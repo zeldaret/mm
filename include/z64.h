@@ -62,11 +62,13 @@
 #define Z_PRIORITY_DMAMGR   17
 #define Z_PRIORITY_IRQMGR   18
 
-#define EQUIP_SLOT_B 0
-#define EQUIP_SLOT_C_LEFT 1
-#define EQUIP_SLOT_C_DOWN 2
-#define EQUIP_SLOT_C_RIGHT 3
-#define EQUIP_SLOT_UNUSED 4
+typedef enum {
+    /* 0 */ EQUIP_SLOT_B,
+    /* 1 */ EQUIP_SLOT_C_LEFT,
+    /* 2 */ EQUIP_SLOT_C_DOWN,
+    /* 3 */ EQUIP_SLOT_C_RIGHT,
+    /* 4 */ EQUIP_SLOT_UNUSED
+} EquipSlot;
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
