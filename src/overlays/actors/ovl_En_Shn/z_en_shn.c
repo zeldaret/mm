@@ -380,7 +380,7 @@ void EnShn_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80AE6130(this);
     func_80AE63A8(this, globalCtx);
     this->unk_2E0 = 0;
-    func_8013C964(&this->actor, globalCtx, 120.0f, 40.0f, 0, this->unk_1D8 & 7);
+    func_8013C964(&this->actor, globalCtx, 120.0f, 40.0f, EXCH_ITEM_NONE, this->unk_1D8 & 7);
 }
 
 s32 EnShn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

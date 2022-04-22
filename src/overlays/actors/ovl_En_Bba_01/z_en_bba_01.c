@@ -308,7 +308,7 @@ void EnBba01_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* t
 void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBba01* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8[64][64]));
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -322,14 +322,14 @@ void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                    EnBba01_TransformLimbDraw, &this->enHy.actor);
     Matrix_InsertXRotation_s(0, MTXMODE_NEW);
 
-    for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8[64][64]); i++) {
+    for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        func_8013CD64(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                      ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSize, gEnHyBodyPartsIndex);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
+                          ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
     }
-    func_8013CF04(&this->enHy.actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->enHy.actor, &globalCtx->state, shadowTex);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

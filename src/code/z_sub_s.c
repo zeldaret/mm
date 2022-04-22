@@ -10,7 +10,7 @@ s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
 #include "code/sub_s/sub_s.c"
 
-Vec3f D_801C5DB0 = { 1.0f, 1.0f, 1.0f };
+Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
@@ -158,7 +158,15 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     return gfx;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD6C.s")
+s32 SubS_InCsMode(GlobalContext* globalCtx) {
+    s32 inCsMode = false;
+
+    if (Play_InCsMode(globalCtx)) {
+        inCsMode = true;
+    }
+
+    return inCsMode;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
 
@@ -333,13 +341,189 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C964.s")
+//! TODO: Needs docs with func_800B8500
+s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
+    s32 ret = false;
+    s16 x;
+    s16 y;
+    f32 xzDistToPlayerTemp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CC2C.s")
+    Actor_GetScreenPos(globalCtx, actor, &x, &y);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CD64.s")
+    switch (type) {
+        case 1:
+            yRange = fabsf(actor->playerHeightRel) + 1.0f;
+            xzRange = actor->xzDistToPlayer + 1.0f;
+            ret = Actor_PickUp(actor, globalCtx, itemId, xzRange, yRange);
+            break;
+        case 2:
+            if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 3:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 4:
+            yRange = fabsf(actor->playerHeightRel) + 1.0f;
+            xzRange = actor->xzDistToPlayer + 1.0f;
+            xzDistToPlayerTemp = actor->xzDistToPlayer;
+            actor->xzDistToPlayer = 0.0f;
+            actor->flags |= 0x10000;
+            ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            actor->xzDistToPlayer = xzDistToPlayerTemp;
+            break;
+        case 5:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+                actor->flags |= 0x10000;
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 6:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+                actor->flags |= 0x10000;
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+    }
+    return ret;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CF04.s")
+const u8 sShadowMaps[4][12][12] = {
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+    },
+};
+
+void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
+    s32 i;
+    s32 j;
+    s32 start;
+
+    for (i = 0; i < 12; i++) {
+        start = ((startRow + i) * 64) + startCol - 390;
+        for (j = 0; j < 12; j++) {
+            if (sShadowMaps[size][i][j] != 0) {
+                if ((start + j >= 0) && (start + j < SUBS_SHADOW_TEX_SIZE)) {
+                    tex[start + j] = 255;
+                }
+            }
+        }
+    }
+}
+
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+                       s8 parentBodyParts[]) {
+    Vec3f pos;
+    Vec3f startVec;
+    s32 i;
+    s32 parentBodyPart;
+    Vec3f* bodyPartPos;
+    s32 startCol;
+    s32 startRow;
+
+    for (i = 0; i < bodyPartsNum; i++) {
+        if (parentBodyParts[i] >= 0) {
+            parentBodyPart = parentBodyParts[i];
+            bodyPartPos = &bodyPartsPos[i];
+
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+        } else {
+            bodyPartPos = &bodyPartsPos[i];
+
+            pos.x = bodyPartPos->x - worldPos->x;
+            pos.y = bodyPartPos->y - worldPos->y;
+            pos.z = bodyPartPos->z - worldPos->z;
+        }
+
+        Matrix_MultiplyVector3fByState(&pos, &startVec);
+        startCol = 64.0f + startVec.x;
+        startRow = 64.0f - startVec.z;
+        SubS_FillShadowTex(startCol >> 1, startRow >> 1, tex, sizes[i]);
+    }
+}
+
+void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
+    s32 pad;
+    GraphicsContext* gfxCtx = gameState->gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C28C(gfxCtx);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+    Matrix_InsertTranslation(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowVtxDL);
+
+    CLOSE_DISPS(gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D0E0.s")
 
@@ -688,9 +872,58 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
     return i;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E4B0.s")
+/**
+ * Computes a plane based on a point on the plane, a unit vector and two angles
+ *
+ * @param[in] point a point on the plane
+ * @param[in] unitVec the unit vector rotated that becomes the plane's normal
+ * @param[in] rot the angles to rotate with, uses just the x and y components
+ * @param[out] plane the computed plane
+ *
+ * Notes:
+ *  The unit input vector is expected to already be normalized (only uses are with the z unit vector)
+ *
+ */
+void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
+    f32 sin;
+    f32 cos;
+    f32 temp;
+    f32 unitVecZ;
+    f32 normY;
+    f32 unitVecYX;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
+    sin = Math_SinS(-rot->x);
+    cos = Math_CosS(-rot->x);
+    unitVecZ = unitVec->z;
+    unitVecYX = unitVec->y;
+
+    // Apply a rotation by -x about the X axis
+    temp = (unitVecZ * cos) - (unitVecYX * sin);
+    normY = (unitVecZ * sin) + (unitVecYX * cos);
+
+    sin = Math_SinS(rot->y);
+    cos = Math_CosS(rot->y);
+    unitVecYX = unitVec->x;
+    plane->normal.y = normY;
+
+    // Apply a rotation by y about the Y axis
+    plane->normal.z = (temp * cos) - (unitVecYX * sin);
+    plane->normal.x = (temp * sin) + (unitVecYX * cos);
+
+    plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
+}
+
+s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB,
+                        Vec3f* intersect) {
+    s32 lineSegVsPlane;
+    Plane plane;
+
+    SubS_ConstructPlane(point, unitVec, rot, &plane);
+    lineSegVsPlane = Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
+                                           linePointB, intersect, false);
+
+    return lineSegVsPlane ? true : false;
+}
 
 /**
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
@@ -714,10 +947,44 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
     return actorIter;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E748.s")
+//! TODO: Needs docs with func_800B8500
+s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+                  func_8013E748_VerifyFunc verifyFunc) {
+    s32 ret = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E7C0.s")
+    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(globalCtx, actor, data))) {
+        ret = func_800B8500(actor, globalCtx, xzRange, yRange, exchangeItemId);
+    }
+    return ret;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E8F8.s")
+s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, void* data) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3s* yawTols = (Vec3s*)data;
+    s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
+    s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
+    s32 areFacing = false;
+    s32 actorYawTol = ABS(yawTols->y);
+    s32 playerYawTol;
+
+    if (actorYaw < (s16)actorYawTol) {
+        playerYawTol = ABS(yawTols->x);
+        if (playerYaw < (s16)playerYawTol) {
+            areFacing = true;
+        }
+    }
+
+    return areFacing;
+}
+
+//! TODO: Needs docs with func_800B8500
+s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+                  s16 actorYawTol) {
+    Vec3s yawTols;
+
+    yawTols.x = playerYawTol;
+    yawTols.y = actorYawTol;
+    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")
