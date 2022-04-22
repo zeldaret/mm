@@ -18,13 +18,16 @@ typedef struct EnSnowman {
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ char unk_284[0x6];
     /* 0x28A */ s8 unk_28A;
-    /* 0x28B */ char unk_28B[0x1];
+    /* 0x28B */ u8 drawDmgEffType;
     /* 0x28C */ s16 unk_28C;
     /* 0x28E */ char unk_28E[0x6];
     /* 0x294 */ f32 unk_294;
     /* 0x298 */ char unk_298[0x4];
     /* 0x29C */ f32 unk_29C;
-    /* 0x2A0 */ char unk_2A0[0x8C];
+    /* 0x2A0 */ f32 drawDmgEffAlpha;
+    /* 0x2A4 */ f32 unk_2A4;
+    /* 0x2A8 */ char unk_2A8[0x18];
+    /* 0x2C0 */ Vec3f limbPos[9];
     /* 0x32C */ ColliderCylinder unk_32C;
 } EnSnowman; // size = 0x378
 
