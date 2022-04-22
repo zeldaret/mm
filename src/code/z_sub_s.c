@@ -498,7 +498,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             pos.z = bodyPartPos->z - worldPos->z;
         }
 
-        Matrix_MultiplyVector3fByState(&pos, &startVec);
+        Matrix_MultVec3f(&pos, &startVec);
         startCol = 64.0f + startVec.x;
         startRow = 64.0f - startVec.z;
         SubS_FillShadowTex(startCol >> 1, startRow >> 1, tex, sizes[i]);
@@ -514,7 +514,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     func_8012C28C(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-    Matrix_InsertTranslation(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
