@@ -14278,7 +14278,7 @@
     0x80B6849C:("func_80B6849C",),
     0x80B6D660:("BgSinkaiKabe_Init",),
     0x80B6D9EC:("BgSinkaiKabe_Destroy",),
-    0x80B6DA20:("func_80B6DA20",),
+    0x80B6DA20:("BgSinkaiKabe_WaitForPlayer",),
     0x80B6DB20:("BgSinkaiKabe_Update",),
     0x80B6DBE0:("BgHakaCurtain_Init",),
     0x80B6DC64:("BgHakaCurtain_Destroy",),
