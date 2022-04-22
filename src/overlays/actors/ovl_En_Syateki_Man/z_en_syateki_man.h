@@ -30,7 +30,7 @@ typedef struct EnSyatekiMan {
     /* 0x01F8 */ Vec3s morphTable[SHOOTING_GALLERY_MAN_LIMB_MAX];
     /* 0x0258 */ Vec3s unk_258;
     /* 0x025E */ Vec3s unk_25E;
-    /* 0x0264 */ s16 unk_264;
+    /* 0x0264 */ s16 eyeIndex;
     /* 0x0266 */ s16 unk_266;
     /* 0x0268 */ UNK_TYPE1 unk268[0x2];
     /* 0x026A */ s16 unk_26A;

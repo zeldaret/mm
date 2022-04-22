@@ -154,7 +154,7 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_284 = 0;
     this->unk_194 = 0;
     this->unk_282 = 0;
-    this->unk_264 = 0;
+    this->eyeIndex = 0;
     this->unk_266 = 0;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
@@ -1206,18 +1206,18 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C8DE8(EnSyatekiMan* this) {
     switch (this->unk_266) {
         case 1:
-            this->unk_264 = 2;
+            this->eyeIndex = 2;
             break;
 
         case 2:
-            this->unk_264 = 1;
+            this->eyeIndex = 1;
             break;
 
         case 40:
             this->unk_266 = 0;
 
         default:
-            this->unk_264 = 0;
+            this->eyeIndex = 0;
             break;
     }
 
@@ -1289,8 +1289,8 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C5B0(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_264]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->unk_264]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
