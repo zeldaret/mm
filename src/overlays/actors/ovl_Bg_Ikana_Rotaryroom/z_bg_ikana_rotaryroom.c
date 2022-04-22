@@ -400,10 +400,10 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_StatePush();
 
         Matrix_InsertMatrix(&this->unk_204.unk_04, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&ikanaBlock->actor.world.pos);
-        func_80B80358(&ikanaBlock->actor.world.pos);
+        Matrix_GetStateTranslation(&ikanaBlock->dyna.actor.world.pos);
+        func_80B80358(&ikanaBlock->dyna.actor.world.pos);
         Matrix_CopyCurrentState(&sp3C);
-        func_8018219C(&sp3C, &ikanaBlock->actor.shape.rot, 0);
+        func_8018219C(&sp3C, &ikanaBlock->dyna.actor.shape.rot, 0);
 
         Matrix_StatePop();
     }
@@ -473,20 +473,21 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
 s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     s32 pad;
-    BgIkanaBlock* sp40 = (BgIkanaBlock*)this->unk_204.unk_00;
+    BgIkanaBlock* ikanaBlock = (BgIkanaBlock*)this->unk_204.unk_00;
     Vec3f sp34;
     Vec3f sp28;
     s32 sp24 = false;
 
-    if (sp40 != NULL) {
+    if (ikanaBlock != NULL) {
         Matrix_StatePush();
 
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_InsertTranslation(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&sp34);
-        Matrix_SetStateRotationAndTranslation(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
-                                              sp40->actor.world.pos.z, &sp40->actor.shape.rot);
+        Matrix_SetStateRotationAndTranslation(ikanaBlock->dyna.actor.world.pos.x,
+                                              ikanaBlock->dyna.actor.world.pos.y + ikanaBlock->unk_170,
+                                              ikanaBlock->dyna.actor.world.pos.z, &ikanaBlock->dyna.actor.shape.rot);
         Matrix_GetStateTranslation(&sp28);
 
         Matrix_StatePop();

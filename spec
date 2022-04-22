@@ -1057,8 +1057,7 @@ beginseg
     name "ovl_En_Bbfall"
     compress
     include "build/src/overlays/actors/ovl_En_Bbfall/z_en_bbfall.o"
-    include "build/data/ovl_En_Bbfall/ovl_En_Bbfall.data.o"
-    include "build/data/ovl_En_Bbfall/ovl_En_Bbfall.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bbfall/ovl_En_Bbfall_reloc.o"
 endseg
 
 beginseg
@@ -1548,8 +1547,7 @@ beginseg
     name "ovl_Obj_Blockstop"
     compress
     include "build/src/overlays/actors/ovl_Obj_Blockstop/z_obj_blockstop.o"
-    include "build/data/ovl_Obj_Blockstop/ovl_Obj_Blockstop.data.o"
-    include "build/data/ovl_Obj_Blockstop/ovl_Obj_Blockstop.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Blockstop/ovl_Obj_Blockstop_reloc.o"
 endseg
 
 beginseg
@@ -1910,8 +1908,7 @@ beginseg
     name "ovl_Effect_Ss_Stone1"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.o"
-    include "build/data/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.data.o"
-    include "build/data/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1_reloc.o"
 endseg
 
 beginseg
@@ -2549,8 +2546,7 @@ beginseg
     name "ovl_En_Raf"
     compress
     include "build/src/overlays/actors/ovl_En_Raf/z_en_raf.o"
-    include "build/data/ovl_En_Raf/ovl_En_Raf.data.o"
-    include "build/data/ovl_En_Raf/ovl_En_Raf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Raf/ovl_En_Raf_reloc.o"
 endseg
 
 beginseg
@@ -3414,8 +3410,7 @@ beginseg
     name "ovl_Effect_Ss_Sbn"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.o"
-    include "build/data/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.data.o"
-    include "build/data/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn_reloc.o"
 endseg
 
 beginseg
@@ -4064,8 +4059,7 @@ beginseg
     name "ovl_Obj_Dora"
     compress
     include "build/src/overlays/actors/ovl_Obj_Dora/z_obj_dora.o"
-    include "build/data/ovl_Obj_Dora/ovl_Obj_Dora.data.o"
-    include "build/data/ovl_Obj_Dora/ovl_Obj_Dora.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Dora/ovl_Obj_Dora_reloc.o"
 endseg
 
 beginseg
@@ -4104,8 +4098,7 @@ beginseg
     name "ovl_Bg_Sinkai_Kabe"
     compress
     include "build/src/overlays/actors/ovl_Bg_Sinkai_Kabe/z_bg_sinkai_kabe.o"
-    include "build/data/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe.data.o"
-    include "build/data/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe_reloc.o"
 endseg
 
 beginseg
@@ -4142,8 +4135,7 @@ beginseg
     name "ovl_Bg_Kin2_Shelf"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Shelf/z_bg_kin2_shelf.o"
-    include "build/data/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf.data.o"
-    include "build/data/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf_reloc.o"
 endseg
 
 beginseg
@@ -4193,8 +4185,7 @@ beginseg
     name "ovl_Bg_Ikana_Block"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.o"
-    include "build/data/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block.data.o"
-    include "build/data/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block_reloc.o"
 endseg
 
 beginseg
@@ -4397,9 +4388,7 @@ beginseg
     name "ovl_Obj_Nozoki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Nozoki/z_obj_nozoki.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.data.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.bss.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Nozoki/ovl_Obj_Nozoki_reloc.o"
 endseg
 
 beginseg

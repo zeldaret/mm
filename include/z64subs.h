@@ -4,15 +4,24 @@
 #include "z64actor.h"
 #include "z64scene.h"
 
+#include "code/sub_s/sub_s.h"
+
+extern Vec3f gOneVec3f;
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
     /* 2 */ SUBS_CUTSCENE_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, void*);
+//! @TODO: rename based on func_8013E748 and func_800B8500
+typedef s32 (*func_8013E748_VerifyFunc)(struct GlobalContext*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
+
+#define SUBS_SHADOW_TEX_WIDTH 64
+#define SUBS_SHADOW_TEX_HEIGHT 64
+#define SUBS_SHADOW_TEX_SIZE ((s32)sizeof(u8[SUBS_SHADOW_TEX_HEIGHT][SUBS_SHADOW_TEX_WIDTH]))
 
 #define ACTOR_PATHING_RETURN_TO_START (1 << 0)
 #define ACTOR_PATHING_SWITCH_DIRECTION (1 << 1)

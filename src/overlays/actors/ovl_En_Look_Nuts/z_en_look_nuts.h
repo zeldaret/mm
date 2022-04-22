@@ -15,8 +15,8 @@ typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, GlobalContext*);
 typedef struct EnLookNuts {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[OBJECT_DNK_LIMB_MAX];
-    /* 0x01CA */ Vec3s morphTable[OBJECT_DNK_LIMB_MAX];
+    /* 0x0188 */ Vec3s jointTable[DEKU_PALACE_GUARD_LIMB_MAX];
+    /* 0x01CA */ Vec3s morphTable[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x020C */ EnLookNutsActionFunc actionFunc;
     /* 0x0210 */ Path *path;
     /* 0x0214 */ s16 currentPathIndex; // Index for the point where the deku guard is in its path 
