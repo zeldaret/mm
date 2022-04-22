@@ -437,7 +437,6 @@ wordReplace = {
     "func_801159c0": "Health_GiveHearts",
     "func_801159EC": "Rupees_ChangeBy",
     "func_80115A14": "Inventory_ChangeAmmo",
-    "Parameter_AddMagic": "Interface_AddMagic",
     "func_8017D2FC": "Math3D_LineSegVsPlane",
     "func_8013A7C0": "SubS_FindDoor",
     "func_8013E640": "SubS_FindActorCustom",

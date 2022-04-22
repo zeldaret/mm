@@ -596,7 +596,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return item;
 
     } else if (item == ITEM_MAGIC_SMALL) {
-        Interface_AddMagic(globalCtx, 0x18);
+        Parameter_AddMagic(globalCtx, 0x18);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -604,7 +604,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return item;
 
     } else if (item == ITEM_MAGIC_LARGE) {
-        Interface_AddMagic(globalCtx, 0x30);
+        Parameter_AddMagic(globalCtx, 0x30);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -1138,7 +1138,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_AddMagic.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Parameter_AddMagic.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115D5C.s")
 

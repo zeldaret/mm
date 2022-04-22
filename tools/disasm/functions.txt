@@ -2134,7 +2134,7 @@
     0x801159C0:("Health_GiveHearts",),
     0x801159EC:("Rupees_ChangeBy",),
     0x80115A14:("Inventory_ChangeAmmo",),
-    0x80115D14:("Interface_AddMagic",),
+    0x80115D14:("Parameter_AddMagic",),
     0x80115D5C:("func_80115D5C",),
     0x80115DB4:("func_80115DB4",),
     0x80116088:("func_80116088",),

@@ -1934,7 +1934,7 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange);
 void Health_GiveHearts(s16 hearts);
 void Rupees_ChangeBy(s16 rupeeChange);
 void Inventory_ChangeAmmo(s16 item, s16 ammoChange);
-void Interface_AddMagic(GlobalContext* globalCtx, s16 arg1);
+void Parameter_AddMagic(GlobalContext* globalCtx, s16 arg1);
 void func_80115D5C(GameState* gamestate);
 // void func_80115DB4(void);
 // void func_80116088(void);
