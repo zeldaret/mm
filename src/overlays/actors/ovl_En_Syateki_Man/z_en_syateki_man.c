@@ -1241,7 +1241,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
                                   Actor* thisx) {
     EnSyatekiMan* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
+    if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD)) {
         *dList = gTownShootingGalleryManHeadDL;
     }
 
