@@ -2547,8 +2547,7 @@ beginseg
     name "ovl_En_Raf"
     compress
     include "build/src/overlays/actors/ovl_En_Raf/z_en_raf.o"
-    include "build/data/ovl_En_Raf/ovl_En_Raf.data.o"
-    include "build/data/ovl_En_Raf/ovl_En_Raf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Raf/ovl_En_Raf_reloc.o"
 endseg
 
 beginseg
