@@ -416,13 +416,13 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
+    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts
         criticalThreshold = 16;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts
         criticalThreshold = 24;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts
         criticalThreshold = 32;
     } else {
         criticalThreshold = 44;

@@ -386,7 +386,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
 
     if (STOLEN_ITEM_1 == ITEM_BOTTLE) {
         slot = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
             if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
@@ -396,7 +396,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
 
     if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
         slot = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
             if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;

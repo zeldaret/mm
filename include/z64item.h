@@ -61,7 +61,7 @@ typedef enum {
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
     /* 0x13 */ QUEST_SKULL_TOKEN,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph is saved
+    /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE = 0x1C,
     /* 0x1E */ QUEST_HEART_CONTAINER = 0x1E
 } QuestItem;
@@ -284,6 +284,9 @@ typedef enum {
     /* 0xFD */ ITEM_UNK_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
+
+#define BOTTLE_FIRST 0
+#define BOTTLE_MAX 6
 
 typedef enum {
     /* 0x00 */ GI_NONE,

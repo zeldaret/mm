@@ -1,5 +1,6 @@
 #include "global.h"
 #include "interface/parameter_static/parameter_static.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 typedef struct {
     /* 0x00 */ u8 scene;
@@ -139,21 +140,33 @@ u16 sCUpTimer = 0;
 s16 sMagicBarOutlinePrimRed = 255;
 s16 sMagicBarOutlinePrimGreen = 255;
 s16 sMagicBarOutlinePrimBlue = 255;
-
 s16 D_801BF8AC = 2; // sMagicBorderRatio
-
 s16 D_801BF8B0 = 1;
 
 s16 sExtraItemBases[] = {
-    ITEM_STICK,   ITEM_STICK, ITEM_NUT,   ITEM_NUT, ITEM_BOMB,    ITEM_BOMB,    ITEM_BOMB,
-    ITEM_BOMB,    ITEM_BOW,   ITEM_BOW,   ITEM_BOW, ITEM_BOMBCHU, ITEM_BOMBCHU, ITEM_BOMBCHU,
-    ITEM_BOMBCHU, ITEM_STICK, ITEM_STICK, ITEM_NUT, ITEM_NUT,
+    ITEM_STICK,   // ITEM_STICKS_5
+    ITEM_STICK,   // ITEM_STICKS_10
+    ITEM_NUT,     // ITEM_NUTS_5
+    ITEM_NUT,     // ITEM_NUTS_10
+    ITEM_BOMB,    // ITEM_BOMBS_5
+    ITEM_BOMB,    // ITEM_BOMBS_10
+    ITEM_BOMB,    // ITEM_BOMBS_20
+    ITEM_BOMB,    // ITEM_BOMBS_30
+    ITEM_BOW,     // ITEM_ARROWS_10
+    ITEM_BOW,     // ITEM_ARROWS_30
+    ITEM_BOW,     // ITEM_ARROWS_40
+    ITEM_BOMBCHU, // ITEM_ARROWS_50 !@bug this data is missing an ITEM_BOW, offsetting the rest by 1
+    ITEM_BOMBCHU, // ITEM_BOMBCHUS_20
+    ITEM_BOMBCHU, // ITEM_BOMBCHUS_10
+    ITEM_BOMBCHU, // ITEM_BOMBCHUS_1
+    ITEM_STICK,   // ITEM_BOMBCHUS_5
+    ITEM_STICK,   // ITEM_STICK_UPGRADE_20
+    ITEM_NUT,     // ITEM_STICK_UPGRADE_30
+    ITEM_NUT,     // ITEM_NUT_UPGRADE_30
 };
 
 s16 D_801BF8DC = 0;
-
 s16 D_801BF8E0 = 0;
-
 s16 D_801BF8E4 = 0;
 
 OSTime D_801BF8E8 = 0;
@@ -169,15 +182,10 @@ u8 D_801BF968 = false;
 u8 D_801BF96C = false;
 
 s16 D_801BF970 = 99;
-
 s16 D_801BF974 = 0;
-
 s16 D_801BF978 = 10;
-
 s16 D_801BF97C = 255;
-
 f32 D_801BF980 = 1.0f;
-
 s32 D_801BF984 = 0;
 
 // Display List
@@ -290,12 +298,10 @@ void func_8010EBA0(s16 timer, s16 timerId);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80112C0C.s")
 
-s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 };
+s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 }; // Sticks, nuts, bombs
 s16 sArrowRefillCounts[] = { 10, 30, 40, 50 };
 s16 sBombchuRefillCounts[] = { 20, 10, 1, 5 };
-s16 sRupeeRefillCounts[] = {
-    1, 5, 10, 20, 50, 100, 200,
-};
+s16 sRupeeRefillCounts[] = { 1, 5, 10, 20, 50, 100, 200 };
 u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     Player* player = GET_PLAYER(globalCtx);
     u8 i;
@@ -612,7 +618,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if (item == ITEM_LONGSHOT) {
         slot = SLOT(item);
 
-        for (i = 0; i < 6; i++) {
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
             if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[slot + i] = ITEM_POTION_RED;
                 return ITEM_NONE;
@@ -624,7 +630,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
                (item == ITEM_HYLIAN_LOACH)) {
         slot = SLOT(item);
 
-        for (i = 0; i < 6; i++) {
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
             if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[slot + i] = item;
                 return ITEM_NONE;
@@ -635,7 +641,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if (item == ITEM_BOTTLE) {
         slot = SLOT(item);
 
-        for (i = 0; i < 6; i++) {
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
             if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[slot + i] = item;
                 return ITEM_NONE;
@@ -666,7 +672,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             }
             slot = SLOT(item);
 
-            for (i = 0; i < 6; i++) {
+            for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
                 if (gSaveContext.save.inventory.items[slot + i] == ITEM_BOTTLE) {
                     if (item == ITEM_HOT_SPRING_WATER) {
                         func_8010EBA0(60, i);
@@ -691,7 +697,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
                 }
             }
         } else {
-            for (i = 0; i < 6; i++) {
+            for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
                 if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
                     gSaveContext.save.inventory.items[slot + i] = item;
                     return ITEM_NONE;
@@ -854,13 +860,13 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             }
             bottleSlot = SLOT(item);
 
-            for (i = 0; i < 6; i++) {
+            for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
                 if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
                     return ITEM_NONE;
                 }
             }
         } else {
-            for (i = 0; i < 6; i++) {
+            for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
                 if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_NONE) {
                     return ITEM_NONE;
                 }
@@ -977,7 +983,7 @@ void Inventory_UpdateBottleItem(GlobalContext* globalCtx, u8 item, u8 btn) {
 
     Interface_LoadItemIconImpl(globalCtx, btn);
 
-    globalCtx->pauseCtx.cursorItem[0] = item;
+    globalCtx->pauseCtx.cursorItem[PAUSE_0] = item;
     gSaveContext.buttonStatus[btn] = BTN_ENABLED;
 
     if (item == ITEM_HOT_SPRING_WATER) {
@@ -990,7 +996,7 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
     u8 btn;
     u8 i;
 
-    for (i = 0; i < 6; i++) {
+    for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
         if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
             for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
                 if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
