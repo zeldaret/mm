@@ -174,7 +174,12 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
-    static u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static u16 D_8099F5AC[][4] = {
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+    };
     Player* player = GET_PLAYER(globalCtx);
     Vec3f focus;
 

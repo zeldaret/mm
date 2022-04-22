@@ -465,7 +465,12 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
-    static u16 D_809C392C[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static u16 D_809C392C[][4] = {
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+    };
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 

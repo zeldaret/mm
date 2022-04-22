@@ -113,7 +113,12 @@ s32 D_80BAA488[] = {
 
 s32 D_80BAA4A8[] = { -1, -1, 0 };
 
-u16 D_80BAA4B4[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+u16 D_80BAA4B4[][4] = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
 s32 func_80BA8820(EnBaba* this, GlobalContext* globalCtx) {
     this->unk_144 = (EnOssan*)SubS_FindActor(globalCtx, &this->unk_144->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);

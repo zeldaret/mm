@@ -97,7 +97,12 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-u16 D_809CCCD8[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+u16 D_809CCCD8[][4] = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
 void EnBba01_UpdateModel(EnBba01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);

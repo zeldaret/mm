@@ -139,8 +139,11 @@ static AnimationInfoS sAnimations[] = {
     { &object_in_Anim_019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
-static u16 D_808F6C0C[] = {
-    4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
+static u16 D_808F6C0C[][4] = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
 };
 
 s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {

@@ -168,7 +168,35 @@ s32 SubS_InCsMode(GlobalContext* globalCtx) {
     return inCsMode;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
+// UpdateLimb
+s32 func_8013AD9C(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 step, s32 override) {
+    Vec3f newPos;
+    Vec3f zeroVec = gZeroVec3f;
+    Vec3s newRot;
+    MtxF curState;
+
+    Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
+    Matrix_CopyCurrentState(&curState);
+    func_8018219C(&curState, &newRot, MTXMODE_NEW);
+    *pos = newPos;
+
+    if (!step && !override) {
+        rot->x = newRot.x;
+        rot->y = newRot.y;
+        rot->z = newRot.z;
+        return true;
+    }
+
+    if (override) {
+        newRot.z = newRotZ;
+        newRot.y = newRotY;
+    }
+
+    Math_SmoothStepToS(&rot->x, newRot.x, 3, 0x2AA8, 0xB6);
+    Math_SmoothStepToS(&rot->y, newRot.y, 3, 0x2AA8, 0xB6);
+    Math_SmoothStepToS(&rot->z, newRot.z, 3, 0x2AA8, 0xB6);
+    return true;
+}
 
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
     *flags = (*flags & ~unsetBits) | setBits;
@@ -525,9 +553,66 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D0E0.s")
+// CalcRot
+s16 func_8013D0E0(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin, f32 rotAdjMax) {
+    s16 prevRot = *rot;
+    f32 rotAdj;
+    f32 prevRotAdj;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
+    rotAdj = (f32)(target - *rot) * (360.0f / 65536.0f);
+    rotAdj *= gFramerateDivisorHalf;
+    prevRotAdj = rotAdj;
+    if (rotAdj >= 0.0f) {
+        rotAdj /= slowness;
+        rotAdj = CLAMP(rotAdj, rotAdjMin, rotAdjMax);
+        *rot += (s16)((rotAdj * 65536.0f) / 360.0f);
+        if (prevRotAdj < rotAdjMin) {
+            *rot = target;
+        }
+        if (rotMax != 0) {
+            *rot = CLAMP(*rot, -rotMax, rotMax);
+        }
+    } else {
+        rotAdj = (rotAdj / slowness) * -1.0f;
+        rotAdj = CLAMP(rotAdj, rotAdjMin, rotAdjMax);
+        *rot -= (s16)((rotAdj * 65536.0f) / 360.0f);
+        if (-rotAdjMin < prevRotAdj) {
+            *rot = target;
+        }
+        if (rotMax != 0) {
+            *rot = CLAMP(*rot, -rotMax, rotMax);
+        }
+    }
+
+    return prevRot - *rot;
+}
+
+// TurnToPoint
+s32 func_8013D2E0(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* focusTarget, Vec3s* headRot,
+                  Vec3s* torsoRot, u16 options[4][4]) {
+    s16 pitch;
+    s16 yaw;
+    s16 pad;
+    s16 targetY;
+    f32 diffX = point->x - focusPos->x;
+    s16 targetX;
+    f32 diffZ = point->z - focusPos->z;
+
+    yaw = Math_FAtan2F(diffZ, diffX);
+    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
+    Math_SmoothStepToS(&focusTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&focusTarget->y, yaw, 4, 0x2710, 0);
+
+    targetX = func_8013D0E0(&headRot->x, options[0][0], focusTarget->x, options[0][1], options[0][2], options[0][3]);
+    //! @bug: options[0][1] should be options[2][1]
+    func_8013D0E0(&torsoRot->x, options[2][0], targetX, options[0][1], options[2][2], options[2][3]);
+
+    targetY = focusTarget->y - shapeRot->y;
+    func_8013D0E0(&headRot->y, options[1][0], targetY - torsoRot->y, options[1][1], options[1][2], options[1][3]);
+    func_8013D0E0(&torsoRot->y, options[3][0], targetY - headRot->y, options[3][1], options[3][2], options[3][3]);
+
+    return true;
+}
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
@@ -987,4 +1072,37 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
     return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")
+// TurnToPointMultiTarget
+s32 func_8013E950(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                  s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj, u16 headZRotAdjMax,
+                  u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax) {
+    s16 yaw;
+    s16 pad;
+    s16 pad2;
+    s16 pitch;
+
+    yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
+    pitch = Math_Vec3f_Pitch(focusPos, pitchTarget);
+
+    if (BINANG_ADD(headXRotAdjMax, torsoXRotAdjMax) >= (s16)ABS(yaw)) {
+        Math_ApproachS(headXRotAdj, yaw - *torsoXRotAdj, 4, 0x2AA8);
+        *headXRotAdj = CLAMP(*headXRotAdj, -headXRotAdjMax, headXRotAdjMax);
+        Math_ApproachS(torsoXRotAdj, yaw - *headXRotAdj, 4, 0x2AA8);
+        *torsoXRotAdj = CLAMP(*torsoXRotAdj, -torsoXRotAdjMax, torsoXRotAdjMax);
+    } else {
+        Math_ApproachS(headXRotAdj, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoXRotAdj, 0, 4, 0x2AA8);
+    }
+
+    if (BINANG_ADD(headZRotAdjMax, torsoZRotAdjMax) >= (s16)ABS(pitch)) {
+        Math_ApproachS(headZRotAdj, pitch - *torsoZRotAdj, 4, 0x2AA8);
+        *headZRotAdj = CLAMP(*headZRotAdj, -headZRotAdjMax, headZRotAdjMax);
+        Math_ApproachS(torsoZRotAdj, pitch - *headZRotAdj, 4, 0x2AA8);
+        *torsoZRotAdj = CLAMP(*torsoZRotAdj, -torsoZRotAdjMax, torsoZRotAdjMax);
+    } else {
+        Math_ApproachS(headZRotAdj, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoZRotAdj, 0, 4, 0x2AA8);
+    }
+
+    return true;
+}
