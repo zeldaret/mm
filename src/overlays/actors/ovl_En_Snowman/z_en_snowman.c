@@ -32,6 +32,7 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx);
 void func_80B19998(Actor* this, GlobalContext* globalCtx);
 void func_80B173D0(EnSnowman* this);
 void func_80B18908(EnSnowman* this);
+void func_80B19948(Actor* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Snowman_InitVars = {
@@ -169,10 +170,9 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetScale(&this->actor, 0.02f);
         }
 
-        this->unk_294 = this->actor.scale.x * 100.0f;
-        if (1) {}
+        this->unk_294 = thisx->scale.x * 100.0f;
         this->unk_29C = (240.0f * this->unk_294) + (phi_v1 * 0.1f * 40.0f);
-        if (this->actor.params == 2) {
+        if (thisx->params == 2) {
             func_80B18908(this);
         } else {
             func_80B173D0(this);
@@ -228,7 +228,17 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17144.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B173D0.s")
+void func_80B173D0(EnSnowman* this) {
+    Animation_PlayLoop(&this->snowPileSkelAnime, &D_060046D8);
+    this->actor.scale.y = this->actor.scale.x;
+    this->actor.speedXZ = 2.0f;
+    this->actor.draw = func_80B19948;
+    this->unk_28C = 0x28;
+    this->unk_28A = 0;
+    this->unk_32C.dim.radius = this->unk_294 * 30.0f;
+    this->unk_32C.dim.height = this->unk_294 * 10.0f;
+    this->actionFunc = func_80B1746C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B1746C.s")
 
