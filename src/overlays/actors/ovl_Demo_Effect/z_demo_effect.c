@@ -272,8 +272,8 @@ s32 func_808CDE78(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIn
 }
 
 void func_808CDFF8(Actor* thisx, GlobalContext* globalCtx) {
-    DemoEffect* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    DemoEffect* this = THIS;
 
     OPEN_DISPS(gfxCtx);
 
