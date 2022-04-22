@@ -1245,12 +1245,12 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
         *dList = gTownShootingGalleryManHeadDL;
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
         Matrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
         Matrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_TORSO) {
         Matrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
     }
 
@@ -1261,7 +1261,7 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     EnSyatekiMan* this = THIS;
     Vec3f sp18 = { 1600.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 15) {
+    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
