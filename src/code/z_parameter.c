@@ -326,9 +326,9 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return ITEM_NONE;
 
     } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
-        gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE);
-        if ((gSaveContext.save.inventory.questItems & 0xF0000000) == (1 << QUEST_HEART_CONTAINER)) {
-            gSaveContext.save.inventory.questItems ^= (1 << QUEST_HEART_CONTAINER);
+        gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
+        if ((gSaveContext.save.inventory.questItems & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT)) {
+            gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT);
             gSaveContext.save.playerData.healthCapacity += 0x10;
             gSaveContext.save.playerData.health += 0x10;
         }

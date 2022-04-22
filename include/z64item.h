@@ -62,8 +62,7 @@ typedef enum {
     /* 0x13 */ QUEST_SKULL_TOKEN,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
-    /* 0x1C */ QUEST_HEART_PIECE = 0x1C,
-    /* 0x1E */ QUEST_HEART_CONTAINER = 0x1E
+    /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;
 
 typedef enum {
