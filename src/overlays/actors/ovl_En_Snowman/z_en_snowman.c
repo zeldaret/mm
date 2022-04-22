@@ -32,7 +32,7 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx);
 void func_80B19998(Actor* this, GlobalContext* globalCtx);
 void func_80B173D0(EnSnowman* this);
 void func_80B18908(EnSnowman* this);
-void func_80B19948(Actor* this, GlobalContext* globalCtx);
+void func_80B19948(Actor* thisx, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Snowman_InitVars = {
@@ -313,6 +313,12 @@ void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             this->unk_2A4 * this->unk_294, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19948.s")
+void func_80B19948(Actor* thisx, GlobalContext* globalCtx) {
+    EnSnowman* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,
+                          this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19998.s")
