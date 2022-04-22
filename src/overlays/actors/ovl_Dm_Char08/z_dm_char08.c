@@ -232,7 +232,7 @@ void DmChar08_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s16 D_80AB1770 = 0; //Some kind of latch for playing a sound only once?
+s16 D_80AB1770 = 0; // Some kind of latch for playing a sound only once?
 
 void func_80AAF610(DmChar08* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -903,7 +903,7 @@ void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         this->unk_206 = 1;
     }
-    
+
     DmChar08_UpdateEyes(this);
     this->actionFunc(this, globalCtx);
     func_80AAFE88(this, globalCtx);
@@ -964,7 +964,7 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 }
 
 #ifdef NON_MATCHING
-//https://decomp.me/scratch/9PIhn
+// https://decomp.me/scratch/9PIhn
 void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     f32 temp_f12;
 
