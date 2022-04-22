@@ -6,6 +6,7 @@
 
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

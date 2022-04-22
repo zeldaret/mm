@@ -213,7 +213,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
+EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
@@ -233,7 +233,7 @@ EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, 
     return ptr;
 }
 
-void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
+void func_80A11144(EnGoStruct* ptr, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
     s32 flag = false;
@@ -279,7 +279,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
+void func_80A1143C(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
@@ -299,7 +299,7 @@ void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg
     }
 }
 
-void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
+void func_80A115B4(EnGoStruct* ptr, GlobalContext* globalCtx) {
     static TexturePtr D_80A16644[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
@@ -355,7 +355,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
+void func_80A118F8(EnGoStruct* ptr, Vec3f arg1) {
     static u8 D_80A1667C[] = {
         3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
     };
@@ -400,10 +400,11 @@ void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
 static u8 D_80A1667C[] = {
     3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
 };
+void func_80A118F8(EnGoStruct* ptr, Vec3f arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A118F8.s")
 #endif
 
-void func_80A11BF8(EnGoStruct ptr[], f32 arg1) {
+void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     f32 test;
     f32 test2;
     f32 x;
@@ -449,7 +450,7 @@ void func_80A11BF8(EnGoStruct ptr[], f32 arg1) {
 }
 
 #ifdef NON_MATCHING
-void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx arg3[], u8 arg4) {
+void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
 
@@ -484,6 +485,7 @@ void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx a
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* arg3, u8 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A11EC0.s")
 #endif
 
@@ -1976,7 +1978,6 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     s32 idx;
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_8) && (limbIndex == 10)) {
-        limbIndex = limbIndex;
         Matrix_GetStateTranslation(&sp30);
         sp30.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
