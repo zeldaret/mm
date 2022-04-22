@@ -64,8 +64,8 @@ const ActorInit En_Shn_InitVars = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
     { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
     { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
 };
@@ -345,8 +345,8 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnShn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, NULL, this->jointTable, this->morphTable,
-                       SHOOTING_GALLERY_MAN_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBurlyGuySkel, NULL, this->jointTable, this->morphTable,
+                       BURLY_GUY_LIMB_MAX);
     this->unk_2E8 = -1;
     if (gSaveContext.save.weekEventReg[23] & 8) {
         func_80AE615C(this, 0);
@@ -386,7 +386,7 @@ void EnShn_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnShn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnShn* this = THIS;
 
-    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
+    if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         func_80AE6488(this, globalCtx);
         *dList = gSwampGuideHeadDL;
     }
@@ -395,7 +395,7 @@ s32 EnShn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 Vec3f D_80AE7270 = { 1200.0f, 0.0f, 0.0f };
 void EnShn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
+    if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80AE7270, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
@@ -418,7 +418,7 @@ void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         phi_v0 = 0;
     }
 
-    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
+    if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         func_8013AD9C((this->unk_2BA + 0x4000), (this->unk_2BC + this->actor.shape.rot.y + 0x4000), &this->unk_1E8,
                       &this->unk_1F4, phi_v0, phi_v1);
         Matrix_StatePop();

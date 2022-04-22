@@ -47,7 +47,7 @@ const ActorInit En_Syateki_Man_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gSwampShootingGalleryManHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
@@ -131,12 +131,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel,
-                           &gSwampShootingGalleryManHeadScratchLoopAnim, this->jointTable, this->morphTable,
-                           SHOOTING_GALLERY_MAN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBurlyGuySkel, &gSwampShootingGalleryManHeadScratchLoopAnim,
+                           this->jointTable, this->morphTable, BURLY_GUY_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &gShootingGalleryManHandsOnTableAnim,
-                           this->jointTable, this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHandsOnTableAnim, this->jointTable,
+                           this->morphTable, BURLY_GUY_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -155,7 +154,7 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_194 = 0;
     this->unk_282 = 0;
     this->eyeIndex = 0;
-    this->unk_266 = 0;
+    this->blinkTimer = 0;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
         this->path = sp34;
@@ -1203,8 +1202,8 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809C8DE8(EnSyatekiMan* this) {
-    switch (this->unk_266) {
+void EnSyatekiMan_Blink(EnSyatekiMan* this) {
+    switch (this->blinkTimer) {
         case 1:
             this->eyeIndex = 2;
             break;
@@ -1214,21 +1213,21 @@ void func_809C8DE8(EnSyatekiMan* this) {
             break;
 
         case 40:
-            this->unk_266 = 0;
+            this->blinkTimer = 0;
 
         default:
             this->eyeIndex = 0;
             break;
     }
 
-    this->unk_266++;
+    this->blinkTimer++;
 }
 
 void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiMan* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_809C8DE8(this);
+    EnSyatekiMan_Blink(this);
     this->actor.focus.pos.y = 70.0f;
     Actor_SetFocus(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
@@ -1241,16 +1240,16 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
                                   Actor* thisx) {
     EnSyatekiMan* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD)) {
+    if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == BURLY_GUY_LIMB_HEAD)) {
         *dList = gTownShootingGalleryManHeadDL;
     }
 
-    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
+    if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         Matrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
         Matrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    } else if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_TORSO) {
+    } else if (limbIndex == BURLY_GUY_LIMB_TORSO) {
         Matrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
     }
 
@@ -1261,7 +1260,7 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     EnSyatekiMan* this = THIS;
     Vec3f sp18 = { 1600.0f, 0.0f, 0.0f };
 
-    if (limbIndex == SHOOTING_GALLERY_MAN_LIMB_HEAD) {
+    if (limbIndex == BURLY_GUY_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
