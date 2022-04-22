@@ -7,7 +7,6 @@
 #include "z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -70,13 +69,13 @@ static ColliderCylinderInit sCylinderInit = {
 static Cylinder16 D_80A2CADC[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
 static AnimationInfo sAnimations[] = {
-    { &object_dekunuts_Anim_003180, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_dekunuts_Anim_00259C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dekunuts_Anim_002DD4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gDekuScrubLookAroundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gDekuScrubDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubUnburrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -124,8 +123,8 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_002A5C,
-                   this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable,
+                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -147,7 +146,7 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A2BE54(EnSyatekiDekunuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_dekunuts_Anim_003180, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
 
     this->actor.speedXZ = 0.0f;
     this->actor.world = this->actor.home;
@@ -398,7 +397,7 @@ s32 EnSyatekiDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, 
                                        Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
-    if ((limbIndex == OBJECT_DEKUNUTS_LIMB_03) && (this->unk_1F0 == 1)) {
+    if ((limbIndex == DEKU_SCRUB_LIMB_HEADDRESS) && (this->unk_1F0 == 1)) {
         rot->z += this->unk_1F2;
     }
 
@@ -428,7 +427,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, &object_dekunuts_DL_001E50);
+            gSPDisplayList(POLY_OPA_DISP++, gDekuScrubFlowerDL);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }

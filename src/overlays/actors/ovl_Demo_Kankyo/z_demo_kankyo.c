@@ -633,7 +633,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 Matrix_Scale(this->particles[i].scale * alphaScale, this->particles[i].scale * alphaScale,
                              this->particles[i].scale * alphaScale, MTXMODE_APPLY);
                 alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
-                alphaScale = (alphaScale > 1.0f) ? 0.0f : (1.0f - alphaScale) > 1.0f ? 1.0f : 1.0f - alphaScale;
+                alphaScale = CLAMP(1.0f - alphaScale, 0.0f, 1.0f);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     this->particles[i].alpha = 255.0f * alphaScale;

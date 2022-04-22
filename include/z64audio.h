@@ -32,7 +32,7 @@ typedef enum {
     /* 1 */ AUDIO_MODE_HEADSET,
     /* 2 */ AUDIO_MODE_UNK,
     /* 3 */ AUDIO_MODE_MONO,
-    /* 4 */ AUDIO_MODE_SURROUND,
+    /* 4 */ AUDIO_MODE_SURROUND
 } AudioSoundMode;
 
 typedef enum {

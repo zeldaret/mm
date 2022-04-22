@@ -154,8 +154,8 @@ void EnGs_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80997AFC(this->unk_194, &this->unk_1FA);
     this->unk_1F4 = this->unk_1FA;
-    Math_Vec3f_Copy(&this->unk_1B0[0], &D_801C5DB0);
-    Math_Vec3f_Copy(&this->unk_1B0[1], &D_801C5DB0);
+    Math_Vec3f_Copy(&this->unk_1B0[0], &gOneVec3f);
+    Math_Vec3f_Copy(&this->unk_1B0[1], &gOneVec3f);
     SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
@@ -183,8 +183,8 @@ void func_80997D38(EnGs* this, GlobalContext* globalCtx) {
 
     if (Message_GetState(&globalCtx->msgCtx) == 0) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
-            func_8013E8F8(&this->actor, globalCtx, D_8099A408[this->actor.params], D_8099A408[this->actor.params], 0,
-                          0x2000, 0x2000);
+            func_8013E8F8(&this->actor, globalCtx, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
+                          EXCH_ITEM_NONE, 0x2000, 0x2000);
         }
     }
 
