@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, globalCtx, 100.0f, 100.0f, 0, 0x4000, 0x4000);
+        func_8013E8F8(&this->actor, globalCtx, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -695,7 +695,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
         func_80AEDE10(this, globalCtx);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, globalCtx, 100.0f, 100.0f, 0, 0x4000, 0x4000);
+            func_8013E8F8(&this->actor, globalCtx, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
         }
     } else {
         func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);

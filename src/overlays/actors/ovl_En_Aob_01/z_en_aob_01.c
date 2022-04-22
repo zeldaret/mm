@@ -598,7 +598,7 @@ s32 func_809C2504(EnAob01* this, GlobalContext* globalCtx) {
     Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
-        if ((npc->id == ACTOR_EN_RACEDOG) && (func_800F2178(this->unk_430) == ((EnRacedog*)npc)->unk_1E8)) {
+        if ((npc->id == ACTOR_EN_RACEDOG) && (func_800F2178(this->unk_430) == ((EnRacedog*)npc)->currentPoint)) {
             ActorCutscene_Stop(this->unk_430);
             this->unk_3F4 = npc;
             this->unk_430 = ActorCutscene_GetAdditionalCutscene(this->unk_430);
@@ -614,7 +614,7 @@ s32 func_809C2594(EnAob01* this, GlobalContext* globalCtx) {
     Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
-        if ((npc->id == ACTOR_EN_RACEDOG) && (((EnRacedog*)npc)->unk_290 == ((EnRacedog*)npc)->unk_292)) {
+        if ((npc->id == ACTOR_EN_RACEDOG) && (((EnRacedog*)npc)->index == ((EnRacedog*)npc)->selectedDogIndex)) {
             this->unk_3F4 = npc;
             return true;
         }
@@ -629,7 +629,7 @@ s32 func_809C25E4(EnAob01* this, GlobalContext* globalCtx) {
     s16 count = 0;
 
     while (npc != NULL) {
-        if ((npc->id == ACTOR_EN_RACEDOG) && (((EnRacedog*)npc)->unk_29C == 3)) {
+        if ((npc->id == ACTOR_EN_RACEDOG) && (((EnRacedog*)npc)->raceStatus == RACEDOG_RACE_STATUS_FINISHED)) {
             count++;
         }
         npc = npc->next;
@@ -853,12 +853,12 @@ s32 func_809C2EC4(EnAob01* this, GlobalContext* globalCtx) {
 
     while (dog != NULL) {
         if (dog->id == ACTOR_EN_DG) {
-            this->unk_432 = ((EnDg*)dog)->unk_288;
+            this->unk_432 = ((EnDg*)dog)->selectedDogIndex;
             if (this->unk_432 == -1) {
                 return false;
             }
 
-            if (this->unk_432 == ENDG_GET_3E0(dog)) {
+            if (this->unk_432 == ENDG_GET_INDEX(dog)) {
                 return true;
             }
         }

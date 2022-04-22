@@ -647,7 +647,7 @@ s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             break;
 
         case 2:
-            this->unk_4F0 = 0;
+            this->unk_4F0 = EXCH_ITEM_NONE;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -660,7 +660,7 @@ s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = 0;
+    this->unk_4F0 = EXCH_ITEM_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 

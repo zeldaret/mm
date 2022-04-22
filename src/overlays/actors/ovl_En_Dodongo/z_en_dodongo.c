@@ -293,7 +293,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.r = 255;
     this->unk_330.g = 10;
     this->unk_330.a = 200;
-    Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
+    Math_Vec3f_Copy(&this->unk_314, &gOneVec3f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
                    this->jointTable, this->morphTable, 31);

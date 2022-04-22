@@ -1086,7 +1086,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         if (arg2->unk0 == 24) {
             Flags_UnsetSwitch(globalCtx, 0);
             Flags_UnsetSwitch(globalCtx, 1);
-            this->unk_394 = 0;
+            this->unk_394 = EXCH_ITEM_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1274,7 +1274,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = 0;
+    this->unk_394 = EXCH_ITEM_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 
@@ -1409,7 +1409,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
     Vec3f* sp28;
     f32 temp;
 
-    if (!func_8013AD6C(globalCtx) && (this->unk_374 != 0)) {
+    if (!SubS_InCsMode(globalCtx) && (this->unk_374 != 0)) {
         if ((door != NULL) && (door->dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
@@ -1457,7 +1457,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk_254;
         sp50 = this->unk_250;
         sp58 = this->actor.world.pos;
@@ -1474,7 +1474,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk_254 = sp54;
         this->unk_250 = sp50;
         this->unk_238 = sp58;

@@ -1363,7 +1363,7 @@ s32 func_80950804(EnGm* this, GlobalContext* globalCtx) {
     f32 temp_f0;
 
     door = func_8094DF90(globalCtx, this->unk_258);
-    if (!func_8013AD6C(globalCtx) && (this->unk_3C4 != 0)) {
+    if (!SubS_InCsMode(globalCtx) && (this->unk_3C4 != 0)) {
         if ((door != NULL) && (door->dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
                 door->unk_1A7 = this->unk_261;
@@ -1412,7 +1412,7 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk_254;
         sp50 = this->unk_250;
         sp58 = this->actor.world.pos;
@@ -1429,7 +1429,7 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk_254 = sp54;
         this->unk_250 = sp50;
         this->unk_238 = sp58;
@@ -1626,7 +1626,7 @@ void EnGm_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_8094DFF8(this, globalCtx);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, globalCtx, this->unk_3B4, 30.0f, 0, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, globalCtx, this->unk_3B4, 30.0f, EXCH_ITEM_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
