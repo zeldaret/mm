@@ -1926,10 +1926,10 @@ void EnGo_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, 0, this->unk_390 & 7);
+        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, 0, this->unk_390 & 7);
+        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&
