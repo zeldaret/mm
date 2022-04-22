@@ -218,7 +218,11 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/EnSnowman_Destroy.s")
+void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSnowman* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->unk_32C);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B16FC0.s")
 
