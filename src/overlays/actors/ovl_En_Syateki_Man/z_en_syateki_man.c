@@ -47,9 +47,9 @@ const ActorInit En_Syateki_Man_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gSwampShootingGalleryManHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
 static s16 D_809C91C8[] = {
@@ -131,11 +131,12 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &object_shn_Anim_00DFEC, this->jointTable,
-                           this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel,
+                           &gSwampShootingGalleryManHeadScratchLoopAnim, this->jointTable, this->morphTable,
+                           SHOOTING_GALLERY_MAN_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &object_shn_Anim_00D9D0, this->jointTable,
-                           this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &gShootingGalleryManHandsOnTableAnim,
+                           this->jointTable, this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -407,7 +408,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->skelAnime.animation == &object_shn_Anim_00D2F8) {
+    if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         }

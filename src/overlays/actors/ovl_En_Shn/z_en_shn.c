@@ -64,10 +64,10 @@ const ActorInit En_Shn_InitVars = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_shn_Anim_00D9D0, 1.0f, 0, -1, 0, 0 },
-    { &object_shn_Anim_00D9D0, 1.0f, 0, -1, 0, -4 },
-    { &object_shn_Anim_00E6C4, 1.0f, 0, -1, 0, 0 },
-    { &object_shn_Anim_00E6C4, 1.0f, 0, -1, 0, -4 },
+    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
+    { &gShootingGalleryManHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
+    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
+    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
 };
 
 static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
