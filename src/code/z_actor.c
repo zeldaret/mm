@@ -240,7 +240,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                         }
                         actor->shape.unk_17 &= ~spB8;
 
-                        if (!mapper->l.l) {} // POSSIBLE FAKE MATCH
+                        if ((uintptr_t)mapper->l.l) {} // POSSIBLE FAKE MATCH
                     }
                 }
 

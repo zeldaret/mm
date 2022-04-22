@@ -450,6 +450,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     }
 }
 #else
+void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D94D0.s")
 #endif
 
@@ -816,6 +817,7 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = temp_f0;
 }
 #else
+void func_808DA578(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA578.s")
 #endif
 
@@ -854,6 +856,7 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
+void func_808DA6FC(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA6FC.s")
 #endif
 
@@ -1013,6 +1016,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
+void func_808DACF4(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
 #endif
 
