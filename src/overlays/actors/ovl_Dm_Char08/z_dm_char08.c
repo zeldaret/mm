@@ -964,6 +964,7 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 }
 
 #ifdef NON_MATCHING
+//https://decomp.me/scratch/9PIhn
 void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     f32 temp_f12;
 
