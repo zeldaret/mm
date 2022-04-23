@@ -115,6 +115,9 @@ extern DamageTable D_80B19A58;
 extern CollisionCheckInfoInit D_80B19A78;
 extern InitChainEntry D_80B19AAC[];
 extern Gfx* D_80B19A94[];
+extern s8 D_80B19AD0[];
+extern Vec3f D_80B19ADC[];
+extern s16 D_80B19ADA;
 
 extern UNK_TYPE D_06000404;
 extern UNK_TYPE D_06004628;
@@ -301,8 +304,44 @@ void func_80B173D0(EnSnowman* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19474.s")
 
-void func_80B19718(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19718.s")
+void func_80B19718(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnSnowman* this = THIS;
+    s32 pad;
+    Gfx* gfx;
+    s32 i;
+
+    if (D_80B19AD0[limbIndex] != -1) {
+        if (D_80B19AD0[limbIndex] == 4) {
+            for (i = 0; i < 5; i++) {
+                Matrix_MultiplyVector3fByState(&D_80B19ADC[i], &this->limbPos[i + 4]);
+            }
+        } else {
+            Matrix_GetStateTranslation(&this->limbPos[D_80B19AD0[limbIndex]]);
+        }
+    }
+
+    if ((limbIndex == 10) && (this->unk_288 == 1)) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gfx = POLY_OPA_DISP;
+
+        if (thisx->params != 1) {
+            Matrix_InsertTranslation(800.0f, -600.0f, 0.0f, MTXMODE_APPLY);
+        } else {
+            Matrix_InsertTranslation(300.0f, -2300.0f, -1900.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
+        }
+
+        gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[1], D_80B19A94[this->actor.params]);
+
+        POLY_OPA_DISP = &gfx[2];
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        Matrix_GetStateTranslation(&this->unk_2B4);
+    }
+}
 
 void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
