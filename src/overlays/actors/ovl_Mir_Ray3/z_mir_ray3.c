@@ -351,7 +351,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
     f32 temp;
-    u16 phi_a0;
+    u16 time;
 
     if (!(this->unk_210 & 1) && func_8012405C(globalCtx)) {
         Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
@@ -369,13 +369,13 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
-            phi_a0 = gSaveContext.save.time;
+            time = gSaveContext.save.time;
 
-            if (phi_a0 > CLOCK_TIME(12, 0)) {
-                phi_a0 = 0xFFFF - phi_a0;
+            if (time > CLOCK_TIME(12, 0)) {
+                time = 0xFFFF - time;
             }
 
-            temp = (phi_a0 * (1.0f / 0x8000));
+            temp = (time * (1.0f / 0x8000));
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x78, 255, 255, 255, (u8)(s8)(100 * this->unk_214));
 
             gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, (u8)((100.0f * temp) + 105.0f), 255);

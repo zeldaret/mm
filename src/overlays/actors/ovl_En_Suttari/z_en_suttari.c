@@ -186,12 +186,8 @@ void EnSuttari_SetNextEntrance(GlobalContext* globalCtx, u16 nextEntranceIndex) 
 }
 
 void EnSuttari_UpdateTime(void) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
-    u16 time = gSaveContext.save.time;
-
-    gSaveContext.save.time = (u16)REG(15) + time;
-    time = gSaveContext.save.time;
-    gSaveContext.save.time = (u16)*unk_14 + time;
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
 }
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {

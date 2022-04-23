@@ -607,7 +607,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (Message_ShouldAdvance(globalCtx)) &&
+    if ((talkState == 5) && Message_ShouldAdvance(globalCtx) &&
         (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
@@ -1084,7 +1084,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);

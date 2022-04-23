@@ -196,14 +196,12 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     u32 dayTime;
     s16 digits[4];
     f32 timeInMinutes;
-    s32 day;
     s16 i;
 
     if (arg1 == 0xCF) {
-        day = gSaveContext.save.day;
-        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.save.time);
+        dayTime = (4 << 16) - (CURRENT_DAY << 16) - (u16)(-0x4000 + ((void)0, gSaveContext.save.time));
     } else {
-        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.save.time);
+        dayTime = (1 << 16) - (u16)(-0x4000 + ((void)0, gSaveContext.save.time));
     }
     timeInMinutes = TIME_TO_MINUTES_F(dayTime);
 

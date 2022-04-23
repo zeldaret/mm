@@ -815,8 +815,6 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 s16 func_800A7650(s16 dropId) {
-    s16 healthCapacity;
-
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
          (INV_CONTENT(ITEM_BOMB) == ITEM_NONE)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
@@ -828,8 +826,7 @@ s16 func_800A7650(s16 dropId) {
     }
 
     if (dropId == ITEM00_HEART) {
-        healthCapacity = gSaveContext.save.playerData.healthCapacity;
-        if (healthCapacity == gSaveContext.save.playerData.health) {
+        if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }

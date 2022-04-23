@@ -872,9 +872,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 }
 
 void func_80B442E4(EnInvadepoh* this) {
-    s32 pad;
-    s32 sp18 = gSaveContext.save.time;
-    s32 temp_v1_2 = sp18 - func_80B43A24(this->actor.params & 7);
+    s32 temp_v1_2 = ((void)0, (s32)gSaveContext.save.time) - func_80B43A24(this->actor.params & 7);
 
     if (D_80B4E940 == 1) {
         this->clockTime = 0.0f;
@@ -999,6 +997,7 @@ void func_80B44700(EnInvadepoh* this) {
         this->clockTime = 1.0f;
     } else {
         f32 new_var = 0.00153374229558f;
+
         this->clockTime = (currentTime + new_var4) * new_var;
         this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }

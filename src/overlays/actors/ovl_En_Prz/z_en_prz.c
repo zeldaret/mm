@@ -314,7 +314,6 @@ void func_80A767A8(EnPrz* this, GlobalContext* globalCtx) {
     EnPr* pr = (EnPr*)this->actor.parent;
     f32 sqrt;
     s32 pad[2];
-    u8 playerForm;
 
     if (func_80A762C0(this, globalCtx)) {
         func_80A75F18(this, 0);
@@ -354,9 +353,8 @@ void func_80A767A8(EnPrz* this, GlobalContext* globalCtx) {
         this->unk_1C8 = 1;
     }
 
-    playerForm = gSaveContext.save.playerForm;
-    this->unk_1D8.y =
-        (player->actor.world.pos.y + D_80A771E0[playerForm]) + randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
+    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[((void)0, gSaveContext.save.playerForm)]) +
+                      randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
     func_80A76070(this, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_1D8), globalCtx);
 }
 

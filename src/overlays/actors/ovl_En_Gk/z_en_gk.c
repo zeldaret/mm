@@ -741,7 +741,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
                 this->unk_1E4 |= 2;
             }
         }
-    } else if ((temp_v0 == 4) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    } else if ((temp_v0 == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
