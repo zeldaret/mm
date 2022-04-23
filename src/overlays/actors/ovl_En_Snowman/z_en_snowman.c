@@ -114,6 +114,7 @@ extern ColliderCylinderInit D_80B19A2C;
 extern DamageTable D_80B19A58;
 extern CollisionCheckInfoInit D_80B19A78;
 extern InitChainEntry D_80B19AAC[];
+extern Gfx* D_80B19A94[];
 
 extern UNK_TYPE D_06000404;
 extern UNK_TYPE D_06004628;
@@ -321,4 +322,6 @@ void func_80B19948(Actor* thisx, GlobalContext* globalCtx) {
                           this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19998.s")
+void func_80B19998(Actor* this, GlobalContext* globalCtx) {
+    Gfx_DrawDListOpa(globalCtx, D_80B19A94[this->params - 3]);
+}
