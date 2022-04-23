@@ -148,7 +148,7 @@ typedef enum {
 } FamosAnimatedMatArrayIndexes;
 
 static AnimatedMaterial* sEmblemAnimatedMats[] = { gFamosNormalGlowingEmblemTexAnim,
-                                                   gFamosFlippedGlowingEmblemTexAnim };
+                                                   gFamosFlippedGlowingEmblemTexAnim, };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
@@ -185,7 +185,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(sEmblemAnimatedMats); i++) {
             sEmblemAnimatedMats[i] = Lib_SegmentedToVirtual(sEmblemAnimatedMats[i]);
         }
-        sAnimatedMaterialsDesgmented = 1;
+        sAnimatedMaterialsDesgmented = true;
     }
 
     this->actor.colChkInfo.mass = 250;
