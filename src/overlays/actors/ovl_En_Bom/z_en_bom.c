@@ -675,14 +675,14 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
     f32 temp_f26 = Math_Vec3f_DistXYZ(arg3, arg1);
     s32 spB0;
     f32 temp_f2;
-    f32 sqrt;
+    f32 distXZ;
 
     Math_Vec3f_Copy(&ptr->unk_00, arg1);
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
     ptr->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-    sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-    ptr->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+    distXZ = sqrtf(SQ(spCC.x) + SQ(spCC.z));
+    ptr->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
 
@@ -721,8 +721,8 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         }
 
         ptr2->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-        sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-        ptr2->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+        distXZ = sqrtf(SQ(spCC.x) + SQ(spCC.z));
+        ptr2->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
         ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
         ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;

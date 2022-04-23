@@ -608,7 +608,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if ((talkState == 5) && Message_ShouldAdvance(globalCtx) &&
-        (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
+        !EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
