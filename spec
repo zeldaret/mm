@@ -4574,8 +4574,7 @@ beginseg
     name "ovl_En_Scopecrow"
     compress
     include "build/src/overlays/actors/ovl_En_Scopecrow/z_en_scopecrow.o"
-    include "build/data/ovl_En_Scopecrow/ovl_En_Scopecrow.data.o"
-    include "build/data/ovl_En_Scopecrow/ovl_En_Scopecrow.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Scopecrow/ovl_En_Scopecrow_reloc.o"
 endseg
 
 beginseg
