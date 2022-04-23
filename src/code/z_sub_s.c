@@ -572,32 +572,32 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
  * @param[in] rotMax the max rotation in binary angles
  * @param[in] target the target rotation value
  * @param[in] slowness how slow to rotate, the larger the number the slower the rotation
- * @param[in] rotAdjMin the minimun rotation adjustment in degrees
- * @param[in] rotAdjMax the maximum rotation adjustment in degrees
+ * @param[in] stepMin the minimun rotation adjustment in degrees
+ * @param[in] stepMax the maximum rotation adjustment in degrees
  */
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin, f32 rotAdjMax) {
+s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
     s16 prevRot = *rot;
-    f32 rotAdj;
+    f32 step;
     f32 prevRotAdj;
 
-    rotAdj = (f32)(target - *rot) * (360.0f / 65536.0f);
-    rotAdj *= gFramerateDivisorHalf;
-    prevRotAdj = rotAdj;
-    if (rotAdj >= 0.0f) {
-        rotAdj /= slowness;
-        rotAdj = CLAMP(rotAdj, rotAdjMin, rotAdjMax);
-        *rot += (s16)((rotAdj * 65536.0f) / 360.0f);
-        if (prevRotAdj < rotAdjMin) {
+    step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
+    step *= gFramerateDivisorHalf;
+    prevRotAdj = step;
+    if (step >= 0.0f) {
+        step /= slowness;
+        step = CLAMP(step, stepMin, stepMax);
+        *rot += (s16)((step * (f32)0x10000) / 360.0f);
+        if (prevRotAdj < stepMin) {
             *rot = target;
         }
         if (rotMax != 0) {
             *rot = CLAMP(*rot, -rotMax, rotMax);
         }
     } else {
-        rotAdj = (rotAdj / slowness) * -1.0f;
-        rotAdj = CLAMP(rotAdj, rotAdjMin, rotAdjMax);
-        *rot -= (s16)((rotAdj * 65536.0f) / 360.0f);
-        if (-rotAdjMin < prevRotAdj) {
+        step = (step / slowness) * -1.0f;
+        step = CLAMP(step, stepMin, stepMax);
+        *rot -= (s16)((step * (f32)0x10000) / 360.0f);
+        if (-stepMin < prevRotAdj) {
             *rot = target;
         }
         if (rotMax != 0) {
@@ -614,7 +614,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
  * @param[in] point the point to turn to
  * @param[in] focusPos the actor's focus postion
  * @param[in] shapeRot the actor's shape rotation
- * @param[in,out] turnTarget the itermediate target step that headRot and torsoRot step towards
+ * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
  * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
@@ -1131,13 +1131,10 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 s32 SubS_TurnToPointMultiTarget(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
                                 s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj,
                                 u16 headZRotAdjMax, u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax) {
-    s16 yaw;
+    s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
     s16 pad;
     s16 pad2;
-    s16 pitch;
-
-    yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
-    pitch = Math_Vec3f_Pitch(focusPos, pitchTarget);
+    s16 pitch = Math_Vec3f_Pitch(focusPos, pitchTarget);
 
     if (BINANG_ADD(headXRotAdjMax, torsoXRotAdjMax) >= (s16)ABS(yaw)) {
         Math_ApproachS(headXRotAdj, yaw - *torsoXRotAdj, 4, 0x2AA8);

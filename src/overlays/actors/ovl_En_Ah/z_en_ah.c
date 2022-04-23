@@ -550,7 +550,7 @@ void EnAh_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAh* this = THIS;
 
     if (limbIndex == 7) {
@@ -559,7 +559,7 @@ void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80BD3AF8(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAh_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAh* this = THIS;
     s32 stepRot;
     s32 overrideRot;
@@ -612,7 +612,8 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BD3F0C[this->unk_2FC]));
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       this->skelAnime.dListCount, NULL, func_80BD3AA8, func_80BD3AF8, &this->actor);
+                                       this->skelAnime.dListCount, NULL, EnAh_PostLimbDraw, EnAh_TransformLimbDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

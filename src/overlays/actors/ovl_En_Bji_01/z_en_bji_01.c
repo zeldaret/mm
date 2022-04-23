@@ -73,13 +73,13 @@ static AnimationSpeedInfo D_809CDC7C[] = {
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp58;
+    Vec3f pitchTarget;
     s32 pad[2];
 
-    Math_Vec3f_Copy(&sp58, &player->actor.world.pos);
-    sp58.y = player->bodyPartsPos[7].y + 3.0f;
+    Math_Vec3f_Copy(&pitchTarget, &player->actor.world.pos);
+    pitchTarget.y = player->bodyPartsPos[7].y + 3.0f;
     SubS_TurnToPointMultiTarget(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
-                                &player->actor.world.pos, &sp58, &this->headZRotAdj, &this->headXRotAdj,
+                                &player->actor.world.pos, &pitchTarget, &this->headZRotAdj, &this->headXRotAdj,
                                 &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554, 0x1FFE, 0xE38, 0x1C70);
 }
 

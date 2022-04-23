@@ -2463,7 +2463,7 @@ s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
 void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
 void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex);
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin, f32 rotAdjMax);
+s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
 s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot, u16 options[4][4]);
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 Path* SubS_GetPathByIndex(GlobalContext* globalCtx, s16 pathIndex, s16 max);
