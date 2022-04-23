@@ -1113,7 +1113,7 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 
 /**
  * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
- * head and torso
+ * head and torso to a point
  *
  * @param[in] worldPos the actor's world position
  * @param[in] focusPos the actor's focus position
