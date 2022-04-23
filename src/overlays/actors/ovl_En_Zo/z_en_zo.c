@@ -174,25 +174,25 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
-    static u16 D_8099F5AC[][4] = {
+    static u16 sTurnOptions[][4] = {
         { 0xFA0, 4, 1, 3 },
         { 0x1770, 4, 1, 6 },
         { 0xFA0, 4, 1, 3 },
         { 0x1770, 4, 1, 6 },
     };
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f focus;
+    Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
-        focus.x = player->actor.world.pos.x;
-        focus.y = player->bodyPartsPos[7].y + 3.0f;
-        focus.z = player->actor.world.pos.z;
-        func_8013D2E0(&focus, &this->actor.focus.pos, &this->actor.shape.rot, &this->headRotTarget, &this->headRot,
-                      &this->upperBodyRot, D_8099F5AC);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                         &this->upperBodyRot, sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->headRotTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->headRotTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 1000, 1);
 
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);

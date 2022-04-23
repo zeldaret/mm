@@ -565,8 +565,17 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     CLOSE_DISPS(gfxCtx);
 }
 
-// CalcRot
-s16 func_8013D0E0(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin, f32 rotAdjMax) {
+/**
+ * Computes the rotation based on the options and target rotation value
+ *
+ * @param[in,out] rot the computed rotation
+ * @param[in] rotMax the max rotation in binary angles
+ * @param[in] target the target rotation value
+ * @param[in] slowness how slow to rotate, the larger the number the slower the rotation
+ * @param[in] rotAdjMin the minimun rotation adjustment in degrees
+ * @param[in] rotAdjMax the maximum rotation adjustment in degrees
+ */
+s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin, f32 rotAdjMax) {
     s16 prevRot = *rot;
     f32 rotAdj;
     f32 prevRotAdj;
@@ -599,9 +608,23 @@ s16 func_8013D0E0(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin,
     return prevRot - *rot;
 }
 
-// TurnToPoint
-s32 func_8013D2E0(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* focusTarget, Vec3s* headRot, Vec3s* torsoRot,
-                  u16 options[4][4]) {
+/**
+ * Computes the necessary HeadRot and TorsoRot adjustments to smoothly turn an actors's head and torso to a point
+ *
+ * @param[in] point the point to turn to
+ * @param[in] focusPos the actor's focus postion
+ * @param[in] shapeRot the actor's shape rotation
+ * @param[in,out] turnTarget the itermediate target step that headRot and torsoRot step towards
+ * @param[in,out] headRot the computed head rotation
+ * @param[in,out] torsoRot the computed torso rotation
+ * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
+ *
+ * options are a 4x4 u16 array where
+ *  the rows are headRotX, headRotY, torsoRotX, torsoRotY and
+ *  the cols are rotMax, slowness, rotAdjMin, rotAdjMax
+ */
+s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
+                     u16 options[4][4]) {
     s16 pitch;
     s16 yaw;
     s16 pad;
@@ -612,16 +635,19 @@ s32 func_8013D2E0(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* focusTa
 
     yaw = Math_FAtan2F(diffZ, diffX);
     pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
-    Math_SmoothStepToS(&focusTarget->x, pitch, 4, 0x2710, 0);
-    Math_SmoothStepToS(&focusTarget->y, yaw, 4, 0x2710, 0);
+    Math_SmoothStepToS(&turnTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&turnTarget->y, yaw, 4, 0x2710, 0);
 
-    targetX = func_8013D0E0(&headRot->x, options[0][0], focusTarget->x, options[0][1], options[0][2], options[0][3]);
-    //! @bug: options[0][1] should be options[2][1]
-    func_8013D0E0(&torsoRot->x, options[2][0], targetX, options[0][1], options[2][2], options[2][3]);
+    targetX = SubS_ComputeTurnToPointRot(&headRot->x, options[0][0], turnTarget->x, options[0][1], options[0][2],
+                                         options[0][3]);
+    //! @bug: torsoRotX uses headRotX slowness, options[0][1] should be options[2][1]
+    SubS_ComputeTurnToPointRot(&torsoRot->x, options[2][0], targetX, options[0][1], options[2][2], options[2][3]);
 
-    targetY = focusTarget->y - shapeRot->y;
-    func_8013D0E0(&headRot->y, options[1][0], targetY - torsoRot->y, options[1][1], options[1][2], options[1][3]);
-    func_8013D0E0(&torsoRot->y, options[3][0], targetY - headRot->y, options[3][1], options[3][2], options[3][3]);
+    targetY = turnTarget->y - shapeRot->y;
+    SubS_ComputeTurnToPointRot(&headRot->y, options[1][0], targetY - torsoRot->y, options[1][1], options[1][2],
+                               options[1][3]);
+    SubS_ComputeTurnToPointRot(&torsoRot->y, options[3][0], targetY - headRot->y, options[3][1], options[3][2],
+                               options[3][3]);
 
     return true;
 }

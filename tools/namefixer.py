@@ -482,6 +482,7 @@ wordReplace = {
     "func_8013DC40": "SubS_CopyPointFromPathList",
     "func_8013DCCC": "SubS_GetPathCount",
     "func_8013AD9C": "SubS_UpdateLimb",
+    "func_8013D2E0": "SubS_TurnToPoint",
 
     "func_80147624": "Message_ShouldAdvance",
     "func_80147734": "Message_ShouldAdvanceSilent",

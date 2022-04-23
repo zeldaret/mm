@@ -120,7 +120,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-static u16 D_80BAE800[][4] = {
+static u16 sTurnOptions[][4] = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
@@ -482,7 +482,7 @@ void EnSuttari_GetPaths(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp30;
+    Vec3f point;
 
     if (this->flags1 & 0x80) {
         EnSuttari_UpdateCollider(this, globalCtx);
@@ -490,18 +490,18 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
-            sp30.x = player->actor.world.pos.x;
-            sp30.y = player->bodyPartsPos[7].y + 3.0f;
-            sp30.z = player->actor.world.pos.z;
-            func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk2D6, &this->unk2DC,
-                          &this->unk2E2, D_80BAE800);
+            point.x = player->actor.world.pos.x;
+            point.y = player->bodyPartsPos[7].y + 3.0f;
+            point.z = player->actor.world.pos.z;
+            SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                             &this->torsoRot, sTurnOptions);
         } else {
-            Math_SmoothStepToS(&this->unk2D6.x, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->unk2D6.y, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->unk2DC.x, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->unk2DC.y, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->unk2E2.x, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->unk2E2.y, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
         }
     }
     SubS_FillLimbRotTables(globalCtx, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
@@ -980,12 +980,12 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
     func_80BAB434(this);
     if (player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_ZORA) {
         if (this->actor.playerHeightRel < 60.0f && this->actor.xzDistToPlayer < 500.0f) {
-            this->unk3F2 = this->unk2DC.y;
+            this->unk3F2 = this->headRot.y;
             this->actionFunc = func_80BACBB0;
         }
     } else if ((player->transformation == PLAYER_FORM_HUMAN) && GET_CUR_EQUIP_VALUE(EQUIP_SWORD) != 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            this->unk3F2 = this->unk2DC.y;
+            this->unk3F2 = this->headRot.y;
             func_80BAAB78(this, globalCtx);
             this->actionFunc = func_80BADA9C;
         } else if (this->actor.xzDistToPlayer < 200.0f) {
@@ -1000,7 +1000,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 target;
 
-    this->unk3F2 = this->unk2DC.y;
+    this->unk3F2 = this->headRot.y;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
@@ -1030,7 +1030,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    this->unk3F2 = this->unk2DC.y;
+    this->unk3F2 = this->headRot.y;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
@@ -1200,7 +1200,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->flags2 |= 4;
             EnSuttari_SetNextEntrance(globalCtx, 0xD670);
         } else {
-            this->unk3F2 = this->unk2DC.y;
+            this->unk3F2 = this->headRot.y;
             Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);
             Actor_MoveWithGravity(&this->actor);
             func_80BAB374(this, globalCtx);
@@ -1300,7 +1300,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     if (this->flags1 & 1) {
-        this->unk3F2 = this->unk2DC.y;
+        this->unk3F2 = this->headRot.y;
         func_80BAA9B4(this);
     } else if ((this->animationIndex == 7) && (curFrame == frameCount)) {
         this->animationIndex = 1;
@@ -1376,14 +1376,14 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->unk1F4[1] == -0x63) {
         this->actor.speedXZ = 0.0f;
     } else {
-        this->unk3F2 = this->unk2DC.y;
+        this->unk3F2 = this->headRot.y;
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
     Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
-    this->unk3F2 = this->unk2DC.y;
+    this->unk3F2 = this->headRot.y;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -1400,7 +1400,7 @@ void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->unk1F4[0] == -0x63) {
         Actor_MarkForDeath(&this->actor);
     }
-    this->unk3F2 = this->unk2DC.y;
+    this->unk3F2 = this->headRot.y;
     if (DECR(this->unk3F6) == 0) {
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
@@ -1471,13 +1471,13 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         if (!(this->flags1 & 4)) {
             Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-this->unk2DC.x, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
             Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->unk2E2.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk2E2.x, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->torsoRot.x, MTXMODE_APPLY);
     }
     if (limbIndex == 8 || limbIndex == 9 || limbIndex == 0xC) {
         rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
