@@ -53,7 +53,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -163,27 +163,27 @@ void func_80BCD2BC(EnScopecrow* this, GlobalContext* globalCtx) {
                                   this->actor.cutscene, this->actor.unk20, NULL);
 }
 
-s32 func_80BCD334(EnScopecrow* this, Path* path, s32 count_) {
+s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
-    s32 count = count_;
+    s32 index = pointIndex;
     s32 ret = false;
     f32 phi_fa0;
     f32 phi_fa1;
     Vec3f sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &points[count]);
+    Math_Vec3s_ToVec3f(&sp30, &points[index]);
 
-    if (count == 0) {
+    if (index == 0) {
         phi_fa0 = points[1].x - points[0].x;
         phi_fa1 = points[1].z - points[0].z;
-    } else if ((sp58 - 1) == count) {
+    } else if ((sp58 - 1) == index) {
         phi_fa0 = points[sp58 - 1].x - points[sp58 - 2].x;
         phi_fa1 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        phi_fa0 = points[count + 1].x - points[count - 1].x;
-        phi_fa1 = points[count + 1].z - points[count - 1].z;
+        phi_fa0 = points[index + 1].x - points[index - 1].x;
+        phi_fa1 = points[index + 1].z - points[index - 1].z;
     }
 
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
