@@ -1104,13 +1104,13 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         s32 temp;
 
         if (D_809C94A8 == 0) {
-            temp = ((void)0, gSaveContext.unk_3DE0[1]) % 0x1F4;
+            temp = ((void)0, gSaveContext.unk_3DE0[1]) % 500;
         } else {
-            temp = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 0x1F4;
+            temp = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 500;
         }
 
         if (temp < 100) {
-            this->unk_26C = 0x50;
+            this->unk_26C = 80;
         }
 
         if (this->unk_26E != 0) {

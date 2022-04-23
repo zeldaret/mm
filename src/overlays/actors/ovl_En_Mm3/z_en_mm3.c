@@ -379,13 +379,13 @@ void func_80A6FBFC(EnMm3* this, GlobalContext* globalCtx) {
     if (gSaveContext.unk_3DD0[0] == 0x10) {
         player->stateFlags1 &= ~0x20;
         this->actor.flags |= ACTOR_FLAG_10000;
-        if (gSaveContext.unk_3DE0[0] > 0x5DC) {
-            gSaveContext.unk_3DE0[0] = 0x5DC;
+        if (gSaveContext.unk_3DE0[0] > 1500) {
+            gSaveContext.unk_3DE0[0] = 1500;
         } else if ((((void)0, gSaveContext.unk_3DE0[0]) >= (OSTime)(995 - XREG(16))) &&
-                   (((void)0, gSaveContext.unk_3DE0[0]) <= (OSTime)(XREG(17) + 1005))) {
+                   (((void)0, gSaveContext.unk_3DE0[0]) <= (OSTime)(1005 + XREG(17)))) {
             gSaveContext.unk_3DE0[0] = 1000;
         }
-    } else if (gSaveContext.unk_3DE0[0] > 0x5DC) {
+    } else if (gSaveContext.unk_3DE0[0] > 1500) {
         gSaveContext.unk_3DD0[0] = 15;
         gSaveContext.unk_3DC8 = osGetTime();
     }
