@@ -89,7 +89,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static u16 sTurnOptions[][4] = {
+static TurnOptionsSet sTurnOptions = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
@@ -106,7 +106,7 @@ void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TurnToPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.turnTarget,
-                         &this->enHy.headRot, &this->enHy.torsoRot, sTurnOptions);
+                         &this->enHy.headRot, &this->enHy.torsoRot, &sTurnOptions);
     } else {
         Math_SmoothStepToS(&this->enHy.turnTarget.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.turnTarget.y, 0, 4, 0x3E8, 1);

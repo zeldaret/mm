@@ -465,7 +465,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
-    static u16 sTurnOptions[][4] = {
+    static TurnOptionsSet sTurnOptions = {
         { 0xFA0, 4, 1, 3 },
         { 0x1770, 4, 1, 6 },
         { 0xFA0, 4, 1, 3 },
@@ -480,7 +480,7 @@ void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
-                         &this->torsoRot, sTurnOptions);
+                         &this->torsoRot, &sTurnOptions);
     } else {
         Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
