@@ -104,7 +104,7 @@ void func_80952DFC(GlobalContext* globalCtx) {
     func_80151BB4(globalCtx, 0x10);
 }
 
-void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 playerOffset) {
+void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
     Vec3f diff;
     f32 distance;
 
@@ -112,13 +112,13 @@ void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 playerOffset) {
 
     distance = SQ(diff.x) + SQ(diff.z); // gets un-squared after we check if we are too close
 
-    if (SQ(playerOffset) > distance) {
+    if (SQ(offset) > distance) {
         return;
     }
 
     distance = sqrtf(distance);
-    diff.x *= (distance - playerOffset) / distance;
-    diff.z *= (distance - playerOffset) / distance;
+    diff.x *= (distance - offset) / distance;
+    diff.z *= (distance - offset) / distance;
 
     dst->x += diff.x;
     dst->z += diff.z;
@@ -127,18 +127,18 @@ void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 playerOffset) {
 void func_80952F00(EnHs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
-    f32 playerOffset;
+    f32 offset;
 
     if (this->actor.home.rot.z >= 20) { // current chick count >= 10
-        playerOffset = 15.0f;
+        offset = 15.0f;
     } else {
-        playerOffset = 10.0f;
+        offset = 10.0f;
     }
 
-    EnHs_UpdateChickPos(&this->nwcPos[0], player->actor.world.pos, playerOffset);
+    EnHs_UpdateChickPos(&this->nwcPos[0], player->actor.world.pos, offset);
 
     for (i = 1; i < ARRAY_COUNT(this->nwcPos); i++) {
-        EnHs_UpdateChickPos(&this->nwcPos[i], this->nwcPos[i - 1], playerOffset);
+        EnHs_UpdateChickPos(&this->nwcPos[i], this->nwcPos[i - 1], offset);
     }
 }
 
