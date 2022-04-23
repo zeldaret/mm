@@ -50,7 +50,7 @@ extern Color_RGBA8 D_80B6E720;
 extern Vec3f D_80B6E724;
 extern s8 D_80B6E730;
 extern s8 D_80B6E735; //? type before
-extern s8 D_80B6E738; //? type before
+extern s16 D_80B6E738; //? type before
 
 //from Draw function :
 extern Gfx D_060002C0;
@@ -69,86 +69,88 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E090.s")
-//void func_80B6E090(BgKin2Bombwall *arg0, GlobalContext *arg1) { //100-e8 = 0x18 too few allocated on stack
-//     BgKin2Bombwall *this = arg0;
-//     GlobalContext *globalCtx = arg1;
-//     Vec3f spF0; //size: 3 floats = 3 times 4 = 0xC bytes
-//     Vec3f spE4;
-//     f32 spE0;
-//     f32 spDC; //unused, only assigned value to.
-//     f32 spD8; 
-//     f32 spD4;  //unused, only assigned value to.
-//     f32 spD0; //unused, only assigned value to.
-//     f32 spCC;
-//     s32 spAC;
-//     //Vec3f *temp_s5; //confirmed fake
-//     s32 temp_a0;
-//     s32 phi_s0; //s0
-//     s32 phi_s1;
-//     s32 temp_s2;
-//     s32 temp_s3;
-//     s8 *temp_s4;
-//     s32 phi_v0;
-//     s8 *phi_s4; //$f6 that should be $f16
-//     //s32 phi_s3; //confirmed fake
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E090.s")
+void func_80B6E090(BgKin2Bombwall *arg0, GlobalContext *arg1) { //100-e8 = 0x18 too few allocated on stack
+    BgKin2Bombwall *this = arg0;
+    GlobalContext *globalCtx = arg1;
+    Vec3f spF0; //size: 3 floats = 3 times 4 = 0xC bytes
+    Vec3f spE4;
+    f32 spE0;
+    f32 spDC; //unused, only assigned value to.
+    f32 spD8; 
+    f32 spD4;  //unused, only assigned value to.
+    f32 spD0; //unused, only assigned value to.
+    f32 spCC;
+    s32 spAC;
+    //Vec3f *temp_s5; //confirmed fake
+    s32 temp_a0;
+    s32 phi_s0; //s0
+    s32 phi_s1;
+    s32 temp_s2;
+    s32 temp_s3;
+    //s8 *temp_s4; //confirmed fake
+    s32 phi_v0;
+    s8 *phi_s4; //$f6 that should be $f16
+    //s32 phi_s3; //confirmed fake
     
-//     //s32 phi_s0_2;
+    //s32 phi_s0_2;
 
-//     Matrix_RotateY(this->actor.shape.rot.y, 0); //s6 should be actor.
-//     //temp_s5 = &spF0;
-//     phi_v0 = 0;
-//     temp_s3 = 0;
+    Matrix_RotateY(this->actor.shape.rot.y, 0); //s6 should be actor.
+    //temp_s5 = &spF0;
+    phi_v0 = 0;
+    temp_s3 = 0;
     
-//     do {
-//         temp_a0 = phi_v0 + 1; //result should go into a0.
-//         spAC = temp_a0; //should be stored into a0 for next function.
+    do {
+        temp_a0 = phi_v0 + 1; //result should go into a0.
+        spAC = temp_a0; //should be stored into a0 for next function.
         
-//         phi_s4 = &D_80B6E730;
-// loop_2:
-//         temp_s3 = (temp_s3 + 1) & 7;
-//         spD8 = (f32) ((Rand_Next() >> 0x1C) + *phi_s4); //spD8 should be $f6?
-//         spD8 = ((Rand_ZeroOne() - 0.5f) * 15.0f) + ((f32) temp_a0 * 15.0f);  //temp_a0 should be $f22
-//         //should be sub.s $f18,$f0,$f20
-//         //should be mul.s $f4,$f18,$f24
-//         //should be add.s $f6,$f4,$f22
-//         spD8 = (Rand_ZeroOne() * 20.0f) - 10.0f;//must find $f10 (is spD8 for now)
-//         spCC = (2.0f * (Rand_ZeroOne() - 0.5f)) + (spD8 * 0.018461538f);//must find $f10.
-//         spD0 = (Rand_ZeroOne() * 7.0f) + 4.0f;
-//         spD4 = spE0 * 0.3f; //should be $f10?
-//         Matrix_MultiplyVector3fByState((Vec3f *) &spD8, &spF0);
-//         Matrix_MultiplyVector3fByState((Vec3f *) &spCC, &spE4);
-//         //spF0 = (bitwise f32) spF0 + arg0->actor.world.pos.x;
-//         spF0.x += this->actor.world.pos.x; //guessed
-//         spF0.y += this->actor.world.pos.y;
-//         spF0.z += this->actor.world.pos.z;
-//         //phi_s3 = temp_s3;
-//         //phi_s3 = temp_s3;
-//         if ((Rand_Next() & 3) == 0) {
-//             phi_s0 = 0x20;
-//         } else {
-//             phi_s0 = 0x40;
-//         }
-//         //phi_s0 = phi_s0_2;
-//         if ((temp_s3 < 2) || (phi_s1 = 0, (Rand_Next() > 0))) {
-//             temp_s2 = Rand_Next();
-//             phi_s0 =  (s32) (s16) (phi_s0 | 1);
-//             // phi_s0 = (s32) (s16) (phi_s0_2 | 1);
-//             func_800B0E48(globalCtx, &spF0, &D_801D15B0, &D_80B6E724, &D_80B6E71C, &D_80B6E720, 
-//                             (s16) (((u32) temp_s2 >> 0x1B) + 0x46), 
-//                             (s16) ((Rand_Next() >> 0x1A) + 0x3C));
+        phi_s4 = &D_80B6E730;//should be 0x4170 in at
+loop_2:
+        temp_s3 = (temp_s3 + 1) & 7;
+        spD8 = (f32) ((Rand_Next() >> 0x1C) + *phi_s4); //spD8 should be $f6?
+        spD8 = ((Rand_ZeroOne() - 0.5f) * 15.0f) + ((f32) temp_a0 * 15.0f);  //temp_a0 should be $f22
+        //should be sub.s $f18,$f0,$f20
+        //should be mul.s $f4,$f18,$f24
+        //should be add.s $f6,$f4,$f22
+        spD8 = (Rand_ZeroOne() * 20.0f) - 10.0f;//must find $f10 (is spD8 for now)
+        spCC = (2.0f * (Rand_ZeroOne() - 0.5f)) + (spD8 * 0.018461538f);//must find $f10.
+        spD0 = (Rand_ZeroOne() * 7.0f) + 4.0f;
+        spD4 = spE0 * 0.3f; //should be $f10?
+        //spD8 = this->actor.shape.rot.z;
+        Matrix_MultiplyVector3fByState((Vec3f *) &spD8, (Vec3f *) &spE4);
+        Matrix_MultiplyVector3fByState((Vec3f *) &spCC, (Vec3f *) &spD0);
+        //spF0 = (bitwise f32) spF0 + arg0->actor.world.pos.x;
+        spF0.x += this->actor.world.pos.x; //guessed
+        spF0.y += this->actor.world.pos.y;
+        spF0.z += this->actor.world.pos.z;
+        //phi_s3 = temp_s3;
+        //phi_s3 = temp_s3;
+        if ((Rand_Next() & 3) == 0) {
+            phi_s0 = 0x20;
+        } else {
+            phi_s0 = 0x40;
+        }
+        //phi_s0 = phi_s0_2;
+        if ((phi_s0 =  (s32) (s16) (phi_s0 | 1),temp_s3 < 2) || (phi_s1 = 0, (Rand_Next() > 0))) {
+            temp_s2 = Rand_Next();
+            //;
+            // phi_s0 = (s32) (s16) (phi_s0_2 | 1);
+            func_800B0E48(globalCtx, &spF0, &D_801D15B0, &D_80B6E724, &D_80B6E71C, &D_80B6E720, 
+                            (s16) (((u32) temp_s2 >> 0x1B) + 0x46), 
+                            (s16) ((Rand_Next() >> 0x1A) + 0x3C));
             
-//             phi_s1 = 1;
-//         }
-//         EffectSsKakera_Spawn(globalCtx, &spF0, &spE4, &spF0, (s16) -0x226, (s16) phi_s0, (s16) 0x1E, (s16) 0, (s16) 0, (s16) (s32) *(&D_80B6E738 + (temp_s3 * 2)), (s16) phi_s1, (s16) 0, 0x32, (s16) -1, (s16) 0x1F5, (Gfx *) &D_06000128);
-//         temp_s4 = phi_s4 + 1;
-//         phi_s4 = temp_s4;
-//         if (temp_s4 != &D_80B6E735) {
-//             goto loop_2;
-//         }
-//         phi_v0 = spAC;
-//     } while (spAC != 6);
-// }
+            phi_s1 = 1;
+        }
+
+        EffectSsKakera_Spawn(globalCtx, &spF0, &spE4, &spF0, (s16) -0x226, (s16) phi_s0, (s16) 0x1E, (s16) 0, (s16) 0, (s16) (s32) *(&D_80B6E738 + (temp_s3 * 2)), (s16) phi_s1, (s16) 0, 0x32, (s16) -1, (s16) 0x1F5, (Gfx *) &D_06000128);
+        
+        //phi_s4 = temp_s4;
+        if (phi_s4 = phi_s4 + 1, phi_s4 != &D_80B6E735) {
+            goto loop_2;
+        }
+        phi_v0 = spAC;
+    } while (spAC != 6);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
     
