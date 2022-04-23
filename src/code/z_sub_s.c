@@ -619,7 +619,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
  * @param[in,out] torsoRot the computed torso rotation
  * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
  *
- * options are a 4x4 u16 array where
+ * options are a u16[4][4] where
  *  the rows are headRotX, headRotY, torsoRotX, torsoRotY and
  *  the cols are rotMax, slowness, rotAdjMin, rotAdjMax
  */
