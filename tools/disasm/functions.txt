@@ -2659,7 +2659,7 @@
     0x8013A860:("SubS_DrawTransformFlexLimb",),
     0x8013AB00:("SubS_DrawTransformFlex",),
     0x8013AD6C:("SubS_InCsMode",),
-    0x8013AD9C:("func_8013AD9C",),
+    0x8013AD9C:("SubS_UpdateLimb",),
     0x8013AED4:("SubS_UpdateFlags",),
     0x8013AF00:("func_8013AF00",),
     0x8013B010:("func_8013B010",),

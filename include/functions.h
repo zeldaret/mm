@@ -2443,7 +2443,7 @@ struct EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag);
 Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
 Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx);
 s32 SubS_InCsMode(GlobalContext* globalCtx);
-s32 func_8013AD9C(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 step, s32 override);
+s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
 void func_8013AF00(f32* arg0, s32 arg1, s32 arg2);
 s32 func_8013B010(f32* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, f32* arg6);

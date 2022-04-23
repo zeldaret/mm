@@ -168,8 +168,20 @@ s32 SubS_InCsMode(GlobalContext* globalCtx) {
     return inCsMode;
 }
 
-// UpdateLimb
-s32 func_8013AD9C(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 step, s32 override) {
+/**
+ * Computes a limb's position and rotation for use in TransformLimbDraws
+ *
+ * @param[in] newRotZ value to override newRot's Z value if override is true
+ * @param[in] newRotY value to override newRot's Y value if override is true
+ * @param[out] pos limb's computed position
+ * @param[out] rot limb's computed rotation
+ * @param[in] stepRot boolean, step towards newRot instead of setting directly
+ * @param[in] overrideRot boolean, override newRot with the specified input.
+ *
+ * Note:
+ *  If overrideRot is true, the rotation will automatically step instead of setting directly
+ */
+s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot) {
     Vec3f newPos;
     Vec3f zeroVec = gZeroVec3f;
     Vec3s newRot;
@@ -180,14 +192,14 @@ s32 func_8013AD9C(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 step, s3
     func_8018219C(&curState, &newRot, MTXMODE_NEW);
     *pos = newPos;
 
-    if (!step && !override) {
+    if (!stepRot && !overrideRot) {
         rot->x = newRot.x;
         rot->y = newRot.y;
         rot->z = newRot.z;
         return true;
     }
 
-    if (override) {
+    if (overrideRot) {
         newRot.z = newRotZ;
         newRot.y = newRotY;
     }
@@ -588,8 +600,8 @@ s16 func_8013D0E0(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 rotAdjMin,
 }
 
 // TurnToPoint
-s32 func_8013D2E0(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* focusTarget, Vec3s* headRot,
-                  Vec3s* torsoRot, u16 options[4][4]) {
+s32 func_8013D2E0(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* focusTarget, Vec3s* headRot, Vec3s* torsoRot,
+                  u16 options[4][4]) {
     s16 pitch;
     s16 yaw;
     s16 pad;

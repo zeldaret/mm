@@ -561,25 +561,25 @@ void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80BD3AF8(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAh* this = THIS;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_2D8 & 0x80)) {
         if (this->unk_2D8 & 0x20) {
-            phi_v0 = 1;
+            overrideRot = true;
         } else {
-            phi_v0 = 0;
+            overrideRot = false;
         }
-        phi_v1 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        stepRot = false;
+        overrideRot = false;
     }
 
     if (limbIndex == 7) {
-        func_8013AD9C(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
-                      BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
-                      this->unk_200, phi_v1, phi_v0);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
+                        BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
+                        this->unk_200, stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -588,8 +588,8 @@ void func_80BD3AF8(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_InsertZRotation_s(this->unk_200[0].z, MTXMODE_APPLY);
         Matrix_StatePush();
     } else if (limbIndex == 2) {
-        func_8013AD9C(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
-                      &this->unk_1E8[1], &this->unk_200[1], phi_v1, phi_v0);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
+                        &this->unk_1E8[1], &this->unk_200[1], stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_1E8[1].x, this->unk_1E8[1].y, this->unk_1E8[1].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

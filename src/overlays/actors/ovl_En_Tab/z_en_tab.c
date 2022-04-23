@@ -572,25 +572,25 @@ void EnTab_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnTab_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTab* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 rotStep;
+    s32 overrideStep;
 
     if (!(this->unk_2FC & 0x40)) {
         if (this->unk_2FC & 0x10) {
-            phi_v1 = 1;
+            overrideStep = true;
         } else {
-            phi_v1 = 0;
+            overrideStep = false;
         }
-        phi_v0 = 1;
+        rotStep = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideStep = false;
+        rotStep = false;
     }
 
     if (limbIndex == 9) {
-        func_8013AD9C(BINANG_ADD(this->unk_312 + this->unk_316, 0x4000),
-                      BINANG_ADD(this->unk_314 + this->unk_318 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
-                      this->unk_200, phi_v0, phi_v1);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_312 + this->unk_316, 0x4000),
+                        BINANG_ADD(this->unk_314 + this->unk_318 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
+                        this->unk_200, rotStep, overrideStep);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
