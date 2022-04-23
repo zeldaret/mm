@@ -66,7 +66,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1 | OC2_UNK1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -204,7 +204,7 @@ void func_808DEA54(EnHorseLinkChild* this, s32 arg1) {
     if (arg1 != this->unk_148) {
         this->unk_148 = arg1;
         Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
     }
 }
 
@@ -227,10 +227,10 @@ void func_808DEB14(EnHorseLinkChild* this, GlobalContext* globalCtx) {
         if (phi_v0 != this->unk_148) {
             this->unk_148 = phi_v0;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
         } else {
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, 0.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
@@ -240,7 +240,7 @@ void func_808DECA0(EnHorseLinkChild* this) {
     this->unk_148 = 0;
     this->actor.speedXZ = 0.0f;
     Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DED40(EnHorseLinkChild* this, GlobalContext* globalCtx) {
@@ -285,10 +285,10 @@ void func_808DED40(EnHorseLinkChild* this, GlobalContext* globalCtx) {
         if (phi_v0 != this->unk_148) {
             this->unk_148 = phi_v0;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
         } else {
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, 0.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
@@ -298,7 +298,7 @@ void func_808DEFE8(EnHorseLinkChild* this) {
     this->unk_148 = 0;
     this->actor.speedXZ = 0.0f;
     Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DF088(EnHorseLinkChild* this, GlobalContext* globalCtx) {
@@ -400,10 +400,11 @@ void func_808DF194(EnHorseLinkChild* this, GlobalContext* globalCtx) {
     if ((sp48 != this->unk_148) || (sp4C == 1)) {
         this->unk_148 = sp48;
         Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
     } else {
         Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this),
-                         this->skin.skelAnime.curFrame, Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, 0.0f);
+                         this->skin.skelAnime.curFrame, Animation_GetLastFrame(D_808DFEC0[this->unk_148]),
+                         ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -418,7 +419,7 @@ void func_808DF560(EnHorseLinkChild* this) {
 
     D_801BDAA4 = 0;
     Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, 0.0f);
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
 }
 
 void func_808DF620(EnHorseLinkChild* this, GlobalContext* globalCtx) {
@@ -442,7 +443,7 @@ void func_808DF620(EnHorseLinkChild* this, GlobalContext* globalCtx) {
         if (Math_CosS(sp36) < 0.0f) {
             this->unk_148 = 2;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], D_808DFF18[this->unk_148], 0.0f,
-                             Animation_GetLastFrame(D_808DFEC8[0]), 2, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC8[0]), ANIMMODE_ONCE, -5.0f);
         } else {
             func_808DF560(this);
         }
@@ -456,7 +457,7 @@ void func_808DF788(EnHorseLinkChild* this) {
     this->unk_1E0 = 0;
     this->actor.speedXZ = 2.0f;
     Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DF838(EnHorseLinkChild* this, GlobalContext* globalCtx) {
@@ -514,10 +515,10 @@ void func_808DF838(EnHorseLinkChild* this, GlobalContext* globalCtx) {
         if (phi_v0 != this->unk_148) {
             this->unk_148 = phi_v0;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
         } else {
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), 2, 0.0f);
+                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
