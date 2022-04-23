@@ -2223,7 +2223,7 @@ asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x801
 asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerFaceEachOther.s,SubS_ActorAndPlayerFaceEachOther,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
-asm/non_matchings/code/z_sub_s/SubS_TurnToPointMultiTarget.s,SubS_TurnToPointMultiTarget,0x8013E950,0xB0
+asm/non_matchings/code/z_sub_s/SubS_TurnToPointStep.s,SubS_TurnToPointStep,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/func_8013EC10.s,func_8013EC10,0x8013EC10,0xD
 asm/non_matchings/code/code_8013EC10/func_8013EC44.s,func_8013EC44,0x8013EC44,0x27
 asm/non_matchings/code/code_8013EC10/func_8013ECE0.s,func_8013ECE0,0x8013ECE0,0x2F

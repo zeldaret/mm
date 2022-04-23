@@ -2493,7 +2493,7 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
 s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
 s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, void* data);
 s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol, s16 actorYawTol);
-s32 SubS_TurnToPointMultiTarget(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj, u16 headZRotAdjMax, u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax);
+s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
 // void func_8013EC10(void);
 void func_8013EC44(f32 a, u8 b, u8 c, u8 d);
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);

@@ -571,23 +571,23 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
  * @param[in,out] rot the computed rotation
  * @param[in] rotMax the max rotation in binary angles
  * @param[in] target the target rotation value
- * @param[in] slowness how slow to rotate, the larger the number the slower the rotation
+ * @param[in] slowness how slow to rotate, the larger the number the slower the rotation, cannot be 0
  * @param[in] stepMin the minimun step in degrees
  * @param[in] stepMax the maximum step in degrees
  */
 s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
     s16 prevRot = *rot;
     f32 step;
-    f32 prevRotAdj;
+    f32 prevRotStep;
 
     step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
     step *= gFramerateDivisorHalf;
-    prevRotAdj = step;
+    prevRotStep = step;
     if (step >= 0.0f) {
         step /= slowness;
         step = CLAMP(step, stepMin, stepMax);
         *rot += (s16)((step * (f32)0x10000) / 360.0f);
-        if (prevRotAdj < stepMin) {
+        if (prevRotStep < stepMin) {
             *rot = target;
         }
         if (rotMax != 0) {
@@ -597,7 +597,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
         step = (step / slowness) * -1.0f;
         step = CLAMP(step, stepMin, stepMax);
         *rot -= (s16)((step * (f32)0x10000) / 360.0f);
-        if (-stepMin < prevRotAdj) {
+        if (-stepMin < prevRotStep) {
             *rot = target;
         }
         if (rotMax != 0) {
@@ -609,7 +609,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
 }
 
 /**
- * Computes the necessary HeadRot and TorsoRot adjustments to smoothly turn an actors's head and torso to a point
+ * Computes the necessary HeadRot and TorsoRot to smoothly turn an actors's head and torso to a point
  *
  * @param[in] point the point to turn to
  * @param[in] focusPos the actor's focus postion
@@ -638,16 +638,17 @@ s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turn
 
     targetX =
         SubS_ComputeTurnToPointRot(&headRot->x, options->headRotX.rotMax, turnTarget->x, options->headRotX.slowness,
-                                   options->headRotX.rotAdjMin, options->headRotX.rotAdjMax);
+                                   options->headRotX.rotStepMin, options->headRotX.rotStepMax);
     //! @bug: torsoRotX uses headRotX slowness
     SubS_ComputeTurnToPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
-                               options->torsoRotX.rotAdjMin, options->torsoRotX.rotAdjMax);
+                               options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
 
     targetY = turnTarget->y - shapeRot->y;
     SubS_ComputeTurnToPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
-                               options->headRotY.rotAdjMin, options->headRotY.rotAdjMax);
+                               options->headRotY.rotStepMin, options->headRotY.rotStepMax);
     SubS_ComputeTurnToPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
-                               options->torsoRotY.slowness, options->torsoRotY.rotAdjMin, options->torsoRotY.rotAdjMax);
+                               options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
+                               options->torsoRotY.rotStepMax);
 
     return true;
 }
@@ -1111,49 +1112,49 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 }
 
 /**
- * Computes the necessary HeadRot and TorsoRot adjustments to smoothly turn an actors's head and torso to different yaw
- * and pitch target points
+ * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
+ * head and torso
  *
  * @param[in] worldPos the actor's world position
  * @param[in] focusPos the actor's focus position
  * @param[in] shapeYRot the actor's shape's Y rotation
  * @param[in] yawTarget the target point to determine desired yaw
  * @param[in] pitchTarget the target point to determine desired pitch
- * @param[in,out] headZRotAdj the computed actors' head's Z rotation
- * @param[in,out] headXRotAdj the computed actors' head's X rotation
- * @param[in,out] torsoZRotAdj the computed actors' torso's Z rotation
- * @param[in,out] torsoXRotAdj the computed actors' torso's X rotation
- * @param[in] headZRotAdjMax the max head's Z rotation
- * @param[in] headXRotAdjMax the max head's X rotation
- * @param[in] torsoZRotAdjMax the max torso's Z rotation
- * @param[in] torsoXRotAdjMax the max torso's X rotation
+ * @param[in,out] headZRotStep the computed actors' head's Z rotation step
+ * @param[in,out] headXRotStep the computed actors' head's X rotation step
+ * @param[in,out] torsoZRotStep the computed actors' torso's Z rotation step
+ * @param[in,out] torsoXRotStep the computed actors' torso's X rotation step
+ * @param[in] headZRotStepMax the max head's Z rotation step
+ * @param[in] headXRotStepMax the max head's X rotation step
+ * @param[in] torsoZRotStepMax the max torso's Z rotation step
+ * @param[in] torsoXRotStepMax the max torso's X rotation step
  */
-s32 SubS_TurnToPointMultiTarget(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
-                                s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj,
-                                u16 headZRotAdjMax, u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax) {
+s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                         s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
+                         u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
     s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
     s16 pad;
     s16 pad2;
     s16 pitch = Math_Vec3f_Pitch(focusPos, pitchTarget);
 
-    if (BINANG_ADD(headXRotAdjMax, torsoXRotAdjMax) >= (s16)ABS(yaw)) {
-        Math_ApproachS(headXRotAdj, yaw - *torsoXRotAdj, 4, 0x2AA8);
-        *headXRotAdj = CLAMP(*headXRotAdj, -headXRotAdjMax, headXRotAdjMax);
-        Math_ApproachS(torsoXRotAdj, yaw - *headXRotAdj, 4, 0x2AA8);
-        *torsoXRotAdj = CLAMP(*torsoXRotAdj, -torsoXRotAdjMax, torsoXRotAdjMax);
+    if (BINANG_ADD(headXRotStepMax, torsoXRotStepMax) >= (s16)ABS(yaw)) {
+        Math_ApproachS(headXRotStep, yaw - *torsoXRotStep, 4, 0x2AA8);
+        *headXRotStep = CLAMP(*headXRotStep, -headXRotStepMax, headXRotStepMax);
+        Math_ApproachS(torsoXRotStep, yaw - *headXRotStep, 4, 0x2AA8);
+        *torsoXRotStep = CLAMP(*torsoXRotStep, -torsoXRotStepMax, torsoXRotStepMax);
     } else {
-        Math_ApproachS(headXRotAdj, 0, 4, 0x2AA8);
-        Math_ApproachS(torsoXRotAdj, 0, 4, 0x2AA8);
+        Math_ApproachS(headXRotStep, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoXRotStep, 0, 4, 0x2AA8);
     }
 
-    if (BINANG_ADD(headZRotAdjMax, torsoZRotAdjMax) >= (s16)ABS(pitch)) {
-        Math_ApproachS(headZRotAdj, pitch - *torsoZRotAdj, 4, 0x2AA8);
-        *headZRotAdj = CLAMP(*headZRotAdj, -headZRotAdjMax, headZRotAdjMax);
-        Math_ApproachS(torsoZRotAdj, pitch - *headZRotAdj, 4, 0x2AA8);
-        *torsoZRotAdj = CLAMP(*torsoZRotAdj, -torsoZRotAdjMax, torsoZRotAdjMax);
+    if (BINANG_ADD(headZRotStepMax, torsoZRotStepMax) >= (s16)ABS(pitch)) {
+        Math_ApproachS(headZRotStep, pitch - *torsoZRotStep, 4, 0x2AA8);
+        *headZRotStep = CLAMP(*headZRotStep, -headZRotStepMax, headZRotStepMax);
+        Math_ApproachS(torsoZRotStep, pitch - *headZRotStep, 4, 0x2AA8);
+        *torsoZRotStep = CLAMP(*torsoZRotStep, -torsoZRotStepMax, torsoZRotStepMax);
     } else {
-        Math_ApproachS(headZRotAdj, 0, 4, 0x2AA8);
-        Math_ApproachS(torsoZRotAdj, 0, 4, 0x2AA8);
+        Math_ApproachS(headZRotStep, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoZRotStep, 0, 4, 0x2AA8);
     }
 
     return true;

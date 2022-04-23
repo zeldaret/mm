@@ -78,9 +78,9 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&pitchTarget, &player->actor.world.pos);
     pitchTarget.y = player->bodyPartsPos[7].y + 3.0f;
-    SubS_TurnToPointMultiTarget(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
-                                &player->actor.world.pos, &pitchTarget, &this->headZRotAdj, &this->headXRotAdj,
-                                &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554, 0x1FFE, 0xE38, 0x1C70);
+    SubS_TurnToPointStep(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
+                         &player->actor.world.pos, &pitchTarget, &this->headZRotStep, &this->headXRotStep,
+                         &this->torsoZRotStep, &this->torsoXRotStep, 0x1554, 0x1FFE, 0xE38, 0x1C70);
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
@@ -406,12 +406,12 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
     switch (limbIndex) {
         case BJI_LIMB_TORSO:
-            rot->x += this->torsoXRotAdj;
-            rot->z += this->torsoZRotAdj;
+            rot->x += this->torsoXRotStep;
+            rot->z += this->torsoZRotStep;
             break;
         case BJI_LIMB_HEAD:
-            rot->x += this->headXRotAdj;
-            rot->z += this->headZRotAdj;
+            rot->x += this->headXRotStep;
+            rot->z += this->headZRotStep;
             break;
     }
     return false;

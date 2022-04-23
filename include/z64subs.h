@@ -40,9 +40,9 @@ typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
 typedef struct TurnOptions {
     /* 0x0 */ u16 rotMax; // binary angles
-    /* 0x2 */ u16 slowness;
-    /* 0x4 */ u16 rotAdjMin; // degrees
-    /* 0x6 */ u16 rotAdjMax; // degrees
+    /* 0x2 */ u16 slowness; // larger for slower rotation, cannot be 0
+    /* 0x4 */ u16 rotStepMin; // degrees
+    /* 0x6 */ u16 rotStepMax; // degrees
 } TurnOptions; // size = 0x8
 
 typedef struct TurnOptionsSet {
