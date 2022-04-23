@@ -78,9 +78,9 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp58, &player->actor.world.pos);
     sp58.y = player->bodyPartsPos[7].y + 3.0f;
-    func_8013E950(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y, &player->actor.world.pos,
-                  &sp58, &this->headZRotAdj, &this->headXRotAdj, &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554,
-                  0x1FFE, 0xE38, 0x1C70);
+    SubS_TurnToPointMultiTarget(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
+                                &player->actor.world.pos, &sp58, &this->headZRotAdj, &this->headXRotAdj,
+                                &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554, 0x1FFE, 0xE38, 0x1C70);
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {

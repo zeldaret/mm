@@ -1110,10 +1110,27 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
     return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
-// TurnToPointMultiTarget
-s32 func_8013E950(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
-                  s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj, u16 headZRotAdjMax,
-                  u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax) {
+/**
+ * Computes the necessary HeadRot and TorsoRot adjustments to smoothly turn an actors's head and torso to different yaw
+ * and pitch target points
+ *
+ * @param[in] worldPos the actor's world position
+ * @param[in] focusPos the actor's focus position
+ * @param[in] shapeYRot the actor's shape's Y rotation
+ * @param[in] yawTarget the target point to determine desired yaw
+ * @param[in] pitchTarget the target point to determine desired pitch
+ * @param[out] headZRotAdj the computed actors' head's Z rotation
+ * @param[out] headXRotAdj the computed actors' head's X rotation
+ * @param[out] torsoZRotAdj the computed actors' torso's Z rotation
+ * @param[out] torsoXRotAdj the computed actors' torso's X rotation
+ * @param[in] headZRotAdjMax the max head's Z rotation
+ * @param[in] headXRotAdjMax the max head's X rotation
+ * @param[in] torsoZRotAdjMax the max torso's Z rotation
+ * @param[in] torsoXRotAdjMax the max torso's X rotation
+ */
+s32 SubS_TurnToPointMultiTarget(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                                s16* headZRotAdj, s16* headXRotAdj, s16* torsoZRotAdj, s16* torsoXRotAdj,
+                                u16 headZRotAdjMax, u16 headXRotAdjMax, u16 torsoZRotAdjMax, u16 torsoXRotAdjMax) {
     s16 yaw;
     s16 pad;
     s16 pad2;
