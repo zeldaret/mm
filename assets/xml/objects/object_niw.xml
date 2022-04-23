@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Cucco: zelda name for chicken, "Niw" likely short for "Niwatori" -->
     <File Name="object_niw" Segment="6">
         <Animation Name="gNiwIdleAnim" Offset="0xE8" />
         <DList Name="gNiwNeckDL" Offset="0x9C0" />
