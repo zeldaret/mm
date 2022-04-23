@@ -291,10 +291,10 @@ void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp18;
 
-    this->unk_35C = REG(15) + *unk_14;
+    this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!func_80133038(globalCtx, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.unk0) && !func_80BC20D0(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;

@@ -1691,10 +1691,10 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     };
     u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
-    u32* unk_14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp2C;
 
-    this->unk_374 = REG(15) + *unk_14;
+    this->unk_374 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;

@@ -840,10 +840,10 @@ void func_80BF2A50(EnIg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_3EC = REG(15) + *unk_14;
+    this->unk_3EC = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (!func_80133038(globalCtx, D_80BF3260, &sp20) ||
         ((this->unk_298.unk0 != sp20.unk0) && !func_80BF2368(this, globalCtx, &sp20))) {

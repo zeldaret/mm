@@ -459,10 +459,10 @@ void func_80BE1224(EnTab* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE127C(EnTab* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp18;
 
-    this->unk_31A = REG(15) + *unk_14;
+    this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (!func_80133038(globalCtx, D_80BE18D0, &sp18) ||
         ((this->unk_1D8 != sp18.unk0) && !func_80BE1060(this, globalCtx, &sp18))) {
