@@ -147,8 +147,10 @@ typedef enum {
     /* 1 */ FAMOS_ANIMATED_MAT_FLIPPED // flipped is orange/yellowish
 } FamosAnimatedMatArrayIndexes;
 
-static AnimatedMaterial* sEmblemAnimatedMats[] = { gFamosNormalGlowingEmblemTexAnim,
-                                                   gFamosFlippedGlowingEmblemTexAnim, };
+static AnimatedMaterial* sEmblemAnimatedMats[] = {
+    gFamosNormalGlowingEmblemTexAnim,
+    gFamosFlippedGlowingEmblemTexAnim,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
