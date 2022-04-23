@@ -583,10 +583,10 @@ void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
-    u32* unk14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_436 = REG(15) + *unk14;
+    this->unk_436 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (!func_80133038(globalCtx, D_80BAA488, &sp20) ||
         ((this->unk_434 != sp20.unk0) && !func_80BA9110(this, globalCtx, &sp20))) {

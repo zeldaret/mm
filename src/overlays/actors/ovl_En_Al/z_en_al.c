@@ -734,10 +734,10 @@ void func_80BDF578(EnAl* this, GlobalContext* globalCtx) {
 }
 
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
-    u32* unk14 = &gSaveContext.save.daySpeed;
+    s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_4E0 = REG(15) + *unk14;
+    this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!func_80133038(globalCtx, D_80BDFC70, &sp20) ||
         ((this->unk_35C != sp20.unk0) && !func_80BDF390(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
