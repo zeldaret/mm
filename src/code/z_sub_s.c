@@ -1119,10 +1119,10 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
  * @param[in] shapeYRot the actor's shape's Y rotation
  * @param[in] yawTarget the target point to determine desired yaw
  * @param[in] pitchTarget the target point to determine desired pitch
- * @param[out] headZRotAdj the computed actors' head's Z rotation
- * @param[out] headXRotAdj the computed actors' head's X rotation
- * @param[out] torsoZRotAdj the computed actors' torso's Z rotation
- * @param[out] torsoXRotAdj the computed actors' torso's X rotation
+ * @param[in,out] headZRotAdj the computed actors' head's Z rotation
+ * @param[in,out] headXRotAdj the computed actors' head's X rotation
+ * @param[in,out] torsoZRotAdj the computed actors' torso's Z rotation
+ * @param[in,out] torsoXRotAdj the computed actors' torso's X rotation
  * @param[in] headZRotAdjMax the max head's Z rotation
  * @param[in] headXRotAdjMax the max head's X rotation
  * @param[in] torsoZRotAdjMax the max torso's Z rotation
