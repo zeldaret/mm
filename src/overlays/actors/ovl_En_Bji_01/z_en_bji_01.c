@@ -116,8 +116,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
-    s32 tempDay;
-    f32 tempTimeBeforeMoonCrash;
+    f32 timeBeforeMoonCrash;
 
     switch (this->actor.params) {
         case ENBJI01_PARAMS_DEFAULT:
@@ -180,10 +179,9 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            tempDay = gSaveContext.save.day;
-                            tempTimeBeforeMoonCrash =
-                                ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.save.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
+                            timeBeforeMoonCrash =
+                                (4 << 16) - (CURRENT_DAY << 16) - (u16)(((void)0, gSaveContext.save.time) - 0x4000);
+                            if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
