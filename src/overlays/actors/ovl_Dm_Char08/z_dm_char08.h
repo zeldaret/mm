@@ -17,9 +17,9 @@ typedef struct DmChar08 {
     /* 0x1B8 */ Vec3f tree2Pos;
     /* 0x1C4 */ Vec3f bubblePos;
     /* 0x1D0 */ Vec3f focusPos;
-    /* 0x1DC */ char pad1DC[8];
+    /* 0x1DC */ UNK_TYPE1 pad1DC[8];
     /* 0x1E4 */ f32 targetYPos;
-    /* 0x1E8 */ char pad1E8[8];
+    /* 0x1E8 */ UNK_TYPE1 pad1E8[8];
     /* 0x1F0 */ f32 unk_1F0;
     /* 0x1F4 */ s16 unk_1F4;
     /* 0x1F6 */ s16 unk_1F6;
@@ -32,7 +32,7 @@ typedef struct DmChar08 {
     /* 0x201 */ u8 eyeIndex;
     /* 0x202 */ u8 animIndex;
     /* 0x203 */ u8 unk_203;
-    /* 0x204 */ char pad204[1];
+    /* 0x204 */ UNK_TYPE1 pad204;
     /* 0x205 */ u8 alpha;
     /* 0x206 */ u8 unk_206;
     /* 0x207 */ u8 unk_207;

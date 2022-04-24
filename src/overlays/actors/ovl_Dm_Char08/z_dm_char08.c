@@ -56,13 +56,13 @@ const ActorInit Dm_Char08_InitVars = {
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
 AnimationInfo sAnimationInfo[7] = {
-    { &object_kamejima_Anim_0048B0, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_006980, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_012260, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_0100CC, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_0047B8, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_0119D4, 1.0f, 0.0f, -1.0f, 0, -24.0f },
-    { &object_kamejima_Anim_014E8C, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_0048B0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_006980, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_012260, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_0100CC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_0047B8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_0119D4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+    { &object_kamejima_Anim_014E8C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -115,10 +115,10 @@ void DmChar08_UpdateEyes(DmChar08* this) {
     }
 }
 
-void DmChar08_SetAnimation(SkelAnime* skelAnime, AnimationInfo* entry, u16 arg2) {
+void DmChar08_SetAnimation(SkelAnime* skelAnime, AnimationInfo* entry, u16 index) {
     f32 endFrame;
 
-    entry += arg2;
+    entry += index;
     if (entry->frameCount < 0.0f) {
         endFrame = Animation_GetLastFrame(entry->animation);
     } else {
@@ -413,7 +413,6 @@ void func_80AAFCCC(DmChar08* this, GlobalContext* globalCtx) {
                     Message_StartTextbox(globalCtx, 0x102E, &this->dyna.actor);
                     this->unk_206++;
                     break;
-                    ;
                 case 2:
                     if (Message_GetState(&globalCtx->msgCtx) == 2) {
                         Message_StartTextbox(globalCtx, 0x102F, &this->dyna.actor);
@@ -472,7 +471,7 @@ void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx) {
                     this->bubbleCount = 0;
                     break;
                 case 14:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, 0x28DE);
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_ROLL);
                     this->animIndex = 2;
                     break;
             }
@@ -500,7 +499,7 @@ void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx) {
             case 14:
                 Cutscene_ActorTranslate(&this->dyna.actor, globalCtx, actorActionIndex);
                 Math_SmoothStepToS(&this->dyna.actor.world.rot.y,
-                                   globalCtx->csCtx.actorActions[actorActionIndex]->rot.y, 0xA, 0xDC, (s16)1);
+                                   globalCtx->csCtx.actorActions[actorActionIndex]->rot.y, 0xA, 0xDC, 1);
                 this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
                 break;
             default:
@@ -597,7 +596,6 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                     this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     break;
-                    ;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 3;
@@ -643,7 +641,6 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                             this->unk_207 = 0;
                             this->unk_208 = 0;
                             break;
-                            ;
                         }
                         this->animIndex = 3;
                         this->eyeMode = EYEMODE_0;
@@ -673,7 +670,6 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                     this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     break;
-                    ;
                 case 2:
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -934,7 +930,7 @@ s32 DmChar08_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         (limbIndex == OBJECT_KAMEJIMA_LIMB_15)) {
         rot->z = -0x5E24;
     }
-    return 0;
+    return false;
 }
 
 void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -963,59 +959,52 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/9PIhn
-void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
-    f32 temp_f12;
-
-    DmChar08* this = THIS;
+void DmChar08_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+    DmChar08* this = (DmChar08*)thisx;
+    f32 one;
 
     switch (limbIndex) {
+        case 2:
+            break;
         case 4:
             Matrix_StatePop();
-            temp_f12 = ((1.0f - 0.7f) * this->unk_1F0) + 0.7f;
-            Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
+            one = 1.0f;
+            Matrix_Scale(((one - 0.7f) * this->unk_1F0) + 0.7f, ((one - 0.7f) * this->unk_1F0) + 0.7f, 1.0f,
+                         MTXMODE_APPLY);
             Matrix_StatePush();
-            return;
+            break;
         case 17:
         case 18:
         case 21:
         case 22:
             Matrix_StatePop();
-            temp_f12 = (this->unk_1F0 * 0.4f) + 0.6f;
-            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
+            Matrix_Scale((this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f,
+                         MTXMODE_APPLY);
             Matrix_StatePush();
-            return;
+            break;
         case 19:
         case 23:
-            temp_f12 = (this->unk_1F0 * 0.4f) + 0.6f;
-            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
-            return;
+            Matrix_Scale((this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f,
+                         MTXMODE_APPLY);
+            break;
         case 14:
             Matrix_StatePop();
-            temp_f12 = (this->unk_1F0 * 0.52f) + 0.48f;
-            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
+            Matrix_Scale((this->unk_1F0 * 0.52f) + 0.48f, (this->unk_1F0 * 0.52f) + 0.48f,
+                         (this->unk_1F0 * 0.52f) + 0.48f, MTXMODE_APPLY);
             Matrix_StatePush();
-            return;
+            break;
         case 10:
         case 12:
-            temp_f12 = (this->unk_1F0 * 0.55f) + 0.45f;
-            Matrix_Scale(temp_f12, (this->unk_1F0 * 0.2f) + 0.8f, temp_f12, 1);
-            return;
-        default:
-            return;
+            Matrix_Scale((this->unk_1F0 * 0.55f) + 0.45f, (this->unk_1F0 * 0.2f) + 0.8f,
+                         (this->unk_1F0 * 0.55f) + 0.45f, MTXMODE_APPLY);
+            break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0F90.s")
-#endif
 
-void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx); /* extern */
-
-TexturePtr sEyeTextures[9] = {
+TexturePtr sEyeTextures[] = {
     gTurtleEyeHalfLeft2Tex, gTurtleEyeHalfLeftTex,     gTurtleEyeClosedTex,
-    gTurtleEyeHalfLeftTex,  gTurtleEyeOpenStarightTex, gTurtleEyeHalfStarightTex,
-    gTurtleEyeClosedTex,    gTurtleEyeHalfStarightTex, gTurtleEyeHalfRightTex,
+    gTurtleEyeHalfLeftTex,  gTurtleEyeOpenStraightTex, gTurtleEyeHalfStraightTex,
+    gTurtleEyeClosedTex,    gTurtleEyeHalfStraightTex, gTurtleEyeHalfRightTex,
 };
 
 void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1029,7 +1018,7 @@ void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->unk_1FF > 0) || (globalCtx->csCtx.state != 0)) {
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar08_OverrideLimbDraw, DmChar08_PostLimbDraw,
-                                       func_80AB0F90, &this->dyna.actor);
+                                       DmChar08_TransformLimbDraw, &this->dyna.actor);
         this->tree1->world.pos.x = this->tree1Pos.x;
         this->tree1->world.pos.y = this->tree1Pos.y;
         this->tree1->world.pos.z = this->tree1Pos.z;
@@ -1041,9 +1030,7 @@ void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_kamejima_DL_004E70);
-        return;
-    }
-    if (this->unk_1FF == 1) {
+    } else if (this->unk_1FF == 1) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         Scene_SetRenderModeXlu(globalCtx, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);

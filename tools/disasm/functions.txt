@@ -11654,7 +11654,7 @@
     0x80AB0CC8:("DmChar08_Update",),
     0x80AB0E3C:("DmChar08_OverrideLimbDraw",),
     0x80AB0E7C:("DmChar08_PostLimbDraw",),
-    0x80AB0F90:("func_80AB0F90",),
+    0x80AB0F90:("DmChar08_TransformLimbDraw",),
     0x80AB1124:("DmChar08_Draw",),
     0x80AB1E10:("func_80AB1E10",),
     0x80AB1EAC:("DmChar09_Init",),
