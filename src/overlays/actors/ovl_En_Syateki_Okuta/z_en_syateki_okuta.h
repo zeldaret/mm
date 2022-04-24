@@ -16,8 +16,8 @@ typedef struct EnSyatekiOkuta {
     /* 0x188 */ EnSyatekiOkutaActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1DC */ Vec3f unk_1D8;
-    /* 0x1E4 */ Vec3s jointTable[OBJECT_OKUTA_LIMB_MAX];
-    /* 0x244 */ Vec3s morphTable[OBJECT_OKUTA_LIMB_MAX];
+    /* 0x1E4 */ Vec3s jointTable[OCTOROK_LIMB_MAX];
+    /* 0x244 */ Vec3s morphTable[OCTOROK_LIMB_MAX];
     /* 0x2A4 */ s16 unk_2A4;
     /* 0x2A6 */ s16 unk_2A6;
     /* 0x2A8 */ UNK_TYPE1 unk_2A8[0x2];

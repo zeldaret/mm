@@ -94,11 +94,11 @@ s32 func_80953BEC(BgIngate* this) {
     Vec3f unkVec;
     s16 yaw;
 
-    func_8013AF00(sp74, 3, this->unk164->count + 3);
+    SubS_TimePathing_FillWeightArray(sp74, 3, this->unk164->count + 3);
     if (!(this->unk160 & 1)) {
         unkVec = gZeroVec3f;
-        func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &unkVec, this->unk168);
+        SubS_TimePathing_Update(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188,
+                                sp74, &unkVec, this->unk168);
         this->unk160 |= 1;
     } else {
         unkVec = this->unk170;
@@ -106,8 +106,8 @@ s32 func_80953BEC(BgIngate* this) {
     this->dyna.actor.world.pos.x = unkVec.x;
     this->dyna.actor.world.pos.z = unkVec.z;
     this->unk170 = gZeroVec3f;
-    if (func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &this->unk170, this->unk168) != 0) {
+    if (SubS_TimePathing_Update(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188,
+                                sp74, &this->unk170, this->unk168) != 0) {
         this->unk160 |= 2;
     } else {
         sp68 = this->dyna.actor.world.pos;

@@ -19,9 +19,24 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BD36B8(EnAh* this, GlobalContext* globalCtx);
 void func_80BD3768(EnAh* this, GlobalContext* globalCtx);
 
-s32 D_80BD3DB0[] = {
-    0x0A00611D, 0x0C000303, 0x0400010C, 0x00021102, 0x15001700, 0x08003220, 0x03040001,
-    0x05040003, 0x050A0010, 0x120C0003, 0x0D021200, 0x06000105, 0x0E120006, 0x00020505,
+static u8 D_80BD3DB0[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x20 - 0x0F),
+    /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 23, 0, 0x1D - 0x15),
+    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x1C - 0x19),
+    /* 0x19 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(3),
+    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x37 - 0x25),
+    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x36 - 0x29),
+    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x30 - 0x2F),
+    /* 0x2F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x30 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
+    /* 0x36 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
 };
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
@@ -361,7 +376,7 @@ s32 func_80BD3320(EnAh* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId
     return ret;
 }
 
-s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
@@ -373,7 +388,7 @@ s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
@@ -385,7 +400,7 @@ s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80BD3320(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -404,12 +419,12 @@ s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
     this->unk_2D8 = 0;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         default:
             ret = false;
             break;
@@ -457,19 +472,18 @@ void func_80BD3658(EnAh* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD36B8(EnAh* this, GlobalContext* globalCtx) {
-    s32 pad;
-    struct_80133038_arg2 sp18;
+    ScheduleResult sp18;
 
-    if (!func_80133038(globalCtx, D_80BD3DB0, &sp18) ||
-        ((this->unk_1DC != sp18.unk0) && !func_80BD3548(this, globalCtx, &sp18))) {
+    if (!Schedule_RunScript(globalCtx, D_80BD3DB0, &sp18) ||
+        ((this->unk_1DC != sp18.result) && !func_80BD3548(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp18.unk0 = 0;
+        sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_1DC = sp18.unk0;
+    this->unk_1DC = sp18.result;
     func_80BD3658(this, globalCtx);
 }
 

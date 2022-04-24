@@ -107,8 +107,16 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-s32 D_80BAA488[] = {
-    0x0C000119, 0x0A006E14, 0x02000000, 0x1E080F00, 0x1E030400, 0x01050E00, 0x00001E02, 0x05050000,
+static u8 D_80BAA488[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x1D - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x1C - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 30, 0x16 - 0x0E),
+    /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(0, 30, 0x15 - 0x12),
+    /* 0x12 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x15 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x16 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 30, 2),
+    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
 };
 
 s32 D_80BAA4A8[] = { -1, -1, 0 };
@@ -310,13 +318,13 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 sp26 = (u16)(gSaveContext.save.time - 0x3FFC);
     u16 temp;
     u8 sp23 = ENBABA_GET_3F00(&this->actor);
 
-    if (D_80BAA4A8[arg2->unk0] >= 0) {
-        this->unk_410 = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->unk0]);
+    if (D_80BAA4A8[arg2->result] >= 0) {
+        this->unk_410 = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->result]);
     }
 
     if (this->unk_410 == NULL) {
@@ -326,13 +334,13 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* 
     if ((this->unk_434 != 0) && (this->unk_436 >= 0)) {
         temp = sp26;
     } else {
-        temp = arg2->unk4;
+        temp = arg2->time0;
     }
 
-    if (arg2->unk8 < temp) {
-        this->unk_424 = (temp - arg2->unk8) + 0xFFFF;
+    if (arg2->time1 < temp) {
+        this->unk_424 = (temp - arg2->time1) + 0xFFFF;
     } else {
-        this->unk_424 = arg2->unk8 - temp;
+        this->unk_424 = arg2->time1 - temp;
     }
 
     this->unk_430 = sp26 - temp;
@@ -344,10 +352,10 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* 
     return true;
 }
 
-s32 func_80BA9110(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BA9110(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         default:
             ret = false;
             break;
@@ -372,14 +380,14 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     s32 sp50 = 0;
     s32 pad;
 
-    func_8013AF00(sp7C, 3, this->unk_410->count + 3);
+    SubS_TimePathing_FillWeightArray(sp7C, 3, this->unk_410->count + 3);
 
     if (this->unk_438 == 0) {
         sp58 = gZeroVec3f;
 
-        func_8013B6B0(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424, &this->unk_42C, sp7C,
-                      &sp58, this->unk_436);
-        func_8013B878(globalCtx, this->unk_410, this->unk_42C, &sp58);
+        SubS_TimePathing_Update(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424,
+                                &this->unk_42C, sp7C, &sp58, this->unk_436);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk_410, this->unk_42C, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk_438 = 1;
     } else {
@@ -397,8 +405,8 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
 
     this->unk_414 = gZeroVec3f;
 
-    if (func_8013B6B0(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424, &this->unk_42C, sp7C,
-                      &this->unk_414, this->unk_436)) {
+    if (SubS_TimePathing_Update(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424,
+                                &this->unk_42C, sp7C, &this->unk_414, this->unk_436)) {
         this->unk_43C = 1;
     } else {
         sp70 = this->actor.world.pos;
@@ -588,21 +596,20 @@ void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
-    u32* unk14 = &gSaveContext.save.daySpeed;
-    struct_80133038_arg2 sp20;
+    ScheduleResult sp20;
 
-    this->unk_436 = REG(15) + *unk14;
+    this->unk_436 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
-    if (!func_80133038(globalCtx, D_80BAA488, &sp20) ||
-        ((this->unk_434 != sp20.unk0) && !func_80BA9110(this, globalCtx, &sp20))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAA488, &sp20) ||
+        ((this->unk_434 != sp20.result) && !func_80BA9110(this, globalCtx, &sp20))) {
         this->unk_40A &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp20.unk0 = false;
+        sp20.result = false;
     } else {
         this->unk_40A |= 0x80;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_434 = sp20.unk0;
+    this->unk_434 = sp20.result;
 
     func_80BA93AC(this, globalCtx);
 
