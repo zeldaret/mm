@@ -376,13 +376,15 @@ beginseg
     name "story_static"
     compress
     romalign 0x1000
-    include "build/baserom/story_static.o"
+    include "build/assets/misc/story_static/story_static.o"
+    number 7
 endseg
 
 beginseg
     name "do_action_static"
     romalign 0x1000
-    include "build/baserom/do_action_static.o"
+    include "build/assets/interface/do_action_static/do_action_static.o"
+    number 9
 endseg
 
 beginseg
@@ -520,8 +522,7 @@ beginseg
     include "build/data/code/code_801C2730.data.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
-    include "build/src/code/code_801323D0.o"
-    include "build/data/code/code_801C5C50.data.o"
+    include "build/src/code/z_schedule.o"
     include "build/src/code/z_skelanime.o"
     include "build/src/code/z_skin.o"
     include "build/src/code/z_skin_awb.o"
@@ -1116,8 +1117,7 @@ beginseg
     name "ovl_Demo_Effect"
     compress
     include "build/src/overlays/actors/ovl_Demo_Effect/z_demo_effect.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.data.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Effect/ovl_Demo_Effect_reloc.o"
 endseg
 
 beginseg
@@ -3438,8 +3438,7 @@ beginseg
     name "ovl_Bg_Open_Spot"
     compress
     include "build/src/overlays/actors/ovl_Bg_Open_Spot/z_bg_open_spot.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.data.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot_reloc.o"
 endseg
 
 beginseg
@@ -9146,7 +9145,8 @@ endseg
 beginseg
     name "week_static"
     romalign 0x1000
-    include "build/baserom/week_static.o"
+    include "build/assets/interface/week_static/week_static.o"
+    number 9
 endseg
 
 beginseg

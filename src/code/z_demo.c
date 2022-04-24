@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 

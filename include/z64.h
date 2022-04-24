@@ -39,6 +39,7 @@
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"
+#include "z64schedule.h"
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
@@ -883,7 +884,7 @@ typedef struct {
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees; 
+    /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ MessageTableEntry* messageEntryTable;
     /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
@@ -1223,7 +1224,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
- 
+
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1396,12 +1397,6 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
-
-typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
 
 typedef struct {
     /* 0x00 */ u32 type;

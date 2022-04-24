@@ -89,22 +89,27 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-u16 D_809CBF58[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+static TurnOptionsSet sTurnOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
 void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f focus;
+    Vec3f point;
 
     EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
-        focus.x = player->actor.world.pos.x;
-        focus.y = player->bodyPartsPos[7].y + 3.0f;
-        focus.z = player->actor.world.pos.z;
-        func_8013D2E0(&focus, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.focusTarget,
-                      &this->enHy.headRot, &this->enHy.torsoRot, D_809CBF58);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.turnTarget,
+                         &this->enHy.headRot, &this->enHy.torsoRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->enHy.focusTarget.x, 0, 4, 0x3E8, 1);
-        Math_SmoothStepToS(&this->enHy.focusTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.turnTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.turnTarget.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
@@ -121,7 +126,7 @@ s32 EnCne01_TestIsTalking(EnCne01* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmpFocusTarget = this->enHy.focusTarget;
+        this->enHy.tmpTurnTarget = this->enHy.turnTarget;
         this->enHy.tmpHeadRot = this->enHy.headRot;
         this->enHy.tmpTorsoRot = this->enHy.torsoRot;
         this->enHy.tmpActionFunc = this->enHy.actionFunc;
@@ -182,7 +187,7 @@ void EnCne01_Talk(EnHy* this, GlobalContext* globalCtx) {
             break;
         case 2:
             this->actor.textId = 0;
-            this->focusTarget = this->tmpFocusTarget;
+            this->turnTarget = this->tmpTurnTarget;
             this->headRot = this->tmpHeadRot;
             this->torsoRot = this->tmpTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;
