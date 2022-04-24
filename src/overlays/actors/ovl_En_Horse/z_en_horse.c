@@ -4156,37 +4156,36 @@ s32 EnHorse_RandInt(f32 arg0) {
     return Rand_ZeroOne() * arg0;
 }
 
-#ifdef NON_MATCHING
-void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx) {
-    static EnHorseActionFunc sActionFuncs[] = {
-        EnHorse_Frozen,
-        EnHorse_Inactive,
-        EnHorse_Idle,
-        EnHorse_FollowPlayer,
-        EnHorse_UpdateIngoRace,
-        func_808819D8,
-        func_80881398,
-        EnHorse_MountedIdle,
-        EnHorse_MountedIdleWhinneying,
-        EnHorse_MountedTurn,
-        EnHorse_MountedWalk,
-        EnHorse_MountedTrot,
-        EnHorse_MountedGallop,
-        EnHorse_MountedRearing,
-        EnHorse_Stopping,
-        EnHorse_Reverse,
-        EnHorse_LowJump,
-        EnHorse_HighJump,
-        EnHorse_CutsceneUpdate,
-        EnHorse_UpdateHorsebackArchery,
-        EnHorse_FleePlayer,
-        func_80884718,
-        func_8087CA04,
-        func_808848C8,
-        func_80884A40,
-        func_80884E0C,
-    };
-    s32 pad;
+static EnHorseActionFunc sActionFuncs[] = {
+    EnHorse_Frozen,
+    EnHorse_Inactive,
+    EnHorse_Idle,
+    EnHorse_FollowPlayer,
+    EnHorse_UpdateIngoRace,
+    func_808819D8,
+    func_80881398,
+    EnHorse_MountedIdle,
+    EnHorse_MountedIdleWhinneying,
+    EnHorse_MountedTurn,
+    EnHorse_MountedWalk,
+    EnHorse_MountedTrot,
+    EnHorse_MountedGallop,
+    EnHorse_MountedRearing,
+    EnHorse_Stopping,
+    EnHorse_Reverse,
+    EnHorse_LowJump,
+    EnHorse_HighJump,
+    EnHorse_CutsceneUpdate,
+    EnHorse_UpdateHorsebackArchery,
+    EnHorse_FleePlayer,
+    func_80884718,
+    func_8087CA04,
+    func_808848C8,
+    func_80884A40,
+    func_80884E0C,
+};
+void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnHorse* this = THIS;
     Vec3f dustAcc = { 0.0f, 0.0f, 0.0f };
     Vec3f dustVel = { 0.0f, 1.0f, 0.0f };
@@ -4228,7 +4227,7 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->curFrame = this->skin.skelAnime.curFrame;
-    this->lastPos = this->actor.world.pos;
+    this->lastPos = thisx->world.pos;
 
     if (!(this->stateFlags & ENHORSE_INACTIVE)) {
         if ((this->action == ENHORSE_ACT_STOPPING) || (this->action == ENHORSE_ACT_MOUNTED_REARING) ||
@@ -4400,39 +4399,6 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->stateFlags &= ~ENHORSE_DRAW;
     }
 }
-#else
-EnHorseActionFunc sActionFuncs[] = {
-    EnHorse_Frozen,
-    EnHorse_Inactive,
-    EnHorse_Idle,
-    EnHorse_FollowPlayer,
-    EnHorse_UpdateIngoRace,
-    func_808819D8,
-    func_80881398,
-    EnHorse_MountedIdle,
-    EnHorse_MountedIdleWhinneying,
-    EnHorse_MountedTurn,
-    EnHorse_MountedWalk,
-    EnHorse_MountedTrot,
-    EnHorse_MountedGallop,
-    EnHorse_MountedRearing,
-    EnHorse_Stopping,
-    EnHorse_Reverse,
-    EnHorse_LowJump,
-    EnHorse_HighJump,
-    EnHorse_CutsceneUpdate,
-    EnHorse_UpdateHorsebackArchery,
-    EnHorse_FleePlayer,
-    func_80884718,
-    func_8087CA04,
-    func_808848C8,
-    func_80884A40,
-    func_80884E0C,
-};
-Vec3f D_808891C8 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808891D4 = { 0.0f, 1.0f, 0.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/EnHorse_Update.s")
-#endif
 
 s32 EnHorse_PlayerDirToMountSide(EnHorse* this, GlobalContext* globalCtx, Player* player) {
     if (this->playerDir == PLAYER_DIR_SIDE_L) {
