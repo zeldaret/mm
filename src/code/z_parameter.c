@@ -1,5 +1,7 @@
 #include "global.h"
 #include "interface/parameter_static/parameter_static.h"
+#include "interface/do_action_static/do_action_static.h"
+#include "misc/story_static/story_static.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 typedef struct {
@@ -1034,8 +1036,8 @@ void Inventory_UpdateItem(GlobalContext* globalCtx, s16 slot, s16 item) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801153C8.s")
 
 TexturePtr sDoActionTextures[] = {
-    0x09000000, // gAttackDoActionENGTex
-    0x09000180, // gCheckDoActionENGTex
+    gDoActionAttackENGTex,
+    gDoActionCheckENGTex,
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115428.s")
 
@@ -1333,13 +1335,13 @@ Color_RGB16 D_801BFD6C[] = {
 };
 // grandma's story pictures
 TexturePtr D_801BFD84[] = {
-    0x07000000,
-    0x07012C00,
+    gStoryMaskFestivalTex,
+    gStoryGiantsLeavingTex,
 };
 // grandma's story TLUT
-u32 D_801BFD8C[] = {
-    0x07025800,
-    0x07025A00,
+TexturePtr D_801BFD8C[] = {
+    gStoryMaskFestivalTLUT,
+    gStoryGiantsLeavingTLUT,
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011F0E0.s")
 
