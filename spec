@@ -1116,8 +1116,7 @@ beginseg
     name "ovl_Demo_Effect"
     compress
     include "build/src/overlays/actors/ovl_Demo_Effect/z_demo_effect.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.data.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Effect/ovl_Demo_Effect_reloc.o"
 endseg
 
 beginseg
