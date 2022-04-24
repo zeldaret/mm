@@ -825,11 +825,17 @@ typedef struct {
 } PreRenderParams; // size = 0x28
 
 typedef struct {
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 unk01;
+} MsgCtx11F00;
+
+typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
     /* 0x11EF4 */ char unk_11EF4[0x4];
     /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
+    /* 0x11F00 */ MsgCtx11F00* unk11F00;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
