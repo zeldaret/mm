@@ -673,16 +673,16 @@ void func_8087C9F8(EnHorse* this) {
 void func_8087CA04(EnHorse* this, GlobalContext* globalCtx) {
 }
 
-#ifdef NON_MATCHING
 void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnHorse* this = THIS;
+    Skin* skin = &this->skin;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     EnHorse_ClearDustFlags(&this->dustFlags);
     D_801BDAA4 = 0;
     Skin_Setup(&this->skin);
-    this->riderPos = this->actor.world.pos;
+    this->riderPos = thisx->world.pos;
     this->unk_52C = 0;
     this->noInputTimer = 0;
     this->riderPos.y += 70.0f;
@@ -906,9 +906,6 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->colliderCylinder2.info.bumper.dmgFlags = 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/EnHorse_Init.s")
-#endif
 
 void func_8087D540(Actor* thisx, GlobalContext* globalCtx) {
     EnHorse* this = THIS;
@@ -2952,13 +2949,12 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void EnHorse_FleePlayer(EnHorse* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 distToHome;
     f32 playerDistToHome;
     f32 distToPlayer;
-    s32 nextAnim;
+    s32 nextAnim = this->animationIdx;
     s32 animFinished;
     s16 yaw;
 
@@ -3098,10 +3094,6 @@ void EnHorse_FleePlayer(EnHorse* this, GlobalContext* globalCtx) {
                          -3.0f);
     }
 }
-#else
-void EnHorse_FleePlayer(EnHorse* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/EnHorse_FleePlayer.s")
-#endif
 
 void func_80883B70(EnHorse* this, CsCmdActorAction* action) {
     this->actor.world.pos.x = action->startPos.x;
