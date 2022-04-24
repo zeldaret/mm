@@ -376,13 +376,15 @@ beginseg
     name "story_static"
     compress
     romalign 0x1000
-    include "build/baserom/story_static.o"
+    include "build/assets/misc/story_static/story_static.o"
+    number 7
 endseg
 
 beginseg
     name "do_action_static"
     romalign 0x1000
-    include "build/baserom/do_action_static.o"
+    include "build/assets/interface/do_action_static/do_action_static.o"
+    number 9
 endseg
 
 beginseg
@@ -9145,7 +9147,8 @@ endseg
 beginseg
     name "week_static"
     romalign 0x1000
-    include "build/baserom/week_static.o"
+    include "build/assets/interface/week_static/week_static.o"
+    number 9
 endseg
 
 beginseg
