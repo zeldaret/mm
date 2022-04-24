@@ -9107,7 +9107,7 @@
     0x809C8808:("func_809C8808",),
     0x809C898C:("func_809C898C",),
     0x809C8BF0:("func_809C8BF0",),
-    0x809C8DE8:("func_809C8DE8",),
+    0x809C8DE8:("EnSyatekiMan_Blink",),
     0x809C8E44:("EnSyatekiMan_Update",),
     0x809C8EE4:("EnSyatekiMan_OverrideLimbDraw",),
     0x809C8FAC:("EnSyatekiMan_PostLimbDraw",),
