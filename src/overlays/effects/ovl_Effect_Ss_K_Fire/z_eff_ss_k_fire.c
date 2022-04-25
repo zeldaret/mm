@@ -71,7 +71,7 @@ void EffectSsKFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gDPPipeSync(POLY_XLU_DISP++);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
-    if ((index & 1) != 0) {
+    if ((index % 2) != 0) {
         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
     }
 
