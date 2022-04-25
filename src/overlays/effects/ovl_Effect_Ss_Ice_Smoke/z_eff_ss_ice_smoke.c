@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_ice_smoke.c
  * Overlay: ovl_Effect_Ss_Ice_Smoke
- * Description:
+ * Description: Ice Smoke
  */
 
 #include "z_eff_ss_ice_smoke.h"
@@ -64,7 +64,7 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0510B0);
+        gSPDisplayList(POLY_XLU_DISP++, gEffIceSmokeDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
