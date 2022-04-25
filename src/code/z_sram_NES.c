@@ -979,7 +979,8 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
 
         if (gSaveContext.save.unk_F65) {
-            Lib_MemCpy(D_801D88A0, gSaveContext.save.scarecrowsSong, sizeof(gSaveContext.save.scarecrowsSong));
+            Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowsSong,
+                       sizeof(gSaveContext.save.scarecrowsSong));
 
             for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowsSong); i++) {}
         }
@@ -1494,7 +1495,7 @@ void func_80146DF8(SramContext* sramCtx) {
 }
 
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
-    if (&gSaveContext.save) {}
+    if (gSaveContext.save.entranceIndex) {} // Required to match
 
     func_801A3D98(gSaveContext.options.audioSetting);
 }

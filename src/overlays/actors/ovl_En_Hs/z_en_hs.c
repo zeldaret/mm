@@ -261,7 +261,7 @@ void func_8095345C(EnHs* this, GlobalContext* globalCtx) {
     } else if (this->actor.home.rot.x >= 20) {
         this->actionFunc = func_80953354;
         this->unk_2A2 = 40;
-    } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_10000) {
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
         this->unk_2A0 |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, globalCtx)) {
