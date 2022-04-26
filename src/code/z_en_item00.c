@@ -68,9 +68,9 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
     s32 getItemId = GI_NONE;
-    s32 sp30 = (this->actor.params & 0x8000) ? 1 : 0;
+    s32 sp30 = ENITEM00_GET_8000(&this->actor) ? 1 : 0;
 
-    this->collectibleFlag = (this->actor.params & 0x7F00) >> 8;
+    this->collectibleFlag = ENITEM00_GET_7F00(&this->actor);
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
