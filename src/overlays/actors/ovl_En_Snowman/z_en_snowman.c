@@ -15,33 +15,33 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B173D0(EnSnowman* this);
 void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B179D0(EnSnowman* this);
 void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17CE8(EnSnowman* this);
 void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17EB4(EnSnowman* this);
 void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B18124(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B1848C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18600(EnSnowman* this);
 void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18908(EnSnowman* this);
 void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B189D4(EnSnowman* this);
 void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2);
+void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2);
 void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B19474(Actor* thisx, GlobalContext* globalCtx);
-void func_80B19998(Actor* this, GlobalContext* globalCtx);
-void func_80B173D0(EnSnowman* this);
-void func_80B18908(EnSnowman* this);
 void func_80B19948(Actor* thisx, GlobalContext* globalCtx);
-void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2);
-void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B179D0(EnSnowman* this);
-void func_80B17EB4(EnSnowman* this);
-void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B17CE8(EnSnowman* this);
-void func_80B189D4(EnSnowman* this);
-void func_80B18600(EnSnowman* this);
-void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2);
+void func_80B19998(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
@@ -55,8 +55,7 @@ const ActorInit En_Snowman_InitVars = {
     (ActorFunc)EnSnowman_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B19A00 = {
+static ColliderCylinderInit sCylinderInit1 = {
     {
         COLTYPE_HIT4,
         AT_NONE,
@@ -76,8 +75,7 @@ static ColliderCylinderInit D_80B19A00 = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B19A2C = {
+static ColliderCylinderInit sCylinderInit2 = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_ENEMY,
@@ -97,8 +95,7 @@ static ColliderCylinderInit D_80B19A2C = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B19A58 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -133,8 +130,7 @@ static DamageTable D_80B19A58 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80B19A78 = { 2, 60, 80, 150 };
+static CollisionCheckInfoInit sColChkInfoInit = { 2, 60, 80, 150 };
 
 static Color_RGBA8 D_80B19A80 = { 250, 250, 250, 255 };
 
@@ -146,8 +142,7 @@ static Gfx* D_80B19A94[] = { object_snowman_DL_004400, object_snowman_DL_0010B0,
 
 static Gfx* D_80B19AA0[] = { object_snowman_DL_005CB0, object_snowman_DL_006190, object_snowman_DL_006620 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B19AAC[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 20, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
@@ -171,7 +166,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
     s32 phi_v1;
 
-    Actor_ProcessInitChain(&this->actor, D_80B19AAC);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     phi_v1 = ((this->actor.params >> 8) & 0xFF);
     if (phi_v1 == 0xFF) {
         phi_v1 = 0;
@@ -184,8 +179,8 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &object_snowman_Skel_004A90,
                            &object_snowman_Anim_0046D8, this->snowPileJointTable, this->snowPileMorphTable,
                            OBJECT_SNOWMAN_2_LIMB_MAX);
-        CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B19A58, &D_80B19A78);
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &D_80B19A00);
+        CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &sCylinderInit1);
         if (this->actor.params == 1) {
             this->actor.flags |= ACTOR_FLAG_400;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_SNOWMAN, this->actor.world.pos.x,
@@ -224,7 +219,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         this->actor.flags &= ~ACTOR_FLAG_1;
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &D_80B19A2C);
+        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &sCylinderInit2);
         this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
         this->actor.velocity.y = (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) * 0.035f) + -5.0f;
         this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 3.5f);
@@ -1046,6 +1041,6 @@ void func_80B19948(Actor* thisx, GlobalContext* globalCtx) {
                           this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
 }
 
-void func_80B19998(Actor* this, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_80B19A94[this->params - 3]);
+void func_80B19998(Actor* thisx, GlobalContext* globalCtx) {
+    Gfx_DrawDListOpa(globalCtx, D_80B19A94[thisx->params - 3]);
 }
