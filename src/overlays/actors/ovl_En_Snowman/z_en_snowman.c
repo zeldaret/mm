@@ -585,7 +585,69 @@ void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18C7C.s")
+void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
+    EnSnowman* parent;
+    EnSnowman* child;
+
+    SkelAnime_Update(&this->snowPileSkelAnime);
+    parent = (EnSnowman*)this->actor.parent;
+    child = (EnSnowman*)this->actor.child;
+    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->unk_2A8), 0x1000);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+
+    if (this->unk_289 == 1) {
+        if (this->unk_32C.base.ocFlags1 & OC1_HIT) {
+            if ((this->unk_32C.base.oc == this->actor.parent) && (parent->unk_289 == 1)) {
+                if (this->actor.scale.x < this->actor.parent->scale.x) {
+                    func_80B18B30(this, parent);
+                } else {
+                    func_80B18B30(parent, this);
+                }
+            } else if ((this->unk_32C.base.oc == this->actor.child) && (child->unk_289 == 1)) {
+                if (this->actor.scale.x < this->actor.child->scale.x) {
+                    func_80B18B30(this, child);
+                } else {
+                    func_80B18B30(child, this);
+                }
+            }
+        }
+
+        if (parent->unk_289 == 2) {
+            func_80B18B30(parent, this);
+        }
+
+        if (child->unk_289 == 2) {
+            func_80B18B30(child, this);
+        }
+    }
+
+    if ((this->unk_290 == 0) && (parent->unk_298 > 0.0f) && (child->unk_298 > 0.0f) && (this->unk_298 < 0.011f) &&
+        (this->unk_289 != 3)) {
+        this->unk_289 = 2;
+        this->unk_298 = 0.0f;
+    }
+
+    if (Actor_XZDistanceToPoint(&this->actor, &this->unk_2A8) < 20.0f) {
+        this->actor.speedXZ = 0.0f;
+    }
+
+    if (Math_StepToF(&this->actor.scale.x, this->unk_298, 0.0005f)) {
+        if (this->unk_298 < 0.01f) {
+            func_80B18908(this);
+        } else if (this->unk_298 > 0.018f) {
+            Actor_SetScale(&this->actor, 0.02f);
+            this->actor.params = 1;
+            this->actor.flags |= ACTOR_FLAG_400;
+            this->unk_32C.base.ocFlags1 |= OC1_ON;
+            this->unk_289 = 3;
+            this->unk_294 = 2.0f;
+            func_80B173D0(this);
+        }
+    }
+
+    this->actor.scale.y = this->actor.scale.x;
+    this->actor.scale.z = this->actor.scale.x;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18F50.s")
 
