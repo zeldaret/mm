@@ -502,7 +502,39 @@ void func_80B180A4(EnSnowman* this) {
     this->actionFunc = func_80B18124;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18124.s")
+void func_80B18124(EnSnowman* this, GlobalContext* globalCtx) {
+    Vec3f sp3C;
+    Vec3f sp30;
+
+    this->unk_28C--;
+    if ((this->unk_28C >= 0x26) && ((this->unk_28C & 1) == 0)) {
+        sp3C.y = (this->unk_28C - 0x26) * 0.083333336f;
+        sp3C.x = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
+        sp3C.z = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
+        sp3C.y += 0.8f;
+        sp30.x = ((sp3C.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->unk_294) + this->actor.world.pos.x;
+        sp30.z = ((sp3C.z >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->unk_294) + this->actor.world.pos.z;
+        sp30.y = this->actor.world.pos.y + 3.0f;
+        EffectSsIceSmoke_Spawn(globalCtx, &sp30, &sp3C, &gZeroVec3f, this->unk_294 * 300.0f);
+    }
+
+    if (this->unk_28C == 0) {
+        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
+        if (this->actor.params == 2) {
+            func_80B18908(this);
+        } else if (this->actor.params == 1) {
+            Actor_MarkForDeath(this->actor.parent);
+            Actor_MarkForDeath(this->actor.child);
+            Actor_MarkForDeath(&this->actor);
+        } else {
+            Actor_MarkForDeath(&this->actor);
+        }
+    }
+
+    this->actor.scale.y = this->unk_28C * 0.0002f * this->unk_294;
+    this->actor.scale.x = (this->unk_294 * 0.0139999995f) - (0.4f * this->actor.scale.y);
+    this->actor.scale.z = (this->unk_294 * 0.0139999995f) - (0.4f * this->actor.scale.y);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18380.s")
 
