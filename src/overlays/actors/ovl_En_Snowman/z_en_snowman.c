@@ -43,22 +43,6 @@ void func_80B189D4(EnSnowman* this);
 void func_80B18600(EnSnowman* this);
 void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2);
 
-extern AnimationHeader D_06000404;
-extern AnimationHeader D_06004628;
-extern AnimationHeader D_060046D8;
-extern AnimationHeader D_06004F14;
-extern AnimationHeader D_0600554C;
-extern AnimationHeader D_060058CC;
-extern FlexSkeletonHeader D_060045A0;
-extern FlexSkeletonHeader D_06004A90;
-extern AnimationHeader D_060007B4;
-extern AnimationHeader D_0600544C;
-extern Gfx D_06004400[];
-extern Gfx D_060010B0[];
-extern Gfx D_06005CB0[];
-extern Gfx D_06006190[];
-extern Gfx D_06006620[];
-
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
@@ -158,9 +142,9 @@ static Color_RGBA8 D_80B19A84 = { 180, 180, 180, 255 };
 
 static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
 
-static Gfx* D_80B19A94[] = { D_06004400, D_060010B0, D_06004400 };
+static Gfx* D_80B19A94[] = { object_snowman_DL_004400, object_snowman_DL_0010B0, object_snowman_DL_004400 };
 
-static Gfx* D_80B19AA0[] = { D_06005CB0, D_06006190, D_06006620 };
+static Gfx* D_80B19AA0[] = { object_snowman_DL_005CB0, object_snowman_DL_006190, object_snowman_DL_006620 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B19AAC[] = {
@@ -195,10 +179,11 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.params &= 7;
     if (this->actor.params < 3) {
-        SkelAnime_InitFlex(globalCtx, &this->bodySkelAnime, &D_060045A0, &D_0600554C, this->bodyJointTable,
-                           this->bodyMorphTable, 12);
-        SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &D_06004A90, &D_060046D8, this->snowPileJointTable,
-                           this->snowPileMorphTable, 3);
+        SkelAnime_InitFlex(globalCtx, &this->bodySkelAnime, &object_snowman_Skel_0045A0, &object_snowman_Anim_00554C,
+                           this->bodyJointTable, this->bodyMorphTable, OBJECT_SNOWMAN_1_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &object_snowman_Skel_004A90,
+                           &object_snowman_Anim_0046D8, this->snowPileJointTable, this->snowPileMorphTable,
+                           OBJECT_SNOWMAN_2_LIMB_MAX);
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B19A58, &D_80B19A78);
         Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &D_80B19A00);
         if (this->actor.params == 1) {
@@ -324,7 +309,7 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B173D0(EnSnowman* this) {
-    Animation_PlayLoop(&this->snowPileSkelAnime, &D_060046D8);
+    Animation_PlayLoop(&this->snowPileSkelAnime, &object_snowman_Anim_0046D8);
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speedXZ = 2.0f;
     this->actor.draw = func_80B19948;
@@ -395,7 +380,7 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
-    Animation_PlayOnce(&this->bodySkelAnime, &D_0600554C);
+    Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_00554C);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
     this->unk_32C.dim.radius = this->unk_294 * 40.0f;
     this->unk_32C.dim.height = this->unk_294 * 25.0f;
@@ -412,7 +397,7 @@ void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     Math_StepToF(&this->actor.scale.y, this->actor.scale.x,
-                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&D_0600554C));
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&object_snowman_Anim_00554C));
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
     if (SkelAnime_Update(&this->bodySkelAnime)) {
@@ -434,10 +419,10 @@ void func_80B179D0(EnSnowman* this) {
     this->actor.scale.y = this->actor.scale.x;
     if (this->actor.params == 1) {
         this->unk_298 = 15.0f;
-        Animation_PlayOnce(&this->bodySkelAnime, &D_06000404);
+        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_000404);
     } else {
         this->unk_298 = 6.0f;
-        Animation_PlayOnce(&this->bodySkelAnime, &D_060007B4);
+        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_0007B4);
     }
 
     this->actionFunc = func_80B17A58;
@@ -479,10 +464,10 @@ void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
 
 void func_80B17CE8(EnSnowman* this) {
     if (this->actor.params == 1) {
-        Animation_PlayOnce(&this->bodySkelAnime, &D_06004F14);
+        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_004F14);
         this->unk_298 = 17.0f;
     } else {
-        Animation_PlayOnce(&this->bodySkelAnime, &D_0600544C);
+        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_00544C);
         this->unk_298 = 15.0f;
     }
 
@@ -519,7 +504,7 @@ void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B17EB4(EnSnowman* this) {
-    Animation_PlayLoop(&this->bodySkelAnime, &D_060058CC);
+    Animation_PlayLoop(&this->bodySkelAnime, &object_snowman_Anim_0058CC);
     this->unk_28C = 0x3C;
     this->actionFunc = func_80B17EFC;
 }
@@ -534,8 +519,8 @@ void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->bodySkelAnime, &D_0600554C, -1.0f, Animation_GetLastFrame(&D_0600554C), 0.0f, ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->bodySkelAnime, &object_snowman_Anim_00554C, -1.0f,
+                     Animation_GetLastFrame(&object_snowman_Anim_00554C), 0.0f, ANIMMODE_ONCE, -3.0f);
     func_80B16FC0(this, globalCtx);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HIDE);
     this->actionFunc = func_80B17FE0;
@@ -543,7 +528,7 @@ void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx) {
 
 void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.scale.y, this->actor.scale.x * 0.4f,
-                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&D_0600554C));
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&object_snowman_Anim_00554C));
 
     if (SkelAnime_Update(&this->bodySkelAnime)) {
         if (this->unk_289 == 1) {
@@ -616,7 +601,7 @@ void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B183C4(EnSnowman* this) {
-    Animation_PlayLoop(&this->bodySkelAnime, &D_06004628);
+    Animation_PlayLoop(&this->bodySkelAnime, &object_snowman_Anim_004628);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->unk_32C.base.acFlags &= ~AC_ON;
     this->unk_28C = 0x14;

@@ -2,6 +2,7 @@
 #define Z_EN_SNOWMAN_H
 
 #include "global.h"
+#include "objects/object_snowman/object_snowman.h"
 
 struct EnSnowman;
 
@@ -11,10 +12,10 @@ typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime bodySkelAnime;
     /* 0x188 */ SkelAnime snowPileSkelAnime;
-    /* 0x1CC */ Vec3s bodyJointTable[12];
-    /* 0x214 */ Vec3s bodyMorphTable[12];
-    /* 0x25C */ Vec3s snowPileJointTable[3];
-    /* 0x26E */ Vec3s snowPileMorphTable[3];
+    /* 0x1CC */ Vec3s bodyJointTable[OBJECT_SNOWMAN_1_LIMB_MAX];
+    /* 0x214 */ Vec3s bodyMorphTable[OBJECT_SNOWMAN_1_LIMB_MAX];
+    /* 0x25C */ Vec3s snowPileJointTable[OBJECT_SNOWMAN_2_LIMB_MAX];
+    /* 0x26E */ Vec3s snowPileMorphTable[OBJECT_SNOWMAN_2_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ EnSnowmanActionFunc unk_284;
     /* 0x288 */ u8 unk_288;
