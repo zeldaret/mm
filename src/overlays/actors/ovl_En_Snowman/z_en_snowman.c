@@ -491,7 +491,16 @@ void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B180A4.s")
+void func_80B180A4(EnSnowman* this) {
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 50);
+    this->unk_32C.base.acFlags &= ~AC_ON;
+    this->unk_28C = 0x32;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.scale.y = this->actor.scale.x;
+    this->actor.speedXZ = 0.0f;
+    this->actionFunc = func_80B18124;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18124.s")
 
