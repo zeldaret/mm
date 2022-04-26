@@ -43,7 +43,22 @@ void func_80B189D4(EnSnowman* this);
 void func_80B18600(EnSnowman* this);
 void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2);
 
-#if 0
+extern AnimationHeader D_06000404;
+extern AnimationHeader D_06004628;
+extern AnimationHeader D_060046D8;
+extern AnimationHeader D_06004F14;
+extern AnimationHeader D_0600554C;
+extern AnimationHeader D_060058CC;
+extern FlexSkeletonHeader D_060045A0;
+extern FlexSkeletonHeader D_06004A90;
+extern AnimationHeader D_060007B4;
+extern AnimationHeader D_0600544C;
+extern Gfx D_06004400[];
+extern Gfx D_060010B0[];
+extern Gfx D_06005CB0[];
+extern Gfx D_06006190[];
+extern Gfx D_06006620[];
+
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
@@ -58,15 +73,43 @@ const ActorInit En_Snowman_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B19A00 = {
-    { COLTYPE_HIT4, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT4,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0.0f, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B19A2C = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
@@ -109,6 +152,16 @@ static DamageTable D_80B19A58 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B19A78 = { 2, 60, 80, 150 };
 
+static Color_RGBA8 D_80B19A80 = { 250, 250, 250, 255 };
+
+static Color_RGBA8 D_80B19A84 = { 180, 180, 180, 255 };
+
+static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
+
+static Gfx* D_80B19A94[] = { D_06004400, D_060010B0, D_06004400 };
+
+static Gfx* D_80B19AA0[] = { D_06005CB0, D_06006190, D_06006620 };
+
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B19AAC[] = {
     ICHAIN_S8(hintId, 20, ICHAIN_CONTINUE),
@@ -116,34 +169,18 @@ static InitChainEntry D_80B19AAC[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-#endif
+static Vec3f D_80B19AB8 = { 0.0f, -1.0f, 0.0f };
 
-extern ColliderCylinderInit D_80B19A00;
-extern ColliderCylinderInit D_80B19A2C;
-extern DamageTable D_80B19A58;
-extern CollisionCheckInfoInit D_80B19A78;
-extern InitChainEntry D_80B19AAC[];
-extern Gfx* D_80B19A94[];
-extern s8 D_80B19AD0[];
-extern Vec3f D_80B19ADC[];
-extern s16 D_80B19ADA;
-extern Color_RGBA8 D_80B19A80;
-extern Color_RGBA8 D_80B19A84;
-extern Vec3f D_80B19A88;
-extern Gfx* D_80B19AA0[];
-extern Vec3f D_80B19AB8;
-extern Vec3f D_80B19AC4;
+static Vec3f D_80B19AC4 = { 0.0f, -0.5f, 0.0f };
 
-extern AnimationHeader D_06000404;
-extern AnimationHeader D_06004628;
-extern AnimationHeader D_060046D8;
-extern AnimationHeader D_06004F14;
-extern AnimationHeader D_0600554C;
-extern AnimationHeader D_060058CC;
-extern FlexSkeletonHeader D_060045A0;
-extern FlexSkeletonHeader D_06004A90;
-extern AnimationHeader D_060007B4;
-extern AnimationHeader D_0600544C;
+static s8 D_80B19AD0[] = {
+    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
+};
+
+static Vec3f D_80B19ADC[] = {
+    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
+    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
+};
 
 void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

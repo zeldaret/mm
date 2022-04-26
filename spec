@@ -3821,7 +3821,6 @@ beginseg
     name "ovl_En_Snowman"
     compress
     include "build/src/overlays/actors/ovl_En_Snowman/z_en_snowman.o"
-    include "build/data/ovl_En_Snowman/ovl_En_Snowman.data.o"
     include "build/data/ovl_En_Snowman/ovl_En_Snowman.reloc.o"
 endseg
 
