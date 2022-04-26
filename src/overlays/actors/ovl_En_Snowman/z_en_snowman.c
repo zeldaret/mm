@@ -763,7 +763,50 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19474.s")
+void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
+    EnSnowman* this = THIS;
+    s16 phi_s0;
+    s32 i;
+
+    if (this->unk_28C > 0) {
+        this->unk_28C--;
+    } else {
+        this->unk_32C.base.ocFlags1 |= OC1_ON;
+    }
+
+    if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 0x10) ||
+        (this->unk_32C.base.atFlags & AT_HIT) || (this->unk_32C.base.acFlags & AC_HIT) ||
+        (this->unk_32C.base.ocFlags1 & OC1_HIT)) {
+        if (this->actor.params == 3) {
+            phi_s0 = 10;
+            for (i = 0; i < 3; i++) {
+                EffectSsHahen_SpawnBurst(globalCtx, &thisx->world.pos, 5.0f, 0, phi_s0, phi_s0 >> 1, 3, 452, 20,
+                                         D_80B19AA0[i]);
+                phi_s0 *= 2;
+            }
+
+            func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 500,
+                          30);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
+        } else {
+            Math_Vec3f_Copy(&this->unk_2B4, &this->actor.world.pos);
+            func_80B17144(this, globalCtx);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SNOWBALL_BROKEN);
+        }
+
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_IT_REFLECTION_WOOD);
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        this->actor.shape.rot.x += 0xF00;
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->unk_32C.dim.radius * 0.6f,
+                                this->unk_32C.dim.height - this->unk_32C.dim.yShift, 0x1F);
+        Collider_UpdateCylinder(&this->actor, &this->unk_32C);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+    }
+}
 
 void func_80B19718(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSnowman* this = THIS;
