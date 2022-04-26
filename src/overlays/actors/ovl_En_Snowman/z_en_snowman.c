@@ -542,7 +542,16 @@ void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18A28.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18B30.s")
+void func_80B18B30(EnSnowman* arg0, EnSnowman* arg1) {
+    Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
+    arg1->unk_298 += 0.005f;
+    arg0->unk_289 = 3;
+    arg0->unk_32C.base.ocFlags1 &= ~OC1_HIT;
+    arg0->unk_32C.base.acFlags &= ~AC_HIT;
+    arg0->unk_32C.base.ocFlags1 &= ~OC1_ON;
+    arg0->unk_32C.base.acFlags &= ~AC_ON;
+    arg0->unk_298 = 0.0f;
+}
 
 void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2) {
     if (this->actor.colChkInfo.health == 0) {
