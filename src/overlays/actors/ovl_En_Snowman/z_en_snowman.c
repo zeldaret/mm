@@ -128,6 +128,8 @@ extern s16 D_80B19ADA;
 extern Color_RGBA8 D_80B19A80;
 extern Color_RGBA8 D_80B19A84;
 extern Vec3f D_80B19A88;
+extern Gfx* D_80B19AA0[];
+extern Vec3f D_80B19AB8;
 
 extern AnimationHeader D_06000404;
 extern UNK_TYPE D_06004628;
@@ -256,7 +258,30 @@ void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17144.s")
+void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
+    s16 temp_s0;
+    s16 temp_s1;
+    Vec3f pos;
+    Vec3f velocity;
+    f32 temp_fs1;
+    s32 i;
+
+    for (i = 0; i < 15; i++) {
+        temp_s0 = Rand_S16Offset(0x1800, 0x2800);
+        temp_s1 = ((u32)Rand_Next() >> 0x10);
+        temp_fs1 = Rand_ZeroFloat(3.0f) + 8.0f;
+        velocity.x = (temp_fs1 * Math_CosS(temp_s0)) * Math_SinS(temp_s1);
+        velocity.y = temp_fs1 * Math_SinS(temp_s0);
+        velocity.z = (temp_fs1 * Math_CosS(temp_s0)) * Math_CosS(temp_s1);
+        pos.x = (Rand_ZeroFloat(10.0f) * velocity.x) + this->unk_2B4.x;
+        pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->unk_2B4.y;
+        pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->unk_2B4.z;
+        EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80B19AB8, 0,
+                            Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20, D_80B19AA0[i % 3]);
+    }
+
+    func_800B0DE0(globalCtx, &this->unk_2B4, &gZeroVec3f, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 1000, 150);
+}
 
 void func_80B173D0(EnSnowman* this) {
     Animation_PlayLoop(&this->snowPileSkelAnime, &D_060046D8);
