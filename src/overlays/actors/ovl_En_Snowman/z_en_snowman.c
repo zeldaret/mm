@@ -561,10 +561,12 @@ void func_80B18124(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.scale.z = (this->unk_294 * 0.0139999995f) - (0.4f * this->actor.scale.y);
 }
 
+void func_80B18380(EnSnowman* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18380.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B183A4.s")
 
+void func_80B183C4(EnSnowman* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B183C4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B1848C.s")
@@ -706,8 +708,56 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.scale.z = this->actor.scale.x;
 }
 
-void func_80B18F50(EnSnowman* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18F50.s")
+void func_80B18F50(EnSnowman* this, GlobalContext* globalCtx) {
+    if (this->unk_32C.base.acFlags & AC_HIT) {
+        this->unk_32C.base.acFlags &= ~AC_HIT;
+        Actor_SetDropFlag(&this->actor, &this->unk_32C.info);
+        if ((this->actor.colChkInfo.damageEffect != 0xF) || (this->actor.params != 1)) {
+            if (this->actor.colChkInfo.damageEffect == 2) {
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                Actor_ApplyDamage(&this->actor);
+                func_80B180A4(this);
+            } else {
+                if ((this->actionFunc == func_80B1746C) || (this->actionFunc == func_80B18C7C)) {
+                    func_80B177EC(this, globalCtx);
+                } else if (this->actor.colChkInfo.damageEffect == 1) {
+                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    func_80B18380(this);
+                } else if (this->actor.colChkInfo.damageEffect == 5) {
+                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    this->unk_2A4 = 0.55f;
+                    this->drawDmgEffAlpha = 2.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    func_80B18380(this);
+                } else if (this->actor.params == 1) {
+                    if (this->unk_288 == 1) {
+                        this->unk_288 = 0;
+                        func_80B17144(this, globalCtx);
+                    }
+
+                    func_80B183C4(this);
+                } else {
+                    if (Actor_ApplyDamage(&this->actor) == 0) {
+                        Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                    }
+
+                    func_80B183C4(this);
+                }
+            }
+
+            if (this->actor.colChkInfo.damageEffect == 4) {
+                this->unk_2A4 = 0.55f;
+                this->drawDmgEffAlpha = 4.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->unk_32C.info.bumper.hitPos.x,
+                            this->unk_32C.info.bumper.hitPos.y, this->unk_32C.info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+            }
+        }
+    }
+}
 
 void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
