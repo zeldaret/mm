@@ -507,7 +507,7 @@ void func_80B18124(EnSnowman* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     this->unk_28C--;
-    if ((this->unk_28C >= 0x26) && ((this->unk_28C & 1) == 0)) {
+    if ((this->unk_28C >= 0x26) && (!(this->unk_28C & 1))) {
         sp3C.y = (this->unk_28C - 0x26) * 0.083333336f;
         sp3C.x = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
         sp3C.z = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
@@ -681,9 +681,62 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.scale.z = this->actor.scale.x;
 }
 
+void func_80B18F50(EnSnowman* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18F50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/EnSnowman_Update.s")
+void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnSnowman* this = THIS;
+    f32 wallCheckRadius;
+
+    if (this->actionFunc != func_80B189C4) {
+        DECR(this->unk_290);
+
+        func_80B18F50(this, globalCtx);
+        this->actionFunc(this, globalCtx);
+
+        if (this->actionFunc != func_80B18A04) {
+            Actor_MoveWithGravity(&this->actor);
+            if ((this->actor.params == 1) && (this->actionFunc == func_80B17A58)) {
+                wallCheckRadius = (this->bodySkelAnime.curFrame * 0.016666668f) + 1.0f;
+                wallCheckRadius = CLAMP_MAX(wallCheckRadius, 1.3f);
+                wallCheckRadius *= this->unk_32C.dim.radius;
+            } else {
+                wallCheckRadius = this->unk_32C.dim.radius;
+            }
+
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
+            if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * 0.00003051851f) < 0.7f)) {
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
+                if (this->unk_28A == 0) {
+                    this->unk_28E = Math_FAtan2F(this->actor.floorPoly->normal.z * 0.00003051851f,
+                                                 this->actor.floorPoly->normal.x * 0.00003051851f);
+                    this->unk_28A = 1;
+                }
+            } else {
+                func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
+            }
+
+            Collider_UpdateCylinder(&this->actor, &this->unk_32C);
+            if (this->unk_32C.base.acFlags & AC_ON) {
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+            }
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+
+            if (this->actor.draw == EnSnowman_Draw) {
+                Actor_SetFocus(&this->actor, this->actor.scale.y * 1800.0f);
+            } else {
+                Actor_SetFocus(&this->actor, this->actor.scale.y * 720.0f);
+            }
+
+            if (this->drawDmgEffAlpha > 0.0f) {
+                Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+                this->unk_2A4 = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
+                this->unk_2A4 = CLAMP_MAX(this->unk_2A4, 0.55f);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B19474.s")
 
