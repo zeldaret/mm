@@ -16,7 +16,7 @@ typedef struct EnSnowman {
     /* 0x25C */ Vec3s snowPileJointTable[3];
     /* 0x26E */ Vec3s snowPileMorphTable[3];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
-    /* 0x284 */ char unk_284[0x4];
+    /* 0x284 */ EnSnowmanActionFunc unk_284;
     /* 0x288 */ u8 unk_288;
     /* 0x299 */ u8 unk_289;
     /* 0x28A */ u8 unk_28A;
