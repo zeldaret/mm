@@ -35,6 +35,11 @@ void func_80B18908(EnSnowman* this);
 void func_80B19948(Actor* thisx, GlobalContext* globalCtx);
 void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2);
 void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B179D0(EnSnowman* this);
+void func_80B17EB4(EnSnowman* this);
+void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17CE8(EnSnowman* this);
+void func_80B189D4(EnSnowman* this);
 
 #if 0
 const ActorInit En_Snowman_InitVars = {
@@ -120,15 +125,20 @@ extern Gfx* D_80B19A94[];
 extern s8 D_80B19AD0[];
 extern Vec3f D_80B19ADC[];
 extern s16 D_80B19ADA;
+extern Color_RGBA8 D_80B19A80;
+extern Color_RGBA8 D_80B19A84;
+extern Vec3f D_80B19A88;
 
-extern UNK_TYPE D_06000404;
+extern AnimationHeader D_06000404;
 extern UNK_TYPE D_06004628;
 extern AnimationHeader D_060046D8;
-extern UNK_TYPE D_06004F14;
+extern AnimationHeader D_06004F14;
 extern AnimationHeader D_0600554C;
-extern UNK_TYPE D_060058CC;
+extern AnimationHeader D_060058CC;
 extern FlexSkeletonHeader D_060045A0;
 extern FlexSkeletonHeader D_06004A90;
+extern AnimationHeader D_060007B4;
+extern AnimationHeader D_0600544C;
 
 void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -156,12 +166,12 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.parent = Actor_SpawnAsChildAndCutscene(
                 &globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 2, -1, this->actor.unk20, NULL);
-            if ((this->actor.child == 0) || (this->actor.parent == 0)) {
-                if (this->actor.child != 0) {
+            if ((this->actor.child == NULL) || (this->actor.parent == NULL)) {
+                if (this->actor.child != NULL) {
                     Actor_MarkForDeath(this->actor.child);
                 }
 
-                if (this->actor.parent != 0) {
+                if (this->actor.parent != NULL) {
                     Actor_MarkForDeath(this->actor.parent);
                 }
 
@@ -230,8 +240,21 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->unk_32C);
 }
 
-void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B16FC0.s")
+void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
+    s16 phi_s1 = 0;
+    Vec3f sp78;
+    f32 temp_fs0;
+    s32 i;
+
+    sp78.y = (Rand_ZeroFloat(10.0f) * this->unk_294) + this->actor.world.pos.y;
+    for (i = 0; i < 16; i++) {
+        temp_fs0 = (Rand_ZeroFloat(10.0f) + 20.0f) * this->unk_294;
+        sp78.x = (Math_SinS(phi_s1) * temp_fs0) + this->actor.world.pos.x;
+        sp78.z = (Math_CosS(phi_s1) * temp_fs0) + this->actor.world.pos.z;
+        func_800B0DE0(globalCtx, &sp78, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, this->unk_294 * 400.0f, 10);
+        phi_s1 += 0x1000;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17144.s")
 
@@ -320,23 +343,153 @@ void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B178B8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B178B8.s")
+void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B179D0.s")
+    Math_StepToF(&this->actor.scale.y, this->actor.scale.x,
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&D_0600554C));
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17A58.s")
+    if (SkelAnime_Update(&this->bodySkelAnime)) {
+        if (this->unk_289 == 1) {
+            func_80B17F4C(this, globalCtx);
+        } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
+            this->unk_32C.base.acFlags |= AC_ON;
+            this->unk_28C = 3;
+            func_80B179D0(this);
+        } else {
+            this->unk_32C.base.acFlags |= AC_ON;
+            this->actor.scale.y = this->actor.scale.x;
+            func_80B17EB4(this);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17CE8.s")
+void func_80B179D0(EnSnowman* this) {
+    this->actor.scale.y = this->actor.scale.x;
+    if (this->actor.params == 1) {
+        this->unk_298 = 15.0f;
+        Animation_PlayOnce(&this->bodySkelAnime, &D_06000404);
+    } else {
+        this->unk_298 = 6.0f;
+        Animation_PlayOnce(&this->bodySkelAnime, &D_060007B4);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17D78.s")
+    this->actionFunc = func_80B17A58;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17EB4.s")
+void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
+    Vec3f sp3C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17EFC.s")
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
+    if ((this->actor.params != 1) && (this->unk_288 != 0) && ((globalCtx->gameplayFrames % 2) != 0)) {
+        sp3C.x = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.x;
+        sp3C.y = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.y;
+        sp3C.z = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.z;
+        func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 500, 30);
+    } else if (this->actor.params == 1) {
+        if ((this->bodySkelAnime.curFrame > 3.0f) && (this->bodySkelAnime.curFrame < 14.0f) &&
+            ((globalCtx->gameplayFrames % 2) != 0)) {
+            sp3C.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
+                     randPlusMinusPoint5Scaled(40.0f);
+            sp3C.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
+            sp3C.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
+                     randPlusMinusPoint5Scaled(40.0f);
+            func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 1000, 150);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17F4C.s")
+    if (SkelAnime_Update(&this->bodySkelAnime)) {
+        func_80B17CE8(this);
+    } else if (Animation_OnFrame(&this->bodySkelAnime, this->unk_298)) {
+        if (this->actor.params == 1) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HOLD_SNOW);
+        } else {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_HOLD);
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B17FE0.s")
+        this->unk_288 = 1;
+    }
+}
+
+void func_80B17CE8(EnSnowman* this) {
+    if (this->actor.params == 1) {
+        Animation_PlayOnce(&this->bodySkelAnime, &D_06004F14);
+        this->unk_298 = 17.0f;
+    } else {
+        Animation_PlayOnce(&this->bodySkelAnime, &D_0600544C);
+        this->unk_298 = 15.0f;
+    }
+
+    this->unk_28C--;
+    this->actionFunc = func_80B17D78;
+}
+
+void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 sp40;
+
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
+    if (SkelAnime_Update(&this->bodySkelAnime)) {
+        if ((this->unk_28C != 0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
+            !(player->stateFlags1 & 0x800000)) {
+            func_80B179D0(this);
+        } else {
+            this->unk_28C = 0;
+            func_80B17EB4(this);
+        }
+    } else if (Animation_OnFrame(&this->bodySkelAnime, this->unk_298)) {
+        this->unk_288 = 0;
+        if (this->actor.params == 1) {
+            sp40 = 4;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_THROW);
+        } else {
+            sp40 = 3;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_THROW);
+        }
+
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN, this->unk_2B4.x, this->unk_2B4.y,
+                    this->unk_2B4.z, 0, this->actor.yawTowardsPlayer, 0, sp40);
+    }
+}
+
+void func_80B17EB4(EnSnowman* this) {
+    Animation_PlayLoop(&this->bodySkelAnime, &D_060058CC);
+    this->unk_28C = 0x3C;
+    this->actionFunc = func_80B17EFC;
+}
+
+void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->bodySkelAnime);
+    if (this->unk_28C > 0) {
+        this->unk_28C--;
+    } else {
+        func_80B17F4C(this, globalCtx);
+    }
+}
+
+void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx) {
+    Animation_Change(&this->bodySkelAnime, &D_0600554C, -1.0f, Animation_GetLastFrame(&D_0600554C), 0.0f, ANIMMODE_ONCE,
+                     -3.0f);
+    func_80B16FC0(this, globalCtx);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HIDE);
+    this->actionFunc = func_80B17FE0;
+}
+
+void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->actor.scale.y, this->actor.scale.x * 0.4f,
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&D_0600554C));
+
+    if (SkelAnime_Update(&this->bodySkelAnime)) {
+        if (this->unk_289 == 1) {
+            this->actor.draw = func_80B19948;
+            this->unk_32C.base.acFlags |= AC_ON;
+            func_80B18BB4(this, globalCtx, &this->unk_2A8);
+        } else {
+            func_80B173D0(this);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B180A4.s")
 
@@ -354,19 +507,65 @@ void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B1861C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18908.s")
+void func_80B18908(EnSnowman* this) {
+    this->unk_32C.base.acFlags &= ~AC_HIT;
+    this->unk_32C.base.acFlags &= ~AC_HIT;
+    this->actor.draw = NULL;
+    if (this->unk_289 == 1) {
+        this->unk_289 = 2;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B189C4.s")
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
+    if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == func_80B189C4)) {
+        if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == func_80B189C4)) {
+            func_80B189D4((EnSnowman*)this->actor.parent);
+            func_80B189D4((EnSnowman*)this->actor.child);
+            Actor_MarkForDeath(&this->actor);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B189D4.s")
+    this->actionFunc = func_80B189C4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18A04.s")
+void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx) {
+}
+
+void func_80B189D4(EnSnowman* this) {
+    this->unk_32C.base.acFlags &= ~(AC_ON | AC_HIT);
+    this->unk_32C.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
+    this->actionFunc = func_80B18A04;
+}
+
+void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx) {
+    Actor_MarkForDeath(&this->actor);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18A28.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18B30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18BB4.s")
+void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2) {
+    if (this->actor.colChkInfo.health == 0) {
+        this->unk_289 = 2;
+    } else {
+        this->actor.flags |= ACTOR_FLAG_10;
+        Math_Vec3f_Copy(&this->unk_2A8, arg2);
+        this->unk_289 = 1;
+        if (this->actionFunc != func_80B17FE0) {
+            this->unk_290 = 0x190;
+            this->unk_298 = 0.01f;
+        }
+
+        if (this->actor.draw == func_80B19948) {
+            this->actor.speedXZ = 3.0f;
+            this->actionFunc = func_80B18C7C;
+        } else {
+            this->unk_288 = 0;
+            this->actor.speedXZ = 0.0f;
+            func_80B17F4C(this, globalCtx);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/func_80B18C7C.s")
 

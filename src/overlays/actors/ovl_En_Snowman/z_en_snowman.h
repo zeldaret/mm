@@ -18,7 +18,7 @@ typedef struct EnSnowman {
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ char unk_284[0x4];
     /* 0x288 */ u8 unk_288;
-    /* 0x299 */ s8 unk_289;
+    /* 0x299 */ u8 unk_289;
     /* 0x28A */ s8 unk_28A;
     /* 0x28B */ u8 drawDmgEffType;
     /* 0x28C */ s16 unk_28C;
