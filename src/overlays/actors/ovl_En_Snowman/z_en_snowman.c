@@ -138,9 +138,9 @@ static Color_RGBA8 D_80B19A84 = { 180, 180, 180, 255 };
 
 static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
 
-static Gfx* D_80B19A94[] = { object_snowman_DL_004400, object_snowman_DL_0010B0, object_snowman_DL_004400 };
+static Gfx* D_80B19A94[] = { gEnosSmallSnowballDL, gEnosBigSnowballDL, gEnosSmallSnowballDL };
 
-static Gfx* D_80B19AA0[] = { object_snowman_DL_005CB0, object_snowman_DL_006190, object_snowman_DL_006620 };
+static Gfx* D_80B19AA0[] = { gEnosSnowFragment1DL, gEnosSnowFragment2DL, gEnosSnowFragment3DL };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 20, ICHAIN_CONTINUE),
@@ -174,11 +174,10 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.params &= 7;
     if (this->actor.params < 3) {
-        SkelAnime_InitFlex(globalCtx, &this->bodySkelAnime, &object_snowman_Skel_0045A0, &object_snowman_Anim_00554C,
-                           this->bodyJointTable, this->bodyMorphTable, OBJECT_SNOWMAN_1_LIMB_MAX);
-        SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &object_snowman_Skel_004A90,
-                           &object_snowman_Anim_0046D8, this->snowPileJointTable, this->snowPileMorphTable,
-                           OBJECT_SNOWMAN_2_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->bodySkelAnime, &gEnosSkel, &gEnosSurfaceAnim, this->bodyJointTable,
+                           this->bodyMorphTable, ENOS_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &gEnosSnowPileSkel, &gEnosSnowPileMoveAnim,
+                           this->snowPileJointTable, this->snowPileMorphTable, ENOS_SNOW_PILE_LIMB_MAX);
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &sCylinderInit1);
         if (this->actor.params == 1) {
@@ -304,7 +303,7 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B173D0(EnSnowman* this) {
-    Animation_PlayLoop(&this->snowPileSkelAnime, &object_snowman_Anim_0046D8);
+    Animation_PlayLoop(&this->snowPileSkelAnime, &gEnosSnowPileMoveAnim);
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speedXZ = 2.0f;
     this->actor.draw = func_80B19948;
@@ -375,7 +374,7 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
-    Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_00554C);
+    Animation_PlayOnce(&this->bodySkelAnime, &gEnosSurfaceAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
     this->unk_32C.dim.radius = this->unk_294 * 40.0f;
     this->unk_32C.dim.height = this->unk_294 * 25.0f;
@@ -392,7 +391,7 @@ void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     Math_StepToF(&this->actor.scale.y, this->actor.scale.x,
-                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&object_snowman_Anim_00554C));
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&gEnosSurfaceAnim));
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
     if (SkelAnime_Update(&this->bodySkelAnime)) {
@@ -414,10 +413,10 @@ void func_80B179D0(EnSnowman* this) {
     this->actor.scale.y = this->actor.scale.x;
     if (this->actor.params == 1) {
         this->unk_298 = 15.0f;
-        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_000404);
+        Animation_PlayOnce(&this->bodySkelAnime, &gEnosBigSnowballCreateAnim);
     } else {
         this->unk_298 = 6.0f;
-        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_0007B4);
+        Animation_PlayOnce(&this->bodySkelAnime, &gEnosSmallSnowballCreateAnim);
     }
 
     this->actionFunc = func_80B17A58;
@@ -459,10 +458,10 @@ void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
 
 void func_80B17CE8(EnSnowman* this) {
     if (this->actor.params == 1) {
-        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_004F14);
+        Animation_PlayOnce(&this->bodySkelAnime, &gEnosBigSnowballThrowAnim);
         this->unk_298 = 17.0f;
     } else {
-        Animation_PlayOnce(&this->bodySkelAnime, &object_snowman_Anim_00544C);
+        Animation_PlayOnce(&this->bodySkelAnime, &gEnosSmallSnowballThrowAnim);
         this->unk_298 = 15.0f;
     }
 
@@ -499,7 +498,7 @@ void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B17EB4(EnSnowman* this) {
-    Animation_PlayLoop(&this->bodySkelAnime, &object_snowman_Anim_0058CC);
+    Animation_PlayLoop(&this->bodySkelAnime, &gEnosIdleAnim);
     this->unk_28C = 0x3C;
     this->actionFunc = func_80B17EFC;
 }
@@ -514,8 +513,8 @@ void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->bodySkelAnime, &object_snowman_Anim_00554C, -1.0f,
-                     Animation_GetLastFrame(&object_snowman_Anim_00554C), 0.0f, ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->bodySkelAnime, &gEnosSurfaceAnim, -1.0f, Animation_GetLastFrame(&gEnosSurfaceAnim), 0.0f,
+                     ANIMMODE_ONCE, -3.0f);
     func_80B16FC0(this, globalCtx);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HIDE);
     this->actionFunc = func_80B17FE0;
@@ -523,7 +522,7 @@ void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx) {
 
 void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.scale.y, this->actor.scale.x * 0.4f,
-                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&object_snowman_Anim_00554C));
+                 (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&gEnosSurfaceAnim));
 
     if (SkelAnime_Update(&this->bodySkelAnime)) {
         if (this->unk_289 == 1) {
@@ -596,7 +595,7 @@ void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B183C4(EnSnowman* this) {
-    Animation_PlayLoop(&this->bodySkelAnime, &object_snowman_Anim_004628);
+    Animation_PlayLoop(&this->bodySkelAnime, &gEnosDamageAnim);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->unk_32C.base.acFlags &= ~AC_ON;
     this->unk_28C = 0x14;
@@ -1000,7 +999,7 @@ void func_80B19718(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         }
     }
 
-    if ((limbIndex == 10) && (this->unk_288 == 1)) {
+    if ((limbIndex == ENOS_LIMB_RIGHT_HAND) && (this->unk_288 == 1)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;

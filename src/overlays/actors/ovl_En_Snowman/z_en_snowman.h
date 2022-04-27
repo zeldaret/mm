@@ -12,10 +12,10 @@ typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime bodySkelAnime;
     /* 0x188 */ SkelAnime snowPileSkelAnime;
-    /* 0x1CC */ Vec3s bodyJointTable[OBJECT_SNOWMAN_1_LIMB_MAX];
-    /* 0x214 */ Vec3s bodyMorphTable[OBJECT_SNOWMAN_1_LIMB_MAX];
-    /* 0x25C */ Vec3s snowPileJointTable[OBJECT_SNOWMAN_2_LIMB_MAX];
-    /* 0x26E */ Vec3s snowPileMorphTable[OBJECT_SNOWMAN_2_LIMB_MAX];
+    /* 0x1CC */ Vec3s bodyJointTable[ENOS_LIMB_MAX];
+    /* 0x214 */ Vec3s bodyMorphTable[ENOS_LIMB_MAX];
+    /* 0x25C */ Vec3s snowPileJointTable[ENOS_SNOW_PILE_LIMB_MAX];
+    /* 0x26E */ Vec3s snowPileMorphTable[ENOS_SNOW_PILE_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ EnSnowmanActionFunc unk_284;
     /* 0x288 */ u8 unk_288;
