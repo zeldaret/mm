@@ -95,39 +95,48 @@ static ColliderCylinderInit sCylinderInit2 = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
+typedef enum {
+    /* 0x0 */ EN_SNOWMAN_DMGEFF_NONE,
+    /* 0x1 */ EN_SNOWMAN_DMGEFF_STUN,
+    /* 0x2 */ EN_SNOWMAN_DMGEFF_FIRE_ARROW,
+    /* 0x4 */ EN_SNOWMAN_DMGEFF_LIGHT_ARROW = 0x4,
+    /* 0x5 */ EN_SNOWMAN_DMGEFF_ZORA_MAGIC,
+    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF,
+} EnTalkGibudDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0xF),
-    /* Goron punch    */ DMG_ENTRY(2, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x0),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(2, EN_SNOWMAN_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, EN_SNOWMAN_DMGEFF_FIRE_ARROW),
+    /* Ice arrow      */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_SNOWMAN_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_SNOWMAN_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_SNOWMAN_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_SNOWMAN_DMGEFF_NONE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 60, 80, 150 };
@@ -833,23 +842,23 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.scale.z = this->actor.scale.x;
 }
 
-void func_80B18F50(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
     if (this->unk_32C.base.acFlags & AC_HIT) {
         this->unk_32C.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->unk_32C.info);
-        if ((this->actor.colChkInfo.damageEffect != 0xF) || (this->actor.params != 1)) {
-            if (this->actor.colChkInfo.damageEffect == 2) {
+        if ((this->actor.colChkInfo.damageEffect != EN_SNOWMAN_DMGEFF_HOOKSHOT) || (this->actor.params != 1)) {
+            if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_FIRE_ARROW) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
                 Actor_ApplyDamage(&this->actor);
                 func_80B180A4(this);
             } else {
                 if ((this->actionFunc == func_80B1746C) || (this->actionFunc == func_80B18C7C)) {
                     func_80B177EC(this, globalCtx);
-                } else if (this->actor.colChkInfo.damageEffect == 1) {
+                } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80B18380(this);
-                } else if (this->actor.colChkInfo.damageEffect == 5) {
+                } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_ZORA_MAGIC) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     this->unk_2A4 = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
@@ -872,7 +881,7 @@ void func_80B18F50(EnSnowman* this, GlobalContext* globalCtx) {
                 }
             }
 
-            if (this->actor.colChkInfo.damageEffect == 4) {
+            if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_LIGHT_ARROW) {
                 this->unk_2A4 = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
@@ -892,7 +901,7 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actionFunc != func_80B189C4) {
         DECR(this->unk_290);
 
-        func_80B18F50(this, globalCtx);
+        EnSnowman_UpdateDamage(this, globalCtx);
         this->actionFunc(this, globalCtx);
 
         if (this->actionFunc != func_80B18A04) {
@@ -983,7 +992,7 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B19718(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSnowman* this = THIS;
     s32 pad;
     Gfx* gfx;
@@ -1027,7 +1036,7 @@ void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->bodySkelAnime.skeleton, this->bodySkelAnime.jointTable,
-                          this->bodySkelAnime.dListCount, NULL, func_80B19718, &this->actor);
+                          this->bodySkelAnime.dListCount, NULL, EnSnowman_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->unk_2A4 * this->unk_294, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
