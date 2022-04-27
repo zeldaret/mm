@@ -141,9 +141,9 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 60, 80, 150 };
 
-static Color_RGBA8 D_80B19A80 = { 250, 250, 250, 255 };
+static Color_RGBA8 sDustPrimColor = { 250, 250, 250, 255 };
 
-static Color_RGBA8 D_80B19A84 = { 180, 180, 180, 255 };
+static Color_RGBA8 sDustEnvColor = { 180, 180, 180, 255 };
 
 static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
 
@@ -188,7 +188,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &gEnosSnowPileSkel, &gEnosSnowPileMoveAnim,
                            this->snowPileJointTable, this->snowPileMorphTable, ENOS_SNOW_PILE_LIMB_MAX);
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &sCylinderInit1);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit1);
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             this->actor.flags |= ACTOR_FLAG_400;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_SNOWMAN, this->actor.world.pos.x,
@@ -227,7 +227,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         this->actor.flags &= ~ACTOR_FLAG_1;
-        Collider_InitAndSetCylinder(globalCtx, &this->unk_32C, &this->actor, &sCylinderInit2);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit2);
         this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
         this->actor.velocity.y = (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) * 0.035f) + -5.0f;
         this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 3.5f);
@@ -242,15 +242,15 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
-            this->unk_32C.dim.radius = 8;
-            this->unk_32C.dim.height = 12;
-            this->unk_32C.dim.yShift = -6;
+            this->collider.dim.radius = 8;
+            this->collider.dim.height = 12;
+            this->collider.dim.yShift = -6;
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
         } else {
-            this->unk_32C.dim.radius = 50;
-            this->unk_32C.dim.height = 122;
-            this->unk_32C.dim.yShift = -8;
-            this->unk_32C.info.toucher.damage = 16;
+            this->collider.dim.radius = 50;
+            this->collider.dim.height = 122;
+            this->collider.dim.yShift = -8;
+            this->collider.info.toucher.damage = 16;
             this->actor.world.pos.y -= 32.0f;
             Actor_SetScale(&this->actor, 0.006f);
             ActorShape_Init(&this->actor.shape, 5333.3335f, ActorShadow_DrawCircle, 170.0f);
@@ -267,7 +267,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->unk_32C);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
@@ -281,7 +281,8 @@ void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
         temp_fs0 = (Rand_ZeroFloat(10.0f) + 20.0f) * this->unk_294;
         sp78.x = (Math_SinS(phi_s1) * temp_fs0) + this->actor.world.pos.x;
         sp78.z = (Math_CosS(phi_s1) * temp_fs0) + this->actor.world.pos.z;
-        func_800B0DE0(globalCtx, &sp78, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, this->unk_294 * 400.0f, 10);
+        func_800B0DE0(globalCtx, &sp78, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
+                      this->unk_294 * 400.0f, 10);
         phi_s1 += 0x1000;
     }
 }
@@ -308,7 +309,7 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
                             Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20, D_80B19AA0[i % 3]);
     }
 
-    func_800B0DE0(globalCtx, &this->unk_2B4, &gZeroVec3f, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 1000, 150);
+    func_800B0DE0(globalCtx, &this->unk_2B4, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
 }
 
 void func_80B173D0(EnSnowman* this) {
@@ -318,8 +319,8 @@ void func_80B173D0(EnSnowman* this) {
     this->actor.draw = func_80B19948;
     this->unk_28C = 0x28;
     this->unk_28A = 0;
-    this->unk_32C.dim.radius = this->unk_294 * 30.0f;
-    this->unk_32C.dim.height = this->unk_294 * 10.0f;
+    this->collider.dim.radius = this->unk_294 * 30.0f;
+    this->collider.dim.height = this->unk_294 * 10.0f;
     this->actionFunc = func_80B1746C;
 }
 
@@ -339,7 +340,7 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_28C == 0) {
-        this->unk_32C.base.acFlags |= AC_ON;
+        this->collider.base.acFlags |= AC_ON;
     }
 
     if ((this->unk_290 == 0) && (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT)) {
@@ -368,7 +369,7 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
                !(player->stateFlags1 & 0x800000)) {
         func_80B177EC(this, globalCtx);
     } else if (this->unk_28E != this->actor.shape.rot.y) {
-        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_28E, 0x100) != 0) {
+        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_28E, 0x100)) {
             this->unk_28A = 0;
         }
 
@@ -385,14 +386,14 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
 void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->bodySkelAnime, &gEnosSurfaceAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
-    this->unk_32C.dim.radius = this->unk_294 * 40.0f;
-    this->unk_32C.dim.height = this->unk_294 * 25.0f;
+    this->collider.dim.radius = this->unk_294 * 40.0f;
+    this->collider.dim.height = this->unk_294 * 25.0f;
     this->actor.draw = EnSnowman_Draw;
     this->actor.scale.y = this->actor.scale.x * 0.4f;
     this->actor.speedXZ = 0.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80B16FC0(this, globalCtx);
-    this->unk_32C.base.acFlags &= ~AC_ON;
+    this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80B178B8;
 }
 
@@ -407,11 +408,11 @@ void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx) {
         if (this->unk_289 == 1) {
             func_80B17F4C(this, globalCtx);
         } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
-            this->unk_32C.base.acFlags |= AC_ON;
+            this->collider.base.acFlags |= AC_ON;
             this->unk_28C = 3;
             func_80B179D0(this);
         } else {
-            this->unk_32C.base.acFlags |= AC_ON;
+            this->collider.base.acFlags |= AC_ON;
             this->actor.scale.y = this->actor.scale.x;
             func_80B17EB4(this);
         }
@@ -435,12 +436,12 @@ void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-    if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && (this->unk_288 != 0) &&
+    if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((globalCtx->gameplayFrames % 2) != 0)) {
         sp3C.x = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.x;
         sp3C.y = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.y;
         sp3C.z = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.z;
-        func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 500, 30);
+        func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->bodySkelAnime.curFrame > 3.0f) && (this->bodySkelAnime.curFrame < 14.0f) &&
             ((globalCtx->gameplayFrames % 2) != 0)) {
@@ -449,7 +450,7 @@ void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
             sp3C.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
             sp3C.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
                      randPlusMinusPoint5Scaled(40.0f);
-            func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 1000, 150);
+            func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
         }
     }
 
@@ -462,7 +463,7 @@ void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_HOLD);
         }
 
-        this->unk_288 = 1;
+        this->isHoldingSnowball = true;
     }
 }
 
@@ -493,7 +494,7 @@ void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx) {
             func_80B17EB4(this);
         }
     } else if (Animation_OnFrame(&this->bodySkelAnime, this->unk_298)) {
-        this->unk_288 = 0;
+        this->isHoldingSnowball = false;
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             sp40 = 4;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_THROW);
@@ -537,7 +538,7 @@ void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->bodySkelAnime)) {
         if (this->unk_289 == 1) {
             this->actor.draw = func_80B19948;
-            this->unk_32C.base.acFlags |= AC_ON;
+            this->collider.base.acFlags |= AC_ON;
             func_80B18BB4(this, globalCtx, &this->unk_2A8);
         } else {
             func_80B173D0(this);
@@ -547,7 +548,7 @@ void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx) {
 
 void func_80B180A4(EnSnowman* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 50);
-    this->unk_32C.base.acFlags &= ~AC_ON;
+    this->collider.base.acFlags &= ~AC_ON;
     this->unk_28C = 0x32;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.flags |= ACTOR_FLAG_10;
@@ -607,12 +608,12 @@ void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx) {
 void func_80B183C4(EnSnowman* this) {
     Animation_PlayLoop(&this->bodySkelAnime, &gEnosDamageAnim);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
-    this->unk_32C.base.acFlags &= ~AC_ON;
+    this->collider.base.acFlags &= ~AC_ON;
     this->unk_28C = 0x14;
     this->actor.draw = EnSnowman_Draw;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speedXZ = 10.0f;
-    func_800BE504(&this->actor, &this->unk_32C);
+    func_800BE504(&this->actor, &this->collider);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_DAMAGE);
@@ -649,7 +650,7 @@ void func_80B1848C(EnSnowman* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk_2B4, &this->actor.world.pos);
         func_80B17144(this, globalCtx);
     } else if (this->actor.colChkInfo.health != 0) {
-        this->unk_32C.base.acFlags |= AC_ON;
+        this->collider.base.acFlags |= AC_ON;
         func_80B17F4C(this, globalCtx);
     } else {
         func_80B18600(this);
@@ -683,7 +684,8 @@ void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
                             Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), 452, 20, D_80B19AA0[i % 3]);
     }
 
-    func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 500, 30);
+    func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500,
+                  30);
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_YMAJIN_DEAD_BREAK);
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
@@ -694,8 +696,8 @@ void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B18908(EnSnowman* this) {
-    this->unk_32C.base.acFlags &= ~AC_HIT;
-    this->unk_32C.base.acFlags &= ~AC_HIT;
+    this->collider.base.acFlags &= ~AC_HIT;
+    this->collider.base.acFlags &= ~AC_HIT;
     this->actor.draw = NULL;
     if (this->unk_289 == 1) {
         this->unk_289 = 2;
@@ -717,8 +719,8 @@ void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void func_80B189D4(EnSnowman* this) {
-    this->unk_32C.base.acFlags &= ~(AC_ON | AC_HIT);
-    this->unk_32C.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
+    this->collider.base.acFlags &= ~(AC_ON | AC_HIT);
+    this->collider.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
     this->actionFunc = func_80B18A04;
 }
 
@@ -740,8 +742,8 @@ void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2) {
     this->unk_290 = 0x258;
     this->actor.params = EN_SNOWMAN_TYPE_SPLIT;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    this->unk_32C.base.ocFlags1 |= OC1_ON;
-    this->unk_32C.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->collider.base.acFlags &= ~AC_ON;
     func_80B173D0(this);
 }
 
@@ -749,10 +751,10 @@ void func_80B18B30(EnSnowman* arg0, EnSnowman* arg1) {
     Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
     arg1->unk_298 += 0.005f;
     arg0->unk_289 = 3;
-    arg0->unk_32C.base.ocFlags1 &= ~OC1_HIT;
-    arg0->unk_32C.base.acFlags &= ~AC_HIT;
-    arg0->unk_32C.base.ocFlags1 &= ~OC1_ON;
-    arg0->unk_32C.base.acFlags &= ~AC_ON;
+    arg0->collider.base.ocFlags1 &= ~OC1_HIT;
+    arg0->collider.base.acFlags &= ~AC_HIT;
+    arg0->collider.base.ocFlags1 &= ~OC1_ON;
+    arg0->collider.base.acFlags &= ~AC_ON;
     arg0->unk_298 = 0.0f;
 }
 
@@ -772,7 +774,7 @@ void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2) {
             this->actor.speedXZ = 3.0f;
             this->actionFunc = func_80B18C7C;
         } else {
-            this->unk_288 = 0;
+            this->isHoldingSnowball = false;
             this->actor.speedXZ = 0.0f;
             func_80B17F4C(this, globalCtx);
         }
@@ -790,14 +792,14 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->unk_289 == 1) {
-        if (this->unk_32C.base.ocFlags1 & OC1_HIT) {
-            if ((this->unk_32C.base.oc == this->actor.parent) && (parent->unk_289 == 1)) {
+        if (this->collider.base.ocFlags1 & OC1_HIT) {
+            if ((this->collider.base.oc == this->actor.parent) && (parent->unk_289 == 1)) {
                 if (this->actor.scale.x < this->actor.parent->scale.x) {
                     func_80B18B30(this, parent);
                 } else {
                     func_80B18B30(parent, this);
                 }
-            } else if ((this->unk_32C.base.oc == this->actor.child) && (child->unk_289 == 1)) {
+            } else if ((this->collider.base.oc == this->actor.child) && (child->unk_289 == 1)) {
                 if (this->actor.scale.x < this->actor.child->scale.x) {
                     func_80B18B30(this, child);
                 } else {
@@ -832,7 +834,7 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
             this->actor.flags |= ACTOR_FLAG_400;
-            this->unk_32C.base.ocFlags1 |= OC1_ON;
+            this->collider.base.ocFlags1 |= OC1_ON;
             this->unk_289 = 3;
             this->unk_294 = 2.0f;
             func_80B173D0(this);
@@ -844,9 +846,9 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
-    if (this->unk_32C.base.acFlags & AC_HIT) {
-        this->unk_32C.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->unk_32C.info);
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->actor.colChkInfo.damageEffect != EN_SNOWMAN_DMGEFF_HOOKSHOT) ||
             (EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE)) {
             if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_FIRE_ARROW) {
@@ -868,8 +870,8 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80B18380(this);
                 } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-                    if (this->unk_288 == 1) {
-                        this->unk_288 = 0;
+                    if (this->isHoldingSnowball == true) {
+                        this->isHoldingSnowball = false;
                         func_80B17144(this, globalCtx);
                     }
 
@@ -887,8 +889,8 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                 this->unk_2A4 = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->unk_32C.info.bumper.hitPos.x,
-                            this->unk_32C.info.bumper.hitPos.y, this->unk_32C.info.bumper.hitPos.z, 0, 0, 0,
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                            this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
         }
@@ -911,9 +913,9 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
             if ((EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) && (this->actionFunc == func_80B17A58)) {
                 wallCheckRadius = (this->bodySkelAnime.curFrame * 0.016666668f) + 1.0f;
                 wallCheckRadius = CLAMP_MAX(wallCheckRadius, 1.3f);
-                wallCheckRadius *= this->unk_32C.dim.radius;
+                wallCheckRadius *= this->collider.dim.radius;
             } else {
-                wallCheckRadius = this->unk_32C.dim.radius;
+                wallCheckRadius = this->collider.dim.radius;
             }
 
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
@@ -928,11 +930,11 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
             }
 
-            Collider_UpdateCylinder(&this->actor, &this->unk_32C);
-            if (this->unk_32C.base.acFlags & AC_ON) {
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+            Collider_UpdateCylinder(&this->actor, &this->collider);
+            if (this->collider.base.acFlags & AC_ON) {
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             }
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
             if (this->actor.draw == EnSnowman_Draw) {
                 Actor_SetFocus(&this->actor, this->actor.scale.y * 1800.0f);
@@ -957,12 +959,12 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_28C > 0) {
         this->unk_28C--;
     } else {
-        this->unk_32C.base.ocFlags1 |= OC1_ON;
+        this->collider.base.ocFlags1 |= OC1_ON;
     }
 
     if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 0x10) ||
-        (this->unk_32C.base.atFlags & AT_HIT) || (this->unk_32C.base.acFlags & AC_HIT) ||
-        (this->unk_32C.base.ocFlags1 & OC1_HIT)) {
+        (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
+        (this->collider.base.ocFlags1 & OC1_HIT)) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             phi_s0 = 10;
             for (i = 0; i < 3; i++) {
@@ -971,8 +973,8 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
                 phi_s0 *= 2;
             }
 
-            func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &D_80B19A80, &D_80B19A84, 500,
-                          30);
+            func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
+                          500, 30);
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
             Math_Vec3f_Copy(&this->unk_2B4, &this->actor.world.pos);
@@ -985,12 +987,12 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.shape.rot.x += 0xF00;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->unk_32C.dim.radius * 0.6f,
-                                this->unk_32C.dim.height - this->unk_32C.dim.yShift, 0x1F);
-        Collider_UpdateCylinder(&this->actor, &this->unk_32C);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_32C.base);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
+                                this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -1010,7 +1012,7 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         }
     }
 
-    if ((limbIndex == ENOS_LIMB_RIGHT_HAND) && (this->unk_288 == 1)) {
+    if ((limbIndex == ENOS_LIMB_RIGHT_HAND) && (this->isHoldingSnowball == true)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
