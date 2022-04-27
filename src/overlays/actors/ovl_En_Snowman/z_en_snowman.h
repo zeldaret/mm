@@ -4,6 +4,16 @@
 #include "global.h"
 #include "objects/object_snowman/object_snowman.h"
 
+#define EN_SNOWMAN_GET_TYPE(thisx) ((thisx)->params)
+
+typedef enum {
+    /* 0 */ EN_SNOWMAN_TYPE_SMALL,
+    /* 1 */ EN_SNOWMAN_TYPE_LARGE,
+    /* 2 */ EN_SNOWMAN_TYPE_SPLIT,
+    /* 3 */ EN_SNOWMAN_TYPE_SMALL_SNOWBALL,
+    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL,
+} EnSnowmanType;
+
 struct EnSnowman;
 
 typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, GlobalContext*);

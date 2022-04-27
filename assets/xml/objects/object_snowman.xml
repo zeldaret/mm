@@ -2,11 +2,11 @@
     <!-- Assets for Enos -->
     <File Name="object_snowman" Segment="6">
         <!-- Enos Animations -->
-        <Animation Name="gEnosBigSnowballCreateAnim" Offset="0x404" /> <!-- Original name is "sm_ageA" ("go up/raise A") -->
+        <Animation Name="gEnosLargeSnowballCreateAnim" Offset="0x404" /> <!-- Original name is "sm_ageA" ("go up/raise A") -->
         <Animation Name="gEnosSmallSnowballCreateAnim" Offset="0x7B4" /> <!-- Original name is "sm_ageB" ("go up/raise B") -->
 
-        <!-- Enos Big Snowball DisplayList -->
-        <DList Name="gEnosBigSnowballDL" Offset="0x10B0" />
+        <!-- Enos Large Snowball DisplayList -->
+        <DList Name="gEnosLargeSnowballDL" Offset="0x10B0" />
 
         <!-- Enos Limb DisplayLists -->
         <DList Name="gEnosBodyBottomDL" Offset="0x2428" />
@@ -61,7 +61,7 @@
         <Skeleton Name="gEnosSnowPileSkel" Type="Flex" LimbType="Standard" LimbNone="ENOS_SNOW_PILE_LIMB_NONE" LimbMax="ENOS_SNOW_PILE_LIMB_MAX" EnumName="EnosSnowPileLimbs" Offset="0x4A90" />
         
         <!-- Enos Animations -->
-        <Animation Name="gEnosBigSnowballThrowAnim" Offset="0x4F14" /> <!-- Original name is "sm_nageA" ("throw A") -->
+        <Animation Name="gEnosLargeSnowballThrowAnim" Offset="0x4F14" /> <!-- Original name is "sm_nageA" ("throw A") -->
         <Animation Name="gEnosSmallSnowballThrowAnim" Offset="0x544C" /> <!-- Original name is "sm_nageB" ("throw B") -->
         <Animation Name="gEnosSurfaceAnim" Offset="0x554C" /> <!-- Original name is "sm_tojo" ("appearance") -->
         <Animation Name="gEnosIdleAnim" Offset="0x58CC" /> <!-- Original name is "sm_wait" -->
