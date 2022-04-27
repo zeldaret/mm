@@ -28,7 +28,7 @@ void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B17F4C(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B18124(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_Stun(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B1848C(EnSnowman* this, GlobalContext* globalCtx);
 void func_80B18600(EnSnowman* this);
 void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx);
@@ -157,19 +157,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static Vec3f D_80B19AB8 = { 0.0f, -1.0f, 0.0f };
-
-static Vec3f D_80B19AC4 = { 0.0f, -0.5f, 0.0f };
-
-static s8 D_80B19AD0[] = {
-    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
-};
-
-static Vec3f D_80B19ADC[] = {
-    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
-    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
-};
-
 void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnSnowman* this = THIS;
@@ -216,8 +203,8 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetScale(&this->actor, 0.02f);
         }
 
-        this->unk_294 = thisx->scale.x * 100.0f;
-        this->unk_29C = (240.0f * this->unk_294) + (phi_v1 * 0.1f * 40.0f);
+        this->enosScale = thisx->scale.x * 100.0f;
+        this->unk_29C = (240.0f * this->enosScale) + (phi_v1 * 0.1f * 40.0f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SPLIT) {
             func_80B18908(this);
         } else {
@@ -276,18 +263,19 @@ void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
     f32 temp_fs0;
     s32 i;
 
-    sp78.y = (Rand_ZeroFloat(10.0f) * this->unk_294) + this->actor.world.pos.y;
+    sp78.y = (Rand_ZeroFloat(10.0f) * this->enosScale) + this->actor.world.pos.y;
     for (i = 0; i < 16; i++) {
-        temp_fs0 = (Rand_ZeroFloat(10.0f) + 20.0f) * this->unk_294;
+        temp_fs0 = (Rand_ZeroFloat(10.0f) + 20.0f) * this->enosScale;
         sp78.x = (Math_SinS(phi_s1) * temp_fs0) + this->actor.world.pos.x;
         sp78.z = (Math_CosS(phi_s1) * temp_fs0) + this->actor.world.pos.z;
         func_800B0DE0(globalCtx, &sp78, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
-                      this->unk_294 * 400.0f, 10);
+                      this->enosScale * 400.0f, 10);
         phi_s1 += 0x1000;
     }
 }
 
 void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
+    static Vec3f sAccel = { 0.0f, -1.0f, 0.0f };
     s16 temp_s0;
     s16 temp_s1;
     Vec3f pos;
@@ -305,7 +293,7 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
         pos.x = (Rand_ZeroFloat(10.0f) * velocity.x) + this->unk_2B4.x;
         pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->unk_2B4.y;
         pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->unk_2B4.z;
-        EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80B19AB8, 0,
+        EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &sAccel, 0,
                             Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20, D_80B19AA0[i % 3]);
     }
 
@@ -319,8 +307,8 @@ void func_80B173D0(EnSnowman* this) {
     this->actor.draw = func_80B19948;
     this->unk_28C = 0x28;
     this->unk_28A = 0;
-    this->collider.dim.radius = this->unk_294 * 30.0f;
-    this->collider.dim.height = this->unk_294 * 10.0f;
+    this->collider.dim.radius = this->enosScale * 30.0f;
+    this->collider.dim.height = this->enosScale * 10.0f;
     this->actionFunc = func_80B1746C;
 }
 
@@ -386,8 +374,8 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
 void func_80B177EC(EnSnowman* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->bodySkelAnime, &gEnosSurfaceAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SURFACE);
-    this->collider.dim.radius = this->unk_294 * 40.0f;
-    this->collider.dim.height = this->unk_294 * 25.0f;
+    this->collider.dim.radius = this->enosScale * 40.0f;
+    this->collider.dim.height = this->enosScale * 25.0f;
     this->actor.draw = EnSnowman_Draw;
     this->actor.scale.y = this->actor.scale.x * 0.4f;
     this->actor.speedXZ = 0.0f;
@@ -567,10 +555,10 @@ void func_80B18124(EnSnowman* this, GlobalContext* globalCtx) {
         sp3C.x = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
         sp3C.z = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
         sp3C.y += 0.8f;
-        sp30.x = ((sp3C.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->unk_294) + this->actor.world.pos.x;
-        sp30.z = ((sp3C.z >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->unk_294) + this->actor.world.pos.z;
+        sp30.x = ((sp3C.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->enosScale) + this->actor.world.pos.x;
+        sp30.z = ((sp3C.z >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->enosScale) + this->actor.world.pos.z;
         sp30.y = this->actor.world.pos.y + 3.0f;
-        EffectSsIceSmoke_Spawn(globalCtx, &sp30, &sp3C, &gZeroVec3f, this->unk_294 * 300.0f);
+        EffectSsIceSmoke_Spawn(globalCtx, &sp30, &sp3C, &gZeroVec3f, this->enosScale * 300.0f);
     }
 
     if (this->unk_28C == 0) {
@@ -586,22 +574,22 @@ void func_80B18124(EnSnowman* this, GlobalContext* globalCtx) {
         }
     }
 
-    this->actor.scale.y = this->unk_28C * 0.0002f * this->unk_294;
-    this->actor.scale.x = (this->unk_294 * 0.0139999995f) - (0.4f * this->actor.scale.y);
-    this->actor.scale.z = (this->unk_294 * 0.0139999995f) - (0.4f * this->actor.scale.y);
+    this->actor.scale.y = this->unk_28C * 0.0002f * this->enosScale;
+    this->actor.scale.x = (this->enosScale * 0.0139999995f) - (0.4f * this->actor.scale.y);
+    this->actor.scale.z = (this->enosScale * 0.0139999995f) - (0.4f * this->actor.scale.y);
 }
 
-void func_80B18380(EnSnowman* this) {
-    if (this->actionFunc != func_80B183A4) {
-        this->unk_284 = this->actionFunc;
+void EnSnowman_SetupStun(EnSnowman* this) {
+    if (this->actionFunc != EnSnowman_Stun) {
+        this->oldActionFunc = this->actionFunc;
     }
 
-    this->actionFunc = func_80B183A4;
+    this->actionFunc = EnSnowman_Stun;
 }
 
-void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_Stun(EnSnowman* this, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer == 0) {
-        this->actionFunc = this->unk_284;
+        this->actionFunc = this->oldActionFunc;
     }
 }
 
@@ -663,6 +651,7 @@ void func_80B18600(EnSnowman* this) {
 }
 
 void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
+    static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     Vec3f velocity;
     Vec3f pos;
     s16 temp_s0;
@@ -680,7 +669,7 @@ void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
         pos.x = (Rand_ZeroFloat(6.0f) * velocity.x) + this->actor.world.pos.x;
         pos.y = (Rand_ZeroFloat(3.0f) * velocity.y) + this->actor.world.pos.y;
         pos.z = (Rand_ZeroFloat(6.0f) * velocity.z) + this->actor.world.pos.z;
-        EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80B19AC4, 0,
+        EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &sAccel, 0,
                             Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), 452, 20, D_80B19AA0[i % 3]);
     }
 
@@ -735,7 +724,7 @@ void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_289 = 0;
     this->actor.colChkInfo.health = 2;
-    this->unk_294 = 1.0f;
+    this->enosScale = 1.0f;
     this->actor.world.pos.x = (Math_SinS(arg2) * 40.0f) + arg1->x;
     this->actor.world.pos.y = arg1->y;
     this->actor.world.pos.z = (Math_CosS(arg2) * 40.0f) + arg1->z;
@@ -836,7 +825,7 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
             this->actor.flags |= ACTOR_FLAG_400;
             this->collider.base.ocFlags1 |= OC1_ON;
             this->unk_289 = 3;
-            this->unk_294 = 2.0f;
+            this->enosScale = 2.0f;
             func_80B173D0(this);
         }
     }
@@ -861,14 +850,14 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    func_80B18380(this);
+                    EnSnowman_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_ZORA_MAGIC) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    this->unk_2A4 = 0.55f;
+                    this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    func_80B18380(this);
+                    EnSnowman_SetupStun(this);
                 } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
                     if (this->isHoldingSnowball == true) {
                         this->isHoldingSnowball = false;
@@ -886,7 +875,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
             }
 
             if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_LIGHT_ARROW) {
-                this->unk_2A4 = 0.55f;
+                this->drawDmgEffScale = 0.55f;
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
@@ -944,8 +933,8 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             if (this->drawDmgEffAlpha > 0.0f) {
                 Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
-                this->unk_2A4 = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
-                this->unk_2A4 = CLAMP_MAX(this->unk_2A4, 0.55f);
+                this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
+                this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
             }
         }
     }
@@ -996,19 +985,33 @@ void func_80B19474(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the limbPos array. An index of -1 indicates that the limb is not part
+ * of the limbPos array.
+ */
+static s8 sLimbIndexToLimbPosIndex[] = {
+    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
+};
+
+static Vec3f D_80B19ADC[] = {
+    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
+    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
+};
+
 void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSnowman* this = THIS;
     s32 pad;
     Gfx* gfx;
     s32 i;
 
-    if (D_80B19AD0[limbIndex] != -1) {
-        if (D_80B19AD0[limbIndex] == 4) {
+    if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
+        if (sLimbIndexToLimbPosIndex[limbIndex] == 4) {
             for (i = 0; i < 5; i++) {
                 Matrix_MultiplyVector3fByState(&D_80B19ADC[i], &this->limbPos[i + 4]);
             }
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[D_80B19AD0[limbIndex]]);
+            Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
         }
     }
 
@@ -1042,7 +1045,7 @@ void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawFlexOpa(globalCtx, this->bodySkelAnime.skeleton, this->bodySkelAnime.jointTable,
                           this->bodySkelAnime.dListCount, NULL, EnSnowman_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->unk_2A4 * this->unk_294, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffScale * this->enosScale, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
 
 void func_80B19948(Actor* thisx, GlobalContext* globalCtx) {

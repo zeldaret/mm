@@ -27,7 +27,7 @@ typedef struct EnSnowman {
     /* 0x25C */ Vec3s snowPileJointTable[ENOS_SNOW_PILE_LIMB_MAX];
     /* 0x26E */ Vec3s snowPileMorphTable[ENOS_SNOW_PILE_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
-    /* 0x284 */ EnSnowmanActionFunc unk_284;
+    /* 0x284 */ EnSnowmanActionFunc oldActionFunc;
     /* 0x288 */ u8 isHoldingSnowball;
     /* 0x299 */ u8 unk_289;
     /* 0x28A */ u8 unk_28A;
@@ -35,11 +35,11 @@ typedef struct EnSnowman {
     /* 0x28C */ s16 unk_28C;
     /* 0x28E */ s16 unk_28E;
     /* 0x290 */ s16 unk_290;
-    /* 0x294 */ f32 unk_294;
+    /* 0x294 */ f32 enosScale;
     /* 0x298 */ f32 unk_298;
     /* 0x29C */ f32 unk_29C;
     /* 0x2A0 */ f32 drawDmgEffAlpha;
-    /* 0x2A4 */ f32 unk_2A4;
+    /* 0x2A4 */ f32 drawDmgEffScale;
     /* 0x2A8 */ Vec3f unk_2A8;
     /* 0x2B4 */ Vec3f unk_2B4;
     /* 0x2C0 */ Vec3f limbPos[9];
