@@ -925,11 +925,7 @@ beginseg
     name "ovl_En_Boom"
     compress
     include "build/src/overlays/actors/ovl_En_Boom/z_en_boom.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Boom/ovl_En_Boom_reloc.o"
-#else
-    include "build/data/ovl_En_Boom/ovl_En_Boom.reloc.o"
-#endif
 endseg
 
 beginseg

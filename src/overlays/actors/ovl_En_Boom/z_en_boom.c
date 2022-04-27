@@ -106,43 +106,25 @@ void func_808A24DC(EnBoom* this, GlobalContext* globalCtx) {
     this->actor.bgCheckFlags |= 0x40;
 }
 
-#ifdef NON_MATCHING
 void EnBoom_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_808A3068 = { 255, 255, 100, 255 };
-    static Color_RGBA8 D_808A306C = { 255, 255, 100, 64 };
-    static Color_RGBA8 D_808A3070 = { 255, 255, 100, 0 };
-    static Color_RGBA8 D_808A3074 = { 255, 255, 100, 0 };
+    static u8 D_808A3068[4] = { 255, 255, 100, 255 };
+    static u8 D_808A306C[4] = { 255, 255, 100, 64 };
+    static u8 D_808A3070[4] = { 255, 255, 100, 0 };
+    static u8 D_808A3074[4] = { 255, 255, 100, 0 };
     s32 pad;
     EnBoom* this = THIS;
     EffectBlureInit1 sp30;
-    s32 pad2;
+    s32 i;
 
     this->actor.room = -1;
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    sp30.p2StartColor[1] = D_808A306C.g;
-    sp30.p1StartColor[1] = D_808A3068.g;
-
-    sp30.p1StartColor[0] = D_808A3068.r;
-    sp30.p2StartColor[0] = D_808A306C.r;
-
-    sp30.p1EndColor[0] = D_808A3070.r;
-    sp30.p2EndColor[0] = D_808A3074.r;
-
-    sp30.p2EndColor[1] = D_808A3074.g;
-    sp30.p1EndColor[1] = D_808A3070.g;
-
-    sp30.p2StartColor[2] = D_808A306C.b;
-    sp30.p1StartColor[2] = D_808A3068.b;
-
-    sp30.p2EndColor[3] = D_808A3074.a;
-    sp30.p1EndColor[3] = D_808A3070.a;
-
-    sp30.p1EndColor[2] = D_808A3070.b;
-
-    sp30.p2EndColor[2] = D_808A3074.b;
-    sp30.p1StartColor[3] = D_808A3068.a;
-    sp30.p2StartColor[3] = D_808A306C.a;
+    for (i = 0; i < 4; i++) {
+        sp30.p1StartColor[i] = D_808A3068[i];
+        sp30.p2StartColor[i] = D_808A306C[i];
+        sp30.p1EndColor[i] = D_808A3070[i];
+        sp30.p2EndColor[i] = D_808A3074[i];
+    }
 
     sp30.elemDuration = 8;
     sp30.unkFlag = 0;
@@ -154,13 +136,6 @@ void EnBoom_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetQuad(globalCtx, &this->collider, &this->actor, &sQuadInit);
     EnBoom_SetupAction(this, func_808A2918);
 }
-#else
-static Color_RGBA8 D_808A3068 = { 255, 255, 100, 255 };
-static Color_RGBA8 D_808A306C = { 255, 255, 100, 64 };
-static Color_RGBA8 D_808A3070 = { 255, 255, 100, 0 };
-static Color_RGBA8 D_808A3074 = { 255, 255, 100, 0 };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Boom/EnBoom_Init.s")
-#endif
 
 void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnBoom* this = THIS;
