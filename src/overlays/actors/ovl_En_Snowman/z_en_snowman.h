@@ -32,11 +32,15 @@ typedef struct EnSnowman {
     /* 0x299 */ u8 unk_289;
     /* 0x28A */ u8 unk_28A;
     /* 0x28B */ u8 drawDmgEffType;
-    /* 0x28C */ s16 unk_28C;
+    /* 0x28C */ s16 timer; // might be able to be split more
     /* 0x28E */ s16 unk_28E;
     /* 0x290 */ s16 unk_290;
     /* 0x294 */ f32 enosScale;
-    /* 0x298 */ f32 unk_298;
+    /* 0x298 */ union {
+                    f32 frameToStartHoldingSnowball;
+                    f32 frameToThrowSnowball;
+                    f32 unk_298;
+                };
     /* 0x29C */ f32 unk_29C;
     /* 0x2A0 */ f32 drawDmgEffAlpha;
     /* 0x2A4 */ f32 drawDmgEffScale;
