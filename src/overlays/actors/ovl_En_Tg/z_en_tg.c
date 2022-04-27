@@ -164,16 +164,16 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8098F8A8(this, globalCtx);
 }
 
-// s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
-s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+// s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_OverrideLimbDraw.s")
+s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
 }
 
-// void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
-void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+// void EnTg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_PostLimbDraw.s")
+void EnTg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
     Vec3f sp18 = D_80990228;
@@ -201,7 +201,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                          (s32)this->skelAnime.dListCount, func_8098FBB4, func_8098FBD0, &this->actor);
+                          (s32)this->skelAnime.dListCount, EnTg_OverrideLimbDraw, EnTg_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
