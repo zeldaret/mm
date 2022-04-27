@@ -73,7 +73,7 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 void func_80B6E090(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     BgKin2Bombwall *this = arg0;
     GlobalContext *globalCtx = arg1;
-    Vec3f spF0; //size: 3 floats = 3 times 4 = 0xC bytes
+    Vec3f spF0; 
     Vec3f spE4;
     f32 spE0;
     f32 spDC; 
@@ -89,20 +89,19 @@ void func_80B6E090(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     s32 temp_s2;
     s32 temp_s3;
     //s8 *temp_s4; //confirmed fake
-    s32 phi_v0;
+    //s32 phi_v0; //fake?
     s8 *phi_s4; //$f6 that should be $f16
     //s32 phi_s3; //confirmed fake
     
     //s32 phi_s0_2;
 
     Matrix_RotateY(this->actor.shape.rot.y, 0); //s6 should be actor.
-    //temp_s5 = &spF0;
-    phi_v0 = 0;
+    i = 0;
     temp_s3 = 0;
     
     do {
-        temp_a0 = phi_v0 + 1; //result should go into a0.
-        i = temp_a0; //should be stored into a0 for next function.
+        temp_a0 = i + 1; //result should go into a0.
+        //i = temp_a0; //should be stored into a0 for next function.
         
         phi_s4 = &D_80B6E730;//should be 0x4170 in at
 loop_2:
@@ -147,7 +146,7 @@ loop_2:
         if (phi_s4 = phi_s4 + 1, phi_s4 != &D_80B6E735) {
             goto loop_2;
         }
-        phi_v0 = i;
+        i=i+1;
     } while (i != 6);
 }
 
