@@ -21,17 +21,17 @@ typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, GlobalContext*);
 
 typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime bodySkelAnime;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ SkelAnime snowPileSkelAnime;
-    /* 0x1CC */ Vec3s bodyJointTable[EENO_LIMB_MAX];
-    /* 0x214 */ Vec3s bodyMorphTable[EENO_LIMB_MAX];
+    /* 0x1CC */ Vec3s jointTable[EENO_LIMB_MAX];
+    /* 0x214 */ Vec3s morphTable[EENO_LIMB_MAX];
     /* 0x25C */ Vec3s snowPileJointTable[EENO_SNOW_PILE_LIMB_MAX];
     /* 0x26E */ Vec3s snowPileMorphTable[EENO_SNOW_PILE_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ EnSnowmanActionFunc oldActionFunc;
     /* 0x288 */ u8 isHoldingSnowball;
     /* 0x299 */ u8 unk_289;
-    /* 0x28A */ u8 unk_28A;
+    /* 0x28A */ u8 turningOnSteepSlope;
     /* 0x28B */ u8 drawDmgEffType;
     /* 0x28C */ union {
                     s16 timer;
