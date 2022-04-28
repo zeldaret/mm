@@ -30,13 +30,13 @@ void EnSnowman_Hide(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_Melt(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_Stun(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B18600(EnSnowman* this);
-void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B18908(EnSnowman* this);
-void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B189D4(EnSnowman* this);
-void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx);
-void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2);
+void EnSnowman_SetupDead(EnSnowman* this);
+void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_SetupSplitDead(EnSnowman* this);
+void EnSnowman_SplitDead(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_SetupMarkForDeath(EnSnowman* this);
+void EnSnowman_MarkForDeath(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* arg1, s32 arg2);
 void func_80B18BB4(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2);
 void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx);
@@ -145,7 +145,7 @@ static Color_RGBA8 sDustPrimColor = { 250, 250, 250, 255 };
 
 static Color_RGBA8 sDustEnvColor = { 180, 180, 180, 255 };
 
-static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
+static Vec3f sDustVelocity = { 0.0f, 1.5f, 0.0f };
 
 static Gfx* sSnowballDLs[] = { gEenoSmallSnowballDL, gEenoLargeSnowballDL, gEenoSmallSnowballDL };
 
@@ -206,7 +206,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->eenoScale = thisx->scale.x * 100.0f;
         this->attackRange = (240.0f * this->eenoScale) + (attackRange * 0.1f * 40.0f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SPLIT) {
-            func_80B18908(this);
+            EnSnowman_SetupSplitDead(this);
         } else {
             EnSnowman_SetupMoveSnowPile(this);
         }
@@ -257,39 +257,39 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
-    s16 phi_s1 = 0;
-    Vec3f sp78;
-    f32 temp_fs0;
+void EnSnowman_CreateShowHideDustEffect(EnSnowman* this, GlobalContext* globalCtx) {
+    s16 angle = 0;
+    Vec3f pos;
+    f32 offset;
     s32 i;
 
-    sp78.y = (Rand_ZeroFloat(10.0f) * this->eenoScale) + this->actor.world.pos.y;
+    pos.y = (Rand_ZeroFloat(10.0f) * this->eenoScale) + this->actor.world.pos.y;
     for (i = 0; i < 16; i++) {
-        temp_fs0 = (Rand_ZeroFloat(10.0f) + 20.0f) * this->eenoScale;
-        sp78.x = (Math_SinS(phi_s1) * temp_fs0) + this->actor.world.pos.x;
-        sp78.z = (Math_CosS(phi_s1) * temp_fs0) + this->actor.world.pos.z;
-        func_800B0DE0(globalCtx, &sp78, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
+        offset = (Rand_ZeroFloat(10.0f) + 20.0f) * this->eenoScale;
+        pos.x = (Math_SinS(angle) * offset) + this->actor.world.pos.x;
+        pos.z = (Math_CosS(angle) * offset) + this->actor.world.pos.z;
+        func_800B0DE0(globalCtx, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
                       this->eenoScale * 400.0f, 10);
-        phi_s1 += 0x1000;
+        angle += 0x1000;
     }
 }
 
-void EnSnowman_CreateSnowFragmentEffects(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_CreateBigSnowballFragmentEffects(EnSnowman* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -1.0f, 0.0f };
-    s16 temp_s0;
-    s16 temp_s1;
+    s16 angle1;
+    s16 angle2;
     Vec3f pos;
     Vec3f velocity;
-    f32 temp_fs1;
+    f32 speed;
     s32 i;
 
     for (i = 0; i < 15; i++) {
-        temp_s0 = Rand_S16Offset(0x1800, 0x2800);
-        temp_s1 = ((u32)Rand_Next() >> 0x10);
-        temp_fs1 = Rand_ZeroFloat(3.0f) + 8.0f;
-        velocity.x = (temp_fs1 * Math_CosS(temp_s0)) * Math_SinS(temp_s1);
-        velocity.y = temp_fs1 * Math_SinS(temp_s0);
-        velocity.z = (temp_fs1 * Math_CosS(temp_s0)) * Math_CosS(temp_s1);
+        angle1 = Rand_S16Offset(0x1800, 0x2800);
+        angle2 = ((u32)Rand_Next() >> 0x10);
+        speed = Rand_ZeroFloat(3.0f) + 8.0f;
+        velocity.x = (speed * Math_CosS(angle1)) * Math_SinS(angle2);
+        velocity.y = speed * Math_SinS(angle1);
+        velocity.z = (speed * Math_CosS(angle1)) * Math_CosS(angle2);
         pos.x = (Rand_ZeroFloat(10.0f) * velocity.x) + this->snowballPos.x;
         pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->snowballPos.y;
         pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->snowballPos.z;
@@ -381,7 +381,7 @@ void EnSnowman_SetupSurface(EnSnowman* this, GlobalContext* globalCtx) {
     this->actor.scale.y = this->actor.scale.x * 0.4f;
     this->actor.speedXZ = 0.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    func_80B16FC0(this, globalCtx);
+    EnSnowman_CreateShowHideDustEffect(this, globalCtx);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnSnowman_Surface;
 }
@@ -422,24 +422,24 @@ void EnSnowman_SetupReadySnowball(EnSnowman* this) {
 }
 
 void EnSnowman_ReadySnowball(EnSnowman* this, GlobalContext* globalCtx) {
-    Vec3f sp3C;
+    Vec3f pos;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((globalCtx->gameplayFrames % 2) != 0)) {
-        sp3C.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
-        sp3C.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
-        sp3C.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
-        func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
+        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
+        pos.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
+        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
+        func_800B0DE0(globalCtx, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->skelAnime.curFrame > 3.0f) && (this->skelAnime.curFrame < 14.0f) &&
             ((globalCtx->gameplayFrames % 2) != 0)) {
-            sp3C.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
-                     randPlusMinusPoint5Scaled(40.0f);
-            sp3C.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
-            sp3C.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
-                     randPlusMinusPoint5Scaled(40.0f);
-            func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
+            pos.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
+                    randPlusMinusPoint5Scaled(40.0f);
+            pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
+            pos.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
+                    randPlusMinusPoint5Scaled(40.0f);
+            func_800B0DE0(globalCtx, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
         }
     }
 
@@ -515,7 +515,7 @@ void EnSnowman_Idle(EnSnowman* this, GlobalContext* globalCtx) {
 void EnSnowman_SetupHide(EnSnowman* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gEenoSurfaceAnim, -1.0f, Animation_GetLastFrame(&gEenoSurfaceAnim), 0.0f,
                      ANIMMODE_ONCE, -3.0f);
-    func_80B16FC0(this, globalCtx);
+    EnSnowman_CreateShowHideDustEffect(this, globalCtx);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HIDE);
     this->actionFunc = EnSnowman_Hide;
 }
@@ -547,25 +547,27 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
 }
 
 void EnSnowman_Melt(EnSnowman* this, GlobalContext* globalCtx) {
-    Vec3f sp3C;
-    Vec3f sp30;
+    Vec3f smokeVelocity;
+    Vec3f smokePos;
 
     this->timer--;
     if ((this->timer >= 38) && (!(this->timer & 1))) {
-        sp3C.y = (this->timer - 38) * 0.083333336f;
-        sp3C.x = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
-        sp3C.z = randPlusMinusPoint5Scaled(1.5f) * sp3C.y;
-        sp3C.y += 0.8f;
-        sp30.x = ((sp3C.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) + this->actor.world.pos.x;
-        sp30.z = ((sp3C.z >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) + this->actor.world.pos.z;
-        sp30.y = this->actor.world.pos.y + 3.0f;
-        EffectSsIceSmoke_Spawn(globalCtx, &sp30, &sp3C, &gZeroVec3f, this->eenoScale * 300.0f);
+        smokeVelocity.y = (this->timer - 38) * 0.083333336f;
+        smokeVelocity.x = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
+        smokeVelocity.z = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
+        smokeVelocity.y += 0.8f;
+        smokePos.x = ((smokeVelocity.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) +
+                     this->actor.world.pos.x;
+        smokePos.z = ((smokeVelocity.z >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) +
+                     this->actor.world.pos.z;
+        smokePos.y = this->actor.world.pos.y + 3.0f;
+        EffectSsIceSmoke_Spawn(globalCtx, &smokePos, &smokeVelocity, &gZeroVec3f, this->eenoScale * 300.0f);
     }
 
     if (this->timer == 0) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
-            func_80B18908(this);
+            EnSnowman_SetupSplitDead(this);
         } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             Actor_MarkForDeath(this->actor.parent);
             Actor_MarkForDeath(this->actor.child);
@@ -614,11 +616,11 @@ void EnSnowman_SetupDamage(EnSnowman* this) {
 }
 
 void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 rotationalVelocityScale;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_v0 = CLAMP_MAX(this->timer, 10);
-    this->actor.shape.rot.y += temp_v0 * 0x300;
+    rotationalVelocityScale = CLAMP_MAX(this->timer, 10);
+    this->actor.shape.rot.y += rotationalVelocityScale * 0x300;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
@@ -631,42 +633,44 @@ void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx) {
         this->timer--;
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_SPLIT);
-        func_80B16FC0(this, globalCtx);
+        EnSnowman_CreateShowHideDustEffect(this, globalCtx);
         this->drawDmgEffAlpha = 0.0f;
-        func_80B18A28((EnSnowman*)this->actor.parent, &this->actor.world.pos, this->actor.shape.rot.y + 0x5555);
-        func_80B18A28((EnSnowman*)this->actor.child, &this->actor.world.pos, this->actor.shape.rot.y - 0x5555);
-        func_80B18A28(this, &this->actor.world.pos, this->actor.shape.rot.y);
+        EnSnowman_CreateSplitEeno((EnSnowman*)this->actor.parent, &this->actor.world.pos,
+                                  this->actor.shape.rot.y + 0x5555);
+        EnSnowman_CreateSplitEeno((EnSnowman*)this->actor.child, &this->actor.world.pos,
+                                  this->actor.shape.rot.y - 0x5555);
+        EnSnowman_CreateSplitEeno(this, &this->actor.world.pos, this->actor.shape.rot.y);
         Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
-        EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
+        EnSnowman_CreateBigSnowballFragmentEffects(this, globalCtx);
     } else if (this->actor.colChkInfo.health != 0) {
         this->collider.base.acFlags |= AC_ON;
         EnSnowman_SetupHide(this, globalCtx);
     } else {
-        func_80B18600(this);
+        EnSnowman_SetupDead(this);
     }
 }
 
-void func_80B18600(EnSnowman* this) {
+void EnSnowman_SetupDead(EnSnowman* this) {
     this->drawDmgEffAlpha = 0.0f;
-    this->actionFunc = func_80B1861C;
+    this->actionFunc = EnSnowman_Dead;
 }
 
-void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     Vec3f velocity;
     Vec3f pos;
-    s16 temp_s0;
-    s16 temp_s1;
-    f32 temp_fs1;
+    s16 angle1;
+    s16 angle2;
+    f32 speed;
     s32 i;
 
     for (i = 0; i < 15; i++) {
-        temp_s0 = Rand_S16Offset(0x1000, 0x3000);
-        temp_s1 = ((u32)Rand_Next() >> 0x10);
-        temp_fs1 = Rand_ZeroFloat(2.0f) + 4.0f;
-        velocity.x = (temp_fs1 * Math_CosS(temp_s0)) * Math_SinS(temp_s1);
-        velocity.y = temp_fs1 * Math_SinS(temp_s0);
-        velocity.z = (temp_fs1 * Math_CosS(temp_s0)) * Math_CosS(temp_s1);
+        angle1 = Rand_S16Offset(0x1000, 0x3000);
+        angle2 = ((u32)Rand_Next() >> 0x10);
+        speed = Rand_ZeroFloat(2.0f) + 4.0f;
+        velocity.x = (speed * Math_CosS(angle1)) * Math_SinS(angle2);
+        velocity.y = speed * Math_SinS(angle1);
+        velocity.z = (speed * Math_CosS(angle1)) * Math_CosS(angle2);
         pos.x = (Rand_ZeroFloat(6.0f) * velocity.x) + this->actor.world.pos.x;
         pos.y = (Rand_ZeroFloat(3.0f) * velocity.y) + this->actor.world.pos.y;
         pos.z = (Rand_ZeroFloat(6.0f) * velocity.z) + this->actor.world.pos.z;
@@ -680,13 +684,13 @@ void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_YMAJIN_DEAD_BREAK);
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
-        func_80B18908(this);
+        EnSnowman_SetupSplitDead(this);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void func_80B18908(EnSnowman* this) {
+void EnSnowman_SetupSplitDead(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_HIT;
     this->collider.base.acFlags &= ~AC_HIT;
     this->actor.draw = NULL;
@@ -695,41 +699,41 @@ void func_80B18908(EnSnowman* this) {
     }
 
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
-    if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == func_80B189C4)) {
-        if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == func_80B189C4)) {
-            func_80B189D4((EnSnowman*)this->actor.parent);
-            func_80B189D4((EnSnowman*)this->actor.child);
+    if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDead)) {
+        if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDead)) {
+            EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.parent);
+            EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.child);
             Actor_MarkForDeath(&this->actor);
         }
     }
 
-    this->actionFunc = func_80B189C4;
+    this->actionFunc = EnSnowman_SplitDead;
 }
 
-void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_SplitDead(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
-void func_80B189D4(EnSnowman* this) {
+void EnSnowman_SetupMarkForDeath(EnSnowman* this) {
     this->collider.base.acFlags &= ~(AC_ON | AC_HIT);
     this->collider.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
-    this->actionFunc = func_80B18A04;
+    this->actionFunc = EnSnowman_MarkForDeath;
 }
 
-void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_MarkForDeath(EnSnowman* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2) {
+void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.shape.rot.y = arg2;
+    this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_289 = 0;
     this->actor.colChkInfo.health = 2;
     this->eenoScale = 1.0f;
-    this->actor.world.pos.x = (Math_SinS(arg2) * 40.0f) + arg1->x;
-    this->actor.world.pos.y = arg1->y;
-    this->actor.world.pos.z = (Math_CosS(arg2) * 40.0f) + arg1->z;
+    this->actor.world.pos.x = (Math_SinS(yRot) * 40.0f) + basePos->x;
+    this->actor.world.pos.y = basePos->y;
+    this->actor.world.pos.z = (Math_CosS(yRot) * 40.0f) + basePos->z;
     this->unk_290 = 0x258;
     this->actor.params = EN_SNOWMAN_TYPE_SPLIT;
     this->actor.flags &= ~ACTOR_FLAG_400;
@@ -820,7 +824,7 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
 
     if (Math_StepToF(&this->actor.scale.x, this->unk_298, 0.0005f)) {
         if (this->unk_298 < 0.01f) {
-            func_80B18908(this);
+            EnSnowman_SetupSplitDead(this);
         } else if (this->unk_298 > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
@@ -863,7 +867,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                 } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
                     if (this->isHoldingSnowball == true) {
                         this->isHoldingSnowball = false;
-                        EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
+                        EnSnowman_CreateBigSnowballFragmentEffects(this, globalCtx);
                     }
 
                     EnSnowman_SetupDamage(this);
@@ -893,13 +897,13 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
     f32 wallCheckRadius;
 
-    if (this->actionFunc != func_80B189C4) {
+    if (this->actionFunc != EnSnowman_SplitDead) {
         DECR(this->unk_290);
 
         EnSnowman_UpdateDamage(this, globalCtx);
         this->actionFunc(this, globalCtx);
 
-        if (this->actionFunc != func_80B18A04) {
+        if (this->actionFunc != EnSnowman_MarkForDeath) {
             Actor_MoveWithGravity(&this->actor);
             if ((EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) &&
                 (this->actionFunc == EnSnowman_ReadySnowball)) {
@@ -945,7 +949,7 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
-    s16 phi_s0;
+    s16 scale;
     s32 i;
 
     if (this->timer > 0) {
@@ -958,11 +962,11 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
         (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
         (this->collider.base.ocFlags1 & OC1_HIT)) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
-            phi_s0 = 10;
+            scale = 10;
             for (i = 0; i < 3; i++) {
-                EffectSsHahen_SpawnBurst(globalCtx, &thisx->world.pos, 5.0f, 0, phi_s0, phi_s0 >> 1, 3, 452, 20,
+                EffectSsHahen_SpawnBurst(globalCtx, &thisx->world.pos, 5.0f, 0, scale, scale >> 1, 3, 452, 20,
                                          sSnowFragmentDLs[i]);
-                phi_s0 *= 2;
+                scale *= 2;
             }
 
             func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
@@ -970,7 +974,7 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
             Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
-            EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
+            EnSnowman_CreateBigSnowballFragmentEffects(this, globalCtx);
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
