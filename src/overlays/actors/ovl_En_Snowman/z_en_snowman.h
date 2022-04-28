@@ -23,10 +23,10 @@ typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime bodySkelAnime;
     /* 0x188 */ SkelAnime snowPileSkelAnime;
-    /* 0x1CC */ Vec3s bodyJointTable[ENOS_LIMB_MAX];
-    /* 0x214 */ Vec3s bodyMorphTable[ENOS_LIMB_MAX];
-    /* 0x25C */ Vec3s snowPileJointTable[ENOS_SNOW_PILE_LIMB_MAX];
-    /* 0x26E */ Vec3s snowPileMorphTable[ENOS_SNOW_PILE_LIMB_MAX];
+    /* 0x1CC */ Vec3s bodyJointTable[EENO_LIMB_MAX];
+    /* 0x214 */ Vec3s bodyMorphTable[EENO_LIMB_MAX];
+    /* 0x25C */ Vec3s snowPileJointTable[EENO_SNOW_PILE_LIMB_MAX];
+    /* 0x26E */ Vec3s snowPileMorphTable[EENO_SNOW_PILE_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
     /* 0x284 */ EnSnowmanActionFunc oldActionFunc;
     /* 0x288 */ u8 isHoldingSnowball;
@@ -39,7 +39,7 @@ typedef struct EnSnowman {
                 };
     /* 0x28E */ s16 snowPileTargetRotY;
     /* 0x290 */ s16 unk_290;
-    /* 0x294 */ f32 enosScale;
+    /* 0x294 */ f32 eenoScale;
     /* 0x298 */ union {
                     f32 frameToStartHoldingSnowball;
                     f32 frameToThrowSnowball;
