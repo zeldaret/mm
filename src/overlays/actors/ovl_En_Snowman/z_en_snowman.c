@@ -15,8 +15,8 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B173D0(EnSnowman* this);
-void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_SetupMoveSnowPile(EnSnowman* this);
+void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_SetupSurface(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_Surface(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_SetupReadySnowball(EnSnowman* this);
@@ -160,12 +160,12 @@ static InitChainEntry sInitChain[] = {
 void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnSnowman* this = THIS;
-    s32 phi_v1;
+    s32 attackRange;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    phi_v1 = ((this->actor.params >> 8) & 0xFF);
-    if (phi_v1 == 0xFF) {
-        phi_v1 = 0;
+    attackRange = EN_SNOWMAN_GET_ATTACK_RANGE(&this->actor);
+    if (attackRange == 0xFF) {
+        attackRange = 0;
     }
 
     this->actor.params &= 7;
@@ -204,11 +204,11 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         this->enosScale = thisx->scale.x * 100.0f;
-        this->unk_29C = (240.0f * this->enosScale) + (phi_v1 * 0.1f * 40.0f);
+        this->attackRange = (240.0f * this->enosScale) + (attackRange * 0.1f * 40.0f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SPLIT) {
             func_80B18908(this);
         } else {
-            func_80B173D0(this);
+            EnSnowman_SetupMoveSnowPile(this);
         }
     } else {
         Player* player = GET_PLAYER(globalCtx);
@@ -300,7 +300,7 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
     func_800B0DE0(globalCtx, &this->unk_2B4, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
 }
 
-void func_80B173D0(EnSnowman* this) {
+void EnSnowman_SetupMoveSnowPile(EnSnowman* this) {
     Animation_PlayLoop(&this->snowPileSkelAnime, &gEnosSnowPileMoveAnim);
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speedXZ = 2.0f;
@@ -309,10 +309,10 @@ void func_80B173D0(EnSnowman* this) {
     this->unk_28A = 0;
     this->collider.dim.radius = this->enosScale * 30.0f;
     this->collider.dim.height = this->enosScale * 10.0f;
-    this->actionFunc = func_80B1746C;
+    this->actionFunc = EnSnowman_MoveSnowPile;
 }
 
-void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp38;
 
@@ -353,21 +353,21 @@ void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx) {
         func_80B18BB4((EnSnowman*)this->actor.child, globalCtx, &sp38);
         func_80B18BB4(this, globalCtx, &sp38);
     } else if ((this->timer == 0) && (fabsf(this->actor.playerHeightRel) < 60.0f) &&
-               (this->actor.xzDistToPlayer < this->unk_29C) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
+               (this->actor.xzDistToPlayer < this->attackRange) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
                !(player->stateFlags1 & 0x800000)) {
         EnSnowman_SetupSurface(this, globalCtx);
-    } else if (this->unk_28E != this->actor.shape.rot.y) {
-        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_28E, 0x100)) {
+    } else if (this->snowPileTargetRotY != this->actor.shape.rot.y) {
+        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->snowPileTargetRotY, 0x100)) {
             this->unk_28A = 0;
         }
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (this->actor.bgCheckFlags & 8) {
-        this->unk_28E = this->actor.wallYaw;
+        this->snowPileTargetRotY = this->actor.wallYaw;
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 200.0f) {
-        this->unk_28E = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + (Rand_Next() >> 0x14);
+        this->snowPileTargetRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + (Rand_Next() >> 0x14);
     } else if (Rand_ZeroOne() < 0.02f) {
-        this->unk_28E += (s16)((((u32)Rand_Next() >> 0x13) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->snowPileTargetRotY += (s16)((((u32)Rand_Next() >> 0x13) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
 }
 
@@ -397,7 +397,7 @@ void EnSnowman_Surface(EnSnowman* this, GlobalContext* globalCtx) {
             EnSnowman_SetupHide(this, globalCtx);
         } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             this->collider.base.acFlags |= AC_ON;
-            this->timer = 3;
+            this->snowballsToThrowBeforeIdling = 3;
             EnSnowman_SetupReadySnowball(this);
         } else {
             this->collider.base.acFlags |= AC_ON;
@@ -464,7 +464,7 @@ void EnSnowman_SetupThrowSnowball(EnSnowman* this) {
         this->frameToThrowSnowball = 15.0f;
     }
 
-    this->timer--;
+    this->snowballsToThrowBeforeIdling--;
     this->actionFunc = EnSnowman_ThrowSnowball;
 }
 
@@ -474,11 +474,11 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if (SkelAnime_Update(&this->bodySkelAnime)) {
-        if ((this->timer != 0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
+        if ((this->snowballsToThrowBeforeIdling != 0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
             !(player->stateFlags1 & 0x800000)) {
             EnSnowman_SetupReadySnowball(this);
         } else {
-            this->timer = 0;
+            this->snowballsToThrowBeforeIdling = 0;
             EnSnowman_SetupIdle(this);
         }
     } else if (Animation_OnFrame(&this->bodySkelAnime, this->frameToThrowSnowball)) {
@@ -529,7 +529,7 @@ void EnSnowman_Hide(EnSnowman* this, GlobalContext* globalCtx) {
             this->collider.base.acFlags |= AC_ON;
             func_80B18BB4(this, globalCtx, &this->unk_2A8);
         } else {
-            func_80B173D0(this);
+            EnSnowman_SetupMoveSnowPile(this);
         }
     }
 }
@@ -733,7 +733,7 @@ void func_80B18A28(EnSnowman* this, Vec3f* arg1, s32 arg2) {
     this->actor.flags &= ~ACTOR_FLAG_400;
     this->collider.base.ocFlags1 |= OC1_ON;
     this->collider.base.acFlags &= ~AC_ON;
-    func_80B173D0(this);
+    EnSnowman_SetupMoveSnowPile(this);
 }
 
 void func_80B18B30(EnSnowman* arg0, EnSnowman* arg1) {
@@ -826,7 +826,7 @@ void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx) {
             this->collider.base.ocFlags1 |= OC1_ON;
             this->unk_289 = 3;
             this->enosScale = 2.0f;
-            func_80B173D0(this);
+            EnSnowman_SetupMoveSnowPile(this);
         }
     }
 
@@ -845,7 +845,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                 Actor_ApplyDamage(&this->actor);
                 EnSnowman_SetupMelt(this);
             } else {
-                if ((this->actionFunc == func_80B1746C) || (this->actionFunc == func_80B18C7C)) {
+                if ((this->actionFunc == EnSnowman_MoveSnowPile) || (this->actionFunc == func_80B18C7C)) {
                     EnSnowman_SetupSurface(this, globalCtx);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
@@ -909,11 +909,11 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
-            if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * 0.00003051851f) < 0.7f)) {
+            if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (this->unk_28A == 0) {
-                    this->unk_28E = Math_FAtan2F(this->actor.floorPoly->normal.z * 0.00003051851f,
-                                                 this->actor.floorPoly->normal.x * 0.00003051851f);
+                    this->snowPileTargetRotY = Math_FAtan2F(this->actor.floorPoly->normal.z * SHT_MINV,
+                                                            this->actor.floorPoly->normal.x * SHT_MINV);
                     this->unk_28A = 1;
                 }
             } else {

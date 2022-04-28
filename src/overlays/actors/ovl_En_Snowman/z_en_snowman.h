@@ -5,6 +5,7 @@
 #include "objects/object_snowman/object_snowman.h"
 
 #define EN_SNOWMAN_GET_TYPE(thisx) ((thisx)->params)
+#define EN_SNOWMAN_GET_ATTACK_RANGE(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef enum {
     /* 0 */ EN_SNOWMAN_TYPE_SMALL,
@@ -32,8 +33,11 @@ typedef struct EnSnowman {
     /* 0x299 */ u8 unk_289;
     /* 0x28A */ u8 unk_28A;
     /* 0x28B */ u8 drawDmgEffType;
-    /* 0x28C */ s16 timer; // might be able to be split more
-    /* 0x28E */ s16 unk_28E;
+    /* 0x28C */ union {
+                    s16 timer;
+                    s16 snowballsToThrowBeforeIdling;
+                };
+    /* 0x28E */ s16 snowPileTargetRotY;
     /* 0x290 */ s16 unk_290;
     /* 0x294 */ f32 enosScale;
     /* 0x298 */ union {
@@ -41,7 +45,7 @@ typedef struct EnSnowman {
                     f32 frameToThrowSnowball;
                     f32 unk_298;
                 };
-    /* 0x29C */ f32 unk_29C;
+    /* 0x29C */ f32 attackRange;
     /* 0x2A0 */ f32 drawDmgEffAlpha;
     /* 0x2A4 */ f32 drawDmgEffScale;
     /* 0x2A8 */ Vec3f unk_2A8;
