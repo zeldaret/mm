@@ -3,6 +3,9 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_rs/object_rs.h"
+#include "objects/object_zo/object_zo.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
 
 struct EnSob1;
 

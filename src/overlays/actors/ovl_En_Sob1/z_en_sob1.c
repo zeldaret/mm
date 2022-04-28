@@ -5,11 +5,8 @@
  */
 
 #include "z_en_sob1.h"
-#include "objects/object_rs/object_rs.h"
-#include "objects/object_zo/object_zo.h"
 #include "objects/object_mastergolon/object_mastergolon.h"
 #include "objects/object_masterzoora/object_masterzoora.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -1318,7 +1315,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZO_LIMB_MAX);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
@@ -1575,7 +1572,7 @@ s32 EnSob1_ZoraShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
                                            Actor* thisx) {
     EnSob1* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ZO_LIMB_HEAD) {
         rot->x += this->headRot;
     }
     return false;
