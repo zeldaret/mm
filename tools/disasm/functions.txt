@@ -13113,7 +13113,7 @@
     0x80B16B00:("EnSnowman_Init",),
     0x80B16F94:("EnSnowman_Destroy",),
     0x80B16FC0:("func_80B16FC0",),
-    0x80B17144:("func_80B17144",),
+    0x80B17144:("EnSnowman_CreateSnowFragmentEffects",),
     0x80B173D0:("EnSnowman_SetupMoveSnowPile",),
     0x80B1746C:("EnSnowman_MoveSnowPile",),
     0x80B177EC:("EnSnowman_SetupSurface",),

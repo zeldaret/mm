@@ -147,9 +147,9 @@ static Color_RGBA8 sDustEnvColor = { 180, 180, 180, 255 };
 
 static Vec3f D_80B19A88 = { 0.0f, 1.5f, 0.0f };
 
-static Gfx* D_80B19A94[] = { gEenoSmallSnowballDL, gEenoLargeSnowballDL, gEenoSmallSnowballDL };
+static Gfx* sSnowballDLs[] = { gEenoSmallSnowballDL, gEenoLargeSnowballDL, gEenoSmallSnowballDL };
 
-static Gfx* D_80B19AA0[] = { gEenoSnowFragment1DL, gEenoSnowFragment2DL, gEenoSnowFragment3DL };
+static Gfx* sSnowFragmentDLs[] = { gEenoSnowFragment1DL, gEenoSnowFragment2DL, gEenoSnowFragment3DL };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 20, ICHAIN_CONTINUE),
@@ -274,7 +274,7 @@ void func_80B16FC0(EnSnowman* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_CreateSnowFragmentEffects(EnSnowman* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -1.0f, 0.0f };
     s16 temp_s0;
     s16 temp_s1;
@@ -290,14 +290,15 @@ void func_80B17144(EnSnowman* this, GlobalContext* globalCtx) {
         velocity.x = (temp_fs1 * Math_CosS(temp_s0)) * Math_SinS(temp_s1);
         velocity.y = temp_fs1 * Math_SinS(temp_s0);
         velocity.z = (temp_fs1 * Math_CosS(temp_s0)) * Math_CosS(temp_s1);
-        pos.x = (Rand_ZeroFloat(10.0f) * velocity.x) + this->unk_2B4.x;
-        pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->unk_2B4.y;
-        pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->unk_2B4.z;
+        pos.x = (Rand_ZeroFloat(10.0f) * velocity.x) + this->snowballPos.x;
+        pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->snowballPos.y;
+        pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->snowballPos.z;
         EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &sAccel, 0,
-                            Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20, D_80B19AA0[i % 3]);
+                            Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20,
+                            sSnowFragmentDLs[i % 3]);
     }
 
-    func_800B0DE0(globalCtx, &this->unk_2B4, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
+    func_800B0DE0(globalCtx, &this->snowballPos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
 }
 
 void EnSnowman_SetupMoveSnowPile(EnSnowman* this) {
@@ -426,9 +427,9 @@ void EnSnowman_ReadySnowball(EnSnowman* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((globalCtx->gameplayFrames % 2) != 0)) {
-        sp3C.x = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.x;
-        sp3C.y = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.y;
-        sp3C.z = randPlusMinusPoint5Scaled(10.0f) + this->unk_2B4.z;
+        sp3C.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
+        sp3C.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
+        sp3C.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
         func_800B0DE0(globalCtx, &sp3C, &D_80B19A88, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->skelAnime.curFrame > 3.0f) && (this->skelAnime.curFrame < 14.0f) &&
@@ -491,8 +492,8 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_MINI_THROW);
         }
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN, this->unk_2B4.x, this->unk_2B4.y,
-                    this->unk_2B4.z, 0, this->actor.yawTowardsPlayer, 0, params);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN, this->snowballPos.x, this->snowballPos.y,
+                    this->snowballPos.z, 0, this->actor.yawTowardsPlayer, 0, params);
     }
 }
 
@@ -635,8 +636,8 @@ void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx) {
         func_80B18A28((EnSnowman*)this->actor.parent, &this->actor.world.pos, this->actor.shape.rot.y + 0x5555);
         func_80B18A28((EnSnowman*)this->actor.child, &this->actor.world.pos, this->actor.shape.rot.y - 0x5555);
         func_80B18A28(this, &this->actor.world.pos, this->actor.shape.rot.y);
-        Math_Vec3f_Copy(&this->unk_2B4, &this->actor.world.pos);
-        func_80B17144(this, globalCtx);
+        Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
+        EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
     } else if (this->actor.colChkInfo.health != 0) {
         this->collider.base.acFlags |= AC_ON;
         EnSnowman_SetupHide(this, globalCtx);
@@ -670,7 +671,8 @@ void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx) {
         pos.y = (Rand_ZeroFloat(3.0f) * velocity.y) + this->actor.world.pos.y;
         pos.z = (Rand_ZeroFloat(6.0f) * velocity.z) + this->actor.world.pos.z;
         EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &sAccel, 0,
-                            Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), 452, 20, D_80B19AA0[i % 3]);
+                            Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), 452, 20,
+                            sSnowFragmentDLs[i % 3]);
     }
 
     func_800B0DE0(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500,
@@ -861,7 +863,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, GlobalContext* globalCtx) {
                 } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
                     if (this->isHoldingSnowball == true) {
                         this->isHoldingSnowball = false;
-                        func_80B17144(this, globalCtx);
+                        EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
                     }
 
                     EnSnowman_SetupDamage(this);
@@ -959,7 +961,7 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
             phi_s0 = 10;
             for (i = 0; i < 3; i++) {
                 EffectSsHahen_SpawnBurst(globalCtx, &thisx->world.pos, 5.0f, 0, phi_s0, phi_s0 >> 1, 3, 452, 20,
-                                         D_80B19AA0[i]);
+                                         sSnowFragmentDLs[i]);
                 phi_s0 *= 2;
             }
 
@@ -967,8 +969,8 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
                           500, 30);
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
-            Math_Vec3f_Copy(&this->unk_2B4, &this->actor.world.pos);
-            func_80B17144(this, globalCtx);
+            Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
+            EnSnowman_CreateSnowFragmentEffects(this, globalCtx);
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
@@ -1029,13 +1031,13 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         }
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[1], D_80B19A94[EN_SNOWMAN_GET_TYPE(&this->actor)]);
+        gSPDisplayList(&gfx[1], sSnowballDLs[EN_SNOWMAN_GET_TYPE(&this->actor)]);
 
         POLY_OPA_DISP = &gfx[2];
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_GetStateTranslation(&this->unk_2B4);
+        Matrix_GetStateTranslation(&this->snowballPos);
     }
 }
 
@@ -1058,5 +1060,5 @@ void EnSnowman_DrawSnowPile(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSnowman_DrawSnowball(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_80B19A94[thisx->params - 3]);
+    Gfx_DrawDListOpa(globalCtx, sSnowballDLs[thisx->params - 3]);
 }

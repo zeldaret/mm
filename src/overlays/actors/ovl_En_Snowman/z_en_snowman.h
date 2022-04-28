@@ -49,7 +49,7 @@ typedef struct EnSnowman {
     /* 0x2A0 */ f32 drawDmgEffAlpha;
     /* 0x2A4 */ f32 drawDmgEffScale;
     /* 0x2A8 */ Vec3f unk_2A8;
-    /* 0x2B4 */ Vec3f unk_2B4;
+    /* 0x2B4 */ Vec3f snowballPos;
     /* 0x2C0 */ Vec3f bodyPartsPos[9];
     /* 0x32C */ ColliderCylinder collider;
 } EnSnowman; // size = 0x378
