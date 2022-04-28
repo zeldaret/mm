@@ -297,7 +297,8 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         Matrix_InsertZRotation_s(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == ZO_LIMB_TORSO) || (limbIndex == ZO_LIMB_LEFT_UPPER_ARM) || (limbIndex == ZO_LIMB_RIGHT_UPPER_ARM)) {
+    if ((limbIndex == ZO_LIMB_TORSO) || (limbIndex == ZO_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == ZO_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
     }

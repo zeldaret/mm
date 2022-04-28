@@ -1317,8 +1317,8 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZO_LIMB_MAX);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
+                     0, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }

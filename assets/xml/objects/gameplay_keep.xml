@@ -1001,7 +1001,7 @@
         <Limb Name="gameplay_keep_Standardlimb_02F004" Type="Standard" Offset="0x2F004" />
         <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" Offset="0x2F028" />
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
-        <Texture Name="gameplay_keep_Tex_02F100" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
+        <Texture Name="gEffShockwaveTex" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gameplay_keep_DL_030100" Offset="0x30100" /> <!-- Floor shockwave ring -->
         <DList Name="gEffBubbleDL" Offset="0x301B0" />
         <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
