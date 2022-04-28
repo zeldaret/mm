@@ -30,9 +30,11 @@ typedef struct EnSob1 {
     /* 0x190 */ EnSob1ActionFunc changeObjectFunc;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ Path* path;
-    /* 0x1E4 */ s32 pathPointsIdx;
+    /* 0x1E4 */ s32 waypoint;
     /* 0x1E8 */ s16 delayTimer;
-    /* 0x1EA */ s8 objIndices[3];
+    /* 0x1EA */ s8 mainObjIndex;
+    /* 0x1EB */ s8 unusedObjIndex;
+    /* 0x1EC */ s8 shopkeeperAnimObjIndex;
     /* 0x1EE */ s16 headRot;
     /* 0x1F0 */ s16 headRotTarget;
     /* 0x1F2 */ Vec3s jointTable[20];
@@ -48,7 +50,7 @@ typedef struct EnSob1 {
     /* 0x31C */ f32 cursorAnimTween;
     /* 0x320 */ u8 cursorAnimState;
     /* 0x321 */ u8 drawCursor;
-    /* 0x322 */ u8 cursorIdx;
+    /* 0x322 */ u8 cursorIndex;
     /* 0x324 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x35C */ StickDirectionPrompt stickRightPrompt;
     /* 0x394 */ f32 arrowAnimTween;
