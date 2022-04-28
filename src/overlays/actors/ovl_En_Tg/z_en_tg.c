@@ -20,7 +20,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
 void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
 void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
-void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 arg3);
+void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 arg3);
 
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
@@ -36,8 +36,22 @@ const ActorInit En_Tg_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809901C0 = {
-    { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_HIT0,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
@@ -120,7 +134,8 @@ void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable,
+                       21);
     func_8098F800(&this->skelAnime, &D_80990218, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809901C0);
@@ -138,7 +153,7 @@ void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
-void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
+void func_8098FA70(EnTg* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
     this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
@@ -152,7 +167,6 @@ void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
     }
 }
 
-
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
 void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
@@ -164,8 +178,8 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8098F8A8(this, globalCtx);
 }
 
-// s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_OverrideLimbDraw.s")
+// s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor*
+// thisx); #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_OverrideLimbDraw.s")
 s32 EnTg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
@@ -206,9 +220,8 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
-void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 len) {
+void func_8098FD50(EnTg* this, EnTgIdk* ptr, Vec3f* arg2, s32 len) {
     Vec3f sp2C = D_80990234;
     Vec3f sp20 = D_80990240;
     s32 i = 0;
