@@ -988,10 +988,10 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx) {
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the limbPos array. An index of -1 indicates that the limb is not part
- * of the limbPos array.
+ * in the bodyPartsPos array. An index of -1 indicates that the limb is
+ * not part of the bodyPartsPos array.
  */
-static s8 sLimbIndexToLimbPosIndex[] = {
+static s8 sLimbIndexToBodyPartsPosIndex[] = {
     -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
 };
 
@@ -1006,13 +1006,13 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Gfx* gfx;
     s32 i;
 
-    if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
-        if (sLimbIndexToLimbPosIndex[limbIndex] == 4) {
+    if (sLimbIndexToBodyPartsPosIndex[limbIndex] != -1) {
+        if (sLimbIndexToBodyPartsPosIndex[limbIndex] == 4) {
             for (i = 0; i < 5; i++) {
-                Matrix_MultiplyVector3fByState(&D_80B19ADC[i], &this->limbPos[i + 4]);
+                Matrix_MultiplyVector3fByState(&D_80B19ADC[i], &this->bodyPartsPos[i + 4]);
             }
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
+            Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
         }
     }
 
@@ -1045,7 +1045,7 @@ void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->bodySkelAnime.skeleton, this->bodySkelAnime.jointTable,
                           this->bodySkelAnime.dListCount, NULL, EnSnowman_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                             this->drawDmgEffScale * this->eenoScale, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
 
