@@ -33,7 +33,7 @@
         <Texture Name="gZoraHandTex" OutName="hand" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
         <Texture Name="gZoraKneeTex" OutName="knee" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
 
-        <!-- Skeleton -->
+        <!-- DLists -->
         <DList Name="gZoraPelvisDL" Offset="0xA2A0" />
         <DList Name="gZoraTorsoDL" Offset="0xA448" />
         <DList Name="gZoraHeadDL" Offset="0xA7C0" />
@@ -54,6 +54,7 @@
         <DList Name="gZoraLeftShinDL" Offset="0xCB38" />
         <DList Name="gZoraLeftFootDL" Offset="0xCE10" />
 
+        <!-- Skeleton -->
         <Limb Name="gZoraPelvisLimb" Type="Standard" EnumName="ZORA_LIMB_PELVIS" Offset="0xD0D8" />
         <Limb Name="gZoraLeftThighLimb" Type="Standard" EnumName="ZORA_LIMB_LEFT_THIGH" Offset="0xD0E4" />
         <Limb Name="gZoraLeftShinLimb" Type="Standard" EnumName="ZORA_LIMB_LEFT_SHIN" Offset="0xD0F0" />

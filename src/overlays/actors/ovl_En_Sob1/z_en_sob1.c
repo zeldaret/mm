@@ -1333,11 +1333,10 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
-                       this->morphTable, 18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
-    Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), ANIMMODE_LOOP, 0.0f);
+    Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
+                     ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
@@ -1640,8 +1639,7 @@ void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSob1_GoronShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
-                                                        object_oF1d_map_Tex_011038 };
+    static TexturePtr sGoronShopkeeperEyeTextures[] = { gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;

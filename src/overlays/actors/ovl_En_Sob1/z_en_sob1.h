@@ -7,6 +7,8 @@
 #include "objects/object_zo/object_zo.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 
+#define ENSOB1_LIMB_MAX MAX(MAX((u32)ZORA_LIMB_MAX, (u32)BOMBSHOPKEEPER_LIMB_MAX), (u32)GORON_LIMB_MAX)
+
 struct EnSob1;
 
 typedef void (*EnSob1ActionFunc)(struct EnSob1*, GlobalContext*);
@@ -37,8 +39,8 @@ typedef struct EnSob1 {
     /* 0x1EC */ s8 shopkeeperAnimObjIndex;
     /* 0x1EE */ s16 headRot;
     /* 0x1F0 */ s16 headRotTarget;
-    /* 0x1F2 */ Vec3s jointTable[20];
-    /* 0x26A */ Vec3s morphTable[20];
+    /* 0x1F2 */ Vec3s jointTable[ENSOB1_LIMB_MAX];
+    /* 0x26A */ Vec3s morphTable[ENSOB1_LIMB_MAX];
     /* 0x2E2 */ s16 eyeTexIndex;
     /* 0x2E4 */ s16 blinkTimer;
     /* 0x2E8 */ EnSob1BlinkFunc blinkFunc;
