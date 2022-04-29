@@ -315,7 +315,7 @@ void EnSnowman_SetupMoveSnowPile(EnSnowman* this) {
 
 void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp38;
+    Vec3f combinePos;
 
     SkelAnime_Update(&this->snowPileSkelAnime);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
@@ -332,27 +332,29 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags |= AC_ON;
     }
 
-    if ((this->unk_290 == 0) && (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT)) {
+    if ((this->combineTimer == 0) && (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT)) {
         if ((this->actor.parent->colChkInfo.health != 0) && (this->actor.child->colChkInfo.health != 0)) {
-            sp38.x = (this->actor.parent->world.pos.x + this->actor.child->world.pos.x + this->actor.world.pos.x) *
-                     0.33333334f;
-            sp38.z = (this->actor.parent->world.pos.z + this->actor.child->world.pos.z + this->actor.world.pos.z) *
-                     0.33333334f;
+            combinePos.x =
+                (this->actor.parent->world.pos.x + this->actor.child->world.pos.x + this->actor.world.pos.x) *
+                0.33333334f;
+            combinePos.z =
+                (this->actor.parent->world.pos.z + this->actor.child->world.pos.z + this->actor.world.pos.z) *
+                0.33333334f;
         } else if (this->actor.parent->colChkInfo.health != 0) {
-            sp38.x = (this->actor.parent->world.pos.x + this->actor.world.pos.x) / 2.0f;
-            sp38.z = (this->actor.parent->world.pos.z + this->actor.world.pos.z) / 2.0f;
+            combinePos.x = (this->actor.parent->world.pos.x + this->actor.world.pos.x) / 2.0f;
+            combinePos.z = (this->actor.parent->world.pos.z + this->actor.world.pos.z) / 2.0f;
         } else if (this->actor.child->colChkInfo.health != 0) {
-            sp38.x = (this->actor.child->world.pos.x + this->actor.world.pos.x) / 2.0f;
-            sp38.z = (this->actor.child->world.pos.z + this->actor.world.pos.z) / 2.0f;
+            combinePos.x = (this->actor.child->world.pos.x + this->actor.world.pos.x) / 2.0f;
+            combinePos.z = (this->actor.child->world.pos.z + this->actor.world.pos.z) / 2.0f;
         } else {
-            sp38.x = this->actor.world.pos.x;
-            sp38.z = this->actor.world.pos.z;
+            combinePos.x = this->actor.world.pos.x;
+            combinePos.z = this->actor.world.pos.z;
         }
 
-        sp38.y = this->actor.world.pos.y;
-        EnSnowman_SetupCombine((EnSnowman*)this->actor.parent, globalCtx, &sp38);
-        EnSnowman_SetupCombine((EnSnowman*)this->actor.child, globalCtx, &sp38);
-        EnSnowman_SetupCombine(this, globalCtx, &sp38);
+        combinePos.y = this->actor.world.pos.y;
+        EnSnowman_SetupCombine((EnSnowman*)this->actor.parent, globalCtx, &combinePos);
+        EnSnowman_SetupCombine((EnSnowman*)this->actor.child, globalCtx, &combinePos);
+        EnSnowman_SetupCombine(this, globalCtx, &combinePos);
     } else if ((this->timer == 0) && (fabsf(this->actor.playerHeightRel) < 60.0f) &&
                (this->actor.xzDistToPlayer < this->attackRange) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
                !(player->stateFlags1 & 0x800000)) {
@@ -394,7 +396,7 @@ void EnSnowman_Surface(EnSnowman* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_289 == 1) {
+        if (this->combineState == 1) {
             EnSnowman_SetupHide(this, globalCtx);
         } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             this->collider.base.acFlags |= AC_ON;
@@ -525,10 +527,10 @@ void EnSnowman_Hide(EnSnowman* this, GlobalContext* globalCtx) {
                  (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&gEenoSurfaceAnim));
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_289 == 1) {
+        if (this->combineState == 1) {
             this->actor.draw = EnSnowman_DrawSnowPile;
             this->collider.base.acFlags |= AC_ON;
-            EnSnowman_SetupCombine(this, globalCtx, &this->unk_2A8);
+            EnSnowman_SetupCombine(this, globalCtx, &this->combinePos);
         } else {
             EnSnowman_SetupMoveSnowPile(this);
         }
@@ -694,8 +696,8 @@ void EnSnowman_SetupSplitDead(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_HIT;
     this->collider.base.acFlags &= ~AC_HIT;
     this->actor.draw = NULL;
-    if (this->unk_289 == 1) {
-        this->unk_289 = 2;
+    if (this->combineState == 1) {
+        this->combineState = 2;
     }
 
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
@@ -728,13 +730,13 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk_289 = 0;
+    this->combineState = 0;
     this->actor.colChkInfo.health = 2;
     this->eenoScale = 1.0f;
     this->actor.world.pos.x = (Math_SinS(yRot) * 40.0f) + basePos->x;
     this->actor.world.pos.y = basePos->y;
     this->actor.world.pos.z = (Math_CosS(yRot) * 40.0f) + basePos->z;
-    this->unk_290 = 0x258;
+    this->combineTimer = 600;
     this->actor.params = EN_SNOWMAN_TYPE_SPLIT;
     this->actor.flags &= ~ACTOR_FLAG_400;
     this->collider.base.ocFlags1 |= OC1_ON;
@@ -744,25 +746,25 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
 
 void EnSnowman_PrepareForCombine(EnSnowman* arg0, EnSnowman* arg1) {
     Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
-    arg1->unk_298 += 0.005f;
-    arg0->unk_289 = 3;
+    arg1->targetScaleDuringCombine += 0.005f;
+    arg0->combineState = 3;
     arg0->collider.base.ocFlags1 &= ~OC1_HIT;
     arg0->collider.base.acFlags &= ~AC_HIT;
     arg0->collider.base.ocFlags1 &= ~OC1_ON;
     arg0->collider.base.acFlags &= ~AC_ON;
-    arg0->unk_298 = 0.0f;
+    arg0->targetScaleDuringCombine = 0.0f;
 }
 
-void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2) {
+void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* combinePos) {
     if (this->actor.colChkInfo.health == 0) {
-        this->unk_289 = 2;
+        this->combineState = 2;
     } else {
         this->actor.flags |= ACTOR_FLAG_10;
-        Math_Vec3f_Copy(&this->unk_2A8, arg2);
-        this->unk_289 = 1;
+        Math_Vec3f_Copy(&this->combinePos, combinePos);
+        this->combineState = 1;
         if (this->actionFunc != EnSnowman_Hide) {
-            this->unk_290 = 0x190;
-            this->unk_298 = 0.01f;
+            this->combineTimer = 400;
+            this->targetScaleDuringCombine = 0.01f;
         }
 
         if (this->actor.draw == EnSnowman_DrawSnowPile) {
@@ -783,18 +785,18 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->snowPileSkelAnime);
     parent = (EnSnowman*)this->actor.parent;
     child = (EnSnowman*)this->actor.child;
-    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->unk_2A8), 0x1000);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->combinePos), 0x1000);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (this->unk_289 == 1) {
+    if (this->combineState == 1) {
         if (this->collider.base.ocFlags1 & OC1_HIT) {
-            if ((this->collider.base.oc == this->actor.parent) && (parent->unk_289 == 1)) {
+            if ((this->collider.base.oc == this->actor.parent) && (parent->combineState == 1)) {
                 if (this->actor.scale.x < this->actor.parent->scale.x) {
                     EnSnowman_PrepareForCombine(this, parent);
                 } else {
                     EnSnowman_PrepareForCombine(parent, this);
                 }
-            } else if ((this->collider.base.oc == this->actor.child) && (child->unk_289 == 1)) {
+            } else if ((this->collider.base.oc == this->actor.child) && (child->combineState == 1)) {
                 if (this->actor.scale.x < this->actor.child->scale.x) {
                     EnSnowman_PrepareForCombine(this, child);
                 } else {
@@ -803,34 +805,35 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (parent->unk_289 == 2) {
+        if (parent->combineState == 2) {
             EnSnowman_PrepareForCombine(parent, this);
         }
 
-        if (child->unk_289 == 2) {
+        if (child->combineState == 2) {
             EnSnowman_PrepareForCombine(child, this);
         }
     }
 
-    if ((this->unk_290 == 0) && (parent->unk_298 > 0.0f) && (child->unk_298 > 0.0f) && (this->unk_298 < 0.011f) &&
-        (this->unk_289 != 3)) {
-        this->unk_289 = 2;
-        this->unk_298 = 0.0f;
+    if ((this->combineTimer == 0) && (parent->targetScaleDuringCombine > 0.0f) &&
+        (child->targetScaleDuringCombine > 0.0f) && (this->targetScaleDuringCombine < 0.011f) &&
+        (this->combineState != 3)) {
+        this->combineState = 2;
+        this->targetScaleDuringCombine = 0.0f;
     }
 
-    if (Actor_XZDistanceToPoint(&this->actor, &this->unk_2A8) < 20.0f) {
+    if (Actor_XZDistanceToPoint(&this->actor, &this->combinePos) < 20.0f) {
         this->actor.speedXZ = 0.0f;
     }
 
-    if (Math_StepToF(&this->actor.scale.x, this->unk_298, 0.0005f)) {
-        if (this->unk_298 < 0.01f) {
+    if (Math_StepToF(&this->actor.scale.x, this->targetScaleDuringCombine, 0.0005f)) {
+        if (this->targetScaleDuringCombine < 0.01f) {
             EnSnowman_SetupSplitDead(this);
-        } else if (this->unk_298 > 0.018f) {
+        } else if (this->targetScaleDuringCombine > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
             this->actor.flags |= ACTOR_FLAG_400;
             this->collider.base.ocFlags1 |= OC1_ON;
-            this->unk_289 = 3;
+            this->combineState = 3;
             this->eenoScale = 2.0f;
             EnSnowman_SetupMoveSnowPile(this);
         }
@@ -898,7 +901,7 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 wallCheckRadius;
 
     if (this->actionFunc != EnSnowman_SplitDead) {
-        DECR(this->unk_290);
+        DECR(this->combineTimer);
 
         EnSnowman_UpdateDamage(this, globalCtx);
         this->actionFunc(this, globalCtx);
