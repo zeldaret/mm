@@ -413,10 +413,10 @@ void EnSnowman_Surface(EnSnowman* this, GlobalContext* globalCtx) {
 void EnSnowman_SetupReadySnowball(EnSnowman* this) {
     this->actor.scale.y = this->actor.scale.x;
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-        this->frameToStartHoldingSnowball = 15.0f;
+        this->workFloat.frameToStartHoldingSnowball = 15.0f;
         Animation_PlayOnce(&this->skelAnime, &gEenoLargeSnowballCreateAnim);
     } else {
-        this->frameToStartHoldingSnowball = 6.0f;
+        this->workFloat.frameToStartHoldingSnowball = 6.0f;
         Animation_PlayOnce(&this->skelAnime, &gEenoSmallSnowballCreateAnim);
     }
 
@@ -447,7 +447,7 @@ void EnSnowman_ReadySnowball(EnSnowman* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         EnSnowman_SetupThrowSnowball(this);
-    } else if (Animation_OnFrame(&this->skelAnime, this->frameToStartHoldingSnowball)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->workFloat.frameToStartHoldingSnowball)) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YMAJIN_HOLD_SNOW);
         } else {
@@ -461,10 +461,10 @@ void EnSnowman_ReadySnowball(EnSnowman* this, GlobalContext* globalCtx) {
 void EnSnowman_SetupThrowSnowball(EnSnowman* this) {
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         Animation_PlayOnce(&this->skelAnime, &gEenoLargeSnowballThrowAnim);
-        this->frameToThrowSnowball = 17.0f;
+        this->workFloat.frameToThrowSnowball = 17.0f;
     } else {
         Animation_PlayOnce(&this->skelAnime, &gEenoSmallSnowballThrowAnim);
-        this->frameToThrowSnowball = 15.0f;
+        this->workFloat.frameToThrowSnowball = 15.0f;
     }
 
     this->snowballsToThrowBeforeIdling--;
@@ -484,7 +484,7 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, GlobalContext* globalCtx) {
             this->snowballsToThrowBeforeIdling = 0;
             EnSnowman_SetupIdle(this);
         }
-    } else if (Animation_OnFrame(&this->skelAnime, this->frameToThrowSnowball)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->workFloat.frameToThrowSnowball)) {
         this->isHoldingSnowball = false;
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             params = EN_SNOWMAN_TYPE_LARGE_SNOWBALL;
@@ -530,6 +530,9 @@ void EnSnowman_Hide(EnSnowman* this, GlobalContext* globalCtx) {
         if (this->combineState == 1) {
             this->actor.draw = EnSnowman_DrawSnowPile;
             this->collider.base.acFlags |= AC_ON;
+
+            // Calling EnSnowman_SetupCombine while EnSnowman_Hide is our actionFunc will result
+            // in the broken target scale bug described in EnSnowman_SetupCombine.
             EnSnowman_SetupCombine(this, globalCtx, &this->combinePos);
         } else {
             EnSnowman_SetupMoveSnowPile(this);
@@ -746,13 +749,13 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
 
 void EnSnowman_PrepareForCombine(EnSnowman* arg0, EnSnowman* arg1) {
     Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
-    arg1->targetScaleDuringCombine += 0.005f;
+    arg1->workFloat.targetScaleDuringCombine += 0.005f;
     arg0->combineState = 3;
     arg0->collider.base.ocFlags1 &= ~OC1_HIT;
     arg0->collider.base.acFlags &= ~AC_HIT;
     arg0->collider.base.ocFlags1 &= ~OC1_ON;
     arg0->collider.base.acFlags &= ~AC_ON;
-    arg0->targetScaleDuringCombine = 0.0f;
+    arg0->workFloat.targetScaleDuringCombine = 0.0f;
 }
 
 void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* combinePos) {
@@ -762,17 +765,29 @@ void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* co
         this->actor.flags |= ACTOR_FLAG_10;
         Math_Vec3f_Copy(&this->combinePos, combinePos);
         this->combineState = 1;
+
         if (this->actionFunc != EnSnowman_Hide) {
             this->combineTimer = 400;
-            this->targetScaleDuringCombine = 0.01f;
+
+            //! @bug: Skipping this based the current actionFunc results in whatever is currently in workFloat
+            // being treated as the target scale when this function is called from EnSnowman_Hide. Since the
+            // only other things that get put in workFloat are animation frame numbers, this results in an
+            // enormous target scale, potentially creating the so-called "Mega Eeno" glitch.
+            this->workFloat.targetScaleDuringCombine = 0.01f;
         }
 
+        //! @bug: If an Eeno is in the middle of hiding, its draw function will still be EnSnowman_Draw.
+        // It will call EnSnowman_SetupHide again, resulting in the hiding animation playing twice.
         if (this->actor.draw == EnSnowman_DrawSnowPile) {
             this->actor.speedXZ = 3.0f;
             this->actionFunc = EnSnowman_Combine;
         } else {
             this->isHoldingSnowball = false;
             this->actor.speedXZ = 0.0f;
+
+            // At this point, the combineState is 1, and the actionFunc will be set to EnSnowman_Hide.
+            // When the hiding animation is complete with this combineState, EnSnowman_Hide will call
+            // EnSnowman_SetupCombine, causing the broken target scale bug described above.
             EnSnowman_SetupHide(this, globalCtx);
         }
     }
@@ -814,21 +829,21 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->combineTimer == 0) && (parent->targetScaleDuringCombine > 0.0f) &&
-        (child->targetScaleDuringCombine > 0.0f) && (this->targetScaleDuringCombine < 0.011f) &&
+    if ((this->combineTimer == 0) && (parent->workFloat.targetScaleDuringCombine > 0.0f) &&
+        (child->workFloat.targetScaleDuringCombine > 0.0f) && (this->workFloat.targetScaleDuringCombine < 0.011f) &&
         (this->combineState != 3)) {
         this->combineState = 2;
-        this->targetScaleDuringCombine = 0.0f;
+        this->workFloat.targetScaleDuringCombine = 0.0f;
     }
 
     if (Actor_XZDistanceToPoint(&this->actor, &this->combinePos) < 20.0f) {
         this->actor.speedXZ = 0.0f;
     }
 
-    if (Math_StepToF(&this->actor.scale.x, this->targetScaleDuringCombine, 0.0005f)) {
-        if (this->targetScaleDuringCombine < 0.01f) {
+    if (Math_StepToF(&this->actor.scale.x, this->workFloat.targetScaleDuringCombine, 0.0005f)) {
+        if (this->workFloat.targetScaleDuringCombine < 0.01f) {
             EnSnowman_SetupSplitDead(this);
-        } else if (this->targetScaleDuringCombine > 0.018f) {
+        } else if (this->workFloat.targetScaleDuringCombine > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
             this->actor.flags |= ACTOR_FLAG_400;
