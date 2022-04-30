@@ -43,6 +43,24 @@ void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_DrawSnowPile(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_DrawSnowball(Actor* thisx, GlobalContext* globalCtx);
 
+typedef enum {
+    // Indicates that this split Eeno is not currently trying to combine into a large Eeno.
+    /* 0 */ EN_SNOWMAN_COMBINE_STATE_NONE,
+
+    // Indicates that this split Eeno is actively trying to combine into a large Eeno again.
+    // Eenos in this state can both absorb other Eenos and start being absorbed themselves.
+    /* 1 */ EN_SNOWMAN_COMBINE_STATE_ACTIVE,
+
+    // Indicates that this Eeno cannot absorb other Eenos to combine into a large Eeno.
+    // It can still be absorbed by Eenos in the EN_SNOWMAN_COMBINE_STATE_ACTIVE state.
+    /* 2 */ EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION,
+
+    // Indicates that either this Eeno is shrinking having been absorbed by another Eeno, or that
+    // this Eeno is a fully-combined large Eeno and is done trying to combine with other split
+    // Eenos. In both cases, this Eeno cannot be absorbed by any other Eeno.
+    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
+} EnSnowmanCombineState;
+
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
@@ -396,7 +414,7 @@ void EnSnowman_Surface(EnSnowman* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->combineState == 1) {
+        if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
             EnSnowman_SetupHide(this, globalCtx);
         } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             this->collider.base.acFlags |= AC_ON;
@@ -527,7 +545,7 @@ void EnSnowman_Hide(EnSnowman* this, GlobalContext* globalCtx) {
                  (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&gEenoSurfaceAnim));
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->combineState == 1) {
+        if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
             this->actor.draw = EnSnowman_DrawSnowPile;
             this->collider.base.acFlags |= AC_ON;
 
@@ -699,8 +717,8 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_HIT;
     this->collider.base.acFlags &= ~AC_HIT;
     this->actor.draw = NULL;
-    if (this->combineState == 1) {
-        this->combineState = 2;
+    if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
+        this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
@@ -733,7 +751,7 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->combineState = 0;
+    this->combineState = EN_SNOWMAN_COMBINE_STATE_NONE;
     this->actor.colChkInfo.health = 2;
     this->eenoScale = 1.0f;
     this->actor.world.pos.x = (Math_SinS(yRot) * 40.0f) + basePos->x;
@@ -750,7 +768,7 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
 void EnSnowman_PrepareForCombine(EnSnowman* arg0, EnSnowman* arg1) {
     Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
     arg1->workFloat.targetScaleDuringCombine += 0.005f;
-    arg0->combineState = 3;
+    arg0->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
     arg0->collider.base.ocFlags1 &= ~OC1_HIT;
     arg0->collider.base.acFlags &= ~AC_HIT;
     arg0->collider.base.ocFlags1 &= ~OC1_ON;
@@ -760,11 +778,11 @@ void EnSnowman_PrepareForCombine(EnSnowman* arg0, EnSnowman* arg1) {
 
 void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* combinePos) {
     if (this->actor.colChkInfo.health == 0) {
-        this->combineState = 2;
+        this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     } else {
         this->actor.flags |= ACTOR_FLAG_10;
         Math_Vec3f_Copy(&this->combinePos, combinePos);
-        this->combineState = 1;
+        this->combineState = EN_SNOWMAN_COMBINE_STATE_ACTIVE;
 
         if (this->actionFunc != EnSnowman_Hide) {
             this->combineTimer = 400;
@@ -785,9 +803,10 @@ void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* co
             this->isHoldingSnowball = false;
             this->actor.speedXZ = 0.0f;
 
-            // At this point, the combineState is 1, and the actionFunc will be set to EnSnowman_Hide.
-            // When the hiding animation is complete with this combineState, EnSnowman_Hide will call
-            // EnSnowman_SetupCombine, causing the broken target scale bug described above.
+            // At this point, the combineState is EN_SNOWMAN_COMBINE_STATE_ACTIVE, and the
+            // actionFunc will be set to EnSnowman_Hide. When the hiding animation is complete
+            // with this combineState, EnSnowman_Hide will call EnSnowman_SetupCombine, causing
+            // the broken target scale bug described above.
             EnSnowman_SetupHide(this, globalCtx);
         }
     }
@@ -803,15 +822,17 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->combinePos), 0x1000);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (this->combineState == 1) {
+    if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
         if (this->collider.base.ocFlags1 & OC1_HIT) {
-            if ((this->collider.base.oc == this->actor.parent) && (parent->combineState == 1)) {
+            if ((this->collider.base.oc == this->actor.parent) &&
+                (parent->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE)) {
                 if (this->actor.scale.x < this->actor.parent->scale.x) {
                     EnSnowman_PrepareForCombine(this, parent);
                 } else {
                     EnSnowman_PrepareForCombine(parent, this);
                 }
-            } else if ((this->collider.base.oc == this->actor.child) && (child->combineState == 1)) {
+            } else if ((this->collider.base.oc == this->actor.child) &&
+                       (child->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE)) {
                 if (this->actor.scale.x < this->actor.child->scale.x) {
                     EnSnowman_PrepareForCombine(this, child);
                 } else {
@@ -820,19 +841,19 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (parent->combineState == 2) {
+        if (parent->combineState == EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION) {
             EnSnowman_PrepareForCombine(parent, this);
         }
 
-        if (child->combineState == 2) {
+        if (child->combineState == EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION) {
             EnSnowman_PrepareForCombine(child, this);
         }
     }
 
     if ((this->combineTimer == 0) && (parent->workFloat.targetScaleDuringCombine > 0.0f) &&
         (child->workFloat.targetScaleDuringCombine > 0.0f) && (this->workFloat.targetScaleDuringCombine < 0.011f) &&
-        (this->combineState != 3)) {
-        this->combineState = 2;
+        (this->combineState != EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE)) {
+        this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
         this->workFloat.targetScaleDuringCombine = 0.0f;
     }
 
@@ -848,7 +869,7 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
             this->actor.flags |= ACTOR_FLAG_400;
             this->collider.base.ocFlags1 |= OC1_ON;
-            this->combineState = 3;
+            this->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
             this->eenoScale = 2.0f;
             EnSnowman_SetupMoveSnowPile(this);
         }
