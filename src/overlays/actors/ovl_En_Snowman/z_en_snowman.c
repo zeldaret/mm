@@ -32,8 +32,8 @@ void EnSnowman_Stun(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_SetupDead(EnSnowman* this);
 void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx);
-void EnSnowman_SetupSplitDead(EnSnowman* this);
-void EnSnowman_SplitDead(EnSnowman* this, GlobalContext* globalCtx);
+void EnSnowman_SetupSplitDoNothing(EnSnowman* this);
+void EnSnowman_SplitDoNothing(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_SetupMarkForDeath(EnSnowman* this);
 void EnSnowman_MarkForDeath(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* arg1, s32 arg2);
@@ -206,7 +206,7 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->eenoScale = thisx->scale.x * 100.0f;
         this->attackRange = (240.0f * this->eenoScale) + (attackRange * 0.1f * 40.0f);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SPLIT) {
-            EnSnowman_SetupSplitDead(this);
+            EnSnowman_SetupSplitDoNothing(this);
         } else {
             EnSnowman_SetupMoveSnowPile(this);
         }
@@ -572,7 +572,7 @@ void EnSnowman_Melt(EnSnowman* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
-            EnSnowman_SetupSplitDead(this);
+            EnSnowman_SetupSplitDoNothing(this);
         } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
             Actor_MarkForDeath(this->actor.parent);
             Actor_MarkForDeath(this->actor.child);
@@ -689,13 +689,13 @@ void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx) {
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_YMAJIN_DEAD_BREAK);
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x60);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
-        EnSnowman_SetupSplitDead(this);
+        EnSnowman_SetupSplitDoNothing(this);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void EnSnowman_SetupSplitDead(EnSnowman* this) {
+void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_HIT;
     this->collider.base.acFlags &= ~AC_HIT;
     this->actor.draw = NULL;
@@ -704,18 +704,18 @@ void EnSnowman_SetupSplitDead(EnSnowman* this) {
     }
 
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
-    if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDead)) {
-        if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDead)) {
+    if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
+        if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.parent);
             EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.child);
             Actor_MarkForDeath(&this->actor);
         }
     }
 
-    this->actionFunc = EnSnowman_SplitDead;
+    this->actionFunc = EnSnowman_SplitDoNothing;
 }
 
-void EnSnowman_SplitDead(EnSnowman* this, GlobalContext* globalCtx) {
+void EnSnowman_SplitDoNothing(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
 void EnSnowman_SetupMarkForDeath(EnSnowman* this) {
@@ -842,7 +842,7 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
 
     if (Math_StepToF(&this->actor.scale.x, this->workFloat.targetScaleDuringCombine, 0.0005f)) {
         if (this->workFloat.targetScaleDuringCombine < 0.01f) {
-            EnSnowman_SetupSplitDead(this);
+            EnSnowman_SetupSplitDoNothing(this);
         } else if (this->workFloat.targetScaleDuringCombine > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
@@ -915,7 +915,7 @@ void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
     f32 wallCheckRadius;
 
-    if (this->actionFunc != EnSnowman_SplitDead) {
+    if (this->actionFunc != EnSnowman_SplitDoNothing) {
         DECR(this->combineTimer);
 
         EnSnowman_UpdateDamage(this, globalCtx);
