@@ -2177,7 +2177,7 @@ void EnBigslime_SetupDamageGekko(EnBigslime* this, s32 isNotFrozen) {
     }
 
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DAMAGE);
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 

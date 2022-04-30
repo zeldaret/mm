@@ -9,8 +9,8 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "objects/object_boss02/object_boss02.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -598,8 +598,8 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.colChkInfo.health = 20;
         Actor_SetScale(&this->actor, 0.01f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss02_Skel_009B10, &object_boss02_Anim_009C78,
-                       this->jointTable, this->morphTable, 13);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &gTwinmoldHeadSkel, &gTwinmoldHeadFlyAnim, this->jointTable,
+                       this->morphTable, TWINMOLD_HEAD_LIMB_MAX);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere1, &this->actor, &sJntSphInit1,
                                   this->colliderSphere1Elements);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere2, &this->actor, &sJntSphInit2,
@@ -638,7 +638,7 @@ void func_809DAA98(Boss02* this, GlobalContext* globalCtx) {
 
 void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809DAB78;
-    Animation_MorphToLoop(&this->skelAnime, &object_boss02_Anim_009C78, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTwinmoldHeadFlyAnim, 0.0f);
     if (D_809E042C->unk_1D20 != 0) {
         this->unk_0144 = 10;
     } else {
@@ -1357,9 +1357,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if (this->actor.params == 0) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0003A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldRedSkinTex));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0041A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldBlueSkinTex));
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
@@ -1532,7 +1532,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
+                gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 185, 140, 70, 128);
                 flag++;
             }
@@ -1553,7 +1553,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
 
@@ -1602,7 +1602,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 2) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
+                gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 30, 30, 30, 128);
                 flag++;
             }
@@ -1618,7 +1618,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
 
@@ -2145,7 +2145,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                       Lib_SegmentedToVirtual(object_boss02_Tex_008650), 160, 180, 128, 40);
+                                       Lib_SegmentedToVirtual(gTwinmoldTitleCardTex), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
