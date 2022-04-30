@@ -735,7 +735,8 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSaveContext.save.entranceIndex == 0xD010) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+                           GORON_LIMB_MAX);
 
         this->unk_334 = -1;
         func_80BF409C(this, 0);

@@ -516,9 +516,12 @@ void func_80A1203C(EnGo* this) {
 }
 
 void func_80A1213C(EnGo* this, GlobalContext* globalCtx) {
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL, 3);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL,
+                  1);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL,
+                  2);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL,
+                  3);
     func_80A11144(this->unk_3F8, globalCtx);
     func_80A115B4(this->unk_3F8, globalCtx);
 }
@@ -1460,7 +1463,8 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
         SubS_IsObjectLoaded(this->unk_289, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+                           GORON_LIMB_MAX);
 
         this->unk_3DC = -1;
         func_80A12C48(this, globalCtx, 2);

@@ -866,8 +866,8 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, &gGoronUnrollAnim, this->jointTable,
-                       this->morphTable, GORON_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, &gGoronUnrollAnim, this->jointTable, this->morphTable,
+                       GORON_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
