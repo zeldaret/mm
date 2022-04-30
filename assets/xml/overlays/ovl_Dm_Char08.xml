@@ -1,5 +1,5 @@
 <Root>
-    <File Name="ovl_Dm_Char08" BaseAddress="0x80aaf050" RangeStart="0x2320" RangeEnd="0x266C">
+    <File Name="ovl_Dm_Char08" BaseAddress="0x80AAF050" RangeStart="0x2320" RangeEnd="0x266C">
     <Array Name="D_80AB14D0" Count="19" Offset="0x2480">
         <CollisionPoly/>
     </Array>

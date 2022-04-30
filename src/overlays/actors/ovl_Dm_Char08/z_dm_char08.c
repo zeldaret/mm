@@ -55,7 +55,7 @@ const ActorInit Dm_Char08_InitVars = {
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
-AnimationInfo sAnimationInfo[7] = {
+AnimationInfo sLargeTurtleAnimationInfo[7] = {
     { &object_kamejima_Anim_0048B0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
     { &object_kamejima_Anim_006980, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
     { &object_kamejima_Anim_012260, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
@@ -149,7 +149,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->targetYPos = this->dyna.actor.world.pos.y;
     this->unk_1F0 = 0.0f;
     if (globalCtx->sceneNum == SCENE_31MISAKI) {
-        if (gSaveContext.save.weekEventReg[0x35] & 0x20) {
+        if (gSaveContext.save.weekEventReg[53] & 0x20) {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002470);
         } else {
@@ -171,7 +171,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     this->dyna.actor.world.pos.y + 368.0f, this->dyna.actor.world.pos.z - 174.0f, 0, 0x7530, 0, 1);
     switch (globalCtx->sceneNum) {
         case SCENE_31MISAKI:
-            if ((gSaveContext.save.weekEventReg[0x35] & 0x20)) {
+            if ((gSaveContext.save.weekEventReg[53] & 0x20)) {
                 this->dyna.actor.world.pos.x = -6480.0f;
                 this->targetYPos = -120.0f;
                 this->dyna.actor.world.pos.z = 1750.0f;
@@ -221,7 +221,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->unk_1F0 = 1.0f;
             break;
     }
-    DmChar08_SetAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+    DmChar08_SetAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
 }
 
 void DmChar08_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -263,14 +263,14 @@ void func_80AAF79C(DmChar08* this, GlobalContext* globalCtx) {
     s16 cs = ActorCutscene_GetAdditionalCutscene(
         ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
 
-    if ((gSaveContext.save.weekEventReg[0x5D] & 8)) {
+    if ((gSaveContext.save.weekEventReg[93] & 8)) {
         cs1 = cs;
     }
 
-    if (ActorCutscene_GetCanPlayNext(cs1) != 0) {
+    if (ActorCutscene_GetCanPlayNext(cs1)) {
         ActorCutscene_Start(cs1, &this->dyna.actor);
-        gSaveContext.save.weekEventReg[0x35] |= 0x20;
-        gSaveContext.save.weekEventReg[0x5D] |= 8;
+        gSaveContext.save.weekEventReg[53] |= 0x20;
+        gSaveContext.save.weekEventReg[93] |= 8;
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AAF884;
     } else {
@@ -350,9 +350,9 @@ void func_80AAFB04(DmChar08* this, GlobalContext* globalCtx) {
 void func_80AAFB94(DmChar08* this, GlobalContext* globalCtx) {
 }
 
-Color_RGBA8 sBubblePrimColor = { 0xFA, 0xC8, 0xFA, 0x64 };
-Color_RGBA8 sBubbleEnvColor = { 0x50, 0x50, 0x50, 0 };
-Vec3f sBubbelAccel = { 0.0f, -0.8f, 0.0f };
+Color_RGBA8 sLargeTurtleBubblePrimColor = { 250, 200, 250, 100 };
+Color_RGBA8 sLargeTurtleBubbleEnvColor = { 80, 80, 80, 0 };
+Vec3f sLargeTurtleBubbelAccel = { 0.0f, -0.8f, 0.0f };
 
 void func_80AAFBA4(DmChar08* this, GlobalContext* globalCtx) {
     s32 i;
@@ -361,19 +361,20 @@ void func_80AAFBA4(DmChar08* this, GlobalContext* globalCtx) {
     velocity.x = (Rand_ZeroOne() - 0.5f) * 24.0f;
     velocity.y = -5.2f;
     velocity.z = 4.0f;
-    sBubbelAccel.x = 0.0f;
-    sBubbelAccel.y = 1.18f;
-    sBubbelAccel.z = 0.0f;
+    sLargeTurtleBubbelAccel.x = 0.0f;
+    sLargeTurtleBubbelAccel.y = 1.18f;
+    sLargeTurtleBubbelAccel.z = 0.0f;
     for (i = 0; i < this->bubbleCount; i++) {
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->bubblePos, &velocity, &sBubbelAccel, &sBubblePrimColor,
-                                          &sBubbleEnvColor, Rand_S16Offset(80, 130), 30, 0);
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->bubblePos, &velocity, &sLargeTurtleBubbelAccel,
+                                          &sLargeTurtleBubblePrimColor, &sLargeTurtleBubbleEnvColor,
+                                          Rand_S16Offset(80, 130), 30, 0);
     }
 }
 
 void func_80AAFCCC(DmChar08* this, GlobalContext* globalCtx) {
     switch (globalCtx->sceneNum) {
         case SCENE_31MISAKI:
-            if (!(gSaveContext.save.weekEventReg[0x37] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 switch (this->unk_206) {
                     case 0:
                         return; // Must be a return
@@ -432,8 +433,8 @@ void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx) {
     CsCmdActorAction* csAction;
     f32 phi_f12;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1DAU)) {
-        actorActionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1DA);
+    if (Cutscene_CheckActorAction(globalCtx, 474)) {
+        actorActionIndex = Cutscene_GetActorActionIndex(globalCtx, 474);
         if (this->unk_1F6 != globalCtx->csCtx.actorActions[actorActionIndex]->action) {
             this->unk_1F6 = globalCtx->csCtx.actorActions[actorActionIndex]->action;
             switch (globalCtx->csCtx.actorActions[actorActionIndex]->action) {
@@ -518,7 +519,7 @@ void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx) {
 void func_80AB01E8(DmChar08* this, GlobalContext* globalCtx) {
     if (this->animIndex != this->unk_203) {
         this->unk_203 = this->animIndex;
-        DmChar08_SetAnimation(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
+        DmChar08_SetAnimation(&this->skelAnime, &sLargeTurtleAnimationInfo[this->animIndex], 0);
     }
 }
 
@@ -937,7 +938,7 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     DmChar08* this = THIS;
     Vec3f src;
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_KAMEJIMA_LIMB_02) {
         src.x = 800.0f;
         src.y = 2600.0f;
         src.z = -800.0f;
@@ -946,12 +947,12 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         src.y = 2500.0f;
         src.z = 700.0f;
         Matrix_MultiplyVector3fByState(&src, &this->tree2Pos);
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == OBJECT_KAMEJIMA_LIMB_08) {
         src.x = 1600.0f;
         src.y = -200.0f;
         src.z = 0.0f;
         Matrix_MultiplyVector3fByState(&src, &this->bubblePos);
-    } else if (limbIndex == 6) {
+    } else if (limbIndex == OBJECT_KAMEJIMA_LIMB_06) {
         src.x = 600.0f;
         src.y = 700.0f;
         src.z = 0.0f;
@@ -964,44 +965,44 @@ void DmChar08_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* 
     f32 one;
 
     switch (limbIndex) {
-        case 2:
+        case OBJECT_KAMEJIMA_LIMB_02:
             break;
-        case 4:
+        case OBJECT_KAMEJIMA_LIMB_04:
             Matrix_StatePop();
             one = 1.0f;
             Matrix_Scale(((one - 0.7f) * this->unk_1F0) + 0.7f, ((one - 0.7f) * this->unk_1F0) + 0.7f, 1.0f,
                          MTXMODE_APPLY);
             Matrix_StatePush();
             break;
-        case 17:
-        case 18:
-        case 21:
-        case 22:
+        case OBJECT_KAMEJIMA_LIMB_11:
+        case OBJECT_KAMEJIMA_LIMB_12:
+        case OBJECT_KAMEJIMA_LIMB_15:
+        case OBJECT_KAMEJIMA_LIMB_16:
             Matrix_StatePop();
             Matrix_Scale((this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f,
                          MTXMODE_APPLY);
             Matrix_StatePush();
             break;
-        case 19:
-        case 23:
+        case OBJECT_KAMEJIMA_LIMB_13:
+        case OBJECT_KAMEJIMA_LIMB_17:
             Matrix_Scale((this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f,
                          MTXMODE_APPLY);
             break;
-        case 14:
+        case OBJECT_KAMEJIMA_LIMB_0E:
             Matrix_StatePop();
             Matrix_Scale((this->unk_1F0 * 0.52f) + 0.48f, (this->unk_1F0 * 0.52f) + 0.48f,
                          (this->unk_1F0 * 0.52f) + 0.48f, MTXMODE_APPLY);
             Matrix_StatePush();
             break;
-        case 10:
-        case 12:
+        case OBJECT_KAMEJIMA_LIMB_0A:
+        case OBJECT_KAMEJIMA_LIMB_0C:
             Matrix_Scale((this->unk_1F0 * 0.55f) + 0.45f, (this->unk_1F0 * 0.2f) + 0.8f,
                          (this->unk_1F0 * 0.55f) + 0.45f, MTXMODE_APPLY);
             break;
     }
 }
 
-TexturePtr sEyeTextures[] = {
+TexturePtr sBigTurtleEyeTextures[] = {
     gTurtleEyeHalfLeft2Tex, gTurtleEyeHalfLeftTex,     gTurtleEyeClosedTex,
     gTurtleEyeHalfLeftTex,  gTurtleEyeOpenStraightTex, gTurtleEyeHalfStraightTex,
     gTurtleEyeClosedTex,    gTurtleEyeHalfStraightTex, gTurtleEyeHalfRightTex,
@@ -1013,8 +1014,8 @@ void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     if ((this->unk_1FF > 0) || (globalCtx->csCtx.state != 0)) {
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar08_OverrideLimbDraw, DmChar08_PostLimbDraw,
