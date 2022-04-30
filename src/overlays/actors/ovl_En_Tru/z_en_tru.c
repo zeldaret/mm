@@ -320,6 +320,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru/func_80A85F84.s")
 #endif
 
@@ -580,7 +581,6 @@ s32 func_80A86DB8(EnTru* this) {
 
             if (this->skelAnime.curFrame < 57.0f) {
                 if (DECR(this->unk_36C) == 0) {
-                    this = this;
                     this->unk_36C = Rand_S16Offset(8, 8);
                     this->unk_36E = 2;
                 } else {
@@ -1130,7 +1130,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (gSaveContext.save.weekEventReg[16] & 0x10) {
         func_80A86924(this, 5);
     } else {
-        this->unk_388 = 0;
+        this->unk_388 = EXCH_ITEM_NONE;
     }
 
     this->actionFunc = func_80A87FD0;
@@ -1156,7 +1156,7 @@ void EnTru_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A86DB8(this);
 
     radius = this->collider.dim.worldSphere.radius + 30;
-    this->unk_388 = !(this->unk_34E & 0x80) ? 0 : 0;
+    this->unk_388 = !(this->unk_34E & 0x80) ? EXCH_ITEM_NONE : EXCH_ITEM_NONE;
 
     func_8013C964(&this->actor, globalCtx, radius, 20.0f, this->unk_388, this->unk_34E & 7);
     func_80A8697C(this, globalCtx);

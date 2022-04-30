@@ -65,11 +65,11 @@ Vec2s D_80BE5DD4[] = {
 };
 
 Gfx* D_80BE5E24[] = {
-    object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18,
-    object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18,
-    object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18, object_boss02_DL_007D18,
-    object_boss02_DL_006FD0, object_boss02_DL_006FD0, object_boss02_DL_006FD0, object_boss02_DL_006FD0,
-    object_boss02_DL_006FD0, object_boss02_DL_006FD0, object_boss02_DL_006FD0, object_boss02_DL_006FD0,
+    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
+    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
+    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
+    gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,
+    gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,
 };
 
 f32 D_80BE5E74[] = {
@@ -176,7 +176,7 @@ void EnTanron5_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_144 = 250;
             this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
         } else {
-            this->unk_148 = object_boss02_DL_007A88;
+            this->unk_148 = gRuinFragmentDL;
             this->unk_144 = 150;
         }
     } else if (ENTANRON5_GET(&this->actor) == ENTANRON5_0) {
@@ -194,7 +194,7 @@ void EnTanron5_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetScale(&child->actor, child->unk_19C);
 
             child->unk_148 = D_80BE5E24[i];
-            if (child->unk_148 == object_boss02_DL_006FD0) {
+            if (child->unk_148 == gTwinmoldPyramidRuinDL) {
                 child->actor.shape.rot.y = 0;
             }
 
@@ -249,7 +249,7 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_SetScale(&this->actor, this->unk_19C * D_80BE5DD0);
 
-    if (this->unk_148 == object_boss02_DL_007D18) {
+    if (this->unk_148 == gTwinmoldMajoraPillarDL) {
         this->collider.dim.radius = 65.0f * D_80BE5DD0;
         this->collider.dim.height = 380.0f * D_80BE5DD0;
     } else if (this->unk_1A0 == 0) {
@@ -280,7 +280,7 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             if ((KREG(19) != 0) || ((acHitInfo->toucher.dmgFlags & 0x05000202) && (D_80BE5DD0 < 0.5f)) ||
                 (ac->id == ACTOR_BOSS_02)) {
-                if (this->unk_148 == object_boss02_DL_007D18) {
+                if (this->unk_148 == gTwinmoldMajoraPillarDL) {
                     Math_Vec3f_Copy(&spB8, &this->actor.world.pos);
                     spB8.y += D_80BE5DD0 * 300.0f;
 
@@ -309,7 +309,8 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         spAC = 780.0f;
                         this->unk_19C *= 1.5f;
                     }
-
+                    // TODO: determine if unk_1A0 ever has a different value from these 3, which will cause UB from spAC
+                    // being uninitialised
                     this->actor.world.pos.y -= D_80BE5DD0 * spAC;
                     Actor_SetScale(&this->actor, this->unk_19C * D_80BE5DD0);
                     Math_Vec3f_Copy(&spB8, &this->actor.world.pos);
@@ -366,11 +367,11 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    if (this->unk_148 == object_boss02_DL_006FD0) {
+    if (this->unk_148 == gTwinmoldPyramidRuinDL) {
         this->collider.dim.pos.y = this->actor.floorHeight;
     }
 
-    if ((this->unk_148 == object_boss02_DL_007D18) || (D_80BE5DD0 < 0.5f)) {
+    if ((this->unk_148 == gTwinmoldMajoraPillarDL) || (D_80BE5DD0 < 0.5f)) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     } else {
         f32 xDiff = player->actor.world.pos.x - this->actor.world.pos.x;

@@ -223,6 +223,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s3
     return sp9C;
 }
 #else
+s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Vspinyroll/func_80A3C8D8.s")
 #endif
 

@@ -219,7 +219,7 @@ void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
             Math_StepToF(&this->unk_2EC, 170.0f, 10.0f);
         }
         sp20 = this->unk_2EC;
-    } else if (this->unk_18D != 0) {
+    } else if (this->unk_18D != 0) { // An else would be sufficient
         sp20 = this->actor.parent->xzDistToPlayer;
     }
 
