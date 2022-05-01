@@ -936,6 +936,8 @@ void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) {
     if (CUR_FORM == PLAYER_FORM_FIERCE_DEITY) {
         interfaceCtx->unk_21C = 0;
         interfaceCtx->unk_21E = 0;
+
+        // Is simply checking if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY)
         if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
                  ? 1
                  : gSaveContext.save.playerForm >> 1) == 0) {
