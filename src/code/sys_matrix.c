@@ -13,14 +13,14 @@
  *  \end{pmatrix}
  * \f]
  * will be stored as
- * 
- *     { { 1, 0, 0, 0 }, 
- *       { 0, 1, 0, 0 }, 
- *       { 0, 0, 1, 0 }, 
+ *
+ *     { { 1, 0, 0, 0 },
+ *       { 0, 1, 0, 0 },
+ *       { 0, 0, 1, 0 },
  *       { x, y, z, 1 }, }
- * 
- * @note As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
- * as the rest of the world, i.e. that \f$ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f$.
+ *
+ * @note As such, we label the elements in column-major order so we can follow the same conventions for multiplying
+ * matrices as the rest of the world, i.e. that \f$ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f$.
  *
  * This file is primarily concerned with matrices representing affine transformations, implemented using an augmented
  * matrix formalism,
@@ -179,22 +179,22 @@ void Matrix_Mult(MtxF* mf, MatrixMode mode) {
  */
 void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode) {
     MtxF* cmf = sCurrentMatrix;
-    f32 tx;
-    f32 ty;
+    f32 tempX;
+    f32 tempY;
 
     if (mode == MTXMODE_APPLY) {
-        tx = cmf->xx;
-        ty = cmf->xy;
-        cmf->xw += tx * x + ty * y + cmf->xz * z;
-        tx = cmf->yx;
-        ty = cmf->yy;
-        cmf->yw += tx * x + ty * y + cmf->yz * z;
-        tx = cmf->zx;
-        ty = cmf->zy;
-        cmf->zw += tx * x + ty * y + cmf->zz * z;
-        tx = cmf->wx;
-        ty = cmf->wy;
-        cmf->ww += tx * x + ty * y + cmf->wz * z;
+        tempX = cmf->xx;
+        tempY = cmf->xy;
+        cmf->xw += tempX * x + tempY * y + cmf->xz * z;
+        tempX = cmf->yx;
+        tempY = cmf->yy;
+        cmf->yw += tempX * x + tempY * y + cmf->yz * z;
+        tempX = cmf->zx;
+        tempY = cmf->zy;
+        cmf->zw += tempX * x + tempY * y + cmf->zz * z;
+        tempX = cmf->wx;
+        tempY = cmf->wy;
+        cmf->ww += tempX * x + tempY * y + cmf->wz * z;
     } else {
         SkinMatrix_SetTranslate(cmf, x, y, z);
     }
@@ -479,8 +479,7 @@ void Matrix_RotateXFApply(f32 x) {
  */
 void Matrix_RotateXFNew(f32 x) {
     MtxF* cmf = sCurrentMatrix;
-    s32 pad;
-    s32 pad1;
+    s32 pad[2];
     f32 sin;
     f32 cos;
 
@@ -881,7 +880,7 @@ void Matrix_RotateZF(f32 z, MatrixMode mode) {
  * This means a (column) vector is first rotated around X, then around Y, then around Z, then (if `mode` is APPLY) gets
  * transformed by what the matrix was before adding the ZYX rotation.
  *
- * See above for the forms of Rz,Ry,Rx
+ * See previous functions for the forms of Rz, Ry, Rx
  *
  * @param x binary angle to rotate about x axis
  * @param y binary angle to rotate about y axis
@@ -1608,7 +1607,7 @@ void Matrix_ReplaceRotation(MtxF* mf) {
 }
 
 /**
- * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
+ * @brief Extract the YXZ Tait-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
  *
  * \f$ A \f$ should have orthogonal columns; the most general matrix of this form can be written as \f$ RS \f$
  * with \f$ S \f$ a scale matrix.
@@ -1678,7 +1677,7 @@ void Matrix_MtxFToYXZRot(MtxF* src, Vec3s* dest, s32 nonUniformScale) {
 }
 
 /**
- * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
+ * @brief Extract the ZYX Tait-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
  *
  * \f$ A \f$ should have orthogonal columns; the most general matrix of this form can be written as \f$ RS \f$
  * with \f$ S \f$ a scale matrix.

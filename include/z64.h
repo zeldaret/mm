@@ -23,6 +23,7 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
@@ -34,7 +35,6 @@
 #include "z64item.h"
 #include "z64light.h"
 #include "z64math.h"
-#include "sys_matrix.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"

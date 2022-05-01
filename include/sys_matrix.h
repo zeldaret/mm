@@ -9,8 +9,8 @@ struct GameState;
 
 
 typedef enum {
-    MTXMODE_NEW,  // generates a new matrix
-    MTXMODE_APPLY // applies transformation to the current matrix
+    /* 0 */ MTXMODE_NEW,  // generates a new matrix
+    /* 1 */ MTXMODE_APPLY // applies transformation to the current matrix
 } MatrixMode;
 
 
