@@ -376,13 +376,15 @@ beginseg
     name "story_static"
     compress
     romalign 0x1000
-    include "build/baserom/story_static.o"
+    include "build/assets/misc/story_static/story_static.o"
+    number 7
 endseg
 
 beginseg
     name "do_action_static"
     romalign 0x1000
-    include "build/baserom/do_action_static.o"
+    include "build/assets/interface/do_action_static/do_action_static.o"
+    number 9
 endseg
 
 beginseg
@@ -1114,8 +1116,7 @@ beginseg
     name "ovl_Demo_Effect"
     compress
     include "build/src/overlays/actors/ovl_Demo_Effect/z_demo_effect.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.data.o"
-    include "build/data/ovl_Demo_Effect/ovl_Demo_Effect.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Effect/ovl_Demo_Effect_reloc.o"
 endseg
 
 beginseg
@@ -3436,8 +3437,7 @@ beginseg
     name "ovl_Bg_Open_Spot"
     compress
     include "build/src/overlays/actors/ovl_Bg_Open_Spot/z_bg_open_spot.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.data.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot_reloc.o"
 endseg
 
 beginseg
@@ -9144,7 +9144,8 @@ endseg
 beginseg
     name "week_static"
     romalign 0x1000
-    include "build/baserom/week_static.o"
+    include "build/assets/interface/week_static/week_static.o"
+    number 9
 endseg
 
 beginseg
