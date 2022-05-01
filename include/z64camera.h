@@ -4,6 +4,10 @@
 #include "prevent_bss_reordering.h"
 #include "ultra64.h"
 
+// these two angle conversion macros are slightly inaccurate
+#define CAM_DEG_TO_BINANG(degrees) (s16)((degrees) * 182.04167f + .5f)
+#define CAM_BINANG_TO_DEG(binang) ((f32)(binang) * (360.0001525f / 65535.0f))
+
 // Camera Id flags
 #define NUM_CAMS 4
 #define CAM_ID_MAIN 0
