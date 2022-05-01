@@ -121,10 +121,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#ifdef NON_MATCHING
-// Breaks relocs
 void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
-    s32 temp;
+    f32 temp;
     Vec3f spF0;
     Vec3f spE4;
     Vec3f spD8;
@@ -138,10 +136,10 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < 6; i++) {
-        temp = i + 1;
+        temp = (i + 1) * 26.666666f;
         for (j = 0; j < ARRAY_COUNT(D_80ABD020); j++) {
             spD8.x = D_80ABD020[j] + (s32)((u32)Rand_Next() >> 0x1C);
-            spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + (temp * 26.666666f);
+            spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp;
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
             spCC.x = ((Rand_ZeroOne() - 0.5f) * 7.0f) + (spD8.x * 0.07777778f);
@@ -176,9 +174,6 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABBFC0.s")
-#endif
 
 void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     s32 pad;
