@@ -814,6 +814,7 @@ void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8E0[] = {
         0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
     };
+
     if (!(gSaveContext.save.weekEventReg[88] & 2)) {
         if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
             (D_80AFB8D4[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80))) {
