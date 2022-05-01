@@ -53,9 +53,9 @@ s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIndex, Vec3f* pos, f32* distSq);
 
 typedef enum {
-    /* 0 */ BOMBSHOPKEEPER_ANIMATION_WALK,
-    /* 1 */ BOMBSHOPKEEPER_ANIMATION_SIT_AT_COUNTER_START,
-    /* 2 */ BOMBSHOPKEEPER_ANIMATION_SIT_AT_COUNTER_LOOP
+    /* 0 */ BOMBSHOPKEEPER_ANIM_WALK,
+    /* 1 */ BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_START,
+    /* 2 */ BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP
 } BombShopkeeperAnimation;
 
 static AnimationInfoS sAnimationsBombShopkeeper[] = {
@@ -722,8 +722,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     if (distSq < 12.0f) {
         this->actor.speedXZ = 0.0f;
         if (animLastFrame == curFrame) {
-            EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper,
-                              BOMBSHOPKEEPER_ANIMATION_SIT_AT_COUNTER_START);
+            EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
     }
@@ -734,7 +733,7 @@ void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if (Animation_GetLastFrame(&gBombShopkeeperSitAtCounterStartAnim) == curFrame) {
-        EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMBSHOPKEEPER_ANIMATION_SIT_AT_COUNTER_LOOP);
+        EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
     EnSob1_Walking(this, globalCtx);
@@ -1668,7 +1667,7 @@ void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyesTex));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyeTex));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnSob1_BombShopkeeper_OverrideLimbDraw, EnSob1_BombShopkeeper_PostLimbDraw, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {

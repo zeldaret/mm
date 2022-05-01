@@ -28,7 +28,7 @@
         <Texture Name="gBombShopkeeperSkinTex" OutName="bombshopkeeper_skin" Format="ci8" Width="8" Height="8" Offset="0x5218" />
         <Texture Name="gBombShopkeeperTorsoTex" OutName="bombshopkeeper_torso" Format="ci8" Width="8" Height="32" Offset="0x5258" />
         <Texture Name="gBombShopkeeperFingersTex" OutName="bombshopkeeper_fingers" Format="ci8" Width="16" Height="16" Offset="0x5358" />
-        <Texture Name="gBombShopkeeperEyesTex" OutName="bombshopkeeper_eyes" Format="rgba16" Width="32" Height="32" Offset="0x5458" />
+        <Texture Name="gBombShopkeeperEyeTex" OutName="bombshopkeeper_eye" Format="rgba16" Width="32" Height="32" Offset="0x5458" />
         <Texture Name="gBombShopkeeperTatooTex" OutName="bombshopkeeper_tatoo" Format="ci8" Width="32" Height="64" Offset="0x5C58" />
         <Texture Name="gBombShopkeeperShortsTex" OutName="bombshopkeeper_shorts" Format="rgba16" Width="16" Height="16" Offset="0x6458" />
         <Texture Name="gBombShopkeeperSandalsTex" OutName="bombshopkeeper_sandals" Format="rgba16" Width="8" Height="8" Offset="0x6658" />

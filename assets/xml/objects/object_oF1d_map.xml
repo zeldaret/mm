@@ -24,7 +24,7 @@
         <DList Name="gGoronSteamMaterialDL" Offset="0x31A0" />
         <DList Name="gGoronSteamModelDL" Offset="0x3258" />
 
-        <!-- Unused Effects -->
+        <!-- Unused -->
         <DList Name="object_oF1d_map_DL_003280" Offset="0x3280" />
         <DList Name="object_oF1d_map_DL_003298" Offset="0x3298" />
 
@@ -65,7 +65,7 @@
         <Texture Name="gGoronRolledUpSkinTex" OutName="goron_rolled_up_skin" Format="ci8" Width="16" Height="16" Offset="0x96E0" />
         <Texture Name="gGoronRolledUpBellyButtonTex" OutName="goron_rolled_up_belly_button" Format="ci8" Width="8" Height="8" Offset="0x97E0" />
         <Texture Name="gGoronRolledUpBottomTex" OutName="goron_rolled_up_bottom" Format="ci8" Width="8" Height="16" Offset="0x9820" />
-        <Texture Name="gGoronRolledUpRocksTex" OutName="goron_rolled_up_stones" Format="ci8" Width="32" Height="64" Offset="0x98A0" />
+        <Texture Name="gGoronRolledUpRocksTex" OutName="goron_rolled_up_rocks" Format="ci8" Width="32" Height="64" Offset="0x98A0" />
 
         <!-- Animation -->
         <Animation Name="gGoronTPoseAnim" Offset="0xA118" />

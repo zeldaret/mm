@@ -8,13 +8,13 @@
         <Animation Name="gZoraWalkAnim" Offset="0x2898" />
 
         <!-- Effects -->
-        <Texture Name="gZoraBubblesTex" OutName="bubble" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
-        <DList Name="gZoraBubblesMaterialDL" Offset="0x29F0" />
-        <DList Name="gZoraBubblesModelDL" Offset="0x2A50" />
+        <Texture Name="gZoraBubbleTex" OutName="zora_bubble" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
+        <DList Name="gZoraBubbleMaterialDL" Offset="0x29F0" />
+        <DList Name="gZoraBubbleModelDL" Offset="0x2A50" />
 
-        <Texture Name="gZoraSplashesTex" OutName="splash" Format="i8" Width="16" Height="16" Offset="0x2A70" />
-        <DList Name="gZoraSplashesMaterialDL" Offset="0x2BA0" />
-        <DList Name="gZoraSplashesModelDL" Offset="0x2C10" />
+        <Texture Name="gZoraSplashTex" OutName="zora_splash" Format="i8" Width="16" Height="16" Offset="0x2A70" />
+        <DList Name="gZoraSplashMaterialDL" Offset="0x2BA0" />
+        <DList Name="gZoraSplashModelDL" Offset="0x2C10" />
 
         <!-- Animations -->
         <Animation Name="gZoraSurfacingAnim" Offset="0x3610" />
@@ -22,16 +22,16 @@
         <Animation Name="gZoraIdleAnim" Offset="0x4248" />
 
         <!-- Textures -->
-        <Texture Name="gZoraTLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
-        <Texture Name="gZoraFinTex" OutName="fin" Format="ci8" Width="32" Height="32" Offset="0x4460" />
-        <Texture Name="gZoraBackAndHeadTailTex" OutName="back_head_tail" Format="ci8" Width="32" Height="64" Offset="0x4860" />
-        <Texture Name="gZoraSkinTex" OutName="skin" Format="ci8" Width="8" Height="8" Offset="0x5060" />
-        <Texture Name="gZoraEyeOpenTex" OutName="eye_open" Format="rgba16" Width="32" Height="32" Offset="0x50A0" />
-        <Texture Name="gZoraEyeHalfTex" OutName="eye_half" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
-        <Texture Name="gZoraEyeClosedTex" OutName="eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
-        <Texture Name="gZoraMouthTex" OutName="mouth" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
-        <Texture Name="gZoraHandTex" OutName="hand" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
-        <Texture Name="gZoraKneeTex" OutName="knee" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
+        <Texture Name="gZoraTLUT" OutName="zora_tlut" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
+        <Texture Name="gZoraFinTex" OutName="zora_fin" Format="ci8" Width="32" Height="32" Offset="0x4460" />
+        <Texture Name="gZoraBackAndHeadTailTex" OutName="zora_back_head_tail" Format="ci8" Width="32" Height="64" Offset="0x4860" />
+        <Texture Name="gZoraSkinTex" OutName="zora_skin" Format="ci8" Width="8" Height="8" Offset="0x5060" />
+        <Texture Name="gZoraEyeOpenTex" OutName="zora_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x50A0" />
+        <Texture Name="gZoraEyeHalfTex" OutName="zora_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
+        <Texture Name="gZoraEyeClosedTex" OutName="zora_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
+        <Texture Name="gZoraMouthTex" OutName="zora_mouth" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
+        <Texture Name="gZoraHandTex" OutName="zora_hand" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="gZoraKneeTex" OutName="zora_knee" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
 
         <!-- DLists -->
         <DList Name="gZoraPelvisDL" Offset="0xA2A0" />
@@ -77,8 +77,8 @@
         <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" LimbNone="ZORA_LIMB_NONE" LimbMax="ZORA_LIMB_MAX" EnumName="ZoraLimbs" Offset="0xD208" />
 
         <!-- Effects -->
-        <DList Name="gZoraRipplesMaterialDL" Offset="0xD220" />
-        <DList Name="gZoraRipplesModelDL" Offset="0xD288" />
+        <DList Name="gZoraRippleMaterialDL" Offset="0xD220" />
+        <DList Name="gZoraRippleModelDL" Offset="0xD288" />
 
         <DList Name="object_zo_DL_00D2A0" Offset="0xD2A0" />
         <DList Name="object_zo_DL_00D2B8" Offset="0xD2B8" />
