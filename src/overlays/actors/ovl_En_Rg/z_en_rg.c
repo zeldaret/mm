@@ -384,6 +384,7 @@ s32 func_80BF43FC(EnRg* this) {
     while (true) {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
+        //! FAKE:
         if (1) {}
         if (1) {}
         if (1) {}

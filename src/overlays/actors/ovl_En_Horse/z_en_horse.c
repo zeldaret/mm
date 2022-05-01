@@ -702,19 +702,19 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
             return;
         }
         this->unk_1EC |= 1;
-        this->actor.update = func_8087D540;
+        thisx->update = func_8087D540;
     } else if (ENHORSE_GET_4000(&this->actor)) {
         this->type = HORSE_2;
         this->unk_528 = 64.8f;
         this->boostSpeed = 15;
         if ((this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_HORSE_LINK_CHILD)) < 0) {
-            this->actor.objBankIndex = Object_Spawn(&globalCtx->objectCtx, OBJECT_HORSE_LINK_CHILD);
+            thisx->objBankIndex = Object_Spawn(&globalCtx->objectCtx, OBJECT_HORSE_LINK_CHILD);
             Actor_SetObjectDependency(globalCtx, &this->actor);
             Skin_Init(&globalCtx->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
             Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx]);
             this->unk_1EC |= 0x200;
         } else {
-            this->actor.update = func_8087D540;
+            thisx->update = func_8087D540;
         }
     } else if (ENHORSE_GET_2000(&this->actor)) {
         this->type = HORSE_3;
@@ -724,46 +724,46 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
             return;
         }
         this->unk_1EC |= 1;
-        this->actor.update = func_8087D540;
+        thisx->update = func_8087D540;
     } else {
         this->type = HORSE_EPONA;
         this->boostSpeed = 15;
         Actor_MarkForDeath(&this->actor);
     }
 
-    this->actor.params &= ~0xE000;
-    if (this->actor.params == 0x1FFF) {
-        this->actor.params = ENHORSE_1;
+    thisx->params &= ~0xE000;
+    if (thisx->params == 0x1FFF) {
+        thisx->params = ENHORSE_1;
     }
 
-    if (this->actor.params == ENHORSE_3) {
+    if (thisx->params == ENHORSE_3) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP | ENHORSE_UNRIDEABLE;
-    } else if (this->actor.params == ENHORSE_8) {
+    } else if (thisx->params == ENHORSE_8) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP;
         if (CHECK_QUEST_ITEM(14)) {
             this->stateFlags &= ~ENHORSE_CANT_JUMP;
             this->stateFlags |= ENHORSE_FLAG_26;
         }
-    } else if (this->actor.params == ENHORSE_13) {
+    } else if (thisx->params == ENHORSE_13) {
         this->stateFlags = ENHORSE_FLAG_29;
         this->unk_1EC |= 0x10;
-    } else if (this->actor.params == ENHORSE_4) {
+    } else if (thisx->params == ENHORSE_4) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        this->actor.flags |= ACTOR_FLAG_80000000;
-    } else if (this->actor.params == ENHORSE_5) {
+        thisx->flags |= ACTOR_FLAG_80000000;
+    } else if (thisx->params == ENHORSE_5) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        this->actor.flags |= ACTOR_FLAG_80000000;
-    } else if (this->actor.params == ENHORSE_15) {
+        thisx->flags |= ACTOR_FLAG_80000000;
+    } else if (thisx->params == ENHORSE_15) {
         this->stateFlags = ENHORSE_UNRIDEABLE | ENHORSE_FLAG_7;
-    } else if (this->actor.params == ENHORSE_17) {
+    } else if (thisx->params == ENHORSE_17) {
         this->stateFlags = 0;
         this->unk_1EC |= 8;
-    } else if (this->actor.params == ENHORSE_18) {
+    } else if (thisx->params == ENHORSE_18) {
         this->stateFlags = ENHORSE_FLAG_29 | ENHORSE_CANT_JUMP;
-        this->actor.flags |= ACTOR_FLAG_80000000;
-    } else if (this->actor.params == ENHORSE_1) {
+        thisx->flags |= ACTOR_FLAG_80000000;
+    } else if (thisx->params == ENHORSE_1) {
         this->stateFlags = ENHORSE_FLAG_7;
-    } else if ((this->actor.params == ENHORSE_19) || (this->actor.params == ENHORSE_20)) {
+    } else if ((thisx->params == ENHORSE_19) || (thisx->params == ENHORSE_20)) {
         this->stateFlags = ENHORSE_CANT_JUMP | ENHORSE_UNRIDEABLE;
     } else {
         this->stateFlags = 0;
@@ -774,10 +774,10 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
-    this->actor.gravity = -3.5f;
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
+    thisx->gravity = -3.5f;
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
     this->action = ENHORSE_ACT_IDLE;
-    this->actor.speedXZ = 0.0f;
+    thisx->speedXZ = 0.0f;
 
     if (this->type == HORSE_2) {
         sJntSphInit.elements[0].dim.limb = 13;
@@ -800,7 +800,7 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->colliderCylinder1.dim.radius = 50;
     }
 
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+    CollisionCheck_SetInfo(&thisx->colChkInfo, NULL, &sColChkInfoInit);
 
     if (this->type == HORSE_2) {
         Actor_SetScale(&this->actor, 0.00648f);
@@ -810,11 +810,11 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Actor_SetScale(&this->actor, 0.01f);
     }
 
-    this->actor.focus.pos = this->actor.world.pos;
+    thisx->focus.pos = thisx->world.pos;
     this->playerControlled = false;
-    this->actor.focus.pos.y += 70.0f;
+    thisx->focus.pos.y += 70.0f;
 
-    if (!(this->unk_1EC & 1) && !(this->unk_1EC & 0x200) && (this->actor.update == EnHorse_Update)) {
+    if (!(this->unk_1EC & 1) && !(this->unk_1EC & 0x200) && (thisx->update == EnHorse_Update)) {
         Skin_Init(&globalCtx->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
     }
 
@@ -828,71 +828,69 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnHorse_ResetRace(this, globalCtx);
     EnHorse_ResetHorsebackArchery(this, globalCtx);
 
-    if (this->actor.params == ENHORSE_2) {
+    if (thisx->params == ENHORSE_2) {
         this->unk_53C = 0;
         EnHorse_InitInactive(this);
-    } else if (this->actor.params == ENHORSE_3) {
+    } else if (thisx->params == ENHORSE_3) {
         EnHorse_InitIngoHorse(this);
-        this->rider = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, this->actor.world.pos.x,
-                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                                         this->actor.shape.rot.y, 1, 1);
+        this->rider =
+            (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->unk_398 = 14.34f;
-    } else if (this->actor.params == ENHORSE_4) {
+    } else if (thisx->params == ENHORSE_4) {
         func_80881634(this);
         this->unk_398 = 14.34f;
-        this->rider = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, this->actor.world.pos.x,
-                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                                         this->actor.shape.rot.y, 1, 1);
+        this->rider =
+            (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->unk_1EC |= 0x100;
-    } else if (this->actor.params == ENHORSE_5) {
+    } else if (thisx->params == ENHORSE_5) {
         func_80881634(this);
         this->unk_398 = 14.525f;
-        this->rider = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, this->actor.world.pos.x,
-                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                                         this->actor.shape.rot.y, 1, 2);
+        this->rider =
+            (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 2);
         this->unk_1EC |= 0x100;
-    } else if (this->actor.params == ENHORSE_9) {
+    } else if (thisx->params == ENHORSE_9) {
         EnHorse_InitCutscene(this, globalCtx);
-    } else if (this->actor.params == ENHORSE_10) {
+    } else if (thisx->params == ENHORSE_10) {
         EnHorse_InitHorsebackArchery(this);
         func_80112AFC(globalCtx);
-    } else if (this->actor.params == ENHORSE_14) {
+    } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, globalCtx);
         if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if (this->actor.params == ENHORSE_16) {
+    } else if (thisx->params == ENHORSE_16) {
         func_8087C9F8(this);
-    } else if (this->actor.params == ENHORSE_15) {
+    } else if (thisx->params == ENHORSE_15) {
         EnHorse_ResetIdleAnimation(this);
-    } else if (this->actor.params == ENHORSE_18) {
+    } else if (thisx->params == ENHORSE_18) {
         func_80884994(this);
-    } else if (this->actor.params == ENHORSE_19) {
+    } else if (thisx->params == ENHORSE_19) {
         EnIn* in;
 
         func_80884D04(this, globalCtx);
-        in = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, this->actor.world.pos.x,
-                                this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                                this->actor.shape.rot.y, 1, 1);
+        in = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                                thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->rider = in;
         in->unk4AC |= (0x20 | 0x4);
-    } else if (this->actor.params == ENHORSE_20) {
+    } else if (thisx->params == ENHORSE_20) {
         EnIn* in;
 
         func_80884D04(this, globalCtx);
-        in = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, this->actor.world.pos.x,
-                                this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
-                                this->actor.shape.rot.y, 1, 1);
+        in = (EnIn*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                                thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->rider = in;
         in->unk4AC |= (0x20 | 0x8 | 0x4);
     } else {
         EnHorse_StartIdleRidable(this);
     }
 
-    this->actor.shape.rot.z = 0;
-    this->actor.world.rot.z = this->actor.shape.rot.z;
-    this->actor.home.rot.z = this->actor.shape.rot.z;
-    this->unk_3EC = this->actor.world.rot.y;
+    thisx->shape.rot.z = 0;
+    thisx->world.rot.z = thisx->shape.rot.z;
+    thisx->home.rot.z = thisx->shape.rot.z;
+    this->unk_3EC = thisx->world.rot.y;
     this->unk_538 = 0;
 
     if (this->unk_1EC & 0x100) {
@@ -4191,7 +4189,7 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Actor_SetScale(&this->actor, 0.01f);
     }
 
-    this->lastYaw = this->actor.shape.rot.y;
+    this->lastYaw = thisx->shape.rot.y;
     EnHorse_UpdateStick(this, globalCtx);
     EnHorse_UpdatePlayerDir(this, globalCtx);
 
@@ -4213,7 +4211,7 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
     sActionFuncs[this->action](this, globalCtx);
 
     this->stateFlags &= ~ENHORSE_OBSTACLE;
-    this->unk_3EC = this->actor.world.rot.y;
+    this->unk_3EC = thisx->world.rot.y;
     if ((this->animationIdx == ENHORSE_ANIM_STOPPING) || (this->animationIdx == ENHORSE_ANIM_REARING)) {
         this->skin.skelAnime.jointTable[0].y += 0x154;
     }
@@ -4232,7 +4230,7 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
 
         if (ActorCutscene_GetCurrentIndex() != -1) {
-            this->actor.speedXZ = 0.0f;
+            thisx->speedXZ = 0.0f;
         }
 
         if (this->action != ENHORSE_ACT_25) {
@@ -4242,11 +4240,11 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (this->rider != NULL) {
             if ((this->action == ENHORSE_ACT_INGO_RACE) || (this->action == ENHORSE_ACT_MOUNTED_IDLE) ||
                 (this->action == ENHORSE_ACT_25)) {
-                this->rider->actor.world.pos.x = this->actor.world.pos.x;
-                this->rider->actor.world.pos.y = this->actor.world.pos.y + 10.0f;
-                this->rider->actor.world.pos.z = this->actor.world.pos.z;
-                this->rider->actor.shape.rot.x = this->actor.shape.rot.x;
-                this->rider->actor.shape.rot.y = this->actor.shape.rot.y;
+                this->rider->actor.world.pos.x = thisx->world.pos.x;
+                this->rider->actor.world.pos.y = thisx->world.pos.y + 10.0f;
+                this->rider->actor.world.pos.z = thisx->world.pos.z;
+                this->rider->actor.shape.rot.x = thisx->shape.rot.x;
+                this->rider->actor.shape.rot.y = thisx->shape.rot.y;
             } else if (this->action == ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING) {
                 EnIn* in = this->rider;
                 s16 jnt = in->jointTable[0].y;
@@ -4254,14 +4252,14 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 in->actor.world.pos.x = this->riderPos.x;
                 in->actor.world.pos.y = this->riderPos.y - (jnt * 0.01f * this->unk_528 * 0.01f);
                 in->actor.world.pos.z = this->riderPos.z;
-                in->actor.shape.rot.x = this->actor.shape.rot.x;
-                in->actor.shape.rot.y = this->actor.shape.rot.y;
+                in->actor.shape.rot.x = thisx->shape.rot.x;
+                in->actor.shape.rot.y = thisx->shape.rot.y;
             }
         }
 
         if (this->colliderJntSph.elements->info.ocElemFlags & OCELEM_HIT) {
-            if (this->actor.speedXZ > 10.0f) {
-                this->actor.speedXZ -= 1.0f;
+            if (thisx->speedXZ > 10.0f) {
+                thisx->speedXZ -= 1.0f;
             }
         }
 
@@ -4300,22 +4298,22 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         if (this->type == HORSE_2) {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(this->actor.shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
+                (s16)(Math_SinS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(this->actor.shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
+                (s16)(Math_CosS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(this->actor.shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
+                (s16)(Math_SinS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(this->actor.shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
+                (s16)(Math_CosS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
         } else {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(this->actor.shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
+                (s16)(Math_SinS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(this->actor.shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
+                (s16)(Math_CosS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(this->actor.shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
+                (s16)(Math_SinS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(this->actor.shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
+                (s16)(Math_CosS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
         }
 
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder1.base);
@@ -4337,18 +4335,18 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         EnHorse_UpdateBgCheckInfo(this, globalCtx);
         EnHorse_CheckFloors(this, globalCtx);
-        if (this->actor.world.pos.y < this->yFront) {
-            if (this->actor.world.pos.y < this->yBack) {
+        if (thisx->world.pos.y < this->yFront) {
+            if (thisx->world.pos.y < this->yBack) {
                 if (this->yBack < this->yFront) {
-                    this->actor.world.pos.y = this->yBack;
+                    thisx->world.pos.y = this->yBack;
                 } else {
-                    this->actor.world.pos.y = this->yFront;
+                    thisx->world.pos.y = this->yFront;
                 }
             }
         }
 
-        this->actor.focus.pos = this->actor.world.pos;
-        this->actor.focus.pos.y += 70.0f;
+        thisx->focus.pos = thisx->world.pos;
+        thisx->focus.pos.y += 70.0f;
 
         if ((Rand_ZeroOne() < 0.025f) && (this->blinkTimer == 0)) {
             this->blinkTimer++;
@@ -4359,13 +4357,13 @@ void EnHorse_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
 
-        if ((this->actor.speedXZ == 0.0f) && !(this->stateFlags & ENHORSE_FLAG_19)) {
-            this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+        if ((thisx->speedXZ == 0.0f) && !(this->stateFlags & ENHORSE_FLAG_19)) {
+            thisx->colChkInfo.mass = MASS_IMMOVABLE;
         } else {
-            this->actor.colChkInfo.mass = MASS_HEAVY;
+            thisx->colChkInfo.mass = MASS_HEAVY;
         }
 
-        if (this->actor.speedXZ >= 5.0f) {
+        if (thisx->speedXZ >= 5.0f) {
             this->colliderCylinder1.base.atFlags |= AT_ON;
         } else {
             this->colliderCylinder1.base.atFlags &= ~AT_ON;

@@ -170,7 +170,7 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     i = 0;
     tempCutscene = this->actor.cutscene;
     while (tempCutscene != -1) {
-        // This might be a fake match, no others found yet
+        //! FAKE:
         tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actorCutscenes[i] = tempCutscene);
         i++;
     }

@@ -1191,7 +1191,7 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
 void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
