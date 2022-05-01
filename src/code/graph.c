@@ -13,7 +13,7 @@ GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphTaskStartTime;
 
-void* Graph_FaultClient(void) {
+void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
     osViSwapBuffer(SysCfb_GetFbPtr(0));
     osViSetMode(D_801FBB88);

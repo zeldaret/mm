@@ -6,7 +6,6 @@
 
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
-#include "objects/object_wf/object_wf.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -115,13 +114,13 @@ const ActorInit En_Syateki_Wf_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_wf_Anim_00A3CC, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_wf_Anim_005700, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_wf_Anim_005700, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
-    { &object_wf_Anim_005700, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
-    { &object_wf_Anim_004A90, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_wf_Anim_009A50, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },
-    { &object_wf_Anim_0053D0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gWolfosWaitingAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gWolfosRunningAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gWolfosRunningAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
+    { &gWolfosRunningAnim, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
+    { &gWolfosBackflippingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gWolfosDamagedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },
+    { &gWolfosRearingUpFallingOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -134,10 +133,10 @@ static Vec3f D_80A20FC4 = { 0.0f, 0.5f, 0.0f };
 static Vec3f D_80A20FD0 = { 1200.0f, 0.0f, 0.0f };
 
 static TexturePtr sEyeTextures[] = {
-    object_wf_Tex_007AA8,
-    object_wf_Tex_0082A8,
-    object_wf_Tex_0084A8,
-    object_wf_Tex_0082A8,
+    gWolfosNormalEyeOpenTex,
+    gWolfosNormalEyeHalfTex,
+    gWolfosNormalEyeNarrowTex,
+    gWolfosNormalEyeHalfTex,
 };
 
 void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -181,11 +180,11 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->unk_300);
     Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &sCylinderInit2);
     Collider_InitJntSph(globalCtx, &this->unk_34C);
-    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &sJntSphInit, &this->unk_36C);
+    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &sJntSphInit, this->unk_36C);
     this->unk_34C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC, this->jointTable,
-                       this->morphTable, 22);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
+                       this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.hintId = 0x4C;
 
@@ -461,7 +460,7 @@ void EnSyatekiWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     Vec3f sp18;
 
     Collider_UpdateSpheres(limbIndex, &this->unk_34C);
-    if (limbIndex == OBJECT_WF_2_LIMB_06) {
+    if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
         Matrix_MultiplyVector3fByState(&D_80A20FD0, &sp18);
         this->unk_300.dim.pos.x = sp18.x;
         this->unk_300.dim.pos.y = sp18.y;
