@@ -2238,8 +2238,7 @@ beginseg
     name "ovl_Obj_Toge"
     compress
     include "build/src/overlays/actors/ovl_Obj_Toge/z_obj_toge.o"
-    include "build/data/ovl_Obj_Toge/ovl_Obj_Toge.data.o"
-    include "build/data/ovl_Obj_Toge/ovl_Obj_Toge.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Toge/ovl_Obj_Toge_reloc.o"
 endseg
 
 beginseg
