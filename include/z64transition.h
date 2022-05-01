@@ -22,7 +22,23 @@ typedef struct {
 extern const TransitionInit TransitionFade_InitVars;
 
 typedef struct {
-    /* 0x000 */ char unk_0[0x20];
+    /* 0x00 */ u8 unk_00; // lod
+    /* 0x01 */ u8 unk_01; // r
+    /* 0x02 */ u8 unk_02; // g
+    /* 0x03 */ u8 unk_03; // b
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 stepValue;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ u8 unk_14;
+    /* 0x15 */ u8 unk_15;
+    /* 0x16 */ u8 isDone;
+    /* 0x17 */ s8 unk_17;
+    /* 0x18 */ TexturePtr* unk_18;
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x1E */ s8 unk_1E;
+    /* 0x1F */ s8 unk_1F;
 } TransitionCircle; // size = 0x20
 
 extern const TransitionInit TransitionCircle_InitVars;
