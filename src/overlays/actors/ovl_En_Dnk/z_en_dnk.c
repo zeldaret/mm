@@ -116,20 +116,20 @@ static AnimationInfoS sAnimations[] = {
     { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_003180, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_002950, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubSpitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubDamageAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubDieAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubUnburrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -179,7 +179,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
-                               this->morphTable, 11);
+                               this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
@@ -190,8 +190,8 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, NULL, this->jointTable,
-                               this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_SCRUB_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }

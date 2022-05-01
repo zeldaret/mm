@@ -61,12 +61,12 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_okuta_Anim_00044C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_okuta_Anim_003958, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_okuta_Anim_003B24, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_okuta_Anim_003EE4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &object_okuta_Anim_00466C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_okuta_Anim_004204, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokFloatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &gOctorokAppearAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
@@ -94,8 +94,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_okuta_Skel_0033D0, &object_okuta_Anim_00466C, this->jointTable,
-                   this->morphTable, OBJECT_OKUTA_LIMB_MAX);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
+                   OCTOROK_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -153,7 +153,7 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
 }
 
 void func_80A36260(EnSyatekiOkuta* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_okuta_Anim_00466C, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gOctorokAppearAnim, 0.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80A362A8;
 }
@@ -173,7 +173,7 @@ void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A362F8(EnSyatekiOkuta* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_okuta_Anim_00466C, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gOctorokAppearAnim, 0.0f);
     this->actor.draw = NULL;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80A36350;
@@ -474,10 +474,10 @@ s32 EnSyatekiOkuta_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx
         curFrame += this->unk_2A4;
     }
 
-    if (limbIndex == OBJECT_OKUTA_LIMB_0E) {
+    if (limbIndex == OCTOROK_LIMB_HEAD) {
         sp20 = this->unk_1D8;
         Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
-    } else if ((limbIndex == OBJECT_OKUTA_LIMB_0F) && (func_80A370EC(this, curFrame, &sp20))) {
+    } else if ((limbIndex == OCTOROK_LIMB_SNOUT) && (func_80A370EC(this, curFrame, &sp20))) {
         Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
     }
 
@@ -493,7 +493,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_2A6 == 1) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, ovl_En_Syateki_Okuta_DL_001640);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gShootingGalleryOctorokBlueMaterialDL);
     }
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw,
@@ -512,9 +512,9 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->unk_2A6 == 2) {
-            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001A98);
+            gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCrossDL);
         } else {
-            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001B18);
+            gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCircleDL);
         }
     }
 

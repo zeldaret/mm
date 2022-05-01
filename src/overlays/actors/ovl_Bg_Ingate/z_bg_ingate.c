@@ -300,7 +300,6 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
                     func_8019F208();
                 } else {
-                    this = this;
                     func_800B7298(globalCtx, &this->dyna.actor, 6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;

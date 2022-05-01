@@ -638,7 +638,7 @@ void Distortion_Update(void) {
             sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
 
-            if (&player->actor != NULL) {
+            if (player != NULL) {
                 Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
