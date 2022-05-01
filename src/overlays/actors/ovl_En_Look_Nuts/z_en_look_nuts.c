@@ -104,7 +104,7 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardDigAnim, this->jointTable,
-                   this->morphTable, OBJECT_DNK_LIMB_MAX);
+                   this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -169,6 +169,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
         sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }
 
+    //! @bug sp30 is uninitialised if path == NULL. Fix by enclosing everything in the path NULL check.
     if (sp30 < 10.0f) {
         if (this->path != NULL) {
             this->currentPathIndex++;
@@ -181,6 +182,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
             }
         }
     }
+
     Math_SmoothStepToS(&this->actor.shape.rot.y, sp34, 1, 0x1388, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
