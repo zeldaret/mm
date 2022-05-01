@@ -181,7 +181,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                         case 3:
                             // Calculates the time left before the moon crash.
                             // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * CLOCK_TIME(24, 0) -
+                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
                                                   (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
                             if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
