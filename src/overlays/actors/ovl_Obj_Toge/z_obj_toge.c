@@ -58,9 +58,11 @@ static ColliderCylinderInit sCylinderInit = {
 f32 D_809A4CDC[] = {
     2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f,
 };
+
 s16 D_809A4CFC[] = {
     0, 10, 20, 30, 40, 50, 60, 70,
 };
+
 f32 D_809A4D0C[] = {
     1.0f,
     2.0f,
