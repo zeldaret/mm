@@ -1,6 +1,6 @@
 #include "global.h"
 
-void MtxConv_F2L(MatrixInternal* m1, MtxF* m2) {
+void MtxConv_F2L(Mtx* m1, MtxF* m2) {
     s32 i;
     s32 j;
 
@@ -13,6 +13,6 @@ void MtxConv_F2L(MatrixInternal* m1, MtxF* m2) {
     }
 }
 
-void MtxConv_L2F(MtxF* m1, MatrixInternal* m2) {
-    guMtxL2F(m1, (Mtx*)m2);
+void MtxConv_L2F(MtxF* m1, Mtx* m2) {
+    guMtxL2F(m1, m2);
 }

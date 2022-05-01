@@ -27,6 +27,10 @@ typedef void* TexturePtr;
 typedef long int Mtx_t[4][4];
 typedef union {
     Mtx_t m;
+    struct {
+        u16 intPart[4][4];
+        u16 fracPart[4][4];
+    };
     long long int forc_structure_alignment;
 } Mtx; // size = 0x40
 

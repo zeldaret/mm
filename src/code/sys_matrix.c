@@ -1,10 +1,9 @@
 /**
- * File: sys_matrix.c
- * Description: Matrix system that mostly uses a matrix stack, and concerns affine transformations.
+ * @file sys_matrix.c
+ * @brief: Matrix system that mostly uses a matrix stack, and concerns affine transformations.
  *
  * @note The RSP matrix format (and hence the `MtxF` format) is column-major: vectors are presumed to be row vectors,
  * and matrices as a column of row vectors. This means that, for example, a translation matrix
- *
  * \f[
  *  \begin{pmatrix}
  *      1 & 0 & 0 & x \\
@@ -13,12 +12,15 @@
  *      0 & 0 & 0 & 1
  *  \end{pmatrix}
  * \f]
- *
  * will be stored as
- * { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { x, y, z, 1 }, }
- *
- * As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
- * as the rest of the world, i.e. that \f[ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f].
+ * 
+ *     { { 1, 0, 0, 0 }, 
+ *       { 0, 1, 0, 0 }, 
+ *       { 0, 0, 1, 0 }, 
+ *       { x, y, z, 1 }, }
+ * 
+ * @note As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
+ * as the rest of the world, i.e. that \f$ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f$.
  *
  * This file is primarily concerned with matrices representing affine transformations, implemented using an augmented
  * matrix formalism,
@@ -30,7 +32,7 @@
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ A \f] is a \f[ 3 \times 3 \f] matrix (the *linear part*) and \f[ b \f] a \f[ 3 \times 1 \f] matrix, i.e. a
+ * where \f$ A \f$ is a \f$ 3 \times 3 \f$ matrix (the *linear part*) and \f$ b \f$ a \f$ 3 \times 1 \f$ matrix, i.e. a
  * 3D vector (the *translation part*), and most of the functions assume that the matrices have this form.
  *
  * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
@@ -38,6 +40,8 @@
  */
 
 #include "global.h"
+
+/* data */
 
 // clang-format off
 Mtx gIdentityMtx = gdSPDefMtx(
@@ -55,8 +59,10 @@ MtxF gIdentityMtxF = { {
     { 0.0f, 0.0f, 0.0f, 1.0f },
 } };
 
-MtxF* sMatrixStack;   // original name: "Matrix_stack"
-MtxF* sCurrentMatrix; // original name: "Matrix_now"
+/* bss */
+
+MtxF* sMatrixStack;   //!< original name: "Matrix_stack"
+MtxF* sCurrentMatrix; //!< original name: "Matrix_now"
 
 #define MATRIX_STACK_SIZE 20
 
@@ -126,10 +132,12 @@ MtxF* Matrix_GetCurrent(void) {
     return sCurrentMatrix;
 }
 
+/* General transformation matrix functions */
+
 /**
  * @brief General multiplication of current by a matrix.
- *      APPLY: current * mf -> current
- *      NEW: mf -> current
+ *      - APPLY: current * mf -> current
+ *      - NEW: mf -> current
  *
  * @param mf Matrix to multiply by.
  * @param mode APPLY or NEW.
@@ -148,8 +156,8 @@ void Matrix_Mult(MtxF* mf, MatrixMode mode) {
 
 /**
  * @brief Right-multiply current by a translation matrix T.
- *      APPLY: current * T -> current
- *      NEW: T -> current
+ *      - APPLY: current * T -> current
+ *      - NEW: T -> current
  *
  * T is given by
  *
@@ -194,8 +202,8 @@ void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode) {
 
 /**
  * @brief Right-multiply by the diagonal scale matrix S = diag(x,y,z,1).
- *      APPLY: current * S -> current
- *      NEW: S -> current
+ *      - APPLY: current * S -> current
+ *      - NEW: S -> current
  *
  * S is given by
  *
@@ -238,8 +246,8 @@ void Matrix_Scale(f32 x, f32 y, f32 z, MatrixMode mode) {
 
 /**
  * @brief Right-multiply by a rotation about the x axis
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -252,9 +260,9 @@ void Matrix_Scale(f32 x, f32 y, f32 z, MatrixMode mode) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos x, s = \sin x \f].
+ * where \f$ c = \cos x, s = \sin x \f$.
  *
- * @note The same as Matrix_RotateXF, but uses a binary angle.
+ * @note The same as Matrix_RotateXF(), but uses a binary angle.
  *
  * @param x rotation angle (binary).
  * @param mode APPLY or NEW.
@@ -328,8 +336,8 @@ void Matrix_RotateXS(s16 x, MatrixMode mode) {
 // Unused
 /**
  * @brief Right-multiply by a rotation about the x axis.
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -342,11 +350,11 @@ void Matrix_RotateXS(s16 x, MatrixMode mode) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos x, s = \sin x \f].
+ * where \f$ c = \cos x, s = \sin x \f$.
  *
- * @note The same as Matrix_RotateXS, but uses a float angle in radians.
+ * @note The same as Matrix_RotateXS(), but uses a float angle in radians.
  *
- * @param x rotation angle in radians.
+ * @param x rotation angle (radians).
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateX", but clashed with the previous function.
@@ -421,9 +429,9 @@ void Matrix_RotateXF(f32 x, MatrixMode mode) {
  * @brief Right-multiply by a rotation about the x axis.
  *      current * R -> current
  *
- * @note Matrix_RotateXF with mode APPLY.
+ * @note Matrix_RotateXF() with mode APPLY.
  *
- * @param x rotation angle in radians.
+ * @param x rotation angle (radians).
  */
 void Matrix_RotateXFApply(f32 x) {
     MtxF* cmf;
@@ -465,9 +473,9 @@ void Matrix_RotateXFApply(f32 x) {
  * @brief Replace current by a rotation about the x axis.
  *      R -> current
  *
- * @note Matrix_RotateXF with mode NEW.
+ * @note Matrix_RotateXF() with mode NEW.
  *
- * @param x rotation angle in radians.
+ * @param x rotation angle (radians).
  */
 void Matrix_RotateXFNew(f32 x) {
     MtxF* cmf = sCurrentMatrix;
@@ -507,8 +515,8 @@ void Matrix_RotateXFNew(f32 x) {
 
 /**
  * @brief Right-multiply by a rotation about the y axis
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -521,9 +529,9 @@ void Matrix_RotateXFNew(f32 x) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos y, s = \sin y \f].
+ * where \f$ c = \cos y, s = \sin y \f$.
  *
- * @note The same as Matrix_RotateYF, but uses a binary angle.
+ * @note The same as Matrix_RotateYF(), but uses a binary angle.
  *
  * @param y rotation angle (binary).
  * @param mode APPLY or NEW.
@@ -596,8 +604,8 @@ void Matrix_RotateYS(s16 y, MatrixMode mode) {
 
 /**
  * @brief Right-multiply by a rotation about the y axis.
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -610,11 +618,11 @@ void Matrix_RotateYS(s16 y, MatrixMode mode) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos y, s = \sin y \f].
+ * where \f$ c = \cos y, s = \sin y \f$.
  *
- * @note The same as Matrix_RotateYS, but uses a float angle in radians.
+ * @note The same as Matrix_RotateYS(), but uses a float angle in radians.
  *
- * @param y rotation angle in radians.
+ * @param y rotation angle (radians).
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateY", but clashed with the previous function.
@@ -686,9 +694,9 @@ void Matrix_RotateYF(f32 y, MatrixMode mode) {
 }
 
 /**
- * @brief Right-multiply by a rotation about the z axis
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ * @brief Right-multiply by a rotation about the z axis.
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -701,7 +709,7 @@ void Matrix_RotateYF(f32 y, MatrixMode mode) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos z, s = \sin z \f].
+ * where \f$ c = \cos z, s = \sin z \f$.
  *
  * @note The same as Matrix_RotateZF, but uses a binary angle.
  *
@@ -778,8 +786,8 @@ void Matrix_RotateZS(s16 z, MatrixMode mode) {
 
 /**
  * @brief Right-multiply by a rotation about the z axis.
- *      APPLY: current * R -> current
- *      NEW: R -> current
+ *      - APPLY: current * R -> current
+ *      - NEW: R -> current
  *
  * R is given by
  *
@@ -792,11 +800,11 @@ void Matrix_RotateZS(s16 z, MatrixMode mode) {
  *  \end{pmatrix}
  * \f]
  *
- * where \f[ c = \cos z, s = \sin z \f].
+ * where \f$ c = \cos z, s = \sin z \f$.
  *
- * @note The same as Matrix_RotateYS, but uses a float angle in radians.
+ * @note The same as Matrix_RotateYS(), but uses a float angle in radians.
  *
- * @param z rotation angle in radians.
+ * @param z rotation angle (radians).
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateZ", but clashed with the previous function.
@@ -867,8 +875,8 @@ void Matrix_RotateZF(f32 z, MatrixMode mode) {
 
 /**
  * @brief Rotate using ZYX Tait-Bryan angles.
- *      APPLY: current Rz Ry Rx -> current
- *      NEW: Rz Ry Rx -> current
+ *      - APPLY: current Rz Ry Rx -> current
+ *      - NEW: Rz Ry Rx -> current
  *
  * This means a (column) vector is first rotated around X, then around Y, then around Z, then (if `mode` is APPLY) gets
  * transformed by what the matrix was before adding the ZYX rotation.
@@ -971,8 +979,7 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, MatrixMode mode) {
 
 /**
  * @brief Translate and rotate using ZYX Tait-Bryan angles.
- *      APPLY: current T Rz Ry Rx -> current
- *      NEW: T Rz Ry Rx -> current
+ *      current T Rz Ry Rx -> current
  *
  * This means a (column) vector is first rotated around X, then around Y, then around Z, then translated, then gets
  * transformed by whatever the matrix was previously.
@@ -1142,7 +1149,7 @@ void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot) {
  * @param[in] src MtxF to convert.
  * @param[out] dest mtx to output to.
  *
- * @return dest.
+ * @return dest
  *
  * @remark original name: "_MtxF_to_Mtx"
  */
@@ -1222,7 +1229,7 @@ Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
 /**
  * @brief Converts current to a fixed-point RSP-compatible matrix.
  *
- * Debug uses Matrix_CheckFloats to test current first.
+ * @note Debug uses Matrix_CheckFloats to test current first.
  *
  * @param[out] dest mtx to output to.
  *
@@ -1262,7 +1269,6 @@ Mtx* Matrix_MtxFToNewMtx(MtxF* src, GraphicsContext* gfxCtx) {
     return Matrix_MtxFToMtx(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
-// Matrix_MultVec3f
 /**
  * @brief Calculates current * (src,1) and writes its components to dest.
  *
@@ -1276,7 +1282,7 @@ Mtx* Matrix_MtxFToNewMtx(MtxF* src, GraphicsContext* gfxCtx) {
  *  \end{pmatrix}
  * \f]
  *
- * where A is \f[ 3 \times 3 \f] and b \f[ 3 \times 1 \f], and so calculates
+ * where A is \f$ 3 \times 3 \f$ and b \f$ 3 \times 1 \f$, and so calculates
  *
  * \f[
  *  MX =
@@ -1316,7 +1322,7 @@ void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
  * Can also see it as obtaining the translation vector part of current, but the former interpretation is consistent with
  * the other functions nearby.
  *
- * @note Special case of @sa Matrix_MultVec3f with `src = { 0, 0, 0 }`; the same assumptions apply.
+ * @note Special case of Matrix_MultVec3f() with `src = { 0, 0, 0 }`; the same assumptions apply.
  *
  * @param[out] dest output vector.
  *
@@ -1333,9 +1339,9 @@ void Matrix_MultZero(Vec3f* dest) {
 /**
  * @brief Multiply the vector `(x, 0, 0, 1)` by current.
  *
- * I.e. calculate \f[ A(x, 0, 0) + b \f].
+ * I.e. calculate \f$ A(x, 0, 0) + b \f$.
  *
- * @note Special case of @sa Matrix_MultVec3f with `src = { x, 0, 0 }`; the same assumptions apply.
+ * @note Special case of Matrix_MultVec3f() with `src = { x, 0, 0 }`; the same assumptions apply.
  *
  * @param[in] x multiplier of unit vector in x direction.
  * @param[out] dest output vector.
@@ -1353,9 +1359,9 @@ void Matrix_MultVecX(f32 x, Vec3f* dest) {
 /**
  * @brief Multiply the vector `(0, y, 0, 1)` by current.
  *
- * I.e. calculate \f[ A(0, y, 0) + b \f].
+ * I.e. calculate \f$ A(0, y, 0) + b \f$.
  *
- * @note Special case of @sa Matrix_MultVec3f with `src = { 0, y, 0 }`; the same assumptions apply.
+ * @note Special case of Matrix_MultVec3f() with `src = { 0, y, 0 }`; the same assumptions apply.
  *
  * @param[in] y multiplier of unit vector in y direction.
  * @param[out] dest output vector.
@@ -1373,9 +1379,9 @@ void Matrix_MultVecY(f32 y, Vec3f* dest) {
 /**
  * @brief Multiply the vector `(0, 0, z, 1)` by current.
  *
- * I.e. calculate \f[ A(0, 0, z) + b \f]`.
+ * I.e. calculate \f$ A(0, 0, z) + b \f$.
  *
- * @note Special case of @sa Matrix_MultVec3f with `src = { 0, 0, z }`; the same assumptions apply.
+ * @note Special case of Matrix_MultVec3f() with `src = { 0, 0, z }`; the same assumptions apply.
  *
  * @param[in] z multiplier of unit vector in z direction.
  * @param[out] dest output vector.
@@ -1393,7 +1399,7 @@ void Matrix_MultVecZ(f32 z, Vec3f* dest) {
 /**
  * @brief Calculates current * (src,1) and writes its x and z components to dest.
  *
- * The same as @sa Matrix_MultVec3f, but only applies to the x and z components; the same assumptions apply.
+ * The same as Matrix_MultVec3f(), but only applies to the x and z components; the same assumptions apply.
  *
  * @note Unlike the previous functions, does *not* just multiply (x, 0, z, 1) and save the x,y,z components.
  *
@@ -1496,7 +1502,7 @@ void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
 /**
  * @brief Calculates mf * (src,1) and writes its components to dest.
  *
- * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one; the same
+ * This is the same as Matrix_MultVec3f() but using a specified matrix rather than the current one; the same
  * assumptions apply.
  *
  * @param[in] src input vector
@@ -1602,10 +1608,10 @@ void Matrix_ReplaceRotation(MtxF* mf) {
 }
 
 /**
- * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
+ * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
  *
- * \f[ A \f] should have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
- * with \f[ S \f] a scale matrix.
+ * \f$ A \f$ should have orthogonal columns; the most general matrix of this form can be written as \f$ RS \f$
+ * with \f$ S \f$ a scale matrix.
  *
  * If A has columns with the same norm (such as if it is just a rotation matrix), it is sufficient (and faster) to use
  * `nonUniformScale` off: `nonUniformScale` being set enables extraction of the angles from a matrix with columns that
@@ -1672,10 +1678,10 @@ void Matrix_MtxFToYXZRot(MtxF* src, Vec3s* dest, s32 nonUniformScale) {
 }
 
 /**
- * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
+ * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f$ A \f$ of a matrix.
  *
- * \f[ A \f] should have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
- * with \f[ S \f] a scale matrix.
+ * \f$ A \f$ should have orthogonal columns; the most general matrix of this form can be written as \f$ RS \f$
+ * with \f$ S \f$ a scale matrix.
  *
  * If A has columns with the same norm (such as if it is just a rotation matrix), it is sufficient (and faster) to use
  * `nonUniformScale` off: `nonUniformScale` being set enables extraction of the angles from a matrix with columns that
@@ -1687,7 +1693,7 @@ void Matrix_MtxFToYXZRot(MtxF* src, Vec3s* dest, s32 nonUniformScale) {
  *
  * @remark original name: "Matrix_to_rotate2_new"?
  *
- * See @sa Matrix_MtxFToYXZRot for full inline documentation.
+ * See Matrix_MtxFToYXZRot() for full inline documentation.
  */
 void Matrix_MtxFToZYXRot(MtxF* src, Vec3s* dest, s32 nonUniformScale) {
     f32 temp;
@@ -1736,7 +1742,7 @@ void Matrix_MtxFToZYXRot(MtxF* src, Vec3s* dest, s32 nonUniformScale) {
 /**
  * @brief Rotate by `angle` radians about `axis`, which is assumed to be a unit vector.
  *
- * @param angle rotation angle in radians.
+ * @param angle rotation angle (radians).
  * @param axis axis about which to rotate, must be a unit vector.
  * @param mode APPLY or NEW.
  *
@@ -1839,7 +1845,7 @@ void Matrix_RotateAxisF(f32 angle, Vec3f* axis, MatrixMode mode) {
 /**
  * @brief Rotate by binary angle `angle` about `axis`, which is assumed to be a unit vector.
  *
- * @param angle rotation angle in binary.
+ * @param angle rotation angle (binary).
  * @param axis axis about which to rotate, must be a unit vector.
  * @param mode APPLY or NEW.
  *

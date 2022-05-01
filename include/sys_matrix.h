@@ -14,12 +14,6 @@ typedef enum {
 } MatrixMode;
 
 
-typedef struct {
-    /* 0x00 */ u16 intPart[4][4];
-    /* 0x20 */ u16 fracPart[4][4];
-} MatrixInternal; // size = 0x40
-
-
 extern Mtx gIdentityMtx;
 extern MtxF gIdentityMtxF;
 
