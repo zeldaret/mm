@@ -2838,8 +2838,7 @@ beginseg
     name "ovl_En_Wiz_Brock"
     compress
     include "build/src/overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.o"
-    include "build/data/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock.data.o"
-    include "build/data/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock_reloc.o"
 endseg
 
 beginseg
