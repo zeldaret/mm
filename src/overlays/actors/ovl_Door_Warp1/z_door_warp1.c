@@ -1021,7 +1021,7 @@ void func_808BB4C4(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx;
+    s32 pad;
     Color_RGB8 sp64[] = {
         { 50, 150, 0 },
         { 100, 150, 200 },
