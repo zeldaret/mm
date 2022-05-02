@@ -44,7 +44,7 @@ typedef struct EnSnowman {
                     f32 frameToStartHoldingSnowball;
                     f32 frameToThrowSnowball;
                     f32 targetScaleDuringCombine;
-                } workFloat;
+                } work;
     /* 0x29C */ f32 attackRange;
     /* 0x2A0 */ f32 drawDmgEffAlpha;
     /* 0x2A4 */ f32 drawDmgEffScale;

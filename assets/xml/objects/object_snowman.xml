@@ -63,15 +63,15 @@
         <!-- Eeno Animations -->
         <Animation Name="gEenoLargeSnowballThrowAnim" Offset="0x4F14" /> <!-- Original name is "sm_nageA" ("throw A") -->
         <Animation Name="gEenoSmallSnowballThrowAnim" Offset="0x544C" /> <!-- Original name is "sm_nageB" ("throw B") -->
-        <Animation Name="gEenoSurfaceAnim" Offset="0x554C" /> <!-- Original name is "sm_tojo" ("appearance") -->
+        <Animation Name="gEenoEmergeAnim" Offset="0x554C" /> <!-- Original name is "sm_tojo" ("appearance") -->
         <Animation Name="gEenoIdleAnim" Offset="0x58CC" /> <!-- Original name is "sm_wait" -->
 
-        <!-- Eeno Snow Fragment DisplayLists -->
-        <DList Name="gEenoSnowFragment1DL" Offset="0x5CB0" />
-        <DList Name="gEenoSnowFragment2DL" Offset="0x6190" />
-        <DList Name="gEenoSnowFragment3DL" Offset="0x6620" />
+        <!-- Eeno Snowball Fragment DisplayLists -->
+        <DList Name="gEenoSnowballFragment1DL" Offset="0x5CB0" />
+        <DList Name="gEenoSnowballFragment2DL" Offset="0x6190" />
+        <DList Name="gEenoSnowballFragment3DL" Offset="0x6620" />
 
-        <!-- Eeno Snow Fragment Texture -->
-        <Texture Name="gEenoSnowFragmentTex" OutName="eeno_snow_fragment" Format="rgba16" Width="32" Height="64" Offset="0x6730" />
+        <!-- Eeno Snowball Fragment Texture -->
+        <Texture Name="gEenoSnowballFragmentTex" OutName="eeno_snowball_fragment" Format="rgba16" Width="32" Height="64" Offset="0x6730" />
     </File>
 </Root>
