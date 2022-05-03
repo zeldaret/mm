@@ -11,15 +11,18 @@
 
 #define THIS ((EnWizBrock*)thisx)
 
+#define PLATFORM_TYPE_INACTIVE 0
+#define PLATFORM_TYPE_FIRE 1
+
 void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A490E4(EnWizBrock* this, GlobalContext* globalCtx);
-void func_80A490FC(EnWizBrock* this, GlobalContext* globalCtx);
+void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, GlobalContext* globalCtx);
+void EnWizBrock_UpdateStatus(EnWizBrock* this, GlobalContext* globalCtx);
 
-s16 D_80A495B0 = 0;
+s16 platformCount = 0;
 
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
@@ -45,8 +48,8 @@ void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.colChkInfo.health = 3;
     this->unk1A6 = 0;
     Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->unk1A8 = D_80A495B0++;
-    this->actionFunc = func_80A490E4;
+    this->platformNum = platformCount++;
+    this->actionFunc = EnWizBrock_SetupUpdateStatus;
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = 0.01f;
     this->alpha = 255.0f;
 }
@@ -57,19 +60,24 @@ void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80A490E4(EnWizBrock* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_80A490FC;
+void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
+    this->actionFunc = EnWizBrock_UpdateStatus;
 }
 
-void func_80A490FC(EnWizBrock* this, GlobalContext* globalCtx) {
-    if (this->unk1AA == 0) {
+/**
+ * @brief Checks the platform status, when the Wizzrobe is defeated, starts incrementing despawnCounter to
+ * 0x25 at which point the platforms are despawned.
+ */
+void EnWizBrock_UpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
+    if (this->platformType == PLATFORM_TYPE_INACTIVE) {
         if (this->dyna.actor.colChkInfo.health != 3) {
-            this->unk1AA = this->dyna.actor.colChkInfo.health;
+            this->platformType = this->dyna.actor.colChkInfo.health;
         }
     }
+
     if (this->dyna.actor.colChkInfo.health == 0) {
-        this->unk1A4++;
-        if ((gGameInfo->data[0x991] + 0x1E) < this->unk1A4) {
+        this->despawnCounter++;
+        if ((gGameInfo->data[0x991] + 0x1E) < this->despawnCounter) {
             Math_ApproachZeroF(&this->dyna.actor.scale.y, (gGameInfo->data[0x992] / 10.0f) + 0.3f,
                                (gGameInfo->data[0x993] / 10000.0f) + 0.003f);
             Math_ApproachZeroF(&this->alpha, (gGameInfo->data[0x994] / 10.0f) + 1.0f,
@@ -106,27 +114,30 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        Gfx_DrawDListOpa(globalCtx, &object_wiz_DL_0010E8);
+        Gfx_DrawDListOpa(globalCtx, gWizzrobePlatform);
 
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)this->alpha);
-        Gfx_DrawDListXlu(globalCtx, &object_wiz_DL_0010E8);
+        Gfx_DrawDListXlu(globalCtx, gWizzrobePlatform);
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
-    if (this->unk1AA != 0) {
+
+    if (this->platformType != PLATFORM_TYPE_INACTIVE) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_wiz_Matanimheader_005C64));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gWizzrobePlatformTexAnim));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
-        if (this->unk1AA == 1) {
+        if (this->platformType == PLATFORM_TYPE_FIRE) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s8)this->alpha);
         } else {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s8)this->alpha);
         }
+
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &object_wiz_DL_005870);
+        gSPDisplayList(POLY_XLU_DISP++, &gWizzrobePlatformCenter);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
