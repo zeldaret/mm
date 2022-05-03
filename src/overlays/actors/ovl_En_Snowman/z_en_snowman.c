@@ -36,8 +36,8 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this);
 void EnSnowman_SplitDoNothing(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_SetupMarkForDeath(EnSnowman* this);
 void EnSnowman_MarkForDeath(EnSnowman* this, GlobalContext* globalCtx);
-void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* arg1, s32 arg2);
-void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* arg2);
+void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot);
+void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* combinePos);
 void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx);
 void EnSnowman_UpdateSnowball(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_DrawSnowPile(Actor* thisx, GlobalContext* globalCtx);
@@ -73,7 +73,7 @@ const ActorInit En_Snowman_InitVars = {
     (ActorFunc)EnSnowman_Draw,
 };
 
-static ColliderCylinderInit sCylinderInit1 = {
+static ColliderCylinderInit sEenoCylinderInit = {
     {
         COLTYPE_HIT4,
         AT_NONE,
@@ -93,7 +93,7 @@ static ColliderCylinderInit sCylinderInit1 = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
-static ColliderCylinderInit sCylinderInit2 = {
+static ColliderCylinderInit sSnowballCylinderInit = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_ENEMY,
@@ -188,45 +188,46 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSnowman* this = THIS;
     s32 attackRange;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    attackRange = EN_SNOWMAN_GET_ATTACK_RANGE(&this->actor);
+    Actor_ProcessInitChain(thisx, sInitChain);
+    attackRange = EN_SNOWMAN_GET_ATTACK_RANGE(thisx);
     if (attackRange == 0xFF) {
         attackRange = 0;
     }
 
-    this->actor.params &= 7;
-    if (EN_SNOWMAN_GET_TYPE(&this->actor) < EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
+    thisx->params &= 7;
+    if (EN_SNOWMAN_GET_TYPE(thisx) < EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gEenoSkel, &gEenoEmergeAnim, this->jointTable,
                            this->morphTable, EENO_LIMB_MAX);
         SkelAnime_InitFlex(globalCtx, &this->snowPileSkelAnime, &gEenoSnowPileSkel, &gEenoSnowPileMoveAnim,
                            this->snowPileJointTable, this->snowPileMorphTable, EENO_SNOW_PILE_LIMB_MAX);
-        CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit1);
-        if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-            this->actor.flags |= ACTOR_FLAG_400;
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_SNOWMAN, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
-            this->actor.parent = Actor_SpawnAsChildAndCutscene(
-                &globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN, this->actor.world.pos.x, this->actor.world.pos.y,
-                this->actor.world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT, -1, this->actor.unk20, NULL);
-            if ((this->actor.child == NULL) || (this->actor.parent == NULL)) {
-                if (this->actor.child != NULL) {
-                    Actor_MarkForDeath(this->actor.child);
+        CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sEenoCylinderInit);
+        if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_LARGE) {
+            thisx->flags |= ACTOR_FLAG_400;
+            Actor_SpawnAsChild(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
+                               thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
+            thisx->parent = Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SNOWMAN,
+                                                          thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0,
+                                                          0, 0, EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
+            if ((thisx->child == NULL) || (thisx->parent == NULL)) {
+                if (thisx->child != NULL) {
+                    Actor_MarkForDeath(thisx->child);
                 }
 
-                if (this->actor.parent != NULL) {
-                    Actor_MarkForDeath(this->actor.parent);
+                if (thisx->parent != NULL) {
+                    Actor_MarkForDeath(thisx->parent);
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_MarkForDeath(thisx);
                 return;
             }
 
-            this->actor.parent->child = &this->actor;
-            this->actor.child->child = this->actor.parent;
-            this->actor.parent->parent = this->actor.child;
+            // Makes each split Eeno the parent or child of other split Eenos
+            thisx->parent->child = thisx;
+            thisx->child->child = thisx->parent;
+            thisx->parent->parent = thisx->child;
             if (1) {}
-            Actor_SetScale(&this->actor, 0.02f);
+            Actor_SetScale(thisx, 0.02f);
         }
 
         this->eenoScale = thisx->scale.x * 100.0f;
@@ -239,40 +240,41 @@ void EnSnowman_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         Player* player = GET_PLAYER(globalCtx);
 
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit2);
-        this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
-        this->actor.velocity.y = (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) * 0.035f) + -5.0f;
-        this->actor.velocity.y = CLAMP_MAX(this->actor.velocity.y, 3.5f);
-        if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
-            this->actor.speedXZ = 15.0f;
+        thisx->flags &= ~ACTOR_FLAG_1;
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sSnowballCylinderInit);
+        thisx->world.rot.y = Actor_YawBetweenActors(thisx, &player->actor);
+        thisx->velocity.y = (Actor_XZDistanceBetweenActors(thisx, &player->actor) * 0.035f) + -5.0f;
+        thisx->velocity.y = CLAMP_MAX(thisx->velocity.y, 3.5f);
+        if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
+            thisx->speedXZ = 15.0f;
         } else {
-            this->actor.speedXZ = 22.5f;
-            this->actor.velocity.y *= 1.5f;
+            thisx->speedXZ = 22.5f;
+            thisx->velocity.y *= 1.5f;
         }
 
-        this->actor.world.pos.x += this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
-        this->actor.world.pos.y += this->actor.velocity.y;
-        this->actor.world.pos.z += this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
-        if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
+        thisx->world.pos.x += thisx->speedXZ * Math_SinS(thisx->world.rot.y);
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->speedXZ * Math_CosS(thisx->world.rot.y);
+
+        if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             this->collider.dim.radius = 8;
             this->collider.dim.height = 12;
             this->collider.dim.yShift = -6;
-            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
+            ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
         } else {
             this->collider.dim.radius = 50;
             this->collider.dim.height = 122;
             this->collider.dim.yShift = -8;
             this->collider.info.toucher.damage = 16;
-            this->actor.world.pos.y -= 32.0f;
-            Actor_SetScale(&this->actor, 0.006f);
-            ActorShape_Init(&this->actor.shape, 5333.3335f, ActorShadow_DrawCircle, 170.0f);
-            this->actor.gravity = -1.5f;
+            thisx->world.pos.y -= 32.0f;
+            Actor_SetScale(thisx, 0.006f);
+            ActorShape_Init(&thisx->shape, 5333.3335f, ActorShadow_DrawCircle, 170.0f);
+            thisx->gravity = -1.5f;
         }
 
-        this->actor.flags |= ACTOR_FLAG_10;
-        this->actor.update = EnSnowman_UpdateSnowball;
-        this->actor.draw = EnSnowman_DrawSnowball;
+        thisx->flags |= ACTOR_FLAG_10;
+        thisx->update = EnSnowman_UpdateSnowball;
+        thisx->draw = EnSnowman_DrawSnowball;
         this->timer = 5;
     }
 }
@@ -345,6 +347,9 @@ void EnSnowman_SetupMoveSnowPile(EnSnowman* this) {
     this->actionFunc = EnSnowman_MoveSnowPile;
 }
 
+/**
+ * Moves around beneath the snow as a snow pile.
+ */
 void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f combinePos;
@@ -365,6 +370,7 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
     }
 
     if ((this->combineTimer == 0) && (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT)) {
+        // Sets the combinePos to be the average position of all living split Eenos.
         if ((this->actor.parent->colChkInfo.health != 0) && (this->actor.child->colChkInfo.health != 0)) {
             combinePos.x =
                 (this->actor.parent->world.pos.x + this->actor.child->world.pos.x + this->actor.world.pos.x) *
@@ -570,6 +576,9 @@ void EnSnowman_SetupSubmerge(EnSnowman* this, GlobalContext* globalCtx) {
     this->actionFunc = EnSnowman_Submerge;
 }
 
+/**
+ * Submerge beneath the snow and become a snow pile.
+ */
 void EnSnowman_Submerge(EnSnowman* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.scale.y, this->actor.scale.x * 0.4f,
                  (this->actor.scale.x * 0.6f) / Animation_GetLastFrame(&gEenoEmergeAnim));
@@ -599,6 +608,9 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     this->actionFunc = EnSnowman_Melt;
 }
 
+/**
+ * Spawns smoke and shrinks the Eeno down until the timer runs out, then kills the Eeno.
+ */
 void EnSnowman_Melt(EnSnowman* this, GlobalContext* globalCtx) {
     Vec3f smokeVelocity;
     Vec3f smokePos;
@@ -643,6 +655,10 @@ void EnSnowman_SetupStun(EnSnowman* this) {
     this->actionFunc = EnSnowman_Stun;
 }
 
+/**
+ * Simply makes the Eeno do absolutely nothing until the stun is over.
+ * Once the stun is over, this swaps the actionFunc back to what it was before the stun.
+ */
 void EnSnowman_Stun(EnSnowman* this, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer == 0) {
         this->actionFunc = this->oldActionFunc;
@@ -668,6 +684,11 @@ void EnSnowman_SetupDamage(EnSnowman* this) {
     this->actionFunc = EnSnowman_Damage;
 }
 
+/**
+ * Plays the damage animation and spins the Eeno around.
+ * Once it's done spinning, it will spawn three small split-off Eenos if the Eeno is a large one.
+ * Otherwise, it will either submerge underground (if it has health remaining) or die.
+ */
 void EnSnowman_Damage(EnSnowman* this, GlobalContext* globalCtx) {
     s32 rotationalVelocityScale;
 
@@ -711,6 +732,9 @@ void EnSnowman_SetupDead(EnSnowman* this) {
     this->actionFunc = EnSnowman_Dead;
 }
 
+/**
+ * Spawns snow-colored dust and snowball fragments and kills the Eeno.
+ */
 void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     Vec3f velocity;
@@ -746,6 +770,14 @@ void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * There are some cases where a split Eeno shouldn't do anything, but we don't want to mark it for death.
+ * This is because we want to keep it around until *all* split Eenos are killed.
+ *
+ * This function is called whenever we want to put a split Eeno into this "do nothing" state. It disables
+ * collision and turns off drawing for the Eeno. If all three split Eenos are killed, this function is
+ * responsible for marking all of them for death.
+ */
 void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_HIT;
     this->collider.base.acFlags &= ~AC_HIT;
@@ -769,16 +801,25 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
 void EnSnowman_SplitDoNothing(EnSnowman* this, GlobalContext* globalCtx) {
 }
 
+/**
+ * Turns off collision on the Eeno before calling Actor_MarkForDeath on it.
+ */
 void EnSnowman_SetupMarkForDeath(EnSnowman* this) {
     this->collider.base.acFlags &= ~(AC_ON | AC_HIT);
     this->collider.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
     this->actionFunc = EnSnowman_MarkForDeath;
 }
 
+/**
+ * Simply calls Actor_MarkForDeath on the Eeno.
+ */
 void EnSnowman_MarkForDeath(EnSnowman* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
+/**
+ * Creates a small split Eeno with a certain Y-rotation and at a certain offset from basePos.
+ */
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -798,15 +839,20 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     EnSnowman_SetupMoveSnowPile(this);
 }
 
-void EnSnowman_PrepareForCombine(EnSnowman* arg0, EnSnowman* arg1) {
-    Actor_PlaySfxAtPos(&arg1->actor, NA_SE_EN_YMAJIN_UNITE);
-    arg1->work.targetScaleDuringCombine += 0.005f;
-    arg0->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
-    arg0->collider.base.ocFlags1 &= ~OC1_HIT;
-    arg0->collider.base.acFlags &= ~AC_HIT;
-    arg0->collider.base.ocFlags1 &= ~OC1_ON;
-    arg0->collider.base.acFlags &= ~AC_ON;
-    arg0->work.targetScaleDuringCombine = 0.0f;
+/**
+ * Absorbs the smaller Eeno into the larger one. The smaller Eeno's target scale is set to
+ * zero so it gradually disappears, and its collision is disabled, while the larger Eeno's
+ * target scale increases.
+ */
+void EnSnowman_AbsorbEeno(EnSnowman* smallerEeno, EnSnowman* largerEeno) {
+    Actor_PlaySfxAtPos(&largerEeno->actor, NA_SE_EN_YMAJIN_UNITE);
+    largerEeno->work.targetScaleDuringCombine += 0.005f;
+    smallerEeno->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
+    smallerEeno->collider.base.ocFlags1 &= ~OC1_HIT;
+    smallerEeno->collider.base.acFlags &= ~AC_HIT;
+    smallerEeno->collider.base.ocFlags1 &= ~OC1_ON;
+    smallerEeno->collider.base.acFlags &= ~AC_ON;
+    smallerEeno->work.targetScaleDuringCombine = 0.0f;
 }
 
 void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* combinePos) {
@@ -845,6 +891,9 @@ void EnSnowman_SetupCombine(EnSnowman* this, GlobalContext* globalCtx, Vec3f* co
     }
 }
 
+/**
+ * Makes the small, split-off Eenos try to combine into a large Eeno by absorbing each other.
+ */
 void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
     EnSnowman* parent;
     EnSnowman* child;
@@ -860,26 +909,26 @@ void EnSnowman_Combine(EnSnowman* this, GlobalContext* globalCtx) {
             if ((this->collider.base.oc == this->actor.parent) &&
                 (parent->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE)) {
                 if (this->actor.scale.x < this->actor.parent->scale.x) {
-                    EnSnowman_PrepareForCombine(this, parent);
+                    EnSnowman_AbsorbEeno(this, parent);
                 } else {
-                    EnSnowman_PrepareForCombine(parent, this);
+                    EnSnowman_AbsorbEeno(parent, this);
                 }
             } else if ((this->collider.base.oc == this->actor.child) &&
                        (child->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE)) {
                 if (this->actor.scale.x < this->actor.child->scale.x) {
-                    EnSnowman_PrepareForCombine(this, child);
+                    EnSnowman_AbsorbEeno(this, child);
                 } else {
-                    EnSnowman_PrepareForCombine(child, this);
+                    EnSnowman_AbsorbEeno(child, this);
                 }
             }
         }
 
         if (parent->combineState == EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION) {
-            EnSnowman_PrepareForCombine(parent, this);
+            EnSnowman_AbsorbEeno(parent, this);
         }
 
         if (child->combineState == EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION) {
-            EnSnowman_PrepareForCombine(child, this);
+            EnSnowman_AbsorbEeno(child, this);
         }
     }
 

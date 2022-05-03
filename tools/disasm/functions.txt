@@ -13139,7 +13139,7 @@
     0x80B189D4:("EnSnowman_SetupMarkForDeath",),
     0x80B18A04:("EnSnowman_MarkForDeath",),
     0x80B18A28:("EnSnowman_CreateSplitEeno",),
-    0x80B18B30:("EnSnowman_PrepareForCombine",),
+    0x80B18B30:("EnSnowman_AbsorbEeno",),
     0x80B18BB4:("EnSnowman_SetupCombine",),
     0x80B18C7C:("EnSnowman_Combine",),
     0x80B18F50:("EnSnowman_UpdateDamage",),
