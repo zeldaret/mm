@@ -104,8 +104,8 @@ static DamageTable sDamageTable = {
 
 static AnimationInfo sAnimations[] = {
     { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLookAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -135,8 +135,8 @@ static AnimationInfo sAnimations[] = {
     { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidCallDownMoonStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidCallDownMoonLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },

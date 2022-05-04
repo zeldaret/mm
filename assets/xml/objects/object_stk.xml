@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_stk" Segment="6">
-        <Animation Name="object_stk_Anim_001030" Offset="0x1030" /> <!-- Original name is "kyoro" -->
-        <Animation Name="object_stk_Anim_002774" Offset="0x2774" /> <!-- Original name is "sk_moon_hikiyose" -->
-        <Animation Name="object_stk_Anim_003068" Offset="0x3068" /> <!-- Original name is "sk_moon_hikiyose_loop" -->
+        <Animation Name="gSkullKidLookAroundAnim" Offset="0x1030" /> <!-- Original name is "kyoro" (onomatopoeic for "looking all around") -->
+        <Animation Name="gSkullKidCallDownMoonStartAnim" Offset="0x2774" /> <!-- Original name is "sk_moon_hikiyose" ("draw or pull the moon") -->
+        <Animation Name="gSkullKidCallDownMoonLoopAnim" Offset="0x3068" /> <!-- Original name is "sk_moon_hikiyose_loop" -->
 
         <!-- DisplayLists for an unused Link Mask -->
         <DList Name="gSkullKidLinkMask1DL" Offset="0x39A0" />
@@ -39,7 +39,7 @@
         <Animation Name="object_stk_Anim_00BB2C" Offset="0xBB2C" /> <!-- Original name is "stk_miageru" -->
         <Animation Name="object_stk_Anim_00C964" Offset="0xC964" /> <!-- Original name is "stk_miageru_loop" -->
         <DList Name="gSkullKidOcarinaOfTimeDL" Offset="0xCAD0" />
-        <Animation Name="object_stk_Anim_00CC94" Offset="0xCC94" /> <!-- Original name is "stk_pause" -->
+        <Animation Name="gSkullKidTPoseAnim" Offset="0xCC94" /> <!-- Original name is "stk_pause" -->
 
         <!-- Skull Kid Limb DisplayLists -->
         <DList Name="gSkullKidTorsoDL" Offset="0xF6F0" />
@@ -132,6 +132,6 @@
 
         <Animation Name="object_stk_Anim_01C21C" Offset="0x1C21C" /> <!-- Original name is "wait_1" -->
         <Animation Name="object_stk_Anim_01D008" Offset="0x1D008" /> <!-- Original name is "wait_2" -->
-        <Animation Name="object_stk_Anim_01D3D0" Offset="0x1D3D0" /> <!-- Original name is "walk" -->
+        <Animation Name="gSkullKidWalkAnim" Offset="0x1D3D0" /> <!-- Original name is "walk" -->
     </File>
 </Root>
