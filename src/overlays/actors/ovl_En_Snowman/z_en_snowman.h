@@ -28,7 +28,7 @@ typedef struct EnSnowman {
     /* 0x25C */ Vec3s snowPileJointTable[EENO_SNOW_PILE_LIMB_MAX];
     /* 0x26E */ Vec3s snowPileMorphTable[EENO_SNOW_PILE_LIMB_MAX];
     /* 0x280 */ EnSnowmanActionFunc actionFunc;
-    /* 0x284 */ EnSnowmanActionFunc oldActionFunc;
+    /* 0x284 */ EnSnowmanActionFunc prevActionFunc;
     /* 0x288 */ u8 isHoldingSnowball;
     /* 0x289 */ u8 combineState;
     /* 0x28A */ u8 turningOnSteepSlope;
@@ -36,7 +36,7 @@ typedef struct EnSnowman {
     /* 0x28C */ union {
                     s16 timer;
                     s16 snowballsToThrowBeforeIdling;
-                };
+                } work;
     /* 0x28E */ s16 snowPileTargetRotY;
     /* 0x290 */ s16 combineTimer;
     /* 0x294 */ f32 eenoScale;
@@ -44,7 +44,7 @@ typedef struct EnSnowman {
                     f32 frameToStartHoldingSnowball;
                     f32 frameToThrowSnowball;
                     f32 targetScaleDuringCombine;
-                } work;
+                } fwork;
     /* 0x29C */ f32 attackRange;
     /* 0x2A0 */ f32 drawDmgEffAlpha;
     /* 0x2A4 */ f32 drawDmgEffScale;
