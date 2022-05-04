@@ -23,9 +23,10 @@
         <Animation Name="object_stk2_Anim_00A2BC" Offset="0xA2BC" />
         <Animation Name="object_stk2_Anim_00A4C4" Offset="0xA4C4" />
         <Animation Name="object_stk2_Anim_00A6D4" Offset="0xA6D4" />
-        <DList Name="object_stk2_DL_00A840" Offset="0xA840" />
+        <DList Name="gDroppedOcarinaOfTimeOcarinaDL" Offset="0xA840" />
         <Texture Name="object_stk2_Tex_00A958" OutName="tex_00A958" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
-        <!-- <Blob Name="object_stk2_Blob_00AD58" Size="0x28" Offset="0xAD58" /> -->
+        <Limb Name="gDroppedOcarinaOfTimeOcarinaLimb" Type="Standard" EnumName="DROPPED_OCARINA_OF_TIME_LIMB_OCARINA" Offset="0xAD58" />
+        <Skeleton Name="gDroppedOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="DROPPED_OCARINA_OF_TIME_LIMB_NONE" LimbMax="DROPPED_OCARINA_OF_TIME_LIMB_MAX" EnumName="DroppedOcarinaOfTimeLimbs" Offset="0xAD68" />
         <Animation Name="object_stk2_Anim_00C270" Offset="0xC270" />
         <!-- <Blob Name="object_stk2_Blob_00C280" Size="0x60" Offset="0xC280" /> -->
         <Animation Name="object_stk2_Anim_00CBB8" Offset="0xCBB8" />

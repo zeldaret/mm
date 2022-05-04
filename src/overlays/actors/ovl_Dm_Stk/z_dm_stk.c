@@ -913,7 +913,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.targetArrowOffset = 1100.0f;
         this->unk_334 = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_stk_Skel_013328, NULL, NULL, NULL, 0);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
         func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
     }
 
@@ -1625,11 +1625,11 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_2E0 == 69) || (this->unk_2E0 == 11) || (this->unk_2E0 == 71)) {
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AEC0);
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AE30);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyEyesDL);
         } else {
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A5C0);
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A530);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidExpressionlessHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidExpressionlessEyesDL);
         }
 
         switch (this->unk_32C) {
@@ -1644,16 +1644,16 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                     }
                     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_2E8, this->unk_2EC, this->unk_2F0,
                                                this->unk_2F4, this->unk_2F8, this->unk_2FC);
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
                 } else {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 }
                 break;
 
             case 2:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_005870);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMaskEyesDL);
 
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
@@ -1689,19 +1689,19 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         switch (this->unk_32D) {
             case 0:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009AC0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0046B0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
             case 1:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009710);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0053C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
             case 3:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009DA0);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 break;
 
@@ -1712,7 +1712,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 break;
         }
 
@@ -1734,12 +1734,12 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
             case 2:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0079F0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
             case 3:
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 break;
@@ -1750,7 +1750,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
             case 6:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_008A80);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_016620);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
             case 9:
@@ -1775,7 +1775,7 @@ void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_33B != 0) {
         if (this->actor.params == 1) {
-            Gfx_DrawDListOpa(globalCtx, object_stk_DL_006BB0);
+            Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMask1DL);
             return;
         }
 
