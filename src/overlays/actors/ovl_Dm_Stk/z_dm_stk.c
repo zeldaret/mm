@@ -253,7 +253,7 @@ static AnimationInfo sAnimations[] = {
 };
 
 void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
-    s32 objectIdx;
+    s32 objectIndex;
 
     if (((this->animationId >= SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) &&
          (this->animationId <= SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE)) ||
@@ -261,15 +261,15 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
         (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) ||
         (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START) ||
         (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_LOOP)) {
-        objectIdx = this->unk_336;
+        objectIndex = this->objectStkObjectIndex;
     } else if (this->animationId > SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
-        objectIdx = this->unk_338;
+        objectIndex = this->objectStk3ObjectIndex;
     } else {
-        objectIdx = this->unk_337;
+        objectIndex = this->objectStk2ObjectIndex;
     }
 
-    if (objectIdx >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objectIdx].segment);
+    if (objectIndex >= 0) {
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objectIndex].segment);
     }
 }
 
@@ -887,13 +887,13 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DmStk* this = THIS;
 
-    this->unk_33B = 1;
+    this->shouldDraw = true;
     if (this->actor.params != 1) {
         this->unk_33A = 0;
-        this->unk_336 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
-        this->unk_337 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
-        this->unk_338 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
-        if (this->unk_336 < 0) {
+        this->objectStkObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
+        this->objectStk2ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
+        this->objectStk3ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
+        if (this->objectStkObjectIndex < 0) {
             Actor_MarkForDeath(&this->actor);
         }
 
@@ -906,13 +906,13 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2F0 = globalCtx->lightCtx.unk9;
 
         if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
-            this->unk_2E4 = 0;
+            this->alpha = 0;
             this->unk_2F8 = 0;
             this->unk_2FC = 1000;
             this->unk_300 = 1.0f;
             this->actionFunc = func_80AA1704;
         } else if (globalCtx->sceneNum == SCENE_OKUJOU) {
-            this->unk_2E4 = 255;
+            this->alpha = 255;
             this->unk_2F8 = 996;
             this->unk_2FC = 1000;
             this->unk_300 = 0.7f;
@@ -966,7 +966,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->unk_32C = 2;
-            this->unk_2E4 = 255;
+            this->alpha = 255;
             this->unk_2F8 = 996;
             this->unk_2FC = 1000;
             this->unk_300 = 0.7f;
@@ -977,7 +977,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->unk_32C = 2;
-            this->unk_2E4 = 255;
+            this->alpha = 255;
             this->unk_2F8 = 996;
             this->unk_2FC = 1000;
             this->unk_300 = 0.7f;
@@ -988,7 +988,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_32E = 0;
         this->unk_32F = 0;
         this->unk_330 = 0;
-        this->unk_2E4 = this->unk_2E4;
+        this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
         this->unk_334 = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -1455,14 +1455,14 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             this->unk_2F8 = 996;
         }
     } else if (this->unk_32E == 3) {
-        if (this->unk_2E4 < 128) {
-            this->unk_2E4 += 3;
+        if (this->alpha < 128) {
+            this->alpha += 3;
         }
 
-        if (this->unk_2E4 < 255) {
-            this->unk_2E4 += 20;
+        if (this->alpha < 255) {
+            this->alpha += 20;
         } else {
-            this->unk_2E4 = 255;
+            this->alpha = 255;
             this->unk_32E = 0;
         }
     }
@@ -1474,15 +1474,15 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
         this->unk_330++;
         if (this->unk_330 >= 44) {
-            this->unk_2E4 -= 35;
-            if (this->unk_2E4 < 0) {
-                this->unk_2E4 = 0;
+            this->alpha -= 35;
+            if (this->alpha < 0) {
+                this->alpha = 0;
                 this->unk_32F = 0;
                 gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
-                    this->unk_33B = 0;
+                    this->shouldDraw = false;
                 }
             }
         }
@@ -1610,7 +1610,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
             SkelAnime_Update(&this->skelAnime);
         }
 
-        this->unk_2E4 = this->unk_2E4;
+        this->alpha = this->alpha;
 
         this->actionFunc(this, globalCtx);
 
@@ -1684,7 +1684,7 @@ s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
                 break;
 
             case 9:
-                if (this->unk_2E4 == 255) {
+                if (this->alpha == 255) {
                     *dList = NULL;
                 }
                 break;
@@ -1702,7 +1702,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     DmStk* this = THIS;
 
     if (limbIndex == SKULL_KID_LIMB_HEAD) {
-        Matrix_MultZero(&this->unk_304);
+        Matrix_MultZero(&this->headPos);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1743,18 +1743,19 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
-                    (this->unk_337 >= 0)) {
+                    (this->objectStk2ObjectIndex >= 0)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
+                    gSegments[6] =
+                        PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_337].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_stk2_Matanimheader_008658));
                     Gfx_DrawDListOpa(globalCtx, object_stk2_DL_007840);
-                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
+                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
                     Matrix_Pop();
                 }
@@ -1840,7 +1841,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case 9:
-                if (this->unk_2E4 == 255) {
+                if (this->alpha == 255) {
                     gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0087B0);
                 }
                 break;
@@ -1859,25 +1860,25 @@ void DmStk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
-    if (this->unk_33B != 0) {
+    if (this->shouldDraw) {
         if (this->actor.params == 1) {
             Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMask1DL);
             return;
         }
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        this->unk_2E4 = this->unk_2E4;
+        this->alpha = this->alpha;
         func_8012C28C(globalCtx->state.gfxCtx);
 
-        if (this->unk_2E4 < 255) {
+        if (this->alpha < 255) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_2E4);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
 
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,

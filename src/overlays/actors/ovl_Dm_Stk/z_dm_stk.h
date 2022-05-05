@@ -14,7 +14,7 @@ typedef struct DmStk {
     /* 0x0290 */ DmStkActionFunc actionFunc;
     /* 0x0294 */ ColliderCylinder collider;
     /* 0x02E0 */ s16 animationId;
-    /* 0x02E4 */ s32 unk_2E4;
+    /* 0x02E4 */ s32 alpha;
     /* 0x02E8 */ u32 unk_2E8;
     /* 0x02EC */ u32 unk_2EC;
     /* 0x02F0 */ u32 unk_2F0;
@@ -22,7 +22,7 @@ typedef struct DmStk {
     /* 0x02F8 */ s32 unk_2F8;
     /* 0x02FC */ s32 unk_2FC;
     /* 0x0300 */ f32 unk_300;
-    /* 0x0304 */ Vec3f unk_304;
+    /* 0x0304 */ Vec3f headPos; // set but never used
     /* 0x0310 */ Vec3f unk_310;
     /* 0x031C */ UNK_TYPE1 unk31C[0xC];
     /* 0x0328 */ u16 unk_328;
@@ -33,13 +33,13 @@ typedef struct DmStk {
     /* 0x032F */ u8 unk_32F;
     /* 0x0330 */ s32 unk_330;
     /* 0x0334 */ u8 unk_334;
-    /* 0x0335 */ u8 unk_335;
-    /* 0x0336 */ s8 unk_336;
-    /* 0x0337 */ s8 unk_337;
-    /* 0x0338 */ s8 unk_338;
+    /* 0x0335 */ u8 unk_335; // set but never used
+    /* 0x0336 */ s8 objectStkObjectIndex;
+    /* 0x0337 */ s8 objectStk2ObjectIndex;
+    /* 0x0338 */ s8 objectStk3ObjectIndex;
     /* 0x0339 */ u8 unk_339;
     /* 0x033A */ u8 unk_33A;
-    /* 0x033B */ u8 unk_33B;
+    /* 0x033B */ u8 shouldDraw;
 } DmStk; // size = 0x33C
 
 extern const ActorInit Dm_Stk_InitVars;
