@@ -1,14 +1,14 @@
 ﻿<Root>
     <File Name="object_stk2" Segment="6">
-        <Animation Name="object_stk2_Anim_00055C" Offset="0x55C" /> <!-- Original name is "kubi_katakata" -->
+        <Animation Name="gSkullKidCurseStartAnim" Offset="0x55C" /> <!-- Original name is "kubi_katakata" -->
         <!-- <Blob Name="object_stk2_Blob_00056C" Size="0x24" Offset="0x56C" /> -->
-        <Animation Name="object_stk2_Anim_00130C" Offset="0x130C" /> <!-- Original name is "kubi_katakata_wait" -->
+        <Animation Name="gSkullKidCurseLoopAnim" Offset="0x130C" /> <!-- Original name is "kubi_katakata_wait" -->
         <!-- <Blob Name="object_stk2_Blob_00131C" Size="0x54" Offset="0x131C" /> -->
-        <Animation Name="object_stk2_Anim_0035C8" Offset="0x35C8" /> <!-- Original name is "lost_horse" -->
-        <Animation Name="object_stk2_Anim_004580" Offset="0x4580" /> <!-- Original name is "lost_horse2" -->
+        <Animation Name="gSkullKidHorseRideStartAnim" Offset="0x35C8" /> <!-- Original name is "lost_horse" -->
+        <Animation Name="gSkullKidHorseRideAndRotateAnim" Offset="0x4580" /> <!-- Original name is "lost_horse2" -->
         <!-- <Blob Name="object_stk2_Blob_004590" Size="0x50" Offset="0x4590" /> -->
-        <Animation Name="object_stk2_Anim_0049C8" Offset="0x49C8" /> <!-- Original name is "lost_horse_wait" -->
-        <Animation Name="object_stk2_Anim_0070DC" Offset="0x70DC" /> <!-- Original name is "lost_house" -->
+        <Animation Name="gSkullKidHorseRideLoopAnim" Offset="0x49C8" /> <!-- Original name is "lost_horse_wait" -->
+        <Animation Name="gSkullKidGlitchyHorseRideStartAnim" Offset="0x70DC" /> <!-- Original name is "lost_house" -->
         <DList Name="object_stk2_DL_007840" Offset="0x7840" />
         <Texture Name="object_stk2_Tex_007A48" OutName="tex_007A48" Format="i8" Width="32" Height="32" Offset="0x7A48" />
         <Texture Name="object_stk2_Tex_007E48" OutName="tex_007E48" Format="i8" Width="32" Height="64" Offset="0x7E48" />
@@ -27,61 +27,61 @@
         <Texture Name="object_stk2_Tex_00A958" OutName="tex_00A958" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
         <Limb Name="gDroppedOcarinaOfTimeOcarinaLimb" Type="Standard" EnumName="DROPPED_OCARINA_OF_TIME_LIMB_OCARINA" Offset="0xAD58" />
         <Skeleton Name="gDroppedOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="DROPPED_OCARINA_OF_TIME_LIMB_NONE" LimbMax="DROPPED_OCARINA_OF_TIME_LIMB_MAX" EnumName="DroppedOcarinaOfTimeLimbs" Offset="0xAD68" />
-        <Animation Name="object_stk2_Anim_00C270" Offset="0xC270" /> <!-- Original name is "oowarai" -->
+        <Animation Name="gSkullKidLaughStartAnim" Offset="0xC270" /> <!-- Original name is "oowarai" -->
         <!-- <Blob Name="object_stk2_Blob_00C280" Size="0x60" Offset="0xC280" /> -->
-        <Animation Name="object_stk2_Anim_00CBB8" Offset="0xCBB8" /> <!-- Original name is "oowarai_wait" -->
+        <Animation Name="gSkullKidLaughLoopAnim" Offset="0xCBB8" /> <!-- Original name is "oowarai_wait" -->
         <!-- <Blob Name="object_stk2_Blob_00CBC8" Size="0x28" Offset="0xCBC8" /> -->
-        <Animation Name="object_stk2_Anim_00D830" Offset="0xD830" /> <!-- Original name is "situkoi_wait"-->
+        <Animation Name="gSkullKidOpeningArmsCrossedAnim" Offset="0xD830" /> <!-- Original name is "situkoi_wait"-->
         <!-- <Blob Name="object_stk2_Blob_00D840" Size="0x50" Offset="0xD840" /> -->
-        <Animation Name="object_stk2_Anim_00E6EC" Offset="0xE6EC" /> <!-- Original name is "sk_atama" -->
-        <Animation Name="object_stk2_Anim_00EEC0" Offset="0xEEC0" /> <!-- Original name is "sk_atama_loop" -->
-        <Animation Name="object_stk2_Anim_0101A4" Offset="0x101A4" /> <!-- Original name is "sk_elf_hataku" -->
-        <Animation Name="object_stk2_Anim_010B60" Offset="0x10B60" /> <!-- Original name is "sk_elf_hataku_loop" -->
-        <Animation Name="object_stk2_Anim_0110B4" Offset="0x110B4" /> <!-- Original name is "sk_koe_kizuku" -->
-        <Animation Name="object_stk2_Anim_011FB0" Offset="0x11FB0" /> <!-- Original name is "sk_koe_kizuku_loop" -->
-        <Animation Name="object_stk2_Anim_012A58" Offset="0x12A58" /> <!-- Original name is "sk_kyojin_sagasu" -->
-        <Animation Name="object_stk2_Anim_0141E4" Offset="0x141E4" /> <!-- Original name is "sk_kyojin_sagasu_loop" -->
-        <Animation Name="object_stk2_Anim_016910" Offset="0x16910" /> <!-- Original name is "sk_ok_fuku" -->
+        <Animation Name="gSkullKidHoldHeadAndShakeStartAnim" Offset="0xE6EC" /> <!-- Original name is "sk_atama" -->
+        <Animation Name="gSkullKidHoldHeadAndShakeLoopAnim" Offset="0xEEC0" /> <!-- Original name is "sk_atama_loop" -->
+        <Animation Name="gSkullKidSmackFairyStartAnim" Offset="0x101A4" /> <!-- Original name is "sk_elf_hataku" -->
+        <Animation Name="gSkullKidSmackFairyLoopAnim" Offset="0x10B60" /> <!-- Original name is "sk_elf_hataku_loop" -->
+        <Animation Name="gSkullKidSurpriseStartAnim" Offset="0x110B4" /> <!-- Original name is "sk_koe_kizuku" -->
+        <Animation Name="gSkullKidSurpriseLoopAnim" Offset="0x11FB0" /> <!-- Original name is "sk_koe_kizuku_loop" -->
+        <Animation Name="gSkullKidLookingAroundForGiantsStartAnim" Offset="0x12A58" /> <!-- Original name is "sk_kyojin_sagasu" -->
+        <Animation Name="gSkullKidLookingAroundForGiantsLoopAnim" Offset="0x141E4" /> <!-- Original name is "sk_kyojin_sagasu_loop" -->
+        <Animation Name="gSkullKidPickUpOcarinaAndStartPlayingAnim" Offset="0x16910" /> <!-- Original name is "sk_ok_fuku" -->
         <!-- <Blob Name="object_stk2_Blob_016920" Size="0xC0" Offset="0x16920" /> -->
-        <Animation Name="object_stk2_Anim_018ED0" Offset="0x18ED0" /> <!-- Original name is "sk_ok_fuku_wait" -->
+        <Animation Name="gSkullKidPlayingOcarinaAndLaughingAnim" Offset="0x18ED0" /> <!-- Original name is "sk_ok_fuku_wait" -->
         <!-- <Blob Name="object_stk2_Blob_018EE0" Size="0xC0" Offset="0x18EE0" /> -->
-        <Animation Name="object_stk2_Anim_01AA80" Offset="0x1AA80" /> <!-- Original name is "sk_ok_kakusu" -->
-        <Animation Name="object_stk2_Anim_01C114" Offset="0x1C114" /> <!-- Original name is "sk_ok_kakusu_jump" -->
+        <Animation Name="gSkullKidHideOcarinaStartAnim" Offset="0x1AA80" /> <!-- Original name is "sk_ok_kakusu" -->
+        <Animation Name="gSkullKidJumpWhileHidingOcarinaAnim" Offset="0x1C114" /> <!-- Original name is "sk_ok_kakusu_jump" -->
         <!-- <Blob Name="object_stk2_Blob_01C124" Size="0x6C" Offset="0x1C124" /> -->
-        <Animation Name="object_stk2_Anim_01D07C" Offset="0x1D07C" /> <!-- Original name is "sk_ok_kakusu_wait" -->
-        <Animation Name="object_stk2_Anim_01DDE0" Offset="0x1DDE0" /> <!-- Original name is "sk_ok_miru" -->
+        <Animation Name="gSkullKidHideOcarinaLoopAnim" Offset="0x1D07C" /> <!-- Original name is "sk_ok_kakusu_wait" -->
+        <Animation Name="gSkullKidPickUpOcarinaAnim" Offset="0x1DDE0" /> <!-- Original name is "sk_ok_miru" -->
         <!-- <Blob Name="object_stk2_Blob_01DDF0" Size="0x40" Offset="0x1DDF0" /> -->
-        <Animation Name="object_stk2_Anim_01EF50" Offset="0x1EF50" /> <!-- Original name is "sk_ok_miru_wait" -->
+        <Animation Name="gSkullKidLookAtOcarinaAnim" Offset="0x1EF50" /> <!-- Original name is "sk_ok_miru_wait" -->
         <!-- <Blob Name="object_stk2_Blob_01EF60" Size="0x50" Offset="0x1EF60" /> -->
-        <Animation Name="object_stk2_Anim_01F9E4" Offset="0x1F9E4" /> <!-- Original name is "sk_ok_otosu" -->
-        <Animation Name="object_stk2_Anim_020CAC" Offset="0x20CAC" /> <!-- Original name is "sk_ok_skyplay" -->
-        <Animation Name="object_stk2_Anim_02200C" Offset="0x2200C" /> <!-- Original name is "sk_ok_skypon" -->
-        <Animation Name="object_stk2_Anim_02336C" Offset="0x2336C" /> <!-- Original name is "sk_ok_skypon_loop" -->
-        <Animation Name="object_stk2_Anim_0259F4" Offset="0x259F4" /> <!-- Original name is "sk_omenage" -->
+        <Animation Name="gSkullKidDropOcarinaAnim" Offset="0x1F9E4" /> <!-- Original name is "sk_ok_otosu" -->
+        <Animation Name="gSkullKidPlayOcarinaWhileFloatingAnim" Offset="0x20CAC" /> <!-- Original name is "sk_ok_skyplay" -->
+        <Animation Name="gSkullKidFloatingTurnAroundAnim" Offset="0x2200C" /> <!-- Original name is "sk_ok_skypon" -->
+        <Animation Name="gSkullKidOcarinaJuggleAnim" Offset="0x2336C" /> <!-- Original name is "sk_ok_skypon_loop" -->
+        <Animation Name="gSkullKidRaiseMaskStartAnim" Offset="0x259F4" /> <!-- Original name is "sk_omenage" -->
         <!-- <Blob Name="object_stk2_Blob_025A04" Size="0xCC" Offset="0x25A04" /> -->
-        <Animation Name="object_stk2_Anim_0266C8" Offset="0x266C8" /> <!-- Original name is "sk_omenage_wait" -->
+        <Animation Name="gSkullKidRaiseMaskLoopAnim" Offset="0x266C8" /> <!-- Original name is "sk_omenage_wait" -->
         <!-- <Blob Name="object_stk2_Blob_0266D8" Size="0x48" Offset="0x266D8" /> -->
-        <Animation Name="object_stk2_Anim_026CF4" Offset="0x26CF4" /> <!-- Original name is "sk_omensage" -->
+        <Animation Name="gSkullKidLowerMaskAnim" Offset="0x26CF4" /> <!-- Original name is "sk_omensage" -->
         <!-- <Blob Name="object_stk2_Blob_026D04" Size="0x1C" Offset="0x26D04" /> -->
-        <Animation Name="object_stk2_Anim_027CF4" Offset="0x27CF4" /> <!-- Original name is "sk_sakebu" -->
-        <Animation Name="object_stk2_Anim_028F28" Offset="0x28F28" /> <!-- Original name is "sk_sakebu_loop" -->
-        <Animation Name="object_stk2_Anim_029A04" Offset="0x29A04" /> <!-- Original name is "sk_sky_taiki" -->
-        <Animation Name="object_stk2_Anim_02A2D8" Offset="0x2A2D8" /> <!-- Original name is "sk_syabon_otosu" -->
-        <Animation Name="object_stk2_Anim_02AD54" Offset="0x2AD54" /> <!-- Original name is "sk_sybonn_hajiku" -->
-        <Animation Name="object_stk2_Anim_02DC64" Offset="0x2DC64" /> <!-- Original name is "sk_uragaesu" -->
+        <Animation Name="gSkullKidHoldHeadAndScreamStartAnim" Offset="0x27CF4" /> <!-- Original name is "sk_sakebu" -->
+        <Animation Name="gSkullKidHoldHeadAndScreamLoopAnim" Offset="0x28F28" /> <!-- Original name is "sk_sakebu_loop" -->
+        <Animation Name="gSkullKidClockTowerArmsCrossedAnim" Offset="0x29A04" /> <!-- Original name is "sk_sky_taiki" -->
+        <Animation Name="gSkullKidHitByBubbleAnim" Offset="0x2A2D8" /> <!-- Original name is "sk_syabon_otosu" -->
+        <Animation Name="gSkullKidDeflectAttackAnim" Offset="0x2AD54" /> <!-- Original name is "sk_sybonn_hajiku" -->
+        <Animation Name="gSkullKidKickOverLinkAnim" Offset="0x2DC64" /> <!-- Original name is "sk_uragaesu" -->
         <!-- <Blob Name="object_stk2_Blob_02DC74" Size="0xDC" Offset="0x2DC74" /> -->
-        <Animation Name="object_stk2_Anim_02E9A0" Offset="0x2E9A0" /> <!-- Original name is "sk_uragaesu_wait" -->
+        <Animation Name="gSkullKidSearchLinkAnim" Offset="0x2E9A0" /> <!-- Original name is "sk_uragaesu_wait" -->
         <!-- <Blob Name="object_stk2_Blob_02E9B0" Size="0x40" Offset="0x2E9B0" /> -->
-        <Animation Name="object_stk2_Anim_02FA70" Offset="0x2FA70" /> <!-- Original name is "stk_fue_loop" -->
-        <Animation Name="object_stk2_Anim_03021C" Offset="0x3021C" /> <!-- Original name is "stk_furueru" -->
-        <Animation Name="object_stk2_Anim_031210" Offset="0x31210" /> <!-- Original name is "stk_gosogoso" -->
-        <Animation Name="object_stk2_Anim_0322FC" Offset="0x322FC" /> <!-- Original name is "stk_kakageru" -->
-        <Animation Name="object_stk2_Anim_032AE0" Offset="0x32AE0" /> <!-- Original name is "stk_kakageru_loop" -->
-        <Animation Name="object_stk2_Anim_03323C" Offset="0x3323C" /> <!-- Original name is "stk_miwoyoseau" -->
-        <Animation Name="object_stk2_Anim_034FD8" Offset="0x34FD8" /> <!-- Original name is "stk_rakka" -->
-        <Animation Name="object_stk2_Anim_036964" Offset="0x36964" /> <!-- Original name is "stk_rakugaki" -->
-        <Animation Name="object_stk2_Anim_037B94" Offset="0x37B94" /> <!-- Original name is "stk_sokuten" -->
-        <Animation Name="object_stk2_Anim_03967C" Offset="0x3967C" /> <!-- Original name is "stk_tyubura" -->
-        <Animation Name="object_stk2_Anim_03A8F8" Offset="0x3A8F8" /> <!-- Original name is "stk_tyubura_loop" -->
+        <Animation Name="gSkullKidPlayFluteAnim" Offset="0x2FA70" /> <!-- Original name is "stk_fue_loop" -->
+        <Animation Name="gSkullKidShiverAnim" Offset="0x3021C" /> <!-- Original name is "stk_furueru" -->
+        <Animation Name="gSkullKidSearchMaskSalesmanAnim" Offset="0x31210" /> <!-- Original name is "stk_gosogoso" -->
+        <Animation Name="gSkullKidHoldUpMaskStartAnim" Offset="0x322FC" /> <!-- Original name is "stk_kakageru" -->
+        <Animation Name="gSkullKidHoldUpMaskLoopAnim" Offset="0x32AE0" /> <!-- Original name is "stk_kakageru_loop" -->
+        <Animation Name="gSkullKidHuddleWithFairiesAnim" Offset="0x3323C" /> <!-- Original name is "stk_miwoyoseau" -->
+        <Animation Name="gSkullKidDroppedFromMaskAnim" Offset="0x34FD8" /> <!-- Original name is "stk_rakka" -->
+        <Animation Name="gSkullKidDrawAnim" Offset="0x36964" /> <!-- Original name is "stk_rakugaki" -->
+        <Animation Name="gSkullKidCartwheelAnim" Offset="0x37B94" /> <!-- Original name is "stk_sokuten" -->
+        <Animation Name="gSkullKidDangleFromMaskStartAnim" Offset="0x3967C" /> <!-- Original name is "stk_tyubura" -->
+        <Animation Name="gSkullKidDangleFromMaskLoopAnim" Offset="0x3A8F8" /> <!-- Original name is "stk_tyubura_loop" -->
     </File>
 </Root>
