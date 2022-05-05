@@ -33,75 +33,6 @@ void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
 void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
 
-const ActorInit Dm_Stk_InitVars = {
-    ACTOR_DM_STK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_STK,
-    sizeof(DmStk),
-    (ActorFunc)DmStk_Init,
-    (ActorFunc)DmStk_Destroy,
-    (ActorFunc)DmStk_Update,
-    (ActorFunc)DmStk_Draw,
-};
-
-static ColliderCylinderInit sCylinderInit = {
-    {
-        COLTYPE_HIT1,
-        AT_NONE,
-        AC_ON | AC_HARD | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
-        OC1_ON | OC1_TYPE_ALL,
-        OC2_TYPE_1,
-        COLSHAPE_CYLINDER,
-    },
-    {
-        ELEMTYPE_UNK1,
-        { 0x00000000, 0x00, 0x00 },
-        { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
-        OCELEM_ON,
-    },
-    { 14, 38, 0, { 0, 0, 0 } },
-};
-
-static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
-static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(1, 0xF),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(1, 0xF),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0xF),
-    /* Hookshot       */ DMG_ENTRY(1, 0xF),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
-    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
-    /* Light arrow    */ DMG_ENTRY(1, 0xF),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
-    /* Deku launch    */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(1, 0xF),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(1, 0xF),
-    /* Light ray      */ DMG_ENTRY(1, 0xF),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(1, 0xF),
-    /* Normal Roll    */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(1, 0xF),
-    /* Unblockable    */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(1, 0xF),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
-};
-
 typedef enum {
     /*  0 */ SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE,
     /*  1 */ SKULL_KID_ANIMATION_WALK,
@@ -176,6 +107,106 @@ typedef enum {
     /* 70 */ SKULL_KID_ANIMATION_SNIFF,
     /* 71 */ SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF,
 } SkullKidAnimationIndex;
+
+typedef enum {
+    /* 0 */ SKULL_KID_MASK_TYPE_NO_MASK,
+    /* 1 */ SKULL_KID_MASK_TYPE_NORMAL,
+    /* 2 */ SKULL_KID_MASK_TYPE_GLOWING_EYES,
+    /* 3 */ SKULL_KID_MASK_TYPE_FADING_OUT,
+    /* 9 */ SKULL_KID_MASK_TYPE_RAISED = 9,
+} SkullKidMaskType;
+
+typedef enum {
+    /* 0 */ SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE,
+    /* 1 */ SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK,
+    /* 2 */ SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK,
+    /* 3 */ SKULL_KID_HAND_TYPE_HOLDING_OCARINA,
+    /* 4 */ SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
+    /* 5 */ SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
+    /* 6 */ SKULL_KID_HAND_TYPE_HOLDING_FLUTE,
+    /* 9 */ SKULL_KID_HAND_TYPE_DEFAULT = 9,
+} SkullKidHandType;
+
+typedef enum {
+    /* 0 */ SKULL_KID_FADE_IN_STATE_NONE,
+    /* 1 */ SKULL_KID_FADE_IN_STATE_START,
+    /* 2 */ SKULL_KID_FADE_IN_STATE_INCREASE_FOG_N,
+    /* 3 */ SKULL_KID_FADE_IN_STATE_INCREASE_ALPHA,
+} SkullKidFadeInState;
+
+typedef enum {
+    /* 0 */ SKULL_KID_FADE_OUT_STATE_NONE,
+    /* 1 */ SKULL_KID_FADE_OUT_STATE_FADING_OUT,
+} SkullKidFadeOutState;
+
+const ActorInit Dm_Stk_InitVars = {
+    ACTOR_DM_STK,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    OBJECT_STK,
+    sizeof(DmStk),
+    (ActorFunc)DmStk_Init,
+    (ActorFunc)DmStk_Destroy,
+    (ActorFunc)DmStk_Update,
+    (ActorFunc)DmStk_Draw,
+};
+
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HIT1,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
+    { 14, 38, 0, { 0, 0, 0 } },
+};
+
+static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
+
+static DamageTable sDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(1, 0xF),
+    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
+    /* Horse trample  */ DMG_ENTRY(1, 0xF),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0xF),
+    /* Hookshot       */ DMG_ENTRY(1, 0xF),
+    /* Goron punch    */ DMG_ENTRY(1, 0xF),
+    /* Sword          */ DMG_ENTRY(1, 0xF),
+    /* Goron pound    */ DMG_ENTRY(1, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
+    /* Light arrow    */ DMG_ENTRY(1, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(1, 0xF),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
+    /* Deku launch    */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(1, 0xF),
+    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
+    /* Normal shield  */ DMG_ENTRY(1, 0xF),
+    /* Light ray      */ DMG_ENTRY(1, 0xF),
+    /* Thrown object  */ DMG_ENTRY(1, 0xF),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(1, 0xF),
+    /* Sword beam     */ DMG_ENTRY(1, 0xF),
+    /* Normal Roll    */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(1, 0xF),
+    /* Unblockable    */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(1, 0xF),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+};
 
 static AnimationInfo sAnimations[] = {
     { &gSkullKidHeadRockingIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -899,23 +930,23 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         this->unk_328 = 0;
         this->unk_339 = 0;
-        this->unk_32C = 1;
+        this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
         this->animationId = SKULL_KID_ANIMATION_IDLE_1;
-        this->unk_2E8 = globalCtx->lightCtx.unk7;
-        this->unk_2EC = globalCtx->lightCtx.unk8;
-        this->unk_2F0 = globalCtx->lightCtx.unk9;
+        this->fogR = globalCtx->lightCtx.unk7;
+        this->fogG = globalCtx->lightCtx.unk8;
+        this->fogB = globalCtx->lightCtx.unk9;
 
         if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
             this->alpha = 0;
-            this->unk_2F8 = 0;
-            this->unk_2FC = 1000;
-            this->unk_300 = 1.0f;
+            this->fogN = 0;
+            this->fogF = 1000;
+            this->fogScale = 1.0f;
             this->actionFunc = func_80AA1704;
         } else if (globalCtx->sceneNum == SCENE_OKUJOU) {
             this->alpha = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
             this->unk_335 = 0;
 
             Collider_InitCylinder(globalCtx, &this->collider);
@@ -965,29 +996,29 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (!(globalCtx->actorCtx.unk5 & 2)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->unk_32C = 2;
+            this->maskType = SKULL_KID_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
             this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
             this->actionFunc = func_80AA1714;
         } else {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->unk_32C = 2;
+            this->maskType = SKULL_KID_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
             this->actionFunc = func_80AA1704;
         }
 
-        this->unk_32D = 9;
-        this->unk_32E = 0;
-        this->unk_32F = 0;
-        this->unk_330 = 0;
+        this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
+        this->fadeInState = SKULL_KID_FADE_IN_STATE_NONE;
+        this->fadeOutState = SKULL_KID_FADE_OUT_STATE_NONE;
+        this->fadeOutTimer = 0;
         this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
         this->unk_334 = 99;
@@ -1064,7 +1095,7 @@ void func_80AA18D8(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA192C(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP;
-        this->unk_32D = 3;
+        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
         func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA2720;
     }
@@ -1164,9 +1195,9 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             if (this->unk_334 != globalCtx->csCtx.actorActions[temp_v0]->action) {
                 this->unk_334 = globalCtx->csCtx.actorActions[temp_v0]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
-                    this->unk_32D = 6;
+                    this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
                 } else {
-                    this->unk_32D = 9;
+                    this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
                 }
 
                 switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
@@ -1189,12 +1220,12 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 6:
                         this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA;
-                        this->unk_32D = 3;
+                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 7:
                         this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING;
-                        this->unk_32D = 3;
+                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 8:
@@ -1203,17 +1234,17 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 9:
                         this->animationId = SKULL_KID_ANIMATION_IDLE_1;
-                        this->unk_32E = 1;
+                        this->fadeInState = SKULL_KID_FADE_IN_STATE_START;
                         break;
 
                     case 12:
                         this->animationId = SKULL_KID_ANIMATION_HIDE_OCARINA_START;
-                        this->unk_32D = 3;
+                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 13:
                         this->animationId = SKULL_KID_ANIMATION_JUMP_WHILE_HIDING_OCARINA;
-                        this->unk_32D = 3;
+                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 14:
@@ -1251,19 +1282,19 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                     case 22:
                         this->animationId = SKULL_KID_ANIMATION_PLAY_OCARINA_WHILE_FLOATING;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 23:
                         this->animationId = SKULL_KID_ANIMATION_FLOATING_TURN_AROUND;
-                        this->unk_32D = 4;
+                        this->handType = SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 24:
                         this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
@@ -1274,20 +1305,20 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                     case 26:
                         this->animationId = SKULL_KID_ANIMATION_SMACK_FAIRY_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 27:
                         this->animationId = SKULL_KID_ANIMATION_HIT_BY_BUBBLE;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 28:
                         this->animationId = SKULL_KID_ANIMATION_DROP_OCARINA;
-                        this->unk_32D = 4;
+                        this->handType = SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 30:
@@ -1352,11 +1383,11 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 45:
                         this->animationId = SKULL_KID_ANIMATION_HIP_SHAKE_AND_JUMP;
-                        this->unk_32F = 1;
+                        this->fadeOutState = SKULL_KID_FADE_OUT_STATE_FADING_OUT;
                         break;
 
                     case 46:
-                        this->unk_32D = 6;
+                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
                         this->animationId = SKULL_KID_ANIMATION_PLAY_FLUTE;
                         break;
 
@@ -1434,27 +1465,27 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
         this->unk_334 = 99;
     }
 
-    if (this->unk_32E == 1) {
-        Math_SmoothStepToF(&this->unk_300, 0.7f, 0.1f, 0.007f, 0.005f);
-        if (this->unk_300 < 0.71f) {
-            this->unk_300 = 0.7f;
-            this->unk_2F8 = 800;
-            this->unk_32E++;
+    if (this->fadeInState == SKULL_KID_FADE_IN_STATE_START) {
+        Math_SmoothStepToF(&this->fogScale, 0.7f, 0.1f, 0.007f, 0.005f);
+        if (this->fogScale < 0.71f) {
+            this->fogScale = 0.7f;
+            this->fogN = 800;
+            this->fadeInState++;
         }
-        this->unk_2E8 = globalCtx->lightCtx.unk7 * this->unk_300;
-        this->unk_2EC = globalCtx->lightCtx.unk8 * this->unk_300;
-        this->unk_2F0 = globalCtx->lightCtx.unk9 * this->unk_300;
+        this->fogR = globalCtx->lightCtx.unk7 * this->fogScale;
+        this->fogG = globalCtx->lightCtx.unk8 * this->fogScale;
+        this->fogB = globalCtx->lightCtx.unk9 * this->fogScale;
 
-    } else if (this->unk_32E == 2) {
-        if (this->unk_2F8 < 996) {
-            this->unk_2F8 += 10;
+    } else if (this->fadeInState == SKULL_KID_FADE_IN_STATE_INCREASE_FOG_N) {
+        if (this->fogN < 996) {
+            this->fogN += 10;
         }
 
-        if (this->unk_2F8 > 996) {
-            this->unk_32E++;
-            this->unk_2F8 = 996;
+        if (this->fogN > 996) {
+            this->fadeInState++;
+            this->fogN = 996;
         }
-    } else if (this->unk_32E == 3) {
+    } else if (this->fadeInState == SKULL_KID_FADE_IN_STATE_INCREASE_ALPHA) {
         if (this->alpha < 128) {
             this->alpha += 3;
         }
@@ -1463,21 +1494,21 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             this->alpha += 20;
         } else {
             this->alpha = 255;
-            this->unk_32E = 0;
+            this->fadeInState = SKULL_KID_FADE_IN_STATE_NONE;
         }
     }
 
-    if (this->unk_32F == 1) {
-        if (this->unk_330 > 40) {
-            this->unk_32C = 3;
+    if (this->fadeOutState == SKULL_KID_FADE_OUT_STATE_FADING_OUT) {
+        if (this->fadeOutTimer > 40) {
+            this->maskType = SKULL_KID_MASK_TYPE_FADING_OUT;
         }
 
-        this->unk_330++;
-        if (this->unk_330 >= 44) {
+        this->fadeOutTimer++;
+        if (this->fadeOutTimer >= 44) {
             this->alpha -= 35;
             if (this->alpha < 0) {
                 this->alpha = 0;
-                this->unk_32F = 0;
+                this->fadeOutState = SKULL_KID_FADE_OUT_STATE_NONE;
                 gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
@@ -1519,8 +1550,8 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
             case SKULL_KID_ANIMATION_LOWER_MASK:
                 this->animationId = SKULL_KID_ANIMATION_IDLE_1;
-                this->unk_32C = 1;
-                this->unk_32D = 9;
+                this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
+                this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
                 func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
         }
@@ -1529,22 +1560,22 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     if (((this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_START) && (this->skelAnime.curFrame >= 16.0f)) ||
         (this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_LOOP) ||
         (this->animationId == SKULL_KID_ANIMATION_LOWER_MASK)) {
-        this->unk_32C = 9;
-        this->unk_32D = 2;
+        this->maskType = SKULL_KID_MASK_TYPE_RAISED;
+        this->handType = SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK;
     } else if (((this->animationId >= SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES) &&
                 (this->animationId <= SKULL_KID_ANIMATION_DRAW)) ||
                ((this->animationId >= SKULL_KID_ANIMATION_PLAY_FLUTE) &&
                 (this->animationId <= SKULL_KID_ANIMATION_CARTWHEEL)) ||
                ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
-        this->unk_32C = 0;
+        this->maskType = SKULL_KID_MASK_TYPE_NO_MASK;
         if ((this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_START) ||
             (this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_LOOP)) {
-            this->unk_32D = 5;
+            this->handType = SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE;
         }
     }
 
     if (this->animationId == SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
-        this->unk_32C = 0;
+        this->maskType = SKULL_KID_MASK_TYPE_NO_MASK;
     }
 }
 
@@ -1670,20 +1701,22 @@ s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     DmStk* this = THIS;
 
     if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
-        if ((this->unk_32D == 0) || (this->unk_32D == 1) || (this->unk_32D == 3)) {
+        if ((this->handType == SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE) ||
+            (this->handType == SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK) ||
+            (this->handType == SKULL_KID_HAND_TYPE_HOLDING_OCARINA)) {
             *dList = NULL;
         }
     } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
-        switch (this->unk_32D) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 6:
+        switch (this->handType) {
+            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
+            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK:
+            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
+            case SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
+            case SKULL_KID_HAND_TYPE_HOLDING_FLUTE:
                 *dList = NULL;
                 break;
 
-            case 9:
+            case SKULL_KID_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
                     *dList = NULL;
                 }
@@ -1718,18 +1751,18 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
             gSPDisplayList(POLY_OPA_DISP++, gSkullKidExpressionlessEyesDL);
         }
 
-        switch (this->unk_32C) {
-            case 0:
+        switch (this->maskType) {
+            case SKULL_KID_MASK_TYPE_NO_MASK:
                 break;
 
-            case 1:
+            case SKULL_KID_MASK_TYPE_NORMAL:
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1) &&
                     (globalCtx->csCtx.frames < 1400)) {
-                    if (this->unk_2F8 == this->unk_2FC) {
-                        this->unk_2FC = this->unk_2F8;
+                    if (this->fogN == this->fogF) {
+                        this->fogF = this->fogN;
                     }
-                    POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_2E8, this->unk_2EC, this->unk_2F0,
-                                               this->unk_2F4, this->unk_2F8, this->unk_2FC);
+                    POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->fogR, this->fogG, this->fogB, this->fogA,
+                                               this->fogN, this->fogF);
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
                 } else {
@@ -1737,7 +1770,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 }
                 break;
 
-            case 2:
+            case SKULL_KID_MASK_TYPE_GLOWING_EYES:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMaskEyesDL);
 
@@ -1768,23 +1801,23 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (this->unk_32D != 5) {
+        if (this->handType != SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         }
 
-        switch (this->unk_32D) {
-            case 0:
+        switch (this->handType) {
+            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009AC0);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
-            case 1:
+            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009710);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
-            case 3:
+            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009DA0);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
@@ -1792,7 +1825,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 }
                 break;
 
-            case 5:
+            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE:
                 Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
                 Matrix_RotateYS(0x6142, MTXMODE_APPLY);
                 Matrix_RotateXS(-0x1988, MTXMODE_APPLY);
@@ -1811,36 +1844,36 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        switch (this->unk_32D) {
-            case 0:
+        switch (this->handType) {
+            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
                 break;
 
-            case 1:
+            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0084C0);
                 break;
 
-            case 2:
+            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
-            case 3:
+            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 break;
 
-            case 4:
+            case SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 break;
 
-            case 6:
+            case SKULL_KID_HAND_TYPE_HOLDING_FLUTE:
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_008A80);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
-            case 9:
+            case SKULL_KID_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
                     gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0087B0);
                 }
