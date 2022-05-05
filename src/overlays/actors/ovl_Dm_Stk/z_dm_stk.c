@@ -102,6 +102,81 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+typedef enum {
+    /*  0 */ SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE,
+    /*  1 */ SKULL_KID_ANIMATION_WALK,
+    /*  2 */ SKULL_KID_ANIMATION_LOOK_AROUND,
+    /*  3 */ SKULL_KID_ANIMATION_IDLE_1,
+    /*  4 */ SKULL_KID_ANIMATION_IDLE_2,
+    /*  5 */ SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE,
+    /*  6 */ SKULL_KID_ANIMATION_GLITCHY_HORSE_RIDE_START,
+    /*  7 */ SKULL_KID_ANIMATION_OPENING_ARMS_CROSSED,
+    /*  8 */ SKULL_KID_ANIMATION_CURSE_START,
+    /*  9 */ SKULL_KID_ANIMATION_CURSE_LOOP,
+    /* 10 */ SKULL_KID_ANIMATION_LAUGH_START,
+    /* 11 */ SKULL_KID_ANIMATION_LAUGH_LOOP,
+    /* 12 */ SKULL_KID_ANIMATION_HIDE_OCARINA_START,
+    /* 13 */ SKULL_KID_ANIMATION_HIDE_OCARINA_LOOP,
+    /* 14 */ SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING,
+    /* 15 */ SKULL_KID_ANIMATION_PLAYING_OCARINA_AND_LAUGHING,
+    /* 16 */ SKULL_KID_ANIMATION_PICK_UP_OCARINA,
+    /* 17 */ SKULL_KID_ANIMATION_LOOK_AT_OCARINA,
+    /* 18 */ SKULL_KID_ANIMATION_KICK_OVER_LINK_1,
+    /* 19 */ SKULL_KID_ANIMATION_SEARCH_LINK_1,
+    /* 20 */ SKULL_KID_ANIMATION_KICK_OVER_LINK_2,
+    /* 21 */ SKULL_KID_ANIMATION_SEARCH_LINK_2,
+    /* 22 */ SKULL_KID_ANIMATION_HORSE_RIDE_START,
+    /* 23 */ SKULL_KID_ANIMATION_HORSE_RIDE_LOOP,
+    /* 24 */ SKULL_KID_ANIMATION_RAISE_MASK_START,
+    /* 25 */ SKULL_KID_ANIMATION_RAISE_MASK_LOOP,
+    /* 26 */ SKULL_KID_ANIMATION_LOWER_MASK,
+    /* 27 */ SKULL_KID_ANIMATION_JUMP_WHILE_HIDING_OCARINA,
+    /* 28 */ SKULL_KID_ANIMATION_HORSE_RIDE_AND_ROTATE,
+    /* 29 */ SKULL_KID_ANIMATION_PLAY_OCARINA_WHILE_FLOATING,
+    /* 30 */ SKULL_KID_ANIMATION_FLOATING_TURN_AROUND,
+    /* 31 */ SKULL_KID_ANIMATION_OCARINA_JUGGLE,
+    /* 32 */ SKULL_KID_ANIMATION_CALL_DOWN_MOON_START,
+    /* 33 */ SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP,
+    /* 34 */ SKULL_KID_ANIMATION_SMACK_FAIRY_START,
+    /* 35 */ SKULL_KID_ANIMATION_SMACK_FAIRY_LOOP,
+    /* 36 */ SKULL_KID_ANIMATION_HIT_BY_BUBBLE,
+    /* 37 */ SKULL_KID_ANIMATION_DROP_OCARINA,
+    /* 38 */ SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED,
+    /* 39 */ SKULL_KID_ANIMATION_DEFLECT_ATTACK,
+    /* 40 */ SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START,
+    /* 41 */ SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_LOOP,
+    /* 42 */ SKULL_KID_ANIMATION_SURPRISE_START,
+    /* 43 */ SKULL_KID_ANIMATION_SURPRISE_LOOP,
+    /* 44 */ SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START,
+    /* 45 */ SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_LOOP,
+    /* 46 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START,
+    /* 47 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_LOOP,
+    /* 48 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START,
+    /* 49 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_LOOP,
+    /* 50 */ SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES,
+    /* 51 */ SKULL_KID_ANIMATION_SEARCH_MASK_SALESMAN,
+    /* 52 */ SKULL_KID_ANIMATION_HOLD_UP_MASK_START,
+    /* 53 */ SKULL_KID_ANIMATION_HOLD_UP_MASK_LOOP,
+    /* 54 */ SKULL_KID_ANIMATION_SHIVER,
+    /* 55 */ SKULL_KID_ANIMATION_DRAW,
+    /* 56 */ SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE_LOOK_UP,
+    /* 57 */ SKULL_KID_ANIMATION_SPANK,
+    /* 58 */ SKULL_KID_ANIMATION_HIP_SHAKE_AND_JUMP,
+    /* 59 */ SKULL_KID_ANIMATION_PLAY_FLUTE,
+    /* 60 */ SKULL_KID_ANIMATION_CARTWHEEL,
+    /* 61 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1,
+    /* 62 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2,
+    /* 63 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_LOOP,
+    /* 64 */ SKULL_KID_ANIMATION_DROPPED_FROM_MASK,
+    /* 65 */ SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS,
+    /* 66 */ SKULL_KID_ANIMATION_ASHAMED_START,
+    /* 67 */ SKULL_KID_ANIMATION_ASHAMED_LOOP,
+    /* 68 */ SKULL_KID_ANIMATION_LOOK_LEFT_START,
+    /* 69 */ SKULL_KID_ANIMATION_LOOK_LEFT_LOOP,
+    /* 70 */ SKULL_KID_ANIMATION_SNIFF,
+    /* 71 */ SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF,
+} SkullKidAnimationIndex;
+
 static AnimationInfo sAnimations[] = {
     { &gSkullKidHeadRockingIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -180,10 +255,14 @@ static AnimationInfo sAnimations[] = {
 void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     s32 objectIdx;
 
-    if (((this->unk_2E0 >= 0) && (this->unk_2E0 <= 5)) || (this->unk_2E0 == 32) || (this->unk_2E0 == 33) ||
-        (this->unk_2E0 == 40) || (this->unk_2E0 == 41)) {
+    if (((this->animationId >= SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) &&
+         (this->animationId <= SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE)) ||
+        (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_START) ||
+        (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) ||
+        (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START) ||
+        (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_LOOP)) {
         objectIdx = this->unk_336;
-    } else if (this->unk_2E0 > 64) {
+    } else if (this->animationId > SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
         objectIdx = this->unk_338;
     } else {
         objectIdx = this->unk_337;
@@ -436,7 +515,7 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->unk_2E0 == 31) && (globalCtx->csCtx.frames < 700)) {
+    if ((this->animationId == SKULL_KID_ANIMATION_OCARINA_JUGGLE) && (globalCtx->csCtx.frames < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
@@ -554,7 +633,7 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->unk_2E0 == 0) {
+    if (this->animationId == SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
@@ -562,12 +641,12 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
         }
-    } else if (this->unk_2E0 == 71) {
+    } else if (this->animationId == SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
-    } else if ((this->unk_2E0 == 70) &&
+    } else if ((this->animationId == SKULL_KID_ANIMATION_SNIFF) &&
                (Animation_OnFrame(&this->skelAnime, 16.0f) || Animation_OnFrame(&this->skelAnime, 23.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_NOSE);
     }
@@ -780,20 +859,20 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_2E0 == 1) {
+    if (this->animationId == SKULL_KID_ANIMATION_WALK) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
         }
-    } else if (this->unk_2E0 == 19) {
+    } else if (this->animationId == SKULL_KID_ANIMATION_SEARCH_LINK_1) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f) ||
             Animation_OnFrame(&this->skelAnime, 20.0f) || Animation_OnFrame(&this->skelAnime, 27.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CALM_HIT);
         }
-    } else if (this->unk_2E0 == 14) {
+    } else if (this->animationId == SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
         }
-    } else if (this->unk_2E0 == 15) {
+    } else if (this->animationId == SKULL_KID_ANIMATION_PLAYING_OCARINA_AND_LAUGHING) {
         if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
         }
@@ -821,7 +900,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_328 = 0;
         this->unk_339 = 0;
         this->unk_32C = 1;
-        this->unk_2E0 = 3;
+        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
         this->unk_2E8 = globalCtx->lightCtx.unk7;
         this->unk_2EC = globalCtx->lightCtx.unk8;
         this->unk_2F0 = globalCtx->lightCtx.unk9;
@@ -858,7 +937,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                     }
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
-                    this->unk_2E0 = 38;
+                    this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                     if (gSaveContext.unk_3DD0[3] == 0) {
                         func_8010E9F0(3, 60);
                         XREG(80) = 200;
@@ -868,12 +947,12 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                     sCylinderInit.base.colType = COLTYPE_WOOD;
                     this->actionFunc = func_80AA27EC;
                 } else {
-                    this->unk_2E0 = 38;
+                    this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                     this->actionFunc = func_80AA16F4;
                 }
             } else {
                 this->unk_33A = 1;
-                this->unk_2E0 = 38;
+                this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
                 sCylinderInit.base.colType = COLTYPE_WOOD;
                 this->actionFunc = func_80AA27EC;
@@ -891,7 +970,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2F8 = 996;
             this->unk_2FC = 1000;
             this->unk_300 = 0.7f;
-            this->unk_2E0 = 5;
+            this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
             this->actionFunc = func_80AA1714;
         } else {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
@@ -914,7 +993,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_334 = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     }
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -984,9 +1063,9 @@ void func_80AA18D8(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA192C(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->unk_2E0 = 33;
+        this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP;
         this->unk_32D = 3;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA2720;
     }
 }
@@ -1002,8 +1081,8 @@ void func_80AA1998(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA19EC(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->unk_2E0 = 38;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA27EC;
     }
 }
@@ -1055,8 +1134,8 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
         }
     }
 
-    this->unk_2E0 = 39;
-    func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+    this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
+    func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = func_80AA1C64;
 }
@@ -1064,8 +1143,8 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
     func_80AA1AF8(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->unk_2E0 = 38;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA27EC;
     }
 
@@ -1093,96 +1172,96 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                 switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                     case 0:
                     case 1:
-                        this->unk_2E0 = 3;
+                        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
                         break;
 
                     case 2:
-                        this->unk_2E0 = 1;
+                        this->animationId = SKULL_KID_ANIMATION_WALK;
                         break;
 
                     case 3:
-                        this->unk_2E0 = 20;
+                        this->animationId = SKULL_KID_ANIMATION_KICK_OVER_LINK_2;
                         break;
 
                     case 4:
-                        this->unk_2E0 = 18;
+                        this->animationId = SKULL_KID_ANIMATION_KICK_OVER_LINK_1;
                         break;
 
                     case 6:
-                        this->unk_2E0 = 16;
+                        this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA;
                         this->unk_32D = 3;
                         break;
 
                     case 7:
-                        this->unk_2E0 = 14;
+                        this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING;
                         this->unk_32D = 3;
                         break;
 
                     case 8:
-                        this->unk_2E0 = 0;
+                        this->animationId = SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE;
                         break;
 
                     case 9:
-                        this->unk_2E0 = 3;
+                        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
                         this->unk_32E = 1;
                         break;
 
                     case 12:
-                        this->unk_2E0 = 12;
+                        this->animationId = SKULL_KID_ANIMATION_HIDE_OCARINA_START;
                         this->unk_32D = 3;
                         break;
 
                     case 13:
-                        this->unk_2E0 = 27;
+                        this->animationId = SKULL_KID_ANIMATION_JUMP_WHILE_HIDING_OCARINA;
                         this->unk_32D = 3;
                         break;
 
                     case 14:
-                        this->unk_2E0 = 22;
+                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_START;
                         break;
 
                     case 15:
-                        this->unk_2E0 = 23;
+                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_LOOP;
                         break;
 
                     case 16:
-                        this->unk_2E0 = 28;
+                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_AND_ROTATE;
                         break;
 
                     case 17:
-                        this->unk_2E0 = 7;
+                        this->animationId = SKULL_KID_ANIMATION_OPENING_ARMS_CROSSED;
                         break;
 
                     case 18:
-                        this->unk_2E0 = 8;
+                        this->animationId = SKULL_KID_ANIMATION_CURSE_START;
                         break;
 
                     case 19:
-                        this->unk_2E0 = 10;
+                        this->animationId = SKULL_KID_ANIMATION_LAUGH_START;
                         break;
 
                     case 20:
-                        this->unk_2E0 = 24;
+                        this->animationId = SKULL_KID_ANIMATION_RAISE_MASK_START;
                         break;
 
                     case 21:
-                        this->unk_2E0 = 26;
+                        this->animationId = SKULL_KID_ANIMATION_LOWER_MASK;
                         break;
 
                     case 22:
-                        this->unk_2E0 = 29;
+                        this->animationId = SKULL_KID_ANIMATION_PLAY_OCARINA_WHILE_FLOATING;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
 
                     case 23:
-                        this->unk_2E0 = 30;
+                        this->animationId = SKULL_KID_ANIMATION_FLOATING_TURN_AROUND;
                         this->unk_32D = 4;
                         break;
 
                     case 24:
-                        this->unk_2E0 = 32;
+                        this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
@@ -1193,148 +1272,148 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 26:
-                        this->unk_2E0 = 34;
+                        this->animationId = SKULL_KID_ANIMATION_SMACK_FAIRY_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
 
                     case 27:
-                        this->unk_2E0 = 36;
+                        this->animationId = SKULL_KID_ANIMATION_HIT_BY_BUBBLE;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
 
                     case 28:
-                        this->unk_2E0 = 37;
+                        this->animationId = SKULL_KID_ANIMATION_DROP_OCARINA;
                         this->unk_32D = 4;
                         break;
 
                     case 30:
-                        this->unk_2E0 = 38;
+                        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                         break;
 
                     case 31:
-                        this->unk_2E0 = 39;
+                        this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
                         break;
 
                     case 32:
-                        this->unk_2E0 = 42;
+                        this->animationId = SKULL_KID_ANIMATION_SURPRISE_START;
                         break;
 
                     case 33:
-                        this->unk_2E0 = 44;
+                        this->animationId = SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START;
                         break;
 
                     case 34:
-                        this->unk_2E0 = 46;
+                        this->animationId = SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START;
                         break;
 
                     case 35:
-                        this->unk_2E0 = 48;
+                        this->animationId = SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START;
                         break;
 
                     case 36:
-                        this->unk_2E0 = 50;
+                        this->animationId = SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES;
                         break;
 
                     case 37:
-                        this->unk_2E0 = 51;
+                        this->animationId = SKULL_KID_ANIMATION_SEARCH_MASK_SALESMAN;
                         break;
 
                     case 38:
-                        this->unk_2E0 = 52;
+                        this->animationId = SKULL_KID_ANIMATION_HOLD_UP_MASK_START;
                         break;
 
                     case 39:
-                        this->unk_2E0 = 54;
+                        this->animationId = SKULL_KID_ANIMATION_SHIVER;
                         break;
 
                     case 40:
-                        this->unk_2E0 = 55;
+                        this->animationId = SKULL_KID_ANIMATION_DRAW;
                         break;
 
                     case 41:
-                        this->unk_2E0 = 40;
+                        this->animationId = SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START;
                         break;
 
                     case 42:
-                        this->unk_2E0 = 5;
+                        this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
                         break;
 
                     case 43:
-                        this->unk_2E0 = 56;
+                        this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE_LOOK_UP;
                         break;
 
                     case 44:
-                        this->unk_2E0 = 57;
+                        this->animationId = SKULL_KID_ANIMATION_SPANK;
                         break;
 
                     case 45:
-                        this->unk_2E0 = 58;
+                        this->animationId = SKULL_KID_ANIMATION_HIP_SHAKE_AND_JUMP;
                         this->unk_32F = 1;
                         break;
 
                     case 46:
                         this->unk_32D = 6;
-                        this->unk_2E0 = 59;
+                        this->animationId = SKULL_KID_ANIMATION_PLAY_FLUTE;
                         break;
 
                     case 47:
-                        this->unk_2E0 = 60;
+                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
                         break;
 
                     case 48:
-                        this->unk_2E0 = 60;
+                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
                         break;
 
                     case 49:
-                        this->unk_2E0 = 65;
+                        this->animationId = SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 50:
-                        this->unk_2E0 = 66;
+                        this->animationId = SKULL_KID_ANIMATION_ASHAMED_START;
                         break;
 
                     case 51:
-                        this->unk_2E0 = 68;
+                        this->animationId = SKULL_KID_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 52:
-                        this->unk_2E0 = 70;
+                        this->animationId = SKULL_KID_ANIMATION_SNIFF;
                         break;
 
                     case 53:
-                        this->unk_2E0 = 60;
+                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
                         break;
 
                     case 54:
-                        this->unk_2E0 = 61;
+                        this->animationId = SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1;
                         break;
 
                     case 55:
-                        this->unk_2E0 = 62;
+                        this->animationId = SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2;
                         break;
 
                     case 56:
-                        this->unk_2E0 = 64;
+                        this->animationId = SKULL_KID_ANIMATION_DROPPED_FROM_MASK;
                         break;
 
                     case 57:
-                        this->unk_2E0 = 65;
+                        this->animationId = SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 58:
-                        this->unk_2E0 = 66;
+                        this->animationId = SKULL_KID_ANIMATION_ASHAMED_START;
                         break;
 
                     case 59:
-                        this->unk_2E0 = 68;
+                        this->animationId = SKULL_KID_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 60:
-                        this->unk_2E0 = 70;
+                        this->animationId = SKULL_KID_ANIMATION_SNIFF;
                         break;
 
                     case 5:
@@ -1342,11 +1421,11 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     default:
-                        this->unk_2E0 = 0;
+                        this->animationId = SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE;
                         break;
                 }
 
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
             }
         }
 
@@ -1410,56 +1489,61 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        switch (this->unk_2E0) {
-            case 2:
-            case 8:
-            case 10:
-            case 12:
-            case 14:
-            case 16:
-            case 18:
-            case 20:
-            case 22:
-            case 24:
-            case 30:
-            case 32:
-            case 34:
-            case 40:
-            case 42:
-            case 44:
-            case 46:
-            case 48:
-            case 52:
-            case 62:
-            case 66:
-            case 68:
-            case 70:
-                this->unk_2E0++;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        switch (this->animationId) {
+            case SKULL_KID_ANIMATION_LOOK_AROUND:
+            case SKULL_KID_ANIMATION_CURSE_START:
+            case SKULL_KID_ANIMATION_LAUGH_START:
+            case SKULL_KID_ANIMATION_HIDE_OCARINA_START:
+            case SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING:
+            case SKULL_KID_ANIMATION_PICK_UP_OCARINA:
+            case SKULL_KID_ANIMATION_KICK_OVER_LINK_1:
+            case SKULL_KID_ANIMATION_KICK_OVER_LINK_2:
+            case SKULL_KID_ANIMATION_HORSE_RIDE_START:
+            case SKULL_KID_ANIMATION_RAISE_MASK_START:
+            case SKULL_KID_ANIMATION_FLOATING_TURN_AROUND:
+            case SKULL_KID_ANIMATION_CALL_DOWN_MOON_START:
+            case SKULL_KID_ANIMATION_SMACK_FAIRY_START:
+            case SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START:
+            case SKULL_KID_ANIMATION_SURPRISE_START:
+            case SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START:
+            case SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START:
+            case SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START:
+            case SKULL_KID_ANIMATION_HOLD_UP_MASK_START:
+            case SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2:
+            case SKULL_KID_ANIMATION_ASHAMED_START:
+            case SKULL_KID_ANIMATION_LOOK_LEFT_START:
+            case SKULL_KID_ANIMATION_SNIFF:
+                this->animationId++;
+                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
 
-            case 26:
-                this->unk_2E0 = 3;
+            case SKULL_KID_ANIMATION_LOWER_MASK:
+                this->animationId = SKULL_KID_ANIMATION_IDLE_1;
                 this->unk_32C = 1;
                 this->unk_32D = 9;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
         }
     }
 
-    if (((this->unk_2E0 == 24) && (this->skelAnime.curFrame >= 16.0f)) || (this->unk_2E0 == 25) ||
-        (this->unk_2E0 == 26)) {
+    if (((this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_START) && (this->skelAnime.curFrame >= 16.0f)) ||
+        (this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_LOOP) ||
+        (this->animationId == SKULL_KID_ANIMATION_LOWER_MASK)) {
         this->unk_32C = 9;
         this->unk_32D = 2;
-    } else if (((this->unk_2E0 >= 50) && (this->unk_2E0 < 56)) || ((this->unk_2E0 > 58) && (this->unk_2E0 <= 60)) ||
+    } else if (((this->animationId >= SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES) &&
+                (this->animationId <= SKULL_KID_ANIMATION_DRAW)) ||
+               ((this->animationId >= SKULL_KID_ANIMATION_PLAY_FLUTE) &&
+                (this->animationId <= SKULL_KID_ANIMATION_CARTWHEEL)) ||
                ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
         this->unk_32C = 0;
-        if ((this->unk_2E0 == 52) || (this->unk_2E0 == 53)) {
+        if ((this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_START) ||
+            (this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_LOOP)) {
             this->unk_32D = 5;
         }
     }
 
-    if (this->unk_2E0 == 64) {
+    if (this->animationId == SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
         this->unk_32C = 0;
     }
 }
@@ -1497,7 +1581,7 @@ void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
         func_80AA1AF8(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
 
-        if (this->unk_2E0 == 33) {
+        if (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;
         } else {
             this->actor.targetArrowOffset = 200.0f;
@@ -1514,7 +1598,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
     if (this->actor.params != 1) {
-        if (this->unk_2E0 == 33) {
+        if (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) {
             Actor_SetFocus(&this->actor, 40.0f);
         } else {
             Actor_SetFocus(&this->actor, 6.0f);
@@ -1522,7 +1606,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         func_80A9FDB0(this, globalCtx);
 
-        if (this->unk_2E0 != 61) {
+        if (this->animationId != SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1) {
             SkelAnime_Update(&this->skelAnime);
         }
 
@@ -1624,7 +1708,9 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if ((this->unk_2E0 == 69) || (this->unk_2E0 == 11) || (this->unk_2E0 == 71)) {
+        if ((this->animationId == SKULL_KID_ANIMATION_LOOK_LEFT_LOOP) ||
+            (this->animationId == SKULL_KID_ANIMATION_LAUGH_LOOP) ||
+            (this->animationId == SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF)) {
             gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyHeadDL);
             gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyEyesDL);
         } else {

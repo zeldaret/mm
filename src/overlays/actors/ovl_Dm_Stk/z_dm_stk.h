@@ -13,7 +13,7 @@ typedef struct DmStk {
     /* 0x0188 */ UNK_TYPE1 unk_188[0x108];
     /* 0x0290 */ DmStkActionFunc actionFunc;
     /* 0x0294 */ ColliderCylinder collider;
-    /* 0x02E0 */ s16 unk_2E0;
+    /* 0x02E0 */ s16 animationId;
     /* 0x02E4 */ s32 unk_2E4;
     /* 0x02E8 */ u32 unk_2E8;
     /* 0x02EC */ u32 unk_2EC;
