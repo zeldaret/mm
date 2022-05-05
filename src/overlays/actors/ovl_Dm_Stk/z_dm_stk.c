@@ -1669,11 +1669,11 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     DmStk* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
         if ((this->unk_32D == 0) || (this->unk_32D == 1) || (this->unk_32D == 3)) {
             *dList = NULL;
         }
-    } else if (limbIndex == 12) {
+    } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
         switch (this->unk_32D) {
             case 1:
             case 2:
@@ -1689,7 +1689,7 @@ s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
                 }
                 break;
         }
-    } else if (limbIndex == 17) {
+    } else if (limbIndex == SKULL_KID_LIMB_HEAD) {
         *dList = NULL;
     }
 
@@ -1701,7 +1701,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     s32 pad2;
     DmStk* this = THIS;
 
-    if (limbIndex == 17) {
+    if (limbIndex == SKULL_KID_LIMB_HEAD) {
         Matrix_MultZero(&this->unk_304);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1763,7 +1763,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    } else if (limbIndex == 15) {
+    } else if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1804,7 +1804,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    } else if (limbIndex == 12) {
+    } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
