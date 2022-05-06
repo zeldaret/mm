@@ -381,15 +381,9 @@ s32 func_80BF43FC(EnRg* this) {
     s16 phi_s6 = 0;
     s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
 
-    while (true) {
+    do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
-        //! FAKE:
-        if (1) {}
-        if (1) {}
-        if (1) {}
-        if (1) {}
-        if (1) {}
         if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
                                      &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
@@ -398,10 +392,7 @@ s32 func_80BF43FC(EnRg* this) {
             phi_s4 = phi_s0;
         }
         phi_s0++;
-        if ((temp_s5 == 18) || (phi_s0 >= D_80BF57E4[temp_s5 + 1][temp_s7])) {
-            break;
-        }
-    }
+    } while ((temp_s5 != 18) && (phi_s0 < D_80BF57E4[temp_s5 + 1][temp_s7]));
 
     return phi_s4;
 }

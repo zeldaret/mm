@@ -136,13 +136,13 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < 6; i++) {
-        temp = (i + 1) * 26.666666f;
+        temp = (i + 1) * (80.0f / 3.0f);
         for (j = 0; j < ARRAY_COUNT(D_80ABD020); j++) {
             spD8.x = D_80ABD020[j] + (s32)((u32)Rand_Next() >> 0x1C);
             spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp;
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-            spCC.x = ((Rand_ZeroOne() - 0.5f) * 7.0f) + (spD8.x * 0.07777778f);
+            spCC.x = ((Rand_ZeroOne() - 0.5f) * 7.0f) + (spD8.x * (7.0f / 90.0f));
             spCC.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
             spCC.z = spD8.z * 0.3f;
 

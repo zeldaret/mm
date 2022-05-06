@@ -156,6 +156,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     if (this->unk_248 > 0) {
         f32 temp_f20 = this->dyna.actor.xzDistToPlayer * this->unk_240 * 0.0007075472f;
+
         if (temp_f20 > 1.0f) {
             temp_f20 = 1.0f;
         } else if (temp_f20 < 0.01f) {
