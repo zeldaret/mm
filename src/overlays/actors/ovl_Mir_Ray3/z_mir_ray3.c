@@ -372,7 +372,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
             time = gSaveContext.save.time;
 
             if (time > CLOCK_TIME(12, 0)) {
-                time = 0xFFFF - time;
+                time = (DAY_LENGTH - 1) - time;
             }
 
             temp = (time * (1.0f / 0x8000));
