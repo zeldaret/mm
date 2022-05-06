@@ -681,7 +681,7 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
     ptr->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-    distXZ = sqrtf(SQ(spCC.x) + SQ(spCC.z));
+    distXZ = sqrtf(SQXZ(spCC));
     ptr->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
@@ -721,7 +721,7 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         }
 
         ptr2->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-        distXZ = sqrtf(SQ(spCC.x) + SQ(spCC.z));
+        distXZ = sqrtf(SQXZ(spCC));
         ptr2->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
         ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;

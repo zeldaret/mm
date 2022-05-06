@@ -1069,7 +1069,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 }
             } else if (effect->type == FS_EFF_RAIN_DROP) {
                 if (effect->pos.y < WATER_SURFACE_Y(globalCtx)) {
-                    f32 sqDistXZ = SQ(effect->pos.x) + SQ(effect->pos.z);
+                    f32 sqDistXZ = SQXZ(effect->pos);
 
                     if (sqDistXZ > SQ(920.0f)) {
                         effect->pos.y = WATER_SURFACE_Y(globalCtx) + ((sqrtf(sqDistXZ) - 920.0f) * 0.11f);
@@ -1106,7 +1106,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 Math_ApproachS(&sEffOwnerHatRot.x, 0, 20, 100);
                 Math_ApproachS(&sEffOwnerHatRot.z, -0x4000, 20, 100);
 
-                sqDistXZ = SQ(effect->pos.x) + SQ(effect->pos.z);
+                sqDistXZ = SQXZ(effect->pos);
                 bottomY = WATER_SURFACE_Y(globalCtx) + ((sqrtf(sqDistXZ) - 920.0f) * 0.147f);
 
                 if (effect->pos.y > (bottomY - 10.0f)) {
@@ -5188,7 +5188,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;
-            lureDistXZ = sqrtf(SQ(spFC.x) + SQ(spFC.z));
+            lureDistXZ = sqrtf(SQXZ(spFC));
             Matrix_InsertYRotation_f(Math_Acot2F(spFC.z, spFC.x), MTXMODE_NEW);
 
             sp114.x = 0.0f;
