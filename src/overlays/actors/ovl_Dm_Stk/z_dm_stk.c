@@ -304,7 +304,8 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
+                           u16 index) {
     func_80A9FDB0(this, globalCtx);
 
     animation += index;
@@ -315,7 +316,7 @@ void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, 
                      animation->mode, animation->morphFrames);
 }
 
-void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames + 20) {
         case 1195:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -407,7 +408,7 @@ void func_80AA00CC(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_IntroCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 78:
         case 89:
@@ -435,7 +436,7 @@ void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0158(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ObtainingMajorasMaskCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 18:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
@@ -451,7 +452,7 @@ void func_80AA0158(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_CurseCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 415:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
@@ -472,7 +473,7 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -575,13 +576,13 @@ void func_80AA05F0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0634(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ShiveringInRainCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.frames >= 642) && (globalCtx->csCtx.frames < 845)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
 
-void func_80AA066C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlayingWithFairiesCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 58:
         case 61:
@@ -603,7 +604,7 @@ void func_80AA066C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA071C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_EndingCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 5:
             func_801A4A28(12);
@@ -615,7 +616,7 @@ void func_80AA071C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -719,7 +720,7 @@ void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     this->soundPos.x = this->actor.projectedPos.x;
     this->soundPos.y = this->actor.projectedPos.y;
     this->soundPos.z = this->actor.projectedPos.z;
@@ -823,16 +824,16 @@ void func_80AA0E1C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         switch (globalCtx->sceneNum) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    func_80A9FED8(this, globalCtx);
+                    DmStk_IntroCutsceneFirstPart_PlaySound(this, globalCtx);
                 } else if (gSaveContext.sceneSetupIndex == 0) {
-                    func_80AA0100(this, globalCtx);
+                    DmStk_IntroCutsceneSecondPart_PlaySound(this, globalCtx);
                 } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.currentCsIndex == 0)) {
-                    func_80AA0158(this, globalCtx);
+                    DmStk_ObtainingMajorasMaskCutscene_PlaySound(this, globalCtx);
                 }
                 break;
 
@@ -845,9 +846,9 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA01C0(this, globalCtx);
+                        DmStk_CurseCutsceneFirstPart_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA0264(this, globalCtx);
+                        DmStk_CurseCutsceneSecondPart_PlaySound(this, globalCtx);
                     }
                 }
                 break;
@@ -861,7 +862,7 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA09DC(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 3) {
-                        func_80AA0B08(this, globalCtx);
+                        DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
@@ -875,15 +876,15 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0634(this, globalCtx);
+                        DmStk_ShiveringInRainCutscene_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        func_80AA066C(this, globalCtx);
+                        DmStk_PlayingWithFairiesCutscene_PlaySound(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA071C(this, globalCtx);
+                        DmStk_EndingCutsceneFirstPart_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA076C(this, globalCtx);
+                        DmStk_EndingCutsceneSecondPart_PlaySound(this, globalCtx);
                     }
                 }
                 break;
@@ -974,6 +975,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                         XREG(80) = 200;
                         XREG(81) = 115;
                     }
+
                     this->actor.world.pos.y = 120.0f;
                     sCylinderInit.base.colType = COLTYPE_WOOD;
                     this->actionFunc = func_80AA27EC;
@@ -1024,7 +1026,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->csAction = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     }
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -1096,7 +1098,7 @@ void func_80AA192C(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP;
         this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA2720;
     }
 }
@@ -1113,7 +1115,7 @@ void func_80AA1998(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA19EC(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA27EC;
     }
 }
@@ -1167,7 +1169,7 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
     }
 
     this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
-    func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+    DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = func_80AA1C64;
 }
@@ -1176,7 +1178,7 @@ void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
     func_80AA1AF8(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = func_80AA27EC;
     }
 
@@ -1457,7 +1459,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                         break;
                 }
 
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
             }
         }
 
@@ -1546,14 +1548,14 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             case SKULL_KID_ANIMATION_LOOK_LEFT_START:
             case SKULL_KID_ANIMATION_SNIFF:
                 this->animationId++;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
 
             case SKULL_KID_ANIMATION_LOWER_MASK:
                 this->animationId = SKULL_KID_ANIMATION_IDLE_1;
                 this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
                 this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
         }
     }
@@ -1580,7 +1582,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA26CC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_UpdateCollision(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1648,11 +1650,11 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if (globalCtx->sceneNum == SCENE_OKUJOU) {
-            func_80AA26CC(this, globalCtx);
+            DmStk_UpdateCollision(this, globalCtx);
         }
 
         func_80AA1D1C(this, globalCtx);
-        func_80AA0E90(this, globalCtx);
+        DmStk_PlaySound(this, globalCtx);
 
         switch (this->unk_33A) {
             case 1:
