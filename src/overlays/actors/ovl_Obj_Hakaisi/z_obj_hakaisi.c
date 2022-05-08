@@ -386,10 +386,10 @@ void func_80B15264(ObjHakaisi* this) {
     s32 pad;
     s16 sp32 = Rand_Next();
 
-    Matrix_InsertRotation(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
+    Matrix_InsertRotation((s32)Rand_Next(), (s32)Rand_Next(), (s32)Rand_Next(), MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&D_80B15600, &this->unk_184);
     this->dyna.actor.gravity = -1.0f;
-    this->unk_19C = Rand_Next() >> 0x12;
+    this->unk_19C = (s32)Rand_Next() >> 0x12;
     this->dyna.actor.velocity.x = Math_SinS(sp32) * 4.0f;
     this->dyna.actor.velocity.z = Math_CosS(sp32) * 4.0f;
     this->dyna.actor.velocity.y = 7.0f;

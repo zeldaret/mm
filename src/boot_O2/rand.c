@@ -1,20 +1,23 @@
 #include "global.h"
 
-// The latest generated random number, used to generate the next number in the sequence.
+//! The latest generated random number, used to generate the next number in the sequence.
 static u32 sRandInt = 1;
 
-// Space to store a value to be re-interpreted as a float.
-// This can't be static because it is used in z_kankyo
+//! Space to store a value to be re-interpreted as a float.
+//! This can't be static because it is used in z_kankyo
 u32 sRandFloat;
 
+//! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
+//! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
+//! "This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses."
 #define RAND_MULTIPLIER 1664525
 #define RAND_INCREMENT 1013904223
 
 /**
  * Gets the next integer in the sequence of pseudo-random numbers.
  */
-s32 Rand_Next(void) {
-    return sRandInt = (sRandInt * 1664525) + 1013904223;
+u32 Rand_Next(void) {
+    return sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 }
 
 /**
@@ -65,9 +68,8 @@ u32 Rand_Next_Variable(u32* rndNum) {
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
-    // clang-format off
-    *rndNum = next; sRandFloat = (next >> 9) | 0x3F800000;
-    // clang-format on
+
+    sRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
     return *((f32*)&sRandFloat) - 1.0f;
 }
 
@@ -77,8 +79,8 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
  */
 f32 Rand_Centered_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
-    // clang-format off
-    *rndNum = next; sRandFloat = (next >> 9) | 0x3F800000;
-    // clang-format on
+
+    *rndNum = next;
+    sRandFloat = (next >> 9) | 0x3F800000;
     return *((f32*)&sRandFloat) - 1.5f;
 }

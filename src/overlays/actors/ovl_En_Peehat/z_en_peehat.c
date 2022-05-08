@@ -249,7 +249,7 @@ void func_80897258(GlobalContext* globalCtx, EnPeehat* this, Vec3f* arg2, f32 ar
     static Vec3f D_80899558 = { 0.0f, 8.0f, 0.0f };
     static Vec3f D_80899564 = { 0.0f, -1.5f, 0.0f };
     Vec3f sp44;
-    s16 sp42 = Rand_Next() >> 0x10;
+    s16 sp42 = (s32)Rand_Next() >> 0x10;
     s32 temp_v1;
 
     sp44.y = this->actor.floorHeight;

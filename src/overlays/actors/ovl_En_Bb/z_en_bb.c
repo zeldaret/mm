@@ -241,7 +241,7 @@ void EnBb_SetupFlyIdle(EnBb* this) {
 
     if ((this->actor.xzDistToPlayer < (this->attackRange + 120.0f)) ||
         (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
-        this->targetYRotation += (s16)(Rand_Next() >> 0x11);
+        this->targetYRotation += (s16)((s32)Rand_Next() >> 0x11);
     }
 
     this->collider.base.atFlags |= AT_ON;

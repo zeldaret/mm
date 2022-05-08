@@ -205,7 +205,7 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
             gravity = -400;
             phi_s4 = 1;
             phi_f22 = 0.8f;
-            if (Rand_Next() > 0) {
+            if ((s32)Rand_Next() > 0) {
                 phi_s0 = 0x21;
             } else {
                 phi_s0 = 0x41;
@@ -245,7 +245,7 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
         temp_f26 = this->unk_20C * 60.0f;
 
         for (i = 0, phi_s6 = 0; i < 16; i++, phi_s6 += 0x1000) {
-            temp_s0 = (u32)Rand_Next() >> 0x10;
+            temp_s0 = Rand_Next() >> 0x10;
             temp_f20 = Math_SinS(temp_s0);
             temp_f22 = Math_CosS(temp_s0);
 
@@ -368,7 +368,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             temp_s1 = D_80B04FC8[0];
             phi_s2 = -400;
             phi_s3 = 1;
-            if (Rand_Next() > 0) {
+            if ((s32)Rand_Next() > 0) {
                 phi_s0 = 0x21;
             } else {
                 phi_s0 = 0x41;
@@ -377,7 +377,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             temp_s1 = D_80B04FC8[1];
             phi_s2 = -340;
             phi_s3 = 1;
-            if (Rand_Next() > 0) {
+            if ((s32)Rand_Next() > 0) {
                 phi_s0 = 0x21;
             } else {
                 phi_s0 = 0x41;
@@ -474,7 +474,7 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.world.pos.y += 20.0f * phi_f20;
     this->actor.uncullZoneScale = 150.0f * phi_f20;
     this->actor.uncullZoneDownward = 300.0f * phi_f20;
-    this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.y = Rand_Next() >> 0x10;
     this->unk_20C = phi_f20;
 
     if (sp34) {

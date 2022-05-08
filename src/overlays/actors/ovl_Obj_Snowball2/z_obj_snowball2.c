@@ -145,7 +145,7 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
     for (i = 0, phi_s5 = 0; i < 11; i++, phi_s5 += (0x10000 / 11)) {
         temp_s3 = (s32)(Rand_ZeroOne() * 5957.0f) + phi_s5;
 
-        if (((u32)Rand_Next() >> 0x1E) == 0) {
+        if ((Rand_Next() >> 0x1E) == 0) {
             phi_s1 = 0x20;
         } else {
             phi_s1 = 0x40;
@@ -234,7 +234,7 @@ void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1) {
     f32 temp_f2;
     s32 i;
 
-    D_80B3A938 += (s16)((u32)Rand_Next() >> 0x11);
+    D_80B3A938 += (s16)(Rand_Next() >> 0x11);
 
     for (i = 0; i < 2; i++) {
         D_80B3A938 += 0x8000;
@@ -319,7 +319,7 @@ void ObjSnowball2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitJntSph(globalCtx, &this->collider);
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
-    this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.y = Rand_Next() >> 0x10;
     ActorShape_Init(&this->actor.shape, 200.0f, NULL, 12.5f);
     this->actor.shape.shadowAlpha = 130;
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -480,7 +480,7 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
             if (this->actor.bgCheckFlags & 0x40) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
-        } else if ((((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) &&
+        } else if ((((globalCtx->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&
                    (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {
             func_80B395EC(&this->actor, globalCtx);
         }
@@ -567,7 +567,7 @@ void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
     this->actor.velocity.y += this->actor.gravity;
     this->actor.world.pos.y += this->actor.velocity.y;
 
-    if (((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) {
+    if (((globalCtx->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) {
         func_80B395C4(globalCtx, &this->actor.home.pos);
     }
 

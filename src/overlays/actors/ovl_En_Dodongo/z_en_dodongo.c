@@ -449,7 +449,7 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
     f32 temp_f20;
 
     Math_Vec3f_Copy(&sp68, &this->limbPos[0]);
-    sp66 = (Rand_Next() >> 0x12) + this->actor.shape.rot.y;
+    sp66 = ((s32)Rand_Next() >> 0x12) + this->actor.shape.rot.y;
     temp_f20 = Math_CosS(sp66);
     temp_f22 = Math_SinS(sp66);
 
@@ -482,7 +482,7 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
     sp62 = this->unk_334 * 25.0f;
     func_800B0EB0(globalCtx, &sp68, &sp80, &sp74, &this->unk_32C, &this->unk_330, sp64, sp62, 0x14);
 
-    sp66 = ((u32)Rand_Next() >> 0x13) + this->actor.shape.rot.y;
+    sp66 = (Rand_Next() >> 0x13) + this->actor.shape.rot.y;
     temp_f20 = Math_CosS(sp66);
     temp_f22 = Math_SinS(sp66);
 

@@ -191,7 +191,7 @@ f64 func_80086D6C(f64 param_1);
 s32 func_80086D8C(f32 param_1);
 s32 func_80086DAC(f64 param_1);
 
-s32 Rand_Next(void);
+u32 Rand_Next(void);
 void Rand_Seed(u32 seed);
 f32 Rand_ZeroOne(void);
 f32 Rand_Centered(void);

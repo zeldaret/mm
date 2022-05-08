@@ -295,7 +295,7 @@ void func_80B84610(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     if (this->unk_1A7 <= 0) {
         this->unk_1A7 = 16;
     } else {
-        this->unk_1A7 -= (s8)((u32)Rand_Next() >> 0x1F);
+        this->unk_1A7 -= (s8)(Rand_Next() >> 0x1F);
     }
 
     if (this->unk_1A7 >= 6) {
