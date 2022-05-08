@@ -12,11 +12,9 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev) whe
 
 ## Useful Links
 
-- [Code Files Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress and file reservations, instead of GitHub Issues or Trello or similar.
-
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
 - [Style Guide](docs/STYLE.md) - Description of the project style that we ask contributors to adhere to.
-- [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
+- [Code Review Guidelines](docs/REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
 - [Zelda 64 Reverse Engineering Website](https://zelda64.dev/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
 - [MM decomp tutorial](docs/tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
@@ -32,7 +30,7 @@ Basic knowledge of C, particularly arrays and pointers, is extremely useful. Kno
 
 You should be familiar with using git and GitHub. There are a number of tutorials available online, [such as this one](https://github.com/firstcontributions/first-contributions) which can help you get started.
 
-The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [OoT Practice Rom](http://practicerom.com/) (aka GZ) or the [MM Practice Rom](https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
+The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [MM Practice Rom](https://kz.zeldacodes.org/) (aka KZ) or the [OoT Practice Rom](http://practicerom.com/) (aka GZ) will be very beneficial if you have not looked at either of the N64 Zelda's internals before.
 
 The [OoT Decompilation Project](https://github.com/zeldaret/oot) is farther along than this project, so it can also be a great resource.
 
@@ -53,7 +51,7 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 
 We recommend that you [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
-We track who is working on what on this [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) (also pinned in `#mm-decomp`). Once you've decided on or been recommended a good first file, mark it as Reserved.
+We track who is working on what on some Google Sheets available in the Discord. Once you've decided on or been recommended a good first file, mark it as Reserved.
 
 The workflow is: 
 - Reserve a file, 
@@ -150,4 +148,4 @@ Project leads are responsible for ensuring that these conventions are followed.
 - When a PR is merged into master, it may conflict with your work. While your branch is private (in particular, not used for a PR), you can rebase, but when your branch is public/used for a PR always merge master instead of rebasing: it makes it much easier for people to understand what you changed since the last review.
 - We squash commits when merging, so your commit history does not have to be completely spotless.
 
-Throughout the PR process, you (the author) should update the row on [the Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) with the appropriate information as the decompilation process progresses.
+Throughout the PR process, you (the author) should update the rows on the appropriate Google Sheets with the appropriate information as the decompilation process progresses.

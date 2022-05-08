@@ -46,6 +46,7 @@ tools/mips_to_c/
 
 # Docs
 !docs/**/*.png
+docs/doxygen/
 !.vscode/extensions.json
 
 # Per-user configuration
