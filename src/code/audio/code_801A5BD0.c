@@ -420,7 +420,7 @@ void Audio_ChooseActiveSfxs(u8 bankId) {
 
                         chosenSfxs[i].priority = entry->priority;
                         chosenSfxs[i].entryIndex = entryIndex;
-                        i = numChannels; // "break; i.e. force for-loop to end"
+                        i = numChannels; // make this the last pass through the loop, here equivalent to "break"
                     }
                 }
             }
