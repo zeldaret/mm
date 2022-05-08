@@ -720,13 +720,13 @@ void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
-    this->unk_310.x = this->actor.projectedPos.x;
-    this->unk_310.y = this->actor.projectedPos.y;
-    this->unk_310.z = this->actor.projectedPos.z;
+    this->soundPos.x = this->actor.projectedPos.x;
+    this->soundPos.y = this->actor.projectedPos.y;
+    this->soundPos.z = this->actor.projectedPos.z;
 
     switch (globalCtx->csCtx.frames) {
         case 64:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -746,11 +746,11 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 
         case 486:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -762,7 +762,7 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 594:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL24_SCREAM2);
             break;
     }
 
@@ -928,8 +928,8 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
         }
 
-        this->unk_328 = 0;
-        this->unk_339 = 0;
+        this->tatlMessageTimer = 0;
+        this->hitCount = 0;
         this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
         this->animationId = SKULL_KID_ANIMATION_IDLE_1;
         this->fogR = globalCtx->lightCtx.unk7;
@@ -1021,7 +1021,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->fadeOutTimer = 0;
         this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
-        this->unk_334 = 99;
+        this->csAction = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
         func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
@@ -1142,8 +1142,8 @@ void func_80AA1AF8(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sin;
 
-    this->unk_32A += 0x4B0;
-    sin = Math_SinS(this->unk_32A) * 10.0f;
+    this->bobPhase += 0x4B0;
+    sin = Math_SinS(this->bobPhase) * 10.0f;
     Math_SmoothStepToF(&this->actor.world.pos.y, 160.0f + sin, 0.2f, 1.0f, 0.0001f);
 
     this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
@@ -1157,10 +1157,11 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80AA1AF8(this, globalCtx);
-    this->unk_339++;
-    if (this->unk_339 >= 3) {
-        this->unk_339 = 0;
+    this->hitCount++;
+    if (this->hitCount >= 3) {
+        this->hitCount = 0;
         if (!(player->stateFlags2 & 0x8000000)) {
+            // That won't do you any good
             Message_StartTextbox(globalCtx, 0x2013, &this->actor);
         }
     }
@@ -1192,8 +1193,8 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
         temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 107);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
-            if (this->unk_334 != globalCtx->csCtx.actorActions[temp_v0]->action) {
-                this->unk_334 = globalCtx->csCtx.actorActions[temp_v0]->action;
+            if (this->csAction != globalCtx->csCtx.actorActions[temp_v0]->action) {
+                this->csAction = globalCtx->csCtx.actorActions[temp_v0]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
                     this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
                 } else {
@@ -1462,7 +1463,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     } else {
-        this->unk_334 = 99;
+        this->csAction = 99;
     }
 
     if (this->fadeInState == SKULL_KID_FADE_IN_STATE_START) {
@@ -1593,10 +1594,11 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
-        this->unk_328++;
-        if (this->unk_328 > 800) {
-            this->unk_328 = 0;
+        this->tatlMessageTimer++;
+        if (this->tatlMessageTimer > 800) {
+            this->tatlMessageTimer = 0;
             if (!(player->stateFlags2 & 0x8000000)) {
+                // Why are you just standing around?
                 Message_StartTextbox(globalCtx, 0x2014, &this->actor);
             }
         }
