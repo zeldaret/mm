@@ -67,7 +67,7 @@ typedef enum {
     /* 1 */ EQUIP_SLOT_C_LEFT,
     /* 2 */ EQUIP_SLOT_C_DOWN,
     /* 3 */ EQUIP_SLOT_C_RIGHT,
-    /* 4 */ EQUIP_SLOT_UNUSED
+    /* 4 */ EQUIP_SLOT_A
 } EquipSlot;
 
 typedef struct {

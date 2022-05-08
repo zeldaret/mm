@@ -55,7 +55,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
-            gSaveContext.buttonStatus[EQUIP_SLOT_UNUSED] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
             gSaveContext.unk_3F1E = 0;
             gSaveContext.unk_3F20 = 0;
             gSaveContext.unk_3F22 = 0;
