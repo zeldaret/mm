@@ -9,7 +9,7 @@ u32 sRandFloat;
 
 //! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
 //! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
-//! "This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses."
+//! > This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses.
 #define RAND_MULTIPLIER 1664525
 #define RAND_INCREMENT 1013904223
 
@@ -65,6 +65,14 @@ u32 Rand_Next_Variable(u32* rndNum) {
 /**
  * Generates the next pseudo-random floating-point number between 0.0f and
  * 1.0f from the provided rndNum.
+ *
+ * @remark This is also recommended by Numerical Recipes, pp. 284-5:
+ * > If you need floating-point values instead of 32-bit integers, and want to avoid a divide by floating-point 2^{32},
+ * > a dirty trick is to mask in an exponent that makes the value lie between 1 and 2, then subtract 1.0.
+ * > [...]
+ * > Your authors have tried very hard to make almost all of the material in this book machine and compiler independent
+ * > — indeed, even programming language independent. This subsection is a rare aberration. Forgive us. Once in a great
+ * > while the temptation to be really dirty is just irresistible."
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
