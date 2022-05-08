@@ -643,8 +643,8 @@ void EnSnowman_Melt(EnSnowman* this, GlobalContext* globalCtx) {
     }
 
     this->actor.scale.y = this->work.timer * 0.0002f * this->eenoScale;
-    this->actor.scale.x = (this->eenoScale * (1.4f / 100.0f)) - (0.4f * this->actor.scale.y);
-    this->actor.scale.z = (this->eenoScale * (1.4f / 100.0f)) - (0.4f * this->actor.scale.y);
+    this->actor.scale.x = (this->eenoScale * (1.4f * 0.01f)) - (0.4f * this->actor.scale.y);
+    this->actor.scale.z = (this->eenoScale * (1.4f * 0.01f)) - (0.4f * this->actor.scale.y);
 }
 
 void EnSnowman_SetupStun(EnSnowman* this) {
