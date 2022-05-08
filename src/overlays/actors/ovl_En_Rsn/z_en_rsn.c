@@ -67,7 +67,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRsn* this = THIS;
 
-    if (limbIndex == BOMBSHOPKEEPER_LIMB_RIGHT_HAND) {
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_RIGHT_HAND) {
         Matrix_InsertXRotation_s(this->unk1D8.y, MTXMODE_APPLY);
     }
     return false;
@@ -77,7 +77,7 @@ void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnRsn* this = THIS;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == BOMBSHOPKEEPER_LIMB_RIGHT_HAND) {
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_RIGHT_HAND) {
         Matrix_MultiplyVector3fByState(&zeroVec, &this->actor.focus.pos);
     }
 }

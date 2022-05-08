@@ -7,7 +7,7 @@
 #include "objects/object_zo/object_zo.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 
-#define ENSOB1_LIMB_MAX MAX(MAX((s32)ZORA_LIMB_MAX, (s32)BOMBSHOPKEEPER_LIMB_MAX), (s32)GORON_LIMB_MAX)
+#define ENSOB1_LIMB_MAX MAX(MAX((s32)ZORA_LIMB_MAX, (s32)BOMB_SHOPKEEPER_LIMB_MAX), (s32)GORON_LIMB_MAX)
 
 struct EnSob1;
 

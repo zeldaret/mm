@@ -53,9 +53,9 @@ s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIndex, Vec3f* pos, f32* distSq);
 
 typedef enum {
-    /* 0 */ BOMBSHOPKEEPER_ANIM_WALK,
-    /* 1 */ BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_START,
-    /* 2 */ BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP
+    /* 0 */ BOMB_SHOPKEEPER_ANIM_WALK,
+    /* 1 */ BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_START,
+    /* 2 */ BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP
 } BombShopkeeperAnimation;
 
 static AnimationInfoS sAnimationsBombShopkeeper[] = {
@@ -722,7 +722,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     if (distSq < 12.0f) {
         this->actor.speedXZ = 0.0f;
         if (animLastFrame == curFrame) {
-            EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
+            EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_START);
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
     }
@@ -733,7 +733,7 @@ void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if (Animation_GetLastFrame(&gBombShopkeeperSitAtCounterStartAnim) == curFrame) {
-        EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMBSHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP);
+        EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, BOMB_SHOPKEEPER_ANIM_SIT_AT_COUNTER_LOOP);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
     EnSob1_Walking(this, globalCtx);
@@ -1343,7 +1343,7 @@ void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_BombShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBombShopkeeperSkel, &gBombShopkeeperWalkAnim, this->jointTable,
-                       this->morphTable, BOMBSHOPKEEPER_LIMB_MAX);
+                       this->morphTable, BOMB_SHOPKEEPER_LIMB_MAX);
     this->actor.draw = EnSob1_BombShopkeeper_Draw;
     this->changeObjectFunc = NULL;
     this->skelAnime.playSpeed = 2.0f;
@@ -1590,7 +1590,7 @@ s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
                                            Actor* thisx) {
     EnSob1* this = THIS;
 
-    if (limbIndex == BOMBSHOPKEEPER_LIMB_HEAD) {
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_HEAD) {
         Matrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
     }
     return false;
@@ -1599,7 +1599,7 @@ s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
 void EnSob1_BombShopkeeper_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
                                         Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (limbIndex == BOMBSHOPKEEPER_LIMB_LEFT_HAND) {
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_LEFT_HAND) {
         gSPDisplayList(POLY_OPA_DISP++, gBombShopkeeperBombDL);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
