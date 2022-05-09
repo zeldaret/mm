@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tokei_turret.h"
+#include "objects/object_tokei_turret/object_tokei_turret.h"
 
 #define FLAGS 0x00000000
 
@@ -15,7 +16,6 @@ void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Tokei_Turret_InitVars = {
     ACTOR_OBJ_TOKEI_TURRET,
     ACTORCAT_BG,
@@ -28,23 +28,67 @@ const ActorInit Obj_Tokei_Turret_InitVars = {
     (ActorFunc)ObjTokeiTurret_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B91EC0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
+void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeiTurret* this = THIS;
+    Actor* actor;
+    s32 actorParams;
 
-extern InitChainEntry D_80B91EC0[];
+    actor = &this->dyna.actor;
+    actorParams = actor->params & 3;
+    this->dyna.actor = *actor;
+    Actor_ProcessInitChain(actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 0);
 
-extern UNK_TYPE D_060026A0;
-extern UNK_TYPE D_06002A88;
+    if ((actorParams == 0) || (actorParams == 1)) { // could this be day?
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Init.s")
+        actor->uncullZoneScale = 240.0f;
+        actor->uncullZoneDownward = 240.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Destroy.s")
+        if (actorParams == 0) {
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_tokei_turret_Colheader_0026A0);
+            return;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Update.s")
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_tokei_turret_Colheader_002D80);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Draw.s")
+    actor->uncullZoneScale = 1300.0f;
+    actor->uncullZoneDownward = 1300.0f;
+}
+
+void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeiTurret* this = THIS;
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
+
+void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeiTurret* this = THIS;
+    Gfx* gfx;
+
+    if ((this->dyna.actor.params & 3) == 1) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gfx = POLY_OPA_DISP;
+        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPDisplayList(gfx++, &gTokeiTurretPlatformTopDL);
+        POLY_OPA_DISP = gfx;
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        return;
+    }
+    if ((this->dyna.actor.params & 3) == 0) {
+        Gfx_DrawDListOpa(globalCtx, gTokeiTurretPlatformBaseDL);
+        return;
+    }
+    Gfx_DrawDListOpa(globalCtx, gClockTownFlagsDL);
+}
