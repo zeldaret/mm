@@ -171,7 +171,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     this->dyna.actor.world.pos.y + 368.0f, this->dyna.actor.world.pos.z - 174.0f, 0, 0x7530, 0, 1);
     switch (globalCtx->sceneNum) {
         case SCENE_31MISAKI:
-            if ((gSaveContext.save.weekEventReg[53] & 0x20)) {
+            if (gSaveContext.save.weekEventReg[53] & 0x20) {
                 this->dyna.actor.world.pos.x = -6480.0f;
                 this->targetYPos = -120.0f;
                 this->dyna.actor.world.pos.z = 1750.0f;
@@ -263,7 +263,7 @@ void func_80AAF79C(DmChar08* this, GlobalContext* globalCtx) {
     s16 cs = ActorCutscene_GetAdditionalCutscene(
         ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
 
-    if ((gSaveContext.save.weekEventReg[93] & 8)) {
+    if (gSaveContext.save.weekEventReg[93] & 8) {
         cs1 = cs;
     }
 
