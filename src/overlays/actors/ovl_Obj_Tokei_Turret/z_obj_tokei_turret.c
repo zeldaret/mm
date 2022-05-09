@@ -44,17 +44,17 @@ void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if ((actorParams == 0) || (actorParams == 1)) { // could this be day?
+    if ((actorParams == 0) || (actorParams == 1)) {
 
         actor->uncullZoneScale = 240.0f;
         actor->uncullZoneDownward = 240.0f;
 
         if (actorParams == 0) {
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_tokei_turret_Colheader_0026A0);
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretBaseCol);
             return;
         }
 
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_tokei_turret_Colheader_002D80);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretPlatformCol);
         return;
     }
 
