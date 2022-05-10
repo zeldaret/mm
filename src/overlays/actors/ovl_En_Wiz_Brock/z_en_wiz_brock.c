@@ -13,6 +13,7 @@
 
 #define PLATFORM_TYPE_INACTIVE 0
 #define PLATFORM_TYPE_FIRE 1
+#define PLATFORM_TYPE_ICE 2
 
 void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -39,14 +40,13 @@ const ActorInit En_Wiz_Brock_InitVars = {
 void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWizBrock* this = THIS;
     CollisionHeader* colHeader = NULL;
-    s32 pad;
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_wiz_Colheader_001690, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->dyna.actor.colChkInfo.health = 3;
-    this->unk1A6 = 0;
+    this->unk_1A6 = 0;
     Actor_SetScale(&this->dyna.actor, 0.01f);
     this->platformNum = platformCount++;
     this->actionFunc = EnWizBrock_SetupUpdateStatus;
@@ -65,8 +65,8 @@ void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
 }
 
 /**
- * @brief Checks the platform status, when the Wizzrobe is defeated, starts incrementing despawnCounter to
- * 0x25 at which point the platforms are despawned.
+ * @brief Checks the platform status, when the Wizzrobe is defeated, starts incrementing timer to
+ * 30 at which point the platforms are despawned.
  */
 void EnWizBrock_UpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
     if (this->platformType == PLATFORM_TYPE_INACTIVE) {
@@ -76,14 +76,12 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
     }
 
     if (this->dyna.actor.colChkInfo.health == 0) {
-        this->despawnCounter++;
-        if ((gGameInfo->data[0x991] + 0x1E) < this->despawnCounter) {
-            Math_ApproachZeroF(&this->dyna.actor.scale.y, (gGameInfo->data[0x992] / 10.0f) + 0.3f,
-                               (gGameInfo->data[0x993] / 10000.0f) + 0.003f);
-            Math_ApproachZeroF(&this->alpha, (gGameInfo->data[0x994] / 10.0f) + 1.0f,
-                               (gGameInfo->data[0x995] / 10.0f) + 35.0f);
-            Math_ApproachF(&this->dyna.actor.scale.x, (gGameInfo->data[0x996] / 100.0f) + 0.02f,
-                           (gGameInfo->data[0x997] / 100.0f) + 0.2f, (gGameInfo->data[0x998] / 1000.0f) + 0.002f);
+        this->timer++;
+        if ((BREG(49) + 30) < this->timer) {
+            Math_ApproachZeroF(&this->dyna.actor.scale.y, (BREG(50) / 10.0f) + 0.3f, (BREG(51) / 10000.0f) + 0.003f);
+            Math_ApproachZeroF(&this->alpha, (BREG(52) / 10.0f) + 1.0f, (BREG(53) / 10.0f) + 35.0f);
+            Math_ApproachF(&this->dyna.actor.scale.x, (BREG(54) / 100.0f) + 0.02f, (BREG(55) / 100.0f) + 0.2f,
+                           (BREG(56) / 1000.0f) + 0.002f);
             this->dyna.actor.scale.z = this->dyna.actor.scale.x;
             if (this->dyna.actor.scale.y < 0.001f) {
                 Actor_MarkForDeath(&this->dyna.actor);
@@ -108,8 +106,8 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             0);
-    Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, 1);
+                             MTXMODE_NEW);
+    Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     if (this->dyna.actor.colChkInfo.health != 0) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
@@ -119,7 +117,7 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)this->alpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s16)this->alpha);
         Gfx_DrawDListXlu(globalCtx, gWizzrobePlatform);
     }
 
@@ -131,9 +129,9 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         if (this->platformType == PLATFORM_TYPE_FIRE) {
-            gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s8)this->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s16)this->alpha);
         } else {
-            gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s8)this->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s16)this->alpha);
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
