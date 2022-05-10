@@ -214,7 +214,7 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Sets 20 rocks to draw from an explosion on the ground (slam attack).
+ * Sets 20 rocks to draw from an explosion on the ground (slam attack).
  */
 void EnFamos_SetupAttackDebris(EnFamos* this) {
     EnFamosRock* rock;
@@ -243,7 +243,7 @@ void EnFamos_SetupAttackDebris(EnFamos* this) {
 }
 
 /**
- * Summary: Sets 20 rocks to draw from an explosion on death.
+ * Sets 20 rocks to draw from an explosion on death.
  */
 void EnFamos_SetupDeathDebris(EnFamos* this) {
     f32 randFloat;
@@ -273,8 +273,8 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
 
 s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE &&
-        Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos) < this->aggroDistance &&
-        (Actor_IsFacingPlayer(&this->actor, 0x5000))) {
+        (Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos) < this->aggroDistance) &&
+        Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         return true;
     } else {
         return false;
@@ -297,7 +297,7 @@ void EnFamos_UpdateBobbingHeight(EnFamos* this) {
 }
 
 /**
- * Summary: Checks if emblem has been hit with light arrow.
+ * Checks if emblem has been hit with light arrow.
  *          Also checks if previously flipped; handles flip status.
  */
 void EnFamos_UpdateFlipStatus(EnFamos* this) {
@@ -342,7 +342,7 @@ void EnFamos_UpdateFlipStatus(EnFamos* this) {
 }
 
 /**
- * Summary: If Famos path is 0xFF, famos hovers stationary in the air
+ * If Famos path is 0xFF, famos hovers stationary in the air
  *          facing forward, only bobbing up and down, without a path to follow.
  */
 void EnFamos_SetupStillIdle(EnFamos* this) {
@@ -361,7 +361,7 @@ void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Regular Famos follows a path until seeing the player.
+ * Regular Famos follows a path until seeing the player.
  */
 void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->isCalm) {
@@ -393,7 +393,7 @@ void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Famos lost player; Turning to face back toward home.
+ * Famos lost player; Turning to face back toward home.
  */
 void EnFamos_SetupTurnHome(EnFamos* this) {
     this->targetYaw = Actor_YawToPoint(&this->actor, &this->calmPos);
@@ -412,7 +412,7 @@ void EnFamos_TurnHome(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Famos has finished rotating toward home; Take off flying in straight line.
+ * Famos has finished rotating toward home; Take off flying in straight line.
  */
 void EnFamos_SetupReturnHome(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -446,7 +446,7 @@ void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Famos has spotted the player; Delayed by surprise.
+ * Famos has spotted the player; delayed by surprise.
  */
 void EnFamos_SetupAlert(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -478,7 +478,7 @@ void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Famos has spotted the player; Begin chasing to attack.
+ * Famos has spotted the player; Begin chasing to attack.
  */
 void EnFamos_SetupChase(EnFamos* this) {
     this->hoverTimer = 0;
@@ -578,7 +578,7 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Attack has hit; Wait for animation to finish before recovering from attack.
+ * Attack has hit; Wait for animation to finish before recovering from attack.
  */
 void EnFamos_SetupFinishAttack(EnFamos* this) {
     Animation_PlayOnce(&this->skelAnime, &gFamosIdleAnim);
@@ -617,14 +617,14 @@ void EnFamos_AttackRebound(EnFamos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->baseHeight < this->actor.world.pos.y || this->actor.bgCheckFlags & 0x10) { // touching ceiling
+    if (this->baseHeight < this->actor.world.pos.y || (this->actor.bgCheckFlags & 0x10)) { // touching ceiling
         this->actor.speedXZ = 0.0f;
         EnFamos_SetupChase(this);
     }
 }
 
 /**
- * Summary: Looking around for player.
+ * Looking around for player.
  */
 void EnFamos_SetupScanForPlayer(EnFamos* this) {
     this->stateTimer = 60;
@@ -646,7 +646,7 @@ void EnFamos_ScanForPlayer(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Famos was upside down and hit the ground headfirst. This kills the Famos.
+ * Famos was upside down and hit the ground headfirst. This kills the Famos.
  */
 void EnFamos_SetupDeathSlam(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
