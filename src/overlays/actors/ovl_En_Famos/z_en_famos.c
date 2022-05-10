@@ -272,7 +272,7 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
 }
 
 s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE &&
+    if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
         (Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos) < this->aggroDistance) &&
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         return true;
@@ -768,9 +768,8 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->flippedTimer >= 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
-            if (this->actionFunc == EnFamos_Attack && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
-                this->actor.bgCheckFlags & 1) { // touch floor
-
+            if ((this->actionFunc == EnFamos_Attack) && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
+                (this->actor.bgCheckFlags & 1)) { // touch floor
                 this->actor.world.pos.y -= 60.0f;
             }
         }
