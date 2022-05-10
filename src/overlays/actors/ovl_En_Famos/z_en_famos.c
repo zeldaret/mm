@@ -505,7 +505,7 @@ void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
         (surfaceType != 0xC && surfaceType != 0xD)) {
         EnFamos_SetupAttackAim(this);
 
-    } else if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE ||
+    } else if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
                (this->aggroDistance < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos)) ||
                !Actor_IsFacingPlayer(&this->actor, 0x6000)) {
         EnFamos_SetupScanForPlayer(this);
