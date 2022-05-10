@@ -18,20 +18,20 @@ void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AA16F4(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1704(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1714(DmStk* this, GlobalContext* globalCtx);
-void func_80AA17F8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA18D8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA192C(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1998(DmStk* this, GlobalContext* globalCtx);
-void func_80AA19EC(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1A50(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1AC8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
-void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
-void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx);
+void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx);
+void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx);
+void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartFirstTimeIntroCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForFirstTimeIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartSubsequentTimesIntroCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForSubsequentTimesIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx);
 
 typedef enum {
     /*  0 */ SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE,
@@ -283,7 +283,7 @@ static AnimationInfo sAnimations[] = {
     { &gSkullKidLaughAfterSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_LoadObjectForAnimation(DmStk* this, GlobalContext* globalCtx) {
     s32 objectIndex;
 
     if (((this->animationId >= SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) &&
@@ -306,7 +306,7 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
 
 void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
                            u16 index) {
-    func_80A9FDB0(this, globalCtx);
+    DmStk_LoadObjectForAnimation(this, globalCtx);
 
     animation += index;
 
@@ -944,7 +944,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->fogN = 0;
             this->fogF = 1000;
             this->fogScale = 1.0f;
-            this->actionFunc = func_80AA1704;
+            this->actionFunc = DmStk_DoNothing;
         } else if (globalCtx->sceneNum == SCENE_OKUJOU) {
             this->alpha = 255;
             this->fogN = 996;
@@ -964,10 +964,10 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = func_80AA18D8;
+                        this->actionFunc = DmStk_ClockTower_StartFirstTimeIntroCutscene;
                     } else {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = func_80AA1998;
+                        this->actionFunc = DmStk_ClockTower_StartSubsequentTimesIntroCutscene;
                     }
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
@@ -980,17 +980,17 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                     this->actor.world.pos.y = 120.0f;
                     sCylinderInit.base.colType = COLTYPE_WOOD;
-                    this->actionFunc = func_80AA27EC;
+                    this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
                     this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
-                    this->actionFunc = func_80AA16F4;
+                    this->actionFunc = DmStk_ClockTower_DoNothing;
                 }
             } else {
                 this->unk_33A = 1;
                 this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
                 sCylinderInit.base.colType = COLTYPE_WOOD;
-                this->actionFunc = func_80AA27EC;
+                this->actionFunc = DmStk_ClockTower_Idle;
             }
 
             Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -1006,7 +1006,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->fogF = 1000;
             this->fogScale = 0.7f;
             this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
-            this->actionFunc = func_80AA1714;
+            this->actionFunc = DmStk_WaitForTelescope;
         } else {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
@@ -1016,7 +1016,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->fogN = 996;
             this->fogF = 1000;
             this->fogScale = 0.7f;
-            this->actionFunc = func_80AA1704;
+            this->actionFunc = DmStk_DoNothing;
         }
 
         this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
@@ -1043,13 +1043,13 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80AA16F4(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 }
 
-void func_80AA1704(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 }
 
-void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx) {
     Vec3f sp1C;
 
     if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
@@ -1057,13 +1057,13 @@ void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
         if (globalCtx->view.fovy < 25.0f) {
             if ((sp1C.x >= 70.0f) && (sp1C.x < 250.0f) && (sp1C.y >= 30.0f) && (sp1C.y < 210.0f)) {
                 func_800FE484();
-                this->actionFunc = func_80AA17F8;
+                this->actionFunc = DmStk_StartTelescopeCutscene;
             }
         }
     }
 }
 
-void func_80AA17F8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx) {
     s16 sp1E = this->actor.cutscene;
     s16 sp1C = ActorCutscene_GetAdditionalCutscene(sp1E);
     s16 sp18 = ActorCutscene_GetAdditionalCutscene(sp1C);
@@ -1081,48 +1081,48 @@ void func_80AA17F8(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
         ActorCutscene_Start(cutscene, &this->actor);
         func_800FE498();
-        this->actionFunc = func_80AA1704;
+        this->actionFunc = DmStk_DoNothing;
     } else {
         ActorCutscene_SetIntentToPlay(cutscene);
     }
 }
 
-void func_80AA18D8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartFirstTimeIntroCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(9)) {
         ActorCutscene_Start(9, &this->actor);
-        this->actionFunc = func_80AA192C;
+        this->actionFunc = DmStk_ClockTower_WaitForFirstTimeIntroCutsceneToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(9);
     }
 }
 
-void func_80AA192C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForFirstTimeIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP;
         this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
-        this->actionFunc = func_80AA2720;
+        this->actionFunc = DmStk_ClockTower_IdleWithOcarina;
     }
 }
 
-void func_80AA1998(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartSubsequentTimesIntroCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(0xB)) {
         ActorCutscene_Start(0xB, &this->actor);
-        this->actionFunc = func_80AA19EC;
+        this->actionFunc = DmStk_ClockTower_WaitForSubsequentTimesIntroCutsceneToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(0xB);
     }
 }
 
-void func_80AA19EC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForSubsequentTimesIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
-        this->actionFunc = func_80AA27EC;
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
 
-void func_80AA1A50(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(0xA)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
         ActorCutscene_Start(0xA, &this->actor);
@@ -1130,19 +1130,19 @@ void func_80AA1A50(DmStk* this, GlobalContext* globalCtx) {
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.shape.rot.y = this->actor.shape.rot.x;
         this->actor.world.rot.y = this->actor.shape.rot.x;
-        this->actionFunc = func_80AA1AC8;
+        this->actionFunc = DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(0xA);
     }
 }
 
-void func_80AA1AC8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != 0) && (globalCtx->csCtx.frames > 20)) {
-        this->actionFunc = func_80AA27EC;
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
 
-void func_80AA1AF8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sin;
 
@@ -1157,10 +1157,10 @@ void func_80AA1AF8(DmStk* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.x = this->actor.world.rot.x;
 }
 
-void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_80AA1AF8(this, globalCtx);
+    DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
     this->hitCount++;
     if (this->hitCount >= 3) {
         this->hitCount = 0;
@@ -1173,19 +1173,19 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
     this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
     DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
-    this->actionFunc = func_80AA1C64;
+    this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
 }
 
-void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
-    func_80AA1AF8(this, globalCtx);
+void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx) {
+    DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
-        this->actionFunc = func_80AA27EC;
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->actionFunc = func_80AA1B9C;
+        this->actionFunc = DmStk_ClockTower_DeflectHit;
     }
 }
 
@@ -1592,11 +1592,11 @@ void DmStk_UpdateCollision(DmStk* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->csCtx.state == 0) {
-        func_80AA1AF8(this, globalCtx);
+        DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
@@ -1606,16 +1606,17 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, 0x2014, &this->actor);
             }
         }
+
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
             this->unk_335 = 1;
-            this->actionFunc = func_80AA1A50;
+            this->actionFunc = DmStk_ClockTower_StartDropOcarinaCutscene;
         }
     }
 }
 
-void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        func_80AA1AF8(this, globalCtx);
+        DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
 
         if (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) {
@@ -1626,7 +1627,7 @@ void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
 
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
             this->unk_335 = 1;
-            this->actionFunc = func_80AA1B9C;
+            this->actionFunc = DmStk_ClockTower_DeflectHit;
         }
     }
 }
@@ -1641,7 +1642,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetFocus(&this->actor, 6.0f);
         }
 
-        func_80A9FDB0(this, globalCtx);
+        DmStk_LoadObjectForAnimation(this, globalCtx);
 
         if (this->animationId != SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1) {
             SkelAnime_Update(&this->skelAnime);
@@ -1671,8 +1672,9 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
             case 2:
                 if (ActorCutscene_GetCanPlayNext(0x10)) {
                     this->unk_33A = 3;
+                    // When did you get that instrument?
                     ActorCutscene_Start(0x10, &this->actor);
-                    this->actionFunc = func_80AA27EC;
+                    this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
                     ActorCutscene_SetIntentToPlay(0x10);
                 }
