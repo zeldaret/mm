@@ -545,7 +545,7 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
 
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & 1;
-    if (hitFloor || this->actor.floorHeight == BGCHECK_Y_MIN || (surfaceType == 0xC || surfaceType == 0xD)) {
+    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
@@ -652,7 +652,7 @@ void EnFamos_SetupDeathSlam(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
     this->stateTimer = 20;
     this->actor.speedXZ = 0.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, false, 20);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->flippedTimer = -1;
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
