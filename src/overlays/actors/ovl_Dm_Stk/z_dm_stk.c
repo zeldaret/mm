@@ -402,7 +402,7 @@ void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCt
     }
 }
 
-void func_80AA00CC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_UnusedSouthClockTownCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 535) {
         func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
     }
@@ -521,8 +521,8 @@ void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalC
     }
 }
 
-void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
-    static s32 D_80AA3CB8 = 0;
+void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+    static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
         case 140:
@@ -556,20 +556,21 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
     }
 
     if (globalCtx->csCtx.frames >= 700) {
-        if (D_80AA3CB8 < 128) {
-            if ((D_80AA3CB8 & 0x1F) == 0) {
+        if (sMoonCallTimer < 128) {
+            if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
-            } else if ((D_80AA3CB8 & 0x1F) == 16) {
+            } else if ((sMoonCallTimer & 0x1F) == 16) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
-            D_80AA3CB8++;
+
+            sMoonCallTimer++;
         }
     } else {
-        D_80AA3CB8 = 0;
+        sMoonCallTimer = 0;
     }
 }
 
-void func_80AA05F0(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_DroppingOcarinaCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
@@ -684,8 +685,8 @@ void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* global
     }
 }
 
-void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
-    static s32 D_80AA3CBC = 0;
+void DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+    static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
         case 40:
@@ -707,27 +708,28 @@ void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
     }
 
     if (globalCtx->csCtx.frames >= 408) {
-        if (D_80AA3CBC < 128) {
-            if ((D_80AA3CBC & 0x1F) == 0) {
+        if (sMoonCallTimer < 128) {
+            if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
-            } else if ((D_80AA3CBC & 0x1F) == 16) {
+            } else if ((sMoonCallTimer & 0x1F) == 16) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
-            D_80AA3CBC++;
+
+            sMoonCallTimer++;
         }
     } else {
-        D_80AA3CBC = 0;
+        sMoonCallTimer = 0;
     }
 }
 
 void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext* globalCtx) {
-    this->soundPos.x = this->actor.projectedPos.x;
-    this->soundPos.y = this->actor.projectedPos.y;
-    this->soundPos.z = this->actor.projectedPos.z;
+    this->oathToOrderCutsceneVoicePos.x = this->actor.projectedPos.x;
+    this->oathToOrderCutsceneVoicePos.y = this->actor.projectedPos.y;
+    this->oathToOrderCutsceneVoicePos.z = this->actor.projectedPos.z;
 
     switch (globalCtx->csCtx.frames) {
         case 64:
-            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -747,11 +749,11 @@ void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext*
 
         case 486:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -763,7 +765,7 @@ void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext*
             break;
 
         case 594:
-            Audio_PlaySfxAtPos(&this->soundPos, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
     }
 
@@ -790,7 +792,7 @@ void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext*
     }
 }
 
-void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_MoonWarpCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -807,7 +809,7 @@ void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0E1C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -839,7 +841,7 @@ void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_CLOCKTOWER:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    func_80AA00CC(this, globalCtx);
+                    DmStk_UnusedSouthClockTownCutscene_PlaySound(this, globalCtx);
                 }
                 break;
 
@@ -856,19 +858,19 @@ void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0420(this, globalCtx);
+                        DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA05F0(this, globalCtx);
+                        DmStk_DroppingOcarinaCutscene_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        func_80AA09DC(this, globalCtx);
+                        DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 3) {
                         DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0DA8(this, globalCtx);
+                        DmStk_MoonWarpCutsceneFirstTime_PlaySound(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA0E1C(this, globalCtx);
+                        DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(this, globalCtx);
                     }
                 }
                 break;

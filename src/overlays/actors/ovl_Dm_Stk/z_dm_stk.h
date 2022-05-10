@@ -23,7 +23,7 @@ typedef struct DmStk {
     /* 0x02FC */ s32 fogF;
     /* 0x0300 */ f32 fogScale;
     /* 0x0304 */ Vec3f headPos; // set but never used
-    /* 0x0310 */ Vec3f soundPos; // only used for Skull Kid's voice sfx in the cutscene after Oath to Order is played
+    /* 0x0310 */ Vec3f oathToOrderCutsceneVoicePos;
     /* 0x031C */ UNK_TYPE1 unk31C[0xC];
     /* 0x0328 */ u16 tatlMessageTimer;
     /* 0x032A */ u16 bobPhase;
