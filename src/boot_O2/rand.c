@@ -71,7 +71,7 @@ u32 Rand_Next_Variable(u32* rndNum) {
  * > a dirty trick is to mask in an exponent that makes the value lie between 1 and 2, then subtract 1.0.
  * > [...]
  * > Your authors have tried very hard to make almost all of the material in this book machine and compiler independent
- * > — indeed, even programming language independent. This subsection is a rare aberration. Forgive us. Once in a great
+ * > - indeed, even programming language independent. This subsection is a rare aberration. Forgive us. Once in a great
  * > while the temptation to be really dirty is just irresistible."
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
