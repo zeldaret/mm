@@ -1,5 +1,6 @@
 ﻿<Root>
     <File Name="object_stk2" Segment="6">
+        <!-- Skull Kid Animations -->
         <Animation Name="gSkullKidCurseStartAnim" Offset="0x55C" /> <!-- Original name is "kubi_katakata" -->
         <!-- <Blob Name="object_stk2_Blob_00056C" Size="0x24" Offset="0x56C" /> -->
         <Animation Name="gSkullKidCurseLoopAnim" Offset="0x130C" /> <!-- Original name is "kubi_katakata_wait" -->
@@ -9,24 +10,40 @@
         <!-- <Blob Name="object_stk2_Blob_004590" Size="0x50" Offset="0x4590" /> -->
         <Animation Name="gSkullKidHorseRideLoopAnim" Offset="0x49C8" /> <!-- Original name is "lost_horse_wait" -->
         <Animation Name="gSkullKidGlitchyHorseRideStartAnim" Offset="0x70DC" /> <!-- Original name is "lost_house" -->
-        <DList Name="object_stk2_DL_007840" Offset="0x7840" />
-        <Texture Name="object_stk2_Tex_007A48" OutName="tex_007A48" Format="i8" Width="32" Height="32" Offset="0x7A48" />
-        <Texture Name="object_stk2_Tex_007E48" OutName="tex_007E48" Format="i8" Width="32" Height="64" Offset="0x7E48" />
-        <TextureAnimation Name="object_stk2_Matanimheader_008658" Offset="0x8658" />
+
+        <!-- Assets for the curse effect overlayed on top of Majora's Mask when Skull Kid curses Link -->
+        <DList Name="gSkullKidMajorasMaskCurseOverlayDL" Offset="0x7840" />
+        <Texture Name="gSkullKidMajorasMaskCurseOverlayMaskTex" OutName="skull_kid_majoras_mask_curse_overlay_mask" Format="i8" Width="32" Height="32" Offset="0x7A48" />
+        <Texture Name="gSkullKidMajorasMaskCurseOverlayElectricityTex" OutName="skull_kid_majoras_mask_curse_overlay_electricity" Format="i8" Width="32" Height="64" Offset="0x7E48" />
+        <TextureAnimation Name="gSkullKidMajorasMaskCurseOverlayTexScroll" Offset="0x8658" />
+
+        <!-- Assets for the effects displayed on the sides of the screen when Skull Kid curses Link or calls down the moon -->
         <DList Name="object_stk2_DL_008920" Offset="0x8920" />
         <DList Name="object_stk2_DL_008A38" Offset="0x8A38" />
         <Texture Name="object_stk2_Tex_008B50" OutName="tex_008B50" Format="i8" Width="32" Height="64" Offset="0x8B50" />
         <Texture Name="object_stk2_Tex_009350" OutName="tex_009350" Format="i8" Width="32" Height="32" Offset="0x9350" />
         <Texture Name="object_stk2_Tex_009750" OutName="tex_009750" Format="i8" Width="32" Height="64" Offset="0x9750" />
         <TextureAnimation Name="object_stk2_Matanimheader_009F60" Offset="0x9F60" />
+
+        <!-- Clock Tower Ocarina Animations -->
         <Animation Name="object_stk2_Anim_00A104" Offset="0xA104" />
         <Animation Name="object_stk2_Anim_00A2BC" Offset="0xA2BC" />
         <Animation Name="object_stk2_Anim_00A4C4" Offset="0xA4C4" />
         <Animation Name="object_stk2_Anim_00A6D4" Offset="0xA6D4" />
-        <DList Name="gDroppedOcarinaOfTimeOcarinaDL" Offset="0xA840" />
+
+        <!-- Clock Tower Ocarina Limb DisplayLists -->
+        <DList Name="object_stk2_DL_00A840" Offset="0xA840" />
+
+        <!-- Clock Tower Ocarina Textures -->
         <Texture Name="object_stk2_Tex_00A958" OutName="tex_00A958" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
-        <Limb Name="gDroppedOcarinaOfTimeOcarinaLimb" Type="Standard" EnumName="DROPPED_OCARINA_OF_TIME_LIMB_OCARINA" Offset="0xAD58" />
-        <Skeleton Name="gDroppedOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="DROPPED_OCARINA_OF_TIME_LIMB_NONE" LimbMax="DROPPED_OCARINA_OF_TIME_LIMB_MAX" EnumName="DroppedOcarinaOfTimeLimbs" Offset="0xAD68" />
+
+        <!-- Clock Tower Ocarina Limbs -->
+        <Limb Name="object_stk2_Standardlimb_00AD58" Type="Standard" EnumName="OBJECT_STK2_LIMB_01" Offset="0xAD58" />
+
+        <!-- Clock Tower Ocarina Skeleton -->
+        <Skeleton Name="object_stk2_Skel_013158" Type="Flex" LimbType="Standard" LimbNone="OBJECT_STK2_LIMB_NONE" LimbMax="OBJECT_STK2_LIMB_MAX" EnumName="object_stk2_Limbs" Offset="0xAD68" />
+
+        <!-- Skull Kid Animations -->
         <Animation Name="gSkullKidLaughStartAnim" Offset="0xC270" /> <!-- Original name is "oowarai" -->
         <!-- <Blob Name="object_stk2_Blob_00C280" Size="0x60" Offset="0xC280" /> -->
         <Animation Name="gSkullKidLaughLoopAnim" Offset="0xCBB8" /> <!-- Original name is "oowarai_wait" -->

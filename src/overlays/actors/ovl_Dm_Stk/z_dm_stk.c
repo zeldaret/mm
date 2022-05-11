@@ -1792,8 +1792,8 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
-                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_stk2_Matanimheader_008658));
-                    Gfx_DrawDListOpa(globalCtx, object_stk2_DL_007840);
+                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexScroll));
+                    Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMaskCurseOverlayDL);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
@@ -1816,17 +1816,17 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         switch (this->handType) {
             case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009AC0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedRightHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
             case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009710);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMaskHoldingRightHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
             case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009DA0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHand);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
@@ -1857,11 +1857,11 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0084C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedLeftHand);
                 break;
 
             case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
@@ -1869,21 +1869,21 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
             case SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
             case SKULL_KID_HAND_TYPE_HOLDING_FLUTE:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_008A80);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteHoldingLeftHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
             case SKULL_KID_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0087B0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHand);
                 }
                 break;
         }
