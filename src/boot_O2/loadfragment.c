@@ -127,7 +127,7 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
     void* allocatedVRamAddr;
     uintptr_t ovlOffset;
     OverlayRelocationSection* ovl;
-    size_t bssSize;
+    size_t allocatedBytes;
 
     if (gLoadLogSeverity >= 3) {}
 
@@ -145,9 +145,9 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
 
     if (1) {}
 
-    bssSize = ovl->bssSize + size;
+    allocatedBytes = ovl->bssSize + size;
 
-    allocatedVRamAddr = SystemArena_Realloc(allocatedVRamAddr, bssSize);
+    allocatedVRamAddr = SystemArena_Realloc(allocatedVRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 
@@ -168,7 +168,7 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
         bzero(end, ovl->bssSize);
     }
 
-    osInvalICache(allocatedVRamAddr, bssSize);
+    osInvalICache(allocatedVRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 

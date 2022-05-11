@@ -114,7 +114,7 @@
     0x80084CD0:("Load_AllocateAndLoad",),
     0x80084DB0:("Load2_Relocate",),
     0x8008501C:("Load2_LoadOverlay",),
-    0x800850C8:("Overlay_AllocateAndLoad",),
+    0x800850C8:("Load2_AllocateAndLoad",),
     0x80085130:("PadUtils_Init",),
     0x80085150:("func_80085150",),
     0x80085158:("PadUtils_ResetPressRel",),

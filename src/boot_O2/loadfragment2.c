@@ -115,7 +115,7 @@ size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamS
     return size;
 }
 
-void* Overlay_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd) {
+void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd) {
     void* allocatedVRamAddr = SystemArena_MallocR(vRamEnd - vRamStart);
 
     if (allocatedVRamAddr != NULL) {

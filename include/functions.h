@@ -109,7 +109,7 @@ size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamSt
 void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart);
 void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* overlayInfo, uintptr_t vRamStart);
 size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd, void* allocatedVRamAddr);
-void* Overlay_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd);
+void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd);
 void PadUtils_Init(Input* input);
 void func_80085150(void);
 void PadUtils_ResetPressRel(Input* input);
