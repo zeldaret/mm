@@ -1,3 +1,14 @@
+/**
+ * @file loadfragment.c
+ *
+ * Functions used to process and relocate Zelda64 overlays
+ *
+ * Note:
+ *  These are completly unused in favor of the functions in `loadfragment2.c`.
+ *
+ *  The main difference between them seems to be the lack of vRamEnd arguments here.
+ *  Instead they are calculated on the fly.
+ */
 #include "global.h"
 #include "system_malloc.h"
 
@@ -34,7 +45,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0xF000000) == 0) {
-                    *relocDataP = (*relocDataP - vRamStart) + allocu32;
+                    *relocDataP = *relocDataP - vRamStart + allocu32;
                 } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
@@ -45,7 +56,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 *relocDataP =
                     (*relocDataP & 0xFC000000) |
-                    (((allocu32 + ((((*relocDataP & 0x3FFFFFF) << 2) | 0x80000000) - vRamStart)) & 0xFFFFFFF) >> 2);
+                    ((((((*relocDataP & 0x3FFFFFF) << 2) | 0x80000000) - vRamStart + allocu32) & 0xFFFFFFF) >> 2);
                 break;
 
             case 0x5000000:
@@ -65,11 +76,11 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
                 // If the lo part is negative, add 1 to the LUI.
 
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
-                regValP = &luiVals[((*relocDataP) >> 0x15) & 0x1F];
+                regValP = &luiVals[(*relocDataP >> 0x15) & 0x1F];
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = (*regValP << 0x10) + (s16)*relocDataP - vRamStart + allocu32;
+                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vRamStart + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
