@@ -8,9 +8,9 @@ struct EnWizBrock;
 typedef void (*EnWizBrockActionFunc)(struct EnWizBrock*, GlobalContext*);
 
 typedef struct EnWizBrock {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ char unk_15C[0x44];
-    /* 0x01A0 */ EnWizBrockActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ UNK_TYPE1 unk_15C[0x44];
+    /* 0x1A0 */ EnWizBrockActionFunc actionFunc;
     /* 0x1A4 */ s16 timer; // Counter for despawing blocks (Max of 37)
     /* 0x1A6 */ s16 unk_1A6; // TODO: set but not used maybe used in wizzrobe?
     /* 0x1A8 */ s16 platformNum; // Numeric identifier for platform

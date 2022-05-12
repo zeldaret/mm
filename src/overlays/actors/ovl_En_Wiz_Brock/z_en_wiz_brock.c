@@ -11,9 +11,12 @@
 
 #define THIS ((EnWizBrock*)thisx)
 
-#define PLATFORM_TYPE_INACTIVE 0
-#define PLATFORM_TYPE_FIRE 1
-#define PLATFORM_TYPE_ICE 2
+typedef enum {
+    PLATFORM_TYPE_INACTIVE,
+    PLATFORM_TYPE_FIRE,
+    PLATFORM_TYPE_ICE,
+    PLATFORM_TYPE_MAX
+} PlatformType;
 
 void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -65,19 +68,19 @@ void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
 }
 
 /**
- * @brief Checks the platform status, when the Wizzrobe is defeated, starts incrementing timer to
- * 30 at which point the platforms are despawned.
+ * @brief Checks the platform status, when the Wizzrobe is defeated, which triggers timer to
+ *  count up to 30 at which point the platforms are despawned.
  */
 void EnWizBrock_UpdateStatus(EnWizBrock* this, GlobalContext* globalCtx) {
     if (this->platformType == PLATFORM_TYPE_INACTIVE) {
-        if (this->dyna.actor.colChkInfo.health != 3) {
+        if (this->dyna.actor.colChkInfo.health != PLATFORM_TYPE_MAX) {
             this->platformType = this->dyna.actor.colChkInfo.health;
         }
     }
 
     if (this->dyna.actor.colChkInfo.health == 0) {
         this->timer++;
-        if ((BREG(49) + 30) < this->timer) {
+        if (this->timer > (BREG(49) + 30)) {
             Math_ApproachZeroF(&this->dyna.actor.scale.y, (BREG(50) / 10.0f) + 0.3f, (BREG(51) / 10000.0f) + 0.003f);
             Math_ApproachZeroF(&this->alpha, (BREG(52) / 10.0f) + 1.0f, (BREG(53) / 10.0f) + 35.0f);
             Math_ApproachF(&this->dyna.actor.scale.x, (BREG(54) / 100.0f) + 0.02f, (BREG(55) / 100.0f) + 0.2f,
