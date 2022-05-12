@@ -707,7 +707,7 @@ void func_8091EFE8(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.speedXZ *= 0.5f;
     }
 
-    if (!(Rand_Next() >> 0x1B) || ((this->actor.bgCheckFlags & 8) && !(Rand_Next() >> 0x1E)) ||
+    if (((Rand_Next() >> 0x1B) == 0) || ((this->actor.bgCheckFlags & 8) && ((Rand_Next() >> 0x1E) == 0)) ||
         !(this->actor.bgCheckFlags & 0x20)) {
         temp_f0 = Rand_ZeroOne();
         sp34 = (1.0f - SQ(temp_f0)) * sp3C->home.rot.x;

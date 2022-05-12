@@ -88,7 +88,6 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
 f32 Rand_Centered_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    *rndNum = next;
-    sRandFloat = (next >> 9) | 0x3F800000;
+    sRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
     return *((f32*)&sRandFloat) - 1.5f;
 }

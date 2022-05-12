@@ -400,11 +400,11 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     EnKusa_SetupWaitObject(this);
     if (D_809366B4) {
-        D_80936CD8 = (Rand_Next() >> 0x10);
-        D_80936CDA = (Rand_Next() >> 0x10);
-        D_80936CDC = (Rand_Next() >> 0x10);
-        D_80936CDE = (Rand_Next() >> 0x10);
-        D_80936CE0 = (Rand_Next() >> 0x10);
+        D_80936CD8 = Rand_Next() >> 0x10;
+        D_80936CDA = Rand_Next() >> 0x10;
+        D_80936CDC = Rand_Next() >> 0x10;
+        D_80936CDE = Rand_Next() >> 0x10;
+        D_80936CE0 = Rand_Next() >> 0x10;
         D_809366B4 = false;
         EnKusa_Sway();
         kusaGameplayFrames = globalCtx->gameplayFrames;
