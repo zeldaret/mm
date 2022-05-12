@@ -15,7 +15,7 @@ typedef enum {
     PLATFORM_TYPE_INACTIVE,
     PLATFORM_TYPE_FIRE,
     PLATFORM_TYPE_ICE,
-    PLATFORM_TYPE_MAX
+    PLATFORM_TYPE_MAX,
 } PlatformType;
 
 void EnWizBrock_Init(Actor* thisx, GlobalContext* globalCtx);
