@@ -198,6 +198,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
     *arg2 = (s32)temp_f22 + arg0->unk_00[2];
 }
 #else
+void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Driftice/func_80A66930.s")
 #endif
 

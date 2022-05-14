@@ -2,6 +2,7 @@
 #define Z_EN_SYATEKI_DEKUNUTS_H
 
 #include "global.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define EN_SYATEKI_DEKUNUTS_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
 #define EN_SYATEKI_DEKUNUTS_GET_PARAM_F0(thisx) (((thisx)->params & 0xF0) >> 4)
@@ -28,8 +29,8 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1EE */ s16 unk_1EE;
     /* 0x1F0 */ s16 unk_1F0;
     /* 0x1F2 */ s16 unk_1F2;
-    /* 0x1F4 */ Vec3s jointTable[10];
-    /* 0x230 */ Vec3s morphTable[10];
+    /* 0x1F4 */ Vec3s jointTable[DEKU_SCRUB_LIMB_MAX];
+    /* 0x230 */ Vec3s morphTable[DEKU_SCRUB_LIMB_MAX];
     /* 0x26C */ UNK_TYPE1 unk_26C[0x4];
 } EnSyatekiDekunuts; // size = 0x270
 
