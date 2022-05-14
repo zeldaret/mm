@@ -36,6 +36,7 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
         switch (RELOC_TYPE(reloc)) {
             case R_MIPS_32 << 24:
                 // Handles 32-bit address relocation, used for things such as jump tables and pointers in data.
+                // Just relocate the full address
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0xF000000) == 0) {
@@ -46,6 +47,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
             case R_MIPS_26 << 24:
                 // Handles 26-bit address relocation, used for jumps and jals.
+                // Extract the address from the target field of the J-type MIPS instruction.
+                // Relocate the address and update the instruction.
 
                 *relocDataP = (*relocDataP & 0xFC000000) |
                               (((PHYS_TO_K0((*relocDataP & 0x3FFFFFF) << 2) - vRamStart + allocu32) & 0xFFFFFFF) >> 2);
@@ -53,7 +56,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
             case R_MIPS_HI16 << 24:
                 // Handles relocation for a hi/lo pair, part 1.
-                // Store the reference to the LUI instruction (hi), and update it in the R_MIPS_LO16 section.
+                // Store the reference to the LUI instruction (hi) using the `rt` register of the instruction.
+                // This will be updated later in the `R_MIPS_LO16` section.
 
                 luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
                 luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
@@ -61,9 +65,10 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
             case R_MIPS_LO16 << 24:
                 // Handles relocation for a hi/lo pair, part 2.
-                // Updates the LUI instruction (hi) to reflect the relocated address.
-                // The full address is calculated from the LUI and lo parts, and then updated.
+                // Grab the stored LUI (hi) from the `R_MIPS_HI16` section using the `rs` register of the instruction.
+                // The full address is calculated, relocated, and then used to update both the LUI and lo instructions.
                 // If the lo part is negative, add 1 to the LUI.
+                // Note: The lo instruction is assumed to have a signed immediate.
 
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
                 regValP = &luiVals[(*relocDataP >> 0x15) & 0x1F];
