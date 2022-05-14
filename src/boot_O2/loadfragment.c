@@ -36,11 +36,10 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
     for (i = 0; i < ovl->nRelocations; i++) {
         reloc = ovl->relocations[i];
-        relocDataP = (u32*)(sections[reloc >> 0x1E] + (reloc & 0xFFFFFF));
+        relocDataP = (u32*)(sections[RELOC_SECTION(reloc)] + RELOC_OFFSET(reloc));
 
-        switch (reloc & 0x3F000000) {
-            case 0x2000000:
-                // R_MIPS_32
+        switch (RELOC_TYPE(reloc)) {
+            case R_MIPS_32 << 24:
                 // Handles 32-bit address relocation, used for things such as jump tables and pointers in data.
 
                 // Check address is valid for relocation
@@ -50,26 +49,22 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
                 }
                 break;
 
-            case 0x4000000:
-                // R_MIPS_26
+            case R_MIPS_26 << 24:
                 // Handles 26-bit address relocation, used for jumps and jals.
 
-                *relocDataP =
-                    (*relocDataP & 0xFC000000) |
-                    ((((((*relocDataP & 0x3FFFFFF) << 2) | 0x80000000) - vRamStart + allocu32) & 0xFFFFFFF) >> 2);
+                *relocDataP = (*relocDataP & 0xFC000000) |
+                              (((PHYS_TO_K0((*relocDataP & 0x3FFFFFF) << 2) - vRamStart + allocu32) & 0xFFFFFFF) >> 2);
                 break;
 
-            case 0x5000000:
-                // R_MIPS_HI16
+            case R_MIPS_HI16 << 24:
                 // Handles relocation for a hi/lo pair, part 1.
-                // Store the reference to the LUI instruction, and update it in the R_MIPS_LO16 section.
+                // Store the reference to the LUI instruction (hi), and update it in the R_MIPS_LO16 section.
 
                 luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
                 luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
                 break;
 
-            case 0x6000000:
-                // R_MIPS_LO16
+            case R_MIPS_LO16 << 24:
                 // Handles relocation for a hi/lo pair, part 2.
                 // Updates the LUI instruction (hi) to reflect the relocated address.
                 // The full address is calculated from the LUI and lo parts, and then updated.

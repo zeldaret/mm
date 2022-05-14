@@ -264,7 +264,7 @@ void __osPackReadData(void);
 uintptr_t osVirtualToPhysical(void* vaddr);
 u32 __osGetSR(void);
 void __osSetSR(u32 value);
-void osWritebackDCache(void* vaddr, size_t nbytes);
+void osWritebackDCache(void* vaddr, s32 nbytes);
 void __createSpeedParam(void);
 void osInitialize(void);
 void __osInitialize_autodetect(void);
