@@ -1,7 +1,7 @@
 /**
  * @file loadfragment.c
  *
- * Functions used to process and relocate Zelda64 overlays
+ * Functions used to process and relocate overlays
  *
  * Note:
  *  These are completly unused in favor of the functions in `loadfragment2.c`.

@@ -1,7 +1,7 @@
 /**
  * @file loadfragment2.c
  *
- * Functions used to process and relocate Zelda64 overlays
+ * Functions used to process and relocate overlays
  *
  */
 #include "global.h"
