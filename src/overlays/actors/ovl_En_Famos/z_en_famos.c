@@ -193,7 +193,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = 250;
     this->baseHeight = this->actor.world.pos.y;
     // params: [this->actor.shape.rot.x] is used to set aggro distance
-    this->aggroDistance = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
+    this->aggroDistance = (GET_FAMOS_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
     this->hasFinishedRotating = true;

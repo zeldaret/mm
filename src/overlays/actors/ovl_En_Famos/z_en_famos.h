@@ -16,8 +16,7 @@ typedef struct EnFamosRock {
 } EnFamosRock; // size = 0x24
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)
-
-// params: [this->actor.shape.rot.x] is used to set aggro distance
+#define GET_FAMOS_AGGRO_DISTANCE(thisx) (thisx->shape.rot.x)
 
 // stateTimer gets reused:
 //   after spotting player, counts frames until first attack (8)
