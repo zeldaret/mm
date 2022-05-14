@@ -192,7 +192,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = 250;
     this->baseHeight = this->actor.world.pos.y;
-    // params: [this->actor.shape.rot.x] is used to set agro distance
+    // params: [this->actor.shape.rot.x] is used to set aggro distance
     this->aggroDistance = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
@@ -501,7 +501,7 @@ void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    if (this->actor.xzDistToPlayer < 30.0f && this->actor.floorHeight > BGCHECK_Y_MIN && // close enough
+    if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
         (surfaceType != 0xC && surfaceType != 0xD)) {
         EnFamos_SetupAttackAim(this);
 
@@ -617,7 +617,7 @@ void EnFamos_AttackRebound(EnFamos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->baseHeight < this->actor.world.pos.y || (this->actor.bgCheckFlags & 0x10)) { // touching ceiling
+    if ((this->baseHeight < this->actor.world.pos.y) || (this->actor.bgCheckFlags & 0x10)) { // touching ceiling
         this->actor.speedXZ = 0.0f;
         EnFamos_SetupChase(this);
     }
