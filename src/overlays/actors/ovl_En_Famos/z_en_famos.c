@@ -803,10 +803,10 @@ s32 EnFamos_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_InsertZRotation_s(this->flipRot, MTXMODE_APPLY);
         Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, MTXMODE_APPLY);
 
-    } else if (this->flippedTimer < 0 && // if set to -1, famos is dying
-               ((limbIndex == FAMOS_LIMB_SWORD) || (limbIndex == FAMOS_LIMB_SHIELD) ||
-                (limbIndex == FAMOS_LIMB_HEAD))) {
-        *dList = NULL;
+    } else if (this->flippedTimer < 0) { // if set to -1, famos is dying
+        if ((limbIndex == FAMOS_LIMB_SWORD) || (limbIndex == FAMOS_LIMB_SHIELD) || (limbIndex == FAMOS_LIMB_HEAD)) {
+            *dList = NULL;
+        }
     }
 
     return false;
