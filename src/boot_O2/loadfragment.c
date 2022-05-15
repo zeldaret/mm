@@ -45,7 +45,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0xF000000) == 0) {
-                    *relocDataP = *relocDataP - vRamStart + allocu32;
+                    *relocDataP = RELOCATE_ADDR(*relocDataP, vRamStart, allocu32);
                 } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
@@ -55,8 +55,9 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
                 // Extract the address from the target field of the J-type MIPS instruction.
                 // Relocate the address and update the instruction.
 
-                *relocDataP = (*relocDataP & 0xFC000000) |
-                              (((PHYS_TO_K0((*relocDataP & 0x3FFFFFF) << 2) - vRamStart + allocu32) & 0xFFFFFFF) >> 2);
+                *relocDataP =
+                    (*relocDataP & 0xFC000000) |
+                    ((RELOCATE_ADDR(PHYS_TO_K0((*relocDataP & 0x3FFFFFF) << 2), vRamStart, allocu32) & 0xFFFFFFF) >> 2);
                 break;
 
             case R_MIPS_HI16 << 24:
@@ -80,7 +81,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vRamStart + allocu32;
+                    relocatedAddress = RELOCATE_ADDR((*regValP << 0x10) + (s16)*relocDataP, vRamStart, allocu32);
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);

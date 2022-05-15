@@ -287,6 +287,8 @@ typedef enum IRQ_TYPE {
     IRQ_PRENMI_4 = 0x2A1
 } IRQ_TYPE;
 
+#define RELOCATE_ADDR(addr, vRamStart, allocu32) ((addr) - (vRamStart) + (allocu32))
+
 #define RELOC_SECTION(reloc) ((reloc) >> 0x1E)
 #define RELOC_OFFSET(reloc) ((reloc) & 0xFFFFFF)
 #define RELOC_TYPE(reloc) ((reloc) & 0x3F000000)
