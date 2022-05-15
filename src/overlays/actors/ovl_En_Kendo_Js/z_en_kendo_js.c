@@ -454,7 +454,7 @@ s32 func_80B26F6C(EnKendoJs* this, GlobalContext* globalCtx) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (Player_GetMeleeWeaponHeld(player)) {
+            if (Player_GetMeleeWeaponHeld(player) != 0) {
                 Message_StartTextbox(globalCtx, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;

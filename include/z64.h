@@ -1331,7 +1331,7 @@ struct GlobalContext {
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
-    /* 0x18794 */ s32 (*unk_18794)(GlobalContext*, Player*, s32, s32);
+    /* 0x18794 */ s32 (*unk_18794)(GlobalContext* globalCtx, Player* player, s32 arg2, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;

@@ -594,7 +594,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (Player_InCsMode(globalCtx) == 0 || globalCtx->sceneNum == SCENE_SECOM)) {
+                (!Player_InCsMode(globalCtx) || globalCtx->sceneNum == SCENE_SECOM)) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, globalCtx, false);

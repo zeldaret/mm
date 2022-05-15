@@ -115,16 +115,15 @@ s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
 #endif
 
 // Load mask object?
+/**
+ * Notes:
+ *
+ * player->maskObjectLoadState seems to be able to take 3 possible values
+ * - 0: The mask object is loaded.
+ * - 1: The mask object must be changed (and the DMA request has not been sent yet)
+ * - 2: Waiting for the DMA request to complete.
+ */
 void func_801229FC(Player* player) {
-    /**
-     * Notes:
-     *
-     * player->maskObjectLoadState seems to be able to take 3 possible values
-     * - 0: The mask object is loaded.
-     * - 1: The mask object must be changed (and the DMA request has not been sent yet)
-     * - 2: Waiting for the DMA request to complete.
-     */
-
     if (player->maskObjectLoadState == 1) {
         s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
@@ -245,30 +244,30 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
 extern u8 sMaskItemIds[PLAYER_MASK_MAX - 1];
 #if 0
 u8 sMaskItemIds[PLAYER_MASK_MAX - 1] = {
-    ITEM_MASK_TRUTH,         // PLAYER_MASK_TRUTH
-    ITEM_MASK_KAFEIS_MASK,   // PLAYER_MASK_KAFEIS_MASK
-    ITEM_MASK_ALL_NIGHT,     // PLAYER_MASK_ALL_NIGHT
-    ITEM_MASK_BUNNY,         // PLAYER_MASK_BUNNY
-    ITEM_MASK_KEATON,        // PLAYER_MASK_KEATON
-    ITEM_MASK_GARO,          // PLAYER_MASK_GARO
-    ITEM_MASK_ROMANI,        // PLAYER_MASK_ROMANI
-    ITEM_MASK_CIRCUS_LEADER, // PLAYER_MASK_CIRCUS_LEADER
-    ITEM_MASK_POSTMAN,       // PLAYER_MASK_POSTMAN
-    ITEM_MASK_COUPLE,        // PLAYER_MASK_COUPLE
-    ITEM_MASK_GREAT_FAIRY,   // PLAYER_MASK_GREAT_FAIRY
-    ITEM_MASK_GIBDO,         // PLAYER_MASK_GIBDO
-    ITEM_MASK_DON_GERO,      // PLAYER_MASK_DON_GERO
-    ITEM_MASK_KAMARO,        // PLAYER_MASK_KAMARO
-    ITEM_MASK_CAPTAIN,       // PLAYER_MASK_CAPTAIN
-    ITEM_MASK_STONE,         // PLAYER_MASK_STONE
-    ITEM_MASK_BREMEN,        // PLAYER_MASK_BREMEN
-    ITEM_MASK_BLAST,         // PLAYER_MASK_BLAST
-    ITEM_MASK_SCENTS,        // PLAYER_MASK_SCENTS
-    ITEM_MASK_GIANT,         // PLAYER_MASK_GIANT
-    ITEM_MASK_FIERCE_DEITY,  // PLAYER_MASK_FIERCE_DEITY
-    ITEM_MASK_GORON,         // PLAYER_MASK_GORON
-    ITEM_MASK_ZORA,          // PLAYER_MASK_ZORA
-    ITEM_MASK_DEKU,          // PLAYER_MASK_DEKU
+    ITEM_MASK_TRUTH,
+    ITEM_MASK_KAFEIS_MASK,
+    ITEM_MASK_ALL_NIGHT,
+    ITEM_MASK_BUNNY,
+    ITEM_MASK_KEATON,
+    ITEM_MASK_GARO,
+    ITEM_MASK_ROMANI,
+    ITEM_MASK_CIRCUS_LEADER,
+    ITEM_MASK_POSTMAN,
+    ITEM_MASK_COUPLE,
+    ITEM_MASK_GREAT_FAIRY,
+    ITEM_MASK_GIBDO,
+    ITEM_MASK_DON_GERO,
+    ITEM_MASK_KAMARO,
+    ITEM_MASK_CAPTAIN,
+    ITEM_MASK_STONE,
+    ITEM_MASK_BREMEN,
+    ITEM_MASK_BLAST,
+    ITEM_MASK_SCENTS,
+    ITEM_MASK_GIANT,
+    ITEM_MASK_FIERCE_DEITY,
+    ITEM_MASK_GORON,
+    ITEM_MASK_ZORA,
+    ITEM_MASK_DEKU,
 };
 #endif
 
@@ -569,7 +568,7 @@ typedef struct {
 } TextTriggerEntry; // size = 0x04
 
 extern TextTriggerEntry sEnvironmentTextTriggers[];
-// Those textIds are OoT remanents and are not present anymore in this game anymore
+// These textIds are OoT remnants and are not present in this game anymore, and don't point to anything relevant
 #if 0
 TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 1, 0x26FC },
@@ -880,7 +879,7 @@ s32 func_801242DC(GlobalContext* globalCtx) {
         return 0;
     }
 
-    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused on MM
+    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
     triggerEntry = &sEnvironmentTextTriggers[index];
     if (!Player_InCsMode(globalCtx)) {
         if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (index == 0)) {
@@ -970,7 +969,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     if (ABS_ALT(BINANG_SUB(sp3C, arg3)) > 0x4000) {
         sp3C = BINANG_ROT180(sp3C);
     }
-    sp3C = sp3C - arg3;
+    sp3C -= arg3;
 
     temp_v0 = Math_FAtan2F(sp44.y, sp40);
     temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
@@ -1051,10 +1050,10 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801262C8.s")
 
 // unused
-s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    Player* player = (Player*)actor;
+s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    Player* player = (Player*)thisx;
 
-    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, actor)) {
+    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, thisx)) {
         *dList = NULL;
     }
 
@@ -1072,7 +1071,7 @@ u8 D_801C096C[PLAYER_SHIELD_MAX] = {
 };
 #endif
 
-void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2, Vec3f arg3[4]) {
+void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f sp4C;
         Vec3f sp40;
@@ -1084,9 +1083,9 @@ void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2,
         Matrix_MultiplyVector3fByState(&arg3[1], &sp34);
         Matrix_MultiplyVector3fByState(&arg3[2], &sp40);
         Matrix_MultiplyVector3fByState(&arg3[3], &sp4C);
-        Collider_SetQuadVertices(arg2, &sp28, &sp34, &sp40, &sp4C);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &arg2->base);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &arg2->base);
+        Collider_SetQuadVertices(collider, &sp28, &sp34, &sp40, &sp4C);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &collider->base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
     }
 }
 
