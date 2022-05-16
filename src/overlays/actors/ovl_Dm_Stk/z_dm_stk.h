@@ -33,12 +33,12 @@ typedef struct DmStk {
     /* 0x032F */ u8 fadeOutState;
     /* 0x0330 */ s32 fadeOutTimer;
     /* 0x0334 */ u8 csAction;
-    /* 0x0335 */ u8 unk_335; // set but never used
+    /* 0x0335 */ u8 hasBeenHit; // set but never used
     /* 0x0336 */ s8 objectStkObjectIndex;
     /* 0x0337 */ s8 objectStk2ObjectIndex;
     /* 0x0338 */ s8 objectStk3ObjectIndex;
     /* 0x0339 */ u8 hitCount;
-    /* 0x033A */ u8 unk_33A;
+    /* 0x033A */ u8 dekuPipesCutsceneState;
     /* 0x033B */ u8 shouldDraw;
 } DmStk; // size = 0x33C
 

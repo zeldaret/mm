@@ -139,6 +139,14 @@ typedef enum {
     /* 1 */ SKULL_KID_FADE_OUT_STATE_FADING_OUT,
 } SkullKidFadeOutState;
 
+typedef enum {
+    /* 0 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CANNOT_START_CUTSCENE,
+    /* 1 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE,
+    /* 2 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA,
+    /* 3 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED,
+    /* 4 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_ENDED
+} SkullKidDekuPipesCutsceneState;
+
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
     ACTORCAT_ITEMACTION,
@@ -923,7 +931,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->shouldDraw = true;
     if (this->actor.params != 1) {
-        this->unk_33A = 0;
+        this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CANNOT_START_CUTSCENE;
         this->objectStkObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
         this->objectStk2ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
         this->objectStk3ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
@@ -950,7 +958,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->fogN = 996;
             this->fogF = 1000;
             this->fogScale = 0.7f;
-            this->unk_335 = 0;
+            this->hasBeenHit = false;
 
             Collider_InitCylinder(globalCtx, &this->collider);
 
@@ -986,7 +994,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->actionFunc = DmStk_ClockTower_DoNothing;
                 }
             } else {
-                this->unk_33A = 1;
+                this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE;
                 this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
                 sCylinderInit.base.colType = COLTYPE_WOOD;
@@ -1189,23 +1197,23 @@ void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalC
     }
 }
 
-void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp_v0;
+    s32 actorActionIndex;
 
     if (Cutscene_CheckActorAction(globalCtx, 107)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 107);
+        actorActionIndex = Cutscene_GetActorActionIndex(globalCtx, 107);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
-            if (this->csAction != globalCtx->csCtx.actorActions[temp_v0]->action) {
-                this->csAction = globalCtx->csCtx.actorActions[temp_v0]->action;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actorActionIndex]->startFrame) {
+            if (this->csAction != globalCtx->csCtx.actorActions[actorActionIndex]->action) {
+                this->csAction = globalCtx->csCtx.actorActions[actorActionIndex]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
                     this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
                 } else {
                     this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
                 }
 
-                switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
+                switch (globalCtx->csCtx.actorActions[actorActionIndex]->action) {
                     case 0:
                     case 1:
                         this->animationId = SKULL_KID_ANIMATION_IDLE_1;
@@ -1465,7 +1473,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actorActionIndex);
     } else {
         this->csAction = 99;
     }
@@ -1608,7 +1616,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx) {
         }
 
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-            this->unk_335 = 1;
+            this->hasBeenHit = true;
             this->actionFunc = DmStk_ClockTower_StartDropOcarinaCutscene;
         }
     }
@@ -1626,7 +1634,7 @@ void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
         }
 
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-            this->unk_335 = 1;
+            this->hasBeenHit = true;
             this->actionFunc = DmStk_ClockTower_DeflectHit;
         }
     }
@@ -1656,23 +1664,22 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
             DmStk_UpdateCollision(this, globalCtx);
         }
 
-        func_80AA1D1C(this, globalCtx);
+        DmStk_UpdateCutscenes(this, globalCtx);
         DmStk_PlaySound(this, globalCtx);
 
-        switch (this->unk_33A) {
-            case 1:
+        switch (this->dekuPipesCutsceneState) {
+            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE:
                 if (func_800B8718(&this->actor, &globalCtx->state)) {
-                    this->unk_33A = 2;
+                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA;
                 } else {
                     func_800B874C(&this->actor, globalCtx, this->actor.xzDistToPlayer,
                                   fabsf(this->actor.playerHeightRel));
                 }
                 break;
 
-            case 2:
+            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA:
                 if (ActorCutscene_GetCanPlayNext(0x10)) {
-                    this->unk_33A = 3;
-                    // When did you get that instrument?
+                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED;
                     ActorCutscene_Start(0x10, &this->actor);
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
@@ -1680,9 +1687,9 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 3:
+            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED:
                 if (globalCtx->csCtx.state == 0) {
-                    this->unk_33A = 4;
+                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_ENDED;
                 }
                 break;
         }
