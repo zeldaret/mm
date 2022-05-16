@@ -3,7 +3,7 @@
  *
  * Functions used to process and relocate overlays
  *
- * Note:
+ * @note:
  *  These are completly unused in favor of the functions in `loadfragment2.c`.
  *
  *  The main difference between them seems to be the lack of vRamEnd arguments here.
