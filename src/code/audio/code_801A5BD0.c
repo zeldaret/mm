@@ -196,15 +196,12 @@ void Audio_ProcessSfxRequest(void) {
     u16 sfxId;
     u8 count;
     u8 index;
-    SfxRequest* req;
+    SfxRequest* req = &sSfxRequests[sSfxRequestReadIndex];
     SfxBankEntry* entry;
     SfxParams* sfxParams;
     s32 bankId;
     u8 evictImportance;
-    u8 evictIndex;
-
-    req = &sSfxRequests[sSfxRequestReadIndex];
-    evictIndex = 0x80;
+    u8 evictIndex = 0x80;
 
     if (req->sfxId == 0) {
         return;
