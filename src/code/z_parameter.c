@@ -190,7 +190,6 @@ s16 D_801BF97C = 255;
 f32 D_801BF980 = 1.0f;
 s32 D_801BF984 = 0;
 
-// Display List
 Gfx D_801BF988[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
