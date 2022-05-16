@@ -28,9 +28,8 @@ void Rand_Seed(u32 seed) {
 }
 
 /**
- * Returns a pseudo-random floating-point number between 0.0f and 1.0f, by generating
- * the next integer and masking it to an IEEE-754 compliant floating-point number
- * between 1.0f and 2.0f, returning the result subtract 1.0f.
+ * Returns a pseudo-random floating-point number between 0.0f and 1.0f, by generating the next integer and masking it to
+ * an IEEE-754 compliant floating-point number between 1.0f and 2.0f, returning the result subtract 1.0f.
  */
 f32 Rand_ZeroOne(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
@@ -39,8 +38,8 @@ f32 Rand_ZeroOne(void) {
 }
 
 /**
- * Returns a pseudo-random floating-point number between -0.5f and 0.5f by the same
- * manner in which Rand_ZeroOne generates its result.
+ * Returns a pseudo-random floating-point number between -0.5f and 0.5f by the same manner in which Rand_ZeroOne
+ * generates its result.
  */
 f32 Rand_Centered(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
@@ -63,16 +62,9 @@ u32 Rand_Next_Variable(u32* rndNum) {
 }
 
 /**
- * Generates the next pseudo-random floating-point number between 0.0f and
- * 1.0f from the provided rndNum.
+ * Generates the next pseudo-random floating-point number between 0.0f and 1.0f from the provided rndNum.
  *
- * @remark This is also recommended by Numerical Recipes, pp. 284-5:
- * > If you need floating-point values instead of 32-bit integers, and want to avoid a divide by floating-point 2^{32},
- * > a dirty trick is to mask in an exponent that makes the value lie between 1 and 2, then subtract 1.0.
- * > [...]
- * > Your authors have tried very hard to make almost all of the material in this book machine and compiler independent
- * > - indeed, even programming language independent. This subsection is a rare aberration. Forgive us. Once in a great
- * > while the temptation to be really dirty is just irresistible."
+ * @remark This is also recommended by Numerical Recipes, pp. 284-5.
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
@@ -82,8 +74,7 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
 }
 
 /**
- * Generates the next pseudo-random floating-point number between -0.5f and
- * 0.5f from the provided rndNum.
+ * Generates the next pseudo-random floating-point number between -0.5f and 0.5f from the provided rndNum.
  */
 f32 Rand_Centered_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
