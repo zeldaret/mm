@@ -7,6 +7,11 @@
 #include "z_obj_tokei_turret.h"
 #include "objects/object_tokei_turret/object_tokei_turret.h"
 
+typedef enum {
+    DISPLAY_TURRET_BASE,
+    DISPLAY_TURRET_TOP,
+} TokeiDisplayState;
+
 #define FLAGS 0x00000000
 
 #define THIS ((ObjTokeiTurret*)thisx)
@@ -34,36 +39,30 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     ObjTokeiTurret* this = THIS;
-    Actor* actor;
-    s32 actorParams;
+    s32 params;
 
-    actor = &this->dyna.actor;
-    actorParams = actor->params & 3;
-    this->dyna.actor = *actor;
-    Actor_ProcessInitChain(actor, sInitChain);
+    params = OBJTOKEI_DISPLAY_STATE(thisx);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if ((actorParams == 0) || (actorParams == 1)) {
+    if (params == DISPLAY_TURRET_BASE || params == DISPLAY_TURRET_TOP) {
+        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 240.0f;
 
-        actor->uncullZoneScale = 240.0f;
-        actor->uncullZoneDownward = 240.0f;
-
-        if (actorParams == 0) {
+        if (params == DISPLAY_TURRET_BASE) {
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretBaseCol);
-            return;
+        } else {
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretPlatformCol);
         }
-
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretPlatformCol);
-        return;
+    } else {
+        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0;
     }
-
-    actor->uncullZoneScale = 1300.0f;
-    actor->uncullZoneDownward = 1300.0f;
 }
 
 void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiTurret* this = THIS;
+
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -74,21 +73,19 @@ void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiTurret* this = THIS;
     Gfx* gfx;
 
-    if ((this->dyna.actor.params & 3) == 1) {
+    if (OBJTOKEI_DISPLAY_STATE(thisx) == DISPLAY_TURRET_TOP) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
         gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-        gSPDisplayList(gfx++, &gTokeiTurretPlatformTopDL);
+        gSPDisplayList(gfx++, gTokeiTurretPlatformTopDL);
         POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
-        return;
-    }
-    if ((this->dyna.actor.params & 3) == 0) {
+    } else if (OBJTOKEI_DISPLAY_STATE(thisx) == DISPLAY_TURRET_BASE) {
         Gfx_DrawDListOpa(globalCtx, gTokeiTurretPlatformBaseDL);
-        return;
+    } else {
+        Gfx_DrawDListOpa(globalCtx, gClockTownFlagsDL);
     }
-    Gfx_DrawDListOpa(globalCtx, gClockTownFlagsDL);
 }
