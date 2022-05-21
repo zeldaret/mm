@@ -494,7 +494,7 @@ wordReplace = {
     "func_80158FB0": "Message_LoadTimeNES",
     "func_8015926C": "Message_LoadAreaTextNES",
     "func_8015E750": "Message_FindCreditsMessage",
-    
+    "func_80133038": "Schedule_RunScript",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
