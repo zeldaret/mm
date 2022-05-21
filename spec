@@ -3909,8 +3909,7 @@ beginseg
     name "ovl_En_Pst"
     compress
     include "build/src/overlays/actors/ovl_En_Pst/z_en_pst.o"
-    //include "build/data/ovl_En_Pst/ovl_En_Pst.data.o"
-    include "build/data/ovl_En_Pst/ovl_En_Pst.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Pst/ovl_En_Pst_reloc.o"
 endseg
 
 beginseg

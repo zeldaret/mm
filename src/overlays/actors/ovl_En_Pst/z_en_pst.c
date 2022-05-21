@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pst.h"
+#include "objects/object_pst/object_pst.h"
 
 #define FLAGS (ACTOR_FLAG_1)
 
@@ -73,8 +74,7 @@ const ActorInit En_Pst_InitVars = {
     (ActorFunc)EnPst_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B2C4B8 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT1,
         AT_NONE,
@@ -94,14 +94,11 @@ static ColliderCylinderInit D_80B2C4B8 = {
     { 28, 72, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B2C4E4 = { 1, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 s32 D_80B2C4F0[] = { 0x06000018, 0x3F800000, 0x0000FFFF, 0x02000000 };
 
-s32 D_80B2C500[] = { D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230, 0x00000000, 0x00000000, 0x00000000 };
-
-extern UNK_TYPE D_06001A80;
+static UNK_TYPE D_80B2C500[] = { D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230 };
 
 void func_80B2B830(EnPst* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -111,17 +108,17 @@ void func_80B2B830(EnPst* this, GlobalContext* globalCtx) {
 s32 func_80B2B874(EnPst* this) {
     switch (this->actor.params) {
         case 0:
-            return gSaveContext.save.weekEventReg[0x1B] & 2;
+            return gSaveContext.save.weekEventReg[0x1B] & 0x2;
         case 1:
-            return gSaveContext.save.weekEventReg[0x1B] & 4;
+            return gSaveContext.save.weekEventReg[0x1B] & 0x4;
         case 2:
-            return gSaveContext.save.weekEventReg[0x1B] & 8;
+            return gSaveContext.save.weekEventReg[0x1B] & 0x8;
         case 3:
             return gSaveContext.save.weekEventReg[0x1B] & 0x10;
         case 4:
             return gSaveContext.save.weekEventReg[0x1B] & 0x20;
         default:
-            return 0;
+            return false;
     }
 }
 
@@ -132,13 +129,13 @@ s32 func_80B2B8F4(EnPst* this) {
         case 1:
             return gSaveContext.save.weekEventReg[0x1B] & 0x80;
         case 2:
-            return gSaveContext.save.weekEventReg[0x1C] & 1;
+            return gSaveContext.save.weekEventReg[0x1C] & 0x1;
         case 3:
-            return gSaveContext.save.weekEventReg[0x1C] & 2;
+            return gSaveContext.save.weekEventReg[0x1C] & 0x2;
         case 4:
-            return gSaveContext.save.weekEventReg[0x1C] & 4;
+            return gSaveContext.save.weekEventReg[0x1C] & 0x4;
         default:
-            return 0;
+            return false;
     }
 }
 
@@ -225,51 +222,111 @@ s32* func_80B2BAA4(EnPst* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BBFC.s")
+s32 func_80B2BBFC(EnPst* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 sp20 = 0;
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BCF8.s")
-s32 func_80B2BCF8(EnPst* this, GlobalContext* globalCtx, s16 unkArg) {
-    SubS_UpdateFlags(&this->unk208, 3, 7);
-    return 1;
+    if (this->unk208 & 7) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+            this->unk208 &= ~0x30;
+            if (player->exchangeItemId == EXCH_ITEM_2D) {
+                this->unk208 |= 0x10;
+                this->unk218 = player->exchangeItemId;
+            } else if (player->exchangeItemId != 0) {
+                this->unk208 |= 0x20;
+                this->unk218 = player->exchangeItemId;
+            }
+            this->unk21C = func_80B2B874(this);
+            SubS_UpdateFlags(&this->unk208, 0, 7);
+            this->unk20E = 0;
+            this->unk210 = NULL;
+            this->unk208 |= 0x40;
+            this->unk1DC = func_80B2BAA4(this, globalCtx);
+            this->actionFunc = func_80B2BE54;
+            sp20 = 1;
+        }
+    }
+    return sp20;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BD30.s")
+s32 EnPst_UpdateFlagsSubs(EnPst* this, GlobalContext* globalCtx, struct_80133038_arg2* unkArg) {
+    SubS_UpdateFlags(&this->unk208, 3, 7);
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BD88.s")
+s32 func_80B2BD30(EnPst* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+    s32 ret = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BD98.s")
+    this->unk208 = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2BE54.s")
-// void func_80B2BE54(EnPst* this, GlobalContext* globalCtx) {
+    switch (arg2->unk0) {
+        case 1:
+            ret = EnPst_UpdateFlagsSubs(this, globalCtx, arg2);
+            break;
+        case 2:
+            ret = true;
+            break;
+    }
+    return ret;
+}
 
-//     if (func_8010BF58(&this->actor, globalCtx, this->unk1DC, this->unk210, &this->unk1E0) != 0) {
-//         if (func_80B2B874(this) != this->unk21C) {
-//             if (gSaveContext.save.day != 1) {
-//                 if (gSaveContext.save.day != 2) {
-//                     gSaveContext.save.weekEventReg[0x5B] |= 8;
-//                 } else if (func_80B2B8F4(this) != 0) {
-//                     gSaveContext.save.weekEventReg[0x5B] |= 8;
-//                 } else {
-//                     gSaveContext.save.weekEventReg[0x5B] |= 4;
-//                 }
-//             } else {
-//                 gSaveContext.save.weekEventReg[0x5B] |= 4;
-//             }
-//         }
-//         SubS_UpdateFlags(&this->unk208, 3U, 7U);
-//         this->unk1E0 = 0;
-//         this->actionFunc = func_80B2BD98;
-//     }
-// }
+void func_80B2BD88(EnPst* this, GlobalContext* globalCtx) {
+}
+
+void func_80B2BD98(EnPst* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s16 params = this->actor.params;
+    struct_80133038_arg2 sp1C;
+
+    if (!func_80133038(globalCtx, D_80B2C500[params], &sp1C) ||
+        ((this->unk1D8 != sp1C.unk0) && !func_80B2BD30(this, globalCtx, &sp1C))) {
+        this->actor.shape.shadowDraw = NULL;
+        this->actor.flags &= ~ACTOR_FLAG_1;
+        sp1C.unk0 = 0;
+    } else {
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        this->actor.flags |= ACTOR_FLAG_1;
+    }
+    this->unk1D8 = sp1C.unk0;
+    func_80B2BD88(this, globalCtx);
+}
+
+void func_80B2BE54(EnPst* this, GlobalContext* globalCtx) {
+    if (func_8010BF58(&this->actor, globalCtx, this->unk1DC, this->unk210, &this->unk1E0)) {
+        if (func_80B2B874(this) != this->unk21C) {
+            switch (gSaveContext.save.day) {
+                case 1:
+                    gSaveContext.save.weekEventReg[0x5B] |= 4;
+                    break;
+
+                case 2:
+                    if (func_80B2B8F4(this) != 0) {
+                        gSaveContext.save.weekEventReg[0x5B] |= 8;
+                    } else {
+                        gSaveContext.save.weekEventReg[0x5B] |= 4;
+                    }
+                    break;
+
+                default:
+                    gSaveContext.save.weekEventReg[0x5B] |= 8;
+                    break;
+            }
+        }
+        SubS_UpdateFlags(&this->unk208, 3, 7);
+        this->unk1E0 = 0;
+        this->actionFunc = func_80B2BD98;
+    }
+}
 
 void EnPst_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPst* this = THIS;
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06001A80, NULL, &this->jointTable, &this->morphTable, 3);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B2C4B8);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B2C4E4);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_pst_Skel_001A80, NULL, &this->jointTable, &this->morphTable,
+                       3);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_UpdateFlags(&this->unk208, 3, 7);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, &D_80B2C4F0, 0);
     this->actor.targetMode = 0;
@@ -299,6 +356,27 @@ void EnPst_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2C11C.s")
+s32 EnPst_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnPst* this = THIS;
+    f32 phi_fa1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/EnPst_Draw.s")
+    if (limbIndex == 2) {
+        if (this->unk208 & 0x40) {
+            phi_fa1 = -100.0f;
+        } else {
+            phi_fa1 = 0.0f;
+        }
+        Matrix_InsertTranslation(0.0f, phi_fa1, 0.0f, MTXMODE_APPLY);
+    }
+    return false;
+}
+
+void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnPst* this = THIS;
+
+    if (this->unk1D8 != 0) {
+        func_8012C28C(globalCtx->state.gfxCtx);
+        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                              this->skelAnime.dListCount, EnPst_OverrideLimbDraw, NULL, &this->actor);
+    }
+}
