@@ -20,9 +20,22 @@ void EnTab_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BE127C(EnTab* this, GlobalContext* globalCtx);
 void func_80BE1348(EnTab* this, GlobalContext* globalCtx);
 
-s32 D_80BE18D0[] = {
-    0x0C000320, 0x0A00151B, 0x02093212, 0x010F0212, 0x00060003, 0x0400000E, 0x12000600, 0x020E0932, 0x12010105,
-    0x0A001519, 0x02093215, 0x050D0215, 0x37050501, 0x050E1537, 0x0505020E, 0x09321505, 0x01050000,
+static u8 D_80BE18D0[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x24 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x23 - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 18, 1, 0x1D - 0x0E),
+    /* 0x0E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x17 - 0x14),
+    /* 0x14 */ SCHEDULE_CMD_RET_VAL_L(0),
+    /* 0x17 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
+    /* 0x1D */ SCHEDULE_CMD_RET_TIME(9, 50, 18, 1, 1),
+    /* 0x23 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x24 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x41 - 0x28),
+    /* 0x28 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 50, 21, 5, 0x3B - 0x2E),
+    /* 0x2E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 55, 5, 5, 0x35 - 0x34),
+    /* 0x34 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x35 */ SCHEDULE_CMD_RET_TIME(21, 55, 5, 5, 2),
+    /* 0x3B */ SCHEDULE_CMD_RET_TIME(9, 50, 21, 5, 1),
+    /* 0x41 */ SCHEDULE_CMD_RET_NONE(),
 };
 
 s32 D_80BE1914[] = {
@@ -353,7 +366,7 @@ s32* func_80BE0E04(EnTab* this, GlobalContext* globalCtx) {
     return NULL;
 }
 
-s32 func_80BE0F04(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BE0F04(EnTab* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
     EnGm* sp28 = func_80BE04E0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_GM);
 
@@ -372,7 +385,7 @@ s32 func_80BE0F04(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* a
     return ret;
 }
 
-s32 func_80BE0FC4(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BE0FC4(EnTab* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
@@ -386,12 +399,12 @@ s32 func_80BE0FC4(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* a
     return true;
 }
 
-s32 func_80BE1060(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BE1060(EnTab* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
     this->unk_2FC = 0;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 1:
             ret = func_80BE0F04(this, globalCtx, arg2);
             break;
@@ -459,21 +472,20 @@ void func_80BE1224(EnTab* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE127C(EnTab* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
-    struct_80133038_arg2 sp18;
+    ScheduleResult sp18;
 
-    this->unk_31A = REG(15) + *unk_14;
+    this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
-    if (!func_80133038(globalCtx, D_80BE18D0, &sp18) ||
-        ((this->unk_1D8 != sp18.unk0) && !func_80BE1060(this, globalCtx, &sp18))) {
+    if (!Schedule_RunScript(globalCtx, D_80BE18D0, &sp18) ||
+        ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp18.unk0 = 0;
+        sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_1D8 = sp18.unk0;
+    this->unk_1D8 = sp18.result;
     func_80BE1224(this, globalCtx);
 }
 

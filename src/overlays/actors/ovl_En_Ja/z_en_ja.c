@@ -22,8 +22,16 @@ void func_80BC2EA4(EnJa* this);
 void func_80BC32D8(EnJa* this, GlobalContext* globalCtx);
 void func_80BC3594(EnJa* this, GlobalContext* globalCtx);
 
-s32 D_80BC35F0[] = {
-    0x0C000301, 0x05020600, 0x1200080A, 0x00610304, 0x0002050A, 0x006C0304, 0x00010500,
+static u8 D_80BC35F0[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x05 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x05 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x13 - 0x0B),
+    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12 - 0x0F),
+    /* 0x0F */ SCHEDULE_CMD_RET_VAL_L(2),
+    /* 0x12 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x13 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x1A - 0x17),
+    /* 0x17 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x1A */ SCHEDULE_CMD_RET_NONE(),
 };
 
 s32 D_80BC360C[] = {
@@ -231,7 +239,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     this->unk_374 = sp20;
 }
 
-s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, globalCtx)) {
@@ -244,7 +252,7 @@ s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, globalCtx)) {
@@ -261,12 +269,12 @@ s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80BC20D0(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BC20D0(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     this->unk_340 = 0;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 1:
             ret = func_80BC1FC8(this, globalCtx, arg2);
             if (ret == 1) {}
@@ -291,20 +299,19 @@ void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.save.daySpeed;
-    struct_80133038_arg2 sp18;
+    ScheduleResult sp18;
 
-    this->unk_35C = REG(15) + *unk_14;
-    if (!func_80133038(globalCtx, D_80BC35F0, &sp18) ||
-        ((this->unk_1D8.unk_00 != sp18.unk0) && !func_80BC20D0(this, globalCtx, &sp18))) {
+    this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    if (!Schedule_RunScript(globalCtx, D_80BC35F0, &sp18) ||
+        ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp18.unk0 = 0;
+        sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_1D8.unk_00 = sp18.unk0;
+    this->unk_1D8.unk_00 = sp18.result;
     func_80BC2150(this, globalCtx);
 }
 
