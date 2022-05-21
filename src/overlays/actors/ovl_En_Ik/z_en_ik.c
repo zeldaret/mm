@@ -527,8 +527,8 @@ void EnIk_PulloutAxe(EnIk* this, GlobalContext* globalCtx) {
 void EnIk_SetupHorizontalDoubleAttack(EnIk* this) {
     this->actor.speedXZ = 0.0f;
     // If the armor has been knocked off animation is sped up
-    Animation_Change(&this->skelAnime, &gIronKnuckleHorizontalAttackAnim, (this->drawArmorFlags) ? 1.3f : 1.0f,
-                     0.0f, Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), 3,
+    Animation_Change(&this->skelAnime, &gIronKnuckleHorizontalAttackAnim, (this->drawArmorFlags) ? 1.3f : 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), 3,
                      (this->drawArmorFlags) ? 4.0f : 10.0f);
     this->counter = 0;
     this->unk_2F8 = -1;
@@ -600,8 +600,8 @@ void EnIk_SingleHorizontalAttack(EnIk* this, GlobalContext* globalCtx) {
 }
 
 void EnIk_SetupEndHorizontalAttack(EnIk* this) {
-    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, (this->drawArmorFlags) ? 2.0f : 1.0f,
-                     0.0f, Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim), 3, -4.0f);
+    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, (this->drawArmorFlags) ? 2.0f : 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim), 3, -4.0f);
     this->actionFunc = EnIk_EndHorizontalAttack;
 }
 
