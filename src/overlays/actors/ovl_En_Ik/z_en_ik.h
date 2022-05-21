@@ -26,15 +26,15 @@ typedef struct EnIk {
     /* 0x023C */ Vec3s morphTable[IRON_KNUCKLE_LIMB_MAX];
     /* 0x02F0 */ EnIkActionFunc actionFunc;
     /* 0x02F4 */ u8 drawArmorFlags; // Value is 0 when Iron knuckle has armor, then changes to 5 for when armor is lost
-    /* 0x02F5 */ u8 drawEffect;
+    /* 0x02F5 */ u8 drawDmgEffType;
     /* 0x02F6 */ s16 counter;
     /* 0x02F8 */ s16 unk_2F8;
     /* 0x02FA */ s16 subCamId;
     /* 0x02FC */ s16 invincibilityFrames;
     /* 0x0300 */ s32 effectIndex;
-    /* 0x0304 */ f32 effectAlpha;
-    /* 0x0308 */ f32 effectScale;
-    /* 0x030C */ f32 steamScale;
+    /* 0x0304 */ f32 drawDmgEffAlpha;
+    /* 0x0308 */ f32 drawDmgEffScale;
+    /* 0x030C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x0310 */ Vec3f limbPos[13];
     /* 0x03AC */ ColliderCylinder colliderCylinder;
     /* 0x03F8 */ ColliderQuad colliderQuad;
