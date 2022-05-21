@@ -4,6 +4,7 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
