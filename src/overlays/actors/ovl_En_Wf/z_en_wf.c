@@ -7,7 +7,6 @@
 #include "z_en_wf.h"
 #include "overlays/actors/ovl_En_Bom_Chu/z_en_bom_chu.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
-#include "objects/object_wf/object_wf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -240,18 +239,18 @@ static DamageTable sDamageTable2 = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 8, 50, 100, MASS_HEAVY };
 
-static TexturePtr D_809942B0[] = {
-    object_wf_Tex_007AA8,
-    object_wf_Tex_0082A8,
-    object_wf_Tex_0084A8,
-    object_wf_Tex_0082A8,
+static TexturePtr sNormalEyeTextures[] = {
+    gWolfosNormalEyeOpenTex,
+    gWolfosNormalEyeHalfTex,
+    gWolfosNormalEyeNarrowTex,
+    gWolfosNormalEyeHalfTex,
 };
 
-static TexturePtr D_809942C0[] = {
-    object_wf_Tex_000300,
-    object_wf_Tex_0027D8,
-    object_wf_Tex_0029D8,
-    object_wf_Tex_0027D8,
+static TexturePtr sWhiteEyeTextures[] = {
+    gWolfosWhiteEyeOpenTex,
+    gWolfosWhiteEyeHalfTex,
+    gWolfosWhiteEyeNarrowTex,
+    gWolfosWhiteEyeHalfTex,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -318,16 +317,16 @@ void EnWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.0075f);
 
     if (this->actor.params == 0) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC,
-                           this->jointTable, this->morphTable, 22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
+                           this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
         this->actor.hintId = 0x4C;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
         this->collider1.elements[0].info.toucher.damage = 8;
         this->collider1.elements[1].info.toucher.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_003BC0, &object_wf_Anim_00A3CC,
-                           this->jointTable, this->morphTable, 22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitingAnim, this->jointTable,
+                           this->morphTable, WOLFOS_WHITE_LIMB_MAX);
         this->actor.hintId = 0x57;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable1, &sColChkInfoInit);
     }
@@ -342,9 +341,9 @@ void EnWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
 
     if (D_809942D8 == 0) {
-        for (i = 0; i < ARRAY_COUNT(D_809942B0); i++) {
-            D_809942B0[i] = Lib_SegmentedToVirtual(D_809942B0[i]);
-            D_809942C0[i] = Lib_SegmentedToVirtual(D_809942C0[i]);
+        for (i = 0; i < ARRAY_COUNT(sNormalEyeTextures); i++) {
+            sNormalEyeTextures[i] = Lib_SegmentedToVirtual(sNormalEyeTextures[i]);
+            sWhiteEyeTextures[i] = Lib_SegmentedToVirtual(sWhiteEyeTextures[i]);
         }
         D_809942D8 = 1;
     }
@@ -382,14 +381,14 @@ void func_80990854(EnWf* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809908E0(EnWf* this) {
-    if (this->unk_294 != 0) {
-        this->unk_294++;
-        if (this->unk_294 == 4) {
-            this->unk_294 = 0;
+void EnWf_Blink(EnWf* this) {
+    if (this->eyeIndex != 0) {
+        this->eyeIndex++;
+        if (this->eyeIndex == 4) {
+            this->eyeIndex = 0;
         }
     } else if (Rand_ZeroOne() < 0.05f) {
-        this->unk_294 = 1;
+        this->eyeIndex = 1;
     }
 }
 
@@ -550,7 +549,7 @@ void func_80990F50(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80990FC8(EnWf* this) {
-    Animation_Change(&this->skelAnime, &object_wf_Anim_0053D0, 0.5f, 0.0f, 7.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, 0.0f);
     this->unk_2A0 = 5;
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80991040;
@@ -573,7 +572,7 @@ void func_80991040(EnWf* this, GlobalContext* globalCtx) {
 void func_809910F0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &object_wf_Anim_0053D0, 0.5f, 0.0f, 7.0f, 3, -5.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, -5.0f);
     this->unk_2A0 = 5;
     this->actionFunc = func_80991174;
 }
@@ -592,7 +591,7 @@ void func_80991174(EnWf* this, GlobalContext* globalCtx) {
 
 void func_80991200(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_00A3CC, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitingAnim, -4.0f);
     this->unk_2A0 = (s32)Rand_ZeroFloat(10.0f) + 2;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_80991280;
@@ -643,7 +642,7 @@ void func_80991280(EnWf* this, GlobalContext* globalCtx) {
 
 void func_80991438(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.speedXZ = 8.0f;
     this->actionFunc = func_8099149C;
@@ -704,7 +703,7 @@ void func_8099149C(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80991738(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_009808, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosSidesteppingAnim, -4.0f);
     this->actionFunc = func_8099177C;
 }
 
@@ -756,7 +755,7 @@ void func_8099177C(EnWf* this, GlobalContext* globalCtx) {
 
 void func_80991948(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     if (Rand_ZeroOne() > 0.5f) {
         this->unk_29A = 16000;
     } else {
@@ -810,7 +809,7 @@ void func_809919F4(EnWf* this, GlobalContext* globalCtx) {
 
 void func_80991C04(EnWf* this) {
     this->collider2.base.acFlags |= AC_ON;
-    Animation_PlayOnce(&this->skelAnime, &object_wf_Anim_004638);
+    Animation_PlayOnce(&this->skelAnime, &gWolfosSlashingAnim);
     this->collider1.base.atFlags &= ~AT_BOUNCED;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2A0 = 7;
@@ -880,7 +879,7 @@ void func_80991FD8(EnWf* this) {
     if (this->skelAnime.curFrame > 15.0f) {
         phi_f0 = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &object_wf_Anim_004638, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0, 3, 0.0f);
     this->collider1.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80992068;
 }
@@ -923,7 +922,7 @@ void func_80992068(EnWf* this, GlobalContext* globalCtx) {
 
 void func_8099223C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_wf_Anim_004A90, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosBackflippingAnim, -3.0f);
     this->unk_2A0 = 0;
     this->actor.speedXZ = -6.0f;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -973,7 +972,7 @@ void func_809923E4(EnWf* this, GlobalContext* globalCtx) {
 
 void func_8099245C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_wf_Anim_009A50, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosDamagedAnim, -4.0f);
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = -4.0f;
     }
@@ -1021,8 +1020,8 @@ void func_809924EC(EnWf* this, GlobalContext* globalCtx) {
 
 void func_809926D0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_Change(&this->skelAnime, &object_wf_Anim_004A90, -1.0f,
-                     Animation_GetLastFrame(&object_wf_Anim_004A90.common), 0.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gWolfosBackflippingAnim, -1.0f,
+                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, 2, -3.0f);
     this->unk_2A0 = 0;
     this->actor.speedXZ = 6.5f;
     this->actor.velocity.y = 15.0f;
@@ -1053,8 +1052,8 @@ void func_8099282C(EnWf* this) {
     this->collider1.base.atFlags &= ~AT_ON;
     this->unk_2A0 = 10;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &object_wf_Anim_004C44, -1.0f,
-                     Animation_GetLastFrame(&object_wf_Anim_004C44.common), 0.0f, 2, -2.0f);
+    Animation_Change(&this->skelAnime, &gWolfosBlockingAnim, -1.0f, Animation_GetLastFrame(&gWolfosBlockingAnim.common),
+                     0.0f, 2, -2.0f);
     this->actionFunc = func_809928CC;
 }
 
@@ -1091,7 +1090,7 @@ void func_80992A74(EnWf* this, GlobalContext* globalCtx) {
     f32 temp_f0;
 
     this->collider2.base.acFlags |= AC_ON;
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     player = GET_PLAYER(globalCtx);
     temp_f0 = Math_SinS((player->actor.shape.rot.y + this->unk_29A) - this->actor.yawTowardsPlayer);
     if (temp_f0 > 0.0f) {
@@ -1153,7 +1152,7 @@ void func_80992B8C(EnWf* this, GlobalContext* globalCtx) {
 
 void func_80992D6C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_wf_Anim_0053D0, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, -4.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = -6.0f;
@@ -1205,7 +1204,7 @@ void func_80992E0C(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80992FD4(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_00A3CC, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosWaitingAnim, -4.0f);
     this->actionFunc = func_80993018;
 }
 
@@ -1232,7 +1231,7 @@ void func_80993018(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80993148(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80993194;
 }
@@ -1277,7 +1276,7 @@ void func_80993194(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80993350(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     this->actionFunc = func_809933A0;
 }
@@ -1317,7 +1316,7 @@ void func_809933A0(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80993524(EnWf* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_wf_Anim_005700, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gWolfosRunningAnim, -4.0f);
     this->actor.speedXZ = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_8099357C;
@@ -1477,7 +1476,7 @@ void EnWf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8099386C(this, globalCtx);
     if (this->actionFunc != func_809923E4) {
-        func_809908E0(this);
+        EnWf_Blink(this);
     }
 
     this->actionFunc(this, globalCtx);
@@ -1535,7 +1534,7 @@ void EnWf_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnWf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnWf* this = THIS;
 
-    if ((limbIndex == 17) || (limbIndex == 18)) {
+    if ((limbIndex == WOLFOS_NORMAL_LIMB_HEAD) || (limbIndex == WOLFOS_NORMAL_LIMB_EYES)) {
         rot->y -= this->unk_29E;
     }
     return false;
@@ -1554,7 +1553,7 @@ void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         Matrix_GetStateTranslation(&this->limbPos[D_809942FC[limbIndex]]);
     }
 
-    if (limbIndex == 6) {
+    if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
         Matrix_GetStateTranslationAndScaledX(1200.0f, &sp20);
         this->collider3.dim.pos.x = sp20.x;
         this->collider3.dim.pos.y = sp20.y;
@@ -1571,9 +1570,9 @@ void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         if (this->actor.params == 0) {
-            gSPSegment(POLY_OPA_DISP++, 0x08, D_809942B0[this->unk_294]);
+            gSPSegment(POLY_OPA_DISP++, 0x08, sNormalEyeTextures[this->eyeIndex]);
         } else {
-            gSPSegment(POLY_OPA_DISP++, 0x08, D_809942C0[this->unk_294]);
+            gSPSegment(POLY_OPA_DISP++, 0x08, sWhiteEyeTextures[this->eyeIndex]);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -1093,6 +1093,7 @@ static Color_RGB8 D_808BBB50[] = {
     { 0, 50, 200 },
     { 120, 150, 0 },
 };
+void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808BB4F4.s")
 #endif
 

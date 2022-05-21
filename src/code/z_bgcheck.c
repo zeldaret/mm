@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
 
@@ -4441,11 +4440,13 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
     return false;
 }
 
+// boolean
 s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                          WaterBox** outWaterBox) {
-    WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
+    return WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
 }
 
+// boolean
 s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                            WaterBox** outWaterBox) {
     s32 bgId;
