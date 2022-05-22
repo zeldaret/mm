@@ -2437,8 +2437,8 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
 s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index);
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s32* startPointIndex);
-s32 func_8013C068(Path* path, s32 arg1, Vec3f* arg2, f32 arg3, s32 arg4);
-s32 func_8013C624(Actor* actor, Path* path, s32* arg2, f32* arg3, s32 arg4, s32 arg5);
+s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 weightVal, s32 direction);
+s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weightVal, s32 direction, s32 returnStart);
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type);
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);

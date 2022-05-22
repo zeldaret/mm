@@ -2186,8 +2186,8 @@ asm/non_matchings/code/z_sub_s/SubS_FindNearestActor.s,SubS_FindNearestActor,0x8
 asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationByInfoS.s,SubS_ChangeAnimationByInfoS,0x8013BC6C,0x35
 asm/non_matchings/code/z_sub_s/SubS_HasReachedPoint.s,SubS_HasReachedPoint,0x8013BD40,0x67
 asm/non_matchings/code/z_sub_s/SubS_GetDayDependentPath.s,SubS_GetDayDependentPath,0x8013BEDC,0x63
-asm/non_matchings/code/z_sub_s/func_8013C068.s,func_8013C068,0x8013C068,0x16F
-asm/non_matchings/code/z_sub_s/func_8013C624.s,func_8013C624,0x8013C624,0xA5
+asm/non_matchings/code/z_sub_s/SubS_WeightPathing_ComputePoint.s,SubS_WeightPathing_ComputePoint,0x8013C068,0x16F
+asm/non_matchings/code/z_sub_s/SubS_WeightPathing_Move.s,SubS_WeightPathing_Move,0x8013C624,0xA5
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathCheckBounds.s,SubS_CopyPointFromPathCheckBounds,0x8013C8B8,0x2B
 asm/non_matchings/code/z_sub_s/func_8013C964.s,func_8013C964,0x8013C964,0xB2
 asm/non_matchings/code/z_sub_s/SubS_FillShadowTex.s,SubS_FillShadowTex,0x8013CC2C,0x4E

@@ -362,9 +362,164 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     return path;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C068.s")
+s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 weightVal, s32 direction) {
+    s32 i;
+    f32 weight0;
+    f32 weight1;
+    f32 weight2;
+    f32 weight3;
+    s32 lastPoint;
+    s32 secondLastPoint;
+    s32 secondPoint;
+    s32 firstPoint;
+    f32 xPoints[4];
+    f32 zPoints[4];
+    f32 oneMinusWeightVal;
+    f32 squared;
+    f32 cubed;
+    Vec3s* points;
+    s32 count = path->count;
+    s32 pointIndex;
+    s32 tmp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C624.s")
+    if (path == NULL) {
+        return false;
+    }
+    if (direction == 1) {
+        if (waypoint <= 2) {
+            pointIndex = 2;
+        } else {
+            pointIndex = (waypoint == 3) ? 3 : waypoint;
+        }
+        for (i = 0; i < 4; i++, pointIndex--) {
+            if (pointIndex <= 0) {
+                pointIndex = 0;
+            }
+            points = Lib_SegmentedToVirtual(path->points);
+            points = &points[pointIndex];
+            xPoints[i] = points->x;
+            zPoints[i] = points->z;
+        }
+        lastPoint = count - 1;
+        secondLastPoint = count - 2;
+        secondPoint = 3;
+        firstPoint = 2;
+    } else {
+        if (waypoint >= count - 3) {
+            pointIndex = count - 3;
+        } else {
+            tmp = waypoint + 4;
+            pointIndex = (count == tmp) ? count - 4 : waypoint;
+        }
+        for (i = 0; i < 4; i++, pointIndex++) {
+            if (pointIndex >= path->count) {
+                pointIndex = path->count - 1;
+            }
+            points = Lib_SegmentedToVirtual(path->points);
+            points = &points[pointIndex];
+            xPoints[i] = points->x;
+            zPoints[i] = points->z;
+        }
+        lastPoint = 0;
+        secondLastPoint = 1;
+        secondPoint = count - 4;
+        firstPoint = count - 3;
+    }
+    if (waypoint == lastPoint) {
+        oneMinusWeightVal = 1.0f - weightVal;
+        squared = weightVal * weightVal;
+        cubed = weightVal * squared;
+        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal;
+        weight1 = (1.75f * cubed) - (4.5f * squared) + (3.0f * weightVal);
+        weight2 = ((-11.0f/ 12.0f) * cubed) + (1.5f * squared);
+        weight3 = (1.0f / 6.0f) * cubed;
+    } else if (waypoint == secondLastPoint) {
+        oneMinusWeightVal = 1.0f - weightVal;
+        squared = weightVal * weightVal;
+        cubed = weightVal * squared;
+        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal * ((void)0, 0.25f);
+        weight1 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * weightVal) + (7.0f / 12.0f);
+        weight2 = (-0.5f * cubed) + (0.5f * squared) + (weightVal * 0.5f) + (1.0f / 6.0f);
+        weight3 = cubed * (1.0f / 6.0f);
+    } else if (waypoint == secondPoint) {
+        oneMinusWeightVal = 1.0f - weightVal;
+        squared = oneMinusWeightVal * oneMinusWeightVal;
+        cubed = oneMinusWeightVal * squared;
+        weight0 = (1.0f / 6.0f) * cubed;
+        weight1 = (-0.5f * cubed) + (0.5f * squared) + (0.5f * oneMinusWeightVal) + (1.0f / 6.0f);
+        weight2 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * oneMinusWeightVal) + (7.0f / 12.0f);
+        weight3 = weightVal * weightVal * weightVal * 0.25f;
+    } else if (((direction == 1) && (firstPoint >= waypoint)) || ((direction != 1) && (waypoint >= firstPoint))) {
+        oneMinusWeightVal = 1.0f - weightVal;
+        squared = oneMinusWeightVal * oneMinusWeightVal;
+        cubed = oneMinusWeightVal * squared;
+        weight0 = (1.0f / 6.0f) * cubed;
+        weight1 = ((-11.0f/ 12.0f) * cubed) + (1.5f * squared);
+        weight2 = (1.75f * cubed) - (4.5f * squared) + (3.0f * oneMinusWeightVal);
+        weight3 = weightVal * weightVal * weightVal;
+    } else {
+        oneMinusWeightVal = 1.0f - weightVal;
+        squared = weightVal * weightVal;
+        cubed = squared * weightVal;
+        weight0 = oneMinusWeightVal * oneMinusWeightVal;
+        weight0 = oneMinusWeightVal * weight0 / 6.0f;
+        weight1 = (cubed * 0.5f) - squared + (2.0f / 3.0f);
+        weight2 = (cubed / -2.0f) + (squared * 0.5f) + (weightVal * 0.5f) + (1.0f / 6.0f);
+        weight3 = cubed / 6.0f;
+    }
+    point->x = (weight0 * xPoints[0]) + (weight1 * xPoints[1]) + (weight2 * xPoints[2]) + (weight3 * xPoints[3]);
+    point->z = (weight0 * zPoints[0]) + (weight1 * zPoints[1]) + (weight2 * zPoints[2]) + (weight3 * zPoints[3]);
+
+    return true;
+}
+
+s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weightVal, s32 direction, s32 returnStart) {
+    Vec3f worldPos = actor->world.pos;
+    Vec3f velocity = actor->velocity;
+    Vec3f point;
+    f32 dist;
+
+    if (((direction != 1) && (*waypoint >= (path->count - 2))) || ((direction == 1) && (*waypoint < 2))) {
+        return false;
+    }
+    while (true) {
+        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *weightVal, direction) || ((s32)(actor->speedXZ * 10000.0f) == 0)) {
+            return false;
+        }
+        dist = Math_Vec3f_DistXZ(&actor->world.pos, &point);
+        actor->world.rot.y = Math_Vec3f_Yaw(&actor->world.pos, &point);
+        Actor_MoveWithGravity(actor);
+        if (Math_Vec3f_DistXZ(&actor->world.pos, &point) < dist) {
+            break;
+        }
+        *weightVal += 0.1f;
+        if (*weightVal >= 1.1f) {
+            if (direction != 1) {
+                (*waypoint)++;
+                if (*waypoint >= (path->count - 2)) {
+                    if (returnStart) {
+                        *waypoint = 0;
+                    } else {
+                        return true;
+                    }
+                }
+            } else {
+                (*waypoint)--;
+                if (*waypoint < 2) {
+                    if (returnStart) {
+                        *waypoint = path->count - 2;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            *weightVal = 0.0f;
+        }
+        actor->world.pos = worldPos;
+        actor->velocity = velocity;
+    }
+    return false;
+}
 
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     Vec3s* point;
