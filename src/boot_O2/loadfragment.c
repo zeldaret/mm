@@ -73,7 +73,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
                 // Handles relocation for a hi/lo pair, part 2.
                 // Grab the stored LUI (hi) from the `R_MIPS_HI16` section using the `rs` register of the instruction.
                 // The full address is calculated, relocated, and then used to update both the LUI and lo instructions.
-                // If the lo part is negative, add 1 to the LUI.
+                // If the lo part is negative, add 1 to the LUI value.
                 // Note: The lo instruction is assumed to have a signed immediate.
 
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
