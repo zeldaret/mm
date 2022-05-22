@@ -33,6 +33,6 @@ typedef struct BgKin2Bombwall {
 //    /* 0x1AC */ char pad1AC[4];
 //} BgKin2Bombwall;                                   /* size = 0x1B0 */
 
-extern const ActorInit Bg_Kin2_Bombwall_InitVars;
+//extern const ActorInit Bg_Kin2_Bombwall_InitVars;
 
 #endif // Z_BG_KIN2_BOMBWALL_H

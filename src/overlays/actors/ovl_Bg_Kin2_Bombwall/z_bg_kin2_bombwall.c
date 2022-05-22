@@ -12,6 +12,21 @@ void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); /* extern */
+
+void func_80B6E4B8(BgKin2Bombwall *);                  /* extern */
+void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); /* extern */
+void func_80B6E544(BgKin2Bombwall *);                  /* extern */ //was ? return type at first
+void func_80B6E558(BgKin2Bombwall *, GlobalContext *); /* extern */
+void func_80B6E5F8(BgKin2Bombwall *);                  /* extern */ //was ? return type before.
+void func_80B6E614(BgKin2Bombwall *, GlobalContext *); /* extern */
+
+extern Gfx D_06000128[];
+extern Gfx D_060002C0[];
+extern Gfx D_06000360[];
+extern Gfx D_06000490[];
+
 #if 0
 const ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
@@ -38,19 +53,30 @@ static InitChainEntry D_80B6E748[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 #endif
-extern Gfx D_06000128[];
-extern Gfx D_060002C0[];
-extern Gfx D_06000360[];
-extern Gfx D_06000490[];
-extern ColliderCylinderInit D_80B6E6F0;
-extern InitChainEntry D_80B6E748[];
 
+extern ColliderCylinderInit D_80B6E6F0;
 extern Color_RGBA8 D_80B6E71C;
 extern Color_RGBA8 D_80B6E720;
 extern Vec3f D_80B6E724;
 extern s8 D_80B6E730[5];
 extern s8 D_80B6E735[5];
 extern s16 D_80B6E738[5]; 
+extern InitChainEntry D_80B6E748[];
+
+/*
+ColliderCylinderInit D_80B6E6F0 = {
+    { 0xA, 0, 9, 0, 0, 1 },
+    { 0, { 0, 0, 0 }, { 8, 0, 0 }, 0, 1, 0 },
+    { 0x3C, 0x3C, 0, { 0, 0, 0 } },
+};
+Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
+Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
+Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
+s8 D_80B6E730[5];                                   
+s8 D_80B6E735[5];                                   
+s16 D_80B6E738[5] = { 0x19, 0x17, 0x15, 0x13, 0x11 };
+InitChainEntry D_80B6E748[6];
+*/
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E020.s")
 
@@ -130,7 +156,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
     
-void func_80B6E4B8(BgKin2Bombwall *);                  /* extern */
+
 
 void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
@@ -167,16 +193,13 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4B8.s")
-void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); /* extern */
+
 
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E4CC;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4CC.s")
-
-s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); /* extern */
-void func_80B6E544(BgKin2Bombwall *);                  /* extern */ //was ? return type at first
 
 void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     BgKin2Bombwall *temp_a0;
@@ -196,14 +219,14 @@ void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E544.s")
-void func_80B6E558(BgKin2Bombwall *, GlobalContext *); /* extern */
+
 
 void func_80B6E544(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E558;
 }
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E558.s")
 void func_80B6E090(BgKin2Bombwall *, GlobalContext *); /* extern */ //was ? return type before.
-void func_80B6E5F8(BgKin2Bombwall *);                  /* extern */ //was ? return type before.
+
 
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->actor.cutscene) != 0) {
@@ -220,7 +243,7 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 }
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E5F8.s")
 
-void func_80B6E614(BgKin2Bombwall *, GlobalContext *); /* extern */
+
 
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
