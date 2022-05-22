@@ -27,8 +27,8 @@ void EnIk_SetupRun(EnIk* this);
 void EnIk_RunTowardsPlayer(EnIk* this, GlobalContext* globalCtx);
 void EnIk_SetupVerticalAttack(EnIk* this);
 void EnIk_VerticalAttack(EnIk* this, GlobalContext* globalCtx);
-void EnIk_SetupPulloutAxe(EnIk* this);
-void EnIk_PulloutAxe(EnIk* this, GlobalContext* globalCtx);
+void EnIk_SetupTakeOutAxe(EnIk* this);
+void EnIk_TakeOutAxe(EnIk* this, GlobalContext* globalCtx);
 void EnIk_SetupHorizontalDoubleAttack(EnIk* this);
 void EnIk_HorizontalDoubleAttack(EnIk* this, GlobalContext* globalCtx);
 void EnIk_SetupSingleHorizontalAttack(EnIk* this);
@@ -501,18 +501,18 @@ void EnIk_VerticalAttack(EnIk* this, GlobalContext* globalCtx) {
         }
 
         if (SkelAnime_Update(&this->skelAnime)) {
-            EnIk_SetupPulloutAxe(this);
+            EnIk_SetupTakeOutAxe(this);
         }
     }
 }
 
-void EnIk_SetupPulloutAxe(EnIk* this) {
+void EnIk_SetupTakeOutAxe(EnIk* this) {
     Animation_PlayOnce(&this->skelAnime, &gIronKnuckleEndVerticalAttackAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_PULLOUT);
-    this->actionFunc = EnIk_PulloutAxe;
+    this->actionFunc = EnIk_TakeOutAxe;
 }
 
-void EnIk_PulloutAxe(EnIk* this, GlobalContext* globalCtx) {
+void EnIk_TakeOutAxe(EnIk* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gIronKnuckleRecoverVerticalAttackAnim) {
             EnIk_CheckActions(this, globalCtx);
@@ -979,7 +979,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         this->colliderCylinder.dim.pos.z = this->actor.focus.pos.z;
     }
 
-    if ((limbIndex == IRON_KNUCKLE_LIMB_17) && (this->unk_2F8 != this->counter) &&
+    if ((limbIndex == IRON_KNUCKLE_LIMB_AXE) && (this->unk_2F8 != this->counter) &&
         ((this->actionFunc == EnIk_VerticalAttack) || (this->actionFunc == EnIk_HorizontalDoubleAttack) ||
          (this->actionFunc == EnIk_SingleHorizontalAttack))) {
         Math_Vec3f_Copy(&vtxC, this->colliderQuad.dim.quad);

@@ -16,15 +16,15 @@
         <!-- <Blob Name="object_ik_Blob_008AE0" Size="0x630" Offset="0x8AE0" /> -->
         <!-- <Blob Name="object_ik_Blob_009290" Size="0x2F0" Offset="0x9290" /> -->
         <!-- <Blob Name="object_ik_Blob_009740" Size="0x300" Offset="0x9740" /> -->
-        <DList Name="object_ik_DL_009A40" Offset="0x9A40" />
-        <DList Name="object_ik_DL_009BC8" Offset="0x9BC8" />
+        <DList Name="gIronKnuckleArmorFrontDL" Offset="0x9A40" />
+        <DList Name="gIronKnuckleArmorBackDL" Offset="0x9BC8" />
         <DList Name="gIronKnuckleAxeDL" Offset="0x9D20" />
-        <DList Name="object_ik_DL_009FD8" Offset="0x9FD8" />
-        <DList Name="object_ik_DL_00A130" Offset="0xA130" />
-        <DList Name="object_ik_DL_00A1F0" Offset="0xA1F0" />
-        <DList Name="object_ik_DL_00A348" Offset="0xA348" />
-        <DList Name="object_ik_DL_00A408" Offset="0xA408" />
-        <DList Name="object_ik_DL_00A4F0" Offset="0xA4F0" />
+        <DList Name="gIronKnuckleRightHandDL" Offset="0x9FD8" />
+        <DList Name="gIronKnuckleLowerRightPauldronDL" Offset="0xA130" />
+        <DList Name="gIronKnuckleLeftHandDL" Offset="0xA1F0" />
+        <DList Name="gIronKnuckleLowerLeftPauldronDL" Offset="0xA348" />
+        <DList Name="gIronKnuckleUpperRightPauldronDL" Offset="0xA408" />
+        <DList Name="gIronKnuckleUpperLeftPauldronDL" Offset="0xA4F0" />
         <DList Name="object_ik_DL_00A5D8" Offset="0xA5D8" />
         <DList Name="object_ik_DL_00A6D0" Offset="0xA6D0" />
         <DList Name="object_ik_DL_00A780" Offset="0xA780" />
@@ -80,25 +80,25 @@
         <Limb Name="object_ik_Standardlimb_01350C" EnumName="IRON_KNUCKLE_LIMB_6" Type="Standard" Offset="0x1350C" />
         <Limb Name="gIronKnuckleLeftLegLimb" EnumName="IRON_KNUCKLE_LIMB_LEFT_LEG" Type="Standard" Offset="0x13518" />
         <Limb Name="gIronKnuckleLeftFootLimb" EnumName="IRON_KNUCKLE_LIMB_LEFT_FOOT" Type="Standard" Offset="0x13524" />
-        <Limb Name="object_ik_Standardlimb_013530" EnumName="IRON_KNUCKLE_LIMB_9" Type="Standard" Offset="0x13530" />
+        <Limb Name="gIronKnuckleUpperBodyRoot" EnumName="IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT" Type="Standard" Offset="0x13530" />
         <Limb Name="object_ik_Standardlimb_01353C" EnumName="IRON_KNUCKLE_LIMB_10" Type="Standard" Offset="0x1353C" />
-        <Limb Name="object_ik_Standardlimb_013548" EnumName="IRON_KNUCKLE_LIMB_11" Type="Standard" Offset="0x13548" />
-        <Limb Name="object_ik_Standardlimb_013554" EnumName="IRON_KNUCKLE_LIMB_12" Type="Standard" Offset="0x13554" />
-        <Limb Name="object_ik_Standardlimb_013560" EnumName="IRON_KNUCKLE_LIMB_13" Type="Standard" Offset="0x13560" />
-        <Limb Name="object_ik_Standardlimb_01356C" EnumName="IRON_KNUCKLE_LIMB_14" Type="Standard" Offset="0x1356C" />
-        <Limb Name="object_ik_Standardlimb_013578" EnumName="IRON_KNUCKLE_LIMB_15" Type="Standard" Offset="0x13578" />
-        <Limb Name="object_ik_Standardlimb_013584" EnumName="IRON_KNUCKLE_LIMB_16" Type="Standard" Offset="0x13584" />
-        <Limb Name="object_ik_Standardlimb_013590" EnumName="IRON_KNUCKLE_LIMB_17" Type="Standard" Offset="0x13590" />
-        <Limb Name="object_ik_Standardlimb_01359C" EnumName="IRON_KNUCKLE_LIMB_18" Type="Standard" Offset="0x1359C" />
-        <Limb Name="object_ik_Standardlimb_0135A8" EnumName="IRON_KNUCKLE_LIMB_19" Type="Standard" Offset="0x135A8" />
-        <Limb Name="object_ik_Standardlimb_0135B4" EnumName="IRON_KNUCKLE_LIMB_20" Type="Standard" Offset="0x135B4" />
-        <Limb Name="object_ik_Standardlimb_0135C0" EnumName="IRON_KNUCKLE_LIMB_21" Type="Standard" Offset="0x135C0" />
-        <Limb Name="object_ik_Standardlimb_0135CC" EnumName="IRON_KNUCKLE_LIMB_22" Type="Standard" Offset="0x135CC" />
-        <Limb Name="object_ik_Standardlimb_0135D8" EnumName="IRON_KNUCKLE_LIMB_23" Type="Standard" Offset="0x135D8" />
-        <Limb Name="object_ik_Standardlimb_0135E4" EnumName="IRON_KNUCKLE_LIMB_24" Type="Standard" Offset="0x135E4" />
-        <Limb Name="object_ik_Standardlimb_0135F0" EnumName="IRON_KNUCKLE_LIMB_25" Type="Standard" Offset="0x135F0" />
-        <Limb Name="object_ik_Standardlimb_0135FC" EnumName="IRON_KNUCKLE_LIMB_26" Type="Standard" Offset="0x135FC" />
-        <Limb Name="object_ik_Standardlimb_013608" EnumName="IRON_KNUCKLE_LIMB_27" Type="Standard" Offset="0x13608" />
+        <Limb Name="gIronKnuckleHeadRootLimb" EnumName="IRON_KNUCKLE_LIMB_HEAD_ROOT" Type="Standard" Offset="0x13548" />
+        <Limb Name="gIronKnuckleHelmetArmorLimb" EnumName="IRON_KNUCKLE_LIMB_HELMET_ARMOR" Type="Standard" Offset="0x13554" />
+        <Limb Name="gIronKnuckleHeadLimb" EnumName="IRON_KNUCKLE_LIMB_HEAD" Type="Standard" Offset="0x13560" />
+        <Limb Name="gIronKnuckleRightUpperArmLimb" EnumName="IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM" Type="Standard" Offset="0x1356C" />
+        <Limb Name="gIronKnuckleRightForearmLimb" EnumName="IRON_KNUCKLE_LIMB_RIGHT_FOREARM" Type="Standard" Offset="0x13578" />
+        <Limb Name="gIronKnuckleAxeRooLimbt" EnumName="IRON_KNUCKLE_LIMB_AXE_ROOT" Type="Standard" Offset="0x13584" />
+        <Limb Name="gIronKnuckleAxeLimb" EnumName="IRON_KNUCKLE_LIMB_AXE" Type="Standard" Offset="0x13590" />
+        <Limb Name="gIronKnuckleRightHandLimb" EnumName="IRON_KNUCKLE_LIMB_RIGHT_HAND" Type="Standard" Offset="0x1359C" />
+        <Limb Name="gIronKnuckleLeftUpperArmLimb" EnumName="IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM" Type="Standard" Offset="0x135A8" />
+        <Limb Name="gIronKnuckleLeftForearmLimb" EnumName="IRON_KNUCKLE_LIMB_LEFT_FOREARM" Type="Standard" Offset="0x135B4" />
+        <Limb Name="gIronKnuckleLeftHandLimb" EnumName="IRON_KNUCKLE_LIMB_LEFT_HAND" Type="Standard" Offset="0x135C0" />
+        <Limb Name="gIronKnuckleUpperLeftPauldronLimb" EnumName="IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON" Type="Standard" Offset="0x135CC" />
+        <Limb Name="gIronKnuckleLowerLeftPauldronLimb" EnumName="IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON" Type="Standard" Offset="0x135D8" />
+        <Limb Name="gIronKnuckleUpperRightPauldronLimb" EnumName="IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON" Type="Standard" Offset="0x135E4" />
+        <Limb Name="gIronKnuckleLowerRightPauldronLimb" EnumName="IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON" Type="Standard" Offset="0x135F0" />
+        <Limb Name="gIronKnuckleChestArmorFrontLimb" EnumName="IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT" Type="Standard" Offset="0x135FC" />
+        <Limb Name="gIronKnuckleChestArmorBackLimb" EnumName="IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK" Type="Standard" Offset="0x13608" />
         <Limb Name="gIronKnuckleTorsoLimb" EnumName="IRON_KNUCKLE_LIMB_TORSO" Type="Standard" Offset="0x13614" />
         <Limb Name="gIronKnuckleWaistLimb" EnumName="IRON_KNUCKLE_LIMB_WAIST" Type="Standard" Offset="0x13620" />
         <Skeleton Name="gIronKnuckleSkel" Type="Flex" LimbType="Standard" LimbNone="IRON_KNUCKLE_LIMB_NONE" LimbMax="IRON_KNUCKLE_LIMB_MAX" EnumName="IronKnuckleLimbs"Offset="0x136A0" />
