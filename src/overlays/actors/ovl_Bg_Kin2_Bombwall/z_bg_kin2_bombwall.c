@@ -13,55 +13,19 @@ void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); /* extern */
-
-void func_80B6E4B8(BgKin2Bombwall *);                  /* extern */
-void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); /* extern */
-void func_80B6E544(BgKin2Bombwall *);                  /* extern */ //was ? return type at first
-void func_80B6E558(BgKin2Bombwall *, GlobalContext *); /* extern */
-void func_80B6E5F8(BgKin2Bombwall *);                  /* extern */ //was ? return type before.
-void func_80B6E614(BgKin2Bombwall *, GlobalContext *); /* extern */
+s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); 
+void func_80B6E090(BgKin2Bombwall *, GlobalContext *);
+void func_80B6E4B8(BgKin2Bombwall *);                  
+void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); 
+void func_80B6E544(BgKin2Bombwall *);                   
+void func_80B6E558(BgKin2Bombwall *, GlobalContext *); 
+void func_80B6E5F8(BgKin2Bombwall *);                   
+void func_80B6E614(BgKin2Bombwall *, GlobalContext *); 
 
 extern Gfx D_06000128[];
 extern Gfx D_060002C0[];
 extern Gfx D_06000360[];
 extern Gfx D_06000490[];
-
-#if 0
-const ActorInit Bg_Kin2_Bombwall_InitVars = {
-    ACTOR_BG_KIN2_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Bombwall),
-    (ActorFunc)BgKin2Bombwall_Init,
-    (ActorFunc)BgKin2Bombwall_Destroy,
-    (ActorFunc)BgKin2Bombwall_Update,
-    (ActorFunc)BgKin2Bombwall_Draw,
-};
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B6E6F0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-    { 60, 60, 0, { 0, 0, 0 } },
-};
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B6E748[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
-};
-#endif
-
-// extern ColliderCylinderInit D_80B6E6F0;
-// extern Color_RGBA8 D_80B6E71C;
-// extern Color_RGBA8 D_80B6E720;
-// extern Vec3f D_80B6E724;
-// extern s8 D_80B6E730[5];
-// extern s8 D_80B6E735[3];
-// extern s16 D_80B6E738[8]; 
-// extern InitChainEntry D_80B6E748[];
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
@@ -84,8 +48,6 @@ Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
 Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
 Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
 s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C}; 
-//s8 D_80B6E734 = 0x2C;                                  /* unable to generate initializer */
-//u8 D_80B6E735[] = { 0, 0 ,0};
 s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
 InitChainEntry D_80B6E748[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -93,32 +55,6 @@ InitChainEntry D_80B6E748[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };  
-
-/*
-InitChainEntry D_80B6E748[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
-};  
-*/
-
-/*
-ColliderCylinderInit D_80B6E6F0 = {
-    { 0xA, 0, 9, 0, 0, 1 },
-    { 0, { 0, 0, 0 }, { 8, 0, 0 }, 0, 1, 0 },
-    { 0x3C, 0x3C, 0, { 0, 0, 0 } },
-};
-Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
-Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
-Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
-s8 D_80B6E730[5];                                   
-s8 D_80B6E735[5];                                   
-s16 D_80B6E738[5] = { 0x19, 0x17, 0x15, 0x13, 0x11 };
-InitChainEntry D_80B6E748[6];
-*/
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E020.s")
 
 s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     Actor *temp_v0;
@@ -131,9 +67,6 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     }
     return 0;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E090.s")
-//#define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 
 void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s32 i;
@@ -157,7 +90,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
             temp_s3++;
             temp_s3 &= 7;
             
-            spD8.x = D_80B6E730[j] + (s32)(((u32)Rand_Next()) >> 0x1C); //It's not a real diff since the address it will resolve to will be the same (from EllipticEllipsis)
+            spD8.x = D_80B6E730[j] + (s32)(((u32)Rand_Next()) >> 0x1C); 
             spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp_a0;  
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
             
@@ -193,18 +126,14 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
-    
+   
 void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     ColliderCylinder *sp24;
-    //ColliderCylinder *temp_a1;
     
     Actor_ProcessInitChain(&this->actor, D_80B6E748);
     DynaPolyActor_Init((DynaPolyActor *) this, 0);
     sp24 = &this->unk15C;
-    //sp24 = temp_a1;
     Collider_InitCylinder(globalCtx, sp24);
     if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F) != 0) {
         Actor_MarkForDeath(&this->actor);
@@ -217,7 +146,6 @@ void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80B6E4B8(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Destroy.s")
 void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     DynaCollisionContext *temp_a1;
     GlobalContext *temp_a0;
@@ -230,14 +158,9 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->unk15C);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4B8.s")
-
-
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E4CC;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4CC.s")
 
 void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     BgKin2Bombwall *temp_a0;
@@ -256,14 +179,10 @@ void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->unk15C.base);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E544.s")
-
-
 void func_80B6E544(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E558;
 }
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E558.s")
-void func_80B6E090(BgKin2Bombwall *, GlobalContext *); /* extern */ //was ? return type before.
+
 
 
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
@@ -279,16 +198,11 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->actor.cutscene);
 }
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E5F8.s")
-
-
 
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
     arg0->actionFunc = func_80B6E614;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E614.s")
 
 void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     s8 temp_a0;
@@ -302,14 +216,10 @@ void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Update.s")
-
 void BgKin2Bombwall_Update(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     this->actionFunc(this, globalCtx);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Draw.s")
 
 void BgKin2Bombwall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
