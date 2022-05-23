@@ -83,9 +83,9 @@ ColliderCylinderInit D_80B6E6F0 = {
 Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
 Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
 Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
-s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12}; 
+s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C}; 
 //s8 D_80B6E734 = 0x2C;                                  /* unable to generate initializer */
-s8 D_80B6E735[] = {0x2C, 0, 0, 0 };
+//u8 D_80B6E735[] = { 0, 0 ,0};
 s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
 InitChainEntry D_80B6E748[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -147,7 +147,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s32 temp_s2;
     s16 phi_s0; //s0
     s16 phi_s1;
-
+    
 
     Matrix_RotateY(this->actor.shape.rot.y, 0);
     
@@ -196,8 +196,6 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
     
-
-
 void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     ColliderCylinder *sp24;
