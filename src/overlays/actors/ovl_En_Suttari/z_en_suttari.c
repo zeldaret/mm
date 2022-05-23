@@ -794,7 +794,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp58 = gZeroVec3f;
         SubS_TimePathing_Update(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420,
                                 sp7C, &sp58, this->unk42A);
-        SubS_TimePathing_ComputePointY(globalCtx, this->unk404, this->unk420, &sp58);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk404, this->unk420, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk42C = 1;
     } else {

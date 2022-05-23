@@ -399,7 +399,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         sp7C = gZeroVec3f;
         SubS_TimePathing_Update(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4,
                                 &this->unk_3EC, spA0, &sp7C, this->unk_3D0);
-        SubS_TimePathing_ComputePointY(globalCtx, this->unk_3C8, this->unk_3EC, &sp7C);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk_3C8, this->unk_3EC, &sp7C);
         this->actor.world.pos.y = sp7C.y;
     } else {
         sp7C = this->unk_3D4;

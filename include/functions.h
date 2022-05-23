@@ -2426,12 +2426,12 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 s32 SubS_InCsMode(GlobalContext* globalCtx);
 s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
-void SubS_TimePathing_FillWeightArray(f32* arg0, s32 arg1, s32 arg2);
-s32 SubS_TimePathing_ComputeWeightVal(f32* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, f32* arg6);
-void SubS_TimePathing_ComputeWeights(s32 arg0, f32 arg1, s32 arg2, f32* arg3, f32* arg4);
-void SubS_TimePathing_ComputePointXZ(f32* arg0, f32* arg1, f32 arg2, s32 arg3, s32 arg4, Vec3s* arg5, f32* arg6);
-s32 SubS_TimePathing_Update(Path* path, f32* arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, f32* arg6, Vec3f* arg7, s32 arg8);
-void SubS_TimePathing_ComputePointY(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
+void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len);
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s32 endTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
+void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]);
+void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[], f32 weightArray[]);
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184, s32 endTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
+void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point);
 Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max);
 Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
 s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index);

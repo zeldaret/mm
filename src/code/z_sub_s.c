@@ -214,20 +214,37 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 }
 
 /**
- * Count should also account for the numPoint, i.e. should add numPoint
+ * Fills the weightArray to be used with time paths
+ *
+ * @param weightArray an array of values that are used to compute the weightVal and the individual weights
+ * @param numPoints the number of points considered with weights
+ * @param len the length to fill the array
  */
-void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 count) {
+void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len) {
     s32 i;
     f32 val = 0.0f;
 
-    for (i = 0; i < count; i++) {
-        if ((i >= numPoints) && (i < (count - numPoints + 1))) {
+    for (i = 0; i < len; i++) {
+        if ((i >= numPoints) && (i < (len - numPoints + 1))) {
             val += 1.0f;
         }
         weightArray[i] = val;
     }
 }
 
+/**
+ * Computes the weightVal to be used with time paths
+ *
+ * @param weightVal the main weight value used to compute the weights for the points considered
+ * @param curTime the current time relative to the start time of the path
+ * @param unk184
+ * @param endTime the end time relative to the start time of the path
+ * @param pathCount the path count
+ * @param numPoints the number of points considered when computing the next point to move to
+ * @param weightArray see SubS_TimePathing_FillWeightArray
+ *
+ * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
+ */
 s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s32 endTime, s32 pathCount,
                                       s32 numPoints, f32 weightArray[]) {
     s32 i;
@@ -253,39 +270,61 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s
     return (curTime == endTime) ? 2 : 1;
 }
 
+/**
+ * Computes the weights to be used with time paths
+ *
+ * @param numPoints the number of points considered when computing the next point to move to, max is 11
+ * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param waypoint the current time relative to the start time of the path
+ * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param weights how much to weight each point considered
+ */
 void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]) {
-    f32 sp48[10][11];
+    f32 weightsTemp[10][11];
     s32 i;
     s32 j;
     s32 k;
 
     for (i = 0; i < numPoints; i++) {
         for (j = 0; j < numPoints + 1; j++) {
-            sp48[i][j] = 0.0f;
+            weightsTemp[i][j] = 0.0f;
         }
     }
 
-    sp48[0][numPoints - 1] = 1.0f;
+    weightsTemp[0][numPoints - 1] = 1.0f;
 
     for (i = 1; i < numPoints; i++) {
         for (j = waypoint - i, k = (numPoints - 1) - i; j <= waypoint; j++, k++) {
             if (weightArray[j + i] != weightArray[j]) {
-                sp48[i][k] = ((weightVal - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * sp48[i - 1][k];
+                weightsTemp[i][k] =
+                    ((weightVal - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * weightsTemp[i - 1][k];
             } else {
-                sp48[i][k] = 0.0f;
+                weightsTemp[i][k] = 0.0f;
             }
 
             if (weightArray[j + i + 1] != weightArray[j + 1]) {
-                sp48[i][k] += ((weightArray[j + i + 1] - weightVal) / (weightArray[j + i + 1] - weightArray[j + 1])) *
-                              sp48[i - 1][k + 1];
+                weightsTemp[i][k] +=
+                    ((weightArray[j + i + 1] - weightVal) / (weightArray[j + i + 1] - weightArray[j + 1])) *
+                    weightsTemp[i - 1][k + 1];
             }
         }
     }
     for (j = 0; j < numPoints; j++) {
-        weights[j] = sp48[numPoints - 1][j];
+        weights[j] = weightsTemp[numPoints - 1][j];
     }
 }
 
+/**
+ * Computes the X and Z component of the point to move to in time based paths
+ *
+ * @param x
+ * @param z
+ * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param numPoints the number of points considered when computing the next point to move to, max is 11
+ * @param waypoint the current time relative to the start time of the path
+ * @param points the path's points
+ * @param weightArray see SubS_TimePathing_FillWeightArray
+ */
 void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[],
                                      f32 weightArray[]) {
     f32 xPos;
@@ -314,10 +353,23 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
 }
 
 /**
-    @param[out] point The calcutated next world position
-*/
-// curTime is relative to startTime from scheduler
-// endTime is relative to starttime from scheduler
+ * Updates a time based path that an actor follows by:
+ *  - Computing the X and Z components of the next point to move to
+ *  - Updating the waypoint
+ *  - Updating the time
+ *
+ * @param path
+ * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param curTime the current time relative to the start time of the path
+ * @param unk184
+ * @param endTime the end time relative to the start time of the path
+ * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
+ * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param point the computed point to move to
+ * @param timeSpeed how much curTime should be updated
+ *
+ * @return s32 returns true when the end has been reached.
+ */
 s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184, s32 endTime, s32* waypoint,
                             f32 weightArray[], Vec3f* point, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -357,7 +409,15 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184
     return reachedEnd;
 }
 
-void SubS_TimePathing_ComputePointY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* pos) {
+/**
+ * Computes the Initial Y component of a time based path
+ *
+ * @param globalCtx
+ * @param path
+ * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
+ * @param point the computed point, only the Y component has meaning
+ */
+void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f posA;
     Vec3f posB;
@@ -387,13 +447,13 @@ void SubS_TimePathing_ComputePointY(GlobalContext* globalCtx, Path* path, s32 wa
     }
     max += 30;
     min -= 30;
-    posA = *pos;
-    posB = *pos;
+    posA = *point;
+    posB = *point;
     posA.y = max;
     posB.y = min;
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true,
                                 &bgId)) {
-        pos->y = posResult.y;
+        point->y = posResult.y;
     }
 }
 

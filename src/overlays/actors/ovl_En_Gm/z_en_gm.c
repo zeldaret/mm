@@ -1483,7 +1483,7 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
         sp58 = gZeroVec3f;
         SubS_TimePathing_Update(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248,
                                 &this->unk_250, sp7C, &sp58, this->unk_3C4);
-        SubS_TimePathing_ComputePointY(globalCtx, this->unk_234, this->unk_250, &sp58);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk_234, this->unk_250, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk_3A4 |= 8;
     } else {

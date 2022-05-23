@@ -387,7 +387,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
 
         SubS_TimePathing_Update(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424,
                                 &this->unk_42C, sp7C, &sp58, this->unk_436);
-        SubS_TimePathing_ComputePointY(globalCtx, this->unk_410, this->unk_42C, &sp58);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk_410, this->unk_42C, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk_438 = 1;
     } else {

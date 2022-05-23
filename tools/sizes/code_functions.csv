@@ -2180,7 +2180,7 @@ asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputeWeightVal.s,SubS_TimePath
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputeWeights.s,SubS_TimePathing_ComputeWeights,0x8013B0C8,0xA2
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputePointXZ.s,SubS_TimePathing_ComputePointXZ,0x8013B350,0xD8
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_Update.s,SubS_TimePathing_Update,0x8013B6B0,0x72
-asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputePointY.s,SubS_TimePathing_ComputePointY,0x8013B878,0xAF
+asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputeInitialY.s,SubS_TimePathing_ComputeInitialY,0x8013B878,0xAF
 asm/non_matchings/code/z_sub_s/SubS_GetAdditionalPath.s,SubS_GetAdditionalPath,0x8013BB34,0x12
 asm/non_matchings/code/z_sub_s/SubS_FindNearestActor.s,SubS_FindNearestActor,0x8013BB7C,0x3C
 asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationByInfoS.s,SubS_ChangeAnimationByInfoS,0x8013BC6C,0x35

@@ -2666,7 +2666,7 @@
     0x8013B0C8:("SubS_TimePathing_ComputeWeights",),
     0x8013B350:("SubS_TimePathing_ComputePointXZ",),
     0x8013B6B0:("SubS_TimePathing_Update",),
-    0x8013B878:("SubS_TimePathing_ComputePointY",),
+    0x8013B878:("SubS_TimePathing_ComputeInitialY",),
     0x8013BB34:("SubS_GetAdditionalPath",),
     0x8013BB7C:("SubS_FindNearestActor",),
     0x8013BC6C:("SubS_ChangeAnimationByInfoS",),
