@@ -213,17 +213,189 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
     *flags = (*flags & ~unsetBits) | setBits;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AF00.s")
+/**
+ * Count should also account for the numPoint, i.e. should add numPoint
+ */
+void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 count) {
+    s32 i;
+    f32 val = 0.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B010.s")
+    for (i = 0; i < count; i++) {
+        if ((i >= numPoints) && (i < (count - numPoints + 1))) {
+            val += 1.0f;
+        }
+        weightArray[i] = val;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B0C8.s")
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s32 endTime, s32 pathCount,
+                                      s32 numPoints, f32 weightArray[]) {
+    s32 i;
+    s32 j;
+    s32 k;
+    f32 f0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B350.s")
+    *weightVal = 0.0f;
+    if ((unk184 <= 0) || (curTime < 0)) {
+        return 0;
+    }
+    f0 = 1.0f / unk184;
+    k = 0;
+    for (i = numPoints - 1; i < pathCount; i++) {
+        for (j = 0; j < unk184; j++) {
+            if (k == curTime) {
+                break;
+            }
+            *weightVal += (weightArray[i + 1] - weightArray[i]) * f0;
+            k++;
+        }
+    }
+    return (curTime == endTime) ? 2 : 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B6B0.s")
+void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]) {
+    f32 sp48[10][11];
+    s32 i;
+    s32 j;
+    s32 k;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B878.s")
+    for (i = 0; i < numPoints; i++) {
+        for (j = 0; j < numPoints + 1; j++) {
+            sp48[i][j] = 0.0f;
+        }
+    }
+
+    sp48[0][numPoints - 1] = 1.0f;
+
+    for (i = 1; i < numPoints; i++) {
+        for (j = waypoint - i, k = (numPoints - 1) - i; j <= waypoint; j++, k++) {
+            if (weightArray[j + i] != weightArray[j]) {
+                sp48[i][k] = ((weightVal - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * sp48[i - 1][k];
+            } else {
+                sp48[i][k] = 0.0f;
+            }
+
+            if (weightArray[j + i + 1] != weightArray[j + 1]) {
+                sp48[i][k] += ((weightArray[j + i + 1] - weightVal) / (weightArray[j + i + 1] - weightArray[j + 1])) *
+                              sp48[i - 1][k + 1];
+            }
+        }
+    }
+    for (j = 0; j < numPoints; j++) {
+        weights[j] = sp48[numPoints - 1][j];
+    }
+}
+
+void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[],
+                                     f32 weightArray[]) {
+    f32 xPos;
+    f32 zPos;
+    f32 weights[11];
+    f32 weightedX;
+    f32 weightedZ;
+    f32 weightedTotal;
+    s32 i;
+
+    SubS_TimePathing_ComputeWeights(numPoints, weightVal, waypoint, weightArray, weights);
+    weightedTotal = 0.0f;
+    weightedZ = 0.0f;
+    weightedX = 0.0f;
+
+    for (i = 0; i < numPoints; i++) {
+        xPos = points[waypoint - numPoints + i + 1].x;
+        zPos = points[waypoint - numPoints + i + 1].z;
+
+        weightedX += weights[i] * xPos;
+        weightedZ += weights[i] * zPos;
+        weightedTotal += weights[i];
+    }
+    *x = weightedX / weightedTotal;
+    *z = weightedZ / weightedTotal;
+}
+
+/**
+    @param[out] point The calcutated next world position
+*/
+// curTime is relative to startTime from scheduler
+// endTime is relative to starttime from scheduler
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184, s32 endTime, s32* waypoint,
+                            f32 weightArray[], Vec3f* point, s32 timeSpeed) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 state;
+    f32 endX;
+    f32 endZ;
+    s32 reachedEnd = false;
+
+    if (*waypoint >= path->count) {
+        state = 2;
+    } else {
+        state = SubS_TimePathing_ComputeWeightVal(weightVal, *curTime, unk184, endTime, path->count, 3, weightArray);
+    }
+
+    switch (state) {
+        case 1: // Haven't reached the end of the path
+            reachedEnd = false;
+            SubS_TimePathing_ComputePointXZ(&point->x, &point->z, *weightVal, 3, *waypoint, points, weightArray);
+            break;
+        case 2: // Have reached the end of the path
+            endX = points[path->count - 1].x;
+            endZ = points[path->count - 1].z;
+            point->x = endX * 1;
+            point->z = endZ * 1;
+            reachedEnd = true;
+            break;
+    }
+
+    *curTime += timeSpeed;
+    if (*curTime >= endTime) {
+        *curTime = endTime;
+    } else if (*curTime < 0) {
+        *curTime = 0;
+    }
+    *waypoint = (*curTime / unk184) + 2;
+
+    return reachedEnd;
+}
+
+void SubS_TimePathing_ComputePointY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* pos) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    Vec3f posA;
+    Vec3f posB;
+    Vec3f posResult;
+    s32 i = waypoint - 2;
+    s16 max;
+    s16 min;
+    s32 isSetup;
+    CollisionPoly* outPoly = NULL;
+    s32 bgId = 0;
+
+    max = 0;
+    min = 0;
+    isSetup = false;
+    for (; i <= waypoint; i++) {
+        if (isSetup) {
+            if (max < points[i].y) {
+                max = points[i].y;
+            }
+            if (points[i].y < min) {
+                min = points[i].y;
+            }
+        } else {
+            max = min = points[i].y;
+        }
+        isSetup = true;
+    }
+    max += 30;
+    min -= 30;
+    posA = *pos;
+    posB = *pos;
+    posA.y = max;
+    posB.y = min;
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true,
+                                &bgId)) {
+        pos->y = posResult.y;
+    }
+}
 
 Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max) {
     Path* path;

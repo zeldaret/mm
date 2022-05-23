@@ -789,12 +789,12 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     s32 sp50 = 0;
     s32 pad;
 
-    func_8013AF00(sp7C, 3, this->unk404->count + 3);
+    SubS_TimePathing_FillWeightArray(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
         sp58 = gZeroVec3f;
-        func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
-                      &sp58, this->unk42A);
-        func_8013B878(globalCtx, this->unk404, this->unk420, &sp58);
+        SubS_TimePathing_Update(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420,
+                                sp7C, &sp58, this->unk42A);
+        SubS_TimePathing_ComputePointY(globalCtx, this->unk404, this->unk420, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk42C = 1;
     } else {
@@ -808,8 +808,8 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
     this->unk408 = gZeroVec3f;
-    if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
-                      &this->unk408, this->unk42A)) {
+    if (SubS_TimePathing_Update(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420,
+                                sp7C, &this->unk408, this->unk42A)) {
         this->unk430 = 1;
     } else {
         sp70 = this->actor.world.pos;
