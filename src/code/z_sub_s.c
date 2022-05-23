@@ -178,8 +178,7 @@ s32 SubS_InCsMode(GlobalContext* globalCtx) {
  * @param[in] stepRot boolean, step towards newRot instead of setting directly
  * @param[in] overrideRot boolean, override newRot with the specified input.
  *
- * Note:
- *  If overrideRot is true, the rotation will automatically step instead of setting directly
+ * @note if overrideRot is true, the rotation will automatically step instead of setting directly
  */
 s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot) {
     Vec3f newPos;
@@ -362,6 +361,17 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     return path;
 }
 
+/**
+ * Computes the point to move toward using a weight based algorithm that considers 4 points along the path
+ *
+ * @param path the path to follow
+ * @param waypoint the current waypoint, this and the previous three points will be used to compute the point
+ * @param point the point computed
+ * @param weightVal the main weight value used to compute the weights for the points considered
+ * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
+ *
+ * @note only computes X and Z components of the point
+ */
 s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 weightVal, s32 direction) {
     s32 i;
     f32 weight0;
@@ -431,7 +441,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
         cubed = weightVal * squared;
         weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal;
         weight1 = (1.75f * cubed) - (4.5f * squared) + (3.0f * weightVal);
-        weight2 = ((-11.0f/ 12.0f) * cubed) + (1.5f * squared);
+        weight2 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
         weight3 = (1.0f / 6.0f) * cubed;
     } else if (waypoint == secondLastPoint) {
         oneMinusWeightVal = 1.0f - weightVal;
@@ -454,7 +464,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
         squared = oneMinusWeightVal * oneMinusWeightVal;
         cubed = oneMinusWeightVal * squared;
         weight0 = (1.0f / 6.0f) * cubed;
-        weight1 = ((-11.0f/ 12.0f) * cubed) + (1.5f * squared);
+        weight1 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
         weight2 = (1.75f * cubed) - (4.5f * squared) + (3.0f * oneMinusWeightVal);
         weight3 = weightVal * weightVal * weightVal;
     } else {
@@ -473,6 +483,20 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
     return true;
 }
 
+/**
+ * Moves an actor based on a weight based algorithm that takes into account 4 points along the path
+ *
+ * @param actor the actor to move
+ * @param path the path to follow
+ * @param waypoint the current waypoint, this and the previous three points will be used to move forward
+ * @param weightVal the main weight value used to compute the weights for the points considered
+ * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
+ * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
+ *
+ * @return s32 true if actor reached the end of the path in this iteration, false otherwise
+ *
+ * @note this function is unused
+ */
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weightVal, s32 direction, s32 returnStart) {
     Vec3f worldPos = actor->world.pos;
     Vec3f velocity = actor->velocity;
@@ -483,7 +507,8 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weight
         return false;
     }
     while (true) {
-        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *weightVal, direction) || ((s32)(actor->speedXZ * 10000.0f) == 0)) {
+        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *weightVal, direction) ||
+            ((s32)(actor->speedXZ * 10000.0f) == 0)) {
             return false;
         }
         dist = Math_Vec3f_DistXZ(&actor->world.pos, &point);
@@ -1159,8 +1184,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
  * @param[in] rot the angles to rotate with, uses just the x and y components
  * @param[out] plane the computed plane
  *
- * Notes:
- *  The unit input vector is expected to already be normalized (only uses are with the z unit vector)
+ * @note the unit input vector is expected to already be normalized (only uses are with the z unit vector)
  *
  */
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
