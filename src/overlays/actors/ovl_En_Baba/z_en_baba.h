@@ -47,7 +47,7 @@ typedef struct EnBaba {
     /* 0x0414 */ Vec3f timePathPoint;
     /* 0x0420 */ f32 timePathWeightVal;
     /* 0x0424 */ s32 timePathTotalTime;
-    /* 0x0428 */ s32 timePathUnkArg;
+    /* 0x0428 */ s32 timePathWaypointTime;
     /* 0x042C */ s32 timePathWaypoint;
     /* 0x0430 */ s32 timePathTimeElapsed;
     /* 0x0434 */ u8 unk_434;

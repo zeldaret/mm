@@ -92,10 +92,10 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
 
 void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len);
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 timePathUnkArg, s32 totalTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
 void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]);
 void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[], f32 weightArray[]);
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 timePathUnkArg, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 waypointTime, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
 void SubS_TimePathing_ComputeInitialY(struct GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point);
 
 Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 max);

@@ -22,7 +22,7 @@ typedef struct EnGm {
     /* 0x0238 */ Vec3f timePathPoint;
     /* 0x0244 */ f32 timePathWeightVal;
     /* 0x0248 */ s32 timePathTotalTime;
-    /* 0x024C */ s32 timePathUnkArg;
+    /* 0x024C */ s32 timePathWaypointTime;
     /* 0x0250 */ s32 timePathWaypoint;
     /* 0x0254 */ s32 timePathTimeElapsed;
     /* 0x0258 */ u8 unk_258;

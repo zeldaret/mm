@@ -58,7 +58,7 @@ typedef struct EnTk {
     /* 0x03D4 */ Vec3f timePathPoint;
     /* 0x03E0 */ f32 timePathWeightVal;
     /* 0x03E4 */ s32 timePathTotalTime;
-    /* 0x03E8 */ s32 timePathUnkArg;
+    /* 0x03E8 */ s32 timePathWaypointTime;
     /* 0x03EC */ s32 timePathWaypoint;
     /* 0x03F0 */ s32 timePathTimeElapsed;
 } EnTk; // size = 0x3F4

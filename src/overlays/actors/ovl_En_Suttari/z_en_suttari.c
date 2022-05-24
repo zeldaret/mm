@@ -704,8 +704,8 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* sch
     this->timePathTimeElapsed = sp26 - phi_a0;
     phi_a0 = this->timePath->count - 2;
     this->unk42C = 0;
-    this->timePathUnkArg = this->timePathTotalTime / phi_a0;
-    this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathUnkArg) + 2;
+    this->timePathWaypointTime = this->timePathTotalTime / phi_a0;
+    this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathWaypointTime) + 2;
     this->unk430 = 0;
     return 1;
 }
@@ -791,8 +791,8 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->unk42C == 0) {
         timePathPoint = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &timePathPoint, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &timePathPoint, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
         this->actor.world.pos.y = timePathPoint.y;
         this->unk42C = 1;
@@ -808,8 +808,8 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->timePathPoint = gZeroVec3f;
     if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &this->timePathPoint, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk430 = 1;
     } else {
         sp70 = this->actor.world.pos;

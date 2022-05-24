@@ -21,7 +21,7 @@ typedef struct BgIngate {
     /* 0x170 */ Vec3f timePathPoint;
     /* 0x17C */ f32 timePathWeightVal;
     /* 0x180 */ s32 timePathTotalTime;
-    /* 0x184 */ s32 timePathUnkArg;
+    /* 0x184 */ s32 timePathWaypointTime;
     /* 0x188 */ s32 timePathWaypoint;
     /* 0x18C */ s32 timePathTimeElapsed;
 } BgIngate; // size = 0x190

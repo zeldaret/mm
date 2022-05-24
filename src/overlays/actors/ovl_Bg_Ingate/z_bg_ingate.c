@@ -80,7 +80,7 @@ void func_80953B40(BgIngate* this) {
         this->timePathTimeSpeed = 1;
     }
     temp = this->timePath->count - 2;
-    this->timePathUnkArg = this->timePathTotalTime / temp;
+    this->timePathWaypointTime = this->timePathTotalTime / temp;
     this->timePathWaypoint = 2;
     this->timePathTimeElapsed = 0;
     this->unk160 &= ~0x1;
@@ -98,8 +98,8 @@ s32 func_80953BEC(BgIngate* this) {
     if (!(this->unk160 & 1)) {
         timePathPoint = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &timePathPoint, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &timePathPoint, this->timePathTimeSpeed);
         this->unk160 |= 1;
     } else {
         timePathPoint = this->timePathPoint;
@@ -108,8 +108,8 @@ s32 func_80953BEC(BgIngate* this) {
     this->dyna.actor.world.pos.z = timePathPoint.z;
     this->timePathPoint = gZeroVec3f;
     if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &this->timePathPoint, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk160 |= 2;
     } else {
         sp68 = this->dyna.actor.world.pos;

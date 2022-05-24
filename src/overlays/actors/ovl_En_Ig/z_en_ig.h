@@ -23,7 +23,7 @@ typedef struct EnIg {
     /* 0x0278 */ Vec3f timePathPoint;
     /* 0x0284 */ f32 timePathWeightVal;
     /* 0x0288 */ s32 timePathTotalTime;
-    /* 0x028C */ s32 timePathUnkArg;
+    /* 0x028C */ s32 timePathWaypointTime;
     /* 0x0290 */ s32 timePathWaypoint;
     /* 0x0294 */ s32 timePathTimeElapsed;
     /* 0x0298 */ u8 scheduleResult;

@@ -1310,8 +1310,8 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
 
         this->timePathTimeElapsed = sp2E - phi_v1;
         phi_v1 = this->timePath->count - 2;
-        this->timePathUnkArg = this->timePathTotalTime / phi_v1;
-        this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathUnkArg) + 2;
+        this->timePathWaypointTime = this->timePathTotalTime / phi_v1;
+        this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathWaypointTime) + 2;
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
@@ -1742,8 +1742,8 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     if (!(this->unk_356 & 8)) {
         timePathPoint = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &timePathPoint, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &timePathPoint, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
         this->actor.world.pos.y = timePathPoint.y;
         this->unk_356 |= 8;
@@ -1763,8 +1763,8 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     this->timePathPoint = gZeroVec3f;
 
     if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
-                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
-                                &this->timePathPoint, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
+                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk_356 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;

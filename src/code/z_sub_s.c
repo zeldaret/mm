@@ -239,7 +239,7 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  *
  * @param weightVal the main weight value used to compute the weights for the points considered
  * @param timeElapsed how much time has passed
- * @param timePathUnkArg
+ * @param waypointTime how much time per each waypoint
  * @param totalTime how much time the path should take to travel
  * @param pathCount the path count
  * @param numPoints the number of points considered when computing the next point to move to
@@ -247,25 +247,25 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 timePathUnkArg, s32 totalTime, s32 pathCount,
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount,
                                       s32 numPoints, f32 weightArray[]) {
     s32 i;
     s32 j;
     s32 k;
-    f32 f0;
+    f32 weightValMultiplier;
 
     *weightVal = 0.0f;
-    if ((timePathUnkArg <= 0) || (timeElapsed < 0)) {
+    if ((waypointTime <= 0) || (timeElapsed < 0)) {
         return 0;
     }
-    f0 = 1.0f / timePathUnkArg;
+    weightValMultiplier = 1.0f / waypointTime;
     k = 0;
     for (i = numPoints - 1; i < pathCount; i++) {
-        for (j = 0; j < timePathUnkArg; j++) {
+        for (j = 0; j < waypointTime; j++) {
             if (k == timeElapsed) {
                 break;
             }
-            *weightVal += (weightArray[i + 1] - weightArray[i]) * f0;
+            *weightVal += (weightArray[i + 1] - weightArray[i]) * weightValMultiplier;
             k++;
         }
     }
@@ -363,7 +363,7 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  * @param path
  * @param weightVal see SubS_TimePathing_ComputeWeightVal
  * @param timeElapsed how much time has passed
- * @param timePathUnkArg
+ * @param waypointTime how much time per each waypoint
  * @param totalTime how much time the path should take to travel
  * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
  * @param weightArray see SubS_TimePathing_FillWeightArray
@@ -372,7 +372,7 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *
  * @return s32 returns true when the end has been reached.
  */
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 timePathUnkArg, s32 totalTime,
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 waypointTime, s32 totalTime,
                             s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
@@ -383,7 +383,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 ti
     if (*waypoint >= path->count) {
         state = 2;
     } else {
-        state = SubS_TimePathing_ComputeWeightVal(weightVal, *timeElapsed, timePathUnkArg, totalTime, path->count, 3,
+        state = SubS_TimePathing_ComputeWeightVal(weightVal, *timeElapsed, waypointTime, totalTime, path->count, 3,
                                                   weightArray);
     }
 
@@ -407,7 +407,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 ti
     } else if (*timeElapsed < 0) {
         *timeElapsed = 0;
     }
-    *waypoint = (*timeElapsed / timePathUnkArg) + 2;
+    *waypoint = (*timeElapsed / waypointTime) + 2;
 
     return reachedEnd;
 }
