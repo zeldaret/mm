@@ -677,12 +677,12 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     }
 }
 
-s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
+s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
     u16 sp26 = SCHEDULE_TIME_NOW;
     u16 pad1;
     u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
     u16 pad2;
-    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->result];
+    s32 sp1C = D_80BAE8F8[scheduleResult->result];
     u16 phi_a0;
 
     if (sp1C >= 0) {
@@ -694,12 +694,12 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     if ((this->unk428 != 0 && this->unk428 < 0xC) && (this->timePathTimeSpeed >= 0)) {
         phi_a0 = sp26;
     } else {
-        phi_a0 = unkStruct->time0;
+        phi_a0 = scheduleResult->time0;
     }
-    if (unkStruct->time1 < phi_a0) {
-        this->timePathTotalTime = (phi_a0 - unkStruct->time1) + 0xFFFF;
+    if (scheduleResult->time1 < phi_a0) {
+        this->timePathTotalTime = (phi_a0 - scheduleResult->time1) + 0xFFFF;
     } else {
-        this->timePathTotalTime = unkStruct->time1 - phi_a0;
+        this->timePathTotalTime = scheduleResult->time1 - phi_a0;
     }
     this->timePathTimeElapsed = sp26 - phi_a0;
     phi_a0 = this->timePath->count - 2;
@@ -710,23 +710,21 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     return 1;
 }
 
-s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
+s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
     s32 pad;
     EnDoor* sp48;
-    u8 sp47;
-    u16 sp44;
+    u8 sp47 = ENSUTTARI_GET_PATH(&this->actor);
+    u16 sp44 = SCHEDULE_TIME_NOW;
     Vec3f sp38;
     Vec3f sp2C;
     Vec3s* sp28;
-    UNK_TYPE sp24;
+    s32 sp24;
 
-    sp47 = ENSUTTARI_GET_PATH(&this->actor);
-    sp44 = SCHEDULE_TIME_NOW;
     if (this->unk428 == 10 || this->unk428 == 11 || this->unk428 == 2) {
         return 0;
     }
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-    sp24 = D_80BAE8F8[unkStruct->result];
+    sp24 = D_80BAE8F8[scheduleResult->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
         this->timePath = SubS_GetAdditionalPath(globalCtx, sp47, sp24);
     }
@@ -736,9 +734,9 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     sp28 = Lib_SegmentedToVirtual(this->timePath->points);
     Math_Vec3s_ToVec3f(&sp38, &sp28[0]);
     Math_Vec3s_ToVec3f(&sp2C, &sp28[1]);
-    this->unk434 = sp44 - unkStruct->time0;
-    this->unk436 = unkStruct->time1 - unkStruct->time0;
-    if (unkStruct->result != 10 && unkStruct->result != 11) {
+    this->unk434 = sp44 - scheduleResult->time0;
+    this->unk436 = scheduleResult->time1 - scheduleResult->time0;
+    if (scheduleResult->result != 10 && scheduleResult->result != 11) {
         sp48->unk_1A7 = 0x4B;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
@@ -748,15 +746,15 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     return 1;
 }
 
-s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
+s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
     s32 ret;
 
-    switch (unkStruct->result) {
+    switch (scheduleResult->result) {
         case 15:
         case 14:
         case 13:
         case 12:
-            ret = func_80BABC48(this, globalCtx, unkStruct);
+            ret = func_80BABC48(this, globalCtx, scheduleResult);
             break;
         case 11:
         case 10:
@@ -764,7 +762,7 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
         case 8:
         case 7:
         case 6:
-            ret = func_80BABDD8(this, globalCtx, unkStruct);
+            ret = func_80BABDD8(this, globalCtx, scheduleResult);
             break;
         case 5:
         case 4:
@@ -1105,17 +1103,17 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
-    ScheduleResult unkStruct;
+    ScheduleResult scheduleResult;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
-    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &scheduleResult) ||
+        ((this->unk428 != scheduleResult.result) && !func_80BABF64(this, globalCtx, &scheduleResult))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.result = 0;
+        scheduleResult.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.result;
+    this->unk428 = scheduleResult.result;
     func_80BAC2FC(this, globalCtx);
     func_80BAB434(this);
     if (this->unk428 == 5) {
@@ -1129,17 +1127,17 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
-    ScheduleResult unkStruct;
+    ScheduleResult scheduleResult;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
-    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &scheduleResult) ||
+        ((this->unk428 != scheduleResult.result) && !func_80BABF64(this, globalCtx, &scheduleResult))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.result = 0;
+        scheduleResult.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.result;
+    this->unk428 = scheduleResult.result;
     func_80BAC2FC(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         Message_StartTextbox(globalCtx, 0x2A3A, &this->actor);
@@ -1250,7 +1248,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
-    ScheduleResult unkStruct;
+    ScheduleResult scheduleResult;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
@@ -1259,21 +1257,21 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
-    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &scheduleResult) ||
+        ((this->unk428 != scheduleResult.result) && !func_80BABF64(this, globalCtx, &scheduleResult))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.result = 0;
+        scheduleResult.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.result;
+    this->unk428 = scheduleResult.result;
     func_80BAC2FC(this, globalCtx);
     if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     func_80BAB434(this);
-    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.result != 7)) {
+    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (scheduleResult.result != 7)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
@@ -1285,7 +1283,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
-    ScheduleResult unkStruct;
+    ScheduleResult scheduleResult;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
@@ -1297,20 +1295,20 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         }
         this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
-        if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
-            ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+        if (!Schedule_RunScript(globalCtx, D_80BAE820, &scheduleResult) ||
+            ((this->unk428 != scheduleResult.result) && !func_80BABF64(this, globalCtx, &scheduleResult))) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            unkStruct.result = 0;
+            scheduleResult.result = 0;
         } else {
             this->actor.flags |= ACTOR_FLAG_1;
         }
-        this->unk428 = unkStruct.result;
+        this->unk428 = scheduleResult.result;
         func_80BAC2FC(this, globalCtx);
         if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        if ((this->flags1 & 0x20) && (unkStruct.result != 9)) {
+        if ((this->flags1 & 0x20) && (scheduleResult.result != 9)) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;

@@ -319,7 +319,7 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp26 = (u16)(gSaveContext.save.time - 0x3FFC);
+    u16 sp26 = SCHEDULE_TIME_NOW;
     u16 temp;
     u8 sp23 = ENBABA_GET_3F00(&this->actor);
 

@@ -439,13 +439,13 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     door = NULL;
     if (!(this->unk_2CA & 0xC00)) {
         Actor* doorIter = NULL;
-        
+
         do {
             doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (doorIter != NULL) {
                 if (Actor_XZDistanceBetweenActors(&this->actor, doorIter) <= 120.0f) {
-                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &doorIter->world.pos), this->actor.shape.rot.y)) <=
-                        0x2000) {
+                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &doorIter->world.pos),
+                                       this->actor.shape.rot.y)) <= 0x2000) {
                         this->unk_2CA |= 0x400;
                         door = (EnDoor*)doorIter;
                         break;

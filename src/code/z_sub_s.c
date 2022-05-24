@@ -219,6 +219,8 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
  * @param weightArray an array of values that are used to compute the weightVal and the individual weights
  * @param numPoints the number of points considered with weights
  * @param len the length to fill the array, generally the path count + numPoints
+ *
+ * @note SubS_TimePathing_Update assumes numPoints to be 3
  */
 void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len) {
     s32 i;
