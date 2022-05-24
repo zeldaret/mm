@@ -370,8 +370,8 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *
  * @return s32 returns true when the end has been reached.
  */
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 timePathUnkArg, s32 totalTime, s32* waypoint,
-                            f32 weightArray[], Vec3f* point, s32 timeSpeed) {
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 timePathUnkArg, s32 totalTime,
+                            s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
     f32 endX;

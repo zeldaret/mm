@@ -686,26 +686,26 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     u16 phi_a0;
 
     if (sp1C >= 0) {
-        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp23, sp1C);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp23, sp1C);
     }
-    if (this->unk404 == NULL) {
+    if (this->timePath == NULL) {
         return 0;
     }
-    if ((this->unk428 != 0 && this->unk428 < 0xC) && (this->unk42A >= 0)) {
+    if ((this->unk428 != 0 && this->unk428 < 0xC) && (this->timePathTimeSpeed >= 0)) {
         phi_a0 = sp26;
     } else {
         phi_a0 = unkStruct->time0;
     }
     if (unkStruct->time1 < phi_a0) {
-        this->unk418 = (phi_a0 - unkStruct->time1) + 0xFFFF;
+        this->timePathTotalTime = (phi_a0 - unkStruct->time1) + 0xFFFF;
     } else {
-        this->unk418 = unkStruct->time1 - phi_a0;
+        this->timePathTotalTime = unkStruct->time1 - phi_a0;
     }
-    this->unk424 = sp26 - phi_a0;
-    phi_a0 = this->unk404->count - 2;
+    this->timePathTimeElapsed = sp26 - phi_a0;
+    phi_a0 = this->timePath->count - 2;
     this->unk42C = 0;
-    this->unk41C = this->unk418 / phi_a0;
-    this->unk420 = (this->unk424 / this->unk41C) + 2;
+    this->timePathUnkArg = this->timePathTotalTime / phi_a0;
+    this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathUnkArg) + 2;
     this->unk430 = 0;
     return 1;
 }
@@ -728,12 +728,12 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[unkStruct->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
-        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp47, sp24);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp47, sp24);
     }
-    if ((sp48 == NULL) || (this->unk404 == NULL)) {
+    if ((sp48 == NULL) || (this->timePath == NULL)) {
         return 0;
     }
-    sp28 = Lib_SegmentedToVirtual(this->unk404->points);
+    sp28 = Lib_SegmentedToVirtual(this->timePath->points);
     Math_Vec3s_ToVec3f(&sp38, &sp28[0]);
     Math_Vec3s_ToVec3f(&sp2C, &sp28[1]);
     this->unk434 = sp44 - unkStruct->time0;
@@ -781,45 +781,47 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    f32 sp7C[265];
+    f32 weightArray[265];
     Vec3f sp70;
     Vec3f sp64;
-    Vec3f sp58;
+    Vec3f timePathPoint;
     s32 sp54 = 0;
     s32 sp50 = 0;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(sp7C, 3, this->unk404->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
     if (this->unk42C == 0) {
-        sp58 = gZeroVec3f;
-        SubS_TimePathing_Update(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420,
-                                sp7C, &sp58, this->unk42A);
-        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk404, this->unk420, &sp58);
-        this->actor.world.pos.y = sp58.y;
+        timePathPoint = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
+                                &timePathPoint, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
+        this->actor.world.pos.y = timePathPoint.y;
         this->unk42C = 1;
     } else {
-        sp58 = this->unk408;
+        timePathPoint = this->timePathPoint;
     }
-    this->actor.world.pos.x = sp58.x;
-    this->actor.world.pos.z = sp58.z;
+    this->actor.world.pos.x = timePathPoint.x;
+    this->actor.world.pos.z = timePathPoint.z;
     if (SubS_InCsMode(globalCtx)) {
-        sp54 = this->unk424;
-        sp50 = this->unk420;
-        sp58 = this->actor.world.pos;
+        sp54 = this->timePathTimeElapsed;
+        sp50 = this->timePathWaypoint;
+        timePathPoint = this->actor.world.pos;
     }
-    this->unk408 = gZeroVec3f;
-    if (SubS_TimePathing_Update(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420,
-                                sp7C, &this->unk408, this->unk42A)) {
+    this->timePathPoint = gZeroVec3f;
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
+                                &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk430 = 1;
     } else {
         sp70 = this->actor.world.pos;
-        sp64 = this->unk408;
+        sp64 = this->timePathPoint;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
     if (SubS_InCsMode(globalCtx)) {
-        this->unk424 = sp54;
-        this->unk420 = sp50;
-        this->unk408 = sp58;
+        this->timePathTimeElapsed = sp54;
+        this->timePathWaypoint = sp50;
+        this->timePathPoint = timePathPoint;
     }
     return 0;
 }
@@ -841,7 +843,7 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
     sp3C.z = this->unk434 * tmp;
     Lib_Vec3f_TranslateAndRotateY(&this->unk438, this->actor.world.rot.y, &sp3C, &sp30);
     this->actor.world.pos = sp30;
-    this->unk434 += this->unk42A;
+    this->unk434 += this->timePathTimeSpeed;
     return 0;
 }
 
@@ -1105,7 +1107,7 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
     ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1129,7 +1131,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1256,7 +1258,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
         this->animationIndex = 2;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
-    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1266,7 +1268,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
-    if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
+    if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -1294,7 +1296,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             this->animationIndex = 2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         }
-        this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+        this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
         if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
             ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1304,7 +1306,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
         }
         this->unk428 = unkStruct.result;
         func_80BAC2FC(this, globalCtx);
-        if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
+        if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }

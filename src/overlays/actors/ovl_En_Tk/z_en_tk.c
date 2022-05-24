@@ -343,7 +343,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
 
     this->unk_2DC += (REG(15) * sp44) - temp2;
     temp3 = this->unk_2DC;
-    this->unk_3D0 = temp2 + temp3;
+    this->timePathTimeSpeed = temp2 + temp3;
     this->unk_2DC -= temp3;
     this->unk_2E0 += REG(15);
 
@@ -384,88 +384,89 @@ void func_80AECE0C(EnTk* this, GlobalContext* globalCtx) {
 
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     EnDoor* door;
-    f32 spA0[265];
+    f32 weightArray[265];
     Vec3f sp94;
     Vec3f sp88;
-    Vec3f sp7C;
+    Vec3f timePathPoint;
     s32 sp78;
     s32 sp74;
-    Actor* door2;
-    Actor* door1;
-    s32 pad2[1];
+    s32 pad;
 
-    SubS_TimePathing_FillWeightArray(spA0, 3, this->unk_3C8->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
     if (!(this->unk_3CE & 4)) {
-        sp7C = gZeroVec3f;
-        SubS_TimePathing_Update(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4,
-                                &this->unk_3EC, spA0, &sp7C, this->unk_3D0);
-        SubS_TimePathing_ComputeInitialY(globalCtx, this->unk_3C8, this->unk_3EC, &sp7C);
-        this->actor.world.pos.y = sp7C.y;
+        timePathPoint = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
+                                &timePathPoint, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
+        this->actor.world.pos.y = timePathPoint.y;
     } else {
-        sp7C = this->unk_3D4;
+        timePathPoint = this->timePathPoint;
     }
 
-    this->actor.world.pos.x = sp7C.x;
-    this->actor.world.pos.z = sp7C.z;
+    this->actor.world.pos.x = timePathPoint.x;
+    this->actor.world.pos.z = timePathPoint.z;
 
     if (!(this->unk_3CE & 4)) {
         Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
         this->unk_3CE |= 4;
     }
 
-    if ((globalCtx->unk_18B4A != 0) || (this->unk_3D0 == 0)) {
-        sp78 = this->unk_3F0;
-        sp74 = this->unk_3EC;
-        sp7C = this->actor.world.pos;
+    if ((globalCtx->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+        sp78 = this->timePathTimeElapsed;
+        sp74 = this->timePathWaypoint;
+        timePathPoint = this->actor.world.pos;
     }
 
-    this->unk_3D4 = gZeroVec3f;
+    this->timePathPoint = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4,
-                                &this->unk_3EC, spA0, &this->unk_3D4, this->unk_3D0)) {
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+                                this->timePathUnkArg, this->timePathTotalTime, &this->timePathWaypoint, weightArray,
+                                &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk_3CE |= 8;
     } else {
         sp94 = this->actor.world.pos;
-        sp88 = this->unk_3D4;
+        sp88 = this->timePathPoint;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp94, &sp88);
     }
 
-    if ((globalCtx->unk_18B4A != 0) || (this->unk_3D0 == 0)) {
-        this->unk_3F0 = sp78;
-        this->unk_3EC = sp74;
-        this->unk_3D4 = sp7C;
+    if ((globalCtx->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+        this->timePathTimeElapsed = sp78;
+        this->timePathWaypoint = sp74;
+        this->timePathPoint = timePathPoint;
     }
 
     door = NULL;
     if (!(this->unk_2CA & 0xC00)) {
-        door1 = NULL;
-    label:
+        Actor* doorIter = NULL;
+        
         do {
-            door1 = SubS_FindActor(globalCtx, door1, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-            if (door1 != NULL) {
-                if (Actor_XZDistanceBetweenActors(&this->actor, door1) <= 120.0f) {
-                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &door1->world.pos), this->actor.shape.rot.y)) <=
+            doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+            if (doorIter != NULL) {
+                if (Actor_XZDistanceBetweenActors(&this->actor, doorIter) <= 120.0f) {
+                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &doorIter->world.pos), this->actor.shape.rot.y)) <=
                         0x2000) {
                         this->unk_2CA |= 0x400;
-                        door = (EnDoor*)door1;
+                        door = (EnDoor*)doorIter;
                         break;
                     }
                 }
-                door1 = door1->next;
+                doorIter = doorIter->next;
             }
-        } while (door1 != NULL);
+        } while (doorIter != NULL);
     } else {
-        door2 = NULL;
+        Actor* doorIter = NULL;
+
         do {
-            door2 = SubS_FindActor(globalCtx, door2, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-            if (door2 != NULL) {
-                if (Actor_XZDistanceBetweenActors(&this->actor, door2) <= 160.0f) {
-                    door = (EnDoor*)door2;
+            doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+            if (doorIter != NULL) {
+                if (Actor_XZDistanceBetweenActors(&this->actor, doorIter) <= 160.0f) {
+                    door = (EnDoor*)doorIter;
                     break;
                 }
-                door2 = door2->next;
+                doorIter = doorIter->next;
             }
-        } while (door2 != NULL);
+        } while (doorIter != NULL);
     }
 
     if ((door != NULL) && (this->unk_2CA & 0x400)) {
@@ -507,22 +508,22 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 phi_a1;
     s32 idx = arg2->result - 1;
 
-    this->unk_3C8 = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
-    if (this->unk_3C8 == 0) {
+    this->timePath = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
+    if (this->timePath == 0) {
         return false;
     }
 
-    if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->unk_3D0 >= 0)) {
+    if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->timePathTimeSpeed >= 0)) {
         phi_a1 = sp1E;
     } else {
         phi_a1 = arg2->time0;
     }
 
-    this->unk_3E4 = arg2->time1 - phi_a1;
-    this->unk_3F0 = sp1E - phi_a1;
-    phi_a1 = this->unk_3C8->count - 2;
-    this->unk_3E8 = this->unk_3E4 / phi_a1;
-    this->unk_3EC = (this->unk_3F0 / this->unk_3E8) + 2;
+    this->timePathTotalTime = arg2->time1 - phi_a1;
+    this->timePathTimeElapsed = sp1E - phi_a1;
+    phi_a1 = this->timePath->count - 2;
+    this->timePathUnkArg = this->timePathTotalTime / phi_a1;
+    this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathUnkArg) + 2;
     this->unk_3CE &= ~4;
     this->unk_3CE &= ~8;
     return true;
