@@ -218,7 +218,7 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
  *
  * @param weightArray an array of values that are used to compute the weightVal and the individual weights
  * @param numPoints the number of points considered with weights
- * @param len the length to fill the array
+ * @param len the length to fill the array, generally the path count + numPoints
  */
 void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len) {
     s32 i;
@@ -236,16 +236,16 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  * Computes the weightVal to be used with time paths
  *
  * @param weightVal the main weight value used to compute the weights for the points considered
- * @param curTime the current time relative to the start time of the path
- * @param unk184
- * @param endTime the end time relative to the start time of the path
+ * @param timeElapsed how much time has passed
+ * @param timePathUnkArg
+ * @param totalTime how much time the path should take to travel
  * @param pathCount the path count
  * @param numPoints the number of points considered when computing the next point to move to
  * @param weightArray see SubS_TimePathing_FillWeightArray
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s32 endTime, s32 pathCount,
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 timePathUnkArg, s32 totalTime, s32 pathCount,
                                       s32 numPoints, f32 weightArray[]) {
     s32 i;
     s32 j;
@@ -253,21 +253,21 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 curTime, s32 unk184, s
     f32 f0;
 
     *weightVal = 0.0f;
-    if ((unk184 <= 0) || (curTime < 0)) {
+    if ((timePathUnkArg <= 0) || (timeElapsed < 0)) {
         return 0;
     }
-    f0 = 1.0f / unk184;
+    f0 = 1.0f / timePathUnkArg;
     k = 0;
     for (i = numPoints - 1; i < pathCount; i++) {
-        for (j = 0; j < unk184; j++) {
-            if (k == curTime) {
+        for (j = 0; j < timePathUnkArg; j++) {
+            if (k == timeElapsed) {
                 break;
             }
             *weightVal += (weightArray[i + 1] - weightArray[i]) * f0;
             k++;
         }
     }
-    return (curTime == endTime) ? 2 : 1;
+    return (timeElapsed == totalTime) ? 2 : 1;
 }
 
 /**
@@ -360,17 +360,17 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *
  * @param path
  * @param weightVal see SubS_TimePathing_ComputeWeightVal
- * @param curTime the current time relative to the start time of the path
- * @param unk184
- * @param endTime the end time relative to the start time of the path
+ * @param timeElapsed how much time has passed
+ * @param timePathUnkArg
+ * @param totalTime how much time the path should take to travel
  * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
  * @param weightArray see SubS_TimePathing_FillWeightArray
  * @param point the computed point to move to
- * @param timeSpeed how much curTime should be updated
+ * @param timeSpeed how much timeElapsed should be updated
  *
  * @return s32 returns true when the end has been reached.
  */
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184, s32 endTime, s32* waypoint,
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 timePathUnkArg, s32 totalTime, s32* waypoint,
                             f32 weightArray[], Vec3f* point, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
@@ -381,7 +381,8 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184
     if (*waypoint >= path->count) {
         state = 2;
     } else {
-        state = SubS_TimePathing_ComputeWeightVal(weightVal, *curTime, unk184, endTime, path->count, 3, weightArray);
+        state = SubS_TimePathing_ComputeWeightVal(weightVal, *timeElapsed, timePathUnkArg, totalTime, path->count, 3,
+                                                  weightArray);
     }
 
     switch (state) {
@@ -398,19 +399,19 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* curTime, s32 unk184
             break;
     }
 
-    *curTime += timeSpeed;
-    if (*curTime >= endTime) {
-        *curTime = endTime;
-    } else if (*curTime < 0) {
-        *curTime = 0;
+    *timeElapsed += timeSpeed;
+    if (*timeElapsed >= totalTime) {
+        *timeElapsed = totalTime;
+    } else if (*timeElapsed < 0) {
+        *timeElapsed = 0;
     }
-    *waypoint = (*curTime / unk184) + 2;
+    *waypoint = (*timeElapsed / timePathUnkArg) + 2;
 
     return reachedEnd;
 }
 
 /**
- * Computes the Initial Y component of a time based path
+ * Computes the initial Y component of a time based path
  *
  * @param globalCtx
  * @param path
@@ -596,7 +597,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
 /**
  * Computes the point to move toward using a weight based algorithm that considers 4 points along the path
  *
- * @param path the path to follow
+ * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to compute the point
  * @param point the point computed
  * @param weightVal the main weight value used to compute the weights for the points considered
@@ -718,8 +719,8 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
 /**
  * Moves an actor based on a weight based algorithm that takes into account 4 points along the path
  *
- * @param actor the actor to move
- * @param path the path to follow
+ * @param actor
+ * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to move forward
  * @param weightVal the main weight value used to compute the weights for the points considered
  * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
@@ -1029,8 +1030,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
  * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
- * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot and
- * TurnOptions/TurnOptionsSet`
+ * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
  *
  */
 s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
