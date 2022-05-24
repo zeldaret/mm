@@ -2693,7 +2693,7 @@
     0x8013D9C8:("SubS_FillLimbRotTables",),
     0x8013DB90:("SubS_IsFloorAbove",),
     0x8013DC40:("SubS_CopyPointFromPathList",),
-    0x8013DCCC:("SubS_GetPathCount",),
+    0x8013DCCC:("SubS_GetPathCountFromPathList",),
     0x8013DCE0:("SubS_ActorPathing_Init",),
     0x8013DE04:("SubS_ActorPathing_Update",),
     0x8013DF3C:("SubS_ActorPathing_ComputePointInfo",),

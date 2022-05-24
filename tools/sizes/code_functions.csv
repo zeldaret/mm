@@ -2207,7 +2207,7 @@ asm/non_matchings/code/z_sub_s/SubS_FindActor.s,SubS_FindActor,0x8013D960,0x1A
 asm/non_matchings/code/z_sub_s/SubS_FillLimbRotTables.s,SubS_FillLimbRotTables,0x8013D9C8,0x72
 asm/non_matchings/code/z_sub_s/SubS_IsFloorAbove.s,SubS_IsFloorAbove,0x8013DB90,0x2C
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathList.s,SubS_CopyPointFromPathList,0x8013DC40,0x23
-asm/non_matchings/code/z_sub_s/SubS_GetPathCount.s,SubS_GetPathCount,0x8013DCCC,0x5
+asm/non_matchings/code/z_sub_s/SubS_GetPathCountFromPathList.s,SubS_GetPathCountFromPathList,0x8013DCCC,0x5
 asm/non_matchings/code/z_sub_s/SubS_ActorPathing_Init.s,SubS_ActorPathing_Init,0x8013DCE0,0x49
 asm/non_matchings/code/z_sub_s/SubS_ActorPathing_Update.s,SubS_ActorPathing_Update,0x8013DE04,0x4E
 asm/non_matchings/code/z_sub_s/SubS_ActorPathing_ComputePointInfo.s,SubS_ActorPathing_ComputePointInfo,0x8013DF3C,0x46

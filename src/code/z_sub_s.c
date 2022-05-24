@@ -1193,8 +1193,8 @@ s32 SubS_CopyPointFromPathList(Path* paths, s32 pathIndex, s32 pointIndex, Vec3f
     return false;
 }
 
-u8 SubS_GetPathCount(Path* paths, s32 index) {
-    Path* path = &paths[index];
+u8 SubS_GetPathCountFromPathList(Path* paths, s32 pathIndex) {
+    Path* path = &paths[pathIndex];
 
     return path->count;
 }
