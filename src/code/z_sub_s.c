@@ -679,7 +679,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
         oneMinusWeightVal = 1.0f - weightVal;
         squared = weightVal * weightVal;
         cubed = weightVal * squared;
-        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal * ((void)0, 0.25f);
+        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal * ((void)0, 0.25f); //! FAKE:
         weight1 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * weightVal) + (7.0f / 12.0f);
         weight2 = (-0.5f * cubed) + (0.5f * squared) + (weightVal * 0.5f) + (1.0f / 6.0f);
         weight3 = cubed * (1.0f / 6.0f);
