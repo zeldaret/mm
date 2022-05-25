@@ -36,6 +36,7 @@ u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     objIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_YABUSAME_POINT);
     if ((objIndex >= 0) && (Object_IsLoaded(&globalCtx->objectCtx, objIndex))) {
         void* segBackup = gSegments[6];
+
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objIndex].segment);
 
         this->pos = PARAMS->pos;
