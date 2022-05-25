@@ -68,8 +68,8 @@ void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, 0);
-    Matrix_Scale(scale, scale, scale, 1);
+    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     func_8012C2DC(globalCtx->state.gfxCtx);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
