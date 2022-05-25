@@ -25,7 +25,7 @@ static TexturePtr sPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex,
 
 #define rObjId regs[0]
 #define rTimer regs[1]
-#define rScoreIdx regs[2]
+#define rScoreIndex regs[2]
 #define rScale regs[3]
 
 u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
