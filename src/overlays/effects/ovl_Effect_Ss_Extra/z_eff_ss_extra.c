@@ -39,14 +39,14 @@ u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
 
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objIndex].segment);
 
-        this->pos = PARAMS->pos;
-        this->velocity = PARAMS->velocity;
-        this->accel = PARAMS->accel;
+        this->pos = params->pos;
+        this->velocity = params->velocity;
+        this->accel = params->accel;
         this->draw = EffectSsExtra_Draw;
         this->update = EffectSsExtra_Update;
         this->life = 50;
-        this->rScoreIndex = PARAMS->scoreIdx;
-        this->rScale = PARAMS->scale;
+        this->rScoreIndex = params->scoreIdx;
+        this->rScale = params->scale;
         this->rTimer = 5;
         this->rObjId = objIndex;
 
