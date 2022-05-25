@@ -45,7 +45,7 @@ u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
         this->draw = EffectSsExtra_Draw;
         this->update = EffectSsExtra_Update;
         this->life = 50;
-        this->rScoreIdx = PARAMS->scoreIdx;
+        this->rScoreIndex = PARAMS->scoreIdx;
         this->rScale = PARAMS->scale;
         this->rTimer = 5;
         this->rObjId = objIndex;
@@ -63,7 +63,9 @@ void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     scale = this->rScale / 100.0f;
     storedSegment = globalCtx->objectCtx.status[this->rObjId].segment;
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     gSegments[6] = PHYSICAL_TO_VIRTUAL(storedSegment);
 
     gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
@@ -75,7 +77,7 @@ void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gPointTextures[this->rScoreIdx]));
+    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sPointTextures[this->rScoreIndex]));
 
     gSPDisplayList(POLY_XLU_DISP++, &gYabusamePointDL);
 
@@ -90,6 +92,6 @@ void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        globalCtx->interfaceCtx.unk_25C = gScores[this->rScoreIdx];
+        globalCtx->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
     }
 }
