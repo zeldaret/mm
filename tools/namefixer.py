@@ -496,6 +496,11 @@ wordReplace = {
     "func_8015E750": "Message_FindCreditsMessage",
     "func_80133038": "Schedule_RunScript",
 
+    "EffectSsKiraKira_SpawnSmallYellow": "EffectSsKirakira_SpawnSmallYellow",
+    "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
+    "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
+    "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
+
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",

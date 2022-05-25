@@ -260,7 +260,7 @@ void func_80931A38(ObjIcePoly* this, GlobalContext* globalCtx) {
         }
         sp6C.z = (phi_v0 * (15.0f + (sp58 * 15.0f)) * this->actor.scale.z) + this->actor.world.pos.z;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &gZeroVec3f, &gZeroVec3f, &D_80932378, &D_8093237C, 2000, 5);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp6C, &gZeroVec3f, &gZeroVec3f, &D_80932378, &D_8093237C, 2000, 5);
     }
 }
 

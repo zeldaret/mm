@@ -713,15 +713,13 @@ void func_808D2040(EnFloormas* this, GlobalContext* globalCtx) {
 
 void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
-    u8 playerForm;
 
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
-    playerForm = gSaveContext.save.playerForm;
-    ptr = &D_808D3900[playerForm];
+    ptr = &D_808D3900[(void)0, gSaveContext.save.playerForm];
     this->actor.home.pos.x = ptr->z * Math_SinS(this->actor.shape.rot.y);
     this->actor.home.pos.y = CLAMP(-this->actor.playerHeightRel, ptr->x, ptr->y);
     this->actor.home.pos.z = ptr->z * Math_CosS(this->actor.shape.rot.y);

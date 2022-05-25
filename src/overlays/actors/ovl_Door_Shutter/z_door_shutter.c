@@ -570,9 +570,7 @@ void func_808A1884(DoorShutter* this, GlobalContext* globalCtx) {
     if (DoorShutter_SetupDoor(this, globalCtx) && !(player->stateFlags1 & 0x800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-            s8 data = gSaveContext.respawn[RESTART_MODE_DOWN].data;
-
-            func_801226E0(globalCtx, data);
+            func_801226E0(globalCtx, ((void)0, gSaveContext.respawn[RESTART_MODE_DOWN].data));
             player->unk_A86 = -1;
             func_800B7298(globalCtx, NULL, 0x73);
         }

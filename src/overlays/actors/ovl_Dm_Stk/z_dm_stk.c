@@ -1512,7 +1512,6 @@ void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
 
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
-    u16 time;
 
     if (this->actor.params != 1) {
         if (this->unk_2E0 == 33) {
@@ -1569,11 +1568,9 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
             (globalCtx->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (globalCtx->csCtx.state == 0)) {
-            time = gSaveContext.save.time;
-            gSaveContext.save.time = (u16)REG(15) + time;
+            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
             if (REG(15) != 0) {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
             }
         }
     }
