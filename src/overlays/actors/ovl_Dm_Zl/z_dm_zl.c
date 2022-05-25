@@ -32,8 +32,6 @@ const ActorInit Dm_Zl_InitVars = {
 
 #endif
 
-
-
 extern UNK_TYPE D_0600DE08;
 extern UNK_TYPE D_0600E038;
 
@@ -57,18 +55,63 @@ void DmZl_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actionFunc = func_80A382FC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/DmZl_Destroy.s")
+void DmZl_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    DmZl *this = (DmZl *) thisx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/func_80A382FC.s")
+
+//do nothing
+void func_80A382FC(DmZl *this, GlobalContext *globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/func_80A3830C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/func_80A38468.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/DmZl_Update.s")
+void DmZl_Update(Actor *thisx, GlobalContext *globalCtx) {
+    DmZl *this = THIS;
+    func_80A38468(this);
+    SkelAnime_Update(&this->skelAnime);
+    func_80A3830C(&this->actor, globalCtx);
+    this->actionFunc(this, globalCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/func_80A3862C.s")
+// DmZl_OverrideLimbDraw
+s32 func_80A3862C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/func_80A38648.s")
+// DmZl_PostLimbDraw
+void func_80A38648(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx){
+    DmZl* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Zl/DmZl_Draw.s")
+    if (limbIndex == 0x10) {
+        if ((this->unk2B0 >= 3) && (this->unk2B0 < 7)) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            gSPDisplayList(POLY_OPA_DISP++, &D_0600DE08);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
+
+extern void* D_80A388A8[];
+extern void* D_80A38898[];
+
+void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    DmZl *this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A388A8[this->unk2B3]));
+
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80A388A8[this->unk2B2]));
+
+    gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_80A38898[this->unk2B4]));
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80A3862C, func_80A38648, &this->actor);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+}
