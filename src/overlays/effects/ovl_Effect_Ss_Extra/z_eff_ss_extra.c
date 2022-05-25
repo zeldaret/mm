@@ -14,7 +14,7 @@ u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
 void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
 void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
-static s16 gScores[] = { 30, 60, 100 };
+static s16 sScores[] = { 30, 60, 100 };
 
 const EffectSsInit Effect_Ss_Extra_InitVars = {
     EFFECT_SS_EXTRA,
