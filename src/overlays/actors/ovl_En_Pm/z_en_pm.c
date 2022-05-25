@@ -1105,12 +1105,11 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20, 0x0000,
+        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20,
     };
     static u16 D_80AFB8E0[] = {
-        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04, 0x0000,
+        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
     };
-    s32 temp;
 
     if (!(gSaveContext.save.weekEventReg[88] & 2)) {
         if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
@@ -1129,9 +1128,8 @@ void func_80AF8BA8(s32 arg0) {
         }
     }
 
-    temp = gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8];
     gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] =
-        temp | (D_80AFB8E0[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80));
+        ((void)0, gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8]) | (u8)D_80AFB8E0[arg0];
 }
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
@@ -1992,9 +1990,8 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
     ScheduleResult sp2C;
-    u32* unk_14 = &gSaveContext.save.daySpeed;
 
-    this->timePathTimeSpeed = REG(15) + *unk_14;
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;

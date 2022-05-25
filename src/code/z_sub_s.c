@@ -1033,7 +1033,6 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
  * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
- *
  */
 s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
                      TurnOptionsSet* options) {

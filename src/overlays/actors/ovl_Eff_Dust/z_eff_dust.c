@@ -296,7 +296,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+            gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
 
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
         }
@@ -352,7 +352,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+            gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
         }
 

@@ -100,11 +100,8 @@ void func_809C10B0(EnAob01* this, s32 arg1) {
 }
 
 void func_809C1124(void) {
-    u16 time = gSaveContext.save.time;
-
-    gSaveContext.save.time = (u16)REG(15) + time;
-    time = gSaveContext.save.time;
-    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
 }
 
 void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
@@ -887,8 +884,8 @@ void func_809C2F34(EnAob01* this, GlobalContext* globalCtx) {
 
 void func_809C2FA0(void) {
     u8 i;
-    u8 idx;
-    u8 idx2;
+    u8 rand;
+    u8 index;
     u8 orig;
     u8 orig2;
     u8 sp44[7];
@@ -897,11 +894,11 @@ void func_809C2FA0(void) {
     };
 
     for (i = 0; i < ARRAY_COUNT(sp34); i++) {
-        idx = Rand_ZeroFloat(14.0f);
+        rand = Rand_ZeroFloat(14.0f);
         orig = sp34[i];
 
-        sp34[i] = sp34[idx];
-        sp34[idx] = orig;
+        sp34[i] = sp34[rand];
+        sp34[rand] = orig;
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
@@ -911,14 +908,14 @@ void func_809C2FA0(void) {
 
     for (i = 0; i < ARRAY_COUNT(sp34); i++) {
         orig2 = sp34[i];
-        idx2 = i / 2;
+        index = i / 2;
 
         if (i % 2) {
-            sp44[idx2] |= orig2 << 0x4;
-            idx = gSaveContext.save.weekEventReg[42 + idx2];
-            gSaveContext.save.weekEventReg[42 + idx2] = idx | sp44[idx2];
+            sp44[index] |= orig2 << 0x4;
+            gSaveContext.save.weekEventReg[42 + index] =
+                ((void)0, gSaveContext.save.weekEventReg[42 + index]) | sp44[index];
         } else {
-            sp44[idx2] |= orig2;
+            sp44[index] |= orig2;
         }
     }
 }

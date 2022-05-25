@@ -607,8 +607,8 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (Message_ShouldAdvance(globalCtx)) &&
-        (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
+    if ((talkState == 5) && Message_ShouldAdvance(globalCtx) &&
+        !EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
@@ -1084,7 +1084,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
@@ -1191,7 +1191,7 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
 void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;

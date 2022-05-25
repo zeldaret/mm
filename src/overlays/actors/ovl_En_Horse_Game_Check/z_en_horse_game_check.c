@@ -252,7 +252,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_4)
+        SET_RACE_FLAGS(RACE_FLAG_4);
         this->unk_174 = 60;
     }
 
@@ -285,7 +285,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_3)
+        SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
 
@@ -318,7 +318,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x02000000;
         gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_3)
+        SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
 
@@ -347,7 +347,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x800;
         gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_2)
+        SET_RACE_FLAGS(RACE_FLAG_2);
         this->unk_174 = 60;
     }
     return true;

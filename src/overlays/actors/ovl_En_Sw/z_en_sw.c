@@ -885,38 +885,33 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
             func_808D8ED0(this, globalCtx);
         }
-        return;
-        if (1) {}
-    }
-
-    if (ENSW_GET_3(&this->actor)) {
+    } else if (ENSW_GET_3(&this->actor)) {
         this->actionFunc = func_808DAEB4;
-        return;
-    }
-
-    if (this->actor.bgCheckFlags & 1) {
-        f32 temp_f2;
-
-        this->actor.shape.yOffset = 400.0f;
-        temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
-        this->actor.velocity.y = temp_f2;
-        this->unk_448 = temp_f2;
-        this->actor.speedXZ = 0.0f;
-        if ((s32)temp_f2 != 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
-        } else {
-            this->actionFunc = func_808DAEB4;
-            this->actor.velocity.y = 0.0f;
-        }
-        if ((s32)this->actor.velocity.y >= 2) {
-            func_808D8940(this, globalCtx);
-        }
     } else {
-        Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
-    }
+        if (this->actor.bgCheckFlags & 1) {
+            f32 temp_f2;
 
-    Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            this->actor.shape.yOffset = 400.0f;
+            temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
+            this->actor.velocity.y = temp_f2;
+            this->unk_448 = temp_f2;
+            this->actor.speedXZ = 0.0f;
+            if ((s32)temp_f2 != 0) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+            } else {
+                this->actionFunc = func_808DAEB4;
+                this->actor.velocity.y = 0.0f;
+            }
+            if ((s32)this->actor.velocity.y >= 2) {
+                func_808D8940(this, globalCtx);
+            }
+        } else {
+            Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
+        }
+
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    }
 }
 
 void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
