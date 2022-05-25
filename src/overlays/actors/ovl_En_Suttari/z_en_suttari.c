@@ -124,13 +124,54 @@ static u16 D_80BAE800[] = {
     4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
-static UNK_TYPE D_80BAE820[] = {
-    0xC00027C,  0x210877,   0xA006D31,  0x2000000, 0x19250200, 0x19001E19, 0x2010F01, 0x140D0201, 0x14012D01,
-    0x50E0114,  0x12D0E0E,  0x10F0114,  0x70E0019, 0x1E060E,   0x19,       0xD0A000D, 0x3D020019, 0x1E3102,
-    0x1E002D,   0x2502002D, 0x1001902,  0x100010F, 0xD02010F,  0x1140105,  0xE010F01, 0x14090E01, 0x10F0B,
-    0xE002D01,  0x20E00,    0x1E002D0A, 0xE001900, 0x1E080505, 0xC000125,  0xA006E20, 0x2120000,  0x14140200,
-    0x14001E08, 0xF001E03,  0x4000405,  0xE001400, 0x1E0F0E12, 0x1403,     0x50C0003, 0x270A0013, 0x22021200,
-    0x13001602, 0x13001319, 0xD021319,  0x105,     0xE131900,  0x10400,    0x50E1200, 0x13000C05, 0x5000000,
+static u8 D_80BAE820[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x80 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x21, 0x08, 0x7F - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x3D - 0x0C),
+    /* 0x0C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 25, 0x37 - 0x12),
+    /* 0x12 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 25, 0, 30, 0x31 - 0x18),
+    /* 0x18 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 15, 1, 20, 0x2B - 0x1E),
+    /* 0x1E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 20, 1, 45, 0x25 - 0x24),
+    /* 0x24 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x25 */ SCHEDULE_CMD_RET_TIME(1, 20, 1, 45, 14),
+    /* 0x2B */ SCHEDULE_CMD_RET_TIME(1, 15, 1, 20, 7),
+    /* 0x31 */ SCHEDULE_CMD_RET_TIME(0, 25, 0, 30, 6),
+    /* 0x37 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 25, 13),
+    /* 0x3D */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_AYASHIISHOP, 0x7E - 0x41),
+    /* 0x41 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 25, 0, 30, 0x78 - 0x47),
+    /* 0x47 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 30, 0, 45, 0x72 - 0x4D),
+    /* 0x4D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 45, 1, 0, 0x6C - 0x53),
+    /* 0x53 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 0, 1, 15, 0x66 - 0x59),
+    /* 0x59 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 15, 1, 20, 0x60 - 0x5F),
+    /* 0x5F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x60 */ SCHEDULE_CMD_RET_TIME(1, 15, 1, 20, 9),
+    /* 0x66 */ SCHEDULE_CMD_RET_TIME(1, 0, 1, 15, 11),
+    /* 0x6C */ SCHEDULE_CMD_RET_TIME(0, 45, 1, 0, 2),
+    /* 0x72 */ SCHEDULE_CMD_RET_TIME(0, 30, 0, 45, 10),
+    /* 0x78 */ SCHEDULE_CMD_RET_TIME(0, 25, 0, 30, 8),
+    /* 0x7E */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x7F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x80 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0xA9 - 0x84),
+    /* 0x84 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0xA8 - 0x88),
+    /* 0x88 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 0, 20, 0xA2 - 0x8E),
+    /* 0x8E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 20, 0, 30, 0x9C - 0x94),
+    /* 0x94 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(0, 30, 0x9B - 0x98),
+    /* 0x98 */ SCHEDULE_CMD_RET_VAL_L(4),
+    /* 0x9B */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x9C */ SCHEDULE_CMD_RET_TIME(0, 20, 0, 30, 15),
+    /* 0xA2 */ SCHEDULE_CMD_RET_TIME(18, 0, 0, 20, 3),
+    /* 0xA8 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0xA9 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0xD4 - 0xAD),
+    /* 0xAD */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_IKANA, 0xD3 - 0xB1),
+    /* 0xB1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 19, 0, 0xCD - 0xB7),
+    /* 0xB7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(19, 0, 19, 25, 0xCA - 0xBD),
+    /* 0xBD */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(19, 25, 0, 0, 0xC4 - 0xC3),
+    /* 0xC3 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0xC4 */ SCHEDULE_CMD_RET_TIME(19, 25, 0, 0, 1),
+    /* 0xCA */ SCHEDULE_CMD_RET_VAL_L(5),
+    /* 0xCD */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 0, 12),
+    /* 0xD3 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0xD4 */ SCHEDULE_CMD_RET_NONE(),
 };
 
 static s32 D_80BAE8F8[] = {
@@ -186,12 +227,12 @@ void EnSuttari_SetNextEntrance(GlobalContext* globalCtx, u16 nextEntranceIndex) 
 }
 
 void EnSuttari_UpdateTime(void) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    u16 time = gSaveContext.time;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
+    u16 time = gSaveContext.save.time;
 
-    gSaveContext.time = (u16)REG(15) + time;
-    time = gSaveContext.time;
-    gSaveContext.time = (u16)*unk_14 + time;
+    gSaveContext.save.time = (u16)REG(15) + time;
+    time = gSaveContext.save.time;
+    gSaveContext.save.time = (u16)*unk_14 + time;
 }
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
@@ -210,7 +251,7 @@ s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAA9B4(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     switch (this->textId) {
         case 0x1454:
@@ -221,15 +262,15 @@ void func_80BAA9B4(EnSuttari* this) {
         case 0x1459:
         case 0x145A:
         case 0x145B:
-            if ((this->animationIdx != 8) && (curFrame == frameCount)) {
-                this->animationIdx = 8;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            if ((this->animationIndex != 8) && (curFrame == frameCount)) {
+                this->animationIndex = 8;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
             break;
         default:
-            if ((this->animationIdx != 1) && (curFrame == frameCount)) {
-                this->animationIdx = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            if ((this->animationIndex != 1) && (curFrame == frameCount)) {
+                this->animationIndex = 1;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
     }
 }
@@ -237,8 +278,8 @@ void func_80BAA9B4(EnSuttari* this) {
 void func_80BAAA94(EnSuttari* this) {
     switch (this->textId) {
         case 0x29E5:
-            this->animationIdx = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 1;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             break;
         case 0x29E9:
             this->enFsn->flags |= ENFSN_ANGRY;
@@ -250,12 +291,12 @@ void func_80BAAA94(EnSuttari* this) {
             this->enFsn->flags |= ENFSN_OFFER_FINAL_PRICE;
             break;
         case 0x29EC:
-            this->animationIdx = 7;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 7;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             break;
         case 0x29ED:
-            this->animationIdx = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 1;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             break;
     }
 }
@@ -323,7 +364,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
     } else if (this->flags1 & 1) {
         switch (this->textId) {
             case 0:
-                if (gSaveContext.weekEventReg[81] & 1) {
+                if (gSaveContext.save.weekEventReg[81] & 1) {
                     this->textId = 0x1455;
                     ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                     this->flags2 |= 1;
@@ -341,12 +382,12 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
                 } else {
                     this->flags1 |= 0x400;
                     this->textId = 0x1452;
-                    gSaveContext.weekEventReg[81] |= 1;
+                    gSaveContext.save.weekEventReg[81] |= 1;
                 }
                 break;
             case 0x1453:
                 this->flags1 |= 0x400;
-                gSaveContext.weekEventReg[81] |= 1;
+                gSaveContext.save.weekEventReg[81] |= 1;
                 ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                 this->flags2 |= 1;
                 this->textId = 0x1454;
@@ -377,14 +418,14 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAAF1C(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
-    if (this->animationIdx == 5) {
-        this->animationIdx = 3;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
-    } else if ((this->animationIdx == 3) && (curFrame == frameCount)) {
-        this->animationIdx = 6;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+    if (this->animationIndex == 5) {
+        this->animationIndex = 3;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
+    } else if ((this->animationIndex == 3) && (curFrame == frameCount)) {
+        this->animationIndex = 6;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         this->flags1 &= ~0x100;
     }
 }
@@ -414,7 +455,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
-            gSaveContext.weekEventReg[61] |= 8;
+            gSaveContext.save.weekEventReg[61] |= 8;
             this->unk3F6 = 20;
             this->actionFunc = func_80BADE8C;
         }
@@ -446,7 +487,7 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
             if (this->unk1F4[0] != 0) {
                 this->unk1F4[0]--;
             }
-            gSaveContext.weekEventReg[61] |= 8;
+            gSaveContext.save.weekEventReg[61] |= 8;
             this->unk3F6 = 20;
             this->actionFunc = func_80BADE8C;
         } else {
@@ -473,8 +514,8 @@ void func_80BAB434(EnSuttari* this) {
 }
 
 void EnSuttari_GetPaths(EnSuttari* this, GlobalContext* globalCtx) {
-    this->paths[0] = func_8013D648(globalCtx, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
-    this->paths[1] = func_8013D648(globalCtx, this->paths[0]->unk1, 0x3F);
+    this->paths[0] = SubS_GetPathByIndex(globalCtx, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
+    this->paths[1] = SubS_GetPathByIndex(globalCtx, this->paths[0]->unk1, 0x3F);
 }
 
 void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
@@ -504,28 +545,29 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     SubS_FillLimbRotTables(globalCtx, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
 }
 
-s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(path->points);
-        points = &points[idx];
+        points = &points[index];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
     } else {
         diffX = 0.0f;
         diffZ = 0.0f;
     }
-    *distSQ = SQ(diffX) + SQ(diffZ);
-    return Math_Acot2F(diffZ, diffX) * (0x8000 / M_PI);
+
+    *distSq = SQ(diffX) + SQ(diffZ);
+    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
 s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
-    s32 idx = arg2;
+    s32 index = arg2;
     s32 ret = false;
     f32 sp54;
     f32 sp48;
@@ -534,16 +576,16 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
-    if (idx == 0) {
+    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    if (index == 0) {
         sp54 = sp5C[1].x - sp5C[0].x;
         sp48 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == sp58 - 1) {
+    } else if (index == sp58 - 1) {
         sp54 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
         sp48 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
     } else {
-        sp54 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        sp48 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
+        sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
@@ -554,29 +596,26 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
 
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58;
+    s32 sp58 = path->count;
+    s32 index = arg2;
+    s32 ret = false;
     f32 sp54;
-    s32 ret;
-    s32 pad4C;
     f32 sp48;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
     Vec3f sp30;
 
-    if (sp5C[arg2 - 1].x) {}
-    sp58 = path->count;
-    ret = false;
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
-    if (arg2 == 0) {
+    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    if (index == 0) {
         sp54 = sp5C[0].x - sp5C[1].x;
         sp48 = sp5C[0].z - sp5C[1].z;
-    } else if (arg2 == sp58 - 1) {
+    } else if (index == sp58 - 1) {
         sp54 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
         sp48 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
     } else {
-        sp54 = sp5C[arg2 - 1].x - sp5C[arg2 + 1].x;
-        sp48 = sp5C[arg2 - 1].z - sp5C[arg2 + 1].z;
+        sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
+        sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
@@ -590,7 +629,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
     f32 dist;
 
     if (this->paths[arg1] != NULL) {
-        target = func_80BAB698(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
+        target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
         if (this->actor.bgCheckFlags & 8) {
             if (arg2 == 2) {
                 this->unk1F4[arg1] = -0x63;
@@ -619,7 +658,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     f32 sp30;
 
     if (this->paths[arg1] != NULL) {
-        target = func_80BAB698(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
+        target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             target = this->actor.wallYaw;
         }
@@ -635,16 +674,16 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     }
 }
 
-s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
-    u16 sp26 = gSaveContext.time - 0x3FFC;
+s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
+    u16 sp26 = SCHEDULE_TIME_NOW;
     u16 pad1;
     u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
     u16 pad2;
-    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->unk0];
+    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->result];
     u16 phi_a0;
 
     if (sp1C >= 0) {
-        this->unk404 = func_8013BB34(globalCtx, sp23, sp1C);
+        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp23, sp1C);
     }
     if (this->unk404 == NULL) {
         return 0;
@@ -652,12 +691,12 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     if ((this->unk428 != 0 && this->unk428 < 0xC) && (this->unk42A >= 0)) {
         phi_a0 = sp26;
     } else {
-        phi_a0 = unkStruct->unk4;
+        phi_a0 = unkStruct->time0;
     }
-    if (unkStruct->unk8 < phi_a0) {
-        this->unk418 = (phi_a0 - unkStruct->unk8) + 0xFFFF;
+    if (unkStruct->time1 < phi_a0) {
+        this->unk418 = (phi_a0 - unkStruct->time1) + 0xFFFF;
     } else {
-        this->unk418 = unkStruct->unk8 - phi_a0;
+        this->unk418 = unkStruct->time1 - phi_a0;
     }
     this->unk424 = sp26 - phi_a0;
     phi_a0 = this->unk404->count - 2;
@@ -668,7 +707,7 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     return 1;
 }
 
-s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
+s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
     s32 pad;
     EnDoor* sp48;
     u8 sp47;
@@ -679,14 +718,14 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     UNK_TYPE sp24;
 
     sp47 = ENSUTTARI_GET_PATH(&this->actor);
-    sp44 = gSaveContext.time - 0x3FFC;
+    sp44 = SCHEDULE_TIME_NOW;
     if (this->unk428 == 10 || this->unk428 == 11 || this->unk428 == 2) {
         return 0;
     }
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-    sp24 = D_80BAE8F8[unkStruct->unk0];
+    sp24 = D_80BAE8F8[unkStruct->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
-        this->unk404 = func_8013BB34(globalCtx, sp47, sp24);
+        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp47, sp24);
     }
     if ((sp48 == NULL) || (this->unk404 == NULL)) {
         return 0;
@@ -694,9 +733,9 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     sp28 = Lib_SegmentedToVirtual(this->unk404->points);
     Math_Vec3s_ToVec3f(&sp38, &sp28[0]);
     Math_Vec3s_ToVec3f(&sp2C, &sp28[1]);
-    this->unk434 = sp44 - unkStruct->unk4;
-    this->unk436 = unkStruct->unk8 - unkStruct->unk4;
-    if (unkStruct->unk0 != 10 && unkStruct->unk0 != 11) {
+    this->unk434 = sp44 - unkStruct->time0;
+    this->unk436 = unkStruct->time1 - unkStruct->time0;
+    if (unkStruct->result != 10 && unkStruct->result != 11) {
         sp48->unk_1A7 = 0x4B;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
@@ -706,10 +745,10 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     return 1;
 }
 
-s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
+s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
     s32 ret;
 
-    switch (unkStruct->unk0) {
+    switch (unkStruct->result) {
         case 15:
         case 14:
         case 13:
@@ -760,7 +799,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk424;
         sp50 = this->unk420;
         sp58 = this->actor.world.pos;
@@ -774,7 +813,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp64 = this->unk408;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk424 = sp54;
         this->unk420 = sp50;
         this->unk408 = sp58;
@@ -806,7 +845,7 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     switch (this->unk428) {
         case 12:
@@ -815,11 +854,11 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             func_80BABFD4(this, globalCtx);
             break;
         case 15:
-            if ((this->animationIdx == 1) && (curFrame == frameCount)) {
-                this->animationIdx = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            if ((this->animationIndex == 1) && (curFrame == frameCount)) {
+                this->animationIndex = 2;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
-            if (!(gSaveContext.weekEventReg[83] & 4) && !(this->flags1 & 0x1000)) {
+            if (!(gSaveContext.save.weekEventReg[83] & 4) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
                     ActorCutscene_Start(this->cutscenes[0], &this->actor);
                     if (!(player->stateFlags1 & 0x10000000)) {
@@ -848,9 +887,9 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             this->flags1 |= 0x80;
             this->flags1 |= 0x20;
             this->enFsn->flags &= ~ENFSN_HAGGLE;
-            if (this->animationIdx != 2) {
-                this->animationIdx = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            if (this->animationIndex != 2) {
+                this->animationIndex = 2;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             }
             func_80BAC220(this, globalCtx);
             break;
@@ -868,7 +907,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             break;
         case 2:
-            if (!(gSaveContext.weekEventReg[81] & 4)) {
+            if (!(gSaveContext.save.weekEventReg[81] & 4)) {
                 this->flags1 |= 0x80;
                 this->actor.world.pos.x = -16.0f;
                 this->actor.world.pos.z = -16.0f;
@@ -878,10 +917,10 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             }
             break;
         case 4:
-            if (!(gSaveContext.weekEventReg[33] & 8)) {
-                if (this->animationIdx == 2 || this->animationIdx == 1) {
-                    this->animationIdx = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+            if (!(gSaveContext.save.weekEventReg[33] & 8)) {
+                if (this->animationIndex == 2 || this->animationIndex == 1) {
+                    this->animationIndex = 5;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
                 }
                 this->flags1 |= 0x10;
                 if (this->flags2 & 2) {
@@ -908,52 +947,52 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     this->actor.flags |= ACTOR_FLAG_1;
     if (globalCtx->sceneNum == SCENE_IKANA) {
         this->flags1 |= 1;
-        if (gSaveContext.day == 1 || gSaveContext.day == 2) {
-            this->animationIdx = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        if (gSaveContext.save.day == 1 || gSaveContext.save.day == 2) {
+            this->animationIndex = 2;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             this->flags1 |= 0x80;
             this->actionFunc = func_80BACA14;
             return;
-        } else if ((gSaveContext.day == 3) && (gSaveContext.time <= CLOCK_TIME(19, 00)) &&
-                   !(gSaveContext.weekEventReg[61] & 8) && !(gSaveContext.weekEventReg[33] & 8) &&
-                   (gSaveContext.weekEventReg[51] & 8)) {
-            this->animationIdx = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        } else if ((gSaveContext.save.day == 3) && (gSaveContext.save.time <= CLOCK_TIME(19, 0)) &&
+                   !(gSaveContext.save.weekEventReg[61] & 8) && !(gSaveContext.save.weekEventReg[33] & 8) &&
+                   (gSaveContext.save.weekEventReg[51] & 8)) {
+            this->animationIndex = 2;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80BACEE0;
             return;
         }
     } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
-        if (gSaveContext.time >= CLOCK_TIME(0, 20) && gSaveContext.time < CLOCK_TIME(6, 00)) {
+        if (gSaveContext.save.time >= CLOCK_TIME(0, 20) && gSaveContext.save.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if ((gSaveContext.entranceIndex == 0xD670) || (gSaveContext.weekEventReg[58] & 0x40)) {
+        if ((gSaveContext.save.entranceIndex == 0xD670) || (gSaveContext.save.weekEventReg[58] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
         }
         this->cutscenes[0] = this->actor.cutscene;
         this->cutscenes[1] = ActorCutscene_GetAdditionalCutscene(this->cutscenes[0]);
         this->flags1 |= 0x80;
         this->flags1 |= 8;
-        this->animationIdx = 1;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = 1;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = func_80BAD004;
         return;
     } else if (globalCtx->sceneNum == SCENE_ICHIBA) {
-        if (gSaveContext.weekEventReg[33] & 8) {
+        if (gSaveContext.save.weekEventReg[33] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        this->animationIdx = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = 0;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         this->flags1 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
     } else if (globalCtx->sceneNum == SCENE_AYASHIISHOP) {
-        if (gSaveContext.weekEventReg[33] & 8) {
+        if (gSaveContext.save.weekEventReg[33] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        this->animationIdx = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = 0;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         this->cutscenes[0] = this->actor.cutscene;
         this->cutscenes[1] = ActorCutscene_GetAdditionalCutscene(this->cutscenes[0]);
         this->flags1 |= 4;
@@ -971,9 +1010,9 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->animationIdx == 1 || this->animationIdx == 8) {
-        this->animationIdx = 2;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+    if (this->animationIndex == 1 || this->animationIndex == 8) {
+        this->animationIndex = 2;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
@@ -982,7 +1021,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             this->unk3F2 = this->unk2DC.y;
             this->actionFunc = func_80BACBB0;
         }
-    } else if ((player->transformation == PLAYER_FORM_HUMAN) && CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) != 0) {
+    } else if ((player->transformation == PLAYER_FORM_HUMAN) && GET_CUR_EQUIP_VALUE(EQUIP_SWORD) != 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk3F2 = this->unk2DC.y;
             func_80BAAB78(this, globalCtx);
@@ -1061,22 +1100,21 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + *unk_14;
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     func_80BAB434(this);
     if (this->unk428 == 5) {
-        gSaveContext.weekEventReg[58] |= 0x80;
+        gSaveContext.save.weekEventReg[58] |= 0x80;
         this->actionFunc = func_80BADDB4;
         this->actor.speedXZ = 0.0f;
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
@@ -1086,18 +1124,17 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + *unk_14;
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         Message_StartTextbox(globalCtx, 0x2A3A, &this->actor);
@@ -1111,7 +1148,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
+    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->flags1 & 8) {
@@ -1142,7 +1179,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x2A30) {
             ActorCutscene_Stop(this->cutscenes[0]);
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1162,13 +1199,13 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.unk11F04 != 0x2A31)) {
+    if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
         this->actor.speedXZ = 0.0f;
     } else {
         this->flags1 &= ~0x8000;
         func_80BABA90(this, 1, 1);
-        if ((this->flags1 & 0x4000) && (talkState == 5) && func_80147624(globalCtx)) {
+        if ((this->flags1 & 0x4000) && (talkState == 5) && Message_ShouldAdvance(globalCtx)) {
             this->flags2 &= ~0x10;
             player->stateFlags1 &= ~0x10000000;
             this->flags1 &= ~0x4000;
@@ -1181,7 +1218,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->flags2 |= 8;
             func_80BAAF1C(this);
         } else if (this->flags1 & 0x200) {
-            gSaveContext.weekEventReg[79] |= 0x40;
+            gSaveContext.save.weekEventReg[79] |= 0x40;
             this->flags2 |= 4;
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
@@ -1192,7 +1229,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
         }
         if (this->unk1F4[1] == -0x63) {
             if (this->flags2 & 8) {
-                gSaveContext.weekEventReg[33] |= 8;
+                gSaveContext.save.weekEventReg[33] |= 8;
             }
             this->actor.speedXZ = 0.0f;
             Audio_QueueSeqCmd(0x101400FF);
@@ -1208,31 +1245,30 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
-    if ((curFrame == frameCount) && (this->animationIdx == 0) && (this->flags1 & 0x20)) {
-        this->animationIdx = 2;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+    if ((curFrame == frameCount) && (this->animationIndex == 0) && (this->flags1 & 0x20)) {
+        this->animationIndex = 2;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
-    this->unk42A = REG(15) + *unk_14;
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     func_80BAB434(this);
-    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
+    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.result != 7)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
@@ -1244,33 +1280,32 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     if (this->enFsn == NULL) {
         this->enFsn = (EnFsn*)EnSuttari_GetActorById(globalCtx, ACTOR_EN_FSN);
     } else {
-        if ((this->flags1 & 0x2000) && (this->animationIdx == 1) && (curFrame == frameCount)) {
-            this->animationIdx = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+        if ((this->flags1 & 0x2000) && (this->animationIndex == 1) && (curFrame == frameCount)) {
+            this->animationIndex = 2;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
         }
-        this->unk42A = REG(15) + *unk_14;
-        if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-            ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+        this->unk42A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+        if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+            ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            unkStruct.unk0 = 0;
+            unkStruct.result = 0;
         } else {
             this->actor.flags |= ACTOR_FLAG_1;
         }
-        this->unk428 = unkStruct.unk0;
+        this->unk428 = unkStruct.result;
         func_80BAC2FC(this, globalCtx);
         if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
+        if ((this->flags1 & 0x20) && (unkStruct.result != 9)) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
@@ -1286,7 +1321,7 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80BAAB78(this, globalCtx);
-        gSaveContext.weekEventReg[81] |= 4;
+        gSaveContext.save.weekEventReg[81] |= 4;
     } else if (this->actor.xzDistToPlayer < 500.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 500.0f);
@@ -1296,17 +1331,17 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkstate = Message_GetState(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     if (this->flags1 & 1) {
         this->unk3F2 = this->unk2DC.y;
         func_80BAA9B4(this);
-    } else if ((this->animationIdx == 7) && (curFrame == frameCount)) {
-        this->animationIdx = 1;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIdx);
+    } else if ((this->animationIndex == 7) && (curFrame == frameCount)) {
+        this->animationIndex = 1;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
     if (talkstate == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->flags1 & 0x400) {
                 if (this->textId == 0x29EE) {
                     ActorCutscene_Stop(this->cutscenes[this->cutsceneIdx]);
@@ -1328,7 +1363,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
             }
             func_80BAAB78(this, globalCtx);
         }
-    } else if ((talkstate == 4) && func_80147624(globalCtx)) {
+    } else if ((talkstate == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -1364,7 +1399,7 @@ void func_80BADD0C(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADDB4(EnSuttari* this, GlobalContext* globalCtx) {
     func_80BABA90(this, 1, 1);
     func_80BAB434(this);
-    if (gSaveContext.weekEventReg[51] & 0x10) {
+    if (gSaveContext.save.weekEventReg[51] & 0x10) {
         this->actionFunc = func_80BADE14;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1410,7 +1445,7 @@ void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
     s32 pad;
 
-    if (gSaveContext.weekEventReg[79] & 0x40) {
+    if (gSaveContext.save.weekEventReg[79] & 0x40) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -1449,11 +1484,11 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnSuttari_UpdateTime();
     }
     if (this->unk428 != 0) {
-        if (this->animationIdx == 2 || this->animationIdx == 6) {
+        if (this->animationIndex == 2 || this->animationIndex == 6) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
-        } else if (this->animationIdx == 0 || this->animationIdx == 5) {
+        } else if (this->animationIndex == 0 || this->animationIndex == 5) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
             }

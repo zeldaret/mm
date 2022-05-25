@@ -87,8 +87,8 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    Play_SetRespawnData(&globalCtx->state, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos,
-                        this->actor.shape.rot.y);
+    Play_SetRespawnData(&globalCtx->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0, 0xBFF,
+                        &this->actor.world.pos, this->actor.shape.rot.y);
     globalCtx->actorCtx.unk254[this->actor.params] = 0;
 }
 

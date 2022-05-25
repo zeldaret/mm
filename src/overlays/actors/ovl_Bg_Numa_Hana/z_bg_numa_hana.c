@@ -161,7 +161,7 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
 
-        if (gSaveContext.weekEventReg[12] & 1) {
+        if (gSaveContext.save.weekEventReg[12] & 1) {
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;
@@ -219,7 +219,7 @@ void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-            gSaveContext.weekEventReg[12] |= 1;
+            gSaveContext.save.weekEventReg[12] |= 1;
             Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {

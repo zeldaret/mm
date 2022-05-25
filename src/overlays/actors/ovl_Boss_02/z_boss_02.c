@@ -4,11 +4,12 @@
  * Description: Twinmold
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "objects/object_boss02/object_boss02.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -549,7 +550,7 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s32 pad[2];
 
-    if ((gSaveContext.weekEventReg[52] & 0x20) && (this->actor.params == 0)) {
+    if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == 0)) {
         D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1,
                                                     0.0f, 60.0f, 0.0f, 0, 0, 0, 1);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
@@ -596,8 +597,8 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.colChkInfo.health = 20;
         Actor_SetScale(&this->actor, 0.01f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss02_Skel_009B10, &object_boss02_Anim_009C78,
-                       this->jointTable, this->morphTable, 13);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &gTwinmoldHeadSkel, &gTwinmoldHeadFlyAnim, this->jointTable,
+                       this->morphTable, TWINMOLD_HEAD_LIMB_MAX);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere1, &this->actor, &sJntSphInit1,
                                   this->colliderSphere1Elements);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere2, &this->actor, &sJntSphInit2,
@@ -636,7 +637,7 @@ void func_809DAA98(Boss02* this, GlobalContext* globalCtx) {
 
 void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809DAB78;
-    Animation_MorphToLoop(&this->skelAnime, &object_boss02_Anim_009C78, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gTwinmoldHeadFlyAnim, 0.0f);
     if (D_809E042C->unk_1D20 != 0) {
         this->unk_0144 = 10;
     } else {
@@ -1320,24 +1321,22 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     func_809DD934(this, globalCtx);
 }
 
-#ifdef NON_MATCHING
-// matrix stuff at the start?
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     static Gfx* D_809DFA9C[] = {
-        object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
-        object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-        object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
-        object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-        object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
-        object_boss02_DL_013210, object_boss02_DL_013590,
+        gTwinmoldBodySegment1DL,  gTwinmoldBodySegment2DL,  gTwinmoldBodySegment3DL,  gTwinmoldBodySegment4DL,
+        gTwinmoldBodySegment5DL,  gTwinmoldBodySegment6DL,  gTwinmoldBodySegment7DL,  gTwinmoldBodySegment8DL,
+        gTwinmoldBodySegment9DL,  gTwinmoldBodySegment10DL, gTwinmoldBodySegment11DL, gTwinmoldBodySegment12DL,
+        gTwinmoldBodySegment13DL, gTwinmoldBodySegment14DL, gTwinmoldBodySegment15DL, gTwinmoldBodySegment16DL,
+        gTwinmoldBodySegment17DL, gTwinmoldBodySegment18DL, gTwinmoldBodySegment19DL, gTwinmoldBodySegment20DL,
+        gTwinmoldBodySegment21DL, gTwinmoldBodyTailDL,
     };
     static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
-    Boss02* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    Boss02* this = THIS;
     s32 i;
     s32 idx;
-    RSPMatrix* matrix;
-    s32 pad;
+    Mtx* mtx;
+    Mtx* mtxIter;
     s32 phi_v0;
     f32 phi_f12;
     f32 spAC;
@@ -1347,19 +1346,19 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp9C;
     f32 sp98;
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(RSPMatrix) * 23);
+    mtxIter = mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 23);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if (this->actor.params == 0) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0003A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldRedSkinTex));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0041A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldBlueSkinTex));
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x0D, matrix);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
     if (D_809E0422 == 0) {
         sp98 = -500.0f;
@@ -1396,11 +1395,11 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     spA4 = 0.0f;
     spA0 = 0.0f;
-    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++) {
+    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtxIter++) {
         if (this->unk_0195 != 0) {
-            phi_v0 = (D_809DF5E4[i] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5E4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         } else {
-            phi_v0 = (D_809DF5B4[i] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5B4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         }
 
         if ((i == 21) && (this->unk_0144 < 20)) {
@@ -1416,9 +1415,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(-(M_PI / 2));
-        Matrix_GetStateAsRSPMatrix(&matrix[i]);
+        Matrix_ToMtx(mtxIter);
 
-        gSPMatrix(POLY_OPA_DISP++, &matrix[i], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_0156 & 1) && (i >= this->unk_0158) && (this->unk_015A >= i)) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 0x384, 0x44B);
@@ -1443,7 +1442,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Actor* child = this->actor.child;
 
             if (child != NULL) {
-                Matrix_GetStateTranslationAndScaledX(500.0f, &child->world.pos);
+                Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.child->world.pos);
             }
 
             func_809DA50C(1, &this->colliderSphere2, &this->unk_147C[i + 1]);
@@ -1464,18 +1463,6 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         func_809DA50C(21, &this->colliderSphere1, &D_809DFAF4);
     }
 }
-#else
-static Gfx* D_809DFA9C[] = {
-    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
-    object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
-    object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
-    object_boss02_DL_013210, object_boss02_DL_013590,
-};
-static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/Boss02_Draw.s")
-#endif
 
 void func_809DD0A8(Actor* thisx, GlobalContext* globalCtx) {
     func_809DD2F8(globalCtx);
@@ -1541,7 +1528,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
+                gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 185, 140, 70, 128);
                 flag++;
             }
@@ -1562,7 +1549,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
 
@@ -1591,7 +1578,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 4) {
             if (!flag) { //! @bug - dev forgot to set flag to 1, should only apply to first entry?
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
             }
 
@@ -1603,7 +1590,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
         }
     }
 
@@ -1611,7 +1598,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 2) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
+                gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 30, 30, 30, 128);
                 flag++;
             }
@@ -1627,15 +1614,13 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// Small ordering in the last loop
 void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 i;
@@ -1946,9 +1931,11 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             }
             temp_a0_5 = temp_a0_5->next;
         }
+        {
+            f32 tmp = D_809E0422 ? 3150.0f : 0.0f;
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, D_809E0422 ? 3150.0f : 0.0f, 0, 0, 0, 0,
-                    D_809E0422);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0, D_809E0422);
+        }
 
         temp_a0_5 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
         while (temp_a0_5 != NULL) {
@@ -2052,9 +2039,6 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         ShrinkWindow_SetLetterboxTarget(27);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DD934.s")
-#endif
 
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -2074,7 +2058,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if ((gSaveContext.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if ((gSaveContext.save.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
@@ -2157,7 +2141,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                       Lib_SegmentedToVirtual(object_boss02_Tex_008650), 160, 180, 128, 40);
+                                       Lib_SegmentedToVirtual(gTwinmoldTitleCardTex), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {

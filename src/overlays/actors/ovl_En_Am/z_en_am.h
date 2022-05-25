@@ -20,8 +20,8 @@ typedef struct EnAm {
     /* 0x023A */ s16 unkFlag;
     /* 0x023C */ s16 armosYaw; // Yaw of Armos
     /* 0x0240 */ f32 speed; // Hopping speed of Armos
-    /* 0x0244 */ f32 effectAlpha;
-    /* 0x0248 */ f32 effectScale;
+    /* 0x0244 */ f32 drawDmgEffAlpha;
+    /* 0x0248 */ f32 drawDmgEffScale;
     /* 0x024C */ Vec3f limbPos[13];
     /* 0x02E8 */ ColliderCylinder enemyCollider; // Collider for when Armos is Hostile
     /* 0x0334 */ ColliderCylinder interactCollider; // Collider for when an interactable Armos is docile

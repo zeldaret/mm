@@ -210,7 +210,7 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = func_8013D648(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), ENCNE01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), ENCNE01_NO_PATH);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnCne01_FinishInit;
@@ -299,7 +299,7 @@ void EnCne01_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* t
 void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCne01* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8[64][64]));
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -314,14 +314,14 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                    EnCne01_TransformLimbDraw, &this->enHy.actor);
     Matrix_InsertXRotation_s(0, MTXMODE_NEW);
 
-    for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8[64][64]); i++) {
+    for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        func_8013CD64(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                      ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSize, gEnHyBodyPartsIndex);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
+                          ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
     }
-    func_8013CF04(&this->enHy.actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->enHy.actor, &globalCtx->state, shadowTex);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

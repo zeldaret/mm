@@ -372,7 +372,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
@@ -381,7 +381,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actionFunc = func_80995244;
             }
             break;
@@ -754,10 +754,10 @@ void func_809962D4(EnSkb* this) {
 }
 
 void func_8099630C(EnSkb* this, GlobalContext* globalCtx) {
-    if (this->unk_3D2 == 0) {
-        this->unk_3D2 = 0;
-        this->unk_230 = 0.0f;
-        this->unk_22C = 0.0f;
+    if (this->drawDmgEffTimer == 0) {
+        this->drawDmgEffTimer = 0;
+        this->drawDmgEffScale = 0.0f;
+        this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -766,7 +766,7 @@ void func_8099630C(EnSkb* this, GlobalContext* globalCtx) {
         } else {
             func_809961E4(this, globalCtx);
         }
-    } else if (this->unk_3D2 == 1) {
+    } else if (this->drawDmgEffTimer == 1) {
         func_80996BEC(this, globalCtx);
     }
 }
@@ -776,10 +776,10 @@ void func_809963C4(EnSkb* this) {
 }
 
 void func_809963D8(EnSkb* this, GlobalContext* globalCtx) {
-    if (this->unk_3D2 == 0) {
-        this->unk_3D2 = 0;
-        this->unk_230 = 0.0f;
-        this->unk_22C = 0.0f;
+    if (this->drawDmgEffTimer == 0) {
+        this->drawDmgEffTimer = 0;
+        this->drawDmgEffScale = 0.0f;
+        this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -807,7 +807,7 @@ void func_809964A0(EnSkb* this, GlobalContext* globalCtx) {
 void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
     if (this->unk_3D6 == 0) {
         if ((this->actionFunc != func_80994E94) && (this->actionFunc != func_80996284) &&
-            (this->actionFunc != func_809964A0) && (gSaveContext.weekEventReg[85] & 0x40)) {
+            (this->actionFunc != func_809964A0) && (gSaveContext.save.weekEventReg[85] & 0x40)) {
             this->actor.colChkInfo.health = 0;
             func_809961E4(this, globalCtx);
         }
@@ -817,7 +817,7 @@ void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
 s32 func_80996544(Vec2f arg0, Vec2f arg1) {
     s32 ret;
 
-    if ((arg1.x * arg0.y) < (arg0.x * arg1.y)) {
+    if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
         ret = 1;
     } else {
         ret = -1;
@@ -840,9 +840,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     worldX = this->actor.world.pos.x;
 
     sp60.x = D_80997468[0].z - worldZ;
-    sp60.y = D_80997468[0].x - worldX;
+    sp60.z = D_80997468[0].x - worldX;
     sp58.x = D_80997468[1].z - worldZ;
-    sp58.y = D_80997468[1].x - worldX;
+    sp58.z = D_80997468[1].x - worldX;
     j = 1;
     temp_s2 = func_80996544(sp60, sp58);
 
@@ -856,9 +856,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
             j = 0;
         }
         sp60.x = D_80997468[i].z - worldZ;
-        sp60.y = D_80997468[i].x - worldX;
+        sp60.z = D_80997468[i].x - worldX;
         sp58.x = D_80997468[j].z - worldZ;
-        sp58.y = D_80997468[j].x - worldX;
+        sp58.z = D_80997468[j].x - worldX;
         if (func_80996544(sp60, sp58) != temp_s2) {
             sp54 = false;
             break;
@@ -885,10 +885,10 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
             if (this->actionFunc == func_8099630C) {
                 switch (this->actor.colChkInfo.damageEffect) {
                     default:
-                        if (this->unk_3D2 >= 2) {
+                        if (this->drawDmgEffTimer > 1) {
                             func_80996BEC(this, globalCtx);
                         }
-                        this->unk_3D2 = 0;
+                        this->drawDmgEffTimer = 0;
                         break;
 
                     case 1:
@@ -909,10 +909,10 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 11:
-                    this->unk_3E6 = 30;
-                    this->unk_3D2 = 40;
-                    this->unk_22C = 1.0f;
-                    this->unk_230 = 0.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffAlpha = 1.0f;
+                    this->drawDmgEffScale = 0.0f;
                     Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
                     func_80995E08(this);
                     break;
@@ -923,10 +923,10 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    this->unk_3D2 = 0x50;
-                    this->unk_3E6 = 0;
-                    this->unk_22C = 1.0f;
-                    this->unk_230 = 0.0f;
+                    this->drawDmgEffTimer = 80;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                    this->drawDmgEffAlpha = 1.0f;
+                    this->drawDmgEffScale = 0.0f;
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     this->unk_3D8 |= 1;
                     func_80995F98(this);
@@ -935,22 +935,22 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                 case 3:
                     if (this->actor.colChkInfo.health != 0) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                        this->unk_3D2 = 0x50;
+                        this->drawDmgEffTimer = 80;
                     } else {
-                        this->unk_3D2 = 3;
+                        this->drawDmgEffTimer = 3;
                     }
-                    this->unk_3E6 = 0xB;
-                    this->unk_22C = 1.0f;
-                    this->unk_230 = 0.5f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
+                    this->drawDmgEffAlpha = 1.0f;
+                    this->drawDmgEffScale = 0.5f;
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     func_809962D4(this);
                     break;
 
                 case 4:
-                    this->unk_3D2 = 0x28;
-                    this->unk_3E6 = 0x14;
-                    this->unk_22C = 1.0f;
-                    this->unk_230 = 0.5f;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                    this->drawDmgEffAlpha = 1.0f;
+                    this->drawDmgEffScale = 0.5f;
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
@@ -1015,29 +1015,29 @@ void func_80996BEC(EnSkb* this, GlobalContext* globalCtx) {
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < end; i++) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_234[i]);
+        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->limbPos[i]);
         sp84.x = Math_SinS(yaw) * 3.0f;
         sp84.z = Math_CosS(yaw) * 3.0f;
         sp84.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
-        EffectSsEnIce_Spawn(globalCtx, &this->unk_234[i], 0.6f, &sp84, &D_80997558, &D_80997550, &D_80997554, 30);
+        EffectSsEnIce_Spawn(globalCtx, &this->limbPos[i], 0.6f, &sp84, &D_80997558, &D_80997550, &D_80997554, 30);
     }
 }
 
 void func_80996D68(EnSkb* this, GlobalContext* globalCtx) {
-    if (this->unk_3D2 > 0) {
-        this->unk_3D2--;
+    if (this->drawDmgEffTimer > 0) {
+        this->drawDmgEffTimer--;
     }
 
     if (this->actionFunc != func_8099630C) {
-        if (this->unk_3D2 < 20) {
+        if (this->drawDmgEffTimer < 20) {
             if (this->actionFunc == func_809963D8) {
-                Math_SmoothStepToF(&this->unk_230, 0.0f, 0.5f, 0.03f, 0.0f);
+                Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
             } else {
-                Math_SmoothStepToF(&this->unk_230, 0.0f, 0.5f, 0.01f, 0.0f);
+                Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.01f, 0.0f);
             }
-            this->unk_22C = this->unk_3D2 * 0.05f;
+            this->drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
         } else {
-            Math_SmoothStepToF(&this->unk_230, 0.5f, 0.1f, 0.02f, 0.0f);
+            Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
         }
     }
 }
@@ -1108,15 +1108,15 @@ void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         Actor_SpawnBodyParts(&this->actor, globalCtx, 1, dList);
     }
 
-    if (this->unk_3D2 != 0) {
+    if (this->drawDmgEffTimer != 0) {
         if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
             (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
             (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-            Matrix_GetStateTranslation(&this->unk_234[this->unk_2DC]);
-            this->unk_2DC++;
+            Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+            this->limbCount++;
         } else if ((limbIndex == 11) && !(this->unk_3D8 & 2)) {
-            Matrix_MultiplyVector3fByState(&D_80997564, &this->unk_234[this->unk_2DC]);
-            this->unk_2DC++;
+            Matrix_MultiplyVector3fByState(&D_80997564, &this->limbPos[this->limbCount]);
+            this->limbCount++;
         }
     }
 }
@@ -1124,13 +1124,13 @@ void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSkb* this = THIS;
 
-    this->unk_2DC = 0;
+    this->limbCount = 0;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
                       EnSkb_PostLimbDraw, &this->actor);
-    if (this->unk_3D2 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->unk_234, this->unk_2DC, this->unk_230, 0.5f, this->unk_22C,
-                      this->unk_3E6);
+    if (this->drawDmgEffTimer > 0) {
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, this->limbCount, this->drawDmgEffScale, 0.5f,
+                                this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     if (this->unk_3D8 & 0x40) {

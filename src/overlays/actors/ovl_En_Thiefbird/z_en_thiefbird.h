@@ -21,7 +21,7 @@ typedef struct EnThiefbird {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnThiefbirdActionFunc actionFunc;
-    /* 0x018C */ u8 unk_18C;
+    /* 0x018C */ u8 drawDmgEffType;
     /* 0x018E */ s16 unk_18E;
     /* 0x0190 */ s16 unk_190;
     /* 0x0192 */ s16 unk_192;
@@ -31,10 +31,10 @@ typedef struct EnThiefbird {
     /* 0x0208 */ Vec3s morphTable[17];
     /* 0x0270 */ ColliderJntSph collider;
     /* 0x0290 */ ColliderJntSphElement colliderElements[3];
-    /* 0x0350 */ Vec3f unk_350[11];
-    /* 0x03D4 */ f32 unk_3D4;
-    /* 0x03D8 */ f32 unk_3D8;
-    /* 0x03DC */ f32 unk_3DC;
+    /* 0x0350 */ Vec3f limbPos[11];
+    /* 0x03D4 */ f32 drawDmgEffAlpha;
+    /* 0x03D8 */ f32 drawDmgEffScale;
+    /* 0x03DC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x03E0 */ f32 unk_3E0;
     /* 0x03E4 */ Gfx* unk_3E4;
     /* 0x03E8 */ Gfx* unk_3E8;

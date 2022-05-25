@@ -707,8 +707,8 @@ void func_80B2E438(EnPoh* this, GlobalContext* globalCtx) {
                 func_80B2D924(this);
             } else {
                 if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_298 = 4.0f;
-                    this->unk_29C = 0.45f;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.45f;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->colliderCylinder.info.bumper.hitPos.x,
                                 this->colliderCylinder.info.bumper.hitPos.y,
@@ -834,16 +834,16 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_80B2E8E0(this);
     this->actor.shape.shadowAlpha = this->unk_197;
-    if (this->unk_298 > 0.0f) {
-        Math_StepToF(&this->unk_298, 0.0f, 0.05f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
         if (this->unk_197 != 255) {
             if (this->unk_197 * (1.0f / 255.0f) < this->unk_197) {
-                this->unk_298 = this->unk_197 * (1.0f / 255.0f);
+                this->drawDmgEffAlpha = this->unk_197 * (1.0f / 255.0f);
             }
         }
 
-        this->unk_29C = (this->unk_298 + 1.0f) * (9.0f / 40.0f);
-        this->unk_29C = CLAMP_MAX(this->unk_29C, 0.45f);
+        this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * (9.0f / 40.0f);
+        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.45f);
     }
 }
 
@@ -899,18 +899,18 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     temp_s3 = D_80B2F71C[limbIndex];
     if (temp_s3 != -1) {
         if (temp_s3 < 4) {
-            Matrix_GetStateTranslation(&this->unk_2A0[temp_s3]);
+            Matrix_GetStateTranslation(&this->limbPos[temp_s3]);
         } else if (temp_s3 == 4) {
-            Matrix_GetStateTranslationAndScaledX(2000.0f, &this->unk_2A0[temp_s3]);
+            Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[temp_s3]);
         } else {
             s32 i;
-            Vec3f* vec = &this->unk_2A0[temp_s3 + 2];
+            Vec3f* vec = &this->limbPos[temp_s3 + 2];
             Vec3f* vec2 = &D_80B2F734[0];
 
-            Matrix_GetStateTranslationAndScaledX(-2000.0f, &this->unk_2A0[temp_s3]);
-            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->unk_2A0[temp_s3 + 1]);
+            Matrix_GetStateTranslationAndScaledX(-2000.0f, &this->limbPos[temp_s3]);
+            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[temp_s3 + 1]);
 
-            for (i = temp_s3 + 2; i < ARRAY_COUNT(this->unk_2A0); i++, vec++, vec2++) {
+            for (i = temp_s3 + 2; i < ARRAY_COUNT(this->limbPos); i++, vec++, vec2++) {
                 Matrix_MultiplyVector3fByState(vec2, vec);
             }
         }
@@ -958,8 +958,9 @@ void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(&gfx[3], object_po_DL_002D28);
 
     POLY_OPA_DISP = &gfx[4];
-    func_800BE680(globalCtx, &this->actor, this->unk_2A0, 10, this->actor.scale.x * 100.0f * this->unk_29C, 0.0f,
-                  this->unk_298, 20);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->actor.scale.x * 100.0f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
+                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

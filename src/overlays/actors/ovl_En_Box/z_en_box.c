@@ -470,7 +470,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
             u8 playerForm;
 
             playbackSpeedTable = sPlaybackSpeed;
-            playerForm = gSaveContext.playerForm;
+            playerForm = gSaveContext.save.playerForm;
             animHeader = sBigChestAnimations[playerForm];
             playbackSpeed = playbackSpeedTable.data[playerForm];
         }
@@ -549,9 +549,9 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
         s32 bgId;
         u16 sfxId = 0;
 
-        if (Animation_OnFrame(&this->skelAnime, gSaveContext.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
             sfxId = NA_SE_EV_TBOX_UNLOCK;
-        } else if (Animation_OnFrame(&this->skelAnime, gSaveContext.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
+        } else if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
         if (sfxId != 0) {

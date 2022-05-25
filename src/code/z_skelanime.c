@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define ANIM_INTERP 1
@@ -1239,9 +1238,9 @@ void SkelAnime_InitLink(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkel
  */
 void LinkAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
     if (skelAnime->mode <= ANIMMODE_LOOP_INTERP) {
-        skelAnime->update = LinkAnimation_Loop;
+        skelAnime->update.link = LinkAnimation_Loop;
     } else {
-        skelAnime->update = LinkAnimation_Once;
+        skelAnime->update.link = LinkAnimation_Once;
     }
     skelAnime->morphWeight = 0.0f;
 }
@@ -1251,7 +1250,7 @@ void LinkAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
  * finishes.
  */
 s32 LinkAnimation_Update(GlobalContext* globalCtx, SkelAnime* skelAnime) {
-    return skelAnime->update(globalCtx, skelAnime);
+    return skelAnime->update.link(globalCtx, skelAnime);
 }
 
 /**
@@ -1356,7 +1355,7 @@ void LinkAnimation_Change(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAn
             SkelAnime_CopyFrameTable(skelAnime, skelAnime->morphTable, skelAnime->jointTable);
             morphFrames = -morphFrames;
         } else {
-            skelAnime->update = LinkAnimation_Morph;
+            skelAnime->update.link = LinkAnimation_Morph;
             AnimationContext_SetLoadFrame(globalCtx, animation, (s32)startFrame, skelAnime->limbCount,
                                           skelAnime->morphTable);
         }
@@ -1577,7 +1576,7 @@ void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkel
 /**
  * Initializes a skeleton with SkinLimbs to a looping animation, dynamically allocating the frame tables.
  */
-void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                         AnimationHeader* animation) {
     SkeletonHeader* skeletonHeader;
 
@@ -1600,11 +1599,11 @@ void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, Skeleton
  */
 void SkelAnime_SetUpdate(SkelAnime* skelAnime) {
     if (skelAnime->mode <= ANIMMODE_LOOP_INTERP) {
-        skelAnime->update = SkelAnime_LoopFull;
+        skelAnime->update.normal = SkelAnime_LoopFull;
     } else if (skelAnime->mode <= ANIMMODE_ONCE_INTERP) {
-        skelAnime->update = SkelAnime_Once;
+        skelAnime->update.normal = SkelAnime_Once;
     } else {
-        skelAnime->update = SkelAnime_LoopPartial;
+        skelAnime->update.normal = SkelAnime_LoopPartial;
     }
 }
 
@@ -1613,7 +1612,7 @@ void SkelAnime_SetUpdate(SkelAnime* skelAnime) {
  * finishes.
  */
 s32 SkelAnime_Update(SkelAnime* skelAnime) {
-    return skelAnime->update(skelAnime);
+    return skelAnime->update.normal(skelAnime);
 }
 
 /**
@@ -1775,10 +1774,10 @@ void Animation_ChangeImpl(SkelAnime* skelAnime, AnimationHeader* animation, f32 
             morphFrames = -morphFrames;
         } else {
             if (taper != ANIMTAPER_NONE) {
-                skelAnime->update = SkelAnime_MorphTaper;
+                skelAnime->update.normal = SkelAnime_MorphTaper;
                 skelAnime->taper = taper;
             } else {
-                skelAnime->update = SkelAnime_Morph;
+                skelAnime->update.normal = SkelAnime_Morph;
             }
             SkelAnime_GetFrameData(animation, startFrame, skelAnime->limbCount, skelAnime->morphTable);
         }

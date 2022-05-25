@@ -6,43 +6,59 @@
 
 #include "z_eff_ss_kakera.h"
 
+#define rReg0 regs[0]
+#define rGravity regs[1]
+#define rPitch regs[2]
+#define rYaw regs[3]
+#define rReg4 regs[4]
+#define rReg5 regs[5]
+#define rReg6 regs[6]
+#define rScale regs[7]
+#define rReg8 regs[8]
+#define rReg9 regs[9]
+#define rObjId regs[10]
+#define rObjBankIndex regs[11]
+#define rColorIndex regs[12]
+
 #define PARAMS ((EffectSsKakeraInitParams*)initParamsx)
 
 u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
 void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
 void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
-void func_8097E130(EffectSs* this, GlobalContext* globalCtx);
+void EffectSsKakera_CheckForObject(EffectSs* this, GlobalContext* globalCtx);
 
 const EffectSsInit Effect_Ss_Kakera_InitVars = {
     EFFECT_SS_KAKERA,
     EffectSsKakera_Init,
 };
+
 KakeraColorStruct D_8097EAD8[] = {
     { 0, { 255, 255, 255 } },
     { 0, { 235, 170, 130 } },
     { 1, { 210, 190, 170 } },
 };
+
 f32 D_8097EAE4[] = { 1.0f, 100.0f, 40.0f, 5.0f, 100.0f, 40.0f, 5.0f, 100.0f, 40.0f, 5.0f };
 
 u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    EffectSsKakeraInitParams* params = PARAMS;
+    EffectSsKakeraInitParams* initParams = PARAMS;
 
-    this->pos = params->pos;
-    this->velocity = params->velocity;
-    this->life = params->life;
+    this->pos = initParams->pos;
+    this->velocity = initParams->velocity;
+    this->life = initParams->life;
     this->priority = 101;
-    if (params->dList != NULL) {
-        this->gfx = params->dList;
-        switch (params->objId) {
+    if (initParams->dList != NULL) {
+        this->gfx = initParams->dList;
+        switch (initParams->objId) {
             case GAMEPLAY_KEEP:
             case GAMEPLAY_FIELD_KEEP:
             case GAMEPLAY_DANGEON_KEEP:
-                this->regs[10] = KAKERA_OBJECT_DEFAULT;
+                this->rObjId = KAKERA_OBJECT_DEFAULT;
                 break;
             default:
-                this->regs[10] = params->objId;
-                func_8097E130(this, globalCtx);
+                this->rObjId = initParams->objId;
+                EffectSsKakera_CheckForObject(this, globalCtx);
                 break;
         }
     } else {
@@ -50,18 +66,18 @@ u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     }
     this->draw = EffectSsKakera_Draw;
     this->update = EffectSsKakera_Update;
-    this->vec = params->unk_18;
-    this->regs[0] = params->unk_2C;
-    this->regs[1] = params->gravity;
-    this->regs[2] = Rand_ZeroOne() * 0x8000;
-    this->regs[3] = Rand_ZeroOne() * 0x8000;
-    this->regs[4] = params->unk_26;
-    this->regs[5] = params->unk_28;
-    this->regs[6] = params->unk_2A;
-    this->regs[7] = params->scale;
-    this->regs[8] = params->unk_30;
-    this->regs[9] = params->unk_32;
-    this->regs[12] = params->colorIdx;
+    this->vec = initParams->unk_18;
+    this->rReg0 = initParams->unk_2C;
+    this->rGravity = initParams->gravity;
+    this->rPitch = Rand_ZeroOne() * 0x8000;
+    this->rYaw = Rand_ZeroOne() * 0x8000;
+    this->rReg4 = initParams->unk_26;
+    this->rReg5 = initParams->unk_28;
+    this->rReg6 = initParams->unk_2A;
+    this->rScale = initParams->scale;
+    this->rReg8 = initParams->unk_30;
+    this->rReg9 = initParams->unk_32;
+    this->rColorIndex = initParams->colorIdx;
     return 1;
 }
 
@@ -72,24 +88,24 @@ f32 func_8097DE30(f32 center, f32 range) {
 void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s16 pad;
-    f32 scale = this->regs[7] / 256.0f;
-    s32 colorIndex = this->regs[12];
+    f32 scale = this->rScale / 256.0f;
+    s32 colorIndex = this->rColorIndex;
 
     OPEN_DISPS(gfxCtx);
-    if (this->regs[10] != KAKERA_OBJECT_DEFAULT) {
-        if ((((this->regs[4] >> 7) & 1) << 7) == 0x80) {
-            gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[this->regs[11]].segment);
+    if (this->rObjId != KAKERA_OBJECT_DEFAULT) {
+        if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {
+            gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIndex].segment);
         } else {
-            gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->regs[11]].segment);
+            gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIndex].segment);
         }
     }
 
     Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->regs[3], MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->regs[2], MTXMODE_APPLY);
+    Matrix_RotateY(this->rYaw, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(this->rPitch, MTXMODE_APPLY);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-    if ((((this->regs[4] >> 7) & 1) << 7) == 0x80) {
+    if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
         if (colorIndex >= 0) {
@@ -109,9 +125,9 @@ void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_8097E130(EffectSs* this, GlobalContext* globalCtx) {
-    this->regs[11] = Object_GetIndex(&globalCtx->objectCtx, this->regs[10]);
-    if ((this->regs[11] < 0) || (!Object_IsLoaded(&globalCtx->objectCtx, this->regs[11]))) {
+void EffectSsKakera_CheckForObject(EffectSs* this, GlobalContext* globalCtx) {
+    this->rObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, this->rObjId);
+    if ((this->rObjBankIndex < 0) || (!Object_IsLoaded(&globalCtx->objectCtx, this->rObjBankIndex))) {
         this->life = 0;
         this->draw = NULL;
     }
@@ -127,9 +143,9 @@ void func_8097E19C(EffectSs* this) {
     f32 temp_f20;
     f32 temp_f2_2;
 
-    temp_f18 = this->regs[5] / 1024.0f;
-    temp_f20 = this->regs[6] / 1024.0f;
-    range = (this->regs[9] / 1024.0f) * 4.0f;
+    temp_f18 = this->rReg5 / 1024.0f;
+    temp_f20 = this->rReg6 / 1024.0f;
+    range = (this->rReg9 / 1024.0f) * 4.0f;
     temp_f2 = this->velocity.x - func_8097DE30(0.0f, range);
     temp_f16 = this->velocity.y - func_8097DE30(0.0f, range);
     temp_f12 = this->velocity.z - func_8097DE30(0.0f, range);
@@ -187,7 +203,7 @@ f32 func_8097E400(f32 arg0, s32 index) {
 s32 func_8097E420(EffectSs* this, Vec3f* diff, f32 distance) {
     static f32 D_8097EB0C[] = { 0.05f, 1.0f };
     f32 phi_f0;
-    s32 index = this->regs[0] & 3;
+    s32 index = this->rReg0 & 3;
 
     if (index != 0) {
         if (distance > 1.0f) {
@@ -198,23 +214,23 @@ s32 func_8097E420(EffectSs* this, Vec3f* diff, f32 distance) {
         this->accel.x += D_8097EB0C[index - 1] * diff->z * phi_f0;
         this->accel.z -= D_8097EB0C[index - 1] * diff->x * phi_f0;
     }
-    return 1;
+    return true;
 }
 
 s32 func_8097E4B0(EffectSs* this, Vec3f* diff, f32 distance) {
     static f32 D_8097EB14[] = { 4.0f, 0.1f, 0.3f, 0.9f, -0.1f, -0.3f, -0.9f };
-    s32 index = (this->regs[0] >> 2) & 7;
+    s32 index = (this->rReg0 >> 2) & 7;
 
     if (index != 0) {
         this->accel.y += D_8097EB14[index];
     }
-    return 1;
+    return true;
 }
 
 s32 func_8097E4F0(EffectSs* this, Vec3f* diff, f32 distance) {
     static f32 D_8097EB30[] = { 0.1f, 1.0f, 6.0f };
     f32 phi_f0;
-    s32 index = (this->regs[0] >> 5) & 3;
+    s32 index = (this->rReg0 >> 5) & 3;
 
     if (index != 0) {
         if (distance > 1.0f) {
@@ -225,32 +241,33 @@ s32 func_8097E4F0(EffectSs* this, Vec3f* diff, f32 distance) {
         this->accel.x -= diff->x * D_8097EB30[index - 1] * phi_f0;
         this->accel.z -= diff->z * D_8097EB30[index - 1] * phi_f0;
     }
-    return 1;
+    return true;
 }
 
 s32 func_8097E584(EffectSs* this, Vec3f* diff, f32 distance) {
-    static f32 (*D_8097EB3C[])(f32,
-                               s32) = { func_8097E368, func_8097E384, func_8097E384, func_8097E384, func_8097E3C0,
-                                        func_8097E3C0, func_8097E3C0, func_8097E400, func_8097E400, func_8097E400 };
+    static f32 (*D_8097EB3C[])(f32, s32) = {
+        func_8097E368, func_8097E384, func_8097E384, func_8097E384, func_8097E3C0,
+        func_8097E3C0, func_8097E3C0, func_8097E400, func_8097E400, func_8097E400,
+    };
     f32 center;
     f32 rand;
     s32 index;
 
-    index = (this->regs[0] >> 7) & 0xF;
+    index = (this->rReg0 >> 7) & 0xF;
     center = D_8097EB3C[index](distance, index);
-    rand = func_8097DE30(center, (this->regs[9] * center) / 1024.0f);
+    rand = func_8097DE30(center, (this->rReg9 * center) / 1024.0f);
     this->accel.x *= rand;
     this->accel.y *= rand;
     this->accel.z *= rand;
     this->accel.x += rand * 0.01f;
     this->accel.y += rand * 0.01f;
     this->accel.z += rand * 0.01f;
-    return 1;
+    return true;
 }
 
 s32 func_8097E660(EffectSs* this, Vec3f* diff, f32 distance) {
-    this->accel.y += this->regs[1] / 256.0f;
-    return 1;
+    this->accel.y += this->rGravity / 256.0f;
+    return true;
 }
 
 s32 func_8097E698(EffectSs* this) {
@@ -265,21 +282,21 @@ s32 func_8097E698(EffectSs* this) {
     if (distance > 1000.0f) {
         return false;
     }
-    if (this->regs[0] != 0) {
-        if (func_8097E420(this, &diff, distance) == 0) {
+    if (this->rReg0 != 0) {
+        if (!func_8097E420(this, &diff, distance)) {
             return false;
         }
-        if (func_8097E4B0(this, &diff, distance) == 0) {
+        if (!func_8097E4B0(this, &diff, distance)) {
             return false;
         }
-        if (func_8097E4F0(this, &diff, distance) == 0) {
+        if (!func_8097E4F0(this, &diff, distance)) {
             return false;
         }
-        if (func_8097E584(this, &diff, distance) == 0) {
+        if (!func_8097E584(this, &diff, distance)) {
             return false;
         }
     }
-    if (func_8097E660(this, &diff, distance) == 0) {
+    if (!func_8097E660(this, &diff, distance)) {
         return false;
     } else {
         return true;
@@ -290,41 +307,41 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
     static f32 D_8097EB64[] = { 10.0f, 20.0f, 40.0f };
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->regs[8] == 0) {
-        if ((((this->regs[4] >> 4) & 1) << 4) == (1 << 4)) {
-            if (this->pos.y <= (player->actor.floorHeight - ((this->regs[4] >> 2) & 3))) {
-                this->regs[9] = 0;
-                this->regs[0] = 0;
-                this->regs[4] &= ~0x60;
+    if (this->rReg8 == 0) {
+        if ((((this->rReg4 >> 4) & 1) << 4) == (1 << 4)) {
+            if (this->pos.y <= (player->actor.floorHeight - ((this->rReg4 >> 2) & 3))) {
+                this->rReg9 = 0;
+                this->rReg0 = 0;
+                this->rReg4 &= ~0x60;
                 this->accel.x = this->accel.y = this->accel.z = 0.0f;
                 this->velocity.x = this->velocity.y = this->velocity.z = 0.0f;
-                this->regs[5] = this->regs[9];
-                this->regs[1] = this->regs[9];
+                this->rReg5 = this->rReg9;
+                this->rGravity = this->rReg9;
             }
         } else {
-            if (this->pos.y <= ((player->actor.floorHeight - ((this->regs[4] >> 2) & 3)) - 600.0f)) {
+            if (this->pos.y <= ((player->actor.floorHeight - ((this->rReg4 >> 2) & 3)) - 600.0f)) {
                 this->life = 0;
             }
         }
     } else {
-        switch (this->regs[4] & 3) {
+        switch (this->rReg4 & 3) {
             case 0:
-                this->regs[8] = 0;
+                this->rReg8 = 0;
                 break;
             case 1:
                 if ((this->velocity.y < 0.0f) &&
-                    (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3]))) {
+                    (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3]))) {
                     this->velocity.x *= func_8097DE30(0.9f, 0.2f);
                     this->velocity.y *= -0.8f;
                     this->velocity.z *= func_8097DE30(0.9f, 0.2f);
-                    if (this->regs[8] > 0) {
-                        this->regs[8]--;
+                    if (this->rReg8 > 0) {
+                        this->rReg8--;
                     }
                 }
                 break;
             case 2:
-                if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3])) {
-                    this->regs[8] = 0;
+                if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->rReg4 >> 2) & 3])) {
+                    this->rReg8 = 0;
                 }
                 break;
         }
@@ -332,18 +349,18 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
 }
 
 void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    switch (((this->regs[4] >> 5) & 3) << 5) {
+    switch (((this->rReg4 >> 5) & 3) << 5) {
         case 0x20:
-            this->regs[2] += 0x47B;
-            this->regs[3] += 0x139;
+            this->rPitch += 0x47B;
+            this->rYaw += 0x139;
             break;
         case 0x40:
-            this->regs[2] += 0x1A7C;
-            this->regs[3] += 0x47B;
+            this->rPitch += 0x1A7C;
+            this->rYaw += 0x47B;
             break;
         case 0x60:
-            this->regs[2] += 0x3F27;
-            this->regs[3] += 0xCA1;
+            this->rPitch += 0x3F27;
+            this->rYaw += 0xCA1;
             break;
     }
     func_8097E19C(this);
@@ -351,7 +368,7 @@ void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) 
         this->life = 0;
     }
     func_8097E7E0(this, globalCtx);
-    if (this->regs[10] != KAKERA_OBJECT_DEFAULT) {
-        func_8097E130(this, globalCtx);
+    if (this->rObjId != KAKERA_OBJECT_DEFAULT) {
+        EffectSsKakera_CheckForObject(this, globalCtx);
     }
 }
