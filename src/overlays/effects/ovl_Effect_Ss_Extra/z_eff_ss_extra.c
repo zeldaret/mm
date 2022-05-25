@@ -21,7 +21,7 @@ const EffectSsInit Effect_Ss_Extra_InitVars = {
     EffectSsExtra_Init,
 };
 
-static u64* gPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex, gYabusamePoint100Tex };
+static TexturePtr sPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex, gYabusamePoint100Tex };
 
 #define rObjId regs[0]
 #define rTimer regs[1]
