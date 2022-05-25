@@ -10,7 +10,7 @@
 
 #define PARAMS ((EffectSsExtraInitParams*)initParamsx)
 
-s32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
 void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
 void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
@@ -21,14 +21,14 @@ const EffectSsInit Effect_Ss_Extra_InitVars = {
     EffectSsExtra_Init,
 };
 
-static Gfx* gPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex, gYabusamePoint100Tex };
+static u64* gPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex, gYabusamePoint100Tex };
 
 #define rObjId regs[0]
 #define rTimer regs[1]
 #define rScoreIdx regs[2]
 #define rScale regs[3]
 
-s32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     s32 pad;
     EffectSsExtraInitParams* params = PARAMS;
     s32 objIndex;
