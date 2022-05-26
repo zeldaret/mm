@@ -70,10 +70,10 @@ void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
