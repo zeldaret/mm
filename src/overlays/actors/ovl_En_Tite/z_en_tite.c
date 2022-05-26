@@ -1121,14 +1121,14 @@ void EnTite_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     if (this->unk_2BA == 0) {
         idx = D_80896B70[limbIndex];
         if (idx != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[idx]);
+            Matrix_MultZero(&this->limbPos[idx]);
             if (idx >= 1) {
-                Matrix_GetStateTranslationAndScaledX(2500.0f, &this->limbPos[idx + 4]);
+                Matrix_MultVecX(2500.0f, &this->limbPos[idx + 4]);
             }
         }
     } else if (this->unk_2BA > 0) {
         if (D_80896B8C[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[D_80896B8C[limbIndex]]);
+            Matrix_MultZero(&this->limbPos[D_80896B8C[limbIndex]]);
         }
 
         if (limbIndex == 24) {
@@ -1137,11 +1137,11 @@ void EnTite_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     } else if (D_80896B8C[limbIndex] != -1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        matrix = Matrix_GetCurrentState();
-        matrix->wx = this->limbPos[D_80896B8C[limbIndex]].x;
-        matrix->wy = this->limbPos[D_80896B8C[limbIndex]].y;
-        matrix->wz = this->limbPos[D_80896B8C[limbIndex]].z;
-        Matrix_InsertZRotation_s(this->actor.world.rot.z, MTXMODE_APPLY);
+        matrix = Matrix_GetCurrent();
+        matrix->xw = this->limbPos[D_80896B8C[limbIndex]].x;
+        matrix->yw = this->limbPos[D_80896B8C[limbIndex]].y;
+        matrix->zw = this->limbPos[D_80896B8C[limbIndex]].z;
+        Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_3A8);

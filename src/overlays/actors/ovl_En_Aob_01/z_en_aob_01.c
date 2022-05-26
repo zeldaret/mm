@@ -999,15 +999,15 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->headRot.x * -1, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.x * -1, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_TORSO) {
-        Matrix_InsertXRotation_s(this->torsoRot.y * -1, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->torsoRot.x * -1, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoRot.y * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(this->torsoRot.x * -1, MTXMODE_APPLY);
     }
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
@@ -1023,7 +1023,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnAob01* this = THIS;
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809C3968, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809C3968, &this->actor.focus.pos);
     }
 }
 

@@ -1148,7 +1148,7 @@ void EnKakasi_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnKakasi* this = THIS;
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk1BC);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk1BC);
     }
 }
 

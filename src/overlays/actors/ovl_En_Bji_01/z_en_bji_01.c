@@ -428,7 +428,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         sp20.x += temp_f4 * 0.1f;
         sp20.y += temp_f4 * 0.1f;
         sp20.z += temp_f4 * 0.1f;
-        Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
     }
 }
 

@@ -245,7 +245,7 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     bodyPart = gEnHyBodyParts[limbIndex];
     if (bodyPart >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
@@ -257,19 +257,19 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     if (limbIndex == CNE_LIMB_HEAD) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->enHy.headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == CNE_LIMB_TORSO) {
-        Matrix_InsertXRotation_s(-this->enHy.torsoRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.torsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->enHy.torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == CNE_LIMB_HEAD) && this->enHy.inMsgState3 && ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == CNE_LIMB_TORSO) || (limbIndex == CNE_LIMB_LEFT_UPPER_ARM) ||
@@ -294,7 +294,7 @@ void EnCne01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }
 
@@ -317,7 +317,7 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->enHy.skelAnime.skeleton, this->enHy.skelAnime.jointTable,
                                    this->enHy.skelAnime.dListCount, EnCne01_OverrideLimbDraw, EnCne01_PostLimbDraw,
                                    EnCne01_TransformLimbDraw, &this->enHy.actor);
-    Matrix_InsertXRotation_s(0, MTXMODE_NEW);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
     for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter++ = 0;

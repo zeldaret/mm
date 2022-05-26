@@ -749,7 +749,7 @@ void func_80BA0FAC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80BA1120, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BA1120, &this->actor.focus.pos);
     }
 }
 

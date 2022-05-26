@@ -152,8 +152,8 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
                 if (SubS_LineSegVsPlane(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C,
                                         &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateY(-crace->actor.home.rot.y, MTXMODE_NEW);
-                    Matrix_MultiplyVector3fByState(&sp7C, &sp70);
+                    Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
+                    Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
                         crace->unk_170 |= 1;
                     }
@@ -970,7 +970,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         func_8012C28C(globalCtx->state.gfxCtx);
         if (limbIndex == 13) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_45C, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_45C, MTXMODE_APPLY);
         }
 
         gfxOpa = POLY_OPA_DISP;
@@ -986,13 +986,13 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
         frames = globalCtx->gameplayFrames;
-        Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
+        Matrix_MultVec3f(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1004,7 +1004,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         POLY_XLU_DISP = gfxXlu + 5;
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

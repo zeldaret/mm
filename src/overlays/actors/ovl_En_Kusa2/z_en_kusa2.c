@@ -241,7 +241,7 @@ void func_80A5B508(void) {
 
 void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = (f32*)&temp->mf[0];
     f32* tmp2 = (f32*)&matrix->mf[0];
 
@@ -1325,7 +1325,7 @@ void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
         EnKusa2UnkBssSubStruct2* s = &D_80A5F1C0.unk_0480[i];
 
         if (s->unk_2C > 0) {
-            Matrix_SetStateRotationAndTranslation(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
+            Matrix_SetTranslateRotateYXZ(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
             Matrix_Scale(s->unk_00, s->unk_00, s->unk_00, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1369,7 +1369,7 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.x = thisx->shape.rot.x + D_80A5EAFC.x;
     sp18.y = thisx->shape.rot.y + D_80A5EAFC.y;
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
-    Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
+    Matrix_SetTranslateRotateYXZ(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
 }

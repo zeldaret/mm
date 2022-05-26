@@ -1057,14 +1057,14 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     f32 temp_f2;
 
     if (D_80B1DB08[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80B1DB08[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == 9) {
-        Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->limbPos[4]);
-        Matrix_GetStateTranslationAndScaledY(3000.0f, &this->limbPos[5]);
+        Matrix_MultVecY(-2500.0f, &this->limbPos[4]);
+        Matrix_MultVecY(3000.0f, &this->limbPos[5]);
     } else if (limbIndex == 10) {
-        Matrix_GetStateTranslationAndScaledY(-4000.0f, &this->limbPos[6]);
+        Matrix_MultVecY(-4000.0f, &this->limbPos[6]);
     } else if (limbIndex == 11) {
-        Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[7]);
+        Matrix_MultVecX(3000.0f, &this->limbPos[7]);
     }
 
     if ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8) && (limbIndex == 9)) {
@@ -1078,7 +1078,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                 this->unk_22C[end] = this->unk_22C[end - 1];
             }
 
-            Matrix_MultiplyVector3fByState(&D_80B1DAFC, this->unk_22C);
+            Matrix_MultVec3f(&D_80B1DAFC, this->unk_22C);
         }
 
         if (this->unk_190 > 0) {
@@ -1100,7 +1100,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         }
 
         if (!(this->unk_191 & 0x80)) {
-            Matrix_CopyCurrentState(&this->unk_358);
+            Matrix_Get(&this->unk_358);
         }
     }
 }
@@ -1136,7 +1136,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (!(this->unk_191 & 0x80)) {
-        Matrix_SetCurrentState(&this->unk_358);
+        Matrix_Put(&this->unk_358);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_po_sisters_DL_0027B0);
@@ -1163,8 +1163,8 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, temp_s7->r, temp_s7->g, temp_s7->b, phi_s5);
 
-        Matrix_InsertTranslation(this->unk_22C[i].x, this->unk_22C[i].y, this->unk_22C[i].z, MTXMODE_NEW);
-        Matrix_InsertRotation(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
+        Matrix_Translate(this->unk_22C[i].x, this->unk_22C[i].y, this->unk_22C[i].z, MTXMODE_NEW);
+        Matrix_RotateZYX(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
 
         if (this->actionFunc == func_80B1BA90) {
             f32 phi_f0;

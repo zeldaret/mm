@@ -1160,23 +1160,23 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnFloormas* this = THIS;
 
     if (D_808D393C[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_808D393C[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_808D393C[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
+        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(M_PI / 3, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(M_PI / 12, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PI / 3, MTXMODE_APPLY);
+        Matrix_RotateZF(M_PI / 12, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList((*gfx)++, gWallmasterLittleFingerDL);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 

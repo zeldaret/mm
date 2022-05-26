@@ -137,11 +137,11 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
                                   s16 childAngle) {
     Vec3f offset;
 
-    Matrix_RotateY(parentRot->y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(parentRot->x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(parentRot->z, MTXMODE_APPLY);
-    Matrix_RotateY(childAngle, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledX(-280.0f, &offset);
+    Matrix_RotateYS(parentRot->y, MTXMODE_NEW);
+    Matrix_RotateXS(parentRot->x, MTXMODE_APPLY);
+    Matrix_RotateZS(parentRot->z, MTXMODE_APPLY);
+    Matrix_RotateYS(childAngle, MTXMODE_APPLY);
+    Matrix_MultVecX(-280.0f, &offset);
 
     childPosOut->x = parentPos->x + offset.x;
     childPosOut->y = parentPos->y + offset.y;
@@ -239,11 +239,11 @@ void ObjChan_ChandelierAction(ObjChan* this2, GlobalContext* globalCtx) {
         this->stateFlags &= ~OBJCHAN_STATE_CUTSCENE;
         ActorCutscene_Stop(this->cutscenes[0]);
     }
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->rotation, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledY(this->unk1CC, &this->actor.world.pos);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
+    Matrix_MultVecY(this->unk1CC, &this->actor.world.pos);
     Math_Vec3f_Sum(&this->actor.world.pos, &this->unk1C0, &this->actor.world.pos);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     for (i = 0; i < 5; i++) {
@@ -373,7 +373,7 @@ void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* xlu;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->rotation, MTXMODE_APPLY);
+    Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
 
     opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
     gSPMatrix(&opa[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
@@ -387,11 +387,11 @@ void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
         ObjChan_DrawFire(this, globalCtx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx) {
@@ -418,11 +418,11 @@ void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx) {
 
     sp4C = globalCtx->gameplayFrames;
 
-    Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000,
-                   MTXMODE_APPLY);
+    Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000,
+                    MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].x * this->flameSize,
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);

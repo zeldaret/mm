@@ -53,7 +53,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     Vec3f pos;
     Vec3s rot;
 
-    Matrix_StatePush();
+    Matrix_Push();
     limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
     limbIndex++;
     rot = jointTable[limbIndex];
@@ -63,8 +63,8 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     newDList = limbDList = limb->dList;
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
-        Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_TranslateRotateZYX(&pos, &rot);
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
 
@@ -77,7 +77,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
             Matrix_ToMtx(*mtx);
             (*mtx)++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
@@ -86,7 +86,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     if (limb->sibling != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
@@ -119,7 +119,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     gSPSegment(gfx++, 0x0D, mtx);
-    Matrix_StatePush();
+    Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
     pos.x = jointTable->x;
     pos.y = jointTable->y;
@@ -129,8 +129,8 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     limbDList = rootLimb->dList;
 
     if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
-        Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_TranslateRotateZYX(&pos, &rot);
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, 1, actor, &gfx);
 
@@ -143,7 +143,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
             Matrix_ToMtx(mtx);
             mtx++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     if (postLimbDraw != NULL) {
@@ -154,7 +154,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
         gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
                                          postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     return gfx;
 }
 
@@ -186,9 +186,9 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
     Vec3s newRot;
     MtxF curState;
 
-    Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
-    Matrix_CopyCurrentState(&curState);
-    func_8018219C(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MultVec3f(&zeroVec, &newPos);
+    Matrix_Get(&curState);
+    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
     *pos = newPos;
 
     if (!stepRot && !overrideRot) {
@@ -953,7 +953,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             pos.z = bodyPartPos->z - worldPos->z;
         }
 
-        Matrix_MultiplyVector3fByState(&pos, &startVec);
+        Matrix_MultVec3f(&pos, &startVec);
         startCol = 64.0f + startVec.x;
         startRow = 64.0f - startVec.z;
         SubS_FillShadowTex(startCol >> 1, startRow >> 1, tex, sizes[i]);
@@ -969,7 +969,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     func_8012C28C(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-    Matrix_InsertTranslation(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);

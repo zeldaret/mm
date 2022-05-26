@@ -181,8 +181,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                                                                           &bgId, &this->actor.world.pos) +
                                               50.0f;
                     if (gSaveContext.save.weekEventReg[84] & 0x10) {
-                        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
+                        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+                        Matrix_MultVecZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
                         this->unk_360 = (EnOt*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, sp64.x, sp64.y,
                                                            sp64.z, 0, BINANG_ROT180(this->actor.shape.rot.y), 1,
@@ -206,8 +206,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                     } else if ((D_80B5E888 != NULL) && (D_80B5E888->unk_32C & 1)) {
                         this->unk_360 = D_80B5E888;
                         this->unk_360->unk_360 = this;
-                        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(800.0f, &sp58);
+                        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
+                        Matrix_MultVecZ(800.0f, &sp58);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp58, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &sp58);
@@ -354,8 +354,8 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
 
     if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp34);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
+        Matrix_MultVecZ(52.519997f, &sp34);
         this->unk_360->actor.world.pos.x = this->actor.world.pos.x + sp34.x;
         this->unk_360->actor.world.pos.y = this->actor.world.pos.y + sp34.y;
         this->unk_360->actor.world.pos.z = this->actor.world.pos.z + sp34.z;
@@ -437,9 +437,9 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp38;
 
     this->unk_3A0 += 0x2D8;
-    Matrix_RotateY(this->unk_3A0, MTXMODE_NEW);
-    Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
-    Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
+    Matrix_RotateYS(this->unk_3A0, MTXMODE_NEW);
+    Matrix_MultVecZ(26.259998f, &sp5C);
+    Matrix_MultVecZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
     this->unk_348.y = this->unk_394.y;
     this->unk_348.z = this->unk_394.z + sp5C.z;
@@ -461,17 +461,17 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_NEW);
+        Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_NEW);
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultVec3f(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 1, &sp44, &this->actor.shape.rot, 10);
         sp38.x = -1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultVec3f(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 2, &sp44, &this->actor.shape.rot, 10);
     }
@@ -500,9 +500,9 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
-    Matrix_RotateY(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
+    Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
-        Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
+        Matrix_MultVecZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
             gSaveContext.save.weekEventReg[84] |= 0x10;
@@ -519,7 +519,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
         } else {
             this->unk_73C--;
         }
-        Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp30);
+        Matrix_MultVecZ(-26.259998f, &sp30);
     }
     this->unk_348.x = this->unk_394.x + sp30.x;
     this->unk_348.y = this->unk_394.y;
@@ -711,8 +711,8 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
 
             this->unk_360 = D_80B5E888;
             this->unk_360->unk_360 = this;
-            Matrix_RotateY(this->actor.home.rot.y, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(800.0f, &sp2C);
+            Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_NEW);
+            Matrix_MultVecZ(800.0f, &sp2C);
             Math_Vec3f_Sum(&this->actor.world.pos, &sp2C, &this->unk_360->actor.world.pos);
             Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &this->unk_360->actor.world.pos);
             this->unk_32C &= ~0x800;
@@ -1024,9 +1024,9 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
     Gfx* gfx;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80B5E1D8(globalCtx, this->unk_3A4, 10);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1038,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
-    Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
+    Matrix_Translate(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
     Matrix_Scale(0.0882f, 0.0882f, 0.0882f, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1068,11 +1068,11 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         gSPDisplayList(&gfx[0], object_ot_DL_0004A0);
         POLY_OPA_DISP = &gfx[1];
-        Matrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
+        Matrix_MultVec3f(&D_80B5E410, &this->unk_74C);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 1) {
-        Matrix_GetStateTranslation(&this->unk_378);
+        Matrix_MultZero(&this->unk_378);
         this->unk_32C |= 0x400;
     }
 }
@@ -1123,8 +1123,8 @@ void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             sp54.x = arg1->unk_30;
             sp54.y = arg1->unk_34;
             sp54.z = 0.0f;
-            Matrix_RotateY(temp, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sp54, &arg1->unk_0C);
+            Matrix_RotateYS(temp, MTXMODE_NEW);
+            Matrix_MultVec3f(&sp54, &arg1->unk_0C);
             Math_Vec3f_Sum(&arg1->unk_0C, &arg1->unk_50, &arg1->unk_0C);
             arg1->unk_4C--;
         }
@@ -1148,8 +1148,8 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
                 if (globalCtx) {}
             }
 
-            Matrix_InsertTranslation(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
-            Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+            Matrix_Translate(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
+            Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));

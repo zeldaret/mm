@@ -349,7 +349,7 @@ void EnHs_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnHs* this = THIS;
 
     if (limbIndex == HS_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_8095393C, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_8095393C, &this->actor.focus.pos);
     }
 }
 

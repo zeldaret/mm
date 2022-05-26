@@ -1586,7 +1586,7 @@ s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1675,7 +1675,7 @@ void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,

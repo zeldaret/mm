@@ -1033,11 +1033,11 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
                 isMaterialApplied++;
             }
 
-            Matrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
-            Matrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_RotateZF(feather->zRot, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

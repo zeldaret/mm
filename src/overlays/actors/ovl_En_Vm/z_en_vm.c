@@ -483,9 +483,9 @@ void EnVm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == OBJECT_VM_LIMB_02) {
         sp4C = NULL;
 
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
-        Matrix_GetStateTranslationAndScaledZ(1600.0f, &this->unk_228);
-        Matrix_GetStateTranslationAndScaledZ(this->unk_224 * 71.428566f, &this->unk_234);
+        Matrix_MultZero(&this->actor.focus.pos);
+        Matrix_MultVecZ(1600.0f, &this->unk_228);
+        Matrix_MultVecZ(this->unk_224 * 71.428566f, &this->unk_234);
 
         if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &sp4C, true,
                                     true, false, true, &sp48)) {
@@ -526,7 +526,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(&gfx[0], &sSetupDL[6 * 60]);
         gDPSetColorDither(&gfx[1], G_CD_DISABLE);
 
-        Matrix_InsertTranslation(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);
         Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -543,9 +543,8 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(&gfx[0], 0x08, func_8012CB28(globalCtx->state.gfxCtx, 0, this->unk_212));
 
-        Matrix_InsertTranslation(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z,
-                                 MTXMODE_NEW);
-        Matrix_InsertRotation(this->unk_216, this->unk_218 + this->actor.shape.rot.y, 0, MTXMODE_APPLY);
+        Matrix_Translate(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z, MTXMODE_NEW);
+        Matrix_RotateZYX(this->unk_216, this->unk_218 + this->actor.shape.rot.y, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_220, this->unk_220, this->unk_224 * 0.0015f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -1,5 +1,5 @@
-#ifndef _Z64MATH_H_
-#define _Z64MATH_H_
+#ifndef Z64MATH_H
+#define Z64MATH_H
 
 #include "ultra64.h"
 
@@ -111,7 +111,7 @@ typedef struct {
 
 // Trig macros
 #define DEGF_TO_BINANG(degreesf) (s16)(degreesf * 182.04167f + .5f)
-#define RADF_TO_BINANG(radf) (s16)(radf * (32768.0f / M_PI))
+#define RADF_TO_BINANG(radf) (s16)(radf * (0x8000 / M_PI))
 #define RADF_TO_DEGF(radf) (radf * (180.0f / M_PI))
 #define DEGF_TO_RADF(degf) (degf * (M_PI / 180.0f))
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
@@ -119,7 +119,7 @@ typedef struct {
 #define BINANG_ADD(a, b) ((s16)(a + b))
 #define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
 #define BINANG_TO_DEGF(binang) ((f32)binang * (360.0001525f / 65535.0f))
-#define BINANG_TO_RAD(binang) (((f32)binang / 32768.0f) * M_PI)
+#define BINANG_TO_RAD(binang) (((f32)binang / 0x8000) * M_PI)
 
 // Vector macros
 #define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))

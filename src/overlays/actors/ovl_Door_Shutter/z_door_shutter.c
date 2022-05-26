@@ -673,9 +673,9 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         if (this->unk_164 == 7) {
-            Matrix_InsertTranslation(0.0f, 64.96f, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
-            Matrix_InsertTranslation(0.0f, -64.96f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 64.96f, 0.0f, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, -64.96f, 0.0f, MTXMODE_APPLY);
         }
 
         if (sp44->unk_04 != 0) {
@@ -687,10 +687,10 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 s16 yaw = this->actor.shape.rot.y - Math_Vec3f_Yaw(&globalCtx->view.eye, &this->actor.world.pos);
 
                 if (ABS_ALT(yaw) < 0x4000) {
-                    Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                 }
             } else if (this->actor.room == transitionEntry->sides[0].room) {
-                Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
         } else if (this->doorType == 5) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808A22DC[this->unk_15E]));
@@ -700,7 +700,7 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, sp44->unk_00);
 
         if ((this->unk_168 != 0.0f) && (sp44->unk_04 != 0)) {
-            Matrix_InsertTranslation(0.0f, sp44->unk_08 * (1.0f - this->unk_168), sp44->translateZ, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, sp44->unk_08 * (1.0f - this->unk_168), sp44->translateZ, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
