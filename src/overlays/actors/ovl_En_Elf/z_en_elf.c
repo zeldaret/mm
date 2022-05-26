@@ -1259,7 +1259,7 @@ void func_8088F5F4(EnElf* this, GlobalContext* globalCtx, s32 sparkleLife) {
         envColor.g = this->outerColor.g;
         envColor.b = this->outerColor.b;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor,
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor,
                                         1000, sparkleLife);
     }
 }

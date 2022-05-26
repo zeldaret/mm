@@ -1148,6 +1148,6 @@ void func_808BB8D4(DoorWarp1* this, GlobalContext* globalCtx, s32 arg2) {
             sVelocity.x = -Math_SinS(rand - 0x8000) * 5.0f;
             sVelocity.z = Math_CosS(rand - 0x8000) * 5.0f;
         }
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAccel, &primColor, &envColor, scale, life);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAccel, &primColor, &envColor, scale, life);
     }
 }
