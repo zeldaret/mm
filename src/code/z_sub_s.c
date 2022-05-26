@@ -187,9 +187,9 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
     Vec3s newRot;
     MtxF curState;
 
-    Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
-    Matrix_CopyCurrentState(&curState);
-    func_8018219C(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MultVec3f(&zeroVec, &newPos);
+    Matrix_Get(&curState);
+    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
     *pos = newPos;
 
     if (!stepRot && !overrideRot) {

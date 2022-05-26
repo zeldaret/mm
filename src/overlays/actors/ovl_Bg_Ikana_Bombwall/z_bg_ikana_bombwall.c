@@ -109,7 +109,7 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
     s16 temp;
     s16 phi_t0;
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     temp_fs0 = 0.0f;
     phi_fs1 = 0.0f;
@@ -130,8 +130,8 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
         spBC.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
         spBC.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
-        Matrix_MultiplyVector3fByState(&spC8, &spE0);
-        Matrix_MultiplyVector3fByState(&spBC, &spD4);
+        Matrix_MultVec3f(&spC8, &spE0);
+        Matrix_MultVec3f(&spBC, &spD4);
 
         spE0.x += this->dyna.actor.world.pos.x;
         spE0.y += this->dyna.actor.world.pos.y;
@@ -161,7 +161,7 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
                              -1, OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 #else
 void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx);
