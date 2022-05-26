@@ -53,7 +53,7 @@ void EffectSsKFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(xzScale, yScale, xzScale, MTXMODE_APPLY);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -69,10 +69,10 @@ void EffectSsKFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     }
 
     gDPPipeSync(POLY_XLU_DISP++);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
     if ((index % 2) != 0) {
-        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
     }
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
