@@ -345,7 +345,7 @@ void func_80A32B20(EnPr* this, GlobalContext* globalCtx) {
 
     this->actor.speedXZ = BREG(57) + 3.0f;
     Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
-    this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y;
+    this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.save.playerForm] + player->actor.world.pos.y;
     func_80A324E0(this, globalCtx);
 
     if (!(player->stateFlags1 & 0x8000000)) {
@@ -382,7 +382,7 @@ void func_80A32D28(EnPr* this, GlobalContext* globalCtx) {
     } else {
         Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
         func_80A325E4(this);
-        this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y;
+        this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.save.playerForm] + player->actor.world.pos.y;
         func_80A324E0(this, globalCtx);
         if (this->unk_2C8 < sqrtf(SQ(player->actor.world.pos.x - this->actor.home.pos.x) +
                                   SQ(player->actor.world.pos.z - this->actor.home.pos.z))) {
@@ -574,13 +574,13 @@ void EnPr_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnPr* this = THIS;
 
     if (limbIndex == 2) {
-        Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_2D4);
+        Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_MultVec3f(&sp24, &this->unk_2D4);
     }
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_GetStateTranslation(&this->limbPos[this->unk_228]);
+        Matrix_MultZero(&this->limbPos[this->unk_228]);
         this->unk_228++;
         if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
             this->unk_228 = 0;

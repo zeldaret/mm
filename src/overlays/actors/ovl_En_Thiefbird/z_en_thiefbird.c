@@ -168,7 +168,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
-    } else if ((gSaveContext.stolenItems & 0xFF000000) >> 0x18) {
+    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
         Actor_MarkForDeath(&this->actor);
     } else {
         func_80C11538(this);
@@ -213,17 +213,17 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s32 itemId1;
     s16 itemId2 = 0;
 
-    for (; slotId < ARRAY_COUNT(gSaveContext.inventory.items); slotId++) {
-        if ((gSaveContext.inventory.items[slotId] >= ITEM_BOTTLE) &&
-            (gSaveContext.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+    for (; slotId < 24; slotId++) {
+        if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            itemId2 = gSaveContext.inventory.items[slotId];
+            itemId2 = gSaveContext.save.inventory.items[slotId];
             break;
         }
     }
 
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
-        phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
@@ -271,10 +271,10 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if (!((gSaveContext.stolenItems & 0xFF000000) >> 0x18)) {
-        gSaveContext.stolenItems = (gSaveContext.stolenItems & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
+    if (STOLEN_ITEM_1 == STOLEN_ITEM_NONE) {
+        SET_STOLEN_ITEM_1(itemId1);
     } else {
-        gSaveContext.stolenItems = (gSaveContext.stolenItems & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
+        SET_STOLEN_ITEM_2(itemId1);
     }
 
     return true;
@@ -334,7 +334,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
@@ -570,8 +570,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
-                    (!((gSaveContext.stolenItems & 0xFF000000) >> 0x18) ||
-                     !((gSaveContext.stolenItems & 0xFF0000) >> 0x10)) &&
+                    ((STOLEN_ITEM_1 == STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 == STOLEN_ITEM_NONE)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
                     func_80C1242C(this);
                 } else if (func_80C10E98(globalCtx)) {
@@ -1067,7 +1066,7 @@ void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[1], this->unk_3E4);
         POLY_OPA_DISP = &gfx[2];
@@ -1099,11 +1098,11 @@ void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     idx = D_80C13698[limbIndex];
     if (idx != -1) {
         if (idx == 9) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[idx]);
+            Matrix_MultVecX(1000.0f, &this->limbPos[idx]);
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[idx]);
+            Matrix_MultZero(&this->limbPos[idx]);
             if ((idx == 3) || (idx == 5)) {
-                Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[idx + 1]);
+                Matrix_MultVecX(2000.0f, &this->limbPos[idx + 1]);
             }
         }
     }
@@ -1124,11 +1123,11 @@ void func_80C13354(EnThiefbird* this, GlobalContext* globalCtx2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
         if (ptr->unk_22 != 0) {
-            Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_RotateY(ptr->unk_1E, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(ptr->unk_20, MTXMODE_APPLY);
-            Matrix_InsertTranslation(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_RotateYS(ptr->unk_1E, MTXMODE_APPLY);
+            Matrix_RotateZS(ptr->unk_20, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

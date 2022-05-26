@@ -92,10 +92,10 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            Matrix_SetCurrentState(&mtx);
+            Matrix_Put(&mtx);
 
             if ((dlist != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
-                Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
+                Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
             shadowScale *= actor->shape.shadowScale;
@@ -151,8 +151,8 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     sp58 = Math_FAtan2F(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
-    Matrix_SetCurrentState(arg2);
-    Matrix_RotateY(sp58, MTXMODE_APPLY);
+    Matrix_Put(arg2);
+    Matrix_RotateYS(sp58, MTXMODE_APPLY);
     Matrix_Scale(shadowScaleX, 1.0f, shadowScaleX * shadowScaleZ, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -195,7 +195,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         CollisionPoly* spF8;
         s32 bgId;
         f32 floorHeight[2];
-        f32 pad;
+        Light* firstLight = &mapper->l.l[0];
         f32 shadowAlpha;
         f32 shadowScaleX;
         f32 shadowScaleZ;
@@ -239,8 +239,6 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                             IREG(88) + 80, IREG(89) + 60, IREG(90) + 40, 30000, 200, 60);
                         }
                         actor->shape.unk_17 &= ~spB8;
-
-                        if (!mapper->l.l) {} // POSSIBLE FAKE MATCH
                     }
                 }
 
@@ -252,7 +250,8 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                 shadowScaleZ = 1.0f - (distToFloor * (1.0f / 70.0f));
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
-                for (lightPtr = mapper->l.l, j = 0; j < numLights; lightPtr++, j++) {
+                lightPtr = firstLight;
+                for (j = 0; j < numLights; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = (lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                    ABS_ALT(lightPtr->l.dir[1]);
@@ -263,9 +262,10 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
 
-                for (j = 0; j < 2; lightPtr++, j++) {
+                for (j = 0; j < 2; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = ((lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                     ABS_ALT(lightPtr->l.dir[1])) -
@@ -275,6 +275,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
             }
             feetPosPtr++;
@@ -300,9 +301,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                       Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
-        Matrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
+        Matrix_MultVec3f(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
-        Matrix_MultiplyVector3fByState(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
+        Matrix_MultVec3f(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
     }
 }
 
@@ -532,22 +533,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
                         }
 
-                        Matrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                        Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
                                         (u8)alpha);
 
-                        Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
+                        Matrix_RotateZS((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
-                            Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
-                            Matrix_StatePush();
-                            Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
+                            Matrix_Push();
+                            Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
                             gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
-                            Matrix_StatePop();
+                            Matrix_Pop();
                         }
                     }
 
@@ -565,10 +566,10 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
-            Matrix_InsertTranslation(actor->focus.pos.x,
-                                     actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
-                                     actor->focus.pos.z, MTXMODE_NEW);
-            Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
+            Matrix_Translate(actor->focus.pos.x,
+                             actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                             actor->focus.pos.z, MTXMODE_NEW);
+            Matrix_RotateYS((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
                          MTXMODE_APPLY);
 
@@ -2224,7 +2225,7 @@ void func_800B90F4(GlobalContext* globalCtx) {
 void func_800B9120(ActorContext* actorCtx) {
     s32 phi_v0 = CURRENT_DAY * 2;
 
-    if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
         phi_v0++;
     }
 
@@ -2236,7 +2237,7 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.weekEventReg[92] |= 0x80;
+    gSaveContext.save.weekEventReg[92] |= 0x80;
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2252,8 +2253,8 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     }
 
     actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->swch0;
-    actorCtx->flags.switches[1] = cycleFlags->swch1;
+    actorCtx->flags.switches[0] = cycleFlags->switch0;
+    actorCtx->flags.switches[1] = cycleFlags->switch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
@@ -2510,14 +2511,13 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights_Draw(light, globalCtx->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
-        Matrix_SetStateRotationAndTranslation(
+        Matrix_SetTranslateRotateYXZ(
             actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
             actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
     } else {
-        Matrix_SetStateRotationAndTranslation(actor->world.pos.x,
-                                              actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
-                                              actor->world.pos.z, &actor->shape.rot);
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
+                                     actor->world.pos.z, &actor->shape.rot);
     }
 
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
@@ -3542,14 +3542,14 @@ void Actor_SpawnBodyParts(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx*
     MtxF* currentMatrix;
 
     if (*dList != NULL) {
-        currentMatrix = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrent();
         spawnedPart =
             Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, currentMatrix->mf[3][0],
                                currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;
 
-            func_8018219C(currentMatrix, &part->actor.shape.rot, 0);
+            Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
             part->unk_150 = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }
@@ -3771,9 +3771,9 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, GlobalContext* globalCtx)
     sp54 = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
     if (sp44 != NULL) {
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
-        Matrix_SetCurrentState(&sp58);
+        Matrix_Put(&sp58);
     } else {
-        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
+        Matrix_Translate(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
     }
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
@@ -3799,13 +3799,13 @@ void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
-    if (arg2 >= 5) {
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 y, s16 countdown) {
+    if (y >= 5) {
         func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(globalCtx, arg2, arg3);
+    func_800BC770(globalCtx, y, countdown);
 }
 
 typedef struct {
@@ -3840,16 +3840,16 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&baseMtxF);
+    Matrix_Translate(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
+    Matrix_Get(&baseMtxF);
 
-    chainsTranslateX = __sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
-    chainsTranslateY = __cosf(entry->chainAngle - chainRotZ) * (10 - frame) * 0.1f * entry->chainLength;
+    chainsTranslateX = sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
+    chainsTranslateY = cosf(entry->chainAngle - chainRotZ) * (10 - frame) * 0.1f * entry->chainLength;
 
     for (i = 0; i < 4; i++) {
-        Matrix_SetCurrentState(&baseMtxF);
-        Matrix_InsertZRotation_f(chainRotZ, MTXMODE_APPLY);
-        Matrix_InsertTranslation(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
+        Matrix_Put(&baseMtxF);
+        Matrix_RotateZF(chainRotZ, MTXMODE_APPLY);
+        Matrix_Translate(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
         if (entry->chainsScale != 1.0f) {
             Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
@@ -3866,7 +3866,7 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
         chainRotZ += rotZStep;
     }
 
-    Matrix_SetCurrentState(&baseMtxF);
+    Matrix_Put(&baseMtxF);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3908,104 +3908,148 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return Hilite_DrawXlu(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 arg4) {
-    s32 spB4;
-    s32 spB0;
-    s32 spA8[2] = { 0, 0 };
-    s32 spA0[2] = { 0, 0 };
-    Vec3f sp94;
-    Vec3f sp7C[2];
-    Vec3f sp70;
-    Vec3f sp64;
-    f32 sp60;
-    f32 sp5C;
-    f32 sp54[2];
+/**
+ * Calculates the closest position `dstPos` to the input position `srcPos` along the path given by `points`/`numPoints`
+ * Whether the points provided forms a closed-loop path is indicated by `isPathLoop`
+ */
+void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
+    s32 pointIndex;
+    s32 closestPointIndex;
+    s32 useAdjacentLines[2] = {
+        false, // determines whether to use line connecting to previous point in calculations
+        false, // determines whether to use line connecting to next point in calculations
+    };
+    s32 isRightSideOfAdjacentLines[2] = {
+        false, // determines whether srcPos is on the right side of the line from prev to curr point
+        false, // determines whether srcPos is on the right side of the line from curr to next point
+    };
+    Vec3f closestPoint;
+    Vec3f closestPos[2];
+    Vec3f closestPointNext;
+    Vec3f closestPointPrev;
+    f32 distSq; // First used as distSq to closest point, then used as distSq to closest position
+    f32 closestPointDistSq;
+    f32 loopDistSq[2];
+    s32 i;
 
-    spB0 = 0;
-    sp5C = SQ(40000.0f);
+    closestPointIndex = 0;
+    closestPointDistSq = SQ(40000.0f);
 
-    for (spB4 = 0; spB4 < pathCount; spB4++) {
-        sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
-        if (sp60 < sp5C) {
-            sp5C = sp60;
-            spB0 = spB4;
+    // Find the point closest to srcPos
+    for (pointIndex = 0; pointIndex < numPoints; pointIndex++) {
+        distSq = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, points[pointIndex].x, points[pointIndex].z);
+        if (distSq < closestPointDistSq) {
+            closestPointDistSq = distSq;
+            closestPointIndex = pointIndex;
         }
     }
 
-    sp94.x = (points + spB0)->x;
-    sp94.z = (points + spB0)->z;
-    pos2->y = (points + spB0)->y;
-    if (spB0 != 0) {
-        sp64.x = (points + spB0 - 1)->x;
-        sp64.z = (points + spB0 - 1)->z;
-    } else if (arg4) {
-        sp64.x = (points + pathCount - 1)->x;
-        sp64.z = (points + pathCount - 1)->z;
+    closestPoint.x = (points + closestPointIndex)->x;
+    closestPoint.z = (points + closestPointIndex)->z;
+    dstPos->y = (points + closestPointIndex)->y;
+
+    // Analyze point on path immediately previous to the closest point
+    if (closestPointIndex != 0) {
+        // The point previous to the closest point
+        closestPointPrev.x = (points + closestPointIndex - 1)->x;
+        closestPointPrev.z = (points + closestPointIndex - 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the first point in the path list
+        // Set the previous point to loop around to the the final point on the path
+        closestPointPrev.x = (points + numPoints - 1)->x;
+        closestPointPrev.z = (points + numPoints - 1)->z;
+    }
+    if ((closestPointIndex != 0) || isPathLoop) {
+        // Use the adjacent line
+        useAdjacentLines[0] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
+                                     closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
     }
 
-    if ((spB0 != 0) || arg4) {
-        spA8[0] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp64.x, sp64.z, sp94.x, sp94.z, &sp7C[0].x, &sp7C[0].z, &sp60);
+    // Analyze point on path immediately next to the closest point
+    if (closestPointIndex + 1 != numPoints) {
+        // The point next to the closest point
+        closestPointNext.x = (points + closestPointIndex + 1)->x;
+        closestPointNext.z = (points + closestPointIndex + 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the final point in the path list
+        // Set the next point to loop around to the the first point on the path
+        closestPointNext.x = (points + 0)->x;
+        closestPointNext.z = (points + 0)->z;
+    }
+    if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
+        useAdjacentLines[1] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
+                                     closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
     }
 
-    if (spB0 + 1 != pathCount) {
-        sp70.x = (points + spB0 + 1)->x;
-        sp70.z = (points + spB0 + 1)->z;
-    } else if (arg4) {
-        sp70.x = points->x;
-        sp70.z = points->z;
-    }
+    /**
+     * For close-looped paths, they must be defined in a clockwise orientation looking from the top down.
+     * Therefore, `srcPos` being interior of the loop will lead to both lines of `isRightSideOfAdjacentLines`
+     * returning true.
+     */
+    if (isPathLoop) {
+        isRightSideOfAdjacentLines[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
+                                        ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
 
-    if ((spB0 + 1 != pathCount) || arg4) {
-        spA8[1] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp94.x, sp94.z, sp70.x, sp70.z, &sp7C[1].x, &sp7C[1].z, &sp60);
-    }
+        isRightSideOfAdjacentLines[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
+                                        ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
 
-    if (arg4) {
-        s32 phi_s0_2;
-
-        spA0[0] = ((sp64.x - pos1->x) * (sp94.z - pos1->z)) < ((sp64.z - pos1->z) * (sp94.x - pos1->x));
-        spA0[1] = ((sp70.z - pos1->z) * (sp94.x - pos1->x)) < ((sp94.z - pos1->z) * (sp70.x - pos1->x));
-
-        for (phi_s0_2 = 0; phi_s0_2 < ARRAY_COUNT(sp54); phi_s0_2++) {
-            if (spA8[phi_s0_2] != 0) {
-                sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
+        for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
+            if (useAdjacentLines[i]) {
+                // Get distSq from srcPos to closestPos
+                loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
-                sp54[phi_s0_2] = SQ(40000.0f);
+                // The closest Pos is not contained within the line-segment
+                loopDistSq[i] = SQ(40000.0f);
             }
         }
     }
 
-    if (arg4 && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
-                 ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
-    } else if ((spA8[0] != 0) && (spA8[1] != 0)) {
-        if ((spA0[0] == 0) && (spA0[1] == 0)) {
-            if (Math3D_PointDistToLine2D(pos1->x, pos1->z, sp7C[0].x, sp7C[0].z, sp7C[1].x, sp7C[1].z, &pos2->x,
-                                         &pos2->z, &sp60) == 0) {
-                pos2->x = (sp7C[1].x + sp7C[0].x) * 0.5f;
-                pos2->z = (sp7C[1].z + sp7C[0].z) * 0.5f;
+    // Calculate closest position along path
+    if (isPathLoop && ((isRightSideOfAdjacentLines[0] && isRightSideOfAdjacentLines[1]) ||
+                       (isRightSideOfAdjacentLines[0] && useAdjacentLines[0] && (loopDistSq[0] < loopDistSq[1])) ||
+                       (isRightSideOfAdjacentLines[1] && useAdjacentLines[1] && (loopDistSq[1] < loopDistSq[0])))) {
+        // srcPos is contained within the closed loop
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
+    } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
+        // srcPos is somewhere withing the bend of the path
+        if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
+            // srcPos is not inside a loop
+            if (!Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
+                                          closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
+                // The dstPos calculated in Math3D_PointDistToLine2D was not valid.
+                // Take the midpoint of the two closest ponits instead
+                dstPos->x = (closestPos[1].x + closestPos[0].x) * 0.5f;
+                dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
             }
-        } else if (sp54[1] < sp54[0]) {
-            pos2->x = sp7C[1].x;
-            pos2->z = sp7C[1].z;
+        } else if (loopDistSq[1] < loopDistSq[0]) {
+            // Use closest position along the line in the loop connecting the closest point and the next point
+            dstPos->x = closestPos[1].x;
+            dstPos->z = closestPos[1].z;
         } else {
-            pos2->x = sp7C[0].x;
-            pos2->z = sp7C[0].z;
+            // Use closest position along the ling in the loop connecting the closest point and the prev point
+            dstPos->x = closestPos[0].x;
+            dstPos->z = closestPos[0].z;
         }
-    } else if (spA8[0] != 0) {
-        pos2->x = sp7C[0].x;
-        pos2->z = sp7C[0].z;
-    } else if (spA8[1] != 0) {
-        pos2->x = sp7C[1].x;
-        pos2->z = sp7C[1].z;
-    } else if (arg4 && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
+    } else if (useAdjacentLines[0]) {
+        // Use closest position along line segment connecting the closest point and the prev point
+        dstPos->x = closestPos[0].x;
+        dstPos->z = closestPos[0].z;
+    } else if (useAdjacentLines[1]) {
+        // Use closest position along line segment connecting the closest point and the next point
+        dstPos->x = closestPos[1].x;
+        dstPos->z = closestPos[1].z;
+    } else if (isPathLoop && ((((closestPointPrev.x - srcPos->x) * (closestPointNext.z - srcPos->z)) <
+                               ((closestPointPrev.z - srcPos->z) * (closestPointNext.x - srcPos->x))))) {
+        // Inside the line that directly connects the previous point to the next point (inside the bend of a corner)
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
     } else {
-        pos2->x = sp94.x;
-        pos2->z = sp94.z;
+        // The closest point and the closest position are the same (srcPos is near the outer region of a corner)
+        dstPos->x = closestPoint.x;
+        dstPos->z = closestPoint.z;
     }
 }
 
@@ -4188,11 +4232,11 @@ Gfx D_801AEFA0[] = {
     gsSPEndDisplayList(),
 };
 
-void* func_800BD9A0(GraphicsContext* gfxCtx) {
+Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetRenderMode(displayListHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
@@ -4471,7 +4515,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
         u32 gameplayFrames = globalCtx->gameplayFrames;
         f32 effectAlphaScaled;
 
-        currentMatrix = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrent();
 
         // Apply sfx along with damage effect
         if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
@@ -4520,15 +4564,15 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                     gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 200, KREG(21) + 200, KREG(22) + 255, (u8)alpha);
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
 
                     if (limbIndex & 1) {
-                        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                     }
 
                     if (limbIndex & 2) {
-                        Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateZF(M_PI, MTXMODE_APPLY);
                     }
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4559,8 +4603,8 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, twoTexScrollParam * 3,
                                                 twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4580,7 +4624,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     type = 255;
                 }
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
                              MTXMODE_APPLY);
 
@@ -4606,7 +4650,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                                 ((limbIndex * 10 + gameplayFrames) * -20) & 0x1FF, 32, 128));
 
-                    Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4643,12 +4687,12 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
 
                 // Apply and draw a light orb over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
-                    Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateZF(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4681,14 +4725,14 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 255), (u8)(sREG(21) + 255), (u8)sREG(22), (u8)sREG(23));
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale(electricSparksScale, electricSparksScale, electricSparksScale, MTXMODE_APPLY);
 
                 // Every limb draws two electric sparks at random orientations
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     // first electric spark
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
@@ -4699,8 +4743,8 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
 
                     // second electric spark
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;

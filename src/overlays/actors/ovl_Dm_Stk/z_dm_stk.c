@@ -841,7 +841,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             Collider_InitCylinder(globalCtx, &this->collider);
 
-            if (gSaveContext.entranceIndex == 0x2C00) {
+            if (gSaveContext.save.entranceIndex == 0x2C00) {
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (gSaveContext.unk_3DD0[3] == 0) {
                         func_8010E9F0(3, 300);
@@ -849,7 +849,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                         XREG(81) = 115;
                     }
 
-                    if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
                         this->actionFunc = func_80AA18D8;
                     } else {
@@ -938,7 +938,7 @@ void func_80AA1704(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
     Vec3f sp1C;
 
-    if (!(gSaveContext.weekEventReg[74] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
         func_80169474(globalCtx, &this->actor.world.pos, &sp1C);
         if (globalCtx->view.fovy < 25.0f) {
             if ((sp1C.x >= 70.0f) && (sp1C.x < 250.0f) && (sp1C.y >= 30.0f) && (sp1C.y < 210.0f)) {
@@ -955,10 +955,10 @@ void func_80AA17F8(DmStk* this, GlobalContext* globalCtx) {
     s16 sp18 = ActorCutscene_GetAdditionalCutscene(sp1C);
     s16 cutscene;
 
-    if (gSaveContext.day < 3) {
+    if (gSaveContext.save.day < 3) {
         cutscene = sp1E;
-    } else if ((gSaveContext.weekEventReg[8] & 0x40) ||
-               ((CURRENT_DAY == 3) && (gSaveContext.time < CLOCK_TIME(6, 0)))) {
+    } else if ((gSaveContext.save.weekEventReg[8] & 0x40) ||
+               ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
         cutscene = sp18;
     } else {
         cutscene = sp1C;
@@ -1171,7 +1171,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 22:
                         this->unk_2E0 = 29;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1183,7 +1183,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 24:
                         this->unk_2E0 = 32;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1194,14 +1194,14 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 26:
                         this->unk_2E0 = 34;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
 
                     case 27:
                         this->unk_2E0 = 36;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1399,7 +1399,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             if (this->unk_2E4 < 0) {
                 this->unk_2E4 = 0;
                 this->unk_32F = 0;
-                gSaveContext.weekEventReg[12] |= 4;
+                gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
@@ -1512,7 +1512,6 @@ void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
 
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
-    u16 time;
 
     if (this->actor.params != 1) {
         if (this->unk_2E0 == 33) {
@@ -1566,14 +1565,12 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
-            (globalCtx->msgCtx.unk11F04 == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
+            (globalCtx->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (globalCtx->csCtx.state == 0)) {
-            time = gSaveContext.time;
-            gSaveContext.time = (u16)REG(15) + time;
+            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
             if (REG(15) != 0) {
-                time = gSaveContext.time;
-                gSaveContext.time = (u16)gSaveContext.unk_14 + time;
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
             }
         }
     }
@@ -1621,7 +1618,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     DmStk* this = THIS;
 
     if (limbIndex == 17) {
-        Matrix_GetStateTranslation(&this->unk_304);
+        Matrix_MultZero(&this->unk_304);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1661,7 +1658,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
                     (this->unk_337 >= 0)) {
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
 
@@ -1673,7 +1670,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
                 break;
         }
@@ -1709,9 +1706,9 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case 5:
-                Matrix_InsertTranslation(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
-                Matrix_RotateY(0x6142, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-0x1988, MTXMODE_APPLY);
+                Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
+                Matrix_RotateYS(0x6142, MTXMODE_APPLY);
+                Matrix_RotateXS(-0x1988, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
