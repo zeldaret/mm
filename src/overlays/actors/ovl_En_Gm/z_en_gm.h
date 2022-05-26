@@ -24,7 +24,7 @@ typedef struct EnGm {
     /* 0x0248 */ s32 timePathTotalTime;
     /* 0x024C */ s32 timePathWaypointTime;
     /* 0x0250 */ s32 timePathWaypoint;
-    /* 0x0254 */ s32 timePathTimeElapsed;
+    /* 0x0254 */ s32 timePathElapsedTime;
     /* 0x0258 */ u8 unk_258;
     /* 0x0259 */ u8 unk_259;
     /* 0x025C */ s32 unk_25C;

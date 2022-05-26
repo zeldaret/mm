@@ -49,7 +49,7 @@ typedef struct EnBaba {
     /* 0x0424 */ s32 timePathTotalTime;
     /* 0x0428 */ s32 timePathWaypointTime;
     /* 0x042C */ s32 timePathWaypoint;
-    /* 0x0430 */ s32 timePathTimeElapsed;
+    /* 0x0430 */ s32 timePathElapsedTime;
     /* 0x0434 */ u8 unk_434;
     /* 0x0436 */ s16 timePathTimeSpeed;
     /* 0x0438 */ s32 unk_438;

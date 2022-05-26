@@ -23,7 +23,7 @@ typedef struct BgIngate {
     /* 0x180 */ s32 timePathTotalTime;
     /* 0x184 */ s32 timePathWaypointTime;
     /* 0x188 */ s32 timePathWaypoint;
-    /* 0x18C */ s32 timePathTimeElapsed;
+    /* 0x18C */ s32 timePathElapsedTime;
 } BgIngate; // size = 0x190
 
 extern const ActorInit Bg_Ingate_InitVars;

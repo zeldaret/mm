@@ -615,12 +615,12 @@ s32 func_80BF1FA8(EnIg* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
             this->timePathTotalTime = arg2->time1 - phi_v1;
         }
 
-        this->timePathTimeElapsed = sp2E - phi_v1;
+        this->timePathElapsedTime = sp2E - phi_v1;
 
         phi_v1 = (this->timePath->count - 2) & 0xFFFF;
 
         this->timePathWaypointTime = this->timePathTotalTime / phi_v1;
-        this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathWaypointTime) + 2;
+        this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
 
         this->unk_3D0 &= ~0x8;
         this->unk_3D0 &= ~0x10;
@@ -767,7 +767,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
     SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
     if (!(this->unk_3D0 & 8)) {
         timePathPoint = gZeroVec3f;
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &timePathPoint, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
@@ -781,14 +781,14 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = timePathPoint.z;
 
     if (SubS_InCsMode(globalCtx)) {
-        sp54 = this->timePathTimeElapsed;
+        sp54 = this->timePathElapsedTime;
         sp50 = this->timePathWaypoint;
         timePathPoint = this->actor.world.pos;
     }
 
     this->timePathPoint = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk_3D0 |= 0x10;
@@ -799,7 +799,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
     }
 
     if (SubS_InCsMode(globalCtx)) {
-        this->timePathTimeElapsed = sp54;
+        this->timePathElapsedTime = sp54;
         this->timePathWaypoint = sp50;
         this->timePathPoint = timePathPoint;
     } else if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {

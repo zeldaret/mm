@@ -343,11 +343,11 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) 
         this->timePathTotalTime = arg2->time1 - temp;
     }
 
-    this->timePathTimeElapsed = sp26 - temp;
+    this->timePathElapsedTime = sp26 - temp;
     temp = this->timePath->count - 2;
     this->timePathWaypointTime = this->timePathTotalTime / temp;
     this->unk_438 = 0;
-    this->timePathWaypoint = (this->timePathTimeElapsed / this->timePathWaypointTime) + 2;
+    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
     this->unk_43C = 0;
     return true;
 }
@@ -385,7 +385,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     if (this->unk_438 == 0) {
         timePathPoint = gZeroVec3f;
 
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &timePathPoint, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
@@ -399,14 +399,14 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = timePathPoint.z;
 
     if (SubS_InCsMode(globalCtx)) {
-        sp54 = this->timePathTimeElapsed;
+        sp54 = this->timePathElapsedTime;
         sp50 = this->timePathWaypoint;
         timePathPoint = this->actor.world.pos;
     }
 
     this->timePathPoint = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathTimeElapsed,
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->unk_43C = 1;
@@ -417,7 +417,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     }
 
     if (SubS_InCsMode(globalCtx)) {
-        this->timePathTimeElapsed = sp54;
+        this->timePathElapsedTime = sp54;
         this->timePathWaypoint = sp50;
         this->timePathPoint = timePathPoint;
     }

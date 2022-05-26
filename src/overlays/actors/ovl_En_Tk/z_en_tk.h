@@ -60,7 +60,7 @@ typedef struct EnTk {
     /* 0x03E4 */ s32 timePathTotalTime;
     /* 0x03E8 */ s32 timePathWaypointTime;
     /* 0x03EC */ s32 timePathWaypoint;
-    /* 0x03F0 */ s32 timePathTimeElapsed;
+    /* 0x03F0 */ s32 timePathElapsedTime;
 } EnTk; // size = 0x3F4
 
 extern const ActorInit En_Tk_InitVars;

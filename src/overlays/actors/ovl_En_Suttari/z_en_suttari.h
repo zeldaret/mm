@@ -45,7 +45,7 @@ typedef struct EnSuttari {
     /* 0x418 */ s32 timePathTotalTime;
     /* 0x41C */ s32 timePathWaypointTime;
     /* 0x420 */ s32 timePathWaypoint;
-    /* 0x424 */ s32 timePathTimeElapsed;
+    /* 0x424 */ s32 timePathElapsedTime;
     /* 0x428 */ u8 unk428;
     /* 0x42A */ s16 timePathTimeSpeed;
     /* 0x42C */ s32 unk42C;

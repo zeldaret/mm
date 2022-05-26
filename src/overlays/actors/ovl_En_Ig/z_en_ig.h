@@ -25,7 +25,7 @@ typedef struct EnIg {
     /* 0x0288 */ s32 timePathTotalTime;
     /* 0x028C */ s32 timePathWaypointTime;
     /* 0x0290 */ s32 timePathWaypoint;
-    /* 0x0294 */ s32 timePathTimeElapsed;
+    /* 0x0294 */ s32 timePathElapsedTime;
     /* 0x0298 */ u8 scheduleResult;
     /* 0x029C */ s32* unk_29C;
     /* 0x02A0 */ s32 unk_2A0;

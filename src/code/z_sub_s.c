@@ -238,7 +238,7 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  * Computes the weightVal to be used with time paths
  *
  * @param weightVal the main weight value used to compute the weights for the points considered
- * @param timeElapsed how much time has passed
+ * @param elapsedTime how much time has passed
  * @param waypointTime how much time per each waypoint
  * @param totalTime how much time the path should take to travel
  * @param pathCount the path count
@@ -247,7 +247,7 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount,
+s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
                                       s32 numPoints, f32 weightArray[]) {
     s32 i;
     s32 j;
@@ -255,21 +255,21 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 waypo
     f32 weightValMultiplier;
 
     *weightVal = 0.0f;
-    if ((waypointTime <= 0) || (timeElapsed < 0)) {
+    if ((waypointTime <= 0) || (elapsedTime < 0)) {
         return 0;
     }
     weightValMultiplier = 1.0f / waypointTime;
     k = 0;
     for (i = numPoints - 1; i < pathCount; i++) {
         for (j = 0; j < waypointTime; j++) {
-            if (k == timeElapsed) {
+            if (k == elapsedTime) {
                 break;
             }
             *weightVal += (weightArray[i + 1] - weightArray[i]) * weightValMultiplier;
             k++;
         }
     }
-    return (timeElapsed == totalTime) ? 2 : 1;
+    return (elapsedTime == totalTime) ? 2 : 1;
 }
 
 /**
@@ -362,17 +362,17 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *
  * @param path
  * @param weightVal see SubS_TimePathing_ComputeWeightVal
- * @param timeElapsed how much time has passed
+ * @param elapsedTime how much time has passed
  * @param waypointTime how much time per each waypoint
  * @param totalTime how much time the path should take to travel
  * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
  * @param weightArray see SubS_TimePathing_FillWeightArray
  * @param point the computed point to move to
- * @param timeSpeed how much timeElapsed should be updated
+ * @param timeSpeed how fast time moves
  *
  * @return s32 returns true when the end has been reached.
  */
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 waypointTime, s32 totalTime,
+s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* elapsedTime, s32 waypointTime, s32 totalTime,
                             s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
@@ -383,7 +383,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 wa
     if (*waypoint >= path->count) {
         state = 2;
     } else {
-        state = SubS_TimePathing_ComputeWeightVal(weightVal, *timeElapsed, waypointTime, totalTime, path->count, 3,
+        state = SubS_TimePathing_ComputeWeightVal(weightVal, *elapsedTime, waypointTime, totalTime, path->count, 3,
                                                   weightArray);
     }
 
@@ -401,13 +401,13 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 wa
             break;
     }
 
-    *timeElapsed += timeSpeed;
-    if (*timeElapsed >= totalTime) {
-        *timeElapsed = totalTime;
-    } else if (*timeElapsed < 0) {
-        *timeElapsed = 0;
+    *elapsedTime += timeSpeed;
+    if (*elapsedTime >= totalTime) {
+        *elapsedTime = totalTime;
+    } else if (*elapsedTime < 0) {
+        *elapsedTime = 0;
     }
-    *waypoint = (*timeElapsed / waypointTime) + 2;
+    *waypoint = (*elapsedTime / waypointTime) + 2;
 
     return reachedEnd;
 }
