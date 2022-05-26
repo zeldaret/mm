@@ -1145,9 +1145,9 @@ s32 Camera_GetNegOne(void) {
 
 s16 func_800E0238(Camera* camera) {
     Camera_SetFlags(camera, CAM_FLAG2_8);
-    if ((camera->camId == CAM_ID_MAIN) && (camera->globalCtx->activeCamera != CAM_ID_MAIN)) {
+    if ((camera->camId == CAM_ID_MAIN) && (camera->globalCtx->activeCamId != CAM_ID_MAIN)) {
         Camera_SetFlags(GET_ACTIVE_CAM(camera->globalCtx), CAM_FLAG2_8);
-        return camera->globalCtx->activeCamera;
+        return camera->globalCtx->activeCamId;
     } else {
         return camera->camId;
     }

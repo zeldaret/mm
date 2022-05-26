@@ -185,13 +185,13 @@ void func_80C168D0(DemoSyoten* this, GlobalContext* globalCtx) {
     Vec3s* points;
     Vec3f sp30;
     Vec3f sp24;
-    f32 sp20;
+    f32 cappedInvW;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(this->unk_3E8->points);
         points += this->unk_3EC;
         Math_Vec3s_ToVec3f(&sp30, points);
-        Actor_GetProjectedPos(globalCtx, &sp30, &sp24, &sp20);
+        Actor_GetProjectedPos(globalCtx, &sp30, &sp24, &cappedInvW);
         Math_Vec3f_Copy(&sp30, &this->actor.projectedPos);
         sp30.z = sp30.y;
         sp24.z = sp24.y;

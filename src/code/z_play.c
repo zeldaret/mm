@@ -74,43 +74,215 @@ s32 Play_InCsMode(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
+void Play_GetScreenPos(GlobalContext* globalCtx, Vec3f* src, Vec3f* dest) {
+    f32 cappedInvW;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CreateSubCamera.s")
+    Actor_GetProjectedPos(globalCtx, src, dest, &cappedInvW);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
+    dest->x = (SCREEN_WIDTH / 2) + (dest->x * cappedInvW * (SCREEN_WIDTH / 2));
+    dest->y = (SCREEN_HEIGHT / 2) - (dest->y * cappedInvW * (SCREEN_HEIGHT / 2));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeStatus.s")
+s16 Play_CreateSubCamera(GlobalContext* globalCtx) {
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
+    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
+        if (globalCtx->cameraPtrs[i] == NULL) {
+            break;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s")
+    if (i == NUM_CAMS) {
+        return CAM_ID_NONE;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
+    globalCtx->cameraPtrs[i] = &globalCtx->subCameras[i - CAM_ID_SUB_FIRST];
+    Camera_Init(globalCtx->cameraPtrs[i], &globalCtx->view, &globalCtx->colCtx, globalCtx);
+    globalCtx->cameraPtrs[i]->camId = i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
+    return i;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s")
+s16 Play_GetActiveCamId(GlobalContext* globalCtx) {
+    return globalCtx->activeCamId;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
+s32 Play_CameraChangeStatus(GlobalContext* globalCtx, s16 camId, s16 status) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetRoll.s")
+    if (status == CAM_STATUS_ACTIVE) {
+        globalCtx->activeCamId = camIdx;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
+    return Camera_ChangeStatus(globalCtx->cameraPtrs[camIdx], status);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169A50.s")
+void Play_ClearCamera(GlobalContext* globalCtx, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeSetting.s")
+    if (globalCtx->cameraPtrs[camIdx] != NULL) {
+        Camera_ChangeStatus(globalCtx->cameraPtrs[camIdx], CAM_STATUS_INACTIVE);
+        globalCtx->cameraPtrs[camIdx] = NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AFC.s")
+void Play_ClearAllSubCameras(GlobalContext* globalCtx) {
+    s16 subCamId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraGetUID.s")
+    for (subCamId = CAM_ID_SUB_FIRST; subCamId < NUM_CAMS; subCamId++) {
+        if (globalCtx->cameraPtrs[subCamId] != NULL) {
+            Play_ClearCamera(globalCtx, subCamId);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
+    globalCtx->activeCamId = CAM_ID_MAIN;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
+Camera* Play_GetCamera(GlobalContext* globalCtx, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s")
+    return globalCtx->cameraPtrs[camIdx];
+}
+
+s32 Play_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye) {
+    s32 ret = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
+    Camera* camera = globalCtx->cameraPtrs[camIdx];
+
+    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_1, at);
+    ret *= 2;
+    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_2, eye);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->trackActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->trackActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->trackActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->trackActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLERPStepScale = 0.01f;
+
+    return ret;
+}
+
+s32 Play_CameraSetAtEyeUp(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
+    s32 ret = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
+    Camera* camera = globalCtx->cameraPtrs[camIdx];
+
+    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_1, at);
+    ret <<= 1;
+    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_2, eye);
+    ret <<= 1;
+    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_4, up);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->trackActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->trackActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->trackActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->trackActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLERPStepScale = 0.01f;
+
+    return ret;
+}
+
+s32 Play_CameraSetFov(GlobalContext* globalCtx, s16 camId, f32 fov) {
+    s32 ret = Camera_SetParam(globalCtx->cameraPtrs[camId], 0x20, &fov) & 1;
+
+    if (1) {}
+    return ret;
+}
+
+s32 Play_CameraSetRoll(GlobalContext* globalCtx, s16 camId, s16 roll) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
+    Camera* camera = globalCtx->cameraPtrs[camIdx];
+
+    camera->roll = roll;
+
+    return 1;
+}
+
+void Play_CopyCamera(GlobalContext* globalCtx, s16 destCamId, s16 srcCamId) {
+    s16 srcCamId2 = (srcCamId == CAM_ID_NONE) ? globalCtx->activeCamId : srcCamId;
+    s16 destCamId1 = (destCamId == CAM_ID_NONE) ? globalCtx->activeCamId : destCamId;
+
+    Camera_Copy(globalCtx->cameraPtrs[destCamId1], globalCtx->cameraPtrs[srcCamId2]);
+}
+
+s32 func_80169A50(GlobalContext* globalCtx, s16 camId, Player* player, s16 setting) {
+    Camera* camera;
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
+
+    camera = globalCtx->cameraPtrs[camIdx];
+    Camera_InitPlayerSettings(camera, player);
+    return Camera_ChangeSetting(camera, setting);
+}
+
+s32 Play_CameraChangeSetting(GlobalContext* globalCtx, s16 camId, s16 setting) {
+    return Camera_ChangeSetting(Play_GetCamera(globalCtx, camId), setting);
+}
+
+void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
+    s16 i;
+
+    Play_ClearCamera(globalCtx, camIdx);
+
+    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
+        if (globalCtx->cameraPtrs[i] != NULL) {
+            Play_ClearCamera(globalCtx, i);
+        }
+    }
+
+    if (arg2 <= 0) {
+        Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
+        globalCtx->cameraPtrs[CAM_ID_MAIN]->childCamId = globalCtx->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = CAM_ID_MAIN;
+    }
+}
+
+s16 Play_CameraGetUID(GlobalContext* globalCtx, s16 camId) {
+    Camera* camera = globalCtx->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return camera->uid;
+    } else {
+        return -1;
+    }
+}
+
+s16 func_80169BF8(GlobalContext* globalCtx, s16 camId, s16 arg2) {
+    Camera* camera = globalCtx->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return 0;
+    } else if (camera->uid != arg2) {
+        return 0;
+    } else if (camera->status != CAM_STATUS_ACTIVE) {
+        return 2;
+    } else {
+        return 1;
+    }
+}
+
+u16 Play_GetCsCamDataSetting(GlobalContext* globalCtx, s32 camId) {
+    CsCamData* csCamData = &globalCtx->csCamData[camId];
+
+    return csCamData->setting;
+}
+
+Vec3s* Play_GetCsCamDataVec3s(GlobalContext* globalCtx, s32 camId) {
+    CsCamData* csCamData = &globalCtx->csCamData[camId];
+
+    return Lib_SegmentedToVirtual(csCamData->data);
+}
 
 /**
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first

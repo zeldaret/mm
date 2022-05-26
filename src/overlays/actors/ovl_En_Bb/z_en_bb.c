@@ -692,7 +692,7 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         currentMatrixState = Matrix_GetCurrent();
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_RotateYS(
-            ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
+            ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamId]) - this->actor.shape.rot.y) + 0x8000),
             MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);

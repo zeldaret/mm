@@ -2519,7 +2519,7 @@ asm/non_matchings/code/z_play/Play_LoadScene.s,Play_LoadScene,0x80169220,0x17
 asm/non_matchings/code/z_play/func_8016927C.s,func_8016927C,0x8016927C,0x12
 asm/non_matchings/code/z_play/func_801692C4.s,func_801692C4,0x801692C4,0x44
 asm/non_matchings/code/z_play/Play_SceneInit.s,Play_SceneInit,0x801693D4,0x28
-asm/non_matchings/code/z_play/func_80169474.s,func_80169474,0x80169474,0x1A
+asm/non_matchings/code/z_play/Play_GetScreenPos.s,Play_GetScreenPos,0x80169474,0x1A
 asm/non_matchings/code/z_play/Play_CreateSubCamera.s,Play_CreateSubCamera,0x801694DC,0x2A
 asm/non_matchings/code/z_play/Play_GetActiveCamId.s,Play_GetActiveCamId,0x80169584,0x3
 asm/non_matchings/code/z_play/Play_CameraChangeStatus.s,Play_CameraChangeStatus,0x80169590,0x1C

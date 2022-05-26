@@ -555,7 +555,8 @@ s32 Camera_Normal3(Camera* camera) {
 
         D_801EDC30[camera->camId].yaw = D_801EDC30[camera->camId].pitch = D_801EDC30[camera->camId].unk_64 = 0;
         D_801EDC30[camera->camId].swingUpdateRate = fixedData->yawUpdateRateInv;
-        dynamicData->yawUpdateRate = BINANG_SUB(BINANG_ROT180(camera->trackActorPosRot.rot.y), sp70.yaw) * (1.0f / 6.0f);
+        dynamicData->yawUpdateRate =
+            BINANG_SUB(BINANG_ROT180(camera->trackActorPosRot.rot.y), sp70.yaw) * (1.0f / 6.0f);
         dynamicData->distTimer = 0;
         dynamicData->is1200 = 1200;
 
@@ -1009,9 +1010,10 @@ s32 Camera_Parallel1(Camera* camera) {
             case (PARA1_FLG_4 | PARA1_FLG_2):
                 if (dynamicData->unk_24 == 1) {
                     OLib_Vec3fDiffToVecSphGeo(&sp88, &dynamicData->unk_10, &spA4);
-                    dynamicData->unk_1E = ((ABS(BINANG_SUB(sp88.yaw, sp80.yaw)) < 0x3A98) || Camera_IsClimbingLedge(camera))
-                                              ? sp80.yaw
-                                              : sp80.yaw + (s16)((BINANG_SUB(sp88.yaw, sp80.yaw) >> 2) * 3);
+                    dynamicData->unk_1E =
+                        ((ABS(BINANG_SUB(sp88.yaw, sp80.yaw)) < 0x3A98) || Camera_IsClimbingLedge(camera))
+                            ? sp80.yaw
+                            : sp80.yaw + (s16)((BINANG_SUB(sp88.yaw, sp80.yaw) >> 2) * 3);
                 }
                 dynamicData->unk_20 = fixedData->unk_20;
                 break;
@@ -2858,7 +2860,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                         spA2 = DEGF_TO_BINANG(fixedData->unk_08);
                         sp9E = Camera_CalcXZAngle(&sp4C.pos, &sp38->pos);
                         spA0 = (BINANG_SUB(sp9E, spA8.yaw) > 0) ? sp9E + DEGF_TO_BINANG(fixedData->unk_0C)
-                                                           : sp9E - DEGF_TO_BINANG(fixedData->unk_0C);
+                                                                : sp9E - DEGF_TO_BINANG(fixedData->unk_0C);
                         spCC[1] = camera->target;
                         sp9C++;
                         break;

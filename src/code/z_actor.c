@@ -389,13 +389,9 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     }
 }
 
-void Actor_GetProjectedPos(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, arg1, arg2, arg3);
-    if (*arg3 < 1.0f) {
-        *arg3 = 1.0f;
-    } else {
-        *arg3 = 1.0f / *arg3;
-    }
+void Actor_GetProjectedPos(GlobalContext* globalCtx, Vec3f* src, Vec3f* xyzDest, f32* cappedInvWDest) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, src, xyzDest, cappedInvWDest);
+    *cappedInvWDest = (*cappedInvWDest < 1.0f) ? 1.0f : (1.0f / *cappedInvWDest);
 }
 
 void Target_SetPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
@@ -480,7 +476,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
             f32 var1 = 1.0f;
             Vec3f spBC;
             s32 spB8;
-            f32 spB4;
+            f32 cappedInvW;
             s32 spB0;
             s32 spAC;
             f32 var2;
@@ -503,13 +499,13 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                 alpha = targetCtx->unk48;
             }
 
-            Actor_GetProjectedPos(globalCtx, &targetCtx->targetCenterPos, &spBC, &spB4);
+            Actor_GetProjectedPos(globalCtx, &targetCtx->targetCenterPos, &spBC, &cappedInvW);
 
-            spBC.x = (160 * (spBC.x * spB4)) * var1;
-            spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
+            spBC.x = ((SCREEN_WIDTH / 2) * (spBC.x * cappedInvW)) * var1;
+            spBC.x = CLAMP(spBC.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-            spBC.y = (120 * (spBC.y * spB4)) * var1;
-            spBC.y = CLAMP(spBC.y, -240.0f, 240.0f);
+            spBC.y = ((SCREEN_HEIGHT / 2) * (spBC.y * cappedInvW)) * var1;
+            spBC.y = CLAMP(spBC.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
             spBC.z = spBC.z * var1;
 
@@ -587,8 +583,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     Actor* sp68 = NULL;
     s32 category;
-    Vec3f sp58;
-    f32 sp54;
+    Vec3f projectedPos;
+    f32 cappedInvW;
 
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -640,8 +636,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &sp58, &sp54);
-        if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
+        Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &projectedPos, &cappedInvW);
+        if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * cappedInvW) >= 1.0f) ||
+            (fabsf(projectedPos.y * cappedInvW) >= 1.0f)) {
             actor = NULL;
         }
     }
@@ -1966,21 +1963,23 @@ s32 func_800B886C(Actor* actor, GlobalContext* globalCtx) {
 
 void Actor_GetScreenPos(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
     Vec3f projectedPos;
-    f32 w;
+    f32 cappedInvW;
 
-    Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &projectedPos, &w);
-    *x = (projectedPos.x * w * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &projectedPos, &cappedInvW);
+
+    *x = (projectedPos.x * cappedInvW * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
+    *y = (projectedPos.y * cappedInvW * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
 }
 
 s32 func_800B8934(GlobalContext* globalCtx, Actor* actor) {
-    Vec3f sp2C;
-    f32 sp28;
+    Vec3f projectedPos;
+    f32 cappedInvW;
     s32 pad[2];
 
-    Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &sp2C, &sp28);
+    Actor_GetProjectedPos(globalCtx, &actor->focus.pos, &projectedPos, &cappedInvW);
 
-    return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
+    return (projectedPos.x * cappedInvW >= -1.0f) && (projectedPos.x * cappedInvW <= 1.0f) &&
+           (projectedPos.y * cappedInvW >= -1.0f) && (projectedPos.y * cappedInvW <= 1.0f);
 }
 
 s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {

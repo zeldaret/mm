@@ -2445,7 +2445,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000),
+                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamId]) * (M_PI / 0x8000),
                                 MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&globalCtx->billboardMtxF);

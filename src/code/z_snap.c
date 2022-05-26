@@ -107,9 +107,9 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* worldPos, Vec3s* rot, f32 distanceMin,
                   f32 distanceMax, s16 angleError) {
-    Vec3f screenSpace;
+    Vec3f projectedPos;
     s16 x;
     s16 y;
     f32 distance;
@@ -119,7 +119,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s32 ret = 0;
     s32 bgId;
 
-    distance = OLib_Vec3fDist(pos, &camera->eye);
+    distance = OLib_Vec3fDist(worldPos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
         func_8013A41C(0x3F);
         ret = 0x3F;
@@ -132,23 +132,23 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3E;
     }
 
-    Actor_GetProjectedPos(globalCtx, pos, &screenSpace, &distance);
-    x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
-    y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
+    Actor_GetProjectedPos(globalCtx, worldPos, &projectedPos, &distance);
+    x = (s16)(projectedPos.x * distance * (SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 2)) - 85;
+    y = (s16)(projectedPos.y * distance * -(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 2)) - 67;
     if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {
         func_8013A41C(0x3D);
         ret |= 0x3D;
     }
 
-    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
-                                   &bgId)) {
+    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, worldPos, &camera->eye, &projectedPos, &poly, true, true, true,
+                                   true, &bgId)) {
         func_8013A41C(0x3C);
         ret |= 0x3C;
     }
 
     actors[0] = actor;
     actors[1] = &GET_PLAYER(globalCtx)->actor;
-    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, pos, &camera->eye, actors, 2)) {
+    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, worldPos, &camera->eye, actors, 2)) {
         func_8013A41C(0x3B);
         ret |= 0x3B;
     }

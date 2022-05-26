@@ -3005,7 +3005,7 @@
     0x8016927C:("func_8016927C",),
     0x801692C4:("func_801692C4",),
     0x801693D4:("Play_SceneInit",),
-    0x80169474:("func_80169474",),
+    0x80169474:("Play_GetScreenPos",),
     0x801694DC:("Play_CreateSubCamera",),
     0x80169584:("Play_GetActiveCamId",),
     0x80169590:("Play_CameraChangeStatus",),

@@ -1212,7 +1212,7 @@ struct GlobalContext {
     /* 0x00220 */ Camera mainCamera;
     /* 0x00398 */ Camera subCameras[NUM_CAMS - CAM_ID_SUB_FIRST];
     /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
-    /* 0x00810 */ s16 activeCamera;
+    /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
     /* 0x00814 */ SoundContext soundCtx;
     /* 0x00818 */ LightContext lightCtx;

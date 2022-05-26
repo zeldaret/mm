@@ -528,7 +528,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
             worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(globalCtx, &worldPos, &screenPos);
 
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
@@ -617,7 +617,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
             worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(globalCtx, &worldPos, &screenPos);
 
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&

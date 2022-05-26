@@ -936,12 +936,13 @@ void func_80AA1704(DmStk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
     if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
-        func_80169474(globalCtx, &this->actor.world.pos, &sp1C);
+        Play_GetScreenPos(globalCtx, &this->actor.world.pos, &screenPos);
         if (globalCtx->view.fovy < 25.0f) {
-            if ((sp1C.x >= 70.0f) && (sp1C.x < 250.0f) && (sp1C.y >= 30.0f) && (sp1C.y < 210.0f)) {
+            if ((screenPos.x >= 70.0f) && (screenPos.x < (SCREEN_WIDTH - 70.0f)) && (screenPos.y >= 30.0f) &&
+                (screenPos.y < (SCREEN_HEIGHT - 30.0f))) {
                 func_800FE484();
                 this->actionFunc = func_80AA17F8;
             }
