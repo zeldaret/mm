@@ -25,6 +25,15 @@
         <Texture Name="object_zl4_Tex_002970" OutName="tex_002970" Format="rgba16" Width="8" Height="8" Offset="0x2970" />
         <Texture Name="object_zl4_Tex_0029F0" OutName="tex_0029F0" Format="rgba16" Width="16" Height="8" Offset="0x29F0" />
         <!-- <Blob Name="object_zl4_Blob_002AF0" Size="0x2C00" Offset="0x2AF0" /> -->
+        <!-- Mouth Textures -->
+        <!-- THESE ARE PORTED Im hoping I can keep using these but they are untested-->
+        <!-- todo: wrong tlut and wrong names -->
+        <Texture Name="gZl4MouthNeutralTex" OutName="mouth_neutral" Format="ci8" Width="32" Height="32" Offset="0x46F0" TlutOffset="0x870"/>
+        <Texture Name="gZl4MouthFrowningTex" OutName="mouth_frowning" Format="ci8" Width="32" Height="32" Offset="0x4AF0" TlutOffset="0x870"/>
+        <Texture Name="gZl4MouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4EF0" TlutOffset="0x870"/>
+        <Texture Name="gZl4MouthOpenSmilingTex" OutName="mouth_open_smiling" Format="ci8" Width="32" Height="32" Offset="0x52F0" TlutOffset="0x870"/>
+
+
         <Texture Name="object_zl4_Tex_0056F0" OutName="tex_0056F0" Format="rgba16" Width="16" Height="16" Offset="0x56F0" />
         <Texture Name="object_zl4_Tex_0058F0" OutName="tex_0058F0" Format="ci8" Width="16" Height="16" Offset="0x58F0" />
         <Texture Name="object_zl4_Tex_0059F0" OutName="tex_0059F0" Format="rgba16" Width="8" Height="8" Offset="0x59F0" />
@@ -50,7 +59,7 @@
         <DList Name="object_zl4_DL_00D728" Offset="0xD728" />
         <DList Name="object_zl4_DL_00D778" Offset="0xD778" />
         <Texture Name="object_zl4_Tex_00D8B8" OutName="tex_00D8B8" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
-        <DList Name="object_zl4_DL_00DE08" Offset="0xDE08" />
+        <DList Name="gDl4OcarinaDl" Offset="0xDE08" />
         <Limb Name="object_zl4_Standardlimb_00DF28" Type="Standard" EnumName="OBJECT_ZL4_LIMB_01" Offset="0xDF28" />
         <Limb Name="object_zl4_Standardlimb_00DF34" Type="Standard" EnumName="OBJECT_ZL4_LIMB_02" Offset="0xDF34" />
         <Limb Name="object_zl4_Standardlimb_00DF40" Type="Standard" EnumName="OBJECT_ZL4_LIMB_03" Offset="0xDF40" />
@@ -68,7 +77,7 @@
         <Limb Name="object_zl4_Standardlimb_00DFD0" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0F" Offset="0xDFD0" />
         <Limb Name="object_zl4_Standardlimb_00DFDC" Type="Standard" EnumName="OBJECT_ZL4_LIMB_10" Offset="0xDFDC" />
         <Limb Name="object_zl4_Standardlimb_00DFE8" Type="Standard" EnumName="OBJECT_ZL4_LIMB_11" Offset="0xDFE8" />
-        <Skeleton Name="object_zl4_Skel_00E038" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL4_LIMB_NONE" LimbMax="OBJECT_ZL4_LIMB_MAX" EnumName="object_zl4_Limbs" Offset="0xE038" />
+        <Skeleton Name="gZl4Skeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL4_LIMB_NONE" LimbMax="OBJECT_ZL4_LIMB_MAX" EnumName="object_zl4_Limbs" Offset="0xE038" />
         <Animation Name="object_zl4_Anim_00F250" Offset="0xF250" />
         <Animation Name="object_zl4_Anim_00FDC8" Offset="0xFDC8" />
         <Animation Name="object_zl4_Anim_010334" Offset="0x10334" />
