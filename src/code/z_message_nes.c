@@ -193,29 +193,32 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
-    u32 dayTime;
+    u32 timeLeft;
     s16 digits[4];
-    f32 timeInMinutes;
-    s32 day;
+    f32 timeLeftInMinutes;
     s16 i;
 
     if (arg1 == 0xCF) {
-        day = gSaveContext.save.day;
-        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.save.time);
+        // Calculates the time left before the moon crashes.
+        // The day begins at CLOCK_TIME(6, 0) so it must be offset.
+        timeLeft = (4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
     } else {
-        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.save.time);
+        // Calculates the time left before a new day.
+        // The day begins at CLOCK_TIME(6, 0) so it must be offset.
+        timeLeft = DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
     }
-    timeInMinutes = TIME_TO_MINUTES_F(dayTime);
+
+    timeLeftInMinutes = TIME_TO_MINUTES_F(timeLeft);
 
     digits[0] = 0;
-    digits[1] = (timeInMinutes / 60.0f);
+    digits[1] = (timeLeftInMinutes / 60.0f);
     while (digits[1] >= 10) {
         digits[0]++;
         digits[1] -= 10;
     }
 
     digits[2] = 0;
-    digits[3] = (s32)timeInMinutes % 60;
+    digits[3] = (s32)timeLeftInMinutes % 60;
     while (digits[3] >= 10) {
         digits[2]++;
         digits[3] -= 10;

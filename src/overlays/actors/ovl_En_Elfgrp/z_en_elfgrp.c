@@ -177,14 +177,11 @@ void EnElfgrp_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80A39BD0(GlobalContext* globalCtx, s32 arg2) {
-    s8 sp1F;
-
     if ((arg2 < 1) || (arg2 >= 5)) {
         return 0;
     }
 
-    sp1F = gSaveContext.save.inventory.strayFairies[arg2 - 1];
-    return (sp1F - func_80A39C1C(globalCtx, arg2)) + 10;
+    return (((void)0, gSaveContext.save.inventory.strayFairies[arg2 - 1]) - func_80A39C1C(globalCtx, arg2)) + 10;
 }
 
 s32 func_80A39C1C(GlobalContext* globalCtx, s32 arg1) {

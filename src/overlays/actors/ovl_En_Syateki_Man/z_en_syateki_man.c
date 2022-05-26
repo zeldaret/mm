@@ -1097,26 +1097,19 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
     };
     static s32 D_809C94A8 = 0;
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp30;
-    s32 pad;
-    u64 sp20;
-
-    sp20 = gSaveContext.unk_3DE0[1];
-    sp30 = (sp20 * 0.1f) + 1.0f;
+    s32 sp30 = (((void)0, gSaveContext.unk_3DE0[1]) * 0.1f) + 1.0f;
 
     if (sp30 < 0x2EF) {
         s32 temp;
 
-        // clang-format off
         if (D_809C94A8 == 0) {
-            sp20 = gSaveContext.unk_3DE0[1]; temp = sp20 % 0x1F4;
+            temp = ((void)0, gSaveContext.unk_3DE0[1]) % 500;
         } else {
-            sp20 = gSaveContext.unk_3DE0[1]; temp = (sp20 + 250) % 0x1F4;
+            temp = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 500;
         }
-        //clang-format on
 
         if (temp < 100) {
-            this->unk_26C = 0x50;
+            this->unk_26C = 80;
         }
 
         if (this->unk_26E != 0) {
@@ -1292,7 +1285,7 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
+                          EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
