@@ -110,7 +110,7 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
     s16 phi_t0;
 
     Matrix_Push();
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     temp_fs0 = 0.0f;
     phi_fs1 = 0.0f;
 
