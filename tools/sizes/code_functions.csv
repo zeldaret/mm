@@ -110,10 +110,10 @@ asm/non_matchings/code/z_effect_soft_sprite_old_init/func_800B139C.s,func_800B13
 asm/non_matchings/code/z_effect_soft_sprite_old_init/func_800B13D8.s,func_800B13D8,0x800B13D8,0x3F
 asm/non_matchings/code/z_effect_soft_sprite_old_init/func_800B14D4.s,func_800B14D4,0x800B14D4,0x31
 asm/non_matchings/code/z_effect_soft_sprite_old_init/func_800B1598.s,func_800B1598,0x800B1598,0x31
-asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKiraKira_SpawnSmallYellow.s,EffectSsKiraKira_SpawnSmallYellow,0x800B165C,0x17
-asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKiraKira_SpawnSmall.s,EffectSsKiraKira_SpawnSmall,0x800B16B8,0xF
-asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKiraKira_SpawnDispersed.s,EffectSsKiraKira_SpawnDispersed,0x800B16F4,0x4F
-asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKiraKira_SpawnFocused.s,EffectSsKiraKira_SpawnFocused,0x800B1830,0x36
+asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKirakira_SpawnSmallYellow.s,EffectSsKirakira_SpawnSmallYellow,0x800B165C,0x17
+asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKirakira_SpawnSmall.s,EffectSsKirakira_SpawnSmall,0x800B16B8,0xF
+asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKirakira_SpawnDispersed.s,EffectSsKirakira_SpawnDispersed,0x800B16F4,0x4F
+asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsKirakira_SpawnFocused.s,EffectSsKirakira_SpawnFocused,0x800B1830,0x36
 asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsBomb2_SpawnFade.s,EffectSsBomb2_SpawnFade,0x800B1908,0x1A
 asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsBomb2_SpawnLayered.s,EffectSsBomb2_SpawnLayered,0x800B1970,0x1C
 asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsBlast_Spawn.s,EffectSsBlast_Spawn,0x800B19E0,0x24
@@ -2173,7 +2173,7 @@ asm/non_matchings/code/z_sub_s/SubS_FindDoor.s,SubS_FindDoor,0x8013A7C0,0x28
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC
-asm/non_matchings/code/z_sub_s/func_8013AD9C.s,func_8013AD9C,0x8013AD9C,0x4E
+asm/non_matchings/code/z_sub_s/SubS_UpdateLimb.s,SubS_UpdateLimb,0x8013AD9C,0x4E
 asm/non_matchings/code/z_sub_s/SubS_UpdateFlags.s,SubS_UpdateFlags,0x8013AED4,0xB
 asm/non_matchings/code/z_sub_s/func_8013AF00.s,func_8013AF00,0x8013AF00,0x44
 asm/non_matchings/code/z_sub_s/func_8013B010.s,func_8013B010,0x8013B010,0x2E
@@ -2193,8 +2193,8 @@ asm/non_matchings/code/z_sub_s/func_8013C964.s,func_8013C964,0x8013C964,0xB2
 asm/non_matchings/code/z_sub_s/SubS_FillShadowTex.s,SubS_FillShadowTex,0x8013CC2C,0x4E
 asm/non_matchings/code/z_sub_s/SubS_GenShadowTex.s,SubS_GenShadowTex,0x8013CD64,0x68
 asm/non_matchings/code/z_sub_s/SubS_DrawShadowTex.s,SubS_DrawShadowTex,0x8013CF04,0x77
-asm/non_matchings/code/z_sub_s/func_8013D0E0.s,func_8013D0E0,0x8013D0E0,0x80
-asm/non_matchings/code/z_sub_s/func_8013D2E0.s,func_8013D2E0,0x8013D2E0,0xC2
+asm/non_matchings/code/z_sub_s/SubS_ComputeTurnToPointRot.s,SubS_ComputeTurnToPointRot,0x8013D0E0,0x80
+asm/non_matchings/code/z_sub_s/SubS_TurnToPoint.s,SubS_TurnToPoint,0x8013D2E0,0xC2
 asm/non_matchings/code/z_sub_s/SubS_AngleDiffLessEqual.s,SubS_AngleDiffLessEqual,0x8013D5E8,0x18
 asm/non_matchings/code/z_sub_s/SubS_GetPathByIndex.s,SubS_GetPathByIndex,0x8013D648,0x11
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPath.s,SubS_CopyPointFromPath,0x8013D68C,0x25
@@ -2223,7 +2223,7 @@ asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x801
 asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerFaceEachOther.s,SubS_ActorAndPlayerFaceEachOther,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
-asm/non_matchings/code/z_sub_s/func_8013E950.s,func_8013E950,0x8013E950,0xB0
+asm/non_matchings/code/z_sub_s/SubS_TurnToPointStep.s,SubS_TurnToPointStep,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/func_8013EC10.s,func_8013EC10,0x8013EC10,0xD
 asm/non_matchings/code/code_8013EC10/func_8013EC44.s,func_8013EC44,0x8013EC44,0x27
 asm/non_matchings/code/code_8013EC10/func_8013ECE0.s,func_8013ECE0,0x8013ECE0,0x2F

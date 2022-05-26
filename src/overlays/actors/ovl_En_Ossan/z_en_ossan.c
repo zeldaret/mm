@@ -1277,7 +1277,7 @@ void EnOssan_UpdateCursorAnim(EnOssan* this) {
 void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;

@@ -176,7 +176,7 @@ void EnElforg_SpawnSparkles(EnElforg* this, GlobalContext* globalCtx, s32 life) 
     index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
-    EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAcceleration, &sPrimColors[index],
+    EffectSsKirakira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAcceleration, &sPrimColors[index],
                                     &sEnvColors[index], 1000, life);
 }
 

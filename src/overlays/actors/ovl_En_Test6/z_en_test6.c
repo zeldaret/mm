@@ -237,7 +237,7 @@ void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 210, 210, 230, 128);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
     gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+    gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
     gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -289,7 +289,7 @@ void func_80A90FC0(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 220, 220, 230, 192);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 0);
     gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+    gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
     gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

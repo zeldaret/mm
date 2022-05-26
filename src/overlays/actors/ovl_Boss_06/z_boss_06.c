@@ -4,6 +4,7 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -510,7 +511,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     u16 pad;
     u8 spD3;
     u8 spD2;
-    s32 maxColor = 255; // Possible FAKE MATCH
+    s32 maxColor = 255; //! FAKE:
     f32 sp68;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -520,7 +521,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     temp_v0 = gSaveContext.save.time;
     if (temp_v0 > CLOCK_TIME(12, 0)) {
-        temp_v0 = 0xFFFF - temp_v0;
+        temp_v0 = (DAY_LENGTH - 1) - temp_v0;
     }
     sp68 = (f32)temp_v0 / 0x8000;
     spD3 = ((10.0f * sp68) + 105.0f) * this->unk_19C;

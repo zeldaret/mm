@@ -652,9 +652,8 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
     }
 
     if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.magicAcquired) {
-        s16 temp = gSaveContext.unk_3F30;
-
-        Parameter_AddMagic(globalCtx, temp + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+        Parameter_AddMagic(globalCtx,
+                           ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
     }
 
     func_80962F10(this);

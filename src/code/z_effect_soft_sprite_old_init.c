@@ -206,21 +206,21 @@ void func_800B1598(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos) {
     }
 }
 
-void EffectSsKiraKira_SpawnSmallYellow(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
+void EffectSsKirakira_SpawnSmallYellow(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
     Color_RGBA8 primColor = { 255, 255, 200, 255 };
     Color_RGBA8 envColor = { 255, 200, 0, 0 };
 
-    EffectSsKiraKira_SpawnDispersed(globalCtx, pos, velocity, accel, &primColor, &envColor, 1000, 16);
+    EffectSsKirakira_SpawnDispersed(globalCtx, pos, velocity, accel, &primColor, &envColor, 1000, 16);
 }
 
-void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
+void EffectSsKirakira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                  Color_RGBA8* primColor, Color_RGBA8* envColor) {
-    EffectSsKiraKira_SpawnDispersed(globalCtx, pos, velocity, accel, primColor, envColor, 1000, 16);
+    EffectSsKirakira_SpawnDispersed(globalCtx, pos, velocity, accel, primColor, envColor, 1000, 16);
 }
 
-void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
+void EffectSsKirakira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                      Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life) {
-    EffectSsKiraKiraInitParams initParams;
+    EffectSsKirakiraInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
@@ -239,9 +239,9 @@ void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f
     EffectSs_Spawn(globalCtx, EFFECT_SS_KIRAKIRA, 128, &initParams);
 }
 
-void EffectSsKiraKira_SpawnFocused(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
+void EffectSsKirakira_SpawnFocused(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                    Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life) {
-    EffectSsKiraKiraInitParams initParams;
+    EffectSsKirakiraInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);

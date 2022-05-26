@@ -403,24 +403,24 @@ void EnShn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnShn* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_1D8 & 0x20)) {
         if (this->unk_1D8 & 0x10) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
     if (limbIndex == BURLY_GUY_LIMB_HEAD) {
-        func_8013AD9C((this->unk_2BA + 0x4000), (this->unk_2BC + this->actor.shape.rot.y + 0x4000), &this->unk_1E8,
-                      &this->unk_1F4, phi_v0, phi_v1);
+        SubS_UpdateLimb(this->unk_2BA + 0x4000, this->unk_2BC + this->actor.shape.rot.y + 0x4000, &this->unk_1E8,
+                        &this->unk_1F4, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->unk_1E8.x, this->unk_1E8.y, this->unk_1E8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

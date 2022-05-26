@@ -269,7 +269,7 @@ void func_80B3B4B0(EnGg2* this, GlobalContext* globalCtx) {
         sp64.x = (Rand_Centered() * 50.0f) + this->unk_304.x;
         sp64.y = this->unk_304.y;
         sp64.z = (Rand_Centered() * 50.0f) + this->unk_304.z;
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp64, &D_80B3C088, &D_80B3C094, &sp60, &sp5C, 3000, 40);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp64, &D_80B3C088, &D_80B3C094, &sp60, &sp5C, 3000, 40);
     }
 }
 

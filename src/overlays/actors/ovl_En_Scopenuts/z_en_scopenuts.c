@@ -331,7 +331,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (Message_ShouldAdvance(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.playerData.rupees < this->unk_358) {

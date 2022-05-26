@@ -2010,30 +2010,30 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGo* this = THIS;
     u16 temp_v0;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (this->unk_390 & 0x40) {
-        phi_v1 = false;
+        stepRot = false;
     } else {
-        phi_v1 = true;
+        stepRot = true;
     }
 
     if (this->unk_390 & 0x10) {
-        phi_v0 = true;
+        overrideRot = true;
     } else {
-        phi_v0 = false;
+        overrideRot = false;
     }
 
-    if (!phi_v1) {
-        phi_v0 = false;
+    if (!stepRot) {
+        overrideRot = false;
     }
 
     switch (limbIndex) {
         case 17:
-            func_8013AD9C(this->unk_3B0 + this->unk_3B4 + 0x4000,
-                          this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
-                          &this->unk_2A8, phi_v1, phi_v0);
+            SubS_UpdateLimb(this->unk_3B0 + this->unk_3B4 + 0x4000,
+                            this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
+                            &this->unk_2A8, stepRot, overrideRot);
             Matrix_Pop();
             Matrix_Translate(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -2044,8 +2044,8 @@ void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
             break;
 
         case 10:
-            func_8013AD9C(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
-                          &this->unk_2AE, phi_v1, phi_v0);
+            SubS_UpdateLimb(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
+                            &this->unk_2AE, stepRot, overrideRot);
             Matrix_Pop();
             Matrix_Translate(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

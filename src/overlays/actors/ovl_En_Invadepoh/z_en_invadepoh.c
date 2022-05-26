@@ -3,6 +3,8 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
+
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -872,9 +874,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 }
 
 void func_80B442E4(EnInvadepoh* this) {
-    s32 pad;
-    s32 sp18 = gSaveContext.save.time;
-    s32 temp_v1_2 = sp18 - func_80B43A24(this->actor.params & 7);
+    s32 temp_v1_2 = ((void)0, (s32)gSaveContext.save.time) - func_80B43A24(this->actor.params & 7);
 
     if (D_80B4E940 == 1) {
         this->clockTime = 0.0f;
@@ -999,6 +999,7 @@ void func_80B44700(EnInvadepoh* this) {
         this->clockTime = 1.0f;
     } else {
         f32 new_var = 0.00153374229558f;
+
         this->clockTime = (currentTime + new_var4) * new_var;
         this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }
@@ -1576,7 +1577,7 @@ void func_80B45EC8(EnInvadepoh* this, GlobalContext* globalCtx, s32 arg2) {
         spA8.y = ((Rand_ZeroOne() * 180.0f) + this->actor.world.pos.y) - 90.0f;
         spA8.z = (spA8.z * 100.0f) + this->actor.world.pos.z;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &spA8, &sp9C, &sp90, &D_80B4EC18, &D_80B4EC1C, 6000, -40);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &spA8, &sp9C, &sp90, &D_80B4EC18, &D_80B4EC1C, 6000, -40);
     }
 }
 

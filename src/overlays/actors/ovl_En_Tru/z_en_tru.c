@@ -1195,32 +1195,32 @@ void EnTru_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTru* this = THIS;
     s32 pad[3];
-    s32 sp2C;
-    s32 phi_v1;
+    s32 overrideRot;
+    s32 stepRot;
 
     if (this->unk_34E & 0x10) {
-        phi_v1 = false;
+        stepRot = false;
     } else {
-        phi_v1 = true;
+        stepRot = true;
     }
 
     if (this->unk_34E & 0x20) {
-        sp2C = true;
+        overrideRot = true;
     } else {
-        sp2C = false;
+        overrideRot = false;
     }
 
-    if (!phi_v1) {
-        sp2C = false;
+    if (!stepRot) {
+        overrideRot = false;
     }
 
     if (limbIndex == 21) {
-        func_8013AD9C(this->unk_366, this->unk_368 + this->actor.shape.rot.y, &this->unk_1EC, &this->unk_204, phi_v1,
-                      sp2C);
+        SubS_UpdateLimb(this->unk_366, this->unk_368 + this->actor.shape.rot.y, &this->unk_1EC, &this->unk_204, stepRot,
+                        overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        if (sp2C) {
+        if (overrideRot) {
             s16 oldZ = this->unk_204.z;
 
             this->unk_204.z = this->unk_204.x;

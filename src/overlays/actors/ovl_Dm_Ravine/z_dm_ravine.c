@@ -29,9 +29,10 @@ const ActorInit Dm_Ravine_InitVars = {
 };
 
 void DmRavine_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     DmRavine* this = THIS;
-    u8 flag = gSaveContext.save.weekEventReg[0];
-    if (((flag & 0x10) | cREG(0)) != 0) {
+
+    if (((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) != 0) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

@@ -739,24 +739,22 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     Gfx* phi_s7;
     Vec3f sp100;
     Vec3f spF4;
     Vec3f spE8;
     f32 temp_f20;
-    s32 phi_fp;
+    f32 spB0;
     s32 j;
     s32 i;
     s32 phi_s0;
     s32 spD0;
     s16 spCE;
-    s16 spC8;
-    f32 spB0;
-    f32 spAC;
     s16 spA8;
+    s16 phi_fp;
+    s16 spC8;
+    f32 spAC;
 
     spD0 = (s32)(arg5 * 35.0f) + 6;
     temp_f20 = (arg5 + 0.1f) * 0.5f;
@@ -815,10 +813,6 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
         }
     }
 }
-#else
-void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_80940588.s")
-#endif
 
 void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     s32 i;

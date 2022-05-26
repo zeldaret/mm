@@ -397,7 +397,8 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (type == OBJSWITCH_TYPE_EYE) {
         if (sIsSegmentTableInit == false) {
-            s32 i, j;
+            s32 i;
+            s32 j;
 
             sIsSegmentTableInit = true;
 

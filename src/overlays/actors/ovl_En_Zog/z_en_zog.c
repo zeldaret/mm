@@ -398,7 +398,7 @@ void func_80B93DE8(Vec3f* arg0, GlobalContext* globalCtx, s32 arg2) {
     sp2C.x = randPlusMinusPoint5Scaled(30.0f) + arg0->x;
     sp2C.y = arg0->y + 3.0f;
     sp2C.z = randPlusMinusPoint5Scaled(30.0f) + arg0->z;
-    EffectSsKiraKira_SpawnDispersed(globalCtx, &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, 1000, arg2);
+    EffectSsKirakira_SpawnDispersed(globalCtx, &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, 1000, arg2);
 }
 
 s32 func_80B93EA0(EnZog* this, GlobalContext* globalCtx) {

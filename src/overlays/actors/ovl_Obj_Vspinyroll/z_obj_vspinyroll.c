@@ -141,15 +141,15 @@ void func_80A3C7E8(ObjVspinyroll* this) {
     s32 index = D_80A3D450[OBJVSPINYROLL_GET_4000(&this->dyna.actor)] * 120.0f * (1.0f / 58.0f);
 
     index += 2;
-    this->unk_38C = index * 4;
+    this->unk_1A8.unk_1E4 = index * 4;
 
     tempf = ((D_80A3D450[OBJVSPINYROLL_GET_4000(&this->dyna.actor)] * 120.0f) - 2.0f) / (index - 1);
     phi_f2 = 1.0f;
 
-    for (i = 0, j = 0; i < this->unk_38C; i++) {
-        this->unk_1A8[i].unk_00.x = D_80A3D4C4[j];
-        this->unk_1A8[i].unk_00.y = phi_f2;
-        this->unk_1A8[i].unk_00.z = D_80A3D4B4[j];
+    for (i = 0, j = 0; i < this->unk_1A8.unk_1E4; i++) {
+        this->unk_1A8.unk_000[i].unk_00.x = D_80A3D4C4[j];
+        this->unk_1A8.unk_000[i].unk_00.y = phi_f2;
+        this->unk_1A8.unk_000[i].unk_00.z = D_80A3D4B4[j];
 
         j++;
         if (j >= 4) {
@@ -159,11 +159,10 @@ void func_80A3C7E8(ObjVspinyroll* this) {
     }
 }
 
-#ifdef NON_MATCHING
 s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3) {
     s32 pad;
-    ObjVspinyrollStruct2* ptr = &this->unk_1A8[0];
-    s32 pad2;
+    ObjVspinyrollStruct3* unk_1A8 = &this->unk_1A8;
+    ObjVspinyrollStruct2* ptr;
     s32 i;
     Vec3f spE4;
     Vec3f spD8;
@@ -177,9 +176,11 @@ s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s3
 
     spE4.z = 0.0f;
     sp9C = false;
-    this->unk_388 = NULL;
+    unk_1A8->unk_1E0 = NULL;
 
-    for (i = 0; i < this->unk_38C; i++, ptr++) {
+    for (i = 0; i < unk_1A8->unk_1E4; i++) {
+        ptr = &unk_1A8->unk_000[i];
+
         spE4.x = ptr->unk_00.x;
         spE4.y = ptr->unk_00.y;
         func_80A3C4E0(&spD8, &spE4, this->dyna.actor.world.rot.y);
@@ -193,8 +194,8 @@ s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s3
         spCC.x += 30.0f * this->unk_3B4.x;
         spCC.z += 30.0f * this->unk_3B4.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spD8, &spCC, &spC0, &this->unk_1A8[i].collisionPoly, true,
-                                    false, false, true, &this->unk_1A8[i].bgId, &this->dyna.actor, 0.0f)) {
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spD8, &spCC, &spC0, &unk_1A8->unk_000[i].collisionPoly, true,
+                                    false, false, true, &unk_1A8->unk_000[i].bgId, &this->dyna.actor, 0.0f)) {
             if ((arg3 != 0) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
                 spA8.x = ptr->unk_00.x * 0.2f;
                 spA8.y = ptr->unk_00.y;
@@ -215,17 +216,13 @@ s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s3
                 temp_f20 = temp_f0;
                 sp9C = true;
                 Math_Vec3f_Diff(&spC0, &spCC, arg2);
-                this->unk_388 = ptr;
+                unk_1A8->unk_1E0 = ptr;
             }
         }
     }
 
     return sp9C;
 }
-#else
-s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Vspinyroll/func_80A3C8D8.s")
-#endif
 
 s32 func_80A3CB94(ObjVspinyroll* this, GlobalContext* globalCtx, s32 arg2) {
     Vec3f sp1C;
@@ -239,8 +236,8 @@ s32 func_80A3CB94(ObjVspinyroll* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 DynaPolyActor* func_80A3CBF0(ObjVspinyroll* this, GlobalContext* globalCtx) {
-    if (this->unk_388 != NULL) {
-        return DynaPoly_GetActor(&globalCtx->colCtx, this->unk_388->bgId);
+    if (this->unk_1A8.unk_1E0 != NULL) {
+        return DynaPoly_GetActor(&globalCtx->colCtx, this->unk_1A8.unk_1E0->bgId);
     }
     return NULL;
 }

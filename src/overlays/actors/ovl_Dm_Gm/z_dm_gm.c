@@ -301,25 +301,25 @@ void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
 void DmGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     DmGm* this = THIS;
-    s16 phi_v1;
-    s16 phi_v0;
+    s16 stepRot;
+    s16 overrideRot;
 
     if (!(this->unk_2AE & 1)) {
         if (this->unk_2AE & 2) {
-            phi_v0 = 1;
+            overrideRot = true;
         } else {
-            phi_v0 = 0;
+            overrideRot = false;
         }
-        phi_v1 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        stepRot = false;
+        overrideRot = false;
     }
 
     if (limbIndex == OBJECT_AN1_LIMB_09) {
-        func_8013AD9C(this->unk_2BE + this->unk_2C2 + 0x4000,
-                      this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C, &this->unk_1A4,
-                      phi_v1, phi_v0);
+        SubS_UpdateLimb(this->unk_2BE + this->unk_2C2 + 0x4000,
+                        this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C,
+                        &this->unk_1A4, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -328,8 +328,8 @@ void DmGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == OBJECT_AN1_LIMB_02) {
-        func_8013AD9C(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
-                      &this->unk_1AA, phi_v1, phi_v0);
+        SubS_UpdateLimb(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
+                        &this->unk_1AA, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

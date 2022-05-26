@@ -139,8 +139,11 @@ static AnimationInfoS sAnimations[] = {
     { &object_in_Anim_019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
-static u16 D_808F6C0C[] = {
-    4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
+static TurnOptionsSet sTurnOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
 };
 
 s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
@@ -228,24 +231,24 @@ s32 func_808F33B8(void) {
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp30;
+    Vec3f point;
 
     if (this->unk23D == 0) {
         this->unk494 = SkelAnime_Update(&this->skelAnime);
     }
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
-        sp30.x = player->actor.world.pos.x;
-        sp30.y = player->bodyPartsPos[7].y + 3.0f;
-        sp30.z = player->actor.world.pos.z;
-        func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk352, &this->unk358,
-                      &this->unk35E, D_808F6C0C);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                         &this->torsoRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->unk352.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk352.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk358.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk358.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk35E.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk35E.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
     func_808F322C(this, 3);
     func_808F3178(this, globalCtx);
@@ -1541,14 +1544,14 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 16) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk358.y, MTXMODE_APPLY);
-        Matrix_RotateZS(-this->unk358.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {
-        Matrix_RotateYS(this->unk35E.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk35E.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
     if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
