@@ -1,6 +1,7 @@
 ﻿<Root>
+    <!-- Assets for Skull Kid, including a small number of animations. Most animations are in object_stk2 and object_stk3. -->
     <File Name="object_stk" Segment="6">
-        <Animation Name="gSkullKidLookAroundAnim" Offset="0x1030" /> <!-- Original name is "kyoro" (onomatopoeic for "looking all around") -->
+        <Animation Name="gSkullKidLookAroundAnim" Offset="0x1030" /> <!-- Original name is "kyoro" (onomatopoeic for "looking around restlessly") -->
         <Animation Name="gSkullKidCallDownMoonStartAnim" Offset="0x2774" /> <!-- Original name is "sk_moon_hikiyose" ("draw or pull the moon") -->
         <Animation Name="gSkullKidCallDownMoonLoopAnim" Offset="0x3068" /> <!-- Original name is "sk_moon_hikiyose_loop" -->
 
@@ -36,7 +37,7 @@
         <DList Name="gSkullKidHappyEyesDL" Offset="0xAE30" />
         <DList Name="gSkullKidHappyHeadDL" Offset="0xAEC0" />
 
-        <Animation Name="gSkullKidTelescopeLookUpStartAnim" Offset="0xBB2C" /> <!-- Original name is "stk_miageru" -->
+        <Animation Name="gSkullKidTelescopeLookUpStartAnim" Offset="0xBB2C" /> <!-- Original name is "stk_miageru" ("look up") -->
         <Animation Name="gSkullKidTelescopeLookUpLoopAnim" Offset="0xC964" /> <!-- Original name is "stk_miageru_loop" -->
         <DList Name="gSkullKidOcarinaOfTimeDL" Offset="0xCAD0" />
         <Animation Name="gSkullKidTPoseAnim" Offset="0xCC94" /> <!-- Original name is "stk_pause" -->
@@ -101,10 +102,10 @@
         <!-- Skull Kid Skeleton -->
         <Skeleton Name="gSkullKidSkel" Type="Flex" LimbType="Standard" LimbNone="SKULL_KID_LIMB_NONE" LimbMax="SKULL_KID_LIMB_MAX" EnumName="SkullKidLimbs" Offset="0x13328" />
 
-        <Animation Name="gSkullKidHipShakeAndJumpAnim" Offset="0x14920" /> <!-- Original name is "stk_penpen_jump" -->
+        <Animation Name="gSkullKidHipShakeAndJumpAnim" Offset="0x14920" /> <!-- Original name is "stk_penpen_jump" ("spanking") -->
         <Animation Name="gSkullKidSpankAnim" Offset="0x15028" /> <!-- Original name is "stk_penpen_loop" -->
-        <Animation Name="gSkullKidDayThreeTelescopeAnim" Offset="0x15C14" /> <!-- Original name is "stk_rari_loop" -->
-        <Animation Name="gSkullKidDayThreeTelescopeLookUpAnim" Offset="0x16508" /> <!-- Original name is "stk_rarimiage" -->
+        <Animation Name="gSkullKidBentOverHeadTwitchAnim" Offset="0x15C14" /> <!-- Original name is "stk_rari_loop" -->
+        <Animation Name="gSkullKidBentOverLookUpAnim" Offset="0x16508" /> <!-- Original name is "stk_rarimiage" -->
 
         <DList Name="gSkullKidFluteDL" Offset="0x16620" />
 
@@ -130,7 +131,7 @@
         <Texture Name="gSkullKidFluteTex" OutName="skull_kid_flute" Format="rgba16" Width="8" Height="8" Offset="0x1AE20" />
         <Texture Name="gSkullKidFluteHoleTex" OutName="skull_kid_flute_hole" Format="ia16" Width="16" Height="8" Offset="0x1AEA0" />
 
-        <Animation Name="gSkullKidHeadRockingIdleAnim" Offset="0x1C21C" /> <!-- Original name is "wait_1" -->
+        <Animation Name="gSkullKidShakeHeadAnim" Offset="0x1C21C" /> <!-- Original name is "wait_1" -->
         <Animation Name="gSkullKidIdleAnim" Offset="0x1D008" /> <!-- Original name is "wait_2" -->
         <Animation Name="gSkullKidWalkAnim" Offset="0x1D3D0" /> <!-- Original name is "walk" -->
     </File>

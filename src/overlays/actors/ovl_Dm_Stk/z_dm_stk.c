@@ -1,7 +1,7 @@
 /*
  * File: z_dm_stk.c
  * Overlay: ovl_Dm_Stk
- * Description: Skull Kid (cutscene)
+ * Description: Skull Kid. Also Majora's Mask in the Happy Mask Salesman's spiel
  */
 
 #include "z_dm_stk.h"
@@ -34,117 +34,117 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx);
 void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx);
 
 typedef enum {
-    /*  0 */ SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE,
-    /*  1 */ SKULL_KID_ANIMATION_WALK,
-    /*  2 */ SKULL_KID_ANIMATION_LOOK_AROUND,
-    /*  3 */ SKULL_KID_ANIMATION_IDLE_1,
-    /*  4 */ SKULL_KID_ANIMATION_IDLE_2,
-    /*  5 */ SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE,
-    /*  6 */ SKULL_KID_ANIMATION_GLITCHY_HORSE_RIDE_START,
-    /*  7 */ SKULL_KID_ANIMATION_OPENING_ARMS_CROSSED,
-    /*  8 */ SKULL_KID_ANIMATION_CURSE_START,
-    /*  9 */ SKULL_KID_ANIMATION_CURSE_LOOP,
-    /* 10 */ SKULL_KID_ANIMATION_LAUGH_START,
-    /* 11 */ SKULL_KID_ANIMATION_LAUGH_LOOP,
-    /* 12 */ SKULL_KID_ANIMATION_HIDE_OCARINA_START,
-    /* 13 */ SKULL_KID_ANIMATION_HIDE_OCARINA_LOOP,
-    /* 14 */ SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING,
-    /* 15 */ SKULL_KID_ANIMATION_PLAYING_OCARINA_AND_LAUGHING,
-    /* 16 */ SKULL_KID_ANIMATION_PICK_UP_OCARINA,
-    /* 17 */ SKULL_KID_ANIMATION_LOOK_AT_OCARINA,
-    /* 18 */ SKULL_KID_ANIMATION_KICK_OVER_LINK_1,
-    /* 19 */ SKULL_KID_ANIMATION_SEARCH_LINK_1,
-    /* 20 */ SKULL_KID_ANIMATION_KICK_OVER_LINK_2,
-    /* 21 */ SKULL_KID_ANIMATION_SEARCH_LINK_2,
-    /* 22 */ SKULL_KID_ANIMATION_HORSE_RIDE_START,
-    /* 23 */ SKULL_KID_ANIMATION_HORSE_RIDE_LOOP,
-    /* 24 */ SKULL_KID_ANIMATION_RAISE_MASK_START,
-    /* 25 */ SKULL_KID_ANIMATION_RAISE_MASK_LOOP,
-    /* 26 */ SKULL_KID_ANIMATION_LOWER_MASK,
-    /* 27 */ SKULL_KID_ANIMATION_JUMP_WHILE_HIDING_OCARINA,
-    /* 28 */ SKULL_KID_ANIMATION_HORSE_RIDE_AND_ROTATE,
-    /* 29 */ SKULL_KID_ANIMATION_PLAY_OCARINA_WHILE_FLOATING,
-    /* 30 */ SKULL_KID_ANIMATION_FLOATING_TURN_AROUND,
-    /* 31 */ SKULL_KID_ANIMATION_OCARINA_JUGGLE,
-    /* 32 */ SKULL_KID_ANIMATION_CALL_DOWN_MOON_START,
-    /* 33 */ SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP,
-    /* 34 */ SKULL_KID_ANIMATION_SMACK_FAIRY_START,
-    /* 35 */ SKULL_KID_ANIMATION_SMACK_FAIRY_LOOP,
-    /* 36 */ SKULL_KID_ANIMATION_HIT_BY_BUBBLE,
-    /* 37 */ SKULL_KID_ANIMATION_DROP_OCARINA,
-    /* 38 */ SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED,
-    /* 39 */ SKULL_KID_ANIMATION_DEFLECT_ATTACK,
-    /* 40 */ SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START,
-    /* 41 */ SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_LOOP,
-    /* 42 */ SKULL_KID_ANIMATION_SURPRISE_START,
-    /* 43 */ SKULL_KID_ANIMATION_SURPRISE_LOOP,
-    /* 44 */ SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START,
-    /* 45 */ SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_LOOP,
-    /* 46 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START,
-    /* 47 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_LOOP,
-    /* 48 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START,
-    /* 49 */ SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_LOOP,
-    /* 50 */ SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES,
-    /* 51 */ SKULL_KID_ANIMATION_SEARCH_MASK_SALESMAN,
-    /* 52 */ SKULL_KID_ANIMATION_HOLD_UP_MASK_START,
-    /* 53 */ SKULL_KID_ANIMATION_HOLD_UP_MASK_LOOP,
-    /* 54 */ SKULL_KID_ANIMATION_SHIVER,
-    /* 55 */ SKULL_KID_ANIMATION_DRAW,
-    /* 56 */ SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE_LOOK_UP,
-    /* 57 */ SKULL_KID_ANIMATION_SPANK,
-    /* 58 */ SKULL_KID_ANIMATION_HIP_SHAKE_AND_JUMP,
-    /* 59 */ SKULL_KID_ANIMATION_PLAY_FLUTE,
-    /* 60 */ SKULL_KID_ANIMATION_CARTWHEEL,
-    /* 61 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1,
-    /* 62 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2,
-    /* 63 */ SKULL_KID_ANIMATION_DANGLE_FROM_MASK_LOOP,
-    /* 64 */ SKULL_KID_ANIMATION_DROPPED_FROM_MASK,
-    /* 65 */ SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS,
-    /* 66 */ SKULL_KID_ANIMATION_ASHAMED_START,
-    /* 67 */ SKULL_KID_ANIMATION_ASHAMED_LOOP,
-    /* 68 */ SKULL_KID_ANIMATION_LOOK_LEFT_START,
-    /* 69 */ SKULL_KID_ANIMATION_LOOK_LEFT_LOOP,
-    /* 70 */ SKULL_KID_ANIMATION_SNIFF,
-    /* 71 */ SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF,
+    /*  0 */ SK_ANIMATION_SHAKE_HEAD,
+    /*  1 */ SK_ANIMATION_WALK,
+    /*  2 */ SK_ANIMATION_LOOK_AROUND, // Not used in the final game
+    /*  3 */ SK_ANIMATION_IDLE,
+    /*  4 */ SK_ANIMATION_UNUSED_IDLE, // Unused duplicate of SK_ANIMATION_IDLE
+    /*  5 */ SK_ANIMATION_BENT_OVER_HEAD_TWITCH,
+    /*  6 */ SK_ANIMATION_GLITCHY_HORSE_RIDE_START, // Not used in the final game
+    /*  7 */ SK_ANIMATION_RECLINING_FLOAT,
+    /*  8 */ SK_ANIMATION_CURSE_START,
+    /*  9 */ SK_ANIMATION_CURSE_LOOP,
+    /* 10 */ SK_ANIMATION_LAUGH_START,
+    /* 11 */ SK_ANIMATION_LAUGH_LOOP,
+    /* 12 */ SK_ANIMATION_HIDE_OCARINA_START,
+    /* 13 */ SK_ANIMATION_HIDE_OCARINA_LOOP,
+    /* 14 */ SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING,
+    /* 15 */ SK_ANIMATION_PLAY_OCARINA_AND_LAUGH,
+    /* 16 */ SK_ANIMATION_PICK_UP_OCARINA, // Not used in the final game
+    /* 17 */ SK_ANIMATION_LOOK_AT_OCARINA, // Not used in the final game
+    /* 18 */ SK_ANIMATION_KICK_OVER_LINK,
+    /* 19 */ SK_ANIMATION_SEARCH_LINK,
+    /* 20 */ SK_ANIMATION_UNUSED_KICK_OVER_LINK, // Unused duplicate of SK_ANIMATION_KICK_OVER_LINK
+    /* 21 */ SK_ANIMATION_UNUSED_SEARCH_LINK,    // Unused duplicate of SK_ANIMATION_SEARCH_LINK
+    /* 22 */ SK_ANIMATION_HORSE_RIDE_START,
+    /* 23 */ SK_ANIMATION_HORSE_RIDE_LOOP,
+    /* 24 */ SK_ANIMATION_RAISE_MASK_START,
+    /* 25 */ SK_ANIMATION_RAISE_MASK_LOOP,
+    /* 26 */ SK_ANIMATION_LOWER_MASK,
+    /* 27 */ SK_ANIMATION_JUMP_WHILE_HIDING_OCARINA,
+    /* 28 */ SK_ANIMATION_HORSE_RIDE_AND_ROTATE, // Used when Link gets thrown off his horse
+    /* 29 */ SK_ANIMATION_PLAY_OCARINA_WHILE_FLOATING,
+    /* 30 */ SK_ANIMATION_FLOATING_TURN_AROUND,
+    /* 31 */ SK_ANIMATION_OCARINA_JUGGLE,
+    /* 32 */ SK_ANIMATION_CALL_DOWN_MOON_START,
+    /* 33 */ SK_ANIMATION_CALL_DOWN_MOON_LOOP,
+    /* 34 */ SK_ANIMATION_SMACK_FAIRY_START,
+    /* 35 */ SK_ANIMATION_SMACK_FAIRY_LOOP,
+    /* 36 */ SK_ANIMATION_HIT_BY_BUBBLE,
+    /* 37 */ SK_ANIMATION_DROP_OCARINA,
+    /* 38 */ SK_ANIMATION_FLOATING_ARMS_CROSSED,
+    /* 39 */ SK_ANIMATION_DEFLECT_ATTACK,
+    /* 40 */ SK_ANIMATION_TELESCOPE_LOOK_UP_START,
+    /* 41 */ SK_ANIMATION_TELESCOPE_LOOK_UP_LOOP,
+    /* 42 */ SK_ANIMATION_SURPRISE_START,
+    /* 43 */ SK_ANIMATION_SURPRISE_LOOP,
+    /* 44 */ SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START,
+    /* 45 */ SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_LOOP,
+    /* 46 */ SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START,
+    /* 47 */ SK_ANIMATION_HOLD_HEAD_AND_SHAKE_LOOP,
+    /* 48 */ SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START,
+    /* 49 */ SK_ANIMATION_HOLD_HEAD_AND_SCREAM_LOOP,
+    /* 50 */ SK_ANIMATION_HUDDLE_WITH_FAIRIES,
+    /* 51 */ SK_ANIMATION_SEARCH_MASK_SALESMAN,
+    /* 52 */ SK_ANIMATION_HOLD_UP_MASK_START,
+    /* 53 */ SK_ANIMATION_HOLD_UP_MASK_LOOP,
+    /* 54 */ SK_ANIMATION_SHIVER,
+    /* 55 */ SK_ANIMATION_DRAW,
+    /* 56 */ SK_ANIMATION_BENT_OVER_LOOK_UP,
+    /* 57 */ SK_ANIMATION_SPANK,
+    /* 58 */ SK_ANIMATION_HIP_SHAKE_AND_JUMP,
+    /* 59 */ SK_ANIMATION_PLAY_FLUTE,
+    /* 60 */ SK_ANIMATION_CARTWHEEL,
+    /* 61 */ SK_ANIMATION_LIE_FLAT,
+    /* 62 */ SK_ANIMATION_DANGLE_FROM_MASK_START,
+    /* 63 */ SK_ANIMATION_DANGLE_FROM_MASK_LOOP,
+    /* 64 */ SK_ANIMATION_DROPPED_FROM_MASK,
+    /* 65 */ SK_ANIMATION_LOOK_UP_AT_GIANTS,
+    /* 66 */ SK_ANIMATION_ASHAMED_START,
+    /* 67 */ SK_ANIMATION_ASHAMED_LOOP,
+    /* 68 */ SK_ANIMATION_LOOK_LEFT_START,
+    /* 69 */ SK_ANIMATION_LOOK_LEFT_LOOP,
+    /* 70 */ SK_ANIMATION_SNIFF,
+    /* 71 */ SK_ANIMATION_LAUGH_AFTER_SNIFF,
 } SkullKidAnimationIndex;
 
 typedef enum {
-    /* 0 */ SKULL_KID_MASK_TYPE_NO_MASK,
-    /* 1 */ SKULL_KID_MASK_TYPE_NORMAL,
-    /* 2 */ SKULL_KID_MASK_TYPE_GLOWING_EYES,
-    /* 3 */ SKULL_KID_MASK_TYPE_FADING_OUT,
-    /* 9 */ SKULL_KID_MASK_TYPE_RAISED = 9,
+    /* 0 */ SK_MASK_TYPE_NO_MASK,
+    /* 1 */ SK_MASK_TYPE_NORMAL,
+    /* 2 */ SK_MASK_TYPE_GLOWING_EYES,
+    /* 3 */ SK_MASK_TYPE_FADING_OUT,
+    /* 9 */ SK_MASK_TYPE_RAISED = 9,
 } SkullKidMaskType;
 
 typedef enum {
-    /* 0 */ SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE,
-    /* 1 */ SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK,
-    /* 2 */ SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK,
-    /* 3 */ SKULL_KID_HAND_TYPE_HOLDING_OCARINA,
-    /* 4 */ SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
-    /* 5 */ SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
-    /* 6 */ SKULL_KID_HAND_TYPE_HOLDING_FLUTE,
-    /* 9 */ SKULL_KID_HAND_TYPE_DEFAULT = 9,
+    /* 0 */ SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE,
+    /* 1 */ SK_HAND_TYPE_HOLDING_LINK_MASK,
+    /* 2 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK,
+    /* 3 */ SK_HAND_TYPE_HOLDING_OCARINA,
+    /* 4 */ SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
+    /* 5 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
+    /* 6 */ SK_HAND_TYPE_HOLDING_FLUTE,
+    /* 9 */ SK_HAND_TYPE_DEFAULT = 9,
 } SkullKidHandType;
 
 typedef enum {
-    /* 0 */ SKULL_KID_FADE_IN_STATE_NONE,
-    /* 1 */ SKULL_KID_FADE_IN_STATE_START,
-    /* 2 */ SKULL_KID_FADE_IN_STATE_INCREASE_FOG_N,
-    /* 3 */ SKULL_KID_FADE_IN_STATE_INCREASE_ALPHA,
+    /* 0 */ SK_FADE_IN_STATE_NONE,
+    /* 1 */ SK_FADE_IN_STATE_START,
+    /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG_N,
+    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
 } SkullKidFadeInState;
 
 typedef enum {
-    /* 0 */ SKULL_KID_FADE_OUT_STATE_NONE,
-    /* 1 */ SKULL_KID_FADE_OUT_STATE_FADING_OUT,
+    /* 0 */ SK_FADE_OUT_STATE_NONE,
+    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT,
 } SkullKidFadeOutState;
 
 typedef enum {
-    /* 0 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CANNOT_START_CUTSCENE,
-    /* 1 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE,
-    /* 2 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA,
-    /* 3 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED,
-    /* 4 */ SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_ENDED
+    /* 0 */ SK_DEKU_PIPES_CS_STATE_NOT_READY,
+    /* 1 */ SK_DEKU_PIPES_CS_STATE_READY,
+    /* 2 */ SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA,
+    /* 3 */ SK_DEKU_PIPES_CS_STATE_START,
+    /* 4 */ SK_DEKU_PIPES_CS_STATE_END
 } SkullKidDekuPipesCutsceneState;
 
 const ActorInit Dm_Stk_InitVars = {
@@ -217,14 +217,14 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &gSkullKidHeadRockingIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidShakeHeadAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidLookAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidDayThreeTelescopeAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidBentOverHeadTwitchAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidGlitchyHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidOpeningArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidRecliningFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidCurseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidCurseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidLaughStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
@@ -232,7 +232,7 @@ static AnimationInfo sAnimations[] = {
     { &gSkullKidHideOcarinaStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidHideOcarinaLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidPickUpOcarinaAndStartPlayingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidPlayingOcarinaAndLaughingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidPlayOcarinaAndLaughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidPickUpOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidLookAtOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
@@ -255,14 +255,14 @@ static AnimationInfo sAnimations[] = {
     { &gSkullKidSmackFairyLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidHitByBubbleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidDropOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidClockTowerArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidFloatingArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidDeflectAttackAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidTelescopeLookUpStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidTelescopeLookUpLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidSurpriseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidSurpriseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidLookingAroundForGiantsStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLookingAroundForGiantsLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLookAroundForGiantsStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLookAroundForGiantsLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidHoldHeadAndShakeStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidHoldHeadAndShakeLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidHoldHeadAndScreamStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
@@ -273,7 +273,7 @@ static AnimationInfo sAnimations[] = {
     { &gSkullKidHoldUpMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidShiverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidDrawAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidDayThreeTelescopeLookUpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidBentOverLookUpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidSpankAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gSkullKidHipShakeAndJumpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &gSkullKidPlayFluteAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -294,14 +294,13 @@ static AnimationInfo sAnimations[] = {
 void DmStk_LoadObjectForAnimation(DmStk* this, GlobalContext* globalCtx) {
     s32 objectIndex;
 
-    if (((this->animationId >= SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) &&
-         (this->animationId <= SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE)) ||
-        (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_START) ||
-        (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) ||
-        (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START) ||
-        (this->animationId == SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_LOOP)) {
+    if (((this->animationId >= SK_ANIMATION_SHAKE_HEAD) && (this->animationId <= SK_ANIMATION_BENT_OVER_HEAD_TWITCH)) ||
+        (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_START) ||
+        (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) ||
+        (this->animationId == SK_ANIMATION_TELESCOPE_LOOK_UP_START) ||
+        (this->animationId == SK_ANIMATION_TELESCOPE_LOOK_UP_LOOP)) {
         objectIndex = this->objectStkObjectIndex;
-    } else if (this->animationId > SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
+    } else if (this->animationId >= SK_ANIMATION_LOOK_UP_AT_GIANTS) {
         objectIndex = this->objectStk3ObjectIndex;
     } else {
         objectIndex = this->objectStk2ObjectIndex;
@@ -555,7 +554,7 @@ void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext
             break;
     }
 
-    if ((this->animationId == SKULL_KID_ANIMATION_OCARINA_JUGGLE) && (globalCtx->csCtx.frames < 700)) {
+    if ((this->animationId == SK_ANIMATION_OCARINA_JUGGLE) && (globalCtx->csCtx.frames < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
@@ -674,7 +673,7 @@ void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* global
             break;
     }
 
-    if (this->animationId == SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE) {
+    if (this->animationId == SK_ANIMATION_SHAKE_HEAD) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
@@ -682,12 +681,12 @@ void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* global
         if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
         }
-    } else if (this->animationId == SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF) {
+    } else if (this->animationId == SK_ANIMATION_LAUGH_AFTER_SNIFF) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
-    } else if ((this->animationId == SKULL_KID_ANIMATION_SNIFF) &&
+    } else if ((this->animationId == SK_ANIMATION_SNIFF) &&
                (Animation_OnFrame(&this->skelAnime, 16.0f) || Animation_OnFrame(&this->skelAnime, 23.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_NOSE);
     }
@@ -901,20 +900,20 @@ void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->animationId == SKULL_KID_ANIMATION_WALK) {
+    if (this->animationId == SK_ANIMATION_WALK) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
         }
-    } else if (this->animationId == SKULL_KID_ANIMATION_SEARCH_LINK_1) {
+    } else if (this->animationId == SK_ANIMATION_SEARCH_LINK) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f) ||
             Animation_OnFrame(&this->skelAnime, 20.0f) || Animation_OnFrame(&this->skelAnime, 27.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CALM_HIT);
         }
-    } else if (this->animationId == SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING) {
+    } else if (this->animationId == SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
         }
-    } else if (this->animationId == SKULL_KID_ANIMATION_PLAYING_OCARINA_AND_LAUGHING) {
+    } else if (this->animationId == SK_ANIMATION_PLAY_OCARINA_AND_LAUGH) {
         if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
         }
@@ -931,7 +930,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->shouldDraw = true;
     if (this->actor.params != 1) {
-        this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CANNOT_START_CUTSCENE;
+        this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_NOT_READY;
         this->objectStkObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
         this->objectStk2ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
         this->objectStk3ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
@@ -941,8 +940,8 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         this->tatlMessageTimer = 0;
         this->hitCount = 0;
-        this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
-        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
+        this->maskType = SK_MASK_TYPE_NORMAL;
+        this->animationId = SK_ANIMATION_IDLE;
         this->fogR = globalCtx->lightCtx.unk7;
         this->fogG = globalCtx->lightCtx.unk8;
         this->fogB = globalCtx->lightCtx.unk9;
@@ -979,7 +978,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                     }
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
-                    this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+                    this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                     if (gSaveContext.unk_3DD0[3] == 0) {
                         func_8010E9F0(3, 60);
                         XREG(80) = 200;
@@ -990,12 +989,12 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                     sCylinderInit.base.colType = COLTYPE_WOOD;
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
-                    this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+                    this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                     this->actionFunc = DmStk_ClockTower_DoNothing;
                 }
             } else {
-                this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE;
-                this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+                this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_READY;
+                this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
                 sCylinderInit.base.colType = COLTYPE_WOOD;
                 this->actionFunc = DmStk_ClockTower_Idle;
@@ -1008,18 +1007,18 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (!(globalCtx->actorCtx.unk5 & 2)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->maskType = SKULL_KID_MASK_TYPE_GLOWING_EYES;
+            this->maskType = SK_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
             this->fogN = 996;
             this->fogF = 1000;
             this->fogScale = 0.7f;
-            this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
+            this->animationId = SK_ANIMATION_BENT_OVER_HEAD_TWITCH;
             this->actionFunc = DmStk_WaitForTelescope;
         } else {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->maskType = SKULL_KID_MASK_TYPE_GLOWING_EYES;
+            this->maskType = SK_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
             this->fogN = 996;
             this->fogF = 1000;
@@ -1027,9 +1026,9 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actionFunc = DmStk_DoNothing;
         }
 
-        this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
-        this->fadeInState = SKULL_KID_FADE_IN_STATE_NONE;
-        this->fadeOutState = SKULL_KID_FADE_OUT_STATE_NONE;
+        this->handType = SK_HAND_TYPE_DEFAULT;
+        this->fadeInState = SK_FADE_IN_STATE_NONE;
+        this->fadeOutState = SK_FADE_OUT_STATE_NONE;
         this->fadeOutTimer = 0;
         this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
@@ -1106,8 +1105,8 @@ void DmStk_ClockTower_StartFirstTimeIntroCutscene(DmStk* this, GlobalContext* gl
 
 void DmStk_ClockTower_WaitForFirstTimeIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP;
-        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+        this->animationId = SK_ANIMATION_CALL_DOWN_MOON_LOOP;
+        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = DmStk_ClockTower_IdleWithOcarina;
     }
@@ -1124,7 +1123,7 @@ void DmStk_ClockTower_StartSubsequentTimesIntroCutscene(DmStk* this, GlobalConte
 
 void DmStk_ClockTower_WaitForSubsequentTimesIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
     }
@@ -1178,7 +1177,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
         }
     }
 
-    this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
+    this->animationId = SK_ANIMATION_DEFLECT_ATTACK;
     DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
@@ -1187,7 +1186,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
 void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx) {
     DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
     }
@@ -1208,106 +1207,106 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
             if (this->csAction != globalCtx->csCtx.actorActions[actorActionIndex]->action) {
                 this->csAction = globalCtx->csCtx.actorActions[actorActionIndex]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
-                    this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
+                    this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
                 } else {
-                    this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
+                    this->handType = SK_HAND_TYPE_DEFAULT;
                 }
 
                 switch (globalCtx->csCtx.actorActions[actorActionIndex]->action) {
                     case 0:
                     case 1:
-                        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
+                        this->animationId = SK_ANIMATION_IDLE;
                         break;
 
                     case 2:
-                        this->animationId = SKULL_KID_ANIMATION_WALK;
+                        this->animationId = SK_ANIMATION_WALK;
                         break;
 
                     case 3:
-                        this->animationId = SKULL_KID_ANIMATION_KICK_OVER_LINK_2;
+                        this->animationId = SK_ANIMATION_UNUSED_KICK_OVER_LINK;
                         break;
 
                     case 4:
-                        this->animationId = SKULL_KID_ANIMATION_KICK_OVER_LINK_1;
+                        this->animationId = SK_ANIMATION_KICK_OVER_LINK;
                         break;
 
                     case 6:
-                        this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA;
-                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                        this->animationId = SK_ANIMATION_PICK_UP_OCARINA;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 7:
-                        this->animationId = SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING;
-                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                        this->animationId = SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 8:
-                        this->animationId = SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE;
+                        this->animationId = SK_ANIMATION_SHAKE_HEAD;
                         break;
 
                     case 9:
-                        this->animationId = SKULL_KID_ANIMATION_IDLE_1;
-                        this->fadeInState = SKULL_KID_FADE_IN_STATE_START;
+                        this->animationId = SK_ANIMATION_IDLE;
+                        this->fadeInState = SK_FADE_IN_STATE_START;
                         break;
 
                     case 12:
-                        this->animationId = SKULL_KID_ANIMATION_HIDE_OCARINA_START;
-                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                        this->animationId = SK_ANIMATION_HIDE_OCARINA_START;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 13:
-                        this->animationId = SKULL_KID_ANIMATION_JUMP_WHILE_HIDING_OCARINA;
-                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                        this->animationId = SK_ANIMATION_JUMP_WHILE_HIDING_OCARINA;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 14:
-                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_START;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_START;
                         break;
 
                     case 15:
-                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_LOOP;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_LOOP;
                         break;
 
                     case 16:
-                        this->animationId = SKULL_KID_ANIMATION_HORSE_RIDE_AND_ROTATE;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_AND_ROTATE;
                         break;
 
                     case 17:
-                        this->animationId = SKULL_KID_ANIMATION_OPENING_ARMS_CROSSED;
+                        this->animationId = SK_ANIMATION_RECLINING_FLOAT;
                         break;
 
                     case 18:
-                        this->animationId = SKULL_KID_ANIMATION_CURSE_START;
+                        this->animationId = SK_ANIMATION_CURSE_START;
                         break;
 
                     case 19:
-                        this->animationId = SKULL_KID_ANIMATION_LAUGH_START;
+                        this->animationId = SK_ANIMATION_LAUGH_START;
                         break;
 
                     case 20:
-                        this->animationId = SKULL_KID_ANIMATION_RAISE_MASK_START;
+                        this->animationId = SK_ANIMATION_RAISE_MASK_START;
                         break;
 
                     case 21:
-                        this->animationId = SKULL_KID_ANIMATION_LOWER_MASK;
+                        this->animationId = SK_ANIMATION_LOWER_MASK;
                         break;
 
                     case 22:
-                        this->animationId = SKULL_KID_ANIMATION_PLAY_OCARINA_WHILE_FLOATING;
+                        this->animationId = SK_ANIMATION_PLAY_OCARINA_WHILE_FLOATING;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 23:
-                        this->animationId = SKULL_KID_ANIMATION_FLOATING_TURN_AROUND;
-                        this->handType = SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
+                        this->animationId = SK_ANIMATION_FLOATING_TURN_AROUND;
+                        this->handType = SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 24:
-                        this->animationId = SKULL_KID_ANIMATION_CALL_DOWN_MOON_START;
+                        this->animationId = SK_ANIMATION_CALL_DOWN_MOON_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
@@ -1316,148 +1315,148 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 26:
-                        this->animationId = SKULL_KID_ANIMATION_SMACK_FAIRY_START;
+                        this->animationId = SK_ANIMATION_SMACK_FAIRY_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 27:
-                        this->animationId = SKULL_KID_ANIMATION_HIT_BY_BUBBLE;
+                        this->animationId = SK_ANIMATION_HIT_BY_BUBBLE;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->handType = SKULL_KID_HAND_TYPE_HOLDING_OCARINA;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 28:
-                        this->animationId = SKULL_KID_ANIMATION_DROP_OCARINA;
-                        this->handType = SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
+                        this->animationId = SK_ANIMATION_DROP_OCARINA;
+                        this->handType = SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 30:
-                        this->animationId = SKULL_KID_ANIMATION_CLOCK_TOWER_ARMS_CROSSED;
+                        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                         break;
 
                     case 31:
-                        this->animationId = SKULL_KID_ANIMATION_DEFLECT_ATTACK;
+                        this->animationId = SK_ANIMATION_DEFLECT_ATTACK;
                         break;
 
                     case 32:
-                        this->animationId = SKULL_KID_ANIMATION_SURPRISE_START;
+                        this->animationId = SK_ANIMATION_SURPRISE_START;
                         break;
 
                     case 33:
-                        this->animationId = SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START;
+                        this->animationId = SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START;
                         break;
 
                     case 34:
-                        this->animationId = SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START;
+                        this->animationId = SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START;
                         break;
 
                     case 35:
-                        this->animationId = SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START;
+                        this->animationId = SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START;
                         break;
 
                     case 36:
-                        this->animationId = SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES;
+                        this->animationId = SK_ANIMATION_HUDDLE_WITH_FAIRIES;
                         break;
 
                     case 37:
-                        this->animationId = SKULL_KID_ANIMATION_SEARCH_MASK_SALESMAN;
+                        this->animationId = SK_ANIMATION_SEARCH_MASK_SALESMAN;
                         break;
 
                     case 38:
-                        this->animationId = SKULL_KID_ANIMATION_HOLD_UP_MASK_START;
+                        this->animationId = SK_ANIMATION_HOLD_UP_MASK_START;
                         break;
 
                     case 39:
-                        this->animationId = SKULL_KID_ANIMATION_SHIVER;
+                        this->animationId = SK_ANIMATION_SHIVER;
                         break;
 
                     case 40:
-                        this->animationId = SKULL_KID_ANIMATION_DRAW;
+                        this->animationId = SK_ANIMATION_DRAW;
                         break;
 
                     case 41:
-                        this->animationId = SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START;
+                        this->animationId = SK_ANIMATION_TELESCOPE_LOOK_UP_START;
                         break;
 
                     case 42:
-                        this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE;
+                        this->animationId = SK_ANIMATION_BENT_OVER_HEAD_TWITCH;
                         break;
 
                     case 43:
-                        this->animationId = SKULL_KID_ANIMATION_DAY_THREE_TELESCOPE_LOOK_UP;
+                        this->animationId = SK_ANIMATION_BENT_OVER_LOOK_UP;
                         break;
 
                     case 44:
-                        this->animationId = SKULL_KID_ANIMATION_SPANK;
+                        this->animationId = SK_ANIMATION_SPANK;
                         break;
 
                     case 45:
-                        this->animationId = SKULL_KID_ANIMATION_HIP_SHAKE_AND_JUMP;
-                        this->fadeOutState = SKULL_KID_FADE_OUT_STATE_FADING_OUT;
+                        this->animationId = SK_ANIMATION_HIP_SHAKE_AND_JUMP;
+                        this->fadeOutState = SK_FADE_OUT_STATE_FADING_OUT;
                         break;
 
                     case 46:
-                        this->handType = SKULL_KID_HAND_TYPE_HOLDING_FLUTE;
-                        this->animationId = SKULL_KID_ANIMATION_PLAY_FLUTE;
+                        this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
+                        this->animationId = SK_ANIMATION_PLAY_FLUTE;
                         break;
 
                     case 47:
-                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 48:
-                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 49:
-                        this->animationId = SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS;
+                        this->animationId = SK_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 50:
-                        this->animationId = SKULL_KID_ANIMATION_ASHAMED_START;
+                        this->animationId = SK_ANIMATION_ASHAMED_START;
                         break;
 
                     case 51:
-                        this->animationId = SKULL_KID_ANIMATION_LOOK_LEFT_START;
+                        this->animationId = SK_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 52:
-                        this->animationId = SKULL_KID_ANIMATION_SNIFF;
+                        this->animationId = SK_ANIMATION_SNIFF;
                         break;
 
                     case 53:
-                        this->animationId = SKULL_KID_ANIMATION_CARTWHEEL;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 54:
-                        this->animationId = SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1;
+                        this->animationId = SK_ANIMATION_LIE_FLAT;
                         break;
 
                     case 55:
-                        this->animationId = SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2;
+                        this->animationId = SK_ANIMATION_DANGLE_FROM_MASK_START;
                         break;
 
                     case 56:
-                        this->animationId = SKULL_KID_ANIMATION_DROPPED_FROM_MASK;
+                        this->animationId = SK_ANIMATION_DROPPED_FROM_MASK;
                         break;
 
                     case 57:
-                        this->animationId = SKULL_KID_ANIMATION_LOOK_UP_AT_GIANTS;
+                        this->animationId = SK_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 58:
-                        this->animationId = SKULL_KID_ANIMATION_ASHAMED_START;
+                        this->animationId = SK_ANIMATION_ASHAMED_START;
                         break;
 
                     case 59:
-                        this->animationId = SKULL_KID_ANIMATION_LOOK_LEFT_START;
+                        this->animationId = SK_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 60:
-                        this->animationId = SKULL_KID_ANIMATION_SNIFF;
+                        this->animationId = SK_ANIMATION_SNIFF;
                         break;
 
                     case 5:
@@ -1465,7 +1464,7 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     default:
-                        this->animationId = SKULL_KID_ANIMATION_HEAD_ROCKING_IDLE;
+                        this->animationId = SK_ANIMATION_SHAKE_HEAD;
                         break;
                 }
 
@@ -1478,7 +1477,7 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
         this->csAction = 99;
     }
 
-    if (this->fadeInState == SKULL_KID_FADE_IN_STATE_START) {
+    if (this->fadeInState == SK_FADE_IN_STATE_START) {
         Math_SmoothStepToF(&this->fogScale, 0.7f, 0.1f, 0.007f, 0.005f);
         if (this->fogScale < 0.71f) {
             this->fogScale = 0.7f;
@@ -1489,7 +1488,7 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
         this->fogG = globalCtx->lightCtx.unk8 * this->fogScale;
         this->fogB = globalCtx->lightCtx.unk9 * this->fogScale;
 
-    } else if (this->fadeInState == SKULL_KID_FADE_IN_STATE_INCREASE_FOG_N) {
+    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG_N) {
         if (this->fogN < 996) {
             this->fogN += 10;
         }
@@ -1498,7 +1497,7 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
             this->fadeInState++;
             this->fogN = 996;
         }
-    } else if (this->fadeInState == SKULL_KID_FADE_IN_STATE_INCREASE_ALPHA) {
+    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_ALPHA) {
         if (this->alpha < 128) {
             this->alpha += 3;
         }
@@ -1507,13 +1506,13 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
             this->alpha += 20;
         } else {
             this->alpha = 255;
-            this->fadeInState = SKULL_KID_FADE_IN_STATE_NONE;
+            this->fadeInState = SK_FADE_IN_STATE_NONE;
         }
     }
 
-    if (this->fadeOutState == SKULL_KID_FADE_OUT_STATE_FADING_OUT) {
+    if (this->fadeOutState == SK_FADE_OUT_STATE_FADING_OUT) {
         if (this->fadeOutTimer > 40) {
-            this->maskType = SKULL_KID_MASK_TYPE_FADING_OUT;
+            this->maskType = SK_MASK_TYPE_FADING_OUT;
         }
 
         this->fadeOutTimer++;
@@ -1521,7 +1520,7 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
             this->alpha -= 35;
             if (this->alpha < 0) {
                 this->alpha = 0;
-                this->fadeOutState = SKULL_KID_FADE_OUT_STATE_NONE;
+                this->fadeOutState = SK_FADE_OUT_STATE_NONE;
                 gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
@@ -1534,61 +1533,58 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->animationId) {
-            case SKULL_KID_ANIMATION_LOOK_AROUND:
-            case SKULL_KID_ANIMATION_CURSE_START:
-            case SKULL_KID_ANIMATION_LAUGH_START:
-            case SKULL_KID_ANIMATION_HIDE_OCARINA_START:
-            case SKULL_KID_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING:
-            case SKULL_KID_ANIMATION_PICK_UP_OCARINA:
-            case SKULL_KID_ANIMATION_KICK_OVER_LINK_1:
-            case SKULL_KID_ANIMATION_KICK_OVER_LINK_2:
-            case SKULL_KID_ANIMATION_HORSE_RIDE_START:
-            case SKULL_KID_ANIMATION_RAISE_MASK_START:
-            case SKULL_KID_ANIMATION_FLOATING_TURN_AROUND:
-            case SKULL_KID_ANIMATION_CALL_DOWN_MOON_START:
-            case SKULL_KID_ANIMATION_SMACK_FAIRY_START:
-            case SKULL_KID_ANIMATION_TELESCOPE_LOOK_UP_START:
-            case SKULL_KID_ANIMATION_SURPRISE_START:
-            case SKULL_KID_ANIMATION_LOOKING_AROUND_FOR_GIANTS_START:
-            case SKULL_KID_ANIMATION_HOLD_HEAD_AND_SHAKE_START:
-            case SKULL_KID_ANIMATION_HOLD_HEAD_AND_SCREAM_START:
-            case SKULL_KID_ANIMATION_HOLD_UP_MASK_START:
-            case SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_2:
-            case SKULL_KID_ANIMATION_ASHAMED_START:
-            case SKULL_KID_ANIMATION_LOOK_LEFT_START:
-            case SKULL_KID_ANIMATION_SNIFF:
+            case SK_ANIMATION_LOOK_AROUND:
+            case SK_ANIMATION_CURSE_START:
+            case SK_ANIMATION_LAUGH_START:
+            case SK_ANIMATION_HIDE_OCARINA_START:
+            case SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING:
+            case SK_ANIMATION_PICK_UP_OCARINA:
+            case SK_ANIMATION_KICK_OVER_LINK:
+            case SK_ANIMATION_UNUSED_KICK_OVER_LINK:
+            case SK_ANIMATION_HORSE_RIDE_START:
+            case SK_ANIMATION_RAISE_MASK_START:
+            case SK_ANIMATION_FLOATING_TURN_AROUND:
+            case SK_ANIMATION_CALL_DOWN_MOON_START:
+            case SK_ANIMATION_SMACK_FAIRY_START:
+            case SK_ANIMATION_TELESCOPE_LOOK_UP_START:
+            case SK_ANIMATION_SURPRISE_START:
+            case SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START:
+            case SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START:
+            case SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START:
+            case SK_ANIMATION_HOLD_UP_MASK_START:
+            case SK_ANIMATION_DANGLE_FROM_MASK_START:
+            case SK_ANIMATION_ASHAMED_START:
+            case SK_ANIMATION_LOOK_LEFT_START:
+            case SK_ANIMATION_SNIFF:
                 this->animationId++;
                 DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
 
-            case SKULL_KID_ANIMATION_LOWER_MASK:
-                this->animationId = SKULL_KID_ANIMATION_IDLE_1;
-                this->maskType = SKULL_KID_MASK_TYPE_NORMAL;
-                this->handType = SKULL_KID_HAND_TYPE_DEFAULT;
+            case SK_ANIMATION_LOWER_MASK:
+                this->animationId = SK_ANIMATION_IDLE;
+                this->maskType = SK_MASK_TYPE_NORMAL;
+                this->handType = SK_HAND_TYPE_DEFAULT;
                 DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
         }
     }
 
-    if (((this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_START) && (this->skelAnime.curFrame >= 16.0f)) ||
-        (this->animationId == SKULL_KID_ANIMATION_RAISE_MASK_LOOP) ||
-        (this->animationId == SKULL_KID_ANIMATION_LOWER_MASK)) {
-        this->maskType = SKULL_KID_MASK_TYPE_RAISED;
-        this->handType = SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK;
-    } else if (((this->animationId >= SKULL_KID_ANIMATION_HUDDLE_WITH_FAIRIES) &&
-                (this->animationId <= SKULL_KID_ANIMATION_DRAW)) ||
-               ((this->animationId >= SKULL_KID_ANIMATION_PLAY_FLUTE) &&
-                (this->animationId <= SKULL_KID_ANIMATION_CARTWHEEL)) ||
+    if (((this->animationId == SK_ANIMATION_RAISE_MASK_START) && (this->skelAnime.curFrame >= 16.0f)) ||
+        (this->animationId == SK_ANIMATION_RAISE_MASK_LOOP) || (this->animationId == SK_ANIMATION_LOWER_MASK)) {
+        this->maskType = SK_MASK_TYPE_RAISED;
+        this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK;
+    } else if (((this->animationId >= SK_ANIMATION_HUDDLE_WITH_FAIRIES) && (this->animationId <= SK_ANIMATION_DRAW)) ||
+               ((this->animationId >= SK_ANIMATION_PLAY_FLUTE) && (this->animationId <= SK_ANIMATION_CARTWHEEL)) ||
                ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
-        this->maskType = SKULL_KID_MASK_TYPE_NO_MASK;
-        if ((this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_START) ||
-            (this->animationId == SKULL_KID_ANIMATION_HOLD_UP_MASK_LOOP)) {
-            this->handType = SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE;
+        this->maskType = SK_MASK_TYPE_NO_MASK;
+        if ((this->animationId == SK_ANIMATION_HOLD_UP_MASK_START) ||
+            (this->animationId == SK_ANIMATION_HOLD_UP_MASK_LOOP)) {
+            this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE;
         }
     }
 
-    if (this->animationId == SKULL_KID_ANIMATION_DROPPED_FROM_MASK) {
-        this->maskType = SKULL_KID_MASK_TYPE_NO_MASK;
+    if (this->animationId == SK_ANIMATION_DROPPED_FROM_MASK) {
+        this->maskType = SK_MASK_TYPE_NO_MASK;
     }
 }
 
@@ -1627,7 +1623,7 @@ void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
 
-        if (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) {
+        if (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;
         } else {
             this->actor.targetArrowOffset = 200.0f;
@@ -1644,7 +1640,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
     if (this->actor.params != 1) {
-        if (this->animationId == SKULL_KID_ANIMATION_CALL_DOWN_MOON_LOOP) {
+        if (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) {
             Actor_SetFocus(&this->actor, 40.0f);
         } else {
             Actor_SetFocus(&this->actor, 6.0f);
@@ -1652,7 +1648,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         DmStk_LoadObjectForAnimation(this, globalCtx);
 
-        if (this->animationId != SKULL_KID_ANIMATION_DANGLE_FROM_MASK_START_1) {
+        if (this->animationId != SK_ANIMATION_LIE_FLAT) {
             SkelAnime_Update(&this->skelAnime);
         }
 
@@ -1668,18 +1664,18 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         DmStk_PlaySound(this, globalCtx);
 
         switch (this->dekuPipesCutsceneState) {
-            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CAN_START_CUTSCENE:
+            case SK_DEKU_PIPES_CS_STATE_READY:
                 if (func_800B8718(&this->actor, &globalCtx->state)) {
-                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA;
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA;
                 } else {
                     func_800B874C(&this->actor, globalCtx, this->actor.xzDistToPlayer,
                                   fabsf(this->actor.playerHeightRel));
                 }
                 break;
 
-            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_PLAYER_USED_OCARINA:
+            case SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA:
                 if (ActorCutscene_GetCanPlayNext(0x10)) {
-                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED;
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_START;
                     ActorCutscene_Start(0x10, &this->actor);
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
@@ -1687,9 +1683,9 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_STARTED:
+            case SK_DEKU_PIPES_CS_STATE_START:
                 if (globalCtx->csCtx.state == 0) {
-                    this->dekuPipesCutsceneState = SKULL_KID_DEKU_PIPES_CUTSCENE_STATE_CUTSCENE_ENDED;
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_END;
                 }
                 break;
         }
@@ -1716,22 +1712,21 @@ s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     DmStk* this = THIS;
 
     if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
-        if ((this->handType == SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE) ||
-            (this->handType == SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK) ||
-            (this->handType == SKULL_KID_HAND_TYPE_HOLDING_OCARINA)) {
+        if ((this->handType == SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE) ||
+            (this->handType == SK_HAND_TYPE_HOLDING_LINK_MASK) || (this->handType == SK_HAND_TYPE_HOLDING_OCARINA)) {
             *dList = NULL;
         }
     } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
         switch (this->handType) {
-            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
-            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK:
-            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
-            case SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
-            case SKULL_KID_HAND_TYPE_HOLDING_FLUTE:
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK:
+            case SK_HAND_TYPE_HOLDING_OCARINA:
+            case SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
+            case SK_HAND_TYPE_HOLDING_FLUTE:
                 *dList = NULL;
                 break;
 
-            case SKULL_KID_HAND_TYPE_DEFAULT:
+            case SK_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
                     *dList = NULL;
                 }
@@ -1756,9 +1751,8 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if ((this->animationId == SKULL_KID_ANIMATION_LOOK_LEFT_LOOP) ||
-            (this->animationId == SKULL_KID_ANIMATION_LAUGH_LOOP) ||
-            (this->animationId == SKULL_KID_ANIMATION_LAUGH_AFTER_SNIFF)) {
+        if ((this->animationId == SK_ANIMATION_LOOK_LEFT_LOOP) || (this->animationId == SK_ANIMATION_LAUGH_LOOP) ||
+            (this->animationId == SK_ANIMATION_LAUGH_AFTER_SNIFF)) {
             gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyHeadDL);
             gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyEyesDL);
         } else {
@@ -1767,10 +1761,10 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         }
 
         switch (this->maskType) {
-            case SKULL_KID_MASK_TYPE_NO_MASK:
+            case SK_MASK_TYPE_NO_MASK:
                 break;
 
-            case SKULL_KID_MASK_TYPE_NORMAL:
+            case SK_MASK_TYPE_NORMAL:
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1) &&
                     (globalCtx->csCtx.frames < 1400)) {
                     if (this->fogN == this->fogF) {
@@ -1785,7 +1779,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 }
                 break;
 
-            case SKULL_KID_MASK_TYPE_GLOWING_EYES:
+            case SK_MASK_TYPE_GLOWING_EYES:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMaskEyesDL);
 
@@ -1816,23 +1810,23 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (this->handType != SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE) {
+        if (this->handType != SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         }
 
         switch (this->handType) {
-            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
+            case SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedRightHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMaskHoldingRightHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
+            case SK_HAND_TYPE_HOLDING_OCARINA:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHand);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
@@ -1840,7 +1834,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 }
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE:
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE:
                 Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
                 Matrix_RotateYS(0x6142, MTXMODE_APPLY);
                 Matrix_RotateXS(-0x1988, MTXMODE_APPLY);
@@ -1860,35 +1854,35 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         switch (this->handType) {
-            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
+            case SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_LINK_MASK:
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedLeftHand);
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_MAJORAS_MASK:
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_OCARINA:
+            case SK_HAND_TYPE_HOLDING_OCARINA:
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
-            case SKULL_KID_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
+            case SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
-            case SKULL_KID_HAND_TYPE_HOLDING_FLUTE:
+            case SK_HAND_TYPE_HOLDING_FLUTE:
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteHoldingLeftHand);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
-            case SKULL_KID_HAND_TYPE_DEFAULT:
+            case SK_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHand);
                 }
