@@ -1779,25 +1779,25 @@ void EnGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
 void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGm* this = THIS;
-    s32 phi_v0 = 1;
-    s32 phi_v1 = 0;
+    s32 overrideRot = true;
+    s32 stepRot = false;
 
     if (!(this->unk_3A4 & 0x200)) {
         if (this->unk_3A4 & 0x80) {
-            phi_v0 = 1;
-            phi_v1 = 1;
+            overrideRot = true;
+            stepRot = true;
         } else {
-            phi_v0 = 0;
-            phi_v1 = 1;
+            overrideRot = false;
+            stepRot = true;
         }
     } else {
-        phi_v0 = 0;
+        overrideRot = false;
     }
 
     if (limbIndex == 16) {
-        func_8013AD9C(BINANG_ADD(this->unk_3BC + this->unk_3C0, 0x4000),
-                      BINANG_ADD(this->unk_3BE + this->unk_3C2 + this->actor.shape.rot.y, 0x4000), &this->unk_290,
-                      &this->unk_2A8, phi_v1, phi_v0);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_3BC + this->unk_3C0, 0x4000),
+                        BINANG_ADD(this->unk_3BE + this->unk_3C2 + this->actor.shape.rot.y, 0x4000), &this->unk_290,
+                        &this->unk_2A8, stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1806,8 +1806,8 @@ void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
         Matrix_StatePush();
     } else if (limbIndex == 9) {
-        func_8013AD9C(BINANG_ADD(this->unk_3C0, 0x4000), BINANG_ADD(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
-                      &this->unk_29C, &this->unk_2AE, phi_v1, phi_v0);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_3C0, 0x4000), BINANG_ADD(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
+                        &this->unk_29C, &this->unk_2AE, stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

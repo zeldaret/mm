@@ -301,25 +301,25 @@ void func_80C1CD80(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     DmAn* this = THIS;
-    s16 phi_v1;
-    s16 phi_v0;
+    s16 stepRot;
+    s16 overrideRot;
 
     if (!(this->unk_2AE & 1)) {
         if (this->unk_2AE & 2) {
-            phi_v0 = 1;
+            overrideRot = true;
         } else {
-            phi_v0 = 0;
+            overrideRot = false;
         }
-        phi_v1 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        stepRot = false;
+        overrideRot = false;
     }
 
     if (limbIndex == OBJECT_AN1_LIMB_09) {
-        func_8013AD9C(this->unk_2BE + this->unk_2C2 + 0x4000,
-                      this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C, &this->unk_1A4,
-                      phi_v1, phi_v0);
+        SubS_UpdateLimb(this->unk_2BE + this->unk_2C2 + 0x4000,
+                        this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C,
+                        &this->unk_1A4, stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -328,8 +328,8 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_InsertZRotation_s(this->unk_1A4.z, MTXMODE_APPLY);
         Matrix_StatePush();
     } else if (limbIndex == OBJECT_AN1_LIMB_02) {
-        func_8013AD9C(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
-                      &this->unk_1AA, phi_v1, phi_v0);
+        SubS_UpdateLimb(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
+                        &this->unk_1AA, stepRot, overrideRot);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -342,13 +342,13 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 TexturePtr D_80C1D2E8[] = {
     object_an1_Tex_00E6E0,
-    &object_an1_Tex_00F7A0,
-    &object_an1_Tex_0101A0,
+    object_an1_Tex_00F7A0,
+    object_an1_Tex_0101A0,
 };
 
 TexturePtr D_80C1D2F4[] = {
-    &object_an1_Tex_00E1E0, &object_an1_Tex_00EFA0, &object_an1_Tex_00F3A0, &object_an1_Tex_00EFA0,
-    &object_an1_Tex_00FDA0, &object_an1_Tex_00F9A0, &object_an1_Tex_0103A0,
+    object_an1_Tex_00E1E0, object_an1_Tex_00EFA0, object_an1_Tex_00F3A0, object_an1_Tex_00EFA0,
+    object_an1_Tex_00FDA0, object_an1_Tex_00F9A0, object_an1_Tex_0103A0,
 };
 
 void func_80C1D0B0(Actor* thisx, GlobalContext* globalCtx) {
