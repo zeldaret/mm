@@ -262,15 +262,15 @@ s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
             F32_LERPIMP(view->curDistortionScale.z, view->distortionScale.z, view->distortionSpeed);
     }
 
-    Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
-    Matrix_SetCurrentState(&projectionMtxF);
-    Matrix_RotateStateAroundXAxis(view->curDistortionDirRot.x);
-    Matrix_InsertYRotation_f(view->curDistortionDirRot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_MtxToMtxF(projectionMtx, &projectionMtxF);
+    Matrix_Put(&projectionMtxF);
+    Matrix_RotateXFApply(view->curDistortionDirRot.x);
+    Matrix_RotateYF(view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_RotateZF(view->curDistortionDirRot.z, MTXMODE_APPLY);
     Matrix_Scale(view->curDistortionScale.x, view->curDistortionScale.y, view->curDistortionScale.z, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(-view->curDistortionDirRot.z, MTXMODE_APPLY);
-    Matrix_InsertYRotation_f(-view->curDistortionDirRot.y, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(-view->curDistortionDirRot.x);
+    Matrix_RotateZF(-view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_RotateYF(-view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_RotateXFApply(-view->curDistortionDirRot.x);
     Matrix_ToMtx(projectionMtx);
 
     return true;

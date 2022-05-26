@@ -39,7 +39,7 @@ enum {
         gSaveContext.save.weekEventReg[92] &= (u8)~RACE_FLAGS;                                                      \
         gSaveContext.save.weekEventReg[92] =                                                                        \
             gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
-    }
+    } (void)0
 
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;

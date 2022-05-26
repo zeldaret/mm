@@ -225,15 +225,15 @@ void FireArrow_SetQuadVerticies(ArrowFire* this) {
     Vec3f sp2C;
     Vec3f sp20;
 
-    Matrix_MultiplyVector3fByState(&D_80922284, &sp44);
-    Matrix_MultiplyVector3fByState(&D_80922290, &sp38);
-    Matrix_MultiplyVector3fByState(&D_8092229C, &sp2C);
-    Matrix_MultiplyVector3fByState(&D_809222A8, &sp20);
+    Matrix_MultVec3f(&D_80922284, &sp44);
+    Matrix_MultVec3f(&D_80922290, &sp38);
+    Matrix_MultVec3f(&D_8092229C, &sp2C);
+    Matrix_MultVec3f(&D_809222A8, &sp20);
     Collider_SetQuadVertices(&this->collider1, &sp44, &sp38, &sp2C, &sp20);
-    Matrix_MultiplyVector3fByState(&D_809222B4, &sp44);
-    Matrix_MultiplyVector3fByState(&D_809222C0, &sp38);
-    Matrix_MultiplyVector3fByState(&D_809222CC, &sp2C);
-    Matrix_MultiplyVector3fByState(&D_809222D8, &sp20);
+    Matrix_MultVec3f(&D_809222B4, &sp44);
+    Matrix_MultVec3f(&D_809222C0, &sp38);
+    Matrix_MultVec3f(&D_809222CC, &sp2C);
+    Matrix_MultVec3f(&D_809222D8, &sp20);
     Collider_SetQuadVertices(&this->collider2, &sp44, &sp38, &sp2C, &sp20);
 }
 
@@ -249,10 +249,10 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
-        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(transform->shape.rot.z, MTXMODE_APPLY);
 
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->screenFillIntensity > 0.0f) {
@@ -271,16 +271,16 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
 
-        Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
 
         if (this->timer != 0) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            Matrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
 
         Matrix_Scale(this->radius * 0.2f, this->height * 4.0f, this->radius * 0.2f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

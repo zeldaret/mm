@@ -45,10 +45,10 @@ typedef struct EnBji01 {
     /* 0x29C */ s16 eyeTexIndex;
     /* 0x29E */ s16 blinkSeqIndex;
     /* 0x2A0 */ s16 blinkTimer;
-    /* 0x2A2 */ s16 torsoZRotAdj;
-    /* 0x2A4 */ s16 torsoXRotAdj;
-    /* 0x2A6 */ s16 headZRotAdj;
-    /* 0x2A8 */ s16 headXRotAdj;
+    /* 0x2A2 */ s16 torsoZRotStep;
+    /* 0x2A4 */ s16 torsoXRotStep;
+    /* 0x2A6 */ s16 headZRotStep;
+    /* 0x2A8 */ s16 headXRotStep;
     /* 0x2AA */ u16 textId;
     /* 0x2AC */ s16 cutscenes[1];
     /* 0x2B0 */ ObjMoonStone* moonsTear;

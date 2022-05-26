@@ -196,7 +196,7 @@ void func_80BDC830(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -227,8 +227,8 @@ void func_80BDC9DC(EnZowStruct* ptr, GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -260,8 +260,8 @@ void func_80BDCB84(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -294,8 +294,8 @@ void func_80BDCDA8(EnZow* this, EnZowStruct* ptr) {
         temp_f22 = Rand_ZeroOne() * 6.28f;
 
         sp78.y = (Rand_ZeroOne() * 3.0f) + 3.0f;
-        sp78.x = __sinf(temp_f22) * temp_f20;
-        sp78.z = __cosf(temp_f22) * temp_f20;
+        sp78.x = sinf(temp_f22) * temp_f20;
+        sp78.z = cosf(temp_f22) * temp_f20;
 
         sp84 = this->actor.world.pos;
         sp84.x += sp78.x * 6.0f;
@@ -603,7 +603,7 @@ Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
 void func_80BDDAA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BDDD4C, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80BDDD4C, &thisx->focus.pos);
     }
 }
 
@@ -619,13 +619,13 @@ void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     };
     EnZow* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     func_80BDC830(this->unk_2D0, globalCtx);
     func_80BDC9DC(this->unk_2D0, globalCtx);
     func_80BDCB84(this->unk_2D0, globalCtx);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_2CE != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);

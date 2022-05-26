@@ -140,10 +140,10 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Vec3f sp88;
     MtxF sp48;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&D_80939018, &spAC);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVec3f(&D_80939018, &spAC);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
@@ -154,10 +154,10 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;
         func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                       this->dyna.actor.world.pos.z, &sp48);
-        Matrix_SetCurrentState(&sp48);
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&sp48);
-        func_8018219C(&sp48, &this->dyna.actor.shape.rot, 0);
+        Matrix_Put(&sp48);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_Get(&sp48);
+        Matrix_MtxFToYXZRot(&sp48, &this->dyna.actor.shape.rot, false);
         return true;
     }
     return false;
@@ -948,8 +948,8 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1FE & 1) {
-        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+        Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_1B8, this->unk_1B8, this->unk_1B8, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

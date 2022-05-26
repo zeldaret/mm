@@ -349,8 +349,8 @@ f32 func_80998334(EnGs* this, GlobalContext* globalCtx, f32* arg2, f32* arg3, s1
 
     if (arg9 == 0) {
         sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
-        this->unk_1B0[0].x = (__sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
-        this->unk_1B0[0].y = 1.0f - (__sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
+        this->unk_1B0[0].x = (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
+        this->unk_1B0[0].y = 1.0f - (sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
         (*arg4)++;
     }
     return sp2C;
@@ -383,8 +383,8 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         Player* player = GET_PLAYER(globalCtx);
 
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(160.0f, &sp38);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVecZ(160.0f, &sp38);
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
@@ -725,8 +725,8 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
         sp40 = Math_SmoothStepToF(&this->unk_1EC, this->unk_1F0, 0.8f, 0.02f, 0.001f);
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
-        this->unk_1B0[0].x += __sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
-        this->unk_1B0[0].y += __sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].x += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].y += sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
         this->unk_1D4++;
         if ((sp48 == 0.0f) && (sp44 == 0.0f) && (sp40 == 0.0f)) {
             this->unk_216 = 0;
@@ -1070,16 +1070,16 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     frames = globalCtx->gameplayFrames;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_StatePush();
+    Matrix_Push();
 
     if (this->unk_19A & 1) {
-        Matrix_RotateY(this->unk_19E[0].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_19E[0].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_19E[0].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_19E[0].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_19E[0].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_19E[0].z, MTXMODE_APPLY);
         Matrix_Scale(this->unk_1B0[0].x, this->unk_1B0[0].y, this->unk_1B0[0].z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_19E[1].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_19E[1].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_19E[1].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_19E[1].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_19E[1].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_19E[1].z, MTXMODE_APPLY);
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1088,11 +1088,11 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
     gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_19A & 2) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         Matrix_Scale(0.05f, -0.05f, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

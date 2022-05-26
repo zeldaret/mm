@@ -359,7 +359,7 @@ void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx) {
             break;
 
         case 6: // End conversation
-            if (Message_ShouldAdvance(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 EnMaYts_SetupStartDialogue(this);
             }
             break;
@@ -426,7 +426,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
 
 // Select the following dialogue based on the current one, and an appropiate face expression
 void EnMaYts_ChooseNextDialogue(EnMaYts* this, GlobalContext* globalCtx) {
-    if (Message_ShouldAdvance(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x335F:
                 EnMaYts_SetFaceExpression(this, 0, 2);
@@ -526,7 +526,7 @@ void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnMaYts* this = THIS;
 
     if (limbIndex == MA1_LIMB_HEAD) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);

@@ -268,8 +268,8 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
                 phi_f20 = globalCtx->envCtx.windSpeed / 120.0f;
                 phi_f20 = CLAMP(phi_f20, 0.0f, 1.0f);
 
-                this->unk_14C[i].unk_0C += __sinf((this->unk_144 + (i * 100.0f)) * 0.01f) + (spC4 * 10.0f * phi_f20);
-                this->unk_14C[i].unk_14 += __cosf((this->unk_148 + (i * 100.0f)) * 0.01f) + (spBC * 10.0f * phi_f20);
+                this->unk_14C[i].unk_0C += sinf((this->unk_144 + (i * 100.0f)) * 0.01f) + (spC4 * 10.0f * phi_f20);
+                this->unk_14C[i].unk_14 += cosf((this->unk_148 + (i * 100.0f)) * 0.01f) + (spBC * 10.0f * phi_f20);
                 this->unk_14C[i].unk_10 -=
                     this->unk_14C[i].unk_18 - (spC0 * 3.0f * (globalCtx->envCtx.windSpeed / 100.0f));
 
@@ -431,8 +431,8 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
                 temp_f20 = globalCtx->envCtx.windSpeed / 120.0f;
                 temp_f20 = CLAMP(temp_f20, 0.0f, 1.0f);
 
-                this->unk_14C[i].unk_0C += __sinf((this->unk_144 + i) * 0.01f) + (spA0 * 10.0f * temp_f20);
-                this->unk_14C[i].unk_14 += __cosf((this->unk_148 + i) * 0.01f) + (sp9C * 10.0f * temp_f20);
+                this->unk_14C[i].unk_0C += sinf((this->unk_144 + i) * 0.01f) + (spA0 * 10.0f * temp_f20);
+                this->unk_14C[i].unk_14 += cosf((this->unk_148 + i) * 0.01f) + (sp9C * 10.0f * temp_f20);
 
                 if ((i % 2) == 0) {
                     this->unk_14C[i].unk_10 += this->unk_14C[i].unk_18;
@@ -557,7 +557,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             }
 
-            Matrix_InsertTranslation(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
+            Matrix_Translate(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
             tempf = (i & 7) * 0.008f;
             Matrix_Scale(0.05f + tempf, 0.05f + tempf, 0.05f + tempf, MTXMODE_APPLY);
             temp_f2 = Math_Vec3f_DistXYZ(&spC4, &globalCtx->view.eye) / 300.0f;
@@ -566,7 +566,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(160.0f * temp_f2));
 
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -616,7 +616,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
         func_80169474(globalCtx, &spBC, &spB0);
 
         if ((spB0.x >= 0.0f) && (spB0.x < 320.0f) && (spB0.y >= 0.0f) && (spB0.y < 240.0f)) {
-            Matrix_InsertTranslation(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
+            Matrix_Translate(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
             Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
             temp_f0 = Math_Vec3f_DistXYZ(&spBC, &globalCtx->view.eye);
             temp_f0 = (u8)(255.0f * phi_f26) * (1.0f - (temp_f0 / 300.0f));
@@ -625,7 +625,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 55, temp_f0);
             gDPSetEnvColor(POLY_XLU_DISP++, 55, 50, 255, temp_f0);
 
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -679,12 +679,12 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
             continue;
         }
 
-        Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+        Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
 
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-        Matrix_RotateY((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
-        Matrix_InsertXRotation_s((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
+        Matrix_RotateYS((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
+        Matrix_RotateXS((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
 
         if (this->unk_114C == 0) {
             Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
@@ -715,7 +715,7 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
                 continue;
             }
 
-            Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+            Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
             temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
 

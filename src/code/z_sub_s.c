@@ -53,7 +53,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     Vec3f pos;
     Vec3s rot;
 
-    Matrix_StatePush();
+    Matrix_Push();
     limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
     limbIndex++;
     rot = jointTable[limbIndex];
@@ -63,8 +63,8 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     newDList = limbDList = limb->dList;
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
-        Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_TranslateRotateZYX(&pos, &rot);
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
 
@@ -77,7 +77,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
             Matrix_ToMtx(*mtx);
             (*mtx)++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
@@ -86,7 +86,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     if (limb->sibling != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
@@ -119,7 +119,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     gSPSegment(gfx++, 0x0D, mtx);
-    Matrix_StatePush();
+    Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
     pos.x = jointTable->x;
     pos.y = jointTable->y;
@@ -129,8 +129,8 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     limbDList = rootLimb->dList;
 
     if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
-        Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_TranslateRotateZYX(&pos, &rot);
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, 1, actor, &gfx);
 
@@ -143,7 +143,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
             Matrix_ToMtx(mtx);
             mtx++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     if (postLimbDraw != NULL) {
@@ -154,7 +154,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
         gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
                                          postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     return gfx;
 }
 
@@ -168,7 +168,47 @@ s32 SubS_InCsMode(GlobalContext* globalCtx) {
     return inCsMode;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
+/**
+ * Computes a limb's position and rotation for use in TransformLimbDraws
+ *
+ * @param[in] newRotZ value to override newRot's Z value if override is true
+ * @param[in] newRotY value to override newRot's Y value if override is true
+ * @param[out] pos limb's computed position
+ * @param[out] rot limb's computed rotation
+ * @param[in] stepRot boolean, step towards newRot instead of setting directly
+ * @param[in] overrideRot boolean, override newRot with the specified input.
+ *
+ * Note:
+ *  If overrideRot is true, the rotation will automatically step instead of setting directly
+ */
+s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot) {
+    Vec3f newPos;
+    Vec3f zeroVec = gZeroVec3f;
+    Vec3s newRot;
+    MtxF curState;
+
+    Matrix_MultVec3f(&zeroVec, &newPos);
+    Matrix_Get(&curState);
+    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
+    *pos = newPos;
+
+    if (!stepRot && !overrideRot) {
+        rot->x = newRot.x;
+        rot->y = newRot.y;
+        rot->z = newRot.z;
+        return true;
+    }
+
+    if (overrideRot) {
+        newRot.z = newRotZ;
+        newRot.y = newRotY;
+    }
+
+    Math_SmoothStepToS(&rot->x, newRot.x, 3, 0x2AA8, 0xB6);
+    Math_SmoothStepToS(&rot->y, newRot.y, 3, 0x2AA8, 0xB6);
+    Math_SmoothStepToS(&rot->z, newRot.z, 3, 0x2AA8, 0xB6);
+    return true;
+}
 
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
     *flags = (*flags & ~unsetBits) | setBits;
@@ -498,7 +538,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
             pos.z = bodyPartPos->z - worldPos->z;
         }
 
-        Matrix_MultiplyVector3fByState(&pos, &startVec);
+        Matrix_MultVec3f(&pos, &startVec);
         startCol = 64.0f + startVec.x;
         startRow = 64.0f - startVec.z;
         SubS_FillShadowTex(startCol >> 1, startRow >> 1, tex, sizes[i]);
@@ -514,7 +554,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     func_8012C28C(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
-    Matrix_InsertTranslation(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
@@ -525,9 +565,93 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D0E0.s")
+/**
+ * Computes the rotation based on the options and target rotation value
+ *
+ * @param[in,out] rot the computed rotation
+ * @param[in] rotMax the max rotation in binary angles
+ * @param[in] target the target rotation value
+ * @param[in] slowness how slow to rotate, the larger the number the slower the rotation, cannot be 0
+ * @param[in] stepMin the minimun step in degrees
+ * @param[in] stepMax the maximum step in degrees
+ */
+s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
+    s16 prevRot = *rot;
+    f32 step;
+    f32 prevRotStep;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
+    step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
+    step *= gFramerateDivisorHalf;
+    prevRotStep = step;
+    if (step >= 0.0f) {
+        step /= slowness;
+        step = CLAMP(step, stepMin, stepMax);
+        *rot += (s16)((step * (f32)0x10000) / 360.0f);
+        if (prevRotStep < stepMin) {
+            *rot = target;
+        }
+        if (rotMax != 0) {
+            *rot = CLAMP(*rot, -rotMax, rotMax);
+        }
+    } else {
+        step = (step / slowness) * -1.0f;
+        step = CLAMP(step, stepMin, stepMax);
+        *rot -= (s16)((step * (f32)0x10000) / 360.0f);
+        if (-stepMin < prevRotStep) {
+            *rot = target;
+        }
+        if (rotMax != 0) {
+            *rot = CLAMP(*rot, -rotMax, rotMax);
+        }
+    }
+
+    return prevRot - *rot;
+}
+
+/**
+ * Computes the necessary HeadRot and TorsoRot to smoothly turn an actors's head and torso to a point
+ *
+ * @param[in] point the point to turn to
+ * @param[in] focusPos the actor's focus postion
+ * @param[in] shapeRot the actor's shape rotation
+ * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
+ * @param[in,out] headRot the computed head rotation
+ * @param[in,out] torsoRot the computed torso rotation
+ * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot and
+ * TurnOptions/TurnOptionsSet`
+ *
+ */
+s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
+                     TurnOptionsSet* options) {
+    s16 pitch;
+    s16 yaw;
+    s16 pad;
+    s16 targetY;
+    f32 diffX = point->x - focusPos->x;
+    s16 targetX;
+    f32 diffZ = point->z - focusPos->z;
+
+    yaw = Math_FAtan2F(diffZ, diffX);
+    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
+    Math_SmoothStepToS(&turnTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&turnTarget->y, yaw, 4, 0x2710, 0);
+
+    targetX =
+        SubS_ComputeTurnToPointRot(&headRot->x, options->headRotX.rotMax, turnTarget->x, options->headRotX.slowness,
+                                   options->headRotX.rotStepMin, options->headRotX.rotStepMax);
+    //! @bug: torsoRotX uses headRotX slowness
+    SubS_ComputeTurnToPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
+                               options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
+
+    targetY = turnTarget->y - shapeRot->y;
+    SubS_ComputeTurnToPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
+                               options->headRotY.rotStepMin, options->headRotY.rotStepMax);
+    SubS_ComputeTurnToPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
+                               options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
+                               options->torsoRotY.rotStepMax);
+
+    return true;
+}
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
@@ -987,4 +1111,51 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
     return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")
+/**
+ * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
+ * head and torso to a point
+ *
+ * @param[in] worldPos the actor's world position
+ * @param[in] focusPos the actor's focus position
+ * @param[in] shapeYRot the actor's shape's Y rotation
+ * @param[in] yawTarget the target point to determine desired yaw
+ * @param[in] pitchTarget the target point to determine desired pitch
+ * @param[in,out] headZRotStep the computed actors' head's Z rotation step
+ * @param[in,out] headXRotStep the computed actors' head's X rotation step
+ * @param[in,out] torsoZRotStep the computed actors' torso's Z rotation step
+ * @param[in,out] torsoXRotStep the computed actors' torso's X rotation step
+ * @param[in] headZRotStepMax the max head's Z rotation step
+ * @param[in] headXRotStepMax the max head's X rotation step
+ * @param[in] torsoZRotStepMax the max torso's Z rotation step
+ * @param[in] torsoXRotStepMax the max torso's X rotation step
+ */
+s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                         s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
+                         u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
+    s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
+    s16 pad;
+    s16 pad2;
+    s16 pitch = Math_Vec3f_Pitch(focusPos, pitchTarget);
+
+    if (BINANG_ADD(headXRotStepMax, torsoXRotStepMax) >= (s16)ABS(yaw)) {
+        Math_ApproachS(headXRotStep, yaw - *torsoXRotStep, 4, 0x2AA8);
+        *headXRotStep = CLAMP(*headXRotStep, -headXRotStepMax, headXRotStepMax);
+        Math_ApproachS(torsoXRotStep, yaw - *headXRotStep, 4, 0x2AA8);
+        *torsoXRotStep = CLAMP(*torsoXRotStep, -torsoXRotStepMax, torsoXRotStepMax);
+    } else {
+        Math_ApproachS(headXRotStep, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoXRotStep, 0, 4, 0x2AA8);
+    }
+
+    if (BINANG_ADD(headZRotStepMax, torsoZRotStepMax) >= (s16)ABS(pitch)) {
+        Math_ApproachS(headZRotStep, pitch - *torsoZRotStep, 4, 0x2AA8);
+        *headZRotStep = CLAMP(*headZRotStep, -headZRotStepMax, headZRotStepMax);
+        Math_ApproachS(torsoZRotStep, pitch - *headZRotStep, 4, 0x2AA8);
+        *torsoZRotStep = CLAMP(*torsoZRotStep, -torsoZRotStepMax, torsoZRotStepMax);
+    } else {
+        Math_ApproachS(headZRotStep, 0, 4, 0x2AA8);
+        Math_ApproachS(torsoZRotStep, 0, 4, 0x2AA8);
+    }
+
+    return true;
+}

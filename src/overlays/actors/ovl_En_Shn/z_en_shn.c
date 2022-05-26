@@ -184,7 +184,7 @@ void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
     tempMsgState = Message_GetState(&globalCtx->msgCtx);
     this->unk_2D4 += (this->unk_2D0 != 0.0f) ? 40.0f : -40.0f;
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
-    Matrix_InsertTranslation(this->unk_2D4, 0.0f, 0.0f, 1);
+    Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->targetActor) &&
         ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId >= 0x201)) &&
         (tempMsgState == 3) && (this->msgState == 3)) {
@@ -396,38 +396,38 @@ s32 EnShn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 Vec3f D_80AE7270 = { 1200.0f, 0.0f, 0.0f };
 void EnShn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == BURLY_GUY_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_80AE7270, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80AE7270, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
 }
 
 void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnShn* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_1D8 & 0x20)) {
         if (this->unk_1D8 & 0x10) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
     if (limbIndex == BURLY_GUY_LIMB_HEAD) {
-        func_8013AD9C((this->unk_2BA + 0x4000), (this->unk_2BC + this->actor.shape.rot.y + 0x4000), &this->unk_1E8,
-                      &this->unk_1F4, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8.x, this->unk_1E8.y, this->unk_1E8.z, 0);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-        Matrix_RotateY(this->unk_1F4.y, 1);
-        Matrix_InsertXRotation_s(this->unk_1F4.x, 1);
-        Matrix_InsertZRotation_s(this->unk_1F4.z, 1);
-        Matrix_StatePush();
+        SubS_UpdateLimb(this->unk_2BA + 0x4000, this->unk_2BC + this->actor.shape.rot.y + 0x4000, &this->unk_1E8,
+                        &this->unk_1F4, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8.x, this->unk_1E8.y, this->unk_1E8.z, MTXMODE_NEW);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1F4.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1F4.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1F4.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
