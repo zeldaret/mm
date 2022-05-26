@@ -148,7 +148,6 @@ f32 func_80A667F0(ObjDrifticeStruct3* arg0, ObjDriftice* this) {
     return temp_f20;
 }
 
-#ifdef NON_MATCHING
 void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
     ObjDrifticeStruct3* temp_s0;
     f32 temp_f22 = 0.0f;
@@ -157,6 +156,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     if (this->unk_248 > 0) {
         f32 temp_f20 = this->dyna.actor.xzDistToPlayer * this->unk_240 * 0.0007075472f;
+
         if (temp_f20 > 1.0f) {
             temp_f20 = 1.0f;
         } else if (temp_f20 < 0.01f) {
@@ -195,12 +195,9 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     temp_f22 *= arg0->unk_08;
 
-    *arg2 = (s32)temp_f22 + arg0->unk_00[2];
+    //! FAKE:
+    *arg2 = arg0->unk_00[2] + (s32)((void)0, temp_f22);
 }
-#else
-void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Driftice/func_80A66930.s")
-#endif
 
 void func_80A66C4C(ObjDrifticeStruct4* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
     ObjDrifticeStruct3* temp_s0;
@@ -340,8 +337,6 @@ void func_80A671CC(ObjDriftice* this) {
     this->actionFunc = func_80A671E0;
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
     f32 phi_f0;
     Vec3f sp40;
@@ -349,12 +344,12 @@ void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
     f32 phi_f12;
     Vec3s* points;
     s32 sp30;
-    Vec3s* points2;
+    Actor* thisx = &this->dyna.actor;
 
     Math_Vec3s_ToVec3f(&sp40, &(&this->unk_16C[this->unk_164])[this->unk_168]);
-    Math_Vec3f_Diff(&sp40, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
+    Math_Vec3f_Diff(&sp40, &this->dyna.actor.world.pos, &thisx->velocity);
 
-    sp3C = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
+    sp3C = Math3D_Vec3fMagnitude(&thisx->velocity);
     if (sp3C < (this->unk_23C * 8.0f)) {
         phi_f0 = this->unk_23C * 0.4f;
         phi_f12 = this->unk_23C * 0.05f;
@@ -391,8 +386,8 @@ void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
                     this->unk_164 = this->unk_160;
                 }
 
-                points2 = &this->unk_16C[0];
-                if ((points2->x != points->x) || (points2->y != points->y) || (points2->z != points->z)) {
+                if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
+                    (this->unk_16C[0].z != points->z)) {
                     func_80A6743C(this);
                     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;
@@ -405,9 +400,6 @@ void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Driftice/func_80A671E0.s")
-#endif
 
 void func_80A6743C(ObjDriftice* this) {
     this->actionFunc = func_80A67450;

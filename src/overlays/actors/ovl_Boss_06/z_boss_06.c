@@ -512,7 +512,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     u16 pad;
     u8 spD3;
     u8 spD2;
-    s32 maxColor = 255; // Possible FAKE MATCH
+    s32 maxColor = 255; //! FAKE:
     f32 sp68;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

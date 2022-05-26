@@ -821,11 +821,7 @@ beginseg
     name "ovl_En_Horse"
     compress
     include "build/src/overlays/actors/ovl_En_Horse/z_en_horse.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Horse/ovl_En_Horse_reloc.o"
-#else
-    include "build/data/ovl_En_Horse/ovl_En_Horse.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1501,11 +1497,7 @@ beginseg
     name "ovl_En_Goroiwa"
     compress
     include "build/src/overlays/actors/ovl_En_Goroiwa/z_en_goroiwa.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Goroiwa/ovl_En_Goroiwa_reloc.o"
-#else
-    include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2765,11 +2757,7 @@ beginseg
     name "ovl_Obj_Vspinyroll"
     compress
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/z_obj_vspinyroll.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll_reloc.o"
-#else
-    include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3001,11 +2989,7 @@ beginseg
     name "ovl_Obj_Driftice"
     compress
     include "build/src/overlays/actors/ovl_Obj_Driftice/z_obj_driftice.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Driftice/ovl_Obj_Driftice_reloc.o"
-#else
-    include "build/data/ovl_Obj_Driftice/ovl_Obj_Driftice.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3287,11 +3271,7 @@ beginseg
     name "ovl_Bg_Hakugin_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/z_bg_hakugin_bombwall.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall_reloc.o"
-#else
-    include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -4878,11 +4858,7 @@ beginseg
     name "ovl_En_Rg"
     compress
     include "build/src/overlays/actors/ovl_En_Rg/z_en_rg.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Rg/ovl_En_Rg_reloc.o"
-#else
-    include "build/data/ovl_En_Rg/ovl_En_Rg.reloc.o"
-#endif
 endseg
 
 beginseg
