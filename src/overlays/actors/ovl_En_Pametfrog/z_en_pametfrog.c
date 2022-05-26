@@ -278,16 +278,16 @@ void func_8086A238(EnPametfrog* this) {
     MtxF unkMtx;
 
     unkMtx.xx = this->unk_2E8.x;
-    unkMtx.xy = this->unk_2E8.y;
-    unkMtx.xz = this->unk_2E8.z;
-    unkMtx.yx = this->unk_2DC.x;
+    unkMtx.yx = this->unk_2E8.y;
+    unkMtx.zx = this->unk_2E8.z;
+    unkMtx.xy = this->unk_2DC.x;
     unkMtx.yy = this->unk_2DC.y;
-    unkMtx.yz = this->unk_2DC.z;
-    unkMtx.zx = this->unk_2D0.x;
-    unkMtx.zy = this->unk_2D0.y;
+    unkMtx.zy = this->unk_2DC.z;
+    unkMtx.xz = this->unk_2D0.x;
+    unkMtx.yz = this->unk_2D0.y;
     unkMtx.zz = this->unk_2D0.z;
 
-    func_8018219C(&unkMtx, &this->actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&unkMtx, &this->actor.shape.rot, false);
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.z = this->actor.shape.rot.z;
@@ -315,8 +315,8 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
+    Matrix_RotateAxisF(rotation, &vec2, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
@@ -683,8 +683,8 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
+        Matrix_RotateAxisF(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
+        Matrix_MultVec3f(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
@@ -1395,9 +1395,9 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     s8 index;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        Matrix_GetStateTranslationAndScaledY(2500.0f, &vec);
+        Matrix_MultVecY(2500.0f, &vec);
         center = &this->collider.elements[0].dim.worldSphere.center;
         center->x = vec.x;
         center->y = vec.y;
@@ -1410,7 +1410,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     index = limbPosIndex[limbIndex];
     if (index != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[index]);
+        Matrix_MultZero(&this->limbPos[index]);
     }
 }
 
@@ -1418,7 +1418,7 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPametfrog* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
+    Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnPametfrog_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,

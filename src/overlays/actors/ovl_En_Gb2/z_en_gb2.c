@@ -982,7 +982,7 @@ s32 EnGb2_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnGb2* this = THIS;
 
     if (limbIndex == 7) {
-        Matrix_RotateY(this->unk_270.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_270.y, MTXMODE_APPLY);
     }
 
     if (limbIndex == 1) {
@@ -997,7 +997,7 @@ void EnGb2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp18 = { 2400.0f, 0.0f, 0.0f };
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
 

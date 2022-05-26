@@ -1121,11 +1121,11 @@ void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnKgy* this = THIS;
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80B432D8, &this->unk_2A8);
+        Matrix_MultVec3f(&D_80B432D8, &this->unk_2A8);
     }
 
     if (limbIndex == 16) {
-        Matrix_MultiplyVector3fByState(&D_80B432E4, &this->unk_2C0);
+        Matrix_MultVec3f(&D_80B432E4, &this->unk_2C0);
     }
 }
 
@@ -1137,9 +1137,9 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+    Matrix_Push();
+    Matrix_Translate(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
+    Matrix_RotateXS(0x4000, MTXMODE_APPLY);
 
     if (func_80B40D8C(globalCtx)) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_kgy_Matanimheader_00F6A0));
@@ -1161,7 +1161,7 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {

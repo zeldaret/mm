@@ -972,8 +972,8 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B4);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255.0f * sp84, 255, 255);
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f,
-                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
     phi_f12 = 1.0f;
     if (this->unk_203 != 0) {
         phi_f12 = this->unk_204 * phi_f12;
@@ -981,19 +981,19 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     Matrix_Scale(phi_f12, phi_f12, phi_f12, MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(globalCtx->state.gfxCtx));
-    Matrix_StatePush();
+    Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
                                 0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
-    Matrix_InsertTranslation(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_1B0 > 0.0f) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B0);
@@ -1004,7 +1004,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100,
                                     0x100, 1, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
 
-        Matrix_InsertTranslation(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,
                      MTXMODE_APPLY);
 
@@ -1019,11 +1019,9 @@ void func_808BB4C4(DoorWarp1* this, GlobalContext* globalCtx) {
     Gfx_DrawDListOpa(globalCtx, object_warp1_DL_0076C0);
 }
 
-#ifdef NON_MATCHING
-// GraphicsContext should be compiler-managed?
 void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx;
+    s32 pad;
     Color_RGB8 sp64[] = {
         { 50, 150, 0 },
         { 100, 150, 200 },
@@ -1033,8 +1031,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     s32 sp60 = 0;
 
     if (this->unk_1D4 != 0) {
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
+                         this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
         Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
@@ -1051,9 +1049,9 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
@@ -1065,17 +1063,16 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
-    gfxCtx = globalCtx->state.gfxCtx;
-
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
-    Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    OPEN_DISPS(gfxCtx);
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
@@ -1086,16 +1083,6 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-static Color_RGB8 D_808BBB50[] = {
-    { 50, 150, 0 },
-    { 100, 150, 200 },
-    { 0, 50, 200 },
-    { 120, 150, 0 },
-};
-void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808BB4F4.s")
-#endif
 
 void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DoorWarp1* this = THIS;
@@ -1123,54 +1110,44 @@ void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// casting/macro on temp_s1/s0
 void func_808BB8D4(DoorWarp1* this, GlobalContext* globalCtx, s32 arg2) {
-    static Vec3f D_808BBB5C = { 0.0f, 0.05f, 0.0f };
-    static Vec3f D_808BBB68 = { 0.0f, 0.25f, 0.0f };
-    Vec3f sp9C;
-    Color_RGBA8 sp98;
-    Color_RGBA8 sp94;
+    static Vec3f sVelocity = { 0.0f, 0.05f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.25f, 0.0f };
+    Vec3f pos;
+    Color_RGBA8 primColor;
+    Color_RGBA8 envColor;
     s32 i;
-    s16 temp_s0;
-    s32 temp_s1;
-    s32 phi_s2;
+    s32 rand;
+    s16 scale;
+    s32 life;
 
     for (i = 0; i < arg2; i++) {
-        temp_s1 = (Rand_ZeroOne() * 0x10000);
-        temp_s0 = temp_s1 - 0x8000;
+        rand = (Rand_ZeroOne() * 0x10000);
 
-        sp9C.x = (-Math_SinS(temp_s0) * 35.0f) + this->dyna.actor.world.pos.x;
-        sp9C.y = this->dyna.actor.world.pos.y;
-        temp_s0 = (s16)(temp_s1 - 0x8000);
-        sp9C.z = Math_CosS(temp_s0) * 35.0f + this->dyna.actor.world.pos.z;
+        pos.x = (-Math_SinS(rand - 0x8000) * 35.0f) + this->dyna.actor.world.pos.x;
+        pos.y = this->dyna.actor.world.pos.y;
+        pos.z = (Math_CosS(rand - 0x8000) * 35.0f) + this->dyna.actor.world.pos.z;
 
-        D_808BBB5C.x = 0.0f;
-        D_808BBB68.y = 0.25f;
+        primColor.r = 255;
+        primColor.g = 255;
+        primColor.b = 255;
+        envColor.r = 200;
+        envColor.g = 200;
+        envColor.b = 255;
 
-        sp98.r = 255;
-        sp98.g = 255;
-        sp98.b = 255;
-        sp94.r = 200;
-        sp94.g = 200;
-        sp94.b = 255;
+        sAccel.y = 0.25f;
+        sVelocity.x = 0.0f;
+        sVelocity.z = 0.0f;
 
-        D_808BBB5C.z = 0.0f;
+        scale = (Rand_ZeroOne() * 1000.0f) + 800.0f;
 
-        temp_s1 = (s16)((Rand_ZeroOne() * 1000.0f) + 800.0f);
-
-        phi_s2 = 27;
+        life = 27;
         if (arg2 >= 2) {
-            phi_s2 = 8;
-            D_808BBB68.y = 1.8f;
-            D_808BBB5C.x = -Math_SinS(temp_s0) * 5.0f;
-            D_808BBB5C.z = Math_CosS(temp_s0) * 5.0f;
+            life = 8;
+            sAccel.y = 1.8f;
+            sVelocity.x = -Math_SinS(rand - 0x8000) * 5.0f;
+            sVelocity.z = Math_CosS(rand - 0x8000) * 5.0f;
         }
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp9C, &D_808BBB5C, &D_808BBB68, &sp98, &sp94, temp_s1, phi_s2);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAccel, &primColor, &envColor, scale, life);
     }
 }
-#else
-static Vec3f D_808BBB5C = { 0.0f, 0.05f, 0.0f };
-static Vec3f D_808BBB68 = { 0.0f, 0.25f, 0.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808BB8D4.s")
-#endif

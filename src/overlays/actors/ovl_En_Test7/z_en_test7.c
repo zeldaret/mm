@@ -332,7 +332,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
 
     func_8012C1C0(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
@@ -348,18 +348,18 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
             continue;
         }
 
-        Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
 
         if (ptr->unk_00 == 1) {
-            Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+            Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
         } else {
             SkinMatrix_SetRotateYRP(&sp6C, ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z);
-            Matrix_InsertMatrix(&sp6C, MTXMODE_APPLY);
+            Matrix_Mult(&sp6C, MTXMODE_APPLY);
         }
 
         Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
         if (ptr->unk_00 == 2) {
-            Matrix_InsertTranslation(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
         }
 
         temp_v0 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -371,7 +371,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
 
     if (ptr) {}
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -939,7 +939,7 @@ s32 func_80AF31D0(GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limb
     Vec3f sp18;
 
     if ((*dList != NULL) && (Rand_ZeroOne() < 0.03f)) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp18);
+        Matrix_MultVec3f(&gZeroVec3f, &sp18);
         func_80AF0C30(this->unk_15C, &sp18, 0);
     }
     return true;
@@ -961,15 +961,15 @@ void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_144 & 2) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertRotation(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateZYX(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_148.unk_08 * 100.0f, this->unk_148.unk_0C * 100.0f, this->unk_148.unk_08 * 100.0f,
                      MTXMODE_APPLY);
         sp40 = this->unk_148.unk_00;
         AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_0815D0), sp40);
         Gfx_DrawDListXlu(globalCtx, gameplay_keep_DL_080FC8);
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     func_80AF14FC(globalCtx, this->unk_15C);

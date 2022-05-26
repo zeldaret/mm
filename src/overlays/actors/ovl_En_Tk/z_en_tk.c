@@ -24,8 +24,8 @@ void func_80AECB0C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECB6C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECE0C(EnTk* this, GlobalContext* globalCtx);
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx);
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2);
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2);
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
 void func_80AED4F8(EnTk* this, GlobalContext* globalCtx);
 void func_80AED610(EnTk* this, GlobalContext* globalCtx);
 void func_80AED898(EnTk* this, GlobalContext* globalCtx);
@@ -62,11 +62,11 @@ void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx);
 
 static s32 D_80AF0050;
 
-static u32 D_80AEF800[] = {
-    0x03060012,
-    0x00000105,
-    0x0E060012,
-    0x00010500,
+static u8 D_80AEF800[] = {
+    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 18, 0, 0x8 - 0x7),
+    /* 0x7 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x8 */ SCHEDULE_CMD_RET_TIME(6, 0, 18, 0, 1),
+    /* 0xE */ SCHEDULE_CMD_RET_NONE(),
 };
 
 const ActorInit En_Tk_InitVars = {
@@ -313,8 +313,8 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
+    ScheduleResult sp34;
     u8 temp4;
-    struct_80133038_arg2 sp34;
 
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -347,14 +347,14 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     this->unk_2DC -= temp3;
     this->unk_2E0 += REG(15);
 
-    if (func_80133038(globalCtx, (UNK_TYPE*)D_80AEF800, &sp34)) {
-        if ((this->unk_3CC != sp34.unk0) && !func_80AED354(this, globalCtx, &sp34)) {
+    if (Schedule_RunScript(globalCtx, D_80AEF800, &sp34)) {
+        if ((this->unk_3CC != sp34.result) && !func_80AED354(this, globalCtx, &sp34)) {
             return;
         }
-        temp4 = sp34.unk0;
+        temp4 = sp34.result;
     } else {
-        sp34.unk0 = 0;
-        temp4 = sp34.unk0;
+        sp34.result = 0;
+        temp4 = sp34.result;
     }
 
     if (!temp4 && (this->unk_3CC != 0)) {
@@ -365,7 +365,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
         this->actor.draw = EnTk_Draw;
     }
 
-    this->unk_3CC = sp34.unk0;
+    this->unk_3CC = sp34.result;
     func_80AECE0C(this, globalCtx);
 
     if (this->unk_3CE & 8) {
@@ -492,20 +492,20 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 phi_v1 = false;
 
-    if (arg2->unk0 != 0) {
+    if (arg2->result != 0) {
         phi_v1 = func_80AED38C(this, globalCtx, arg2);
     }
     return phi_v1;
 }
 
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp1E = gSaveContext.save.time - 0x3FFC;
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+    u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
-    s32 idx = arg2->unk0 - 1;
+    s32 idx = arg2->result - 1;
 
     this->unk_3C8 = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
     if (this->unk_3C8 == 0) {
@@ -515,10 +515,10 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->unk_3D0 >= 0)) {
         phi_a1 = sp1E;
     } else {
-        phi_a1 = arg2->unk4;
+        phi_a1 = arg2->time0;
     }
 
-    this->unk_3E4 = arg2->unk8 - phi_a1;
+    this->unk_3E4 = arg2->time1 - phi_a1;
     this->unk_3F0 = sp1E - phi_a1;
     phi_a1 = this->unk_3C8->count - 2;
     this->unk_3E8 = this->unk_3E4 / phi_a1;
@@ -1353,11 +1353,11 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->unk_2B0 != 2) {
         switch (limbIndex) {
             case 16:
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
                 break;
 
             case 14:
-                Matrix_MultiplyVector3fByState(&D_80AEFA84, &this->unk_2B4);
+                Matrix_MultVec3f(&D_80AEFA84, &this->unk_2B4);
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1384,7 +1384,7 @@ void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AEFA90[this->unk_2C2]));
 
-    Matrix_RotateY(this->unk_318, MTXMODE_APPLY);
+    Matrix_RotateYS(this->unk_318, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTk_OverrideLimbDraw, EnTk_PostLimbDraw, &this->actor);
 

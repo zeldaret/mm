@@ -357,7 +357,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
 
 // Chooses the next dialogue based on player's selection
 void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
-    if (Message_ShouldAdvance(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x3339:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -491,7 +491,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 aux;
 
-    if (Message_ShouldAdvance(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x2390:
                 func_801477B4(globalCtx);
@@ -643,7 +643,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
             break;
 
         case 6: // End conversation
-            if (Message_ShouldAdvance(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
@@ -1052,7 +1052,7 @@ void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
     if (limbIndex == MA1_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp28, &this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);

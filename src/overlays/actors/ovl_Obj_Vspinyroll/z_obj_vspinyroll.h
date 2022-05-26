@@ -21,12 +21,16 @@ typedef struct {
     /* 0x10 */ s32 bgId;
 } ObjVspinyrollStruct2; // size = 0x14
 
+typedef struct {
+    /* 0x000 */ ObjVspinyrollStruct2 unk_000[24];
+    /* 0x1E0 */ ObjVspinyrollStruct2* unk_1E0;
+    /* 0x1E4 */ s32 unk_1E4;
+} ObjVspinyrollStruct3; // size = 0x1E8
+
 typedef struct ObjVspinyroll {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ ColliderCylinder collider;
-    /* 0x01A8 */ ObjVspinyrollStruct2 unk_1A8[24];
-    /* 0x0388 */ ObjVspinyrollStruct2* unk_388;
-    /* 0x038C */ s32 unk_38C;
+    /* 0x01A8 */ ObjVspinyrollStruct3 unk_1A8;
     /* 0x0390 */ ObjVspinyrollActionFunc actionFunc;
     /* 0x0394 */ f32 unk_394;
     /* 0x0398 */ s32 unk_398;

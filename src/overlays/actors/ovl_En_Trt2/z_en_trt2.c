@@ -854,9 +854,9 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
-    func_8018219C(&sp28, &sp68, 0);
+    Matrix_MultVec3f(&sp70, &sp7C);
+    Matrix_Get(&sp28);
+    Matrix_MtxFToYXZRot(&sp28, &sp68, false);
 
     *arg2 = sp7C;
 
@@ -895,12 +895,12 @@ void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
     if (limbIndex == 21) {
         func_80AD5394(this->unk_3D4, this->unk_3D6, &this->unk_3C8, &this->unk_3C2, phi_v0);
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_3C2.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+        Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_3C2.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_3C2.z, MTXMODE_APPLY);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
 }
 
@@ -908,11 +908,11 @@ void EnTrt2_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* th
     EnTrt2* this = THIS;
 
     if (limbIndex == 21) {
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_3C2.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_3C2.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_3C2.z, MTXMODE_APPLY);
     }
 }
 

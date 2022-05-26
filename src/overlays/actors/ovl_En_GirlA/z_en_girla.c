@@ -597,7 +597,7 @@ void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnGirlA* this = THIS;
 
-    Matrix_RotateY(this->rotY, MTXMODE_APPLY);
+    Matrix_RotateYS(this->rotY, MTXMODE_APPLY);
     if (this->drawFunc != NULL) {
         this->drawFunc(&this->actor, globalCtx, 0);
     }

@@ -1221,7 +1221,7 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
 void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1697,9 +1697,9 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     Vec3s newRot;
     MtxF currentState;
 
-    Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
-    Matrix_CopyCurrentState(&currentState);
-    func_8018219C(&currentState, &newRot, MTXMODE_NEW);
+    Matrix_MultVec3f(&zeroVec, &newPos);
+    Matrix_Get(&currentState);
+    Matrix_MtxFToYXZRot(&currentState, &newRot, false);
     *pos = newPos;
     if (isFullyAwake) {
         newRot.x += pitch;
@@ -1740,11 +1740,11 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
     if (limbIndex == 21) {
         EnTrt_UpdateHeadPosAndRot(this->headPitch, this->headYaw, &this->headPos, &this->headRot, isFullyAwake);
-        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1752,11 +1752,11 @@ void EnTrt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {
-        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.z, MTXMODE_APPLY);
     }
 }
 

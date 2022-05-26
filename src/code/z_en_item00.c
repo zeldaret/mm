@@ -68,9 +68,9 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
     s32 getItemId = GI_NONE;
-    s32 sp30 = (this->actor.params & 0x8000) ? 1 : 0;
+    s32 sp30 = ENITEM00_GET_8000(&this->actor) ? 1 : 0;
 
-    this->collectibleFlag = (this->actor.params & 0x7F00) >> 8;
+    this->collectibleFlag = ENITEM00_GET_7F00(&this->actor);
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
@@ -346,7 +346,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
-        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        EffectSsKirakira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
     if ((this->actor.bgCheckFlags & 3) != 0) {
         if (this->actor.velocity.y > -2.0f) {
@@ -403,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);
-        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        EffectSsKirakira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
 
     if (this->actor.bgCheckFlags & 0x0003) {
@@ -815,8 +815,6 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 s16 func_800A7650(s16 dropId) {
-    s16 healthCapacity;
-
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
          (INV_CONTENT(ITEM_BOMB) == ITEM_NONE)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
@@ -828,8 +826,7 @@ s16 func_800A7650(s16 dropId) {
     }
 
     if (dropId == ITEM00_HEART) {
-        healthCapacity = gSaveContext.save.playerData.healthCapacity;
-        if (healthCapacity == gSaveContext.save.playerData.health) {
+        if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }

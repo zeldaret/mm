@@ -760,7 +760,7 @@ void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
                ((limbIndex == 15) || (limbIndex == 21))) {
         if (this->actionFunc != EnFirefly_Die) {
-            Matrix_GetStateTranslation(&auraPos);
+            Matrix_MultZero(&auraPos);
             auraPos.x += Rand_ZeroFloat(5.0f);
             auraPos.y += Rand_ZeroFloat(5.0f);
             auraPos.z += Rand_ZeroFloat(5.0f);
@@ -793,11 +793,11 @@ void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if (limbIndex == 15) {
-        Matrix_GetStateTranslation(&this->limbPos[0]);
+        Matrix_MultZero(&this->limbPos[0]);
     } else if (limbIndex == 21) {
-        Matrix_GetStateTranslation(&this->limbPos[1]);
+        Matrix_MultZero(&this->limbPos[1]);
     } else if (limbIndex == 10) {
-        Matrix_GetStateTranslation(&this->limbPos[2]);
+        Matrix_MultZero(&this->limbPos[2]);
     }
 }
 
