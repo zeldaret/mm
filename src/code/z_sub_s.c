@@ -220,7 +220,7 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
  * @param numPoints the number of points considered with weights
  * @param len the length to fill the array, generally the path count + numPoints
  *
- * @note SubS_TimePathing_Update assumes numPoints to be 3
+ * @note `SubS_TimePathing_Update` assumes numPoints to be 3
  */
 void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len) {
     s32 i;
@@ -243,7 +243,7 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
  * @param totalTime how much time the path should take to travel
  * @param pathCount the path count
  * @param numPoints the number of points considered when computing the next point to move to
- * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param weightArray see `SubS_TimePathing_FillWeightArray`
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
@@ -276,9 +276,9 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 elapsedTime, s32 waypo
  * Computes the weights to be used with time paths
  *
  * @param numPoints the number of points considered when computing the next point to move to, max is 11
- * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
  * @param waypoint the current time relative to the start time of the path
- * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param weightArray see `SubS_TimePathing_FillWeightArray`
  * @param weights how much to weight each point considered
  */
 void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]) {
@@ -321,11 +321,11 @@ void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint,
  *
  * @param x
  * @param z
- * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
  * @param numPoints the number of points considered when computing the next point to move to, max is 11
  * @param waypoint the current time relative to the start time of the path
  * @param points the path's points
- * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param weightArray see `SubS_TimePathing_FillWeightArray`
  */
 void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[],
                                      f32 weightArray[]) {
@@ -361,12 +361,12 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *  - Updating the time
  *
  * @param path
- * @param weightVal see SubS_TimePathing_ComputeWeightVal
+ * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
  * @param elapsedTime how much time has passed
  * @param waypointTime how much time per each waypoint
  * @param totalTime how much time the path should take to travel
  * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
- * @param weightArray see SubS_TimePathing_FillWeightArray
+ * @param weightArray see `SubS_TimePathing_FillWeightArray`
  * @param point the computed point to move to
  * @param timeSpeed how fast time moves
  *
