@@ -272,14 +272,14 @@ s16 func_80169BF8(GlobalContext* globalCtx, s16 camId, s16 arg2) {
     }
 }
 
-u16 Play_GetCsCamDataSetting(GlobalContext* globalCtx, s32 camId) {
-    CsCamData* csCamData = &globalCtx->csCamData[camId];
+u16 Play_GetCsCamDataSetting(GlobalContext* globalCtx, s32 csCamDataId) {
+    CsCamData* csCamData = &globalCtx->csCamData[csCamDataId];
 
     return csCamData->setting;
 }
 
-Vec3s* Play_GetCsCamDataVec3s(GlobalContext* globalCtx, s32 camId) {
-    CsCamData* csCamData = &globalCtx->csCamData[camId];
+Vec3s* Play_GetCsCamDataVec3s(GlobalContext* globalCtx, s32 csCamDataId) {
+    CsCamData* csCamData = &globalCtx->csCamData[csCamDataId];
 
     return Lib_SegmentedToVirtual(csCamData->data);
 }

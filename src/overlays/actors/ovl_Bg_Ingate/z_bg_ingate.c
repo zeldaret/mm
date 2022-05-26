@@ -128,14 +128,14 @@ s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
     } else {
         gSaveContext.eventInf[4] |= 2;
     }
-    Camera_ChangeSetting(camera, 47);
+    Camera_ChangeSetting(camera, CAM_SET_BOAT_CRUISE);
     globalCtx->unk_1887C = 0x63;
 
     return false;
 }
 
 void func_80953E38(GlobalContext* globalCtx) {
-    Camera_ChangeSetting(Play_GetCamera(globalCtx, CAM_ID_MAIN), 1);
+    Camera_ChangeSetting(Play_GetCamera(globalCtx, CAM_ID_MAIN), CAM_SET_NORMAL0);
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
         gSaveContext.eventInf[4] &= (u8)~2;
@@ -212,11 +212,11 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     }
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
-            Camera_ChangeSetting(camera, 1);
+            Camera_ChangeSetting(camera, CAM_SET_NORMAL0);
             player->stateFlags1 |= 0x20;
             globalCtx->actorCtx.unk5 &= ~0x4;
         } else {
-            Camera_ChangeSetting(camera, 47);
+            Camera_ChangeSetting(camera, CAM_SET_BOAT_CRUISE);
             player->stateFlags1 &= ~0x20;
         }
     }

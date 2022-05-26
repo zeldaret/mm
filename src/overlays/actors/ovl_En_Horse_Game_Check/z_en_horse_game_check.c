@@ -137,7 +137,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, GlobalContext* globalCtx2) {
     }
 
     this->unk_17C = -1;
-    Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], 10);
+    Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_FREE0);
     Play_CameraSetAtEye(globalCtx, 0, &sp40, &sp4C);
     Play_CameraSetFov(globalCtx, 0, 45.0f);
     func_800FE484();
@@ -228,7 +228,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 
     if ((this->unk_17C != -1) && ((this->unk_168 - this->unk_17C) > 10)) {
         this->unk_17C = -1;
-        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], 4);
+        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_HORSE);
     }
 
     this->unk_168++;
