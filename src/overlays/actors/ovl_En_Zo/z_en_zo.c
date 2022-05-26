@@ -206,11 +206,11 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_Walk(EnZo* this, GlobalContext* globalCtx) {
-    if (ENZO_GET_PATH(&this->actor) != ENZO_NO_PATH) {
+    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
         EnZo_SetAnimation(&this->skelAnime, 6);
     }
 
-    if (ENZO_GET_PATH(&this->actor) != ENZO_NO_PATH) {
+    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = EnZo_FollowPath;
     } else {
         this->actionFunc = EnZo_DoNothing;
@@ -264,7 +264,7 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
+    this->path = SubS_GetPathByIndex(globalCtx, ENZO_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;

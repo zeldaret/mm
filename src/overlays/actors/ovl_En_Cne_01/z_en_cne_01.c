@@ -152,7 +152,7 @@ void EnCne01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
-        if (ENCNE01_GET_PATH(&this->actor) == ENCNE01_NO_PATH) {
+        if (ENCNE01_GET_PATH(&this->actor) == 0x3F) {
             this->actionFunc = EnCne01_FaceForward;
         } else {
             this->actionFunc = EnCne01_Walk;
@@ -215,7 +215,7 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), ENCNE01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), 0x3F);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnCne01_FinishInit;
