@@ -969,8 +969,7 @@ beginseg
     name "ovl_En_Famos"
     compress
     include "build/src/overlays/actors/ovl_En_Famos/z_en_famos.o"
-    include "build/data/ovl_En_Famos/ovl_En_Famos.data.o"
-    include "build/data/ovl_En_Famos/ovl_En_Famos.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Famos/ovl_En_Famos_reloc.o"
 endseg
 
 beginseg
