@@ -43,15 +43,15 @@ typedef struct EnBaba {
     /* 0x0406 */ UNK_TYPE1 unk406[4];
     /* 0x040A */ u16 unk_40A;
     /* 0x040C */ s32 unk_40C;
-    /* 0x0410 */ Path* unk_410;
-    /* 0x0414 */ Vec3f unk_414;
-    /* 0x0420 */ f32 unk_420;
-    /* 0x0424 */ s32 unk_424;
-    /* 0x0428 */ s32 unk_428;
-    /* 0x042C */ s32 unk_42C;
-    /* 0x0430 */ s32 unk_430;
+    /* 0x0410 */ Path* timePath;
+    /* 0x0414 */ Vec3f timePathPoint;
+    /* 0x0420 */ f32 timePathWeightVal;
+    /* 0x0424 */ s32 timePathTotalTime;
+    /* 0x0428 */ s32 timePathWaypointTime;
+    /* 0x042C */ s32 timePathWaypoint;
+    /* 0x0430 */ s32 timePathElapsedTime;
     /* 0x0434 */ u8 unk_434;
-    /* 0x0436 */ s16 unk_436;
+    /* 0x0436 */ s16 timePathTimeSpeed;
     /* 0x0438 */ s32 unk_438;
     /* 0x043C */ s32 unk_43C;
 } EnBaba; // size = 0x440
