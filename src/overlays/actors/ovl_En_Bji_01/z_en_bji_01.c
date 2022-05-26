@@ -73,14 +73,14 @@ static AnimationSpeedInfo D_809CDC7C[] = {
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp58;
+    Vec3f pitchTarget;
     s32 pad[2];
 
-    Math_Vec3f_Copy(&sp58, &player->actor.world.pos);
-    sp58.y = player->bodyPartsPos[7].y + 3.0f;
-    func_8013E950(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y, &player->actor.world.pos,
-                  &sp58, &this->headZRotAdj, &this->headXRotAdj, &this->torsoZRotAdj, &this->torsoXRotAdj, 0x1554,
-                  0x1FFE, 0xE38, 0x1C70);
+    Math_Vec3f_Copy(&pitchTarget, &player->actor.world.pos);
+    pitchTarget.y = player->bodyPartsPos[7].y + 3.0f;
+    SubS_TurnToPointStep(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
+                         &player->actor.world.pos, &pitchTarget, &this->headZRotStep, &this->headXRotStep,
+                         &this->torsoZRotStep, &this->torsoXRotStep, 0x1554, 0x1FFE, 0xE38, 0x1C70);
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
@@ -116,8 +116,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
-    s32 tempDay;
-    f32 tempTimeBeforeMoonCrash;
+    f32 timeBeforeMoonCrash;
 
     switch (this->actor.params) {
         case ENBJI01_PARAMS_DEFAULT:
@@ -180,10 +179,11 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            tempDay = gSaveContext.save.day;
-                            tempTimeBeforeMoonCrash =
-                                ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.save.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
+                            // Calculates the time left before the moon crashes.
+                            // The day begins at CLOCK_TIME(6, 0) so it must be offset.
+                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
+                                                  (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+                            if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
@@ -207,7 +207,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case 4:
-            if (Message_ShouldAdvance(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -235,7 +235,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case 5:
-            if (Message_ShouldAdvance(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (globalCtx->msgCtx.currentTextId) {
                     case 0x5DE:
@@ -406,12 +406,12 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
     switch (limbIndex) {
         case BJI_LIMB_TORSO:
-            rot->x += this->torsoXRotAdj;
-            rot->z += this->torsoZRotAdj;
+            rot->x += this->torsoXRotStep;
+            rot->z += this->torsoZRotStep;
             break;
         case BJI_LIMB_HEAD:
-            rot->x += this->headXRotAdj;
-            rot->z += this->headZRotAdj;
+            rot->x += this->headXRotStep;
+            rot->z += this->headZRotStep;
             break;
     }
     return false;
@@ -428,7 +428,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         sp20.x += temp_f4 * 0.1f;
         sp20.y += temp_f4 * 0.1f;
         sp20.z += temp_f4 * 0.1f;
-        Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
     }
 }
 

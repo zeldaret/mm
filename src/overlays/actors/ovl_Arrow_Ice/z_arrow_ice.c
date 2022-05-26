@@ -196,10 +196,10 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
-        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         // Draw blue effect over the screen when arrow hits
@@ -217,14 +217,14 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
-        Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
         if (this->timer != 0) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            Matrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
         Matrix_Scale(this->radius * 0.2f, this->height * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gIceArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,

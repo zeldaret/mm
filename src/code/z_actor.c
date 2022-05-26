@@ -92,10 +92,10 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            Matrix_SetCurrentState(&mtx);
+            Matrix_Put(&mtx);
 
             if ((dlist != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
-                Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
+                Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
             shadowScale *= actor->shape.shadowScale;
@@ -151,8 +151,8 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     sp58 = Math_FAtan2F(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
-    Matrix_SetCurrentState(arg2);
-    Matrix_RotateY(sp58, MTXMODE_APPLY);
+    Matrix_Put(arg2);
+    Matrix_RotateYS(sp58, MTXMODE_APPLY);
     Matrix_Scale(shadowScaleX, 1.0f, shadowScaleX * shadowScaleZ, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -195,7 +195,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         CollisionPoly* spF8;
         s32 bgId;
         f32 floorHeight[2];
-        f32 pad;
+        Light* firstLight = &mapper->l.l[0];
         f32 shadowAlpha;
         f32 shadowScaleX;
         f32 shadowScaleZ;
@@ -239,8 +239,6 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                             IREG(88) + 80, IREG(89) + 60, IREG(90) + 40, 30000, 200, 60);
                         }
                         actor->shape.unk_17 &= ~spB8;
-
-                        if ((uintptr_t)mapper->l.l) {} // POSSIBLE FAKE MATCH
                     }
                 }
 
@@ -252,7 +250,8 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                 shadowScaleZ = 1.0f - (distToFloor * (1.0f / 70.0f));
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
-                for (lightPtr = mapper->l.l, j = 0; j < numLights; lightPtr++, j++) {
+                lightPtr = firstLight;
+                for (j = 0; j < numLights; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = (lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                    ABS_ALT(lightPtr->l.dir[1]);
@@ -263,9 +262,10 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
 
-                for (j = 0; j < 2; lightPtr++, j++) {
+                for (j = 0; j < 2; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = ((lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                     ABS_ALT(lightPtr->l.dir[1])) -
@@ -275,6 +275,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
             }
             feetPosPtr++;
@@ -300,9 +301,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                       Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
-        Matrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
+        Matrix_MultVec3f(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
-        Matrix_MultiplyVector3fByState(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
+        Matrix_MultVec3f(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
     }
 }
 
@@ -532,22 +533,22 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
                         }
 
-                        Matrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                        Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
                                         (u8)alpha);
 
-                        Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
+                        Matrix_RotateZS((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
-                            Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
-                            Matrix_StatePush();
-                            Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
+                            Matrix_Push();
+                            Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
                             gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
-                            Matrix_StatePop();
+                            Matrix_Pop();
                         }
                     }
 
@@ -565,10 +566,10 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
-            Matrix_InsertTranslation(actor->focus.pos.x,
-                                     actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
-                                     actor->focus.pos.z, MTXMODE_NEW);
-            Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
+            Matrix_Translate(actor->focus.pos.x,
+                             actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                             actor->focus.pos.z, MTXMODE_NEW);
+            Matrix_RotateYS((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
                          MTXMODE_APPLY);
 
@@ -2511,14 +2512,13 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights_Draw(light, globalCtx->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
-        Matrix_SetStateRotationAndTranslation(
+        Matrix_SetTranslateRotateYXZ(
             actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
             actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
     } else {
-        Matrix_SetStateRotationAndTranslation(actor->world.pos.x,
-                                              actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
-                                              actor->world.pos.z, &actor->shape.rot);
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
+                                     actor->world.pos.z, &actor->shape.rot);
     }
 
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
@@ -3544,14 +3544,14 @@ void Actor_SpawnBodyParts(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx*
     MtxF* currentMatrix;
 
     if (*dList != NULL) {
-        currentMatrix = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrent();
         spawnedPart =
             Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, currentMatrix->mf[3][0],
                                currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;
 
-            func_8018219C(currentMatrix, &part->actor.shape.rot, 0);
+            Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
             part->unk_150 = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }
@@ -3773,9 +3773,9 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, GlobalContext* globalCtx)
     sp54 = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
     if (sp44 != NULL) {
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
-        Matrix_SetCurrentState(&sp58);
+        Matrix_Put(&sp58);
     } else {
-        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
+        Matrix_Translate(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
     }
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
@@ -3842,16 +3842,16 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&baseMtxF);
+    Matrix_Translate(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
+    Matrix_Get(&baseMtxF);
 
-    chainsTranslateX = __sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
-    chainsTranslateY = __cosf(entry->chainAngle - chainRotZ) * (10 - frame) * 0.1f * entry->chainLength;
+    chainsTranslateX = sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
+    chainsTranslateY = cosf(entry->chainAngle - chainRotZ) * (10 - frame) * 0.1f * entry->chainLength;
 
     for (i = 0; i < 4; i++) {
-        Matrix_SetCurrentState(&baseMtxF);
-        Matrix_InsertZRotation_f(chainRotZ, MTXMODE_APPLY);
-        Matrix_InsertTranslation(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
+        Matrix_Put(&baseMtxF);
+        Matrix_RotateZF(chainRotZ, MTXMODE_APPLY);
+        Matrix_Translate(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
         if (entry->chainsScale != 1.0f) {
             Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
@@ -3868,7 +3868,7 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
         chainRotZ += rotZStep;
     }
 
-    Matrix_SetCurrentState(&baseMtxF);
+    Matrix_Put(&baseMtxF);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4517,7 +4517,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
         u32 gameplayFrames = globalCtx->gameplayFrames;
         f32 effectAlphaScaled;
 
-        currentMatrix = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrent();
 
         // Apply sfx along with damage effect
         if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
@@ -4566,15 +4566,15 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                     gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 200, KREG(21) + 200, KREG(22) + 255, (u8)alpha);
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
 
                     if (limbIndex & 1) {
-                        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                     }
 
                     if (limbIndex & 2) {
-                        Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateZF(M_PI, MTXMODE_APPLY);
                     }
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4605,8 +4605,8 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, twoTexScrollParam * 3,
                                                 twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4626,7 +4626,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     type = 255;
                 }
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
                              MTXMODE_APPLY);
 
@@ -4652,7 +4652,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                                 ((limbIndex * 10 + gameplayFrames) * -20) & 0x1FF, 32, 128));
 
-                    Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4689,12 +4689,12 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
 
                 // Apply and draw a light orb over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
-                    Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateZF(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4727,14 +4727,14 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 255), (u8)(sREG(21) + 255), (u8)sREG(22), (u8)sREG(23));
 
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Put(&globalCtx->billboardMtxF);
                 Matrix_Scale(electricSparksScale, electricSparksScale, electricSparksScale, MTXMODE_APPLY);
 
                 // Every limb draws two electric sparks at random orientations
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     // first electric spark
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
@@ -4745,8 +4745,8 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
 
                     // second electric spark
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;

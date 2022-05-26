@@ -186,12 +186,12 @@ void func_809CE068(BgSpdweb* this) {
     s32 i;
     s32 j;
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < this->collider.count; i++) {
         for (j = 0; j < ARRAY_COUNT(sp64); j++) {
-            Matrix_MultiplyVector3fByState(this->collider.elements[i].dim.vtx + j, &sp64[j]);
+            Matrix_MultVec3f(this->collider.elements[i].dim.vtx + j, &sp64[j]);
         }
         Collider_SetTrisVertices(&this->collider, i, &sp64[0], &sp64[1], &sp64[2]);
     }
@@ -513,7 +513,7 @@ void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], object_spdweb_DL_000060);
     } else {
-        Matrix_InsertTranslation(0.0f, (thisx->home.pos.y - thisx->world.pos.y) * 10.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, (thisx->home.pos.y - thisx->world.pos.y) * 10.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ((thisx->home.pos.y - thisx->world.pos.y) + 10.0f) * 0.1f, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

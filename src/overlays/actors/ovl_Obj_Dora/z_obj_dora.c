@@ -193,13 +193,13 @@ void ObjDora_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                          &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         for (j = 0; j < ARRAY_COUNT(vtx); j++) {
-            Matrix_MultiplyVector3fByState(&sTrisElementsInit[i].dim.vtx[j], &vtx[j]);
+            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &vtx[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &vtx[0], &vtx[1], &vtx[2]);
     }
@@ -329,19 +329,19 @@ void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gongForceX *= -1.0f;
         }
 
-        Matrix_StatePush();
-        Matrix_InsertXRotation_s(this->gongRotation.x, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_RotateXS(this->gongRotation.x, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
 
-        Matrix_InsertTranslation(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-position.x, -position.y, -position.z, MTXMODE_APPLY);
+        Matrix_Translate(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
+        Matrix_RotateXS(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
+        Matrix_Translate(-position.x, -position.y, -position.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     } else {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraChainDL);

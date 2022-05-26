@@ -214,7 +214,7 @@ void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (ptr->unk_00 != 0) {
-        Matrix_InsertTranslation(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
+        Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, MTXMODE_APPLY);
         POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
         POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
@@ -224,11 +224,11 @@ void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     }
 
-    Matrix_InsertTranslation(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
+    Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
     Matrix_Scale(2.0f * ptr->unk_04, 2.0f * ptr->unk_04, 2.0f * ptr->unk_04, MTXMODE_APPLY);
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(globalCtx->state.frames * 512, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 2.0f, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_RotateZS(globalCtx->state.frames * 512, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 2.0f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -237,7 +237,7 @@ void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 210, 210, 230, 128);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
     gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+    gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
     gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -267,20 +267,20 @@ void func_80A90FC0(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
 
         gSPSegment(POLY_OPA_DISP++, 0x07, gfx2);
 
-        Matrix_InsertTranslation(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
+        Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, MTXMODE_APPLY);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
     }
 
-    Matrix_InsertTranslation(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
+    Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
     Matrix_Scale(ptr->unk_04 * 2.5f, ptr->unk_04 * 2.5f, ptr->unk_04 * 2.5f, MTXMODE_APPLY);
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(globalCtx->state.frames * 256, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 4.0f, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_RotateZS(globalCtx->state.frames * 256, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 4.0f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -289,7 +289,7 @@ void func_80A90FC0(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 220, 220, 230, 192);
     gDPSetEnvColor(POLY_XLU_DISP++, 128, 128, 128, 0);
     gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+    gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
     gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1117,10 +1117,10 @@ void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
         temp_s3 += 0x1000;
         cos = Math_CosS(temp_s3) * this->unk_150;
         sin = Math_SinS(temp_s3) * this->unk_150;
-        Matrix_InsertTranslation(cos, phi_f24, sin, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+        Matrix_Translate(cos, phi_f24, sin, MTXMODE_NEW);
+        Matrix_RotateXS(0x4000, MTXMODE_APPLY);
         Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(phi_s2, MTXMODE_APPLY);
+        Matrix_RotateZS(phi_s2, MTXMODE_APPLY);
 
         gSPMatrix(this->unk_148++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
@@ -1131,10 +1131,10 @@ void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
         temp_s4 += 0x1000;
         cos = Math_CosS(temp_s4) * this->unk_150;
         sin = Math_SinS(temp_s4) * this->unk_150;
-        Matrix_InsertTranslation(cos, phi_f24, sin, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+        Matrix_Translate(cos, phi_f24, sin, MTXMODE_NEW);
+        Matrix_RotateXS(0x4000, MTXMODE_APPLY);
         Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-phi_s2, MTXMODE_APPLY);
+        Matrix_RotateZS(-phi_s2, MTXMODE_APPLY);
 
         gSPMatrix(this->unk_148++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, 28, 28, 28, 255);
@@ -1203,11 +1203,11 @@ void func_80A9369C(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < 51; i++) {
         temp_f20 = Math_CosS(phi_s2) * this->unk_150;
         temp_f22 = Math_SinS(phi_s2) * this->unk_150;
-        Matrix_InsertZRotation_s(this->unk_27E, MTXMODE_NEW);
-        Matrix_InsertTranslation(phi_f26, temp_f20, temp_f22, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_27E, MTXMODE_NEW);
+        Matrix_Translate(phi_f26, temp_f20, temp_f22, MTXMODE_APPLY);
         Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(phi_s2, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(sp78, MTXMODE_APPLY);
+        Matrix_RotateXS(phi_s2, MTXMODE_APPLY);
+        Matrix_RotateZS(sp78, MTXMODE_APPLY);
 
         gSPMatrix(this->unk_148++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(this->unk_148++, 0, 0xFF, this->unk_280, this->unk_280, this->unk_280, 255);
@@ -1247,10 +1247,10 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
             this->unk_148 = POLY_XLU_DISP;
 
             for (i = 0; i < ARRAY_COUNT(this->unk_20C); i++) {
-                Matrix_InsertTranslation(this->unk_20C[i].x, this->unk_20C[i].y, this->unk_20C[i].z, MTXMODE_NEW);
+                Matrix_Translate(this->unk_20C[i].x, this->unk_20C[i].y, this->unk_20C[i].z, MTXMODE_NEW);
                 Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
-                Matrix_InsertZRotation_s(this->unk_278, MTXMODE_APPLY);
+                Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
+                Matrix_RotateZS(this->unk_278, MTXMODE_APPLY);
 
                 gSPMatrix(this->unk_148++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1265,16 +1265,15 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
             if (this->unk_254 != NULL) {
                 for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                     temp_f20 = Rand_ZeroOne() * 0.0025f;
-                    Matrix_InsertTranslation((*this->unk_254)[i].x, (*this->unk_254)[i].y, (*this->unk_254)[i].z,
-                                             MTXMODE_NEW);
+                    Matrix_Translate((*this->unk_254)[i].x, (*this->unk_254)[i].y, (*this->unk_254)[i].z, MTXMODE_NEW);
                     Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 128, 128, 128, this->unk_282 >> 1);
                     gDPSetEnvColor(POLY_XLU_DISP++, 230, 230, 180, this->unk_282);
 
                     func_8012C2DC(globalCtx->state.gfxCtx);
-                    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-                    Matrix_InsertZRotation_s(this->unk_278 + (i << 2), MTXMODE_APPLY);
+                    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                    Matrix_RotateZS(this->unk_278 + (i << 2), MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

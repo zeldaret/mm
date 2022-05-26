@@ -491,10 +491,10 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         f32 rand;
 
         rand = Boss03_RandZeroOne();
-        Matrix_InsertYRotation_f((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+        Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
-        Matrix_GetStateTranslationAndScaledZ((rand * 800.0f) + 400.0f, &sp70);
+        Matrix_MultVecZ((rand * 800.0f) + 400.0f, &sp70);
 
         rand = Boss03_RandZeroOne();
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0, rand * 0x10000, 0,
@@ -574,8 +574,8 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
     yDiff = this->unk_268.y - this->actor.world.pos.y;
@@ -589,10 +589,10 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & 8)) {
-        Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
+        Matrix_MultVecZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
         this->workTimer[WORK_TIMER_UNK2_A] = 60;
         this->workTimer[WORK_TIMER_UNK0_A] = Rand_ZeroFloat(60.0f) + 60.0f;
@@ -677,7 +677,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
@@ -706,10 +706,9 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
             sp44 = 100.0f;
         }
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_MultVecZ(sp44, &sp50);
 
         xDiff = sp50.x - player->actor.world.pos.x;
         zDiff = sp50.z - player->actor.world.pos.z;
@@ -774,7 +773,7 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
@@ -834,12 +833,12 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_ChewPlayer;
 
     pitchAngle = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
-    Matrix_RotateY(pitchAngle, MTXMODE_NEW);
+    Matrix_RotateYS(pitchAngle, MTXMODE_NEW);
 
     out.x = 0.0f;
     out.y = 200.0f;
     out.z = 700.0f;
-    Matrix_MultiplyVector3fByState(&out, &this->unk_268);
+    Matrix_MultVec3f(&out, &this->unk_268);
 
     this->unk_276 = 0x800;
     this->unk_242 = 0;
@@ -864,8 +863,8 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
     yDiff = this->unk_268.y - this->actor.world.pos.y;
@@ -877,7 +876,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
                        -0.5f,
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
         case 0:
@@ -1041,7 +1040,7 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
 
     Math_ApproachF(&this->actor.speedXZ, 25.0f, 1.0f, 3.0f);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speedXZ >= 20.0f) {
@@ -1394,12 +1393,11 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         phi_f2 = CLAMP_MAX(phi_f2, 0.12f);
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->csCamAt);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYF(sp5C, MTXMODE_APPLY);
+        Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
+        Matrix_MultVecZ(100.0f, &this->csCamAt);
 
         this->csCamEye = this->actor.world.pos;
 
@@ -1491,8 +1489,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamTargetAt.z = this->actor.world.pos.z;
 
                     this->unk_568 += this->unk_56C;
-                    Matrix_InsertYRotation_f(this->unk_568, MTXMODE_NEW);
-                    Matrix_MultiplyVector3fByState(&sp90, &this->csCamTargetEye);
+                    Matrix_RotateYF(this->unk_568, MTXMODE_NEW);
+                    Matrix_MultVec3f(&sp90, &this->csCamTargetEye);
 
                     this->csCamTargetEye.x += this->actor.world.pos.x;
                     this->csCamTargetEye.y += this->waterHeight;
@@ -1517,8 +1515,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight,
                            1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
-            Matrix_RotateY(this->unk_2BE, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
+            Matrix_RotateYS(this->unk_2BE, MTXMODE_NEW);
+            Matrix_MultVecZ(500.0f, &sp84);
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
@@ -1692,10 +1690,10 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     player->actor.shape.rot.y = player->actor.world.rot.y = this->actor.world.rot.y + 0x8000;
 
-                    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                             MTXMODE_NEW);
-                    Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
-                    Matrix_GetStateTranslationAndScaledZ(340.0f, &this->csCamEye);
+                    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                     MTXMODE_NEW);
+                    Matrix_RotateYS(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
+                    Matrix_MultVecZ(340.0f, &this->csCamEye);
 
                     this->csCamAt.x = this->actor.world.pos.x;
                     this->csCamAt.y = this->actor.world.pos.y;
@@ -2065,8 +2063,8 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->unk_290 != 0) {
         this->unk_294 += 0.1f;
         this->unk_298 += 0.12f;
-        this->leftFinYRot = __sinf(this->unk_294) * 1280.0f;
-        this->rightFinYRot = __sinf(this->unk_298) * 1280.0f;
+        this->leftFinYRot = sinf(this->unk_294) * 1280.0f;
+        this->rightFinYRot = sinf(this->unk_298) * 1280.0f;
     } else {
         Math_ApproachS(&this->rightFinYRot, 0, 0xA, 0x100);
         Math_ApproachS(&this->leftFinYRot, 0, 0xA, 0x100);
@@ -2132,8 +2130,8 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         yRot = 0.0f;
 
         for (j = 0, i = 0; i < 20; j++) {
-            Matrix_InsertYRotation_f(yRot, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            Matrix_RotateYF(yRot, MTXMODE_NEW);
+            Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
             dropletPos.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
@@ -2236,12 +2234,12 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Player* player = GET_PLAYER(globalCtx);
 
     if (limbIndex == GYORG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809E9148, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809E9148, &this->actor.focus.pos);
     }
 
     sphereElementIndex = sGyorgSphElementIndices[limbIndex];
     if (sphereElementIndex >= 0) {
-        Matrix_MultiplyVector3fByState(&D_809E9154[sphereElementIndex], &spherePos);
+        Matrix_MultVec3f(&D_809E9154[sphereElementIndex], &spherePos);
 
         if (sphereElementIndex < 2) {
             if ((this->actionFunc == Boss03_Stunned) && (this->waterHeight < player->actor.world.pos.y)) {
@@ -2258,9 +2256,9 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         MtxF mf;
 
         D_809E91B4.x = this->unk_2C4 + 300.0f;
-        Matrix_MultiplyVector3fByState(&D_809E91B4, &this->insideJawPos);
-        Matrix_CopyCurrentState(&mf);
-        func_8018219C(&mf, &this->unk_2A2, 0);
+        Matrix_MultVec3f(&D_809E91B4, &this->insideJawPos);
+        Matrix_Get(&mf);
+        Matrix_MtxFToYXZRot(&mf, &this->unk_2A2, false);
     }
 }
 
@@ -2276,8 +2274,8 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
         }
 
-        Matrix_InsertYRotation_f(this->unk_260, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateYF(this->unk_260, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
         POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
@@ -2346,11 +2344,11 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 6.0f, 0);
+                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, MTXMODE_NEW);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
-                    Matrix_MultiplyVector3fByState(&sp94, &velocity);
+                    Matrix_MultVec3f(&sp94, &velocity);
                     Boss03_SpawnEffectSplash(globalCtx, &eff->pos, &velocity);
                 }
             }
@@ -2413,9 +2411,9 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2444,18 +2442,17 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)eff->unk_40, (u8)((((void)0, eff->unk_40) + 55.0f)), 225, 150);
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_InsertYRotation_f(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
-                                             (M_PI / 0x8000),
-                                         MTXMODE_APPLY);
+                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000),
+                                MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             }
 
             Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(eff->unk_34.z, MTXMODE_APPLY);
+            Matrix_RotateZF(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
@@ -2481,10 +2478,10 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
                             eff->alpha);
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(eff->unk_34.z, MTXMODE_APPLY);
+            Matrix_RotateYF(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
@@ -2610,27 +2607,27 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(0x4000, MTXMODE_APPLY);
     // The indices looks a bit random...
-    Matrix_RotateY(this->jointTable[5].x * -5.0f * 0.1f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateYS(this->jointTable[5].x * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateXS(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(sGyorgSeaweedDLs); i++, mtx++) {
-        Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
 
         Matrix_ToMtx(mtx);
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPDisplayList(POLY_OPA_DISP++, sGyorgSeaweedDLs[i]);
 
-        Matrix_GetStateTranslation(&this->seaweedSegmentPositions[i]);
-        Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_MultZero(&this->seaweedSegmentPositions[i]);
+        Matrix_Translate(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -20,69 +20,365 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
 void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
 
-// Game scripts
-static UNK_TYPE D_80AFAD80[] = {
-    0x0D000102, 0x3B030900, 0x0C00010B, 0x030C000D, 0x0100F902, 0x0D010F00, 0x12020F00, 0x00050105, 0x0A002E06,
-    0x0E0F0000, 0x0508050A, 0x006D3102, 0x0D010D04, 0x25020D04, 0x0D151902, 0x0E300E38, 0x0D020E38, 0x0F000105,
-    0x0E0E380F, 0x00020E0E, 0x300E383E, 0x0E0D040D, 0x15350E0D, 0x010D0401, 0x0A006F31, 0x020D040D, 0x1525020D,
-    0x150D2719, 0x020E260E, 0x300D020E, 0x300E3801, 0x050E0E30, 0x0E383D0E, 0x0E260E30, 0x3C0E0D15, 0x0D27370E,
-    0x0D040D15, 0x360A006C, 0x31020D27, 0x0D382502, 0x0D380E00, 0x19020E1A, 0x0E1E0D02, 0x0E1E0E26, 0x01050E0E,
-    0x1E0E263B, 0x0E0E1A0E, 0x1E0B0E0D, 0x380E000A, 0x0E0D270D, 0x38380A00, 0x613D020D, 0x380E0031, 0x020E000E,
-    0x0825020E, 0x080E1219, 0x020E120E, 0x1A0D020E, 0x1A0E1E01, 0x050E0E1A, 0x0E1E0D0E, 0x0E120E1A, 0x3A0E0E08,
-    0x0E12100E, 0x0E000E08, 0x390E0D38, 0x0E000C05, 0x0A002E06, 0x0E0C000D, 0x0109050A, 0x006D3102, 0x09000903,
-    0x25020903, 0x09111902, 0x0B2B0B39, 0x0D020B39, 0x0C000105, 0x0E0B390C, 0x00020E0B, 0x2B0B3934, 0x0E090309,
-    0x11260E09, 0x00090301, 0x0A006F61, 0x02090309, 0x11550209, 0x11091F49, 0x02091F09, 0x233D0209, 0x23093131,
-    0x020A390B, 0x0B25020B, 0x0B0B1919, 0x020B190B, 0x1D0D020B, 0x1D0B2B01, 0x050E0B1D, 0x0B2B320E, 0x0B190B1D,
-    0x070E0B0B, 0x0B19300E, 0x0A390B0B, 0x2F0E0923, 0x0931290E, 0x091F0923, 0x030E0911, 0x091F280E, 0x09030911,
-    0x270A006E, 0x25020931, 0x0A031902, 0x0A030A07, 0x0D020A07, 0x0A150105, 0x0E0A070A, 0x152B0E0A, 0x030A0704,
-    0x0E09310A, 0x032A0A00, 0x6C61020A, 0x150A2355, 0x020A230A, 0x2749020A, 0x270A353D, 0x020A350A, 0x3931020A,
-    0x390B0B25, 0x020B0B0B, 0x1919020B, 0x190B1D0D, 0x020B1D0B, 0x2B01050E, 0x0B1D0B2B, 0x330E0B19, 0x0B1D070E,
-    0x0B0B0B19, 0x310E0A39, 0x0B0B2E0E, 0x0A350A39, 0x060E0A27, 0x0A352D0E, 0x0A230A27, 0x050E0A15, 0x0A232C05,
-    0x0D000201, 0xCF011C08, 0x00A50309, 0x000C00FE, 0xC6030C00, 0x0D01008C, 0x020D010F, 0x007E0200, 0x00020001,
-    0x050A006D, 0x31020000, 0x00042502, 0x0004001F, 0x1902011D, 0x01380D02, 0x01380200, 0x01050E01, 0x38020002,
-    0x0E011D01, 0x384F0E00, 0x04001F4A, 0x0E000000, 0x04010A00, 0x6F3D0200, 0x04001F31, 0x02001F00, 0x3A250200,
-    0x3A010219, 0x02010201, 0x1D0D0201, 0x1D013801, 0x050E011D, 0x01384E0E, 0x0102011D, 0x4D0E003A, 0x0102120E,
-    0x001F003A, 0x4C0E0004, 0x001F4B05, 0x0A002E03, 0x04000E05, 0x0A002E06, 0x0E0C000D, 0x01140503, 0x09000C00,
-    0xFE21030C, 0x000D0101, 0x0C020D01, 0x11001202, 0x11000005, 0x01050A00, 0x2E060E11, 0x00000508, 0x050A006D,
-    0x31020D01, 0x0D042502, 0x0D040D0F, 0x19021023, 0x10390D02, 0x10391100, 0x01050E10, 0x39110002, 0x0E102310,
-    0x39490E0D, 0x040D0F3F, 0x0E0D010D, 0x04010A00, 0x6F31020D, 0x040D0F25, 0x020D0F0D, 0x1E19020D, 0x340E2D0D,
-    0x02100F10, 0x2301050E, 0x100F1023, 0x480E0D34, 0x0E2D430E, 0x0D0F0D1E, 0x410E0D04, 0x0D0F400A, 0x006C1902,
-    0x0D1E0D34, 0x0D020D34, 0x0E320105, 0x0E0D340E, 0x32440E0D, 0x1E0D3442, 0x0A007068, 0x020E2D0F, 0x055C0C00,
-    0x0231020F, 0x050F1425, 0x020F140F, 0x1919020F, 0x190F280D, 0x020F2810, 0x0F01050E, 0x0F28100F, 0x510E0F19,
-    0x0F28110E, 0x0F140F19, 0x500E0F05, 0x0F141702, 0x0F050F14, 0x1B020F14, 0x0F320F02, 0x0F32100F, 0x03040000,
-    0x0E0F3210, 0x0F470E0F, 0x140F3219, 0x0E0F050F, 0x14170E0E, 0x2D0F0546, 0x050A002E, 0x060E0C00, 0x0D011505,
-    0x0D000301, 0x6F011C08, 0x013F011C, 0x10010C03, 0x09000C00, 0xFCED030C, 0x000D0100, 0xF6020D01, 0x0F000F02,
-    0x12000600, 0x01050A00, 0x2E030400, 0x18050A00, 0x6D31020D, 0x000D0125, 0x020D050D, 0x0F19020E, 0x2D0E370D,
-    0x020E370F, 0x0001050E, 0x0E370F00, 0x020E0E2D, 0x0E37340E, 0x0D050D0F, 0x260E0D00, 0x0D01010A, 0x006F4902,
-    0x0D050D0F, 0x3D020D0F, 0x0D193102, 0x0D190D23, 0x25020E0F, 0x0E191902, 0x0E190E23, 0x0D020E23, 0x0E2D0105,
-    0x0E0E230E, 0x2D320E0E, 0x190E2330, 0x0E0E0F0E, 0x192F0E0D, 0x190D2329, 0x0E0D0F0D, 0x19280E0D, 0x050D0F27,
-    0x0A006E19, 0x020D230D, 0x2D0D020D, 0x2D0D3701, 0x050E0D2D, 0x0D372B0E, 0x0D230D2D, 0x2A0A006C, 0x3D020D37,
-    0x0E053102, 0x0E050E0F, 0x25020E0F, 0x0E191902, 0x0E190E23, 0x0D020E23, 0x0E2D0105, 0x0E0E230E, 0x2D330E0E,
-    0x190E2331, 0x0E0E0F0E, 0x192E0E0E, 0x050E0F2D, 0x0E0D370E, 0x052C050A, 0x002E0304, 0x00160503, 0x09000C00,
-    0xFBE1020C, 0x000D0116, 0x030D0111, 0x00FDD202, 0x12000600, 0x01050A00, 0x2E030400, 0x18050A00, 0x2E060E0C,
-    0x000D0115, 0x05030900, 0x0C00FBB3, 0x020C000D, 0x0116030D, 0x010F00FE, 0xD5021200, 0x06000105, 0x0A002E03,
-    0x04001805, 0x0A002E03, 0x04001405, 0x05000000,
+static u8 D_80AFAD80[] = {
+    /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0x240 - 0x005),
+    /* 0x005 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x00C),
+    /* 0x00C */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x10C - 0x013),
+    /* 0x013 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 15, 0, 0x02B - 0x019),
+    /* 0x019 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 0, 0, 5, 0x020 - 0x01F),
+    /* 0x01F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x020 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x02A - 0x024),
+    /* 0x024 */ SCHEDULE_CMD_RET_TIME(15, 0, 0, 5, 8),
+    /* 0x02A */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x02B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x060 - 0x02F),
+    /* 0x02F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 13, 4, 0x05A - 0x035),
+    /* 0x035 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 4, 13, 21, 0x054 - 0x03B),
+    /* 0x03B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 48, 14, 56, 0x04E - 0x041),
+    /* 0x041 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 56, 15, 0, 0x048 - 0x047),
+    /* 0x047 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x048 */ SCHEDULE_CMD_RET_TIME(14, 56, 15, 0, 2),
+    /* 0x04E */ SCHEDULE_CMD_RET_TIME(14, 48, 14, 56, 62),
+    /* 0x054 */ SCHEDULE_CMD_RET_TIME(13, 4, 13, 21, 53),
+    /* 0x05A */ SCHEDULE_CMD_RET_TIME(13, 1, 13, 4, 1),
+    /* 0x060 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x095 - 0x064),
+    /* 0x064 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 4, 13, 21, 0x08F - 0x06A),
+    /* 0x06A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 21, 13, 39, 0x089 - 0x070),
+    /* 0x070 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 38, 14, 48, 0x083 - 0x076),
+    /* 0x076 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 48, 14, 56, 0x07D - 0x07C),
+    /* 0x07C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x07D */ SCHEDULE_CMD_RET_TIME(14, 48, 14, 56, 61),
+    /* 0x083 */ SCHEDULE_CMD_RET_TIME(14, 38, 14, 48, 60),
+    /* 0x089 */ SCHEDULE_CMD_RET_TIME(13, 21, 13, 39, 55),
+    /* 0x08F */ SCHEDULE_CMD_RET_TIME(13, 4, 13, 21, 54),
+    /* 0x095 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x0CA - 0x099),
+    /* 0x099 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 39, 13, 56, 0x0C4 - 0x09F),
+    /* 0x09F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 56, 14, 0, 0x0BE - 0x0A5),
+    /* 0x0A5 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 26, 14, 30, 0x0B8 - 0x0AB),
+    /* 0x0AB */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 30, 14, 38, 0x0B2 - 0x0B1),
+    /* 0x0B1 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x0B2 */ SCHEDULE_CMD_RET_TIME(14, 30, 14, 38, 59),
+    /* 0x0B8 */ SCHEDULE_CMD_RET_TIME(14, 26, 14, 30, 11),
+    /* 0x0BE */ SCHEDULE_CMD_RET_TIME(13, 56, 14, 0, 10),
+    /* 0x0C4 */ SCHEDULE_CMD_RET_TIME(13, 39, 13, 56, 56),
+    /* 0x0CA */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x10B - 0x0CE),
+    /* 0x0CE */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 56, 14, 0, 0x105 - 0x0D4),
+    /* 0x0D4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 0, 14, 8, 0x0FF - 0x0DA),
+    /* 0x0DA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 8, 14, 18, 0x0F9 - 0x0E0),
+    /* 0x0E0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 18, 14, 26, 0x0F3 - 0x0E6),
+    /* 0x0E6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 26, 14, 30, 0x0ED - 0x0EC),
+    /* 0x0EC */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x0ED */ SCHEDULE_CMD_RET_TIME(14, 26, 14, 30, 13),
+    /* 0x0F3 */ SCHEDULE_CMD_RET_TIME(14, 18, 14, 26, 58),
+    /* 0x0F9 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, 16),
+    /* 0x0FF */ SCHEDULE_CMD_RET_TIME(14, 0, 14, 8, 57),
+    /* 0x105 */ SCHEDULE_CMD_RET_TIME(13, 56, 14, 0, 12),
+    /* 0x10B */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x10C */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x116 - 0x110),
+    /* 0x110 */ SCHEDULE_CMD_RET_TIME(12, 0, 13, 1, 9),
+    /* 0x116 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x117 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x14C - 0x11B),
+    /* 0x11B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 0, 9, 3, 0x146 - 0x121),
+    /* 0x121 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 3, 9, 17, 0x140 - 0x127),
+    /* 0x127 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 43, 11, 57, 0x13A - 0x12D),
+    /* 0x12D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 57, 12, 0, 0x134 - 0x133),
+    /* 0x133 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x134 */ SCHEDULE_CMD_RET_TIME(11, 57, 12, 0, 2),
+    /* 0x13A */ SCHEDULE_CMD_RET_TIME(11, 43, 11, 57, 52),
+    /* 0x140 */ SCHEDULE_CMD_RET_TIME(9, 3, 9, 17, 38),
+    /* 0x146 */ SCHEDULE_CMD_RET_TIME(9, 0, 9, 3, 1),
+    /* 0x14C */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x1B1 - 0x150),
+    /* 0x150 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 3, 9, 17, 0x1AB - 0x156),
+    /* 0x156 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 17, 9, 31, 0x1A5 - 0x15C),
+    /* 0x15C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 31, 9, 35, 0x19F - 0x162),
+    /* 0x162 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 35, 9, 49, 0x199 - 0x168),
+    /* 0x168 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 57, 11, 11, 0x193 - 0x16E),
+    /* 0x16E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 11, 11, 25, 0x18D - 0x174),
+    /* 0x174 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x187 - 0x17A),
+    /* 0x17A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 43, 0x181 - 0x180),
+    /* 0x180 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x181 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 43, 50),
+    /* 0x187 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 29, 7),
+    /* 0x18D */ SCHEDULE_CMD_RET_TIME(11, 11, 11, 25, 48),
+    /* 0x193 */ SCHEDULE_CMD_RET_TIME(10, 57, 11, 11, 47),
+    /* 0x199 */ SCHEDULE_CMD_RET_TIME(9, 35, 9, 49, 41),
+    /* 0x19F */ SCHEDULE_CMD_RET_TIME(9, 31, 9, 35, 3),
+    /* 0x1A5 */ SCHEDULE_CMD_RET_TIME(9, 17, 9, 31, 40),
+    /* 0x1AB */ SCHEDULE_CMD_RET_TIME(9, 3, 9, 17, 39),
+    /* 0x1B1 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x1DA - 0x1B5),
+    /* 0x1B5 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(9, 49, 10, 3, 0x1D4 - 0x1BB),
+    /* 0x1BB */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 3, 10, 7, 0x1CE - 0x1C1),
+    /* 0x1C1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 7, 10, 21, 0x1C8 - 0x1C7),
+    /* 0x1C7 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(10, 7, 10, 21, 43),
+    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(10, 3, 10, 7, 4),
+    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(9, 49, 10, 3, 42),
+    /* 0x1DA */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x23F - 0x1DE),
+    /* 0x1DE */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 21, 10, 35, 0x239 - 0x1E4),
+    /* 0x1E4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 35, 10, 39, 0x233 - 0x1EA),
+    /* 0x1EA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 39, 10, 53, 0x22D - 0x1F0),
+    /* 0x1F0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 53, 10, 57, 0x227 - 0x1F6),
+    /* 0x1F6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 57, 11, 11, 0x221 - 0x1FC),
+    /* 0x1FC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 11, 11, 25, 0x21B - 0x202),
+    /* 0x202 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 25, 11, 29, 0x215 - 0x208),
+    /* 0x208 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 43, 0x20F - 0x20E),
+    /* 0x20E */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x20F */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 43, 51),
+    /* 0x215 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 29, 7),
+    /* 0x21B */ SCHEDULE_CMD_RET_TIME(11, 11, 11, 25, 49),
+    /* 0x221 */ SCHEDULE_CMD_RET_TIME(10, 57, 11, 11, 46),
+    /* 0x227 */ SCHEDULE_CMD_RET_TIME(10, 53, 10, 57, 6),
+    /* 0x22D */ SCHEDULE_CMD_RET_TIME(10, 39, 10, 53, 45),
+    /* 0x233 */ SCHEDULE_CMD_RET_TIME(10, 35, 10, 39, 5),
+    /* 0x239 */ SCHEDULE_CMD_RET_TIME(10, 21, 10, 35, 44),
+    /* 0x23F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x240 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x414 - 0x245),
+    /* 0x245 */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x08, 0x2EF - 0x24A),
+    /* 0x24A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x251),
+    /* 0x251 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x2E4 - 0x258),
+    /* 0x258 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 15, 0, 0x2DC - 0x25E),
+    /* 0x25E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 2, 0, 0x265 - 0x264),
+    /* 0x264 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x265 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x29A - 0x269),
+    /* 0x269 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 4, 0x294 - 0x26F),
+    /* 0x26F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 4, 0, 31, 0x28E - 0x275),
+    /* 0x275 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 29, 1, 56, 0x288 - 0x27B),
+    /* 0x27B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 56, 2, 0, 0x282 - 0x281),
+    /* 0x281 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x282 */ SCHEDULE_CMD_RET_TIME(1, 56, 2, 0, 2),
+    /* 0x288 */ SCHEDULE_CMD_RET_TIME(1, 29, 1, 56, 79),
+    /* 0x28E */ SCHEDULE_CMD_RET_TIME(0, 4, 0, 31, 74),
+    /* 0x294 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 4, 1),
+    /* 0x29A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x2DB - 0x29E),
+    /* 0x29E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 4, 0, 31, 0x2D5 - 0x2A4),
+    /* 0x2A4 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 31, 0, 58, 0x2CF - 0x2AA),
+    /* 0x2AA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 58, 1, 2, 0x2C9 - 0x2B0),
+    /* 0x2B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 2, 1, 29, 0x2C3 - 0x2B6),
+    /* 0x2B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 29, 1, 56, 0x2BD - 0x2BC),
+    /* 0x2BC */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x2BD */ SCHEDULE_CMD_RET_TIME(1, 29, 1, 56, 78),
+    /* 0x2C3 */ SCHEDULE_CMD_RET_TIME(1, 2, 1, 29, 77),
+    /* 0x2C9 */ SCHEDULE_CMD_RET_TIME(0, 58, 1, 2, 18),
+    /* 0x2CF */ SCHEDULE_CMD_RET_TIME(0, 31, 0, 58, 76),
+    /* 0x2D5 */ SCHEDULE_CMD_RET_TIME(0, 4, 0, 31, 75),
+    /* 0x2DB */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x2DC */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x2E3 - 0x2E0),
+    /* 0x2E0 */ SCHEDULE_CMD_RET_VAL_L(14),
+    /* 0x2E3 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x2E4 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x2EE - 0x2E8),
+    /* 0x2E8 */ SCHEDULE_CMD_RET_TIME(12, 0, 13, 1, 20),
+    /* 0x2EE */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x2EF */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x2F6),
+    /* 0x2F6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x409 - 0x2FD),
+    /* 0x2FD */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 17, 0, 0x315 - 0x303),
+    /* 0x303 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 0, 0, 5, 0x30A - 0x309),
+    /* 0x309 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x30A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x314 - 0x30E),
+    /* 0x30E */ SCHEDULE_CMD_RET_TIME(17, 0, 0, 5, 8),
+    /* 0x314 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x315 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x34A - 0x319),
+    /* 0x319 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 13, 4, 0x344 - 0x31F),
+    /* 0x31F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 4, 13, 15, 0x33E - 0x325),
+    /* 0x325 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 35, 16, 57, 0x338 - 0x32B),
+    /* 0x32B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 57, 17, 0, 0x332 - 0x331),
+    /* 0x331 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x332 */ SCHEDULE_CMD_RET_TIME(16, 57, 17, 0, 2),
+    /* 0x338 */ SCHEDULE_CMD_RET_TIME(16, 35, 16, 57, 73),
+    /* 0x33E */ SCHEDULE_CMD_RET_TIME(13, 4, 13, 15, 63),
+    /* 0x344 */ SCHEDULE_CMD_RET_TIME(13, 1, 13, 4, 1),
+    /* 0x34A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x37F - 0x34E),
+    /* 0x34E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 4, 13, 15, 0x379 - 0x354),
+    /* 0x354 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 30, 0x373 - 0x35A),
+    /* 0x35A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 52, 14, 45, 0x36D - 0x360),
+    /* 0x360 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 15, 16, 35, 0x367 - 0x366),
+    /* 0x366 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x367 */ SCHEDULE_CMD_RET_TIME(16, 15, 16, 35, 72),
+    /* 0x36D */ SCHEDULE_CMD_RET_TIME(13, 52, 14, 45, 67),
+    /* 0x373 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 30, 65),
+    /* 0x379 */ SCHEDULE_CMD_RET_TIME(13, 4, 13, 15, 64),
+    /* 0x37F */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x39C - 0x383),
+    /* 0x383 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 30, 13, 52, 0x396 - 0x389),
+    /* 0x389 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 52, 14, 50, 0x390 - 0x38F),
+    /* 0x38F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x390 */ SCHEDULE_CMD_RET_TIME(13, 52, 14, 50, 68),
+    /* 0x396 */ SCHEDULE_CMD_RET_TIME(13, 30, 13, 52, 66),
+    /* 0x39C */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ALLEY, 0x408 - 0x3A0),
+    /* 0x3A0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 45, 15, 5, 0x402 - 0x3A6),
+    /* 0x3A6 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x3DB - 0x3AA),
+    /* 0x3AA */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 5, 15, 20, 0x3D5 - 0x3B0),
+    /* 0x3B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 20, 15, 25, 0x3CF - 0x3B6),
+    /* 0x3B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 40, 0x3C9 - 0x3BC),
+    /* 0x3BC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 40, 16, 15, 0x3C3 - 0x3C2),
+    /* 0x3C2 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(15, 40, 16, 15, 81),
+    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 40, 17),
+    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(15, 20, 15, 25, 80),
+    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME(15, 5, 15, 20, 23),
+    /* 0x3DB */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 5, 15, 20, 0x3FC - 0x3E1),
+    /* 0x3E1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 20, 15, 50, 0x3F6 - 0x3E7),
+    /* 0x3E7 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 50, 16, 15, 0x3F0 - 0x3ED),
+    /* 0x3ED */ SCHEDULE_CMD_RET_VAL_L(0),
+    /* 0x3F0 */ SCHEDULE_CMD_RET_TIME(15, 50, 16, 15, 71),
+    /* 0x3F6 */ SCHEDULE_CMD_RET_TIME(15, 20, 15, 50, 25),
+    /* 0x3FC */ SCHEDULE_CMD_RET_TIME(15, 5, 15, 20, 23),
+    /* 0x402 */ SCHEDULE_CMD_RET_TIME(14, 45, 15, 5, 70),
+    /* 0x408 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x409 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x413 - 0x40D),
+    /* 0x40D */ SCHEDULE_CMD_RET_TIME(12, 0, 13, 1, 21),
+    /* 0x413 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x414 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x588 - 0x419),
+    /* 0x419 */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x08, 0x55D - 0x41E),
+    /* 0x41E */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x10, 0x52F - 0x423),
+    /* 0x423 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x42A),
+    /* 0x42A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x527 - 0x431),
+    /* 0x431 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 15, 0, 0x446 - 0x437),
+    /* 0x437 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x43E - 0x43D),
+    /* 0x43D */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x43E */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x445 - 0x442),
+    /* 0x442 */ SCHEDULE_CMD_RET_VAL_L(24),
+    /* 0x445 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x446 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x47B - 0x44A),
+    /* 0x44A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 0, 13, 1, 0x475 - 0x450),
+    /* 0x450 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 5, 13, 15, 0x46F - 0x456),
+    /* 0x456 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 45, 14, 55, 0x469 - 0x45C),
+    /* 0x45C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 55, 15, 0, 0x463 - 0x462),
+    /* 0x462 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x463 */ SCHEDULE_CMD_RET_TIME(14, 55, 15, 0, 2),
+    /* 0x469 */ SCHEDULE_CMD_RET_TIME(14, 45, 14, 55, 52),
+    /* 0x46F */ SCHEDULE_CMD_RET_TIME(13, 5, 13, 15, 38),
+    /* 0x475 */ SCHEDULE_CMD_RET_TIME(13, 0, 13, 1, 1),
+    /* 0x47B */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x4C8 - 0x47F),
+    /* 0x47F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 5, 13, 15, 0x4C2 - 0x485),
+    /* 0x485 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 25, 0x4BC - 0x48B),
+    /* 0x48B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 25, 13, 35, 0x4B6 - 0x491),
+    /* 0x491 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 15, 14, 25, 0x4B0 - 0x497),
+    /* 0x497 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 25, 14, 35, 0x4AA - 0x49D),
+    /* 0x49D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 35, 14, 45, 0x4A4 - 0x4A3),
+    /* 0x4A3 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x4A4 */ SCHEDULE_CMD_RET_TIME(14, 35, 14, 45, 50),
+    /* 0x4AA */ SCHEDULE_CMD_RET_TIME(14, 25, 14, 35, 48),
+    /* 0x4B0 */ SCHEDULE_CMD_RET_TIME(14, 15, 14, 25, 47),
+    /* 0x4B6 */ SCHEDULE_CMD_RET_TIME(13, 25, 13, 35, 41),
+    /* 0x4BC */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 25, 40),
+    /* 0x4C2 */ SCHEDULE_CMD_RET_TIME(13, 5, 13, 15, 39),
+    /* 0x4C8 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x4E5 - 0x4CC),
+    /* 0x4CC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 35, 13, 45, 0x4DF - 0x4D2),
+    /* 0x4D2 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 45, 13, 55, 0x4D9 - 0x4D8),
+    /* 0x4D8 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x4D9 */ SCHEDULE_CMD_RET_TIME(13, 45, 13, 55, 43),
+    /* 0x4DF */ SCHEDULE_CMD_RET_TIME(13, 35, 13, 45, 42),
+    /* 0x4E5 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x526 - 0x4E9),
+    /* 0x4E9 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 55, 14, 5, 0x520 - 0x4EF),
+    /* 0x4EF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 5, 14, 15, 0x51A - 0x4F5),
+    /* 0x4F5 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 15, 14, 25, 0x514 - 0x4FB),
+    /* 0x4FB */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 25, 14, 35, 0x50E - 0x501),
+    /* 0x501 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(14, 35, 14, 45, 0x508 - 0x507),
+    /* 0x507 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x508 */ SCHEDULE_CMD_RET_TIME(14, 35, 14, 45, 51),
+    /* 0x50E */ SCHEDULE_CMD_RET_TIME(14, 25, 14, 35, 49),
+    /* 0x514 */ SCHEDULE_CMD_RET_TIME(14, 15, 14, 25, 46),
+    /* 0x51A */ SCHEDULE_CMD_RET_TIME(14, 5, 14, 15, 45),
+    /* 0x520 */ SCHEDULE_CMD_RET_TIME(13, 55, 14, 5, 44),
+    /* 0x526 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x527 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x52E - 0x52B),
+    /* 0x52B */ SCHEDULE_CMD_RET_VAL_L(22),
+    /* 0x52E */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x52F */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x536),
+    /* 0x536 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 13, 1, 0x552 - 0x53C),
+    /* 0x53C */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(13, 1, 17, 0, 0x315 - 0x543),
+    /* 0x543 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x54A - 0x549),
+    /* 0x549 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x54A */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x551 - 0x54E),
+    /* 0x54E */ SCHEDULE_CMD_RET_VAL_L(24),
+    /* 0x551 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x552 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x55C - 0x556),
+    /* 0x556 */ SCHEDULE_CMD_RET_TIME(12, 0, 13, 1, 21),
+    /* 0x55C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x55D */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x564),
+    /* 0x564 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 0, 13, 1, 0x580 - 0x56A),
+    /* 0x56A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(13, 1, 15, 0, 0x446 - 0x571),
+    /* 0x571 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x578 - 0x577),
+    /* 0x577 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x578 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x57F - 0x57C),
+    /* 0x57C */ SCHEDULE_CMD_RET_VAL_L(24),
+    /* 0x57F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x580 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x587 - 0x584),
+    /* 0x584 */ SCHEDULE_CMD_RET_VAL_L(20),
+    /* 0x587 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x588 */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static UNK_TYPE D_80AFB30C[] = {
-    0x0A002E2E, 0x02000000, 0x0A220200, 0x0A000D19, 0x02000D00, 0x170D0200, 0x17001A01, 0x050E0017, 0x001A200E,
-    0x000D0017, 0x5304001B, 0x0E000000, 0x0A520A00, 0x6D190200, 0x17001A0D, 0x02001A00, 0x2401050E, 0x001A0024,
-    0x540E0017, 0x001A210A, 0x006F1902, 0x001A0024, 0x0D020024, 0x002E0105, 0x0E002400, 0x2E560E00, 0x1A002455,
-    0x0A006C19, 0x02002E00, 0x380D0200, 0x38003B01, 0x050E0038, 0x003B220E, 0x002E0038, 0x570A0015, 0x25020038,
-    0x003B1902, 0x003B0109, 0x0D020109, 0x01280105, 0x0E010901, 0x281C0E00, 0x3B010958, 0x0E003800, 0x3B240500,
+static u8 D_80AFB30C[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_POSTHOUSE, 0x32 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 10, 0x2C - 0x0A),
+    /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 10, 0, 13, 0x29 - 0x10),
+    /* 0x10 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 13, 0, 23, 0x23 - 0x16),
+    /* 0x16 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 23, 0, 26, 0x1D - 0x1C),
+    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1D */ SCHEDULE_CMD_RET_TIME(0, 23, 0, 26, 32),
+    /* 0x23 */ SCHEDULE_CMD_RET_TIME(0, 13, 0, 23, 83),
+    /* 0x29 */ SCHEDULE_CMD_RET_VAL_L(27),
+    /* 0x2C */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 10, 82),
+    /* 0x32 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x4F - 0x36),
+    /* 0x36 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 23, 0, 26, 0x49 - 0x3C),
+    /* 0x3C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 26, 0, 36, 0x43 - 0x42),
+    /* 0x42 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x43 */ SCHEDULE_CMD_RET_TIME(0, 26, 0, 36, 84),
+    /* 0x49 */ SCHEDULE_CMD_RET_TIME(0, 23, 0, 26, 33),
+    /* 0x4F */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x6C - 0x53),
+    /* 0x53 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 26, 0, 36, 0x66 - 0x59),
+    /* 0x59 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 36, 0, 46, 0x60 - 0x5F),
+    /* 0x5F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x60 */ SCHEDULE_CMD_RET_TIME(0, 36, 0, 46, 86),
+    /* 0x66 */ SCHEDULE_CMD_RET_TIME(0, 26, 0, 36, 85),
+    /* 0x6C */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x89 - 0x70),
+    /* 0x70 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 46, 0, 56, 0x83 - 0x76),
+    /* 0x76 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 56, 0, 59, 0x7D - 0x7C),
+    /* 0x7C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x7D */ SCHEDULE_CMD_RET_TIME(0, 56, 0, 59, 34),
+    /* 0x83 */ SCHEDULE_CMD_RET_TIME(0, 46, 0, 56, 87),
+    /* 0x89 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0xB2 - 0x8D),
+    /* 0x8D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 56, 0, 59, 0xAC - 0x93),
+    /* 0x93 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 59, 1, 9, 0xA6 - 0x99),
+    /* 0x99 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(1, 9, 1, 40, 0xA0 - 0x9F),
+    /* 0x9F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0xA0 */ SCHEDULE_CMD_RET_TIME(1, 9, 1, 40, 28),
+    /* 0xA6 */ SCHEDULE_CMD_RET_TIME(0, 59, 1, 9, 88),
+    /* 0xAC */ SCHEDULE_CMD_RET_TIME(0, 56, 0, 59, 36),
+    /* 0xB2 */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static UNK_TYPE D_80AFB3C0[] = {
-    0x0A006C19, 0x02000A00, 0x0D0D0200, 0x0D001701, 0x050E000D, 0x00175A0E, 0x000A000D, 0x230A0015,
-    0x19020000, 0x000A0D02, 0x000A000D, 0x01050E00, 0x0A000D25, 0x0E000000, 0x0A590500,
+static u8 D_80AFB3C0[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x1D - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 10, 0, 13, 0x17 - 0x0A),
+    /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 13, 0, 23, 0x11 - 0x10),
+    /* 0x10 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x11 */ SCHEDULE_CMD_RET_TIME(0, 13, 0, 23, 90),
+    /* 0x17 */ SCHEDULE_CMD_RET_TIME(0, 10, 0, 13, 35),
+    /* 0x1D */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_MILK_BAR, 0x3A - 0x21),
+    /* 0x21 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 10, 0x34 - 0x27),
+    /* 0x27 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 10, 0, 13, 0x2E - 0x2D),
+    /* 0x2D */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x2E */ SCHEDULE_CMD_RET_TIME(0, 10, 0, 13, 37),
+    /* 0x34 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 10, 89),
+    /* 0x3A */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static UNK_TYPE D_80AFB3FC[] = {
-    0x0A006C19, 0x02120006, 0x000D0205, 0x00050A01, 0x050E0500, 0x050A5B0E, 0x12000600, 0x1D050000,
+static u8 D_80AFB3FC[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x1D - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x17 - 0x0A),
+    /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(5, 0, 5, 10, 0x11 - 0x10),
+    /* 0x10 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x11 */ SCHEDULE_CMD_RET_TIME(5, 0, 5, 10, 91),
+    /* 0x17 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 29),
+    /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static UNK_TYPE D_80AFB41C[] = {
-    0x0A006C0D, 0x02000000, 0x0A01050E, 0x0000000A, 0x5B050000,
+static u8 D_80AFB41C[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x11 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 10, 0x0B - 0x0A),
+    /* 0x0A */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x0B */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 10, 91),
+    /* 0x11 */ SCHEDULE_CMD_RET_NONE(),
 };
 
 static s32 D_80AFB430[] = {
@@ -742,7 +1038,7 @@ s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
-    Matrix_StatePush();
+    Matrix_Push();
 
     switch (arg2) {
         case 0:
@@ -764,7 +1060,7 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
             break;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void func_80AF898C(EnPm* this) {
@@ -809,12 +1105,11 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20, 0x0000,
+        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20,
     };
     static u16 D_80AFB8E0[] = {
-        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04, 0x0000,
+        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
     };
-    s32 temp;
 
     if (!(gSaveContext.save.weekEventReg[88] & 2)) {
         if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
@@ -833,9 +1128,8 @@ void func_80AF8BA8(s32 arg0) {
         }
     }
 
-    temp = gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8];
     gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] =
-        temp | (D_80AFB8E0[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80));
+        ((void)0, gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8]) | (u8)D_80AFB8E0[arg0];
 }
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
@@ -856,7 +1150,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_388 = sp28;
 }
 
@@ -904,7 +1198,7 @@ s32 func_80AF8DD4(EnPm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2, u8 actorCat, s16 actorId) {
+s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8 actorCat, s16 actorId) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3s* sp48;
     Vec3f sp3C;
@@ -915,8 +1209,8 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
     sp2C = func_80AF7CB0(this, globalCtx, actorCat, actorId);
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -934,8 +1228,8 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp56 = gSaveContext.save.time - 0x3FFC;
+s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+    u16 sp56 = SCHEDULE_TIME_NOW;
     u8 sp55 = this->actor.params & 0xFF;
     EnDoor* door;
     Vec3s* sp4C;
@@ -945,9 +1239,9 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     this->unk_234 = NULL;
-    door = func_80AF7D60(globalCtx, arg2->unk0);
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp55, D_80AFB430[arg2->unk0]);
+    door = func_80AF7D60(globalCtx, arg2->result);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp55, D_80AFB430[arg2->result]);
     }
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
@@ -966,8 +1260,8 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 this->unk_260 = 0x4B;
             }
 
-            this->unk_36C = arg2->unk8 - arg2->unk4;
-            this->unk_36E = sp56 - arg2->unk4;
+            this->unk_36C = arg2->time1 - arg2->time0;
+            this->unk_36E = sp56 - arg2->time0;
             this->actor.flags &= ~ACTOR_FLAG_1;
             if (gSaveContext.save.weekEventReg[90] & 8) {
                 this->unk_356 |= 0x800;
@@ -982,8 +1276,8 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp2E = (u16)(gSaveContext.save.time - 0x3FFC);
+s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+    u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
     u8 sp2B = this->actor.params & 0xFF;
     s32 pad;
@@ -991,8 +1285,8 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
 
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp2B, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp2B, D_80AFB430[arg2->result]);
     }
 
     if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
@@ -1003,13 +1297,13 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->unk_374 >= 0)) {
             phi_v1 = sp2E;
         } else {
-            phi_v1 = arg2->unk4;
+            phi_v1 = arg2->time0;
         }
 
-        if (arg2->unk8 < phi_v1) {
-            this->unk_248 = (phi_v1 - arg2->unk8) + 0xFFFF;
+        if (arg2->time1 < phi_v1) {
+            this->unk_248 = (phi_v1 - arg2->time1) + 0xFFFF;
         } else {
-            this->unk_248 = arg2->unk8 - phi_v1;
+            this->unk_248 = arg2->time1 - phi_v1;
         }
 
         this->unk_254 = sp2E - phi_v1;
@@ -1023,7 +1317,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             Flags_UnsetSwitch(globalCtx, 0);
         }
 
-        switch (arg2->unk0) {
+        switch (arg2->result) {
             case 83:
             case 84:
             case 85:
@@ -1062,7 +1356,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1071,8 +1365,8 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     this->unk_234 = NULL;
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
@@ -1083,7 +1377,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
-        if (arg2->unk0 == 24) {
+        if (arg2->result == 24) {
             Flags_UnsetSwitch(globalCtx, 0);
             Flags_UnsetSwitch(globalCtx, 1);
             this->unk_394 = EXCH_ITEM_NONE;
@@ -1095,7 +1389,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1104,13 +1398,13 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
     s32 phi_a3 = -1;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 3:
         case 4:
         case 5:
         case 6:
         case 7:
-            phi_a3 = arg2->unk0 - 3;
+            phi_a3 = arg2->result - 3;
             break;
 
         case 19:
@@ -1123,7 +1417,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     this->unk_234 = NULL;
-    phi_a3 = D_80AFB430[arg2->unk0];
+    phi_a3 = D_80AFB430[arg2->result];
     if (phi_a3 >= 0) {
         this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, phi_a3);
     }
@@ -1137,7 +1431,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
 
-        switch (arg2->unk0) {
+        switch (arg2->result) {
             case 27:
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(globalCtx, 0);
@@ -1169,7 +1463,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 gSaveContext.save.weekEventReg[60] |= 4;
 
             default:
-                if (arg2->unk0 == 0x1D) {
+                if (arg2->result == 0x1D) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 }
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
@@ -1182,7 +1476,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0,
@@ -1193,7 +1487,7 @@ s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80AFB8EC = { 116.0f, 26.0f, -219.0f };
     static Vec3s D_80AFB8F8 = { 0x0000, 0xC0BA, 0x0000 };
     s32 pad;
@@ -1205,7 +1499,7 @@ s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->actor.targetMode = 6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
-    if (arg2->unk0 == 14) {
+    if (arg2->result == 14) {
         this->unk_356 &= ~0x200;
         func_80AF7E98(this, 13);
     } else {
@@ -1215,7 +1509,7 @@ s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -1233,7 +1527,7 @@ s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
@@ -1251,7 +1545,7 @@ s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AL)) {
@@ -1269,7 +1563,7 @@ s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -1278,7 +1572,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 16:
             ret = func_80AF9A0C(this, globalCtx, arg2);
             break;
@@ -1688,32 +1982,31 @@ void func_80AFA438(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AFB900[] = {
+    static u8* D_80AFB900[] = {
         D_80AFAD80, D_80AFB30C, D_80AFB3C0, D_80AFB3FC, D_80AFB41C,
     };
     u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
-    u32* unk_14 = &gSaveContext.save.daySpeed;
-    struct_80133038_arg2 sp2C;
+    ScheduleResult sp2C;
 
-    this->unk_374 = REG(15) + *unk_14;
+    this->unk_374 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;
         gSaveContext.save.time = time;
     }
 
-    if (!func_80133038(globalCtx, D_80AFB900[this->unk_38C], &sp2C) ||
-        ((this->unk_258 != sp2C.unk0) && !func_80AF9BF8(this, globalCtx, &sp2C))) {
+    if (!Schedule_RunScript(globalCtx, D_80AFB900[this->unk_38C], &sp2C) ||
+        ((this->unk_258 != sp2C.result) && !func_80AF9BF8(this, globalCtx, &sp2C))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp2C.unk0 = 0;
+        sp2C.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
 
-    this->unk_258 = sp2C.unk0;
+    this->unk_258 = sp2C.result;
     this->unk_268 = func_80AF8040(this, globalCtx);
     func_80AFA438(this, globalCtx);
     if (this->unk_38C != 0) {
@@ -1823,7 +2116,7 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     switch (limbIndex) {
         case 15:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->actor.focus.pos);
+                Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
             if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
@@ -1839,10 +2132,10 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         case 8:
             if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             } else if (this->unk_258 == 24) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);
@@ -1850,33 +2143,33 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnPm* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_356 & 0x200)) {
         if (this->unk_356 & 0x80) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
-    if (arg1 == 15) {
-        func_8013AD9C(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
-                      &this->unk_290, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
+    if (limbIndex == 15) {
+        SubS_UpdateLimb(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
+                        &this->unk_290, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_290.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_290.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

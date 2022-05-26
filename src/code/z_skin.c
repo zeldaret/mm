@@ -13,13 +13,13 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
     Vec3f normal;
     Vec3f sp44;
 
-    wTemp.x = mtx->wx;
-    wTemp.y = mtx->wy;
-    wTemp.z = mtx->wz;
+    wTemp.x = mtx->xw;
+    wTemp.y = mtx->yw;
+    wTemp.z = mtx->zw;
 
-    mtx->wx = 0.0f;
-    mtx->wy = 0.0f;
-    mtx->wz = 0.0f;
+    mtx->xw = 0.0f;
+    mtx->yw = 0.0f;
+    mtx->zw = 0.0f;
 
     for (vertexEntry = skinVertices; vertexEntry < &skinVertices[modifEntry->vtxCount]; vertexEntry++) {
         vtx = &vtxBuf[vertexEntry->index];
@@ -39,9 +39,9 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
         vtx->n.n[2] = normal.z;
     }
 
-    mtx->wx = wTemp.x;
-    mtx->wy = wTemp.y;
-    mtx->wz = wTemp.z;
+    mtx->xw = wTemp.x;
+    mtx->yw = wTemp.y;
+    mtx->zw = wTemp.z;
 }
 
 void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3) {

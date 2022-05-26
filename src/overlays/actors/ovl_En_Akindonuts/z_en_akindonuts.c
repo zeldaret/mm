@@ -1699,7 +1699,7 @@ void EnAkindonuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Act
     }
 
     if (limbIndex == 24) {
-        Matrix_RotateY(this->unk_352, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_352, MTXMODE_APPLY);
     }
 }
 

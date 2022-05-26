@@ -670,7 +670,7 @@ void EnWallmas_DrawShadow(EnWallmas* this, GlobalContext* globalCtx) {
         gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
         func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                       &mf);
-        Matrix_InsertMatrix(&mf, MTXMODE_NEW);
+        Matrix_Mult(&mf, MTXMODE_NEW);
 
         if ((this->actionFunc != EnWallmas_WaitToDrop) && (this->actionFunc != EnWallmas_ReturnToCeiling) &&
             (this->actionFunc != EnWallmas_TakePlayer) && (this->actionFunc != EnWallmas_WaitForSwitchFlag)) {
@@ -709,21 +709,21 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Gfx* gfx;
 
     if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
+        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
 
-        Matrix_StatePush();
-        Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
-        Matrix_RotateY(0x2AAA, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(0xAAA, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
+        Matrix_RotateYS(0x2AAA, MTXMODE_APPLY);
+        Matrix_RotateZS(0xAAA, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -731,7 +731,7 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
         POLY_OPA_DISP = &gfx[2];
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
