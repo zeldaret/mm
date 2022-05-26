@@ -32,16 +32,6 @@ typedef enum {
 } DeepPythonAnimationIndex;
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_ACTION_IDLE,
-    /* 1 */ DEEP_PYTHON_ACTION_EXTEND,
-    /* 2 */ DEEP_PYTHON_ACTION_GRAB,
-    /* 3 */ DEEP_PYTHON_ACTION_DAMAGE,
-    /* 4 */ DEEP_PYTHON_ACTION_RETREAT,
-    /* 5 */ DEEP_PYTHON_ACTION_SETUP_DEAD,
-    /* 6 */ DEEP_PYTHON_ACTION_DEAD,
-} DeepPythonAction;
-
-typedef enum {
     /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
     /* 1 */ DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED,
     /* 2 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY,
@@ -735,7 +725,7 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
-    if ((this->action == DEEP_PYTHON_ACTION_EXTEND)) {
+    if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
@@ -826,15 +816,15 @@ void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     Vec3f playerGrabOffsetFromJawPos = { 350.0f, -120.0f, -60.0f };
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->jawPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->jawPos);
         playerGrabOffsetFromJawPos.x = 350.0f;
         playerGrabOffsetFromJawPos.y = -120.0f;
         playerGrabOffsetFromJawPos.z = -60.0f;
-        Matrix_MultiplyVector3fByState(&playerGrabOffsetFromJawPos, &this->playerGrabPosition);
+        Matrix_MultVec3f(&playerGrabOffsetFromJawPos, &this->playerGrabPosition);
     }
 
     if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->focusPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->focusPos);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);

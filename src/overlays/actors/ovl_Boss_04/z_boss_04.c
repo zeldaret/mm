@@ -214,8 +214,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_6F6 = 82;
     phi_s0_2 = 0;
     for (i = 0; i < 82; i++) {
-        Matrix_RotateY(phi_s0_2, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(phi_f20, &sp90);
+        Matrix_RotateYS(phi_s0_2, MTXMODE_NEW);
+        Matrix_MultVecZ(phi_f20, &sp90);
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x,
                            phi_f24, this->unk_6F0 + sp90.z, 0, 0, 0, i);
         phi_f20 += 2.5f;
@@ -245,7 +245,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     this->unk_1FE = 15;
     if ((this->unk_708 != 0) && (this->unk_708 < 10)) {
         this->actor.world.pos.y = (Math_SinS(this->unk_1F4 * 512) * 10.0f) + (this->actor.floorHeight + 160.0f);
-        Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
     }
 
     switch (this->unk_708) {
@@ -339,7 +339,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
         case 1:
             player->actor.shape.rot.y = 0x7FFF;
             player->actor.world.rot.y = player->actor.shape.rot.y;
-            Matrix_GetStateTranslationAndScaledZ(-100.0f, &this->unk_70C);
+            Matrix_MultVecZ(-100.0f, &this->unk_70C);
 
             this->unk_70C.x += player->actor.world.pos.x;
             this->unk_70C.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
@@ -358,7 +358,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
         case 2:
         case 3:
-            Matrix_GetStateTranslationAndScaledZ(500.0f, &this->unk_70C);
+            Matrix_MultVecZ(500.0f, &this->unk_70C);
             this->unk_70C.x += this->actor.world.pos.x;
             this->unk_70C.y += this->actor.world.pos.y - 50.0f;
             this->unk_70C.z += this->actor.world.pos.z;
@@ -591,82 +591,82 @@ void func_809ED50C(Boss04* this) {
     this->unk_2DE += this->unk_2E2;
     this->unk_2DC += this->unk_2E0;
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6BC);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
+    Matrix_MultZero(&this->unk_6BC);
     Matrix_Scale(this->actor.scale.x * 13.0f, this->actor.scale.y * 13.0f, this->actor.scale.z * 16.0f, MTXMODE_APPLY);
-    Matrix_RotateY(this->unk_2DC, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->unk_2DE, MTXMODE_APPLY);
-    Matrix_StatePush();
+    Matrix_RotateYS(this->unk_2DC, MTXMODE_APPLY);
+    Matrix_RotateXS(this->unk_2DE, MTXMODE_APPLY);
+    Matrix_Push();
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
-        Matrix_RotateStateAroundXAxis(0.3926991f);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_2E4[i]);
+        Matrix_RotateXFApply(0.3926991f);
+        Matrix_MultVecZ(100.0f, &this->unk_2E4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_3A4[i]);
+        Matrix_RotateXFApply(0.41887903f);
+        Matrix_MultVecZ(92.0f, &this->unk_3A4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_458); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_458[i]);
+        Matrix_RotateXFApply(0.41887903f);
+        Matrix_MultVecZ(92.0f, &this->unk_458[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_50C); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_50C[i]);
+        Matrix_RotateXFApply(0.5711987f);
+        Matrix_MultVecZ(71.0f, &this->unk_50C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_590); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_590[i]);
+        Matrix_RotateXFApply(0.5711987f);
+        Matrix_MultVecZ(71.0f, &this->unk_590[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_614); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_614[i]);
+        Matrix_RotateXFApply(1.0471976f);
+        Matrix_MultVecZ(38.0f, &this->unk_614[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_65C); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_65C[i]);
+        Matrix_RotateXFApply(1.0471976f);
+        Matrix_MultVecZ(38.0f, &this->unk_65C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
-    Matrix_GetStateTranslation(&this->unk_6A4);
-    Matrix_StatePop();
-    Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6B0);
+    Matrix_MultZero(&this->unk_6A4);
+    Matrix_Pop();
+    Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_MultZero(&this->unk_6B0);
 }
 
 void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
@@ -805,10 +805,10 @@ void Boss04_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Vec3f sp18;
 
     if (limbIndex == 1) {
-        Matrix_GetStateTranslationAndScaledY(-500.0f, &this->actor.focus.pos);
-        Matrix_MultiplyVector3fByState(&D_809EE228, &sp18);
+        Matrix_MultVecY(-500.0f, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809EE228, &sp18);
         func_809EC040(0, &this->collider1, &sp18);
-        Matrix_MultiplyVector3fByState(&D_809EE234, &sp18);
+        Matrix_MultVec3f(&D_809EE234, &sp18);
         func_809EC040(0, &this->collider2, &sp18);
     }
 }
@@ -824,7 +824,7 @@ void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 800.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 800.0f, MTXMODE_APPLY);
     Matrix_Scale(this->unk_6F8, this->unk_6FC, this->unk_700, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           Boss04_OverrideLimbDraw, Boss04_PostLimbDraw, &this->actor);
@@ -837,9 +837,9 @@ void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
         gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
 
-        Matrix_InsertTranslation(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

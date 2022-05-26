@@ -478,8 +478,8 @@ void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triN
 
         for (i = 0; i < sp80->unk_0F; i++) {
             temp_f2 = (Rand_ZeroOne() * temp_f24) + phi_f22;
-            Matrix_InsertRotationAroundUnitVector_f(temp_f2, &spAC, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&spA0, &sp94);
+            Matrix_RotateAxisF(temp_f2, &spAC, MTXMODE_NEW);
+            Matrix_MultVec3f(&spA0, &sp94);
 
             if (arg5 == 0) {
                 spC4.x = (sp94.x * arg4) + arg3->x;
@@ -557,7 +557,8 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderTrisElementInit* element;
     Vec3f sp70[3];
     Vec3f sp64;
-    s32 i, j;
+    s32 i;
+    s32 j;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -570,23 +571,23 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, ptr->unk_04);
     Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, D_80B31350[temp_s1].unk_08, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     sp64.x = ptr->unk_10 * 1.2f;
     sp64.y = ptr->unk_10 * 1.2f;
     sp64.z = ptr->unk_10 * 1.2f;
 
-    Matrix_MultiplyVector3fByState(&sp64, &this->dyna.actor.focus.pos);
-    Matrix_InsertTranslation(ptr->unk_10, ptr->unk_14 + 5.0f, ptr->unk_18, MTXMODE_APPLY);
+    Matrix_MultVec3f(&sp64, &this->dyna.actor.focus.pos);
+    Matrix_Translate(ptr->unk_10, ptr->unk_14 + 5.0f, ptr->unk_18, MTXMODE_APPLY);
     Matrix_Scale(ptr->unk_0C, ptr->unk_0C, ptr->unk_0C, MTXMODE_APPLY);
-    Matrix_InsertTranslation(-ptr->unk_10, -ptr->unk_14, -ptr->unk_18, MTXMODE_APPLY);
+    Matrix_Translate(-ptr->unk_10, -ptr->unk_14, -ptr->unk_18, MTXMODE_APPLY);
 
     for (i = 0; i < 6; i++) {
         element = &ptr->unk_08->elements[i];
 
         for (j = 0; j < ARRAY_COUNT(sp70); j++) {
-            Matrix_MultiplyVector3fByState(&element->dim.vtx[j], &sp70[j]);
+            Matrix_MultVec3f(&element->dim.vtx[j], &sp70[j]);
         }
 
         Collider_SetTrisVertices(&this->collider, i, &sp70[0], &sp70[1], &sp70[2]);
@@ -698,8 +699,9 @@ void func_80B30AD4(ObjSpidertent* this) {
 void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
     ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     TriNorm* triNorm;
-    s32 i, j;
-    ObjSpidertentStruct2* ptr;
+    s32 i;
+    s32 j;
+    s32 pad;
     Vec3f sp60;
     f32 sp5C;
 

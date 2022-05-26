@@ -255,10 +255,9 @@ void EnMinifrog_SpawnDust(EnMinifrog* this, GlobalContext* globalCtx) {
 }
 
 void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
-    u8 flag;
-
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
+
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnMinifrog_SetJumpState(this);
 
@@ -270,6 +269,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD87: // "Ah! You need not say a thing. Upon seeing that face, I understand!" ...
                 func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
+
             case 0xD82:                                          // "What has brought you all this way?"
                 if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
                     func_80151938(globalCtx, 0xD83); // "Could it be... Has spring finally come to the mountains?"
@@ -277,10 +277,11 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
                     func_80151938(globalCtx, 0xD86); // "Could it be... You came all this way looking for me?"
                 }
 
-                flag = gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8];
                 gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
-                    flag | (u8)isFrogReturnedFlags[this->frogIndex];
+                    ((void)0, gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8]) |
+                    (u8)isFrogReturnedFlags[this->frogIndex];
                 break;
+
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
                 func_801477B4(globalCtx);
@@ -619,14 +620,14 @@ void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 

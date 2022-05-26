@@ -358,7 +358,7 @@ void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
             globalCtx->msgCtx.msgMode = 0x43;
@@ -425,7 +425,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
-        if ((messageState == 5) && (Message_ShouldAdvance(globalCtx))) {
+        if ((messageState == 5) && Message_ShouldAdvance(globalCtx)) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
@@ -480,7 +480,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     }
 
-    if ((messageState == 5) && (Message_ShouldAdvance(globalCtx))) {
+    if ((messageState == 5) && Message_ShouldAdvance(globalCtx)) {
         temp = this->textId;
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.
@@ -600,7 +600,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = EnJg_FrozenIdle;
@@ -1004,10 +1004,10 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         if (this->flags & FLAG_LOOKING_AT_PLAYER) {
             Math_SmoothStepToS(&this->rootRotationWhenTalking, this->actor.yawTowardsPlayer - this->actor.shape.rot.y,
                                5, 0x1000, 0x100);
-            Matrix_RotateY(this->rootRotationWhenTalking, MTXMODE_APPLY);
+            Matrix_RotateYS(this->rootRotationWhenTalking, MTXMODE_APPLY);
         } else {
             Math_SmoothStepToS(&this->rootRotationWhenTalking, 0, 5, 0x1000, 0x100);
-            Matrix_RotateY(this->rootRotationWhenTalking, MTXMODE_APPLY);
+            Matrix_RotateYS(this->rootRotationWhenTalking, MTXMODE_APPLY);
         }
     }
 
@@ -1018,14 +1018,14 @@ void EnJg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnJg* this = THIS;
 
     if (limbIndex == GORON_ELDER_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
 
     if (limbIndex == GORON_ELDER_LIMB_LOWER_LIP) {
-        Matrix_MultiplyVector3fByState(&sBreathPosOffset, &this->breathPos);
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sBreathVelOffset, &this->breathVelocity);
-        Matrix_MultiplyVector3fByState(&sBreathAccelOffset, &this->breathAccel);
+        Matrix_MultVec3f(&sBreathPosOffset, &this->breathPos);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVec3f(&sBreathVelOffset, &this->breathVelocity);
+        Matrix_MultVec3f(&sBreathAccelOffset, &this->breathAccel);
     }
 }
 

@@ -450,7 +450,7 @@ Gfx* func_808AF86C(GraphicsContext* gfxCtx, GlobalContext* globalCtx) {
     Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
     Gfx* gfx = head;
 
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
     gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPEndDisplayList(gfx++);
@@ -473,7 +473,7 @@ void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
 
-            Matrix_InsertTranslation(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
         }
 

@@ -293,7 +293,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.r = 255;
     this->unk_330.g = 10;
     this->unk_330.a = 200;
-    Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
+    Math_Vec3f_Copy(&this->unk_314, &gOneVec3f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
                    this->jointTable, this->morphTable, 31);
@@ -1081,16 +1081,16 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
     if (D_80879388[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80879388[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80879388[limbIndex]]);
     }
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&D_80879370, &this->unk_308);
-        Matrix_MultiplyVector3fByState(&D_8087937C, &this->limbPos[0]);
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
-        Matrix_GetStateTranslationAndScaledY(-200.0f, &this->limbPos[1]);
+        Matrix_MultVec3f(&D_80879370, &this->unk_308);
+        Matrix_MultVec3f(&D_8087937C, &this->limbPos[0]);
+        Matrix_MultZero(&this->actor.focus.pos);
+        Matrix_MultVecY(-200.0f, &this->limbPos[1]);
     } else if (limbIndex == 13) {
-        Matrix_GetStateTranslationAndScaledX(1600.0f, &this->unk_320);
+        Matrix_MultVecX(1600.0f, &this->unk_320);
     }
 
     if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {

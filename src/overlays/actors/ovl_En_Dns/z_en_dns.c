@@ -380,8 +380,8 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                          &this->actor.home.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+                                 &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -554,7 +554,7 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8092C934(this);
         func_8092C86C(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-        func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
+        func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, EXCH_ITEM_NONE, this->unk_2C6 & 7);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, globalCtx);
         func_8092C5C0(this);
@@ -566,9 +566,9 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
-    Matrix_CopyCurrentState(&sp2C);
-    func_8018219C(&sp2C, &sp6C, 0);
+    Matrix_MultVec3f(&gZeroVec3f, &sp74);
+    Matrix_Get(&sp2C);
+    Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
 
     if (arg4 == 0) {
@@ -617,11 +617,11 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD) {
         func_8092D954(this->unk_2CC, this->unk_2CE + this->actor.shape.rot.y, &this->unk_218, &this->unk_224, phi_v1,
                       phi_v0);
-        Matrix_InsertTranslation(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_224.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_224.z, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_224.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_224.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_224.z, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_224.x, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

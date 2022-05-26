@@ -843,19 +843,19 @@ s32 EnPeehat_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Gfx* gfx = POLY_OPA_DISP;
 
-        Matrix_StatePush();
-        Matrix_RotateStateAroundXAxis(this->unk_2BC * 0.115f);
-        Matrix_InsertYRotation_f(this->unk_2BC * 0.13f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(this->unk_2BC * 0.1f, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_RotateXFApply(this->unk_2BC * 0.115f);
+        Matrix_RotateYF(this->unk_2BC * 0.13f, MTXMODE_APPLY);
+        Matrix_RotateZF(this->unk_2BC * 0.1f, MTXMODE_APPLY);
         Matrix_Scale(1.0f - this->unk_2C4, this->unk_2C4 + 1.0f, 1.0f - this->unk_2C4, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(-(this->unk_2BC * 0.115f));
+        Matrix_RotateZF(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
+        Matrix_RotateYF(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
+        Matrix_RotateXFApply(-(this->unk_2BC * 0.115f));
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[1], *dList);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         POLY_OPA_DISP = &gfx[2];
 
@@ -882,31 +882,31 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
     Gfx* gfx;
 
     if (index != -1) {
-        Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[index]);
-        Matrix_GetStateTranslationAndScaledX(4000.0f, &this->limbPos[index + 1]);
+        Matrix_MultVecX(2000.0f, &this->limbPos[index]);
+        Matrix_MultVecX(4000.0f, &this->limbPos[index + 1]);
     }
 
     if (limbIndex == 4) {
-        Matrix_GetStateTranslationAndScaledZ(5500.0f, &this->unk_2D4[0]);
-        Matrix_GetStateTranslationAndScaledZ(-5500.0f, &this->unk_2D4[1]);
+        Matrix_MultVecZ(5500.0f, &this->unk_2D4[0]);
+        Matrix_MultVecZ(-5500.0f, &this->unk_2D4[1]);
     } else if ((limbIndex == 3) && (thisx->params == 0)) {
         Vec3f* vec = &D_80899570[0];
         Vec3f* vec2 = &this->limbPos[12];
 
         for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-            Matrix_MultiplyVector3fByState(vec, vec2);
+            Matrix_MultVec3f(vec, vec2);
         }
 
-        Matrix_GetStateTranslationAndScaledX(3000.0f, vec2++);
-        Matrix_GetStateTranslationAndScaledX(-400.0f, vec2);
+        Matrix_MultVecX(3000.0f, vec2++);
+        Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gfx = POLY_OPA_DISP;
 
-        Matrix_InsertTranslation(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Collider_UpdateSphere(0, &this->colliderSphere);
-        Matrix_InsertTranslation(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
+        Matrix_Translate(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateYF(3.2f, MTXMODE_APPLY);
         Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -932,11 +932,11 @@ void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx) {
                       (this->actor.params == 0) ? EnPeehat_PostLimbDraw : NULL, &this->actor);
 
     if ((this->actor.speedXZ != 0.0f) || (this->actor.velocity.y != 0.0f)) {
-        Matrix_GetStateTranslationAndScaledZ(4500.0f, &sp40);
-        Matrix_GetStateTranslationAndScaledZ(-4500.0f, &sp4C);
-        Matrix_GetStateTranslationAndScaledX(4500.0f, &sp58);
+        Matrix_MultVecZ(4500.0f, &sp40);
+        Matrix_MultVecZ(-4500.0f, &sp4C);
+        Matrix_MultVecX(4500.0f, &sp58);
         Collider_SetTrisVertices(&this->colliderTris, 0, &sp40, &sp4C, &sp58);
-        Matrix_GetStateTranslationAndScaledX(-4500.0f, &sp58);
+        Matrix_MultVecX(-4500.0f, &sp58);
         Collider_SetTrisVertices(&this->colliderTris, 1, &sp40, &sp58, &sp4C);
     }
 

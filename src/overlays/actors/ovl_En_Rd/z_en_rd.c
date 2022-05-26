@@ -1317,7 +1317,7 @@ void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
          (limbIndex == REDEAD_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == REDEAD_LIMB_RIGHT_FOREARM) ||
          (limbIndex == REDEAD_LIMB_RIGHT_HAND) || (limbIndex == REDEAD_LIMB_HEAD) ||
          (limbIndex == REDEAD_LIMB_PELVIS))) {
-        Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
+        Matrix_MultZero(&this->limbPos[this->limbIndex]);
         this->limbIndex++;
     }
 }

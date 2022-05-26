@@ -269,7 +269,7 @@ void func_80B3B4B0(EnGg2* this, GlobalContext* globalCtx) {
         sp64.x = (Rand_Centered() * 50.0f) + this->unk_304.x;
         sp64.y = this->unk_304.y;
         sp64.z = (Rand_Centered() * 50.0f) + this->unk_304.z;
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp64, &D_80B3C088, &D_80B3C094, &sp60, &sp5C, 3000, 40);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp64, &D_80B3C088, &D_80B3C094, &sp60, &sp5C, 3000, 40);
     }
 }
 
@@ -457,11 +457,11 @@ s32 func_80B3BD44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if ((this->unk_2EE != 5) && (this->unk_2EE != 7)) {
         if (limbIndex == 1) {
-            Matrix_RotateY(this->unk_2F6, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_2F6, MTXMODE_APPLY);
         }
 
         if (limbIndex == 2) {
-            Matrix_InsertZRotation_s(this->unk_2F4, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_2F4, MTXMODE_APPLY);
         }
     }
     return false;
@@ -471,7 +471,7 @@ void func_80B3BDC0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnGg2* this = THIS;
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&D_80B3C0A0, &this->unk_304);
+        Matrix_MultVec3f(&D_80B3C0A0, &this->unk_304);
     }
 }
 
