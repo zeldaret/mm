@@ -821,11 +821,7 @@ beginseg
     name "ovl_En_Horse"
     compress
     include "build/src/overlays/actors/ovl_En_Horse/z_en_horse.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Horse/ovl_En_Horse_reloc.o"
-#else
-    include "build/data/ovl_En_Horse/ovl_En_Horse.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -924,8 +920,7 @@ beginseg
     name "ovl_En_Boom"
     compress
     include "build/src/overlays/actors/ovl_En_Boom/z_en_boom.o"
-    include "build/data/ovl_En_Boom/ovl_En_Boom.data.o"
-    include "build/data/ovl_En_Boom/ovl_En_Boom.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Boom/ovl_En_Boom_reloc.o"
 endseg
 
 beginseg
@@ -1026,11 +1021,7 @@ beginseg
     name "ovl_Door_Warp1"
     compress
     include "build/src/overlays/actors/ovl_Door_Warp1/z_door_warp1.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Door_Warp1/ovl_Door_Warp1_reloc.o"
-#else
-    include "build/data/ovl_Door_Warp1/ovl_Door_Warp1.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1506,11 +1497,7 @@ beginseg
     name "ovl_En_Goroiwa"
     compress
     include "build/src/overlays/actors/ovl_En_Goroiwa/z_en_goroiwa.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Goroiwa/ovl_En_Goroiwa_reloc.o"
-#else
-    include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1869,8 +1856,7 @@ beginseg
     name "ovl_Effect_Ss_Lightning"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Lightning/z_eff_ss_lightning.o"
-    include "build/data/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.data.o"
-    include "build/data/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning_reloc.o"
 endseg
 
 beginseg
@@ -2769,11 +2755,7 @@ beginseg
     name "ovl_Obj_Vspinyroll"
     compress
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/z_obj_vspinyroll.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll_reloc.o"
-#else
-    include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2836,8 +2818,7 @@ beginseg
     name "ovl_En_Wiz_Brock"
     compress
     include "build/src/overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.o"
-    include "build/data/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock.data.o"
-    include "build/data/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wiz_Brock/ovl_En_Wiz_Brock_reloc.o"
 endseg
 
 beginseg
@@ -3006,11 +2987,7 @@ beginseg
     name "ovl_Obj_Driftice"
     compress
     include "build/src/overlays/actors/ovl_Obj_Driftice/z_obj_driftice.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Driftice/ovl_Obj_Driftice_reloc.o"
-#else
-    include "build/data/ovl_Obj_Driftice/ovl_Obj_Driftice.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3292,11 +3269,7 @@ beginseg
     name "ovl_Bg_Hakugin_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/z_bg_hakugin_bombwall.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall_reloc.o"
-#else
-    include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3819,8 +3792,7 @@ beginseg
     name "ovl_En_Snowman"
     compress
     include "build/src/overlays/actors/ovl_En_Snowman/z_en_snowman.o"
-    include "build/data/ovl_En_Snowman/ovl_En_Snowman.data.o"
-    include "build/data/ovl_En_Snowman/ovl_En_Snowman.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Snowman/ovl_En_Snowman_reloc.o"
 endseg
 
 beginseg
@@ -4572,8 +4544,7 @@ beginseg
     name "ovl_En_Scopecrow"
     compress
     include "build/src/overlays/actors/ovl_En_Scopecrow/z_en_scopecrow.o"
-    include "build/data/ovl_En_Scopecrow/ovl_En_Scopecrow.data.o"
-    include "build/data/ovl_En_Scopecrow/ovl_En_Scopecrow.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Scopecrow/ovl_En_Scopecrow_reloc.o"
 endseg
 
 beginseg
@@ -4633,8 +4604,11 @@ beginseg
     name "ovl_Bg_Ikana_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.o"
-    include "build/data/ovl_Bg_Ikana_Bombwall/ovl_Bg_Ikana_Bombwall.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Bg_Ikana_Bombwall/ovl_Bg_Ikana_Bombwall_reloc.o"
+#else
     include "build/data/ovl_Bg_Ikana_Bombwall/ovl_Bg_Ikana_Bombwall.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -4881,11 +4855,7 @@ beginseg
     name "ovl_En_Rg"
     compress
     include "build/src/overlays/actors/ovl_En_Rg/z_en_rg.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Rg/ovl_En_Rg_reloc.o"
-#else
-    include "build/data/ovl_En_Rg/ovl_En_Rg.reloc.o"
-#endif
 endseg
 
 beginseg

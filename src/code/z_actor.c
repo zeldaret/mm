@@ -195,7 +195,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         CollisionPoly* spF8;
         s32 bgId;
         f32 floorHeight[2];
-        f32 pad;
+        Light* firstLight = &mapper->l.l[0];
         f32 shadowAlpha;
         f32 shadowScaleX;
         f32 shadowScaleZ;
@@ -239,8 +239,6 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                             IREG(88) + 80, IREG(89) + 60, IREG(90) + 40, 30000, 200, 60);
                         }
                         actor->shape.unk_17 &= ~spB8;
-
-                        if ((uintptr_t)mapper->l.l) {} // POSSIBLE FAKE MATCH
                     }
                 }
 
@@ -252,7 +250,8 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                 shadowScaleZ = 1.0f - (distToFloor * (1.0f / 70.0f));
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
-                for (lightPtr = mapper->l.l, j = 0; j < numLights; lightPtr++, j++) {
+                lightPtr = firstLight;
+                for (j = 0; j < numLights; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = (lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                    ABS_ALT(lightPtr->l.dir[1]);
@@ -263,9 +262,10 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
 
-                for (j = 0; j < 2; lightPtr++, j++) {
+                for (j = 0; j < 2; j++) {
                     if (lightPtr->l.dir[1] > 0) {
                         lightNum = ((lightPtr->l.col[0] + lightPtr->l.col[1] + lightPtr->l.col[2]) *
                                     ABS_ALT(lightPtr->l.dir[1])) -
@@ -275,6 +275,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                                                  shadowScaleZ);
                         }
                     }
+                    lightPtr++;
                 }
             }
             feetPosPtr++;

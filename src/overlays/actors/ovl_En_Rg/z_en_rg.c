@@ -368,7 +368,6 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
     return false;
 }
 
-#ifdef NON_MATCHING
 s32 func_80BF43FC(EnRg* this) {
     Vec3f sp9C;
     Vec3f sp90;
@@ -378,11 +377,11 @@ s32 func_80BF43FC(EnRg* this) {
     f32 phi_f20 = 0.0f;
     s32 temp_s7 = ENRG_GET_7F80(&this->actor);
     s32 phi_s4 = -1;
-    s16 phi_s6 = 0;
     s32 temp_s5 = this->unk_344;
+    s16 phi_s6 = 0;
     s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
 
-    while (true) {
+    do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
         if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
@@ -393,17 +392,10 @@ s32 func_80BF43FC(EnRg* this) {
             phi_s4 = phi_s0;
         }
         phi_s0++;
-        if ((temp_s5 == 18) || (phi_s0 >= D_80BF57E4[temp_s5 + 1][temp_s7])) {
-            break;
-        }
-    }
+    } while ((temp_s5 != 18) && (phi_s0 < D_80BF57E4[temp_s5 + 1][temp_s7]));
 
     return phi_s4;
 }
-#else
-s32 func_80BF43FC(EnRg* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rg/func_80BF43FC.s")
-#endif
 
 s32 func_80BF4560(EnRg* this, GlobalContext* globalCtx) {
     s32 temp_v0 = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);

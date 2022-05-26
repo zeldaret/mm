@@ -557,7 +557,8 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderTrisElementInit* element;
     Vec3f sp70[3];
     Vec3f sp64;
-    s32 i, j;
+    s32 i;
+    s32 j;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -698,8 +699,9 @@ void func_80B30AD4(ObjSpidertent* this) {
 void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
     ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     TriNorm* triNorm;
-    s32 i, j;
-    ObjSpidertentStruct2* ptr;
+    s32 i;
+    s32 j;
+    s32 pad;
     Vec3f sp60;
     f32 sp5C;
 
