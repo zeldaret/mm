@@ -109,7 +109,7 @@ void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     if (this->dyna.actor.colChkInfo.health != 0) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
