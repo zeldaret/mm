@@ -325,19 +325,18 @@ void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
-
-    Matrix_InsertZRotation_s((this->actor.params != 0) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&sp58->unk_04, &sp4C);
-    Matrix_MultiplyVector3fByState(&sp58->unk_10, &sp40);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS((this->actor.params != 0) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
+    Matrix_MultVec3f(&sp58->unk_04, &sp4C);
+    Matrix_MultVec3f(&sp58->unk_10, &sp40);
 
     if (func_80126440(globalCtx, &this->collider, &this->weaponInfo, &sp4C, &sp40)) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &sp4C, &sp40);
     }
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
+    Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sp58->unk_00);

@@ -1618,7 +1618,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     DmStk* this = THIS;
 
     if (limbIndex == 17) {
-        Matrix_GetStateTranslation(&this->unk_304);
+        Matrix_MultZero(&this->unk_304);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1658,7 +1658,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
                     (this->unk_337 >= 0)) {
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
 
@@ -1670,7 +1670,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
                 break;
         }
@@ -1706,9 +1706,9 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case 5:
-                Matrix_InsertTranslation(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
-                Matrix_RotateY(0x6142, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-0x1988, MTXMODE_APPLY);
+                Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
+                Matrix_RotateYS(0x6142, MTXMODE_APPLY);
+                Matrix_RotateXS(-0x1988, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

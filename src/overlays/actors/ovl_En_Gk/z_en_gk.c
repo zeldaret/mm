@@ -403,9 +403,9 @@ s32 func_80B50ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
-    func_8018219C(&sp28, &sp68, 0);
+    Matrix_MultVec3f(&sp70, &sp7C);
+    Matrix_Get(&sp28);
+    Matrix_MtxFToYXZRot(&sp28, &sp68, false);
 
     *arg2 = sp7C;
 
@@ -1146,17 +1146,17 @@ void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         this->actor.focus.pos.y = this->actor.world.pos.y + phi_f0;
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
-        Matrix_MultiplyVector3fByState(&sp58, &this->actor.focus.pos);
-        Matrix_MultiplyVector3fByState(&sp34, &this->unk_2E8);
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_2F4);
+        Matrix_MultVec3f(&sp58, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp34, &this->unk_2E8);
+        Matrix_MultVec3f(&sp28, &this->unk_2F4);
 
-        Matrix_StatePush();
+        Matrix_Push();
 
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp4C, &this->unk_30C);
-        Matrix_MultiplyVector3fByState(&sp40, &this->unk_300);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp4C, &this->unk_30C);
+        Matrix_MultVec3f(&sp40, &this->unk_300);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -1182,15 +1182,15 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
                           this->unk_320 + this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_328,
                           &this->unk_334, phi_v0, phi_v1);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
-            Matrix_InsertTranslation(this->unk_328.x, this->unk_328.y, this->unk_328.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_328.x, this->unk_328.y, this->unk_328.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_334.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_334.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_334.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_334.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_334.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_334.z, MTXMODE_APPLY);
 
-            Matrix_StatePush();
+            Matrix_Push();
             break;
 
         case 9:
@@ -1208,15 +1208,15 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             func_80B50ED4(this->unk_322 + 0x4000, this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_33C,
                           &this->unk_348, phi_v0, phi_v1);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
-            Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_348.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_348.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_348.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_348.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_348.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_348.z, MTXMODE_APPLY);
 
-            Matrix_StatePush();
+            Matrix_Push();
             break;
     }
 }
@@ -1239,7 +1239,7 @@ void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if ((ENGK_GET_F(&this->actor) == ENGK_F_0) && (gSaveContext.save.weekEventReg[22] & 4)) {
-        Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_gk_DL_006688);

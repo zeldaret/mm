@@ -1482,7 +1482,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
-    Matrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (&this->actor == player->targetActor &&
         !(globalCtx->msgCtx.currentTextId >= 0xFF && globalCtx->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
         this->unk4C8 == 3) {
@@ -1543,15 +1543,15 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 16) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {
-        Matrix_RotateY(this->torsoRot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->torsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
     if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
@@ -1581,16 +1581,16 @@ void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 16) {
-        Matrix_MultiplyVector3fByState(&sp50, &this->unk4B4);
+        Matrix_MultVec3f(&sp50, &this->unk4B4);
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk4B4);
     }
     if (this->unk23D == 0) {
         Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
         if (limbIndex == 4) {
-            Matrix_MultiplyVector3fByState(&sp44, &this->unk248);
+            Matrix_MultVec3f(&sp44, &this->unk248);
         }
         if (limbIndex == 7) {
-            Matrix_MultiplyVector3fByState(&sp44, &this->unk254);
+            Matrix_MultVec3f(&sp44, &this->unk254);
         }
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {

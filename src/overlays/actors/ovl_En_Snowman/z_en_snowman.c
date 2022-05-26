@@ -1144,10 +1144,10 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     if (sLimbIndexToBodyPartsPosIndex[limbIndex] != -1) {
         if (sLimbIndexToBodyPartsPosIndex[limbIndex] == 4) {
             for (i = 0; i < 5; i++) {
-                Matrix_MultiplyVector3fByState(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[i + 4]);
+                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[i + 4]);
             }
         } else {
-            Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
+            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
         }
     }
 
@@ -1157,9 +1157,9 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         gfx = POLY_OPA_DISP;
 
         if (EN_SNOWMAN_GET_TYPE(thisx) != EN_SNOWMAN_TYPE_LARGE) {
-            Matrix_InsertTranslation(800.0f, -600.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(800.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            Matrix_InsertTranslation(300.0f, -2300.0f, -1900.0f, MTXMODE_APPLY);
+            Matrix_Translate(300.0f, -2300.0f, -1900.0f, MTXMODE_APPLY);
             Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
         }
 
@@ -1170,7 +1170,7 @@ void EnSnowman_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_GetStateTranslation(&this->snowballPos);
+        Matrix_MultZero(&this->snowballPos);
     }
 }
 

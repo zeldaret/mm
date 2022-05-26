@@ -1003,12 +1003,12 @@ void EnZog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     D_80B959B8.y = 1000.0f;
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80B959B8, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B959B8, &this->actor.focus.pos);
     }
     D_80B959B8.y = 0.0f;
 
     if (limbIndex == 1) {
-        Matrix_MultiplyVector3fByState(&D_80B959B8, &this->unk_2F0);
+        Matrix_MultVec3f(&D_80B959B8, &this->unk_2F0);
     }
 
     if ((this->unk_30A & 2) && (limbIndex == 17)) {
@@ -1026,12 +1026,12 @@ void func_80B95598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     D_80B959C4.y = 1000.0f;
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80B959C4, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B959C4, &this->actor.focus.pos);
     }
     D_80B959C4.y = 0.0f;
 
     if (limbIndex == 1) {
-        Matrix_MultiplyVector3fByState(&D_80B959C4, &this->unk_2F0);
+        Matrix_MultVec3f(&D_80B959C4, &this->unk_2F0);
     }
 
     if ((this->unk_30A & 2) && (limbIndex == 17)) {

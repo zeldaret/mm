@@ -972,8 +972,8 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B4);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255.0f * sp84, 255, 255);
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f,
-                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
     phi_f12 = 1.0f;
     if (this->unk_203 != 0) {
         phi_f12 = this->unk_204 * phi_f12;
@@ -981,19 +981,19 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     Matrix_Scale(phi_f12, phi_f12, phi_f12, MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(globalCtx->state.gfxCtx));
-    Matrix_StatePush();
+    Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
                                 0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
-    Matrix_InsertTranslation(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_1B0 > 0.0f) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B0);
@@ -1004,7 +1004,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100,
                                     0x100, 1, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
 
-        Matrix_InsertTranslation(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,
                      MTXMODE_APPLY);
 
@@ -1031,8 +1031,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     s32 sp60 = 0;
 
     if (this->unk_1D4 != 0) {
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
+                         this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
         Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
@@ -1049,9 +1049,9 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
@@ -1069,9 +1069,9 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 
     func_8012C2DC(globalCtx->state.gfxCtx);

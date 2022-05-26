@@ -636,12 +636,12 @@ void EnBigokuta_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (limbPosIndex != -1) {
         if (limbPosIndex < 6) {
-            Matrix_GetStateTranslationAndScaledX(800.0f, &this->limbPos[limbPosIndex]);
+            Matrix_MultVecX(800.0f, &this->limbPos[limbPosIndex]);
         } else if (limbPosIndex < 8) {
-            Matrix_GetStateTranslation(&this->limbPos[limbPosIndex]);
+            Matrix_MultZero(&this->limbPos[limbPosIndex]);
         } else {
             for (i = 0; i < ARRAY_COUNT(D_80AC45D0); i++) {
-                Matrix_MultiplyVector3fByState(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
+                Matrix_MultVec3f(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
             }
         }
     }

@@ -361,10 +361,10 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
         sp34 = D_80964B24;
     }
 
-    Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&sp34, &this->actor.focus.pos);
-    Matrix_StatePop();
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultVec3f(&sp34, &this->actor.focus.pos);
+    Matrix_Pop();
     this->actor.focus.pos.x += this->actor.world.pos.x;
     this->actor.focus.pos.y += this->actor.world.pos.y;
     this->actor.focus.pos.z += this->actor.world.pos.z;
@@ -1347,17 +1347,17 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_InsertTranslation(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_524[1], MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_524[0], MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_524[2], MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_524[1], MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_524[0], MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_524[2], MTXMODE_APPLY);
+        Matrix_Translate(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 20) {
-        Matrix_InsertTranslation(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_52A[1], MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_52A[0], MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_52A[2], MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1800.0f, -200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_52A[1], MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_52A[0], MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_52A[2], MTXMODE_APPLY);
+        Matrix_Translate(-1800.0f, -200.0f, 0.0f, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1368,9 +1368,9 @@ void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80964C28, &this->unk_508);
+        Matrix_MultVec3f(&D_80964C28, &this->unk_508);
     } else if (limbIndex == 20) {
-        Matrix_MultiplyVector3fByState(&D_80964C34, &this->unk_514);
+        Matrix_MultVec3f(&D_80964C34, &this->unk_514);
     }
 }
 
@@ -1378,9 +1378,9 @@ void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFu* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80964950(globalCtx, this->unk_2D8, ARRAY_COUNT(this->unk_2D8));
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1431,11 +1431,11 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.y += ptr->unk_20.y;
             ptr->unk_08.x += 2.0f * Math_SinS(ptr->unk_2C);
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
-            Matrix_StatePush();
-            Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_RotateY(yaw, MTXMODE_APPLY);
-            Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
-            Matrix_StatePop();
+            Matrix_Push();
+            Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+            Matrix_RotateYS(yaw, MTXMODE_APPLY);
+            Matrix_MultVec3f(&sp44, &ptr->unk_08);
+            Matrix_Pop();
             ptr->unk_2C += 6000;
         }
     }
@@ -1456,8 +1456,8 @@ void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
-            Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));

@@ -277,8 +277,8 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
+    Matrix_RotateAxisF(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
@@ -316,8 +316,8 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
     }
 
     Math_Vec3f_Scale(&sp2C, 1.0f / temp_f0);
-    Matrix_InsertRotationAroundUnitVector_f(sp4C, &sp2C, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_35C, &sp2C);
+    Matrix_RotateAxisF(sp4C, &sp2C, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_35C, &sp2C);
     Math_Vec3f_Copy(&this->unk_35C, &sp2C);
     Math3D_CrossProduct(&this->unk_35C, &sp38, &this->unk_350);
 
@@ -336,15 +336,15 @@ void func_808D93BC(EnSw* this) {
     MtxF sp18;
 
     sp18.xx = this->unk_35C.x;
-    sp18.xy = this->unk_35C.y;
-    sp18.xz = this->unk_35C.z;
-    sp18.yx = this->unk_368.x;
+    sp18.yx = this->unk_35C.y;
+    sp18.zx = this->unk_35C.z;
+    sp18.xy = this->unk_368.x;
     sp18.yy = this->unk_368.y;
-    sp18.yz = this->unk_368.z;
-    sp18.zx = this->unk_350.x;
-    sp18.zy = this->unk_350.y;
+    sp18.zy = this->unk_368.z;
+    sp18.xz = this->unk_350.x;
+    sp18.yz = this->unk_350.y;
     sp18.zz = this->unk_350.z;
-    func_8018219C(&sp18, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
@@ -459,30 +459,30 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
     MtxF sp1C;
 
     sp1C.xx = this->unk_35C.x;
-    sp1C.yx = this->unk_35C.y;
-    sp1C.zx = this->unk_35C.z;
-    sp1C.wx = 0.0f;
-
-    sp1C.xy = this->unk_368.x;
-    sp1C.yy = this->unk_368.y;
-    sp1C.zy = this->unk_368.z;
-    sp1C.wy = 0.0f;
-
-    sp1C.xz = this->unk_350.x;
-    sp1C.yz = this->unk_350.y;
-    sp1C.zz = this->unk_350.z;
-    sp1C.wz = 0.0f;
-
+    sp1C.xy = this->unk_35C.y;
+    sp1C.xz = this->unk_35C.z;
     sp1C.xw = 0.0f;
+
+    sp1C.yx = this->unk_368.x;
+    sp1C.yy = this->unk_368.y;
+    sp1C.yz = this->unk_368.z;
     sp1C.yw = 0.0f;
+
+    sp1C.zx = this->unk_350.x;
+    sp1C.zy = this->unk_350.y;
+    sp1C.zz = this->unk_350.z;
     sp1C.zw = 0.0f;
+
+    sp1C.wx = 0.0f;
+    sp1C.wy = 0.0f;
+    sp1C.wz = 0.0f;
     sp1C.ww = 0.0f;
 
-    Matrix_SetCurrentState(&sp1C);
+    Matrix_Put(&sp1C);
     sp5C.x = vec->x - this->actor.world.pos.x;
     sp5C.y = vec->y - this->actor.world.pos.y;
     sp5C.z = vec->z - this->actor.world.pos.z;
-    Matrix_MultiplyVector3fByState(&sp5C, vec);
+    Matrix_MultVec3f(&sp5C, vec);
 }
 
 s32 func_808D9968(EnSw* this, GlobalContext* globalCtx) {
@@ -1317,7 +1317,7 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
             func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
         }
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
                           &this->actor);
     }

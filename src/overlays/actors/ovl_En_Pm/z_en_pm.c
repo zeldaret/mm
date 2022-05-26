@@ -1038,7 +1038,7 @@ s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
-    Matrix_StatePush();
+    Matrix_Push();
 
     switch (arg2) {
         case 0:
@@ -1060,7 +1060,7 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
             break;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void func_80AF898C(EnPm* this) {
@@ -1150,7 +1150,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_388 = sp28;
 }
 
@@ -2116,7 +2116,7 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     switch (limbIndex) {
         case 15:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->actor.focus.pos);
+                Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
             if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
@@ -2132,10 +2132,10 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         case 8:
             if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             } else if (this->unk_258 == 24) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);
@@ -2163,13 +2163,13 @@ void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
     if (limbIndex == 15) {
         SubS_UpdateLimb(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
                         &this->unk_290, stepRot, overrideRot);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_290.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_290.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

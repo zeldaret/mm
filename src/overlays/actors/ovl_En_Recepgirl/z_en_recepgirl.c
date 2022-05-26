@@ -196,8 +196,8 @@ void EnRecepgirl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Acto
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->headRot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
+        Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }
 }
 

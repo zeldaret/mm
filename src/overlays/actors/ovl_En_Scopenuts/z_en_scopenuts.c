@@ -817,7 +817,7 @@ void EnScopenuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Acto
     }
 
     if (limbIndex == 24) {
-        Matrix_RotateY(this->unk_340, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_340, MTXMODE_APPLY);
     }
 }
 

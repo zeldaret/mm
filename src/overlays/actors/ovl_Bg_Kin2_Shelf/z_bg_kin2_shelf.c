@@ -77,22 +77,22 @@ s32 func_80B6FB30(BgKin2Shelf* this, GlobalContext* globalCtx) {
 
     spA4 = D_80B70750[temp_v1] + ((this->dyna.pushForce < 0.0f) ? 28.0f : -2.0f) + D_80B70768[temp_v1];
 
-    Matrix_InsertTranslation(0.0f, 10.0f, D_80B70760[temp_v1], MTXMODE_NEW);
-    Matrix_RotateY(spA2, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 10.0f, D_80B70760[temp_v1], MTXMODE_NEW);
+    Matrix_RotateYS(spA2, MTXMODE_APPLY);
 
     sp58.x = 0.0f;
     sp58.y = 0.0f;
     sp58.z = 0.0f;
 
-    Matrix_MultiplyVector3fByState(&sp58, &sp94);
+    Matrix_MultVec3f(&sp58, &sp94);
 
     sp58.z = spA4;
 
-    Matrix_MultiplyVector3fByState(&sp58, &sp88);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    Matrix_MultiplyVector3fByState(&sp94, &sp7C);
-    Matrix_MultiplyVector3fByState(&sp88, &sp70);
+    Matrix_MultVec3f(&sp58, &sp88);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_MultVec3f(&sp94, &sp7C);
+    Matrix_MultVec3f(&sp88, &sp70);
 
     return BgCheck_EntityLineTest3(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &sp54, true, false, false, true, &sp50,
                                    &this->dyna.actor, 0.0f);
@@ -119,22 +119,22 @@ s32 func_80B6FCA4(BgKin2Shelf* this, GlobalContext* globalCtx) {
 
     spA0 = D_80B70758[0] + ((this->dyna.pushForce < 0.0f) ? 28.0f : -2.0f) + D_80B70770[0];
 
-    Matrix_InsertTranslation(0.0f, 10.0f, *D_80B70760, MTXMODE_NEW);
-    Matrix_RotateY(sp9E, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 10.0f, *D_80B70760, MTXMODE_NEW);
+    Matrix_RotateYS(sp9E, MTXMODE_APPLY);
 
     sp54.x = 0.0f;
     sp54.y = 0.0f;
     sp54.z = 0.0f;
 
-    Matrix_MultiplyVector3fByState(&sp54, &sp90);
+    Matrix_MultVec3f(&sp54, &sp90);
 
     sp54.z = spA0;
 
-    Matrix_MultiplyVector3fByState(&sp54, &sp84);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    Matrix_MultiplyVector3fByState(&sp90, &sp78);
-    Matrix_MultiplyVector3fByState(&sp84, &sp6C);
+    Matrix_MultVec3f(&sp54, &sp84);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_MultVec3f(&sp90, &sp78);
+    Matrix_MultVec3f(&sp84, &sp6C);
 
     return BgCheck_EntityLineTest3(&globalCtx->colCtx, &sp78, &sp6C, &sp60, &sp50, true, false, false, true, &sp4C,
                                    &this->dyna.actor, 0.0f);

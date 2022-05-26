@@ -136,8 +136,8 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
     }
 
     Math_Vec3f_Scale(&vec, 1.0f / magnitude);
-    Matrix_InsertRotationAroundUnitVector_f(angle, &vec, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->axisLeft, &vec);
+    Matrix_RotateAxisF(angle, &vec, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
     Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
 
@@ -156,18 +156,18 @@ void EnBomChu_UpdateRotation(EnBomChu* this) {
     MtxF mf;
 
     mf.xx = this->axisLeft.x;
-    mf.xy = this->axisLeft.y;
-    mf.xz = this->axisLeft.z;
+    mf.yx = this->axisLeft.y;
+    mf.zx = this->axisLeft.z;
 
-    mf.yx = this->axisUp.x;
+    mf.xy = this->axisUp.x;
     mf.yy = this->axisUp.y;
-    mf.yz = this->axisUp.z;
+    mf.zy = this->axisUp.z;
 
-    mf.zx = this->axisForwards.x;
-    mf.zy = this->axisForwards.y;
+    mf.xz = this->axisForwards.x;
+    mf.yz = this->axisForwards.y;
     mf.zz = this->axisForwards.z;
 
-    func_8018219C(&mf, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&mf, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
@@ -205,13 +205,13 @@ s32 EnBomChu_IsOnCollisionPoly(GlobalContext* globalCtx, Vec3f* posA, Vec3f* pos
 void EnBomChu_SetupMove(EnBomChu* this) {
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
 
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
 
-    Matrix_GetStateTranslationAndScaledY(1.0f, &this->axisUp);
-    Matrix_GetStateTranslationAndScaledZ(1.0f, &this->axisForwards);
-    Matrix_GetStateTranslationAndScaledX(1.0f, &this->axisLeft);
+    Matrix_MultVecY(1.0f, &this->axisUp);
+    Matrix_MultVecZ(1.0f, &this->axisForwards);
+    Matrix_MultVecX(1.0f, &this->axisLeft);
 
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -564,7 +564,7 @@ void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     colorIntensity = blinkTime / (f32)blinkHalfPeriod;
     gDPSetEnvColor(POLY_OPA_DISP++, (s32)(colorIntensity * 209.0f) + 9, (s32)(colorIntensity * 34.0f) + 9,
                    (s32)(colorIntensity * -35.0f) + 35, 255);
-    Matrix_InsertTranslation(this->visualJitter * (1.0f / BOMBCHU_SCALE), 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->visualJitter * (1.0f / BOMBCHU_SCALE), 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gBombchuDL);
 

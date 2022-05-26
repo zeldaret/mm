@@ -799,9 +799,9 @@ s32 EnFamos_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnFamos* this = THIS;
 
     if (limbIndex == FAMOS_LIMB_BODY) {
-        Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->flipRot, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateZS(this->flipRot, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -4000.0f, 0.0f, MTXMODE_APPLY);
 
     } else if (this->flippedTimer < 0) { // if set to -1, famos is dying
         if ((limbIndex == FAMOS_LIMB_SWORD) || (limbIndex == FAMOS_LIMB_SHIELD) || (limbIndex == FAMOS_LIMB_HEAD)) {
@@ -816,7 +816,7 @@ void EnFamos_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnFamos* this = THIS;
 
     if (limbIndex == FAMOS_LIMB_EMBLEM) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         Collider_UpdateSpheres(limbIndex, &this->emblemCollider);
     }
 }
@@ -840,7 +840,7 @@ void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx) {
         rock = &this->rocks[0];
         for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
 
-            Matrix_SetStateRotationAndTranslation(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rotation);
+            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rotation);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
             gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(globalCtx->state.gfxCtx),

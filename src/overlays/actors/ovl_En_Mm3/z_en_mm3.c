@@ -534,7 +534,7 @@ s32 EnMm3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         rot->x += this->unk_2A0.y;
         rot->z += this->unk_2A0.x;
         if ((this->unk_2B0 & 2) && ((globalCtx->gameplayFrames % 3) == 0)) {
-            Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     return false;
@@ -544,7 +544,7 @@ void EnMm3_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnMm3* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80A704F0, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80A704F0, &this->actor.focus.pos);
     }
 }
 

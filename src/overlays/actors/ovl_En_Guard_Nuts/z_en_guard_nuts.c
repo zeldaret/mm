@@ -374,7 +374,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnGuardNuts_OverrideLimbDraw,
                       NULL, &this->actor);
-    Matrix_InsertTranslation(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
+    Matrix_Translate(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
     Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

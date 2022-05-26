@@ -173,13 +173,13 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
 
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                          &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         for (j = 0; j < ARRAY_COUNT(sp70); j++) {
-            Matrix_MultiplyVector3fByState(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
+            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &sp70[0], &sp70[1], &sp70[2]);
     }
@@ -339,14 +339,14 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
         this->unk_2FC = index;
         this->unk_2E4 = this->unk_29C[index];
 
-        Matrix_StatePush();
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                              &this->actor.shape.rot);
+        Matrix_Push();
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                     &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&this->unk_2E4, &this->actor.world.pos);
+        Matrix_MultVec3f(&this->unk_2E4, &this->actor.world.pos);
         this->actor.world.pos = sp5C;
         this->actor.prevPos = this->actor.world.pos;
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -474,8 +474,8 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        Matrix_InsertRotationAroundUnitVector_s(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
+        Matrix_Translate(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -499,10 +499,10 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        Matrix_MultiplyVector3fByState(&this->unk_29C[i], &this->unk_26C[i]);
+        Matrix_MultVec3f(&this->unk_29C[i], &this->unk_26C[i]);
     }
 
-    Matrix_MultiplyVector3fByState(&this->unk_2CC, &this->unk_2D8);
+    Matrix_MultVec3f(&this->unk_2CC, &this->unk_2D8);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Draw.s")

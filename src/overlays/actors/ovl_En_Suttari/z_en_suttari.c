@@ -439,11 +439,11 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
-        Matrix_StatePush();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_Push();
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
-        Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        Matrix_StatePop();
+        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        Matrix_Pop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -471,11 +471,11 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
-        Matrix_StatePush();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_Push();
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
-        Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        Matrix_StatePop();
+        Matrix_MultVec3f(&effectVelOffset, &effectVel);
+        Matrix_Pop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -1502,15 +1502,15 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     if (limbIndex == 15) {
         *dList = object_boj_DL_00AF90;
         if (!(this->flags1 & 4)) {
-            Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
-            Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk3F2, MTXMODE_APPLY);
+            Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+            Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->torsoRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->torsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
     if (limbIndex == 8 || limbIndex == 9 || limbIndex == 0xC) {
         rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
@@ -1530,15 +1530,15 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     if (((this->flags1 & 8) && (this->flags1 & 0x10)) || ((this->flags1 & 2) && !(this->flags1 & 0x20)) ||
         ((this->flags1 & 4) && !(this->flags1 & 0x20))) {
         if (limbIndex == 8) {
-            curState = Matrix_GetCurrentState();
-            Matrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
+            curState = Matrix_GetCurrent();
+            Matrix_MultVec3f(&D_80BAE95C, &this->unk3F8);
             if (this->actor.child == NULL) {
                 if (this->flags1 & 0x100) {
                     bombBag =
                         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_NIMOTSU,
                                            curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
                     if (bombBag != NULL) {
-                        func_8018219C(curState, &bombBag->shape.rot, 0);
+                        Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, false);
                     }
                 } else {
                     func_8012C28C(globalCtx->state.gfxCtx);
@@ -1550,7 +1550,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         }
     }
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BAE950, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BAE950, &this->actor.focus.pos);
     }
 }
 
