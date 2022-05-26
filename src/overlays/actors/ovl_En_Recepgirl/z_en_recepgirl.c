@@ -120,7 +120,7 @@ void EnRecepgirl_SetupTalk(EnRecepgirl* this) {
 }
 
 void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
-    u8 temp_v0_2;
+    u8 talkState;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
@@ -140,11 +140,11 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
-    if (temp_v0_2 == 2) {
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    if (talkState == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
-    } else if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    } else if ((talkState == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
@@ -196,8 +196,8 @@ void EnRecepgirl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Acto
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->headRot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
+        Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }
 }
 

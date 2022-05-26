@@ -912,8 +912,8 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             this->unk_0152 = 15;
             if ((s16)(BREG(71) + 140) < this->unk_0146[1]) {
                 if (this->unk_0146[0] == 0) {
-                    Matrix_RotateY(Math_Atan2S(-player->actor.world.pos.x, -player->actor.world.pos.z), MTXMODE_NEW);
-                    Matrix_GetStateTranslationAndScaledZ(1500.0f * D_809DF5B0, &spA4);
+                    Matrix_RotateYS(Math_Atan2S(-player->actor.world.pos.x, -player->actor.world.pos.z), MTXMODE_NEW);
+                    Matrix_MultVecZ(1500.0f * D_809DF5B0, &spA4);
                     this->unk_0146[0] = 50;
                     this->unk_01B0.x = player->actor.world.pos.x + spA4.x;
                     this->unk_01B0.y = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + (600.0f * D_809DF5B0);
@@ -1023,15 +1023,14 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 sp9C = Rand_ZeroFloat(M_PI);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
-                    Matrix_GetStateTranslationAndScaledZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
-                                                         &sp90);
+                    Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
+                    Matrix_MultVecZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f, &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * D_809DF5B0);
                     spD0.z = this->unk_0170.z + sp90.z;
                     if (BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
                         spA0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp8C, &spD0);
-                        Matrix_GetStateTranslationAndScaledZ(5.0f * D_809DF5B0, &sp70);
+                        Matrix_MultVecZ(5.0f * D_809DF5B0, &sp70);
                         sp70.y = 2.0f * D_809DF5B0;
                         sp64.y = 0.3f * D_809DF5B0;
                         sp64.z = 0.0f;
@@ -1376,14 +1375,14 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     idx = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
-    Matrix_InsertTranslation(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
-    Matrix_InsertYRotation_f(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(spAC - this->unk_0B1C[idx].x);
+    Matrix_Translate(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
+    Matrix_RotateYF(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
+    Matrix_RotateXFApply(spAC - this->unk_0B1C[idx].x);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledZ(150.0f, &this->unk_147C[0]);
+    Matrix_Translate(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
+    Matrix_MultVecZ(150.0f, &this->unk_147C[0]);
     this->unk_0188 = this->unk_017C;
-    Matrix_GetStateTranslationAndScaledZ(300.0f, &this->unk_017C);
+    Matrix_MultVecZ(300.0f, &this->unk_017C);
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_017C);
 
     if ((this->unk_0156 & 1) && (this->unk_0158 == 0)) {
@@ -1407,14 +1406,13 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             spA0 = spA8;
         }
 
-        Matrix_InsertTranslation(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
-                                 MTXMODE_NEW);
-        Matrix_InsertYRotation_f(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(spA4 - this->unk_0B1C[phi_v0].x);
-        Matrix_InsertZRotation_f(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
+        Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z, MTXMODE_NEW);
+        Matrix_RotateYF(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
+        Matrix_RotateXFApply(spA4 - this->unk_0B1C[phi_v0].x);
+        Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(-(M_PI / 2));
+        Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
+        Matrix_RotateXFApply(-(M_PI / 2));
         Matrix_ToMtx(mtxIter);
 
         gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1436,13 +1434,13 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             phi_f12 = 200.0f;
         }
 
-        Matrix_GetStateTranslationAndScaledX(phi_f12, &this->unk_147C[i + 1]);
+        Matrix_MultVecX(phi_f12, &this->unk_147C[i + 1]);
 
         if (i == 21) {
             Actor* child = this->actor.child;
 
             if (child != NULL) {
-                Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.child->world.pos);
+                Matrix_MultVecX(500.0f, &this->actor.child->world.pos);
             }
 
             func_809DA50C(1, &this->colliderSphere2, &this->unk_147C[i + 1]);
@@ -1543,8 +1541,8 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, effect->unk_26 + (i * 3),
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1562,9 +1560,9 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x01, 100, 100, 120, 255);
                 flag++;
             }
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_RotateY(effect->unk_30, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(effect->unk_2E, MTXMODE_APPLY);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_RotateYS(effect->unk_30, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->unk_2E, MTXMODE_APPLY);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0,
                          MTXMODE_APPLY);
 
@@ -1584,8 +1582,8 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)effect->unk_2C);
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1608,8 +1606,8 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, effect->unk_26 + (i * 3),
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -2021,8 +2019,8 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_1D18 != 0) && (this->unk_1D22 != 0)) {
-        Matrix_RotateY(player->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(this->unk_1D64, &sp58);
+        Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVecZ(this->unk_1D64, &sp58);
 
         this->unk_1D24.x = player->actor.world.pos.x + sp58.x;
         this->unk_1D24.y = player->actor.world.pos.y + sp58.y + this->unk_1D68;
@@ -2033,8 +2031,8 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         this->unk_1D30.z = player->actor.world.pos.z;
 
         this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
-        Matrix_InsertZRotation_f(this->unk_1D54, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
+        Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
+        Matrix_MultVecY(1.0f, &this->unk_1D3C);
         Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
         ShrinkWindow_SetLetterboxTarget(27);
     }
@@ -2084,9 +2082,8 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 }
                 this->unk_0150 += 0x4000;
                 sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
-                Matrix_InsertZRotation_f(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f),
-                                         MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
+                Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f), MTXMODE_NEW);
+                Matrix_MultVecY(1.0f, &this->unk_1D3C);
                 func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             }
 

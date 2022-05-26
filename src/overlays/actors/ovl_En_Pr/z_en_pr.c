@@ -574,13 +574,13 @@ void EnPr_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnPr* this = THIS;
 
     if (limbIndex == 2) {
-        Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_2D4);
+        Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_MultVec3f(&sp24, &this->unk_2D4);
     }
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_GetStateTranslation(&this->limbPos[this->unk_228]);
+        Matrix_MultZero(&this->limbPos[this->unk_228]);
         this->unk_228++;
         if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
             this->unk_228 = 0;

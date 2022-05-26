@@ -399,9 +399,9 @@ void MirRay_SetIntensity(MirRay* this, GlobalContext* globalCtx) {
 
     this->reflectIntensity = 0.0f;
 
-    if (MirRay_CheckInFrustum(&this->sourcePt, &this->poolPt, shieldMtx->wx, shieldMtx->wy, shieldMtx->wz,
+    if (MirRay_CheckInFrustum(&this->sourcePt, &this->poolPt, shieldMtx->xw, shieldMtx->yw, shieldMtx->zw,
                               this->sourceEndRad, this->poolEndRad)) {
-        temp_f0 = sqrtf(SQ(shieldMtx->zz) + (SQ(shieldMtx->zx) + SQ(shieldMtx->zy)));
+        temp_f0 = sqrtf(SQ(shieldMtx->zz) + (SQ(shieldMtx->xz) + SQ(shieldMtx->yz)));
         if (temp_f0 == 0.0f) {
             this->reflectRange = 1.0f;
         } else {
@@ -415,7 +415,7 @@ void MirRay_SetIntensity(MirRay* this, GlobalContext* globalCtx) {
             sp4C[1] = this->poolPt.y - this->sourcePt.y;
             sp4C[2] = this->poolPt.z - this->sourcePt.z;
 
-            temp_f2 = (-shieldMtx->zx * sp4C[0]) - (shieldMtx->zy * sp4C[1]) - (shieldMtx->zz * sp4C[2]);
+            temp_f2 = (-shieldMtx->xz * sp4C[0]) - (shieldMtx->yz * sp4C[1]) - (shieldMtx->zz * sp4C[2]);
 
             if (temp_f2 < 0.0f) {
                 temp_f0_2 = sqrtf(SQ(sp4C[0]) + SQ(sp4C[1]) + SQ(sp4C[2]));
@@ -439,17 +439,17 @@ void MirRay_SetupReflectionPolys(MirRay* this, GlobalContext* globalCtx, MirRayS
     CollisionPoly* outPoly;
     f32 sp60[3];
 
-    sp60[0] = -(shieldMtx->zx * this->reflectRange) * this->reflectIntensity * 400.0f;
-    sp60[1] = -(shieldMtx->zy * this->reflectRange) * this->reflectIntensity * 400.0f;
+    sp60[0] = -(shieldMtx->xz * this->reflectRange) * this->reflectIntensity * 400.0f;
+    sp60[1] = -(shieldMtx->yz * this->reflectRange) * this->reflectIntensity * 400.0f;
     sp60[2] = -(shieldMtx->zz * this->reflectRange) * this->reflectIntensity * 400.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->shieldCorners); i++) {
         posA.x =
-            (shieldMtx->wx + (this->shieldCorners[i].x * shieldMtx->xx)) + (this->shieldCorners[i].y * (*shieldMtx).yx);
+            (shieldMtx->xw + (this->shieldCorners[i].x * shieldMtx->xx)) + (this->shieldCorners[i].y * (*shieldMtx).xy);
         posA.y =
-            (shieldMtx->wy + (this->shieldCorners[i].x * shieldMtx->xy)) + (this->shieldCorners[i].y * (*shieldMtx).yy);
+            (shieldMtx->yw + (this->shieldCorners[i].x * shieldMtx->yx)) + (this->shieldCorners[i].y * (*shieldMtx).yy);
         posA.z =
-            (shieldMtx->wz + (this->shieldCorners[i].x * shieldMtx->xz)) + (this->shieldCorners[i].y * (*shieldMtx).yz);
+            (shieldMtx->zw + (this->shieldCorners[i].x * shieldMtx->zx)) + (this->shieldCorners[i].y * (*shieldMtx).zy);
 
         posB.x = sp60[0] + posA.x;
         posB.y = sp60[1] + posA.y;
@@ -501,25 +501,25 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
     Vec3f vecA;
     Vec3f vecC;
 
-    spE8[0] = -(shieldMtx->zx * this->reflectRange) * this->reflectIntensity * 400.0f;
-    spE8[1] = -(shieldMtx->zy * this->reflectRange) * this->reflectIntensity * 400.0f;
+    spE8[0] = -(shieldMtx->xz * this->reflectRange) * this->reflectIntensity * 400.0f;
+    spE8[1] = -(shieldMtx->yz * this->reflectRange) * this->reflectIntensity * 400.0f;
     spE8[2] = -(shieldMtx->zz * this->reflectRange) * this->reflectIntensity * 400.0f;
 
-    vecB.x = shieldMtx->wx;
-    vecB.y = shieldMtx->wy;
-    vecB.z = shieldMtx->wz;
+    vecB.x = shieldMtx->xw;
+    vecB.y = shieldMtx->yw;
+    vecB.z = shieldMtx->zw;
 
     vecD.x = spE8[0] + vecB.x;
     vecD.y = spE8[1] + vecB.y;
     vecD.z = spE8[2] + vecB.z;
 
     vecA.x = vecB.x + (shieldMtx->xx * 300.0f);
-    vecA.y = vecB.y + (shieldMtx->xy * 300.0f);
-    vecA.z = vecB.z + (shieldMtx->xz * 300.0f);
+    vecA.y = vecB.y + (shieldMtx->yx * 300.0f);
+    vecA.z = vecB.z + (shieldMtx->zx * 300.0f);
 
     vecC.x = vecD.x + (shieldMtx->xx * 300.0f);
-    vecC.y = vecD.y + (shieldMtx->xy * 300.0f);
-    vecC.z = vecD.z + (shieldMtx->xz * 300.0f);
+    vecC.y = vecD.y + (shieldMtx->yx * 300.0f);
+    vecC.z = vecD.z + (shieldMtx->zx * 300.0f);
 
     Collider_SetQuadVertices(&this->collider2, &vecA, &vecB, &vecC, &vecD);
 
@@ -547,8 +547,8 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
                 reflection[i].opacity = (s32)(reflection[i].opacity * 1.275f);
 
                 sp10C.x = (shieldMtx->xx * 100.0f) + vecB.x;
-                sp10C.y = (shieldMtx->xy * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->xz * 100.0f) + vecB.z;
+                sp10C.y = (shieldMtx->yx * 100.0f) + vecB.y;
+                sp10C.z = (shieldMtx->zx * 100.0f) + vecB.z;
 
                 sp100.x = (spE8[0] * 4.0f) + sp10C.x;
                 sp100.y = (spE8[1] * 4.0f) + sp10C.y;
@@ -556,21 +556,21 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
 
                 reflection[i].mtx.xx = reflection[i].mtx.yy = reflection[i].mtx.zz = reflection[i].mtx.ww = 1.0f;
 
-                reflection[i].mtx.xy = reflection[i].mtx.xz = reflection[i].mtx.xw = reflection[i].mtx.yx =
-                    reflection[i].mtx.yz = reflection[i].mtx.yw = reflection[i].mtx.zx = reflection[i].mtx.zy =
-                        reflection[i].mtx.zw = reflection[i].mtx.wx = reflection[i].mtx.wy = reflection[i].mtx.wz =
+                reflection[i].mtx.yx = reflection[i].mtx.zx = reflection[i].mtx.wx = reflection[i].mtx.xy =
+                    reflection[i].mtx.zy = reflection[i].mtx.wy = reflection[i].mtx.xz = reflection[i].mtx.yz =
+                        reflection[i].mtx.wz = reflection[i].mtx.xw = reflection[i].mtx.yw = reflection[i].mtx.zw =
                             0.0f;
 
                 if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
                                           &sp10C, &sp100, &intersection, 1)) {
                     reflection[i].mtx.xx = intersection.x - sp118.x;
-                    reflection[i].mtx.xy = intersection.y - sp118.y;
-                    reflection[i].mtx.xz = intersection.z - sp118.z;
+                    reflection[i].mtx.yx = intersection.y - sp118.y;
+                    reflection[i].mtx.zx = intersection.z - sp118.z;
                 }
 
-                sp10C.x = (shieldMtx->yx * 100.0f) + vecB.x;
+                sp10C.x = (shieldMtx->xy * 100.0f) + vecB.x;
                 sp10C.y = (shieldMtx->yy * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->yz * 100.0f) + vecB.z;
+                sp10C.z = (shieldMtx->zy * 100.0f) + vecB.z;
 
                 sp100.x = (spE8[0] * 4.0f) + sp10C.x;
                 sp100.y = (spE8[1] * 4.0f) + sp10C.y;
@@ -578,9 +578,9 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
 
                 if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
                                           &sp10C, &sp100, &intersection, 1)) {
-                    reflection[i].mtx.yx = intersection.x - sp118.x;
+                    reflection[i].mtx.xy = intersection.x - sp118.x;
                     reflection[i].mtx.yy = intersection.y - sp118.y;
-                    reflection[i].mtx.yz = intersection.z - sp118.z;
+                    reflection[i].mtx.zy = intersection.z - sp118.z;
                 }
             } else {
                 reflection[i].reflectionPoly = NULL;
@@ -603,7 +603,7 @@ void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
     this->reflectIntensity = 0.0f;
 
     if (!D_808E3BF0 && !this->unLit && func_80124088(globalCtx)) {
-        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
+        Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         MirRay_SetIntensity(this, globalCtx);
 
         if (this->reflectIntensity <= 0.0f) {
@@ -640,9 +640,9 @@ void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(reflection); i++) {
             if (reflection[i].reflectionPoly != NULL) {
-                Matrix_InsertTranslation(reflection[i].pos.x, reflection[i].pos.y, reflection[i].pos.z, MTXMODE_NEW);
+                Matrix_Translate(reflection[i].pos.x, reflection[i].pos.y, reflection[i].pos.z, MTXMODE_NEW);
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-                Matrix_InsertMatrix(&reflection[i].mtx, MTXMODE_APPLY);
+                Matrix_Mult(&reflection[i].mtx, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

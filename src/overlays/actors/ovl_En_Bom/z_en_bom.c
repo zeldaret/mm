@@ -383,8 +383,8 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         spCC = Rand_ZeroFloat(M_PI);
 
         for (i = 0; i < 15; i++) {
-            Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
+            Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
+            Matrix_MultVecZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
@@ -400,7 +400,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
                         sp84 = D_80872E94;
                         sp80 = D_80872E94;
                     }
-                    Matrix_GetStateTranslationAndScaledZ(5.0f, &sp94);
+                    Matrix_MultVecZ(5.0f, &sp94);
                     sp88.x = sp88.z = 0.0f;
                     sp94.y = 2.0f;
                     sp88.y = 0.2f;
@@ -606,14 +606,14 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (!this->isPowderKeg) {
             func_800B8050(&this->actor, globalCtx, 0);
-            Matrix_MultiplyVector3fByState(&D_80872EE0, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
 
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_RotateXS(0x4000, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -629,15 +629,15 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 s16 sp4A = this->actor.world.rot.y - this->actor.shape.rot.y;
                 f32 sp44 = (1000.0f / Math_CosS(ABS_ALT((s16)(this->unk_1FA % 10922)) - 0x1555)) + -1000.0f;
 
-                Matrix_RotateY(sp4A, MTXMODE_APPLY);
-                Matrix_InsertTranslation(0.0f, sp44, 0.0f, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(this->unk_1FA, MTXMODE_APPLY);
-                Matrix_RotateY(-sp4A, MTXMODE_APPLY);
+                Matrix_RotateYS(sp4A, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, sp44, 0.0f, MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk_1FA, MTXMODE_APPLY);
+                Matrix_RotateYS(-sp4A, MTXMODE_APPLY);
             }
 
-            Matrix_MultiplyVector3fByState(&D_80872EEC, &this->actor.home.pos);
-            Matrix_MultiplyVector3fByState(&D_80872EF8, &sp58);
-            Matrix_MultiplyVector3fByState(&D_80872F04, &sp4C);
+            Matrix_MultVec3f(&D_80872EEC, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EF8, &sp58);
+            Matrix_MultVec3f(&D_80872F04, &sp4C);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -675,14 +675,14 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
     f32 temp_f26 = Math_Vec3f_DistXYZ(arg3, arg1);
     s32 spB0;
     f32 temp_f2;
-    f32 sqrt;
+    f32 distXZ;
 
     Math_Vec3f_Copy(&ptr->unk_00, arg1);
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
     ptr->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-    sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-    ptr->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+    distXZ = sqrtf(SQXZ(spCC));
+    ptr->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
 
@@ -721,8 +721,8 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         }
 
         ptr2->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-        sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-        ptr2->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+        distXZ = sqrtf(SQXZ(spCC));
+        ptr2->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
         ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
         ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
@@ -776,8 +776,8 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-    Matrix_InsertRotation(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
+    Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+    Matrix_RotateZYX(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -787,8 +787,8 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
     ptr2 = &D_80874650[1];
 
     for (i = 1; i < temp_s5; i++, ptr2++) {
-        Matrix_InsertTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
-        Matrix_InsertRotation(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
+        Matrix_Translate(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
+        Matrix_RotateZYX(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

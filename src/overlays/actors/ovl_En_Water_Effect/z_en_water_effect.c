@@ -225,8 +225,8 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     }
 
                     for (j = 0; j < 12; j++) {
-                        Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
+                        Matrix_RotateYF((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
+                        Matrix_MultVecZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
                         spA4.y = Rand_ZeroFloat(4.0f) + 2.0f;
                         func_80A58908(this, &ptr->unk_04, &spA4, ptr->unk_2A);
                     }
@@ -293,16 +293,16 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225, 150);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_00 == 1) {
-                Matrix_RotateY(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
+                Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             } else {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateZF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
@@ -326,9 +326,9 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                             ptr->unk_3C);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
@@ -530,18 +530,18 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (ptr->unk_01 * -20) & 0x1FF,
                                         0x20, 0x80));
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_2A >= 2) {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             } else {
-                Matrix_RotateY(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
+                Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
 
             if ((i & 1) != 0) {
-                Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -549,8 +549,8 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0043E8);
 
             if ((ptr->unk_2A & 1) == 0) {
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
-                Matrix_InsertXRotation_s(ptr->unk_28, MTXMODE_APPLY);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_RotateXS(ptr->unk_28, MTXMODE_APPLY);
                 Matrix_Scale(ptr->unk_2C.z, ptr->unk_2C.z, ptr->unk_2C.z, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -610,16 +610,16 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 165, 235, 255, 128);
 
-    Matrix_StatePush();
-    Matrix_StatePush();
-    Matrix_StatePush();
+    Matrix_Push();
+    Matrix_Push();
+    Matrix_Push();
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
         if (this->unk_E2C > 1.0f) {
@@ -633,7 +633,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000420);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         if (this->unk_E30 > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
@@ -645,10 +645,10 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E30);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000730);
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     } else {
-        Matrix_StatePop();
-        Matrix_StatePop();
+        Matrix_Pop();
+        Matrix_Pop();
     }
 
     if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
@@ -661,7 +661,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000A48);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
@@ -690,9 +690,9 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                                 ptr->unk_3C);
 
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
                 Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-                Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+                Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

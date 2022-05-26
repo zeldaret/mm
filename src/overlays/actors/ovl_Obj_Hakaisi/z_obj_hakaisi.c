@@ -131,19 +131,19 @@ void ObjHakaisi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
                   this->dyna.actor.world.pos.z, &sp3C);
-    Matrix_SetCurrentState(&sp3C);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Put(&sp3C);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp3C);
-    func_8018219C(&sp3C, &this->dyna.actor.shape.rot, 1);
+    Matrix_Get(&sp3C);
+    Matrix_MtxFToYXZRot(&sp3C, &this->dyna.actor.shape.rot, true);
     this->dyna.actor.world.rot = this->dyna.actor.shape.rot;
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&D_80B155B0, &this->dyna.actor.focus.pos);
+    Matrix_MultVec3f(&D_80B155B0, &this->dyna.actor.focus.pos);
 
     for (i = 0; i < ARRAY_COUNT(D_80B155BC); i++) {
-        Matrix_MultiplyVector3fByState(&D_80B155BC[i], &this->unk_160[i]);
+        Matrix_MultVec3f(&D_80B155BC[i], &this->unk_160[i]);
     }
 
     func_80B1444C(this);
@@ -386,8 +386,8 @@ void func_80B15264(ObjHakaisi* this) {
     s32 pad;
     s16 sp32 = Rand_Next();
 
-    Matrix_InsertRotation(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&D_80B15600, &this->unk_184);
+    Matrix_RotateZYX(Rand_Next(), Rand_Next(), Rand_Next(), MTXMODE_NEW);
+    Matrix_MultVec3f(&D_80B15600, &this->unk_184);
     this->dyna.actor.gravity = -1.0f;
     this->unk_19C = Rand_Next() >> 0x12;
     this->dyna.actor.velocity.x = Math_SinS(sp32) * 4.0f;
@@ -409,13 +409,13 @@ void func_80B15330(ObjHakaisi* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 
-    Matrix_InsertRotationAroundUnitVector_s(this->unk_19C, &this->unk_184, MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp34);
+    Matrix_RotateAxisS(this->unk_19C, &this->unk_184, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Get(&sp34);
 
-    func_8018219C(&sp34, &this->dyna.actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&sp34, &this->dyna.actor.shape.rot, false);
 }
 
 void func_80B1544C(Actor* thisx, GlobalContext* globalCtx) {

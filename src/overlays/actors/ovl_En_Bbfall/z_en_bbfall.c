@@ -674,17 +674,17 @@ void EnBbfall_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
-                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
+                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[0]);
             } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
-                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
-                Matrix_MultiplyVector3fByState(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
+                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[3]);
+                Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
-                Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+                Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
             }
         }
     } else if (this->bodyPartDrawStatus > BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
@@ -694,11 +694,11 @@ void EnBbfall_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            currentMatrixState = Matrix_GetCurrentState();
+            currentMatrixState = Matrix_GetCurrent();
             currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
             currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
             currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
-            Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
+            Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
@@ -727,12 +727,12 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (this->flameOpacity > 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_RotateY(
+        Matrix_RotateYS(
             ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
             MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        currentMatrixState = Matrix_GetCurrentState();
+        currentMatrixState = Matrix_GetCurrent();
 
         opacity = this->flameOpacity;
         pos = &this->flamePos[0];
