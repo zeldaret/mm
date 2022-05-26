@@ -607,8 +607,8 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (Message_ShouldAdvance(globalCtx)) &&
-        (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
+    if ((talkState == 5) && Message_ShouldAdvance(globalCtx) &&
+        !EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
@@ -1084,7 +1084,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
@@ -1191,7 +1191,7 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
 void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1586,7 +1586,7 @@ s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1675,7 +1675,7 @@ void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,

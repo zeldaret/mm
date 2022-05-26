@@ -579,21 +579,22 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* ar
     Vec3f sp34;
     s32 sp30;
 
-    Matrix_MultiplyVector3fByState(&arg2->unk_48, &this->unk_234);
+    Matrix_MultVec3f(&arg2->unk_48, &this->unk_234);
     if (func_8088ACE0 == this->actionFunc) {
-        if (this->unk_244 == 0) {
+        if (!this->unk_244.active) {
             sp4C = arg2->unk_00;
         } else {
             sp4C = arg2->unk_18[globalCtx->gameplayFrames % 2];
         }
-        Matrix_MultiplyVector3fByState(&sp4C[0], &sp40);
-        Matrix_MultiplyVector3fByState(&sp4C[1], &sp34);
+        Matrix_MultVec3f(&sp4C[0], &sp40);
+        Matrix_MultVec3f(&sp4C[1], &sp34);
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
             if (this->unk_264 == 0) {
-                sp30 &= func_80126440(globalCtx, &this->collider.base, &this->unk_244, &sp40, &sp34);
-            } else if (sp30 && (sp40.x == this->unk_248) && (sp40.y == this->unk_24C) && (sp40.z == this->unk_250) &&
-                       (sp34.x == this->unk_254) && (sp34.y == this->unk_258) && (sp34.z == this->unk_25C)) {
+                sp30 &= func_80126440(globalCtx, &this->collider, &this->unk_244, &sp40, &sp34);
+            } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
+                       (sp40.z == this->unk_244.tip.z) && (sp34.x == this->unk_244.base.x) &&
+                       (sp34.y == this->unk_244.base.y) && (sp34.z == this->unk_244.base.z)) {
                 sp30 = false;
             }
             if (sp30) {
@@ -665,7 +666,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Matrix_Scale(this->bubble.unk_144 * sp9C, this->bubble.unk_144 * sp9C, this->bubble.unk_144 * spA0,
                      MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
         if (this->actor.speedXZ == 0.0f) {
             func_800B8118(&this->actor, globalCtx, MTXMODE_NEW);
@@ -676,7 +677,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
                               COMBINED, 0, ENVIRONMENT, 0, COMBINED, 0, ENVIRONMENT, 0);
             gDPSetEnvColor(POLY_XLU_DISP++, 230, 225, 150, spA4);
 
-            Matrix_NormalizeXYZ(&gIdentityMtxF);
+            Matrix_ReplaceRotation(&gIdentityMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -717,8 +718,8 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
             sp5C = 150.0f;
         }
 
-        Matrix_StatePush();
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         if (this->actor.speedXZ == 0.0f) {
             phi_v0 = 0;
@@ -726,21 +727,21 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
             phi_v0 = (globalCtx->gameplayFrames % 256) * 4000;
         }
 
-        Matrix_InsertZRotation_s(phi_v0, MTXMODE_APPLY);
+        Matrix_RotateZS(phi_v0, MTXMODE_APPLY);
         Matrix_Scale(sp5C, sp5C, sp5C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+        gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
 
-        Matrix_StatePop();
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_Pop();
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (this->actor.velocity.y != 0.0f) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);

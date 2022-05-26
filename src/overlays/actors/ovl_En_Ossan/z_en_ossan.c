@@ -1277,7 +1277,7 @@ void EnOssan_UpdateCursorAnim(EnOssan* this) {
 void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255; // POSSIBLY FAKE
+    s32 maxColor = 255; //! FAKE:
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1673,7 +1673,7 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limb
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_HEAD) {
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1683,8 +1683,8 @@ s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIn
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1705,7 +1705,7 @@ void EnOssan_PartTimeWorker_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
     }
 }
 

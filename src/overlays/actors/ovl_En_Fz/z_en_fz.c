@@ -259,13 +259,13 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp5C.y = this->actor.world.pos.y + 20.0f;
     sp5C.z = this->actor.world.pos.z;
 
-    Matrix_InsertTranslation(sp5C.x, sp5C.y, sp5C.z, MTXMODE_NEW);
-    Matrix_InsertRotation(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(sp5C.x, sp5C.y, sp5C.z, MTXMODE_NEW);
+    Matrix_RotateZYX(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
 
     sp44.x = sp44.y = 0.0f;
     sp44.z = 440.0f;
 
-    Matrix_MultiplyVector3fByState(&sp44, &this->unk_22C);
+    Matrix_MultVec3f(&sp44, &this->unk_22C);
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true,
                                 &sp40)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
@@ -620,7 +620,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
         sp58.y = this->actor.world.pos.y + 20.0f;
         sp58.z = this->actor.world.pos.z;
 
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
         sp64.x = 0.0f;
         sp64.y = -2.0f;
@@ -629,7 +629,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
                                                            : 0.0f) +
                  20;
 
-        Matrix_MultiplyVector3fByState(&sp64, &sp4C);
+        Matrix_MultVec3f(&sp64, &sp4C);
 
         if ((this->unk_BCA & 7) == 0) {
             sp3F = 1;
@@ -737,7 +737,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
     sp58.y = this->actor.world.pos.y + 20.0f;
     sp58.z = this->actor.world.pos.z;
 
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
     sp64.x = 0.0f;
     sp64.y = -2.0f;
@@ -746,7 +746,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
                                                        : 0.0f) +
              20;
 
-    Matrix_MultiplyVector3fByState(&sp64, &sp4C);
+    Matrix_MultVec3f(&sp64, &sp4C);
 
     if (!(this->unk_BC6 & 7)) {
         sp3F = 1;
@@ -1013,8 +1013,8 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_01 + (i * 3)) * 3,
                                         (ptr->unk_01 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

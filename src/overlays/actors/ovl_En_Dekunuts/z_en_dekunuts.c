@@ -710,20 +710,20 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (value != -1) {
         if (value < 3) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[value]);
+            Matrix_MultVecX(1000.0f, &this->limbPos[value]);
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[value]);
+            Matrix_MultZero(&this->limbPos[value]);
             ptr1 = &D_808BEFA4[0];
             ptr2 = &this->limbPos[value + 1];
             for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
-                Matrix_MultiplyVector3fByState(ptr1, ptr2);
+                Matrix_MultVec3f(ptr1, ptr2);
                 ptr1++, ptr2++;
             }
         }
     }
 
     if (limbIndex == DEKU_SCRUB_LIMB_HEAD) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 
@@ -732,8 +732,8 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDekunuts_OverrideLimbDraw,
                       EnDekunuts_PostLimbDraw, &this->actor);
-    Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                          &this->actor.home.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+                                 &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);

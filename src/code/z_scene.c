@@ -142,11 +142,9 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
 
 // SceneTableEntry Header Command 0x00: Spawn List
 void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    GlobalContext* globalCtx2 = globalCtx;
     s32 loadedCount;
-    void* nextObject;
     s16 playerObjectId;
-    u8 playerForm;
+    void* nextObject;
 
     globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
                                 globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
@@ -158,11 +156,10 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     loadedCount = Object_Spawn(&globalCtx->objectCtx, OBJECT_LINK_CHILD);
-    nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
+    nextObject = globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
-    playerForm = gSaveContext.save.playerForm;
-    playerObjectId = gLinkFormObjectIndexes[playerForm];
+    playerObjectId = gLinkFormObjectIndexes[(void)0, gSaveContext.save.playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 
@@ -378,8 +375,6 @@ void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    u32 dayTime;
-
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
         gSaveContext.environmentTime = gSaveContext.save.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
@@ -399,12 +394,9 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         REG(15) = globalCtx->envCtx.timeIncrement;
     }
 
-    dayTime = gSaveContext.save.time;
-    globalCtx->envCtx.unk_4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.save.time;
-    globalCtx->envCtx.unk_8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.save.time;
-    globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
+    globalCtx->envCtx.unk_4 = -(Math_SinS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
 
     if (globalCtx->envCtx.timeIncrement == 0 && gSaveContext.save.cutscene < 0xFFF0) {
         gSaveContext.environmentTime = gSaveContext.save.time;

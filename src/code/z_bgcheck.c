@@ -248,20 +248,20 @@ void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
         phi_f12 = 0.0f;
     }
     dest->xx = z_f14;
-    dest->xy = (-nx) * phi_f14;
-    dest->xz = (-nx) * phi_f12;
-    dest->yx = nx;
+    dest->yx = (-nx) * phi_f14;
+    dest->zx = (-nx) * phi_f12;
+    dest->xy = nx;
     dest->yy = ny;
-    dest->yz = nz;
-    dest->zx = 0.0f;
-    dest->zy = -phi_f12;
+    dest->zy = nz;
+    dest->xz = 0.0f;
+    dest->yz = -phi_f12;
     dest->zz = phi_f14;
-    dest->wx = tx;
-    dest->wy = ty;
-    dest->wz = tz;
-    dest->xw = 0.0f;
-    dest->yw = 0.0f;
-    dest->zw = 0.0f;
+    dest->xw = tx;
+    dest->yw = ty;
+    dest->zw = tz;
+    dest->wx = 0.0f;
+    dest->wy = 0.0f;
+    dest->wz = 0.0f;
     dest->ww = 1.0f;
 }
 
@@ -4208,9 +4208,6 @@ s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
 }
 
-/**
- * unused
- */
 u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }

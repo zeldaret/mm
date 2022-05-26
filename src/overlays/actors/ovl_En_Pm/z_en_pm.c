@@ -1038,7 +1038,7 @@ s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
-    Matrix_StatePush();
+    Matrix_Push();
 
     switch (arg2) {
         case 0:
@@ -1060,7 +1060,7 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
             break;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void func_80AF898C(EnPm* this) {
@@ -1105,12 +1105,11 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20, 0x0000,
+        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20,
     };
     static u16 D_80AFB8E0[] = {
-        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04, 0x0000,
+        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
     };
-    s32 temp;
 
     if (!(gSaveContext.save.weekEventReg[88] & 2)) {
         if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
@@ -1129,9 +1128,8 @@ void func_80AF8BA8(s32 arg0) {
         }
     }
 
-    temp = gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8];
     gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] =
-        temp | (D_80AFB8E0[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80));
+        ((void)0, gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8]) | (u8)D_80AFB8E0[arg0];
 }
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
@@ -1152,7 +1150,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_388 = sp28;
 }
 
@@ -1990,9 +1988,8 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
     ScheduleResult sp2C;
-    u32* unk_14 = &gSaveContext.save.daySpeed;
 
-    this->unk_374 = REG(15) + *unk_14;
+    this->unk_374 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;
@@ -2119,7 +2116,7 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     switch (limbIndex) {
         case 15:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->actor.focus.pos);
+                Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
             if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
@@ -2135,10 +2132,10 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         case 8:
             if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             } else if (this->unk_258 == 24) {
-                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
+                Matrix_MultVec3f(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);
@@ -2146,33 +2143,33 @@ void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnPm* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_356 & 0x200)) {
         if (this->unk_356 & 0x80) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
-    if (arg1 == 15) {
-        func_8013AD9C(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
-                      &this->unk_290, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
+    if (limbIndex == 15) {
+        SubS_UpdateLimb(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
+                        &this->unk_290, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_290.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_290.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

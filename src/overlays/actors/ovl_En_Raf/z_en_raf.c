@@ -829,13 +829,13 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             // These matrix operations make the trap petals look a bit more "wobbly" as it chews
             // by stretching the limbs in various random directions.
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
-                Matrix_RotateY((this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertXRotation_s((this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertZRotation_s((this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateYS((this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateXS((this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateZS((this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_Scale(this->chewScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                Matrix_InsertZRotation_s(-(this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-(this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateY(-(this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateZS(-(this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateXS(-(this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateYS(-(this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
             }
             break;
 
@@ -948,11 +948,11 @@ void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (particle->isVisible) {
-            Matrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
+            Matrix_Translate(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(particle->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateYS(particle->rotation.y, MTXMODE_APPLY);
+            Matrix_RotateZS(particle->rotation.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);
