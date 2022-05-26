@@ -3498,7 +3498,7 @@ void func_801A0238(s32 arg0, s32 arg1);
 // void func_801A05F0(void);
 void func_801A0654(Vec3f* arg0, u16 sfxId, s32 arg2);
 void func_801A0810(Vec3f* arg0, u16 sfxId, u8 arg2);
-// void func_801A0868(void);
+void func_801A0868(Vec3f* pos, u16 sfxId, u8 val);
 // void func_801A09D4(void);
 // void Audio_SplitBgmChannels(void);
 // void func_801A0E44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
