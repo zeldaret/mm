@@ -277,7 +277,7 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 elapsedTime, s32 waypo
  *
  * @param numPoints the number of points considered when computing the next point to move to, max is 11
  * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
- * @param waypoint the current time relative to the start time of the path
+ * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
  * @param weightArray see `SubS_TimePathing_FillWeightArray`
  * @param weights how much to weight each point considered
  */
@@ -323,7 +323,7 @@ void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint,
  * @param z
  * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
  * @param numPoints the number of points considered when computing the next point to move to, max is 11
- * @param waypoint the current time relative to the start time of the path
+ * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
  * @param points the path's points
  * @param weightArray see `SubS_TimePathing_FillWeightArray`
  */
