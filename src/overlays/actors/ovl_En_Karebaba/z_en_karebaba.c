@@ -175,39 +175,39 @@ void EnKarebaba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_808F1374(EnKarebaba* this, GlobalContext* globalCtx) {
     s32 phi_a3;
 
-    if (this->unk_1EC == 10) {
-        this->unk_1EC = 0;
-        this->unk_1F0 = 0.0f;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 0.0f;
         if (this->actor.params == ENKAREBABA_2) {
             phi_a3 = 1;
         } else {
             phi_a3 = 4;
         }
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_1FC, phi_a3, 4, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, phi_a3, 4, 0.3f, 0.2f);
     }
 }
 
 void func_808F13FC(EnKarebaba* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.damageEffect == 2) {
-        this->unk_1EC = 0;
-        this->unk_1F4 = 0.75f;
-        this->unk_1F0 = 3.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 3.0f;
     } else if (this->actor.colChkInfo.damageEffect == 4) {
-        this->unk_1F4 = 0.75f;
-        this->unk_1EC = 20;
-        this->unk_1F0 = 3.0f;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+        this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider2.info.bumper.hitPos.x,
                     this->collider2.info.bumper.hitPos.y, this->collider2.info.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_SMALL_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == 3) {
-        this->unk_1EC = 10;
-        this->unk_1F4 = 0.75f;
-        this->unk_1F0 = 1.0f;
-        this->unk_1F8 = 1.125f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 1.0f;
+        this->drawDmgEffFrozenSteamScale = 1.125f;
     } else if (this->actor.colChkInfo.damageEffect == 5) {
-        this->unk_1EC = 31;
-        this->unk_1F4 = 0.75f;
-        this->unk_1F0 = 3.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 3.0f;
     }
 }
 
@@ -371,7 +371,7 @@ void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx) {
 }
 
 void func_808F1BF8(EnKarebaba* this) {
-    if (this->unk_1EC != 10) {
+    if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->unk_1EE = 0;
         this->actor.gravity = -0.8f;
         this->actor.velocity.y = 4.0f;
@@ -393,7 +393,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
     f32 temp_f22;
     f32 temp_f24;
 
-    if (this->unk_1EC == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->unk_1EE--;
         if (this->unk_1EE == 0) {
             this->actor.gravity = -0.8f;
@@ -446,14 +446,14 @@ void func_808F1FAC(EnKarebaba* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    if (this->unk_1EC == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->unk_1EE = 3;
     }
     this->actionFunc = func_808F200C;
 }
 
 void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx) {
-    if (this->unk_1EC == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->unk_1EE--;
         if (this->unk_1EE == 0) {
             func_808F1374(this, globalCtx);
@@ -481,7 +481,7 @@ void func_808F20FC(EnKarebaba* this, GlobalContext* globalCtx) {
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 8);
     this->unk_1EE = 200;
     this->actor.flags &= ~ACTOR_FLAG_20;
-    this->unk_1F0 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     this->actionFunc = func_808F21A4;
 }
 
@@ -530,7 +530,7 @@ void func_808F238C(EnKarebaba* this) {
     this->unk_1EE = 200;
     this->actor.parent = NULL;
     this->actor.shape.shadowScale = 0.0f;
-    this->unk_1F0 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actionFunc = func_808F254C;
 }
@@ -580,16 +580,16 @@ void EnKarebaba_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->unk_1F0 > 0.0f) {
-        if (this->unk_1EC != 10) {
-            Math_StepToF(&this->unk_1F0, 0.0f, 0.05f);
-            this->unk_1F4 = (this->unk_1F0 + 1.0f) * 0.375f;
-            if (this->unk_1F4 > 0.75f) {
-                this->unk_1F4 = 0.75f;
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
+            if (this->drawDmgEffScale > 0.75f) {
+                this->drawDmgEffScale = 0.75f;
             } else {
-                this->unk_1F4 = this->unk_1F4;
+                this->drawDmgEffScale = this->drawDmgEffScale;
             }
-        } else if (!Math_StepToF(&this->unk_1F8, 0.75f, 0.01875f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -633,7 +633,7 @@ void func_808F280C(EnKarebaba* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
     func_800C0094(this->unk_22C, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &sp40);
-    Matrix_InsertMatrix(&sp40, MTXMODE_NEW);
+    Matrix_Mult(&sp40, MTXMODE_NEW);
     Matrix_Scale(0.15f, 1.0f, 0.15f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -646,17 +646,17 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKarebaba* this = THIS;
     s32 i;
     s32 sp94;
-    s16 phi_a3;
+    s16 limbCount;
     f32 sp8C = 0.01f;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Math_Vec3f_Copy(this->unk_1FC, &this->actor.world.pos);
+    Math_Vec3f_Copy(this->limbPos, &this->actor.world.pos);
 
     if (this->actionFunc == func_808F21A4) {
         if ((this->unk_1EE > 40) || (this->unk_1EE & 1)) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -665,8 +665,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actionFunc != func_808F254C) {
         func_800AE2A0(globalCtx, &D_808F2E28, 1, 2);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
 
         if ((this->actionFunc == func_808F241C) || (this->actionFunc == func_808F200C) ||
             (this->actionFunc == func_808F15B0)) {
@@ -674,7 +673,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_Scale(sp8C, sp8C, sp8C, MTXMODE_APPLY);
-        Matrix_InsertRotation(this->actor.shape.rot.x, this->actor.shape.rot.y, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(this->actor.shape.rot.x, this->actor.shape.rot.y, 0, MTXMODE_APPLY);
 
         if (this->actor.params == ENKAREBABA_2) {
             sp94 = 1;
@@ -685,15 +684,15 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         for (i = 0; i < sp94; i++) {
-            Matrix_InsertTranslation(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
-            Matrix_GetStateTranslation(&this->unk_1FC[1 + i]);
+            Matrix_MultZero(&this->limbPos[1 + i]);
             if ((i == 0) && (this->actionFunc == func_808F1C84)) {
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
             }
         }
 
@@ -701,37 +700,37 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_800AE2A0(globalCtx, &D_808F2E28, 1, 2);
-    Matrix_InsertTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, MTXMODE_NEW);
 
     if (this->actionFunc != func_808F15B0) {
         sp8C = 0.01f;
     }
 
     Matrix_Scale(sp8C, sp8C, sp8C, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.home.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_0010F0);
 
     if (this->actionFunc == func_808F1C84) {
-        Matrix_InsertRotation(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_001828);
 
-        Matrix_GetStateTranslation(&this->unk_1FC[3]);
+        Matrix_MultZero(&this->limbPos[3]);
     }
 
     func_800AE5A0(globalCtx);
 
     if (this->actor.params == ENKAREBABA_2) {
-        phi_a3 = 1;
+        limbCount = 1;
     } else {
-        phi_a3 = 4;
+        limbCount = ARRAY_COUNT(this->limbPos);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->unk_1FC, phi_a3, this->unk_1F4, this->unk_1F8, this->unk_1F0,
-                  this->unk_1EC);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, limbCount, this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->unk_22C != 0) {
         func_808F280C(this, globalCtx);

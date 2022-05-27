@@ -142,27 +142,24 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
 
 // SceneTableEntry Header Command 0x00: Spawn List
 void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    GlobalContext* globalCtx2 = globalCtx;
     s32 loadedCount;
-    void* nextObject;
     s16 playerObjectId;
-    u8 playerForm;
+    void* nextObject;
 
     globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
                                 globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
     if ((globalCtx->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[1].playerParams == 0x0CFF)) {
+        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0x0CFF)) {
         // Skull Kid Object
         Object_Spawn(&globalCtx->objectCtx, OBJECT_STK);
         return;
     }
 
     loadedCount = Object_Spawn(&globalCtx->objectCtx, OBJECT_LINK_CHILD);
-    nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
+    nextObject = globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
-    playerForm = gSaveContext.playerForm;
-    playerObjectId = gLinkFormObjectIndexes[playerForm];
+    playerObjectId = gLinkFormObjectIndexes[(void)0, gSaveContext.save.playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 
@@ -341,7 +338,7 @@ void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
  * Loads different texture files for each region of the world.
  * These later are stored in segment 0x06, and used in maps.
  */
-s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
+void Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
         { 0, 0 }, // Default
         { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
@@ -358,10 +355,8 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
 
     if (size != 0) {
         globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
-        return DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
+        DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
     }
-
-    // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
 // SceneTableEntry Header Command 0x11: Skybox Settings
@@ -380,10 +375,8 @@ void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
-    u32 dayTime;
-
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.environmentTime = gSaveContext.time =
+        gSaveContext.environmentTime = gSaveContext.save.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
@@ -393,7 +386,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->envCtx.timeIncrement = 0;
     }
 
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.timeIncrement != 0)) {
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.timeIncrement != 0)) {
         globalCtx->envCtx.timeIncrement = 5;
     }
 
@@ -401,15 +394,12 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         REG(15) = globalCtx->envCtx.timeIncrement;
     }
 
-    dayTime = gSaveContext.time;
-    globalCtx->envCtx.unk_4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.time;
-    globalCtx->envCtx.unk_8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.time;
-    globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
+    globalCtx->envCtx.unk_4 = -(Math_SinS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
+    globalCtx->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->envCtx.timeIncrement == 0 && gSaveContext.cutscene < 0xFFF0) {
-        gSaveContext.environmentTime = gSaveContext.time;
+    if (globalCtx->envCtx.timeIncrement == 0 && gSaveContext.save.cutscene < 0xFFF0) {
+        gSaveContext.environmentTime = gSaveContext.save.time;
 
         if (gSaveContext.environmentTime >= CLOCK_TIME(4, 0) && gSaveContext.environmentTime < CLOCK_TIME(6, 30)) {
             gSaveContext.environmentTime = CLOCK_TIME(5, 0);
@@ -527,7 +517,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     }
 
     if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.mapsVisited = (gBitFlags[i] | gSaveContext.mapsVisited) | gSaveContext.mapsVisited;
+        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
     }
 }
 
@@ -610,5 +600,5 @@ u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
  * Creates an entrance index from the current entrance index with the given spawn index.
  */
 u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.entranceIndex >> 9, spawnIndex, 0);
+    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawnIndex, 0);
 }

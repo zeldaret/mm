@@ -153,12 +153,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
 
                     Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
                     Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
-                    this->particles[i].posOffset.x +=
-                        __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                    this->particles[i].posOffset.y +=
-                        __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                    this->particles[i].posOffset.z +=
-                        __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                    this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                    this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                    this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:
@@ -205,7 +202,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                                                this->particles[i].LostWoodsSkyFishPosOffsetMax,
                                            0.5f, 2.0f, 0.2f);
                         this->particles[i].LostWoodsSkyFishSpeedXZClock += this->particles[i].LostWoodsSkyFishSpeedXZ;
-                        this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y);
+                        this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y);
                         this->particles[i].speedClock.x += 0.2f * Rand_ZeroOne(); // unused calculation
                         this->particles[i].speedClock.y += this->particles[i].LostWoodsSkyFishSpeedY;
                         this->particles[i].speedClock.z += 0.1f * Rand_ZeroOne(); // unused calculation
@@ -377,9 +374,9 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 Math_SmoothStepToF(&this->particles[i].scale, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
 
-                this->particles[i].posOffset.x += __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                this->particles[i].posOffset.z += __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                 switch ((i >> 1) & 3) {
                     case 0:
@@ -536,7 +533,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
                     scaleAlpha = 1.0f;
@@ -586,8 +583,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -625,7 +622,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
                     alphaScale = 1.0f;
@@ -633,7 +630,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 Matrix_Scale(this->particles[i].scale * alphaScale, this->particles[i].scale * alphaScale,
                              this->particles[i].scale * alphaScale, MTXMODE_APPLY);
                 alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
-                alphaScale = (alphaScale > 1.0f) ? 0.0f : (1.0f - alphaScale) > 1.0f ? 1.0f : 1.0f - alphaScale;
+                alphaScale = CLAMP(1.0f - alphaScale, 0.0f, 1.0f);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     this->particles[i].alpha = 255.0f * alphaScale;
@@ -655,11 +652,11 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_023348);
+                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
 
-                Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
-                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -667,7 +664,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
             }
         }

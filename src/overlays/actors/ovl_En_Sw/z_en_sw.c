@@ -176,14 +176,15 @@ s32 func_808D8B58(EnSw* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
-        if (this->unk_412 != 10) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
             this->unk_464[i] = 80;
         }
         this->unk_47C[i] = this->unk_464[i];
-        this->unk_418[i] = 0.45000002f;
-        if ((this->unk_412 == 0) || (this->unk_412 == 1) || (this->unk_412 == 10)) {
+        this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
+        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
+            (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
             this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
             this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
@@ -197,26 +198,27 @@ s32 func_808D8B58(EnSw* this) {
 
 s32 func_808D8D60(EnSw* this, GlobalContext* globalCtx, s32 arg2) {
     s32 ret = false;
-    u8 sp53;
-    Vec3f sp44;
-    f32 sp40;
+    u8 drawDmgEffType;
+    Vec3f limbPos[1];
+    f32 drawDmgEffAlpha;
 
     if (arg2 < this->unk_462) {
         if (this->unk_464[arg2] != 0) {
-            sp40 = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
-            sp53 = this->unk_412;
-            Math_ApproachF(&this->unk_418[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
-            sp44.x += this->unk_380[arg2].x;
-            sp44.y += this->unk_380[arg2].y;
-            sp44.z += this->unk_380[arg2].z;
-            if (sp53 == 10) {
+            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+            drawDmgEffType = this->drawDmgEffType;
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
+            limbPos[0].x += this->unk_380[arg2].x;
+            limbPos[0].y += this->unk_380[arg2].y;
+            limbPos[0].z += this->unk_380[arg2].z;
+            if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
-                    sp53 = 11;
+                    drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
-                sp40 = 1.0f;
+                drawDmgEffAlpha = 1.0f;
             }
-            func_800BE680(globalCtx, &this->actor, &sp44, 1, 0.3f, this->unk_418[arg2], sp40, sp53);
+            Actor_DrawDamageEffects(globalCtx, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
+                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
             ret = true;
         }
     }
@@ -275,8 +277,8 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
+    Matrix_RotateAxisF(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
@@ -314,8 +316,8 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
     }
 
     Math_Vec3f_Scale(&sp2C, 1.0f / temp_f0);
-    Matrix_InsertRotationAroundUnitVector_f(sp4C, &sp2C, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_35C, &sp2C);
+    Matrix_RotateAxisF(sp4C, &sp2C, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_35C, &sp2C);
     Math_Vec3f_Copy(&this->unk_35C, &sp2C);
     Math3D_CrossProduct(&this->unk_35C, &sp38, &this->unk_350);
 
@@ -334,15 +336,15 @@ void func_808D93BC(EnSw* this) {
     MtxF sp18;
 
     sp18.xx = this->unk_35C.x;
-    sp18.xy = this->unk_35C.y;
-    sp18.xz = this->unk_35C.z;
-    sp18.yx = this->unk_368.x;
+    sp18.yx = this->unk_35C.y;
+    sp18.zx = this->unk_35C.z;
+    sp18.xy = this->unk_368.x;
     sp18.yy = this->unk_368.y;
-    sp18.yz = this->unk_368.z;
-    sp18.zx = this->unk_350.x;
-    sp18.zy = this->unk_350.y;
+    sp18.zy = this->unk_368.z;
+    sp18.xz = this->unk_350.x;
+    sp18.yz = this->unk_350.y;
     sp18.zz = this->unk_350.z;
-    func_8018219C(&sp18, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
@@ -448,6 +450,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     }
 }
 #else
+void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D94D0.s")
 #endif
 
@@ -456,30 +459,30 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
     MtxF sp1C;
 
     sp1C.xx = this->unk_35C.x;
-    sp1C.yx = this->unk_35C.y;
-    sp1C.zx = this->unk_35C.z;
-    sp1C.wx = 0.0f;
-
-    sp1C.xy = this->unk_368.x;
-    sp1C.yy = this->unk_368.y;
-    sp1C.zy = this->unk_368.z;
-    sp1C.wy = 0.0f;
-
-    sp1C.xz = this->unk_350.x;
-    sp1C.yz = this->unk_350.y;
-    sp1C.zz = this->unk_350.z;
-    sp1C.wz = 0.0f;
-
+    sp1C.xy = this->unk_35C.y;
+    sp1C.xz = this->unk_35C.z;
     sp1C.xw = 0.0f;
+
+    sp1C.yx = this->unk_368.x;
+    sp1C.yy = this->unk_368.y;
+    sp1C.yz = this->unk_368.z;
     sp1C.yw = 0.0f;
+
+    sp1C.zx = this->unk_350.x;
+    sp1C.zy = this->unk_350.y;
+    sp1C.zz = this->unk_350.z;
     sp1C.zw = 0.0f;
+
+    sp1C.wx = 0.0f;
+    sp1C.wy = 0.0f;
+    sp1C.wz = 0.0f;
     sp1C.ww = 0.0f;
 
-    Matrix_SetCurrentState(&sp1C);
+    Matrix_Put(&sp1C);
     sp5C.x = vec->x - this->actor.world.pos.x;
     sp5C.y = vec->y - this->actor.world.pos.y;
     sp5C.z = vec->z - this->actor.world.pos.z;
-    Matrix_MultiplyVector3fByState(&sp5C, vec);
+    Matrix_MultVec3f(&sp5C, vec);
 }
 
 s32 func_808D9968(EnSw* this, GlobalContext* globalCtx) {
@@ -665,7 +668,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
 
-        if (this->unk_412 == 10) {
+        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             // clang-format off
             for (i = 0; i < ARRAY_COUNT(this->unk_464); i++) { this->unk_464[i] = 0; }
             // clang-format on
@@ -681,36 +684,36 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
-                    this->unk_412 = 20;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 3:
-                    this->unk_412 = 10;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                     this->unk_45C = 0;
                     func_808D8B58(this);
                     break;
 
                 case 2:
-                    this->unk_412 = 0;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 5:
-                    this->unk_412 = 30;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 default:
-                    this->unk_412 = 1;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
                     this->unk_45C = 0;
                     break;
             }
 
-            if (!ENSW_GET_3(&this->actor) && (this->unk_412 != 10)) {
+            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
                 func_808D9E44(this);
             }
             this->unk_458 = 20;
@@ -814,6 +817,7 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = temp_f0;
 }
 #else
+void func_808DA578(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA578.s")
 #endif
 
@@ -852,11 +856,12 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
+void func_808DA6FC(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA6FC.s")
 #endif
 
 void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
-    if (this->unk_412 == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         s32 i;
         s32 count;
         s16 phi_a0;
@@ -877,41 +882,36 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
             if (!ENSW_GET_3(&this->actor)) {
                 func_808D9E44(this);
             }
-            this->unk_412 = 1;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
             func_808D8ED0(this, globalCtx);
         }
-        return;
-        if (1) {}
-    }
-
-    if (ENSW_GET_3(&this->actor)) {
+    } else if (ENSW_GET_3(&this->actor)) {
         this->actionFunc = func_808DAEB4;
-        return;
-    }
-
-    if (this->actor.bgCheckFlags & 1) {
-        f32 temp_f2;
-
-        this->actor.shape.yOffset = 400.0f;
-        temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
-        this->actor.velocity.y = temp_f2;
-        this->unk_448 = temp_f2;
-        this->actor.speedXZ = 0.0f;
-        if ((s32)temp_f2 != 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
-        } else {
-            this->actionFunc = func_808DAEB4;
-            this->actor.velocity.y = 0.0f;
-        }
-        if ((s32)this->actor.velocity.y >= 2) {
-            func_808D8940(this, globalCtx);
-        }
     } else {
-        Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
-    }
+        if (this->actor.bgCheckFlags & 1) {
+            f32 temp_f2;
 
-    Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            this->actor.shape.yOffset = 400.0f;
+            temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
+            this->actor.velocity.y = temp_f2;
+            this->unk_448 = temp_f2;
+            this->actor.speedXZ = 0.0f;
+            if ((s32)temp_f2 != 0) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+            } else {
+                this->actionFunc = func_808DAEB4;
+                this->actor.velocity.y = 0.0f;
+            }
+            if ((s32)this->actor.velocity.y >= 2) {
+                func_808D8940(this, globalCtx);
+            }
+        } else {
+            Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
+        }
+
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    }
 }
 
 void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
@@ -1011,6 +1011,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
+void func_808DACF4(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
 #endif
 
@@ -1065,7 +1066,7 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
         phi_a0 = DECR(this->unk_45C);
         if (phi_a0 == 0) {
             this->unk_410 |= 2;
-            if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
+            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE)) {
                 func_808D8B58(this);
                 this->unk_45C = 10;
             } else {
@@ -1173,7 +1174,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = func_8013BEDC(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
+        this->unk_1E4 = SubS_GetDayDependentPath(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
         if (this->unk_1E4 != NULL) {
             this->unk_4A0 = 1;
         }
@@ -1249,7 +1250,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
     }
 
-    if ((this->unk_412 != 10) || (this->unk_45A != 0)) {
+    if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) || (this->unk_45A != 0)) {
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -1316,7 +1317,7 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
             func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
         }
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
                           &this->actor);
     }

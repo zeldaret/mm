@@ -122,7 +122,7 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
 
     if (temp_s6 > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
+        Matrix_Push();
         for (i = 0; i < temp_s6; i++) {
             f32 temp_f0 = (f32)i / temp_s6;
             s16 temp_s0 = ((f32)arg0->unk_18 - arg0->unk_1C) * temp_f0 + arg0->unk_1C;
@@ -138,18 +138,18 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
                 phi_f24 = arg0->pos.y + (0.03f * temp_s0) + (0.01f * temp_s0 * temp_s0);
             }
             temp_f28 = (Math_CosS(temp_s0 * 0x9A6) * 45.0f) + arg0->pos.z;
-            Matrix_InsertTranslation(2.0f * Rand_Centered() + temp_f30, 2.0f * Rand_Centered() + phi_f24,
+            Matrix_Translate(2.0f * Rand_Centered() + temp_f30, 2.0f * Rand_Centered() + phi_f24,
                                      2.0f * Rand_Centered() + temp_f28, 0);
             Matrix_Scale(temp_f26, temp_f26, temp_f26, 1);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
             func_8012C2DC(globalCtx->state.gfxCtx);
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, 1);
+            Matrix_Mult(&globalCtx->billboardMtxF, 1);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         }
-        Matrix_StatePop();
+        Matrix_Pop();
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -470,7 +470,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
             u8 playerForm;
 
             playbackSpeedTable = sPlaybackSpeed;
-            playerForm = gSaveContext.playerForm;
+            playerForm = gSaveContext.save.playerForm;
             animHeader = sBigChestAnimations[playerForm];
             playbackSpeed = playbackSpeedTable.data[playerForm];
         }
@@ -549,9 +549,9 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
         s32 bgId;
         u16 sfxId = 0;
 
-        if (Animation_OnFrame(&this->skelAnime, gSaveContext.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
             sfxId = NA_SE_EV_TBOX_UNLOCK;
-        } else if (Animation_OnFrame(&this->skelAnime, gSaveContext.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
+        } else if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
         if (sfxId != 0) {

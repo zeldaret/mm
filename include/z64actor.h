@@ -256,6 +256,9 @@ struct EnItem00;
 
 typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
 
+#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
+
 typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
@@ -386,6 +389,18 @@ typedef struct ActorContext {
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;
 } ActorContext; // size = 0x284
+
+typedef enum {
+    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
+    /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
+    /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
+    /* 21 */ ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS,
+    /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL = 30,
+    /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
+    /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
+} ActorDrawDamageEffectType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

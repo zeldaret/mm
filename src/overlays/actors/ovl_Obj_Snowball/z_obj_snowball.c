@@ -228,8 +228,8 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
         scale = ((Rand_ZeroOne() * 15.0f) + 30.0f) * this->unk_20C;
 
-        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1, 0xEF,
-                             temp_s2);
+        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1,
+                             OBJECT_GOROIWA, temp_s2);
         if ((this->unk_210 == 0) && (temp_s7 >= 3)) {
             spFC.x += (Rand_ZeroOne() * 120.0f) - 60.0f;
             spFC.y += Rand_ZeroOne() * 80.0f;
@@ -333,7 +333,6 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     f32 temp_f30 = sqrtf(arg1);
     Vec3f spD8;
@@ -341,14 +340,16 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     s32 i;
     Gfx* temp_s1;
     f32 temp_f20;
-    s32 phi_s5;
-    s32 pad;
     s16 phi_s2;
-    s32 pad2;
     s16 phi_s0;
     s16 phi_s3;
+    s32 phi_s5;
+    s32 tmp;
+    s32 pad;
 
     for (i = 0, phi_s5 = 0; i < 13; i++, phi_s5 += 0x1999) {
+        tmp = i & 3;
+
         temp_f20 = (Rand_ZeroOne() * (40.0f * arg1)) + 20.0f;
 
         spD8.x = Math_SinS((s32)(Rand_ZeroOne() * 6553.6f) + phi_s5) * temp_f20;
@@ -363,7 +364,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
         spD8.y += arg2->y;
         spD8.z += arg2->z;
 
-        if ((i & 3) == 0) {
+        if (tmp == 0) {
             temp_s1 = D_80B04FC8[0];
             phi_s2 = -400;
             phi_s3 = 1;
@@ -372,7 +373,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             } else {
                 phi_s0 = 0x41;
             }
-        } else if ((i & 3) == 1) {
+        } else if (tmp == 1) {
             temp_s1 = D_80B04FC8[1];
             phi_s2 = -340;
             phi_s3 = 1;
@@ -389,7 +390,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spD8, &spCC, &spD8, phi_s2, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 15.0f) + 25.0f) * arg1, phi_s3, 0, 0x36, -1, 0xEF, temp_s1);
+                             ((Rand_ZeroOne() * 15.0f) + 25.0f) * arg1, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, temp_s1);
 
         spD8.x += (Rand_ZeroOne() * 80.0f) - 40.0f;
         spD8.y += Rand_ZeroOne() * 55.0f;
@@ -401,10 +402,6 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
                       (s32)(Rand_ZeroOne() * 30.0f * temp_f30) + 60);
     }
 }
-#else
-void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball/func_80B03A80.s")
-#endif
 
 void func_80B03E2C(ObjSnowball* this, GlobalContext* globalCtx) {
     ObjSnowballStruct* ptr;
@@ -690,8 +687,8 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
             ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
 
             if (ptr->unk_10 <= 0.0f) {
-                Matrix_InsertRotation(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
-                Matrix_MultiplyVector3fByState(&D_80B04FE4, &sp88);
+                Matrix_RotateZYX(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
+                Matrix_MultVec3f(&D_80B04FE4, &sp88);
 
                 sp84 = this->unk_20C * 60.0f * 0.9f;
                 if (sp88.y > 0.0f) {
@@ -815,7 +812,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
             sp80.y = ptr->unk_1C.y;
             sp80.z = ptr->unk_1C.z;
 
-            Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
+            Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_0082D0);
 
@@ -829,7 +826,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, ptr->unk_2C);
 
                 func_800C0094(ptr->unk_28, ptr->unk_00.x, ptr->unk_18, ptr->unk_00.z, &sp88);
-                Matrix_SetCurrentState(&sp88);
+                Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

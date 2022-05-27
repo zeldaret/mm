@@ -33,11 +33,11 @@ typedef struct EnPr {
     /* 0x0220 */ UNK_TYPE1 unk220[0x8];
     /* 0x0228 */ s32 unk_228;
     /* 0x022C */ s16 unk_22C;
-    /* 0x022E */ s16 unk_22E;
-    /* 0x0230 */ s16 unk_230;
+    /* 0x022E */ s16 drawDmgEffAlpha;
+    /* 0x0230 */ s16 drawDmgEffType;
     /* 0x0234 */ f32 unk_234;
     /* 0x0238 */ f32 unk_238;
-    /* 0x023C */ Vec3f unk_23C[10];
+    /* 0x023C */ Vec3f limbPos[10];
     /* 0x02B4 */ f32 unk_2B4;
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ f32 unk_2BC;

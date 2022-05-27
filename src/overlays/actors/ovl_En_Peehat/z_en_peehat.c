@@ -189,7 +189,7 @@ void EnPeehat_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 0) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit1);
-        if (gSaveContext.isNight) {
+        if (gSaveContext.save.isNight) {
             this->actor.shape.yOffset = -1000.0f;
         }
         Actor_SetScale(&this->actor, 0.036f);
@@ -227,21 +227,21 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80897170(EnPeehat* this) {
-    this->unk_2AE = 10;
-    this->unk_2CC = 1.1f;
-    this->unk_2D0 = 1.6500001f;
-    this->unk_2C8 = 1.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 1.1f;
+    this->drawDmgEffFrozenSteamScale = 1.6500001f;
+    this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808971DC(EnPeehat* this, GlobalContext* globalCtx) {
-    if (this->unk_2AE == 10) {
-        this->unk_2AE = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderSphere.base.colType = COLTYPE_HIT6;
-        this->unk_2C8 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2EC, ARRAY_COUNT(this->unk_2EC), 2, 0.5f, 0.35f);
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
     }
 }
 
@@ -296,7 +296,7 @@ void func_80897498(EnPeehat* this) {
 }
 
 void func_80897520(EnPeehat* this, GlobalContext* globalCtx) {
-    if (!gSaveContext.isNight) {
+    if (!gSaveContext.save.isNight) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->colliderSphere.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < 740.0f) {
@@ -381,7 +381,7 @@ void func_80897910(EnPeehat* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.25f);
     Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + 80.0f, 3.0f);
     SkelAnime_Update(&this->skelAnime);
-    if (!gSaveContext.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
+    if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1000);
         this->actor.shape.rot.y += (s16)(this->unk_2AD * 450);
     } else {
@@ -521,7 +521,7 @@ void func_80897F44(EnPeehat* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += this->unk_2B6;
     this->actor.shape.rot.y += 0x15E;
 
-    if (!gSaveContext.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
+    if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         func_80897864(this);
     } else {
@@ -566,7 +566,7 @@ void func_80898144(EnPeehat* this, GlobalContext* globalCtx) {
         func_80897D00(this);
     }
 
-    if (!gSaveContext.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
+    if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         func_80897864(this);
     }
     func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
@@ -685,7 +685,8 @@ void func_8089874C(EnPeehat* this, GlobalContext* globalCtx) {
 
     if (this->colliderSphere.base.acFlags & AC_HIT) {
         this->colliderSphere.base.acFlags &= ~AC_HIT;
-        if ((this->unk_2AE != 10) || !(this->colliderSphere.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            !(this->colliderSphere.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (!Actor_ApplyDamage(&this->actor)) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
             }
@@ -698,9 +699,9 @@ void func_8089874C(EnPeehat* this, GlobalContext* globalCtx) {
                 this->unk_2B0 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                this->unk_2CC = 1.1f;
-                this->unk_2C8 = 2.0f;
-                this->unk_2AE = 32;
+                this->drawDmgEffScale = 1.1f;
+                this->drawDmgEffAlpha = 2.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2B0 = 40;
@@ -716,13 +717,13 @@ void func_8089874C(EnPeehat* this, GlobalContext* globalCtx) {
                 func_80898414(this);
             } else {
                 if (this->actor.colChkInfo.damageEffect == 2) {
-                    this->unk_2C8 = 4.0f;
-                    this->unk_2CC = 2.1f;
-                    this->unk_2AE = 0;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 2.1f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 } else if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_2C8 = 4.0f;
-                    this->unk_2CC = 1.1f;
-                    this->unk_2AE = 20;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 1.1f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->colliderSphere.info.bumper.hitPos.x, this->colliderSphere.info.bumper.hitPos.y,
                                 this->colliderSphere.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -731,8 +732,10 @@ void func_8089874C(EnPeehat* this, GlobalContext* globalCtx) {
                 func_808984E0(this);
             }
         }
-    } else if ((this->unk_2AE == 10) && (this->colliderCylinder.base.acFlags & AC_HIT) &&
-               ((this->unk_2AE != 10) || !(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+    } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+               (this->colliderCylinder.base.acFlags & AC_HIT) &&
+               ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+                !(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
         func_808971DC(this, globalCtx);
         this->actor.colorFilterTimer = 0;
         func_80897648(this);
@@ -812,17 +815,17 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Math_StepToF(&this->unk_2C4, 0.0f, 0.001f);
     }
 
-    if (this->unk_2C8 > 0.0f) {
-        if (this->unk_2AE != 10) {
-            Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
-            if (this->unk_2AE == 0) {
-                this->unk_2CC = (this->unk_2C8 + 1.0f) * 1.05f;
-                this->unk_2CC = CLAMP_MAX(this->unk_2CC, 2.1f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
+                this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 1.05f;
+                this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 2.1f);
             } else {
-                this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.55f;
-                this->unk_2CC = CLAMP_MAX(this->unk_2CC, 1.1f);
+                this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.55f;
+                this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.1f);
             }
-        } else if (!Math_StepToF(&this->unk_2D0, 1.1f, 0.0275f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.1f, 0.0275f)) {
             func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -840,19 +843,19 @@ s32 EnPeehat_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Gfx* gfx = POLY_OPA_DISP;
 
-        Matrix_StatePush();
-        Matrix_RotateStateAroundXAxis(this->unk_2BC * 0.115f);
-        Matrix_InsertYRotation_f(this->unk_2BC * 0.13f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(this->unk_2BC * 0.1f, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_RotateXFApply(this->unk_2BC * 0.115f);
+        Matrix_RotateYF(this->unk_2BC * 0.13f, MTXMODE_APPLY);
+        Matrix_RotateZF(this->unk_2BC * 0.1f, MTXMODE_APPLY);
         Matrix_Scale(1.0f - this->unk_2C4, this->unk_2C4 + 1.0f, 1.0f - this->unk_2C4, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(-(this->unk_2BC * 0.115f));
+        Matrix_RotateZF(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
+        Matrix_RotateYF(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
+        Matrix_RotateXFApply(-(this->unk_2BC * 0.115f));
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[1], *dList);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         POLY_OPA_DISP = &gfx[2];
 
@@ -879,31 +882,31 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
     Gfx* gfx;
 
     if (index != -1) {
-        Matrix_GetStateTranslationAndScaledX(2000.0f, &this->unk_2EC[index]);
-        Matrix_GetStateTranslationAndScaledX(4000.0f, &this->unk_2EC[index + 1]);
+        Matrix_MultVecX(2000.0f, &this->limbPos[index]);
+        Matrix_MultVecX(4000.0f, &this->limbPos[index + 1]);
     }
 
     if (limbIndex == 4) {
-        Matrix_GetStateTranslationAndScaledZ(5500.0f, &this->unk_2D4[0]);
-        Matrix_GetStateTranslationAndScaledZ(-5500.0f, &this->unk_2D4[1]);
+        Matrix_MultVecZ(5500.0f, &this->unk_2D4[0]);
+        Matrix_MultVecZ(-5500.0f, &this->unk_2D4[1]);
     } else if ((limbIndex == 3) && (thisx->params == 0)) {
         Vec3f* vec = &D_80899570[0];
-        Vec3f* vec2 = &this->unk_2EC[12];
+        Vec3f* vec2 = &this->limbPos[12];
 
         for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-            Matrix_MultiplyVector3fByState(vec, vec2);
+            Matrix_MultVec3f(vec, vec2);
         }
 
-        Matrix_GetStateTranslationAndScaledX(3000.0f, vec2++);
-        Matrix_GetStateTranslationAndScaledX(-400.0f, vec2);
+        Matrix_MultVecX(3000.0f, vec2++);
+        Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gfx = POLY_OPA_DISP;
 
-        Matrix_InsertTranslation(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Collider_UpdateSphere(0, &this->colliderSphere);
-        Matrix_InsertTranslation(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
+        Matrix_Translate(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateYF(3.2f, MTXMODE_APPLY);
         Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -929,20 +932,20 @@ void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx) {
                       (this->actor.params == 0) ? EnPeehat_PostLimbDraw : NULL, &this->actor);
 
     if ((this->actor.speedXZ != 0.0f) || (this->actor.velocity.y != 0.0f)) {
-        Matrix_GetStateTranslationAndScaledZ(4500.0f, &sp40);
-        Matrix_GetStateTranslationAndScaledZ(-4500.0f, &sp4C);
-        Matrix_GetStateTranslationAndScaledX(4500.0f, &sp58);
+        Matrix_MultVecZ(4500.0f, &sp40);
+        Matrix_MultVecZ(-4500.0f, &sp4C);
+        Matrix_MultVecX(4500.0f, &sp58);
         Collider_SetTrisVertices(&this->colliderTris, 0, &sp40, &sp4C, &sp58);
-        Matrix_GetStateTranslationAndScaledX(-4500.0f, &sp58);
+        Matrix_MultVecX(-4500.0f, &sp58);
         Collider_SetTrisVertices(&this->colliderTris, 1, &sp40, &sp58, &sp4C);
     }
 
-    if (this->unk_2AE == 0) {
-        for (i = 0; i < ARRAY_COUNT(this->unk_2EC); i++) {
-            this->unk_2EC[i].y -= 50.0f;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
+        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
+            this->limbPos[i].y -= 50.0f;
         }
     }
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2EC, ARRAY_COUNT(this->unk_2EC), this->unk_2CC, this->unk_2D0,
-                  this->unk_2C8, this->unk_2AE);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

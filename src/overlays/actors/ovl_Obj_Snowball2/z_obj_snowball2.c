@@ -79,9 +79,9 @@ Gfx* D_80B3A91C[] = {
 Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
 
 void func_80B38E20(ObjSnowball2* this) {
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
-                                          this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
-                                          this->actor.world.pos.z, &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x,
+                                 this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+                                 this->actor.world.pos.z, &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
@@ -178,7 +178,7 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50,
-                             -1, 0xEF, D_80B3A91C[i & 3]);
+                             -1, OBJECT_GOROIWA, D_80B3A91C[i & 3]);
 
         spD0.x += (Rand_ZeroOne() - 0.5f) * 40.0f;
         spD0.y += (Rand_ZeroOne() - 0.3f) * 45.0f;

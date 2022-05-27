@@ -74,8 +74,8 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
+    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
+                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -212,9 +212,9 @@ void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
-        Matrix_RotateY(rotY, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_190, MTXMODE_APPLY);
-        Matrix_RotateY(-rotY, MTXMODE_APPLY);
+        Matrix_RotateYS(rotY, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_190, MTXMODE_APPLY);
+        Matrix_RotateYS(-rotY, MTXMODE_APPLY);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);

@@ -170,7 +170,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.weekEventReg[KEY] = VALUE
+// gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
     (32 << 8) | 0x40, // Woodfall Temple Frog Returned
@@ -192,7 +192,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
@@ -231,21 +231,21 @@ u8 EnPametfrog_Vec3fNormalize(Vec3f* vec) {
 }
 
 void EnPametfrog_Freeze(EnPametfrog* this) {
-    this->drawEffect = GEKKO_DRAW_EFFECT_FROZEN;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.elements->info.elemType = ELEMTYPE_UNK0;
-    this->unk_2C8 = 0.75f;
-    this->unk_2CC = 1.125f;
-    this->unk_2C4 = 1.0f;
+    this->drawDmgEffScale = 0.75f;
+    this->drawDmgEffFrozenSteamScale = 1.125f;
+    this->drawDmgEffAlpha = 1.0f;
 }
 
 void EnPametfrog_Thaw(EnPametfrog* this, GlobalContext* globalCtx) {
     this->freezeTimer = 0;
-    if (this->drawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
-        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->collider.elements->info.elemType = ELEMTYPE_UNK1;
-        this->unk_2C4 = 0.0f;
+        this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
     }
 }
@@ -278,16 +278,16 @@ void func_8086A238(EnPametfrog* this) {
     MtxF unkMtx;
 
     unkMtx.xx = this->unk_2E8.x;
-    unkMtx.xy = this->unk_2E8.y;
-    unkMtx.xz = this->unk_2E8.z;
-    unkMtx.yx = this->unk_2DC.x;
+    unkMtx.yx = this->unk_2E8.y;
+    unkMtx.zx = this->unk_2E8.z;
+    unkMtx.xy = this->unk_2DC.x;
     unkMtx.yy = this->unk_2DC.y;
-    unkMtx.yz = this->unk_2DC.z;
-    unkMtx.zx = this->unk_2D0.x;
-    unkMtx.zy = this->unk_2D0.y;
+    unkMtx.zy = this->unk_2DC.z;
+    unkMtx.xz = this->unk_2D0.x;
+    unkMtx.yz = this->unk_2D0.y;
     unkMtx.zz = this->unk_2D0.z;
 
-    func_8018219C(&unkMtx, &this->actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&unkMtx, &this->actor.shape.rot, false);
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.z = this->actor.shape.rot.z;
@@ -315,8 +315,8 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
+    Matrix_RotateAxisF(rotation, &vec2, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
@@ -387,13 +387,13 @@ void EnPametfrog_JumpOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
-        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
-        this->unk_2C4 = 3.0f;
-        this->unk_2C8 = 0.75f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 3.0f;
+        this->drawDmgEffScale = 0.75f;
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {
-        this->drawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
-        this->unk_2C8 = 0.75f;
-        this->unk_2C4 = 3.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                     this->collider.elements[0].info.bumper.hitPos.x, this->collider.elements[0].info.bumper.hitPos.y,
                     this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -406,9 +406,9 @@ void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-    this->drawEffect = GEKKO_DRAW_EFFECT_ELECTRIC_STUN;
-    this->unk_2C8 = 0.75f;
-    this->unk_2C4 = 2.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+    this->drawDmgEffScale = 0.75f;
+    this->drawDmgEffAlpha = 2.0f;
 }
 
 void EnPametfrog_ApplyStun(EnPametfrog* this) {
@@ -683,8 +683,8 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
+        Matrix_RotateAxisF(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
+        Matrix_MultVec3f(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
@@ -1035,7 +1035,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_IdleWaterEffects(this, globalCtx);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x400, 0x80);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && !Play_InCsMode(globalCtx)) {
         if (!this->unk_2AE) {
             func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
@@ -1265,7 +1265,7 @@ void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* global
 void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
             !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -1286,13 +1286,13 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                 } else {
                     EnPametfrog_Thaw(this, globalCtx);
                     if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
-                        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
-                        this->unk_2C8 = 0.75f;
-                        this->unk_2C4 = 4.0f;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                        this->drawDmgEffScale = 0.75f;
+                        this->drawDmgEffAlpha = 4.0f;
                     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {
-                        this->drawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
-                        this->unk_2C8 = 0.75f;
-                        this->unk_2C4 = 4.0f;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                        this->drawDmgEffScale = 0.75f;
+                        this->drawDmgEffAlpha = 4.0f;
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                     this->collider.elements[0].info.bumper.hitPos.x,
                                     this->collider.elements[0].info.bumper.hitPos.y,
@@ -1357,13 +1357,14 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
-    if (this->unk_2C4 > 0.0f) {
-        if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) && (this->actionFunc != EnPametfrog_PlayCutscene)) {
-            Math_StepToF(&this->unk_2C4, 0.0f, 0.05f);
-            unk2C4 = ((this->unk_2C4 + 1.0f) * 0.375f);
-            this->unk_2C8 = unk2C4;
-            this->unk_2C8 = unk2C4 > 0.75f ? 0.75f : this->unk_2C8;
-        } else if (!Math_StepToF(&this->unk_2CC, 0.75f, (3.0f / 160.0f))) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+            (this->actionFunc != EnPametfrog_PlayCutscene)) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            unk2C4 = ((this->drawDmgEffAlpha + 1.0f) * 0.375f);
+            this->drawDmgEffScale = unk2C4;
+            this->drawDmgEffScale = unk2C4 > 0.75f ? 0.75f : this->drawDmgEffScale;
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, (3.0f / 160.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1394,9 +1395,9 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     s8 index;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        Matrix_GetStateTranslationAndScaledY(2500.0f, &vec);
+        Matrix_MultVecY(2500.0f, &vec);
         center = &this->collider.elements[0].dim.worldSphere.center;
         center->x = vec.x;
         center->y = vec.y;
@@ -1409,7 +1410,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     index = limbPosIndex[limbIndex];
     if (index != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[index]);
+        Matrix_MultZero(&this->limbPos[index]);
     }
 }
 
@@ -1417,9 +1418,9 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPametfrog* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
+    Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnPametfrog_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2C8, this->unk_2CC,
-                  this->unk_2C4, this->drawEffect);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

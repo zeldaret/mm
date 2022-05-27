@@ -528,10 +528,9 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     f32 temp;
+    f32 tmp2;
     f32 sp7C;
     Vec3f sp70;
     Vec3f sp64;
@@ -541,7 +540,8 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp7C = this->unk_1C0;
     } else {
         temp = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
-        this->unk_1C0 = temp / this->unk_1DC;
+        tmp2 = temp / this->unk_1DC;
+        this->unk_1C0 = tmp2;
         sp7C = this->unk_1C0;
     }
 
@@ -560,16 +560,13 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp64 = this->unk_1B4;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(sp7C, &sp64, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp24);
-    func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
+    Matrix_RotateAxisF(sp7C, &sp64, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Get(&sp24);
+    Matrix_MtxFToYXZRot(&sp24, &this->actor.shape.rot, false);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_8093FAA4.s")
-#endif
 
 void func_8093FC00(EnGoroiwa* this) {
     s32 params = ENGOROIWA_GET_300(&this->actor);
@@ -724,8 +721,8 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Math_Vec3f_Sum(&sp100, &sp10C, &sp100);
             EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
-                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1, 0xEF,
-                                 phi_s1);
+                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1,
+                                 OBJECT_GOROIWA, phi_s1);
             if (this->unk_1E6 == 0) {
                 sp100.x += ((Rand_ZeroOne() * 1200.0f) - 600.0f) * this->actor.scale.x;
                 sp100.y += ((Rand_ZeroOne() * 1400.0f) - 600.0f) * this->actor.scale.y;
@@ -742,24 +739,22 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     Gfx* phi_s7;
     Vec3f sp100;
     Vec3f spF4;
     Vec3f spE8;
     f32 temp_f20;
-    s32 phi_fp;
+    f32 spB0;
     s32 j;
     s32 i;
     s32 phi_s0;
     s32 spD0;
     s16 spCE;
-    s16 spC8;
-    f32 spB0;
-    f32 spAC;
     s16 spA8;
+    s16 phi_fp;
+    s16 spC8;
+    f32 spAC;
 
     spD0 = (s32)(arg5 * 35.0f) + 6;
     temp_f20 = (arg5 + 0.1f) * 0.5f;
@@ -807,7 +802,7 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
         }
 
         EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_fp, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, 0xEF, phi_s7);
+                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, OBJECT_GOROIWA, phi_s7);
 
         for (j = 0; j < 2; j++) {
             spE8.x = (((Rand_ZeroOne() * 1000.0f) - 500.0f) * arg5) + sp100.x;
@@ -818,10 +813,6 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
         }
     }
 }
-#else
-void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_80940588.s")
-#endif
 
 void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     s32 i;
@@ -882,7 +873,7 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
         }
 
         EffectSsKakera_Spawn(globalCtx, &spE8, &spDC, &spE8, phi_s2, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, 0xEF, phi_s1);
+                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, phi_s1);
 
         spE8.x += ((Rand_ZeroOne() * 800.0f) - 400.0f) * arg5;
         spE8.y += ((Rand_ZeroOne() * 800.0f) - 250.0f) * arg5;
@@ -1358,8 +1349,8 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
-                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
-                Matrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
+                Matrix_RotateZYX(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
+                Matrix_MultVec3f(&D_80942E6C, &spB8);
                 temp_f20 = this->unk_1DC * 0.9f;
 
                 if (spB8.y > 0.0f) {
@@ -1431,8 +1422,6 @@ void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack for params and colCtx
 void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGoroiwa* this = THIS;
@@ -1442,6 +1431,8 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
+    u32 temp_v0_2;
+    CollisionPoly* tmp;
 
     if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
         if (this->unk_1CC > 0) {
@@ -1459,8 +1450,9 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
             sp5C = true;
 
             if (this->actor.flags & ACTOR_FLAG_40) {
-                if (this->actor.floorPoly != NULL) {
-                    u32 temp_v0_2 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                tmp = this->actor.floorPoly;
+                if (tmp != NULL) {
+                    temp_v0_2 = func_800C99D4(&globalCtx->colCtx, tmp, this->actor.floorBgId);
 
                     if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
                         if (!(this->unk_1E5 & 0x40)) {
@@ -1549,9 +1541,6 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/EnGoroiwa_Update.s")
-#endif
 
 void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
     s32 pad;
@@ -1577,7 +1566,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
             sp80.y = ptr->unk_1E;
             sp80.z = ptr->unk_20;
 
-            Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
+            Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Gfx_DrawDListOpa(globalCtx, phi_fp);
 
@@ -1591,7 +1580,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, ptr->unk_2C);
 
                 func_800C0094(ptr->unk_28, ptr->unk_00.x, ptr->unk_18, ptr->unk_00.z, &sp88);
-                Matrix_SetCurrentState(&sp88);
+                Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

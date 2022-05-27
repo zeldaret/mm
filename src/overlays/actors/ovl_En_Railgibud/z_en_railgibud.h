@@ -23,8 +23,8 @@ typedef struct EnRailgibud {
     /* 0x0294 */ Vec3s* points;
     /* 0x0298 */ s32 currentPoint;
     /* 0x029C */ s32 pathCount;
-    /* 0x02A0 */ f32 effectAlpha;
-    /* 0x02A4 */ f32 effectScale;
+    /* 0x02A0 */ f32 drawDmgEffAlpha;
+    /* 0x02A4 */ f32 drawDmgEffScale;
     /* 0x02A8 */ Vec3s jointTable[GIBDO_LIMB_MAX];
     /* 0x0344 */ Vec3s morphTable[GIBDO_LIMB_MAX];
     /* 0x03E0 */ Vec3s headRotation;
@@ -44,14 +44,14 @@ typedef struct EnRailgibud {
                     s16 sinkTimer;
                 };
     /* 0x03F4 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
-    /* 0x03F6 */ s16 effectTimer;
+    /* 0x03F6 */ s16 drawDmgEffTimer;
     /* 0x03F8 */ s16 type;
     /* 0x03FA */ s16 isInvincible;
     /* 0x03FC */ u16 actorActionCommand;
     /* 0x03FE */ u16 csAction;
     /* 0x0400 */ u16 textId;
     /* 0x0402 */ s16 timeInitialized; // unused other than setting it
-    /* 0x0404 */ u8 effectType;
+    /* 0x0404 */ u8 drawDmgEffType;
     /* 0x0405 */ s8 unk_405; // related to player->unk_ADD
 } EnRailgibud; // size = 0x408
 

@@ -38,8 +38,8 @@ typedef struct EnRd {
     /* 0x0190 */ ColliderCylinder collider;
     /* 0x01DC */ Vec3f limbPos[15];
     /* 0x0290 */ s32 limbIndex;
-    /* 0x0294 */ f32 effectAlpha;
-    /* 0x0298 */ f32 effectScale;
+    /* 0x0294 */ f32 drawDmgEffAlpha;
+    /* 0x0298 */ f32 drawDmgEffScale;
     /* 0x029C */ Vec3s jointTable[REDEAD_LIMB_MAX];
     /* 0x0338 */ Vec3s morphTable[REDEAD_LIMB_MAX];
     /* 0x03D4 */ s16 headShakeTimer;
@@ -59,8 +59,8 @@ typedef struct EnRd {
                     s16 danceEndTimer;
                     s16 pirouetteRotationalVelocity;
                 };
-    /* 0x03E6 */ s16 effectTimer;
-    /* 0x03E8 */ u8 effectType;
+    /* 0x03E6 */ s16 drawDmgEffTimer;
+    /* 0x03E8 */ u8 drawDmgEffType;
     /* 0x03E9 */ u8 stunnedBySunsSong;
     /* 0x03EA */ u8 grabDamageTimer;
     /* 0x03EB */ u8 grabState;

@@ -64,7 +64,7 @@ typedef struct EnBigslime {
                     u8 numGekkoMeleeAttacks; // The Gekko will melee-attack link at 1-3 times at each position while engulfed in bigslime
                 };
     /* 0x02B4 */ u8 shockwaveAlpha;
-    /* 0x02B5 */ u8 gekkoDrawEffect;
+    /* 0x02B5 */ u8 gekkoDrawDmgEffType;
     /* 0x02B6 */ s16 gekkoYaw;
     /* 0x02B8 */ s16 cutscene;
     /* 0x02BA */ union { // multi-use timer
@@ -97,7 +97,7 @@ typedef struct EnBigslime {
     /* 0x02C4 */ s16 numGekkoPosGrabPlayer; // The Gekko will melee-attack link at 6 positions while engulfed in bigslime
     /* 0x02C6 */ s16 subCamId;
     /* 0x02C8 */ s16 subCamYawGrabPlayer;
-    /* 0x02CA */ s16 rotation; // is always 0, used in Matrix_RotateY
+    /* 0x02CA */ s16 rotation; // is always 0, used in Matrix_RotateYS
     /* 0x02CC */ s16 itemDropTimer; // items only drop when zero, Set to 40 then decrements, prevents itemDrop spam
     /* 0x02CE */ Vec3s gekkoRot;
     /* 0x02D4 */ Vec3f gekkoPosOffset; // Used when Bigslime grabs link
@@ -107,9 +107,9 @@ typedef struct EnBigslime {
                     Vec3f subCamDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
                 };
     /* 0x02F8 */ Vec3f limbPos[12];
-    /* 0x0388 */ f32 unk_388; // used as arg to func_800BE680
-    /* 0x038C */ f32 unk_38C; // used as arg to func_800BE680
-    /* 0x0390 */ f32 unk_390; // used as arg to func_800BE680
+    /* 0x0388 */ f32 gekkoDrawDmgEffAlpha;
+    /* 0x038C */ f32 gekkoDrawDmgEffScale;
+    /* 0x0390 */ f32 gekkoDrawDmgEffFrozenSteamScale;
     /* 0x0394 */ f32 gekkoScale;
     /* 0x0398 */ f32 vtxSurfacePerturbation[BIGSLIME_NUM_VTX];
     /* 0x0620 */ f32 vtxScaleX;

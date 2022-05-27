@@ -6,7 +6,6 @@
 
 #include "z_en_dekunuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -119,8 +118,8 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_00326C,
-                   this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubIdleAnim, this->jointTable,
+                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
@@ -147,26 +146,26 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_808BD348(EnDekunuts* this) {
-    this->unk_18E = 10;
-    this->unk_214 = 0.55f;
-    this->unk_218 = 0.82500005f;
-    this->unk_210 = 1.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.55f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
-    if (this->unk_18E == 10) {
-        this->unk_18E = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
-        this->unk_210 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_21C, 8, 2, 0.2f, 0.2f);
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 8, 2, 0.2f, 0.2f);
     }
 }
 
 void func_808BD428(EnDekunuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_dekunuts_Anim_003180, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gDekuScrubUpAnim, 0.0f);
     this->unk_190 = Rand_S16Offset(100, 50);
     this->collider.dim.height = 5;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -221,7 +220,7 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BD78C(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_002FA4);
+    Animation_PlayLoop(&this->skelAnime, &gDekuScrubLookAroundAnim);
     this->unk_190 = 2;
     this->actionFunc = func_808BD7D4;
 }
@@ -241,7 +240,7 @@ void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BD870(EnDekunuts* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_dekunuts_Anim_00326C, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gDekuScrubIdleAnim, -3.0f);
     if (this->actionFunc == func_808BDA4C) {
         this->unk_190 = 4098;
     } else {
@@ -280,7 +279,7 @@ void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDA08(EnDekunuts* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_dekunuts_Anim_000168);
+    Animation_PlayOnce(&this->skelAnime, &gDekuScrubSpitAnim);
     this->unk_190 = this->unk_194;
     this->actionFunc = func_808BDA4C;
 }
@@ -324,7 +323,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_000168, -3.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubSpitAnim, -3.0f);
         if (this->unk_190 != 0) {
             this->unk_190--;
         }
@@ -332,14 +331,14 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDC9C(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002A5C, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubBurrowAnim, -5.0f);
     this->unk_190 = 0;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
 void func_808BDCF0(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002A5C, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubBurrowAnim, -5.0f);
     this->collider.base.acFlags &= ~AC_ON;
     this->unk_190 = 80;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
@@ -367,7 +366,7 @@ void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDE7C(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002DD4, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubUnburrowAnim, -3.0f);
     this->collider.dim.height = 37;
     this->actor.colChkInfo.mass = 50;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
@@ -387,7 +386,7 @@ void func_808BDEF8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDF60(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_003780);
+    Animation_PlayLoop(&this->skelAnime, &gDekuScrubRunAnim);
     this->unk_190 = 2;
     this->unk_18C = 0;
     this->collider.base.acFlags |= AC_ON;
@@ -444,7 +443,7 @@ void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE1CC(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_0033E4);
+    Animation_PlayLoop(&this->skelAnime, &gDekuScrubPantingAnim);
     this->unk_190 = 3;
     this->actor.speedXZ = 0.0f;
     if (this->unk_18D != 0) {
@@ -467,7 +466,7 @@ void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE294(EnDekunuts* this, s32 arg1) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_00259C, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubDamageAnim, -3.0f);
     if (this->actor.params == ENDEKUNUTS_GET_FF00_0) {
         this->actor.speedXZ = 10.0f;
         if (arg1 != 0) {
@@ -480,7 +479,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CUTBODY);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&object_dekunuts_Anim_00259C));
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&gDekuScrubDamageAnim));
 }
 
 void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -519,7 +518,7 @@ void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE484(EnDekunuts* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_dekunuts_Anim_002BD4);
+    Animation_PlayOnce(&this->skelAnime, &gDekuScrubDieAnim);
     this->actionFunc = func_808BE4D4;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
@@ -543,13 +542,13 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10,
-                                 object_dekunuts_DL_001F50);
+                                 gDekuScrubFlowerFragmentDL);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void func_808BE680(EnDekunuts* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_dekunuts_Anim_00326C, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gDekuScrubIdleAnim, -3.0f);
     this->actionFunc = func_808BE6C4;
 }
 
@@ -568,7 +567,8 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.info);
-        if ((this->unk_18E != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, globalCtx);
             if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != ENDEKUNUTS_GET_FF00_0)) {
                 if ((this->actor.params != ENDEKUNUTS_GET_FF00_1) && !Actor_ApplyDamage(&this->actor)) {
@@ -599,20 +599,20 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 2) {
-                    this->unk_210 = 4.0f;
-                    this->unk_214 = 0.55f;
-                    this->unk_18E = 0;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.55f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 } else if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_210 = 4.0f;
-                    this->unk_214 = 0.55f;
-                    this->unk_18E = 20;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.55f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                 this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
-                    this->unk_18E = 32;
-                    this->unk_210 = 4.0f;
-                    this->unk_214 = 0.55f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.55f;
                 }
 
                 func_808BE294(this, 1);
@@ -649,12 +649,13 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    if (this->unk_210 > 0.0f) {
-        if (this->unk_18E != 10) {
-            Math_StepToF(&this->unk_210, 0.0f, 0.05f);
-            this->unk_214 = (this->unk_210 + 1.0f) * 0.275f;
-            this->unk_214 = CLAMP_MAX(this->unk_214, 0.55f);
-        } else if ((this->unk_18E == 10) && !Math_StepToF(&this->unk_218, 0.55f, (33.0f / 1600.0f))) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
+        } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+                   !Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, (33.0f / 1600.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -667,7 +668,7 @@ s32 EnDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     f32 currentFrame;
 
     if (this->actionFunc == func_808BDA4C) {
-        if (limbIndex == 5) {
+        if (limbIndex == DEKU_SCRUB_LIMB_SNOUT) {
             currentFrame = this->skelAnime.curFrame;
             if (currentFrame <= 6.0f) {
                 arg2 = 1.0f - (currentFrame * 0.0833f);
@@ -686,7 +687,7 @@ s32 EnDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
                 return 0;
             }
             Matrix_Scale(arg1, arg2, arg3, MTXMODE_APPLY);
-        } else if ((limbIndex == 2) && (this->actor.params == ENDEKUNUTS_GET_FF00_2)) {
+        } else if ((limbIndex == DEKU_SCRUB_LIMB_HEAD) && (this->actor.params == ENDEKUNUTS_GET_FF00_2)) {
             rot->z = this->actor.world.rot.x;
         }
     }
@@ -709,20 +710,20 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (value != -1) {
         if (value < 3) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_21C[value]);
+            Matrix_MultVecX(1000.0f, &this->limbPos[value]);
         } else {
-            Matrix_GetStateTranslation(&this->unk_21C[value]);
+            Matrix_MultZero(&this->limbPos[value]);
             ptr1 = &D_808BEFA4[0];
-            ptr2 = &this->unk_21C[value + 1];
-            for (i = value + 1; i < ARRAY_COUNT(this->unk_21C); i++) {
-                Matrix_MultiplyVector3fByState(ptr1, ptr2);
+            ptr2 = &this->limbPos[value + 1];
+            for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+                Matrix_MultVec3f(ptr1, ptr2);
                 ptr1++, ptr2++;
             }
         }
     }
 
-    if (limbIndex == 2) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+    if (limbIndex == DEKU_SCRUB_LIMB_HEAD) {
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 
@@ -731,13 +732,13 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDekunuts_OverrideLimbDraw,
                       EnDekunuts_PostLimbDraw, &this->actor);
-    Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                          &this->actor.home.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+                                 &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);
     }
-    Gfx_DrawDListOpa(globalCtx, object_dekunuts_DL_001E50);
-    func_800BE680(globalCtx, &this->actor, this->unk_21C, 8, this->unk_214, this->unk_218, this->unk_210,
-                  this->unk_18E);
+    Gfx_DrawDListOpa(globalCtx, gDekuScrubFlowerDL);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

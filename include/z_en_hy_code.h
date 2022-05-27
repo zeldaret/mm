@@ -57,10 +57,10 @@ typedef struct EnHy {
     /* 0x205 */ u8 isRightFootOnGround;
     /* 0x206 */ Vec3s jointTable[ENHY_LIMB_MAX];
     /* 0x266 */ Vec3s morphTable[ENHY_LIMB_MAX];
-    /* 0x2C6 */ Vec3s focusTarget;
+    /* 0x2C6 */ Vec3s turnTarget;
     /* 0x2CC */ Vec3s headRot;
     /* 0x2D2 */ Vec3s torsoRot;
-    /* 0x2D8 */ Vec3s tmpFocusTarget;
+    /* 0x2D8 */ Vec3s tmpTurnTarget;
     /* 0x2DE */ Vec3s tmpHeadRot;
     /* 0x2E4 */ Vec3s tmpTorsoRot;
     /* 0x2EA */ s16 limbRotTableY[16];
@@ -72,8 +72,8 @@ typedef struct EnHy {
 } EnHy; // size = 0x3EC
 
 extern s8 gEnHyBodyParts[];
-extern s8 gEnHyBodyPartsIndex[];
-extern u8 gEnHyShadowSize[];
+extern s8 gEnHyParentBodyParts[];
+extern u8 gEnHyShadowSizes[];
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
 EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);

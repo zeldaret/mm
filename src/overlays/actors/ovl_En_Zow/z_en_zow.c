@@ -196,7 +196,7 @@ void func_80BDC830(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -227,8 +227,8 @@ void func_80BDC9DC(EnZowStruct* ptr, GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -260,8 +260,8 @@ void func_80BDCB84(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
 
-            Matrix_InsertTranslation(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -294,8 +294,8 @@ void func_80BDCDA8(EnZow* this, EnZowStruct* ptr) {
         temp_f22 = Rand_ZeroOne() * 6.28f;
 
         sp78.y = (Rand_ZeroOne() * 3.0f) + 3.0f;
-        sp78.x = __sinf(temp_f22) * temp_f20;
-        sp78.z = __cosf(temp_f22) * temp_f20;
+        sp78.x = sinf(temp_f22) * temp_f20;
+        sp78.z = cosf(temp_f22) * temp_f20;
 
         sp84 = this->actor.world.pos;
         sp84.x += sp78.x * 6.0f;
@@ -360,45 +360,45 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (gSaveContext.weekEventReg[55] & 0x80) {
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.weekEventReg[78] & 4) {
+        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+                if (gSaveContext.save.weekEventReg[78] & 4) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
-                    gSaveContext.weekEventReg[78] |= 4;
+                    gSaveContext.save.weekEventReg[78] |= 4;
                 }
-            } else if (gSaveContext.weekEventReg[78] & 0x10) {
+            } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
                 phi_a1 = 0x1301;
             } else {
-                gSaveContext.weekEventReg[78] |= 0x10;
+                gSaveContext.save.weekEventReg[78] |= 0x10;
                 phi_a1 = 0x12FF;
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            if (gSaveContext.weekEventReg[78] & 8) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.weekEventReg[78] & 8) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
-                gSaveContext.weekEventReg[78] |= 8;
+                gSaveContext.save.weekEventReg[78] |= 8;
             }
-        } else if (gSaveContext.weekEventReg[78] & 0x10) {
+        } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
             phi_a1 = 0x1301;
         } else {
-            gSaveContext.weekEventReg[78] |= 0x10;
+            gSaveContext.save.weekEventReg[78] |= 0x10;
             phi_a1 = 0x12FF;
         }
-    } else if (gSaveContext.weekEventReg[55] & 0x80) {
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
-    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[78] & 2) {
+    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[78] & 2) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;
-            gSaveContext.weekEventReg[78] |= 2;
+            gSaveContext.save.weekEventReg[78] |= 2;
         }
     } else {
         phi_a1 = 0x12EF;
@@ -463,8 +463,8 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x12E8:
                     case 0x12E9:
                     case 0x12EC:
@@ -480,7 +480,7 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
                     case 0x12FB:
                     case 0x12FD:
                     case 0x12FF:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     default:
@@ -603,7 +603,7 @@ Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
 void func_80BDDAA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BDDD4C, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80BDDD4C, &thisx->focus.pos);
     }
 }
 
@@ -619,13 +619,13 @@ void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     };
     EnZow* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     func_80BDC830(this->unk_2D0, globalCtx);
     func_80BDC9DC(this->unk_2D0, globalCtx);
     func_80BDCB84(this->unk_2D0, globalCtx);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_2CE != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
