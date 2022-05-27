@@ -955,11 +955,11 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->drawArmorFlags == 0x1) {
         if (sp80 > 0) {
             ptr = &this->unk_550[sp80];
-            mf = Matrix_GetCurrentState();
+            mf = Matrix_GetCurrent();
             ptr->unk_04.x = mf->mf[3][0];
             ptr->unk_04.y = mf->mf[3][1];
             ptr->unk_04.z = mf->mf[3][2];
-            func_8018219C(mf, &ptr->unk_1C, 0);
+            Matrix_MtxFToYXZRot(mf, &ptr->unk_1C, 0);
             ptr->unk_24 = true;
             sp76 = D_8092BFA0[sp80].unk04 + ((Rand_Next() >> 0x13) + this->actor.shape.rot.y);
             ptr->unk_10.x = Math_SinS(sp76) * 5.0f;
@@ -973,7 +973,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == IRON_KNUCKLE_LIMB_ROOT) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         this->colliderCylinder.dim.pos.x = this->actor.focus.pos.x;
         this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
         this->colliderCylinder.dim.pos.z = this->actor.focus.pos.z;
@@ -984,8 +984,8 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
          (this->actionFunc == EnIk_SingleHorizontalAttack))) {
         Math_Vec3f_Copy(&vtxC, this->colliderQuad.dim.quad);
         Math_Vec3f_Copy(&vtxD, &this->colliderQuad.dim.quad[1]);
-        Matrix_MultiplyVector3fByState(&D_8092C1C8, &vtxB);
-        Matrix_MultiplyVector3fByState(&D_8092C1D4, &vtxA);
+        Matrix_MultVec3f(&D_8092C1C8, &vtxB);
+        Matrix_MultVec3f(&D_8092C1D4, &vtxA);
         Collider_SetQuadVertices(&this->colliderQuad, &vtxA, &vtxB, &vtxC, &vtxD);
         if (this->colliderQuad.base.atFlags & AT_ON) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &vtxB, &vtxA);
@@ -994,7 +994,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (D_8092C1E0[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_8092C1E0[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_8092C1E0[limbIndex]]);
     }
 
     if ((sp80 == 0) || ((sp80 != -1) && (this->drawArmorFlags == 0) && (D_8092BFA0[sp80].unk00 != 0))) {
@@ -1027,7 +1027,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
             ptr = &this->unk_550[i];
             if (ptr->unk_24) {
-                Matrix_SetStateRotationAndTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, &ptr->unk_1C);
+                Matrix_SetTranslateRotateYXZ(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, &ptr->unk_1C);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
 
                 gSPMatrix(gfxOpa++, Matrix_NewMtx(globalCtx->state.gfxCtx),
