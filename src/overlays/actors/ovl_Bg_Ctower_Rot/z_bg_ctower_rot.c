@@ -82,17 +82,12 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
     f32 rotZ;
-    f32 rotZtmp;
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
-    if (offset.z > 1100.0f) {
-        rotZ = 0.0f;
-    } else {
-        rotZtmp = CLAMP_MAX(1100.0f - offset.z, 1000.0f);
-        rotZ = rotZtmp;
-    }
+    rotZ = CLAMP(1100.0f - offset.z, 0.0f, 1000.0f);
     func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 17);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
+
     if (globalCtx->csCtx.frames == 132) {
         play_sound(NA_SE_SY_SPIRAL_DASH);
     }

@@ -261,8 +261,8 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                     }
                     break;
             }
-            Matrix_RotateY(sp32, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(this->actor.speedXZ, &this->actor.velocity);
+            Matrix_RotateYS(sp32, MTXMODE_NEW);
+            Matrix_MultVecZ(this->actor.speedXZ, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
         }
@@ -359,9 +359,9 @@ void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
     Vec3f sp90;
 
     for (i = 0; i < 15; i++) {
-        Matrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
+        Matrix_RotateYF(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
+        Matrix_RotateXFApply(Rand_ZeroFloat(6.2831855f));
+        Matrix_MultVecZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
         sp90.x = this->actor.world.pos.x + spA8.x;
         sp90.y = this->actor.world.pos.y + spA8.y;
         sp90.z = this->actor.world.pos.z + spA8.z;
@@ -436,13 +436,13 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_154 = 15;
                 if (this->actionFunc != func_80BB69FC) {
-                    Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+                    Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
                     if ((acHitInfo->toucher.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
-                        Matrix_GetStateTranslationAndScaledZ(-10.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-10.0f, &this->actor.velocity);
                     } else {
                         this->unk_156 = 15;
-                        Matrix_GetStateTranslationAndScaledZ(-20.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-20.0f, &this->actor.velocity);
                         damage = this->actor.colChkInfo.damage;
                         this->actor.colChkInfo.health -= damage;
                         func_80BB7398(this, globalCtx);
@@ -464,10 +464,10 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
     block_18:
         func_80BB6B80(this);
         this->unk_158 = 2;
-        Matrix_RotateY(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
-                                   this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
-                       MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(10.0f, &this->actor.velocity);
+        Matrix_RotateYS(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
+                                    this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
+                        MTXMODE_NEW);
+        Matrix_MultVecZ(10.0f, &this->actor.velocity);
         this->unk_152 = Rand_ZeroFloat(100.0f) + 200.0f;
     } else if (D_80BB8450->unk_1F6 == 10) {
         Actor_MarkForDeath(&this->actor);
@@ -624,13 +624,13 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         if (D_80BB8458[i] != NULL) {
-            Matrix_InsertTranslation(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
-                                     D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
+                             D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -646,8 +646,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z, MTXMODE_NEW);
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -668,8 +667,8 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) &&
             (tanron2->world.pos.y <= tanron2->floorHeight)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
+                             MTXMODE_NEW);
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

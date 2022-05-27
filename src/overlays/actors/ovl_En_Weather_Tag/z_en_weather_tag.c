@@ -482,18 +482,15 @@ void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnWeatherTag* this = THIS;
-    u16 oldTime;
 
     this->actionFunc(this, globalCtx);
     if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
         (globalCtx->msgCtx.currentTextId == 0x5E6) && (!FrameAdvance_IsEnabled(&globalCtx->state)) &&
         (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
-        oldTime = gSaveContext.save.time;
-        gSaveContext.save.time = (u16)REG(0xF) + oldTime; // cast req
-        if (REG(0xF) != 0) {
-            oldTime = gSaveContext.save.time;
-            gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + oldTime;
+        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+        if (REG(15) != 0) {
+            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
         }
     }
 }

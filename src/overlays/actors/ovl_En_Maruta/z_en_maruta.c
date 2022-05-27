@@ -621,10 +621,10 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1) {
 }
 
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4) {
-    Matrix_StatePush();
-    Matrix_InsertRotation(arg2, arg3, arg4, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(arg0, arg1);
-    Matrix_StatePop();
+    Matrix_Push();
+    Matrix_RotateZYX(arg2, arg3, arg4, MTXMODE_NEW);
+    Matrix_MultVec3f(arg0, arg1);
+    Matrix_Pop();
 }
 
 void func_80B382E4(GlobalContext* globalCtx, Vec3f arg1) {
@@ -672,10 +672,10 @@ void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         sp50 = D_80B387E4[this->unk_210];
 
-        Matrix_StatePush();
-        Matrix_InsertTranslation(sp50.x, sp50.y, sp50.z, MTXMODE_APPLY);
-        Matrix_InsertRotationAroundUnitVector_s(this->unk_218, &this->unk_194, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->unk_218, &this->unk_194, MTXMODE_APPLY);
+        Matrix_Translate(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -687,12 +687,12 @@ void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->unk_1A0 != NULL) {
             for (i = 0; i < ARRAY_COUNT(this->unk_1A4); i++) {
-                Matrix_MultiplyVector3fByState(&this->unk_1A0[i], &this->unk_1A4[i]);
+                Matrix_MultVec3f(&this->unk_1A0[i], &this->unk_1A4[i]);
             }
-            Matrix_MultiplyVector3fByState(&sp50, &this->unk_204);
+            Matrix_MultVec3f(&sp50, &this->unk_204);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

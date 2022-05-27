@@ -104,7 +104,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     if (overrideLimbDraw == NULL ||
         (overrideLimbDraw != NULL && overrideLimbDraw(globalCtx, skelCurve, limbIndex, thisx))) {
@@ -126,7 +126,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
         pos.y = transform->y;
         pos.z = transform->z;
 
-        Matrix_JointPosition(&pos, &rot);
+        Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
 
         if (lod == 0) {
@@ -164,7 +164,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
         SkelCurve_DrawLimb(globalCtx, limb->firstChildIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (limb->nextLimbIdx != LIMB_DONE) {
         SkelCurve_DrawLimb(globalCtx, limb->nextLimbIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);

@@ -153,15 +153,15 @@ void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
 
     for (i = 0; i < 400; i++, arg0++) {
         if (arg0->unk_00 == 1) {
-            Matrix_InsertTranslation(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             if (arg0->unk_01 < 40) {
                 Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
                              MTXMODE_APPLY);
             } else {
                 Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
             }
-            Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
+            Matrix_RotateZS(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -348,7 +348,7 @@ void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnHanabi* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80B22FA8(this->unk_148, globalCtx);
-    Matrix_StatePop();
+    Matrix_Pop();
 }

@@ -98,7 +98,7 @@ void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
-                   this->morphTable, OBJECT_DNK_LIMB_MAX);
+                   this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -228,7 +228,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
         if ((this->guardTextIndex == 3) && (this->animIndex == WAIT_HEAD_TILT_ANIM)) {
             EnGuardNuts_ChangeAnim(this, WAIT_HEAD_TILT_ANIM);
         }
-        if (Message_ShouldAdvance(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
                     func_801477B4(globalCtx);
@@ -355,7 +355,7 @@ s32 EnGuardNuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx) {
     EnGuardNuts* this = THIS;
 
-    if (limbIndex == OBJECT_DNK_LIMB_HEAD) {
+    if (limbIndex == DEKU_PALACE_GUARD_LIMB_HEAD) {
         rot->x += this->headRot.x;
         rot->y += this->headRot.y;
         rot->z += this->headRot.z;
@@ -374,7 +374,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnGuardNuts_OverrideLimbDraw,
                       NULL, &this->actor);
-    Matrix_InsertTranslation(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
+    Matrix_Translate(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
     Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

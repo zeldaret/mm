@@ -411,7 +411,7 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
                         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_0110B8));
                         Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_010FD8);
                         Gfx_DrawDListXlu(globalCtx, object_mtoride_DL_010EF0);
-                        Matrix_InsertTranslation(0.0f, 10.0f, 0.0f, MTXMODE_APPLY);
+                        Matrix_Translate(0.0f, 10.0f, 0.0f, MTXMODE_APPLY);
                     }
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_009D70));
 
