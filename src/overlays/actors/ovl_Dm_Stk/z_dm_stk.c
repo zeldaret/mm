@@ -417,7 +417,12 @@ void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCt
     }
 }
 
-void DmStk_UnusedSouthClockTownCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * This is supposed to play a bell sound in the title cutscene where the Skull Kid is
+ * looking at the moon on top of the Clock Tower. However, it doesn't actually play
+ * any sound in-game, since all sound effects are muted when it plays.
+ */
+void DmStk_TitleCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 535) {
         func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
     }
@@ -905,7 +910,7 @@ void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext*
 /**
  * Handles sound effects for all cutscenes.
  */
-void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlayCutsceneSound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         switch (globalCtx->sceneNum) {
             case SCENE_LOST_WOODS:
@@ -920,7 +925,7 @@ void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_CLOCKTOWER:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    DmStk_UnusedSouthClockTownCutscene_PlaySound(this, globalCtx);
+                    DmStk_TitleCutscene_PlaySound(this, globalCtx);
                 }
                 break;
 
@@ -1767,7 +1772,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         DmStk_UpdateCutscenes(this, globalCtx);
-        DmStk_PlaySound(this, globalCtx);
+        DmStk_PlayCutsceneSound(this, globalCtx);
 
         switch (this->dekuPipesCutsceneState) {
             case SK_DEKU_PIPES_CS_STATE_READY:
