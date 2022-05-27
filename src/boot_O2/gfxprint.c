@@ -161,7 +161,7 @@ void GfxPrint_PrintStringWithSize(GfxPrint* this, const void* buffer, size_t cha
 }
 
 void GfxPrint_PrintString(GfxPrint* this, const char* str) {
-    while (*str) {
+    while (*str != '\0') {
         GfxPrint_PrintChar(this, *str++);
     }
 }
