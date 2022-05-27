@@ -121,7 +121,12 @@ static u8 D_80BAA488[] = {
 
 s32 D_80BAA4A8[] = { -1, -1, 0 };
 
-u16 D_80BAA4B4[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+static TurnOptionsSet sTurnOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
 s32 func_80BA8820(EnBaba* this, GlobalContext* globalCtx) {
     this->unk_144 = (EnOssan*)SubS_FindActor(globalCtx, &this->unk_144->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
@@ -285,25 +290,25 @@ s32 func_80BA8D2C(EnBaba* this, f32 arg1) {
 
 void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp30;
+    Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
 
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) &&
         !(this->unk_40A & 4)) {
-        sp30.x = player->actor.world.pos.x;
-        sp30.y = player->bodyPartsPos[7].y + 3.0f;
-        sp30.z = player->actor.world.pos.z;
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
 
-        func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk_2DE, &this->unk_2E4,
-                      &this->unk_2EA, D_80BAA4B4);
+        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                         &this->torsoRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->unk_2DE.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2DE.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2E4.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2E4.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2EA.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2EA.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
 
     SubS_FillLimbRotTables(globalCtx, this->unk_302, this->unk_326, ARRAY_COUNT(this->unk_302));
@@ -695,19 +700,19 @@ s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnBaba* this = THIS;
 
     if (limbIndex == 6) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2E4.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk_2E4.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 5) {
-        Matrix_InsertXRotation_s(-this->unk_2EA.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk_2EA.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 6) && (this->unk_1E2 != 0) && ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 5) || (limbIndex == 10) || (limbIndex == 14)) {
@@ -731,7 +736,7 @@ void EnBaba_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         this->actor.focus.pos.x = this->actor.world.pos.x;
         this->actor.focus.pos.y = this->actor.world.pos.y;
         this->actor.focus.pos.z = this->actor.world.pos.z;
-        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
 

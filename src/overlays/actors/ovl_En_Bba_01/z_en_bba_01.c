@@ -97,22 +97,27 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-u16 D_809CCCD8[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+static TurnOptionsSet sTurnOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
 
 void EnBba01_UpdateModel(EnBba01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f focus;
+    Vec3f point;
 
     EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
-        focus.x = player->actor.world.pos.x;
-        focus.y = player->bodyPartsPos[7].y + 3.0f;
-        focus.z = player->actor.world.pos.z;
-        func_8013D2E0(&focus, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.focusTarget,
-                      &this->enHy.headRot, &this->enHy.torsoRot, D_809CCCD8);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.turnTarget,
+                         &this->enHy.headRot, &this->enHy.torsoRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->enHy.focusTarget.x, 0, 4, 0x3E8, 1);
-        Math_SmoothStepToS(&this->enHy.focusTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.turnTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.turnTarget.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
@@ -129,7 +134,7 @@ s32 EnBba01_TestIsTalking(EnBba01* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmpFocusTarget = this->enHy.focusTarget;
+        this->enHy.tmpTurnTarget = this->enHy.turnTarget;
         this->enHy.tmpHeadRot = this->enHy.headRot;
         this->enHy.tmpTorsoRot = this->enHy.torsoRot;
         this->enHy.tmpActionFunc = this->enHy.actionFunc;
@@ -192,7 +197,7 @@ void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx) {
             break;
         case 2:
             this->actor.textId = 0;
-            this->focusTarget = this->tmpFocusTarget;
+            this->turnTarget = this->tmpTurnTarget;
             this->headRot = this->tmpHeadRot;
             this->torsoRot = this->tmpTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -250,7 +255,7 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     bodyPart = gEnHyBodyParts[limbIndex];
     if (bodyPart >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
@@ -261,20 +266,20 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->enHy.headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == BBA_LIMB_BAG) {
-        Matrix_InsertXRotation_s(-this->enHy.torsoRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.torsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->enHy.torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 &&
         ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
@@ -298,7 +303,7 @@ void EnBba01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }
 
@@ -320,7 +325,7 @@ void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->enHy.skelAnime.skeleton, this->enHy.skelAnime.jointTable,
                                    this->enHy.skelAnime.dListCount, EnBba01_OverrideLimbDraw, EnBba01_PostLimbDraw,
                                    EnBba01_TransformLimbDraw, &this->enHy.actor);
-    Matrix_InsertXRotation_s(0, MTXMODE_NEW);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
     for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter++ = 0;

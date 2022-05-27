@@ -266,7 +266,7 @@ void func_80BE0A98(EnTab* this, GlobalContext* globalCtx) {
     this->unk_308 += (this->unk_304 != 0.0f) ? 40.0f : -40.0f;
     this->unk_308 = CLAMP(this->unk_308, 0.0f, 80.0f);
 
-    Matrix_InsertTranslation(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->targetActor) &&
         ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
@@ -577,39 +577,39 @@ void EnTab_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnTab* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80BE1B18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BE1B18, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }
 
 void EnTab_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTab* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 rotStep;
+    s32 overrideStep;
 
     if (!(this->unk_2FC & 0x40)) {
         if (this->unk_2FC & 0x10) {
-            phi_v1 = 1;
+            overrideStep = true;
         } else {
-            phi_v1 = 0;
+            overrideStep = false;
         }
-        phi_v0 = 1;
+        rotStep = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideStep = false;
+        rotStep = false;
     }
 
     if (limbIndex == 9) {
-        func_8013AD9C(BINANG_ADD(this->unk_312 + this->unk_316, 0x4000),
-                      BINANG_ADD(this->unk_314 + this->unk_318 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
-                      this->unk_200, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_312 + this->unk_316, 0x4000),
+                        BINANG_ADD(this->unk_314 + this->unk_318 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
+                        this->unk_200, rotStep, overrideStep);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_200[0].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_200[0].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_200[0].z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_200[0].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_200[0].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_200[0].z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

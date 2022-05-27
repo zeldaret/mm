@@ -564,53 +564,53 @@ void EnAh_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAh* this = THIS;
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&D_80BD3F00, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BD3F00, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }
 
-void func_80BD3AF8(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAh_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAh* this = THIS;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_2D8 & 0x80)) {
         if (this->unk_2D8 & 0x20) {
-            phi_v0 = 1;
+            overrideRot = true;
         } else {
-            phi_v0 = 0;
+            overrideRot = false;
         }
-        phi_v1 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        stepRot = false;
+        overrideRot = false;
     }
 
     if (limbIndex == 7) {
-        func_8013AD9C(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
-                      BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
-                      this->unk_200, phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
+                        BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
+                        this->unk_200, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_200[0].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_200[0].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_200[0].z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_200[0].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_200[0].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_200[0].z, MTXMODE_APPLY);
+        Matrix_Push();
     } else if (limbIndex == 2) {
-        func_8013AD9C(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
-                      &this->unk_1E8[1], &this->unk_200[1], phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8[1].x, this->unk_1E8[1].y, this->unk_1E8[1].z, MTXMODE_NEW);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
+                        &this->unk_1E8[1], &this->unk_200[1], stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8[1].x, this->unk_1E8[1].y, this->unk_1E8[1].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_200[1].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_200[1].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_200[1].z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_200[1].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_200[1].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_200[1].z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
@@ -626,7 +626,8 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BD3F0C[this->unk_2FC]));
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       this->skelAnime.dListCount, NULL, func_80BD3AA8, func_80BD3AF8, &this->actor);
+                                       this->skelAnime.dListCount, NULL, EnAh_PostLimbDraw, EnAh_TransformLimbDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

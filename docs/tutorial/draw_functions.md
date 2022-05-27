@@ -163,22 +163,22 @@ As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
-        Matrix_RotateY((s16) (0x400 - actor->unk2AE), 1);
-        Matrix_GetStateTranslationAndScaledX(500.0f, (Vec3f *) &actor->focus);
+        Matrix_RotateYS((s16) (0x400 - actor->unk2AE), 1);
+        Matrix_MultVecX(500.0f, (Vec3f *) &actor->focus);
     }
 }
 ```
 There is only minor cleanup needed here: 
 - recasting the last argument, 
-- replacing the last argument of `Matrix_RotateY` by the enum `MTXMODE_APPLY` (which means "use the current matrix instead of starting from a new identity matrix"), and the first argument by `0x400 - this->unk_2AE.x`.
+- replacing the last argument of `Matrix_RotateYS` by the enum `MTXMODE_APPLY` (which means "use the current matrix instead of starting from a new identity matrix"), and the first argument by `0x400 - this->unk_2AE.x`.
 - `(Vec3f *) &actor->focus` to `&actor->focus.pos` (this is the same issue as `(Actor*)this`, where mips2c doesn't climb deep enough into the struct).
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
+        Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }
 }
 ```
@@ -213,7 +213,7 @@ void ObjTree_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0->polyOpa.p = temp_v0_2 + 8;
     temp_v0_2->words.w1 = (u32) &D_06000680;
     temp_v0_2->words.w0 = 0xDE000000;
-    Matrix_InsertRotation(sp36, 0, sp34, 1);
+    Matrix_RotateZYX(sp36, 0, sp34, 1);
     temp_v0_3 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDA380003;
@@ -286,7 +286,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
-    Matrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
+    Matrix_RotateZYX(sp36, 0, sp34, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 

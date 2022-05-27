@@ -1,6 +1,11 @@
+# Build options can be changed by modifying the makefile or by building with 'make SETTING=value'.
+# It is also possible to override the settings in Defaults in a file called .make_options as 'SETTING=value'.
+
+-include .make_options
+
 MAKEFLAGS += --no-builtin-rules
 
-# Build options can either be changed by modifying the makefile, or by building with 'make SETTING=value'
+#### Defaults ####
 
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -14,6 +19,14 @@ WERROR ?= 0
 KEEP_MDEBUG ?= 0
 # Disassembles all asm from the ROM instead of skipping files which are entirely in C
 FULL_DISASM ?= 0
+# Check code syntax with host compiler
+RUN_CC_CHECK ?= 1
+# Dump build object files
+OBJDUMP_BUILD ?= 0
+# Number of threads to disassmble, extract, and compress with
+N_THREADS ?= $(shell nproc)
+
+#### Setup ####
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -45,9 +58,8 @@ else
   endif
 endif
 
-N_THREADS ?= $(shell nproc)
-
 #### Tools ####
+
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 else
@@ -86,8 +98,15 @@ else
 endif
 
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
+ifneq ($(RUN_CC_CHECK),0)
+  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+  CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
+  ifneq ($(WERROR), 0)
+    CC_CHECK += -Werror
+  endif
+else
+  CC_CHECK := @:
+endif
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -103,12 +122,20 @@ MIPS_VERSION := -mips2
 CFLAGS += -G 0 -non_shared -fullwarn -verbose -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712,516
 
 # Use relocations and abi fpr names in the dump
-OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
+OBJDUMP_FLAGS := --disassemble --reloc --disassemble-zeroes -Mreg-names=32
+
+ifneq ($(OBJDUMP_BUILD), 0)
+  OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+  OBJCOPY_BIN = $(OBJCOPY) -O binary $@ $@.bin
+else
+  OBJDUMP_CMD = @:
+  OBJCOPY_BIN = @:
+endif
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
   export QEMU_GUEST_BASE := 1
-else
+else ifneq ($(RUN_CC_CHECK),0)
   # Ensure that gcc treats the code as 32-bit
   CC_CHECK += -m32
 endif
@@ -116,11 +143,7 @@ endif
 # rom compression flags
 COMPFLAGS := --threads $(N_THREADS)
 ifneq ($(NON_MATCHING),1)
-	COMPFLAGS += --matching
-endif
-
-ifneq ($(WERROR), 0)
-  CC_CHECK += -Werror
+  COMPFLAGS += --matching
 endif
 
 #### Files ####
@@ -229,14 +252,14 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum.md5
 endif
 
-.PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
+.PHONY: all uncompressed compressed clean assetclean distclean assets disasm init setup
 .DEFAULT_GOAL := uncompressed
-all: compressed
+all: uncompressed compressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
-$(ROMC): uncompressed
+$(ROMC): $(ROM)
 	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
@@ -263,6 +286,8 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
+
+assets:
 	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
@@ -278,6 +303,7 @@ diff-init: uncompressed
 init:
 	$(MAKE) distclean
 	$(MAKE) setup
+	$(MAKE) assets
 	$(MAKE) disasm
 	$(MAKE) all
 	$(MAKE) diff-init
@@ -296,7 +322,7 @@ build/asm/%.o: asm/%.s
 
 build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	$(OBJCOPY) -O binary $@ $@.bin
+	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
 build/baserom/%.o: baserom/%
@@ -308,7 +334,7 @@ build/data/%.o: data/%.s
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
@@ -318,21 +344,21 @@ build/src/overlays/%.o: src/overlays/%.c
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 # Build C files from assets

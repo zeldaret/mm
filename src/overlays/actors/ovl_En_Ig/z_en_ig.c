@@ -973,7 +973,7 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp2C;
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80BF3528, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BF3528, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
 
         gSPDisplayList((*gfx)++, object_dai_DL_008710);
@@ -986,42 +986,42 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == 9) {
         gSPDisplayList((*gfx)++, object_dai_DL_008B00);
-        Matrix_MultiplyVector3fByState(&D_80BF351C, &sp2C);
+        Matrix_MultVec3f(&D_80BF351C, &sp2C);
         Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp2C);
     }
 
     if (limbIndex == 10) {
-        Matrix_CopyCurrentState(&this->unk_190);
+        Matrix_Get(&this->unk_190);
     }
 }
 
 void EnIg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnIg* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_3D0 & 0x200)) {
         if (this->unk_3D0 & 0x80) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
     if (limbIndex == 9) {
-        func_8013AD9C(this->unk_3E8 + 0x4000, this->unk_3EA + this->actor.shape.rot.y + 0x4000, &this->unk_2D4,
-                      &this->unk_2E6, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_2D4.x, this->unk_2D4.y, this->unk_2D4.z, MTXMODE_NEW);
+        SubS_UpdateLimb(this->unk_3E8 + 0x4000, this->unk_3EA + this->actor.shape.rot.y + 0x4000, &this->unk_2D4,
+                        &this->unk_2E6, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_2D4.x, this->unk_2D4.y, this->unk_2D4.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_2E6.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2E6.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2E6.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_2E6.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2E6.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2E6.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
@@ -1045,7 +1045,7 @@ void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                                this->skelAnime.dListCount, EnIg_OverrideLimbDraw, EnIg_PostLimbDraw,
                                                EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
-        Matrix_SetCurrentState(&this->unk_190);
+        Matrix_Put(&this->unk_190);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);

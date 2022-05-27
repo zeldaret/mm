@@ -235,7 +235,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     this->unk_34C += (this->unk_348 != 0.0f) ? 60.0f : -60.0f;
     this->unk_34C = CLAMP(this->unk_34C, 0.0f, 120.0f);
 
-    Matrix_InsertTranslation(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_374 = sp20;
 }
 
@@ -420,18 +420,18 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     s32 pad2;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BC3780, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BC3780, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     } else if ((this->unk_340 & 0x40) && (limbIndex == 11)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
-        Matrix_JointPosition(&D_80BC3774, &D_80BC37A4);
+        Matrix_Push();
+        Matrix_TranslateRotateZYX(&D_80BC3774, &D_80BC37A4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BA30);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -441,9 +441,9 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                                   ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            Matrix_StatePush();
-            Matrix_InsertTranslation(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Push();
+            Matrix_Translate(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gDPPipeSync(POLY_OPA_DISP++);
 
@@ -473,17 +473,17 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         } else if (limbIndex == 14) {
             if ((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 18.0f)) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
-                Matrix_StatePush();
+                Matrix_Push();
 
-                Matrix_InsertTranslation(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_Translate(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
                 gDPPipeSync(POLY_OPA_DISP++);
 
@@ -513,7 +513,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
-                Matrix_StatePop();
+                Matrix_Pop();
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
@@ -523,48 +523,48 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
 void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnJa* this = THIS;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (this->unk_340 & 0x10) {
-        phi_v1 = false;
+        stepRot = false;
     } else {
-        phi_v1 = true;
+        stepRot = true;
     }
 
     if (this->unk_340 & 0x20) {
-        phi_v0 = true;
+        overrideRot = true;
     } else {
-        phi_v0 = false;
+        overrideRot = false;
     }
 
-    if (!phi_v1) {
-        phi_v0 = false;
+    if (!stepRot) {
+        overrideRot = false;
     }
 
     if (limbIndex != 8) {
         if (limbIndex == 15) {
-            func_8013AD9C(this->unk_354 + this->unk_358 + 0x4000,
-                          this->unk_356 + this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1EC,
-                          &this->unk_274, phi_v1, phi_v0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
+            SubS_UpdateLimb(this->unk_354 + this->unk_358 + 0x4000,
+                            this->unk_356 + this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1EC,
+                            &this->unk_274, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_274.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_274.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_274.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_RotateYS(this->unk_274.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_274.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_274.z, MTXMODE_APPLY);
+            Matrix_Push();
         }
     } else {
-        func_8013AD9C(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
-                      &this->unk_27A, phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
+        SubS_UpdateLimb(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
+                        &this->unk_27A, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_27A.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_27A.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_27A.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_27A.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_27A.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_27A.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
@@ -725,8 +725,8 @@ void func_80BC33C0(EnJaStruct* ptr, GlobalContext* globalCtx) {
     if (((ptr->unk_0E < 0) || (ptr->unk_0E >= 19)) && ((ptr->unk_0E < 83) || (ptr->unk_0E >= 103))) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         switch (ptr->unk_0C) {

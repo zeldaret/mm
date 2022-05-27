@@ -259,9 +259,9 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_178 = func_80A29A80(globalCtx, this->unk_1C0, this->unk_1BC);
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
-            Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledX(2240.0f, &this->unk_190);
-            Matrix_GetStateTranslationAndScaledX(-10.0f, &this->unk_19C);
+            Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_MultVecX(2240.0f, &this->unk_190);
+            Matrix_MultVecX(-10.0f, &this->unk_19C);
             Math_Vec3f_Sum(&this->unk_190, &this->dyna.actor.world.pos, &this->unk_190);
             Math_Vec3f_Sum(&this->unk_19C, &this->dyna.actor.world.pos, &this->unk_19C);
             D_80A2BBF0 = this;
@@ -591,10 +591,10 @@ void func_80A2ABD0(BgDblueMovebg* this, GlobalContext* globalCtx) {
         }
 
         for (j = 0; j < ARRAY_COUNT(this->unk_1D8[0]); j++) {
-            Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x + (j * 0x2000), MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_MultiplyVector3fByState(&D_80A2B988, &spAC);
+            Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(this->dyna.actor.shape.rot.x + (j * 0x2000), MTXMODE_APPLY);
+            Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_MultVec3f(&D_80A2B988, &spAC);
             Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spAC);
             Math_Vec3f_Copy(&this->unk_238[i][j], &spAC);
             temp_f20 = spAC.y - this->unk_2F8[i]->world.pos.y;
@@ -770,7 +770,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Gfx* gfx;
     Gfx* gfx2;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -808,7 +808,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -817,11 +817,11 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                         MTXMODE_NEW);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
         gfx = func_8012C2B4(POLY_XLU_DISP);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_1D8[0]); i++) {
@@ -834,11 +834,11 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                              (s32)(((globalCtx->gameplayFrames % 128) * -9.0f) / this->unk_1F8[j][i]),
                                              0x20, 0x20, 1, 0, 0, 0x20, 0x20));
                     }
-                    Matrix_StatePush();
-                    Matrix_InsertXRotation_s(i * 0x2000, MTXMODE_APPLY);
-                    Matrix_InsertTranslation(1785.0f, 0.0f, 270.0f, MTXMODE_APPLY);
+                    Matrix_Push();
+                    Matrix_RotateXS(i * 0x2000, MTXMODE_APPLY);
+                    Matrix_Translate(1785.0f, 0.0f, 270.0f, MTXMODE_APPLY);
                     if (j != 0) {
-                        Matrix_InsertZRotation_s(-0x8000, MTXMODE_APPLY);
+                        Matrix_RotateZS(-0x8000, MTXMODE_APPLY);
                     }
                     Matrix_Scale(this->unk_1F8[j][i] * this->dyna.actor.scale.x,
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.y,
@@ -849,7 +849,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
                     gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
             }
         }

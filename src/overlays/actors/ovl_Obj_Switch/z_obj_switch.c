@@ -208,10 +208,10 @@ void ObjSwitch_InitJntSphCollider(ObjSwitch* this, GlobalContext* globalCtx, Col
 
     Collider_InitJntSph(globalCtx, &this->colliderJntSph);
     Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->dyna.actor, init, this->colliderJntSphElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x,
-                                          this->dyna.actor.world.pos.y +
-                                              (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
+                                 this->dyna.actor.world.pos.y +
+                                     (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->colliderJntSph);
 }
@@ -224,20 +224,20 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, Colli
 
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, init, this->colliderTrisElements);
-    Matrix_StatePush();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x,
-                                          this->dyna.actor.world.pos.y +
-                                              this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_Push();
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
+                                 this->dyna.actor.world.pos.y +
+                                     this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         if (this) {}
         for (j = 0; j < ARRAY_COUNT(vtx); j++) {
-            Matrix_MultiplyVector3fByState(&init->elements[i].dim.vtx[j], &vtx[j]);
+            Matrix_MultVec3f(&init->elements[i].dim.vtx[j], &vtx[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &vtx[0], &vtx[1], &vtx[2]);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 Actor* ObjSwitch_SpawnIce(ObjSwitch* this, GlobalContext* globalCtx) {
@@ -397,7 +397,8 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (type == OBJSWITCH_TYPE_EYE) {
         if (sIsSegmentTableInit == false) {
-            s32 i, j;
+            s32 i;
+            s32 j;
 
             sIsSegmentTableInit = true;
 
@@ -639,15 +640,15 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Vec3f sp2C;
             Vec3f sp20;
 
-            Matrix_StatePush();
-            Matrix_RotateY(acActor->world.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(acActor->world.rot.x, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledZ(1.0f, &sp2C);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledZ(1.0f, &sp20);
-            Matrix_StatePop();
+            Matrix_Push();
+            Matrix_RotateYS(acActor->world.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(acActor->world.rot.x, MTXMODE_APPLY);
+            Matrix_MultVecZ(1.0f, &sp2C);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_MultVecZ(1.0f, &sp20);
+            Matrix_Pop();
             if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
                 return true;
             }

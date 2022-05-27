@@ -1353,11 +1353,11 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->unk_2B0 != 2) {
         switch (limbIndex) {
             case 16:
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
                 break;
 
             case 14:
-                Matrix_MultiplyVector3fByState(&D_80AEFA84, &this->unk_2B4);
+                Matrix_MultVec3f(&D_80AEFA84, &this->unk_2B4);
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1384,7 +1384,7 @@ void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AEFA90[this->unk_2C2]));
 
-    Matrix_RotateY(this->unk_318, MTXMODE_APPLY);
+    Matrix_RotateYS(this->unk_318, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTk_OverrideLimbDraw, EnTk_PostLimbDraw, &this->actor);
 

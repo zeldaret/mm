@@ -405,23 +405,23 @@ void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
 
 u32 func_80151C9C(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    u8 flag;
 
     while (true) {
         if (msgCtx->unk120B1 == 0) {
-            return 0;
+            return false;
         }
         msgCtx->unk120B1--;
 
         if ((gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
              (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
-            flag = gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8];
             gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
-                flag | (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+                ((void)0, gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8]) |
+                (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 func_80151938(globalCtx, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
-                return 1;
+                return true;
             }
         }
     }

@@ -174,20 +174,25 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
-    static u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static TurnOptionsSet sTurnOptions = {
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+    };
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f focus;
+    Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
-        focus.x = player->actor.world.pos.x;
-        focus.y = player->bodyPartsPos[7].y + 3.0f;
-        focus.z = player->actor.world.pos.z;
-        func_8013D2E0(&focus, &this->actor.focus.pos, &this->actor.shape.rot, &this->headRotTarget, &this->headRot,
-                      &this->upperBodyRot, D_8099F5AC);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                         &this->upperBodyRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->headRotTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->headRotTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 1000, 1);
 
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);
@@ -287,15 +292,15 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnZo* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->upperBodyRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->upperBodyRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->upperBodyRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
@@ -311,16 +316,16 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (sBodyParts[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
+        Matrix_MultVec3f(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
     }
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->leftFootPos);
+        Matrix_MultVec3f(&zeroVec, &this->leftFootPos);
     }
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->rightFootPos);
+        Matrix_MultVec3f(&zeroVec, &this->rightFootPos);
     }
 }
 
@@ -352,7 +357,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    Matrix_InsertXRotation_s(0, 0);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
     for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter = 0;

@@ -839,31 +839,31 @@ void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     switch (limbIndex) {
         case 3:
-            Matrix_CopyCurrentState(&this->unk_190[0]);
+            Matrix_Get(&this->unk_190[0]);
             break;
 
         case 11:
-            Matrix_CopyCurrentState(&this->unk_190[1]);
+            Matrix_Get(&this->unk_190[1]);
             break;
 
         case 12:
-            Matrix_CopyCurrentState(&this->unk_190[2]);
+            Matrix_Get(&this->unk_190[2]);
             break;
 
         case 13:
-            Matrix_CopyCurrentState(&this->unk_190[3]);
+            Matrix_Get(&this->unk_190[3]);
             break;
 
         case 14:
-            Matrix_CopyCurrentState(&this->unk_190[4]);
+            Matrix_Get(&this->unk_190[4]);
             break;
 
         case 15:
-            Matrix_CopyCurrentState(&this->unk_190[5]);
+            Matrix_Get(&this->unk_190[5]);
             break;
 
         case 16:
-            Matrix_MultiplyVector3fByState(&D_80BE0070, &this->actor.focus.pos);
+            Matrix_MultVec3f(&D_80BE0070, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             break;
     }
@@ -871,31 +871,31 @@ void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
 void EnAl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAl* this = THIS;
-    s32 phi_v0;
-    s32 phi_v1;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_4C2 & 0x200)) {
         if (this->unk_4C2 & 0x80) {
-            phi_v1 = 1;
+            overrideRot = true;
         } else {
-            phi_v1 = 0;
+            overrideRot = false;
         }
-        phi_v0 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        overrideRot = false;
+        stepRot = false;
     }
 
     if (limbIndex == 16) {
-        func_8013AD9C(this->unk_4DC + 0x4000, this->unk_4DE + this->actor.shape.rot.y + 0x4000, &this->unk_36C,
-                      &this->unk_378, phi_v0, phi_v1);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_36C.x, this->unk_36C.y, this->unk_36C.z, MTXMODE_NEW);
+        SubS_UpdateLimb(this->unk_4DC + 0x4000, this->unk_4DE + this->actor.shape.rot.y + 0x4000, &this->unk_36C,
+                        &this->unk_378, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_36C.x, this->unk_36C.y, this->unk_36C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_378.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_378.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_378.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_378.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_378.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_378.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
@@ -907,13 +907,13 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnAl_OverrideLimbDraw, EnAl_PostLimbDraw,
                                        EnAl_TransformLimbDraw, &this->actor);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
-            Matrix_SetCurrentState(&this->unk_190[i]);
+            Matrix_Put(&this->unk_190[i]);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

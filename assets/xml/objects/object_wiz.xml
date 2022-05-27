@@ -8,7 +8,7 @@
         <DList Name="object_wiz_DL_000F28" Offset="0xF28" />
         <DList Name="object_wiz_DL_000FD8" Offset="0xFD8" />
         <DList Name="object_wiz_DL_0010E0" Offset="0x10E0" />
-        <DList Name="object_wiz_DL_0010E8" Offset="0x10E8" />
+        <DList Name="gWizzrobePlatform" Offset="0x10E8" />
         <Texture Name="object_wiz_Tex_001198" OutName="tex_001198" Format="rgba16" Width="16" Height="32" Offset="0x1198" />
         <!-- <Blob Name="object_wiz_Blob_0015A0" Size="0x10" Offset="0x15A0" /> -->
         <Collision Name="object_wiz_Colheader_001690" Offset="0x1690" />
@@ -40,11 +40,11 @@
         <Texture Name="object_wiz_Tex_005230" OutName="tex_005230" Format="i4" Width="32" Height="64" Offset="0x5230" />
         <Texture Name="object_wiz_Tex_005630" OutName="tex_005630" Format="i4" Width="16" Height="16" Offset="0x5630" />
         <DList Name="object_wiz_DL_005750" Offset="0x5750" />
-        <DList Name="object_wiz_DL_005870" Offset="0x5870" />
+        <DList Name="gWizzrobePlatformCenter" Offset="0x5870" />
         <DList Name="object_wiz_DL_005938" Offset="0x5938" />
         <Texture Name="object_wiz_Tex_005940" OutName="tex_005940" Format="i4" Width="32" Height="32" Offset="0x5940" />
         <Texture Name="object_wiz_Tex_005B40" OutName="tex_005B40" Format="i4" Width="16" Height="32" Offset="0x5B40" />
-        <TextureAnimation Name="object_wiz_Matanimheader_005C64" Offset="0x5C64" />
+        <TextureAnimation Name="gWizzrobePlatformTexAnim" Offset="0x5C64" />
         <Animation Name="object_wiz_Anim_0060E8" Offset="0x60E8" />
         <Animation Name="object_wiz_Anim_0066C0" Offset="0x66C0" />
         <DList Name="object_wiz_DL_008640" Offset="0x8640" />

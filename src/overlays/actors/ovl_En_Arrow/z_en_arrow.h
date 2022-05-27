@@ -43,13 +43,7 @@ typedef struct EnArrow {
     /* 0x228 */ Vec3f unk_228;
     /* 0x234 */ Vec3f unk_234;
     /* 0x240 */ s32 unk_240;
-    /* 0x244 */ s32 unk_244;
-    /* 0x248 */ f32 unk_248;
-    /* 0x24C */ f32 unk_24C;
-    /* 0x250 */ f32 unk_250;
-    /* 0x254 */ f32 unk_254;
-    /* 0x258 */ f32 unk_258;
-    /* 0x25C */ f32 unk_25C;
+    /* 0x244 */ WeaponInfo unk_244;
     /* 0x260 */ u8 unk_260; // timer in OoT
     /* 0x261 */ u8 unk_261; // hitFlags in OoT
     /* 0x262 */ u8 unk_262;
