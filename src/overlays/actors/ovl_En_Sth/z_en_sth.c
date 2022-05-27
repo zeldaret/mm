@@ -119,13 +119,13 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.textId = 0;
-            if (!(gSaveContext.save.weekEventReg[34] & 0x40) || !(gSaveContext.save.weekEventReg[34] & 8)) {
+            if (!(gSaveContext.weekEventReg[34] & 0x40) || !(gSaveContext.weekEventReg[34] & 8)) {
                 this->unk_29C |= 1;
             }
             break;
 
         case ENSTH_F_3:
-            if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30) {
+            if ((gSaveContext.skullTokenCount & 0xFFFF) >= 30) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -136,20 +136,19 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_4:
-            if (gSaveContext.save.weekEventReg[13] & 0x20) {
+            if (gSaveContext.weekEventReg[13] & 0x20) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             this->actor.textId = 0;
             this->actionFunc = func_80B677BC;
-            if (gSaveContext.save.weekEventReg[13] & 0x80) {
+            if (gSaveContext.weekEventReg[13] & 0x80) {
                 this->unk_29C |= 2;
             }
             break;
 
         case ENSTH_F_5:
-            if (!(gSaveContext.save.weekEventReg[13] & 0x20) ||
-                (Inventory_GetSkullTokenCount(globalCtx->sceneNum) < 30)) {
+            if (!(gSaveContext.weekEventReg[13] & 0x20) || (Inventory_GetSkullTokenCount(globalCtx->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -201,7 +200,7 @@ void func_80B67148(EnSth* this, GlobalContext* globalCtx) {
 void func_80B671A0(EnSth* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         this->actionFunc = func_80B67208;
         func_801477B4(globalCtx);
     }
@@ -259,7 +258,7 @@ void func_80B67348(EnSth* this, GlobalContext* globalCtx) {
                 break;
 
             case 5:
-                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                if (gSaveContext.weekEventReg[13] & 0x40) {
                     phi_a1 = 0x113D;
                 } else {
                     phi_a1 = 0x113C;
@@ -267,7 +266,7 @@ void func_80B67348(EnSth* this, GlobalContext* globalCtx) {
                 break;
 
             default:
-                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                if (gSaveContext.weekEventReg[13] & 0x40) {
                     phi_a1 = 0x1142;
                 } else {
                     phi_a1 = 0x1141;
@@ -314,10 +313,10 @@ void func_80B67540(EnSth* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.currentTextId) {
+            if (func_80147624(globalCtx)) {
+                switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1134:
-                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                         break;
 
                     case 0x1132:
@@ -332,14 +331,14 @@ void func_80B67540(EnSth* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0x1136:
-                        gSaveContext.save.weekEventReg[13] |= 0x80;
+                        gSaveContext.weekEventReg[13] |= 0x80;
 
                         switch (sp2C) {
                             case 0:
-                                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                                if (gSaveContext.weekEventReg[13] & 0x40) {
                                     this->actor.home.rot.z = 6;
                                 } else {
-                                    gSaveContext.save.weekEventReg[13] |= 0x40;
+                                    gSaveContext.weekEventReg[13] |= 0x40;
                                     switch (CUR_UPG_VALUE(UPG_WALLET)) {
                                         case 0:
                                             this->actor.home.rot.z = 8;
@@ -404,7 +403,7 @@ void func_80B677BC(EnSth* this, GlobalContext* globalCtx) {
 void func_80B67838(EnSth* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         this->actionFunc = func_80B678A8;
         func_801477B4(globalCtx);
     }
@@ -417,7 +416,7 @@ void func_80B678A8(EnSth* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B67838;
     } else if (func_80B6703C(this, globalCtx) || this->actor.isTargeted) {
-        if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+        if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time <= CLOCK_TIME(18, 0))) {
             this->actor.textId = 0x1130;
         } else {
             this->actor.textId = 0x1131;
@@ -434,14 +433,14 @@ void func_80B67958(EnSth* this, GlobalContext* globalCtx) {
 void func_80B67984(EnSth* this, GlobalContext* globalCtx) {
     u16 sp1E;
 
-    if (gSaveContext.save.weekEventReg[34] & 0x10) {
+    if (gSaveContext.weekEventReg[34] & 0x10) {
         sp1E = 0x903;
         func_80B670A4(this, 2);
-    } else if (gSaveContext.save.weekEventReg[34] & 0x20) {
+    } else if (gSaveContext.weekEventReg[34] & 0x20) {
         sp1E = 0x90F;
         func_80B670A4(this, 2);
-    } else if (gSaveContext.save.weekEventReg[34] & 0x40) {
-        if (!(gSaveContext.save.weekEventReg[34] & 8)) {
+    } else if (gSaveContext.weekEventReg[34] & 0x40) {
+        if (!(gSaveContext.weekEventReg[34] & 8)) {
             sp1E = 0x91B;
         } else {
             sp1E = 0x918;
@@ -454,11 +453,11 @@ void func_80B67984(EnSth* this, GlobalContext* globalCtx) {
         } else {
             sp1E = 0x916;
         }
-    } else if (gSaveContext.save.weekEventReg[34] & 2) {
+    } else if (gSaveContext.weekEventReg[34] & 2) {
         sp1E = 0x8FF;
     } else {
         sp1E = 0x8FC;
-        gSaveContext.save.weekEventReg[34] |= 2;
+        gSaveContext.weekEventReg[34] |= 2;
     }
     Message_StartTextbox(globalCtx, sp1E, &this->actor);
 }
@@ -468,7 +467,7 @@ void func_80B67AB4(EnSth* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B67C1C;
-        gSaveContext.save.weekEventReg[34] |= 0x40;
+        gSaveContext.weekEventReg[34] |= 0x40;
         Message_StartTextbox(globalCtx, 0x918, &this->actor);
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -485,7 +484,7 @@ void func_80B67B50(EnSth* this, GlobalContext* globalCtx) {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
         this->unk_29C &= ~1;
-        gSaveContext.save.weekEventReg[34] |= 8;
+        gSaveContext.weekEventReg[34] |= 8;
         Actor_PickUp(&this->actor, globalCtx, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -495,17 +494,17 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        switch (globalCtx->msgCtx.currentTextId) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        switch (globalCtx->msgCtx.unk11F04) {
             case 0x90C:
                 func_80B670A4(this, 2);
-                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
 
             case 0x916:
             case 0x919:
                 func_80B670A4(this, 3);
-                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
 
             case 0x8FC:
@@ -513,7 +512,7 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
             case 0x900:
             case 0x90A:
             case 0x90D:
-                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
 
             case 0x901:
@@ -525,8 +524,8 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x91A:
-                gSaveContext.save.weekEventReg[34] |= 0x40;
-                gSaveContext.save.weekEventReg[34] &= (u8)~8;
+                gSaveContext.weekEventReg[34] |= 0x40;
+                gSaveContext.weekEventReg[34] &= (u8)~8;
 
             case 0x902:
             case 0x903:
@@ -580,9 +579,8 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
                                this->jointTable, this->morphTable, 16);
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
-            if ((gSaveContext.save.weekEventReg[34] & 0x10) || (gSaveContext.save.weekEventReg[34] & 0x20) ||
-                (gSaveContext.save.weekEventReg[34] & 0x40) ||
-                (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30)) {
+            if ((gSaveContext.weekEventReg[34] & 0x10) || (gSaveContext.weekEventReg[34] & 0x20) ||
+                (gSaveContext.weekEventReg[34] & 0x40) || (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {
@@ -600,7 +598,7 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case ENSTH_F_4:
-                if (gSaveContext.save.weekEventReg[13] & 0x80) {
+                if (gSaveContext.weekEventReg[13] & 0x80) {
                     func_80B670A4(this, 5);
                 } else {
                     func_80B670A4(this, 5);

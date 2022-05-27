@@ -775,6 +775,7 @@ void EnBigpo_AdjustPoAlpha(EnBigpo* this, s32 alphaDiff) {
         this->actor.scale.x = newXYScale;
         this->actor.scale.z = newXYScale;
         this->actor.scale.y = (0.007f - (0.007f * lowerAlpha)) + 0.007f;
+        lowerAlpha = lowerAlpha;
     } else {
         Actor_SetScale(&this->actor, lowerAlpha * 0.007f);
         this->actor.world.pos.y = this->savedHeight + (lowerAlpha * 15.0f);
@@ -1013,6 +1014,7 @@ void EnBigpo_RevealedFireIdle(EnBigpo* this, GlobalContext* globalCtx) {
         if (this->idleTimer == 0) {
             //! @bug: unreachable code
             this->actor.params = ENBIGPO_UNK5;
+            return;
         }
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f)) {
@@ -1087,7 +1089,7 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
 
         // this might be a triple ternary but it matches and is easier to read spread out
         bplus5 = this->mainColor.b + 5;
-        if (this->mainColor.b > 210) {
+        if (this->mainColor.b >= 211) {
             bminus5 = this->mainColor.b - 5;
             if (bminus5 < 210) {
                 this->mainColor.b = 210;
@@ -1095,7 +1097,7 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
                 this->mainColor.b = bminus5;
             }
         } else {
-            if (bplus5 > 210) {
+            if (bplus5 >= 211) {
                 this->mainColor.b = 210;
             } else {
                 this->mainColor.b = bplus5;
@@ -1134,8 +1136,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
 
         // light arrows
         if (this->actor.colChkInfo.damageEffect == 4) {
-            this->drawDmgEffAlpha = 4.0f;
-            this->drawDmgEffScale = 1.0f;
+            this->unk21C = 4.0f;
+            this->unk220 = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -1151,7 +1153,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }
@@ -1199,15 +1201,15 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
 
-    if (this->drawDmgEffAlpha > 0.0f) {
-        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+    if (this->unk21C > 0.0f) {
+        Math_StepToF(&this->unk21C, 0.0f, 0.05f);
         if (this->mainColor.a != 255) { // NOT fully visible
             if (this->mainColor.a * (1.0f / 255.0f) < this->mainColor.a) {
-                this->drawDmgEffAlpha = this->mainColor.a * (1.0f / 255.0f);
+                this->unk21C = this->mainColor.a * (1.0f / 255.0f);
             }
         }
-        this->drawDmgEffScale = ((this->drawDmgEffAlpha + 1.0f) * 0.5f);
-        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.0f);
+        this->unk220 = ((this->unk21C + 1.0f) * 0.5f);
+        this->unk220 = CLAMP_MAX(this->unk220, 1.0f);
     }
 }
 
@@ -1263,20 +1265,25 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if (limbByte != -1) {
         if (limbByte < 3) {
             Matrix_GetStateTranslation(&this->limbPos[limbByte]);
-        } else if (limbByte == 3) {
+            return;
+        }
+        if (limbByte == 3) {
             Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[limbByte]);
-        } else if (limbByte == 4) {
+            return;
+        }
+        if (limbByte == 4) {
             Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[limbByte]);
-        } else {
-            v2ptr = &this->limbPos[limbByte + 1];
-            v1ptr = D_80B65084;
-            Matrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
+            return;
+        }
 
-            for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
-                Matrix_MultiplyVector3fByState(v1ptr, v2ptr);
-                v2ptr++;
-                v1ptr++;
-            }
+        v2ptr = &this->limbPos[limbByte + 1];
+        v1ptr = D_80B65084;
+        Matrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
+
+        for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            Matrix_MultiplyVector3fByState(v1ptr, v2ptr);
+            v2ptr++;
+            v1ptr++;
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1311,9 +1318,8 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // 71.428566f might be 500/7 context unknown
-    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
-                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
+    func_800BE680(globalCtx, &this->actor, this->limbPos, 9, this->actor.scale.x * 71.428566f * this->unk220, 0,
+                  this->unk21C, 0x14);
 
     Matrix_SetCurrentState(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
@@ -1436,7 +1442,6 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         EnBigpoFireEffect* firePtr = &this->fires[i];
-
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
                                   this->fires[i].pos.z, 170, 255, 255, fireRadius);
         mtfxPtr->wx = firePtr->pos.x;

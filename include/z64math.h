@@ -6,13 +6,8 @@
 #define VEC_SET(V,X,Y,Z) V.x=X;V.y=Y;V.z=Z
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 z;
-} Vec2s; // size = 0x04
-
-typedef struct {
     /* 0x00 */ f32 x;
-    /* 0x04 */ f32 z;
+    /* 0x04 */ f32 y;
 } Vec2f; // size = 0x08
 
 typedef struct {
@@ -49,10 +44,6 @@ typedef struct {
     /* 0x0C */ f32   radius;
 } Spheref; // size = 0x10
 
-/* 
-The plane paramaters are of form `ax + by + cz + d = 0` 
-where `(a,b,c)` is the plane's normal vector and d is the originDist
- */
 typedef struct {
     /* 0x00 */ Vec3f normal;
     /* 0x0C */ f32   originDist;

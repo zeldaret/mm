@@ -72,8 +72,8 @@ typedef struct EnHy {
 } EnHy; // size = 0x3EC
 
 extern s8 gEnHyBodyParts[];
-extern s8 gEnHyParentBodyParts[];
-extern u8 gEnHyShadowSizes[];
+extern s8 gEnHyBodyPartsIndex[];
+extern u8 gEnHyShadowSize[];
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
 EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);

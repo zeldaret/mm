@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dg.h"
+#include "objects/object_dog/object_dog.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -57,32 +58,19 @@ typedef struct {
 
 static D_8098C2A4_s D_8098C2A4 = { 0x0063, 0x0000 };
 
-/**
- * Stores the state for the dogs milling about at the Doggy Racetrack.
- */
 typedef struct {
-    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;  // The dog's index within sDogInfo
-    s16 textId; // The ID of the text to display when the dog is picked up
-} RacetrackDogInfo;
+    s16 unk_00;
+    s16 unk_02;
+    s16 unk_04;
+} D_8098C2A8_s;
 
-/**
- * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values
- * in this table are updated by functions within this actor.
- */
-static RacetrackDogInfo sRacetrackDogInfo[] = {
-    { DOG_COLOR_BEIGE, 0, 0x3539 },  { DOG_COLOR_WHITE, 1, 0x353A },  { DOG_COLOR_BLUE, 2, 0x353B },
-    { DOG_COLOR_GRAY, 3, 0x353C },   { DOG_COLOR_BROWN, 4, 0x3538 },  { DOG_COLOR_GRAY, 5, 0x353E },
-    { DOG_COLOR_BEIGE, 6, 0x353F },  { DOG_COLOR_WHITE, 7, 0x3540 },  { DOG_COLOR_WHITE, 8, 0x3541 },
-    { DOG_COLOR_GOLD, 9, 0x3542 },   { DOG_COLOR_GRAY, 10, 0x3543 },  { DOG_COLOR_BEIGE, 11, 0x3544 },
-    { DOG_COLOR_WHITE, 12, 0x3545 }, { DOG_COLOR_BROWN, 13, 0x3546 },
+static D_8098C2A8_s D_8098C2A8[] = {
+    { 3, 0, 0x3539 },  { 1, 1, 0x353A },  { 5, 2, 0x353B },  { 2, 3, 0x353C },  { 4, 4, 0x3538 },
+    { 2, 5, 0x353E },  { 3, 6, 0x353F },  { 1, 7, 0x3540 },  { 1, 8, 0x3541 },  { 6, 9, 0x3542 },
+    { 2, 10, 0x3543 }, { 3, 11, 0x3544 }, { 1, 12, 0x3545 }, { 4, 13, 0x3546 },
 };
 
-/**
- * Stores the RacetrackDogInfo for the dog that is selected by the player. These values are just
- * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in func_80989E18.
- */
-static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x353E };
+static D_8098C2A8_s D_8098C2FC = { 0, -1, 0x353E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -142,14 +130,22 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
-    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
-    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_000998, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001348, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_0021C8, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_001A84, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -225,7 +221,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
     if (idx == 0) {
         phi_f12 = sp5C[1].x - sp5C[0].x;
         phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == count - 1) {
+    } else if ((idx + 1) == ((void)0, count)) {
         phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
         phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
     } else {
@@ -233,7 +229,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -265,29 +261,29 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
     s16 phi_a1;
     f32 sp30;
 
-    if (this->path != NULL) {
-        phi_a1 = func_809895B4(this->path, this->unk_1E0, &this->actor.world.pos, &sp30);
+    if (this->unk_1DC != NULL) {
+        phi_a1 = func_809895B4(this->unk_1DC, this->unk_1E0, &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         }
 
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80989418(this, this->path, this->unk_1E0)) {
-            if (this->unk_1E0 >= (this->path->count - 1)) {
+        if (func_80989418(this, this->unk_1DC, this->unk_1E0)) {
+            if (this->unk_1E0 >= (this->unk_1DC->count - 1)) {
                 this->unk_1E0 = 0;
             } else {
                 this->unk_1E0++;
             }
         }
 
-        if ((this->index == 21) || ((this->index == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-        } else if (this->index == 20) {
+        } else if (this->unk_286 == 20) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
+        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -302,7 +298,7 @@ void func_80989864(EnDg* this, GlobalContext* globalCtx) {
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
     Vec3f sp38;
 
-    if (((this->index + frame) % mod) == 0) {
+    if (((this->unk_286 + frame) % mod) == 0) {
         sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
         sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
@@ -342,13 +338,13 @@ void func_80989A9C(EnDg* this, f32 arg1) {
 
 void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        if ((this->index == 21) || ((this->index == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
             func_80989140(&this->skelAnime, sAnimations, 1);
-        } else if (this->index == 20) {
+        } else if (this->unk_286 == 20) {
             func_80989140(&this->skelAnime, sAnimations, 2);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
+        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
             func_80989140(&this->skelAnime, sAnimations, 1);
         } else {
             func_80989140(&this->skelAnime, sAnimations, 2);
@@ -358,37 +354,37 @@ void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_80989BF8(EnDg* this) {
-    if (this->index < 14) {
-        if (this->index % 2) {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
+    if (this->unk_286 < 14) {
+        if (this->unk_286 % 2) {
+            D_8098C2A8[this->unk_286].unk_04 =
+                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
         } else {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (1 | 2 | 4 | 8));
+            D_8098C2A8[this->unk_286].unk_04 =
+                0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (1 | 2 | 4 | 8));
         }
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 
-    if ((sRacetrackDogInfo[this->index].textId >= 0x3547) || (sRacetrackDogInfo[this->index].textId < 0x3538)) {
-        sRacetrackDogInfo[this->index].textId = 0x353E;
+    if ((D_8098C2A8[this->unk_286].unk_04 >= 0x3547) || (D_8098C2A8[this->unk_286].unk_04 < 0x3538)) {
+        D_8098C2A8[this->unk_286].unk_04 = 0x353E;
     }
 
-    if (sRacetrackDogInfo[this->index].textId == 0x353D) {
-        sRacetrackDogInfo[this->index].textId = 0x3538;
+    if (D_8098C2A8[this->unk_286].unk_04 == 0x353D) {
+        D_8098C2A8[this->unk_286].unk_04 = 0x3538;
     }
 }
 
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
-    if (this->index == 21) {
+    if (this->unk_286 == 21) {
         if (CURRENT_DAY == 1) {
             Message_StartTextbox(globalCtx, 0x91C, NULL);
         } else {
             Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
-    } else if ((this->index >= 0) && (this->index < 14)) {
-        Message_StartTextbox(globalCtx, sRacetrackDogInfo[this->index].textId, NULL);
-    } else if (this->index == 20) {
+    } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
+        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
+    } else if (this->unk_286 == 20) {
         Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {
         Message_StartTextbox(globalCtx, 0x627, NULL);
@@ -396,7 +392,7 @@ void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
-    RacetrackDogInfo* temp;
+    D_8098C2A8_s* temp;
 
     if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
@@ -409,7 +405,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->unk_290 = 1;
-        sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
+        D_8098C2FC = D_8098C2A8[this->unk_286];
         if (D_8098C2A0 == 0) {
             this->actor.flags |= ACTOR_FLAG_8000000;
             D_8098C2A0 = 1;
@@ -439,13 +435,13 @@ s32 func_80989FC8(GlobalContext* globalCtx) {
     while (enemy != NULL) {
         if (enemy->actor.id == ACTOR_EN_DG) {
             if (enemy->actor.isTargeted) {
-                D_8098C2A4.unk_00 = enemy->index;
+                D_8098C2A4.unk_00 = enemy->unk_286;
                 return true;
             }
 
             dist = enemy->actor.xzDistToPlayer;
             if (dist < minDist) {
-                D_8098C2A4.unk_00 = enemy->index;
+                D_8098C2A4.unk_00 = enemy->unk_286;
                 minDist = dist;
             }
         }
@@ -467,7 +463,7 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
             func_80989FC8(globalCtx);
         }
 
-        if (this->index == D_8098C2A4.unk_00) {
+        if (this->unk_286 == D_8098C2A4.unk_00) {
             if (!(this->unk_280 & 0x20)) {
                 this->unk_280 |= 0x20;
                 func_80989140(&this->skelAnime, sAnimations, 1);
@@ -479,7 +475,7 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
                 }
             }
         }
-    } else if (this->index == D_8098C2A4.unk_00) {
+    } else if (this->unk_286 == D_8098C2A4.unk_00) {
         this->unk_280 &= ~0x20;
         D_8098C2A4.unk_00 = 99;
         func_80989ADC(this, globalCtx);
@@ -1065,8 +1061,8 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
             D_8098C2A0 = 0;
             this->unk_280 &= ~1;
         }
-        this->selectedDogIndex = -1;
-        sSelectedRacetrackDogInfo.index = this->selectedDogIndex;
+        this->unk_288 = -1;
+        D_8098C2FC.unk_02 = this->unk_288;
         this->unk_28A = 100;
         Actor_MoveWithGravity(&this->actor);
         this->unk_280 |= 0x10;
@@ -1121,12 +1117,13 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
+                       13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(globalCtx, ENDG_GET_PATH(&this->actor), 0x3F);
+    this->unk_1DC = func_8013D648(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
@@ -1134,7 +1131,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_280 = 0;
     this->unk_28E = 20;
     this->unk_284 = 10;
-    this->index = ENDG_GET_INDEX(&this->actor);
+    this->unk_286 = ENDG_GET_3E0(&this->actor);
     this->unk_28C = 0;
     this->unk_290 = 0;
     if (globalCtx->sceneNum == SCENE_F01_B) {
@@ -1156,7 +1153,7 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
 
-    this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
+    this->unk_288 = D_8098C2FC.unk_02;
     if (!(player->stateFlags1 & 0x20) || (globalCtx->sceneNum != SCENE_CLOCKTOWER)) {
         if (func_8098A1B4(this, globalCtx)) {
             func_8098A234(this, globalCtx);
@@ -1187,7 +1184,7 @@ void EnDg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnDg* this = THIS;
     Vec3f sp20 = { 0.0f, 20.0f, 0.0f };
 
-    if (limbIndex == DOG_LIMB_HEAD) {
+    if (limbIndex == 5) {
         if (this->actionFunc == func_8098BBEC) {
             sp20.x = 5000.0f;
             Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
@@ -1206,31 +1203,25 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (sRacetrackDogInfo[this->index].color) {
-        case DOG_COLOR_BEIGE:
+    switch (D_8098C2A8[this->unk_286].unk_00) {
+        case 3:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
-
-        case DOG_COLOR_WHITE:
+        case 1:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
             break;
-
-        case DOG_COLOR_BLUE:
+        case 5:
             gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
             break;
-
-        case DOG_COLOR_GOLD:
+        case 6:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
             break;
-
-        case DOG_COLOR_BROWN:
+        case 4:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
             break;
-
-        case DOG_COLOR_GRAY:
+        case 2:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
             break;
-
         default:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;

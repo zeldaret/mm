@@ -625,11 +625,11 @@ void EffectSsSibuki_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos) {
 
 // EffectSsStone1 Spawn Functions
 
-void EffectSsStone1_Spawn(GlobalContext* globalCtx, Vec3f* pos, s32 reg0) {
+void EffectSsStone1_Spawn(GlobalContext* globalCtx, Vec3f* pos, s32 arg2) {
     EffectSsStone1InitParams initParams;
 
     initParams.pos = *pos;
-    initParams.reg0 = reg0;
+    initParams.unk_C = arg2;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_STONE1, 128, &initParams);
 }

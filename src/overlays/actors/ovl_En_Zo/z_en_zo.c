@@ -99,9 +99,9 @@ static AnimationInfoS sAnimations[] = {
     { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-s8 sBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
-s8 sParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
-u8 sShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
+s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
+u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
@@ -141,12 +141,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
 
-    this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->leftFootPos, -6.0f);
+    this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->rightFootPos, -6.0f);
+    this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
@@ -218,7 +218,7 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     speed = this->actor.speedXZ * 400.0f;
-    if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
+    if (func_8013D68C(this->path, this->waypoint, &pos) && func_8013D768(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
             this->waypoint = 0;
@@ -259,7 +259,7 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
+    this->path = func_8013D648(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;
@@ -310,8 +310,8 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (sBodyParts[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
+    if (D_8099F578[limbIndex] >= 0) {
+        Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
     }
     if (limbIndex == 15) {
         Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
@@ -336,9 +336,9 @@ static Gfx sTransparencyDlist[] = {
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8) * SQ(64));
     u8* shadowTexIter;
-    TexturePtr eyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
+    TexturePtr eyeTextures[] = { &gZoraEyeOpenTex, &gZoraEyeHalfTex, &gZoraEyeClosedTex };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -354,15 +354,14 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     Matrix_InsertXRotation_s(0, 0);
 
-    for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
+    for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8) * SQ(64); i++) {
         *shadowTexIter = 0;
         shadowTexIter++;
     }
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(this->bodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f,
-                          ARRAY_COUNT(this->bodyPartsPos), sShadowSizes, sParentBodyParts);
+        func_8013CD64(this->unk_364, &this->actor.world.pos, shadowTex, i / 5.0f, 15, D_8099F59C, D_8099F58C);
     }
 
-    SubS_DrawShadowTex(&this->actor, &globalCtx->state, shadowTex);
+    func_8013CF04(&this->actor, &globalCtx->state.gfxCtx, shadowTex);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

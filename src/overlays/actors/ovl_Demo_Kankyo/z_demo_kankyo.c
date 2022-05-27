@@ -633,7 +633,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 Matrix_Scale(this->particles[i].scale * alphaScale, this->particles[i].scale * alphaScale,
                              this->particles[i].scale * alphaScale, MTXMODE_APPLY);
                 alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
-                alphaScale = CLAMP(1.0f - alphaScale, 0.0f, 1.0f);
+                alphaScale = (alphaScale > 1.0f) ? 0.0f : (1.0f - alphaScale) > 1.0f ? 1.0f : 1.0f - alphaScale;
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     this->particles[i].alpha = 255.0f * alphaScale;
@@ -655,7 +655,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_023348);
 
                 Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
@@ -667,7 +667,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
                 }
             }
         }

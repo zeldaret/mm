@@ -107,16 +107,8 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static u8 D_80BAA488[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x1D - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_BACKTOWN, 0x1C - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 30, 0x16 - 0x0E),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(0, 30, 0x15 - 0x12),
-    /* 0x12 */ SCHEDULE_CMD_RET_VAL_L(1),
-    /* 0x15 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x16 */ SCHEDULE_CMD_RET_TIME(0, 0, 0, 30, 2),
-    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
+s32 D_80BAA488[] = {
+    0x0C000119, 0x0A006E14, 0x02000000, 0x1E080F00, 0x1E030400, 0x01050E00, 0x00001E02, 0x05050000,
 };
 
 s32 D_80BAA4A8[] = { -1, -1, 0 };
@@ -138,12 +130,12 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
     switch (this->unk_1E0) {
         case 0:
             if (this->unk_40A & 8) {
-                if (gSaveContext.save.weekEventReg[33] & 8) {
+                if (gSaveContext.weekEventReg[33] & 8) {
                     this->unk_1E0 = 0x2A34;
                     break;
                 }
 
-                if (gSaveContext.save.weekEventReg[79] & 0x40) {
+                if (gSaveContext.weekEventReg[79] & 0x40) {
                     this->unk_40A |= 1;
                     this->unk_1E0 = 0x2A33;
                     break;
@@ -153,8 +145,8 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
                 this->unk_1E0 = 0x2A32;
                 break;
             } else if (player->transformation == PLAYER_FORM_DEKU) {
-                if (!(gSaveContext.save.weekEventReg[79] & 0x20)) {
-                    gSaveContext.save.weekEventReg[79] |= 0x20;
+                if (!(gSaveContext.weekEventReg[79] & 0x20)) {
+                    gSaveContext.weekEventReg[79] |= 0x20;
                     this->unk_40A |= 1;
                     this->unk_1E0 = 0x2A37;
                     break;
@@ -163,15 +155,15 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
                     this->unk_1E0 = 0x2A38;
                 }
                 break;
-            } else if (!(gSaveContext.save.weekEventReg[33] & 8)) {
-                if (!(gSaveContext.save.weekEventReg[73] & 1)) {
+            } else if (!(gSaveContext.weekEventReg[33] & 8)) {
+                if (!(gSaveContext.weekEventReg[73] & 1)) {
                     this->unk_1E0 = 0x660;
                     break;
                 }
                 this->unk_1E0 = 0x662;
                 break;
             } else {
-                if (!(gSaveContext.save.weekEventReg[73] & 2)) {
+                if (!(gSaveContext.weekEventReg[73] & 2)) {
                     this->unk_1E0 = 0x65A;
                     break;
                 }
@@ -193,7 +185,7 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
         case 0x662:
             Actor_ChangeFocus(&this->actor, globalCtx, &this->unk_144->actor);
             this->unk_1E0 = 0x663;
-            gSaveContext.save.weekEventReg[73] |= 1;
+            gSaveContext.weekEventReg[73] |= 1;
             this->unk_40A |= 1;
             break;
 
@@ -210,7 +202,7 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
         case 0x65C:
             Actor_ChangeFocus(&this->actor, globalCtx, &this->unk_144->actor);
             this->unk_1E0 = 0x65D;
-            gSaveContext.save.weekEventReg[73] |= 2;
+            gSaveContext.weekEventReg[73] |= 2;
             this->unk_40A |= 1;
             break;
 
@@ -274,7 +266,7 @@ s32 func_80BA8D2C(EnBaba* this, f32 arg1) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, arg1, 0.4f, 1000.0f, 0.0f);
     sp3E = this->actor.speedXZ * 400.0f;
-    if (SubS_CopyPointFromPath(this->path, this->unk_1E8, &sp2C) && SubS_MoveActorToPoint(&this->actor, &sp2C, sp3E)) {
+    if (func_8013D68C(this->path, this->unk_1E8, &sp2C) && func_8013D768(&this->actor, &sp2C, sp3E)) {
         this->unk_1E8++;
         if (this->unk_1E8 >= this->path->count) {
             ret = true;
@@ -313,13 +305,13 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp26 = (u16)(gSaveContext.save.time - 0x3FFC);
+s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+    u16 sp26 = (u16)(gSaveContext.time - 0x3FFC);
     u16 temp;
     u8 sp23 = ENBABA_GET_3F00(&this->actor);
 
-    if (D_80BAA4A8[arg2->result] >= 0) {
-        this->unk_410 = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->result]);
+    if (D_80BAA4A8[arg2->unk0] >= 0) {
+        this->unk_410 = func_8013BB34(globalCtx, sp23, D_80BAA4A8[arg2->unk0]);
     }
 
     if (this->unk_410 == NULL) {
@@ -329,13 +321,13 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) 
     if ((this->unk_434 != 0) && (this->unk_436 >= 0)) {
         temp = sp26;
     } else {
-        temp = arg2->time0;
+        temp = arg2->unk4;
     }
 
-    if (arg2->time1 < temp) {
-        this->unk_424 = (temp - arg2->time1) + 0xFFFF;
+    if (arg2->unk8 < temp) {
+        this->unk_424 = (temp - arg2->unk8) + 0xFFFF;
     } else {
-        this->unk_424 = arg2->time1 - temp;
+        this->unk_424 = arg2->unk8 - temp;
     }
 
     this->unk_430 = sp26 - temp;
@@ -347,10 +339,10 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) 
     return true;
 }
 
-s32 func_80BA9110(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BA9110(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     s32 ret;
 
-    switch (arg2->result) {
+    switch (arg2->unk0) {
         default:
             ret = false;
             break;
@@ -392,7 +384,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (SubS_InCsMode(globalCtx)) {
+    if (func_8013AD6C(globalCtx)) {
         sp54 = this->unk_430;
         sp50 = this->unk_42C;
         sp58 = this->actor.world.pos;
@@ -409,7 +401,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (SubS_InCsMode(globalCtx)) {
+    if (func_8013AD6C(globalCtx)) {
         this->unk_430 = sp54;
         this->unk_42C = sp50;
         this->unk_414 = sp58;
@@ -421,7 +413,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
 void func_80BA93AC(EnBaba* this, GlobalContext* globalCtx) {
     if (this->unk_434 != 1) {
         if (this->unk_434 == 2) {
-            gSaveContext.save.weekEventReg[58] |= 0x40;
+            gSaveContext.weekEventReg[58] |= 0x40;
             this->unk_40A |= 2;
             func_80BA9160(this, globalCtx);
         }
@@ -451,10 +443,10 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
         this->actionFunc = func_80BA9758;
     } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
-        if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_0) && (gSaveContext.save.entranceIndex != 0xD670) &&
+        if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_0) && (gSaveContext.entranceIndex != 0xD670) &&
             ((ENBABA_GET_3F00(&this->actor)) != ENBABA_3F00_3F)) {
-            if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
-                (!(gSaveContext.save.time < CLOCK_TIME(0, 20)) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
+            if ((gSaveContext.weekEventReg[58] & 0x40) ||
+                (!(gSaveContext.time < CLOCK_TIME(0, 20)) && (gSaveContext.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -463,14 +455,14 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
             this->unk_40C = 2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
             this->actionFunc = func_80BA9B80;
-        } else if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_1) && (gSaveContext.save.entranceIndex == 0xD670)) {
-            if (gSaveContext.save.weekEventReg[81] & 2) {
+        } else if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_1) && (gSaveContext.entranceIndex == 0xD670)) {
+            if (gSaveContext.weekEventReg[81] & 2) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
 
             this->unk_40A |= 2;
-            if (gSaveContext.save.weekEventReg[33] & 8) {
+            if (gSaveContext.weekEventReg[33] & 8) {
                 this->unk_40C = 0;
             } else {
                 this->unk_40C = 1;
@@ -522,7 +514,7 @@ void func_80BA9758(EnBaba* this, GlobalContext* globalCtx) {
 void func_80BA9848(EnBaba* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(globalCtx)) {
+    if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80BA9B80;
@@ -534,7 +526,7 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (Message_ShouldAdvance(globalCtx)) {
+        if (func_80147624(globalCtx)) {
             if (this->unk_40A & 1) {
                 this->unk_40A &= ~1;
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -542,12 +534,12 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
                 if (this->unk_40A & 8) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (globalCtx->msgCtx.unk120B1 == 0) {
-                            gSaveContext.save.weekEventReg[81] |= 2;
+                            gSaveContext.weekEventReg[81] |= 2;
                             func_80BA8C4C(globalCtx, 0xD670);
                             return;
                         }
                     } else {
-                        gSaveContext.save.weekEventReg[81] |= 2;
+                        gSaveContext.weekEventReg[81] |= 2;
                         func_80BA8C4C(globalCtx, 0xD670);
                     }
                 } else {
@@ -564,8 +556,8 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 6) {
-        if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk120B1 == 0)) {
-            gSaveContext.save.weekEventReg[81] |= 2;
+        if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk120B1 == 0)) {
+            gSaveContext.weekEventReg[81] |= 2;
             func_80BA8C4C(globalCtx, 0xD670);
         }
     }
@@ -591,20 +583,21 @@ void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
-    ScheduleResult sp20;
+    u32* unk14 = &gSaveContext.unk_14;
+    struct_80133038_arg2 sp20;
 
-    this->unk_436 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_436 = REG(15) + *unk14;
 
-    if (!Schedule_RunScript(globalCtx, D_80BAA488, &sp20) ||
-        ((this->unk_434 != sp20.result) && !func_80BA9110(this, globalCtx, &sp20))) {
+    if (!func_80133038(globalCtx, D_80BAA488, &sp20) ||
+        ((this->unk_434 != sp20.unk0) && !func_80BA9110(this, globalCtx, &sp20))) {
         this->unk_40A &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp20.result = false;
+        sp20.unk0 = false;
     } else {
         this->unk_40A |= 0x80;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_434 = sp20.result;
+    this->unk_434 = sp20.unk0;
 
     func_80BA93AC(this, globalCtx);
 
@@ -636,7 +629,7 @@ void func_80BA9CD4(EnBaba* this, GlobalContext* globalCtx) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
         }
     } else {
-        if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->unk_404) == 0)) {
+        if ((gSaveContext.weekEventReg[79] & 0x40) && (DECR(this->unk_404) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
             func_80BA8C4C(globalCtx, 0xD670);
         } else {
@@ -666,7 +659,7 @@ void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(globalCtx, ENBABA_GET_3F00(&this->actor), ENBABA_3F00_3F);
+    this->path = func_8013D648(globalCtx, ENBABA_GET_3F00(&this->actor), ENBABA_3F00_3F);
 
     Actor_SetScale(&this->actor, 0.01f);
 

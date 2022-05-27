@@ -164,7 +164,7 @@ void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
     func_80953DA8(this, globalCtx);
-    if (this->unk164 != NULL) {
+    if (this->unk164 != 0) {
         func_80953B40(this);
     }
     this->unk16E = -1;
@@ -194,7 +194,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 this->dyna.actor.textId = 0x9E4;
                 Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
                 this->unk16C += 1;
-                gSaveContext.save.weekEventReg[90] |= 0x40;
+                gSaveContext.weekEventReg[90] |= 0x40;
                 this->actionFunc = func_809543D4;
             } else {
 
@@ -253,13 +253,13 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
     globalCtx->unk_1887F = 3;
     gSaveContext.nextTransition = 3;
     this->actionFunc = func_80953F8C;
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+    gSaveContext.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
 }
 
 void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
     if (!DECR(this->unk16A)) {
-        if (this->unk164 != NULL) {
+        if (this->unk164 != 0) {
             func_800B7298(globalCtx, &this->dyna.actor, 6);
             this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
             func_80953F14(this, globalCtx);
@@ -271,7 +271,7 @@ void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
 void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(globalCtx)) {
+    if (((talkState == 4) || (talkState == 5)) && func_80147624(globalCtx)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;
@@ -285,11 +285,11 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                     func_800FE498();
                     func_8019F208();
                 } else {
-                    if (this->unk164 != NULL) {
+                    if (this->unk164 != 0) {
                         this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
                     }
                     func_80953F14(this, globalCtx);
-                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+                    gSaveContext.weekEventReg[90] &= (u8)~0x40;
                     func_8019F230();
                 }
                 func_801477B4(globalCtx);
@@ -297,9 +297,10 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
             case 0x9E6:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, globalCtx);
-                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+                    gSaveContext.weekEventReg[90] &= (u8)~0x40;
                     func_8019F208();
                 } else {
+                    this = this;
                     func_800B7298(globalCtx, &this->dyna.actor, 6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
@@ -327,12 +328,12 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
-        if (gSaveContext.save.weekEventReg[20] & 2) {
-            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
+        if (gSaveContext.weekEventReg[20] & 2) {
+            gSaveContext.weekEventReg[90] &= (u8)~0x40;
         }
-        if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.save.weekEventReg[90] & 0x40)) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.weekEventReg[90] & 0x40)) {
             phi_a2 = 1;
             this->unk16C = 1;
             this->actionFunc = func_809541B8;
@@ -349,8 +350,8 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
-        if (this->unk164 != NULL) {
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        if (this->unk164 != 0) {
             sp38 = Lib_SegmentedToVirtual(this->unk164->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
             Math_Vec3s_ToVec3f(&sp20, &sp38[1]);
@@ -360,7 +361,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
     }

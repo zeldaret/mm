@@ -254,7 +254,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
 
 s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.currentTextId;
+    u16 temp = globalCtx->msgCtx.unk11F04;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
         switch (temp) {
@@ -306,7 +306,7 @@ void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
-    if (gSaveContext.save.weekEventReg[23] & 0x20) {
+    if (gSaveContext.weekEventReg[23] & 0x20) {
         return &D_80A53400[14];
     }
 
@@ -340,11 +340,11 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(globalCtx) &&
+        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+            if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
                 Message_StartTextbox(globalCtx, 0x969, NULL);
                 this->unk_384 = 200;
             }
@@ -358,7 +358,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
         this->actor.xzDistToPlayer = this->unk_394;
 
-        if (gSaveContext.save.weekEventReg[83] & 8) {
+        if (gSaveContext.weekEventReg[83] & 8) {
             func_80A52A78(this, globalCtx);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
@@ -427,7 +427,7 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
-    if (gSaveContext.save.weekEventReg[9] & 0x80) {
+    if (gSaveContext.weekEventReg[9] & 0x80) {
         this->unk_3A4 = 1;
     } else {
         this->unk_3A4 = 0;
@@ -455,7 +455,7 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         this->unk_394 = this->actor.xzDistToPlayer;
         func_80A52C6C(this, globalCtx);
-        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, EXCH_ITEM_NONE,
+        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, 0,
                       this->unk_37C & 7);
         this->actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->actor, 46.0f);

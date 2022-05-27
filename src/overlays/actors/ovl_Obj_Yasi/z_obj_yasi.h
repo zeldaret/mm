@@ -6,11 +6,10 @@
 struct ObjYasi;
 
 typedef struct ObjYasi {
-    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x18];
 } ObjYasi; // size = 0x15C
 
 extern const ActorInit Obj_Yasi_InitVars;
-
-#define OBJYASI_IS_WIDE(thisx) ((thisx)->params & 1)
 
 #endif // Z_OBJ_YASI_H

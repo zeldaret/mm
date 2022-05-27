@@ -645,8 +645,7 @@ typedef enum {
     /* 0x6D */ SCENE_ICHIBA,
     /* 0x6E */ SCENE_BACKTOWN,
     /* 0x6F */ SCENE_CLOCKTOWER,
-    /* 0x70 */ SCENE_ALLEY,
-    /* 0x71 */ SCENE_MAX
+    /* 0x70 */ SCENE_ALLEY
 } SceneID;
 
 // SceneTableEntry draw configs

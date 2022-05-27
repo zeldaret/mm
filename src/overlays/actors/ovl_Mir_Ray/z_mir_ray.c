@@ -465,8 +465,7 @@ void MirRay_SetupReflectionPolys(MirRay* this, GlobalContext* globalCtx, MirRayS
 
 // Remove reflections that are in the same position and are sufficiently near to the same plane
 void MirRay_RemoveSimilarReflections(MirRayShieldReflection* reflection) {
-    s32 i;
-    s32 j;
+    s32 i, j;
 
     for (i = 0; i < 6; i++) {
         for (j = i + 1; j < 6; j++) {

@@ -95,7 +95,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         globalCtx->interfaceCtx.unk_25C = 1;
-        this->hitFlag = true;
+        this->hitFlag = 1;
         return 1;
     } else {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -111,7 +111,7 @@ void EnJcMato_SetupIdle(EnJcMato* this) {
 void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx) {
     s16 shouldDespawn;
 
-    if (this->hitFlag) {
+    if (this->hitFlag != 0) {
         if (this->despawnTimer == 0) {
             shouldDespawn = 0;
         } else {
@@ -133,7 +133,7 @@ void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.radius = 0xF;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
-    this->hitFlag = false;
+    this->hitFlag = 0;
     this->despawnTimer = 25;
     EnJcMato_SetupIdle(this);
 }

@@ -176,15 +176,14 @@ s32 func_808D8B58(EnSw* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
-        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        if (this->unk_412 != 10) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
             this->unk_464[i] = 80;
         }
         this->unk_47C[i] = this->unk_464[i];
-        this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
-        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
-            (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
+        this->unk_418[i] = 0.45000002f;
+        if ((this->unk_412 == 0) || (this->unk_412 == 1) || (this->unk_412 == 10)) {
             this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
             this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
@@ -198,27 +197,26 @@ s32 func_808D8B58(EnSw* this) {
 
 s32 func_808D8D60(EnSw* this, GlobalContext* globalCtx, s32 arg2) {
     s32 ret = false;
-    u8 drawDmgEffType;
-    Vec3f limbPos[1];
-    f32 drawDmgEffAlpha;
+    u8 sp53;
+    Vec3f sp44;
+    f32 sp40;
 
     if (arg2 < this->unk_462) {
         if (this->unk_464[arg2] != 0) {
-            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
-            drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
-            limbPos[0].x += this->unk_380[arg2].x;
-            limbPos[0].y += this->unk_380[arg2].y;
-            limbPos[0].z += this->unk_380[arg2].z;
-            if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            sp40 = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+            sp53 = this->unk_412;
+            Math_ApproachF(&this->unk_418[arg2], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
+            sp44.x += this->unk_380[arg2].x;
+            sp44.y += this->unk_380[arg2].y;
+            sp44.z += this->unk_380[arg2].z;
+            if (sp53 == 10) {
                 if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
-                    drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
+                    sp53 = 11;
                 }
-                drawDmgEffAlpha = 1.0f;
+                sp40 = 1.0f;
             }
-            Actor_DrawDamageEffects(globalCtx, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
-                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
+            func_800BE680(globalCtx, &this->actor, &sp44, 1, 0.3f, this->unk_418[arg2], sp40, sp53);
             ret = true;
         }
     }
@@ -450,7 +448,6 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     }
 }
 #else
-void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D94D0.s")
 #endif
 
@@ -668,7 +665,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
 
-        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        if (this->unk_412 == 10) {
             // clang-format off
             for (i = 0; i < ARRAY_COUNT(this->unk_464); i++) { this->unk_464[i] = 0; }
             // clang-format on
@@ -684,36 +681,36 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                    this->unk_412 = 20;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 3:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+                    this->unk_412 = 10;
                     this->unk_45C = 0;
                     func_808D8B58(this);
                     break;
 
                 case 2:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                    this->unk_412 = 0;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 5:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->unk_412 = 30;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 default:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
+                    this->unk_412 = 1;
                     this->unk_45C = 0;
                     break;
             }
 
-            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
+            if (!ENSW_GET_3(&this->actor) && (this->unk_412 != 10)) {
                 func_808D9E44(this);
             }
             this->unk_458 = 20;
@@ -817,7 +814,6 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = temp_f0;
 }
 #else
-void func_808DA578(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA578.s")
 #endif
 
@@ -856,12 +852,11 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
-void func_808DA6FC(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA6FC.s")
 #endif
 
 void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
-    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+    if (this->unk_412 == 10) {
         s32 i;
         s32 count;
         s16 phi_a0;
@@ -882,7 +877,7 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
             if (!ENSW_GET_3(&this->actor)) {
                 func_808D9E44(this);
             }
-            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
+            this->unk_412 = 1;
             func_808D8ED0(this, globalCtx);
         }
         return;
@@ -1016,7 +1011,6 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     this->unk_414 = sp4C;
 }
 #else
-void func_808DACF4(EnSw* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
 #endif
 
@@ -1071,7 +1065,7 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
         phi_a0 = DECR(this->unk_45C);
         if (phi_a0 == 0) {
             this->unk_410 |= 2;
-            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE)) {
+            if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
                 func_808D8B58(this);
                 this->unk_45C = 10;
             } else {
@@ -1179,7 +1173,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = SubS_GetDayDependentPath(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
+        this->unk_1E4 = func_8013BEDC(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
         if (this->unk_1E4 != NULL) {
             this->unk_4A0 = 1;
         }
@@ -1255,7 +1249,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
     }
 
-    if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) || (this->unk_45A != 0)) {
+    if ((this->unk_412 != 10) || (this->unk_45A != 0)) {
         SkelAnime_Update(&this->skelAnime);
     }
 

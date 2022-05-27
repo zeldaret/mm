@@ -5,8 +5,6 @@
 
 struct ObjJgameLight;
 
-#define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
-
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x78];

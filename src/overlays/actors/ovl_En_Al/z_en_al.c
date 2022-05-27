@@ -19,22 +19,10 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx);
 void func_80BDF6C4(EnAl* this, GlobalContext* globalCtx);
 
-static u8 D_80BDFC70[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x11 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x0B - 0x0A),
-    /* 0x0A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0B */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
-    /* 0x11 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 10, 0, 0x46 - 0x17),
-    /* 0x17 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 10, 55, 0x40 - 0x1D),
-    /* 0x1D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 55, 11, 45, 0x30 - 0x23),
-    /* 0x23 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 45, 20, 0, 0x2A - 0x29),
-    /* 0x29 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x2A */ SCHEDULE_CMD_RET_TIME(11, 45, 20, 0, 1),
-    /* 0x30 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x3A - 0x34),
-    /* 0x34 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 45, 1),
-    /* 0x3A */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 45, 3),
-    /* 0x40 */ SCHEDULE_CMD_RET_TIME(10, 0, 10, 55, 1),
-    /* 0x46 */ SCHEDULE_CMD_RET_VAL_L(1),
+s32 D_80BDFC70[] = {
+    0x0C00030D, 0x02120006, 0x0001050E, 0x12000600, 0x02020800, 0x0A002F02, 0x0A000A37,
+    0x23020A37, 0x0B2D0D02, 0x0B2D1400, 0x01050E0B, 0x2D140001, 0x0C000206, 0x0E0A370B,
+    0x2D010E0A, 0x370B2D03, 0x0E0A000A, 0x37010400, 0x01000000,
 };
 
 s32 D_80BDFCBC[] = {
@@ -199,7 +187,7 @@ Actor* func_80BDE384(EnAl* this, GlobalContext* globalCtx) {
 
     switch (this->unk_35C) {
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!(gSaveContext.weekEventReg[89] & 8) && (gSaveContext.weekEventReg[85] & 0x80)) {
                 actor = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_PM);
             } else {
                 actor = &GET_PLAYER(globalCtx)->actor;
@@ -410,7 +398,7 @@ s32 func_80BDEA14(EnAl* this, GlobalContext* globalCtx) {
     switch (this->unk_4E6) {
         case 0:
         case 1:
-            if ((gSaveContext.save.weekEventReg[75] & 2)) {
+            if ((gSaveContext.weekEventReg[75] & 2)) {
                 sp18 = true;
             } else if (func_80BDE4E0(this, &this->unk_4E6, 0)) {
                 sp18 = true;
@@ -451,7 +439,7 @@ s32* func_80BDEABC(EnAl* this, GlobalContext* globalCtx) {
             return D_80BDFE84;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!(gSaveContext.weekEventReg[89] & 8) && (gSaveContext.weekEventReg[85] & 0x80)) {
                 this->unk_4EC = func_80BDE7FC;
                 return D_80BDFCBC;
             }
@@ -571,7 +559,7 @@ void func_80BDEFE4(EnAl* this, GlobalContext* globalCtx) {
 
 s32 func_80BDF064(EnAl* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 sp22 = globalCtx->msgCtx.currentTextId;
+    u16 sp22 = globalCtx->msgCtx.unk11F04;
     Actor* sp1C = func_80BDE1A0(this, globalCtx, 4, 0xA4);
     Actor* temp_v0 = func_80BDE1A0(this, globalCtx, 4, 0x234);
 
@@ -635,7 +623,7 @@ s32 func_80BDF064(EnAl* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     s32 ret = false;
     Actor* sp20 = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_GM);
     Actor* temp_v0 = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_TOTO);
@@ -650,16 +638,16 @@ s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     SubS_UpdateFlags(&this->unk_4C2, 3, 7);
 
-    switch (arg2->result) {
+    switch (arg2->unk0) {
         case 1:
             func_80BDE27C(this, 0);
             break;
 
         case 2:
-            this->unk_4F0 = EXCH_ITEM_NONE;
+            this->unk_4F0 = 0;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -667,16 +655,16 @@ s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = EXCH_ITEM_NONE;
+    this->unk_4F0 = 0;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 
-    switch (arg2->result) {
+    switch (arg2->unk0) {
         case 3:
             ret = func_80BDF244(this, globalCtx, arg2);
             break;
@@ -699,15 +687,15 @@ void func_80BDF414(EnAl* this, GlobalContext* globalCtx) {
     switch (this->unk_4EA) {
         case 0:
         case 1:
-            if (!(gSaveContext.save.weekEventReg[89] & 8)) {
-                if (gSaveContext.save.weekEventReg[85] & 0x80) {
+            if (!(gSaveContext.weekEventReg[89] & 8)) {
+                if (gSaveContext.weekEventReg[85] & 0x80) {
                     func_80BDE4E0(this, &this->unk_4EA, 0);
                 }
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[89] & 8) {
+            if (gSaveContext.weekEventReg[89] & 8) {
                 this->unk_4EA++;
             }
             break;
@@ -746,19 +734,20 @@ void func_80BDF578(EnAl* this, GlobalContext* globalCtx) {
 }
 
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
-    ScheduleResult sp20;
+    u32* unk14 = &gSaveContext.unk_14;
+    struct_80133038_arg2 sp20;
 
-    this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
-    if (!Schedule_RunScript(globalCtx, D_80BDFC70, &sp20) ||
-        ((this->unk_35C != sp20.result) && !func_80BDF390(this, globalCtx, &sp20))) {
+    this->unk_4E0 = REG(15) + *unk14;
+    if (!func_80133038(globalCtx, D_80BDFC70, &sp20) ||
+        ((this->unk_35C != sp20.unk0) && !func_80BDF390(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp20.result = 0;
+        sp20.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_35C = sp20.result;
+    this->unk_35C = sp20.unk0;
     this->unk_368 = func_80BDE384(this, globalCtx);
     func_80BDF578(this, globalCtx);
 }
