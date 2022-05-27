@@ -1,7 +1,6 @@
 #ifndef Z64CAMERA_H
 #define Z64CAMERA_H
 
-#include "prevent_bss_reordering.h"
 #include "ultra64.h"
 
 // these two angle conversion macros are slightly inaccurate
