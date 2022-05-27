@@ -291,6 +291,9 @@ static AnimationInfo sAnimations[] = {
     { &gSkullKidLaughAfterSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
+/**
+ * Ensures the correct object for the current animation is in segment 6.
+ */
 void DmStk_LoadObjectForAnimation(DmStk* this, GlobalContext* globalCtx) {
     s32 objectIndex;
 
@@ -323,6 +326,11 @@ void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* ske
                      animation->mode, animation->morphFrames);
 }
 
+/**
+ * Handles sound effects for the first part of the intro cutscene, i.e., the cutscene
+ * that starts when the player start a new game and ends when the screen fades to white
+ * after Skull Kid steals Epona.
+ */
 void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames + 20) {
         case 1195:
@@ -415,6 +423,10 @@ void DmStk_UnusedSouthClockTownCutscene_PlaySound(DmStk* this, GlobalContext* gl
     }
 }
 
+/**
+ * Handles sound effects for the second part of the intro cutscene, i.e., the cutscene
+ * that starts after the fade-to-white and ends when the player gains control.
+ */
 void DmStk_IntroCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 78:
@@ -443,6 +455,10 @@ void DmStk_IntroCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalC
     }
 }
 
+/**
+ * Handles sound effects for the cutscene where Skull Kid steals Majora's Mask from
+ * the Happy Mask Salesman.
+ */
 void DmStk_ObtainingMajorasMaskCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 18:
@@ -459,6 +475,11 @@ void DmStk_ObtainingMajorasMaskCutscene_PlaySound(DmStk* this, GlobalContext* gl
     }
 }
 
+/**
+ * Handles sound effects for the first part of the curse cutscene, i.e., the cutscene
+ * that starts when Link falls down the large hole and ends with a fade-to-black to
+ * the hallucinatory Deku Scrubs scene.
+ */
 void DmStk_CurseCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 415:
@@ -480,6 +501,11 @@ void DmStk_CurseCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCt
     }
 }
 
+/**
+ * Handles sound effects for the second part of the curse cutscene, i.e., the cutscene
+ * that starts once the hallucinatory Deku Scrubs scene is over and ends when the player
+ * gains control.
+ */
 void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -528,6 +554,11 @@ void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalC
     }
 }
 
+/**
+ * Handles sound effects for the intro cutscene at the top of the Clock Tower. Specifically,
+ * it handles the variation of the cutscene that plays the first time the player reaches the
+ * top of the Clock Tower, which is slightly longer.
+ */
 void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
@@ -577,6 +608,9 @@ void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext
     }
 }
 
+/**
+ * Handles sound effects for the cutscene where Skull Kid drops the Ocarina of Time.
+ */
 void DmStk_DroppingOcarinaCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
@@ -584,12 +618,19 @@ void DmStk_DroppingOcarinaCutscene_PlaySound(DmStk* this, GlobalContext* globalC
     }
 }
 
+/**
+ * Handles sound effects for the cutscene where Skull Kid is shivering in the rain.
+ */
 void DmStk_ShiveringInRainCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.frames >= 642) && (globalCtx->csCtx.frames < 845)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
 
+/**
+ * Handles sound effects for the cutscene where Skull Kid is playing with Tatl and Tael
+ * in Termina Field.
+ */
 void DmStk_PlayingWithFairiesCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 58:
@@ -612,6 +653,11 @@ void DmStk_PlayingWithFairiesCutscene_PlaySound(DmStk* this, GlobalContext* glob
     }
 }
 
+/**
+ * Handles sound effects for the first part of the ending cutscene, i.e., the cutscene
+ * that starts after the Dawn of the New Day screen and ends with a fade to black as
+ * the Giants are walking away.
+ */
 void DmStk_EndingCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 5:
@@ -624,6 +670,10 @@ void DmStk_EndingCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalC
     }
 }
 
+/**
+ * Handles sound effects for the second part of the ending cutscene, i.e., the cutscene
+ * that starts after a fade-to-black and ends after the credits start.
+ */
 void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -692,6 +742,11 @@ void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* global
     }
 }
 
+/**
+ * Handles sound effects for the intro cutscene at the top of the Clock Tower. Specifically,
+ * it handles the variation of the cutscene that plays the second or later time the player
+ * reaches the top of the Clock Tower, which is slightly shorter.
+ */
 void DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
@@ -729,6 +784,10 @@ void DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalC
     }
 }
 
+/**
+ * Handles sound effects for the cutscene that plays after the player performs the
+ * Oath to Order at the top of the Clock Tower.
+ */
 void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     this->oathToOrderCutsceneVoicePos.x = this->actor.projectedPos.x;
     this->oathToOrderCutsceneVoicePos.y = this->actor.projectedPos.y;
@@ -799,6 +858,11 @@ void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext*
     }
 }
 
+/**
+ * Handles sound effects for the cutscene before the player warps to the moon. Specifically,
+ * it handles the variation of the cutscene that plays the first time the player warps to the
+ * moon, which is slightly longer.
+ */
 void DmStk_MoonWarpCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
@@ -816,6 +880,11 @@ void DmStk_MoonWarpCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globa
     }
 }
 
+/**
+ * Handles sound effects for the cutscene before the player warps to the moon. Specifically,
+ * it handles the variation of the cutscene that plays the second or later time the player
+ * warps to the moon, which is slightly shorter.
+ */
 void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
@@ -833,6 +902,9 @@ void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext*
     }
 }
 
+/**
+ * Handles sound effects for all cutscenes.
+ */
 void DmStk_PlaySound(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         switch (globalCtx->sceneNum) {
@@ -1056,6 +1128,10 @@ void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 }
 
+/**
+ * Waits around until the player zooms the telescope in on Skull Kid,
+ * then starts the telescope cutscene.
+ */
 void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx) {
     Vec3f sp1C;
 
@@ -1070,6 +1146,9 @@ void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Plays the cutscene in the telescope where the Moon's Tear falls.
+ */
 void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx) {
     s16 sp1E = this->actor.cutscene;
     s16 sp1C = ActorCutscene_GetAdditionalCutscene(sp1E);
@@ -1149,6 +1228,9 @@ void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext
     }
 }
 
+/**
+ * Makes Skull Kid bob up and down and face the player.
+ */
 void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sin;
@@ -1164,6 +1246,10 @@ void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, GlobalContext* global
     this->actor.shape.rot.x = this->actor.world.rot.x;
 }
 
+/**
+ * Starts the deflection animation and, depending on how many times Skull Kid has been hit,
+ * prints a message taunting the player.
+ */
 void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1183,6 +1269,10 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
     this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
 }
 
+/**
+ * Resets Skull Kid back to his idle state once the deflection animation ends.
+ * If he is hit again before the animation ends, this function will make his deflection restart.
+ */
 void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx) {
     DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -1596,6 +1686,13 @@ void DmStk_UpdateCollision(DmStk* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
+/**
+ * Handles Skull Kid when he is at the top of the Clock Tower with the Ocarina of Time.
+ * If he is hit in this state, he will drop the Ocarina.
+ *
+ * If the player waits a while while Skull Kid is in this state, they will see a message
+ * from Tatl telling them to hurry up and do something.
+ */
 void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1618,6 +1715,11 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Handles Skull Kid when he is at the top of the Clock Tower after the Ocarina of Time
+ * has been returned to the player.
+ * If he is hit in this state, he will just deflect the attack.
+ */
 void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
