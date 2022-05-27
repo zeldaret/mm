@@ -87,7 +87,7 @@ void DemoTreLgt_Wait(DemoTreLgt* this, GlobalContext* globalCtx) {
     EnBox* chest = (EnBox*)this->actor.parent;
 
     if (chest != NULL) {
-        if (Animation_OnFrame(&chest->skelAnime, 10.0f) != 0) {
+        if (Animation_OnFrame(&chest->skelAnime, 10.0f)) {
             DemoTreLgt_SetupAnimate(this, globalCtx, chest->skelAnime.curFrame);
         }
     }

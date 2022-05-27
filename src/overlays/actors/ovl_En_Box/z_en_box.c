@@ -139,12 +139,12 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
             }
             temp_f28 = (Math_CosS(temp_s0 * 0x9A6) * 45.0f) + arg0->pos.z;
             Matrix_Translate(2.0f * Rand_Centered() + temp_f30, 2.0f * Rand_Centered() + phi_f24,
-                                     2.0f * Rand_Centered() + temp_f28, 0);
-            Matrix_Scale(temp_f26, temp_f26, temp_f26, 1);
+                             2.0f * Rand_Centered() + temp_f28, MTXMODE_NEW);
+            Matrix_Scale(temp_f26, temp_f26, temp_f26, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
             func_8012C2DC(globalCtx->state.gfxCtx);
-            Matrix_Mult(&globalCtx->billboardMtxF, 1);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
@@ -281,8 +281,8 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z = 0;
 
     SkelAnime_Init(globalCtx, &this->skelAnime, &gBoxChestSkel, &gBoxChestOpenAnim, this->jointTable, this->morphTable,
-                   5);
-    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, 2, 0.0f);
+                   OBJECT_BOX_CHEST_LIMB_MAX);
+    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, ANIMMODE_ONCE, 0.0f);
     if (Actor_IsSmallChest(this)) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
         Actor_SetFocus(&this->dyna.actor, 20.0f);
@@ -476,7 +476,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
         }
 
         frameCount = Animation_GetLastFrame(animHeader);
-        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
         EnBox_SetupAction(this, EnBox_Open);
         if (this->unk_1EC > 0) {
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_DEMO_TRE_LGT,
@@ -551,7 +551,8 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
 
         if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
             sfxId = NA_SE_EV_TBOX_UNLOCK;
-        } else if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
+        } else if (Animation_OnFrame(&this->skelAnime,
+                                     gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
         if (sfxId != 0) {

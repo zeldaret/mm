@@ -2,6 +2,7 @@
 #define Z_EN_BOX_H
 
 #include "global.h"
+#include "objects/object_box/object_box.h"
 
 struct EnBox;
 struct func_80867BDC_a0;
@@ -39,11 +40,11 @@ typedef struct EnBox {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ SkelAnime skelAnime;
     /* 0x01A0 */ s32 unk_1A0;
-    /* 0x01A4 */ char unk_1A4[0x04];
+    /* 0x01A4 */ UNK_TYPE1 unk_1A4[0x04];
     /* 0x01A8 */ f32 unk_1A8;
     /* 0x01AC */ EnBoxActionFunc actionFunc;
-    /* 0x01B0 */ Vec3s jointTable[5];
-    /* 0x01CE */ Vec3s morphTable[5];
+    /* 0x01B0 */ Vec3s jointTable[OBJECT_BOX_CHEST_LIMB_MAX];
+    /* 0x01CE */ Vec3s morphTable[OBJECT_BOX_CHEST_LIMB_MAX];
     /* 0x01EC */ s16 unk_1EC;
     /* 0x01EE */ u8 movementFlags;
     /* 0x01EF */ u8 alpha;
