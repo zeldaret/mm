@@ -1150,18 +1150,18 @@ void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx) {
  * Plays the cutscene in the telescope where the Moon's Tear falls.
  */
 void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx) {
-    s16 sp1E = this->actor.cutscene;
-    s16 sp1C = ActorCutscene_GetAdditionalCutscene(sp1E);
-    s16 sp18 = ActorCutscene_GetAdditionalCutscene(sp1C);
+    s16 dayOneAndTwoCutscene = this->actor.cutscene;
+    s16 dayThreeCutscene = ActorCutscene_GetAdditionalCutscene(dayOneAndTwoCutscene);
+    s16 finalHoursCutscene = ActorCutscene_GetAdditionalCutscene(dayThreeCutscene);
     s16 cutscene;
 
     if (gSaveContext.save.day < 3) {
-        cutscene = sp1E;
+        cutscene = dayOneAndTwoCutscene;
     } else if ((gSaveContext.save.weekEventReg[8] & 0x40) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
-        cutscene = sp18;
+        cutscene = finalHoursCutscene;
     } else {
-        cutscene = sp1C;
+        cutscene = dayThreeCutscene;
     }
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
@@ -1286,6 +1286,10 @@ void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalC
     }
 }
 
+/**
+ * Updates a variety of state based on Skull Kid's current cutscene, including his current
+ * animation, his hand/mask type, his fade in/fade out state, and his current cutscene action.
+ */
 void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 actorActionIndex;
