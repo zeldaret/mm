@@ -100,7 +100,7 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 numPo
 s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* timeElapsed, s32 waypointTime, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
 void SubS_TimePathing_ComputeInitialY(struct GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point);
 
-Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 max);
+Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 limit);
 
 Actor* SubS_FindNearestActor(Actor* actor, struct GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
 

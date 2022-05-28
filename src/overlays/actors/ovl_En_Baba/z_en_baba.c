@@ -140,7 +140,7 @@ static u8 sSchedule[] = {
     /* 0x1D */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static s32 sAdditionalTimePaths[] = { -1, -1, 0 };
+static s32 sSearchTimePathLimit[] = { -1, -1, 0 };
 
 static TurnOptionsSet sTurnOptions = {
     { 0xFA0, 4, 1, 3 },
@@ -344,17 +344,18 @@ void EnBaba_UpdateModel(EnBaba* this, GlobalContext* globalCtx) {
 s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
     u16 now = SCHEDULE_TIME_NOW;
     u16 startTime;
-    u8 path = ENBABA_GET_PATH(&this->actor);
+    u8 pathIndex = ENBABA_GET_PATH_INDEX(&this->actor);
+    u16 numWaypoints;
 
-    if (sAdditionalTimePaths[scheduleResult->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(globalCtx, path, sAdditionalTimePaths[scheduleResult->result]);
+    if (sSearchTimePathLimit[scheduleResult->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(globalCtx, pathIndex, sSearchTimePathLimit[scheduleResult->result]);
     }
 
     if (this->timePath == NULL) {
         return false;
     }
 
-    if ((this->scheduleResult != 0) && (this->timePathTimeSpeed >= 0)) {
+    if ((this->scheduleResult != BABA_SCHEDULE_RESULT_NONE) && (this->timePathTimeSpeed >= 0)) {
         startTime = now;
     } else {
         startTime = scheduleResult->time0;
@@ -368,8 +369,8 @@ s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* 
 
     this->timePathElapsedTime = now - startTime;
 
-    startTime = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1); // startTime resused to store total waypoints
-    this->timePathWaypointTime = this->timePathTotalTime / startTime;
+    numWaypoints = startTime = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / numWaypoints;
 
     this->timePathIsSetup = false;
     this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
@@ -402,11 +403,12 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     Vec3f worldPos;
     Vec3f timePathPointNew; // used to compute yaw after update
     Vec3f timePathPoint;    // used in setup and to store a backup before update
-    s32 timePathElapsedTime = 0;
-    s32 timePathWaypoint = 0;
+    s32 prevTimePathElapsedTime = 0;
+    s32 prevTimePathWaypoint = 0;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
+                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
 
     if (!this->timePathIsSetup) {
         timePathPoint = gZeroVec3f;
@@ -425,8 +427,8 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = timePathPoint.z;
 
     if (SubS_InCsMode(globalCtx)) {
-        timePathElapsedTime = this->timePathElapsedTime;
-        timePathWaypoint = this->timePathWaypoint;
+        prevTimePathElapsedTime = this->timePathElapsedTime;
+        prevTimePathWaypoint = this->timePathWaypoint;
         timePathPoint = this->actor.world.pos;
     }
 
@@ -443,8 +445,8 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     }
 
     if (SubS_InCsMode(globalCtx)) {
-        this->timePathElapsedTime = timePathElapsedTime;
-        this->timePathWaypoint = timePathWaypoint;
+        this->timePathElapsedTime = prevTimePathElapsedTime;
+        this->timePathWaypoint = prevTimePathWaypoint;
         this->timePathPoint = timePathPoint;
     }
 
@@ -487,7 +489,7 @@ void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BA9758;
     } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
         if ((ENBABA_GET_TYPE(&this->actor) == ENBABA_TYPE_FOLLOW_SCHEDULE) &&
-            (gSaveContext.save.entranceIndex != 0xD670) && (ENBABA_GET_PATH(&this->actor) != 0x3F)) {
+            (gSaveContext.save.entranceIndex != 0xD670) && (ENBABA_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_MarkForDeath(&this->actor);
@@ -525,7 +527,7 @@ void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
             this->animIndex = BABA_ANIM_SWAY;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
-        } else if (ENBABA_GET_PATH(&this->actor) != 0x3F) {
+        } else if (ENBABA_GET_PATH_INDEX(&this->actor) != 0x3F) {
             this->animIndex = BABA_ANIM_WALKING_HOLDING_BAG;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
             this->actionFunc = EnBaba_Walk;
@@ -702,7 +704,7 @@ void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(globalCtx, ENBABA_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENBABA_GET_PATH_INDEX(&this->actor), 0x3F);
 
     Actor_SetScale(&this->actor, 0.01f);
 

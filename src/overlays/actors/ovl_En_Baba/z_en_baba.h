@@ -8,7 +8,7 @@ struct EnBaba;
 
 typedef void (*EnBabaActionFunc)(struct EnBaba*, GlobalContext*);
 
-#define ENBABA_GET_PATH(thisx) (((thisx)->params & 0x3F00) >> 8)
+#define ENBABA_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
 #define ENBABA_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)
 
 // Types ENBABA_TYPE_FOLLOW_SCHEDULE and 1 can only be used in SCENE_BACKTOWN

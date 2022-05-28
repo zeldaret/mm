@@ -507,9 +507,10 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
-    s32 idx = arg2->result - 1;
+    s32 index = arg2->result - 1;
+    u16 tmp;
 
-    this->timePath = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
+    this->timePath = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[index + 1]);
     if (this->timePath == NULL) {
         return false;
     }
@@ -522,8 +523,8 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
 
     this->timePathTotalTime = arg2->time1 - phi_a1;
     this->timePathElapsedTime = sp1E - phi_a1;
-    phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
-    this->timePathWaypointTime = this->timePathTotalTime / phi_a1;
+    tmp = phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / tmp;
     this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->unk_3CE &= ~4;
     this->unk_3CE &= ~8;

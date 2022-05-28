@@ -675,14 +675,12 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 
 s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
     u16 sp26 = SCHEDULE_TIME_NOW;
-    u16 pad1;
-    u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
-    u16 pad2;
-    s32 sp1C = D_80BAE8F8[scheduleResult->result];
     u16 phi_a0;
+    u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
+    u16 tmp;
 
-    if (sp1C >= 0) {
-        this->timePath = SubS_GetAdditionalPath(globalCtx, sp23, sp1C);
+    if (D_80BAE8F8[scheduleResult->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAE8F8[scheduleResult->result]);
     }
     if (this->timePath == NULL) {
         return 0;
@@ -698,9 +696,9 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* sch
         this->timePathTotalTime = scheduleResult->time1 - phi_a0;
     }
     this->timePathElapsedTime = sp26 - phi_a0;
-    phi_a0 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    tmp = phi_a0 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
     this->unk42C = 0;
-    this->timePathWaypointTime = this->timePathTotalTime / phi_a0;
+    this->timePathWaypointTime = this->timePathTotalTime / tmp;
     this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->unk430 = 0;
     return 1;
