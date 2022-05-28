@@ -40,8 +40,8 @@ typedef struct EnSuttari {
     /* 0x3F6 */ s16 unk3F6;
     /* 0x3F8 */ Vec3f unk3F8;
     /* 0x404 */ Path* timePath;
-    /* 0x408 */ Vec3f timePathPoint;
-    /* 0x414 */ f32 timePathWeightVal;
+    /* 0x408 */ Vec3f timePathTargetPos;
+    /* 0x414 */ f32 timePathProgress;
     /* 0x418 */ s32 timePathTotalTime;
     /* 0x41C */ s32 timePathWaypointTime;
     /* 0x420 */ s32 timePathWaypoint;

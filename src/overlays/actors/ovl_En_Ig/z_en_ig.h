@@ -20,8 +20,8 @@ typedef struct EnIg {
     /* 0x01D0 */ ColliderCylinder collider1;
     /* 0x021C */ ColliderSphere collider2;
     /* 0x0274 */ Path* timePath;
-    /* 0x0278 */ Vec3f timePathPoint;
-    /* 0x0284 */ f32 timePathWeightVal;
+    /* 0x0278 */ Vec3f timePathTargetPos;
+    /* 0x0284 */ f32 timePathProgress;
     /* 0x0288 */ s32 timePathTotalTime;
     /* 0x028C */ s32 timePathWaypointTime;
     /* 0x0290 */ s32 timePathWaypoint;

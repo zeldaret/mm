@@ -79,9 +79,9 @@ void func_80953B40(BgIngate* this) {
         this->timePathTotalTime = 0x7D0;
         this->timePathTimeSpeed = 1;
     }
-    temp = this->timePath->count - 2;
+    temp = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
     this->timePathWaypointTime = this->timePathTotalTime / temp;
-    this->timePathWaypoint = 2;
+    this->timePathWaypoint = SUBS_TIME_PATHING_ORDER - 1;
     this->timePathElapsedTime = 0;
     this->unk160 &= ~0x1;
     this->unk160 &= ~0x2;
@@ -91,29 +91,30 @@ s32 func_80953BEC(BgIngate* this) {
     f32 weightArray[265];
     Vec3f sp68;
     Vec3f sp5C;
-    Vec3f timePathPoint;
+    Vec3f timePathTargetPos;
     s16 yaw;
 
-    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
+                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk160 & 1)) {
-        timePathPoint = gZeroVec3f;
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+        timePathTargetPos = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathPoint, this->timePathTimeSpeed);
+                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
         this->unk160 |= 1;
     } else {
-        timePathPoint = this->timePathPoint;
+        timePathTargetPos = this->timePathTargetPos;
     }
-    this->dyna.actor.world.pos.x = timePathPoint.x;
-    this->dyna.actor.world.pos.z = timePathPoint.z;
-    this->timePathPoint = gZeroVec3f;
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+    this->dyna.actor.world.pos.x = timePathTargetPos.x;
+    this->dyna.actor.world.pos.z = timePathTargetPos.z;
+    this->timePathTargetPos = gZeroVec3f;
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
+                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk160 |= 2;
     } else {
         sp68 = this->dyna.actor.world.pos;
-        sp5C = this->timePathPoint;
+        sp5C = this->timePathTargetPos;
         yaw = Math_Vec3f_Yaw(&sp68, &sp5C);
         this->dyna.actor.world.rot.y = yaw;
         this->dyna.actor.shape.rot.y = yaw;
