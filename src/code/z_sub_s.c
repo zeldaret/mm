@@ -216,18 +216,18 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 /**
  * Fills the weightArray to be used with time paths
  *
- * @param weightArray an array of values that are used to compute the weightVal and the individual weights
- * @param numPoints the number of points considered with weights
- * @param len the length to fill the array, generally the path count + numPoints
+ * @param[out] weightArray an array of values that are used to compute the progress and the individual weights
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
+ * @param[in] numPoints the number of points to fill, generally the path count + order
  *
- * @note `SubS_TimePathing_Update` assumes numPoints to be 3
+ * @note `SubS_TimePathing_Update` assumes order to be 3, see SUBS_TIME_PATHING_ORDER
  */
-void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len) {
+void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoints) {
     s32 i;
     f32 val = 0.0f;
 
-    for (i = 0; i < len; i++) {
-        if ((i >= numPoints) && (i < (len - numPoints + 1))) {
+    for (i = 0; i < numPoints; i++) {
+        if ((i >= order) && (i < (numPoints - order + 1))) {
             val += 1.0f;
         }
         weightArray[i] = val;
@@ -235,37 +235,40 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len)
 }
 
 /**
- * Computes the weightVal to be used with time paths
+ * Computes the progress to be used with time paths
  *
- * @param weightVal the main weight value used to compute the weights for the points considered
- * @param elapsedTime how much time has passed
- * @param waypointTime how much time per each waypoint
- * @param totalTime how much time the path should take to travel
- * @param pathCount the path count
- * @param numPoints the number of points considered when computing the next point to move to
- * @param weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[out] progress the progress along the path, used to compute the weights
+ * @param[in] elapsedTime how much time has passed
+ * @param[in] waypointTime how much time per each waypoint
+ * @param[in] totalTime how much time the path should take to travel
+ * @param[in] pathCount the path count
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
+ * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
-                                      s32 numPoints, f32 weightArray[]) {
+s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
+                                     s32 order, f32 weightArray[]) {
     s32 i;
     s32 j;
     s32 k;
-    f32 weightValMultiplier;
+    f32 waypointTimeInv; // The fraction of a waypoint a single unit of time contains
 
-    *weightVal = 0.0f;
+    *progress = 0.0f;
     if ((waypointTime <= 0) || (elapsedTime < 0)) {
         return 0;
     }
-    weightValMultiplier = 1.0f / waypointTime;
+
+    // When using the weightArray from `SubS_TimePathing_FillWeightArray` these nested loops seem to simplify to
+    // *progress = (f32)elapsedTime / (f32)waypointTime;
+    waypointTimeInv = 1.0f / waypointTime;
     k = 0;
-    for (i = numPoints - 1; i < pathCount; i++) {
+    for (i = order - 1; i < pathCount; i++) {
         for (j = 0; j < waypointTime; j++) {
             if (k == elapsedTime) {
                 break;
             }
-            *weightVal += (weightArray[i + 1] - weightArray[i]) * weightValMultiplier;
+            *progress += (weightArray[i + 1] - weightArray[i]) * waypointTimeInv;
             k++;
         }
     }
@@ -273,62 +276,62 @@ s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 elapsedTime, s32 waypo
 }
 
 /**
- * Computes the weights to be used with time paths
+ * Computes the interpolation weights to be used with time paths
  *
- * @param numPoints the number of points considered when computing the next point to move to, max is 11
- * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
- * @param waypoint the current time relative to the start time of the path
- * @param weightArray see `SubS_TimePathing_FillWeightArray`
- * @param weights how much to weight each point considered
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 11
+ * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[in] waypoint the current waypoint
+ * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[out] weights how much to weight each point considered
  */
-void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]) {
+void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 weightArray[], f32 weights[]) {
     f32 weightsTemp[10][11];
     s32 i;
     s32 j;
     s32 k;
 
-    for (i = 0; i < numPoints; i++) {
-        for (j = 0; j < numPoints + 1; j++) {
+    for (i = 0; i < order; i++) {
+        for (j = 0; j < order + 1; j++) {
             weightsTemp[i][j] = 0.0f;
         }
     }
 
-    weightsTemp[0][numPoints - 1] = 1.0f;
+    weightsTemp[0][order - 1] = 1.0f;
 
-    for (i = 1; i < numPoints; i++) {
-        for (j = waypoint - i, k = (numPoints - 1) - i; j <= waypoint; j++, k++) {
+    for (i = 1; i < order; i++) {
+        for (j = waypoint - i, k = (order - 1) - i; j <= waypoint; j++, k++) {
             if (weightArray[j + i] != weightArray[j]) {
                 weightsTemp[i][k] =
-                    ((weightVal - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * weightsTemp[i - 1][k];
+                    ((progress - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * weightsTemp[i - 1][k];
             } else {
                 weightsTemp[i][k] = 0.0f;
             }
 
             if (weightArray[j + i + 1] != weightArray[j + 1]) {
                 weightsTemp[i][k] +=
-                    ((weightArray[j + i + 1] - weightVal) / (weightArray[j + i + 1] - weightArray[j + 1])) *
+                    ((weightArray[j + i + 1] - progress) / (weightArray[j + i + 1] - weightArray[j + 1])) *
                     weightsTemp[i - 1][k + 1];
             }
         }
     }
-    for (j = 0; j < numPoints; j++) {
-        weights[j] = weightsTemp[numPoints - 1][j];
+    for (j = 0; j < order; j++) {
+        weights[j] = weightsTemp[order - 1][j];
     }
 }
 
 /**
- * Computes the X and Z component of the point to move to in time based paths
+ * Computes the X and Z component of the position to move to in time based paths
  *
- * @param x
- * @param z
- * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
- * @param numPoints the number of points considered when computing the next point to move to, max is 11
- * @param waypoint the current time relative to the start time of the path
- * @param points the path's points
- * @param weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[out] x
+ * @param[out] z
+ * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[in] order the number of points considered when computing the next point to move to, max is 11
+ * @param[in] waypoint the current waypoint
+ * @param[in] points the path's points
+ * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
  */
-void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[],
-                                     f32 weightArray[]) {
+void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[],
+                                         f32 weightArray[]) {
     f32 xPos;
     f32 zPos;
     f32 weights[11];
@@ -337,14 +340,14 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
     f32 weightedTotal;
     s32 i;
 
-    SubS_TimePathing_ComputeWeights(numPoints, weightVal, waypoint, weightArray, weights);
+    SubS_TimePathing_ComputeWeights(order, progress, waypoint, weightArray, weights);
     weightedTotal = 0.0f;
     weightedZ = 0.0f;
     weightedX = 0.0f;
 
-    for (i = 0; i < numPoints; i++) {
-        xPos = points[waypoint - numPoints + i + 1].x;
-        zPos = points[waypoint - numPoints + i + 1].z;
+    for (i = 0; i < order; i++) {
+        xPos = points[waypoint - order + i + 1].x;
+        zPos = points[waypoint - order + i + 1].z;
 
         weightedX += weights[i] * xPos;
         weightedZ += weights[i] * zPos;
@@ -360,20 +363,20 @@ void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoint
  *  - Updating the waypoint
  *  - Updating the time
  *
- * @param path
- * @param weightVal see `SubS_TimePathing_ComputeWeightVal`
- * @param elapsedTime how much time has passed
- * @param waypointTime how much time per each waypoint
- * @param totalTime how much time the path should take to travel
- * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
- * @param weightArray see `SubS_TimePathing_FillWeightArray`
- * @param point the computed point to move to
- * @param timeSpeed how fast time moves
+ * @param[in] path
+ * @param[out] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[in,out] elapsedTime how much time has passed
+ * @param[in] waypointTime how much time per each waypoint
+ * @param[in] totalTime how much time the path should take to travel
+ * @param[in,out] waypoint the current waypoint, this and the previous two points will be used to compute the targetPos
+ * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[out] targetPos the computed position to move to
+ * @param[in] timeSpeed how fast time moves
  *
  * @return s32 returns true when the end has been reached.
  */
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* elapsedTime, s32 waypointTime, s32 totalTime,
-                            s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed) {
+s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint,
+                            f32 weightArray[], Vec3f* targetPos, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
     f32 endX;
@@ -383,20 +386,21 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* elapsedTime, s32 wa
     if (*waypoint >= path->count) {
         state = 2;
     } else {
-        state = SubS_TimePathing_ComputeWeightVal(weightVal, *elapsedTime, waypointTime, totalTime, path->count, 3,
-                                                  weightArray);
+        state = SubS_TimePathing_ComputeProgress(progress, *elapsedTime, waypointTime, totalTime, path->count,
+                                                 SUBS_TIME_PATHING_ORDER, weightArray);
     }
 
     switch (state) {
         case 1: // Haven't reached the end of the path
             reachedEnd = false;
-            SubS_TimePathing_ComputePointXZ(&point->x, &point->z, *weightVal, 3, *waypoint, points, weightArray);
+            SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
+                                                *waypoint, points, weightArray);
             break;
         case 2: // Have reached the end of the path
             endX = points[path->count - 1].x;
             endZ = points[path->count - 1].z;
-            point->x = endX * 1;
-            point->z = endZ * 1;
+            targetPos->x = endX * 1;
+            targetPos->z = endZ * 1;
             reachedEnd = true;
             break;
     }
@@ -407,7 +411,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* elapsedTime, s32 wa
     } else if (*elapsedTime < 0) {
         *elapsedTime = 0;
     }
-    *waypoint = (*elapsedTime / waypointTime) + 2;
+    *waypoint = (*elapsedTime / waypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
 
     return reachedEnd;
 }
@@ -415,17 +419,17 @@ s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* elapsedTime, s32 wa
 /**
  * Computes the initial Y component of a time based path
  *
- * @param globalCtx
- * @param path
- * @param waypoint the current waypoint, this and the previous two points will be used to compute the point
- * @param point the computed point, only the Y component has meaning
+ * @param[in] globalCtx
+ * @param[in] path
+ * @param[in] waypoint the current waypoint, this and the previous two points will be used to compute the target pos
+ * @param[out] targetPos the computed position to move to, only the Y component has meaning
  */
-void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point) {
+void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* targetPos) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f posA;
     Vec3f posB;
     Vec3f posResult;
-    s32 i = waypoint - 2;
+    s32 i = waypoint - (SUBS_TIME_PATHING_ORDER - 1);
     s16 max;
     s16 min;
     s32 isSetup;
@@ -450,13 +454,13 @@ void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 
     }
     max += 30;
     min -= 30;
-    posA = *point;
-    posB = *point;
+    posA = *targetPos;
+    posB = *targetPos;
     posA.y = max;
     posB.y = min;
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true,
                                 &bgId)) {
-        point->y = posResult.y;
+        targetPos->y = posResult.y;
     }
 }
 
@@ -602,12 +606,12 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
  * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to compute the point
  * @param point the point computed
- * @param weightVal the main weight value used to compute the weights for the points considered
+ * @param progress the main weight value used to compute the weights for the points considered
  * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
  *
  * @note only computes X and Z components of the point
  */
-s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 weightVal, s32 direction) {
+s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction) {
     s32 i;
     f32 weight0;
     f32 weight1;
@@ -619,7 +623,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
     s32 firstPoint;
     f32 xPoints[4];
     f32 zPoints[4];
-    f32 oneMinusWeightVal;
+    f32 oneMinusProgress;
     f32 squared;
     f32 cubed;
     Vec3s* points;
@@ -671,45 +675,45 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
         firstPoint = count - 3;
     }
     if (waypoint == lastPoint) {
-        oneMinusWeightVal = 1.0f - weightVal;
-        squared = weightVal * weightVal;
-        cubed = weightVal * squared;
-        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal;
-        weight1 = (1.75f * cubed) - (4.5f * squared) + (3.0f * weightVal);
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = progress * squared;
+        weight0 = oneMinusProgress * oneMinusProgress * oneMinusProgress;
+        weight1 = (1.75f * cubed) - (4.5f * squared) + (3.0f * progress);
         weight2 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
         weight3 = (1.0f / 6.0f) * cubed;
     } else if (waypoint == secondLastPoint) {
-        oneMinusWeightVal = 1.0f - weightVal;
-        squared = weightVal * weightVal;
-        cubed = weightVal * squared;
-        weight0 = oneMinusWeightVal * oneMinusWeightVal * oneMinusWeightVal * ((void)0, 0.25f); //! FAKE:
-        weight1 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * weightVal) + (7.0f / 12.0f);
-        weight2 = (-0.5f * cubed) + (0.5f * squared) + (weightVal * 0.5f) + (1.0f / 6.0f);
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = progress * squared;
+        weight0 = oneMinusProgress * oneMinusProgress * oneMinusProgress * ((void)0, 0.25f); //! FAKE:
+        weight1 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * progress) + (7.0f / 12.0f);
+        weight2 = (-0.5f * cubed) + (0.5f * squared) + (progress * 0.5f) + (1.0f / 6.0f);
         weight3 = cubed * (1.0f / 6.0f);
     } else if (waypoint == secondPoint) {
-        oneMinusWeightVal = 1.0f - weightVal;
-        squared = oneMinusWeightVal * oneMinusWeightVal;
-        cubed = oneMinusWeightVal * squared;
+        oneMinusProgress = 1.0f - progress;
+        squared = oneMinusProgress * oneMinusProgress;
+        cubed = oneMinusProgress * squared;
         weight0 = (1.0f / 6.0f) * cubed;
-        weight1 = (-0.5f * cubed) + (0.5f * squared) + (0.5f * oneMinusWeightVal) + (1.0f / 6.0f);
-        weight2 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * oneMinusWeightVal) + (7.0f / 12.0f);
-        weight3 = weightVal * weightVal * weightVal * 0.25f;
+        weight1 = (-0.5f * cubed) + (0.5f * squared) + (0.5f * oneMinusProgress) + (1.0f / 6.0f);
+        weight2 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * oneMinusProgress) + (7.0f / 12.0f);
+        weight3 = progress * progress * progress * 0.25f;
     } else if (((direction == 1) && (firstPoint >= waypoint)) || ((direction != 1) && (waypoint >= firstPoint))) {
-        oneMinusWeightVal = 1.0f - weightVal;
-        squared = oneMinusWeightVal * oneMinusWeightVal;
-        cubed = oneMinusWeightVal * squared;
+        oneMinusProgress = 1.0f - progress;
+        squared = oneMinusProgress * oneMinusProgress;
+        cubed = oneMinusProgress * squared;
         weight0 = (1.0f / 6.0f) * cubed;
         weight1 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
-        weight2 = (1.75f * cubed) - (4.5f * squared) + (3.0f * oneMinusWeightVal);
-        weight3 = weightVal * weightVal * weightVal;
+        weight2 = (1.75f * cubed) - (4.5f * squared) + (3.0f * oneMinusProgress);
+        weight3 = progress * progress * progress;
     } else {
-        oneMinusWeightVal = 1.0f - weightVal;
-        squared = weightVal * weightVal;
-        cubed = squared * weightVal;
-        weight0 = oneMinusWeightVal * oneMinusWeightVal;
-        weight0 = oneMinusWeightVal * weight0 / 6.0f;
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = squared * progress;
+        weight0 = oneMinusProgress * oneMinusProgress;
+        weight0 = oneMinusProgress * weight0 / 6.0f;
         weight1 = (cubed * 0.5f) - squared + (2.0f / 3.0f);
-        weight2 = (cubed / -2.0f) + (squared * 0.5f) + (weightVal * 0.5f) + (1.0f / 6.0f);
+        weight2 = (cubed / -2.0f) + (squared * 0.5f) + (progress * 0.5f) + (1.0f / 6.0f);
         weight3 = cubed / 6.0f;
     }
     point->x = (weight0 * xPoints[0]) + (weight1 * xPoints[1]) + (weight2 * xPoints[2]) + (weight3 * xPoints[3]);
@@ -724,7 +728,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
  * @param actor
  * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to move forward
- * @param weightVal the main weight value used to compute the weights for the points considered
+ * @param progress the progress towards a given waypoint, used to compute the weights
  * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
  * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
  *
@@ -732,7 +736,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
  *
  * @note this function is unused
  */
-s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weightVal, s32 direction, s32 returnStart) {
+s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart) {
     Vec3f worldPos = actor->world.pos;
     Vec3f velocity = actor->velocity;
     Vec3f point;
@@ -742,7 +746,7 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weight
         return false;
     }
     while (true) {
-        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *weightVal, direction) ||
+        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *progress, direction) ||
             ((s32)(actor->speedXZ * 10000.0f) == 0)) {
             return false;
         }
@@ -752,8 +756,8 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weight
         if (Math_Vec3f_DistXZ(&actor->world.pos, &point) < dist) {
             break;
         }
-        *weightVal += 0.1f;
-        if (*weightVal >= 1.1f) {
+        *progress += 0.1f;
+        if (*progress >= 1.1f) {
             if (direction != 1) {
                 (*waypoint)++;
                 if (*waypoint >= (path->count - 2)) {
@@ -773,7 +777,7 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weight
                     }
                 }
             }
-            *weightVal = 0.0f;
+            *progress = 0.0f;
         }
         actor->world.pos = worldPos;
         actor->velocity = velocity;

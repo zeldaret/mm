@@ -387,25 +387,26 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     f32 weightArray[265];
     Vec3f sp94;
     Vec3f sp88;
-    Vec3f timePathPoint;
+    Vec3f timePathTargetPos;
     s32 sp78;
     s32 sp74;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
+                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk_3CE & 4)) {
-        timePathPoint = gZeroVec3f;
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+        timePathTargetPos = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathPoint, this->timePathTimeSpeed);
-        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
-        this->actor.world.pos.y = timePathPoint.y;
+                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
+        this->actor.world.pos.y = timePathTargetPos.y;
     } else {
-        timePathPoint = this->timePathPoint;
+        timePathTargetPos = this->timePathTargetPos;
     }
 
-    this->actor.world.pos.x = timePathPoint.x;
-    this->actor.world.pos.z = timePathPoint.z;
+    this->actor.world.pos.x = timePathTargetPos.x;
+    this->actor.world.pos.z = timePathTargetPos.z;
 
     if (!(this->unk_3CE & 4)) {
         Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
@@ -415,25 +416,25 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     if ((globalCtx->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
         sp78 = this->timePathElapsedTime;
         sp74 = this->timePathWaypoint;
-        timePathPoint = this->actor.world.pos;
+        timePathTargetPos = this->actor.world.pos;
     }
 
-    this->timePathPoint = gZeroVec3f;
+    this->timePathTargetPos = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
+                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_3CE |= 8;
     } else {
         sp94 = this->actor.world.pos;
-        sp88 = this->timePathPoint;
+        sp88 = this->timePathTargetPos;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp94, &sp88);
     }
 
     if ((globalCtx->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
         this->timePathElapsedTime = sp78;
         this->timePathWaypoint = sp74;
-        this->timePathPoint = timePathPoint;
+        this->timePathTargetPos = timePathTargetPos;
     }
 
     door = NULL;
@@ -509,7 +510,7 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 idx = arg2->result - 1;
 
     this->timePath = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
-    if (this->timePath == 0) {
+    if (this->timePath == NULL) {
         return false;
     }
 
@@ -521,9 +522,9 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
 
     this->timePathTotalTime = arg2->time1 - phi_a1;
     this->timePathElapsedTime = sp1E - phi_a1;
-    phi_a1 = this->timePath->count - 2;
+    phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
     this->timePathWaypointTime = this->timePathTotalTime / phi_a1;
-    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
+    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->unk_3CE &= ~4;
     this->unk_3CE &= ~8;
     return true;

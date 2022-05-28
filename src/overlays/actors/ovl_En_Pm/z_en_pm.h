@@ -17,8 +17,8 @@ typedef struct EnPm {
     /* 0x0190 */ ColliderCylinder colliderCylinder;
     /* 0x01DC */ ColliderSphere colliderSphere;
     /* 0x0234 */ Path* timePath;
-    /* 0x0238 */ Vec3f timePathPoint;
-    /* 0x0244 */ f32 timePathWeightVal;
+    /* 0x0238 */ Vec3f timePathTargetPos;
+    /* 0x0244 */ f32 timePathProgress;
     /* 0x0248 */ s32 timePathTotalTime;
     /* 0x024C */ s32 timePathWaypointTime;
     /* 0x0250 */ s32 timePathWaypoint;

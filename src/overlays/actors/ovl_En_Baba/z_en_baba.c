@@ -368,11 +368,11 @@ s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* 
 
     this->timePathElapsedTime = now - startTime;
 
-    startTime = this->timePath->count - 2; // startTime resused to store total waypoints
+    startTime = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1); // startTime resused to store total waypoints
     this->timePathWaypointTime = this->timePathTotalTime / startTime;
 
     this->timePathIsSetup = false;
-    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
+    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->timePathHasReachedEnd = false;
 
     return true;
@@ -406,12 +406,12 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     s32 timePathWaypoint = 0;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
 
     if (!this->timePathIsSetup) {
         timePathPoint = gZeroVec3f;
 
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &timePathPoint, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
@@ -432,7 +432,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
 
     this->timePathPoint = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
         this->timePathHasReachedEnd = true;

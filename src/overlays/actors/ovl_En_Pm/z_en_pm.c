@@ -1307,9 +1307,10 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
         }
 
         this->timePathElapsedTime = sp2E - phi_v1;
-        phi_v1 = this->timePath->count - 2;
+        phi_v1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
         this->timePathWaypointTime = this->timePathTotalTime / phi_v1;
-        this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
+        this->timePathWaypoint =
+            (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
@@ -1729,51 +1730,52 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     f32 weightArray[265];
     Vec3f sp70;
     Vec3f sp64;
-    Vec3f timePathPoint;
+    Vec3f timePathTargetPos;
     s32 sp54;
     s32 sp50;
 
     sp50 = 0;
     sp54 = 0;
 
-    SubS_TimePathing_FillWeightArray(weightArray, 3, this->timePath->count + 3);
+    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
+                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk_356 & 8)) {
-        timePathPoint = gZeroVec3f;
-        SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+        timePathTargetPos = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathPoint, this->timePathTimeSpeed);
-        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
-        this->actor.world.pos.y = timePathPoint.y;
+                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
+        this->actor.world.pos.y = timePathTargetPos.y;
         this->unk_356 |= 8;
     } else {
-        timePathPoint = this->timePathPoint;
+        timePathTargetPos = this->timePathTargetPos;
     }
 
-    this->actor.world.pos.x = timePathPoint.x;
-    this->actor.world.pos.z = timePathPoint.z;
+    this->actor.world.pos.x = timePathTargetPos.x;
+    this->actor.world.pos.z = timePathTargetPos.z;
 
     if (SubS_InCsMode(globalCtx)) {
         sp54 = this->timePathElapsedTime;
         sp50 = this->timePathWaypoint;
-        timePathPoint = this->actor.world.pos;
+        timePathTargetPos = this->actor.world.pos;
     }
 
-    this->timePathPoint = gZeroVec3f;
+    this->timePathTargetPos = gZeroVec3f;
 
-    if (SubS_TimePathing_Update(this->timePath, &this->timePathWeightVal, &this->timePathElapsedTime,
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathPoint, this->timePathTimeSpeed)) {
+                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_356 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;
-        sp64 = this->timePathPoint;
+        sp64 = this->timePathTargetPos;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
     if (SubS_InCsMode(globalCtx)) {
         this->timePathElapsedTime = sp54;
         this->timePathWaypoint = sp50;
-        this->timePathPoint = timePathPoint;
+        this->timePathTargetPos = timePathTargetPos;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);

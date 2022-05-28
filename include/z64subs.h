@@ -8,6 +8,8 @@
 
 extern Vec3f gOneVec3f;
 
+#define SUBS_TIME_PATHING_ORDER 3
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
@@ -92,10 +94,10 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
 
 void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len);
-s32 SubS_TimePathing_ComputeWeightVal(f32* weightVal, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
-void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 weightVal, s32 waypoint, f32 weightArray[], f32 weights[]);
-void SubS_TimePathing_ComputePointXZ(f32* x, f32* z, f32 weightVal, s32 numPoints, s32 waypoint, Vec3s points[], f32 weightArray[]);
-s32 SubS_TimePathing_Update(Path* path, f32* weightVal, s32* timeElapsed, s32 waypointTime, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
+s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
+void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 progress, s32 waypoint, f32 weightArray[], f32 weights[]);
+void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 numPoints, s32 waypoint, Vec3s points[], f32 weightArray[]);
+s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* timeElapsed, s32 waypointTime, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
 void SubS_TimePathing_ComputeInitialY(struct GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point);
 
 Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 max);
@@ -108,8 +110,8 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
 Path* SubS_GetDayDependentPath(struct GlobalContext* globalCtx, u8 pathIndex, u8 max, s32* startPointIndex);
 
-s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 weightVal, s32 direction);
-s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* weightVal, s32 direction, s32 returnStart);
+s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction);
+s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart);
 
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 
