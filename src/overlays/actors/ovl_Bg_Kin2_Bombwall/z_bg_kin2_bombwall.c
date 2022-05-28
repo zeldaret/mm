@@ -40,15 +40,19 @@ ActorInit Bg_Kin2_Bombwall_InitVars = {
 };
 
 ColliderCylinderInit D_80B6E6F0 = {
-    { 0xA, 0, 9, 0, 0, 1 },
-    { 0, { 0, 0, 0 }, { 8, 0, 0 }, 0, 1, 0 },
-    { 0x3C, 0x3C, 0, { 0, 0, 0 } },
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 60, 60, 0, { 0, 0, 0 } },
 };
+
 Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
 Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
+
 Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
+
 s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C}; 
 s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
+
 InitChainEntry D_80B6E748[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
@@ -59,9 +63,9 @@ InitChainEntry D_80B6E748[] = {
 s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     Actor *temp_v0;
 
-    if ((arg0->unk15C.base.acFlags & 2) != 0) {
-        temp_v0 = arg0->unk15C.base.ac;
-        if ((temp_v0 != 0) && (Math3D_Vec3fDistSq(&arg0->actor.world.pos, &temp_v0->world.pos) < 6400.0f)) {
+    if ((arg0->collider.base.acFlags & 2) != 0) {
+        temp_v0 = arg0->collider.base.ac;
+        if ((temp_v0 != 0) && (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &temp_v0->world.pos) < 6400.0f)) {
             return 1;
         }
     }
@@ -82,7 +86,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s16 phi_s1;
     
 
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
     
     for(i = 0, temp_s3 = 0; i < 6; i++) {
         temp_a0 = (i + 1) * 15.f;   
@@ -101,9 +105,9 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
             Matrix_MultiplyVector3fByState(&spD8, &spF0);
             Matrix_MultiplyVector3fByState(&spCC, &spE4);
     
-            spF0.x += this->actor.world.pos.x;
-            spF0.y += this->actor.world.pos.y;
-            spF0.z += this->actor.world.pos.z;
+            spF0.x += this->dyna.actor.world.pos.x;
+            spF0.y += this->dyna.actor.world.pos.y;
+            spF0.z += this->dyna.actor.world.pos.z;
          
             if (Rand_Next() % 4 == 0) {
                 phi_s0 = 0x20;
@@ -131,18 +135,18 @@ void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     ColliderCylinder *sp24;
     
-    Actor_ProcessInitChain(&this->actor, D_80B6E748);
+    Actor_ProcessInitChain(&this->dyna.actor, D_80B6E748);
     DynaPolyActor_Init((DynaPolyActor *) this, 0);
-    sp24 = &this->unk15C;
+    sp24 = &this->collider;
     Collider_InitCylinder(globalCtx, sp24);
-    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F) != 0) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) != 0) {
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
     DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor *) this, (CollisionHeader *) &D_06000490);
-    Collider_SetCylinder(globalCtx, sp24, &this->actor, &D_80B6E6F0);
-    Collider_UpdateCylinder(&this->actor, sp24);
-    Actor_SetHeight(&this->actor, 60.0f);
+    Collider_SetCylinder(globalCtx, sp24, &this->dyna.actor, &D_80B6E6F0);
+    Collider_UpdateCylinder(&this->dyna.actor, sp24);
+    Actor_SetHeight(&this->dyna.actor, 60.0f);
     func_80B6E4B8(this);
 }
 
@@ -154,8 +158,8 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     temp_a0 = globalCtx;
     temp_a1 = &globalCtx->colCtx.dyna;
     globalCtx = globalCtx;
-    DynaPoly_DeleteBgActor(temp_a0, temp_a1, this->unk_144[0]);
-    Collider_DestroyCylinder(globalCtx, &this->unk15C);
+    DynaPoly_DeleteBgActor(temp_a0, temp_a1, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
@@ -169,14 +173,14 @@ void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     temp_a0 = arg0;
     arg0 = arg0;
     if (func_80B6E020(temp_a0, arg1) != 0) {
-        temp_a0_2 = arg0->actor.cutscene;
-        arg0->unk15C.base.acFlags &= 0xFFFD;
+        temp_a0_2 = arg0->dyna.actor.cutscene;
+        arg0->collider.base.acFlags &= 0xFFFD;
         arg0 = arg0;
         ActorCutscene_SetIntentToPlay((s16) temp_a0_2);
         func_80B6E544(arg0);
         return;
     }
-    CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->unk15C.base);
+    CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->collider.base);
 }
 
 void func_80B6E544(BgKin2Bombwall *arg0) {
@@ -186,17 +190,17 @@ void func_80B6E544(BgKin2Bombwall *arg0) {
 
 
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
-    if (ActorCutscene_GetCanPlayNext((s16) arg0->actor.cutscene) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->actor.cutscene, &arg0->actor);
-        Actor_SetSwitchFlag(arg1, arg0->actor.params & 0x7F);
-        Audio_PlaySoundAtPosition(arg1, &arg0->actor.world.pos, 0x3C, 0x2810U);
-        func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->unk_144[0]);
-        arg0->actor.draw = NULL;
+    if (ActorCutscene_GetCanPlayNext((s16) arg0->dyna.actor.cutscene) != 0) {
+        ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->dyna.actor.cutscene, &arg0->dyna.actor);
+        Actor_SetSwitchFlag(arg1, arg0->dyna.actor.params & 0x7F);
+        Audio_PlaySoundAtPosition(arg1, &arg0->dyna.actor.world.pos, 0x3C, 0x2810U);
+        func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->dyna.bgId);
+        arg0->dyna.actor.draw = NULL;
         func_80B6E090(arg0, arg1);
         func_80B6E5F8(arg0);
         return;
     }
-    ActorCutscene_SetIntentToPlay((s16) arg0->actor.cutscene);
+    ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
 }
 
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
@@ -209,10 +213,10 @@ void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 
     arg0->unk_1AC[0] += -1;//-1
     if ((s32) arg0->unk_1AC[0] <= 0) {
-        temp_a0 = arg0->actor.cutscene;
+        temp_a0 = arg0->dyna.actor.cutscene;
         arg0 = arg0;
         ActorCutscene_Stop((s16) temp_a0);
-        Actor_MarkForDeath(&arg0->actor);
+        Actor_MarkForDeath(&arg0->dyna.actor);
     }
 }
 
