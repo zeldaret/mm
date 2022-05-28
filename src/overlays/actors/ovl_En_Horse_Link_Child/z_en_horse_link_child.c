@@ -72,9 +72,9 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 10, 35, 100, MASS_HEAVY };
 
-s32 D_808DFF10[2] = { 1, 19 };
+s32 D_808DFF10[] = { 1, 19 };
 
-f32 D_808DFF18[5] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
+f32 D_808DFF18[] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
@@ -120,11 +120,11 @@ f32 func_808DE728(EnHorseLinkChild* this) {
     f32 phi_fv1;
 
     if (this->unk_148 == 2) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * 0.5f;
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 2.0f);
     } else if (this->unk_148 == 3) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * 0.33333334f;
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 3.0f);
     } else if (this->unk_148 == 4) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * 0.2f;
+        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speedXZ * (1.0f / 5.0f);
     } else {
         phi_fv1 = D_808DFF18[this->unk_148];
     }
@@ -179,7 +179,7 @@ void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_808DE9A8(EnHorseLinkChild* this) {
     this->unk_144 = 0;
     this->unk_148++;
-    if (this->unk_148 >= 5) {
+    if (this->unk_148 >= ARRAY_COUNT(D_808DFF18)) {
         this->unk_148 = 0;
     }
     Animation_PlayOnce(&this->skin.skelAnime, D_808DFEC0[this->unk_148]);
@@ -593,5 +593,5 @@ void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_80138258(&this->actor, globalCtx, &this->skin, EnHorseLinkChild_PostSkinDraw,
-                  EnHorseLinkChild_OverrideSkinDraw, 1);
+                  EnHorseLinkChild_OverrideSkinDraw, true);
 }
