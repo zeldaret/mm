@@ -285,8 +285,8 @@ void func_80ACA840(EnTimeTag* this, GlobalContext* globalCtx) {
     s16 temp_hi;
 
     if ((globalCtx->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
-        temp_ft4 = gSaveContext.save.time * 0.00036621094f;
-        temp_hi = (s32)(gSaveContext.save.time * 0.021972656f) % 60;
+        temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
+        temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
         if (gSaveContext.save.weekEventReg[63] & 1) {
             if (gSaveContext.save.weekEventReg[63] & 2) {
                 this->actionFunc = func_80ACA7C4;
