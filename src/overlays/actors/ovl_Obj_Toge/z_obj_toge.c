@@ -16,9 +16,9 @@ void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809A4744(ObjToge* thid);
+void func_809A4744(ObjToge* this);
 void func_809A477C(ObjToge* this, GlobalContext* globalCtx);
-void func_809A4804(ObjToge* thid);
+void func_809A4804(ObjToge* this);
 void func_809A481C(ObjToge* this, GlobalContext* globalCtx);
 void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, GlobalContext* globalCtx);
@@ -55,18 +55,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 20, 0, { 0, 0, 0 } },
 };
 
-f32 D_809A4CDC[] = {
-    2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f,
-};
+f32 D_809A4CDC[] = { 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f };
 
-s16 D_809A4CFC[] = {
-    0, 10, 20, 30, 40, 50, 60, 70,
-};
+s16 D_809A4CFC[] = { 0, 10, 20, 30, 40, 50, 60, 70 };
 
-f32 D_809A4D0C[] = {
-    1.0f,
-    2.0f,
-};
+f32 D_809A4D0C[] = { 1.0f, 2.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(terminalVelocity, 0, ICHAIN_CONTINUE),
@@ -160,7 +153,7 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (sp3E > 0) {
         s16 sp36;
 
-        this->unk_1B4 = 1;
+        this->unk_1B4 = true;
         this->unk_1B8 = (this->unk_198[0].x + this->unk_198[1].x) * 0.5f;
         this->unk_1BC = (this->unk_198[0].z + this->unk_198[1].z) * 0.5f;
 
@@ -170,7 +163,7 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_1C0 = sp3E * 7.5f;
         this->unk_1C4 = Math3D_Distance(&this->unk_198[0], &this->unk_198[1]) * 0.5f;
     } else {
-        this->unk_1B4 = 0;
+        this->unk_1B4 = false;
     }
 
     Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
@@ -182,7 +175,7 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.height = 40;
     }
 
-    if (this->unk_1B4 != 0) {
+    if (this->unk_1B4) {
         func_809A4804(this);
     } else {
         func_809A4744(this);
@@ -211,14 +204,14 @@ void func_809A477C(ObjToge* this, GlobalContext* globalCtx) {
         this->unk_1B0 += 200;
     }
 
-    if (this->unk_1B4 == 0) {
+    if (!this->unk_1B4) {
         this->actor.shape.rot.y += this->unk_1B0;
     }
 }
 
-void func_809A4804(ObjToge* thid) {
-    thid->actionFunc = func_809A481C;
-    thid->unk_1B0 = 0;
+void func_809A4804(ObjToge* this) {
+    this->actionFunc = func_809A481C;
+    this->unk_1B0 = 0;
 }
 
 void func_809A481C(ObjToge* this, GlobalContext* globalCtx) {
@@ -240,7 +233,7 @@ void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 sp30 = this->unk_194 ^ 1;
 
-    if ((this->unk_1B4 != 0) && (this->unk_194 == 1)) {
+    if (this->unk_1B4 && (this->unk_194 == 1)) {
         Math_StepToF(&this->actor.speedXZ, 2.0f, 0.4f);
     } else {
         Math_StepToF(&this->actor.speedXZ, D_809A4CDC[OBJTOGE_GET_700(&this->actor)], 1.5f);
@@ -254,7 +247,7 @@ void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 8) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);
         this->unk_194 = sp30;
-        if ((this->unk_1B4 != 0) && (this->unk_194 == 0)) {
+        if (this->unk_1B4 && (this->unk_194 == 0)) {
             func_809A4804(this);
         } else {
             func_809A4744(this);
@@ -267,7 +260,7 @@ void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
         if ((yaw > 0x4000) || (yaw == -0x8000)) {
             this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);
             this->unk_194 = sp30;
-            if ((this->unk_1B4 != 0) && (this->unk_194 == 0)) {
+            if (this->unk_1B4 && (this->unk_194 == 0)) {
                 func_809A4804(this);
             } else {
                 func_809A4744(this);
@@ -284,7 +277,7 @@ void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
             func_809A43A8(this, globalCtx);
-            Actor_SetColorFilter(&this->actor, 0, 0xFA, 0, 0xFA);
+            Actor_SetColorFilter(&this->actor, 0, 250, 0, 250);
         }
         collider->base.acFlags &= ~AC_HIT;
     }
