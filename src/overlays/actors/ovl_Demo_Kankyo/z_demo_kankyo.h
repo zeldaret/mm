@@ -23,13 +23,13 @@ typedef struct {
   /* 0x04A */ u16 LostWoodsSkyFishPosOffsetMax; // The x-z range the lost woods skyfish oscillates around player. random value between 15-65
   /* 0x04C */ f32 LostWoodsSkyFishSpeedY; // the y speed (angular velocity) the lost woods skyfish oscillates around player.
   /* 0x050 */ u16 pad50; // unused, always assigned to 0, nothing else in this actor uses it
-} DemoKankyoParticle; // size = 0x54
+} DemoKankyoEffect; // size = 0x54
 
-#define DEMOKANKYO_PARTICLE_COUNT 64
+#define DEMOKANKYO_EFFECT_COUNT 64
 
 typedef struct DemoKankyo {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ DemoKankyoParticle particles[DEMOKANKYO_PARTICLE_COUNT];
+    /* 0x0144 */ DemoKankyoEffect effects[DEMOKANKYO_EFFECT_COUNT];
     /* 0x1644 */ DemoKankyoActionFunc actionFunc;
     /* 0x1648 */ s32 objectId;
     /* 0x164C */ u8 isSafeToDrawGiants;
