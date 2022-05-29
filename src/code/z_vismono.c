@@ -59,8 +59,8 @@ void VisMono_DesaturateTLUT(u16* tlut) {
         // Note: I + A = (RRRRR * FAC_RED + GGGGG * FAC_GREEN + BBBBB * FAC_BLUE) * (255 / FAC_NORM)
 
         tlut[i] = GPACK_IA16(
-            ((i >> 3 & 0x1F) * VISMONO_FAC_RED + (i << 2 & 0x1F) * VISMONO_FAC_GREEN) * 255 / VISMONO_FAC_NORM,
-            ((i >> 6 & 0x1F) * VISMONO_FAC_GREEN + (i >> 1 & 0x1F) * VISMONO_FAC_BLUE) * 255 / VISMONO_FAC_NORM);
+            (((i >> 3) & 0x1F) * VISMONO_FAC_RED + ((i << 2) & 0x1F) * VISMONO_FAC_GREEN) * 255 / VISMONO_FAC_NORM,
+            (((i >> 6) & 0x1F) * VISMONO_FAC_GREEN + ((i >> 1) & 0x1F) * VISMONO_FAC_BLUE) * 255 / VISMONO_FAC_NORM);
     }
 }
 
