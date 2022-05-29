@@ -18,7 +18,7 @@ typedef struct {
   /* 0x03C */ u16 alphaClock;
   /* 0x03E */ u16 LostWoodsSkyFishSpeedXZClock;
   /* 0x040 */ u8 alpha;
-  /* 0x044 */ f32 scale; // size of the particle
+  /* 0x044 */ f32 scale; // size of the effect
   /* 0x048 */ u16 LostWoodsSkyFishSpeedXZ; // the x-z speed (angular velocity) the lost woods skyfish oscillates around player. pos or neg 200-400 
   /* 0x04A */ u16 LostWoodsSkyFishPosOffsetMax; // The x-z range the lost woods skyfish oscillates around player. random value between 15-65
   /* 0x04C */ f32 LostWoodsSkyFishSpeedY; // the y speed (angular velocity) the lost woods skyfish oscillates around player.
