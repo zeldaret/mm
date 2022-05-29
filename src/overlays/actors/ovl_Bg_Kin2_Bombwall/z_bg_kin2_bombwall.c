@@ -28,48 +28,48 @@ extern Gfx D_060002C0[];
 extern Gfx D_06000360[];
 extern Gfx D_06000490[];
 
-// ActorInit Bg_Kin2_Bombwall_InitVars = {
-//     ACTOR_BG_KIN2_BOMBWALL,
-//     ACTORCAT_BG,
-//     FLAGS,
-//     OBJECT_KIN2_OBJ,
-//     sizeof(BgKin2Bombwall),
-//     (ActorFunc)BgKin2Bombwall_Init,
-//     (ActorFunc)BgKin2Bombwall_Destroy,
-//     (ActorFunc)BgKin2Bombwall_Update,
-//     (ActorFunc)BgKin2Bombwall_Draw,
-// };
+ActorInit Bg_Kin2_Bombwall_InitVars = {
+    ACTOR_BG_KIN2_BOMBWALL,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_KIN2_OBJ,
+    sizeof(BgKin2Bombwall),
+    (ActorFunc)BgKin2Bombwall_Init,
+    (ActorFunc)BgKin2Bombwall_Destroy,
+    (ActorFunc)BgKin2Bombwall_Update,
+    (ActorFunc)BgKin2Bombwall_Draw,
+};
 
-// ColliderCylinderInit D_80B6E6F0 = {
-//     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-//     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-//     { 60, 60, 0, { 0, 0, 0 } },
-// };
+ColliderCylinderInit D_80B6E6F0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000008, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 60, 60, 0, { 0, 0, 0 } },
+};
 
-// Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
-// Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
+Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
+Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
 
-// Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
+Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
 
-// s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C};
-// s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
+s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C};
+s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
 
-// InitChainEntry D_80B6E748[] = {
-//     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-//     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-//     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
-//     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
-// };  
+InitChainEntry D_80B6E748[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
+};  
 
 //extern 
-extern ColliderCylinderInit D_80B6E6F0;
-extern Color_RGBA8 D_80B6E71C;
-extern Color_RGBA8 D_80B6E720;
-extern Vec3f D_80B6E724;
-extern s8 D_80B6E730[5];
-//extern s8 D_80B6E735;
-extern s16 D_80B6E738[8];
-extern InitChainEntry D_80B6E748[];
+// extern ColliderCylinderInit D_80B6E6F0;
+// extern Color_RGBA8 D_80B6E71C;
+// extern Color_RGBA8 D_80B6E720;
+// extern Vec3f D_80B6E724;
+// extern s8 D_80B6E730[5];
+// //extern s8 D_80B6E735;
+// extern s16 D_80B6E738[8];
+// extern InitChainEntry D_80B6E748[];
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E020.s")
 
