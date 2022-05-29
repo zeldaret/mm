@@ -10,10 +10,10 @@
 
 #define THIS ((ObjTokeiTurret*)thisx)
 
-void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTokeiTurret_Init(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Update(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Tokei_Turret_InitVars = {

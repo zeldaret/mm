@@ -5,9 +5,9 @@
 
 struct DemoEffect;
 
-typedef void (*DemoEffectActionFunc)(struct DemoEffect*, GlobalContext*);
-typedef void (*DemoEffectUnkFunc)(struct DemoEffect*, GlobalContext*);
-typedef void (*DemoEffectUnkFunc2)(Actor*, GlobalContext*);
+typedef void (*DemoEffectActionFunc)(struct DemoEffect*, PlayState*);
+typedef void (*DemoEffectUnkFunc)(struct DemoEffect*, PlayState*);
+typedef void (*DemoEffectUnkFunc2)(Actor*, PlayState*);
 
 #define DEMOEFFECT_GET_FF(thisx) ((thisx)->params & 0xFF)
 

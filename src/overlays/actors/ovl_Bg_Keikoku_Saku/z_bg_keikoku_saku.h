@@ -5,7 +5,7 @@
 
 struct BgKeikokuSaku;
 
-typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, GlobalContext*);
+typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, PlayState*);
 
 typedef struct BgKeikokuSaku {
     /* 0x0000 */ Actor actor;

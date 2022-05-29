@@ -5,7 +5,7 @@
 
 struct BgAstrBombwall;
 
-typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
+typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, PlayState*);
 
 typedef struct BgAstrBombwall {
     /* 0x0000 */ Actor actor;

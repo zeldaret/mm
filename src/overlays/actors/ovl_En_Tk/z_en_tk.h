@@ -5,8 +5,8 @@
 
 struct EnTk;
 
-typedef void (*EnTkActionFunc)(struct EnTk*, GlobalContext*);
-typedef void (*EnTkUnkFunc)(struct EnTk*, GlobalContext*);
+typedef void (*EnTkActionFunc)(struct EnTk*, PlayState*);
+typedef void (*EnTkUnkFunc)(struct EnTk*, PlayState*);
 
 #define ENTK_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENTK_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)

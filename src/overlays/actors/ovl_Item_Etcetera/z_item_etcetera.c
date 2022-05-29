@@ -10,11 +10,11 @@
 
 #define THIS ((ItemEtcetera*)thisx)
 
-void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
-void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
+void ItemEtcetera_Init(Actor* thisx, PlayState* play);
+void ItemEtcetera_Destroy(Actor* thisx, PlayState* play);
+void ItemEtcetera_Update(Actor* thisx, PlayState* play);
 
-void func_80920044(ItemEtcetera* this, GlobalContext* globalCtx);
+void func_80920044(ItemEtcetera* this, PlayState* play);
 
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc);
 

@@ -5,7 +5,7 @@
 
 struct EnSw;
 
-typedef void (*EnSwActionFunc)(struct EnSw*, GlobalContext*);
+typedef void (*EnSwActionFunc)(struct EnSw*, PlayState*);
 
 #define ENSW_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
 #define ENSW_GET_3FC(thisx) (((thisx)->params & 0x3FC) >> 2)

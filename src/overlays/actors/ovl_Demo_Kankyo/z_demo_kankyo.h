@@ -5,7 +5,7 @@
 
 struct DemoKankyo;
 
-typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
+typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, PlayState*);
 
 typedef struct {
   /* 0x000 */ u8 state;

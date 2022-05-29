@@ -10,10 +10,10 @@
 
 #define THIS ((ObjLift*)thisx)
 
-void ObjLift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjLift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjLift_Init(Actor* thisx, PlayState* play);
+void ObjLift_Destroy(Actor* thisx, PlayState* play);
+void ObjLift_Update(Actor* thisx, PlayState* play);
+void ObjLift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Lift_InitVars = {

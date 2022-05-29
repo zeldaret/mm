@@ -24,7 +24,7 @@ typedef enum {
 
 struct EnFall;
 
-typedef void (*EnFallActionFunc)(struct EnFall*, GlobalContext*);
+typedef void (*EnFallActionFunc)(struct EnFall*, PlayState*);
 
 typedef struct EnFall {
     /* 0x000 */ Actor actor;

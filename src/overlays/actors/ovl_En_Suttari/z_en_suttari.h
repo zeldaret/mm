@@ -6,7 +6,7 @@
 
 struct EnSuttari;
 
-typedef void (*EnSuttariActionFunc)(struct EnSuttari*, GlobalContext*);
+typedef void (*EnSuttariActionFunc)(struct EnSuttari*, PlayState*);
 
 #define ENSUTTARI_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
 

@@ -20,7 +20,7 @@ typedef enum {
 
 struct EnRacedog;
 
-typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
+typedef void (*EnRacedogActionFunc)(struct EnRacedog*, PlayState*);
 
 typedef struct EnRacedog {
     /* 0x000 */ Actor actor;

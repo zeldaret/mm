@@ -34,7 +34,7 @@ typedef enum {
     /* 21 */ ENHY_ANIMATION_MAX
 } EnHyAnimation;
 
-typedef void (*EnHyActionFunc)(struct EnHy*, GlobalContext*);
+typedef void (*EnHyActionFunc)(struct EnHy*, PlayState*);
 
 typedef struct EnHy {
     /* 0x000 */ Actor actor;
@@ -76,19 +76,19 @@ extern s8 gEnHyParentBodyParts[];
 extern u8 gEnHyShadowSizes[];
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
-EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);
-void EnHy_ChangeObjectAndAnim(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex);
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, GlobalContext* globalCtx);
+EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play);
+void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex);
+s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play);
 void EnHy_Blink(EnHy* enHy, s32 arg1);
-s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
-void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4);
-s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
-s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3);
-s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
-s32 EnHy_SetPointBackwards(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex);
+s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
+void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4);
+s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
+s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3);
+s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex);
+s32 EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex);
 s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget);
 s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget);
-void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx);
-s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThreshold);
+void EnHy_UpdateCollider(EnHy* enHy, PlayState* play);
+s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold);
 
 #endif // Z_EN_HY_CODE_H

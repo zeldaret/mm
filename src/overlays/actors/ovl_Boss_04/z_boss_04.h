@@ -5,7 +5,7 @@
 
 struct Boss04;
 
-typedef void (*Boss04ActionFunc)(struct Boss04*, GlobalContext*);
+typedef void (*Boss04ActionFunc)(struct Boss04*, PlayState*);
 
 typedef struct Boss04 {
     /* 0x0000 */ Actor actor;

@@ -15,9 +15,9 @@ typedef enum {
 } SubSCutsceneType;
 
 //! @TODO: rename based on func_8013E748 and func_800B8500
-typedef s32 (*func_8013E748_VerifyFunc)(struct GlobalContext*, Actor*, void*);
+typedef s32 (*func_8013E748_VerifyFunc)(struct PlayState*, Actor*, void*);
 
-typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
+typedef s32 (*VerifyActor)(struct PlayState*, Actor*, Actor*, void*);
 
 #define SUBS_SHADOW_TEX_WIDTH 64
 #define SUBS_SHADOW_TEX_HEIGHT 64
@@ -53,8 +53,8 @@ typedef struct TurnOptionsSet {
 } TurnOptionsSet; // size = 0x20
 
 struct ActorPathing;
-typedef void (*ActorPathingComputeFunc)(struct GlobalContext*, struct ActorPathing*);
-typedef s32 (*ActorPathingUpdateFunc)(struct GlobalContext*, struct ActorPathing*);
+typedef void (*ActorPathingComputeFunc)(struct PlayState*, struct ActorPathing*);
+typedef s32 (*ActorPathingUpdateFunc)(struct PlayState*, struct ActorPathing*);
 
 typedef struct ActorPathing {
     /* 0x00 */ Path* setupPathList;

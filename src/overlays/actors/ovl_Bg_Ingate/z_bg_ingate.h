@@ -5,7 +5,7 @@
 
 struct BgIngate;
 
-typedef void (*BgIngateActionFunc)(struct BgIngate*, GlobalContext*);
+typedef void (*BgIngateActionFunc)(struct BgIngate*, PlayState*);
 
 #define BGINGATE_GET_FF(thisx) ((thisx)->params & 0xFF)
 

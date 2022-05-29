@@ -10,17 +10,17 @@
 
 #define THIS ((EnStoneheishi*)thisx)
 
-void EnStoneheishi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnStoneheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnStoneheishi_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnStoneheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnStoneheishi_Init(Actor* thisx, PlayState* play);
+void EnStoneheishi_Destroy(Actor* thisx, PlayState* play);
+void EnStoneheishi_Update(Actor* thisx, PlayState* play);
+void EnStoneheishi_Draw(Actor* thisx, PlayState* play);
 
-void func_80BC9560(EnStoneheishi* this, GlobalContext* globalCtx);
-void func_80BC9680(EnStoneheishi* this, GlobalContext* globalCtx);
-void func_80BC9908(EnStoneheishi* this, GlobalContext* globalCtx);
-void func_80BC9A2C(EnStoneheishi* this, GlobalContext* globalCtx);
-void func_80BC9D28(EnStoneheishi* this, GlobalContext* globalCtx);
-void func_80BC9E50(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9560(EnStoneheishi* this, PlayState* play);
+void func_80BC9680(EnStoneheishi* this, PlayState* play);
+void func_80BC9908(EnStoneheishi* this, PlayState* play);
+void func_80BC9A2C(EnStoneheishi* this, PlayState* play);
+void func_80BC9D28(EnStoneheishi* this, PlayState* play);
+void func_80BC9E50(EnStoneheishi* this, PlayState* play);
 
 #if 0
 const ActorInit En_Stone_heishi_InitVars = {

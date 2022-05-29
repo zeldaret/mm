@@ -5,7 +5,7 @@
 
 struct EnGg2;
 
-typedef void (*EnGg2ActionFunc)(struct EnGg2*, GlobalContext*);
+typedef void (*EnGg2ActionFunc)(struct EnGg2*, PlayState*);
 
 #define ENGG2_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 

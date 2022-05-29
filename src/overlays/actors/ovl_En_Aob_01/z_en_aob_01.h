@@ -6,7 +6,7 @@
 
 struct EnAob01;
 
-typedef void (*EnAob01ActionFunc)(struct EnAob01*, GlobalContext*);
+typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 
 #define ENAOB01_GET_7E00_1(thisx) ((thisx)->params & 0x7E00)
 #define ENAOB01_GET_7E00_2(thisx) (((thisx)->params & 0x7E00) >> 9)

@@ -12,18 +12,18 @@
 
 #define THIS ((DemoEffect*)thisx)
 
-void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx);
+void DemoEffect_Init(Actor* thisx, PlayState* play);
+void DemoEffect_Destroy(Actor* thisx, PlayState* play);
+void DemoEffect_Update(Actor* thisx, PlayState* play);
 
-void func_808CD940(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CD998(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CDCEC(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CDD70(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CDDE0(DemoEffect* this, GlobalContext* globalCtx);
-void func_808CDFF8(Actor* thisx, GlobalContext* globalCtx);
-void func_808CE078(Actor* thisx, GlobalContext* globalCtx2);
+void func_808CD940(DemoEffect* this, PlayState* play);
+void func_808CD998(DemoEffect* this, PlayState* play);
+void func_808CDBDC(DemoEffect* this, PlayState* play);
+void func_808CDCEC(DemoEffect* this, PlayState* play);
+void func_808CDD70(DemoEffect* this, PlayState* play);
+void func_808CDDE0(DemoEffect* this, PlayState* play);
+void func_808CDFF8(Actor* thisx, PlayState* play);
+void func_808CE078(Actor* thisx, PlayState* play2);
 
 const ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
@@ -37,7 +37,7 @@ const ActorInit Demo_Effect_InitVars = {
     (ActorFunc)NULL,
 };
 
-void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoEffect_Init(Actor* thisx, PlayState* play) {
     static s16 D_808CE2C0[] = {
         OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, GAMEPLAY_KEEP,
         GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP,
@@ -54,7 +54,7 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (D_808CE2C0[sp3C] == 1) {
         phi_v1 = 0;
     } else {
-        phi_v1 = Object_GetIndex(&globalCtx->objectCtx, D_808CE2C0[sp3C]);
+        phi_v1 = Object_GetIndex(&play->objectCtx, D_808CE2C0[sp3C]);
     }
 
     if (phi_v1 >= 0) {
@@ -102,7 +102,7 @@ u8 D_808CE2D4[] = {
     1, 1, 2, 0, 1, 1, 2, 0, 1, 2, 0, 2, 1, 0, 1, 0, 2, 0, 2, 2, 0,
 };
 
-void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoEffect_Destroy(Actor* thisx, PlayState* play) {
     DemoEffect* this = THIS;
 
     switch (DEMOEFFECT_GET_FF(&this->actor)) {
@@ -110,26 +110,26 @@ void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         case 1:
         case 2:
         case 3:
-            SkelCurve_Destroy(globalCtx, &this->skelCurve);
+            SkelCurve_Destroy(play, &this->skelCurve);
             break;
     }
 }
 
-void func_808CD940(DemoEffect* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_164)) {
+void func_808CD940(DemoEffect* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->unk_164)) {
         this->actor.objBankIndex = this->unk_164;
         this->actor.draw = this->unk_174;
         this->actionFunc = this->unk_170;
     }
 }
 
-void func_808CD998(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CD998(DemoEffect* this, PlayState* play) {
     s32 sp34 = DEMOEFFECT_GET_FF(&this->actor);
 
-    if (SkelCurve_Init(globalCtx, &this->skelCurve, &object_efc_tw_Skel_0012E8, &object_efc_tw_CurveAnim_000050)) {}
+    if (SkelCurve_Init(play, &this->skelCurve, &object_efc_tw_Skel_0012E8, &object_efc_tw_CurveAnim_000050)) {}
 
     SkelCurve_SetAnim(&this->skelCurve, &object_efc_tw_CurveAnim_000050, 1.0f, 59.0f, 1.0f, 1.7f);
-    SkelCurve_Update(globalCtx, &this->skelCurve);
+    SkelCurve_Update(play, &this->skelCurve);
     this->actionFunc = func_808CDCEC;
 
     switch (sp34) {
@@ -171,7 +171,7 @@ void func_808CDAD0(f32 arg0) {
     }
 }
 
-void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CDBDC(DemoEffect* this, PlayState* play) {
     s32 params = DEMOEFFECT_GET_FF(&this->actor);
     f32 temp_f0;
     f32 temp_f12;
@@ -209,17 +209,17 @@ void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808CDCEC(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CDCEC(DemoEffect* this, PlayState* play) {
     func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
 
-    if (SkelCurve_Update(globalCtx, &this->skelCurve)) {
+    if (SkelCurve_Update(play, &this->skelCurve)) {
         SkelCurve_SetAnim(&this->skelCurve, &object_efc_tw_CurveAnim_000050, 1.0f, 60.0f, 59.0f, 0.0f);
         this->actionFunc = func_808CDBDC;
         this->unk_16C = 0;
     }
 }
 
-void func_808CDD70(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CDD70(DemoEffect* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->actor.scale.x - 0.02f);
 
     this->unk_16C++;
@@ -228,7 +228,7 @@ void func_808CDD70(DemoEffect* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808CDDE0(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CDDE0(DemoEffect* this, PlayState* play) {
     Actor_SetScale(&this->actor, (this->actor.scale.x * 0.5f) + 0.2f);
 
     this->unk_16C++;
@@ -237,28 +237,28 @@ void func_808CDDE0(DemoEffect* this, GlobalContext* globalCtx) {
     }
 }
 
-void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DemoEffect_Update(Actor* thisx, PlayState* play) {
     DemoEffect* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-s32 func_808CDE78(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex, Actor* thisx) {
+s32 func_808CDE78(PlayState* play, SkelAnimeCurve* skelCuve, s32 limbIndex, Actor* thisx) {
     s32 pad;
     DemoEffect* this = THIS;
-    u32 sp4C = globalCtx->gameplayFrames;
+    u32 sp4C = play->gameplayFrames;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->unk_168[0], this->unk_168[1], this->unk_168[2], 255);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (sp4C * 6) % 1024, 255 - ((sp4C * 16) % 256), 0x100, 0x40,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, (sp4C * 6) % 1024, 255 - ((sp4C * 16) % 256), 0x100, 0x40,
                                 1, (sp4C * 4) % 512, 127 - ((sp4C * 12) % 128), 0x80, 0x20));
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 0) {
         LimbTransform* transform = skelCuve->transforms;
@@ -271,8 +271,8 @@ s32 func_808CDE78(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIn
     return true;
 }
 
-void func_808CDFF8(Actor* thisx, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void func_808CDFF8(Actor* thisx, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     DemoEffect* this = THIS;
 
     OPEN_DISPS(gfxCtx);
@@ -280,37 +280,37 @@ void func_808CDFF8(Actor* thisx, GlobalContext* globalCtx) {
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 25);
 
     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-    SkelCurve_Draw(&this->actor, globalCtx, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);
+    SkelCurve_Draw(&this->actor, play, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_808CE078(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_808CE078(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     DemoEffect* this = THIS;
     s16 sp46 = (this->unk_16C * 0x400) & 0xFFFF;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->unk_168[0], this->unk_168[1], this->unk_168[2], 255);
 
-    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     Matrix_Push();
     Matrix_RotateZS(sp46, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
 
     Matrix_Pop();
     Matrix_RotateZS(sp46 * -1, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     D_801F4E32 = 1;
     D_801F4E38.x = thisx->world.pos.x;

@@ -66,7 +66,7 @@ asm/non_matchings/code/z_eff_tire_mark/EffectTireMark_Destroy.s,EffectTireMark_D
 asm/non_matchings/code/z_eff_tire_mark/EffectTireMark_Update.s,EffectTireMark_Update,0x800AF050,0x8D
 asm/non_matchings/code/z_eff_tire_mark/EffectTireMark_SetVertices.s,EffectTireMark_SetVertices,0x800AF284,0x23
 asm/non_matchings/code/z_eff_tire_mark/EffectTireMark_Draw.s,EffectTireMark_Draw,0x800AF310,0x100
-asm/non_matchings/code/z_effect/Effect_GetGlobalCtx.s,Effect_GetGlobalCtx,0x800AF710,0x4
+asm/non_matchings/code/z_effect/Effect_GetPlayState.s,Effect_GetPlayState,0x800AF710,0x4
 asm/non_matchings/code/z_effect/Effect_GetByIndex.s,Effect_GetByIndex,0x800AF720,0x57
 asm/non_matchings/code/z_effect/Effect_InitStatus.s,Effect_InitStatus,0x800AF87C,0x5
 asm/non_matchings/code/z_effect/Effect_Init.s,Effect_Init,0x800AF890,0x34

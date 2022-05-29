@@ -474,15 +474,15 @@ u16 gScenesPerRegion[11][27] = {
     },
 };
 
-s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
+s32 Inventory_GetBtnBItem(PlayState* play) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (gSaveContext.unk_1015 == ITEM_NONE) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
-        if (globalCtx->interfaceCtx.unk_21C != 0) {
-            if (globalCtx->interfaceCtx.unk_21E != 0) {
-                return globalCtx->interfaceCtx.unk_21E;
+        if (play->interfaceCtx.unk_21C != 0) {
+            if (play->interfaceCtx.unk_21E != 0) {
+                return play->interfaceCtx.unk_21E;
             }
         }
         return ITEM_NONE;
@@ -501,12 +501,12 @@ void Inventory_ChangeEquipment(s16 value) {
 /**
  * Only deletes shield, equipment argument unused and is a remnant of OoT
  */
-u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
-    Player* player = GET_PLAYER(globalCtx);
+u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
+    Player* player = GET_PLAYER(play);
 
     if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
         SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
-        Player_SetEquipmentData(globalCtx, player);
+        Player_SetEquipmentData(play, player);
         return true;
     }
 
@@ -719,12 +719,12 @@ s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     }
 }
 
-void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx) {
+void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     u16 lotteryCodeGuess;
 
-    lotteryCodeGuess = ((globalCtx->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
-    lotteryCodeGuess |= ((globalCtx->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
-    lotteryCodeGuess |= (globalCtx->msgCtx.unk12054[2] & 0xF);        // Third Digit
+    lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
+    lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
+    lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
     gSaveContext.save.lotteryCodeGuess =
         (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }

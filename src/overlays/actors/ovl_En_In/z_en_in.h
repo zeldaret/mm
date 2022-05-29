@@ -5,7 +5,7 @@
 
 struct EnIn;
 
-typedef void (*EnInActionFunc)(struct EnIn*, GlobalContext*);
+typedef void (*EnInActionFunc)(struct EnIn*, PlayState*);
 
 typedef enum {
     /* 0 */ ENIN_UNK_TYPE,

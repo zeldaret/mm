@@ -10,10 +10,10 @@
 
 #define THIS ((BgKeikokuSaku*)thisx)
 
-void BgKeikokuSaku_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKeikokuSaku_Init(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Destroy(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Update(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Keikoku_Saku_InitVars = {

@@ -10,24 +10,24 @@
 
 #define THIS ((EnTimeTag*)thisx)
 
-void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTimeTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnTimeTag_Init(Actor* thisx, PlayState* play);
+void EnTimeTag_Destroy(Actor* thisx, PlayState* play);
+void EnTimeTag_Update(Actor* thisx, PlayState* play);
 
-void func_80AC9FD4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80AC9FE4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA0A8(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA12C(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA184(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA268(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA348(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA3C0(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA5F8(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA714(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA724(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA7C4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA840(EnTimeTag* this, GlobalContext* globalCtx);
+void func_80AC9FD4(EnTimeTag* this, PlayState* play);
+void func_80AC9FE4(EnTimeTag* this, PlayState* play);
+void func_80ACA0A8(EnTimeTag* this, PlayState* play);
+void func_80ACA12C(EnTimeTag* this, PlayState* play);
+void func_80ACA184(EnTimeTag* this, PlayState* play);
+void func_80ACA268(EnTimeTag* this, PlayState* play);
+void func_80ACA348(EnTimeTag* this, PlayState* play);
+void func_80ACA3C0(EnTimeTag* this, PlayState* play);
+void func_80ACA418(EnTimeTag* this, PlayState* play);
+void func_80ACA5F8(EnTimeTag* this, PlayState* play);
+void func_80ACA714(EnTimeTag* this, PlayState* play);
+void func_80ACA724(EnTimeTag* this, PlayState* play);
+void func_80ACA7C4(EnTimeTag* this, PlayState* play);
+void func_80ACA840(EnTimeTag* this, PlayState* play);
 
 #if 0
 const ActorInit En_Time_Tag_InitVars = {

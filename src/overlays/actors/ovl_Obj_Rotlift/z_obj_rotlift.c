@@ -10,10 +10,10 @@
 
 #define THIS ((ObjRotlift*)thisx)
 
-void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjRotlift_Init(Actor* thisx, PlayState* play);
+void ObjRotlift_Destroy(Actor* thisx, PlayState* play);
+void ObjRotlift_Update(Actor* thisx, PlayState* play);
+void ObjRotlift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Rotlift_InitVars = {

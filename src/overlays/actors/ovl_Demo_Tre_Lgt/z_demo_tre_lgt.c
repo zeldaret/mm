@@ -10,10 +10,10 @@
 
 #define THIS ((DemoTreLgt*)thisx)
 
-void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoTreLgt_Init(Actor* thisx, PlayState* play);
+void DemoTreLgt_Destroy(Actor* thisx, PlayState* play);
+void DemoTreLgt_Update(Actor* thisx, PlayState* play);
+void DemoTreLgt_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Demo_Tre_Lgt_InitVars = {

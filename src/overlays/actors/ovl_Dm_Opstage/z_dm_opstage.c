@@ -10,12 +10,12 @@
 
 #define THIS ((DmOpstage*)thisx)
 
-void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmOpstage_Init(Actor* thisx, PlayState* play);
+void DmOpstage_Destroy(Actor* thisx, PlayState* play);
+void DmOpstage_Update(Actor* thisx, PlayState* play);
+void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
-void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx);
+void func_80A9FA58(DmOpstage* this, PlayState* play);
 
 void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc);
 

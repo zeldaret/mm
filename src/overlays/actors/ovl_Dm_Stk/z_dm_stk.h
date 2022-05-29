@@ -5,7 +5,7 @@
 
 struct DmStk;
 
-typedef void (*DmStkActionFunc)(struct DmStk*, GlobalContext*);
+typedef void (*DmStkActionFunc)(struct DmStk*, PlayState*);
 
 typedef struct DmStk {
     /* 0x0000 */ Actor actor;

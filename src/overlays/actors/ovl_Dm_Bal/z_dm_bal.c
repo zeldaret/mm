@@ -10,12 +10,12 @@
 
 #define THIS ((DmBal*)thisx)
 
-void DmBal_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmBal_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmBal_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmBal_Init(Actor* thisx, PlayState* play);
+void DmBal_Destroy(Actor* thisx, PlayState* play);
+void DmBal_Update(Actor* thisx, PlayState* play);
+void DmBal_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1EAD8(DmBal* this, GlobalContext* globalCtx);
+void func_80C1EAD8(DmBal* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Bal_InitVars = {

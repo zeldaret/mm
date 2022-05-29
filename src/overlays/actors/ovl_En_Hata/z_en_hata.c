@@ -10,10 +10,10 @@
 
 #define THIS ((EnHata*)thisx)
 
-void EnHata_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHata_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHata_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHata_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHata_Init(Actor* thisx, PlayState* play);
+void EnHata_Destroy(Actor* thisx, PlayState* play);
+void EnHata_Update(Actor* thisx, PlayState* play);
+void EnHata_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Hata_InitVars = {

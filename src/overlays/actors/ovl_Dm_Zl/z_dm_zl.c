@@ -10,12 +10,12 @@
 
 #define THIS ((DmZl*)thisx)
 
-void DmZl_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmZl_Init(Actor* thisx, PlayState* play);
+void DmZl_Destroy(Actor* thisx, PlayState* play);
+void DmZl_Update(Actor* thisx, PlayState* play);
+void DmZl_Draw(Actor* thisx, PlayState* play);
 
-void func_80A382FC(DmZl* this, GlobalContext* globalCtx);
+void func_80A382FC(DmZl* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Zl_InitVars = {

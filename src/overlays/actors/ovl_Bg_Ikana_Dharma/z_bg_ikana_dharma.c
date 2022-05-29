@@ -10,10 +10,10 @@
 
 #define THIS ((BgIkanaDharma*)thisx)
 
-void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIkanaDharma_Init(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Update(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Ikana_Dharma_InitVars = {

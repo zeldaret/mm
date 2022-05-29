@@ -10,7 +10,7 @@
 
 struct EnOssan;
 
-typedef void (*EnOssanActionFunc)(struct EnOssan*, GlobalContext*);
+typedef void (*EnOssanActionFunc)(struct EnOssan*, PlayState*);
 typedef void (*EnOssanBlinkFunc)(struct EnOssan*);
 
 typedef struct EnOssan {

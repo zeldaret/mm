@@ -49,7 +49,7 @@ typedef enum {
 
 struct EnElforg;
 
-typedef void (*EnElforgActionFunc)(struct EnElforg*, GlobalContext*);
+typedef void (*EnElforgActionFunc)(struct EnElforg*, PlayState*);
 
 typedef struct EnElforg {
     /* 0x000 */ Actor actor;

@@ -10,10 +10,10 @@
 
 #define THIS ((EnHorseLinkChild*)thisx)
 
-void EnHorseLinkChild_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHorseLinkChild_Init(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Destroy(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Update(Actor* thisx, PlayState* play);
+void EnHorseLinkChild_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Horse_Link_Child_InitVars = {

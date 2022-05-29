@@ -10,10 +10,10 @@
 
 #define THIS ((BgIkninside*)thisx)
 
-void BgIkninside_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIkninside_Init(Actor* thisx, PlayState* play);
+void BgIkninside_Destroy(Actor* thisx, PlayState* play);
+void BgIkninside_Update(Actor* thisx, PlayState* play);
+void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Ikninside_InitVars = {
