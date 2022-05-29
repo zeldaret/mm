@@ -7,6 +7,13 @@ struct DmStk;
 
 typedef void (*DmStkActionFunc)(struct DmStk*, GlobalContext*);
 
+#define DM_STK_GET_TYPE(thisx) ((thisx)->params)
+
+typedef enum {
+    /* 0 */ DM_STK_TYPE_SKULL_KID,
+    /* 1 */ DM_STK_TYPE_MAJORAS_MASK,
+} DmStkType;
+
 typedef struct DmStk {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;

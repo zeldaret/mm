@@ -32,10 +32,10 @@
         <DList Name="gSkullKidOcarinaHoldingRightHand" Offset="0x9DA0" />
 
         <!-- Head DisplayLists with two different expressions -->
-        <DList Name="gSkullKidExpressionlessEyesDL" Offset="0xA530" />
-        <DList Name="gSkullKidExpressionlessHeadDL" Offset="0xA5C0" />
-        <DList Name="gSkullKidHappyEyesDL" Offset="0xAE30" />
-        <DList Name="gSkullKidHappyHeadDL" Offset="0xAEC0" />
+        <DList Name="gSkullKidNormalEyesDL" Offset="0xA530" />
+        <DList Name="gSkullKidNormalHeadDL" Offset="0xA5C0" />
+        <DList Name="gSkullKidLaughingEyesDL" Offset="0xAE30" />
+        <DList Name="gSkullKidLaughingHeadDL" Offset="0xAEC0" />
 
         <Animation Name="gSkullKidTelescopeLookUpStartAnim" Offset="0xBB2C" /> <!-- Original name is "stk_miageru" ("look up") -->
         <Animation Name="gSkullKidTelescopeLookUpLoopAnim" Offset="0xC964" /> <!-- Original name is "stk_miageru_loop" -->

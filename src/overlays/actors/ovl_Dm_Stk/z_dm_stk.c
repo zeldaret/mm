@@ -1,7 +1,11 @@
 /*
  * File: z_dm_stk.c
  * Overlay: ovl_Dm_Stk
- * Description: Skull Kid. Also Majora's Mask in the Happy Mask Salesman's spiel
+ * Description: Skull Kid. Also manages Majora's Mask in the cutscene where is backstory is explained.
+ * 
+ * This actor is responsible for some somewhat unintuitive things. For example, during certain cutscenes,
+ * it is responsible for handling the player's sound effects as well. As another example, this actor makes
+ * time pass when the player looks through the Astral Observatory telescope.
  */
 
 #include "z_dm_stk.h"
@@ -130,7 +134,7 @@ typedef enum {
 typedef enum {
     /* 0 */ SK_FADE_IN_STATE_NONE,
     /* 1 */ SK_FADE_IN_STATE_START,
-    /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG_N,
+    /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG,
     /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
 } SkullKidFadeInState;
 
@@ -1006,7 +1010,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
     this->shouldDraw = true;
-    if (this->actor.params != 1) {
+    if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
         this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_NOT_READY;
         this->objectStkObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
         this->objectStk2ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
@@ -1041,6 +1045,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (gSaveContext.save.entranceIndex == 0x2C00) {
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (gSaveContext.unk_3DD0[3] == 0) {
+                        // Starts a 5 minute (300 second) timer until the moon falls.
                         func_8010E9F0(3, 300);
                         XREG(80) = 200;
                         XREG(81) = 115;
@@ -1057,6 +1062,8 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                 } else if (gSaveContext.sceneSetupIndex == 3) {
                     this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                     if (gSaveContext.unk_3DD0[3] == 0) {
+                        // This code is called when the Giants fail to stop the moon.
+                        // Starts a 1 minute (60 second) timer until the moon falls.
                         func_8010E9F0(3, 60);
                         XREG(80) = 200;
                         XREG(81) = 115;
@@ -1084,6 +1091,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (!(globalCtx->actorCtx.unk5 & 2)) {
                 Actor_MarkForDeath(&this->actor);
             }
+
             this->maskType = SK_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
             this->fogN = 996;
@@ -1095,6 +1103,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
+
             this->maskType = SK_MASK_TYPE_GLOWING_EYES;
             this->alpha = 255;
             this->fogN = 996;
@@ -1583,11 +1592,11 @@ void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
             this->fogN = 800;
             this->fadeInState++;
         }
+
         this->fogR = globalCtx->lightCtx.unk7 * this->fogScale;
         this->fogG = globalCtx->lightCtx.unk8 * this->fogScale;
         this->fogB = globalCtx->lightCtx.unk9 * this->fogScale;
-
-    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG_N) {
+    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
         }
@@ -1750,7 +1759,7 @@ void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
-    if (this->actor.params != 1) {
+    if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
         if (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) {
             Actor_SetFocus(&this->actor, 40.0f);
         } else {
@@ -1774,6 +1783,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         DmStk_UpdateCutscenes(this, globalCtx);
         DmStk_PlayCutsceneSound(this, globalCtx);
 
+        // This handles the cutscene where the player takes out the Deku Pipes for the first time.
         switch (this->dekuPipesCutsceneState) {
             case SK_DEKU_PIPES_CS_STATE_READY:
                 if (func_800B8718(&this->actor, &globalCtx->state)) {
@@ -1801,6 +1811,8 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
         }
 
+        // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
+        // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
         if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
             (globalCtx->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
@@ -1864,11 +1876,11 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         if ((this->animationId == SK_ANIMATION_LOOK_LEFT_LOOP) || (this->animationId == SK_ANIMATION_LAUGH_LOOP) ||
             (this->animationId == SK_ANIMATION_LAUGH_AFTER_SNIFF)) {
-            gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyHeadDL);
-            gSPDisplayList(POLY_OPA_DISP++, gSkullKidHappyEyesDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidLaughingHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidLaughingEyesDL);
         } else {
-            gSPDisplayList(POLY_OPA_DISP++, gSkullKidExpressionlessHeadDL);
-            gSPDisplayList(POLY_OPA_DISP++, gSkullKidExpressionlessEyesDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidNormalHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidNormalEyesDL);
         }
 
         switch (this->maskType) {
@@ -2014,7 +2026,7 @@ void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
     if (this->shouldDraw) {
-        if (this->actor.params == 1) {
+        if (DM_STK_GET_TYPE(&this->actor) == DM_STK_TYPE_MAJORAS_MASK) {
             Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMask1DL);
             return;
         }
