@@ -27,6 +27,8 @@ typedef struct EnDaiku2Effect {
     /* 0x34 */ s16 unk_34;
 } EnDaiku2Effect; // size = 0x38
 
+#define EN_DAIKU2_EFFECT_COUNT 50
+
 typedef struct EnDaiku2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -47,7 +49,7 @@ typedef struct EnDaiku2 {
     /* 0x284 */ f32 unk_284;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
-    /* 0x28C */ EnDaiku2Effect effects[50];
+    /* 0x28C */ EnDaiku2Effect effects[EN_DAIKU2_EFFECT_COUNT];
     /* 0xD7C */ ColliderCylinder collider;
 } EnDaiku2; // size = 0xDC8
 

@@ -58,7 +58,9 @@ typedef struct {
     Vec3s rot;
 } EnFallDebrisEffect;
 
-EnFallDebrisEffect debrisEffects[50];
+#define EN_FALL_DEBRIS_EFFECT_COUNT 50
+
+EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,

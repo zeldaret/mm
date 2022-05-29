@@ -19,6 +19,8 @@ typedef struct EnDaiEffect {
     /* 0x38 */ f32 unk_38;
 } EnDaiEffect; // size = 0x3C
 
+#define EN_DAI_EFFECT_COUNT 32
+
 typedef struct EnDai {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -39,7 +41,7 @@ typedef struct EnDai {
     /* 0x1FC */ Vec3f unk_1FC;
     /* 0x208 */ Vec3s jointTable[19];
     /* 0x27A */ Vec3s morphTable[19];
-    /* 0x2EC */ EnDaiEffect effects[32];
+    /* 0x2EC */ EnDaiEffect effects[EN_DAI_EFFECT_COUNT];
     /* 0xA6C */ s32 unk_A6C;
     /* 0xA70 */ s32 unk_A70;
 } EnDai; // size = 0xA74

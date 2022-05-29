@@ -22,6 +22,8 @@ typedef struct NejironEffect {
     /* 0x34 */ s16 timer;
 } NejironEffect; // size = 0x38
 
+#define EN_BAGUO_EFFECT_COUNT 30
+
 typedef struct EnBaguo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -39,7 +41,7 @@ typedef struct EnBaguo {
     /* 0x1D0 */ Vec3f targetRotation;
     /* 0x1DC */ ColliderJntSph collider;
     /* 0x1FC */ ColliderJntSphElement colliderElements[1];
-    /* 0x23C */ NejironEffect effects[30];
+    /* 0x23C */ NejironEffect effects[EN_BAGUO_EFFECT_COUNT];
 } EnBaguo; // size = 0x8CC
 
 extern const ActorInit En_Baguo_InitVars;

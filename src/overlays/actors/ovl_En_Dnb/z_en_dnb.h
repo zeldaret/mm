@@ -29,10 +29,12 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
 } EnDnbUnkStruct; // size = 0x28
 
+#define EN_DNB_EFFECT_COUNT 54
+
 typedef struct EnDnb {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ UNK_TYPE1 unk_015C[0x4];
-    /* 0x0160 */ EnDnbEffect effects[54];
+    /* 0x0160 */ EnDnbEffect effects[EN_DNB_EFFECT_COUNT];
     /* 0x0D30 */ s16 unk_0D30;
     /* 0x0D32 */ s16 unk_0D32;
     /* 0x0D34 */ s16 unk_0D34;

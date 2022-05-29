@@ -493,7 +493,7 @@ void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
     s16 i;
-    EnDaiku2Effect* effect = &this->effects[0];
+    EnDaiku2Effect* effect = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (!effect->isEnabled) {
@@ -513,7 +513,7 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
 
 void func_80BE7600(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 i;
-    EnDaiku2Effect* effect = &this->effects[0];
+    EnDaiku2Effect* effect = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
@@ -535,7 +535,7 @@ void func_80BE7600(EnDaiku2* this, GlobalContext* globalCtx) {
 void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 i;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    EnDaiku2Effect* effect = &this->effects[0];
+    EnDaiku2Effect* effect = this->effects;
     s32 objectIdx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

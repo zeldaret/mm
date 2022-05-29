@@ -28,6 +28,8 @@ typedef struct {
     /* 0x34 */ s16 timer;
 } EnRafEffect; // size = 0x38
 
+#define EN_RAF_EFFECT_COUNT 31
+
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;
@@ -59,7 +61,7 @@ typedef struct EnRaf {
     /* 0x3CC */ s16 petalClearPixelSecondPassIndex;
     /* 0x3CE */ s16 teethClearPixelSecondPassIndex;
     /* 0x3D0 */ ColliderCylinder collider;
-    /* 0x41C */ EnRafEffect effects[31];
+    /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
 
 extern const ActorInit En_Raf_InitVars;

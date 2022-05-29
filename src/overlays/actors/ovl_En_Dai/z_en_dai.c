@@ -36,7 +36,7 @@ static Vec3f D_80B3FBF0 = { 1.0f, 1.0f, 1.0f };
 EnDaiEffect* func_80B3DFF0(EnDaiEffect* effect, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
     s32 i;
 
-    for (i = 0; i < 32; i++, effect++) {
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
         if (!effect->isEnabled) {
             effect->isEnabled = true;
             effect->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
@@ -64,7 +64,7 @@ void func_80B3E168(EnDaiEffect* effect, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 32; i++, effect++) {
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
         if (effect->isEnabled == true) {
             gDPPipeSync(POLY_XLU_DISP++);
 
@@ -100,7 +100,7 @@ void func_80B3E168(EnDaiEffect* effect, GlobalContext* globalCtx2) {
 }
 
 s32 func_80B3E460(EnDai* this) {
-    EnDaiEffect* effect = &this->effects[0];
+    EnDaiEffect* effect = this->effects;
     s32 i;
     s32 count;
 
