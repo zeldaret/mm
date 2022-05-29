@@ -7,7 +7,7 @@ struct EnEncount2;
 
 typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 
-typedef struct EnEncount2Particle{
+typedef struct EnEncount2Effect{
    /* 0x00 */ u8 enabled;
    /* 0x04 */ Vec3f pos;
    /* 0x10 */ UNK_TYPE4 unk10;
@@ -16,7 +16,7 @@ typedef struct EnEncount2Particle{
    /* 0x18 */ Vec3f vel;
    /* 0x24 */ Vec3f accel;
    /* 0x30 */ f32 scale;
-} EnEncount2Particle; // size = 0x34
+} EnEncount2Effect; // size = 0x34
 
 typedef struct EnEncount2 {
     /* 0x0000 */ DynaPolyActor dyna;
@@ -28,7 +28,7 @@ typedef struct EnEncount2 {
     /* 0x016C */ f32 oscillationAngle;
     /* 0x0170 */ ColliderJntSph collider;
     /* 0x0190 */ ColliderJntSphElement colElement;
-    /* 0x01D0 */ EnEncount2Particle particles[200];
+    /* 0x01D0 */ EnEncount2Effect effects[200];
 } EnEncount2; // size = 0x2A70
 
 #define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))

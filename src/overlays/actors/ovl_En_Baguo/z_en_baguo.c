@@ -22,10 +22,10 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this);
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx);
-void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
-                                s16 timer);
-void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx);
-void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+                              s16 timer);
+void EnBaguo_UpdateEffects(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_DrawEffects(EnBaguo* this, GlobalContext* globalCtx);
 
 typedef enum {
     /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
@@ -335,15 +335,15 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
 
-                for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
+                for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
                     acceleration.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
                     acceleration.y = -1.0f;
                     acceleration.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
                     velocity.x = (Rand_ZeroOne() - 0.5f) * 14.0f;
                     velocity.y = Rand_ZeroOne() * 30.0f;
                     velocity.z = (Rand_ZeroOne() - 0.5f) * 14.0f;
-                    EnBaguo_InitializeParticle(this, &this->actor.focus.pos, &velocity, &acceleration,
-                                               (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
+                    EnBaguo_InitializeEffect(this, &this->actor.focus.pos, &velocity, &acceleration,
+                                             (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
                 }
 
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
@@ -368,7 +368,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
     Actor_SetFocus(&this->actor, 30.0f);
-    EnBaguo_UpdateParticles(this, globalCtx);
+    EnBaguo_UpdateEffects(this, globalCtx);
     EnBaguo_CheckForDetonation(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
@@ -432,77 +432,77 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    EnBaguo_DrawRockParticles(this, globalCtx);
+    EnBaguo_DrawEffects(this, globalCtx);
 }
 
-void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
-                                s16 timer) {
+void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+                              s16 timer) {
     s16 i;
-    NejironParticle* particle = this->particles;
+    NejironEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (!particle->isVisible) {
-            particle->isVisible = true;
-            particle->position = *position;
-            particle->velocity = *velocity;
-            particle->acceleration = *acceleration;
-            particle->scale = scale;
-            particle->timer = timer;
-            particle->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            particle->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            particle->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isVisible) {
+            effect->isVisible = true;
+            effect->position = *position;
+            effect->velocity = *velocity;
+            effect->acceleration = *acceleration;
+            effect->scale = scale;
+            effect->timer = timer;
+            effect->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
             return;
         }
     }
 }
 
-void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_UpdateEffects(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
-    NejironParticle* particle = this->particles;
+    NejironEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isVisible) {
-            particle->position.x += particle->velocity.x;
-            particle->position.y += particle->velocity.y;
-            particle->position.z += particle->velocity.z;
-            particle->rotation.x += 0xBB8;
-            particle->rotation.y += 0xBB8;
-            particle->rotation.z += 0xBB8;
-            particle->velocity.x += particle->acceleration.x;
-            particle->velocity.y += particle->acceleration.y;
-            particle->velocity.z += particle->acceleration.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isVisible) {
+            effect->position.x += effect->velocity.x;
+            effect->position.y += effect->velocity.y;
+            effect->position.z += effect->velocity.z;
+            effect->rotation.x += 0xBB8;
+            effect->rotation.y += 0xBB8;
+            effect->rotation.z += 0xBB8;
+            effect->velocity.x += effect->acceleration.x;
+            effect->velocity.y += effect->acceleration.y;
+            effect->velocity.z += effect->acceleration.z;
 
-            if (particle->position.y < (this->actor.world.pos.y - 10.0f)) {
-                Math_ApproachZeroF(&particle->scale, 0.2f, 0.001f);
-                if (particle->scale <= 0.0001f) {
-                    particle->timer = 0;
+            if (effect->position.y < (this->actor.world.pos.y - 10.0f)) {
+                Math_ApproachZeroF(&effect->scale, 0.2f, 0.001f);
+                if (effect->scale <= 0.0001f) {
+                    effect->timer = 0;
                 }
             }
 
-            if (particle->timer != 0) {
-                particle->timer--;
+            if (effect->timer != 0) {
+                effect->timer--;
             } else {
-                particle->isVisible = false;
+                effect->isVisible = false;
             }
         }
     }
 }
 
-void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_DrawEffects(EnBaguo* this, GlobalContext* globalCtx) {
     s16 i;
-    NejironParticle* particle = this->particles;
+    NejironEffect* effect = this->effects;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isVisible) {
-            Matrix_Translate(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
-            Matrix_RotateXS(particle->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(particle->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(particle->rotation.z, MTXMODE_APPLY);
-            Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isVisible) {
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
