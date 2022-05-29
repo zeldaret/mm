@@ -208,7 +208,7 @@ Gfx* GfxPrint_Close(GfxPrint* this) {
     this->flags &= ~GFXP_FLAG_OPEN;
     ret = this->dList;
     this->dList = NULL;
-    
+
     return ret;
 }
 
