@@ -335,7 +335,7 @@ void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* ske
  * that starts when the player start a new game and ends when the screen fades to white
  * after Skull Kid steals Epona.
  */
-void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames + 20) {
         case 1195:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -426,7 +426,7 @@ void DmStk_IntroCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCt
  * looking at the moon on top of the Clock Tower. However, it doesn't actually play
  * any sound in-game, since all sound effects are muted when it plays.
  */
-void DmStk_TitleCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForTitleCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 535) {
         func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
     }
@@ -436,7 +436,7 @@ void DmStk_TitleCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
  * Handles sound effects for the second part of the intro cutscene, i.e., the cutscene
  * that starts after the fade-to-white and ends when the player gains control.
  */
-void DmStk_IntroCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 78:
         case 89:
@@ -468,7 +468,7 @@ void DmStk_IntroCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalC
  * Handles sound effects for the cutscene where Skull Kid steals Majora's Mask from
  * the Happy Mask Salesman.
  */
-void DmStk_ObtainingMajorasMaskCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 18:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
@@ -489,7 +489,7 @@ void DmStk_ObtainingMajorasMaskCutscene_PlaySound(DmStk* this, GlobalContext* gl
  * that starts when Link falls down the large hole and ends with a fade-to-black to
  * the hallucinatory Deku Scrubs scene.
  */
-void DmStk_CurseCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 415:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
@@ -515,7 +515,7 @@ void DmStk_CurseCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCt
  * that starts once the hallucinatory Deku Scrubs scene is over and ends when the player
  * gains control.
  */
-void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -568,7 +568,7 @@ void DmStk_CurseCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalC
  * it handles the variation of the cutscene that plays the first time the player reaches the
  * top of the Clock Tower, which is slightly longer.
  */
-void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForClockTowerIntroCutsceneFirstTime(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
@@ -620,7 +620,7 @@ void DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext
 /**
  * Handles sound effects for the cutscene where Skull Kid drops the Ocarina of Time.
  */
-void DmStk_DroppingOcarinaCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
@@ -630,7 +630,7 @@ void DmStk_DroppingOcarinaCutscene_PlaySound(DmStk* this, GlobalContext* globalC
 /**
  * Handles sound effects for the cutscene where Skull Kid is shivering in the rain.
  */
-void DmStk_ShiveringInRainCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForShiveringInRainCutscene(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.frames >= 642) && (globalCtx->csCtx.frames < 845)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
@@ -640,7 +640,7 @@ void DmStk_ShiveringInRainCutscene_PlaySound(DmStk* this, GlobalContext* globalC
  * Handles sound effects for the cutscene where Skull Kid is playing with Tatl and Tael
  * in Termina Field.
  */
-void DmStk_PlayingWithFairiesCutscene_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 58:
         case 61:
@@ -667,7 +667,7 @@ void DmStk_PlayingWithFairiesCutscene_PlaySound(DmStk* this, GlobalContext* glob
  * that starts after the Dawn of the New Day screen and ends with a fade to black as
  * the Giants are walking away.
  */
-void DmStk_EndingCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 5:
             func_801A4A28(12);
@@ -683,7 +683,7 @@ void DmStk_EndingCutsceneFirstPart_PlaySound(DmStk* this, GlobalContext* globalC
  * Handles sound effects for the second part of the ending cutscene, i.e., the cutscene
  * that starts after a fade-to-black and ends after the credits start.
  */
-void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -756,7 +756,7 @@ void DmStk_EndingCutsceneSecondPart_PlaySound(DmStk* this, GlobalContext* global
  * it handles the variation of the cutscene that plays the second or later time the player
  * reaches the top of the Clock Tower, which is slightly shorter.
  */
-void DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForClockTowerIntroCutsceneSubsequentTimes(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
@@ -797,7 +797,7 @@ void DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalC
  * Handles sound effects for the cutscene that plays after the player performs the
  * Oath to Order at the top of the Clock Tower.
  */
-void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, GlobalContext* globalCtx) {
     this->oathToOrderCutsceneVoicePos.x = this->actor.projectedPos.x;
     this->oathToOrderCutsceneVoicePos.y = this->actor.projectedPos.y;
     this->oathToOrderCutsceneVoicePos.z = this->actor.projectedPos.z;
@@ -872,7 +872,7 @@ void DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(DmStk* this, GlobalContext*
  * it handles the variation of the cutscene that plays the first time the player warps to the
  * moon, which is slightly longer.
  */
-void DmStk_MoonWarpCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForMoonWarpCutsceneFirstTime(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -894,7 +894,7 @@ void DmStk_MoonWarpCutsceneFirstTime_PlaySound(DmStk* this, GlobalContext* globa
  * it handles the variation of the cutscene that plays the second or later time the player
  * warps to the moon, which is slightly shorter.
  */
-void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForMoonWarpCutsceneSubsequentTimes(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -914,31 +914,31 @@ void DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(DmStk* this, GlobalContext*
 /**
  * Handles sound effects for all cutscenes.
  */
-void DmStk_PlayCutsceneSound(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForCutscenes(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         switch (globalCtx->sceneNum) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    DmStk_IntroCutsceneFirstPart_PlaySound(this, globalCtx);
+                    DmStk_PlaySfxForIntroCutsceneFirstPart(this, globalCtx);
                 } else if (gSaveContext.sceneSetupIndex == 0) {
-                    DmStk_IntroCutsceneSecondPart_PlaySound(this, globalCtx);
+                    DmStk_PlaySfxForIntroCutsceneSecondPart(this, globalCtx);
                 } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.currentCsIndex == 0)) {
-                    DmStk_ObtainingMajorasMaskCutscene_PlaySound(this, globalCtx);
+                    DmStk_PlaySfxForObtainingMajorasMaskCutscene(this, globalCtx);
                 }
                 break;
 
             case SCENE_CLOCKTOWER:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    DmStk_TitleCutscene_PlaySound(this, globalCtx);
+                    DmStk_PlaySfxForTitleCutscene(this, globalCtx);
                 }
                 break;
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_CurseCutsceneFirstPart_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForCurseCutsceneFirstPart(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        DmStk_CurseCutsceneSecondPart_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForCurseCutsceneSecondPart(this, globalCtx);
                     }
                 }
                 break;
@@ -946,19 +946,19 @@ void DmStk_PlayCutsceneSound(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_ClockTowerIntroCutsceneFirstTime_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneFirstTime(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        DmStk_DroppingOcarinaCutscene_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForDroppingOcarinaCutscene(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        DmStk_ClockTowerIntroCutsceneSubsequentTimes_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneSubsequentTimes(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 3) {
-                        DmStk_CutsceneAfterPlayingOathToOrder_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_MoonWarpCutsceneFirstTime_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneFirstTime(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        DmStk_MoonWarpCutsceneSubsequentTimes_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneSubsequentTimes(this, globalCtx);
                     }
                 }
                 break;
@@ -966,15 +966,15 @@ void DmStk_PlayCutsceneSound(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_ShiveringInRainCutscene_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForShiveringInRainCutscene(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        DmStk_PlayingWithFairiesCutscene_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForPlayingWithFairiesCutscene(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_EndingCutsceneFirstPart_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForEndingCutsceneFirstPart(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        DmStk_EndingCutsceneSecondPart_PlaySound(this, globalCtx);
+                        DmStk_PlaySfxForEndingCutsceneSecondPart(this, globalCtx);
                     }
                 }
                 break;
@@ -1781,7 +1781,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         DmStk_UpdateCutscenes(this, globalCtx);
-        DmStk_PlayCutsceneSound(this, globalCtx);
+        DmStk_PlaySfxForCutscenes(this, globalCtx);
 
         // This handles the cutscene where the player takes out the Deku Pipes for the first time.
         switch (this->dekuPipesCutsceneState) {
