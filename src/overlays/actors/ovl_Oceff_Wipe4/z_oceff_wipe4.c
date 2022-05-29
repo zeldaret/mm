@@ -1,12 +1,12 @@
 /*
  * File: z_oceff_wipe4.c
  * Overlay: ovl_Oceff_Wipe4
- * Description:
+ * Description: Scarecrow's Song Ocarina Effect
  */
 
 #include "z_oceff_wipe4.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe4*)thisx)
 

@@ -6,7 +6,7 @@
 
 #include "z_en_firefly2.h"
 
-#define FLAGS 0x00005015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly2*)thisx)
 

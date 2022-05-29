@@ -1,0 +1,10 @@
+﻿<Root>
+    <File Name="object_gi_shield_3" Segment="6">
+        <DList Name="object_gi_shield_3_DL_000770" Offset="0x770" />
+        <DList Name="object_gi_shield_3_DL_000BF8" Offset="0xBF8" />
+        <Texture Name="object_gi_shield_3_Tex_000C00" OutName="tex_000C00" Format="i4" Width="32" Height="32" Offset="0xC00" />
+        <Texture Name="object_gi_shield_3_Tex_000E00" OutName="tex_000E00" Format="i8" Width="32" Height="64" Offset="0xE00" />
+        <Texture Name="object_gi_shield_3_Tex_001600" OutName="tex_001600" Format="i8" Width="32" Height="32" Offset="0x1600" />
+        <Texture Name="object_gi_shield_3_Tex_001A00" OutName="tex_001A00" Format="i4" Width="32" Height="32" Offset="0x1A00" />
+    </File>
+</Root>

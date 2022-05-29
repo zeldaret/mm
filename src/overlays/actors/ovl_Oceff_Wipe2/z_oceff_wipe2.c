@@ -1,12 +1,12 @@
 /*
  * File: z_oceff_wipe2.c
  * Overlay: ovl_Oceff_Wipe2
- * Description:
+ * Description: Epona's Song Ocarina Effect
  */
 
 #include "z_oceff_wipe2.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe2*)thisx)
 

@@ -34,16 +34,16 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
 
     __osPackRequestData(0);
 
-    ret = __osSiRawStartDma(1, &__osContPifRam);
-    osRecvMesg(mq, &dummy, 1);
+    ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
+    osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 
-    ret = __osSiRawStartDma(0, &__osContPifRam);
-    osRecvMesg(mq, &dummy, 1);
+    ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
+    osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 
     __osContGetInitData(bitpattern, data);
     __osContLastPoll = 0;
     __osSiCreateAccessQueue();
-    osCreateMesgQueue(&D_8009CF38, D_8009CF50, 1);
+    osCreateMesgQueue(&D_8009CF38, D_8009CF50, ARRAY_COUNT(D_8009CF50));
 
     return ret;
 }
@@ -78,7 +78,7 @@ void __osPackRequestData(u8 poll) {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = 1;
+    __osContPifRam.status = 1;
     ptr = (u8*)__osContPifRam.ramarray;
     requestHeader.align = 255;
     requestHeader.txsize = 1;

@@ -1,12 +1,12 @@
 /*
  * File: z_obj_toudai.c
  * Overlay: ovl_Obj_Toudai
- * Description: Clock Tower Spotlight
+ * Description: Unused early Clock Tower Spotlight
  */
 
 #include "z_obj_toudai.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjToudai*)thisx)
 

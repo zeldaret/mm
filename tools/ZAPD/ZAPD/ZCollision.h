@@ -4,7 +4,9 @@
 #include "ZResource.h"
 #include "ZRoom/ZRoom.h"
 #include "ZVector.h"
+#include "ZCollisionPoly.h"
 
+#if 0
 class PolygonEntry
 {
 public:
@@ -14,6 +16,7 @@ public:
 
 	PolygonEntry(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex);
 };
+#endif
 
 class WaterBoxHeader
 {
@@ -55,8 +58,7 @@ public:
 	std::vector<CameraPositionData*> cameraPositionData;
 
 	CameraDataList(ZFile* parent, const std::string& prefix, const std::vector<uint8_t>& rawData,
-	               uint32_t rawDataIndex, uint32_t polyTypeDefSegmentOffset,
-	               uint32_t polygonTypesCnt);
+	               offset_t rawDataIndex, offset_t upperCameraBoundary);
 	~CameraDataList();
 };
 
@@ -79,7 +81,7 @@ public:
 		waterBoxSegmentOffset;
 
 	std::vector<ZVector> vertices;
-	std::vector<PolygonEntry> polygons;
+	std::vector<ZCollisionPoly> polygons;
 	std::vector<uint64_t> polygonTypes;
 	std::vector<WaterBoxHeader> waterBoxes;
 	CameraDataList* camData = nullptr;

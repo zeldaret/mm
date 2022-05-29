@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_spot11_obj" Segment="6">
+        <DList Name="object_spot11_obj_DL_000080" Offset="0x80" />
+        <DList Name="object_spot11_obj_DL_000088" Offset="0x88" />
+        <Texture Name="object_spot11_obj_Tex_000120" OutName="tex_000120" Format="rgba16" Width="32" Height="64" Offset="0x120" />
+        <Collision Name="object_spot11_obj_Colheader_0011C0" Offset="0x11C0" />
+        <DList Name="object_spot11_obj_DL_0013F0" Offset="0x13F0" />
+        <Texture Name="object_spot11_obj_TLUT_001560" OutName="tlut_001560" Format="rgba16" Width="16" Height="16" Offset="0x1560" />
+        <Texture Name="object_spot11_obj_Tex_001760" OutName="tex_001760" Format="ci8" Width="32" Height="32" Offset="0x1760" />
+        <Texture Name="object_spot11_obj_Tex_001B60" OutName="tex_001B60" Format="ci8" Width="32" Height="16" Offset="0x1B60" />
+        <Collision Name="object_spot11_obj_Colheader_001EB8" Offset="0x1EB8" />
+    </File>
+</Root>

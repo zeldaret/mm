@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_mbar_chair.h"
+#include "objects/object_mbar_obj/object_mbar_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -34,15 +35,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_060019B4;
-extern Gfx D_06000288[];
-
 void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mbar_obj_Colheader_0019B4);
 }
 
 void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -55,5 +53,5 @@ void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000288);
+    Gfx_DrawDListOpa(globalCtx, object_mbar_obj_DL_000288);
 }

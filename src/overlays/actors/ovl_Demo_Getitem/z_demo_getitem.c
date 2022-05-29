@@ -1,12 +1,12 @@
 /*
  * File: z_demo_getitem.c
  * Overlay: ovl_Demo_Getitem
- * Description:
+ * Description: Cutscene object for Great Fairy's Mask and Great Fairy's Sword
  */
 
 #include "z_demo_getitem.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DemoGetitem*)thisx)
 

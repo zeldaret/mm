@@ -1,12 +1,12 @@
 /*
  * File: z_oceff_wipe.c
  * Overlay: ovl_Oceff_Wipe
- * Description:
+ * Description: Song of Time Ocarina Effect
  */
 
 #include "z_oceff_wipe.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe*)thisx)
 

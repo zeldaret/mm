@@ -1,0 +1,7 @@
+<Root>
+    <File Name="ovl_Dm_Char01" BaseAddress="0x80AA81E0" RangeStart="0x1BE0" RangeEnd="0x28B0">
+        <Array Name="ovl_dm_char01_Vtx_1BE0" Count="205" Offset="0x1BE0">
+            <Vtx/>
+        </Array>
+    </File>
+</Root>

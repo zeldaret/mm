@@ -55,7 +55,7 @@ void __osPfsRequestData(u8 poll) {
 
     __osContLastPoll = poll;
 
-    __osPfsPifRam.pifstatus = 1;
+    __osPfsPifRam.status = 1;
 
     req.align = 0xFF;
     req.txsize = 1;

@@ -5,8 +5,10 @@
  */
 
 #include "z_demo_kankyo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DemoKankyo*)thisx)
 
@@ -16,10 +18,6 @@ void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx);
-
-extern Gfx D_0407AB58[];
-extern Gfx D_06001000[]; // the bubble display list used by shabom in giants type
-extern Gfx D_04023428[];
 
 static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
 static s16 sLostWoodsSkyFishParticleNum = 0;
@@ -155,12 +153,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
 
                     Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
                     Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
-                    this->particles[i].posOffset.x +=
-                        __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                    this->particles[i].posOffset.y +=
-                        __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                    this->particles[i].posOffset.z +=
-                        __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                    this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                    this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                    this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:
@@ -207,7 +202,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                                                this->particles[i].LostWoodsSkyFishPosOffsetMax,
                                            0.5f, 2.0f, 0.2f);
                         this->particles[i].LostWoodsSkyFishSpeedXZClock += this->particles[i].LostWoodsSkyFishSpeedXZ;
-                        this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y);
+                        this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y);
                         this->particles[i].speedClock.x += 0.2f * Rand_ZeroOne(); // unused calculation
                         this->particles[i].speedClock.y += this->particles[i].LostWoodsSkyFishSpeedY;
                         this->particles[i].speedClock.z += 0.1f * Rand_ZeroOne(); // unused calculation
@@ -379,9 +374,9 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 Math_SmoothStepToF(&this->particles[i].scale, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
 
-                this->particles[i].posOffset.x += __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                this->particles[i].posOffset.z += __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                 switch ((i >> 1) & 3) {
                     case 0:
@@ -512,21 +507,21 @@ void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
-    DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    DemoKankyo* this = THIS;
     s16 i;
     f32 scaleAlpha;
     Vec3f worldPos;
     Vec3f screenPos;
 
     // if not underwater
-    if (!(globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100)) {
+    if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_04079B10));
-        gSPDisplayList(POLY_XLU_DISP++, D_0407AB10);
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
 
         for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->particles[i].posBase.x + this->particles[i].posOffset.x;
@@ -538,7 +533,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
                     scaleAlpha = 1.0f;
@@ -588,12 +583,12 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
-                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_0407AB58);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
             }
         }
 
@@ -603,8 +598,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
 
 // draw, giants and moon
 void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
-    DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    DemoKankyo* this = THIS;
     s16 i;
     f32 alphaScale;
 
@@ -627,7 +622,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
                     alphaScale = 1.0f;
@@ -635,7 +630,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 Matrix_Scale(this->particles[i].scale * alphaScale, this->particles[i].scale * alphaScale,
                              this->particles[i].scale * alphaScale, MTXMODE_APPLY);
                 alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
-                alphaScale = (alphaScale > 1.0f) ? 0.0f : (1.0f - alphaScale) > 1.0f ? 1.0f : 1.0f - alphaScale;
+                alphaScale = CLAMP(1.0f - alphaScale, 0.0f, 1.0f);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     this->particles[i].alpha = 255.0f * alphaScale;
@@ -657,19 +652,19 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &D_04023348);
+                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
 
-                Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
-                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
-                    gSPDisplayList(POLY_XLU_DISP++, D_06001000);
+                    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
             }
         }

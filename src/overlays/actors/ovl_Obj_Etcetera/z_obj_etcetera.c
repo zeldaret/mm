@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_etcetera.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjEtcetera*)thisx)
 
@@ -14,8 +15,8 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx);
@@ -51,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 20, 14, 0, { 0, 0, 0 } },
 };
-
-extern ColliderCylinderInit D_80A7C790;
 
 static s16 objectIds[] = {
     GAMEPLAY_KEEP,
@@ -105,6 +104,11 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
+/**
+ * This function will make the flower oscillate on the X and Z axes in most situations
+ * where something interacts with it. When the player launches out of the flower, the
+ * oscillation is handled by ObjEtcetera_DoBounceOscillation instead.
+ */
 void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (this->oscillationTimer > 0) {
         s32 requiredScopeTemp;
@@ -119,10 +123,11 @@ void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx
     }
 }
 
-void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
-    Animation_Change(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, Animation_GetLastFrame(&D_040117A8), 2, 0.0f);
+void ObjEtcetera_StartRustleAnimation(ObjEtcetera* this) {
+    Animation_Change(&this->skelAnime, &gDekuFlowerRustleAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuFlowerRustleAnim), 2, 0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-    this->actionFunc = ObjEtcetera_PlaySmallFlutterAnimation;
+    this->actionFunc = ObjEtcetera_PlayRustleAnimation;
 }
 
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
@@ -131,12 +136,13 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
-        Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gDekuFlowerBounceAnim), 2, 0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-        this->actionFunc = ObjEtcetera_DoIntenseOscillation;
+        this->actionFunc = ObjEtcetera_DoBounceOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->intenseOscillationScale = 0.003f;
+        this->bounceOscillationScale = 0.003f;
         this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
@@ -151,7 +157,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
-                ObjEtcetera_StartSmallFlutterAnimation(this);
+                ObjEtcetera_StartRustleAnimation(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
                 // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very
                 // start of launching
@@ -162,19 +168,19 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
             if (this->burrowFlag & 1) {
                 // Player is walking off the Deku Flower
                 this->oscillationTimer = 10;
-                ObjEtcetera_StartSmallFlutterAnimation(this);
+                ObjEtcetera_StartRustleAnimation(this);
             }
             this->burrowFlag &= ~1;
         }
     }
     if ((this->collider.base.acFlags & AC_HIT)) {
         this->oscillationTimer = 10;
-        ObjEtcetera_StartSmallFlutterAnimation(this);
+        ObjEtcetera_StartRustleAnimation(this);
     }
     ObjEtcetera_DoNormalOscillation(this, globalCtx);
 }
 
-void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
@@ -187,7 +193,12 @@ void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* glo
     ObjEtcetera_DoNormalOscillation(this, globalCtx);
 }
 
-void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
+/**
+ * When the bounce animation plays (either because the player launched out of the flower,
+ * or because the flower spawned after killing a Mad Scrub), this function makes the
+ * flower oscillate stronger than it normally does, including an oscillation on the Y-axis.
+ */
+void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
     // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
@@ -208,12 +219,12 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->oscillationTimer = 0;
-        this->intenseOscillationScale = 0.0f;
+        this->bounceOscillationScale = 0.0f;
         return;
     }
-    this->intenseOscillationScale *= 0.8f;
-    this->intenseOscillationScale -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
-    scaleTemp = dyna->actor.scale.x + this->intenseOscillationScale;
+    this->bounceOscillationScale *= 0.8f;
+    this->bounceOscillationScale -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
+    scaleTemp = dyna->actor.scale.x + this->bounceOscillationScale;
     Actor_SetScale(&this->dyna.actor, scaleTemp);
     this->dyna.actor.scale.y = 2.0f * scaleTemp;
 }
@@ -221,7 +232,12 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
     s32 type;
-    CollisionHeader* collisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
+    CollisionHeader* collisionHeaders[] = {
+        &gPinkDekuFlowerCol,
+        &gPinkDekuFlowerCol,
+        &gGoldDekuFlowerCol,
+        &gGoldDekuFlowerCol,
+    };
     s32 pad;
     CollisionHeader* thisCollisionHeader;
 
@@ -232,7 +248,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
-        Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
+        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 1);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
@@ -244,15 +260,15 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (type) {
             case DEKU_FLOWER_TYPE_PINK:
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->jointTable,
-                               this->morphTable, 11);
-                this->dList = &D_0400ED80;
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim,
+                               this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
+                this->dList = gPinkDekuFlowerIdleDL;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                this->dList = &D_04011BD0;
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->jointTable,
-                               this->morphTable, 11);
+                this->dList = gGoldDekuFlowerIdleDL;
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gGoldDekuFlowerSkel.sh, &gDekuFlowerBounceAnim,
+                               this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
                 break;
         }
@@ -270,13 +286,13 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2,
-                                 0.0f);
+                Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
+                                 Animation_GetLastFrame(&gDekuFlowerBounceAnim), 2, 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-                this->actionFunc = ObjEtcetera_DoIntenseOscillation;
+                this->actionFunc = ObjEtcetera_DoBounceOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
                 this->oscillationTimer = 30;
-                this->intenseOscillationScale = 0.0f;
+                this->bounceOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;
@@ -299,6 +315,11 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
+/**
+ * When the flower isn't animating, this function is used to draw it.
+ * It draws the flower as a single, non-moving display list that encompasses the whole flower.
+ * When an animation is finished, functions are expected to set the actor's draw function to this.
+ */
 void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
@@ -311,6 +332,11 @@ void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+/**
+ * When the flower is animating, this function is used to draw it.
+ * It draws the flower as an animated bunch of limbs using the SkelAnime system.
+ * When a function wants to play an animation, it is expected to set the actor's draw function to this.
+ */
 void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 

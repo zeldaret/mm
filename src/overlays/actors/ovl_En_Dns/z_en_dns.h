@@ -2,6 +2,7 @@
 #define Z_EN_DNS_H
 
 #include "global.h"
+#include "objects/object_dns/object_dns.h"
 
 struct EnDns;
 
@@ -31,8 +32,8 @@ typedef struct EnDns {
     /* 0x1E4 */ Gfx* unk_1E4[13];
     /* 0x218 */ Vec3f unk_218;
     /* 0x224 */ Vec3s unk_224;
-    /* 0x22A */ Vec3s jointTable[13];
-    /* 0x278 */ Vec3s morphTable[13];
+    /* 0x22A */ Vec3s jointTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
+    /* 0x278 */ Vec3s morphTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
     /* 0x2C6 */ u16 unk_2C6;
     /* 0x2C8 */ u16 unk_2C8;
     /* 0x2CA */ UNK_TYPE1 unk_2CA[0x2];
@@ -45,14 +46,14 @@ typedef struct EnDns {
     /* 0x2D8 */ s16 unk_2D8;
     /* 0x2DA */ s16 unk_2DA;
     /* 0x2DC */ s16 unk_2DC;
-    /* 0x2DE */ s16 unk_2DE;
-    /* 0x2E0 */ s16 unk_2E0;
+    /* 0x2DE */ s16 blinkTimer;
+    /* 0x2E0 */ s16 eyeIndex;
     /* 0x2E4 */ f32 unk_2E4;
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x4];
     /* 0x2EC */ f32 unk_2EC;
     /* 0x2F0 */ f32 unk_2F0;
     /* 0x2F4 */ EnDnsFunc unk_2F4;
-    /* 0x2F8 */ s32 unk_2F8;
+    /* 0x2F8 */ s32 animationIndex;
     /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300
 

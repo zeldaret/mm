@@ -9,7 +9,7 @@ OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
 u8 sDmaMgrStack[0x500];
 
-s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
+s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
     OSIoMesg ioMsg;
     OSMesgQueue queue;
     OSMesg msg[1];
@@ -31,7 +31,7 @@ s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
                 goto END;
             }
 
-            osRecvMesg(&queue, NULL, 1);
+            osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
             size -= buffSize;
             rom = rom + buffSize;
             ram = (u8*)ram + buffSize;
@@ -47,7 +47,7 @@ s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
         goto END;
     }
 
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     osInvalDCache(ram, size);
 
@@ -55,8 +55,8 @@ END:
     return ret;
 }
 
-void DmaMgr_DmaCallback0(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
-    osEPiStartDma(pihandle, mb, direction);
+s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
+    return osEPiStartDma(pihandle, mb, direction);
 }
 
 DmaEntry* DmaMgr_FindDmaEntry(u32 vrom) {
@@ -129,7 +129,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
             if (dmaEntry->vromEnd < (vrom + size)) {
                 Fault_AddHungupAndCrash("../z_std_dma.c", 499);
             }
-            DmaMgr_DMARomToRam((dmaEntry->romStart + vrom) - dmaEntry->vromStart, (u8*)ram, size);
+            DmaMgr_DmaRomToRam((dmaEntry->romStart + vrom) - dmaEntry->vromStart, (u8*)ram, size);
             return;
         }
 
@@ -210,23 +210,19 @@ s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size) {
 }
 
 void DmaMgr_Start(void) {
-    DmaEntry* iter;
-    u32 idx;
+    DmaMgr_DmaRomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
-    DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
+    {
+        DmaEntry* iter = dmadata;
+        u32 idx = 0;
 
-dummy_label:;
+        while (iter->vromEnd != 0) {
+            iter++;
+            idx++;
+        }
 
-    iter = dmadata;
-    idx = 0;
-    while (iter->vromEnd != 0) {
-        iter++;
-        idx++;
+        numDmaEntries = idx;
     }
-
-    numDmaEntries = idx;
-
-dummy_label_2:;
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
     StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 0x100, "dmamgr");

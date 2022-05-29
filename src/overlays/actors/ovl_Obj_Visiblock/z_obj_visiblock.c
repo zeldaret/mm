@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_visiblock.h"
+#include "objects/object_visiblock/object_visiblock.h"
 
-#define FLAGS 0x00000080
+#define FLAGS (ACTOR_FLAG_80)
 
 #define THIS ((ObjVisiblock*)thisx)
 
@@ -33,15 +34,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000AD0;
-extern Gfx D_06000140[];
-
 void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_visiblock_Colheader_000AD0);
 }
 
 void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -51,5 +49,5 @@ void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, D_06000140);
+    Gfx_DrawDListXlu(globalCtx, object_visiblock_DL_000140);
 }

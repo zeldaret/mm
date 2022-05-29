@@ -1,0 +1,17 @@
+﻿<Root>
+    <File Name="object_sekihin" Segment="6">
+        <DList Name="object_sekihin_DL_000340" Offset="0x340" />
+        <DList Name="object_sekihin_DL_0004A8" Offset="0x4A8" />
+        <DList Name="object_sekihin_DL_0004B8" Offset="0x4B8" />
+        <DList Name="object_sekihin_DL_0005C8" Offset="0x5C8" />
+        <!-- <Blob Name="object_sekihin_Blob_0005E0" Size="0x20" Offset="0x5E0" /> -->
+        <Texture Name="object_sekihin_TLUT_000600" OutName="tlut_000600" Format="rgba16" Width="4" Height="4" Offset="0x600" />
+        <!-- <Blob Name="object_sekihin_Blob_000620" Size="0x40" Offset="0x620" /> -->
+        <Texture Name="object_sekihin_Tex_000660" OutName="tex_000660" Format="rgba16" Width="32" Height="32" Offset="0x660" />
+        <Texture Name="object_sekihin_Tex_000E60" OutName="tex_000E60" Format="rgba16" Width="32" Height="64" Offset="0xE60" />
+        <Texture Name="object_sekihin_Tex_001E60" OutName="tex_001E60" Format="ci4" Width="64" Height="64" Offset="0x1E60" />
+        <Texture Name="object_sekihin_Tex_002660" OutName="tex_002660" Format="ia4" Width="128" Height="16" Offset="0x2660" />
+        <Texture Name="object_sekihin_Tex_002A60" OutName="tex_002A60" Format="ia4" Width="128" Height="32" Offset="0x2A60" />
+        <Collision Name="object_sekihin_Colheader_0033D8" Offset="0x33D8" />
+    </File>
+</Root>

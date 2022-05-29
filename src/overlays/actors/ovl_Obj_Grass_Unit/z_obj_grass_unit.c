@@ -1,7 +1,7 @@
 /*
  * File: z_obj_grass_unit.c
  * Overlay: ovl_Obj_Grass_Unit
- * Description:
+ * Description: Spawner for circular patch of grass
  */
 
 #include "z_obj_grass_unit.h"

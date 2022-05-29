@@ -5,8 +5,16 @@
  */
 
 #include "z_door_spiral.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_numa_obj/object_numa_obj.h"
+#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "objects/object_danpei_object/object_danpei_object.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
+
+#define THIS ((DoorSpiral*)thisx)
 
 #define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
 #define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
@@ -75,29 +83,16 @@ const ActorInit Door_Spiral_InitVars = {
     (ActorFunc)DoorSpiral_Draw,
 };
 
-extern Gfx D_06000590[];
-extern Gfx D_060007A8[];
-extern Gfx D_06000EA0[];
-extern Gfx D_060012C0[];
-extern Gfx D_060014C8[];
-extern Gfx D_06002110[];
-extern Gfx D_06004448[];
-extern Gfx D_060051B8[];
-extern Gfx D_06006128[];
-extern Gfx D_06009278[];
-extern Gfx D_06012B70[];
-extern Gfx D_06013EA8[];
-
 // Parameters for each staircase, indexed with SpiralType
 static SpiralInfo sSpiralInfo[] = {
-    { { NULL, NULL }, 0, 130, 12, 50, 15 },             // SPIRAL_OVERWORLD
-    { { D_050219E0, D_0501D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
-    { { D_06004448, D_060007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
-    { { D_060051B8, D_060014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
-    { { D_06009278, D_06006128 }, 0, 130, 12, 50, 15 }, // SPIRAL_SNOWHEAD_TEMPLE
-    { { D_06013EA8, D_06012B70 }, 0, 130, 12, 50, 15 }, // SPIRAL_STONE_TOWER
-    { { D_06000EA0, D_06000590 }, 0, 130, 12, 50, 15 }, // SPIRAL_IKANA_CASTLE
-    { { D_06002110, D_060012C0 }, 0, 130, 12, 50, 15 }, // SPIRAL_DAMPES_HOUSE
+    { { NULL, NULL }, 0, 130, 12, 50, 15 },                                                       // SPIRAL_OVERWORLD
+    { { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
+    { { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
+    { { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
+    { { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128 }, 0, 130, 12, 50, 15 }, // SPIRAL_SNOWHEAD_TEMPLE
+    { { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70 }, 0, 130, 12, 50, 15 },     // SPIRAL_STONE_TOWER
+    { { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590 }, 0, 130, 12, 50, 15 }, // SPIRAL_IKANA_CASTLE
+    { { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0 }, 0, 130, 12, 50, 15 }, // SPIRAL_DAMPES_HOUSE
 };
 
 // Defines which object bank a staircase should use, and its index to `sSpiralInfo`
@@ -130,7 +125,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
 
-        this->actor.flags |= 0x10000000;
+        this->actor.flags |= ACTOR_FLAG_10000000;
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_Wait);
@@ -182,7 +177,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
@@ -205,7 +200,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
 }
 
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -237,7 +232,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
     target.y = player->actor.world.pos.y + yOffset;
     target.z = player->actor.world.pos.z;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
         return FLT_MAX;
@@ -252,7 +247,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(func_801233E4(globalCtx))) {
+    if (!Player_InCsMode(&globalCtx->state)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist =
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
@@ -291,7 +286,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         transition = GET_TRANSITION_ID_PARAM(this);
         player->doorNext = ((u16)globalCtx->doorCtx.transitionActorList[transition].params) >> 10;
 
-        func_80122F28(player, globalCtx, &this->actor);
+        func_80122F28(player);
     }
 }
 
@@ -308,7 +303,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 }
 
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -319,7 +314,7 @@ void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
 
     if (this->actor.objBankIndex == this->bankIndex) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];

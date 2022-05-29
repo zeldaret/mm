@@ -1,12 +1,12 @@
 /*
  * File: z_item_etcetera.c
  * Overlay: ovl_Item_Etcetera
- * Description:
+ * Description: Leftover OoT Collectible Items (bottle, key, Fire Arrow, etc.)
  */
 
 #include "z_item_etcetera.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ItemEtcetera*)thisx)
 

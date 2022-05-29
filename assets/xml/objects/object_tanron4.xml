@@ -1,0 +1,30 @@
+﻿<Root>
+    <!-- Assets for seagulls -->
+    <File Name="object_tanron4" Segment="6">
+        <!-- The glide animation goes unused, instead the flap animation is frozen while it glides-->
+        <Animation Name="gSeagullGlideAnim" Offset="0x58" />
+        <Animation Name="gSeagullFlapAnim" Offset="0x168" />
+
+        <DList Name="object_tanron4_DL_000300" Offset="0x300" />
+        <DList Name="object_tanron4_DL_0003A0" Offset="0x3A0" />
+        <DList Name="object_tanron4_DL_000440" Offset="0x440" />
+        <DList Name="object_tanron4_DL_0004B0" Offset="0x4B0" />
+        <DList Name="object_tanron4_DL_000550" Offset="0x550" />
+
+        <Texture Name="object_tanron4_Tex_0005C8" OutName="tex_0005C8" Format="rgba16" Width="32" Height="16" Offset="0x5C8" />
+        <Texture Name="object_tanron4_Tex_0009C8" OutName="tex_0009C8" Format="rgba16" Width="32" Height="16" Offset="0x9C8" />
+
+        <Limb Name="object_tanron4_Standardlimb_000DC8" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_01" Offset="0xDC8" />
+        <Limb Name="object_tanron4_Standardlimb_000DD4" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_02" Offset="0xDD4" />
+        <Limb Name="object_tanron4_Standardlimb_000DE0" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_03" Offset="0xDE0" />
+        <Limb Name="object_tanron4_Standardlimb_000DEC" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_04" Offset="0xDEC" />
+        <Limb Name="object_tanron4_Standardlimb_000DF8" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_05" Offset="0xDF8" />
+        <Limb Name="object_tanron4_Standardlimb_000E04" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_06" Offset="0xE04" />
+        <Limb Name="object_tanron4_Standardlimb_000E10" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_07" Offset="0xE10" />
+        <Limb Name="object_tanron4_Standardlimb_000E1C" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_08" Offset="0xE1C" />
+        <Limb Name="object_tanron4_Standardlimb_000E28" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_09" Offset="0xE28" />
+        <Limb Name="object_tanron4_Standardlimb_000E34" Type="Standard" EnumName="OBJECT_TANRON4_LIMB_0A" Offset="0xE34" />
+
+        <Skeleton Name="gSeagullSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TANRON4_LIMB_NONE" LimbMax="OBJECT_TANRON4_LIMB_MAX" EnumName="object_tanron4_Limbs" Offset="0xE68" />
+    </File>
+</Root>

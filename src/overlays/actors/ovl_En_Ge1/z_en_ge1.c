@@ -1,12 +1,12 @@
 /*
  * File: z_en_ge1.c
  * Overlay: ovl_En_Ge1
- * Description:
+ * Description: White-clad Gerudo Pirate
  */
 
 #include "z_en_ge1.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnGe1*)thisx)
 

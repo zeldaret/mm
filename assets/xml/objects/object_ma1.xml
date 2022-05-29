@@ -1,0 +1,96 @@
+﻿<Root>
+    <File Name="object_ma1" Segment="6">
+        <DList Name="object_ma1_DL_0003B0" Offset="0x3B0" /> <!-- Bow -->
+        <Texture Name="object_ma1_TLUT_0005E0" OutName="tlut_0005E0" Format="rgba16" Width="16" Height="16" Offset="0x5E0" />
+        <Texture Name="object_ma1_Tex_0007E0" OutName="tex_0007E0" Format="ci8" Width="16" Height="16" Offset="0x7E0" />
+        <Texture Name="object_ma1_Tex_0008E0" OutName="tex_0008E0" Format="ci8" Width="8" Height="8" Offset="0x8E0" />
+        <DList Name="object_ma1_DL_000A20" Offset="0xA20" /> <!-- Box -->
+        <Texture Name="object_ma1_Tex_000AD0" OutName="tex_000AD0" Format="rgba16" Width="32" Height="64" Offset="0xAD0" />
+        <Animation Name="object_ma1_Anim_002A8C" Offset="0x2A8C" />
+        <DList Name="object_ma1_DL_0043A0" Offset="0x43A0" /> <!-- Sleeping -->
+        <Texture Name="object_ma1_TLUT_004CF8" OutName="tlut_004CF8" Format="rgba16" Width="16" Height="16" Offset="0x4CF8" />
+        <Texture Name="object_ma1_Tex_004EF8" OutName="tex_004EF8" Format="ci8" Width="16" Height="16" Offset="0x4EF8" />
+        <Texture Name="object_ma1_Tex_004FF8" OutName="tex_004FF8" Format="ci8" Width="8" Height="8" Offset="0x4FF8" />
+        <Texture Name="object_ma1_Tex_005038" OutName="tex_005038" Format="ci8" Width="8" Height="8" Offset="0x5038" />
+        <Texture Name="object_ma1_Tex_005078" OutName="tex_005078" Format="ci8" Width="16" Height="16" Offset="0x5078" />
+        <Texture Name="object_ma1_Tex_005178" OutName="tex_005178" Format="ci8" Width="16" Height="16" Offset="0x5178" />
+        <Texture Name="object_ma1_Tex_005278" OutName="tex_005278" Format="ci8" Width="8" Height="16" Offset="0x5278" />
+        <Texture Name="object_ma1_Tex_0052F8" OutName="tex_0052F8" Format="rgba16" Width="32" Height="32" Offset="0x52F8" />
+        <Texture Name="object_ma1_Tex_005AF8" OutName="tex_005AF8" Format="rgba16" Width="16" Height="128" Offset="0x5AF8" />
+        <Texture Name="object_ma1_Tex_006AF8" OutName="tex_006AF8" Format="rgba16" Width="32" Height="16" Offset="0x6AF8" />
+        <Animation Name="object_ma1_Anim_007328" Offset="0x7328" />
+        <Animation Name="object_ma1_Anim_007D98" Offset="0x7D98" />
+        <Animation Name="object_ma1_Anim_00852C" Offset="0x852C" />
+        <Animation Name="object_ma1_Anim_008F6C" Offset="0x8F6C" />
+        <Animation Name="object_ma1_Anim_009E58" Offset="0x9E58" />
+        <DList Name="object_ma1_DL_00D060" Offset="0xD060" />
+        <DList Name="object_ma1_DL_00D440" Offset="0xD440" />
+        <DList Name="object_ma1_DL_00D688" Offset="0xD688" />
+        <DList Name="object_ma1_DL_00D7A0" Offset="0xD7A0" />
+        <DList Name="object_ma1_DL_00D980" Offset="0xD980" />
+        <DList Name="object_ma1_DL_00DBC8" Offset="0xDBC8" />
+        <DList Name="object_ma1_DL_00DCE0" Offset="0xDCE0" />
+        <DList Name="object_ma1_DL_00DEC0" Offset="0xDEC0" />
+        <DList Name="object_ma1_DL_00E410" Offset="0xE410" />
+        <DList Name="object_ma1_DL_00E510" Offset="0xE510" />
+        <DList Name="object_ma1_DL_00E618" Offset="0xE618" />
+        <DList Name="object_ma1_DL_00E710" Offset="0xE710" />
+        <DList Name="object_ma1_DL_00E838" Offset="0xE838" />
+        <DList Name="object_ma1_DL_00E980" Offset="0xE980" />
+        <DList Name="object_ma1_DL_00EA80" Offset="0xEA80" />
+        <DList Name="object_ma1_DL_00EAC8" Offset="0xEAC8" />
+        <DList Name="object_ma1_DL_00EB88" Offset="0xEB88" />
+        <DList Name="object_ma1_DL_00ED08" Offset="0xED08" />
+        <DList Name="object_ma1_DL_00EE28" Offset="0xEE28" />
+        <DList Name="object_ma1_DL_00EEE8" Offset="0xEEE8" />
+        <DList Name="object_ma1_DL_00F068" Offset="0xF068" />
+        <Texture Name="object_ma1_TLUT_00F188" OutName="tlut_00F188" Format="rgba16" Width="16" Height="16" Offset="0xF188" />
+        <Texture Name="object_ma1_Tex_00F388" OutName="tex_00F388" Format="ci8" Width="16" Height="16" Offset="0xF388" />
+        <Texture Name="object_ma1_Tex_00F488" OutName="tex_00F488" Format="ci8" Width="8" Height="8" Offset="0xF488" />
+        <Texture Name="object_ma1_Tex_00F4C8" OutName="tex_00F4C8" Format="ci8" Width="8" Height="8" Offset="0xF4C8" />
+        <Texture Name="object_ma1_Tex_00F508" OutName="tex_00F508" Format="ci8" Width="16" Height="16" Offset="0xF508" />
+        <Texture Name="object_ma1_Tex_00F608" OutName="tex_00F608" Format="ci8" Width="8" Height="8" Offset="0xF608" />
+        <Texture Name="object_ma1_Tex_00F648" OutName="tex_00F648" Format="rgba16" Width="16" Height="32" Offset="0xF648" />
+        <Texture Name="object_ma1_Tex_00FA48" OutName="tex_00FA48" Format="ci8" Width="16" Height="16" Offset="0xFA48" />
+        <Texture Name="object_ma1_Tex_00FB48" OutName="tex_00FB48" Format="ci8" Width="64" Height="16" Offset="0xFB48" />
+        <Texture Name="object_ma1_Tex_00FF48" OutName="tex_00FF48" Format="ci8" Width="8" Height="16" Offset="0xFF48" />
+        <Texture Name="object_ma1_Tex_00FFC8" OutName="tex_00FFC8" Format="rgba16" Width="32" Height="32" Offset="0xFFC8" />
+        <Texture Name="object_ma1_Tex_0107C8" OutName="tex_0107C8" Format="rgba16" Width="32" Height="32" Offset="0x107C8" />
+        <Texture Name="object_ma1_Tex_010FC8" OutName="tex_010FC8" Format="rgba16" Width="32" Height="32" Offset="0x10FC8" />
+        <Texture Name="object_ma1_Tex_0117C8" OutName="tex_0117C8" Format="rgba16" Width="32" Height="32" Offset="0x117C8" />
+        <Texture Name="object_ma1_Tex_011FC8" OutName="tex_011FC8" Format="rgba16" Width="32" Height="32" Offset="0x11FC8" />
+        <Texture Name="object_ma1_Tex_0127C8" OutName="tex_0127C8" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
+        <Texture Name="object_ma1_Tex_012BC8" OutName="tex_012BC8" Format="rgba16" Width="32" Height="16" Offset="0x12BC8" />
+        <Texture Name="object_ma1_Tex_012FC8" OutName="tex_012FC8" Format="rgba16" Width="32" Height="16" Offset="0x12FC8" />
+        <Texture Name="object_ma1_Tex_0133C8" OutName="tex_0133C8" Format="rgba16" Width="32" Height="16" Offset="0x133C8" />
+        <Limb Name="object_ma1_Standardlimb_0137C8" Type="Standard" EnumName="OBJECT_MA1_LIMB_01" Offset="0x137C8" />
+        <Limb Name="object_ma1_Standardlimb_0137D4" Type="Standard" EnumName="OBJECT_MA1_LIMB_02" Offset="0x137D4" />
+        <Limb Name="object_ma1_Standardlimb_0137E0" Type="Standard" EnumName="OBJECT_MA1_LIMB_03" Offset="0x137E0" />
+        <Limb Name="object_ma1_Standardlimb_0137EC" Type="Standard" EnumName="OBJECT_MA1_LIMB_04" Offset="0x137EC" />
+        <Limb Name="object_ma1_Standardlimb_0137F8" Type="Standard" EnumName="OBJECT_MA1_LIMB_05" Offset="0x137F8" />
+        <Limb Name="object_ma1_Standardlimb_013804" Type="Standard" EnumName="OBJECT_MA1_LIMB_06" Offset="0x13804" />
+        <Limb Name="object_ma1_Standardlimb_013810" Type="Standard" EnumName="OBJECT_MA1_LIMB_07" Offset="0x13810" />
+        <Limb Name="object_ma1_Standardlimb_01381C" Type="Standard" EnumName="OBJECT_MA1_LIMB_08" Offset="0x1381C" />
+        <Limb Name="object_ma1_Standardlimb_013828" Type="Standard" EnumName="OBJECT_MA1_LIMB_09" Offset="0x13828" />
+        <Limb Name="object_ma1_Standardlimb_013834" Type="Standard" EnumName="OBJECT_MA1_LIMB_0A" Offset="0x13834" />
+        <Limb Name="object_ma1_Standardlimb_013840" Type="Standard" EnumName="OBJECT_MA1_LIMB_0B" Offset="0x13840" />
+        <Limb Name="object_ma1_Standardlimb_01384C" Type="Standard" EnumName="OBJECT_MA1_LIMB_0C" Offset="0x1384C" />
+        <Limb Name="object_ma1_Standardlimb_013858" Type="Standard" EnumName="OBJECT_MA1_LIMB_0D" Offset="0x13858" />
+        <Limb Name="object_ma1_Standardlimb_013864" Type="Standard" EnumName="OBJECT_MA1_LIMB_0E" Offset="0x13864" />
+        <Limb Name="object_ma1_Standardlimb_013870" Type="Standard" EnumName="OBJECT_MA1_LIMB_0F" Offset="0x13870" />
+        <Limb Name="object_ma1_Standardlimb_01387C" Type="Standard" EnumName="OBJECT_MA1_LIMB_10" Offset="0x1387C" />
+        <Limb Name="object_ma1_Standardlimb_013888" Type="Standard" EnumName="OBJECT_MA1_LIMB_11" Offset="0x13888" />
+        <Limb Name="object_ma1_Standardlimb_013894" Type="Standard" EnumName="OBJECT_MA1_LIMB_12" Offset="0x13894" />
+        <Limb Name="object_ma1_Standardlimb_0138A0" Type="Standard" EnumName="OBJECT_MA1_LIMB_13" Offset="0x138A0" />
+        <Limb Name="object_ma1_Standardlimb_0138AC" Type="Standard" EnumName="OBJECT_MA1_LIMB_14" Offset="0x138AC" />
+        <Limb Name="object_ma1_Standardlimb_0138B8" Type="Standard" EnumName="OBJECT_MA1_LIMB_15" Offset="0x138B8" />
+        <Limb Name="object_ma1_Standardlimb_0138C4" Type="Standard" EnumName="OBJECT_MA1_LIMB_16" Offset="0x138C4" />
+        <Skeleton Name="object_ma1_Skel_013928" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MA1_LIMB_NONE" LimbMax="OBJECT_MA1_LIMB_MAX" EnumName="object_ma1_Limbs" Offset="0x13928" />
+        <Animation Name="object_ma1_Anim_014088" Offset="0x14088" />
+        <Animation Name="object_ma1_Anim_015B7C" Offset="0x15B7C" />
+        <Animation Name="object_ma1_Anim_016588" Offset="0x16588" />
+        <Animation Name="object_ma1_Anim_0180DC" Offset="0x180DC" />
+        <Animation Name="object_ma1_Anim_018948" Offset="0x18948" />
+        <Animation Name="object_ma1_Anim_01B76C" Offset="0x1B76C" />
+    </File>
+</Root>

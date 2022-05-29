@@ -1,0 +1,17 @@
+﻿<Root>
+    <File Name="object_tokei_turret" Segment="6">
+        <Texture Name="object_tokei_turret_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="object_tokei_turret_Tex_000020" OutName="tex_000020" Format="ci4" Width="64" Height="64" Offset="0x20" />
+        <Texture Name="object_tokei_turret_Tex_000820" OutName="tex_000820" Format="rgba16" Width="32" Height="32" Offset="0x820" />
+        <Texture Name="object_tokei_turret_Tex_001020" OutName="tex_001020" Format="rgba16" Width="16" Height="32" Offset="0x1020" />
+        <Texture Name="object_tokei_turret_Tex_001420" OutName="tex_001420" Format="rgba16" Width="128" Height="16" Offset="0x1420" />
+        <DList Name="object_tokei_turret_DL_002500" Offset="0x2500" />
+        <DList Name="object_tokei_turret_DL_002508" Offset="0x2508" />
+        <Collision Name="object_tokei_turret_Colheader_0026A0" Offset="0x26A0" />
+        <DList Name="object_tokei_turret_DL_002A80" Offset="0x2A80" />
+        <DList Name="object_tokei_turret_DL_002A88" Offset="0x2A88" />
+        <Collision Name="object_tokei_turret_Colheader_002D80" Offset="0x2D80" />
+        <DList Name="object_tokei_turret_DL_003030" Offset="0x3030" />
+        <DList Name="object_tokei_turret_DL_003038" Offset="0x3038" />
+    </File>
+</Root>

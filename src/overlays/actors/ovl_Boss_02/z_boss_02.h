@@ -2,6 +2,7 @@
 #define Z_BOSS_02_H
 
 #include "global.h"
+#include "objects/object_boss02/object_boss02.h"
 
 struct Boss02;
 
@@ -40,7 +41,7 @@ typedef struct Boss02 {
     /* 0x016C */ s16 unk_016C;
     /* 0x0170 */ Vec3f unk_0170;
     /* 0x017C */ Vec3f unk_017C;
-    /* 0x018C */ Vec3f unk_0188;
+    /* 0x0188 */ Vec3f unk_0188;
     /* 0x0194 */ u8 unk_0194;
     /* 0x0195 */ u8 unk_0195;
     /* 0x0196 */ s16 unk_0196;
@@ -53,11 +54,11 @@ typedef struct Boss02 {
     /* 0x01AC */ f32 unk_01AC;
     /* 0x01B0 */ Vec3f unk_01B0;
     /* 0x01BC */ Vec3f unk_01BC[200];
-    /* 0x0B1c */ Vec3f unk_0B1C[200];
+    /* 0x0B1C */ Vec3f unk_0B1C[200];
     /* 0x147C */ Vec3f unk_147C[23];
     /* 0x1590 */ SkelAnime skelAnime;
-    /* 0x15D4 */ Vec3s jointTable[13];
-    /* 0x1622 */ Vec3s morphTable[13];
+    /* 0x15D4 */ Vec3s jointTable[TWINMOLD_HEAD_LIMB_MAX];
+    /* 0x1622 */ Vec3s morphTable[TWINMOLD_HEAD_LIMB_MAX];
     /* 0x1670 */ Boss02ActionFunc actionFunc;
     /* 0x1674 */ struct Boss02* unk_1674; // points to the other's instance
     /* 0x1678 */ s32 unk_1678;

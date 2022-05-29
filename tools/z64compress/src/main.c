@@ -221,7 +221,7 @@ wow_main
 		}
 	}
 	
-	fprintf(printer, "welcome to z64compress 1.0.1 <z64.me>\n");
+	fprintf(printer, "welcome to z64compress 1.0.2 <z64.me>\n");
 	
 	if (argc <= 1)
 	{
@@ -356,7 +356,6 @@ wow_main
 	
 	ARG_ZERO_TEST(Ain   , "--in"   );
 	ARG_ZERO_TEST(Aout  , "--out"  );
-	ARG_ZERO_TEST(Amb   , "--mb"   );
 	ARG_ZERO_TEST(Acodec, "--codec");
 	
 	#undef ARG_ZERO_TEST

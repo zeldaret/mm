@@ -1,0 +1,71 @@
+﻿<Root>
+    <File Name="object_dinofos" Segment="6">
+        <Animation Name="object_dinofos_Anim_000580" Offset="0x580" />
+        <Animation Name="object_dinofos_Anim_000AF0" Offset="0xAF0" />
+        <Animation Name="object_dinofos_Anim_001040" Offset="0x1040" />
+        <Animation Name="object_dinofos_Anim_0013C0" Offset="0x13C0" />
+        <Animation Name="object_dinofos_Anim_0017B8" Offset="0x17B8" />
+        <Animation Name="object_dinofos_Anim_001CCC" Offset="0x1CCC" />
+        <Animation Name="object_dinofos_Anim_0025B4" Offset="0x25B4" />
+        <Animation Name="object_dinofos_Anim_002E40" Offset="0x2E40" />
+        <DList Name="object_dinofos_DL_005B10" Offset="0x5B10" />
+        <DList Name="object_dinofos_DL_005D00" Offset="0x5D00" />
+        <DList Name="object_dinofos_DL_005E60" Offset="0x5E60" />
+        <DList Name="object_dinofos_DL_005FC8" Offset="0x5FC8" />
+        <DList Name="object_dinofos_DL_0061F8" Offset="0x61F8" />
+        <DList Name="object_dinofos_DL_006440" Offset="0x6440" />
+        <DList Name="object_dinofos_DL_006930" Offset="0x6930" />
+        <DList Name="object_dinofos_DL_006C28" Offset="0x6C28" />
+        <DList Name="object_dinofos_DL_006D68" Offset="0x6D68" />
+        <DList Name="object_dinofos_DL_006E58" Offset="0x6E58" />
+        <DList Name="object_dinofos_DL_0070A0" Offset="0x70A0" />
+        <DList Name="object_dinofos_DL_0071E0" Offset="0x71E0" />
+        <DList Name="object_dinofos_DL_0072D0" Offset="0x72D0" />
+        <DList Name="object_dinofos_DL_007450" Offset="0x7450" />
+        <DList Name="object_dinofos_DL_007690" Offset="0x7690" />
+        <DList Name="object_dinofos_DL_0078E0" Offset="0x78E0" />
+        <DList Name="object_dinofos_DL_007AC8" Offset="0x7AC8" />
+        <DList Name="object_dinofos_DL_007C20" Offset="0x7C20" />
+        <DList Name="object_dinofos_DL_007E70" Offset="0x7E70" />
+        <DList Name="object_dinofos_DL_008058" Offset="0x8058" />
+        <Texture Name="object_dinofos_TLUT_0081B0" OutName="tlut_0081B0" Format="rgba16" Width="16" Height="16" Offset="0x81B0" />
+        <Texture Name="object_dinofos_Tex_0083B0" OutName="tex_0083B0" Format="ci8" Width="16" Height="16" Offset="0x83B0" />
+        <Texture Name="object_dinofos_Tex_0084B0" OutName="tex_0084B0" Format="rgba16" Width="16" Height="16" Offset="0x84B0" />
+        <Texture Name="object_dinofos_Tex_0086B0" OutName="tex_0086B0" Format="rgba16" Width="16" Height="16" Offset="0x86B0" />
+        <Texture Name="object_dinofos_Tex_0088B0" OutName="tex_0088B0" Format="rgba16" Width="8" Height="8" Offset="0x88B0" />
+        <Texture Name="object_dinofos_Tex_008930" OutName="tex_008930" Format="rgba16" Width="16" Height="16" Offset="0x8930" />
+        <Texture Name="object_dinofos_Tex_008B30" OutName="tex_008B30" Format="rgba16" Width="8" Height="8" Offset="0x8B30" />
+        <Texture Name="object_dinofos_Tex_008BB0" OutName="tex_008BB0" Format="rgba16" Width="8" Height="16" Offset="0x8BB0" />
+        <Texture Name="object_dinofos_Tex_008CB0" OutName="tex_008CB0" Format="rgba16" Width="16" Height="8" Offset="0x8CB0" />
+        <Texture Name="object_dinofos_Tex_008DB0" OutName="tex_008DB0" Format="rgba16" Width="8" Height="8" Offset="0x8DB0" />
+        <Texture Name="object_dinofos_Tex_008E30" OutName="tex_008E30" Format="rgba16" Width="16" Height="16" Offset="0x8E30" />
+        <Texture Name="object_dinofos_Tex_009030" OutName="tex_009030" Format="rgba16" Width="16" Height="16" Offset="0x9030" />
+        <Texture Name="object_dinofos_Tex_009230" OutName="tex_009230" Format="rgba16" Width="16" Height="16" Offset="0x9230" />
+        <Limb Name="object_dinofos_Standardlimb_009430" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_01" Offset="0x9430" />
+        <Limb Name="object_dinofos_Standardlimb_00943C" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_02" Offset="0x943C" />
+        <Limb Name="object_dinofos_Standardlimb_009448" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_03" Offset="0x9448" />
+        <Limb Name="object_dinofos_Standardlimb_009454" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_04" Offset="0x9454" />
+        <Limb Name="object_dinofos_Standardlimb_009460" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_05" Offset="0x9460" />
+        <Limb Name="object_dinofos_Standardlimb_00946C" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_06" Offset="0x946C" />
+        <Limb Name="object_dinofos_Standardlimb_009478" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_07" Offset="0x9478" />
+        <Limb Name="object_dinofos_Standardlimb_009484" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_08" Offset="0x9484" />
+        <Limb Name="object_dinofos_Standardlimb_009490" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_09" Offset="0x9490" />
+        <Limb Name="object_dinofos_Standardlimb_00949C" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0A" Offset="0x949C" />
+        <Limb Name="object_dinofos_Standardlimb_0094A8" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0B" Offset="0x94A8" />
+        <Limb Name="object_dinofos_Standardlimb_0094B4" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0C" Offset="0x94B4" />
+        <Limb Name="object_dinofos_Standardlimb_0094C0" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0D" Offset="0x94C0" />
+        <Limb Name="object_dinofos_Standardlimb_0094CC" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0E" Offset="0x94CC" />
+        <Limb Name="object_dinofos_Standardlimb_0094D8" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_0F" Offset="0x94D8" />
+        <Limb Name="object_dinofos_Standardlimb_0094E4" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_10" Offset="0x94E4" />
+        <Limb Name="object_dinofos_Standardlimb_0094F0" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_11" Offset="0x94F0" />
+        <Limb Name="object_dinofos_Standardlimb_0094FC" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_12" Offset="0x94FC" />
+        <Limb Name="object_dinofos_Standardlimb_009508" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_13" Offset="0x9508" />
+        <Limb Name="object_dinofos_Standardlimb_009514" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_14" Offset="0x9514" />
+        <Skeleton Name="object_dinofos_Skel_009570" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DINOFOS_LIMB_NONE" LimbMax="OBJECT_DINOFOS_LIMB_MAX" EnumName="object_dinofos_Limbs" Offset="0x9570" />
+        <Animation Name="object_dinofos_Anim_009B70" Offset="0x9B70" />
+        <Animation Name="object_dinofos_Anim_00ABD0" Offset="0xABD0" />
+        <Animation Name="object_dinofos_Anim_00C974" Offset="0xC974" />
+        <Animation Name="object_dinofos_Anim_00D21C" Offset="0xD21C" />
+        <Animation Name="object_dinofos_Anim_00D62C" Offset="0xD62C" />
+    </File>
+</Root>

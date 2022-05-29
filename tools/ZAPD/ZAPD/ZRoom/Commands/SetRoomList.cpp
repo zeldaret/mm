@@ -104,9 +104,8 @@ std::string RomFile::GetBodySourceCode() const
 				if (!isFirst)
 					declaration += "\n";
 
-				declaration +=
-					StringHelper::Sprintf("\t{ (u32)_%sSegmentRomStart, (u32)_%sSegmentRomEnd },",
-				                          roomName.c_str(), roomName.c_str());
+				declaration += StringHelper::Sprintf("\t{ _%sSegmentRomStart, _%sSegmentRomEnd },",
+				                                     roomName.c_str(), roomName.c_str());
 				isFirst = false;
 			}
 		}
@@ -115,11 +114,9 @@ std::string RomFile::GetBodySourceCode() const
 	return declaration;
 }
 
-std::string RomFile::GetSourceOutputCode(const std::string& prefix)
+void RomFile::GetSourceOutputCode(const std::string& prefix)
 {
 	DeclareVar(prefix, GetBodySourceCode());
-
-	return "";
 }
 
 std::string RomFile::GetSourceTypeName() const

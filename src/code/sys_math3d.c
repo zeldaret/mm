@@ -130,7 +130,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D220.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D2FC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineSegVsPlane.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D404.s")
 
@@ -138,7 +138,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_IsPointInSphere.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D668.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PointDistToLine2D.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017D7C0.s")
 

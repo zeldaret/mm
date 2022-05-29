@@ -1,12 +1,12 @@
 /*
- * File z_eff_zoraband.c
+ * File: z_eff_zoraband.c
  * Overlay: ovl_Eff_Zoraband
- * Description:
+ * Description: Indigo-Go's (Mikau's healing cutscene)
  */
 
 #include "z_eff_zoraband.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EffZoraband*)thisx)
 

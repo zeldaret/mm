@@ -6,7 +6,7 @@
 
 #include "z_en_pst.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnPst*)thisx)
 

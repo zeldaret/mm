@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_hgdoor.h"
+#include "objects/object_hgdoor/object_hgdoor.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((ObjHgdoor*)thisx)
 
@@ -25,13 +26,6 @@ void func_80BD4460(ObjHgdoor* this);
 void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx);
 s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx);
 
-extern CollisionHeader D_06001D10;
-extern CollisionHeader D_060018C0;
-extern Gfx D_06001AB0[];
-extern Gfx D_06001BA8[];
-extern Gfx D_06001670[];
-extern Gfx D_06001768[];
-
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
     ACTORCAT_PROP,
@@ -49,7 +43,7 @@ static s32 unused = 0;
 static s32 unused2 = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
@@ -61,7 +55,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
 }
 
 void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {
@@ -80,9 +74,9 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
-        CollisionHeader_GetVirtual(&D_06001D10, &header);
+        CollisionHeader_GetVirtual(&object_hgdoor_Colheader_001D10, &header);
     } else {
-        CollisionHeader_GetVirtual(&D_060018C0, &header);
+        CollisionHeader_GetVirtual(&object_hgdoor_Colheader_0018C0, &header);
     }
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
@@ -102,7 +96,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
+    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, globalCtx);
@@ -134,15 +128,15 @@ void func_80BD433C(ObjHgdoor* this) {
 }
 
 void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E3)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E3);
-        if (this->unk166 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->unk166 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 483)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 483);
+        if (this->unk166 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
@@ -203,11 +197,11 @@ void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJHGDOOR_IS_RIGHT_DOOR(thisx)) {
-        gSPDisplayList(POLY_OPA_DISP++, D_06001AB0);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001BA8);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001AB0);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001BA8);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, D_06001670);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001768);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001670);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001768);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

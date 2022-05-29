@@ -1,12 +1,12 @@
 /*
  * File: z_eff_change.c
  * Overlay: ovl_Eff_Change
- * Description:
+ * Description: Elegy of Emptiness - Beam of Light When Creating Statue
  */
 
 #include "z_eff_change.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EffChange*)thisx)
 

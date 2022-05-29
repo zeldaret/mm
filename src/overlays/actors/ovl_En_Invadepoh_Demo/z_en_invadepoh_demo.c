@@ -6,7 +6,7 @@
 
 #include "z_en_invadepoh_demo.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnInvadepohDemo*)thisx)
 
@@ -68,7 +68,7 @@ static InitChainEntry D_80C1AAB0[] = {
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
 };
 

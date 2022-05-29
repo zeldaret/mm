@@ -1,12 +1,12 @@
 /*
  * File: z_dm_char04.c
  * Overlay: ovl_Dm_Char04
- * Description:
+ * Description: Unused(?) Tatl and Tael actors
  */
 
 #include "z_dm_char04.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar04*)thisx)
 

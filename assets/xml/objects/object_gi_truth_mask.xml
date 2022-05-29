@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_truth_mask" Segment="6">
+        <Texture Name="object_gi_truth_mask_Tex_000000" OutName="tex_000000" Format="i8" Width="32" Height="32" Offset="0x0" />
+        <Texture Name="object_gi_truth_mask_Tex_000400" OutName="tex_000400" Format="i8" Width="32" Height="32" Offset="0x400" />
+        <DList Name="object_gi_truth_mask_DL_0013D0" Offset="0x13D0" />
+        <DList Name="object_gi_truth_mask_DL_0016B0" Offset="0x16B0" />
+    </File>
+</Root>

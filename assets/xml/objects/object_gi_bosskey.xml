@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_gi_bosskey" Segment="6">
+        <DList Name="object_gi_bosskey_DL_000CA0" Offset="0xCA0" />
+        <DList Name="object_gi_bosskey_DL_000F08" Offset="0xF08" />
+    </File>
+</Root>

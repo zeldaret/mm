@@ -1,0 +1,106 @@
+﻿<Root>
+    <File Name="object_ik" Segment="6">
+        <Animation Name="object_ik_Anim_000CE8" Offset="0xCE8" />
+        <Animation Name="object_ik_Anim_0015F8" Offset="0x15F8" />
+        <Animation Name="object_ik_Anim_001ABC" Offset="0x1ABC" />
+        <Animation Name="object_ik_Anim_002484" Offset="0x2484" />
+        <Animation Name="object_ik_Anim_002E7C" Offset="0x2E7C" />
+        <Animation Name="object_ik_Anim_00367C" Offset="0x367C" />
+        <Animation Name="object_ik_Anim_00391C" Offset="0x391C" />
+        <Animation Name="object_ik_Anim_004A04" Offset="0x4A04" />
+        <Animation Name="object_ik_Anim_005254" Offset="0x5254" />
+        <Animation Name="object_ik_Anim_0057F4" Offset="0x57F4" />
+        <Animation Name="object_ik_Anim_006294" Offset="0x6294" />
+        <!-- <Blob Name="object_ik_Blob_006730" Size="0x5A0" Offset="0x6730" /> -->
+        <!-- <Blob Name="object_ik_Blob_007120" Size="0x11A0" Offset="0x7120" /> -->
+        <!-- <Blob Name="object_ik_Blob_008AE0" Size="0x630" Offset="0x8AE0" /> -->
+        <!-- <Blob Name="object_ik_Blob_009290" Size="0x2F0" Offset="0x9290" /> -->
+        <!-- <Blob Name="object_ik_Blob_009740" Size="0x300" Offset="0x9740" /> -->
+        <DList Name="object_ik_DL_009A40" Offset="0x9A40" />
+        <DList Name="object_ik_DL_009BC8" Offset="0x9BC8" />
+        <DList Name="object_ik_DL_009D20" Offset="0x9D20" />
+        <DList Name="object_ik_DL_009FD8" Offset="0x9FD8" />
+        <DList Name="object_ik_DL_00A130" Offset="0xA130" />
+        <DList Name="object_ik_DL_00A1F0" Offset="0xA1F0" />
+        <DList Name="object_ik_DL_00A348" Offset="0xA348" />
+        <DList Name="object_ik_DL_00A408" Offset="0xA408" />
+        <DList Name="object_ik_DL_00A4F0" Offset="0xA4F0" />
+        <DList Name="object_ik_DL_00A5D8" Offset="0xA5D8" />
+        <DList Name="object_ik_DL_00A6D0" Offset="0xA6D0" />
+        <DList Name="object_ik_DL_00A780" Offset="0xA780" />
+        <DList Name="object_ik_DL_00A820" Offset="0xA820" />
+        <DList Name="object_ik_DL_00BF80" Offset="0xBF80" />
+        <DList Name="object_ik_DL_00C200" Offset="0xC200" />
+        <DList Name="object_ik_DL_00CF08" Offset="0xCF08" />
+        <DList Name="object_ik_DL_00D038" Offset="0xD038" />
+        <DList Name="object_ik_DL_00D050" Offset="0xD050" />
+        <DList Name="object_ik_DL_00D068" Offset="0xD068" />
+        <DList Name="object_ik_DL_00D080" Offset="0xD080" />
+        <DList Name="object_ik_DL_00D098" Offset="0xD098" />
+        <DList Name="object_ik_DL_00D0B0" Offset="0xD0B0" />
+        <DList Name="object_ik_DL_00D0C8" Offset="0xD0C8" />
+        <DList Name="object_ik_DL_00EC20" Offset="0xEC20" />
+        <DList Name="object_ik_DL_00EFD8" Offset="0xEFD8" />
+        <DList Name="object_ik_DL_00F270" Offset="0xF270" />
+        <DList Name="object_ik_DL_00F3F8" Offset="0xF3F8" />
+        <DList Name="object_ik_DL_00F690" Offset="0xF690" />
+        <DList Name="object_ik_DL_00F818" Offset="0xF818" />
+        <DList Name="object_ik_DL_00F8E0" Offset="0xF8E0" />
+        <DList Name="object_ik_DL_00FC20" Offset="0xFC20" />
+        <DList Name="object_ik_DL_00FD68" Offset="0xFD68" />
+        <DList Name="object_ik_DL_00FFA8" Offset="0xFFA8" />
+        <DList Name="object_ik_DL_010358" Offset="0x10358" />
+        <DList Name="object_ik_DL_0104A0" Offset="0x104A0" />
+        <DList Name="object_ik_DL_0106E0" Offset="0x106E0" />
+        <Texture Name="object_ik_TLUT_010A30" OutName="tlut_010A30" Format="rgba16" Width="16" Height="16" Offset="0x10A30" />
+        <Texture Name="object_ik_Tex_010C30" OutName="tex_010C30" Format="ia16" Width="16" Height="16" Offset="0x10C30" />
+        <Texture Name="object_ik_Tex_010E30" OutName="tex_010E30" Format="ci8" Width="16" Height="16" Offset="0x10E30" />
+        <Texture Name="object_ik_Tex_010F30" OutName="tex_010F30" Format="ci8" Width="16" Height="16" Offset="0x10F30" />
+        <!-- <Blob Name="object_ik_Blob_011030" Size="0x170" Offset="0x11030" /> -->
+        <Texture Name="object_ik_Tex_0111A0" OutName="tex_0111A0" Format="i4" Width="32" Height="64" Offset="0x111A0" />
+        <Texture Name="object_ik_Tex_0115A0" OutName="tex_0115A0" Format="ia8" Width="32" Height="32" Offset="0x115A0" />
+        <Texture Name="object_ik_Tex_0119A0" OutName="tex_0119A0" Format="rgba16" Width="16" Height="16" Offset="0x119A0" />
+        <Texture Name="object_ik_Tex_011BA0" OutName="tex_011BA0" Format="rgba16" Width="16" Height="16" Offset="0x11BA0" />
+        <Texture Name="object_ik_Tex_011DA0" OutName="tex_011DA0" Format="ia16" Width="32" Height="32" Offset="0x11DA0" />
+        <Texture Name="object_ik_Tex_0125A0" OutName="tex_0125A0" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
+        <Texture Name="object_ik_Tex_012DA0" OutName="tex_012DA0" Format="ci8" Width="16" Height="16" Offset="0x12DA0" />
+        <Texture Name="object_ik_Tex_012EA0" OutName="tex_012EA0" Format="ia8" Width="16" Height="16" Offset="0x12EA0" />
+        <!-- <Blob Name="object_ik_Blob_012FA0" Size="0xF0" Offset="0x12FA0" /> -->
+        <Texture Name="object_ik_Tex_013090" OutName="tex_013090" Format="ci8" Width="16" Height="16" Offset="0x13090" />
+        <Texture Name="object_ik_Tex_013190" OutName="tex_013190" Format="ci8" Width="8" Height="8" Offset="0x13190" />
+        <Texture Name="object_ik_Tex_0131D0" OutName="tex_0131D0" Format="ci8" Width="16" Height="16" Offset="0x131D0" />
+        <Texture Name="object_ik_Tex_0132D0" OutName="tex_0132D0" Format="ci8" Width="8" Height="16" Offset="0x132D0" />
+        <Texture Name="object_ik_Tex_013350" OutName="tex_013350" Format="ci8" Width="8" Height="16" Offset="0x13350" />
+        <Texture Name="object_ik_Tex_0133D0" OutName="tex_0133D0" Format="ci8" Width="16" Height="16" Offset="0x133D0" />
+        <Limb Name="object_ik_Standardlimb_0134D0" Type="Standard" EnumName="OBJECT_IK_LIMB_01" Offset="0x134D0" />
+        <Limb Name="object_ik_Standardlimb_0134DC" Type="Standard" EnumName="OBJECT_IK_LIMB_02" Offset="0x134DC" />
+        <Limb Name="object_ik_Standardlimb_0134E8" Type="Standard" EnumName="OBJECT_IK_LIMB_03" Offset="0x134E8" />
+        <Limb Name="object_ik_Standardlimb_0134F4" Type="Standard" EnumName="OBJECT_IK_LIMB_04" Offset="0x134F4" />
+        <Limb Name="object_ik_Standardlimb_013500" Type="Standard" EnumName="OBJECT_IK_LIMB_05" Offset="0x13500" />
+        <Limb Name="object_ik_Standardlimb_01350C" Type="Standard" EnumName="OBJECT_IK_LIMB_06" Offset="0x1350C" />
+        <Limb Name="object_ik_Standardlimb_013518" Type="Standard" EnumName="OBJECT_IK_LIMB_07" Offset="0x13518" />
+        <Limb Name="object_ik_Standardlimb_013524" Type="Standard" EnumName="OBJECT_IK_LIMB_08" Offset="0x13524" />
+        <Limb Name="object_ik_Standardlimb_013530" Type="Standard" EnumName="OBJECT_IK_LIMB_09" Offset="0x13530" />
+        <Limb Name="object_ik_Standardlimb_01353C" Type="Standard" EnumName="OBJECT_IK_LIMB_0A" Offset="0x1353C" />
+        <Limb Name="object_ik_Standardlimb_013548" Type="Standard" EnumName="OBJECT_IK_LIMB_0B" Offset="0x13548" />
+        <Limb Name="object_ik_Standardlimb_013554" Type="Standard" EnumName="OBJECT_IK_LIMB_0C" Offset="0x13554" />
+        <Limb Name="object_ik_Standardlimb_013560" Type="Standard" EnumName="OBJECT_IK_LIMB_0D" Offset="0x13560" />
+        <Limb Name="object_ik_Standardlimb_01356C" Type="Standard" EnumName="OBJECT_IK_LIMB_0E" Offset="0x1356C" />
+        <Limb Name="object_ik_Standardlimb_013578" Type="Standard" EnumName="OBJECT_IK_LIMB_0F" Offset="0x13578" />
+        <Limb Name="object_ik_Standardlimb_013584" Type="Standard" EnumName="OBJECT_IK_LIMB_10" Offset="0x13584" />
+        <Limb Name="object_ik_Standardlimb_013590" Type="Standard" EnumName="OBJECT_IK_LIMB_11" Offset="0x13590" />
+        <Limb Name="object_ik_Standardlimb_01359C" Type="Standard" EnumName="OBJECT_IK_LIMB_12" Offset="0x1359C" />
+        <Limb Name="object_ik_Standardlimb_0135A8" Type="Standard" EnumName="OBJECT_IK_LIMB_13" Offset="0x135A8" />
+        <Limb Name="object_ik_Standardlimb_0135B4" Type="Standard" EnumName="OBJECT_IK_LIMB_14" Offset="0x135B4" />
+        <Limb Name="object_ik_Standardlimb_0135C0" Type="Standard" EnumName="OBJECT_IK_LIMB_15" Offset="0x135C0" />
+        <Limb Name="object_ik_Standardlimb_0135CC" Type="Standard" EnumName="OBJECT_IK_LIMB_16" Offset="0x135CC" />
+        <Limb Name="object_ik_Standardlimb_0135D8" Type="Standard" EnumName="OBJECT_IK_LIMB_17" Offset="0x135D8" />
+        <Limb Name="object_ik_Standardlimb_0135E4" Type="Standard" EnumName="OBJECT_IK_LIMB_18" Offset="0x135E4" />
+        <Limb Name="object_ik_Standardlimb_0135F0" Type="Standard" EnumName="OBJECT_IK_LIMB_19" Offset="0x135F0" />
+        <Limb Name="object_ik_Standardlimb_0135FC" Type="Standard" EnumName="OBJECT_IK_LIMB_1A" Offset="0x135FC" />
+        <Limb Name="object_ik_Standardlimb_013608" Type="Standard" EnumName="OBJECT_IK_LIMB_1B" Offset="0x13608" />
+        <Limb Name="object_ik_Standardlimb_013614" Type="Standard" EnumName="OBJECT_IK_LIMB_1C" Offset="0x13614" />
+        <Limb Name="object_ik_Standardlimb_013620" Type="Standard" EnumName="OBJECT_IK_LIMB_1D" Offset="0x13620" />
+        <Skeleton Name="object_ik_Skel_0136A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IK_LIMB_NONE" LimbMax="OBJECT_IK_LIMB_MAX" EnumName="object_ik_Limbs" Offset="0x136A0" />
+    </File>
+</Root>

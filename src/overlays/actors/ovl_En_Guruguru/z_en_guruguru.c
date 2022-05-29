@@ -5,8 +5,9 @@
  */
 
 #include "z_en_guruguru.h"
+#include "objects/object_fu/object_fu.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGuruguru*)thisx)
 
@@ -24,15 +25,7 @@ void func_80BC73F4(EnGuruguru* this);
 void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx);
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06006C90;
 extern ColliderCylinderInit D_80BC79A0;
-extern AnimationHeader D_06000B04;
-extern AnimationHeader D_0600057C;
-
-extern u64 D_06005F20[];
-extern u64 D_06006320[];
-extern u64 D_06006720[];
-extern u64 D_06006920[];
 
 const ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
@@ -69,29 +62,30 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BC79CC[] = { &D_06000B04, &D_0600057C };
+static AnimationHeader* D_80BC79CC[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
 static u8 D_80BC79D4[] = { 0 };
 static f32 D_80BC79D8[] = { 1.0f, 1.0f };
-static void* sEyeTextures[] = { D_06005F20, D_06006320 };
-static void* sMouthTextures[] = { D_06006720, D_06006920 };
+static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
+static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
 
 void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
+                       this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
-    if (!gSaveContext.isNight) {
+    if (!gSaveContext.save.isNight) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
-            this->actor.flags |= 0x8000000;
+            this->actor.flags |= ACTOR_FLAG_8000000;
             this->actor.draw = NULL;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
             Actor_MarkForDeath(&this->actor);
@@ -125,10 +119,10 @@ void func_80BC6E10(EnGuruguru* this) {
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
-        if (gSaveContext.weekEventReg[38] & 0x10) {
+        if (gSaveContext.save.weekEventReg[38] & 0x10) {
             this->textIdIndex = 1;
         }
-    } else if (gSaveContext.weekEventReg[38] & 0x40) {
+    } else if (gSaveContext.save.weekEventReg[38] & 0x40) {
         this->textIdIndex = 2;
     } else {
         this->textIdIndex = 3;
@@ -137,8 +131,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.weekEventReg[77] & 4)) {
-        if (!(gSaveContext.weekEventReg[88] & 4)) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.save.weekEventReg[77] & 4)) {
+        if (!(gSaveContext.save.weekEventReg[88] & 4)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -159,7 +153,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
             this->textIdIndex = 13;
-            if (gSaveContext.weekEventReg[79] & 4) {
+            if (gSaveContext.save.weekEventReg[79] & 4) {
                 this->textIdIndex = 14;
             }
         }
@@ -170,7 +164,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yaw = ABS_ALT(yawTemp);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BC701C(this, globalCtx);
     } else if (yaw <= 0x2890) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
@@ -197,7 +191,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (func_80152498(&globalCtx->msgCtx) != 5) {
+        if (Message_GetState(&globalCtx->msgCtx) != 5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -213,21 +207,21 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(globalCtx, 0x13);
-            gSaveContext.weekEventReg[79] |= 4;
+            gSaveContext.save.weekEventReg[79] |= 4;
             func_80BC6E10(this);
             return;
         }
         if (this->actor.params == 0) {
             if (this->actor.textId == 0x295F) {
-                gSaveContext.weekEventReg[88] |= 4;
+                gSaveContext.save.weekEventReg[88] |= 4;
             }
             if (this->actor.textId == 0x292A) {
-                gSaveContext.weekEventReg[38] |= 0x10;
+                gSaveContext.save.weekEventReg[38] |= 0x10;
             }
             func_80151BB4(globalCtx, 0x13);
             func_80BC6E10(this);
@@ -238,7 +232,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             return;
         }
         if (this->textIdIndex == 12) {
-            gSaveContext.weekEventReg[38] |= 0x40;
+            gSaveContext.save.weekEventReg[38] |= 0x40;
             func_801A3B48(0);
             func_80151BB4(globalCtx, 0x36);
             func_80151BB4(globalCtx, 0x13);
@@ -301,21 +295,21 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
         this->unk268 = 0;
-        gSaveContext.weekEventReg[38] |= 0x40;
+        gSaveContext.save.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
     }
 }
 
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -325,7 +319,7 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yawTemp;
 
-    if (!gSaveContext.isNight) {
+    if (!gSaveContext.save.isNight) {
         if (this->actor.params == 1) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -365,8 +359,8 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     Actor_SetScale(&this->actor, 0.01f);
-    Actor_SetHeight(&this->actor, 50.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 50.0f);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);

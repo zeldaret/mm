@@ -1,12 +1,12 @@
 /*
  * File: z_en_ge3.c
  * Overlay: ovl_En_Ge3
- * Description:
+ * Description: Aviel
  */
 
 #include "z_en_ge3.h"
 
-#define FLAGS 0x80000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe3*)thisx)
 

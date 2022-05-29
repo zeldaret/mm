@@ -1,12 +1,12 @@
 /*
  * File: z_bg_f40_swlift.c
  * Overlay: ovl_Bg_F40_Swlift
- * Description:
+ * Description: Unused Stone Tower vertically-oscillating platform
  */
 
 #include "z_bg_f40_swlift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgF40Swlift*)thisx)
 

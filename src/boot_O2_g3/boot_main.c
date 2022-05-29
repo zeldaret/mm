@@ -1,6 +1,4 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
-#include "prevent_bss_reordering.h"
 
 StackEntry sBootThreadInfo;
 OSThread sIdleThread;

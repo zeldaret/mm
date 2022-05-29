@@ -1,0 +1,42 @@
+﻿<Root>
+    <File Name="object_sth" Segment="6">
+        <!-- <Blob Name="object_sth_Blob_000000" Size="0x530" Offset="0x0" /> -->
+        <DList Name="object_sth_DL_001C30" Offset="0x1C30" />
+        <DList Name="object_sth_DL_001C38" Offset="0x1C38" />
+        <DList Name="object_sth_DL_001D80" Offset="0x1D80" />
+        <DList Name="object_sth_DL_001E88" Offset="0x1E88" />
+        <DList Name="object_sth_DL_001F90" Offset="0x1F90" />
+        <DList Name="object_sth_DL_0020D8" Offset="0x20D8" />
+        <DList Name="object_sth_DL_0021E0" Offset="0x21E0" />
+        <DList Name="object_sth_DL_0022E8" Offset="0x22E8" />
+        <DList Name="object_sth_DL_0024C0" Offset="0x24C0" />
+        <DList Name="object_sth_DL_0025D8" Offset="0x25D8" />
+        <DList Name="object_sth_DL_0026E8" Offset="0x26E8" />
+        <DList Name="object_sth_DL_0027F0" Offset="0x27F0" />
+        <DList Name="object_sth_DL_002908" Offset="0x2908" />
+        <DList Name="object_sth_DL_002A18" Offset="0x2A18" />
+        <DList Name="object_sth_DL_002B20" Offset="0x2B20" />
+        <Texture Name="object_sth_TLUT_002D08" OutName="tlut_002D08" Format="rgba16" Width="16" Height="16" Offset="0x2D08" />
+        <Texture Name="object_sth_Tex_002F08" OutName="tex_002F08" Format="ci8" Width="8" Height="8" Offset="0x2F08" />
+        <Texture Name="object_sth_Tex_002F48" OutName="tex_002F48" Format="ci8" Width="8" Height="8" Offset="0x2F48" />
+        <Texture Name="object_sth_Tex_002F88" OutName="tex_002F88" Format="i8" Width="16" Height="16" Offset="0x2F88" />
+        <Texture Name="object_sth_Tex_003088" OutName="tex_003088" Format="ci8" Width="8" Height="8" Offset="0x3088" />
+        <Texture Name="object_sth_Tex_0030C8" OutName="tex_0030C8" Format="i8" Width="8" Height="8" Offset="0x30C8" />
+        <Limb Name="object_sth_Standardlimb_003108" Type="Standard" EnumName="OBJECT_STH_LIMB_01" Offset="0x3108" />
+        <Limb Name="object_sth_Standardlimb_003114" Type="Standard" EnumName="OBJECT_STH_LIMB_02" Offset="0x3114" />
+        <Limb Name="object_sth_Standardlimb_003120" Type="Standard" EnumName="OBJECT_STH_LIMB_03" Offset="0x3120" />
+        <Limb Name="object_sth_Standardlimb_00312C" Type="Standard" EnumName="OBJECT_STH_LIMB_04" Offset="0x312C" />
+        <Limb Name="object_sth_Standardlimb_003138" Type="Standard" EnumName="OBJECT_STH_LIMB_05" Offset="0x3138" />
+        <Limb Name="object_sth_Standardlimb_003144" Type="Standard" EnumName="OBJECT_STH_LIMB_06" Offset="0x3144" />
+        <Limb Name="object_sth_Standardlimb_003150" Type="Standard" EnumName="OBJECT_STH_LIMB_07" Offset="0x3150" />
+        <Limb Name="object_sth_Standardlimb_00315C" Type="Standard" EnumName="OBJECT_STH_LIMB_08" Offset="0x315C" />
+        <Limb Name="object_sth_Standardlimb_003168" Type="Standard" EnumName="OBJECT_STH_LIMB_09" Offset="0x3168" />
+        <Limb Name="object_sth_Standardlimb_003174" Type="Standard" EnumName="OBJECT_STH_LIMB_0A" Offset="0x3174" />
+        <Limb Name="object_sth_Standardlimb_003180" Type="Standard" EnumName="OBJECT_STH_LIMB_0B" Offset="0x3180" />
+        <Limb Name="object_sth_Standardlimb_00318C" Type="Standard" EnumName="OBJECT_STH_LIMB_0C" Offset="0x318C" />
+        <Limb Name="object_sth_Standardlimb_003198" Type="Standard" EnumName="OBJECT_STH_LIMB_0D" Offset="0x3198" />
+        <Limb Name="object_sth_Standardlimb_0031A4" Type="Standard" EnumName="OBJECT_STH_LIMB_0E" Offset="0x31A4" />
+        <Limb Name="object_sth_Standardlimb_0031B0" Type="Standard" EnumName="OBJECT_STH_LIMB_0F" Offset="0x31B0" />
+        <Skeleton Name="object_sth_Skel_0031F8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_STH_LIMB_NONE" LimbMax="OBJECT_STH_LIMB_MAX" EnumName="object_sth_Limbs" Offset="0x31F8" />
+    </File>
+</Root>

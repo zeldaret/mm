@@ -1,12 +1,12 @@
 /*
- * File z_en_bigpamet.c
+ * File: z_en_bigpamet.c
  * Overlay: ovl_En_Bigpamet
  * Description: Gekko & Snapper Miniboss - Snapper
  */
 
 #include "z_en_bigpamet.h"
 
-#define FLAGS 0x00000435
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnBigpamet*)thisx)
 

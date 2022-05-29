@@ -1,44 +1,44 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "interface/parameter_static/parameter_static.h"
+#include "prevent_bss_reordering.h"
 
-static s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
-static s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50 }, { -155, 30, 205 } };
-static s16 sHeartsEnvFactors[3][3] = { { 0, 0, 0 }, { 205, -40, -60 }, { -50, -40, 195 } };
-static s16 sHeartsDDPrimColors[3][3] = { { 255, 255, 255 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsDDEnvColors[3][3] = { { 200, 0, 0 }, { 255, 0, 0 }, { 0, 0, 255 } };
-static s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 }, { -155, -155, 0 } };
-static s16 sHeartsDDEnvFactors[3][3] = { { 0, 0, 0 }, { 55, 0, 0 }, { -200, 0, 255 } };
+s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
+s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
+s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50 }, { -155, 30, 205 } };
+s16 sHeartsEnvFactors[3][3] = { { 0, 0, 0 }, { 205, -40, -60 }, { -50, -40, 195 } };
+s16 sHeartsDDPrimColors[3][3] = { { 255, 255, 255 }, { 255, 190, 0 }, { 100, 100, 255 } };
+s16 sHeartsDDEnvColors[3][3] = { { 200, 0, 0 }, { 255, 0, 0 }, { 0, 0, 255 } };
+s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 }, { -155, -155, 0 } };
+s16 sHeartsDDEnvFactors[3][3] = { { 0, 0, 0 }, { 55, 0, 0 }, { -200, 0, 255 } };
 
 s16 sBeatingHeartsDDPrim[3];
 s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-extern TexturePtr D_02000000; // Empty heart texture
-extern TexturePtr D_02000100; // Quarter Heart Texture
-extern TexturePtr D_02000200; // Half Heart Texture
-extern TexturePtr D_02000300; // Three Quarter Heart Texture
-extern TexturePtr D_02000400; // Full heart texture
-extern TexturePtr D_02000500; // Empty Double Defense Heart texture
-extern TexturePtr D_02000600; // Quarter Double Defense Heart Texture
-extern TexturePtr D_02000700; // Half Double Defense Heart Texture
-extern TexturePtr D_02000800; // Three Quarter Double Defense Heart Texture
-extern TexturePtr D_02000900; // Full Double Defense Heart texture
+TexturePtr HeartTextures[] = {
+    gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
+    gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
+    gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
+    gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
+};
 
-TexturePtr HeartTextures[] = { &D_02000400, &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
-                               &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000300,
-                               &D_02000300, &D_02000300, &D_02000300, &D_02000300 };
-
-TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600,
-                                 &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000800,
-                                 &D_02000800, &D_02000800, &D_02000800, &D_02000800 };
+TexturePtr HeartDDTextures[] = {
+    gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex,
+};
 
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
     interfaceCtx->unkTimer = 320;
 
-    interfaceCtx->health = gSaveContext.health;
+    interfaceCtx->health = gSaveContext.save.playerData.health;
 
     interfaceCtx->lifeColorChange = 0;
     interfaceCtx->lifeColorChangeDirection = 0;
@@ -168,7 +168,7 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
 }
 
 s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
-    gSaveContext.health = globalCtx->interfaceCtx.health;
+    gSaveContext.save.playerData.health = globalCtx->interfaceCtx.health;
 
     return 1;
 }
@@ -178,8 +178,8 @@ s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
 
     interfaceCtx->unkTimer = 320;
     interfaceCtx->health += 0x10;
-    if (globalCtx->interfaceCtx.health >= gSaveContext.health) {
-        globalCtx->interfaceCtx.health = gSaveContext.health;
+    if (globalCtx->interfaceCtx.health >= gSaveContext.save.playerData.health) {
+        globalCtx->interfaceCtx.health = gSaveContext.save.playerData.health;
         return 1;
     }
     return 0;
@@ -195,7 +195,7 @@ s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
         interfaceCtx->health -= 0x10;
         if (interfaceCtx->health <= 0) {
             interfaceCtx->health = 0;
-            globalCtx->damagePlayer(globalCtx, -(((void)0, gSaveContext.health) + 1));
+            globalCtx->damagePlayer(globalCtx, -(((void)0, gSaveContext.save.playerData.health) + 1));
             return 1;
         }
     }
@@ -216,18 +216,18 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
     Vtx* beatingHeartVtx = interfaceCtx->beatingHeartVtx;
-    s32 fractionHeartCount = gSaveContext.health % 0x10;
-    s16 healthCapacity = gSaveContext.healthCapacity / 0x10;
-    s16 fullHeartCount = gSaveContext.health / 0x10;
+    s32 fractionHeartCount = gSaveContext.save.playerData.health % 0x10;
+    s16 healthCapacity = gSaveContext.save.playerData.healthCapacity / 0x10;
+    s16 fullHeartCount = gSaveContext.save.playerData.health / 0x10;
     s32 pad2;
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
     TexturePtr temp = NULL;
-    s32 ddCount = gSaveContext.inventory.dungeonKeys[9] - 1;
+    s32 ddCount = gSaveContext.save.inventory.dungeonKeys[9] - 1;
 
     OPEN_DISPS(gfxCtx);
 
-    if ((gSaveContext.health % 0x10) == 0) {
+    if ((gSaveContext.save.playerData.health % 0x10) == 0) {
         fullHeartCount--;
     }
     offsetY = 0.0f;
@@ -276,11 +276,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
 
             if (i < fullHeartCount) {
-                heartTex = &D_02000400;
+                heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000000;
+                heartTex = gHeartEmptyTex;
             }
         } else {
             if (i < fullHeartCount) {
@@ -316,11 +316,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[1][0], sHeartsDDEnv[1][1], sHeartsDDEnv[1][2], 255);
             }
             if (i < fullHeartCount) {
-                heartTex = &D_02000900;
+                heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000500;
+                heartTex = gDefenseHeartEmptyTex;
             }
         }
 
@@ -399,9 +399,8 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (func_801233E4(globalCtx) == 0 && (globalCtx->pauseCtx.state == 0) &&
-                (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
-                // func_801233E4 and func_801690CC : Check if in Cutscene
+            if (!Player_InCsMode(&globalCtx->state) && (globalCtx->pauseCtx.state == 0) &&
+                (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && !Play_InCsMode(globalCtx)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }
@@ -417,19 +416,19 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
+    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
         criticalThreshold = 16;
 
-    } else if (gSaveContext.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
         criticalThreshold = 24;
 
-    } else if (gSaveContext.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
         criticalThreshold = 32;
     } else {
         criticalThreshold = 44;
     }
 
-    if ((criticalThreshold >= gSaveContext.health) && (gSaveContext.health > 0)) {
+    if ((criticalThreshold >= gSaveContext.save.playerData.health) && (gSaveContext.save.playerData.health > 0)) {
         return true;
     }
     return false;

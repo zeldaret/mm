@@ -1,12 +1,12 @@
 /*
- * File z_en_az.c
+ * File: z_en_az.c
  * Overlay: ovl_En_Az
  * Description: Beaver Bros
  */
 
 #include "z_en_az.h"
 
-#define FLAGS 0x80000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnAz*)thisx)
 

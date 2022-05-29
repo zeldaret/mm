@@ -1,12 +1,12 @@
 /*
  * File: z_dm_char06.c
  * Overlay: ovl_Dm_Char06
- * Description: Some unseen Mountain Village cutscene actor?
+ * Description: Mountain Village Snowy landscape fadeout in post-Snowhead thawing cutscene
  */
 
 #include "z_dm_char06.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar06*)thisx)
 

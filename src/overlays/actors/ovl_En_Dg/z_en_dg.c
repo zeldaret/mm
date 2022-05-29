@@ -6,7 +6,7 @@
 
 #include "z_en_dg.h"
 
-#define FLAGS 0x00800019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
@@ -36,17 +36,6 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx);
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx);
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06000998;
-extern AnimationHeader D_06001048;
-extern AnimationHeader D_06001348;
-extern AnimationHeader D_06001560;
-extern AnimationHeader D_060017C0;
-extern AnimationHeader D_06001A84;
-extern AnimationHeader D_06001BD8;
-extern AnimationHeader D_06001FB0;
-extern AnimationHeader D_060021C8;
-extern FlexSkeletonHeader D_060080F0;
-
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
@@ -68,19 +57,32 @@ typedef struct {
 
 static D_8098C2A4_s D_8098C2A4 = { 0x0063, 0x0000 };
 
+/**
+ * Stores the state for the dogs milling about at the Doggy Racetrack.
+ */
 typedef struct {
-    s16 unk_00;
-    s16 unk_02;
-    s16 unk_04;
-} D_8098C2A8_s;
+    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
+    s16 index;  // The dog's index within sDogInfo
+    s16 textId; // The ID of the text to display when the dog is picked up
+} RacetrackDogInfo;
 
-static D_8098C2A8_s D_8098C2A8[] = {
-    { 3, 0, 0x3539 },  { 1, 1, 0x353A },  { 5, 2, 0x353B },  { 2, 3, 0x353C },  { 4, 4, 0x3538 },
-    { 2, 5, 0x353E },  { 3, 6, 0x353F },  { 1, 7, 0x3540 },  { 1, 8, 0x3541 },  { 6, 9, 0x3542 },
-    { 2, 10, 0x3543 }, { 3, 11, 0x3544 }, { 1, 12, 0x3545 }, { 4, 13, 0x3546 },
+/**
+ * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values
+ * in this table are updated by functions within this actor.
+ */
+static RacetrackDogInfo sRacetrackDogInfo[] = {
+    { DOG_COLOR_BEIGE, 0, 0x3539 },  { DOG_COLOR_WHITE, 1, 0x353A },  { DOG_COLOR_BLUE, 2, 0x353B },
+    { DOG_COLOR_GRAY, 3, 0x353C },   { DOG_COLOR_BROWN, 4, 0x3538 },  { DOG_COLOR_GRAY, 5, 0x353E },
+    { DOG_COLOR_BEIGE, 6, 0x353F },  { DOG_COLOR_WHITE, 7, 0x3540 },  { DOG_COLOR_WHITE, 8, 0x3541 },
+    { DOG_COLOR_GOLD, 9, 0x3542 },   { DOG_COLOR_GRAY, 10, 0x3543 },  { DOG_COLOR_BEIGE, 11, 0x3544 },
+    { DOG_COLOR_WHITE, 12, 0x3545 }, { DOG_COLOR_BROWN, 13, 0x3546 },
 };
 
-static D_8098C2A8_s D_8098C2FC = { 0, -1, 0x353E };
+/**
+ * Stores the RacetrackDogInfo for the dog that is selected by the player. These values are just
+ * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in func_80989E18.
+ */
+static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x353E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -139,31 +141,33 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
-    { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
-    { &D_06001048, 1.0f, 28, -1, 2, -6 }, { &D_06001048, 1.0f, 54, 54, 2, -6 }, { &D_060021C8, -1.5f, -1, 0, 0, -6 },
-    { &D_06001560, 1.0f, 0, -1, 2, 0 },   { &D_06001A84, 1.2f, 0, -1, 2, 0 },   { &D_060017C0, 1.2f, 0, -1, 2, 0 },
-    { &D_060021C8, 0.5f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+void func_80989140(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(arg1->animationSeg);
+        frameCount = Animation_GetLastFrame(arg1->animation);
     } else {
         frameCount = arg1->frameCount;
     }
 
-    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount,
-                     arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, arg1->animation, arg1->playSpeed + (BREG(88) * 0.1f), arg1->startFrame, frameCount,
+                     arg1->mode, arg1->morphFrames);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -198,15 +202,15 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
         sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        __sinf(0.0f);
-        __cosf(0.0f);
+        sinf(0.0f);
+        cosf(0.0f);
         arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
         arg1->z = Math_Acot2F(1.0f, -sp24 * sp20);
     }
 }
 
 s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
+    Vec3s* sp5C = Lib_SegmentedToVirtual(arg1->points);
     s32 count = arg1->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -221,7 +225,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
     if (idx == 0) {
         phi_f12 = sp5C[1].x - sp5C[0].x;
         phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if ((idx + 1) == ((void)0, count)) {
+    } else if (idx == count - 1) {
         phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
         phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
     } else {
@@ -229,7 +233,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -243,7 +247,7 @@ s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[idx];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
@@ -261,29 +265,29 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
     s16 phi_a1;
     f32 sp30;
 
-    if (this->unk_1DC != NULL) {
-        phi_a1 = func_809895B4(this->unk_1DC, this->unk_1E0, &this->actor.world.pos, &sp30);
+    if (this->path != NULL) {
+        phi_a1 = func_809895B4(this->path, this->unk_1E0, &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         }
 
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80989418(this, this->unk_1DC, this->unk_1E0)) {
-            if (this->unk_1E0 >= (this->unk_1DC->count - 1)) {
+        if (func_80989418(this, this->path, this->unk_1E0)) {
+            if (this->unk_1E0 >= (this->path->count - 1)) {
                 this->unk_1E0 = 0;
             } else {
                 this->unk_1E0++;
             }
         }
 
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->index == 21) || ((this->index == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-        } else if (this->unk_286 == 20) {
+        } else if (this->index == 20) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
+        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -298,53 +302,53 @@ void func_80989864(EnDg* this, GlobalContext* globalCtx) {
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
     Vec3f sp38;
 
-    if (((this->unk_286 + frame) % mod) == 0) {
+    if (((this->index + frame) % mod) == 0) {
         sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
         sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
-        func_800BBDAC(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, 1);
     }
 }
 
 void func_80989974(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
 void func_809899C8(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
 void func_80989A08(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
 void func_80989A48(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
 void func_80989A9C(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
 
 void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->index == 21) || ((this->index == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
             func_80989140(&this->skelAnime, sAnimations, 1);
-        } else if (this->unk_286 == 20) {
+        } else if (this->index == 20) {
             func_80989140(&this->skelAnime, sAnimations, 2);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
+        } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
             func_80989140(&this->skelAnime, sAnimations, 1);
         } else {
             func_80989140(&this->skelAnime, sAnimations, 2);
@@ -354,93 +358,94 @@ void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_80989BF8(EnDg* this) {
-    if (this->unk_286 < 14) {
-        if (this->unk_286 % 2) {
-            D_8098C2A8[this->unk_286].unk_04 =
-                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
+    if (this->index < 14) {
+        if (this->index % 2) {
+            sRacetrackDogInfo[this->index].textId =
+                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
+            sRacetrackDogInfo[this->index].textId =
+                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (1 | 2 | 4 | 8));
         }
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 
-    if ((D_8098C2A8[this->unk_286].unk_04 >= 0x3547) || (D_8098C2A8[this->unk_286].unk_04 < 0x3538)) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x353E;
+    if ((sRacetrackDogInfo[this->index].textId >= 0x3547) || (sRacetrackDogInfo[this->index].textId < 0x3538)) {
+        sRacetrackDogInfo[this->index].textId = 0x353E;
     }
 
-    if (D_8098C2A8[this->unk_286].unk_04 == 0x353D) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x3538;
+    if (sRacetrackDogInfo[this->index].textId == 0x353D) {
+        sRacetrackDogInfo[this->index].textId = 0x3538;
     }
 }
 
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
-    if (this->unk_286 == 21) {
+    if (this->index == 21) {
         if (CURRENT_DAY == 1) {
-            func_801518B0(globalCtx, 0x91C, NULL);
+            Message_StartTextbox(globalCtx, 0x91C, NULL);
         } else {
-            func_801518B0(globalCtx, 0x91E, NULL);
+            Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
-    } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        func_801518B0(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
-    } else if (this->unk_286 == 20) {
-        func_801518B0(globalCtx, 0x353D, NULL);
+    } else if ((this->index >= 0) && (this->index < 14)) {
+        Message_StartTextbox(globalCtx, sRacetrackDogInfo[this->index].textId, NULL);
+    } else if (this->index == 20) {
+        Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {
-        func_801518B0(globalCtx, 0x627, NULL);
+        Message_StartTextbox(globalCtx, 0x627, NULL);
     }
 }
 
 void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
-    D_8098C2A8_s* temp;
+    RacetrackDogInfo* temp;
 
     if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         this->unk_280 |= 1;
     } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
-        this->actor.flags &= ~0x8000000;
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
         this->unk_280 &= ~1;
     }
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->unk_290 = 1;
-        D_8098C2FC = D_8098C2A8[this->unk_286];
+        sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (D_8098C2A0 == 0) {
-            this->actor.flags |= 0x8000000;
+            this->actor.flags |= ACTOR_FLAG_8000000;
             D_8098C2A0 = 1;
             this->unk_280 |= 1;
         }
 
         func_80989140(&this->skelAnime, sAnimations, 5);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.speedXZ = 0.0f;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 100.0f);
             this->actionFunc = func_8098BBEC;
         } else {
             this->actionFunc = func_8098BA64;
         }
     } else {
-        func_800B8BB0(&this->actor, globalCtx);
+        Actor_LiftActor(&this->actor, globalCtx);
     }
 }
 
 s32 func_80989FC8(GlobalContext* globalCtx) {
-    EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     f32 minDist = 9999.0f;
     f32 dist;
 
     while (enemy != NULL) {
         if (enemy->actor.id == ACTOR_EN_DG) {
             if (enemy->actor.isTargeted) {
-                D_8098C2A4.unk_00 = enemy->unk_286;
+                D_8098C2A4.unk_00 = enemy->index;
                 return true;
             }
 
             dist = enemy->actor.xzDistToPlayer;
             if (dist < minDist) {
-                D_8098C2A4.unk_00 = enemy->unk_286;
+                D_8098C2A4.unk_00 = enemy->index;
                 minDist = dist;
             }
         }
@@ -462,7 +467,7 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
             func_80989FC8(globalCtx);
         }
 
-        if (this->unk_286 == D_8098C2A4.unk_00) {
+        if (this->index == D_8098C2A4.unk_00) {
             if (!(this->unk_280 & 0x20)) {
                 this->unk_280 |= 0x20;
                 func_80989140(&this->skelAnime, sAnimations, 1);
@@ -470,11 +475,11 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
             } else if ((this->actionFunc == func_8098B004) || (this->actionFunc == func_8098AB48)) {
                 if (DECR(this->unk_292) == 0) {
                     this->unk_292 = 10;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
         }
-    } else if (this->unk_286 == D_8098C2A4.unk_00) {
+    } else if (this->index == D_8098C2A4.unk_00) {
         this->unk_280 &= ~0x20;
         D_8098C2A4.unk_00 = 99;
         func_80989ADC(this, globalCtx);
@@ -567,7 +572,7 @@ void func_8098A468(EnDg* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
     func_80989674(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (player->transformation == PLAYER_FORM_HUMAN) {
         func_80989E18(this, globalCtx);
     }
@@ -619,7 +624,7 @@ void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
         }
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
@@ -655,12 +660,12 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 7.0f;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -698,7 +703,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_8098AC34;
             } else {
                 func_80989140(&this->skelAnime, sAnimations, 11);
-                sAnimations[11].playbackSpeed = -1.0f;
+                sAnimations[11].playSpeed = -1.0f;
                 this->actionFunc = func_8098B198;
             }
         }
@@ -707,7 +712,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     func_80989A08(this, 5.0f);
 }
@@ -715,7 +720,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
 void func_8098AAAC(EnDg* this, GlobalContext* globalCtx) {
     this->unk_280 &= ~8;
     Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (DECR(this->unk_28E) == 0) {
         this->unk_28E = 20;
         this->actionFunc = func_8098A938;
@@ -773,7 +778,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
 
     if (sp26 < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimations[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimations[14].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
         func_80989864(this, globalCtx);
     } else {
@@ -781,7 +786,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
-            sAnimations[14].playbackSpeed = 1.2f;
+            sAnimations[14].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
             this->actor.speedXZ = 8.0f + rand;
         } else if (sp26 >= 0x15) {
@@ -790,7 +795,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
         if (sp26 >= 0x18) {
             func_80989864(this, globalCtx);
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989A9C(this, 10.0f);
@@ -808,7 +813,7 @@ void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
@@ -818,7 +823,7 @@ void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
 void func_8098AF44(EnDg* this, GlobalContext* globalCtx) {
     if (func_801A46F8() == 1) {
         this->unk_292 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->actionFunc = func_8098B004;
     }
 }
@@ -829,7 +834,7 @@ void func_8098AF98(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098A468;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_809899C8(this, 3.0f);
 }
 
@@ -838,7 +843,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & 2)) {
+    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & OC1_HIT)) {
         this->actor.shape.rot.y += 0x71C;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
@@ -859,7 +864,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
     }
 
     func_8098A064(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     if (!(this->unk_280 & 0x20)) {
         func_809899C8(this, 3.0f);
@@ -881,7 +886,7 @@ void func_8098B198(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     Math_ApproachF(&this->actor.speedXZ, -1.0f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     func_80989A9C(this, 4.0f);
 }
@@ -901,11 +906,11 @@ void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -2.0f, 0.2f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
 void func_8098B390(EnDg* this, GlobalContext* globalCtx) {
@@ -936,12 +941,12 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
         this->unk_284 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         this->actionFunc = func_8098B560;
     }
 
     Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
@@ -963,7 +968,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     if (DECR(this->unk_284) == 0) {
         if (!(this->unk_280 & 4)) {
             this->unk_280 |= 4;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
         this->unk_284 = 5;
         EffectSsGRipple_Spawn(globalCtx, &sp54, 100, 500, 30);
@@ -999,7 +1004,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
         this->unk_280 &= ~4;
         this->unk_28C = 8;
         this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80989140(&this->skelAnime, sAnimations, 2);
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         this->actionFunc = func_8098A468;
@@ -1008,7 +1013,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
@@ -1040,7 +1045,7 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
         this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80989140(&this->skelAnime, sAnimations, 2);
         this->actionFunc = func_8098A468;
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -1048,22 +1053,22 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->unk_290 = 2;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (D_8098C2A0 != 0) {
-            this->actor.flags &= ~0x8000000;
+            this->actor.flags &= ~ACTOR_FLAG_8000000;
             D_8098C2A0 = 0;
             this->unk_280 &= ~1;
         }
-        this->unk_288 = -1;
-        D_8098C2FC.unk_02 = this->unk_288;
+        this->selectedDogIndex = -1;
+        sSelectedRacetrackDogInfo.index = this->selectedDogIndex;
         this->unk_28A = 100;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         this->unk_280 |= 0x10;
         this->actionFunc = func_8098BB10;
     }
@@ -1075,7 +1080,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         if (this->unk_280 & 0x10) {
             this->unk_280 &= ~0x10;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
         this->actor.speedXZ = 0.0f;
@@ -1091,12 +1096,12 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098A468;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
     } else {
@@ -1105,7 +1110,7 @@ void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         func_80989140(&this->skelAnime, sAnimations, 0);
         this->actionFunc = func_8098BA64;
     }
@@ -1115,13 +1120,13 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDg* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1DC = func_8013D648(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENDG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
@@ -1129,7 +1134,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_280 = 0;
     this->unk_28E = 20;
     this->unk_284 = 10;
-    this->unk_286 = ENDG_GET_3E0(&this->actor);
+    this->index = ENDG_GET_INDEX(&this->actor);
     this->unk_28C = 0;
     this->unk_290 = 0;
     if (globalCtx->sceneNum == SCENE_F01_B) {
@@ -1151,7 +1156,7 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
 
-    this->unk_288 = D_8098C2FC.unk_02;
+    this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
     if (!(player->stateFlags1 & 0x20) || (globalCtx->sceneNum != SCENE_CLOCKTOWER)) {
         if (func_8098A1B4(this, globalCtx)) {
             func_8098A234(this, globalCtx);
@@ -1174,20 +1179,20 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_8098BFB8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+s32 EnDg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
 }
 
-void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDg* this = THIS;
     Vec3f sp20 = { 0.0f, 20.0f, 0.0f };
 
-    if (limbIndex == 5) {
+    if (limbIndex == DOG_LIMB_HEAD) {
         if (this->actionFunc == func_8098BBEC) {
             sp20.x = 5000.0f;
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         } else if (this->actionFunc != func_8098BC54) {
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         }
     }
 }
@@ -1201,37 +1206,43 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_8098C2A8[this->unk_286].unk_00) {
-        case 3:
+    switch (sRacetrackDogInfo[this->index].color) {
+        case DOG_COLOR_BEIGE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
-        case 1:
+
+        case DOG_COLOR_WHITE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
             break;
-        case 5:
+
+        case DOG_COLOR_BLUE:
             gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
             break;
-        case 6:
+
+        case DOG_COLOR_GOLD:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
             break;
-        case 4:
+
+        case DOG_COLOR_BROWN:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
             break;
-        case 2:
+
+        case DOG_COLOR_GRAY:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
             break;
+
         default:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
     }
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->unk_294.x);
-    Matrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateXFApply(this->unk_294.x);
+    Matrix_RotateZF(this->unk_294.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_8098BFB8, func_8098BFD4, &this->actor);
+                          EnDg_OverrideLimbDraw, EnDg_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_icicle" Segment="6">
+        <DList Name="object_icicle_DL_0000D0" Offset="0xD0" />
+        <Collision Name="object_icicle_Colheader_000294" Offset="0x294" />
+        <Texture Name="object_icicle_Tex_0002C0" OutName="tex_0002C0" Format="i8" Width="64" Height="64" Offset="0x2C0" />
+    </File>
+</Root>

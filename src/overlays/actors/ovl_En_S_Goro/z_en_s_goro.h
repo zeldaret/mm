@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define EN_S_GORO_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
+
 struct EnSGoro;
 
 typedef void (*EnSGoroActionFunc)(struct EnSGoro*, GlobalContext*);

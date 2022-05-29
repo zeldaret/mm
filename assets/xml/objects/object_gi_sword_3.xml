@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_sword_3" Segment="6">
+        <DList Name="object_gi_sword_3_DL_0009E0" Offset="0x9E0" />
+        <DList Name="object_gi_sword_3_DL_0009E8" Offset="0x9E8" />
+        <Texture Name="object_gi_sword_3_Tex_000F58" OutName="tex_000F58" Format="rgba16" Width="16" Height="16" Offset="0xF58" />
+        <Texture Name="object_gi_sword_3_Tex_001158" OutName="tex_001158" Format="i8" Width="8" Height="8" Offset="0x1158" />
+        <Texture Name="object_gi_sword_3_Tex_001198" OutName="tex_001198" Format="i8" Width="16" Height="16" Offset="0x1198" />
+    </File>
+</Root>

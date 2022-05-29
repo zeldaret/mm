@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_bubble" Segment="6">
+        <Texture Name="object_bubble_Tex_000000" OutName="tex_000000" Format="ia8" Width="64" Height="64" Offset="0x0" />
+        <DList Name="object_bubble_DL_001000" Offset="0x1000" />
+    </File>
+</Root>

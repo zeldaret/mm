@@ -16,6 +16,9 @@
 #define MARKER_COM 0xFE
 #define MARKER_EOI 0xD9
 
+extern u64 njpgdspMainTextStart[];
+extern u64 njpgdspMainDataStart[];
+
 /**
  * Configures and schedules a JPEG decoder task and waits for it to finish.
  */
@@ -25,9 +28,9 @@ void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
         0,                    // flags
         NULL,                 // ucode_boot
         0,                    // ucode_boot_size
-        gJpegUCode,           // ucode
+        njpgdspMainTextStart, // ucode
         0x1000,               // ucode_size
-        gJpegUCodeData,       // ucode_data
+        njpgdspMainDataStart, // ucode_data
         0x800,                // ucode_data_size
         NULL,                 // dram_stack
         0,                    // dram_stack_size

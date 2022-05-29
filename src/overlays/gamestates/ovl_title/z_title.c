@@ -6,7 +6,7 @@
 
 #include "z_title.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "static/nintendo_rogo_static/nintendo_rogo_static.h"
+#include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
 void Title_UpdateCounters(TitleContext* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
@@ -74,15 +74,15 @@ void Title_Draw(GameState* thisx) {
     eye.y = 4002.5417f;
     eye.z = 1119.0837f;
 
-    func_800B7FE0(&object, &eye, &lightDir, this->gameState.gfxCtx);
+    Hilite_DrawOpa(&object, &eye, &lightDir, this->gameState.gfxCtx);
 
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
     Title_RenderView(this, 0.0f, 150.0f, 300.0f);
     func_8012C28C(this->gameState.gfxCtx);
-    Matrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
+    Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(0, titleRotation, 0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
@@ -105,7 +105,8 @@ void Title_Draw(GameState* thisx) {
                             G_TX_NOLOD, G_TX_NOLOD);
 
         gDPSetTileSize(POLY_OPA_DISP++, 1, this->uls, (this->ult & 0x7F) - idx * 4, 0, 0);
-        gSPTextureRectangle(POLY_OPA_DISP++, 388, y << 2, 1156, (y + 2) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(POLY_OPA_DISP++, 97 << 2, y << 2, (97 + 192) << 2, (y + 2) << 2, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
     }
 
     func_800FC444(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
@@ -118,7 +119,7 @@ void Title_Draw(GameState* thisx) {
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->gameState.gfxCtx);
 
@@ -144,7 +145,7 @@ void Title_Main(GameState* thisx) {
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_80146E40(&this->gameState, &this->sramCtx);
+    Sram_InitSram(&this->gameState, &this->sramCtx);
     ShrinkWindow_Destroy();
     CIC6105_Nop80081828();
 }
@@ -158,7 +159,7 @@ void Title_Init(GameState* thisx) {
     DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
 
     Game_SetFramerateDivisor(thisx, 1);
-    Matrix_StateAlloc(thisx);
+    Matrix_Init(thisx);
     ShrinkWindow_Init();
     View_Init(&this->view, thisx->gfxCtx);
 
@@ -172,7 +173,7 @@ void Title_Init(GameState* thisx) {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = 1;
+    gSaveContext.unk_3F3F = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

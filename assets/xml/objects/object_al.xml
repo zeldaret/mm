@@ -1,0 +1,75 @@
+﻿<Root>
+    <File Name="object_al" Segment="6">
+        <Animation Name="object_al_Anim_000C54" Offset="0xC54" />
+        <DList Name="object_al_DL_0045F0" Offset="0x45F0" />
+        <DList Name="object_al_DL_004738" Offset="0x4738" />
+        <DList Name="object_al_DL_004880" Offset="0x4880" />
+        <DList Name="object_al_DL_004A50" Offset="0x4A50" />
+        <DList Name="object_al_DL_004B30" Offset="0x4B30" />
+        <DList Name="object_al_DL_004BF8" Offset="0x4BF8" />
+        <DList Name="object_al_DL_004D10" Offset="0x4D10" />
+        <DList Name="object_al_DL_004DD0" Offset="0x4DD0" />
+        <DList Name="object_al_DL_004EE8" Offset="0x4EE8" />
+        <DList Name="object_al_DL_004FA8" Offset="0x4FA8" />
+        <DList Name="object_al_DL_0050B0" Offset="0x50B0" />
+        <DList Name="object_al_DL_005680" Offset="0x5680" />
+        <DList Name="object_al_DL_005728" Offset="0x5728" />
+        <DList Name="object_al_DL_0057D0" Offset="0x57D0" />
+        <DList Name="object_al_DL_005878" Offset="0x5878" />
+        <DList Name="object_al_DL_005920" Offset="0x5920" />
+        <DList Name="object_al_DL_0059E8" Offset="0x59E8" />
+        <DList Name="object_al_DL_005C10" Offset="0x5C10" />
+        <DList Name="object_al_DL_005D28" Offset="0x5D28" />
+        <DList Name="object_al_DL_005E48" Offset="0x5E48" />
+        <DList Name="object_al_DL_005FF8" Offset="0x5FF8" />
+        <DList Name="object_al_DL_006190" Offset="0x6190" />
+        <DList Name="object_al_DL_0062B0" Offset="0x62B0" />
+        <DList Name="object_al_DL_0064E0" Offset="0x64E0" />
+        <DList Name="object_al_DL_006598" Offset="0x6598" />
+        <Texture Name="object_al_TLUT_006638" OutName="tlut_006638" Format="rgba16" Width="16" Height="16" Offset="0x6638" />
+        <Texture Name="object_al_Tex_006838" OutName="tex_006838" Format="ci8" Width="8" Height="8" Offset="0x6838" />
+        <Texture Name="object_al_Tex_006878" OutName="tex_006878" Format="ci8" Width="8" Height="8" Offset="0x6878" />
+        <Texture Name="object_al_Tex_0068B8" OutName="tex_0068B8" Format="ci8" Width="16" Height="16" Offset="0x68B8" />
+        <Texture Name="object_al_Tex_0069B8" OutName="tex_0069B8" Format="rgba16" Width="64" Height="32" Offset="0x69B8" />
+        <Texture Name="object_al_Tex_0079B8" OutName="tex_0079B8" Format="rgba16" Width="32" Height="32" Offset="0x79B8" />
+        <Texture Name="object_al_Tex_0081B8" OutName="tex_0081B8" Format="ci8" Width="32" Height="16" Offset="0x81B8" />
+        <Texture Name="object_al_Tex_0083B8" OutName="tex_0083B8" Format="rgba16" Width="32" Height="32" Offset="0x83B8" />
+        <Texture Name="object_al_Tex_008BB8" OutName="tex_008BB8" Format="rgba16" Width="8" Height="8" Offset="0x8BB8" />
+        <Texture Name="object_al_Tex_008C38" OutName="tex_008C38" Format="ci8" Width="16" Height="16" Offset="0x8C38" />
+        <Texture Name="object_al_Tex_008D38" OutName="tex_008D38" Format="ci8" Width="16" Height="16" Offset="0x8D38" />
+        <Texture Name="object_al_Tex_008E38" OutName="tex_008E38" Format="rgba16" Width="32" Height="64" Offset="0x8E38" />
+        <Texture Name="object_al_Tex_009E38" OutName="tex_009E38" Format="rgba16" Width="8" Height="16" Offset="0x9E38" />
+        <Limb Name="object_al_Standardlimb_009F38" Type="Standard" EnumName="OBJECT_AL_LIMB_01" Offset="0x9F38" />
+        <Limb Name="object_al_Standardlimb_009F44" Type="Standard" EnumName="OBJECT_AL_LIMB_02" Offset="0x9F44" />
+        <Limb Name="object_al_Standardlimb_009F50" Type="Standard" EnumName="OBJECT_AL_LIMB_03" Offset="0x9F50" />
+        <Limb Name="object_al_Standardlimb_009F5C" Type="Standard" EnumName="OBJECT_AL_LIMB_04" Offset="0x9F5C" />
+        <Limb Name="object_al_Standardlimb_009F68" Type="Standard" EnumName="OBJECT_AL_LIMB_05" Offset="0x9F68" />
+        <Limb Name="object_al_Standardlimb_009F74" Type="Standard" EnumName="OBJECT_AL_LIMB_06" Offset="0x9F74" />
+        <Limb Name="object_al_Standardlimb_009F80" Type="Standard" EnumName="OBJECT_AL_LIMB_07" Offset="0x9F80" />
+        <Limb Name="object_al_Standardlimb_009F8C" Type="Standard" EnumName="OBJECT_AL_LIMB_08" Offset="0x9F8C" />
+        <Limb Name="object_al_Standardlimb_009F98" Type="Standard" EnumName="OBJECT_AL_LIMB_09" Offset="0x9F98" />
+        <Limb Name="object_al_Standardlimb_009FA4" Type="Standard" EnumName="OBJECT_AL_LIMB_0A" Offset="0x9FA4" />
+        <Limb Name="object_al_Standardlimb_009FB0" Type="Standard" EnumName="OBJECT_AL_LIMB_0B" Offset="0x9FB0" />
+        <Limb Name="object_al_Standardlimb_009FBC" Type="Standard" EnumName="OBJECT_AL_LIMB_0C" Offset="0x9FBC" />
+        <Limb Name="object_al_Standardlimb_009FC8" Type="Standard" EnumName="OBJECT_AL_LIMB_0D" Offset="0x9FC8" />
+        <Limb Name="object_al_Standardlimb_009FD4" Type="Standard" EnumName="OBJECT_AL_LIMB_0E" Offset="0x9FD4" />
+        <Limb Name="object_al_Standardlimb_009FE0" Type="Standard" EnumName="OBJECT_AL_LIMB_0F" Offset="0x9FE0" />
+        <Limb Name="object_al_Standardlimb_009FEC" Type="Standard" EnumName="OBJECT_AL_LIMB_10" Offset="0x9FEC" />
+        <Limb Name="object_al_Standardlimb_009FF8" Type="Standard" EnumName="OBJECT_AL_LIMB_11" Offset="0x9FF8" />
+        <Limb Name="object_al_Standardlimb_00A004" Type="Standard" EnumName="OBJECT_AL_LIMB_12" Offset="0xA004" />
+        <Limb Name="object_al_Standardlimb_00A010" Type="Standard" EnumName="OBJECT_AL_LIMB_13" Offset="0xA010" />
+        <Limb Name="object_al_Standardlimb_00A01C" Type="Standard" EnumName="OBJECT_AL_LIMB_14" Offset="0xA01C" />
+        <Limb Name="object_al_Standardlimb_00A028" Type="Standard" EnumName="OBJECT_AL_LIMB_15" Offset="0xA028" />
+        <Limb Name="object_al_Standardlimb_00A034" Type="Standard" EnumName="OBJECT_AL_LIMB_16" Offset="0xA034" />
+        <Limb Name="object_al_Standardlimb_00A040" Type="Standard" EnumName="OBJECT_AL_LIMB_17" Offset="0xA040" />
+        <Limb Name="object_al_Standardlimb_00A04C" Type="Standard" EnumName="OBJECT_AL_LIMB_18" Offset="0xA04C" />
+        <Limb Name="object_al_Standardlimb_00A058" Type="Standard" EnumName="OBJECT_AL_LIMB_19" Offset="0xA058" />
+        <Limb Name="object_al_Standardlimb_00A064" Type="Standard" EnumName="OBJECT_AL_LIMB_1A" Offset="0xA064" />
+        <Skeleton Name="object_al_Skel_00A0D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AL_LIMB_NONE" LimbMax="OBJECT_AL_LIMB_MAX" EnumName="object_al_Limbs" Offset="0xA0D8" />
+        <Animation Name="object_al_Anim_00A764" Offset="0xA764" />
+        <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" />
+        <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" />
+        <Animation Name="object_al_Anim_00CA28" Offset="0xCA28" />
+        <Animation Name="object_al_Anim_00DBE0" Offset="0xDBE0" />
+    </File>
+</Root>

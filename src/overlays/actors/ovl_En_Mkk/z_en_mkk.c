@@ -1,12 +1,12 @@
 /*
  * File: z_en_mkk.c
  * Overlay: ovl_En_Mkk
- * Description: Makkurokurosuke / Black and White Boe
+ * Description: Black and White Boe (Name origin: Makkurokurosuke)
  */
 
 #include "z_en_mkk.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnMkk*)thisx)
 
@@ -85,7 +85,7 @@ static DamageTable D_80A4F754 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A4F774[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -5, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
 };
 

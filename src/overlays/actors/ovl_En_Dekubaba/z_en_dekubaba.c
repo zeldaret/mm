@@ -1,12 +1,12 @@
 /*
- * File z_en_dekubaba.c
+ * File: z_en_dekubaba.c
  * Overlay: ovl_En_Dekubaba
  * Description: Deku Baba
  */
 
 #include "z_en_dekubaba.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnDekubaba*)thisx)
 

@@ -1,12 +1,12 @@
 /*
  * File: z_obj_y2shutter.c
  * Overlay: ovl_Obj_Y2shutter
- * Description:
+ * Description: Pirates' Fortress sliding grate
  */
 
 #include "z_obj_y2shutter.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjY2shutter*)thisx)
 

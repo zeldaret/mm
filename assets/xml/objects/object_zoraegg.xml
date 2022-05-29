@@ -1,0 +1,34 @@
+﻿<Root>
+    <File Name="object_zoraegg" Segment="6">
+        <Animation Name="object_zoraegg_Anim_0005D4" Offset="0x5D4" />
+        <Animation Name="object_zoraegg_Anim_001E08" Offset="0x1E08" />
+        <DList Name="object_zoraegg_DL_002550" Offset="0x2550" />
+        <DList Name="object_zoraegg_DL_0027C8" Offset="0x27C8" />
+        <DList Name="object_zoraegg_DL_002A60" Offset="0x2A60" />
+        <DList Name="object_zoraegg_DL_002B60" Offset="0x2B60" />
+        <DList Name="object_zoraegg_DL_002C70" Offset="0x2C70" />
+        <DList Name="object_zoraegg_DL_002D30" Offset="0x2D30" />
+        <Texture Name="object_zoraegg_TLUT_002DF0" OutName="tlut_002DF0" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
+        <Texture Name="object_zoraegg_Tex_002FF0" OutName="tex_002FF0" Format="ci8" Width="32" Height="32" Offset="0x2FF0" />
+        <Texture Name="object_zoraegg_Tex_0033F0" OutName="tex_0033F0" Format="ci8" Width="8" Height="8" Offset="0x33F0" />
+        <Texture Name="object_zoraegg_Tex_003430" OutName="tex_003430" Format="ci8" Width="32" Height="32" Offset="0x3430" />
+        <Texture Name="object_zoraegg_Tex_003830" OutName="tex_003830" Format="ci8" Width="32" Height="64" Offset="0x3830" />
+        <Texture Name="object_zoraegg_Tex_004030" OutName="tex_004030" Format="ci8" Width="32" Height="32" Offset="0x4030" />
+        <Texture Name="object_zoraegg_Tex_004430" OutName="tex_004430" Format="ci8" Width="32" Height="32" Offset="0x4430" />
+        <Texture Name="object_zoraegg_Tex_004830" OutName="tex_004830" Format="ci8" Width="32" Height="32" Offset="0x4830" />
+        <Limb Name="object_zoraegg_Standardlimb_004C30" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_01" Offset="0x4C30" />
+        <Limb Name="object_zoraegg_Standardlimb_004C3C" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_02" Offset="0x4C3C" />
+        <Limb Name="object_zoraegg_Standardlimb_004C48" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_03" Offset="0x4C48" />
+        <Limb Name="object_zoraegg_Standardlimb_004C54" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_04" Offset="0x4C54" />
+        <Limb Name="object_zoraegg_Standardlimb_004C60" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_05" Offset="0x4C60" />
+        <Limb Name="object_zoraegg_Standardlimb_004C6C" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_06" Offset="0x4C6C" />
+        <Skeleton Name="object_zoraegg_Skel_004C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZORAEGG_LIMB_NONE" LimbMax="OBJECT_ZORAEGG_LIMB_MAX" EnumName="object_zoraegg_Limbs" Offset="0x4C90" />
+        <Animation Name="object_zoraegg_Anim_004D20" Offset="0x4D20" />
+        <Animation Name="object_zoraegg_Anim_004E04" Offset="0x4E04" />
+        <Animation Name="object_zoraegg_Anim_004FE4" Offset="0x4FE4" />
+        <Animation Name="object_zoraegg_Anim_005098" Offset="0x5098" />
+        <DList Name="object_zoraegg_DL_005250" Offset="0x5250" />
+        <Texture Name="object_zoraegg_TLUT_0053B0" OutName="tlut_0053B0" Format="rgba16" Width="16" Height="16" Offset="0x53B0" />
+        <Texture Name="object_zoraegg_Tex_0055B0" OutName="tex_0055B0" Format="ci8" Width="32" Height="32" Offset="0x55B0" />
+    </File>
+</Root>

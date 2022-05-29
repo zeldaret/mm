@@ -24,11 +24,11 @@ typedef struct EnPm {
     /* 0x0250 */ s32 unk_250;
     /* 0x0254 */ s32 unk_254;
     /* 0x0258 */ u8 unk_258;
-    /* 0x026C */ UNK_TYPE* unk_25C;
+    /* 0x025C */ UNK_TYPE* unk_25C;
     /* 0x0260 */ s8 unk_260;
     /* 0x0264 */ s32 unk_264;
     /* 0x0268 */ Actor* unk_268;
-    /* 0x0268 */ Vec3f unk_26C;
+    /* 0x026C */ Vec3f unk_26C;
     /* 0x0278 */ Vec3f unk_278;
     /* 0x0284 */ Vec3f unk_284;
     /* 0x0290 */ Vec3s unk_290;

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lightblock.h"
+#include "objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000
 
@@ -72,9 +73,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000B80;
 extern Gfx D_801AEF88[];
-extern Gfx D_06000178[];
 extern Gfx D_801AEFA0[];
 
 void func_80AF3910(ObjLightblock* this, GlobalContext* globalCtx) {
@@ -96,7 +95,7 @@ void ObjLightblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B80);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_lightblock_Colheader_000B80);
         Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         this->collider.dim.radius = typeVars->radius;
@@ -148,7 +147,7 @@ void func_80AF3B8C(ObjLightblock* this) {
 void func_80AF3BA0(ObjLightblock* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetSwitchFlag(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
+        Flags_SetSwitch(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
         func_80AF3910(this, globalCtx);
         func_80AF3C18(this);
     } else {
@@ -195,13 +194,13 @@ void ObjLightblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
-        gSPDisplayList(POLY_XLU_DISP++, D_06000178);
+        gSPDisplayList(POLY_XLU_DISP++, object_lightblock_DL_000178);
     } else {
         func_8012C28C(globalCtx->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000178);
+        gSPDisplayList(POLY_OPA_DISP++, object_lightblock_DL_000178);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

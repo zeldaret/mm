@@ -312,7 +312,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetMode.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF840.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeMode.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF86C.s")
 
@@ -320,19 +320,19 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFAC8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFB14.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeDataIdx.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFC1C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFC40.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFC68.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetInputDirYaw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFC90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFCB4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetCamDirPitch.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFCDC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetCamDirYaw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFD04.s")
 
@@ -356,7 +356,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01AC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01B8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetQuakeOffset.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01DC.s")
 
@@ -364,10 +364,10 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E0238.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E02AC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetToTrackActor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E0308.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetTargetActor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E031C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetWaterYPos.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E0348.s")

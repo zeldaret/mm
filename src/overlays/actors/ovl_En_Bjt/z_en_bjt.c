@@ -1,12 +1,12 @@
 /*
- * File z_en_bjt.c
+ * File: z_en_bjt.c
  * Overlay: ovl_En_Bjt
- * Description: Hand in Toilet
+ * Description: ??? (Hand in toilet)
  */
 
 #include "z_en_bjt.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBjt*)thisx)
 

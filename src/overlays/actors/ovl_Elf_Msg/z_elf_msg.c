@@ -1,12 +1,12 @@
 /*
- * File z_elf_msg.c
+ * File: z_elf_msg.c
  * Overlay: ovl_Elf_Msg
  * Description: Tatl Hint (proximity-activated C-up hint?)
  */
 
 #include "z_elf_msg.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ElfMsg*)thisx)
 

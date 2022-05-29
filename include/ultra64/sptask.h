@@ -2,6 +2,7 @@
 #define _SPTASK_H_
 
 #include "PR/ultratypes.h"
+#include "libc/stddef.h"
 
 /* Task Types */
 #define M_NULTASK   0
@@ -80,7 +81,7 @@ typedef struct {
     /* 0x04 */ u32 flags;
 
     /* 0x08 */ u64* ucodeBoot;
-    /* 0x0C */ u32 ucodeBootSize;
+    /* 0x0C */ u32 ucodeBootSize; // ucode will load these sizes with lw, so need to be 32-bit
 
     /* 0x10 */ u64* ucode;
     /* 0x14 */ u32 ucodeSize;
@@ -101,8 +102,7 @@ typedef struct {
     /* 0x3C */ u32 yieldDataSize;
 } OSTask_t; // size = 0x40
 
-typedef union
-{
+typedef union {
     OSTask_t t;
     long long int force_structure_alignment;
 } OSTask;

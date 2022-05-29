@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_ikana_shutter.h"
+#include "objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIkanaShutter*)thisx)
 
@@ -53,9 +54,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000F28;
-extern Gfx D_06000CE8[];
-
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, GlobalContext* globalCtx) {
     return Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) &&
            Flags_GetSwitch(globalCtx, (this->dyna.actor.params & 0x7F) + 1) &&
@@ -68,7 +66,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ikana_obj_Colheader_000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
             func_80BD599C(this);
@@ -77,7 +75,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80BD5828(this);
         return;
     }
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         BgIkanaShutter_SetupDoNothing(this);
         return;
     }
@@ -166,7 +164,7 @@ void func_80BD5AE8(BgIkanaShutter* this) {
 }
 
 void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (Actor_GetRoomClearedTemp(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClearTemp(globalCtx, this->dyna.actor.room)) {
         func_80BD5B44(this);
     }
 }
@@ -179,7 +177,7 @@ void func_80BD5B44(BgIkanaShutter* this) {
 void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetRoomCleared(globalCtx, this->dyna.actor.room);
+        Flags_SetClear(globalCtx, this->dyna.actor.room);
         func_80BD5BC4(this);
         return;
     }
@@ -213,5 +211,5 @@ void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000CE8);
+    Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_000CE8);
 }

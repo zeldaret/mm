@@ -1,12 +1,12 @@
 /*
  * File: z_bg_open_shutter.c
  * Overlay: ovl_Bg_Open_Shutter
- * Description:
+ * Description: Sliding doors in opening dungeon
  */
 
 #include "z_bg_open_shutter.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgOpenShutter*)thisx)
 

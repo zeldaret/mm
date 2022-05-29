@@ -1,0 +1,18 @@
+﻿<Root>
+    <File Name="object_bh" Segment="6">
+        <Animation Name="object_bh_Anim_000074" Offset="0x74" />
+        <DList Name="object_bh_DL_0002B0" Offset="0x2B0" />
+        <DList Name="object_bh_DL_0003A0" Offset="0x3A0" />
+        <DList Name="object_bh_DL_000450" Offset="0x450" />
+        <DList Name="object_bh_DL_0004D8" Offset="0x4D8" />
+        <DList Name="object_bh_DL_000588" Offset="0x588" />
+        <Texture Name="object_bh_Tex_000610" OutName="tex_000610" Format="rgba16" Width="32" Height="32" Offset="0x610" />
+        <Texture Name="object_bh_Tex_000E10" OutName="tex_000E10" Format="rgba16" Width="64" Height="32" Offset="0xE10" />
+        <Limb Name="object_bh_Standardlimb_001E10" Type="Standard" EnumName="OBJECT_BH_LIMB_01" Offset="0x1E10" />
+        <Limb Name="object_bh_Standardlimb_001E1C" Type="Standard" EnumName="OBJECT_BH_LIMB_02" Offset="0x1E1C" />
+        <Limb Name="object_bh_Standardlimb_001E28" Type="Standard" EnumName="OBJECT_BH_LIMB_03" Offset="0x1E28" />
+        <Limb Name="object_bh_Standardlimb_001E34" Type="Standard" EnumName="OBJECT_BH_LIMB_04" Offset="0x1E34" />
+        <Limb Name="object_bh_Standardlimb_001E40" Type="Standard" EnumName="OBJECT_BH_LIMB_05" Offset="0x1E40" />
+        <Skeleton Name="object_bh_Skel_001E60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BH_LIMB_NONE" LimbMax="OBJECT_BH_LIMB_MAX" EnumName="object_bh_Limbs" Offset="0x1E60" />
+    </File>
+</Root>

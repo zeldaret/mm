@@ -1,0 +1,89 @@
+﻿<Root>
+    <File Name="object_link_zora" Segment="6">
+        <!-- <Blob Name="object_link_zora_Blob_000000" Size="0x5000" Offset="0x0" /> -->
+        <Texture Name="object_link_zora_TLUT_005000" OutName="tlut_005000" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
+        <Texture Name="object_link_zora_Tex_005200" OutName="tex_005200" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
+        <Texture Name="object_link_zora_Tex_005400" OutName="tex_005400" Format="ci8" Width="32" Height="32" Offset="0x5400" />
+        <Texture Name="object_link_zora_Tex_005800" OutName="tex_005800" Format="ci8" Width="16" Height="16" Offset="0x5800" />
+        <Texture Name="object_link_zora_Tex_005900" OutName="tex_005900" Format="ci8" Width="16" Height="16" Offset="0x5900" />
+        <Texture Name="object_link_zora_Tex_005A00" OutName="tex_005A00" Format="ci8" Width="8" Height="16" Offset="0x5A00" />
+        <Texture Name="object_link_zora_Tex_005A80" OutName="tex_005A80" Format="ci8" Width="8" Height="16" Offset="0x5A80" />
+        <Texture Name="object_link_zora_Tex_005B00" OutName="tex_005B00" Format="ci8" Width="32" Height="16" Offset="0x5B00" />
+        <Texture Name="object_link_zora_Tex_005D00" OutName="tex_005D00" Format="ci8" Width="16" Height="32" Offset="0x5D00" />
+        <Texture Name="object_link_zora_Tex_005F00" OutName="tex_005F00" Format="ci8" Width="16" Height="16" Offset="0x5F00" />
+        <Texture Name="object_link_zora_Tex_006000" OutName="tex_006000" Format="ci8" Width="16" Height="16" Offset="0x6000" />
+        <Texture Name="object_link_zora_Tex_006100" OutName="tex_006100" Format="ci8" Width="8" Height="16" Offset="0x6100" />
+        <Texture Name="object_link_zora_Tex_006180" OutName="tex_006180" Format="ci8" Width="8" Height="8" Offset="0x6180" />
+        <Texture Name="object_link_zora_Tex_0061C0" OutName="tex_0061C0" Format="ci8" Width="16" Height="16" Offset="0x61C0" />
+        <DList Name="object_link_zora_DL_009E00" Offset="0x9E00" />
+        <DList Name="object_link_zora_DL_00A108" Offset="0xA108" />
+        <DList Name="object_link_zora_DL_00A370" Offset="0xA370" />
+        <DList Name="object_link_zora_DL_00A4A0" Offset="0xA4A0" />
+        <DList Name="object_link_zora_DL_00A7A8" Offset="0xA7A8" />
+        <DList Name="object_link_zora_DL_00AA10" Offset="0xAA10" />
+        <DList Name="object_link_zora_DL_00AB40" Offset="0xAB40" />
+        <DList Name="object_link_zora_DL_00AD38" Offset="0xAD38" />
+        <DList Name="object_link_zora_DL_00ADF0" Offset="0xADF0" />
+        <DList Name="object_link_zora_DL_00B170" Offset="0xB170" />
+        <DList Name="object_link_zora_DL_00B630" Offset="0xB630" />
+        <DList Name="object_link_zora_DL_00B768" Offset="0xB768" />
+        <DList Name="object_link_zora_DL_00B820" Offset="0xB820" />
+        <DList Name="object_link_zora_DL_00B990" Offset="0xB990" />
+        <DList Name="object_link_zora_DL_00BBE0" Offset="0xBBE0" />
+        <DList Name="object_link_zora_DL_00BEE8" Offset="0xBEE8" />
+        <DList Name="object_link_zora_DL_00C020" Offset="0xC020" />
+        <DList Name="object_link_zora_DL_00C270" Offset="0xC270" />
+        <Texture Name="object_link_zora_TLUT_00C578" OutName="tlut_00C578" Format="rgba16" Width="16" Height="16" Offset="0xC578" />
+        <Texture Name="object_link_zora_Tex_00C778" OutName="tex_00C778" Format="ci8" Width="16" Height="32" Offset="0xC778" />
+        <Texture Name="object_link_zora_Tex_00C978" OutName="tex_00C978" Format="ci8" Width="16" Height="16" Offset="0xC978" />
+        <DList Name="object_link_zora_DL_00CC38" Offset="0xCC38" />
+        <DList Name="object_link_zora_DL_00CDA0" Offset="0xCDA0" />
+        <DList Name="object_link_zora_DL_00E088" Offset="0xE088" />
+        <DList Name="object_link_zora_DL_00E2A0" Offset="0xE2A0" />
+        <Texture Name="object_link_zora_Tex_00E678" OutName="tex_00E678" Format="ci8" Width="16" Height="16" Offset="0xE678" />
+        <Texture Name="object_link_zora_Tex_00E778" OutName="tex_00E778" Format="ci8" Width="16" Height="16" Offset="0xE778" />
+        <Texture Name="object_link_zora_Tex_00E878" OutName="tex_00E878" Format="ci8" Width="8" Height="16" Offset="0xE878" />
+        <Texture Name="object_link_zora_Tex_00E8F8" OutName="tex_00E8F8" Format="rgba16" Width="16" Height="16" Offset="0xE8F8" />
+        <Texture Name="object_link_zora_Tex_00EAF8" OutName="tex_00EAF8" Format="rgba16" Width="16" Height="16" Offset="0xEAF8" />
+        <Texture Name="object_link_zora_Tex_00ECF8" OutName="tex_00ECF8" Format="rgba16" Width="16" Height="16" Offset="0xECF8" />
+        <Texture Name="object_link_zora_Tex_00EEF8" OutName="tex_00EEF8" Format="rgba16" Width="16" Height="32" Offset="0xEEF8" />
+        <Texture Name="object_link_zora_Tex_00F2F8" OutName="tex_00F2F8" Format="rgba16" Width="16" Height="32" Offset="0xF2F8" />
+        <DList Name="object_link_zora_DL_00FBB8" Offset="0xFBB8" />
+        <DList Name="object_link_zora_DL_00FDF0" Offset="0xFDF0" />
+        <Texture Name="object_link_zora_Tex_010028" OutName="tex_010028" Format="rgba16" Width="16" Height="16" Offset="0x10028" />
+        <Texture Name="object_link_zora_Tex_010228" OutName="tex_010228" Format="rgba16" Width="16" Height="32" Offset="0x10228" />
+        <DList Name="object_link_zora_DL_010868" Offset="0x10868" />
+        <DList Name="object_link_zora_DL_010978" Offset="0x10978" />
+        <DList Name="object_link_zora_DL_010D08" Offset="0x10D08" />
+        <DList Name="object_link_zora_DL_0110A8" Offset="0x110A8" />
+        <!-- <Blob Name="object_link_zora_Blob_011710" Size="0x50" Offset="0x11710" /> -->
+        <DList Name="object_link_zora_DL_011760" Offset="0x11760" />
+        <DList Name="object_link_zora_DL_011A58" Offset="0x11A58" />
+        <Texture Name="object_link_zora_Tex_011A60" OutName="tex_011A60" Format="i8" Width="64" Height="32" Offset="0x11A60" />
+        <Texture Name="object_link_zora_Tex_012260" OutName="tex_012260" Format="i8" Width="32" Height="64" Offset="0x12260" />
+        <TextureAnimation Name="object_link_zora_Matanimheader_012A68" Offset="0x12A68" />
+        <TextureAnimation Name="object_link_zora_Matanimheader_012A80" Offset="0x12A80" />
+        <Limb Name="object_link_zora_Lodlimb_012A90" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_01" Offset="0x12A90" />
+        <Limb Name="object_link_zora_Lodlimb_012AA0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_02" Offset="0x12AA0" />
+        <Limb Name="object_link_zora_Lodlimb_012AB0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_03" Offset="0x12AB0" />
+        <Limb Name="object_link_zora_Lodlimb_012AC0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_04" Offset="0x12AC0" />
+        <Limb Name="object_link_zora_Lodlimb_012AD0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_05" Offset="0x12AD0" />
+        <Limb Name="object_link_zora_Lodlimb_012AE0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_06" Offset="0x12AE0" />
+        <Limb Name="object_link_zora_Lodlimb_012AF0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_07" Offset="0x12AF0" />
+        <Limb Name="object_link_zora_Lodlimb_012B00" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_08" Offset="0x12B00" />
+        <Limb Name="object_link_zora_Lodlimb_012B10" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_09" Offset="0x12B10" />
+        <Limb Name="object_link_zora_Lodlimb_012B20" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0A" Offset="0x12B20" />
+        <Limb Name="object_link_zora_Lodlimb_012B30" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0B" Offset="0x12B30" />
+        <Limb Name="object_link_zora_Lodlimb_012B40" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0C" Offset="0x12B40" />
+        <Limb Name="object_link_zora_Lodlimb_012B50" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0D" Offset="0x12B50" />
+        <Limb Name="object_link_zora_Lodlimb_012B60" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0E" Offset="0x12B60" />
+        <Limb Name="object_link_zora_Lodlimb_012B70" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_0F" Offset="0x12B70" />
+        <Limb Name="object_link_zora_Lodlimb_012B80" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_10" Offset="0x12B80" />
+        <Limb Name="object_link_zora_Lodlimb_012B90" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_11" Offset="0x12B90" />
+        <Limb Name="object_link_zora_Lodlimb_012BA0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_12" Offset="0x12BA0" />
+        <Limb Name="object_link_zora_Lodlimb_012BB0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_13" Offset="0x12BB0" />
+        <Limb Name="object_link_zora_Lodlimb_012BC0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_14" Offset="0x12BC0" />
+        <Limb Name="object_link_zora_Lodlimb_012BD0" Type="LOD" EnumName="OBJECT_LINK_ZORA_LIMB_15" Offset="0x12BD0" />
+        <Skeleton Name="object_link_zora_Skel_012C34" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_ZORA_LIMB_NONE" LimbMax="OBJECT_LINK_ZORA_LIMB_MAX" EnumName="object_link_zora_Limbs" Offset="0x12C34" />
+    </File>
+</Root>

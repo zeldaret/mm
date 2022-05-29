@@ -1,12 +1,12 @@
 /*
  * File: z_en_gamelupy.c
  * Overlay: ovl_En_Gamelupy
- * Description: Deku Scrub Playground - Large Green Rupee
+ * Description: Deku Scrub Playground Rupees
  */
 
 #include "z_en_gamelupy.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnGamelupy*)thisx)
 

@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_ladder.h"
+#include "objects/object_ladder/object_ladder.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgLadder*)thisx)
 
@@ -18,16 +19,6 @@ void BgLadder_ActionWait(BgLadder* this, GlobalContext* globalCtx);
 void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx);
 void BgLadder_ActionFadeIn(BgLadder* this, GlobalContext* globalCtx);
 void BgLadder_ActionIdle(BgLadder* this, GlobalContext* globalCtx);
-
-extern Gfx D_060000A0[];
-extern Gfx D_060002D0[];
-extern Gfx D_06000500[];
-extern Gfx D_06000730[];
-
-extern CollisionHeader D_060001D8;
-extern CollisionHeader D_06000408;
-extern CollisionHeader D_06000638;
-extern CollisionHeader D_06000868;
 
 const ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
@@ -46,10 +37,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static Gfx* sLadderDLists[] = {
-    D_060000A0, // 12 Rung
-    D_060002D0, // 16 Rung
-    D_06000500, // 20 Rung
-    D_06000730, // 24 Rung
+    object_ladder_DL_0000A0, // 12 Rung
+    object_ladder_DL_0002D0, // 16 Rung
+    object_ladder_DL_000500, // 20 Rung
+    object_ladder_DL_000730, // 24 Rung
 };
 
 void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -65,13 +56,13 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060001D8);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_0001D8);
     } else if (size == LADDER_SIZE_16RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000408);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000408);
     } else if (size == LADDER_SIZE_20RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000638);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000638);
     } else if (size == LADDER_SIZE_24RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000868);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000868);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
@@ -80,7 +71,7 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         // If the flag is set, then the ladder draws immediately
         this->alpha = 255;
-        this->dyna.actor.flags &= ~0x10; // always update = off
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
         this->action = BgLadder_ActionIdle;
     } else {
         // Otherwise, the ladder doesn't draw; wait for the flag to be set
@@ -110,7 +101,7 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_ActionFadeIn;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -124,7 +115,7 @@ void BgLadder_ActionFadeIn(BgLadder* this, GlobalContext* globalCtx) {
         this->alpha = 255;
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->dyna.actor.flags &= ~0x10; // always update = off
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
         this->action = BgLadder_ActionIdle;
     }
 }

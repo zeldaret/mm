@@ -5,8 +5,10 @@
  */
 
 #include "z_obj_kibako.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_kibako/object_kibako.h"
 
-#define FLAGS 0x04000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjKibako*)thisx)
 
@@ -66,18 +68,15 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06001A70[];
-extern Gfx D_06001180[];
-
 static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-static Gfx* sKakeraDisplayLists[] = { D_05007980, D_06001A70 };
+static Gfx* sKakeraDisplayLists[] = { gameplay_dangeon_keep_DL_007980, gSmallCrateFragmentDL };
 
-static Gfx* sDisplayLists[] = { D_05007890, D_06001180 };
+static Gfx* sDisplayLists[] = { gameplay_dangeon_keep_DL_007890, gSmallCrateDL };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -18000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -18000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
 };
@@ -97,7 +96,7 @@ void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
 
 void ObjKibako_SetShadow(ObjKibako* this) {
     if ((this->actor.projectedPos.z < 370.0f) && (this->actor.projectedPos.z > -10.0f)) {
-        this->actor.shape.shadowDraw = func_800B4024;
+        this->actor.shape.shadowDraw = ActorShadow_DrawSquare;
         this->actor.shape.shadowScale = 1.4f;
         this->actor.shape.shadowAlpha =
             (this->actor.projectedPos.z < 200.0f) ? 100 : (400 - ((s32)this->actor.projectedPos.z)) >> 1;
@@ -121,8 +120,8 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
 
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
-        if (ABS_ALT(angle) >= 0x5556) {
-            func_800B8A1C(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
+        if (ABS_ALT(angle) > 0x5555) {
+            Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
         }
     }
 }
@@ -134,8 +133,8 @@ void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjKibako* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjKibako* this = THIS;
     s32 whichBankIndex;
 
     whichBankIndex = KIBAKO_BANK_INDEX(thisx);
@@ -252,7 +251,7 @@ void func_80926B40(ObjKibako* this) {
 }
 
 void func_80926B54(ObjKibako* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.draw = ObjKibako_Draw;
@@ -272,24 +271,27 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         ObjKibako_SetupHeld(this);
         this->actor.room = -1;
-        this->actor.colChkInfo.mass = 0x78;
+        this->actor.colChkInfo.mass = 120;
         if (func_800A817C(KIBAKO_COLLECTIBLE_ID(&this->actor))) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
-        func_800B8E58(&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
+
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+        //! player->currentMask, but in this case is garbage in the collider
+        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_WOODBOX);
     } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         Actor_MarkForDeath(&this->actor);
     } else if (this->collider.base.acFlags & AC_HIT) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         Actor_MarkForDeath(&this->actor);
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         func_809262BC(this);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
 
@@ -341,11 +343,11 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= ~0x4000000;
+            this->actor.flags &= ~ACTOR_FLAG_4000000;
         }
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     } else {
@@ -385,20 +387,20 @@ void ObjKibako_Thrown(ObjKibako* this, GlobalContext* globalCtx) {
     if ((this->actor.bgCheckFlags & 0xB) || (atHit) || (this->timer <= 0)) {
         ObjKibako_AirBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         Actor_MarkForDeath(&this->actor);
     } else {
         if (this->actor.bgCheckFlags & 0x40) {
             ObjKibako_WaterBreak(this, globalCtx);
             ObjKibako_SpawnCollectible(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
             Actor_MarkForDeath(&this->actor);
         } else {
             if (this->actor.velocity.y < -0.05f) {
                 this->actor.gravity = -2.3f;
             }
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Math_StepToS(&D_80927384, D_80927380, 0xA0);
             Math_StepToS(&D_8092738C, D_80927388, 0xA0);
             this->actor.shape.rot.x = (s16)(this->actor.shape.rot.x + D_80927384);
@@ -419,5 +421,5 @@ void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, sDisplayLists[KIBAKO_BANK_INDEX(thisx)]);
+    Gfx_DrawDListOpa(globalCtx, sDisplayLists[KIBAKO_BANK_INDEX(thisx)]);
 }
