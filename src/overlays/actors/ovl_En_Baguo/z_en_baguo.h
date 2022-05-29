@@ -9,8 +9,8 @@ struct EnBaguo;
 typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
 /**
- * When a Nejiron explodes, rock effects fly out from where it exploded.
- * This struct governs how these rock effects behave.
+ * When a Nejiron explodes, rock particles fly out from where it exploded.
+ * This struct governs how these rock particles behave.
  */
 typedef struct NejironEffect {
     /* 0x00 */ u8 isVisible;
