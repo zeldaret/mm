@@ -4075,7 +4075,8 @@ beginseg
     name "ovl_Bg_Kin2_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Bombwall/z_bg_kin2_bombwall.o"
-    include "build/src/overlays/actors/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall_reloc.o"
+    include "build/data/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall.data.o"
+    include "build/data/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall.reloc.o"
 endseg
 
 beginseg
