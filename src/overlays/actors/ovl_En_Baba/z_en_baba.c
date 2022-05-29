@@ -341,14 +341,14 @@ void EnBaba_UpdateModel(EnBaba* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
+s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleOutput* scheduleOutput) {
     u16 now = SCHEDULE_TIME_NOW;
     u16 startTime;
     u8 pathIndex = ENBABA_GET_PATH_INDEX(&this->actor);
     u16 numWaypoints;
 
-    if (sSearchTimePathLimit[scheduleResult->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(globalCtx, pathIndex, sSearchTimePathLimit[scheduleResult->result]);
+    if (sSearchTimePathLimit[scheduleOutput->result] >= 0) {
+        this->timePath = SubS_GetAdditionalPath(globalCtx, pathIndex, sSearchTimePathLimit[scheduleOutput->result]);
     }
 
     if (this->timePath == NULL) {
@@ -358,13 +358,13 @@ s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* 
     if ((this->scheduleResult != BABA_SCHEDULE_RESULT_NONE) && (this->timePathTimeSpeed >= 0)) {
         startTime = now;
     } else {
-        startTime = scheduleResult->time0;
+        startTime = scheduleOutput->time0;
     }
 
-    if (scheduleResult->time1 < startTime) {
-        this->timePathTotalTime = (startTime - scheduleResult->time1) + (DAY_LENGTH - 1);
+    if (scheduleOutput->time1 < startTime) {
+        this->timePathTotalTime = (startTime - scheduleOutput->time1) + (DAY_LENGTH - 1);
     } else {
-        this->timePathTotalTime = scheduleResult->time1 - startTime;
+        this->timePathTotalTime = scheduleOutput->time1 - startTime;
     }
 
     this->timePathElapsedTime = now - startTime;
@@ -379,16 +379,16 @@ s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* 
     return true;
 }
 
-s32 EnBaba_ProcessScheduleResult(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* scheduleResult) {
+s32 EnBaba_ProcessScheduleOutput(EnBaba* this, GlobalContext* globalCtx, ScheduleOutput* scheduleOutput) {
     s32 success;
 
-    switch (scheduleResult->result) {
+    switch (scheduleOutput->result) {
         default:
             success = false;
             break;
 
         case BABA_SCHEDULE_RESULT_FOLLOW_TIME_PATH:
-            success = EnBaba_InitTimePath(this, globalCtx, scheduleResult);
+            success = EnBaba_InitTimePath(this, globalCtx, scheduleOutput);
             break;
 
         case BABA_SCHEDULE_RESULT_KNOCKED_OVER:
@@ -453,7 +453,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnBaba_HandleScheduleResult(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_HandleScheduleOutput(EnBaba* this, GlobalContext* globalCtx) {
     switch (this->scheduleResult) {
         case BABA_SCHEDULE_RESULT_FOLLOW_TIME_PATH:
             gSaveContext.save.weekEventReg[58] |= 0x40;
@@ -628,23 +628,23 @@ void EnBaba_GaveBlastMask(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void EnBaba_FollowSchedule(EnBaba* this, GlobalContext* globalCtx) {
-    ScheduleResult scheduleResult;
+    ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
-    if (!Schedule_RunScript(globalCtx, sSchedule, &scheduleResult) ||
-        ((this->scheduleResult != scheduleResult.result) &&
-         !EnBaba_ProcessScheduleResult(this, globalCtx, &scheduleResult))) {
+    if (!Schedule_RunScript(globalCtx, sSchedule, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) &&
+         !EnBaba_ProcessScheduleOutput(this, globalCtx, &scheduleOutput))) {
         this->flags &= ~ENBABA_DRAW_SHADOW;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        scheduleResult.result = BABA_SCHEDULE_RESULT_NONE;
+        scheduleOutput.result = BABA_SCHEDULE_RESULT_NONE;
     } else {
         this->flags |= ENBABA_DRAW_SHADOW;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->scheduleResult = scheduleResult.result;
+    this->scheduleResult = scheduleOutput.result;
 
-    EnBaba_HandleScheduleResult(this, globalCtx);
+    EnBaba_HandleScheduleOutput(this, globalCtx);
 
     if (this->flags & ENBABA_VISIBLE) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {

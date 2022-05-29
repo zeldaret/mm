@@ -24,8 +24,8 @@ void func_80AECB0C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECB6C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECE0C(EnTk* this, GlobalContext* globalCtx);
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx);
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleOutput* arg2);
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleOutput* arg2);
 void func_80AED4F8(EnTk* this, GlobalContext* globalCtx);
 void func_80AED610(EnTk* this, GlobalContext* globalCtx);
 void func_80AED898(EnTk* this, GlobalContext* globalCtx);
@@ -313,7 +313,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
-    ScheduleResult sp34;
+    ScheduleOutput sp34;
     u8 temp4;
 
     this->actor.textId = 0;
@@ -494,7 +494,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 phi_v1 = false;
 
     if (arg2->result != 0) {
@@ -503,7 +503,7 @@ s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return phi_v1;
 }
 
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;

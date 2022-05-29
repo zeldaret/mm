@@ -2299,7 +2299,7 @@ s32 Entrance_GetSceneNum(u16 entranceIndex);
 s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex);
 s32 Entrance_GetSpawnNum(u16 entranceIndex);
 s32 Entrance_GetTransitionFlags(u16 entranceIndex);
-s32 Schedule_RunScript(GlobalContext* globalCtx, u8* script, ScheduleResult* result);
+s32 Schedule_RunScript(GlobalContext* globalCtx, u8* script, ScheduleOutput* output);
 void SkelAnime_DrawLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawFlexLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod, Mtx** mtx);

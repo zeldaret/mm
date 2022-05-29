@@ -635,7 +635,7 @@ s32 func_80BDF064(EnAl* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
     Actor* sp20 = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_GM);
     Actor* temp_v0 = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_TOTO);
@@ -650,7 +650,7 @@ s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     SubS_UpdateFlags(&this->unk_4C2, 3, 7);
 
     switch (arg2->result) {
@@ -667,7 +667,7 @@ s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -746,7 +746,7 @@ void func_80BDF578(EnAl* this, GlobalContext* globalCtx) {
 }
 
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
-    ScheduleResult sp20;
+    ScheduleOutput sp20;
 
     this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(globalCtx, D_80BDFC70, &sp20) ||

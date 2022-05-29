@@ -376,7 +376,7 @@ s32 func_80BD3320(EnAh* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId
     return ret;
 }
 
-s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
@@ -388,7 +388,7 @@ s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
@@ -400,7 +400,7 @@ s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
 
     if (func_80BD3320(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -419,7 +419,7 @@ s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret;
 
     this->unk_2D8 = 0;
@@ -472,7 +472,7 @@ void func_80BD3658(EnAh* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD36B8(EnAh* this, GlobalContext* globalCtx) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     if (!Schedule_RunScript(globalCtx, D_80BD3DB0, &sp18) ||
         ((this->unk_1DC != sp18.result) && !func_80BD3548(this, globalCtx, &sp18))) {

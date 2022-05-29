@@ -970,7 +970,7 @@ s32 func_8094F53C(EnGm* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8 arg3, s16 arg4) {
+s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2, u8 arg3, s16 arg4) {
     u8 sp4F = ENGM_GET_FF(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -1000,7 +1000,7 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8
     return ret;
 }
 
-s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     u16 sp56 = SCHEDULE_TIME_NOW;
     u8 sp55 = ENGM_GET_FF(&this->actor);
     EnDoor* door;
@@ -1046,7 +1046,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
     u8 sp2B = ENGM_GET_FF(&this->actor);
@@ -1093,7 +1093,7 @@ s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     static Vec3f D_80951D90 = { 64.0f, 0.0f, -122.0f };
     s32 ret = false;
 
@@ -1113,7 +1113,7 @@ s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
 
     if (func_8094F7D0(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
@@ -1126,7 +1126,7 @@ s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
     Actor* al;
 
@@ -1147,7 +1147,7 @@ s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     static Vec3f D_80951D9C = { 64.0f, 0.0f, -122.0f };
     u8 sp4F = ENGM_GET_FF(&this->actor);
     Vec3s* sp48;
@@ -1189,7 +1189,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80950088(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80950088(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     static Vec3f D_80951DA8 = { 278.0f, 0.0f, 223.0f };
     static Vec3s D_80951DB4 = { 0x0000, 0xC000, 0x0000 };
     s32 pad;
@@ -1204,7 +1204,7 @@ s32 func_80950088(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80950120(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80950120(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     static Vec3f D_80951DBC = { -525.0f, 214.0f, 515.0f };
     static Vec3s D_80951DC8 = { 0x0000, 0x38E0, 0x0000 };
     s32 pad;
@@ -1219,7 +1219,7 @@ s32 func_80950120(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     static Vec3f D_80951DD0 = { -334.0f, 225.0f, 903.0f };
     static Vec3s D_80951DDC = { 0x0000, 0x7FFF, 0x0000 };
     s32 pad;
@@ -1240,7 +1240,7 @@ s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80950280(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80950280(EnGm* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 phi_v1;
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -1579,7 +1579,7 @@ void func_80950C24(EnGm* this, GlobalContext* globalCtx) {
 }
 
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx) {
-    ScheduleResult sp20;
+    ScheduleOutput sp20;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 

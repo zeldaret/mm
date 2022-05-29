@@ -239,7 +239,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     this->unk_374 = sp20;
 }
 
-s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, globalCtx)) {
@@ -252,7 +252,7 @@ s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, globalCtx)) {
@@ -269,7 +269,7 @@ s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BC20D0(EnJa* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+s32 func_80BC20D0(EnJa* this, GlobalContext* globalCtx, ScheduleOutput* arg2) {
     s32 ret = false;
 
     this->unk_340 = 0;
@@ -299,7 +299,7 @@ void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(globalCtx, D_80BC35F0, &sp18) ||

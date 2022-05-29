@@ -56,7 +56,7 @@ typedef struct {
     /* 0x4 */ s32 time0;
     /* 0x8 */ s32 time1;
     /* 0xC */ s32 hasResult;
-} ScheduleResult; // size = 0x10
+} ScheduleOutput; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 cmd;
