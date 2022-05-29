@@ -218,8 +218,8 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     EnEncount2Effect* sPtr = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (!sPtr->enabled) {
-            sPtr->enabled = true;
+        if (!sPtr->isEnabled) {
+            sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
             sPtr->alpha = 0xFF;
@@ -228,9 +228,9 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
 
-            sPtr->vel.x = Rand_ZeroOne() - 0.5f;
-            sPtr->vel.y = Rand_ZeroOne() - 0.5f;
-            sPtr->vel.z = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.x = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.y = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.z = Rand_ZeroOne() - 0.5f;
 
             sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
@@ -243,20 +243,20 @@ void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx) {
     EnEncount2Effect* sPtr = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->enabled) {
-            sPtr->pos.x += sPtr->vel.x;
-            sPtr->pos.y += sPtr->vel.y;
-            sPtr->pos.z += sPtr->vel.z;
-            sPtr->vel.x += sPtr->accel.x;
-            sPtr->vel.y += sPtr->accel.y;
-            sPtr->vel.z += sPtr->accel.z;
+        if (sPtr->isEnabled) {
+            sPtr->pos.x += sPtr->velocity.x;
+            sPtr->pos.y += sPtr->velocity.y;
+            sPtr->pos.z += sPtr->velocity.z;
+            sPtr->velocity.x += sPtr->accel.x;
+            sPtr->velocity.y += sPtr->accel.y;
+            sPtr->velocity.z += sPtr->accel.z;
 
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
                 sPtr->alpha -= 10;
                 if (sPtr->alpha < 10) {
-                    sPtr->enabled = 0;
+                    sPtr->isEnabled = 0;
                 }
             }
         }
@@ -273,7 +273,7 @@ void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx) {
     func_8012C28C(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->enabled) {
+        if (sPtr->isEnabled) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);

@@ -16,12 +16,14 @@ typedef struct BossHakuginEffect {
     /* 0x24 */ f32 unk_24;
 } BossHakuginEffect; // size = 0x28
 
+#define BOSS_HAKUGIN_EFFECT_COUNT 180
+
 typedef struct BossHakugin {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ char unk_0144[0x44];
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ char unk_018C[0x86C];
-    /* 0x09F8 */ BossHakuginEffect unk_9F8[180];
+    /* 0x09F8 */ BossHakuginEffect unk_9F8[BOSS_HAKUGIN_EFFECT_COUNT];
     /* 0x2618 */ char unk_2618[0x11F8];
 } BossHakugin; // size = 0x3810
 

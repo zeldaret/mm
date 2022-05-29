@@ -8,12 +8,12 @@ struct EnEncount2;
 typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
 
 typedef struct EnEncount2Effect{
-   /* 0x00 */ u8 enabled;
+   /* 0x00 */ u8 isEnabled;
    /* 0x04 */ Vec3f pos;
    /* 0x10 */ UNK_TYPE4 unk10;
    /* 0x14 */ s16 alpha;
    /* 0x16 */ s16 alphaFadeDelay; // frame count before alpha fade starts
-   /* 0x18 */ Vec3f vel;
+   /* 0x18 */ Vec3f velocity;
    /* 0x24 */ Vec3f accel;
    /* 0x30 */ f32 scale;
 } EnEncount2Effect; // size = 0x34
