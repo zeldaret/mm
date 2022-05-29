@@ -1,5 +1,12 @@
 #include "global.h"
 
+#define GFXP_FLAG_HIRAGANA (1 << 0)
+#define GFXP_FLAG_RAINBOW  (1 << 1)
+#define GFXP_FLAG_SHADOW   (1 << 2)
+#define GFXP_FLAG_UPDATE   (1 << 3)
+#define GFXP_FLAG_ENLARGE  (1 << 6)
+#define GFXP_FLAG_OPEN     (1 << 7)
+
 //! TODO: Need to extract
 extern u16 sGfxPrintFontTLUT[64];
 extern u16 sGfxPrintRainbowTLUT[16];

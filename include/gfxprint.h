@@ -17,13 +17,6 @@
 #define GFXP_RAINBOW_OFF "\x8A"
 #define GFXP_RAINBOW_OFF_CHAR 0x8A
 
-#define GFXP_FLAG_HIRAGANA (1 << 0)
-#define GFXP_FLAG_RAINBOW  (1 << 1)
-#define GFXP_FLAG_SHADOW   (1 << 2)
-#define GFXP_FLAG_UPDATE   (1 << 3)
-#define GFXP_FLAG_ENLARGE  (1 << 6)
-#define GFXP_FLAG_OPEN     (1 << 7)
-
 typedef struct GfxPrint {
     /* 0x00 */ PrintCallback callback;
     /* 0x04 */ Gfx* dList;
