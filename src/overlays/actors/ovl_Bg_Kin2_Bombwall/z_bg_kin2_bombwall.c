@@ -87,7 +87,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s16 phi_s1;
     
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
+    Matrix_RotateYF(this->dyna.actor.shape.rot.y, 0);
     
     for(i = 0, temp_s3 = 0; i < 6; i++) {
         temp_a0 = (i + 1) * 15.f;   
