@@ -11,33 +11,33 @@ void GfxPrint_Setup(GfxPrint* this) {
     s32 height = 256;
     s32 i;
 
-    gDPPipeSync(this->dlist++);
-    gDPSetOtherMode(this->dlist++,
+    gDPPipeSync(this->dList++);
+    gDPSetOtherMode(this->dList++,
                     G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_IA16 | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_XLU_SURF | G_RM_XLU_SURF2);
-    gDPSetCombineMode(this->dlist++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    gDPLoadTextureBlock_4b(this->dlist++, sGfxPrintFontData, G_IM_FMT_CI, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPSetCombineMode(this->dList++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPLoadTextureBlock_4b(this->dList++, sGfxPrintFontData, G_IM_FMT_CI, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gDPLoadTLUT(this->dlist++, 64, 256, sGfxPrintFontTLUT);
+    gDPLoadTLUT(this->dList++, 64, 256, sGfxPrintFontTLUT);
 
     for (i = 1; i < 4; i++) {
-        gDPSetTile(this->dlist++, G_IM_FMT_CI, G_IM_SIZ_4b, 1, 0, i * 2, i, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+        gDPSetTile(this->dList++, G_IM_FMT_CI, G_IM_SIZ_4b, 1, 0, i * 2, i, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                    G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-        gDPSetTileSize(this->dlist++, i * 2, 0, 0, 60, 1020);
+        gDPSetTileSize(this->dList++, i * 2, 0, 0, 60, 1020);
     }
 
-    gDPSetColor(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
+    gDPSetColor(this->dList++, G_SETPRIMCOLOR, this->color.rgba);
 
-    gDPLoadMultiTile_4b(this->dlist++, sGfxPrintRainbowData, 0, 1, G_IM_FMT_CI, 2, 8, 0, 0, 1, 7, 4,
+    gDPLoadMultiTile_4b(this->dList++, sGfxPrintRainbowData, 0, 1, G_IM_FMT_CI, 2, 8, 0, 0, 1, 7, 4,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 1, 3, G_TX_NOLOD, G_TX_NOLOD);
 
-    gDPLoadTLUT(this->dlist++, 16, 320, sGfxPrintRainbowTLUT);
+    gDPLoadTLUT(this->dList++, 16, 320, sGfxPrintRainbowTLUT);
 
     for (i = 1; i < 4; i++) {
-        gDPSetTile(this->dlist++, G_IM_FMT_CI, G_IM_SIZ_4b, 1, 0, i * 2 + 1, 4, G_TX_NOMIRROR | G_TX_WRAP, 3,
+        gDPSetTile(this->dList++, G_IM_FMT_CI, G_IM_SIZ_4b, 1, 0, i * 2 + 1, 4, G_TX_NOMIRROR | G_TX_WRAP, 3,
                    G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 1, G_TX_NOLOD);
-        gDPSetTileSize(this->dlist++, i * 2 + 1, 0, 0, 4, 28);
+        gDPSetTileSize(this->dList++, i * 2 + 1, 0, 0, 4, 28);
     }
 }
 
@@ -46,8 +46,8 @@ void GfxPrint_SetColor(GfxPrint* this, u32 r, u32 g, u32 b, u32 a) {
     this->color.g = g;
     this->color.b = b;
     this->color.a = a;
-    gDPPipeSync(this->dlist++);
-    gDPSetColor(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
+    gDPPipeSync(this->dList++);
+    gDPSetColor(this->dList++, G_SETPRIMCOLOR, this->color.rgba);
 }
 
 void GfxPrint_SetPosPx(GfxPrint* this, s32 x, s32 y) {
@@ -72,30 +72,30 @@ void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
     if (this->flags & GFXP_FLAG_UPDATE) {
         this->flags &= ~GFXP_FLAG_UPDATE;
 
-        gDPPipeSync(this->dlist++);
+        gDPPipeSync(this->dList++);
         if (this->flags & GFXP_FLAG_RAINBOW) {
-            gDPSetTextureLUT(this->dlist++, G_TT_RGBA16);
-            gDPSetCycleType(this->dlist++, G_CYC_2CYCLE);
-            gDPSetRenderMode(this->dlist++, G_RM_OPA_CI, G_RM_XLU_SURF2);
-            gDPSetCombineMode(this->dlist++, G_CC_INTERFERENCE, G_CC_PASS2);
+            gDPSetTextureLUT(this->dList++, G_TT_RGBA16);
+            gDPSetCycleType(this->dList++, G_CYC_2CYCLE);
+            gDPSetRenderMode(this->dList++, G_RM_OPA_CI, G_RM_XLU_SURF2);
+            gDPSetCombineMode(this->dList++, G_CC_INTERFERENCE, G_CC_PASS2);
         } else {
-            gDPSetTextureLUT(this->dlist++, G_TT_IA16);
-            gDPSetCycleType(this->dlist++, G_CYC_1CYCLE);
-            gDPSetRenderMode(this->dlist++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-            gDPSetCombineMode(this->dlist++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+            gDPSetTextureLUT(this->dList++, G_TT_IA16);
+            gDPSetCycleType(this->dList++, G_CYC_1CYCLE);
+            gDPSetRenderMode(this->dList++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+            gDPSetCombineMode(this->dList++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
         }
     }
 
     if (this->flags & GFXP_FLAG_SHADOW) {
-        gDPSetColor(this->dlist++, G_SETPRIMCOLOR, 0);
+        gDPSetColor(this->dList++, G_SETPRIMCOLOR, 0);
 
-        gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
+        gSPTextureRectangle(this->dList++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
                             tile, s << 6, t << 8, 1 << 10, 1 << 10);
 
-        gDPSetColor(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
+        gDPSetColor(this->dList++, G_SETPRIMCOLOR, this->color.rgba);
     }
 
-    gSPTextureRectangle(this->dlist++, this->posX, this->posY, this->posX + 32, this->posY + 32, tile, s << 6, t << 8,
+    gSPTextureRectangle(this->dList++, this->posX, this->posY, this->posX + 32, this->posY + 32, tile, s << 6, t << 8,
                         1 << 10, 1 << 10);
 
     this->posX += 32;
@@ -170,6 +170,7 @@ void* GfxPrint_Callback(void* arg, const char* str, size_t size) {
     GfxPrint* this = arg;
 
     GfxPrint_PrintStringWithSize(this, str, sizeof(char), size);
+
     return this;
 }
 
@@ -177,13 +178,13 @@ void GfxPrint_Init(GfxPrint* this) {
     this->flags &= ~GFXP_FLAG_OPEN;
 
     this->callback = GfxPrint_Callback;
-
-    this->dlist = NULL;
+    this->dList = NULL;
     this->posX = 0;
     this->posY = 0;
     this->baseX = 0;
     this->baseY = 0;
     this->color.rgba = 0;
+
     this->flags &= ~GFXP_FLAG_HIRAGANA;
     this->flags &= ~GFXP_FLAG_RAINBOW;
     this->flags |= GFXP_FLAG_SHADOW;
@@ -193,10 +194,10 @@ void GfxPrint_Init(GfxPrint* this) {
 void GfxPrint_Destroy(GfxPrint* this) {
 }
 
-void GfxPrint_Open(GfxPrint* this, Gfx* dlist) {
+void GfxPrint_Open(GfxPrint* this, Gfx* dList) {
     if (!(this->flags & GFXP_FLAG_OPEN)) {
         this->flags |= GFXP_FLAG_OPEN;
-        this->dlist = dlist;
+        this->dList = dList;
         GfxPrint_Setup(this);
     }
 }
@@ -205,8 +206,9 @@ Gfx* GfxPrint_Close(GfxPrint* this) {
     Gfx* ret;
 
     this->flags &= ~GFXP_FLAG_OPEN;
-    ret = this->dlist;
-    this->dlist = NULL;
+    ret = this->dList;
+    this->dList = NULL;
+    
     return ret;
 }
 
