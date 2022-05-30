@@ -1374,10 +1374,10 @@ void CollisionCheck_SpawnShieldParticlesMetal2(GlobalContext* globalCtx, Vec3f* 
 void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos);
 s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* itemPos, Vec3f* itemProjPos, Vec3f* out1, Vec3f* out2);
 void Actor_ContinueText(GlobalContext* globalCtx, Actor* actor, u16 textId);
-s32 nop_800E8ED0(UNK_TYPE4 arg0);
-void nop_800E8EE0(UNK_TYPE4 arg0);
-s32 nop_800E8EEC(UNK_TYPE4 arg0);
-void nop_800E8EFC(UNK_TYPE4 arg0);
+s32 Flags_GetEventChkInf(s32 flag);
+void Flags_SetEventChkInf(s32 flag);
+s32 Flags_GetInfTable(s32 flag);
+void Flags_SetInfTable(s32 flag);
 s32 Actor_RotateForward(Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_RotateToPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj);
