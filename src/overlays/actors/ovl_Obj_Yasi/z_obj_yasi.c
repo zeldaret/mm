@@ -42,7 +42,7 @@ void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_obj_yasi_Colheader_001428);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gYasiCol);
 
     this->dyna.actor.home.rot.y = 0;
 
@@ -97,5 +97,5 @@ void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, object_obj_yasi_DL_000360);
+    Gfx_DrawDListOpa(globalCtx, gYasiDL);
 }
