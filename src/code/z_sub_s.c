@@ -282,7 +282,7 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
 /**
  * Computes the interpolation weights to be used with time paths
  *
- * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 11
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] progress see `SubS_TimePathing_ComputeProgress`
  * @param[in] waypoint the current waypoint
  * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
@@ -329,7 +329,7 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
  * @param[out] x
  * @param[out] z
  * @param[in] progress see `SubS_TimePathing_ComputeProgress`
- * @param[in] order the number of points considered when computing the next point to move to, max is 11
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] waypoint the current waypoint
  * @param[in] points the path's points
  * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
