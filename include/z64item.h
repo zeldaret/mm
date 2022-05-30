@@ -339,7 +339,7 @@ typedef enum {
     /* 0x91 */ GI_CHATEAU = 0x91,
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST,
-    /* 0x94 */ GI_EEL, //Unused bottled eel
+    /* 0x94 */ GI_EEL, // Unused bottled eel
     /* 0x95 */ GI_SEAHORSE, 
     /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
