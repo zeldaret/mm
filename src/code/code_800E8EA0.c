@@ -26,7 +26,7 @@ s32 Flags_GetInfTable(s32 flag) {
 }
 
 /**
- * InfTabe does not exist, so this does nothing
+ * InfTable does not exist, so this does nothing
  */
 void Flags_SetInfTable(s32 flag) {
 }
