@@ -215,8 +215,8 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 
 /**
  * Fills the weightArray to be used with time paths
- * 
- * This default weightArray is just an array of the point indicies as floats, 
+ *
+ * This default weightArray is just an array of the point indicies as floats,
  * offset to start at the index of the interpolation order minus 1.
  *
  * @param[out] weightArray an array of values that are used to compute the progress and the individual weights

@@ -11,12 +11,12 @@ typedef void (*EnBabaActionFunc)(struct EnBaba*, GlobalContext*);
 #define ENBABA_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
 #define ENBABA_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)
 
-// Types ENBABA_TYPE_FOLLOW_SCHEDULE and 1 can only be used in SCENE_BACKTOWN
+// Types ENBABA_TYPE_FOLLOW_SCHEDULE and ENBABA_TYPE_IDLE can only be used in SCENE_BACKTOWN
 // Type ENBABA_TYPE_SWAY can be used anywhere except SCENE_BACKTOWN and SCENE_BOMYA
 typedef enum {
     /* 0 */ ENBABA_TYPE_FOLLOW_SCHEDULE,
-    /* 1 */ ENBABA_TYPE_1, // Idle in backtown?
-    /* 2 */ ENBABA_TYPE_SWAY // Sway, used in credits
+    /* 1 */ ENBABA_TYPE_IDLE,
+    /* 2 */ ENBABA_TYPE_SWAY
 } EnBabaType;
 
 typedef struct EnBaba {
@@ -27,7 +27,7 @@ typedef struct EnBaba {
     /* 0x150 */ SkelAnime skelAnime;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ u16 textId;
-    /* 0x1E2 */ u8 unk_1E2;
+    /* 0x1E2 */ u8 inMsgState3;
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 waypoint;
     /* 0x1EA */ UNK_TYPE1 unk1EA[0x1C];
