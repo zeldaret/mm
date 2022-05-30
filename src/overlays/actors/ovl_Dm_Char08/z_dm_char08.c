@@ -942,21 +942,21 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         src.x = 800.0f;
         src.y = 2600.0f;
         src.z = -800.0f;
-        Matrix_MultiplyVector3fByState(&src, &this->tree1Pos);
+        Matrix_MultVec3f(&src, &this->tree1Pos);
         src.x = 2600.0f;
         src.y = 2500.0f;
         src.z = 700.0f;
-        Matrix_MultiplyVector3fByState(&src, &this->tree2Pos);
+        Matrix_MultVec3f(&src, &this->tree2Pos);
     } else if (limbIndex == OBJECT_KAMEJIMA_LIMB_08) {
         src.x = 1600.0f;
         src.y = -200.0f;
         src.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&src, &this->bubblePos);
+        Matrix_MultVec3f(&src, &this->bubblePos);
     } else if (limbIndex == OBJECT_KAMEJIMA_LIMB_06) {
         src.x = 600.0f;
         src.y = 700.0f;
         src.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&src, &this->focusPos);
+        Matrix_MultVec3f(&src, &this->focusPos);
     }
 }
 
@@ -968,20 +968,20 @@ void DmChar08_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* 
         case OBJECT_KAMEJIMA_LIMB_02:
             break;
         case OBJECT_KAMEJIMA_LIMB_04:
-            Matrix_StatePop();
+            Matrix_Pop();
             one = 1.0f;
             Matrix_Scale(((one - 0.7f) * this->unk_1F0) + 0.7f, ((one - 0.7f) * this->unk_1F0) + 0.7f, 1.0f,
                          MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
             break;
         case OBJECT_KAMEJIMA_LIMB_11:
         case OBJECT_KAMEJIMA_LIMB_12:
         case OBJECT_KAMEJIMA_LIMB_15:
         case OBJECT_KAMEJIMA_LIMB_16:
-            Matrix_StatePop();
+            Matrix_Pop();
             Matrix_Scale((this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f, (this->unk_1F0 * 0.4f) + 0.6f,
                          MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
             break;
         case OBJECT_KAMEJIMA_LIMB_13:
         case OBJECT_KAMEJIMA_LIMB_17:
@@ -989,10 +989,10 @@ void DmChar08_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* 
                          MTXMODE_APPLY);
             break;
         case OBJECT_KAMEJIMA_LIMB_0E:
-            Matrix_StatePop();
+            Matrix_Pop();
             Matrix_Scale((this->unk_1F0 * 0.52f) + 0.48f, (this->unk_1F0 * 0.52f) + 0.48f,
                          (this->unk_1F0 * 0.52f) + 0.48f, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
             break;
         case OBJECT_KAMEJIMA_LIMB_0A:
         case OBJECT_KAMEJIMA_LIMB_0C:
