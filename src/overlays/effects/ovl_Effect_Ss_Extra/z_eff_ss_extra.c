@@ -1,8 +1,8 @@
 /*
  * File: z_eff_ss_extra.c
  * Overlay: ovl_Effect_Ss_Extra
- * Description: The floating points hovering over a target you hit in OoT
- *   i.e. 30/60/100 points when hitting the target in lost woods with slingshot to get a bigger seed sack
+ * Description: The floating points that pop-up in Swamp Bow Minigame
+ *   i.e. 100 points for hitting the deku scrubs in the background
  */
 
 #include "z_eff_ss_extra.h"
