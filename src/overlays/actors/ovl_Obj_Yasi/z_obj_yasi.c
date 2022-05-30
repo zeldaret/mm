@@ -42,11 +42,11 @@ void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gYasiCol);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gPalmTreeCol);
 
     this->dyna.actor.home.rot.y = 0;
 
-    if (OBJYASI_IS_WIDE(thisx)) {
+    if (PALM_TREE_IS_WIDE(thisx)) {
         this->dyna.actor.scale.x = 0.2f;
         this->dyna.actor.scale.z = 0.2f;
     }
@@ -97,5 +97,5 @@ void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, gYasiDL);
+    Gfx_DrawDListOpa(globalCtx, gPalmTreeDL);
 }
