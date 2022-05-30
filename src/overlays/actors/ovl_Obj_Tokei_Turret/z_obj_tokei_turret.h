@@ -3,6 +3,13 @@
 
 #include "global.h"
 
+#define OBJ_TOKEI_TURRET_TIER_TYPE(thisx) ((thisx)->params & 3)
+
+typedef enum {
+    /* 0 */ TURRET_TIER_BASE,
+    /* 1 */ TURRET_TIER_TOP,
+} TurretTierType;
+
 struct ObjTokeiTurret;
 
 typedef struct ObjTokeiTurret {
@@ -10,7 +17,5 @@ typedef struct ObjTokeiTurret {
 } ObjTokeiTurret; // size = 0x15C
 
 extern const ActorInit Obj_Tokei_Turret_InitVars;
-
-#define OBJ_TOKEI_TURRET_TIER_TYPE(thisx) ((thisx)->params & 3)
 
 #endif // Z_OBJ_TOKEI_TURRET_H
