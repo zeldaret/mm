@@ -78,8 +78,8 @@ s32 Actor_RotateToPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* tors
  *
  * @return s32 boolean, true if rotated towards player, false if roatated back forwards.
  *
- * @note if in a cutscene or debug camera is enabled, the computed rotation will turn towards the view eye no matter the
- * yaw.
+ * @note if in a cutscene or debug camera is enabled, the computed rotation will instead turn towards the view eye no
+ * matter the yaw.
  */
 s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj) {
     Player* player = GET_PLAYER(globalCtx);
@@ -121,8 +121,8 @@ s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, V
  *
  * @return s32 boolean, true if rotated towards player, false if roatated back forwards.
  *
- * @note if in a cutscene or debug camera is enabled, the computed rotation will turn towards the view eye no matter the
- * yaw.
+ * @note if in a cutscene or debug camera is enabled, the computed rotation will instead turn towards the view eye no
+ * matter the yaw.
  */
 s32 Actor_TurnToPlayerSetFocus(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot,
                                Vec3f focusPos) {
