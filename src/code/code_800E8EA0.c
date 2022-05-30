@@ -38,7 +38,7 @@ s32 func_800E8F08(Vec3s* headRot, Vec3s* torsoRot) {
 s32 func_800E8FA4(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) {
     s16 targetPitch;
     s16 targetYaw;
-    s16 yawDiffFromTarget;
+    s16 yawDiff;
 
     targetPitch = Math_Vec3f_Pitch(&actor->focus.pos, target);
     targetYaw = Math_Vec3f_Yaw(&actor->focus.pos, target) - actor->world.rot.y;
@@ -46,10 +46,10 @@ s32 func_800E8FA4(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) 
     Math_SmoothStepToS(&headRot->x, targetPitch, 6, 0x7D0, 1);
     headRot->x = CLAMP(headRot->x, -0x1770, 0x1770);
 
-    yawDiffFromTarget = Math_SmoothStepToS(&headRot->y, targetYaw, 6, 0x7D0, 1);
+    yawDiff = Math_SmoothStepToS(&headRot->y, targetYaw, 6, 0x7D0, 1);
     headRot->y = CLAMP(headRot->y, -0x1F40, 0x1F40);
 
-    if (yawDiffFromTarget != 0) {
+    if (yawDiff != 0) {
         if (ABS_ALT(headRot->y) < 0x1F40) {
             return false;
         }
@@ -70,7 +70,7 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
     actor->focus.pos = actor->world.pos;
     actor->focus.pos.y += focusPosYAdj;
 
-    if (!((globalCtx->csCtx.state != 0) || D_801D0D50)) {
+    if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             func_800E8F08(headRot, torsoRot);
@@ -78,7 +78,7 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || D_801D0D50) {
+    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
         target = globalCtx->view.eye;
     } else {
         target = player->actor.focus.pos;
@@ -97,7 +97,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
 
     actor->focus.pos = focusPos;
 
-    if (!((globalCtx->csCtx.state != 0) || D_801D0D50)) {
+    if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             func_800E8F08(headRot, torsoRot);
@@ -105,7 +105,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || D_801D0D50) {
+    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
         target = globalCtx->view.eye;
     } else {
         target = player->actor.focus.pos;

@@ -313,7 +313,7 @@ s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
 // This data appears to be a boolean. It is only set by Play_Init.
 // OOT's gDbgCamEnabled?
 s32 func_8016A168(void) {
-    return D_801D0D50;
+    return gDbgCamEnabled;
 }
 
 // A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
