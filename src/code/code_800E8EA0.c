@@ -1,8 +1,7 @@
 #include "global.h"
 
-// SetTextId?, OOT's func_80035B18
-void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId) {
-    func_80151938(globalCtx, textId); // ContinueTextBox?
+void Actor_ContinueText(GlobalContext* globalCtx, Actor* actor, u16 textId) {
+    func_80151938(globalCtx, textId);
     actor->textId = textId;
 }
 

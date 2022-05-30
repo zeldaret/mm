@@ -1023,7 +1023,7 @@ asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnShieldParticlesMeta
 asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnShieldParticlesMetal2.s,CollisionCheck_SpawnShieldParticlesMetal2,0x800E86C0,0x8
 asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnShieldParticlesWood.s,CollisionCheck_SpawnShieldParticlesWood,0x800E86E0,0x29
 asm/non_matchings/code/z_collision_check/CollisionCheck_CylSideVsLineSeg.s,CollisionCheck_CylSideVsLineSeg,0x800E8784,0x1C7
-asm/non_matchings/code/code_800E8EA0/func_800E8EA0.s,func_800E8EA0,0x800E8EA0,0xC
+asm/non_matchings/code/code_800E8EA0/Actor_ContinueText.s,Actor_ContinueText,0x800E8EA0,0xC
 asm/non_matchings/code/code_800E8EA0/nop_800E8ED0.s,nop_800E8ED0,0x800E8ED0,0x4
 asm/non_matchings/code/code_800E8EA0/nop_800E8EE0.s,nop_800E8EE0,0x800E8EE0,0x3
 asm/non_matchings/code/code_800E8EA0/nop_800E8EEC.s,nop_800E8EEC,0x800E8EEC,0x4
