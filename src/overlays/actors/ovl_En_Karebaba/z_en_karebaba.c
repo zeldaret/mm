@@ -633,7 +633,7 @@ void func_808F280C(EnKarebaba* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
     func_800C0094(this->unk_22C, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &sp40);
-    Matrix_InsertMatrix(&sp40, MTXMODE_NEW);
+    Matrix_Mult(&sp40, MTXMODE_NEW);
     Matrix_Scale(0.15f, 1.0f, 0.15f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -656,7 +656,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actionFunc == func_808F21A4) {
         if ((this->unk_1EE > 40) || (this->unk_1EE & 1)) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -665,8 +665,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actionFunc != func_808F254C) {
         func_800AE2A0(globalCtx, &D_808F2E28, 1, 2);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
 
         if ((this->actionFunc == func_808F241C) || (this->actionFunc == func_808F200C) ||
             (this->actionFunc == func_808F15B0)) {
@@ -674,7 +673,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_Scale(sp8C, sp8C, sp8C, MTXMODE_APPLY);
-        Matrix_InsertRotation(this->actor.shape.rot.x, this->actor.shape.rot.y, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(this->actor.shape.rot.x, this->actor.shape.rot.y, 0, MTXMODE_APPLY);
 
         if (this->actor.params == ENKAREBABA_2) {
             sp94 = 1;
@@ -685,15 +684,15 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         for (i = 0; i < sp94; i++) {
-            Matrix_InsertTranslation(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
-            Matrix_GetStateTranslation(&this->limbPos[1 + i]);
+            Matrix_MultZero(&this->limbPos[1 + i]);
             if ((i == 0) && (this->actionFunc == func_808F1C84)) {
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
             }
         }
 
@@ -701,25 +700,25 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_800AE2A0(globalCtx, &D_808F2E28, 1, 2);
-    Matrix_InsertTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, MTXMODE_NEW);
 
     if (this->actionFunc != func_808F15B0) {
         sp8C = 0.01f;
     }
 
     Matrix_Scale(sp8C, sp8C, sp8C, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.home.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_0010F0);
 
     if (this->actionFunc == func_808F1C84) {
-        Matrix_InsertRotation(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(-0x4000, this->actor.shape.rot.y - this->actor.home.rot.y, 0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_001828);
 
-        Matrix_GetStateTranslation(&this->limbPos[3]);
+        Matrix_MultZero(&this->limbPos[3]);
     }
 
     func_800AE5A0(globalCtx);

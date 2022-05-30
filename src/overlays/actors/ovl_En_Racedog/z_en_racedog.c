@@ -713,8 +713,8 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, GlobalContext* globalCtx) {
 
         func_8012C28C(globalCtx->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
-                                              this->actor.world.pos.z, &rotation);
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
+                                     &rotation);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->selectionArrowGreenPrimColor, 0, 255);
@@ -740,7 +740,7 @@ void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Vec3f focusOffset = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&focusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&focusOffset, &this->actor.focus.pos);
     }
 
     if (limbIndex == DOG_LIMB_TAIL) {
@@ -787,10 +787,10 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->curRot.x);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateXFApply(this->curRot.x);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRacedog_OverrideLimbDraw, EnRacedog_PostLimbDraw, &this->actor);

@@ -346,9 +346,9 @@ void func_809A5960(ObjArmos* this, GlobalContext* globalCtx) {
     Vec3f sp28;
 
     sp28.x = Math_SinS(this->dyna.actor.shape.rot.y);
-    Matrix_SetStateRotationAndTranslation(
-        (sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-        (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ((sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z,
+                                 &this->dyna.actor.shape.rot);
     Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);
     func_8012C28C(globalCtx->state.gfxCtx);
 
@@ -374,7 +374,7 @@ void func_809A5A3C(ObjArmos* this, GlobalContext* globalCtx) {
 
         func_800C0094(this->dyna.actor.floorPoly, this->unk_250.x, this->dyna.actor.floorHeight, this->unk_250.z,
                       &sp48);
-        Matrix_SetCurrentState(&sp48);
+        Matrix_Put(&sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

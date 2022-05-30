@@ -309,7 +309,8 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         spAC = 780.0f;
                         this->unk_19C *= 1.5f;
                     }
-
+                    // TODO: determine if unk_1A0 ever has a different value from these 3, which will cause UB from spAC
+                    // being uninitialised
                     this->actor.world.pos.y -= D_80BE5DD0 * spAC;
                     Actor_SetScale(&this->actor, this->unk_19C * D_80BE5DD0);
                     Math_Vec3f_Copy(&spB8, &this->actor.world.pos);
@@ -516,8 +517,8 @@ void func_80BE5C10(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
 
-        Matrix_InsertTranslation(0.0f, 200.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_198, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_198, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);

@@ -128,7 +128,7 @@ void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this
 
     func_800C0094(this->gfx, this->pos.x, this->pos.y, this->pos.z, &mtx);
     SkinMatrix_MulYRotation(&mtx, this->rRotAngle);
-    Matrix_InsertMatrix(&mtx, MTXMODE_NEW);
+    Matrix_Mult(&mtx, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
 
@@ -168,7 +168,7 @@ void EffectSsSbn_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     func_800C0094(this->gfx, this->pos.x, this->pos.y, this->pos.z, &mtx);
     SkinMatrix_MulYRotation(&mtx, this->rRotAngle);
-    Matrix_InsertMatrix(&mtx, MTXMODE_NEW);
+    Matrix_Mult(&mtx, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
 

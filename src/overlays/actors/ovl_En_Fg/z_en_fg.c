@@ -377,16 +377,16 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_Push();
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_StatePop();
+        Matrix_Pop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
+        Matrix_MultVec3f(&vec1, &this->actor.focus.pos);
     }
 }
 
@@ -398,9 +398,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_StatePush();
+    Matrix_Push();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -471,8 +471,8 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
             alpha = (255.0f / 16.0f) * dustEffect->timer;
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
             gDPPipeSync(POLY_XLU_DISP++);
-            Matrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

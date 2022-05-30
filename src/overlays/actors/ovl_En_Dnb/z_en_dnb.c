@@ -159,17 +159,17 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
-        Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                         MTXMODE_NEW);
+        Matrix_RotateXS(this->particles[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->particles[i].unk_18.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->particles[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gfx[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -184,17 +184,17 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
-        Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                         MTXMODE_NEW);
+        Matrix_RotateXS(this->particles[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->particles[i].unk_18.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->particles[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gfx[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -275,16 +275,16 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;
             }
-            Matrix_StatePush();
+            Matrix_Push();
 
             if (1) {};
             arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
 
-            Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -292,7 +292,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             sp5C += 1;
         }
     }

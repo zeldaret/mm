@@ -887,7 +887,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (this->unk_1E8 * 0) & 0x7F, (this->unk_1E8 * 0) & 0x3F,
                                 0x20, 0x10, 1, (this->unk_1E8 * 0) & 0x3F, (this->unk_1E8 * -6) & 0x7F, 0x20, 0x10));
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_Scale((1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, 1.0f,
                  (1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, MTXMODE_APPLY);
 
@@ -895,38 +895,38 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    Matrix_GetStateTranslationAndScaledZ(1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
-    Matrix_StatePop();
+    Matrix_MultVecZ(1842.1053f, vecPtr++);
+    Matrix_MultVecZ(-1842.1053f, vecPtr++);
+    Matrix_MultVecX(1842.1053f, vecPtr++);
+    Matrix_MultVecX(-1842.1053f, vecPtr++);
+    Matrix_Pop();
 
     for (i = 1; i < ARRAY_COUNT(this->unk_324); i++) {
         temp_f20 = this->unk_324[i].unk_08 * (this->unk_324[i].unk_10 + 1.0f);
         ptr = &this->unk_324[i];
 
-        Matrix_InsertTranslation(0.0f, ptr->unk_00 + 1000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertRotation(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Translate(0.0f, ptr->unk_00 + 1000.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateZYX(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
+        Matrix_Push();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, MTXMODE_APPLY);
         Matrix_ToMtx(matrix);
 
         if ((i & 1) != 0) {
-            Matrix_RotateY(0x2000, MTXMODE_APPLY);
+            Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
-        Matrix_GetStateTranslationAndScaledZ(1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
-        Matrix_StatePop();
+        Matrix_MultVecZ(1842.1053f, vecPtr++);
+        Matrix_MultVecZ(-1842.1053f, vecPtr++);
+        Matrix_MultVecX(1842.1053f, vecPtr++);
+        Matrix_MultVecX(-1842.1053f, vecPtr++);
+        Matrix_Pop();
         matrix++;
         if (i == 3) {
-            Matrix_GetStateTranslation(&spA4);
+            Matrix_MultZero(&spA4);
         }
     }
 
-    Matrix_GetStateTranslation(&this->unk_228);
+    Matrix_MultZero(&this->unk_228);
     this->collider2.dim.pos.x = ((this->unk_228.x - spA4.x) * 0.85f) + spA4.x;
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
