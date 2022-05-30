@@ -11,6 +11,6 @@ typedef struct ObjTokeiTurret {
 
 extern const ActorInit Obj_Tokei_Turret_InitVars;
 
-#define OBJTOKEI_DISPLAY_STATE(thisx) ((thisx)->params & 3)
+#define OBJ_TOKEI_TURRET_TIER_TYPE(thisx) ((thisx)->params & 3)
 
 #endif // Z_OBJ_TOKEI_TURRET_H

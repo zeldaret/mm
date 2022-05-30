@@ -8,8 +8,8 @@
 #include "objects/object_tokei_turret/object_tokei_turret.h"
 
 typedef enum {
-    DISPLAY_TURRET_BASE,
-    DISPLAY_TURRET_TOP,
+    /* 0 */ DISPLAY_TURRET_BASE,
+    /* 1 */ DISPLAY_TURRET_TOP,
 } TokeiDisplayState;
 
 #define FLAGS 0x00000000
@@ -41,16 +41,16 @@ static InitChainEntry sInitChain[] = {
 void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjTokeiTurret* this = THIS;
-    s32 params;
+    s32 tier;
 
-    params = OBJTOKEI_DISPLAY_STATE(thisx);
+    tier = OBJ_TOKEI_TURRET_TIER_TYPE(thisx);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if (params == DISPLAY_TURRET_BASE || params == DISPLAY_TURRET_TOP) {
+    if ((tier == DISPLAY_TURRET_BASE) || (tier == DISPLAY_TURRET_TOP)) {
         this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 240.0f;
 
-        if (params == DISPLAY_TURRET_BASE) {
+        if (tier == DISPLAY_TURRET_BASE) {
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretBaseCol);
         } else {
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gTokeiTurretPlatformCol);
@@ -73,7 +73,7 @@ void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiTurret* this = THIS;
     Gfx* gfx;
 
-    if (OBJTOKEI_DISPLAY_STATE(thisx) == DISPLAY_TURRET_TOP) {
+    if (OBJ_TOKEI_TURRET_TIER_TYPE(thisx) == DISPLAY_TURRET_TOP) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
@@ -83,7 +83,7 @@ void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
-    } else if (OBJTOKEI_DISPLAY_STATE(thisx) == DISPLAY_TURRET_BASE) {
+    } else if (OBJ_TOKEI_TURRET_TIER_TYPE(thisx) == DISPLAY_TURRET_BASE) {
         Gfx_DrawDListOpa(globalCtx, gTokeiTurretPlatformBaseDL);
     } else {
         Gfx_DrawDListOpa(globalCtx, gClockTownFlagsDL);
