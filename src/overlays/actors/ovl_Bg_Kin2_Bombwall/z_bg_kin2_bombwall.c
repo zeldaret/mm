@@ -61,23 +61,15 @@ InitChainEntry D_80B6E748[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };  
 
-//extern 
-// extern ColliderCylinderInit D_80B6E6F0;
-// extern Color_RGBA8 D_80B6E71C;
-// extern Color_RGBA8 D_80B6E720;
-// extern Vec3f D_80B6E724;
-// extern s8 D_80B6E730[5];
-// //extern s8 D_80B6E735;
-// extern s16 D_80B6E738[8];
-// extern InitChainEntry D_80B6E748[];
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E020.s")
-
 s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     Actor *temp_v0;
 
     if ((arg0->collider.base.acFlags & 2) != 0) {
         temp_v0 = arg0->collider.base.ac;
+        //checks distance between wall and ? where ideas for ? would be
+        //-Player
+        //-sword/attacking object
+        //-bomb (most likely)
         if ((temp_v0 != 0) && (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &temp_v0->world.pos) < 6400.0f)) {
             return 1;
         }
@@ -85,8 +77,8 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     return 0;
 }
 
-//pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E090.s")
 
+//first idea: with all the random numbers fetched, this is probably related to particle effects from slashing or blowing up
 void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s32 i;
     Vec3f spF0; 
@@ -97,7 +89,7 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s32 temp_s3;
     f32 temp_a0;
     s32 temp_s2;
-    s16 phi_s0; //s0
+    s16 phi_s0;
     s16 phi_s1;
     
 
@@ -146,8 +138,6 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
-
 void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     ColliderCylinder *sp24;
@@ -167,8 +157,6 @@ void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80B6E4B8(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Destroy.s")
-
 void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     DynaCollisionContext *temp_a1;
     GlobalContext *temp_a0;
@@ -181,14 +169,13 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4B8.s")
-
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E4CC;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4CC.s")
 
+//if possible, requests the wall explosion cutscene to play (to confirm)
+//by setting the action function to the cutscene function func_80B6E558
 void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     BgKin2Bombwall *temp_a0;
     s8 temp_a0_2;
@@ -206,14 +193,11 @@ void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->collider.base);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E544.s")
-
 void func_80B6E544(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E558;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E558.s")
-
+//tries to play the wall explosion cutscene 
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->dyna.actor.cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->dyna.actor.cutscene, &arg0->dyna.actor);
@@ -222,20 +206,16 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
         func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->dyna.bgId);
         arg0->dyna.actor.draw = NULL;
         func_80B6E090(arg0, arg1);
-        func_80B6E5F8(arg0);
+        func_80B6E5F8(arg0); //Wall is dead.
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E5F8.s")
-
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
     arg0->actionFunc = func_80B6E614;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E614.s")
 
 void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     s8 temp_a0;
@@ -249,14 +229,10 @@ void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Update.s")
-
 void BgKin2Bombwall_Update(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
     this->actionFunc(this, globalCtx);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Draw.s")
 
 void BgKin2Bombwall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
