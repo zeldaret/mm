@@ -2760,7 +2760,7 @@ s32 func_80169FFC(GameState* gameState);
 s32 FrameAdvance_IsEnabled(GameState* gameState);
 s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos);
-s32 func_8016A168(void);
+s32 Play_IsDebugCamEnabled(void);
 void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene);
 void func_8016A268(GameState* gameState, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5);
 void Play_Init(GameState* gameState);

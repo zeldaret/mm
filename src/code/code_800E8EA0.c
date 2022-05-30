@@ -5,17 +5,29 @@ void Actor_ContinueText(GlobalContext* globalCtx, Actor* actor, u16 textId) {
     actor->textId = textId;
 }
 
+/**
+ * EventCheckInf does not exist, so this always returns false
+ */
 s32 Flags_GetEventChkInf(s32 flag) {
     return false;
 }
 
+/**
+ * EventCheckInf does not exist, so this does nothing
+ */
 void Flags_SetEventChkInf(s32 flag) {
 }
 
+/**
+ * InfTable does not exist, so this always returns false
+ */
 s32 Flags_GetInfTable(s32 flag) {
     return false;
 }
 
+/**
+ * InfTabe does not exist, so this does nothing
+ */
 void Flags_SetInfTable(s32 flag) {
 }
 
@@ -56,6 +68,7 @@ s32 Actor_RotateToPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* tors
 /**
  * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
  * head and torso towards the player if within a certain yaw.
+ * Also sets the focus position to the actor's world position with the specified Y adjustment.
  *
  * @param[in] globalCtx
  * @param[in] actor
@@ -98,6 +111,7 @@ s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, V
 /**
  * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
  * head and torso towards the player if within a certain yaw, else rotate back forward.
+ * Also sets the focus position with the specified point.
  *
  * @param[in] globalCtx
  * @param[in] actor
