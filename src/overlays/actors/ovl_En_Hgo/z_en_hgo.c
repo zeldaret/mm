@@ -337,7 +337,7 @@ void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     SkelAnime_Update(&this->skelAnime);
     if (func_80BD0898(this, globalCtx)) {
-        Actor_RotateBack(&this->unk_300, &this->unk_306);
+        Actor_RotateForward(&this->unk_300, &this->unk_306);
     } else if (this->actionFunc != func_80BD0410) {
         if (this->actionFunc != func_80BD0434) {
             Collider_UpdateCylinder(&this->actor, &this->collider);

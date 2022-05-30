@@ -513,7 +513,7 @@ void func_80BD94E0(EnPamera* this, GlobalContext* globalCtx) {
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ == 3.0f))) {
         Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->limb9Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
-        Actor_RotateBack(&this->limb9Rot, &this->limb8Rot);
+        Actor_RotateForward(&this->limb9Rot, &this->limb8Rot);
     }
 }
 
@@ -856,7 +856,7 @@ void func_80BDA344(Actor* thisx, GlobalContext* globalCtx) {
         if (!(gSaveContext.save.weekEventReg[61] & 4)) {
             gSaveContext.save.weekEventReg[61] |= 4;
         }
-        Actor_RotateBack(&this->limb9Rot, &this->limb8Rot);
+        Actor_RotateForward(&this->limb9Rot, &this->limb8Rot);
     } else {
         func_80BD94E0(this, globalCtx);
         if (this->actionFunc == func_80BD994C) {

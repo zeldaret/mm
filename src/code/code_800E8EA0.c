@@ -23,7 +23,7 @@ s32 nop_800E8EEC(UNK_TYPE4 arg0) {
 void nop_800E8EFC(UNK_TYPE4 arg0) {
 }
 
-s32 Actor_RotateBack(Vec3s* headRot, Vec3s* torsoRot) {
+s32 Actor_RotateForward(Vec3s* headRot, Vec3s* torsoRot) {
     Math_SmoothStepToS(&headRot->y, 0, 6, 0x1838, 0x64);
     Math_SmoothStepToS(&headRot->x, 0, 6, 0x1838, 0x64);
     Math_SmoothStepToS(&torsoRot->y, 0, 6, 0x1838, 0x64);
@@ -81,7 +81,7 @@ s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, V
     if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
-            Actor_RotateBack(headRot, torsoRot);
+            Actor_RotateForward(headRot, torsoRot);
             return false;
         }
     }
@@ -121,7 +121,7 @@ s32 Actor_TurnToPlayerSetFocus(GlobalContext* globalCtx, Actor* actor, Vec3s* he
     if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
-            Actor_RotateBack(headRot, torsoRot);
+            Actor_RotateForward(headRot, torsoRot);
             return false;
         }
     }

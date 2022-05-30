@@ -1378,7 +1378,7 @@ s32 nop_800E8ED0(UNK_TYPE4 arg0);
 void nop_800E8EE0(UNK_TYPE4 arg0);
 s32 nop_800E8EEC(UNK_TYPE4 arg0);
 void nop_800E8EFC(UNK_TYPE4 arg0);
-s32 Actor_RotateBack(Vec3s* headRot, Vec3s* torsoRot);
+s32 Actor_RotateForward(Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_RotateToPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj);
 s32 Actor_TurnToPlayerSetFocus(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos);

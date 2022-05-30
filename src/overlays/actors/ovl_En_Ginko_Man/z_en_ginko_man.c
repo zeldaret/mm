@@ -614,7 +614,7 @@ void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
         Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
-        Actor_RotateBack(&this->limb15Rot, &this->limb8Rot);
+        Actor_RotateForward(&this->limb15Rot, &this->limb8Rot);
     }
 }
 
