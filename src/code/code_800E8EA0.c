@@ -24,9 +24,7 @@ s32 nop_800E8EEC(UNK_TYPE4 arg0) {
 void nop_800E8EFC(UNK_TYPE4 arg0) {
 }
 
-
-// RotateBack, OOT's func_80037F30
-s32 func_800E8F08(Vec3s* headRot, Vec3s* torsoRot) {
+s32 Actor_RotateBack(Vec3s* headRot, Vec3s* torsoRot) {
     Math_SmoothStepToS(&headRot->y, 0, 6, 0x1838, 0x64);
     Math_SmoothStepToS(&headRot->x, 0, 6, 0x1838, 0x64);
     Math_SmoothStepToS(&torsoRot->y, 0, 6, 0x1838, 0x64);
@@ -34,8 +32,7 @@ s32 func_800E8F08(Vec3s* headRot, Vec3s* torsoRot) {
     return true;
 }
 
-// RotateToPoint, OOT's func_80037FC8
-s32 func_800E8FA4(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) {
+s32 Actor_RotateToPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) {
     s16 targetPitch;
     s16 targetYaw;
     s16 yawDiff;
@@ -61,8 +58,20 @@ s32 func_800E8FA4(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) 
     return true;
 }
 
-// TurnToPlayer, OOT's func_80038154
-s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj) {
+/**
+ * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
+ * head and torso towards the player if within a certain yaw.
+ *
+ * @param[in] globalCtx
+ * @param[in] actor
+ * @param[in,out] headRot the computed actors' head's rotation step
+ * @param[in,out] torsoRot the computed actors' torso's rotation step
+ * @param[in] focusPosYAdj how much to adjust the focus position's Y value from the actor's world position
+ *
+ * @note if in a cutscene or debug camera is enabled, the computed rotation will turn towards the view eye no matter the
+ * yaw.
+ */
+s32 Actor_TurnToPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yaw;
     Vec3f target;
@@ -73,7 +82,7 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
     if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
-            func_800E8F08(headRot, torsoRot);
+            Actor_RotateBack(headRot, torsoRot);
             return false;
         }
     }
@@ -84,13 +93,26 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
         target = player->actor.focus.pos;
     }
 
-    func_800E8FA4(actor, &target, headRot, torsoRot);
+    Actor_RotateToPoint(actor, &target, headRot, torsoRot);
 
     return true;
 }
 
-// TurnToPlayerSetFocus, OOT's func_80038290
-s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos) {
+/**
+ * Computes the necessary HeadRot and TorsoRot steps to be added to the normal rotation to smoothly turn an actors's
+ * head and torso towards the player if within a certain yaw, else rotate back forward.
+ *
+ * @param[in] globalCtx
+ * @param[in] actor
+ * @param[in,out] headRot the computed actors' head's rotation step
+ * @param[in,out] torsoRot the computed actors' torso's rotation step
+ * @param[in] focusPos the point to set as the actor's focus position
+ *
+ * @note if in a cutscene or debug camera is enabled, the computed rotation will turn towards the view eye no matter the
+ * yaw.
+ */
+s32 Actor_TurnToPlayerSetFocus(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot,
+                               Vec3f focusPos) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yaw;
     Vec3f target;
@@ -100,7 +122,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
     if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
-            func_800E8F08(headRot, torsoRot);
+            Actor_RotateBack(headRot, torsoRot);
             return false;
         }
     }
@@ -111,7 +133,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s*
         target = player->actor.focus.pos;
     }
 
-    func_800E8FA4(actor, &target, headRot, torsoRot);
+    Actor_RotateToPoint(actor, &target, headRot, torsoRot);
 
     return true;
 }

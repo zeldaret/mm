@@ -1028,10 +1028,10 @@ asm/non_matchings/code/code_800E8EA0/nop_800E8ED0.s,nop_800E8ED0,0x800E8ED0,0x4
 asm/non_matchings/code/code_800E8EA0/nop_800E8EE0.s,nop_800E8EE0,0x800E8EE0,0x3
 asm/non_matchings/code/code_800E8EA0/nop_800E8EEC.s,nop_800E8EEC,0x800E8EEC,0x4
 asm/non_matchings/code/code_800E8EA0/nop_800E8EFC.s,nop_800E8EFC,0x800E8EFC,0x3
-asm/non_matchings/code/code_800E8EA0/func_800E8F08.s,func_800E8F08,0x800E8F08,0x27
-asm/non_matchings/code/code_800E8EA0/func_800E8FA4.s,func_800E8FA4,0x800E8FA4,0x65
-asm/non_matchings/code/code_800E8EA0/func_800E9138.s,func_800E9138,0x800E9138,0x46
-asm/non_matchings/code/code_800E8EA0/func_800E9250.s,func_800E9250,0x800E9250,0x44
+asm/non_matchings/code/code_800E8EA0/Actor_RotateBack.s,Actor_RotateBack,0x800E8F08,0x27
+asm/non_matchings/code/code_800E8EA0/Actor_RotateToPoint.s,Actor_RotateToPoint,0x800E8FA4,0x65
+asm/non_matchings/code/code_800E8EA0/Actor_TurnToPlayer.s,Actor_TurnToPlayer,0x800E9138,0x46
+asm/non_matchings/code/code_800E8EA0/Actor_TurnToPlayerSetFocus.s,Actor_TurnToPlayerSetFocus,0x800E9250,0x44
 asm/non_matchings/code/z_common_data/func_800E9360.s,func_800E9360,0x800E9360,0x20
 asm/non_matchings/code/z_debug/GameInfo_Init.s,GameInfo_Init,0x800E93E0,0x24
 asm/non_matchings/code/z_debug_display/DebugDisplay_Init.s,DebugDisplay_Init,0x800E9470,0x6

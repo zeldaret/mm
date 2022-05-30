@@ -1445,7 +1445,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
-    func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
+    Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
     SubS_FillLimbRotTables(globalCtx, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
