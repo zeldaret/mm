@@ -3566,7 +3566,7 @@ void Audio_QueueSeqCmd(u32 cmd);
 // void func_801A89D0(void);
 s32 func_801A8A50(s32 param1);
 // void func_801A8ABC(void);
-void Audio_SetVolumeScale(u8 playerIndex, u8 scaleIdx, u8 targetVol, u8 volFadeTimer);
+void Audio_SetVolumeScale(u8 playerIndex, u8 scaleIndex, u8 targetVol, u8 volFadeTimer);
 // void func_801A8D5C(void);
 // void func_801A8E90(void);
 // void func_801A9768(void);
