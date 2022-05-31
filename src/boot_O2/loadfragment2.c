@@ -52,7 +52,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
                 *relocDataP =
                     (*relocDataP & 0xFC000000) |
-                    ((RELOCATE_ADDR(PHYS_TO_K0((*relocDataP & 0x03FFFFFF) << 2), vRamStart, allocu32) & 0x0FFFFFFF) >> 2);
+                    ((RELOCATE_ADDR(PHYS_TO_K0((*relocDataP & 0x03FFFFFF) << 2), vRamStart, allocu32) & 0x0FFFFFFF) >>
+                     2);
                 break;
 
             case R_MIPS_HI16 << RELOC_TYPE_SHIFT:
