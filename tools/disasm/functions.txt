@@ -3792,7 +3792,7 @@
     0x80198640:("AudioSeq_SeqLayerProcessScriptStep4",),
     0x80198CE0:("AudioSeq_SeqLayerProcessScriptStep3",),
     0x801990F4:("AudioSeq_SetChannelPriorities",),
-    0x80199124:("AudioSeq_GetInstrument",),
+    0x80199124:("AudioSeq_GetInstrumentId",),
     0x80199198:("AudioSeq_SetInstrument",),
     0x80199244:("AudioSeq_SequenceChannelSetVolume",),
     0x80199268:("AudioSeq_SequenceChannelProcessScript",),

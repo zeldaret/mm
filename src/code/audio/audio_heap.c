@@ -21,25 +21,25 @@ f32 func_8018B0F0(f32 arg0) {
 void func_8018B10C(void) {
     s32 i;
 
-    gAudioContext.unk_3520[255] = func_8018B0F0(0.25f);
-    gAudioContext.unk_3520[254] = func_8018B0F0(0.33f);
-    gAudioContext.unk_3520[253] = func_8018B0F0(0.5f);
-    gAudioContext.unk_3520[252] = func_8018B0F0(0.66f);
-    gAudioContext.unk_3520[251] = func_8018B0F0(0.75f);
+    gAudioContext.adsrDecayTable[255] = func_8018B0F0(0.25f);
+    gAudioContext.adsrDecayTable[254] = func_8018B0F0(0.33f);
+    gAudioContext.adsrDecayTable[253] = func_8018B0F0(0.5f);
+    gAudioContext.adsrDecayTable[252] = func_8018B0F0(0.66f);
+    gAudioContext.adsrDecayTable[251] = func_8018B0F0(0.75f);
 
     for (i = 128; i < 251; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(251 - i);
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(251 - i);
     }
 
     for (i = 16; i < 128; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(4 * (143 - i));
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(4 * (143 - i));
     }
 
     for (i = 1; i < 16; i++) {
-        gAudioContext.unk_3520[i] = func_8018B0F0(60 * (23 - i));
+        gAudioContext.adsrDecayTable[i] = func_8018B0F0(60 * (23 - i));
     }
 
-    gAudioContext.unk_3520[0] = 0.0f;
+    gAudioContext.adsrDecayTable[0] = 0.0f;
 }
 
 void AudioHeap_ResetLoadStatus(void) {
@@ -1042,8 +1042,8 @@ void AudioHeap_Init(void) {
             AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, gAudioContext.maxAudioCmds * sizeof(u64));
     }
 
-    // Initialize unk_3520 (fadeOutVelocities for ADSR)
-    gAudioContext.unk_3520 = AudioHeap_Alloc(&gAudioContext.miscPool, 0x100 * sizeof(f32));
+    // Initialize adsrDecayTable (fadeOutVelocities for ADSR)
+    gAudioContext.adsrDecayTable = AudioHeap_Alloc(&gAudioContext.miscPool, 0x100 * sizeof(f32));
     func_8018B10C();
 
     // Initialize reverbs

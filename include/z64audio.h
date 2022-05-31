@@ -231,7 +231,7 @@ typedef struct {
     /* 0x00 */ u8 loaded;
     /* 0x01 */ u8 normalRangeLo;
     /* 0x02 */ u8 normalRangeHi;
-    /* 0x03 */ u8 releaseRate;
+    /* 0x03 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
     /* 0x04 */ AdsrEnvelope* envelope;
     /* 0x08 */ SoundFontSound lowNotesSound;
     /* 0x10 */ SoundFontSound normalNotesSound;
@@ -239,7 +239,7 @@ typedef struct {
 } Instrument; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8 releaseRate;
+    /* 0x00 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
     /* 0x01 */ u8 pan;
     /* 0x02 */ u8 loaded;
     /* 0x04 */ SoundFontSound sound;
@@ -313,7 +313,7 @@ typedef struct {
 } SequencePlayer; // size = 0x160
 
 typedef struct {
-    /* 0x0 */ u8 releaseRate;
+    /* 0x0 */ u8 decayIndex; // index used to obtain adsr decay rate from adsrDecayTable
     /* 0x1 */ u8 sustain;
     /* 0x4 */ AdsrEnvelope* envelope;
 } AdsrSettings; // size = 0x8
@@ -965,7 +965,7 @@ typedef struct {
     /* 0x4448 */ volatile u8 resetStatus;
     /* 0x4449 */ u8 audioResetSpecIdToLoad;
     /* 0x444C */ s32 audioResetFadeOutFramesLeft;
-    /* 0x4450 */ f32* unk_3520; // fadeOutVelocities for ADSR
+    /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for adsr
     /* 0x4454 */ u8* audioHeap;
     /* 0x4458 */ size_t audioHeapSize;
     /* 0x445C */ Note* notes;
