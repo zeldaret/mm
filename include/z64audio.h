@@ -86,12 +86,12 @@ typedef enum {
 } AudioCacheType;
 
 typedef enum {
-    /* 0 */ LOAD_STATUS_0,
-    /* 1 */ LOAD_STATUS_1,
-    /* 2 */ LOAD_STATUS_2, // Samples/Seqplayer
-    /* 3 */ LOAD_STATUS_3, // Sequences
-    /* 4 */ LOAD_STATUS_4, // SoundFonts
-    /* 5 */ LOAD_STATUS_5 // Permanent
+    /* 0 */ LOAD_STATUS_NOT_LOADED,
+    /* 1 */ LOAD_STATUS_IN_PROGRESS,
+    /* 2 */ LOAD_STATUS_COMPLETE,
+    /* 3 */ LOAD_STATUS_DISCARDABLE,
+    /* 4 */ LOAD_STATUS_MAYBE_DISCARDABLE,
+    /* 5 */ LOAD_STATUS_PERMANENTLY_LOADED
 } AudioLoadStatus;
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
@@ -281,7 +281,7 @@ typedef struct {
     /* 0x004 */ u8 seqId;
     /* 0x005 */ u8 defaultFont;
     /* 0x006 */ u8 unk_06[1];
-    /* 0x007 */ s8 playerIdx;
+    /* 0x007 */ s8 playerIndex;
     /* 0x008 */ u16 tempo; // tatums per minute
     /* 0x00A */ u16 tempoAcc;
     /* 0x00C */ s16 unk_0C;
@@ -356,7 +356,7 @@ typedef union {
 
 typedef struct {
     /* 0x00 */ u8 reverb;
-    /* 0x01 */ u8 unk_1;
+    /* 0x01 */ u8 gain; // Increases volume by a multiplicative scaling factor. Represented as a UQ4.4 number
     /* 0x02 */ u8 pan;
     /* 0x03 */ u8 unk_3; // Possibly part of stereo?
     /* 0x04 */ Stereo stereo;
@@ -406,7 +406,7 @@ typedef struct SequenceChannel {
     /* 0x09 */ u8 bookOffset;
     /* 0x0A */ u8 newPan;
     /* 0x0B */ u8 panChannelWeight;  // proportion of pan that comes from the channel (0..128)
-    /* 0x0C */ u8 unk_0C;
+    /* 0x0C */ u8 gain; // Increases volume by a multiplicative scaling factor. Represented as a UQ4.4 number
     /* 0x0D */ u8 velocityRandomVariance;
     /* 0x0E */ u8 gateTimeRandomVariance;
     /* 0x0F */ u8 unk_0F;
@@ -434,7 +434,7 @@ typedef struct SequenceChannel {
     /* 0x80 */ AdsrSettings adsr;
     /* 0x88 */ NotePool notePool;
     /* 0xC8 */ s8 soundScriptIO[8]; // bridge between sound script and audio lib, "io ports"
-    /* 0xD0 */ u8* unk_D0; // New to MM
+    /* 0xD0 */ u8* sfxState; // New to MM
     /* 0xD4 */ s16* filter;
     /* 0xD8 */ Stereo stereo;
     /* 0xDC */ s32 unk_DC; // New to MM
@@ -596,7 +596,7 @@ typedef struct {
         /* 0x01 */ u8 hasTwoParts : 1;
         /* 0x01 */ u8 usesHeadsetPanEffects2 : 1;
     } bitField1;
-    /* 0x02 */ u8 unk_2;
+    /* 0x02 */ u8 gain; // Increases volume by a multiplicative scaling factor. Represented as a UQ4.4 number
     /* 0x03 */ u8 headsetPanRight;
     /* 0x04 */ u8 headsetPanLeft;
     /* 0x05 */ u8 reverbVol;
@@ -994,7 +994,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 reverbVol;
-    /* 0x01 */ u8 unk_1;
+    /* 0x01 */ u8 gain; // Increases volume by a multiplicative scaling factor. Represented as a UQ4.4 number
     /* 0x02 */ u8 pan;
     /* 0x03 */ u8 unk_3;
     /* 0x04 */ Stereo stereo;

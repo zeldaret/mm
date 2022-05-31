@@ -98,7 +98,7 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
     sub->targetVolLeft = (s32)((vel * volLeft) * (0x1000 - 0.001f));
     sub->targetVolRight = (s32)((vel * volRight) * (0x1000 - 0.001f));
 
-    sub->unk_2 = attrs->unk_1;
+    sub->gain = attrs->gain;
     sub->filter = attrs->filter;
     sub->unk_07 = attrs->unk_14;
     sub->unk_0E = attrs->unk_16;
@@ -257,7 +257,7 @@ void AudioPlayback_ProcessNotes(void) {
                 subAttrs.pan = attrs->pan;
                 subAttrs.reverbVol = attrs->reverb;
                 subAttrs.stereo = attrs->stereo;
-                subAttrs.unk_1 = attrs->unk_1;
+                subAttrs.gain = attrs->gain;
                 subAttrs.filter = attrs->filter;
                 subAttrs.unk_14 = attrs->unk_4;
                 subAttrs.unk_16 = attrs->unk_6;
@@ -290,9 +290,9 @@ void AudioPlayback_ProcessNotes(void) {
                 }
 
                 if (layer->unk_0A.s.bit_9 == 1) {
-                    subAttrs.unk_1 = channel->unk_0C;
+                    subAttrs.gain = channel->gain;
                 } else {
-                    subAttrs.unk_1 = 0;
+                    subAttrs.gain = 0;
                     if (1) {}
                 }
 
@@ -506,9 +506,9 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
             }
 
             if (layer->unk_0A.s.bit_9 == 1) {
-                attrs->unk_1 = chan->unk_0C;
+                attrs->gain = chan->gain;
             } else {
-                attrs->unk_1 = 0;
+                attrs->gain = 0;
             }
 
             attrs->filter = chan->filter;
