@@ -16,7 +16,7 @@ void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmZl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A382FC(DmZl* this, GlobalContext* globalCtx);
+void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx);
 
 const ActorInit Dm_Zl_InitVars = {
     ACTOR_DM_ZL,
@@ -30,8 +30,7 @@ const ActorInit Dm_Zl_InitVars = {
     (ActorFunc)DmZl_Draw,
 };
 
-//animations
-AnimationInfo D_80A387F0[7] = {
+static AnimationInfo sAnimations[7] = {
     { (AnimationHeader *)0x06015DA0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
     { (AnimationHeader *)0x06015494, 1.0f, 0.0f, -1.0f, 2, -10.0f },
     { (AnimationHeader *)0x06015A4C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
@@ -41,14 +40,14 @@ AnimationInfo D_80A387F0[7] = {
     { (AnimationHeader *)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
 };
 
-u64* sMouthTextures[4] = {
+static u64* sMouthTextures[4] = {
     gZl4MouthNeutralTex,
     gZl4MouthOpenSmilingTex,
     gZl4MouthFrowningTex,
     gZl4MouthOpenTex,
 };
 
-void *sEyeTextures[0xA] = {
+static u64* sEyeTextures[0xA] = {
     gDmZl4EyeOpenLookingUpRightTex,
     gDmZl4EyeOpenHalf2Tex,
     gDmZl4EyeOpenClosedTex,
@@ -62,8 +61,7 @@ void *sEyeTextures[0xA] = {
 };
 
 
-// DmZl_ChangeAnimation
-void func_80A38190(SkelAnime *skelAnime, AnimationInfo animation[], u16 index) {
+void DmZl_ChangeAnimation(SkelAnime *skelAnime, AnimationInfo animation[], u16 index) {
     f32 endFrame;
     animation += index;
     endFrame = (animation->frameCount < 0.0f) ? Animation_GetLastFrame(animation->animation) : animation->frameCount;
@@ -82,18 +80,17 @@ void DmZl_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unused2BA = 0;
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, (FlexSkeletonHeader *) &gZl4Skeleton, NULL, NULL, NULL, 0);
-    func_80A38190(&this->skelAnime, &D_80A387F0[this->animationIndex], 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
+    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_80A382FC;
+    this->actionFunc = DmZl_DoNothing;
 }
 
 void DmZl_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     DmZl *this = (DmZl *) thisx;
 }
 
-// DmZl_DoNothing
-void func_80A382FC(DmZl *this, GlobalContext *globalCtx) {
+void DmZl_DoNothing(DmZl *this, GlobalContext *globalCtx) {
 }
 
 // weird cutscene func
@@ -103,8 +100,8 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 0x66) != 0) {
         actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x66);
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            s16 newUnk2B0;
-            newUnk2B0 = 0;
+            s16 newUnk2B0 = 0;
+
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 2:
                     newUnk2B0 = 1;
@@ -119,9 +116,10 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
                 default:
                     break;
             }
+
             if (newUnk2B0 != this->animationIndex) {
                 this->animationIndex = newUnk2B0;
-                func_80A38190(&this->skelAnime, &D_80A387F0[this->animationIndex], 0);
+                DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
             }
         }
 
@@ -131,12 +129,11 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) &&
            (((actionIndex = this->animationIndex) == 1) || (actionIndex == 3) || (actionIndex == 5))) {
         this->animationIndex++;
-        func_80A38190(&this->skelAnime, &D_80A387F0[this->animationIndex], 0);
+        DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
     }
 }
 
-// eye control?
-void func_80A38468(DmZl *this) {
+void DmZl_UpdateFace(DmZl *this) {
     if (this->timer > 0) {
         this->timer--;
     } else {
@@ -211,19 +208,17 @@ void func_80A38468(DmZl *this) {
 
 void DmZl_Update(Actor *thisx, GlobalContext *globalCtx) {
     DmZl *this = THIS;
-    func_80A38468(this);
+    DmZl_UpdateFace(this);
     SkelAnime_Update(&this->skelAnime);
     func_80A3830C(this, globalCtx);
     this->actionFunc(this, globalCtx);
 }
 
-// DmZl_OverrideLimbDraw
-s32 func_80A3862C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 DmZl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return 0;
 }
 
-// DmZl_PostLimbDraw
-void func_80A38648(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx){
+void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx){
     DmZl* this = THIS;
 
     if (limbIndex == 0x10) {
@@ -250,7 +245,7 @@ void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTextureIndex]));
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80A3862C, func_80A38648, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, DmZl_OverrideLimbDraw, DmZl_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
 }

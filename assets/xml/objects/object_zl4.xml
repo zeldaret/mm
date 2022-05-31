@@ -28,7 +28,7 @@
         <!-- not named in OOT, some skin blemish center -->
         <Texture Name="object_zl4_Tex_002970" OutName="tex_002970" Format="rgba16" Width="8" Height="8" Offset="0x2970" />
         <Texture Name="object_zl4_Tex_0029F0" OutName="hair" Format="rgba16" Width="16" Height="8" Offset="0x29F0" />
-        <!-- <Blob Name="object_zl4_Blob_002AF0" Size="0x2C00" Offset="0x2AF0" /> -->
+
         <!-- Eye Textures -->
         <!-- TODO update the offsets and the tluts -->
         <Texture Name="gDmZl4EyeOpenLookingUpRightTex" OutName="eye_open_looking_up_right" Format="ci8" Width="32" Height="32" Offset="0x2AF0" TlutOffset="0x870"/>
@@ -44,7 +44,6 @@
         <Texture Name="gZl4MouthOpenSmilingTex" OutName="mouth_open_smiling" Format="ci8" Width="32" Height="32" Offset="0x4AF0" TlutOffset="0xA70"/>
         <Texture Name="gZl4MouthFrowningTex" OutName="mouth_frowning" Format="ci8" Width="32" Height="32" Offset="0x4EF0" TlutOffset="0xA70"/>
         <Texture Name="gZl4MouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x52F0" TlutOffset="0xA70"/>
-
 
         <Texture Name="object_zl4_Tex_0056F0" OutName="fingers" Format="rgba16" Width="16" Height="16" Offset="0x56F0" />
         <Texture Name="object_zl4_Tex_0058F0" OutName="bracelet" Format="ci8" Width="16" Height="16" Offset="0x58F0" />
@@ -145,6 +144,6 @@
         <DList Name="object_zl4_DL_024D80" Offset="0x24D80" />
         <DList Name="object_zl4_DL_024E40" Offset="0x24E40" />
         <Texture Name="object_zl4_Tex_024E50" OutName="black_spot" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
-        <!-- <Blob Name="object_zl4_Blob_024F50" Size="0x10" Offset="0x24F50" /> -->
+        <TextureAnimation Name="gDmZlEmptyTextAnim" Offset="0x24F50" />
     </File>
 </Root>
