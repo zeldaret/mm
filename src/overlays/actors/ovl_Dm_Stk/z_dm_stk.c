@@ -1,7 +1,7 @@
 /*
  * File: z_dm_stk.c
  * Overlay: ovl_Dm_Stk
- * Description: Skull Kid. Also manages Majora's Mask in the cutscene where is backstory is explained.
+ * Description: Skull Kid. Also manages Majora's Mask in the cutscene where its backstory is explained.
  *
  * This actor is responsible for some somewhat unintuitive things. For example, during certain cutscenes,
  * it is responsible for handling the player's sound effects as well. As another example, this actor makes
