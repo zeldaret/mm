@@ -41,26 +41,21 @@ AnimationInfo D_80A387F0[7] = {
     { (AnimationHeader *)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
 };
 
-// data
-// mouth textures
-//extern void* D_80A38898[];
-void *D_80A38898[4] = {
-    (void *)0x060046F0,
-    (void *)0x06004AF0,
-    (void *)0x06004EF0,
-    (void *)0x060052F0,
+u64* sMouthTextures[4] = {
+    gZl4MouthNeutralTex,
+    gZl4MouthOpenSmilingTex,
+    gZl4MouthFrowningTex,
+    gZl4MouthOpenTex,
 };
 
-// eye textures
-//extern void* D_80A388A8[];
-void *D_80A388A8[0xA] = {
-    (void *)0x06002AF0,
-    (void *)0x06002EF0,
-    (void *)0x060032F0,
-    (void *)0x060036F0,
-    (void *)0x06003AF0,
-    (void *)0x06003EF0,
-    (void *)0x060042F0,
+void *sEyeTextures[0xA] = {
+    gDmZl4EyeOpenLookingUpRightTex,
+    gDmZl4EyeOpenHalf2Tex,
+    gDmZl4EyeOpenClosedTex,
+    gDmZl4EyeWideTex,
+    gDmZl4EyeHalf1Tex,
+    gDmZl4EyeOpenLookingLeftTex,
+    gDmZl4EyeOpenLookingRightTex,
     NULL,
     NULL,
     NULL,
@@ -248,11 +243,11 @@ void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A388A8[this->unk2B3]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk2B3]));
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80A388A8[this->unk2B2]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->unk2B2]));
 
-    gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_80A38898[this->mouthTextureIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTextureIndex]));
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80A3862C, func_80A38648, &this->actor);
