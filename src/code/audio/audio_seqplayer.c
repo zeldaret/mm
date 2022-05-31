@@ -117,13 +117,13 @@ u8 sSeqInstructionArgsTable[] = {
     CMD_ARGS_1(u8),         // 0xD0 (channel: stereo headset effects)
     CMD_ARGS_1(u8),         // 0xD1 (channel: set note allocation policy)
     CMD_ARGS_1(u8),         // 0xD2 (channel: set sustain)
-    CMD_ARGS_1(u8),         // 0xD3 (channel: large pitch bend)
+    CMD_ARGS_1(u8),         // 0xD3 (channel: large bend pitch)
     CMD_ARGS_1(u8),         // 0xD4 (channel: set reverb)
     CMD_ARGS_1(u8),         // 0xD5 ()
     CMD_ARGS_1(u8),         // 0xD6 ()
     CMD_ARGS_1(u8),         // 0xD7 (channel: set vibrato rate)
     CMD_ARGS_1(u8),         // 0xD8 (channel: set vibrato extent)
-    CMD_ARGS_1(u8),         // 0xD9 (channel: set release rate)
+    CMD_ARGS_1(u8),         // 0xD9 (channel: set decay index)
     CMD_ARGS_1(s16),        // 0xDA (channel: set envelope)
     CMD_ARGS_1(u8),         // 0xDB (channel: transpose)
     CMD_ARGS_1(u8),         // 0xDC (channel: set pan mix)
@@ -144,7 +144,7 @@ u8 sSeqInstructionArgsTable[] = {
     CMD_ARGS_2(u8, u8),     // 0xEB (channel: set soundFont and instrument)
     CMD_ARGS_0(),           // 0xEC (channel: reset vibrato)
     CMD_ARGS_1(u8),         // 0xED (channel: set hilo gain)
-    CMD_ARGS_1(u8),         // 0xEE (channel: small pitch bend)
+    CMD_ARGS_1(u8),         // 0xEE (channel: small bend pitch)
     CMD_ARGS_2(s16, u8),    // 0xEF ()
     CMD_ARGS_0(),           // 0xF0 (channel: unreserve notes)
     CMD_ARGS_1(u8),         // 0xF1 (channel: reserve notes)
@@ -769,23 +769,23 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 layer->portamento.mode = PORTAMENTO_MODE_OFF;
                 break;
 
-            case 0xCB: // layer:
+            case 0xCB: // layer: set envelope and decay index
                 cmdArg16 = AudioSeq_ScriptReadS16(state);
                 layer->adsr.envelope = (AdsrEnvelope*)(seqPlayer->seqData + cmdArg16);
                 // fallthrough
-            case 0xCF: // layer:
+            case 0xCF: // layer: set decay index
                 layer->adsr.decayIndex = AudioSeq_ScriptReadU8(state);
                 break;
 
-            case 0xCC: // layer:
+            case 0xCC: // layer: ignore drum pan
                 layer->ignoreDrumPan = true;
                 break;
 
-            case 0xCD: // layer:
+            case 0xCD: // layer: stereo effects
                 layer->stereo.asByte = AudioSeq_ScriptReadU8(state);
                 break;
 
-            case 0xCE: // layer:
+            case 0xCE: // layer: bend pitch
                 cmdArg8 = AudioSeq_ScriptReadU8(state);
 
                 layer->bend = gBendPitchTwoSemitonesFrequencies[(u8)(cmdArg8 + 0x80)];
@@ -1337,14 +1337,14 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->changes.s.freqScale = true;
                     break;
 
-                case 0xD3: // channel: large pitch bend
+                case 0xD3: // channel: large bend pitch
                     cmd = (u8)cmdArgs[0];
                     cmd += 0x80;
                     channel->freqScale = gBendPitchOneOctaveFrequencies[cmd];
                     channel->changes.s.freqScale = true;
                     break;
 
-                case 0xEE: // channel: small pitch bend
+                case 0xEE: // channel: small bend pitch
                     cmd = (u8)cmdArgs[0];
                     cmd += 0x80;
                     channel->freqScale = gBendPitchTwoSemitonesFrequencies[cmd];
@@ -1373,7 +1373,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->adsr.envelope = (AdsrEnvelope*)&seqPlayer->seqData[cmdArgU16];
                     break;
 
-                case 0xD9: // channel: set release rate
+                case 0xD9: // channel: set decay index
                     cmd = (u8)cmdArgs[0];
                     channel->adsr.decayIndex = cmd;
                     break;
