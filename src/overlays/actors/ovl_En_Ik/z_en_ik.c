@@ -10,6 +10,12 @@
 
 #define THIS ((EnIk*)thisx)
 
+typedef enum {
+    /* 0 */ IK_TYPE_SILVER,
+    /* 1 */ IK_TYPE_BLACK,
+    /* 2 */ IK_TYPE_WHITE
+} EnIkType;
+
 void EnIk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -237,7 +243,7 @@ static EffectBlureInit2 sBlureInit = {
     0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
 };
 
-static s32 D_8092C198 = 0;
+static s32 texturesDesegmented = 0;
 
 Vec3f sEffectVelAndAccel = { 0.0f, 0.5f, 0.0f };
 
@@ -265,18 +271,18 @@ void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderItems);
     Collider_InitAndSetQuad(globalCtx, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTableArmor, &sColChkInfoInit);
-    this->actor.params &= IK_PARAMS_FF;
-    this->actor.params -= IK_PARAMS_01;
+    this->actor.params = IK_GET_FF(&this->actor);
+    this->actor.params -= 1;
 
     Effect_Add(globalCtx, &this->effectIndex, EFFECT_BLURE2, 0, 0, &sBlureInit);
-    if (!D_8092C198) {
+    if (!texturesDesegmented) {
 
         for (i = 0; i < ARRAY_COUNT(D_8092BFD8); i++) {
-            D_8092BFD8[i][0] = Lib_SegmentedToVirtual(D_8092BFD8[i][0]);
-            D_8092BFD8[i][1] = Lib_SegmentedToVirtual(D_8092BFD8[i][1]);
-            D_8092BFD8[i][2] = Lib_SegmentedToVirtual(D_8092BFD8[i][2]);
+            D_8092BFD8[i][IK_TYPE_SILVER] = Lib_SegmentedToVirtual(D_8092BFD8[i][IK_TYPE_SILVER]);
+            D_8092BFD8[i][IK_TYPE_BLACK] = Lib_SegmentedToVirtual(D_8092BFD8[i][IK_TYPE_BLACK]);
+            D_8092BFD8[i][IK_TYPE_WHITE] = Lib_SegmentedToVirtual(D_8092BFD8[i][IK_TYPE_WHITE]);
         }
-        D_8092C198 = true;
+        texturesDesegmented = true;
     }
     EnIk_SetupIdle(this);
 }
@@ -1017,7 +1023,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
     EnIkStruct* ptr;
     s32 i;
 
-    if (this->drawArmorFlags == 3) {
+    if (this->drawArmorFlags == (0x1 | 0x2)) {
         sp54 = 0;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1045,7 +1051,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
         }
 
         if (sp54 == ARRAY_COUNT(this->unk_550)) {
-            this->drawArmorFlags = 5;
+            this->drawArmorFlags = (0x1 | 0x4);
         }
 
         POLY_XLU_DISP = gfxXlu;

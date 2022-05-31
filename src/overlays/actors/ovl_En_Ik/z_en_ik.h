@@ -8,8 +8,7 @@ struct EnIk;
 
 typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 
-#define IK_PARAMS_01 1
-#define IK_PARAMS_FF 0xFF
+#define IK_GET_FF(thisx) ((thisx)->params & 0xFF)
 
 typedef struct {
     /* 0x00 */ Gfx* unk_00;
