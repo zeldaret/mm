@@ -1,65 +1,73 @@
 ﻿<Root>
     <File Name="object_zl4" Segment="6">
-        <Animation Name="object_zl4_Anim_000654" Offset="0x654" />
+        <Animation Name="gDmZl4IdleAnim" Offset="0x654" />
         <Texture Name="object_zl4_TLUT_000670" OutName="tlut_000670" Format="rgba16" Width="16" Height="16" Offset="0x670" />
-        <Texture Name="object_zl4_Tex_000870" OutName="tex_000870" Format="rgba16" Width="16" Height="16" Offset="0x870" />
-        <Texture Name="object_zl4_Tex_000A70" OutName="tex_000A70" Format="rgba16" Width="16" Height="16" Offset="0xA70" />
-        <Texture Name="object_zl4_Tex_000C70" OutName="tex_000C70" Format="ci8" Width="8" Height="8" Offset="0xC70" />
-        <Texture Name="object_zl4_Tex_000CB0" OutName="tex_000CB0" Format="ci8" Width="16" Height="16" Offset="0xCB0" />
-        <Texture Name="object_zl4_Tex_000DB0" OutName="tex_000DB0" Format="ci8" Width="32" Height="64" Offset="0xDB0" />
-        <Texture Name="object_zl4_Tex_0015B0" OutName="tex_0015B0" Format="rgba16" Width="8" Height="8" Offset="0x15B0" />
-        <Texture Name="object_zl4_Tex_001630" OutName="tex_001630" Format="rgba16" Width="8" Height="8" Offset="0x1630" />
-        <Texture Name="object_zl4_Tex_0016B0" OutName="tex_0016B0" Format="ci8" Width="32" Height="8" Offset="0x16B0" />
-        <Texture Name="object_zl4_Tex_0017B0" OutName="tex_0017B0" Format="ci8" Width="8" Height="8" Offset="0x17B0" />
-        <Texture Name="object_zl4_Tex_0017F0" OutName="tex_0017F0" Format="ci8" Width="32" Height="32" Offset="0x17F0" />
-        <Texture Name="object_zl4_Tex_001BF0" OutName="tex_001BF0" Format="rgba16" Width="8" Height="16" Offset="0x1BF0" />
-        <Texture Name="object_zl4_Tex_001CF0" OutName="tex_001CF0" Format="ci8" Width="16" Height="16" Offset="0x1CF0" />
+        <Texture Name="object_zl4_TLUT_000870" OutName="eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x870" />
+        <Texture Name="object_zl4_TLUT_000A70" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0xA70" />
+        <Texture Name="gDmZl4DressGradientTex" OutName="dress_gradient" Format="ci8" Width="8" Height="8" Offset="0xC70" />
+        <Texture Name="object_zl4_Tex_000CB0" OutName="purple_dress_patern" Format="ci8" Width="16" Height="16" Offset="0xCB0" />
+        <Texture Name="object_zl4_Tex_000DB0" OutName="triforce_sash" Format="ci8" Width="32" Height="64" Offset="0xDB0" />
+        <Texture Name="object_zl4_Tex_0015B0" OutName="boot_shaft" Format="rgba16" Width="8" Height="8" Offset="0x15B0" />
+        <Texture Name="object_zl4_Tex_001630" OutName="boot" Format="rgba16" Width="8" Height="8" Offset="0x1630" />
+        <Texture Name="object_zl4_Tex_0016B0" OutName="alternate_dress_belt" Format="ci8" Width="32" Height="8" Offset="0x16B0" />
+        <Texture Name="object_zl4_Tex_0017B0" OutName="alternate_dress_patern" Format="ci8" Width="8" Height="8" Offset="0x17B0" />
+        <Texture Name="object_zl4_Tex_0017F0" OutName="dress_wrinkles" Format="ci8" Width="32" Height="32" Offset="0x17F0" />
+        <Texture Name="object_zl4_Tex_001BF0" OutName="alternate_dress_lining" Format="rgba16" Width="8" Height="16" Offset="0x1BF0" />
+        <Texture Name="object_zl4_Tex_001CF0" OutName="alternate_dress_gradient" Format="ci8" Width="16" Height="16" Offset="0x1CF0" />
+
+        <!-- not named in OOT, some blue blemish center -->
         <Texture Name="object_zl4_Tex_001DF0" OutName="tex_001DF0" Format="ci8" Width="8" Height="8" Offset="0x1DF0" />
-        <Texture Name="object_zl4_Tex_001E30" OutName="tex_001E30" Format="rgba16" Width="16" Height="32" Offset="0x1E30" />
-        <Texture Name="object_zl4_Tex_002230" OutName="tex_002230" Format="ci8" Width="8" Height="8" Offset="0x2230" />
+        <Texture Name="object_zl4_Tex_001E30" OutName="headdress_triforce_emblem" Format="rgba16" Width="16" Height="32" Offset="0x1E30" />
+        <Texture Name="object_zl4_Tex_002230" OutName="headdress_gradient" Format="ci8" Width="8" Height="8" Offset="0x2230" />
+        <!-- not named in OOT, graident with dark blotch bottom-->
         <Texture Name="object_zl4_Tex_002270" OutName="tex_002270" Format="ci8" Width="8" Height="16" Offset="0x2270" />
-        <Texture Name="object_zl4_Tex_0022F0" OutName="tex_0022F0" Format="ci8" Width="16" Height="32" Offset="0x22F0" />
-        <Texture Name="object_zl4_Tex_0024F0" OutName="tex_0024F0" Format="rgba16" Width="16" Height="16" Offset="0x24F0" />
-        <Texture Name="object_zl4_Tex_0026F0" OutName="tex_0026F0" Format="rgba16" Width="16" Height="16" Offset="0x26F0" />
-        <Texture Name="object_zl4_Tex_0028F0" OutName="tex_0028F0" Format="rgba16" Width="8" Height="8" Offset="0x28F0" />
+        <Texture Name="object_zl4_Tex_0022F0" OutName="headdress_stripe" Format="ci8" Width="16" Height="32" Offset="0x22F0" />
+        <Texture Name="object_zl4_Tex_0024F0" OutName="ear" Format="rgba16" Width="16" Height="16" Offset="0x24F0" />
+        <Texture Name="object_zl4_Tex_0026F0" OutName="hair_on_side" Format="rgba16" Width="16" Height="16" Offset="0x26F0" />
+        <Texture Name="object_zl4_Tex_0028F0" OutName="skin_gradient" Format="rgba16" Width="8" Height="8" Offset="0x28F0" />
+        <!-- not named in OOT, some skin blemish center -->
         <Texture Name="object_zl4_Tex_002970" OutName="tex_002970" Format="rgba16" Width="8" Height="8" Offset="0x2970" />
-        <Texture Name="object_zl4_Tex_0029F0" OutName="tex_0029F0" Format="rgba16" Width="16" Height="8" Offset="0x29F0" />
+        <Texture Name="object_zl4_Tex_0029F0" OutName="hair" Format="rgba16" Width="16" Height="8" Offset="0x29F0" />
         <!-- <Blob Name="object_zl4_Blob_002AF0" Size="0x2C00" Offset="0x2AF0" /> -->
+        <!-- Eye Textures -->
+
         <!-- Mouth Textures -->
-        <!-- THESE ARE PORTED Im hoping I can keep using these but they are untested-->
-        <!-- todo: wrong tlut and wrong names -->
-        <Texture Name="gZl4MouthNeutralTex" OutName="mouth_neutral" Format="ci8" Width="32" Height="32" Offset="0x46F0" TlutOffset="0x870"/>
-        <Texture Name="gZl4MouthFrowningTex" OutName="mouth_frowning" Format="ci8" Width="32" Height="32" Offset="0x4AF0" TlutOffset="0x870"/>
-        <Texture Name="gZl4MouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4EF0" TlutOffset="0x870"/>
-        <Texture Name="gZl4MouthOpenSmilingTex" OutName="mouth_open_smiling" Format="ci8" Width="32" Height="32" Offset="0x52F0" TlutOffset="0x870"/>
+        <Texture Name="gZl4MouthNeutralTex" OutName="mouth_neutral" Format="ci8" Width="32" Height="32" Offset="0x46F0" TlutOffset="0xA70"/>
+        <Texture Name="gZl4MouthOpenSmilingTex" OutName="mouth_open_smiling" Format="ci8" Width="32" Height="32" Offset="0x4AF0" TlutOffset="0xA70"/>
+        <Texture Name="gZl4MouthFrowningTex" OutName="mouth_frowning" Format="ci8" Width="32" Height="32" Offset="0x4EF0" TlutOffset="0xA70"/>
+        <Texture Name="gZl4MouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x52F0" TlutOffset="0xA70"/>
 
 
-        <Texture Name="object_zl4_Tex_0056F0" OutName="tex_0056F0" Format="rgba16" Width="16" Height="16" Offset="0x56F0" />
-        <Texture Name="object_zl4_Tex_0058F0" OutName="tex_0058F0" Format="ci8" Width="16" Height="16" Offset="0x58F0" />
-        <Texture Name="object_zl4_Tex_0059F0" OutName="tex_0059F0" Format="rgba16" Width="8" Height="8" Offset="0x59F0" />
-        <Texture Name="object_zl4_Tex_005A70" OutName="tex_005A70" Format="rgba16" Width="16" Height="16" Offset="0x5A70" />
-        <Texture Name="object_zl4_Tex_005C70" OutName="tex_005C70" Format="ci8" Width="8" Height="8" Offset="0x5C70" />
-        <Texture Name="object_zl4_Tex_005CB0" OutName="tex_005CB0" Format="ci8" Width="16" Height="16" Offset="0x5CB0" />
-        <Texture Name="object_zl4_Tex_005DB0" OutName="tex_005DB0" Format="rgba16" Width="32" Height="32" Offset="0x5DB0" />
-        <DList Name="object_zl4_DL_00A630" Offset="0xA630" />
-        <DList Name="object_zl4_DL_00AFC8" Offset="0xAFC8" />
+        <Texture Name="object_zl4_Tex_0056F0" OutName="fingers" Format="rgba16" Width="16" Height="16" Offset="0x56F0" />
+        <Texture Name="object_zl4_Tex_0058F0" OutName="bracelet" Format="ci8" Width="16" Height="16" Offset="0x58F0" />
+        <Texture Name="object_zl4_Tex_0059F0" OutName="blue_undershirt_gradient" Format="rgba16" Width="8" Height="8" Offset="0x59F0" />
+        <Texture Name="object_zl4_Tex_005A70" OutName="blue_undershirt_gradient_2" Format="rgba16" Width="16" Height="16" Offset="0x5A70" />
+        <Texture Name="object_zl4_Tex_005C70" OutName="striped_shoulder_patern" Format="ci8" Width="8" Height="8" Offset="0x5C70" />
+        <Texture Name="object_zl4_Tex_005CB0" OutName="undershirt_wrinkles" Format="ci8" Width="16" Height="16" Offset="0x5CB0" />
+        <Texture Name="object_zl4_Tex_005DB0" OutName="pendant" Format="rgba16" Width="32" Height="32" Offset="0x5DB0" />
+        <DList Name="gDmZl4ChestDl" Offset="0xA630" />
+        <DList Name="gDmZl4HeadDl" Offset="0xAFC8" />
         <DList Name="object_zl4_DL_00B8D8" Offset="0xB8D8" />
         <DList Name="object_zl4_DL_00BB40" Offset="0xBB40" />
         <DList Name="object_zl4_DL_00BC90" Offset="0xBC90" />
         <DList Name="object_zl4_DL_00BE70" Offset="0xBE70" />
         <DList Name="object_zl4_DL_00C0E0" Offset="0xC0E0" />
         <DList Name="object_zl4_DL_00C230" Offset="0xC230" />
+
+        <!-- unk frilly clothing, horse? -->
         <DList Name="object_zl4_DL_00C410" Offset="0xC410" />
+        <!-- top piece of above dl -->
         <DList Name="object_zl4_DL_00C8D0" Offset="0xC8D0" />
         <DList Name="object_zl4_DL_00D0E8" Offset="0xD0E8" />
         <DList Name="object_zl4_DL_00D2A0" Offset="0xD2A0" />
         <DList Name="object_zl4_DL_00D460" Offset="0xD460" />
         <DList Name="object_zl4_DL_00D598" Offset="0xD598" />
-        <DList Name="object_zl4_DL_00D5E8" Offset="0xD5E8" />
+        <DList Name="gDmZl4BootDl1" Offset="0xD5E8" />
         <DList Name="object_zl4_DL_00D728" Offset="0xD728" />
-        <DList Name="object_zl4_DL_00D778" Offset="0xD778" />
+        <DList Name="gDmZl4BootDl2" Offset="0xD778" />
         <Texture Name="object_zl4_Tex_00D8B8" OutName="tex_00D8B8" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
         <DList Name="gDl4OcarinaDl" Offset="0xDE08" />
+        <!-- 13 is left hand , 16 is right hand -->
         <Limb Name="object_zl4_Standardlimb_00DF28" Type="Standard" EnumName="OBJECT_ZL4_LIMB_01" Offset="0xDF28" />
         <Limb Name="object_zl4_Standardlimb_00DF34" Type="Standard" EnumName="OBJECT_ZL4_LIMB_02" Offset="0xDF34" />
         <Limb Name="object_zl4_Standardlimb_00DF40" Type="Standard" EnumName="OBJECT_ZL4_LIMB_03" Offset="0xDF40" />
@@ -76,7 +84,7 @@
         <Limb Name="object_zl4_Standardlimb_00DFC4" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0E" Offset="0xDFC4" />
         <Limb Name="object_zl4_Standardlimb_00DFD0" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0F" Offset="0xDFD0" />
         <Limb Name="object_zl4_Standardlimb_00DFDC" Type="Standard" EnumName="OBJECT_ZL4_LIMB_10" Offset="0xDFDC" />
-        <Limb Name="object_zl4_Standardlimb_00DFE8" Type="Standard" EnumName="OBJECT_ZL4_LIMB_11" Offset="0xDFE8" />
+        <Limb Name="gDmZl4HeadLimb" Type="Standard" EnumName="OBJECT_ZL4_LIMB_11" Offset="0xDFE8" />
         <Skeleton Name="gZl4Skeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL4_LIMB_NONE" LimbMax="OBJECT_ZL4_LIMB_MAX" EnumName="object_zl4_Limbs" Offset="0xE038" />
         <Animation Name="object_zl4_Anim_00F250" Offset="0xF250" />
         <Animation Name="object_zl4_Anim_00FDC8" Offset="0xFDC8" />
@@ -128,7 +136,7 @@
         <Animation Name="object_zl4_Anim_024B68" Offset="0x24B68" />
         <DList Name="object_zl4_DL_024D80" Offset="0x24D80" />
         <DList Name="object_zl4_DL_024E40" Offset="0x24E40" />
-        <Texture Name="object_zl4_Tex_024E50" OutName="tex_024E50" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
+        <Texture Name="object_zl4_Tex_024E50" OutName="black_spot" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
         <!-- <Blob Name="object_zl4_Blob_024F50" Size="0x10" Offset="0x24F50" /> -->
     </File>
 </Root>
