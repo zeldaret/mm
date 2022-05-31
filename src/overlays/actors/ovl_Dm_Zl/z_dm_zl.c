@@ -18,7 +18,6 @@ void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A382FC(DmZl* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Dm_Zl_InitVars = {
     ACTOR_DM_ZL,
     ACTORCAT_ITEMACTION,
@@ -31,17 +30,42 @@ const ActorInit Dm_Zl_InitVars = {
     (ActorFunc)DmZl_Draw,
 };
 
-#endif
+//animations
+AnimationInfo D_80A387F0[7] = {
+    { (AnimationHeader *)0x06015DA0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader *)0x06015494, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader *)0x06015A4C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader *)0x06011BB8, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader *)0x060122E0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader *)0x06012A84, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader *)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+};
 
 // data
 // mouth textures
-extern void* D_80A38898[];
+//extern void* D_80A38898[];
+void *D_80A38898[4] = {
+    (void *)0x060046F0,
+    (void *)0x06004AF0,
+    (void *)0x06004EF0,
+    (void *)0x060052F0,
+};
 
 // eye textures
-extern void* D_80A388A8[];
+//extern void* D_80A388A8[];
+void *D_80A388A8[0xA] = {
+    (void *)0x06002AF0,
+    (void *)0x06002EF0,
+    (void *)0x060032F0,
+    (void *)0x060036F0,
+    (void *)0x06003AF0,
+    (void *)0x06003EF0,
+    (void *)0x060042F0,
+    NULL,
+    NULL,
+    NULL,
+};
 
-// dont yet know what this data is supposed to be other than 0x18
-extern AnimationInfo D_80A387F0[];
 
 // DmZl_ChangeAnimation
 void func_80A38190(SkelAnime *skelAnime, AnimationInfo animation[], u16 index) {

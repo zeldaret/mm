@@ -2732,8 +2732,7 @@ beginseg
     name "ovl_Dm_Zl"
     compress
     include "build/src/overlays/actors/ovl_Dm_Zl/z_dm_zl.o"
-    include "build/data/ovl_Dm_Zl/ovl_Dm_Zl.data.o"
-    include "build/data/ovl_Dm_Zl/ovl_Dm_Zl.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Zl/ovl_Dm_Zl_reloc.o"
 endseg
 
 beginseg
