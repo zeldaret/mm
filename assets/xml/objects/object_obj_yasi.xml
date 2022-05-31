@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Object for the Palm Tree(s) found at the Great Bay Coast -->
     <File Name="object_obj_yasi" Segment="6">
         <DList Name="gPalmTreeDL" Offset="0x360" />
         <Texture Name="gPalmTreeTLUT" OutName="palm_tree_tlut" Format="rgba16" Width="4" Height="4" Offset="0x630" />
