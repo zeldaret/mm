@@ -1407,7 +1407,7 @@ typedef struct {
     /* 0x08 */ Color_RGBA8_u32 primColor;
     /* 0x0C */ Color_RGBA8_u32 envColor;
     /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* monoDL;
+    /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
 
 typedef struct DebugDispObject {

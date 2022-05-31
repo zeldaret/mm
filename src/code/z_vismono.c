@@ -23,8 +23,6 @@
 #define VISMONO_FAC_BLUE 1
 #define VISMONO_FAC_NORM (0x1F * VISMONO_FAC_RED + 0x1F * VISMONO_FAC_GREEN + 0x1F * VISMONO_FAC_BLUE)
 
-extern Gfx D_0E0001C8[];
-
 void VisMono_Init(VisMono* this) {
     bzero(this, sizeof(VisMono));
     this->unk_00 = 0;
@@ -40,7 +38,7 @@ void VisMono_Init(VisMono* this) {
 }
 
 void VisMono_Destroy(VisMono* this) {
-    SystemArena_Free(this->monoDL);
+    SystemArena_Free(this->dList);
 }
 
 void VisMono_DesaturateTLUT(u16* tlut) {
@@ -143,8 +141,8 @@ void VisMono_Draw(VisMono* this, Gfx** gfxp) {
         VisMono_DesaturateTLUT(tlut);
     }
 
-    if (this->monoDL) {
-        dList = this->monoDL;
+    if (this->dList) {
+        dList = this->dList;
     } else {
         dList = Graph_DlistAlloc(&gfx, VISMONO_DLSIZE * sizeof(Gfx));
         dListEnd = VisMono_DesaturateDList(dList);
@@ -153,7 +151,7 @@ void VisMono_Draw(VisMono* this, Gfx** gfxp) {
     gDPPipeSync(gfx++);
 
     if (this->setScissor == true) {
-        gSPDisplayList(gfx++, D_0E0001C8);
+        gSPDisplayList(gfx++, D_0E000000.setScissor);
     }
 
     gDPSetColor(gfx++, G_SETPRIMCOLOR, this->primColor.rgba);
@@ -174,8 +172,8 @@ void VisMono_DrawOld(VisMono* this) {
         VisMono_DesaturateTLUT(this->tlut);
     }
 
-    if (this->monoDL == NULL) {
-        this->monoDL = SystemArena_Malloc(VISMONO_DLSIZE * sizeof(Gfx));
-        VisMono_DesaturateDList(this->monoDL);
+    if (this->dList == NULL) {
+        this->dList = SystemArena_Malloc(VISMONO_DLSIZE * sizeof(Gfx));
+        VisMono_DesaturateDList(this->dList);
     }
 }
