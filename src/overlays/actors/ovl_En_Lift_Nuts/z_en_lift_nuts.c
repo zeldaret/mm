@@ -18,11 +18,13 @@ void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AE9F70(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA044(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEA0B4(EnLiftNuts* this);
 void func_80AEA128(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA1A0(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEAC64(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEACF8(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEAF14(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEAF8C(EnLiftNuts* this);
 void func_80AEAFA0(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB148(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx);
@@ -31,6 +33,7 @@ void func_80AEB428(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB684(EnLiftNuts* this);
 void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB828(EnLiftNuts* this);
 void func_80AEB8A4(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB934(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB9E0(EnLiftNuts* this, GlobalContext* globalCtx);
@@ -112,32 +115,36 @@ void func_80AE9A80(EnLiftNuts* this, GlobalContext* globalCtx) {
 
 s32 D_80AEBF6C = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AE9AC4.s")
-
-/*
+// Most likely a fake match
 s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
+    s32* temp = &D_80AEBF6C;
+    s32 temp2;
+
     switch (arg1) {
         case 0:
-            if (D_80AEBF6C) {
+            if (*temp == 0) {
                 return 1;
             }
+            break;
         case 1:
-            if (D_80AEBF6C == 0) {
+            if (*temp == 0) {
                 this->unk_34E = 1;
                 D_80AEBF6C = 1;
                 return 1;
             }
+            break;
         case 2:
-            if (D_80AEBF6C == 1) {
+            if (*temp == (temp2 = 1)) {
                 this->unk_34E = 0;
                 D_80AEBF6C = 0;
                 return 1;
             }
+            break;
         default:
-            return 0;
+            break;
     }
+    return 0;
 }
-*/
 
 UNK_TYPE D_80AEBF70 = 0x00000000;
 
@@ -175,7 +182,17 @@ s32 func_80AE9B8C() {
 
     return ret;
 }
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AE9BCC.s")
+
+void func_80AE9BCC(EnLiftNuts* this, GlobalContext* globalCtx) {
+
+    if ((this->actionFunc != func_80AEB934) && (this->actionFunc != func_80AEB8A4) &&
+        (this->actionFunc != func_80AEACF8) && (this->actionFunc != func_80AEAC64) &&
+        (this->actionFunc != func_80AEA044) && (this->actionFunc != func_80AEB598) &&
+        (this->actionFunc != func_80AEB698) && (func_80AE9B4C(0, 3) == 0) && (func_80AE9B8C() == 3) &&
+        (gSaveContext.save.playerForm == 3) && (this->actor.xzDistToPlayer < 150.0f)) {
+        func_80AEB828(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/EnLiftNuts_Init.s")
 
@@ -196,17 +213,47 @@ void func_80AE9F70(EnLiftNuts* this, GlobalContext* globalCtx) {
     if (this->unk_354 < 40) {
         this->unk_354++;
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_80AEA0B4();
+        func_80AEA0B4(this);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AE9FC8.s")
+void func_80AE9FC8(EnLiftNuts* this) {
+    if (this->actionFunc == func_80AEA1A0) {
+        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 17);
+    } else {
+        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 3);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA044.s")
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    this->actionFunc = func_80AEA044;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA0B4.s")
+void func_80AEA044(EnLiftNuts* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80AE9F28(this);
+    } else if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        func_80AEB9E0(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA128.s")
+void func_80AEA0B4(EnLiftNuts* this) {
+    if (func_80AE9B4C(0, 1)) {
+        this->actionFunc = func_80AEA1A0;
+    } else {
+        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 2);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        this->actionFunc = func_80AEA128;
+    }
+}
+
+void func_80AEA128(EnLiftNuts* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 15);
+        this->actionFunc = func_80AEA1A0;
+    } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
+        func_80AEB9E0(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA1A0.s")
 
@@ -226,15 +273,42 @@ void func_80AEABF0(EnLiftNuts* this) {
     this->actionFunc = func_80AEAC64;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAC64.s")
+void func_80AEAC64(EnLiftNuts *this, GlobalContext *globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if ((this->textId == 0x27EE) || (this->textId == 0x27F4) || (this->textId == 0x27F5)) {
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 10);
+        } else {
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 0);
+        }
+        this->actionFunc = func_80AEACF8;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEACF8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAEAC.s")
+void func_80AEAEAC(EnLiftNuts* this) {
+    this->actor.speedXZ = 2.0f;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+    func_80AE9AC4(this, 1);
+    func_80AE9B4C(1, 1);
+    this->actionFunc = func_80AEAF14;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAF14.s")
+void func_80AEAF14(EnLiftNuts *this, GlobalContext *globalCtx) {
+    f32 dist;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAF8C.s")
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 10, 0x1000, 0x500);
+    dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speedXZ);
+    this->actor.world.pos.y += this->actor.gravity;
+    
+    if (dist == 0.0f) {
+        func_80AEAF8C(this);
+    }
+}
+
+void func_80AEAF8C(EnLiftNuts* this) {
+    this->actionFunc = func_80AEAFA0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAFA0.s")
 
