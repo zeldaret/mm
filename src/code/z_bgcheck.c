@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
 
@@ -6,11 +5,11 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-static u32 sWallFlags[32] = {
+u32 sWallFlags[32] = {
     0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-static u16 sSurfaceTypeSfx[] = {
+u16 sSurfaceTypeSfx[] = {
     /* 0x00 */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
     /* 0x01 */ NA_SE_PL_WALK_SAND - SFX_FLAG,
     /* 0x02 */ NA_SE_PL_WALK_CONCRETE - SFX_FLAG,
@@ -28,7 +27,7 @@ static u16 sSurfaceTypeSfx[] = {
     /* 0x0E */ NA_SE_PL_WALK_SNOW - SFX_FLAG
 };
 
-static u8 D_801B46C0[] = {
+u8 D_801B46C0[] = {
     /* 0x00 */ 1,
     /* 0x01 */ 1,
     /* 0x02 */ 0,
@@ -46,7 +45,7 @@ static u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-static s16 sSmallMemScenes[] = {
+s16 sSmallMemScenes[] = {
     SCENE_F01,
 };
 
@@ -55,7 +54,7 @@ typedef struct {
     u32 memSize;
 } BgCheckSceneMemEntry;
 
-static BgCheckSceneMemEntry sSceneMemList[] = {
+BgCheckSceneMemEntry sSceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
 };
 
@@ -249,20 +248,20 @@ void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
         phi_f12 = 0.0f;
     }
     dest->xx = z_f14;
-    dest->xy = (-nx) * phi_f14;
-    dest->xz = (-nx) * phi_f12;
-    dest->yx = nx;
+    dest->yx = (-nx) * phi_f14;
+    dest->zx = (-nx) * phi_f12;
+    dest->xy = nx;
     dest->yy = ny;
-    dest->yz = nz;
-    dest->zx = 0.0f;
-    dest->zy = -phi_f12;
+    dest->zy = nz;
+    dest->xz = 0.0f;
+    dest->yz = -phi_f12;
     dest->zz = phi_f14;
-    dest->wx = tx;
-    dest->wy = ty;
-    dest->wz = tz;
-    dest->xw = 0.0f;
-    dest->yw = 0.0f;
-    dest->zw = 0.0f;
+    dest->xw = tx;
+    dest->yw = ty;
+    dest->zw = tz;
+    dest->wx = 0.0f;
+    dest->wy = 0.0f;
+    dest->wz = 0.0f;
     dest->ww = 1.0f;
 }
 
@@ -4209,9 +4208,6 @@ s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
 }
 
-/**
- * unused
- */
 u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
@@ -4441,11 +4437,13 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
     return false;
 }
 
+// boolean
 s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                          WaterBox** outWaterBox) {
-    WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
+    return WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
 }
 
+// boolean
 s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                            WaterBox** outWaterBox) {
     s32 bgId;

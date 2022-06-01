@@ -50,7 +50,7 @@ const ActorInit En_Bom_Bowl_Man_InitVars = {
 };
 
 static AnimationHeader* sAnimations[] = {
-    &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+    &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
     &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
     &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C, &object_cs_Anim_003EE4,
     &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8, &object_cs_Anim_001708,
@@ -76,7 +76,7 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, 21);
     this->unk_2F6 = ENBOMBOWLMAN_GET_F0(&this->actor);
     this->unk_2F4 = ENBOMBOWLMAN_GET_F(&this->actor);
@@ -94,10 +94,10 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = func_8013D648(globalCtx, this->unk_29A, 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.entranceIndex == 0xD220) && (gSaveContext.weekEventReg[73] & 0x80) &&
+    if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
         !CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
@@ -157,7 +157,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 
 void func_809C4B6C(EnBomBowlMan* this) {
     if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
-        if (!func_8013D68C(this->path, this->unk_298, &this->unk_2A0)) {
+        if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -173,9 +173,9 @@ void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
     func_809C4B50(this);
     func_809C493C(this, 0, 1.0f);
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.bomberCode); i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
-        code = gSaveContext.bomberCode[i];
+        code = gSaveContext.save.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
             this->unk_2D8[code] = this;
@@ -203,8 +203,8 @@ void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
     func_809C493C(this, 3, 1.0f);
     this->unk_2D4 = this->actor.yawTowardsPlayer;
     this->unk_290 = this->actor.yawTowardsPlayer;
-    gSaveContext.weekEventReg[73] &= (u8)~0x10;
-    gSaveContext.weekEventReg[85] &= (u8)~2;
+    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
+    gSaveContext.save.weekEventReg[85] &= (u8)~2;
     this->unk_29C = 0;
     this->actionFunc = func_809C4DA4;
 }
@@ -238,7 +238,7 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
         s32 pad;
         s32 sp28 = false;
@@ -338,13 +338,13 @@ void func_809C51B4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x56;
         gSaveContext.nextTransition = 3;
-        gSaveContext.weekEventReg[75] &= (u8)~0x40;
+        gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            gSaveContext.weekEventReg[84] |= 0x80;
-            gSaveContext.weekEventReg[77] &= (u8)~2;
+            gSaveContext.save.weekEventReg[84] |= 0x80;
+            gSaveContext.save.weekEventReg[77] &= (u8)~2;
         } else {
-            gSaveContext.weekEventReg[73] |= 0x20;
-            gSaveContext.weekEventReg[85] &= (u8)~1;
+            gSaveContext.save.weekEventReg[73] |= 0x20;
+            gSaveContext.save.weekEventReg[85] &= (u8)~1;
         }
     }
 }
@@ -402,7 +402,7 @@ void func_809C5408(EnBomBowlMan* this, GlobalContext* globalCtx) {
 
 void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
     this->actor.textId = 0x730;
-    if (!(gSaveContext.weekEventReg[85] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[85] & 2)) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
@@ -411,7 +411,7 @@ void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
@@ -484,8 +484,8 @@ void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx) {
             (this->path != NULL)) {
             this->unk_298++;
             if (this->unk_298 >= this->path->count) {
-                gSaveContext.weekEventReg[84] |= 0x80;
-                gSaveContext.weekEventReg[83] &= (u8)~4;
+                gSaveContext.save.weekEventReg[84] |= 0x80;
+                gSaveContext.save.weekEventReg[83] &= (u8)~4;
                 ActorCutscene_Stop(this->unk_2D6);
                 Actor_MarkForDeath(&this->actor);
             } else {

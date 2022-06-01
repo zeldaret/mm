@@ -162,7 +162,7 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->state = MAG_STATE_FADE_IN_MASK;
         sInputDelayTimer = 20;
         gSaveContext.fadeDuration = 1;
-        gSaveContext.unk_3F51 = 255;
+        gSaveContext.fadeSpeed = 255;
     }
 
     Font_LoadOrderedFont(&this->font);
@@ -246,7 +246,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     this->unk11F02 = 30;
                     sInputDelayTimer = 20;
                     gSaveContext.fadeDuration = 1;
-                    gSaveContext.unk_3F51 = 255;
+                    gSaveContext.fadeSpeed = 255;
                 }
             }
         } else {
@@ -392,7 +392,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                                 globalCtx->sceneLoadFlag = 0x14;
                                 globalCtx->unk_1887F = 2;
                                 globalCtx->nextEntranceIndex = 0x1C00;
-                                gSaveContext.cutscene = 0;
+                                gSaveContext.save.cutscene = 0;
                                 gSaveContext.sceneSetupIndex = 0;
                             }
                             this->unk11F54 = 15;

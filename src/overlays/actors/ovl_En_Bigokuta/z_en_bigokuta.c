@@ -105,7 +105,7 @@ void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
-    if (gSaveContext.weekEventReg[20] & 2 ||
+    if (gSaveContext.save.weekEventReg[20] & 2 ||
         ((this->actor.params != 0xFF) && Flags_GetSwitch(globalCtx, this->actor.params))) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -636,12 +636,12 @@ void EnBigokuta_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (limbPosIndex != -1) {
         if (limbPosIndex < 6) {
-            Matrix_GetStateTranslationAndScaledX(800.0f, &this->limbPos[limbPosIndex]);
+            Matrix_MultVecX(800.0f, &this->limbPos[limbPosIndex]);
         } else if (limbPosIndex < 8) {
-            Matrix_GetStateTranslation(&this->limbPos[limbPosIndex]);
+            Matrix_MultZero(&this->limbPos[limbPosIndex]);
         } else {
             for (i = 0; i < ARRAY_COUNT(D_80AC45D0); i++) {
-                Matrix_MultiplyVector3fByState(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
+                Matrix_MultVec3f(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
             }
         }
     }

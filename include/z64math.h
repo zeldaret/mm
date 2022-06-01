@@ -1,13 +1,18 @@
-#ifndef _Z64MATH_H_
-#define _Z64MATH_H_
+#ifndef Z64MATH_H
+#define Z64MATH_H
 
 #include "ultra64.h"
 
 #define VEC_SET(V,X,Y,Z) V.x=X;V.y=Y;V.z=Z
 
 typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 z;
+} Vec2s; // size = 0x04
+
+typedef struct {
     /* 0x00 */ f32 x;
-    /* 0x04 */ f32 y;
+    /* 0x04 */ f32 z;
 } Vec2f; // size = 0x08
 
 typedef struct {
@@ -44,6 +49,10 @@ typedef struct {
     /* 0x0C */ f32   radius;
 } Spheref; // size = 0x10
 
+/* 
+The plane paramaters are of form `ax + by + cz + d = 0` 
+where `(a,b,c)` is the plane's normal vector and d is the originDist
+ */
 typedef struct {
     /* 0x00 */ Vec3f normal;
     /* 0x0C */ f32   originDist;
@@ -102,7 +111,7 @@ typedef struct {
 
 // Trig macros
 #define DEGF_TO_BINANG(degreesf) (s16)(degreesf * 182.04167f + .5f)
-#define RADF_TO_BINANG(radf) (s16)(radf * (32768.0f / M_PI))
+#define RADF_TO_BINANG(radf) (s16)(radf * (0x8000 / M_PI))
 #define RADF_TO_DEGF(radf) (radf * (180.0f / M_PI))
 #define DEGF_TO_RADF(degf) (degf * (M_PI / 180.0f))
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
@@ -110,7 +119,7 @@ typedef struct {
 #define BINANG_ADD(a, b) ((s16)(a + b))
 #define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
 #define BINANG_TO_DEGF(binang) ((f32)binang * (360.0001525f / 65535.0f))
-#define BINANG_TO_RAD(binang) (((f32)binang / 32768.0f) * M_PI)
+#define BINANG_TO_RAD(binang) (((f32)binang / 0x8000) * M_PI)
 
 // Vector macros
 #define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))

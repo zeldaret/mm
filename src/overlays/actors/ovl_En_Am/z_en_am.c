@@ -196,7 +196,7 @@ void EnAm_SpawnEffects(EnAm* this, GlobalContext* globalCtx) {
         effectPos.x = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.x;
         effectPos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + 40.0f);
         effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
-        EffectSsKiraKira_SpawnSmall(globalCtx, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
+        EffectSsKirakira_SpawnSmall(globalCtx, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WALK);
     Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
@@ -551,7 +551,7 @@ void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         phi_s3 = 0;
     }
     for (i = 0; i < phi_s3; i++, phi_s2++, phi_s1++) {
-        Matrix_MultiplyVector3fByState(phi_s1, phi_s2);
+        Matrix_MultVec3f(phi_s1, phi_s2);
     }
 }
 

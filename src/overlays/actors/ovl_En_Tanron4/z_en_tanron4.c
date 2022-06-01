@@ -73,7 +73,7 @@ void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
 
-        if ((gSaveContext.time > CLOCK_TIME(20, 0)) || (gSaveContext.time < CLOCK_TIME(4, 0))) {
+        if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
             this->timeInfluence = 1500.0f;
             thisx->world.pos.y += 1500.0f;
         }
@@ -99,7 +99,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, GlobalContext* globalCtx) {
 
     // `timeInfluence` controls both the height of the seagulls and when they are visible.
     // They fly higher in the sky as the night goes on, and they disapear as dawn approaches.
-    if ((gSaveContext.time > CLOCK_TIME(20, 0)) || (gSaveContext.time < CLOCK_TIME(4, 0))) {
+    if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
         Math_ApproachF(&this->timeInfluence, 1500.0f, 1.0f, 1.0f);
     } else {
         Math_ApproachZeroF(&this->timeInfluence, 1.0f, 1.0f);
@@ -276,7 +276,7 @@ void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron4* this = THIS;
 
     if (this->timeInfluence < 1400.0f) {
-        Matrix_InsertZRotation_s(this->roll, MTXMODE_APPLY);
+        Matrix_RotateZS(this->roll, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, NULL, NULL, &this->actor);
     }

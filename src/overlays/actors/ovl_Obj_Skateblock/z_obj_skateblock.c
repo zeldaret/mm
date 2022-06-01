@@ -159,7 +159,7 @@ s32 func_80A21370(ObjSkateblock* this, GlobalContext* globalCtx) {
         floor->bgId = BG_ACTOR_MAX;
 
         sp8C.x = this->dyna.actor.world.pos.x + ((D_80A22A1C[i].x * this->dyna.actor.scale.x) + D_80A22A44[i].x);
-        sp8C.z = this->dyna.actor.world.pos.z + ((D_80A22A1C[i].y * this->dyna.actor.scale.z) + D_80A22A44[i].y);
+        sp8C.z = this->dyna.actor.world.pos.z + ((D_80A22A1C[i].z * this->dyna.actor.scale.z) + D_80A22A44[i].z);
 
         floor->height =
             BgCheck_EntityRaycastFloor6(&globalCtx->colCtx, &floor->poly, &floor->bgId, &this->dyna.actor, &sp8C, 0.0f);
@@ -244,7 +244,7 @@ s32 func_80A216D4(ObjSkateblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f
 
     for (i = 0; i < ARRAY_COUNT(D_80A22A6C); i++) {
         spBC.x = (D_80A22A6C[i].x * this->dyna.actor.scale.x) + D_80A22A94[i].x;
-        spBC.y = (D_80A22A6C[i].y * this->dyna.actor.scale.y) + D_80A22A94[i].y;
+        spBC.y = (D_80A22A6C[i].z * this->dyna.actor.scale.y) + D_80A22A94[i].z;
         spBC.z = 0.0f;
 
         func_80A212F0(&spD4, &spBC, sp96);

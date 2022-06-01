@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_grass.h"
+#include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -85,7 +86,7 @@ s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void func_809A91FC(MtxF* matrix) {
     s32 i;
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = &temp->xx;
     f32* tmp2 = &matrix->xx;
 
@@ -118,7 +119,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0527F0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
 
         spB0.x = ptr->unk_00.x + (ptr2->x * 16.0f);
         spB0.y = (ptr->unk_00.y + (ptr2->y * 16.0f)) + 10.0f;
@@ -129,7 +130,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0528B0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
     }
 }
 
@@ -266,7 +267,7 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
                                   Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
 
                             if (ABS_ALT(yaw) < 0x2000) {
-                                this->unk_3294 = &ptr->unk_0C[j].unk_00;
+                                this->unk_3294 = &ptr->unk_0C[j];
                             }
                         }
                     }
@@ -456,7 +457,7 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
 
                 if ((ptr2->unk_0F & 1) && (ptr2->unk_10 == 255)) {
                     sp70.y = ptr2->unk_0C;
-                    Matrix_SetStateRotationAndTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp70);
+                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp70);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
                     if (ptr2->unk_0F & 2) {
                         func_809A91FC(&this->unk_2F88[j]);
@@ -496,7 +497,7 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
 
                 if ((ptr2->unk_0F & 1) && (ptr2->unk_10 > 0) && (ptr2->unk_10 < 255)) {
                     sp6C.y = ptr2->unk_0C;
-                    Matrix_SetStateRotationAndTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
+                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

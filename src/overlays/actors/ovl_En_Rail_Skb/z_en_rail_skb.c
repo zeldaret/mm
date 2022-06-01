@@ -194,7 +194,7 @@ void func_80B708C0(EnRailSkb* this, GlobalContext* globalCtx) {
 s32 func_80B70AB4(Vec2f arg0, Vec2f arg1) {
     s32 phi_v1;
 
-    if ((arg1.x * arg0.y) < (arg0.x * arg1.y)) {
+    if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
         phi_v1 = 1;
     } else {
         phi_v1 = -1;
@@ -213,9 +213,9 @@ s32 func_80B70B04(EnRailSkb* this, Vec3f pos) {
     s32 j;
 
     sp60.x = this->unk_230[0].z - pos.z;
-    sp60.y = this->unk_230[0].x - pos.x;
+    sp60.z = this->unk_230[0].x - pos.x;
     sp58.x = this->unk_230[1].z - pos.z;
-    sp58.y = this->unk_230[1].x - pos.x;
+    sp58.z = this->unk_230[1].x - pos.x;
     j = 1;
     temp_s3 = func_80B70AB4(sp60, sp58);
 
@@ -229,9 +229,9 @@ s32 func_80B70B04(EnRailSkb* this, Vec3f pos) {
         }
 
         sp60.x = this->unk_230[i].z - pos.z;
-        sp60.y = this->unk_230[i].x - pos.x;
+        sp60.z = this->unk_230[i].x - pos.x;
         sp58.x = this->unk_230[j].z - pos.z;
-        sp58.y = this->unk_230[j].x - pos.x;
+        sp58.z = this->unk_230[j].x - pos.x;
 
         if (func_80B70AB4(sp60, sp58) != temp_s3) {
             ret = false;
@@ -534,7 +534,7 @@ void func_80B717E0(EnRailSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80B71650(this);
             }
             break;
@@ -700,7 +700,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_3F2 = 1;
     }
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_400) {
             case 0x13EC:
                 Message_StartTextbox(globalCtx, 0x13ED, &this->actor);
@@ -753,7 +753,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B72100(EnRailSkb* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
             Message_StartTextbox(globalCtx, 0x13F1, &this->actor);
@@ -1099,9 +1099,9 @@ s32 EnRailSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     } else if (limbIndex == 10) {
         Vec3f sp24 = { 0.0f, 1000.0f, 0.0f };
 
-        Matrix_MultiplyVector3fByState(&sp24, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp24, &this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3FA == 1)) {
-        Matrix_InsertZRotation_s(1820, MTXMODE_APPLY);
+        Matrix_RotateZS(1820, MTXMODE_APPLY);
     }
 
     if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_402 & 2)) {
@@ -1129,10 +1129,10 @@ void EnRailSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
                 (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
                 (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-                Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+                Matrix_MultZero(&this->limbPos[this->limbCount]);
                 this->limbCount++;
             } else if ((limbIndex == 11) && !(this->unk_402 & 2)) {
-                Matrix_MultiplyVector3fByState(&D_80B734D0, &this->limbPos[this->limbCount]);
+                Matrix_MultVec3f(&D_80B734D0, &this->limbPos[this->limbCount]);
                 this->limbCount++;
             }
         }
