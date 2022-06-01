@@ -33,7 +33,6 @@
 #include "z64effect.h"
 #include "z64item.h"
 #include "z64light.h"
-#include "z64load.h"
 #include "z64math.h"
 #include "z64object.h"
 #include "z64ocarina.h"

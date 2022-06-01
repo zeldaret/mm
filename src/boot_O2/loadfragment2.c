@@ -6,6 +6,7 @@
  */
 #include "global.h"
 #include "system_malloc.h"
+#include "z64load.h"
 
 s32 gLoad2LogSeverity = 2;
 
