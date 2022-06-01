@@ -161,15 +161,15 @@ UNK_TYPE func_80AE9B4C(s32 arg0, s32 arg1) {
 s32 func_80AE9B8C() {
     s32 ret = 0;
 
-    if (gSaveContext.weekEventReg[14] & 0x10) {
+    if (gSaveContext.save.weekEventReg[14] & 0x10) {
         ret = 1;
     }
 
-    if (gSaveContext.weekEventReg[14] & 0x20) {
+    if (gSaveContext.save.weekEventReg[14] & 0x20) {
         ret++;
     }
 
-    if (gSaveContext.weekEventReg[14] & 0x40) {
+    if (gSaveContext.save.weekEventReg[14] & 0x40) {
         ret++;
     }
 
@@ -287,14 +287,14 @@ void func_80AEB584(EnLiftNuts* this) {
 void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        if ((gSaveContext.weekEventReg[14] & 0x10) && (gSaveContext.weekEventReg[14] & 0x20) &&
-            ((gSaveContext.day % 5) == 3) && !(gSaveContext.weekEventReg[14] & 0x80)) {
-            gSaveContext.weekEventReg[14] |= 0x80;
+        if ((gSaveContext.save.weekEventReg[14] & 0x10) && (gSaveContext.save.weekEventReg[14] & 0x20) &&
+            ((gSaveContext.save.day % 5) == 3) && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
+            gSaveContext.save.weekEventReg[14] |= 0x80;
         }
         func_80AEB684(this);
         return;
     }
-    if (this->textId == 0x27F4 && !(gSaveContext.weekEventReg[0xE] & 0x80)) {
+    if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[0xE] & 0x80)) {
         Actor_PickUp(&this->actor, globalCtx, 0xC, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, 5, 500.0f, 100.0f);
@@ -307,8 +307,8 @@ void func_80AEB684(EnLiftNuts* this) {
 
 void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if ((gSaveContext.weekEventReg[0xE] & 0x10) && (gSaveContext.weekEventReg[0xE] & 0x20) &&
-            ((gSaveContext.day % 5) == 3)) {
+        if ((gSaveContext.save.weekEventReg[0xE] & 0x10) && (gSaveContext.save.weekEventReg[0xE] & 0x20) &&
+            ((gSaveContext.save.day % 5) == 3)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 0xD);
             Message_StartTextbox(globalCtx, 0x27F5, &this->actor);
             this->textId = 0x27F5;
@@ -322,15 +322,15 @@ void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx) {
         }
         this->actor.flags &= 0xFFFEFFFF;
         func_80AEABF0(this);
-        switch (gSaveContext.day % 5) {
+        switch (gSaveContext.save.day % 5) {
             case 1:
-                gSaveContext.weekEventReg[0xE] |= 0x10;
+                gSaveContext.save.weekEventReg[0xE] |= 0x10;
                 break;
             case 2:
-                gSaveContext.weekEventReg[0xE] |= 0x20;
+                gSaveContext.save.weekEventReg[0xE] |= 0x20;
                 break;
             case 3:
-                gSaveContext.weekEventReg[0xE] |= 0x40;
+                gSaveContext.save.weekEventReg[0xE] |= 0x40;
                 break;
             default:
                 break;
@@ -455,7 +455,7 @@ s32 func_80AEBC18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void func_80AEBC90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 25) {
-        Matrix_MultiplyVector3fByState(&D_80AEBF7C, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80AEBF7C, &thisx->focus.pos);
     }
 }
 
