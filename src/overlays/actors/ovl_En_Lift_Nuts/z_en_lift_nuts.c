@@ -29,6 +29,7 @@ void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB294(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB428(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB684(EnLiftNuts* this);
 void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB8A4(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB934(EnLiftNuts* this, GlobalContext* globalCtx);
@@ -251,13 +252,58 @@ void func_80AEABF0(EnLiftNuts* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB3E0.s")
 
+#if 0
+void func_80AEB428(EnLiftNuts *this, GlobalContext *globalCtx) {
+    if (this->unk_354 == 10) {
+        if (gSaveContext.unk_3DE0[4] >= 0 || ((gSaveContext.unk_E18[gSaveContext.day % 5]) < this->unk_354)) {
+            Message_StartTextbox(globalCtx, 0x27EA, &this->actor);
+            this->textId = 0x27EA;
+        } else if (*this->ptr_1EC == 300) {
+            Message_StartTextbox(globalCtx, 0x27F8, &this->actor);
+            this->textId = 0x27F8;
+        } else {
+            Message_StartTextbox(globalCtx, 0x27EC, &this->actor);
+            this->textId = 0x27EC;
+        }
+    } else if (this->unk_354 == 30) {
+        gSaveContext.respawn[0].entranceIndex = 0x3610;
+        gSaveContext.eventInf[3] &= 0xEF;
+        gSaveContext.nextCutsceneIndex = 0;
+        func_80169EFC(&globalCtx->state);
+        gSaveContext.respawnFlag = -2;
+        globalCtx->unk_1887F = 0x40;
+        gSaveContext.nextTransition = 2;
+    }
+    this->unk_354 += 1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB428.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB584.s")
+void func_80AEB584(EnLiftNuts* this) {
+    this->actionFunc = func_80AEB598;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB598.s")
+void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx) {
+    if (Actor_HasParent(&this->actor, globalCtx)) {
+        this->actor.parent = NULL;
+        if ((gSaveContext.weekEventReg[14] & 0x10) && (gSaveContext.weekEventReg[14] & 0x20) &&
+            ((gSaveContext.day % 5) == 3) && !(gSaveContext.weekEventReg[14] & 0x80)) {
+            gSaveContext.weekEventReg[14] |= 0x80;
+        }
+        func_80AEB684(this);
+        return;
+    }
+    if (this->textId == 0x27F4 && !(gSaveContext.weekEventReg[0xE] & 0x80)) {
+        Actor_PickUp(&this->actor, globalCtx, 0xC, 500.0f, 100.0f);
+    } else {
+        Actor_PickUp(&this->actor, globalCtx, 5, 500.0f, 100.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB684.s")
+void func_80AEB684(EnLiftNuts* this) {
+    this->actionFunc = func_80AEB698;
+}
 
 void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {

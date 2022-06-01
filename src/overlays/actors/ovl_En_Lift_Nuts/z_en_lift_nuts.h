@@ -19,7 +19,7 @@ typedef struct EnLiftNuts {
     /* 0x01F0 */ Vec3s jointTable[28];
     /* 0x0298 */ Vec3s morphTable[28];
     /* 0x0340 */ char unk_340[0xC];
-    /* 0x034C */ u16 textId;
+    /* 0x034C */ s16 textId;
     /* 0x034E */ s16 unk_34E;
     /* 0x0350 */ char unk_350[0x4];
     /* 0x0354 */ s16 unk_354;
