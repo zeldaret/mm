@@ -3,6 +3,8 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
+
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -872,9 +874,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 }
 
 void func_80B442E4(EnInvadepoh* this) {
-    s32 pad;
-    s32 sp18 = gSaveContext.save.time;
-    s32 temp_v1_2 = sp18 - func_80B43A24(this->actor.params & 7);
+    s32 temp_v1_2 = ((void)0, (s32)gSaveContext.save.time) - func_80B43A24(this->actor.params & 7);
 
     if (D_80B4E940 == 1) {
         this->clockTime = 0.0f;
@@ -999,6 +999,7 @@ void func_80B44700(EnInvadepoh* this) {
         this->clockTime = 1.0f;
     } else {
         f32 new_var = 0.00153374229558f;
+
         this->clockTime = (currentTime + new_var4) * new_var;
         this->clockTime = CLAMP(this->clockTime, 0.0f, 1.0f);
     }
@@ -1324,11 +1325,11 @@ void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
-    MtxF* sysMatrix = Matrix_GetCurrentState();
+    MtxF* sysMatrix = Matrix_GetCurrent();
 
-    sysMatrix->wx = vec->x;
-    sysMatrix->wy = vec->y;
-    sysMatrix->wz = vec->z;
+    sysMatrix->xw = vec->x;
+    sysMatrix->yw = vec->y;
+    sysMatrix->zw = vec->z;
 }
 
 s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 arg3) {
@@ -1576,7 +1577,7 @@ void func_80B45EC8(EnInvadepoh* this, GlobalContext* globalCtx, s32 arg2) {
         spA8.y = ((Rand_ZeroOne() * 180.0f) + this->actor.world.pos.y) - 90.0f;
         spA8.z = (spA8.z * 100.0f) + this->actor.world.pos.z;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &spA8, &sp9C, &sp90, &D_80B4EC18, &D_80B4EC1C, 6000, -40);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &spA8, &sp9C, &sp90, &D_80B4EC18, &D_80B4EC1C, 6000, -40);
     }
 }
 
@@ -2387,16 +2388,16 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 0x32);
     if (this->actor.child != NULL) {
-        Matrix_StatePush();
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                              &this->actor.shape.rot);
-        Matrix_InsertTranslation(0, 57.0f, -36.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&this->actor.child->world.pos);
-        Matrix_CopyCurrentState(&unkMtx);
-        func_8018219C(&unkMtx, &this->actor.child->shape.rot, 0);
-        Matrix_StatePop();
+        Matrix_Push();
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                     &this->actor.shape.rot);
+        Matrix_Translate(0, 57.0f, -36.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
+        Matrix_RotateZS(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
+        Matrix_MultZero(&this->actor.child->world.pos);
+        Matrix_Get(&unkMtx);
+        Matrix_MtxFToYXZRot(&unkMtx, &this->actor.child->shape.rot, false);
+        Matrix_Pop();
     }
 }
 
@@ -4313,7 +4314,7 @@ void func_80B4D7B8(GlobalContext* globalCtx) {
             temp_v0 = globalCtx->gameplayFrames;
             temp_s5 = (temp_v0 + ((0x10 * i) & 0xFFU)) & 0x7F;
             temp_s6 = (u8)(temp_v0 * -0xF);
-            Matrix_InsertTranslation(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
+            Matrix_Translate(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, phi_s2->unk2);
@@ -4342,22 +4343,22 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if ((limbIndex == 12) && (this->alienBeamAlpha != 0)) {
-        Matrix_StatePush();
-        Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
-        Matrix_RotateY(-0x3830, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
+        Matrix_RotateYS(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&D_80B502A0);
-        Matrix_StatePop();
+        Matrix_Get(&D_80B502A0);
+        Matrix_Pop();
     } else if ((limbIndex == 13) && (this->alienBeamAlpha != 0)) {
-        Matrix_StatePush();
-        Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
-        Matrix_RotateY(-0x47D0, MTXMODE_APPLY);
+        Matrix_Push();
+        Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
+        Matrix_RotateYS(-0x47D0, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&D_80B502E0);
-        Matrix_StatePop();
+        Matrix_Get(&D_80B502E0);
+        Matrix_Pop();
     }
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80B4EE24, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B4EE24, &this->actor.focus.pos);
     }
 }
 
@@ -4368,7 +4369,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(spCC);
     func_8012C2DC(spCC);
-    Matrix_StatePush();
+    Matrix_Push();
     if (this->drawAlien) {
         Gfx* new_var6;
         Gfx* spBC;
@@ -4398,10 +4399,10 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             gDPPipeSync(spBC++);
             gDPSetPrimColor(spBC++, 0, 255, 240, 180, 100, 60);
             gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * (150.0f / 255.0f));
-            Matrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
+            Matrix_Mult(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(spBC++, object_uch_DL_000080);
-            Matrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
+            Matrix_Mult(&D_80B502E0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(spBC++, object_uch_DL_000080);
             spB8->polyXlu.p = spBC;
@@ -4409,8 +4410,8 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->drawAlienDeathEffect) {
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
-                                              this->actor.world.pos.z, &this->actor.shape.rot);
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f, this->actor.world.pos.z,
+                                     &this->actor.shape.rot);
         Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z,
                      MTXMODE_APPLY);
         gSPMatrix(spCC->polyXlu.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4430,12 +4431,12 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetDither(gfx++, G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
+        Matrix_MultVecZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
         sp74.z = thisx->world.pos.z + sp80.z;
-        Matrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
+        Matrix_Translate(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
         alpha2 = this->alienAlpha * (100.0f / 255.0f);
         gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
@@ -4449,7 +4450,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
     CLOSE_DISPS(spCC);
 }
 
@@ -4501,7 +4502,7 @@ void func_80B4E2AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 14) {
-        Matrix_MultiplyVector3fByState(&D_80B4EE30, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B4EE30, &this->actor.focus.pos);
     }
 }
 
@@ -4521,16 +4522,16 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
     Vec3f sp5C;
 
-    Matrix_StatePush();
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
-    Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
-    Matrix_StatePop();
+    Matrix_Push();
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
+    Matrix_MultVecZ(200.0f, &sp5C);
+    Matrix_Pop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-    Matrix_InsertZRotation_s(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+    Matrix_RotateZS(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4562,7 +4563,7 @@ void func_80B4E61C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_GetStateTranslationAndScaledY(20.0f, &this->actor.focus.pos);
+        Matrix_MultVecY(20.0f, &this->actor.focus.pos);
     }
 }
 
@@ -4596,7 +4597,7 @@ void func_80B4E784(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 

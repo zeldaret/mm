@@ -19,9 +19,24 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BD36B8(EnAh* this, GlobalContext* globalCtx);
 void func_80BD3768(EnAh* this, GlobalContext* globalCtx);
 
-s32 D_80BD3DB0[] = {
-    0x0A00611D, 0x0C000303, 0x0400010C, 0x00021102, 0x15001700, 0x08003220, 0x03040001,
-    0x05040003, 0x050A0010, 0x120C0003, 0x0D021200, 0x06000105, 0x0E120006, 0x00020505,
+static u8 D_80BD3DB0[] = {
+    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x20 - 0x0F),
+    /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 23, 0, 0x1D - 0x15),
+    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x1C - 0x19),
+    /* 0x19 */ SCHEDULE_CMD_RET_VAL_L(1),
+    /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x1D */ SCHEDULE_CMD_RET_VAL_L(3),
+    /* 0x20 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x21 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x37 - 0x25),
+    /* 0x25 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x36 - 0x29),
+    /* 0x29 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x30 - 0x2F),
+    /* 0x2F */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x30 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
+    /* 0x36 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
 };
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
@@ -361,7 +376,7 @@ s32 func_80BD3320(EnAh* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId
     return ret;
 }
 
-s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
@@ -373,7 +388,7 @@ s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
@@ -385,7 +400,7 @@ s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80BD3320(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -404,12 +419,12 @@ s32 func_80BD3484(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80BD3548(EnAh* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
     this->unk_2D8 = 0;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         default:
             ret = false;
             break;
@@ -457,19 +472,18 @@ void func_80BD3658(EnAh* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD36B8(EnAh* this, GlobalContext* globalCtx) {
-    s32 pad;
-    struct_80133038_arg2 sp18;
+    ScheduleResult sp18;
 
-    if (!func_80133038(globalCtx, D_80BD3DB0, &sp18) ||
-        ((this->unk_1DC != sp18.unk0) && !func_80BD3548(this, globalCtx, &sp18))) {
+    if (!Schedule_RunScript(globalCtx, D_80BD3DB0, &sp18) ||
+        ((this->unk_1DC != sp18.result) && !func_80BD3548(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp18.unk0 = 0;
+        sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk_1DC = sp18.unk0;
+    this->unk_1DC = sp18.result;
     func_80BD3658(this, globalCtx);
 }
 
@@ -550,53 +564,53 @@ void EnAh_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAh* this = THIS;
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&D_80BD3F00, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BD3F00, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }
 
-void func_80BD3AF8(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAh_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAh* this = THIS;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (!(this->unk_2D8 & 0x80)) {
         if (this->unk_2D8 & 0x20) {
-            phi_v0 = 1;
+            overrideRot = true;
         } else {
-            phi_v0 = 0;
+            overrideRot = false;
         }
-        phi_v1 = 1;
+        stepRot = true;
     } else {
-        phi_v1 = 0;
-        phi_v0 = 0;
+        stepRot = false;
+        overrideRot = false;
     }
 
     if (limbIndex == 7) {
-        func_8013AD9C(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
-                      BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
-                      this->unk_200, phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
+                        BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
+                        this->unk_200, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8[0].x, this->unk_1E8[0].y, this->unk_1E8[0].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_200[0].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_200[0].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_200[0].z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_200[0].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_200[0].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_200[0].z, MTXMODE_APPLY);
+        Matrix_Push();
     } else if (limbIndex == 2) {
-        func_8013AD9C(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
-                      &this->unk_1E8[1], &this->unk_200[1], phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1E8[1].x, this->unk_1E8[1].y, this->unk_1E8[1].z, MTXMODE_NEW);
+        SubS_UpdateLimb(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
+                        &this->unk_1E8[1], &this->unk_200[1], stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1E8[1].x, this->unk_1E8[1].y, this->unk_1E8[1].z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_200[1].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_200[1].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_200[1].z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_200[1].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_200[1].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_200[1].z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 
@@ -612,7 +626,8 @@ void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BD3F0C[this->unk_2FC]));
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       this->skelAnime.dListCount, NULL, func_80BD3AA8, func_80BD3AF8, &this->actor);
+                                       this->skelAnime.dListCount, NULL, EnAh_PostLimbDraw, EnAh_TransformLimbDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

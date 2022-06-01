@@ -439,8 +439,8 @@ void func_80A54E10(ObjHugebombiwa* this) {
     s32 pad;
     Vec3f sp84;
 
-    Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -455,7 +455,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
         sp84.y = (i + 1) * 10.0f;
         sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
 
-        Matrix_MultiplyVector3fByState(&sp84, &ptr->unk_0C);
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
 
         ptr->unk_0C.x += this->actor.world.pos.x;
         ptr->unk_0C.y += this->actor.world.pos.y;
@@ -471,7 +471,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
 
     this->unk_4B0 = 0;
     this->unk_4B2 = 100;
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actionFunc = func_80A55064;
 }
 
@@ -534,8 +534,8 @@ void func_80A55310(ObjHugebombiwa* this) {
     s16 phi_s2;
     Vec3f sp84;
 
-    Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -549,7 +549,7 @@ void func_80A55310(ObjHugebombiwa* this) {
         sp84.x = Math_SinS(phi_s2) * temp_f20_2;
         sp84.y = (i + 1) * 14.0f;
         sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
-        Matrix_MultiplyVector3fByState(&sp84, &ptr->unk_0C);
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
 
         ptr->unk_0C.x += this->actor.world.pos.x;
         ptr->unk_0C.y += this->actor.world.pos.y;
@@ -567,7 +567,7 @@ void func_80A55310(ObjHugebombiwa* this) {
 
     this->unk_4B0 = 0;
     this->unk_4B2 = 100;
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actionFunc = func_80A55564;
 }
 
@@ -671,7 +671,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
             ptr = &this->unk_190[i];
 
             if (ptr->unk_24 == 0) {
-                Matrix_SetStateRotationAndTranslation(ptr->unk_0C.x, ptr->unk_0C.y, ptr->unk_0C.z, &ptr->unk_1C);
+                Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y, ptr->unk_0C.z, &ptr->unk_1C);
                 Matrix_Scale(ptr->unk_00.x, ptr->unk_00.x, ptr->unk_00.x, MTXMODE_APPLY);
 
                 gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -708,10 +708,10 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
             continue;
         }
 
-        Matrix_SetStateRotationAndTranslation(ptr->unk_0C.x, ptr->unk_0C.y + (325.0f * ptr->unk_00.y), ptr->unk_0C.z,
-                                              &ptr->unk_1C);
+        Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y + (325.0f * ptr->unk_00.y), ptr->unk_0C.z,
+                                     &ptr->unk_1C);
         Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
 
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, object_bombiwa_DL_0009E0);

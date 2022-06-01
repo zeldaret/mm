@@ -111,7 +111,7 @@ s32 func_80B7EB94(BgIkanaBlock* this, GlobalContext* globalCtx) {
     sp70.y = this->dyna.actor.world.pos.y + this->unk_170 + 2.0f;
     sp70.z = this->dyna.actor.world.pos.z;
 
-    Matrix_RotateY(phi_a0, MTXMODE_NEW);
+    Matrix_RotateYS(phi_a0, MTXMODE_NEW);
 
     if (sp4C) {
         phi_f12 = 89.0f;
@@ -119,7 +119,7 @@ s32 func_80B7EB94(BgIkanaBlock* this, GlobalContext* globalCtx) {
         phi_f12 = 119.0f;
     }
 
-    Matrix_GetStateTranslationAndScaledZ(phi_f12, &sp64);
+    Matrix_MultVecZ(phi_f12, &sp64);
 
     sp64.x += this->dyna.actor.world.pos.x;
     sp64.y += this->dyna.actor.world.pos.y + this->unk_170 + 2.0f;
@@ -137,10 +137,10 @@ void func_80B7ED54(BgIkanaBlock* this) {
     s32 pad;
     Vec3f sp18;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledY(30.0f, &sp18);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVecY(30.0f, &sp18);
     this->unk_170 = sp18.y - 30.0f;
 }
 

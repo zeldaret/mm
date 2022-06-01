@@ -770,7 +770,7 @@ void func_80AD8AF8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnKame* this = THIS;
 
     if (D_80AD8EA4[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80AD8EA4[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80AD8EA4[limbIndex]]);
     }
 
     if (limbIndex == 1) {
@@ -779,13 +779,13 @@ void func_80AD8AF8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Vec3f* ptr2;
 
         if (this->actor.shape.shadowDraw == NULL) {
-            Matrix_GetStateTranslation(&this->actor.world.pos);
+            Matrix_MultZero(&this->actor.world.pos);
         }
 
         ptr2 = D_80AD8E68;
         ptr = &this->limbPos[5];
         for (i = 0; i < ARRAY_COUNT(D_80AD8E68); i++) {
-            Matrix_MultiplyVector3fByState(ptr2, ptr);
+            Matrix_MultVec3f(ptr2, ptr);
             ptr2++;
             ptr++;
         }

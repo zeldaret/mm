@@ -1259,7 +1259,7 @@ void func_8088F5F4(EnElf* this, GlobalContext* globalCtx, s32 sparkleLife) {
         envColor.g = this->outerColor.g;
         envColor.b = this->outerColor.b;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor,
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor,
                                         1000, sparkleLife);
     }
 }
@@ -1558,8 +1558,8 @@ s32 EnElf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         }
         scale *= this->actor.scale.x * 124.99999f;
 
-        Matrix_MultiplyVector3fByState(&zeroVec, &sp34);
-        Matrix_InsertTranslation(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&zeroVec, &sp34);
+        Matrix_Translate(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 

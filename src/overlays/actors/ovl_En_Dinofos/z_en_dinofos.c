@@ -1429,15 +1429,15 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
     if (D_8089E3B0[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_8089E3B0[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_8089E3B0[limbIndex]]);
     }
 
     if ((limbIndex == 14) && (this->unk_292 != this->unk_290) &&
         ((this->actionFunc == func_8089C56C) || (this->actionFunc == func_8089C2A8))) {
         Math_Vec3f_Copy(&sp74, &this->colliderQuad.dim.quad[0]);
         Math_Vec3f_Copy(&sp80, &this->colliderQuad.dim.quad[1]);
-        Matrix_MultiplyVector3fByState(&D_8089E38C, &sp68);
-        Matrix_MultiplyVector3fByState(&D_8089E398, &sp5C);
+        Matrix_MultVec3f(&D_8089E38C, &sp68);
+        Matrix_MultVec3f(&D_8089E398, &sp5C);
         Collider_SetQuadVertices(&this->colliderQuad, &sp5C, &sp68, &sp74, &sp80);
         if (this->colliderQuad.base.atFlags & AT_ON) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->unk_2A0), &sp68, &sp5C);
@@ -1446,18 +1446,18 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 
     if (limbIndex == 4) {
-        Matrix_GetStateTranslationAndScaledX(300.0f, &this->actor.shape.feetPos[0]);
+        Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[0]);
     } else if (limbIndex == 7) {
-        Matrix_GetStateTranslationAndScaledX(300.0f, &this->actor.shape.feetPos[1]);
+        Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[1]);
     }
 
     if ((limbIndex == 16) && (this->actionFunc == func_8089B580)) {
         if ((this->skelAnime.curFrame > 38.0f) && (this->skelAnime.curFrame <= 55.0f) &&
             (this->unk_292 != this->unk_290)) {
-            sp48 = Matrix_GetCurrentState();
+            sp48 = Matrix_GetCurrent();
             sp58 = 48 - (s32)this->skelAnime.curFrame;
             sp58 = CLAMP_MIN(sp58, 0);
-            Matrix_MultiplyVector3fByState(&D_8089E3A4, &sp4C);
+            Matrix_MultVec3f(&D_8089E3A4, &sp4C);
             sp4C.x -= sp48->mf[3][0];
             sp4C.y -= sp48->mf[3][1];
             sp4C.z -= sp48->mf[3][2];

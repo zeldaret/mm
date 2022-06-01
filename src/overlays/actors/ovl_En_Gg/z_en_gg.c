@@ -509,7 +509,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -520,22 +520,22 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
         if (1) {}
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -544,20 +544,20 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
         temp_f26 = ptr->unk_0C.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
         temp_f20 = Rand_ZeroOne() * 0.003f;
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -583,7 +583,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
     if (phi_s4 > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
 
         for (i = 0; i < phi_s4; i++) {
             if (ptr->unk_48 != 0) {
@@ -596,22 +596,22 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
             temp_f28 = ptr->unk_0C.z + (ptr->unk_18.z * i) + (0.5f * ptr->unk_24.z * i * i);
             temp_f20 = Rand_ZeroOne() * 0.003f;
 
-            Matrix_InsertTranslation((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
-                                     ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
+            Matrix_Translate((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
+                             ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
             func_8012C2DC(globalCtx->state.gfxCtx);
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -739,7 +739,7 @@ s32 EnGg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnGg* this = THIS;
 
     if (limbIndex == 2) {
-        Matrix_InsertZRotation_s(this->unk_2E8, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2E8, MTXMODE_APPLY);
     }
     return false;
 }
@@ -764,12 +764,12 @@ void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&D_80B36DF0, &this->unk_320);
-        Matrix_StatePush();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp30, &this->unk_32C);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_338);
-        Matrix_StatePop();
+        Matrix_MultVec3f(&D_80B36DF0, &this->unk_320);
+        Matrix_Push();
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp30, &this->unk_32C);
+        Matrix_MultVec3f(&sp24, &this->unk_338);
+        Matrix_Pop();
     }
 }
 

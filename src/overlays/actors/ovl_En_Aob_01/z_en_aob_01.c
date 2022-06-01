@@ -100,11 +100,8 @@ void func_809C10B0(EnAob01* this, s32 arg1) {
 }
 
 void func_809C1124(void) {
-    u16 time = gSaveContext.save.time;
-
-    gSaveContext.save.time = (u16)REG(15) + time;
-    time = gSaveContext.save.time;
-    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
 }
 
 void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
@@ -465,24 +462,29 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
-    static u16 D_809C392C[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static TurnOptionsSet sTurnOptions = {
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+    };
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp30;
+    Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
-        sp30.x = player->actor.world.pos.x;
-        sp30.y = player->bodyPartsPos[7].y + 3.0f;
-        sp30.z = player->actor.world.pos.z;
-        func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk_2D4, &this->unk_2DA,
-                      &this->unk_2E0, D_809C392C);
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
+                         &this->torsoRot, &sTurnOptions);
     } else {
-        Math_SmoothStepToS(&this->unk_2D4.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2D4.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2DA.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2DA.y, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2E0.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk_2E0.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
     func_809C10B0(this, 3);
     SubS_FillLimbRotTables(globalCtx, this->unk_2F8, this->unk_318, ARRAY_COUNT(this->unk_2F8));
@@ -503,9 +505,9 @@ void func_809C2060(EnAob01* this, GlobalContext* globalCtx) {
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_2D2 & 0x100)) {
             this->unk_2D2 &= ~0x100;
-            this->unk_2E6 = this->unk_2D4;
-            this->unk_2EC = this->unk_2DA;
-            this->unk_2F2 = this->unk_2E0;
+            this->unk_2E6 = this->turnTarget;
+            this->unk_2EC = this->headRot;
+            this->unk_2F2 = this->torsoRot;
             func_809C16DC(this, globalCtx);
             this->actionFunc = func_809C21E0;
         } else {
@@ -754,9 +756,9 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
         }
 
         if (Actor_HasParent(&this->actor, globalCtx)) {
-            this->unk_2D4 = this->unk_2E6;
-            this->unk_2DA = this->unk_2EC;
-            this->unk_2E0 = this->unk_2F2;
+            this->turnTarget = this->unk_2E6;
+            this->headRot = this->unk_2EC;
+            this->torsoRot = this->unk_2F2;
             this->actor.parent = NULL;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (gSaveContext.save.weekEventReg[8] & 0x20) {
@@ -825,9 +827,9 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
             Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             this->actionFunc = func_809C2A64;
         } else {
-            this->unk_2D4 = this->unk_2E6;
-            this->unk_2DA = this->unk_2EC;
-            this->unk_2E0 = this->unk_2F2;
+            this->turnTarget = this->unk_2E6;
+            this->headRot = this->unk_2EC;
+            this->torsoRot = this->unk_2F2;
 
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -882,8 +884,8 @@ void func_809C2F34(EnAob01* this, GlobalContext* globalCtx) {
 
 void func_809C2FA0(void) {
     u8 i;
-    u8 idx;
-    u8 idx2;
+    u8 rand;
+    u8 index;
     u8 orig;
     u8 orig2;
     u8 sp44[7];
@@ -892,11 +894,11 @@ void func_809C2FA0(void) {
     };
 
     for (i = 0; i < ARRAY_COUNT(sp34); i++) {
-        idx = Rand_ZeroFloat(14.0f);
+        rand = Rand_ZeroFloat(14.0f);
         orig = sp34[i];
 
-        sp34[i] = sp34[idx];
-        sp34[idx] = orig;
+        sp34[i] = sp34[rand];
+        sp34[rand] = orig;
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
@@ -906,14 +908,14 @@ void func_809C2FA0(void) {
 
     for (i = 0; i < ARRAY_COUNT(sp34); i++) {
         orig2 = sp34[i];
-        idx2 = i / 2;
+        index = i / 2;
 
         if (i % 2) {
-            sp44[idx2] |= orig2 << 0x4;
-            idx = gSaveContext.save.weekEventReg[42 + idx2];
-            gSaveContext.save.weekEventReg[42 + idx2] = idx | sp44[idx2];
+            sp44[index] |= orig2 << 0x4;
+            gSaveContext.save.weekEventReg[42 + index] =
+                ((void)0, gSaveContext.save.weekEventReg[42 + index]) | sp44[index];
         } else {
-            sp44[idx2] |= orig2;
+            sp44[index] |= orig2;
         }
     }
 }
@@ -997,15 +999,15 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2DA.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2DA.x * -1, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.x * -1, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_TORSO) {
-        Matrix_InsertXRotation_s(this->unk_2E0.y * -1, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2E0.x * -1, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoRot.y * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(this->torsoRot.x * -1, MTXMODE_APPLY);
     }
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
@@ -1021,7 +1023,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnAob01* this = THIS;
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809C3968, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809C3968, &this->actor.focus.pos);
     }
 }
 

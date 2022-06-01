@@ -18,8 +18,8 @@ void EnHs_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80952FE0(EnHs* this, GlobalContext* globalCtx);
 void func_80953098(EnHs* this, GlobalContext* globalCtx);
 void func_80953180(EnHs* this, GlobalContext* globalCtx);
-void func_809532C0(EnHs* this, GlobalContext* globalCtx);
-void func_809532D0(EnHs* this, GlobalContext* globalCtx);
+void EnHs_DoNothing(EnHs* this, GlobalContext* globalCtx);
+void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, GlobalContext* globalCtx);
 void func_80953354(EnHs* this, GlobalContext* globalCtx);
 void func_8095345C(EnHs* this, GlobalContext* globalCtx);
 
@@ -61,12 +61,12 @@ void func_80952C50(EnHs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2A4); i++) {
-        Math_Vec3f_Copy(&this->unk_2A4[i], &player->actor.world.pos);
+    for (i = 0; i < ARRAY_COUNT(this->nwcPos); i++) {
+        Math_Vec3f_Copy(&this->nwcPos[i], &player->actor.world.pos);
     }
 
-    this->actor.home.rot.x = 0;
-    this->actor.home.rot.z = 0;
+    this->actor.home.rot.x = 0; // reset adult transformed count
+    this->actor.home.rot.z = 0; // reset chick count
 }
 
 void EnHs_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -74,17 +74,19 @@ void EnHs_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHs* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_hs_Skel_006260, &object_hs_Anim_0005C0, this->jointTable,
-                       this->morphTable, OBJECT_HS_LIMB_MAX);
-    Animation_PlayLoop(&this->skelAnime, &object_hs_Anim_0005C0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable, this->morphTable,
+                       OBJECT_HS_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gHsIdleAnim);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_8095345C;
+
     if (globalCtx->curSpawn == 1) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
-    this->unk_2A0 = 0;
+
+    this->stateFlags = 0;
     this->actor.targetMode = 6;
     func_80952C50(this, globalCtx);
 }
@@ -102,56 +104,56 @@ void func_80952DFC(GlobalContext* globalCtx) {
     func_80151BB4(globalCtx, 0x10);
 }
 
-void func_80952E50(Vec3f* dst, Vec3f src, f32 arg2) {
-    Vec3f sp1C;
-    f32 temp_f0;
+void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
+    Vec3f diff;
+    f32 distance;
 
-    Math_Vec3f_Diff(&src, dst, &sp1C);
+    Math_Vec3f_Diff(&src, dst, &diff);
 
-    temp_f0 = SQ(sp1C.x) + SQ(sp1C.z);
+    distance = SQ(diff.x) + SQ(diff.z); // gets un-squared after we check if we are too close
 
-    if (SQ(arg2) > temp_f0) {
+    if (SQ(offset) > distance) {
         return;
     }
 
-    temp_f0 = sqrtf(temp_f0);
-    sp1C.x *= (temp_f0 - arg2) / temp_f0;
-    sp1C.z *= (temp_f0 - arg2) / temp_f0;
+    distance = sqrtf(distance);
+    diff.x *= (distance - offset) / distance;
+    diff.z *= (distance - offset) / distance;
 
-    dst->x += sp1C.x;
-    dst->z += sp1C.z;
+    dst->x += diff.x;
+    dst->z += diff.z;
 }
 
 void func_80952F00(EnHs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
-    f32 phi_f20;
+    f32 offset;
 
-    if (this->actor.home.rot.z >= 20) {
-        phi_f20 = 15.0f;
+    if (this->actor.home.rot.z >= 20) { // current chick count >= 10
+        offset = 15.0f;
     } else {
-        phi_f20 = 10.0f;
+        offset = 10.0f;
     }
 
-    func_80952E50(&this->unk_2A4[0], player->actor.world.pos, phi_f20);
+    EnHs_UpdateChickPos(&this->nwcPos[0], player->actor.world.pos, offset);
 
-    for (i = 1; i < ARRAY_COUNT(this->unk_2A4); i++) {
-        func_80952E50(&this->unk_2A4[i], this->unk_2A4[i - 1], phi_f20);
+    for (i = 1; i < ARRAY_COUNT(this->nwcPos); i++) {
+        EnHs_UpdateChickPos(&this->nwcPos[i], this->nwcPos[i - 1], offset);
     }
 }
 
 void func_80952FE0(EnHs* this, GlobalContext* globalCtx) {
-    if (this->unk_2A2 < 40) {
-        Math_SmoothStepToS(&this->unk_294.y, 0x1F40, 6, 0x1838, 0x64);
-    } else if (this->unk_2A2 < 80) {
-        Math_SmoothStepToS(&this->unk_294.y, -0x1F40, 6, 0x1838, 0x64);
+    if (this->stateTimer < 40) {
+        Math_SmoothStepToS(&this->headRot.y, 0x1F40, 6, 0x1838, 0x64);
+    } else if (this->stateTimer < 80) {
+        Math_SmoothStepToS(&this->headRot.y, -0x1F40, 6, 0x1838, 0x64);
     } else {
         this->actionFunc = func_80953180;
-        this->unk_2A0 &= ~4;
+        this->stateFlags &= ~4;
         func_80151938(globalCtx, 0x33F6);
         func_80952DFC(globalCtx);
     }
-    this->unk_2A2++;
+    this->stateTimer++;
 }
 
 void func_80953098(EnHs* this, GlobalContext* globalCtx) {
@@ -159,10 +161,10 @@ void func_80953098(EnHs* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_8095345C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        this->unk_2A0 |= 0x10;
+        this->stateFlags |= 0x10;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
-        this->unk_2A0 |= 8;
+        this->stateFlags |= 8;
         if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
             Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 10000.0f, 50.0f);
         } else {
@@ -174,31 +176,31 @@ void func_80953098(EnHs* this, GlobalContext* globalCtx) {
 void func_80953180(EnHs* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.currentTextId) {
-            case 0x33F4:
-            case 0x33F6:
+            case 0x33F4: // text: laughing that they are all roosters (!)
+            case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
                 func_801477B4(globalCtx);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F7:
+            case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80953098;
                 func_80953098(this, globalCtx);
                 break;
 
-            case 0x33F9:
+            case 0x33F9: // text: laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_801477B4(globalCtx);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F5:
+            case 0x33F5: // He heard from his gramps (?) the moon is going to fall
                 globalCtx->msgCtx.unk11F10 = 0;
                 this->actionFunc = func_80952FE0;
-                this->unk_2A2 = 0;
-                this->unk_294.z = 0;
-                this->unk_2A0 |= 4;
+                this->stateTimer = 0;
+                this->headRot.z = 0;
+                this->stateFlags |= 4;
                 break;
 
             default:
@@ -209,34 +211,34 @@ void func_80953180(EnHs* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809532C0(EnHs* this, GlobalContext* globalCtx) {
+void EnHs_DoNothing(EnHs* this, GlobalContext* globalCtx) {
 }
 
-void func_809532D0(EnHs* this, GlobalContext* globalCtx) {
-    if (DECR(this->unk_2A2) == 0) {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENHS_GET_F(&this->actor)];
+void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, GlobalContext* globalCtx) {
+    if (DECR(this->stateTimer) == 0) {
+        globalCtx->nextEntranceIndex = globalCtx->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
         globalCtx->sceneLoadFlag = 0x14;
         gSaveContext.save.weekEventReg[25] |= 8;
-        this->actionFunc = func_809532C0;
+        this->actionFunc = EnHs_DoNothing;
     }
 }
 
 void func_80953354(EnHs* this, GlobalContext* globalCtx) {
     if (!Play_InCsMode(globalCtx)) {
         func_800B7298(globalCtx, &this->actor, 7);
-        this->actionFunc = func_809532D0;
+        this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
 
 void func_809533A0(EnHs* this, GlobalContext* globalCtx) {
     u16 sp1E;
 
-    if ((globalCtx->curSpawn == 1) && !(this->unk_2A0 & 0x20)) {
+    if ((globalCtx->curSpawn == 1) && !(this->stateFlags & 0x20)) {
         sp1E = 0x33F7;
-        this->unk_2A0 |= 0x20;
-    } else if (this->unk_2A0 & 0x10) {
+        this->stateFlags |= 0x20;
+    } else if (this->stateFlags & 0x10) {
         sp1E = 0x33F9;
-        this->unk_2A0 &= ~0x10;
+        this->stateFlags &= ~0x10;
     } else if (gSaveContext.save.weekEventReg[25] & 8) {
         sp1E = 0x33F4;
     } else {
@@ -254,21 +256,21 @@ void func_8095345C(EnHs* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80953180;
         func_809533A0(this, globalCtx);
-        if (this->unk_2A0 & 8) {
+        if (this->stateFlags & 8) {
             func_80952DFC(globalCtx);
-            this->unk_2A0 &= ~8;
+            this->stateFlags &= ~8;
         }
-    } else if (this->actor.home.rot.x >= 20) {
+    } else if (this->actor.home.rot.x >= 20) { // chicks turned adult >= 10
         this->actionFunc = func_80953354;
-        this->unk_2A2 = 40;
+        this->stateTimer = 40;
     } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
-        this->unk_2A0 |= 1;
+        this->stateFlags |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, globalCtx)) {
         func_800B8614(&this->actor, globalCtx, 130.0f);
-        this->unk_2A0 |= 1;
+        this->stateFlags |= 1;
     } else {
-        this->unk_2A0 &= ~1;
+        this->stateFlags &= ~1;
     }
 }
 
@@ -290,17 +292,17 @@ void EnHs_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80952F00(this, globalCtx);
 
-    if (this->unk_2A0 & 4) {
-        Math_SmoothStepToS(&this->unk_294.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_29A.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_29A.y, 0, 6, 0x1838, 0x64);
-    } else if (this->unk_2A0 & 1) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_294, &this->unk_29A, this->actor.focus.pos);
+    if (this->stateFlags & 4) {
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
+    } else if (this->stateFlags & 1) {
+        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unusedRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_294.x, 0x3200, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_294.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_29A.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_29A.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0x3200, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
@@ -308,29 +310,33 @@ s32 EnHs_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnHs* this = THIS;
 
     switch (limbIndex) {
-        case OBJECT_HS_LIMB_09:
-            rot->x += this->unk_294.y;
-            rot->z += this->unk_294.x;
+        case HS_LIMB_HEAD:
+            rot->x += this->headRot.y;
+            rot->z += this->headRot.x;
             break;
 
-        case OBJECT_HS_LIMB_0A:
-            rot->x += this->unk_294.y;
-            rot->z += this->unk_294.x;
+        case HS_LIMB_HAIR_SPIKES:
+            rot->x += this->headRot.y;
+            rot->z += this->headRot.x;
             break;
 
-        case OBJECT_HS_LIMB_0B:
+        case HS_LIMB_HIDDEN_HAIR:
+            // for some reason this hair is always removed here in the Override limb
+            // if you do re-enable, make sure you add the head rot like above
             *dList = NULL;
             return false;
 
+        // these two limbs both have empty enddisplaylist, they do nothing
+        // at the same time (params == HS_TYPE_UNK1) is always false, because vanilla params is 0xFE01
         case OBJECT_HS_LIMB_0C:
-            if (this->actor.params == ENHS_1) {
+            if (this->actor.params == HS_TYPE_UNK1) {
                 *dList = NULL;
                 return false;
             }
             break;
 
         case OBJECT_HS_LIMB_0D:
-            if (this->actor.params == ENHS_1) {
+            if (this->actor.params == HS_TYPE_UNK1) {
                 *dList = NULL;
                 return false;
             }
@@ -342,8 +348,8 @@ s32 EnHs_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnHs_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHs* this = THIS;
 
-    if (limbIndex == OBJECT_HS_LIMB_09) {
-        Matrix_MultiplyVector3fByState(&D_8095393C, &this->actor.focus.pos);
+    if (limbIndex == HS_LIMB_HEAD) {
+        Matrix_MultVec3f(&D_8095393C, &this->actor.focus.pos);
     }
 }
 
