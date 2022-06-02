@@ -51,6 +51,7 @@
         <Texture Name="object_zl4_Tex_005C70" OutName="striped_shoulder_patern" Format="ci8" Width="8" Height="8" Offset="0x5C70" />
         <Texture Name="object_zl4_Tex_005CB0" OutName="undershirt_wrinkles" Format="ci8" Width="16" Height="16" Offset="0x5CB0" />
         <Texture Name="object_zl4_Tex_005DB0" OutName="pendant" Format="rgba16" Width="32" Height="32" Offset="0x5DB0" />
+
         <DList Name="gDmZl4ChestDl" Offset="0xA630" />
         <DList Name="gDmZl4HeadDl" Offset="0xAFC8" />
         <DList Name="object_zl4_DL_00B8D8" Offset="0xB8D8" />
@@ -96,22 +97,21 @@
         <Limb Name="gDmZl4HeadLimb" Type="Standard" EnumName="ZL4_LIMB_HEAD" Offset="0xDFE8" />
         <Skeleton Name="gZl4Skeleton" Type="Flex" LimbType="Standard" LimbNone="ZL4_LIMB_NONE" LimbMax="ZL4_LIMB_MAX" EnumName="zl4_Limbs" Offset="0xE038" />
 
-        <!-- First meeting Link in OOT I think  -->
+        <!-- unused, left over from OoT I think  -->
         <Animation Name="gDmZl4TurningAroundAnim" Offset="0xF250" />
         <Animation Name="gDmZl4IdleHandsInFrontAnim" Offset="0xFDC8" />
         <Animation Name="gDmZl4RaiseOcarinaToPlayAnim" Offset="0x10334" />
         <Animation Name="gDmZl4LowerOCarinaAfterPlayAnim" Offset="0x105C8" />
-        <Animation Name="gDmZl4PlayingOcarinaAnim" Offset="0x10D50" />
+        <Animation Name="gDmZl4PlayingOcarinaAnim2" Offset="0x10D50" />
         <Animation Name="gDmZl4FacingAwayIdle" Offset="0x11294" />
 
-        <!-- these are actually referenced --> 
+        <!-- these are actually referenced -->
         <Animation Name="gDmZl4GivingItemToLinkStartAnim" Offset="0x11BB8" />
         <Animation Name="gDmZl4GivingItemToLinkLoopAnim" Offset="0x122E0" />
-        <!-- taking back and holding in front of them, something...? -->
-        <Animation Name="gDmZl4_012A84" Offset="0x12A84" />
-        <Animation Name="gDmZl4_01303C" Offset="0x1303C" />
+        <Animation Name="gDmZl4RaisingOcarinaToPlayAnim" Offset="0x12A84" />
+        <Animation Name="gDmZl4PlayingOcarinaAnim" Offset="0x1303C" />
 
-        <!-- not referenced... --> 
+        <!-- She does a Backflip -->
         <Animation Name="gDmZl4BackFlipAnim" Offset="0x13934" />
         <Animation Name="gDmZl4BackFlipPrepareAnim" Offset="0x13F2C" />
         <Animation Name="gDmZl4BackFlipPrepareHoldingReadyAnim" Offset="0x14558" />
@@ -121,9 +121,8 @@
         <Animation Name="gDmZl4HandsOverEmblemLoopAnim" Offset="0x15A4C" />
         <Animation Name="gDmZl4FacingAwayHandsOverEmblemLoop" Offset="0x15DA0" />
 
-        <!-- old unused OoT animations--> 
+        <!-- unused animations --> 
         <Animation Name="gDmZl4Anim_016328" Offset="0x16328" />
-
         <Animation Name="gDmZl4Anim_016924" Offset="0x16924" />
         <Animation Name="gDmZl4Anim_016E04" Offset="0x16E04" />
         <Animation Name="gDmZl4Anim_0175F4" Offset="0x175F4" />

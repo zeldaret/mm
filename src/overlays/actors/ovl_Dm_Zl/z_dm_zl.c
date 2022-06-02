@@ -31,13 +31,13 @@ const ActorInit Dm_Zl_InitVars = {
 };
 
 static AnimationInfo sAnimations[7] = {
-    { (AnimationHeader*)0x06015DA0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader*)0x06015494, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader*)0x06015A4C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader*)0x06011BB8, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader*)0x060122E0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader*)0x06012A84, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader*)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { &gDmZl4FacingAwayHandsOverEmblemLoop, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gDmZl4TurningAround2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
+    { &gDmZl4HandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gDmZl4GivingItemToLinkStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
+    { &gDmZl4GivingItemToLinkLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gDmZl4RaisingOcarinaToPlayAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
+    { &gDmZl4PlayingOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
 };
 
 static u64* sMouthTextures[4] = {
