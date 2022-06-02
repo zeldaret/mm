@@ -61,6 +61,7 @@ InitChainEntry D_80B6E748[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };  
 
+//suggested name: BgKin2Bombwall_HitByBomb
 s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     Actor *temp_v0;
 
@@ -168,7 +169,7 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     DynaPoly_DeleteBgActor(temp_a0, temp_a1, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
-
+//suggested name: BgKin2Bombwall_
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E4CC;
 }
@@ -176,6 +177,7 @@ void func_80B6E4B8(BgKin2Bombwall *arg0) {
 
 //if possible, requests the wall explosion cutscene to play (to confirm)
 //by setting the action function to the cutscene function func_80B6E558
+//suggested name : BgKin2Bombwall_CheckCutsceneStart
 void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     BgKin2Bombwall *temp_a0;
     s8 temp_a0_2;
@@ -193,11 +195,13 @@ void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->collider.base);
 }
 
+//suggested name: BgKin2Bombwall_SetCutsceneStart
 void func_80B6E544(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E558;
 }
 
 //tries to play the wall explosion cutscene 
+//name suggestion :BgKin2Bombwall_PlayExplosionCutscene
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->dyna.actor.cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->dyna.actor.cutscene, &arg0->dyna.actor);
@@ -205,22 +209,24 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
         SoundSource_PlaySfxAtFixedWorldPos(arg1, &arg0->dyna.actor.world.pos, 0x3C, 0x2810U);
         func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->dyna.bgId);
         arg0->dyna.actor.draw = NULL;
-        func_80B6E090(arg0, arg1);
-        func_80B6E5F8(arg0); //Wall is dead.
+        func_80B6E090(arg0, arg1); //not sure yet, but takes care of the explosion effects and particles probably
+        func_80B6E5F8(arg0); //Wall is dead. Sets the action function to end cutscene and remove actor.
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
 }
 
+//suggested name: BgKin2Bombwall_SetCutsceneStop
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
     arg0->actionFunc = func_80B6E614;
 }
 
+//suggested name: BgKin2Bombwall_StopCutscene
 void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     s8 temp_a0;
 
-    arg0->unk_1AC[0] += -1;//-1
+    arg0->unk_1AC[0] += -1;
     if ((s32) arg0->unk_1AC[0] <= 0) {
         temp_a0 = arg0->dyna.actor.cutscene;
         arg0 = arg0;
