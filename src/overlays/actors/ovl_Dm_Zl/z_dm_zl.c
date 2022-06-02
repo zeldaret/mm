@@ -93,7 +93,7 @@ void DmZl_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 void DmZl_DoNothing(DmZl *this, GlobalContext *globalCtx) {
 }
 
-// weird cutscene func
+// weird cutscene func, called from update every frame
 void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
     s32 actionIndex;
 
@@ -133,6 +133,9 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
     }
 }
 
+/**
+ * Updates the eye and mouth texture indexes.
+ */
 void DmZl_UpdateFace(DmZl *this) {
     if (this->timer > 0) {
         this->timer--;
