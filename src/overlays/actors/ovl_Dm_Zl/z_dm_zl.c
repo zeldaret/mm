@@ -31,13 +31,13 @@ const ActorInit Dm_Zl_InitVars = {
 };
 
 static AnimationInfo sAnimations[7] = {
-    { (AnimationHeader *)0x06015DA0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader *)0x06015494, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader *)0x06015A4C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader *)0x06011BB8, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader *)0x060122E0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { (AnimationHeader *)0x06012A84, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { (AnimationHeader *)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader*)0x06015DA0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader*)0x06015494, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader*)0x06015A4C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader*)0x06011BB8, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader*)0x060122E0, 1.0f, 0.0f, -1.0f, 0, -10.0f },
+    { (AnimationHeader*)0x06012A84, 1.0f, 0.0f, -1.0f, 2, -10.0f },
+    { (AnimationHeader*)0x0601303C, 1.0f, 0.0f, -1.0f, 0, -10.0f },
 };
 
 static u64* sMouthTextures[4] = {
@@ -60,21 +60,18 @@ static u64* sEyeTextures[0xA] = {
     NULL,
 };
 
-
-void DmZl_ChangeAnimation(SkelAnime *skelAnime, AnimationInfo animation[], u16 index) {
+void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animation[], u16 index) {
     f32 endFrame;
     animation += index;
     endFrame = (animation->frameCount < 0.0f) ? Animation_GetLastFrame(animation->animation) : animation->frameCount;
 
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, 
-          endFrame,
-          animation->mode, animation->morphFrames);
-
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
+                     animation->mode, animation->morphFrames);
 }
 
-void DmZl_Init(Actor *thisx, GlobalContext *globalCtx) {
+void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    DmZl *this = THIS;
+    DmZl* this = THIS;
 
     this->animationIndex = 0;
     this->unused2BA = 0;
@@ -86,15 +83,15 @@ void DmZl_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actionFunc = DmZl_DoNothing;
 }
 
-void DmZl_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    DmZl *this = (DmZl *) thisx;
+void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    DmZl* this = (DmZl*)thisx;
 }
 
-void DmZl_DoNothing(DmZl *this, GlobalContext *globalCtx) {
+void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx) {
 }
 
 // weird cutscene func, called from update every frame
-void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
+void func_80A3830C(DmZl* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
     if (Cutscene_CheckActorAction(globalCtx, 0x66) != 0) {
@@ -127,7 +124,7 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) &&
-           (((actionIndex = this->animationIndex) == 1) || (actionIndex == 3) || (actionIndex == 5))) {
+        (((actionIndex = this->animationIndex) == 1) || (actionIndex == 3) || (actionIndex == 5))) {
         this->animationIndex++;
         DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
     }
@@ -136,7 +133,7 @@ void func_80A3830C(DmZl *this, GlobalContext *globalCtx) {
 /**
  * Updates the eye and mouth texture indexes.
  */
-void DmZl_UpdateFace(DmZl *this) {
+void DmZl_UpdateFace(DmZl* this) {
     if (this->timer > 0) {
         this->timer--;
     } else {
@@ -208,9 +205,8 @@ void DmZl_UpdateFace(DmZl *this) {
     }
 }
 
-
-void DmZl_Update(Actor *thisx, GlobalContext *globalCtx) {
-    DmZl *this = THIS;
+void DmZl_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DmZl* this = THIS;
     DmZl_UpdateFace(this);
     SkelAnime_Update(&this->skelAnime);
     func_80A3830C(this, globalCtx);
@@ -221,7 +217,7 @@ s32 DmZl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx){
+void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     DmZl* this = THIS;
 
     if (limbIndex == 0x10) {
@@ -235,9 +231,8 @@ void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-
-void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    DmZl *this = THIS;
+void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    DmZl* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -248,7 +243,7 @@ void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTextureIndex]));
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, DmZl_OverrideLimbDraw, DmZl_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          DmZl_OverrideLimbDraw, DmZl_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
-
 }
