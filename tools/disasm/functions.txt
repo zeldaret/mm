@@ -10248,7 +10248,7 @@
     0x80A3822C:("DmZl_Init",),
     0x80A382EC:("DmZl_Destroy",),
     0x80A382FC:("DmZl_DoNothing",),
-    0x80A3830C:("func_80A3830C",),
+    0x80A3830C:("DmZl_UpdateCutscene",),
     0x80A38468:("DmZl_UpdateFace",),
     0x80A385D4:("DmZl_Update",),
     0x80A3862C:("DmZl_OverrideLimbDraw",),
