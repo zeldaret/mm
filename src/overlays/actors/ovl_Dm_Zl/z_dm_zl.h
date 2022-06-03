@@ -26,4 +26,7 @@ typedef struct DmZl {
 
 extern const ActorInit Dm_Zl_InitVars;
 
+// vanilla params are 0x0000, never checked or used
+#define DMZL_TYPE_SOT_CUTCSENE 0
+
 #endif // Z_DM_ZL_H
