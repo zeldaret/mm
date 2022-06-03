@@ -61,17 +61,19 @@ InitChainEntry D_80B6E748[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };  
 
-//suggested name: BgKin2Bombwall_HitByBomb
+//suggested name: BgKin2Bombwall_HadAnACCollision
+//Must check in-game before renaming.
 s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
-    Actor *temp_v0;
+    Actor *bombwallCollider;
 
     if ((arg0->collider.base.acFlags & 2) != 0) {
-        temp_v0 = arg0->collider.base.ac;
+        bombwallCollider = arg0->collider.base.ac;
         //checks distance between wall and ? where ideas for ? would be
         //-Player
         //-sword/attacking object
         //-bomb (most likely)
-        if ((temp_v0 != 0) && (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &temp_v0->world.pos) < 6400.0f)) {
+        if ((bombwallCollider != 0) && 
+            (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
             return 1;
         }
     }
@@ -141,67 +143,55 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
 
 void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
-    ColliderCylinder *sp24;
+    ColliderCylinder *bombwallCollider;
     
     Actor_ProcessInitChain(&this->dyna.actor, D_80B6E748);
     DynaPolyActor_Init((DynaPolyActor *) this, 0);
-    sp24 = &this->collider;
-    Collider_InitCylinder(globalCtx, sp24);
+    bombwallCollider = &this->collider;
+    Collider_InitCylinder(globalCtx, bombwallCollider);
     if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) != 0) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
     DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor *) this, (CollisionHeader *) &D_06000490);
-    Collider_SetCylinder(globalCtx, sp24, &this->dyna.actor, &D_80B6E6F0);
-    Collider_UpdateCylinder(&this->dyna.actor, sp24);
+    Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &D_80B6E6F0);
+    Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
     Actor_SetFocus(&this->dyna.actor, 60.0f);
     func_80B6E4B8(this);
 }
 
 void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    DynaCollisionContext *temp_a1;
-    GlobalContext *temp_a0;
     BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
-
-    temp_a0 = globalCtx;
-    temp_a1 = &globalCtx->colCtx.dyna;
-    globalCtx = globalCtx;
-    DynaPoly_DeleteBgActor(temp_a0, temp_a1, this->dyna.bgId);
+    
+    DynaPoly_DeleteBgActor(globalCtx,  &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
-//suggested name: BgKin2Bombwall_
+//suggested name: BgKin2Bombwall_SetupWait
 void func_80B6E4B8(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E4CC;
 }
 
 
-//if possible, requests the wall explosion cutscene to play (to confirm)
+//if possible, requests the wall explosion cutscene to play
 //by setting the action function to the cutscene function func_80B6E558
-//suggested name : BgKin2Bombwall_CheckCutsceneStart
+//Current name : BgKin2Bombwall_Wait
 void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
-    BgKin2Bombwall *temp_a0;
-    s8 temp_a0_2;
-
-    temp_a0 = arg0;
-    arg0 = arg0;
-    if (func_80B6E020(temp_a0, arg1) != 0) {
-        temp_a0_2 = arg0->dyna.actor.cutscene;
+    if (func_80B6E020(arg0, arg1) != 0) { //checks if AC collision happened
         arg0->collider.base.acFlags &= 0xFFFD;
-        arg0 = arg0;
-        ActorCutscene_SetIntentToPlay((s16) temp_a0_2);
+        ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
         func_80B6E544(arg0);
         return;
     }
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->collider.base);
 }
 
-//suggested name: BgKin2Bombwall_SetCutsceneStart
+//suggested name: BgKin2Bombwall_SetupStart
 void func_80B6E544(BgKin2Bombwall *arg0) {
     arg0->actionFunc = func_80B6E558;
 }
 
 //tries to play the wall explosion cutscene 
-//name suggestion :BgKin2Bombwall_PlayExplosionCutscene
+//Current name :BgKin2Bombwall_PlayCutscene
 void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->dyna.actor.cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->dyna.actor.cutscene, &arg0->dyna.actor);
@@ -216,7 +206,7 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
 }
 
-//suggested name: BgKin2Bombwall_SetCutsceneStop
+//suggested name: BgKin2Bombwall_SetupStopCutscene
 void func_80B6E5F8(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
     arg0->actionFunc = func_80B6E614;
@@ -224,13 +214,9 @@ void func_80B6E5F8(BgKin2Bombwall *arg0) {
 
 //suggested name: BgKin2Bombwall_StopCutscene
 void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
-    s8 temp_a0;
-
     arg0->unk_1AC[0] += -1;
     if ((s32) arg0->unk_1AC[0] <= 0) {
-        temp_a0 = arg0->dyna.actor.cutscene;
-        arg0 = arg0;
-        ActorCutscene_Stop((s16) temp_a0);
+        ActorCutscene_Stop((s16) arg0->dyna.actor.cutscene);
         Actor_MarkForDeath(&arg0->dyna.actor);
     }
 }
