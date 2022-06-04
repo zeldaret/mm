@@ -5013,8 +5013,7 @@ beginseg
     name "ovl_Bg_Astr_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Astr_Bombwall/z_bg_astr_bombwall.o"
-    include "build/data/ovl_Bg_Astr_Bombwall/ovl_Bg_Astr_Bombwall.data.o"
-    include "build/data/ovl_Bg_Astr_Bombwall/ovl_Bg_Astr_Bombwall.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Astr_Bombwall/ovl_Bg_Astr_Bombwall_reloc.o"
 endseg
 
 beginseg

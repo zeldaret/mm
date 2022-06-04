@@ -7,9 +7,7 @@ struct BgAstrBombwall;
 
 typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
 typedef struct BgAstrBombwall {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ s32 unk144;                         /* inferred */
-    /* 0x148 */ char pad148[0x14];                  /* maybe part of unk144[6]? */
+   /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgAstrBombwallActionFunc actionFunc;
     /* 0x160 */ ColliderTris unk160;                /* inferred */
     /* 0x180 */ ColliderTrisElement unk180;         /* inferred */

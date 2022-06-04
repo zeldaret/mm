@@ -78,8 +78,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_06002178;
-extern UNK_TYPE D_06002498;
+extern Gfx D_06002178;
+extern CollisionHeader D_06002498;
 extern Gfx D_06002380[];
 extern Gfx D_060022E0[];
 
@@ -104,28 +104,28 @@ void func_80C09ED0(ColliderTrisInit* arg0, Vec3f* arg1, Vec3s* arg2, ColliderTri
 void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderTris* temp_a1;
     BgAstrBombwall* this = THIS;
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    DynaPolyActor_Init(this, 1);
-    DynaPolyActor_LoadMesh(globalCtx, this, &D_06002498);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init((DynaPolyActor*)&this->dyna.actor, 1);
+    DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)&this->dyna.actor, &D_06002498);
     temp_a1 = &this->unk160;
     Collider_InitTris(globalCtx, temp_a1);
-    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F) != 0) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) != 0) {
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    this->actor.flags |= 0x10000000;
-    if (Collider_SetTris(globalCtx, temp_a1, &this->actor, &sTrisInit, &this->unk180) == 0) {
-        Actor_MarkForDeath(&this->actor);
+    this->dyna.actor.flags |= 0x10000000;
+    if (Collider_SetTris(globalCtx, temp_a1, &this->dyna.actor, &sTrisInit, &this->unk180) == 0) {
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    func_80C09ED0(&sTrisInit, &this->actor.world, &this->actor.shape, temp_a1);
-    SubS_FillCutscenesList(&this->actor, &this->unk238, 1);
+    func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, temp_a1);
+    SubS_FillCutscenesList(&this->dyna.actor, &this->unk238, 1);
     func_80C0A378(this);
 }
 
 void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->unk144);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
@@ -135,13 +135,13 @@ void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
     s16 var_v0;
     Vec3f spAC;
     f32 temp_fv0;
-    Matrix_RotateYS(thisx->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(thisx->dyna.actor.shape.rot.y, MTXMODE_NEW);
     for (var_s1 = 0; var_s1 < 0x1E; var_s1++) {
         spC8.x = Rand_Centered() * 140.0f;
         spC8.y = Rand_ZeroOne() * 200.0f;
         spC8.z = 0.0f;
         Matrix_MultVec3f(&spC8, &spBC);
-        Math_Vec3f_Sum(&thisx->actor.world.pos, &spBC, &spBC);
+        Math_Vec3f_Sum(&thisx->dyna.actor.world.pos, &spBC, &spBC);
         func_800BBFB0(globalCtx, &spBC, 50.0f, 2, Rand_ZeroOne() * 120.0f + 20.0f, Rand_ZeroOne() * 240.0f + 20.0f, 0);
         spAC.x = Rand_ZeroOne() * 2.5f;
         spAC.y = (Rand_ZeroOne() * 2.5f) + 1.0f;
@@ -170,7 +170,7 @@ void func_80C0A38C(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
     temp_v0 = thisx->unk160.base.acFlags;
     if ((temp_v0 & 2) != 0) {
         thisx->unk160.base.acFlags = temp_v0 & 0xFFFD;
-        Flags_SetSwitch(globalCtx, thisx->actor.params & 0x7F);
+        Flags_SetSwitch(globalCtx, thisx->dyna.actor.params & 0x7F);
         func_80C0A400(thisx, globalCtx);
         return;
     }
@@ -182,16 +182,16 @@ void func_80C0A400(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80C0A418(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    if (SubS_StartActorCutscene(&thisx->actor, thisx->unk238, -1, 0) != 0) {
+    if (SubS_StartActorCutscene(&thisx->dyna.actor, thisx->unk238, -1, 0) != 0) {
         func_80C0A458(thisx, globalCtx);
     }
 }
 
 void func_80C0A458(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, thisx->unk144);
-    thisx->actor.draw = NULL;
+    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, thisx->dyna.bgId);
+    thisx->dyna.actor.draw = NULL;
     func_80C0A120(thisx, globalCtx);
-    Actor_PlaySfxAtPos(&thisx->actor, 0x2810U);
+    Actor_PlaySfxAtPos(&thisx->dyna.actor, 0x2810U);
     thisx->actionFunc = func_80C0A4BC;
 }
 
