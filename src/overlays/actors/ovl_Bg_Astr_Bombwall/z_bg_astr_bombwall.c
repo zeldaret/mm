@@ -125,6 +125,7 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
+    
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
