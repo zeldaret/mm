@@ -118,8 +118,8 @@ s32 Actor_TrackPlayerSetFocusHeight(GlobalContext* globalCtx, Actor* actor, Vec3
  *
  * @return true if rotated towards player, false if rotations were stepped back to zero.
  *
- * @note if in a cutscene or debug camera is enabled, and the last entrance used was Kokiri Forest spawn 0, the computed
- * rotation will instead turn towards the view eye no matter the yaw.
+ * @note if in a cutscene or debug camera is enabled, the computed rotation will instead turn towards the view eye no
+ * matter the yaw.
  */
 s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos) {
     Player* player = GET_PLAYER(globalCtx);

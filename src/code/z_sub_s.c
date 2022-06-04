@@ -620,8 +620,8 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
  * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTrackPointRot
  *
  */
-s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot, Vec3s* torsoRot,
-                    TrackOptionsSet* options) {
+s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
+                    Vec3s* torsoRot, TrackOptionsSet* options) {
     s16 pitch;
     s16 yaw;
     s16 pad;
