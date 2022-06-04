@@ -184,7 +184,7 @@ void func_80C0A400(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80C0A418(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    if (SubS_StartActorCutscene(&thisx->dyna.actor, thisx->unk238, -1, 0) != 0) {
+    if (SubS_StartActorCutscene(&thisx->dyna.actor, thisx->unk238, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         func_80C0A458(thisx, globalCtx);
     }
 }
