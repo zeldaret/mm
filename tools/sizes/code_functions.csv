@@ -1028,10 +1028,10 @@ asm/non_matchings/code/code_800E8EA0/Flags_GetEventChkInf.s,Flags_GetEventChkInf
 asm/non_matchings/code/code_800E8EA0/Flags_SetEventChkInf.s,Flags_SetEventChkInf,0x800E8EE0,0x3
 asm/non_matchings/code/code_800E8EA0/Flags_GetInfTable.s,Flags_GetInfTable,0x800E8EEC,0x4
 asm/non_matchings/code/code_800E8EA0/Flags_SetInfTable.s,Flags_SetInfTable,0x800E8EFC,0x3
-asm/non_matchings/code/code_800E8EA0/Actor_RotateForward.s,Actor_RotateForward,0x800E8F08,0x27
-asm/non_matchings/code/code_800E8EA0/Actor_RotateToPoint.s,Actor_RotateToPoint,0x800E8FA4,0x65
-asm/non_matchings/code/code_800E8EA0/Actor_TurnToPlayer.s,Actor_TurnToPlayer,0x800E9138,0x46
-asm/non_matchings/code/code_800E8EA0/Actor_TurnToPlayerSetFocus.s,Actor_TurnToPlayerSetFocus,0x800E9250,0x44
+asm/non_matchings/code/code_800E8EA0/Actor_TrackNone.s,Actor_TrackNone,0x800E8F08,0x27
+asm/non_matchings/code/code_800E8EA0/Actor_TrackPoint.s,Actor_TrackPoint,0x800E8FA4,0x65
+asm/non_matchings/code/code_800E8EA0/Actor_TrackPlayerSetFocusHeight.s,Actor_TrackPlayerSetFocusHeight,0x800E9138,0x46
+asm/non_matchings/code/code_800E8EA0/Actor_TrackPlayer.s,Actor_TrackPlayer,0x800E9250,0x44
 asm/non_matchings/code/z_common_data/func_800E9360.s,func_800E9360,0x800E9360,0x20
 asm/non_matchings/code/z_debug/GameInfo_Init.s,GameInfo_Init,0x800E93E0,0x24
 asm/non_matchings/code/z_debug_display/DebugDisplay_Init.s,DebugDisplay_Init,0x800E9470,0x6

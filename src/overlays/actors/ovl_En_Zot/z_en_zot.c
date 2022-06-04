@@ -1324,7 +1324,7 @@ void EnZot_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (!(this->unk_2F2 & 8)) {
         if (!(this->unk_2F2 & 4) && func_80B96DF0(this, globalCtx)) {
-            Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->unk_2C4, &this->unk_2CA, this->actor.focus.pos);
+            Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2C4, &this->unk_2CA, this->actor.focus.pos);
         } else {
             Math_SmoothStepToS(&this->unk_2C4.x, 0, 6, 6200, 100);
             Math_SmoothStepToS(&this->unk_2C4.y, 0, 6, 6200, 100);

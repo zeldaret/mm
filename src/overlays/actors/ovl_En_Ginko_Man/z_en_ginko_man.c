@@ -612,9 +612,9 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
-        Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
-        Actor_RotateForward(&this->limb15Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->limb15Rot, &this->limb8Rot);
     }
 }
 

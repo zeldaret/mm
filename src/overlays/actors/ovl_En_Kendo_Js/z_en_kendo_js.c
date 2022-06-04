@@ -741,7 +741,7 @@ void EnKendoJs_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
     func_80B279AC(this, globalCtx);
     func_80B27880(this, globalCtx);
 }

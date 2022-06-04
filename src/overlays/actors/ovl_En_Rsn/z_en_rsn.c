@@ -61,7 +61,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    Actor_TurnToPlayerSetFocus(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
 
 s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
