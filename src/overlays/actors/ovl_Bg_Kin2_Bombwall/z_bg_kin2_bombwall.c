@@ -16,12 +16,12 @@ void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); 
 void func_80B6E090(BgKin2Bombwall *, GlobalContext *);
-void func_80B6E4B8(BgKin2Bombwall *);                  
-void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); 
-void func_80B6E544(BgKin2Bombwall *);                   
-void func_80B6E558(BgKin2Bombwall *, GlobalContext *); 
-void func_80B6E5F8(BgKin2Bombwall *);                   
-void func_80B6E614(BgKin2Bombwall *, GlobalContext *); 
+void BgKin2Bombwall_SetupWait(BgKin2Bombwall *);                  
+void BgKin2Bombwall_Wait(BgKin2Bombwall *, GlobalContext *); 
+void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall *);                   
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall *, GlobalContext *); 
+void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall *);                   
+void BgKin2Bombwall_EndCutscene(BgKin2Bombwall *, GlobalContext *); 
 
 extern Gfx D_06000128[];
 extern Gfx D_060002C0[];
@@ -68,10 +68,6 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 
     if ((arg0->collider.base.acFlags & 2) != 0) {
         bombwallCollider = arg0->collider.base.ac;
-        //checks distance between wall and ? where ideas for ? would be
-        //-Player
-        //-sword/attacking object
-        //-bomb (most likely)
         if ((bombwallCollider != 0) && 
             (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
             return 1;
@@ -84,8 +80,8 @@ s32 func_80B6E020(BgKin2Bombwall *arg0, GlobalContext *arg1) {
 //first idea: with all the random numbers fetched, this is probably related to particle effects from slashing or blowing up
 void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
     s32 i;
-    Vec3f spF0; 
-    Vec3f spE4;
+    Vec3f pos; 
+    Vec3f velocity;
     Vec3f spD8; 
     Vec3f spCC;
     s32 j;
@@ -112,12 +108,12 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
             spCC.y = (Rand_ZeroOne() * 7.0f) + 4.0f;
             spCC.z = spD8.z * 0.3f;
             
-            Matrix_MultVec3f(&spD8, &spF0);
-            Matrix_MultVec3f(&spCC, &spE4);
+            Matrix_MultVec3f(&spD8, &pos);
+            Matrix_MultVec3f(&spCC, &velocity);
     
-            spF0.x += this->dyna.actor.world.pos.x;
-            spF0.y += this->dyna.actor.world.pos.y;
-            spF0.z += this->dyna.actor.world.pos.z;
+            pos.x += this->dyna.actor.world.pos.x;
+            pos.y += this->dyna.actor.world.pos.y;
+            pos.z += this->dyna.actor.world.pos.z;
          
             if (Rand_Next() % 4 == 0) {
                 phi_s0 = 0x20;
@@ -128,13 +124,13 @@ void func_80B6E090(BgKin2Bombwall *this, GlobalContext *globalCtx) {
             if (temp_s3 < 2 ||  Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
-                func_800B0E48(globalCtx, &spF0, &gZeroVec3f, &D_80B6E724, &D_80B6E71C, &D_80B6E720, 
+                func_800B0E48(globalCtx, &pos, &gZeroVec3f, &D_80B6E724, &D_80B6E71C, &D_80B6E720, 
                                  (((u32) Rand_Next() >> 0x1B) + 0x46), 
-                                 (( ( (u32) Rand_Next() ) >> 0x1A) + 0x3C));
+                                 (( ( (u32) Rand_Next() ) >> 0x1A) + 0x3C)); //for dust spawn
             } else {
                 phi_s1 = 0;
             }
-            EffectSsKakera_Spawn(globalCtx, &spF0, &spE4, &spF0, -0x226, phi_s0, 0x1E, 0, 
+            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x226, phi_s0, 0x1E, 0, 
                                  0,  D_80B6E738[temp_s3], phi_s1, 0, 0x32, -1, 
                                  0x1F5,  D_06000128);
         }
@@ -157,7 +153,7 @@ void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &D_80B6E6F0);
     Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
     Actor_SetFocus(&this->dyna.actor, 60.0f);
-    func_80B6E4B8(this);
+    BgKin2Bombwall_SetupWait(this);
 }
 
 void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
@@ -167,32 +163,32 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 //suggested name: BgKin2Bombwall_SetupWait
-void func_80B6E4B8(BgKin2Bombwall *arg0) {
-    arg0->actionFunc = func_80B6E4CC;
+void BgKin2Bombwall_SetupWait(BgKin2Bombwall *arg0) {
+    arg0->actionFunc = BgKin2Bombwall_Wait;
 }
 
 
 //if possible, requests the wall explosion cutscene to play
-//by setting the action function to the cutscene function func_80B6E558
+//by setting the action function to the cutscene function BgKin2Bombwall_PlayCutscene
 //Current name : BgKin2Bombwall_Wait
-void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+void BgKin2Bombwall_Wait(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (func_80B6E020(arg0, arg1) != 0) { //checks if AC collision happened
         arg0->collider.base.acFlags &= 0xFFFD;
         ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
-        func_80B6E544(arg0);
+        BgKin2Bombwall_SetupPlayCutscene(arg0);
         return;
     }
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->collider.base);
 }
 
-//suggested name: BgKin2Bombwall_SetupStart
-void func_80B6E544(BgKin2Bombwall *arg0) {
-    arg0->actionFunc = func_80B6E558;
+//suggested name: BgKin2Bombwall_SetupPlayCutscene
+void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall *arg0) {
+    arg0->actionFunc = BgKin2Bombwall_PlayCutscene;
 }
 
 //tries to play the wall explosion cutscene 
 //Current name :BgKin2Bombwall_PlayCutscene
-void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->dyna.actor.cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->dyna.actor.cutscene, &arg0->dyna.actor);
         Flags_SetSwitch(arg1, arg0->dyna.actor.params & 0x7F);
@@ -200,20 +196,20 @@ void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
         func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->dyna.bgId);
         arg0->dyna.actor.draw = NULL;
         func_80B6E090(arg0, arg1); //not sure yet, but takes care of the explosion effects and particles probably
-        func_80B6E5F8(arg0); //Wall is dead. Sets the action function to end cutscene and remove actor.
+        BgKin2Bombwall_SetupEndCutscene(arg0); //Wall is dead. Sets the action function to end cutscene and remove actor.
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->dyna.actor.cutscene);
 }
 
-//suggested name: BgKin2Bombwall_SetupStopCutscene
-void func_80B6E5F8(BgKin2Bombwall *arg0) {
+//suggested name: BgKin2Bombwall_SetupEndCutscene
+void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall *arg0) {
     arg0->unk_1AC[0] = 0x28;
-    arg0->actionFunc = func_80B6E614;
+    arg0->actionFunc = BgKin2Bombwall_EndCutscene;
 }
 
-//suggested name: BgKin2Bombwall_StopCutscene
-void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+//suggested name: BgKin2Bombwall_EndCutscene
+void BgKin2Bombwall_EndCutscene(BgKin2Bombwall *arg0, GlobalContext *arg1) {
     arg0->unk_1AC[0] += -1;
     if ((s32) arg0->unk_1AC[0] <= 0) {
         ActorCutscene_Stop((s16) arg0->dyna.actor.cutscene);
