@@ -38,19 +38,19 @@ typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 #define ACTOR_PATHING_REACHED_END \
     (ACTOR_PATHING_REACHED_END_PERMANENT | ACTOR_PATHING_REACHED_END_TEMPORARY)
 
-typedef struct TurnOptions {
+typedef struct TrackOptions {
     /* 0x0 */ u16 rotMax; // binary angles
     /* 0x2 */ u16 slowness; // larger for slower rotation, cannot be 0
     /* 0x4 */ u16 rotStepMin; // degrees
     /* 0x6 */ u16 rotStepMax; // degrees
-} TurnOptions; // size = 0x8
+} TrackOptions; // size = 0x8
 
-typedef struct TurnOptionsSet {
-    /* 0x00 */ TurnOptions headRotX;
-    /* 0x08 */ TurnOptions headRotY;
-    /* 0x10 */ TurnOptions torsoRotX;
-    /* 0x18 */ TurnOptions torsoRotY;
-} TurnOptionsSet; // size = 0x20
+typedef struct TrackOptionsSet {
+    /* 0x00 */ TrackOptions headRotX;
+    /* 0x08 */ TrackOptions headRotY;
+    /* 0x10 */ TrackOptions torsoRotX;
+    /* 0x18 */ TrackOptions torsoRotY;
+} TrackOptionsSet; // size = 0x20
 
 struct ActorPathing;
 typedef void (*ActorPathingComputeFunc)(struct GlobalContext*, struct ActorPathing*);
