@@ -168,7 +168,8 @@ void func_80C0A378(BgAstrBombwall* this) {
     this->actionFunc = func_80C0A38C;
 }
 
-void func_80C0A38C(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
+void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    BgAstrBombwall* this = THIS;
     u8 temp_v0;
 
     temp_v0 = thisx->unk160.base.acFlags;
