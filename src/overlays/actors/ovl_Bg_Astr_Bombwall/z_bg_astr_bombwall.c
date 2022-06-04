@@ -181,8 +181,10 @@ void func_80C0A38C(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisx->unk160.base);
 }
 
-void func_80C0A400(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    thisx->actionFunc = func_80C0A418;
+void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    BgAstrBombwall* this = THIS;
+    
+    this->actionFunc = func_80C0A418;
 }
 
 void func_80C0A418(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
