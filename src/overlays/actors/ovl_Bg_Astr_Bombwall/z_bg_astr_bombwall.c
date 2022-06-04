@@ -169,11 +169,8 @@ void func_80C0A378(BgAstrBombwall* this) {
 
 void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
-    u8 temp_v0;
-
-    temp_v0 = thisx->unk160.base.acFlags;
-    if ((temp_v0 & 2) != 0) {
-        thisx->unk160.base.acFlags = temp_v0 & 0xFFFD;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Flags_SetSwitch(globalCtx, thisx->dyna.actor.params & 0x7F);
         func_80C0A400(thisx, globalCtx);
         return;
