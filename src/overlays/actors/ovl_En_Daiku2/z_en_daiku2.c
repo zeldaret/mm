@@ -549,17 +549,17 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
             if (particle->isEnabled) {
-                Matrix_StatePush();
-                Matrix_InsertTranslation(particle->unk_04.x, particle->unk_04.y, particle->unk_04.z, MTXMODE_NEW);
-                Matrix_InsertXRotation_s(particle->unk_28.x, MTXMODE_APPLY);
-                Matrix_RotateY(particle->unk_28.y, MTXMODE_APPLY);
-                Matrix_InsertZRotation_s(particle->unk_28.z, MTXMODE_APPLY);
+                Matrix_Push();
+                Matrix_Translate(particle->unk_04.x, particle->unk_04.y, particle->unk_04.z, MTXMODE_NEW);
+                Matrix_RotateXS(particle->unk_28.x, MTXMODE_APPLY);
+                Matrix_RotateYS(particle->unk_28.y, MTXMODE_APPLY);
+                Matrix_RotateZS(particle->unk_28.z, MTXMODE_APPLY);
                 Matrix_Scale(particle->unk_30, particle->unk_30, particle->unk_30, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_0009E0);
 
-                Matrix_StatePop();
+                Matrix_Pop();
             }
         }
     }

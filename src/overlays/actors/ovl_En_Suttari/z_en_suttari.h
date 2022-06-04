@@ -27,9 +27,9 @@ typedef struct EnSuttari {
     /* 0x1FC */ UNK_TYPE1 unk_1FC[0x1A];
     /* 0x216 */ Vec3s jointTable[16];
     /* 0x276 */ Vec3s morphTable[16];
-    /* 0x2D6 */ Vec3s unk2D6;
-    /* 0x2DC */ Vec3s unk2DC;
-    /* 0x2E2 */ Vec3s unk2E2;
+    /* 0x2D6 */ Vec3s turnTarget;
+    /* 0x2DC */ Vec3s headRot;
+    /* 0x2E2 */ Vec3s torsoRot;
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x12];
     /* 0x2FA */ s16 unk2FA[16];
     /* 0x31A */ s16 unk31A[16];

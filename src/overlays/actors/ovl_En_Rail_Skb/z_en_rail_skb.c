@@ -1099,9 +1099,9 @@ s32 EnRailSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     } else if (limbIndex == 10) {
         Vec3f sp24 = { 0.0f, 1000.0f, 0.0f };
 
-        Matrix_MultiplyVector3fByState(&sp24, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp24, &this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3FA == 1)) {
-        Matrix_InsertZRotation_s(1820, MTXMODE_APPLY);
+        Matrix_RotateZS(1820, MTXMODE_APPLY);
     }
 
     if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_402 & 2)) {
@@ -1129,10 +1129,10 @@ void EnRailSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
                 (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
                 (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-                Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+                Matrix_MultZero(&this->limbPos[this->limbCount]);
                 this->limbCount++;
             } else if ((limbIndex == 11) && !(this->unk_402 & 2)) {
-                Matrix_MultiplyVector3fByState(&D_80B734D0, &this->limbPos[this->limbCount]);
+                Matrix_MultVec3f(&D_80B734D0, &this->limbPos[this->limbCount]);
                 this->limbCount++;
             }
         }

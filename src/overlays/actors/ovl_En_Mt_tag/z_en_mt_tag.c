@@ -453,7 +453,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
  * responded to the Goron Elder's son's question.
  */
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (Message_ShouldAdvance(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             // Exit the race
             func_8019F230();

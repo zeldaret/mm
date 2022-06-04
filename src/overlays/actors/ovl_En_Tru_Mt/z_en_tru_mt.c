@@ -455,9 +455,9 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
-    func_8018219C(&sp28, &sp68, 0);
+    Matrix_MultVec3f(&sp70, &sp7C);
+    Matrix_Get(&sp28);
+    Matrix_MtxFToYXZRot(&sp28, &sp68, false);
 
     *arg2 = sp7C;
 
@@ -479,11 +479,11 @@ s32 EnTruMt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_35C);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_35C);
     }
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
-        Matrix_MultiplyVector3fByState(&D_80B7765C, &this->unk_350);
+        Matrix_MultVec3f(&D_80B7765C, &this->unk_350);
     }
     return false;
 }
@@ -501,11 +501,11 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             phi_v0 = 0;
         }
         func_80B76ED4(this->unk_348, this->unk_34A, &this->unk_33C, &this->unk_336, phi_v0);
-        Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_336.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_336.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_336.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_336.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_336.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_336.z, MTXMODE_APPLY);
     }
 
     if (limbIndex == OBJECT_TRU_LIMB_0E) {
@@ -513,11 +513,11 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_MultiplyVector3fByState(&D_80B77668, &this->unk_370);
-        Matrix_InsertTranslation(this->unk_370.x, this->unk_370.y, this->unk_370.z, MTXMODE_NEW);
-        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_38E.z, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_38E.x, MTXMODE_APPLY);
+        Matrix_MultVec3f(&D_80B77668, &this->unk_370);
+        Matrix_Translate(this->unk_370.x, this->unk_370.y, this->unk_370.z, MTXMODE_NEW);
+        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_38E.z, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_38E.x, MTXMODE_APPLY);
         Matrix_Scale(0.008f, 0.008f, 0.008f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -525,15 +525,15 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        sp54 = Matrix_GetCurrentState();
+        sp54 = Matrix_GetCurrent();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->wx, sp54->wy,
-                               sp54->wz, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw,
+                               sp54->zw, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
                                this->unk_38E.z, -1);
         } else if (!((EnJcMato*)this->actor.child)->hitFlag) {
-            this->actor.child->world.pos.x = sp54->wx;
-            this->actor.child->world.pos.y = sp54->wy;
-            this->actor.child->world.pos.z = sp54->wz;
+            this->actor.child->world.pos.x = sp54->xw;
+            this->actor.child->world.pos.y = sp54->yw;
+            this->actor.child->world.pos.z = sp54->zw;
 
             this->actor.child->world.rot = this->unk_38E;
             this->actor.child->world.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
@@ -547,11 +547,11 @@ void EnTruMt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* t
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
-        Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_336.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_336.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_336.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_336.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_336.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_336.z, MTXMODE_APPLY);
     }
 }
 

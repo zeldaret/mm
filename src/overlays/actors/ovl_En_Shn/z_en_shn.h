@@ -20,8 +20,8 @@ typedef struct EnShn {
     /* 0x1E4 */ Player* shnPlayerRef;
     /* 0x1E8 */ Vec3f unk_1E8;
     /* 0x1F4 */ Vec3s unk_1F4;
-    /* 0x1FA */ Vec3s jointTable[OBJECT_SHN_LIMB_MAX];
-    /* 0x25A */ Vec3s morphTable[OBJECT_SHN_LIMB_MAX];
+    /* 0x1FA */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
+    /* 0x25A */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
     /* 0x2BA */ s16 unk_2BA;
     /* 0x2BC */ s16 unk_2BC;
     /* 0x2BE */ s16 unk_2BE;

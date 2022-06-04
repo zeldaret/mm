@@ -50,7 +50,7 @@ void Opening_Init(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
 
     Game_SetFramerateDivisor(&this->gameState, 1);
-    Matrix_StateAlloc(&this->gameState);
+    Matrix_Init(&this->gameState);
     ShrinkWindow_Init();
     View_Init(&this->view, this->gameState.gfxCtx);
     this->gameState.main = Opening_Main;

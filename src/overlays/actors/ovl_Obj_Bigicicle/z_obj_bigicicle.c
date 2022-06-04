@@ -302,7 +302,7 @@ void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx) {
         sp44.z = (((215.0f + Rand_ZeroFloat(65.0f)) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1)) * this->actor.scale.z) +
                  this->actor.world.pos.z;
 
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp44, &gZeroVec3f, &gZeroVec3f, &D_80AE9894, &D_80AE9898, 2000, 5);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp44, &gZeroVec3f, &gZeroVec3f, &D_80AE9894, &D_80AE9898, 2000, 5);
     }
 
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);

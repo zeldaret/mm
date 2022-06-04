@@ -1347,60 +1347,329 @@ typedef union {
     long int	force_structure_alignment[4];
 } Hilite;
 
-#define gdSPDefLights0(ar,ag,ab)					\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ { 0, 0, 0},0,{ 0, 0, 0},0,{ 0, 0, 0},0}}} }
-#define gdSPDefLights1(ar,ag,ab,r1,g1,b1,x1,y1,z1)			\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}}} }
-#define gdSPDefLights2(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2)	\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}}} }
-#define gdSPDefLights3(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3)									\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}}} }
-#define gdSPDefLights4(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4)						\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}}} }
-#define gdSPDefLights5(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5)				\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}}} }
+#define gdSPDefLights0(ar,ag,ab)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { 0, 0, 0 }, 0,     \
+                    { 0, 0, 0 }, 0,     \
+                    { 0, 0, 0 }, 0      \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights1(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLights6(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5,r6,g6,b6,x6,y6,z6)		\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}},	\
-			{{ {r6,g6,b6},0,{r6,g6,b6},0,{x6,y6,z6},0}}} }
+#define gdSPDefLights2(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights3(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLights7(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5,r6,g6,b6,x6,y6,z6,r7,g7,b7,x7,y7,z7)	\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}},	\
-			{{ {r6,g6,b6},0,{r6,g6,b6},0,{x6,y6,z6},0}},	\
-			{{ {r7,g7,b7},0,{r7,g7,b7},0,{x7,y7,z7},0}}} }
+#define gdSPDefLights4(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights5(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLookAt(rightx,righty,rightz,upx,upy,upz)			    \
-		{	{{ {{0,0,0},0,{0,0,0},0,{rightx,righty,rightz},0}}, \
-			{ {{0,0x80,0},0,{0,0x80,0},0,{upx,upy,upz},0}}}   }
+#define gdSPDefLights6(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5,        \
+                       r6,g6,b6,        \
+                       x6,y6,z6)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }},                     \
+                {{                      \
+                    { r6, g6, b6 }, 0,  \
+                    { r6, g6, b6 }, 0,  \
+                    { x6, y6, z6 }, 0   \
+                }}                      \
+            }                           \
+        }
+
+#define gdSPDefLights7(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5,        \
+                       r6,g6,b6,        \
+                       x6,y6,z6,        \
+                       r7,g7,b7,        \
+                       x7,y7,z7)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }},                     \
+                {{                      \
+                    { r6, g6, b6 }, 0,  \
+                    { r6, g6, b6 }, 0,  \
+                    { x6, y6, z6 }, 0   \
+                }},                     \
+                {{                      \
+                    { r7, g7, b7 }, 0,  \
+                    { r7, g7, b7 }, 0,  \
+                    { x7, y7, z7 }, 0   \
+                }}                      \
+            }                           \
+        }
+
+#define gdSPDefLookAt(rightx,righty,rightz,upx,upy,upz) \
+        {{                                              \
+                {{                                      \
+                    { 0, 0, 0 }, 0,                     \
+                    { 0, 0, 0 }, 0,                     \
+                    { rightx, righty, rightz }, 0       \
+                }},                                     \
+                {{                                      \
+                    { 0, 0x80, 0 }, 0,                  \
+                    { 0, 0x80, 0 }, 0,                  \
+                    { upx, upy, upz }, 0                \
+                }}                                      \
+        }}
+
+#define qs1616(e) ((s32)((e) * 0x00010000))
+
+#define IPART(x) ((qs1616(x) >> 16) & 0xFFFF)
+#define FPART(x) (qs1616(x) & 0xFFFF)
+
+#define gdSPDefMtx(     \
+        xx, yx, zx, wx, \
+        xy, yy, zy, wy, \
+        xz, yz, zz, wz, \
+        xw, yw, zw, ww) \
+    {{                                  \
+        (IPART(xx) << 0x10) | IPART(xy),  \
+        (IPART(xz) << 0x10) | IPART(xw),  \
+        (IPART(yx) << 0x10) | IPART(yy),  \
+        (IPART(yz) << 0x10) | IPART(yw),  \
+        (IPART(zx) << 0x10) | IPART(zy),  \
+        (IPART(zz) << 0x10) | IPART(zw),  \
+        (IPART(wx) << 0x10) | IPART(wy),  \
+        (IPART(wz) << 0x10) | IPART(ww),  \
+        (FPART(xx) << 0x10) | FPART(xy),  \
+        (FPART(xz) << 0x10) | FPART(xw),  \
+        (FPART(yx) << 0x10) | FPART(yy),  \
+        (FPART(yz) << 0x10) | FPART(yw),  \
+        (FPART(zx) << 0x10) | FPART(zy),  \
+        (FPART(zz) << 0x10) | FPART(zw),  \
+        (FPART(wx) << 0x10) | FPART(wy),  \
+        (FPART(wz) << 0x10) | FPART(ww),  \
+    }}
 
 /*
  *  Graphics DMA Packet

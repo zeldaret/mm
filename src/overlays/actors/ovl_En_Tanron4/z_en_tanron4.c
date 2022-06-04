@@ -276,7 +276,7 @@ void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron4* this = THIS;
 
     if (this->timeInfluence < 1400.0f) {
-        Matrix_InsertZRotation_s(this->roll, MTXMODE_APPLY);
+        Matrix_RotateZS(this->roll, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, NULL, NULL, &this->actor);
     }

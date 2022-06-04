@@ -374,7 +374,8 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x39 */ GID_39 = 0x39,
+    /* 0x3A */ GID_3A,
     /* 0x3B */ GID_FAIRY,
     /* 0x3E */ GID_3E = 0x3E,
     /* 0x44 */ GID_44 = 0x44,
@@ -386,7 +387,7 @@ typedef enum {
     /* 0x6A */ GID_6A = 0x6A,
     /* 0x6B */ GID_6B,
     /* 0x70 */ GID_70 = 0x70,
-    /* 0x71 */ GID_71,
+    /* 0x71 */ GID_71
 } GetItemDrawID;
 
 // TODO: fill

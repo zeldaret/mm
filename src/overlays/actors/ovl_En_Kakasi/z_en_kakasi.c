@@ -170,7 +170,7 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     i = 0;
     tempCutscene = this->actor.cutscene;
     while (tempCutscene != -1) {
-        // This might be a fake match, no others found yet
+        //! FAKE:
         tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actorCutscenes[i] = tempCutscene);
         i++;
     }
@@ -415,7 +415,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkState1A8 = 0;
     }
 
-    if (this->unkMsgState1AC == Message_GetState(&globalCtx->msgCtx) && Message_ShouldAdvance(globalCtx) != 0) {
+    if ((this->unkMsgState1AC == Message_GetState(&globalCtx->msgCtx)) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if (this->unkMsgState1AC == 5) {
             // bad song input
@@ -560,7 +560,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_80152434(globalCtx, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -734,8 +734,8 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
     func_8096FAAC(this, globalCtx);
 
-    if (this->unkState1A8 != 0 && Message_GetState(&globalCtx->msgCtx) == this->unkMsgState1AC &&
-        Message_ShouldAdvance(globalCtx) != 0) {
+    if ((this->unkState1A8 != 0) && (Message_GetState(&globalCtx->msgCtx) == this->unkMsgState1AC) &&
+        Message_ShouldAdvance(globalCtx)) {
 
         func_801477B4(globalCtx);
 
@@ -1101,7 +1101,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_RisenDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         EnKakasi_SetupIdleRisen(this);
     }
@@ -1148,7 +1148,7 @@ void EnKakasi_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnKakasi* this = THIS;
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk1BC);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk1BC);
     }
 }
 
