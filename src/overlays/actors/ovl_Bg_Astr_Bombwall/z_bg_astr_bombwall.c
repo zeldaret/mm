@@ -136,6 +136,7 @@ void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
     s16 var_v0;
     Vec3f spAC;
     f32 temp_fv0;
+    
     Matrix_RotateYS(thisx->dyna.actor.shape.rot.y, MTXMODE_NEW);
     for (var_s1 = 0; var_s1 < 0x1E; var_s1++) {
         spC8.x = Rand_Centered() * 140.0f;
