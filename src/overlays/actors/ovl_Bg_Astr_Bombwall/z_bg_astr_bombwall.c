@@ -119,7 +119,7 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, temp_a1);
-    SubS_FillCutscenesList(&this->dyna.actor, &this->unk238, 1);
+    SubS_FillCutscenesList(&this->dyna.actor, &this->unk238, ARRAY_COUNT(this->unk238));
     func_80C0A378(this);
 }
 
