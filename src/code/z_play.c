@@ -309,8 +309,6 @@ s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
-// z_demo and EnTest4
-// This data appears to be a boolean. It is only set by Play_Init.
 s32 Play_IsDebugCamEnabled(void) {
     return gDbgCamEnabled;
 }
