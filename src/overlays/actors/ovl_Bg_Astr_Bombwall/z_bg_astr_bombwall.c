@@ -193,7 +193,7 @@ void func_80C0A458(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, thisx->dyna.bgId);
     thisx->dyna.actor.draw = NULL;
     func_80C0A120(thisx, globalCtx);
-    Actor_PlaySfxAtPos(&thisx->dyna.actor, 0x2810U);
+    Actor_PlaySfxAtPos(&thisx->dyna.actor, NA_SE_EV_WALL_BROKEN);
     thisx->actionFunc = func_80C0A4BC;
 }
 
