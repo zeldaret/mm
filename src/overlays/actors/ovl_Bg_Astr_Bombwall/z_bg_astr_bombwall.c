@@ -202,6 +202,7 @@ void func_80C0A4BC(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
 
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
+    
     this->actionFunc(this, globalCtx);
 }
 
