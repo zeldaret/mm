@@ -107,8 +107,7 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init((DynaPolyActor*)&this->dyna.actor, 1);
     DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)&this->dyna.actor, &D_06002498);
-    temp_a1 = &this->unk160;
-    Collider_InitTris(globalCtx, temp_a1);
+    Collider_InitTris(globalCtx, &this->unk160);
     if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
