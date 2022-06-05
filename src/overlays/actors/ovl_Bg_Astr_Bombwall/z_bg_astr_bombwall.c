@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_astr_bombwall.h"
+#include "objects/object_astr_obj/object_astr_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -15,14 +16,14 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C0A378(BgAstrBombwall* thisx);
-void func_80C0A38C(BgAstrBombwall* thisx, GlobalContext* globalCtx);
-void func_80C0A400(BgAstrBombwall* thisx, GlobalContext* globalCtx);
-void func_80C0A418(BgAstrBombwall* thisx, GlobalContext* globalCtx);
-void func_80C0A458(BgAstrBombwall* thisx, GlobalContext* globalCtx);
-void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx);
-void func_80C0A4BC(BgAstrBombwall* thisx, GlobalContext* globalCtx);
 void func_80C09ED0(ColliderTrisInit* arg0, Vec3f* arg1, Vec3s* arg2, ColliderTris* arg3);
+void func_80C0A120(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A378(BgAstrBombwall* this);
+void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A418(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A458(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A4BC(BgAstrBombwall* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
@@ -78,11 +79,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-extern Gfx D_06002178;
-extern CollisionHeader D_06002498;
-extern Gfx D_06002380[];
-extern Gfx D_060022E0[];
-
 void func_80C09ED0(ColliderTrisInit* arg0, Vec3f* arg1, Vec3s* arg2, ColliderTris* arg3) {
     s32 i;
     s32 j;
@@ -102,46 +98,48 @@ void func_80C09ED0(ColliderTrisInit* arg0, Vec3f* arg1, Vec3s* arg2, ColliderTri
 }
 
 void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderTris* temp_a1;
+    s32 pad;
     BgAstrBombwall* this = THIS;
+
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init((DynaPolyActor*)&this->dyna.actor, 1);
-    DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)&this->dyna.actor, &D_06002498);
-    temp_a1 = &this->unk160;
-    Collider_InitTris(globalCtx, temp_a1);
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F) != 0) {
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_astr_obj_Colheader_002498);
+    Collider_InitTris(globalCtx, &this->collider);
+    if (Flags_GetSwitch(globalCtx, OBJBgAstrBombwall_GET_SWITCHFLAG(this))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
     this->dyna.actor.flags |= 0x10000000;
-    if (Collider_SetTris(globalCtx, temp_a1, &this->dyna.actor, &sTrisInit, &this->unk180) == 0) {
+    if (Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, &this->colliderElements) == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, temp_a1);
-    SubS_FillCutscenesList(&this->dyna.actor, &this->unk238, 1);
+    func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape, &this->collider);
+    SubS_FillCutscenesList(&this->dyna.actor, this->unk238, ARRAY_COUNT(this->unk238));
     func_80C0A378(this);
 }
 
 void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
+
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
+void func_80C0A120(BgAstrBombwall* this, GlobalContext* globalCtx) {
     s32 var_s1;
     Vec3f spC8;
     Vec3f spBC;
     s16 var_v0;
     Vec3f spAC;
     f32 temp_fv0;
-    Matrix_RotateYS(thisx->dyna.actor.shape.rot.y, MTXMODE_NEW);
+
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     for (var_s1 = 0; var_s1 < 0x1E; var_s1++) {
         spC8.x = Rand_Centered() * 140.0f;
         spC8.y = Rand_ZeroOne() * 200.0f;
         spC8.z = 0.0f;
         Matrix_MultVec3f(&spC8, &spBC);
-        Math_Vec3f_Sum(&thisx->dyna.actor.world.pos, &spBC, &spBC);
+        Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spBC, &spBC);
         func_800BBFB0(globalCtx, &spBC, 50.0f, 2, Rand_ZeroOne() * 120.0f + 20.0f, Rand_ZeroOne() * 240.0f + 20.0f, 0);
         spAC.x = Rand_ZeroOne() * 2.5f;
         spAC.y = (Rand_ZeroOne() * 2.5f) + 1.0f;
@@ -156,73 +154,73 @@ void func_80C0A120(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
             var_v0 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &spBC, &spAC, &spBC, -0x104, var_v0, 0x14, 0, 0, 0xA, 0, 0, 0x32, -1, 0x267,
-                             &D_06002178);
+                             &object_astr_obj_DL_002178);
     }
 }
 
-void func_80C0A378(BgAstrBombwall* thisx) {
-    thisx->actionFunc = func_80C0A38C;
+void func_80C0A378(BgAstrBombwall* this) {
+    this->actionFunc = func_80C0A38C;
 }
 
-void func_80C0A38C(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    u8 temp_v0;
-
-    temp_v0 = thisx->unk160.base.acFlags;
-    if ((temp_v0 & 2) != 0) {
-        thisx->unk160.base.acFlags = temp_v0 & 0xFFFD;
-        Flags_SetSwitch(globalCtx, thisx->dyna.actor.params & 0x7F);
-        func_80C0A400(thisx, globalCtx);
+void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    if ((this->collider.base.acFlags & AC_HIT)) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        Flags_SetSwitch(globalCtx, OBJBgAstrBombwall_GET_SWITCHFLAG(this));
+        func_80C0A400(this, globalCtx);
         return;
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisx->unk160.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void func_80C0A400(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    thisx->actionFunc = func_80C0A418;
+void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80C0A418;
 }
 
-void func_80C0A418(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    if (SubS_StartActorCutscene(&thisx->dyna.actor, thisx->unk238, -1, 0) != 0) {
-        func_80C0A458(thisx, globalCtx);
+void func_80C0A418(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->unk238[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        func_80C0A458(this, globalCtx);
     }
 }
 
-void func_80C0A458(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
-    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, thisx->dyna.bgId);
-    thisx->dyna.actor.draw = NULL;
-    func_80C0A120(thisx, globalCtx);
-    Actor_PlaySfxAtPos(&thisx->dyna.actor, 0x2810U);
-    thisx->actionFunc = func_80C0A4BC;
+void func_80C0A458(BgAstrBombwall* this, GlobalContext* globalCtx) {
+    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    this->dyna.actor.draw = NULL;
+    func_80C0A120(this, globalCtx);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    this->actionFunc = func_80C0A4BC;
 }
 
-void func_80C0A4BC(BgAstrBombwall* thisx, GlobalContext* globalCtx) {
+void func_80C0A4BC(BgAstrBombwall* this, GlobalContext* globalCtx) {
 }
 
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgAstrBombwall* this = THIS;
+
     this->actionFunc(this, globalCtx);
 }
 
-void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgAstrBombwall_Draw(Actor* thixs, GlobalContext* globalCtx) {
     {
         Gfx* opa;
+
         OPEN_DISPS(globalCtx->state.gfxCtx);
         opa = POLY_OPA_DISP;
         gSPDisplayList(&opa[0], &sSetupDL[25 * 6]);
         gSPMatrix(&opa[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&opa[2], 0x400000);
-        gSPDisplayList(&opa[3], D_06002380);
+        gSPDisplayList(&opa[3], object_astr_obj_DL_002380);
         POLY_OPA_DISP = &opa[4];
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     {
         Gfx* xlu;
+
         OPEN_DISPS(globalCtx->state.gfxCtx);
         xlu = POLY_XLU_DISP;
         gSPDisplayList(&xlu[0], &sSetupDL[25 * 6]);
         gSPMatrix(&xlu[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&xlu[2], 0x400000);
-        gSPDisplayList(&xlu[3], D_060022E0);
+        gSPDisplayList(&xlu[3], object_astr_obj_DL_0022E0);
         POLY_XLU_DISP = &xlu[4];
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
