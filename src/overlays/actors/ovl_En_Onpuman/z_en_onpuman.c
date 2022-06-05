@@ -14,11 +14,11 @@ void EnOnpuman_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOnpuman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOnpuman_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B121D8(EnOnpuman *, GlobalContext *globalCtx);   /* extern */
-s32 func_80B11F44(GlobalContext *globalCtx);                 /* extern */
-void func_80B1202C(EnOnpuman *, GlobalContext *globalCtx);   /* extern */
-void func_80B1217C(EnOnpuman *, GlobalContext *globalCtx);   /* extern */
-#if  1
+void func_80B121D8(EnOnpuman*, GlobalContext* globalCtx); /* extern */
+s32 func_80B11F44(GlobalContext* globalCtx);              /* extern */
+void func_80B1202C(EnOnpuman*, GlobalContext* globalCtx); /* extern */
+void func_80B1217C(EnOnpuman*, GlobalContext* globalCtx); /* extern */
+#if 1
 const ActorInit En_Onpuman_InitVars = {
     ACTOR_EN_ONPUMAN,
     ACTORCAT_NPC,
@@ -33,8 +33,22 @@ const ActorInit En_Onpuman_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B12390 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
@@ -44,8 +58,8 @@ extern ColliderCylinderInit D_80B12390;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Onpuman/EnOnpuman_Init.s")
 
-void EnOnpuman_Init(Actor *thisx, GlobalContext *globalCtx) {
-    EnOnpuman *this = (EnOnpuman *) thisx;
+void EnOnpuman_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnOnpuman* this = (EnOnpuman*)thisx;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->actor.flags |= 0x02000000;
     Collider_InitAndSetCylinder(globalCtx, &this->unk254, &this->actor, &D_80B12390);
@@ -62,8 +76,8 @@ void EnOnpuman_Init(Actor *thisx, GlobalContext *globalCtx) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Onpuman/EnOnpuman_Destroy.s")
 
-void EnOnpuman_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnOnpuman *this = (EnOnpuman *) thisx;
+void EnOnpuman_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnOnpuman* this = (EnOnpuman*)thisx;
     Collider_DestroyCylinder(globalCtx, &this->unk254);
 }
 

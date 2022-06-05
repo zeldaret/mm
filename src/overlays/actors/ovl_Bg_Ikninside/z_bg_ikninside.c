@@ -16,7 +16,7 @@ void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80C072D0(BgIkninside*, GlobalContext*); /* extern */
-//void func_80C07230(BgIkninside*, GlobalContext*); /* extern */
+// void func_80C07230(BgIkninside*, GlobalContext*); /* extern */
 #if 1
 const ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
@@ -204,7 +204,7 @@ void BgIkninside_Draw(Actor *thisx, GlobalContext *globalCtx) {
     //sp24 = temp_a2;
     func_8012C28C(globalCtx->state.gfxCtx);
     //temp_a2->polyOpa.p = temp_v0_2 + 8;
-    
+
     //temp_v0_2 = temp_a2->polyOpa.p;
     //temp_v0_2->words.w0 = 0xDE000000;
     //temp_v0_2->words.w1 = (u32) &D_0600CC78;

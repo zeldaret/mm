@@ -56,7 +56,7 @@ s16 func_80B9AF50(ObjBoat* this, Vec3f* arg0) {
 
 void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
-    ObjBoat* this = (ObjBoat* ) thisx;
+    ObjBoat* this = (ObjBoat*)thisx;
     Path* path;
     Vec3f sp24;
 
@@ -64,7 +64,7 @@ void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 3);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06009A88);
     if (this->dyna.actor.params < 0) {
-        this->dyna.actor.update = (void (*)(Actor*, GlobalContext*)) func_80B9B428;
+        this->dyna.actor.update = (void (*)(Actor*, GlobalContext*))func_80B9B428;
     } else {
         path = &globalCtx->setupPathList[(this->dyna.actor.params >> 7) & 0x1F];
         this->unk163 = path->count - 1;
