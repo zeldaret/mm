@@ -256,6 +256,9 @@ struct EnItem00;
 
 typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
 
+#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
+
 typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;

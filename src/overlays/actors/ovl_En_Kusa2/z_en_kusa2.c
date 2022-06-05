@@ -4,6 +4,7 @@
  * Description: Keaton grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -240,7 +241,7 @@ void func_80A5B508(void) {
 
 void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = (f32*)&temp->mf[0];
     f32* tmp2 = (f32*)&matrix->mf[0];
 
@@ -1310,8 +1311,8 @@ void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A5EB68[] = {
-        gameplay_keep_DL_0528B0,
-        gameplay_keep_DL_0527F0,
+        gKakeraLeafTip,
+        gKakeraLeafMiddle,
     };
     EnKusa2* this = THIS;
     s32 i;
@@ -1324,7 +1325,7 @@ void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
         EnKusa2UnkBssSubStruct2* s = &D_80A5F1C0.unk_0480[i];
 
         if (s->unk_2C > 0) {
-            Matrix_SetStateRotationAndTranslation(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
+            Matrix_SetTranslateRotateYXZ(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
             Matrix_Scale(s->unk_00, s->unk_00, s->unk_00, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1343,7 +1344,7 @@ void func_80A5E80C(GlobalContext* globalCtx, s32 arg1) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_007938);
+    gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1356,7 +1357,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
+        Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(globalCtx, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1368,16 +1369,16 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.x = thisx->shape.rot.x + D_80A5EAFC.x;
     sp18.y = thisx->shape.rot.y + D_80A5EAFC.y;
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
-    Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
+    Matrix_SetTranslateRotateYXZ(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
+    Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
 }
 
 void func_80A5EA48(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
+        Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
     } else {
         func_80A5E80C(globalCtx, this->unk_1CF);
     }
