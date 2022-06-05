@@ -110,13 +110,13 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     this->dyna.actor.flags |= 0x10000000;
-    if (Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, &this->colliderElements) == 0) {
+    if (Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements) == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape, &this->collider);
+    func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->collider);
     SubS_FillCutscenesList(&this->dyna.actor, this->unk238, ARRAY_COUNT(this->unk238));
-    func_80C0A378(this);
+    func_80C0A378(this); 
 }
 
 void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -154,7 +154,7 @@ void func_80C0A120(BgAstrBombwall* this, GlobalContext* globalCtx) {
             var_v0 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &spBC, &spAC, &spBC, -0x104, var_v0, 0x14, 0, 0, 0xA, 0, 0, 0x32, -1, 0x267,
-                             &object_astr_obj_DL_002178);
+                             object_astr_obj_DL_002178);
     }
 }
 
