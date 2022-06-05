@@ -57,8 +57,8 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, this->rScrollX * this->life, this->rScrollY * this->life,
                                 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
     scale = this->rScale * 0.0001f;
     Matrix_Scale(scale, scale, 1.0f, MTXMODE_APPLY);
     mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -73,7 +73,7 @@ void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 void EffectSsIceSmoke_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     if (this->life < 10) {
         Math_StepToS(&this->rAlpha, 0, 10);
-    } else if (this->rAlpha < 0x64) {
+    } else if (this->rAlpha < 100) {
         this->rAlpha += 10;
     }
 }
