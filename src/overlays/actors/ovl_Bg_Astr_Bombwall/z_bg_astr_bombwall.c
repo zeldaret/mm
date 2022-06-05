@@ -179,7 +179,6 @@ void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
 }
 
 void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx) {
-    BgAstrBombwall* this = THIS;
     
     this->actionFunc = func_80C0A418;
 }
