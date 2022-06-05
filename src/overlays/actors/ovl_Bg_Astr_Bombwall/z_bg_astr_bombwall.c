@@ -116,7 +116,7 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     func_80C09ED0(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->collider);
     SubS_FillCutscenesList(&this->dyna.actor, this->unk238, ARRAY_COUNT(this->unk238));
-    func_80C0A378(this); 
+    func_80C0A378(this);
 }
 
 void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
