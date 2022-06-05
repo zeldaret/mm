@@ -3745,7 +3745,7 @@ beginseg
     name "ovl_En_Onpuman"
     compress
     include "build/src/overlays/actors/ovl_En_Onpuman/z_en_onpuman.o"
-    include "build/data/ovl_En_Onpuman/ovl_En_Onpuman.data.o"
+    //include "build/data/ovl_En_Onpuman/ovl_En_Onpuman.data.o"
     include "build/data/ovl_En_Onpuman/ovl_En_Onpuman.reloc.o"
 endseg
 
@@ -4296,7 +4296,7 @@ beginseg
     name "ovl_Obj_Boat"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boat/z_obj_boat.o"
-    include "build/data/ovl_Obj_Boat/ovl_Obj_Boat.data.o"
+    // "build/data/ovl_Obj_Boat/ovl_Obj_Boat.data.o"
     include "build/data/ovl_Obj_Boat/ovl_Obj_Boat.reloc.o"
 endseg
 
@@ -4953,7 +4953,7 @@ beginseg
     name "ovl_Bg_Ikninside"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikninside/z_bg_ikninside.o"
-    include "build/data/ovl_Bg_Ikninside/ovl_Bg_Ikninside.data.o"
+    //include "build/data/ovl_Bg_Ikninside/ovl_Bg_Ikninside.data.o"
     include "build/data/ovl_Bg_Ikninside/ovl_Bg_Ikninside.reloc.o"
 endseg
 
