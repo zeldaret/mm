@@ -93,13 +93,11 @@ void EffectSsKFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
                 this->rYScale = this->rScaleMax;
             }
         }
-    } else {
-        if (this->rAlpha > 0) {
-            this->rAlpha -= 10;
-            if (this->rAlpha <= 0) {
-                this->rAlpha = 0;
-                this->life = 0;
-            }
+    } else if (this->rAlpha > 0) {
+        this->rAlpha -= 10;
+        if (this->rAlpha <= 0) {
+            this->rAlpha = 0;
+            this->life = 0;
         }
     }
 
