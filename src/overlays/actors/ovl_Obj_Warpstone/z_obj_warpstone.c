@@ -110,7 +110,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_80143A10(OBJ_WARPSTONE_GET_ID(this));
+        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(this));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -138,13 +138,13 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->isTalking) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 globalCtx->msgCtx.msgMode = 0x4D;
                 globalCtx->msgCtx.unk120D6 = 0;
                 globalCtx->msgCtx.unk120D4 = 0;
-                gSaveContext.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
+                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
             } else {
                 func_801477B4(globalCtx);
             }
@@ -169,21 +169,21 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
+                         this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x,
                      MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 200, this->dyna.actor.home.rot.x);
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
-        Matrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        Matrix_RotateZF((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
-        Matrix_StatePop();
-        Matrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        Matrix_Pop();
+        Matrix_RotateZF((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);

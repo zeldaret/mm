@@ -77,7 +77,7 @@ const ActorInit En_Fall_InitVars = {
  * it also moves the moon closer to the ground depending on the current time.
  */
 void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, GlobalContext* globalCtx) {
-    u16 currentTime = gSaveContext.time;
+    u16 currentTime = gSaveContext.save.time;
     u16 dayStartTime = this->dayStartTime;
     f32 finalDayRelativeHeight;
 
@@ -218,7 +218,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(gSaveContext.weekEventReg[25] & 2)) {
+                if (!(gSaveContext.save.weekEventReg[25] & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -227,7 +227,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
-                if (gSaveContext.weekEventReg[25] & 2) {
+                if (gSaveContext.save.weekEventReg[25] & 2) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -325,7 +325,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
             case 2:
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-                    if (gSaveContext.weekEventReg[93] & 4) {
+                    if (gSaveContext.save.weekEventReg[93] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
                             sGiantsCutsceneState++;
@@ -334,7 +334,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
                         }
                     } else if (ActorCutscene_GetCanPlayNext(0xB)) {
                         ActorCutscene_Start(0xB, &this->actor);
-                        gSaveContext.weekEventReg[93] |= 4;
+                        gSaveContext.save.weekEventReg[93] |= 4;
                         sGiantsCutsceneState++;
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
@@ -481,7 +481,7 @@ void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
         currentDay = CURRENT_DAY;
         if ((u16)this->currentDay != (u32)currentDay) {
             this->currentDay = currentDay;
-            this->dayStartTime = gSaveContext.time;
+            this->dayStartTime = gSaveContext.save.time;
         }
         EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
     }
@@ -518,8 +518,8 @@ void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
-            gSaveContext.weekEventReg[74] |= 0x80;
-            gSaveContext.weekEventReg[74] |= 0x20;
+            gSaveContext.save.weekEventReg[74] |= 0x80;
+            gSaveContext.save.weekEventReg[74] |= 0x20;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
@@ -737,7 +737,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    Matrix_MultiplyVector3fByState(sFocusOffset, &this->actor.focus.pos);
+    Matrix_MultVec3f(sFocusOffset, &this->actor.focus.pos);
 
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
@@ -807,11 +807,11 @@ void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
         translation.x = (-(globalCtx->view.eye.x - thisx->world.pos.x) * scale) + globalCtx->view.eye.x;
         translation.y = (-(globalCtx->view.eye.y - thisx->world.pos.y) * scale) + globalCtx->view.eye.y;
         translation.z = (-(globalCtx->view.eye.z - thisx->world.pos.z) * scale) + globalCtx->view.eye.z;
-        Matrix_InsertTranslation(translation.x, translation.y, translation.z, MTXMODE_NEW);
+        Matrix_Translate(translation.x, translation.y, translation.z, MTXMODE_NEW);
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(thisx->shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
     }
 
     EnFall_LodMoon_Draw(thisx, globalCtx);
@@ -870,11 +870,10 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         if (debrisParticles[i].modelIndex < 3) {
-            Matrix_InsertTranslation(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-            Matrix_InsertRotation(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
-                                  MTXMODE_APPLY);
+            Matrix_RotateZYX(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
+                             MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);

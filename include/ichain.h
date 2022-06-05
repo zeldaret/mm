@@ -1,5 +1,5 @@
-#ifndef _ICHAIN_H_
-#define _ICHAIN_H_
+#ifndef ICHAIN_H
+#define ICHAIN_H
 
 #include "libc/stddef.h"
 

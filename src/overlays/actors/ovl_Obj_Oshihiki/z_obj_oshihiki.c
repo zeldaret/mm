@@ -332,7 +332,7 @@ s32 ObjOshihiki_CheckWall(GlobalContext* globalCtx, s16 angle, f32 direction, Ob
         maxDist = maxDists[D_80918940[i]];
 
         faceVtxOffset.x = (sFaceVtx[i].x * this->dyna.actor.scale.x * 10.0f) + sFaceDirection[i].x;
-        faceVtxOffset.y = (sFaceVtx[i].y * this->dyna.actor.scale.y * 10.0f) + sFaceDirection[i].y;
+        faceVtxOffset.y = (sFaceVtx[i].z * this->dyna.actor.scale.y * 10.0f) + sFaceDirection[i].z;
         faceVtxOffset.z = 0.0f;
 
         ObjOshihiki_RotateXZ(&faceVtx, &faceVtxOffset, sn, cs);
@@ -588,7 +588,7 @@ void ObjOshihiki_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (ObjOshihiki_MoveWithBlockUnder(this, globalCtx)) {
-        Matrix_InsertTranslation(this->underDistX * 10.0f, 0.0f, this->underDistZ * 10.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->underDistX * 10.0f, 0.0f, this->underDistZ * 10.0f, MTXMODE_APPLY);
     }
 
     this->stateFlags &= ~PUSHBLOCK_MOVE_UNDER;
