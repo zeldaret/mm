@@ -5,15 +5,15 @@
 
 struct BgAstrBombwall;
 
+#define OBJBgAstrBombwall_GET_SWITCHFLAG(this) (this->dyna.actor.params & 0x7F)
+
 typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
 typedef struct BgAstrBombwall {
-   /* 0x000 */ DynaPolyActor dyna;
+    /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgAstrBombwallActionFunc actionFunc;
-    /* 0x160 */ ColliderTris unk160;                /* inferred */
-    /* 0x180 */ ColliderTrisElement unk180;         /* inferred */
-    /* 0x1DC */ char pad1DC[0x5C];
-    /* 0x238 */ s16 unk238;                         /* inferred */
-    /* 0x23A */ char pad23A[2];
+    /* 0x160 */ ColliderTris collider;
+    /* 0x180 */ ColliderTrisElement colliderElements[2];
+    /* 0x238 */ s16 unk238[1];
 } BgAstrBombwall;
 extern const ActorInit Bg_Astr_Bombwall_InitVars;
 
