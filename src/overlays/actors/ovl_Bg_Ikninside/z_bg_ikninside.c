@@ -61,12 +61,13 @@ s32 D_80C076D4[] = { 0x00000000, 0xBF800000, 0x00000000 };
 extern UNK_TYPE D_0600CC78;
 extern UNK_TYPE D_0600DE48;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/BgIkninside_Init.s")
-
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/BgIkninside_Init.s")
+/* (matching)
 void BgIkninside_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* sp28;
     ColliderCylinder* sp20;
     BgIkninside* this = THIS;
+
     sp20 = NULL;
     Actor_SetScale(&this->actor, 0.1f);
     this->actionFunc = func_80C072D0;
@@ -79,15 +80,15 @@ void BgIkninside_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/BgIkninside_Destroy.s")
-
+*/
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/BgIkninside_Destroy.s")
+/* (matching)
 void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninside* this = (BgIkninside*)thisx;
     Collider_DestroyCylinder(globalCtx, &this->unk15C);
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->unk144);
 }
-
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/func_80C07220.s")
 /*
 void func_80C07220(s32 arg0, s32 arg1) {
