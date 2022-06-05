@@ -129,7 +129,7 @@ s32 func_80B34FB4(EnGg* this, GlobalContext* globalCtx) {
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);
 
     if ((this->actor.xzDistToPlayer < 250.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
-        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (gSaveContext.weekEventReg[19] & 0x80))) {
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (gSaveContext.save.weekEventReg[19] & 0x80))) {
         Math_SmoothStepToS(&this->unk_2E8, pitch, 4, 0x2AA8, 1);
     } else {
         Math_SmoothStepToS(&this->unk_2E8, 0, 4, 0x2AA8, 1);
@@ -212,7 +212,7 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                 break;
         }
-        gSaveContext.weekEventReg[19] |= 0x80;
+        gSaveContext.save.weekEventReg[19] |= 0x80;
         this->actionFunc = func_80B3556C;
     } else if ((this->unk_2E6 == 0) && ((this->actor.textId == 0xCED) || (this->actor.textId == 0xCEE))) {
         if (sp26 < (lastFrame - 1)) {
@@ -225,21 +225,21 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[91] & 0x10) && (globalCtx->csCtx.state == 0)) {
+    if ((gSaveContext.save.weekEventReg[91] & 0x10) && (globalCtx->csCtx.state == 0)) {
         func_80B359DC(this, globalCtx);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
             func_800B90F4(globalCtx);
         }
         this->unk_308 = 1;
         this->actionFunc = func_80B352A4;
     } else if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.xzDistToPlayer > 50.0f)) {
-        if (gSaveContext.weekEventReg[19] & 0x80) {
+        if (gSaveContext.save.weekEventReg[19] & 0x80) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xCEE;
-        } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xCE5;
         }
@@ -247,7 +247,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3556C(EnGg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_2E6 == 4) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -400,8 +400,8 @@ void func_80B359DC(EnGg* this, GlobalContext* globalCtx) {
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (globalCtx->msgCtx.ocarinaMode == 3) &&
             (globalCtx->msgCtx.unk1202E == 7)) {
-            if (!(gSaveContext.weekEventReg[19] & 0x80)) {
-                gSaveContext.weekEventReg[19] |= 0x80;
+            if (!(gSaveContext.save.weekEventReg[19] & 0x80)) {
+                gSaveContext.save.weekEventReg[19] |= 0x80;
             }
             this->unk_307 = true;
         }
@@ -509,7 +509,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -520,22 +520,22 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
         if (1) {}
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -544,20 +544,20 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
         temp_f26 = ptr->unk_0C.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
         temp_f20 = Rand_ZeroOne() * 0.003f;
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -583,7 +583,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
     if (phi_s4 > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
 
         for (i = 0; i < phi_s4; i++) {
             if (ptr->unk_48 != 0) {
@@ -596,22 +596,22 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
             temp_f28 = ptr->unk_0C.z + (ptr->unk_18.z * i) + (0.5f * ptr->unk_24.z * i * i);
             temp_f20 = Rand_ZeroOne() * 0.003f;
 
-            Matrix_InsertTranslation((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
-                                     ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
+            Matrix_Translate((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
+                             ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 150, 0, 255);
 
             func_8012C2DC(globalCtx->state.gfxCtx);
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -661,9 +661,9 @@ void EnGg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    gSaveContext.weekEventReg[20] &= (u8)~4;
-    gSaveContext.weekEventReg[20] &= (u8)~8;
-    gSaveContext.weekEventReg[20] &= (u8)~0x10;
+    gSaveContext.save.weekEventReg[20] &= (u8)~4;
+    gSaveContext.save.weekEventReg[20] &= (u8)~8;
+    gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_310 = this->actor.home.pos.y;
     this->unk_2DC = this->actor.cutscene;
@@ -691,7 +691,7 @@ void EnGg_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    if (gSaveContext.weekEventReg[19] & 0x80) {
+    if (gSaveContext.save.weekEventReg[19] & 0x80) {
         if (globalCtx->csCtx.state == 0) {
             this->actor.flags |= ACTOR_FLAG_1;
         } else {
@@ -709,10 +709,10 @@ void EnGg_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B35968(this, globalCtx);
     }
 
-    if (!(gSaveContext.weekEventReg[91] & 0x10) &&
-        ((gSaveContext.weekEventReg[19] & 0x80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
+    if (!(gSaveContext.save.weekEventReg[91] & 0x10) &&
+        ((gSaveContext.save.weekEventReg[19] & 0x80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
          (this->unk_308 == 1))) {
-        gSaveContext.weekEventReg[91] |= 0x10;
+        gSaveContext.save.weekEventReg[91] |= 0x10;
     }
 
     this->actionFunc(this, globalCtx);
@@ -739,7 +739,7 @@ s32 EnGg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnGg* this = THIS;
 
     if (limbIndex == 2) {
-        Matrix_InsertZRotation_s(this->unk_2E8, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2E8, MTXMODE_APPLY);
     }
     return false;
 }
@@ -764,12 +764,12 @@ void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&D_80B36DF0, &this->unk_320);
-        Matrix_StatePush();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp30, &this->unk_32C);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_338);
-        Matrix_StatePop();
+        Matrix_MultVec3f(&D_80B36DF0, &this->unk_320);
+        Matrix_Push();
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp30, &this->unk_32C);
+        Matrix_MultVec3f(&sp24, &this->unk_338);
+        Matrix_Pop();
     }
 }
 
@@ -790,7 +790,7 @@ void EnGg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_344.unk_38(&this->unk_344, globalCtx);
     }
 
-    if (gSaveContext.weekEventReg[19] & 0x80) {
+    if (gSaveContext.save.weekEventReg[19] & 0x80) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B36DFC[this->unk_2E2]));

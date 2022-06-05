@@ -241,8 +241,8 @@ void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
     Vec3f sp88;
     ObjDhouseStruct2* ptr2;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultiplyVector3fXZByCurrentState(&D_80B13FC4, &sp94);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultVec3fXZ(&D_80B13FC4, &sp94);
     sp94.y = 100.0f;
     func_80B12A50(ptr, ptr3, &spA0);
 
@@ -511,9 +511,9 @@ void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0, ptr = &this->unk_160[0], ptr3 = &D_80B13E90[0]; i < ARRAY_COUNT(this->unk_160); i++, ptr3++, ptr++) {
         if (ptr->unk_1E >= 0) {
-            Matrix_SetStateRotationAndTranslation(ptr->unk_00.x + ptr3->unk_08.x, ptr->unk_00.y + ptr3->unk_08.y,
-                                                  ptr->unk_00.z + ptr3->unk_08.z, &ptr->unk_18);
-            Matrix_InsertTranslation(-ptr3->unk_08.x, -ptr3->unk_08.y, -ptr3->unk_08.z, MTXMODE_APPLY);
+            Matrix_SetTranslateRotateYXZ(ptr->unk_00.x + ptr3->unk_08.x, ptr->unk_00.y + ptr3->unk_08.y,
+                                         ptr->unk_00.z + ptr3->unk_08.z, &ptr->unk_18);
+            Matrix_Translate(-ptr3->unk_08.x, -ptr3->unk_08.y, -ptr3->unk_08.z, MTXMODE_APPLY);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -525,7 +525,7 @@ void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0, ptr2 = &this->unk_240[0]; i < ARRAY_COUNT(this->unk_240); i++, ptr2++) {
         if (ptr2->unk_28 > 0) {
-            Matrix_SetStateRotationAndTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &ptr2->unk_1C);
+            Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &ptr2->unk_1C);
             Matrix_Scale(ptr2->unk_18, ptr2->unk_18, ptr2->unk_18, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

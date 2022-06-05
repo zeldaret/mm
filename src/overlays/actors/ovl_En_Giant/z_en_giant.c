@@ -183,10 +183,11 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.weekEventReg[25] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
+
         this->actorActionCommand = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
@@ -484,7 +485,7 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnGiant* this = THIS;
 
     if (limbIndex == GIANT_LIMB_HEAD) {
-        Matrix_CopyCurrentState(&this->headDrawMtxF);
+        Matrix_Get(&this->headDrawMtxF);
     }
 }
 
@@ -516,7 +517,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
-            Matrix_InsertMatrix(&this->headDrawMtxF, MTXMODE_NEW);
+            Matrix_Mult(&this->headDrawMtxF, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);

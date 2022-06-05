@@ -14,6 +14,12 @@ pipeline {
                 sh 'bash -c "tools/check_format.sh 2>&1 >(tee tools/check_format.txt)"'
             }
         }
+        stage('Check relocs') {
+            steps {
+                echo 'Checking relocs on spec...'
+                sh 'bash -c "tools/reloc_spec_check.sh"'
+            }
+        }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
@@ -30,6 +36,16 @@ pipeline {
                 sh 'bash -c "./tools/warnings_count/compare_warnings.sh setup"'
             }
         }
+        stage('Assets') {
+            steps {
+                sh 'bash -c "make -j assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)"'
+            }
+        }
+        stage('Check assets warnings') {
+            steps {
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh assets"'
+            }
+        }
         stage('Disasm') {
             steps {
                 sh 'bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"'
@@ -42,12 +58,22 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
+                sh 'bash -c "make -j uncompressed 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
             steps {
                 sh 'bash -c "./tools/warnings_count/compare_warnings.sh build"'
+            }
+        }
+        stage('Compress') {
+            steps {
+                sh 'bash -c "make -j compressed 2> >(tee tools/warnings_count/warnings_compress_new.txt)"'
+            }
+        }
+        stage('Check compress warnings') {
+            steps {
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh compress"'
             }
         }
         stage('Report Progress') {

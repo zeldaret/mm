@@ -40,7 +40,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMuPict* this = THIS;
 
-    if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -109,7 +109,7 @@ void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
             func_80C06E88(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80C06B5C(this);
                 if (this->actor.cutscene >= 0) {
                     ActorCutscene_Stop(this->actor.cutscene);
@@ -154,7 +154,7 @@ void func_80C06DC8(ObjMuPict* this, GlobalContext* globalCtx) {
 }
 
 void func_80C06E88(ObjMuPict* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x159A:
                 Message_StartTextbox(globalCtx, 0x159B, &this->actor);

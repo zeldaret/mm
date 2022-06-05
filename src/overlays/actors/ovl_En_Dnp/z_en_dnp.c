@@ -206,7 +206,7 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
+    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
@@ -247,10 +247,10 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
         (globalCtx->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.weekEventReg[29] |= 0x40;
+        gSaveContext.save.weekEventReg[29] |= 0x40;
     }
 
     if (Cutscene_CheckActorAction(globalCtx, 101)) {
@@ -337,7 +337,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.weekEventReg[23] |= 0x20;
+        gSaveContext.save.weekEventReg[23] |= 0x20;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -366,12 +366,12 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
-                !(gSaveContext.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
+                !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
+        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -407,10 +407,10 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, globalCtx, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);
+        func_8013C964(&this->actor, globalCtx, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, globalCtx);
     }
@@ -425,9 +425,9 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
-    Matrix_CopyCurrentState(&sp2C);
-    func_8018219C(&sp2C, &sp6C, 0);
+    Matrix_MultVec3f(&gZeroVec3f, &sp74);
+    Matrix_Get(&sp2C);
+    Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
     if (arg4 == 0) {
         if (arg5 != 0) {
@@ -468,13 +468,13 @@ void EnDnp_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     if (limbIndex == 12) {
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_1E4.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_1E4.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_1E4.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1E4.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1E4.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

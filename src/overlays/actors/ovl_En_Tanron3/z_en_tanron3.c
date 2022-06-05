@@ -86,12 +86,12 @@ static ColliderCylinderInit sUnusedCylinderInit = {
 };
 
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
-    UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
+    GyorgEffect* effectPtr = globalCtx->specialEffects;
     s16 i;
 
-    for (i = 0; i < 150; i++, effectPtr++) {
-        if ((effectPtr->type == 0) || (effectPtr->type == 1)) {
-            effectPtr->type = 2;
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
+        if ((effectPtr->type == GYORG_EFFECT_NONE) || (effectPtr->type == GYORG_EFFECT_BUBBLE)) {
+            effectPtr->type = GYORG_EFFECT_DROPLET;
             effectPtr->pos = *effectPos;
             effectPtr->velocity = *sZeroVec;
             effectPtr->accel = *sZeroVec;
@@ -124,7 +124,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    sGyorg->unk_252--;
+    sGyorg->numSpawnedSmallFish--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
@@ -135,9 +135,9 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     Vec3f acceleration;
 
     for (i = 0; i < 20; i++) {
-        Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
+        Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
+        Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+        Matrix_MultVecZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
         acceleration.x = velocity.x * -0.05f;
         acceleration.y = velocity.y * -0.05f;
         acceleration.z = velocity.z * -0.05f;
@@ -232,8 +232,8 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 // opposite direction and swim away. In both cases, the fish's target y-position
                 // will be slightly above the halfway point of the water.
                 atanTemp = Math_FAtan2F(this->targetPos.z, this->targetPos.x);
-                Matrix_RotateY(atanTemp, MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->targetPos);
+                Matrix_RotateYS(atanTemp, MTXMODE_NEW);
+                Matrix_MultVecZ(700.0f, &this->targetPos);
                 this->targetPos.y = 250.0f;
 
                 extraScaleY = 150.0f;

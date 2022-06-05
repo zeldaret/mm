@@ -94,16 +94,16 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_002A08, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_00031C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_000430, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnk_Anim_000430, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
     { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -116,20 +116,20 @@ static AnimationInfoS sAnimations[] = {
     { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_003180, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dekunuts_Anim_002950, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubSpitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubDamageAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubDieAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubUnburrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -178,8 +178,8 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dnk_Skel_002848, NULL, this->jointTable,
-                               this->morphTable, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
+                               this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
@@ -190,8 +190,8 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, NULL, this->jointTable,
-                               this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_SCRUB_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }
@@ -285,10 +285,10 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
-        Matrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
@@ -311,9 +311,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -326,9 +326,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     static TexturePtr D_80A5245C[] = {
-        object_dnk_Tex_001680,
-        object_dnk_Tex_001700,
-        object_dnk_Tex_001780,
+        gDekuPalaceGuardEyeOpenTex,
+        gDekuPalaceGuardEyeHalfTex,
+        gDekuPalaceGuardEyeClosedTex,
     };
     s32 pad;
 
@@ -361,10 +361,10 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
-        Matrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->unk_28C & 0x10) {
@@ -388,9 +388,9 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

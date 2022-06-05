@@ -213,7 +213,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
+EnGoStruct* func_80A10FD0(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
@@ -233,7 +233,7 @@ EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, 
     return ptr;
 }
 
-void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
+void func_80A11144(EnGoStruct* ptr, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
     s32 flag = false;
@@ -253,7 +253,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = ((f32)ptr->unk_02 / ptr->unk_01);
             temp *= 255;
@@ -263,15 +263,15 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_02 + (i * 3)) * 3,
                                         (ptr->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_003258);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             if (globalCtx->state.gfxCtx) {}
         }
     }
@@ -279,7 +279,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
+void func_80A1143C(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7) {
     s32 i;
 
     for (i = 16; i < 32; i++, ptr++) {
@@ -299,7 +299,7 @@ void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg
     }
 }
 
-void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
+void func_80A115B4(EnGoStruct* ptr, GlobalContext* globalCtx) {
     static TexturePtr D_80A16644[] = {
         gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
@@ -328,7 +328,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
                 gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
                 flag = true;
             }
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = (f32)ptr->unk_02 / ptr->unk_01;
 
@@ -337,16 +337,16 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, D_80A16670[(s32)ptr->unk_00 - 4].r, D_80A16670[(s32)ptr->unk_00 - 4].g,
                            D_80A16670[(s32)ptr->unk_00 - 4].b, 0);
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
         if (globalCtx->state.gfxCtx) {}
     }
@@ -355,7 +355,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
+void func_80A118F8(EnGoStruct* ptr, Vec3f arg1) {
     static u8 D_80A1667C[] = {
         3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
     };
@@ -400,10 +400,11 @@ void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
 static u8 D_80A1667C[] = {
     3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
 };
+void func_80A118F8(EnGoStruct* ptr, Vec3f arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A118F8.s")
 #endif
 
-void func_80A11BF8(EnGoStruct ptr[], f32 arg1) {
+void func_80A11BF8(EnGoStruct* ptr, f32 arg1) {
     f32 test;
     f32 test2;
     f32 x;
@@ -449,7 +450,7 @@ void func_80A11BF8(EnGoStruct ptr[], f32 arg1) {
 }
 
 #ifdef NON_MATCHING
-void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx arg3[], u8 arg4) {
+void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* arg3, u8 arg4) {
     s32 i;
     u8 flag = false;
 
@@ -464,12 +465,12 @@ void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx a
                 flag = true;
             }
 
-            Matrix_StatePush();
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Push();
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(ptr->unk_0A.z, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(ptr->unk_0A.x, MTXMODE_APPLY);
-            Matrix_RotateY(ptr->unk_0A.y, MTXMODE_APPLY);
+            Matrix_RotateZS(ptr->unk_0A.z, MTXMODE_APPLY);
+            Matrix_RotateXS(ptr->unk_0A.x, MTXMODE_APPLY);
+            Matrix_RotateYS(ptr->unk_0A.y, MTXMODE_APPLY);
 
             if (1) {
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -477,13 +478,14 @@ void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx a
                 gSPDisplayList(POLY_OPA_DISP++, arg3);
             }
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* arg3, u8 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A11EC0.s")
 #endif
 
@@ -536,7 +538,7 @@ s32 func_80A1222C(EnGo* this, GlobalContext* globalCtx) {
 
     if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
          (globalCtx->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
+        (!(gSaveContext.save.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
@@ -821,7 +823,7 @@ void func_80A12DF4(EnGo* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A12E80(EnGo* this, GlobalContext* globalCtx) {
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
     Player* player = GET_PLAYER(globalCtx);
 
     if (ENGO_GET_F(&this->actor) != ENGO_F_4) {
@@ -943,7 +945,7 @@ void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
-               (gSaveContext.weekEventReg[21] & 4) || (gSaveContext.weekEventReg[21] & 8)) {
+               (gSaveContext.save.weekEventReg[21] & 4) || (gSaveContext.save.weekEventReg[21] & 8)) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
         SubS_UpdateFlags(&this->unk_390, 4, 7);
@@ -951,7 +953,7 @@ void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A133A8(EnGo* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[21] & 8) {
+    if (gSaveContext.save.weekEventReg[21] & 8) {
         SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
         SubS_UpdateFlags(&this->unk_390, 4, 7);
@@ -986,7 +988,7 @@ Actor* func_80A13400(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A134B0(EnGo* this, GlobalContext* globalCtx, s32 arg2) {
-    if ((gSaveContext.weekEventReg[18] & 0x80) || (globalCtx->actorCtx.unk5 & 1) || arg2) {
+    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (globalCtx->actorCtx.unk5 & 1) || arg2) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
         this->colliderSphere.dim.modelSphere.radius = 380;
@@ -1065,14 +1067,13 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
     u32 frames2;
 
     if (this->unk_390 & 0x400) {
-        Matrix_StatePush();
+        Matrix_Push();
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(arg2 * 0.7f, arg2 * 0.8f, arg2, MTXMODE_APPLY);
         func_800B8118(&this->actor, globalCtx, 0);
 
@@ -1086,7 +1087,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -1177,7 +1178,7 @@ s32 func_80A13B1C(EnGo* this, GlobalContext* globalCtx) {
                 func_80A13728(this, globalCtx);
                 this->unk_3C4++;
                 this->unk_3C2 = 0;
-                gSaveContext.weekEventReg[88] |= 0x40;
+                gSaveContext.save.weekEventReg[88] |= 0x40;
             }
             break;
 
@@ -1197,19 +1198,19 @@ s32 func_80A13B1C(EnGo* this, GlobalContext* globalCtx) {
             if (this->unk_3C0 >= 65) {
                 switch (player->transformation) {
                     case 4:
-                        gSaveContext.weekEventReg[88] |= 0x80;
+                        gSaveContext.save.weekEventReg[88] |= 0x80;
                         break;
 
                     case 1:
-                        gSaveContext.weekEventReg[89] |= 4;
+                        gSaveContext.save.weekEventReg[89] |= 4;
                         break;
 
                     case 2:
-                        gSaveContext.weekEventReg[89] |= 2;
+                        gSaveContext.save.weekEventReg[89] |= 2;
                         break;
 
                     case 3:
-                        gSaveContext.weekEventReg[89] |= 1;
+                        gSaveContext.save.weekEventReg[89] |= 1;
                         break;
                 }
                 ret = true;
@@ -1332,7 +1333,7 @@ void func_80A1428C(EnGo* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     if (this->unk_284 != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_2000000;
-        func_8013C8B8(this->unk_284, 0, &sp24);
+        SubS_CopyPointFromPathCheckBounds(this->unk_284, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
         this->actor.world.rot.y = temp;
@@ -1373,8 +1374,8 @@ void func_80A143A8(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A14430(EnGo* this, GlobalContext* globalCtx) {
-    if (((gSaveContext.entranceIndex == 0xD000) || (gSaveContext.entranceIndex == 0xD020)) &&
-        (gSaveContext.weekEventReg[33] & 0x80)) {
+    if (((gSaveContext.save.entranceIndex == 0xD000) || (gSaveContext.save.entranceIndex == 0xD020)) &&
+        (gSaveContext.save.weekEventReg[33] & 0x80)) {
         func_80A14018(this, globalCtx);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1383,7 +1384,7 @@ void func_80A14430(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A1449C(EnGo* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.entranceIndex == 0xD010) || (gSaveContext.entranceIndex == 0x1C00)) {
+    if ((gSaveContext.save.entranceIndex == 0xD010) || (gSaveContext.save.entranceIndex == 0x1C00)) {
         func_80A14104(this, globalCtx);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1392,8 +1393,8 @@ void func_80A1449C(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A144F4(EnGo* this, GlobalContext* globalCtx) {
-    if (gSaveContext.day >= 2) {
-        this->unk_284 = func_8013BEDC(globalCtx, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
+    if (gSaveContext.save.day >= 2) {
+        this->unk_284 = SubS_GetDayDependentPath(globalCtx, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
         if (this->unk_284 != NULL) {
             this->unk_3E4 = 1;
         }
@@ -1411,7 +1412,7 @@ void func_80A145AC(EnGo* this, GlobalContext* globalCtx) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
         (((globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
           (globalCtx->csCtx.currentCsIndex == 0)) ||
-         !(gSaveContext.weekEventReg[21] & 8))) {
+         !(gSaveContext.save.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, globalCtx);
         this->actor.child->child = &this->actor;
         func_80A141D4(this, globalCtx);
@@ -1423,7 +1424,7 @@ void func_80A145AC(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A14668(EnGo* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[22] & 4)) {
+    if (!(gSaveContext.save.weekEventReg[22] & 4)) {
         func_80A14324(this, globalCtx);
         this->actionFunc = func_80A149B0;
     } else {
@@ -1511,7 +1512,7 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
 void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.entranceIndex == 0xD010)) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entranceIndex == 0xD010)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (func_80A1222C(this, globalCtx)) {
@@ -1568,7 +1569,7 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
             this->unk_390 &= ~0x200;
             this->unk_390 |= 0x8000;
             this->actor.shape.yOffset = 0.0f;
-        } else if ((this->unk_3EC != 0) && (gSaveContext.weekEventReg[22] & 4)) {
+        } else if ((this->unk_3EC != 0) && (gSaveContext.save.weekEventReg[22] & 4)) {
             this->actor.scale.x = this->unk_3A4 - (Math_SinS(this->unk_3AE) * 0.001f);
             this->actor.scale.y = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
             this->actor.scale.z = (Math_SinS(this->unk_3AE) * 0.001f) + this->unk_3A4;
@@ -1771,7 +1772,7 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
 
-        if (gSaveContext.day == 3) {
+        if (gSaveContext.save.day == 3) {
             func_80A141D4(this, globalCtx);
             this->actionFunc = func_80A14E14;
         } else {
@@ -1785,7 +1786,7 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
         }
 
         sp5C = Lib_SegmentedToVirtual(this->unk_284->points);
-        if (func_8013BD40(&this->actor, this->unk_284, this->unk_3E4)) {
+        if (SubS_HasReachedPoint(&this->actor, this->unk_284, this->unk_3E4)) {
             if (this->unk_3E4 >= (this->unk_284->count - 1)) {
                 this->unk_3E4 = 0;
             } else {
@@ -1926,10 +1927,10 @@ void EnGo_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, 0, this->unk_390 & 7);
+        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, 0, this->unk_390 & 7);
+        func_8013C964(&this->actor, globalCtx, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&
@@ -1949,12 +1950,12 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
-                             this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
+                     this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
 
     if (this->unk_390 & 0x100) {
         Matrix_Scale(this->actor.scale.x * 8.0f, this->actor.scale.y * 8.0f, this->actor.scale.z * 8.0f, MTXMODE_APPLY);
@@ -1962,7 +1963,7 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     }
 
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? object_oF1d_map_DL_001560 : object_oF1d_map_DL_0091A8);
@@ -1976,8 +1977,7 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     s32 idx;
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_8) && (limbIndex == 10)) {
-        limbIndex = limbIndex;
-        Matrix_GetStateTranslation(&sp30);
+        Matrix_MultZero(&sp30);
         sp30.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }
@@ -2010,49 +2010,49 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGo* this = THIS;
     u16 temp_v0;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (this->unk_390 & 0x40) {
-        phi_v1 = false;
+        stepRot = false;
     } else {
-        phi_v1 = true;
+        stepRot = true;
     }
 
     if (this->unk_390 & 0x10) {
-        phi_v0 = true;
+        overrideRot = true;
     } else {
-        phi_v0 = false;
+        overrideRot = false;
     }
 
-    if (!phi_v1) {
-        phi_v0 = false;
+    if (!stepRot) {
+        overrideRot = false;
     }
 
     switch (limbIndex) {
         case 17:
-            func_8013AD9C(this->unk_3B0 + this->unk_3B4 + 0x4000,
-                          this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
-                          &this->unk_2A8, phi_v1, phi_v0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
+            SubS_UpdateLimb(this->unk_3B0 + this->unk_3B4 + 0x4000,
+                            this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
+                            &this->unk_2A8, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_2A8.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_2A8.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_RotateYS(this->unk_2A8.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_2A8.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_2A8.z, MTXMODE_APPLY);
+            Matrix_Push();
             break;
 
         case 10:
-            func_8013AD9C(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
-                          &this->unk_2AE, phi_v1, phi_v0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
+            SubS_UpdateLimb(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
+                            &this->unk_2AE, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_2AE.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_2AE.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_2AE.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_RotateYS(this->unk_2AE.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_2AE.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_2AE.z, MTXMODE_APPLY);
+            Matrix_Push();
             break;
     }
 }
@@ -2072,7 +2072,7 @@ void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->unk_3BE]));
 
         if (this->unk_3DC == 14) {
-            Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnGo_OverrideLimbDraw, NULL, EnGo_TransfromLimbDraw,

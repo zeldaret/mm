@@ -61,7 +61,7 @@ void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.weekEventReg[60] &= (u8)~4;
+    gSaveContext.save.weekEventReg[60] &= (u8)~4;
 }
 
 void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -83,16 +83,16 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 }
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[60] & 4) {
+    if (gSaveContext.save.weekEventReg[60] & 4) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
-        gSaveContext.weekEventReg[60] &= (u8)~4;
+        gSaveContext.save.weekEventReg[60] &= (u8)~4;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.weekEventReg[51] & 4)) {
-            gSaveContext.weekEventReg[51] |= 4;
+        if (!(gSaveContext.save.weekEventReg[51] & 4)) {
+            gSaveContext.save.weekEventReg[51] |= 4;
             this->actionFunc = EnCha_Ring;
         }
     }
@@ -116,7 +116,7 @@ void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
     Gfx_DrawDListOpa(globalCtx, object_cha_DL_000710);
-    Matrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.home.rot.x, MTXMODE_APPLY);
+    Matrix_Translate(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.home.rot.x, MTXMODE_APPLY);
     Gfx_DrawDListOpa(globalCtx, object_cha_DL_000958);
 }
