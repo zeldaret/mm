@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_ice_piece.c
  * Overlay: ovl_Effect_Ss_Ice_Piece
- * Description:
+ * Description: Ice Shards
  */
 
 #include "z_eff_ss_ice_piece.h"
@@ -61,10 +61,10 @@ void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
         alpha = 255.0f;
     }
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_RotateY(this->rYaw, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->rPitch, MTXMODE_APPLY);
+    Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -73,7 +73,7 @@ void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, (1 * frames) % 256, 0x20, 0x10, 1, 0, (2 * frames) % 256,
                                 0x40, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050550);
+    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragmentDL);
 
     CLOSE_DISPS(gfxCtx);
 }
