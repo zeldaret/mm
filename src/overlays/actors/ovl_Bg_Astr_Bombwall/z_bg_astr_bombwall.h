@@ -7,7 +7,7 @@ struct BgAstrBombwall;
 
 typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
 typedef struct BgAstrBombwall {
-   /* 0x000 */ DynaPolyActor dyna;
+    /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgAstrBombwallActionFunc actionFunc;
     /* 0x160 */ ColliderTris collider;
     /* 0x180 */ ColliderTrisElement colliderElements;
