@@ -36,6 +36,7 @@
 #define CAM_HUD_ALPHA_B CAM_HUD_ALPHA(11)
 #define CAM_HUD_ALPHA_C CAM_HUD_ALPHA(12)
 #define CAM_HUD_ALPHA_D CAM_HUD_ALPHA(13)
+#define CAM_HUD_ALPHA_E CAM_HUD_ALPHA(14)
 #define CAM_HUD_ALPHA_IGNORE CAM_HUD_ALPHA(0xF)
 
 /**
@@ -251,56 +252,56 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ CAM_FUNC_NONE,
-    /* 0x01 */ CAM_FUNC_NORM0,
-    /* 0x02 */ CAM_FUNC_NORM1,
-    /* 0x03 */ CAM_FUNC_NORM2,
-    /* 0x04 */ CAM_FUNC_NORM3,
-    /* 0x05 */ CAM_FUNC_NORM4,
-    /* 0x06 */ CAM_FUNC_PARA0,
-    /* 0x07 */ CAM_FUNC_PARA1,
-    /* 0x08 */ CAM_FUNC_PARA2,
-    /* 0x09 */ CAM_FUNC_PARA3,
-    /* 0x0A */ CAM_FUNC_PARA4,
-    /* 0x0B */ CAM_FUNC_KEEP0,
-    /* 0x0C */ CAM_FUNC_KEEP1,
-    /* 0x0D */ CAM_FUNC_KEEP2,
-    /* 0x0E */ CAM_FUNC_KEEP3,
-    /* 0x0F */ CAM_FUNC_KEEP4,
-    /* 0x10 */ CAM_FUNC_SUBJ0,
-    /* 0x11 */ CAM_FUNC_SUBJ1,
-    /* 0x12 */ CAM_FUNC_SUBJ2,
-    /* 0x13 */ CAM_FUNC_SUBJ3,
-    /* 0x14 */ CAM_FUNC_SUBJ4,
+    /* 0x01 */ CAM_FUNC_NORMAL0,
+    /* 0x02 */ CAM_FUNC_NORMAL1,
+    /* 0x03 */ CAM_FUNC_NORMAL2,
+    /* 0x04 */ CAM_FUNC_NORMAL3,
+    /* 0x05 */ CAM_FUNC_NORMAL4,
+    /* 0x06 */ CAM_FUNC_PARALLEL0,
+    /* 0x07 */ CAM_FUNC_PARALLEL1,
+    /* 0x08 */ CAM_FUNC_PARALLEL2,
+    /* 0x09 */ CAM_FUNC_PARALLEL3,
+    /* 0x0A */ CAM_FUNC_PARALLEL4,
+    /* 0x0B */ CAM_FUNC_KEEPON0,
+    /* 0x0C */ CAM_FUNC_KEEPON1,
+    /* 0x0D */ CAM_FUNC_KEEPON2,
+    /* 0x0E */ CAM_FUNC_KEEPON3,
+    /* 0x0F */ CAM_FUNC_KEEPON4,
+    /* 0x10 */ CAM_FUNC_SUBJECT0,
+    /* 0x11 */ CAM_FUNC_SUBJECT1,
+    /* 0x12 */ CAM_FUNC_SUBJECT2,
+    /* 0x13 */ CAM_FUNC_SUBJECT3,
+    /* 0x14 */ CAM_FUNC_SUBJECT4,
     /* 0x15 */ CAM_FUNC_JUMP0,
     /* 0x16 */ CAM_FUNC_JUMP1,
     /* 0x17 */ CAM_FUNC_JUMP2,
     /* 0x18 */ CAM_FUNC_JUMP3,
     /* 0x19 */ CAM_FUNC_JUMP4,
-    /* 0x1A */ CAM_FUNC_BATT0,
-    /* 0x1B */ CAM_FUNC_BATT1,
-    /* 0x1C */ CAM_FUNC_BATT2,
-    /* 0x1D */ CAM_FUNC_BATT3,
-    /* 0x1E */ CAM_FUNC_BATT4,
-    /* 0x1F */ CAM_FUNC_FIXD0,
-    /* 0x20 */ CAM_FUNC_FIXD1,
-    /* 0x21 */ CAM_FUNC_FIXD2,
-    /* 0x22 */ CAM_FUNC_FIXD3,
-    /* 0x23 */ CAM_FUNC_FIXD4,
+    /* 0x1A */ CAM_FUNC_BATTLE0,
+    /* 0x1B */ CAM_FUNC_BATTLE1,
+    /* 0x1C */ CAM_FUNC_BATTLE2,
+    /* 0x1D */ CAM_FUNC_BATTLE3,
+    /* 0x1E */ CAM_FUNC_BATTLE4,
+    /* 0x1F */ CAM_FUNC_FIXED0,
+    /* 0x20 */ CAM_FUNC_FIXED1,
+    /* 0x21 */ CAM_FUNC_FIXED2,
+    /* 0x22 */ CAM_FUNC_FIXED3,
+    /* 0x23 */ CAM_FUNC_FIXED4,
     /* 0x24 */ CAM_FUNC_DATA0,
     /* 0x25 */ CAM_FUNC_DATA1,
     /* 0x26 */ CAM_FUNC_DATA2,
     /* 0x27 */ CAM_FUNC_DATA3,
     /* 0x28 */ CAM_FUNC_DATA4,
-    /* 0x29 */ CAM_FUNC_UNIQ0,
-    /* 0x2A */ CAM_FUNC_UNIQ1,
-    /* 0x2B */ CAM_FUNC_UNIQ2,
-    /* 0x2C */ CAM_FUNC_UNIQ3,
-    /* 0x2D */ CAM_FUNC_UNIQ4,
-    /* 0x2E */ CAM_FUNC_UNIQ5,
-    /* 0x2F */ CAM_FUNC_UNIQ6,
-    /* 0x30 */ CAM_FUNC_UNIQ7,
-    /* 0x31 */ CAM_FUNC_UNIQ8,
-    /* 0x32 */ CAM_FUNC_UNIQ9,
+    /* 0x29 */ CAM_FUNC_UNIQUE0,
+    /* 0x2A */ CAM_FUNC_UNIQUE1,
+    /* 0x2B */ CAM_FUNC_UNIQUE2,
+    /* 0x2C */ CAM_FUNC_UNIQUE3,
+    /* 0x2D */ CAM_FUNC_UNIQUE4,
+    /* 0x2E */ CAM_FUNC_UNIQUE5,
+    /* 0x2F */ CAM_FUNC_UNIQUE6,
+    /* 0x30 */ CAM_FUNC_UNIQUE7,
+    /* 0x31 */ CAM_FUNC_UNIQUE8,
+    /* 0x32 */ CAM_FUNC_UNIQUE9,
     /* 0x33 */ CAM_FUNC_DEMO0,
     /* 0x34 */ CAM_FUNC_DEMO1,
     /* 0x35 */ CAM_FUNC_DEMO2,
@@ -311,16 +312,16 @@ typedef enum {
     /* 0x3A */ CAM_FUNC_DEMO7,
     /* 0x3B */ CAM_FUNC_DEMO8,
     /* 0x3C */ CAM_FUNC_DEMO9,
-    /* 0x3D */ CAM_FUNC_SPEC0,
-    /* 0x3E */ CAM_FUNC_SPEC1,
-    /* 0x3F */ CAM_FUNC_SPEC2,
-    /* 0x40 */ CAM_FUNC_SPEC3,
-    /* 0x41 */ CAM_FUNC_SPEC4,
-    /* 0x42 */ CAM_FUNC_SPEC5,
-    /* 0x43 */ CAM_FUNC_SPEC6,
-    /* 0x44 */ CAM_FUNC_SPEC7,
-    /* 0x45 */ CAM_FUNC_SPEC8,
-    /* 0x46 */ CAM_FUNC_SPEC9,
+    /* 0x3D */ CAM_FUNC_SPECIAL0,
+    /* 0x3E */ CAM_FUNC_SPECIAL1,
+    /* 0x3F */ CAM_FUNC_SPECIAL2,
+    /* 0x40 */ CAM_FUNC_SPECIAL3,
+    /* 0x41 */ CAM_FUNC_SPECIAL4,
+    /* 0x42 */ CAM_FUNC_SPECIAL5,
+    /* 0x43 */ CAM_FUNC_SPECIAL6,
+    /* 0x44 */ CAM_FUNC_SPECIAL7,
+    /* 0x45 */ CAM_FUNC_SPECIAL8,
+    /* 0x46 */ CAM_FUNC_SPECIAL9,
     /* 0x47 */ CAM_FUNC_MAX
 } CameraFuncType;
 
@@ -404,8 +405,8 @@ typedef struct {
  *================================
  */
 
-#define FLAGS_FIXED_DATA(flags) \
-    { flags,       CAM_DATA_FLAGS }
+#define FLAGS_FIXED_DATA(interfaceFlags) \
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 
 /*================================
@@ -413,7 +414,7 @@ typedef struct {
  *================================
  */
 
-#define NORM1_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, flags) \
+#define NORMAL1_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, interfaceFlags) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -423,7 +424,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -435,7 +436,7 @@ typedef struct {
     /* 0x18 */ f32 unk_18; // fovTarget
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20; // pitchTarget
-    /* 0x22 */ s16 unk_22; // flags
+    /* 0x22 */ s16 interfaceFlags;
 } Normal1ReadOnlyData; // size = 0x24
 
 typedef struct {
@@ -453,14 +454,14 @@ typedef struct {
     /* 0x24 */ Normal1ReadWriteData rwData;
 } Normal1; // size = 0x38
 
-#define NORM1_FLG_1 (1 << 0)
-#define NORM1_FLG_2 (1 << 1)
-#define NORM1_FLG_4 (1 << 2)
-#define NORM1_FLG_8 (1 << 3)
-#define NORM1_FLG_10 (1 << 4)
-#define NORM1_FLG_20 (1 << 5)
-#define NORM1_FLG_40 (1 << 6)
-#define NORM1_FLG_80 (1 << 7)
+#define NORMAL1_FLAG_0 (1 << 0)
+#define NORMAL1_FLAG_1 (1 << 1)
+#define NORMAL1_FLAG_2 (1 << 2)
+#define NORMAL1_FLAG_3 (1 << 3)
+#define NORMAL1_FLAG_4 (1 << 4)
+#define NORMAL1_FLAG_5 (1 << 5)
+#define NORMAL1_FLAG_6 (1 << 6)
+#define NORMAL1_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -470,7 +471,7 @@ typedef struct {
 
 // Unused Camera RemoteBomb Setting
 
-#define NORM2_FIXED_DATA(yOffset, data01, data02, pitchTarget, data04, fov, data08, flags) \
+#define NORMAL2_FIXED_DATA(yOffset, data01, data02, pitchTarget, data04, fov, data08, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
@@ -478,9 +479,9 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
-#define NORM2_FLG_2 (1 << 1)
+#define NORMAL2_FLAG_1 (1 << 1)
 
 
 /*================================
@@ -488,7 +489,7 @@ typedef struct {
  *================================
  */
 
-#define NORM3_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, flags) \
+#define NORMAL3_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, interfaceFlags) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -497,7 +498,7 @@ typedef struct {
     { posStepScale, CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -508,7 +509,7 @@ typedef struct {
     /* 0x14 */ f32 fovTarget;
     /* 0x18 */ f32 maxAtLERPScale;
     /* 0x1C */ s16 pitchTarget;
-    /* 0x1E */ s16 flags;
+    /* 0x1E */ s16 interfaceFlags;
 } Normal3ReadOnlyData; // size = 0x20
 
 typedef struct {
@@ -527,10 +528,10 @@ typedef struct {
     /* 0x20 */ Normal3ReadWriteData rwData;
 } Normal3; // size = 0x34
 
-#define NORM3_FLG_2 (1 << 1)
-#define NORM3_FLG_20 (1 << 5)
-#define NORM3_FLG_40 (1 << 6)
-#define NORM3_FLG_80 (1 << 7)
+#define NORMAL3_FLAG_1 (1 << 1)
+#define NORMAL3_FLAG_5 (1 << 5)
+#define NORMAL3_FLAG_6 (1 << 6)
+#define NORMAL3_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -538,7 +539,7 @@ typedef struct {
  *================================
  */
 
-#define NORM0_FIXED_DATA(yOffset, data01, data02, data21, data04, yawDiffRange, fov, data08, flags) \
+#define NORMAL0_FIXED_DATA(yOffset, data01, data02, data21, data04, yawDiffRange, fov, data08, interfaceFlags) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -547,7 +548,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -558,7 +559,7 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
+    /* 0x1E */ s16 interfaceFlags;
 } Normal0ReadOnlyData; // size = 0x20
 
 typedef struct {
@@ -578,10 +579,10 @@ typedef struct {
     /* 0x20 */ Normal0ReadWriteData rwData;
 } Normal0; // size = 0x50
 
-#define NORM0_FLG_1 (1 << 0)
-#define NORM0_FLG_4 (1 << 2)
-#define NORM0_FLG_10 (1 << 4)
-#define NORM0_FLG_80 (1 << 7)
+#define NORMAL0_FLAG_0 (1 << 0)
+#define NORMAL0_FLAG_2 (1 << 2)
+#define NORMAL0_FLAG_4 (1 << 4)
+#define NORMAL0_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -589,7 +590,7 @@ typedef struct {
  *================================
  */
 
-#define PARA1_FIXED_DATA(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, flags, data11, data12) \
+#define PARALLEL1_FIXED_DATA(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, interfaceFlags, data11, data12) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -599,12 +600,12 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }, \
+    { interfaceFlags,        CAM_DATA_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }
 
 // Same as above but with extra unused entry
-#define PARA1_FIXED_DATA_ALT(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, flags, data11, data12, data18) \
+#define PARALLEL1_FIXED_DATA_ALT(yOffset, data01, data02, pitchTarget, data10, data04, data05, fov, data08, interfaceFlags, data11, data12, data18) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -614,7 +615,7 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }, \
+    { interfaceFlags,        CAM_DATA_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }, \
     { data18,       CAM_DATA_18 }
@@ -631,7 +632,7 @@ typedef struct {
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
+    /* 0x26 */ s16 interfaceFlags;
 } Parallel1ReadOnlyData; // size = 0x28
 
 typedef struct {
@@ -653,14 +654,14 @@ typedef struct {
     /* 0x28 */ Parallel1ReadWriteData rwData;
 } Parallel1; // size = 0x50
 
-#define PARA1_FLG_1 (1 << 0)
-#define PARA1_FLG_2 (1 << 1)
-#define PARA1_FLG_4 (1 << 2)
-#define PARA1_FLG_8 (1 << 3)
-#define PARA1_FLG_10 (1 << 4)
-#define PARA1_FLG_20 (1 << 5)
-#define PARA1_FLG_40 (1 << 6)
-#define PARA1_FLG_80 (1 << 7)
+#define PARALLEL1_FLAG_0 (1 << 0)
+#define PARALLEL1_FLAG_1 (1 << 1)
+#define PARALLEL1_FLAG_2 (1 << 2)
+#define PARALLEL1_FLAG_3 (1 << 3)
+#define PARALLEL1_FLAG_4 (1 << 4)
+#define PARALLEL1_FLAG_5 (1 << 5)
+#define PARALLEL1_FLAG_6 (1 << 6)
+#define PARALLEL1_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -670,7 +671,7 @@ typedef struct {
 
 // Unused Camera Maze Setting
 
-#define PARA2_FIXED_DATA(yOffset, data02, data01, pitchTarget, data04, fov, data08, flags) \
+#define PARALLEL2_FIXED_DATA(yOffset, data02, data01, pitchTarget, data04, fov, data08, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data02,      CAM_DATA_02 }, \
     { data01,      CAM_DATA_01 }, \
@@ -678,9 +679,9 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
-#define PARA2_FLG_2 (1 << 1)
+#define PARALLEL2_FLAG_1 (1 << 1)
 
 
 /*================================
@@ -688,7 +689,7 @@ typedef struct {
  *================================
  */
 
-#define JUMP2_FIXED_DATA(yOffset, data01, data02, data20, data04, data05, fov, data08, flags) \
+#define JUMP2_FIXED_DATA(yOffset, data01, data02, data20, data04, data05, fov, data08, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
@@ -697,7 +698,7 @@ typedef struct {
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -708,7 +709,7 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
+    /* 0x20 */ s16 interfaceFlags;
 } Jump2ReadOnlyData; // size = 0x24
 
 typedef struct {
@@ -728,8 +729,8 @@ typedef struct {
     /* 0x02 */ Jump2ReadWriteData rwData;
 } Jump2; // size = 0x44
 
-#define JUMP2_FLG_2 (1 << 1)
-#define JUMP2_FLG_4 (1 << 2)
+#define JUMP2_FLAG_1 (1 << 1)
+#define JUMP2_FLAG_2 (1 << 2)
 
 
 /*================================
@@ -737,7 +738,7 @@ typedef struct {
  *================================
  */
 
-#define JUMP3_FIXED_DATA(yOffset, data01, data02, pitchTarget, data04, data05, yawDiffRange, fov, data08, flags) \
+#define JUMP3_FIXED_DATA(yOffset, data01, data02, pitchTarget, data04, data05, yawDiffRange, fov, data08, interfaceFlags) \
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
@@ -747,7 +748,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { flags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -759,7 +760,7 @@ typedef struct {
     /* 0x18 */ f32 unk_18; // fovTarget
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22; // flags
+    /* 0x22 */ s16 interfaceFlags;
 } Jump3ReadOnlyData; // size = 0x24
 
 typedef struct {
@@ -779,13 +780,13 @@ typedef struct {
     /* 0x24 */ Jump3ReadWriteData rwData;
 } Jump3; // size = 0x44
 
-#define JUMP3_FLG_1 (1 << 0)
-#define JUMP3_FLG_4 (1 << 2)
-#define JUMP3_FLG_8 (1 << 3)
-#define JUMP3_FLG_10 (1 << 4)
-#define JUMP3_FLG_20 (1 << 5)
-#define JUMP3_FLG_40 (1 << 6)
-#define JUMP3_FLG_80 (1 << 7)
+#define JUMP3_FLAG_0 (1 << 0)
+#define JUMP3_FLAG_2 (1 << 2)
+#define JUMP3_FLAG_3 (1 << 3)
+#define JUMP3_FLAG_4 (1 << 4)
+#define JUMP3_FLAG_5 (1 << 5)
+#define JUMP3_FLAG_6 (1 << 6)
+#define JUMP3_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -793,7 +794,7 @@ typedef struct {
  *================================
  */
 
-#define BATT1_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, flags, data11, data18) \
+#define BATTLE1_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, interfaceFlags, data11, data18) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
@@ -804,7 +805,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { flags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_FLAGS }, \
     { data11,  CAM_DATA_11 }, \
     { data18,  CAM_DATA_18 }
 
@@ -821,7 +822,7 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ s16 unk_30;
+    /* 0x30 */ s16 interfaceFlags;
 } Battle1ReadOnlyData; // size = 0x34
 
 typedef struct {
@@ -842,10 +843,10 @@ typedef struct {
     /* 0x24 */ Battle1ReadWriteData rwData;
 } Battle1; // size = 0x50
 
-#define BATT1_FLG_1 (1 << 0)
-#define BATT1_FLG_2 (1 << 1)
-#define BATT1_FLG_10 (1 << 4)
-#define BATT1_FLG_80 (1 << 7)
+#define BATTLE1_FLAG_0 (1 << 0)
+#define BATTLE1_FLAG_1 (1 << 1)
+#define BATTLE1_FLAG_4 (1 << 4)
+#define BATTLE1_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -853,7 +854,7 @@ typedef struct {
  *================================
  */
 
-#define KEEP1_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, flags, data11) \
+#define KEEPON1_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, interfaceFlags, data11) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
@@ -864,7 +865,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { flags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_FLAGS }, \
     { data11,  CAM_DATA_11 }
 
 typedef struct {
@@ -879,7 +880,7 @@ typedef struct {
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2C */ s16 interfaceFlags;
 } KeepOn1ReadOnlyData; // size = 0x30
 
 typedef struct {
@@ -899,10 +900,10 @@ typedef struct {
     /* 0x30 */ KeepOn1ReadWriteData rwData;
 } KeepOn1; // size = 0x4C
 
-#define KEEP1_FLG_1 (1 << 0)
-#define KEEP1_FLG_2 (1 << 1)
-#define KEEP1_FLG_10 (1 << 4)
-#define KEEP1_FLG_80 (1 << 7)
+#define KEEPON1_FLAG_0 (1 << 0)
+#define KEEPON1_FLAG_1 (1 << 1)
+#define KEEPON1_FLAG_4 (1 << 4)
+#define KEEPON1_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -910,7 +911,7 @@ typedef struct {
  *================================
  */
 
-#define KEEP3_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, data04, flags, data18) \
+#define KEEPON3_FIXED_DATA(yOffset, data01, data02, data13, data14, data15, data16, data17, fov, data08, data04, interfaceFlags, data18) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
@@ -922,7 +923,7 @@ typedef struct {
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
     { data04,  CAM_DATA_04 }, \
-    { flags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_FLAGS }, \
     { data18,  CAM_DATA_18 }
 
 typedef struct {
@@ -938,7 +939,7 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E;
+    /* 0x2E */ s16 interfaceFlags;
 } KeepOn3ReadOnlyData; // size = 0x30
 
 typedef struct {
@@ -955,9 +956,9 @@ typedef struct {
     /* 0x30 */ KeepOn3ReadWriteData rwData;
 } KeepOn3; // size = 0x50
 
-#define KEEP3_FLG_20 (1 << 5)
-#define KEEP3_FLG_40 (1 << 6)
-#define KEEP3_FLG_80 (1 << 7)
+#define KEEPON3_FLAG_5 (1 << 5)
+#define KEEPON3_FLAG_6 (1 << 6)
+#define KEEPON3_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -965,14 +966,14 @@ typedef struct {
  *================================
  */
 
-#define KEEP4_FIXED_DATA(yOffset, data01, pitchTarget, data10, data18, fov, flags, data04, data12) \
+#define KEEPON4_FIXED_DATA(yOffset, data01, pitchTarget, data10, data18, fov, interfaceFlags, data04, data12) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { pitchTarget, CAM_DATA_PITCHTARGET }, \
     { data10,      CAM_DATA_10 }, \
     { data18,      CAM_DATA_18 }, \
     { fov,         CAM_DATA_FOV }, \
-    { flags,       CAM_DATA_FLAGS }, \
+    { interfaceFlags,       CAM_DATA_FLAGS }, \
     { data04,      CAM_DATA_04 }, \
     { data12,      CAM_DATA_12 }
 
@@ -984,7 +985,7 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
+    /* 0x1C */ s16 interfaceFlags;
     /* 0x1E */ s16 unk_1E;
 } KeepOn4ReadOnlyData; // size = 0x20
 
@@ -1005,10 +1006,10 @@ typedef struct {
     /* 0x20 */ KeepOn4ReadWriteData rwData;
 } KeepOn4; // size = 0x3C
 
-#define KEEP4_FLG_2 (1 << 1)
-#define KEEP4_FLG_4 (1 << 2)
-#define KEEP4_FLG_8 (1 << 3)
-#define KEEP4_FLG_40 (1 << 6)
+#define KEEPON4_FLAG_1 (1 << 1)
+#define KEEPON4_FLAG_2 (1 << 2)
+#define KEEPON4_FLAG_3 (1 << 3)
+#define KEEPON4_FLAG_6 (1 << 6)
 
 
 /*================================
@@ -1016,17 +1017,17 @@ typedef struct {
  *================================
  */
 
-#define FIXD1_FIXED_DATA(yOffset, data04, fov, flags) \
+#define FIXED1_FIXED_DATA(yOffset, data04, fov, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 fov;
-    /* 0x0C */ s16 flags;
+    /* 0x0C */ s16 interfaceFlags;
 } Fixed1ReadOnlyData; // size = 0x10
 
 typedef struct {
@@ -1040,7 +1041,7 @@ typedef struct {
     /* 0x10 */ Fixed1ReadWriteData rwData;
 } Fixed1; // size = 0x2C
 
-#define FIXD1_FLG_10 (1 << 4)
+#define FIXED1_FLAG_4 (1 << 4)
 
 
 /*================================
@@ -1048,14 +1049,14 @@ typedef struct {
  *================================
  */
 
-#define FIXD2_FIXED_DATA(yOffset, data01, data02, data04, data05, fov, flags) \
+#define FIXED2_FIXED_DATA(yOffset, data01, data02, data04, data05, fov, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
     { data04,      CAM_DATA_04 }, \
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1064,7 +1065,7 @@ typedef struct {
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
+    /* 0x18 */ s16 interfaceFlags;
 } Fixed2ReadOnlyData; // size = 0x1C
 
 typedef struct {
@@ -1081,14 +1082,14 @@ typedef struct {
     /* 0x1C */ Fixed2ReadWriteData rwData;
 } Fixed2; // size = 0x3C
 
-#define FIXD2_FLG_1 (1 << 0)
-#define FIXD2_FLG_2 (1 << 1)
-#define FIXD2_FLG_4 (1 << 2)
-#define FIXD2_FLG_8 (1 << 3)
-#define FIXD2_FLG_10 (1 << 4)
-#define FIXD2_FLG_20 (1 << 5)
-#define FIXD2_FLG_40 (1 << 6)
-#define FIXD2_FLG_80 (1 << 7)
+#define FIXED2_FLAG_0 (1 << 0)
+#define FIXED2_FLAG_1 (1 << 1)
+#define FIXED2_FLAG_2 (1 << 2)
+#define FIXED2_FLAG_3 (1 << 3)
+#define FIXED2_FLAG_4 (1 << 4)
+#define FIXED2_FLAG_5 (1 << 5)
+#define FIXED2_FLAG_6 (1 << 6)
+#define FIXED2_FLAG_7 (1 << 7)
 
 
 /*================================
@@ -1096,16 +1097,16 @@ typedef struct {
  *================================
  */
 
-#define FIXD3_FIXED_DATA(flags) \
-    { flags,       CAM_DATA_FLAGS }
+#define FIXED3_FIXED_DATA(interfaceFlags) \
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 
 /*================================
- *   Camera_Subj1() HEAP DATA
+ *   Camera_Subject1() HEAP DATA
  *================================
  */
 
-#define SUBJ1_FIXED_DATA(yOffset, data01, data02, data04, data19, data17, data18, fov, flags) \
+#define SUBJECT1_FIXED_DATA(yOffset, data01, data02, data04, data19, data17, data18, fov, interfaceFlags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01,  CAM_DATA_01 }, \
     { data02,  CAM_DATA_02 }, \
@@ -1114,7 +1115,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { data18,  CAM_DATA_18 }, \
     { fov,     CAM_DATA_FOV }, \
-    { flags,   CAM_DATA_FLAGS }
+    { interfaceFlags,   CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1125,22 +1126,22 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-} Subj1ReadOnlyData; // size = 0x24
+    /* 0x20 */ s16 interfaceFlags;
+} Subject1ReadOnlyData; // size = 0x24
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
     /* 0x4 */ s16 unk_04; // yaw
     /* 0x6 */ s16 unk_06; // pitch
     /* 0x8 */ s16 unk_08;
-} Subj1ReadWriteData; // size = 0xC
+} Subject1ReadWriteData; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Subj1ReadOnlyData roData;
-    /* 0x24 */ Subj1ReadWriteData rwData;
-} Subj1; // size = 0x30
+    /* 0x00 */ Subject1ReadOnlyData roData;
+    /* 0x24 */ Subject1ReadWriteData rwData;
+} Subject1; // size = 0x30
 
-#define SUBJ1_FLG_10 (1 << 4)
+#define SUBJECT1_FLAG_4 (1 << 4)
 
 
 /*================================
@@ -1148,18 +1149,18 @@ typedef struct {
  *================================
  */
 
-#define UNIQ2_FIXED_DATA(yOffset, data01, fov, flags) \
+#define UNIQUE2_FIXED_DATA(yOffset, data01, fov, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { fov,         CAM_DATA_FOV }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 unk_10;
+    /* 0x10 */ s16 interfaceFlags;
 } Unique2ReadOnlyData; // size = 0x14
 
 typedef struct {
@@ -1172,10 +1173,10 @@ typedef struct {
     /* 0x14 */ Unique2ReadWriteData rwData;
 } Unique2; // size = 0x1C
 
-#define UNIQ2_FLG_1 (1 << 0)
-#define UNIQ2_FLG_2 (1 << 1)
-#define UNIQ2_FLG_10 (1 << 4)
-#define UNIQ2_FLG_20 (1 << 5)
+#define UNIQUE2_FLAG_0 (1 << 0)
+#define UNIQUE2_FLAG_1 (1 << 1)
+#define UNIQUE2_FLAG_4 (1 << 4)
+#define UNIQUE2_FLAG_5 (1 << 5)
 
 
 /*================================
@@ -1183,15 +1184,15 @@ typedef struct {
  *================================
  */
 
-#define UNIQ0_FIXED_DATA(yOffset, data04, flags) \
+#define UNIQUE0_FIXED_DATA(yOffset, data04, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
     /* 0x4 */ f32 unk_04;
-    /* 0x8 */ s16 unk_08;
+    /* 0x8 */ s16 interfaceFlags;
 } Unique0ReadOnlyData; // size = 0xC
 
 typedef struct {
@@ -1211,9 +1212,9 @@ typedef struct {
     /* 0x0C */ Unique0ReadWriteData rwData;
 } Unique0; // size = 0x4C
 
-#define UNIQ0_FLG_1 (1 << 0)
-#define UNIQ0_FLG_2 (1 << 1)
-#define UNIQ0_FLG_10 (1 << 4)
+#define UNIQUE0_FLAG_0 (1 << 0)
+#define UNIQUE0_FLAG_1 (1 << 1)
+#define UNIQUE0_FLAG_4 (1 << 4)
 
 
 /*================================
@@ -1222,14 +1223,14 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 flags;
+    /* 0x00 */ s16 interfaceFlags;
 } Unique6ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ Unique6ReadOnlyData roData;
 } Unique6; // size = 0x4
 
-#define UNIQ6_FLG_1 (1 << 0)
+#define UNIQUE6_FLAG_0 (1 << 0)
 
 
 /*================================
@@ -1237,9 +1238,9 @@ typedef struct {
  *================================
  */
 
-#define UNIQ7_FIXED_DATA(fov, flags) \
+#define UNIQUE7_FIXED_DATA(fov, interfaceFlags) \
     { fov,      CAM_DATA_FOV }, \
-    { flags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_FLAGS }
 
 
 /*================================
@@ -1248,7 +1249,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 flags;
+    /* 0x00 */ s16 interfaceFlags;
 } Demo1ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1269,15 +1270,15 @@ typedef struct {
  *================================
  */
 
-#define DEMO2_FIXED_DATA(fov, data08, flags) \
+#define DEMO2_FIXED_DATA(fov, data08, interfaceFlags) \
     { fov,    CAM_DATA_FOV }, \
     { data08, CAM_DATA_08 }, \
-    { flags,  CAM_DATA_FLAGS }
+    { interfaceFlags,  CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 fov;
     /* 0x04 */ f32 unk_04; // unused
-    /* 0x08 */ s16 flags;
+    /* 0x08 */ s16 interfaceFlags;
 } Demo2ReadOnlyData; // size = 0xC
 
 typedef struct {
@@ -1299,7 +1300,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 flags;
+    /* 0x00 */ s16 interfaceFlags;
 } Demo3ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1320,7 +1321,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 flags;
+    /* 0x00 */ s16 interfaceFlags;
 } Demo4ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1345,7 +1346,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 flags;
+    /* 0x00 */ s16 interfaceFlags;
 } Demo5ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1395,7 +1396,7 @@ typedef struct {
  *================================
  */
 
-#define SPEC5_FIXED_DATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, flags) \
+#define SPECIAL5_FIXED_DATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, interfaceFlags) \
     { yOffset,        CAM_DATA_Y_OFFSET }, \
     { eyeDist,        CAM_DATA_01 }, \
     { minDistForRot,  CAM_DATA_02 }, \
@@ -1403,7 +1404,7 @@ typedef struct {
     { atMaxLERPScale, CAM_DATA_FOV }, \
     { timerInit,      CAM_DATA_08 }, \
     { pitch,          CAM_DATA_12 }, \
-    { flags,          CAM_DATA_FLAGS }
+    { interfaceFlags,          CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1413,7 +1414,7 @@ typedef struct {
     /* 0x10 */ f32 atMaxLERPScale;
     /* 0x14 */ s16 timerInit;
     /* 0x16 */ s16 pitch;
-    /* 0x18 */ s16 flags;
+    /* 0x18 */ s16 interfaceFlags;
 } Special5ReadOnlyData; // size = 0x1C
 
 typedef struct {
@@ -1454,13 +1455,13 @@ typedef struct {
  *================================
  */
 
-#define SPEC8_FIXED_DATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
+#define SPECIAL8_FIXED_DATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, interfaceFlags) \
     { yOffset,            CAM_DATA_Y_OFFSET }, \
     { eyeStepScale,       CAM_DATA_04 }, \
     { posStepScale,       CAM_DATA_05 }, \
     { fov,                CAM_DATA_FOV }, \
     { spiralDoorCsLength, CAM_DATA_12 }, \
-    { flags,              CAM_DATA_FLAGS }
+    { interfaceFlags,              CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1468,7 +1469,7 @@ typedef struct {
     /* 0x08 */ f32 posStepScale;
     /* 0x0C */ f32 fov;
     /* 0x10 */ s16 spiralDoorCsLength;
-    /* 0x12 */ s16 flags;
+    /* 0x12 */ s16 interfaceFlags;
 } Special8ReadOnlyData; // size = 0x14
 
 typedef struct {
@@ -1482,8 +1483,8 @@ typedef struct {
     /* 0x14 */ Special8ReadWriteData rwData;
 } Special8; // size = 0x24
 
-#define SPEC8_FLG_1 (1 << 0)
-#define SPEC8_FLG_8 (1 << 3)
+#define SPECIAL8_FLAG_0 (1 << 0)
+#define SPECIAL8_FLAG_3 (1 << 3)
 
 
 /*================================
@@ -1491,15 +1492,15 @@ typedef struct {
  *================================
  */
 
-#define SPEC9_FIXED_DATA(yOffset, fov, flags) \
+#define SPECIAL9_FIXED_DATA(yOffset, fov, interfaceFlags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { fov,     CAM_DATA_FOV }, \
-    { flags,   CAM_DATA_FLAGS }
+    { interfaceFlags,   CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 fov;
-    /* 0x08 */ s16 flags;
+    /* 0x08 */ s16 interfaceFlags;
 } Special9ReadOnlyData; // size = 0xC
 
 typedef struct {
@@ -1511,9 +1512,9 @@ typedef struct {
     /* 0x0C */ Special9ReadWriteData rwData;
 } Special9; // size = 0x10
 
-#define SPEC9_FLG_1 (1 << 0)
-#define SPEC9_FLG_2 (1 << 1)
-#define SPEC9_FLG_8 (1 << 3)
+#define SPECIAL9_FLAG_0 (1 << 0)
+#define SPECIAL9_FLAG_1 (1 << 1)
+#define SPECIAL9_FLAG_3 (1 << 3)
 
 typedef union {
     Normal1 norm1;
@@ -1528,7 +1529,7 @@ typedef union {
     KeepOn4 keep4;
     Fixed1 fixd1;
     Fixed2 fixd2;
-    Subj1 subj1;
+    Subject1 subj1;
     Unique2 uniq2;
     Unique0 uniq0;
     Unique6 uniq6;

@@ -727,11 +727,11 @@ asm/non_matchings/code/z_camera/Camera_Fixed2.s,Camera_Fixed2,0x800D83C8,0x290
 asm/non_matchings/code/z_camera/Camera_Fixed3.s,Camera_Fixed3,0x800D8E08,0x8
 asm/non_matchings/code/z_camera/Camera_Fixed4.s,Camera_Fixed4,0x800D8E28,0x8
 asm/non_matchings/code/z_camera/Camera_Fixed0.s,Camera_Fixed0,0x800D8E48,0x8
-asm/non_matchings/code/z_camera/Camera_Subj1.s,Camera_Subj1,0x800D8E68,0x185
-asm/non_matchings/code/z_camera/Camera_Subj2.s,Camera_Subj2,0x800D947C,0x8
-asm/non_matchings/code/z_camera/Camera_Subj3.s,Camera_Subj3,0x800D949C,0x8
-asm/non_matchings/code/z_camera/Camera_Subj4.s,Camera_Subj4,0x800D94BC,0x8
-asm/non_matchings/code/z_camera/Camera_Subj0.s,Camera_Subj0,0x800D94DC,0x8
+asm/non_matchings/code/z_camera/Camera_Subject1.s,Camera_Subject1,0x800D8E68,0x185
+asm/non_matchings/code/z_camera/Camera_Subject2.s,Camera_Subject2,0x800D947C,0x8
+asm/non_matchings/code/z_camera/Camera_Subject3.s,Camera_Subject3,0x800D949C,0x8
+asm/non_matchings/code/z_camera/Camera_Subject4.s,Camera_Subject4,0x800D94BC,0x8
+asm/non_matchings/code/z_camera/Camera_Subject0.s,Camera_Subject0,0x800D94DC,0x8
 asm/non_matchings/code/z_camera/Camera_Data0.s,Camera_Data0,0x800D94FC,0x8
 asm/non_matchings/code/z_camera/Camera_Data1.s,Camera_Data1,0x800D951C,0x8
 asm/non_matchings/code/z_camera/Camera_Data2.s,Camera_Data2,0x800D953C,0x8
