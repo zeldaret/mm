@@ -490,8 +490,8 @@ typedef struct Camera {
  * Everything below in this file is for these customized functions
  */
 
-#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncHeap)->fixedData
-#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncHeap)->dynamicData
+#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncHeap)->roData
+#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncHeap)->rwData
 
 // Camera will reload static data from camera_data
 #define RELOAD_PARAMS \
@@ -542,7 +542,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20; // pitchTarget
     /* 0x22 */ s16 unk_22; // flags
-} Normal1FixedData; // size = 0x24
+} Normal1ReadOnlyData; // size = 0x24
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yPos
@@ -552,11 +552,11 @@ typedef struct {
     /* 0x0C */ s16 unk_0C; // flags (May be s32)
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ f32 unk_10; // set to float
-} Normal1DynamicData; // size = 0x14
+} Normal1ReadWriteData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Normal1FixedData fixedData;
-    /* 0x24 */ Normal1DynamicData dynamicData;
+    /* 0x00 */ Normal1ReadOnlyData roData;
+    /* 0x24 */ Normal1ReadWriteData rwData;
 } Normal1; // size = 0x38
 
 #define NORM1_FLG_1 (1 << 0)
@@ -615,7 +615,7 @@ typedef struct {
     /* 0x18 */ f32 maxAtLERPScale;
     /* 0x1C */ s16 pitchTarget;
     /* 0x1E */ s16 flags;
-} Normal3FixedData; // size = 0x20
+} Normal3ReadOnlyData; // size = 0x20
 
 typedef struct {
     /* 0x00 */ f32 isZero; // set but unused
@@ -626,11 +626,11 @@ typedef struct {
     /* 0x0E */ s16 distTimer;
     /* 0x10 */ s16 flag;
     /* 0x12 */ s16 is1200; // set but unused
-} Normal3DynamicData; // size = 0x14
+} Normal3ReadWriteData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Normal3FixedData fixedData;
-    /* 0x20 */ Normal3DynamicData dynamicData;
+    /* 0x00 */ Normal3ReadOnlyData roData;
+    /* 0x20 */ Normal3ReadWriteData rwData;
 } Normal3; // size = 0x34
 
 #define NORM3_FLG_2 (1 << 1)
@@ -665,7 +665,7 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
-} Normal0FixedData; // size = 0x20
+} Normal0ReadOnlyData; // size = 0x20
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -677,11 +677,11 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
-} Normal0DynamicData; // size = 0x30
+} Normal0ReadWriteData; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ Normal0FixedData fixedData;
-    /* 0x20 */ Normal0DynamicData dynamicData;
+    /* 0x00 */ Normal0ReadOnlyData roData;
+    /* 0x20 */ Normal0ReadWriteData rwData;
 } Normal0; // size = 0x50
 
 #define NORM0_FLG_1 (1 << 0)
@@ -738,7 +738,7 @@ typedef struct {
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 unk_26;
-} Parallel1FixedData; // size = 0x28
+} Parallel1ReadOnlyData; // size = 0x28
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -752,11 +752,11 @@ typedef struct {
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 unk_26;
-} Parallel1DynamicData; // size = 0x28
+} Parallel1ReadWriteData; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ Parallel1FixedData fixedData;
-    /* 0x28 */ Parallel1DynamicData dynamicData;
+    /* 0x00 */ Parallel1ReadOnlyData roData;
+    /* 0x28 */ Parallel1ReadWriteData rwData;
 } Parallel1; // size = 0x50
 
 #define PARA1_FLG_1 (1 << 0)
@@ -815,7 +815,7 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-} Jump2FixedData; // size = 0x24
+} Jump2ReadOnlyData; // size = 0x24
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -827,11 +827,11 @@ typedef struct {
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s32 unk_10; // unused?
     /* 0x1C */ s16 unk_1C;
-} Jump2DynamicData; // size = 0x20
+} Jump2ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Jump2FixedData fixedData;
-    /* 0x02 */ Jump2DynamicData dynamicData;
+    /* 0x00 */ Jump2ReadOnlyData roData;
+    /* 0x02 */ Jump2ReadWriteData rwData;
 } Jump2; // size = 0x44
 
 #define JUMP2_FLG_2 (1 << 1)
@@ -866,7 +866,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22; // flags
-} Jump3FixedData; // size = 0x24
+} Jump3ReadOnlyData; // size = 0x24
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -878,11 +878,11 @@ typedef struct {
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
     /* 0x1C */ s16 unk_1C;
-} Jump3DynamicData; // size = 0x20
+} Jump3ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Jump3FixedData fixedData; // yOffset
-    /* 0x24 */ Jump3DynamicData dynamicData;
+    /* 0x00 */ Jump3ReadOnlyData roData; // yOffset
+    /* 0x24 */ Jump3ReadWriteData rwData;
 } Jump3; // size = 0x44
 
 #define JUMP3_FLG_1 (1 << 0)
@@ -928,7 +928,7 @@ typedef struct {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
     /* 0x30 */ s16 unk_30;
-} Battle1FixedData; // size = 0x34
+} Battle1ReadOnlyData; // size = 0x34
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -941,11 +941,11 @@ typedef struct {
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
-} Battle1DynamicData; // size = 0x1C
+} Battle1ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Battle1FixedData fixedData;
-    /* 0x24 */ Battle1DynamicData dynamicData;
+    /* 0x00 */ Battle1ReadOnlyData roData;
+    /* 0x24 */ Battle1ReadWriteData rwData;
 } Battle1; // size = 0x50
 
 #define BATT1_FLG_1 (1 << 0)
@@ -986,7 +986,7 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
-} KeepOn1FixedData; // size = 0x30
+} KeepOn1ReadOnlyData; // size = 0x30
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -998,11 +998,11 @@ typedef struct {
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
-} KeepOn1DynamicData; // size = 0x1C
+} KeepOn1ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ KeepOn1FixedData fixedData;
-    /* 0x30 */ KeepOn1DynamicData dynamicData;
+    /* 0x00 */ KeepOn1ReadOnlyData roData;
+    /* 0x30 */ KeepOn1ReadWriteData rwData;
 } KeepOn1; // size = 0x4C
 
 #define KEEP1_FLG_1 (1 << 0)
@@ -1045,7 +1045,7 @@ typedef struct {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
     /* 0x2E */ s16 unk_2E;
-} KeepOn3FixedData; // size = 0x30
+} KeepOn3ReadOnlyData; // size = 0x30
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // Vec3f?
@@ -1054,11 +1054,11 @@ typedef struct {
     /* 0x0C */ Actor* unk_0C;
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ s16 unk_1C;
-} KeepOn3DynamicData; // size = 0x20
+} KeepOn3ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ KeepOn3FixedData fixedData;
-    /* 0x30 */ KeepOn3DynamicData dynamicData;
+    /* 0x00 */ KeepOn3ReadOnlyData roData;
+    /* 0x30 */ KeepOn3ReadWriteData rwData;
 } KeepOn3; // size = 0x50
 
 #define KEEP3_FLG_20 (1 << 5)
@@ -1092,7 +1092,7 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
-} KeepOn4FixedData; // size = 0x20
+} KeepOn4ReadOnlyData; // size = 0x20
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // Vec3f?
@@ -1104,11 +1104,11 @@ typedef struct {
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
-} KeepOn4DynamicData; // size = 0x1C
+} KeepOn4ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ KeepOn4FixedData fixedData;
-    /* 0x20 */ KeepOn4DynamicData dynamicData;
+    /* 0x00 */ KeepOn4ReadOnlyData roData;
+    /* 0x20 */ KeepOn4ReadWriteData rwData;
 } KeepOn4; // size = 0x3C
 
 #define KEEP4_FLG_2 (1 << 1)
@@ -1133,17 +1133,17 @@ typedef struct {
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 fov;
     /* 0x0C */ s16 flags;
-} Fixed1FixedData; // size = 0x10
+} Fixed1ReadOnlyData; // size = 0x10
 
 typedef struct {
     /* 0x00 */ PosRot eyePosRotTarget;
     /* 0x14 */ s16 fov;
     /* 0x18 */ Actor* trackActor;
-} Fixed1DynamicData; // size = 0x1C
+} Fixed1ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Fixed1FixedData fixedData;
-    /* 0x10 */ Fixed1DynamicData dynamicData;
+    /* 0x00 */ Fixed1ReadOnlyData roData;
+    /* 0x10 */ Fixed1ReadWriteData rwData;
 } Fixed1; // size = 0x2C
 
 #define FIXD1_FLG_10 (1 << 4)
@@ -1171,7 +1171,7 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ s16 unk_18;
-} Fixed2FixedData; // size = 0x1C
+} Fixed2ReadOnlyData; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -1180,11 +1180,11 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
-} Fixed2DynamicData; // size = 0x20
+} Fixed2ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Fixed2FixedData fixedData;
-    /* 0x1C */ Fixed2DynamicData dynamicData;
+    /* 0x00 */ Fixed2ReadOnlyData roData;
+    /* 0x1C */ Fixed2ReadWriteData rwData;
 } Fixed2; // size = 0x3C
 
 #define FIXD2_FLG_1 (1 << 0)
@@ -1232,18 +1232,18 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-} Subj1FixedData; // size = 0x24
+} Subj1ReadOnlyData; // size = 0x24
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
     /* 0x4 */ s16 unk_04; // yaw
     /* 0x6 */ s16 unk_06; // pitch
     /* 0x8 */ s16 unk_08;
-} Subj1DynamicData; // size = 0xC
+} Subj1ReadWriteData; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Subj1FixedData fixedData;
-    /* 0x24 */ Subj1DynamicData dynamicData;
+    /* 0x00 */ Subj1ReadOnlyData roData;
+    /* 0x24 */ Subj1ReadWriteData rwData;
 } Subj1; // size = 0x30
 
 #define SUBJ1_FLG_10 (1 << 4)
@@ -1266,16 +1266,16 @@ typedef struct {
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ s16 unk_10;
-} Unique2FixedData; // size = 0x14
+} Unique2ReadOnlyData; // size = 0x14
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ s16 unk_04;
-} Unique2DynamicData; // size = 0x8
+} Unique2ReadWriteData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Unique2FixedData fixedData;
-    /* 0x14 */ Unique2DynamicData dynamicData;
+    /* 0x00 */ Unique2ReadOnlyData roData;
+    /* 0x14 */ Unique2ReadWriteData rwData;
 } Unique2; // size = 0x1C
 
 #define UNIQ2_FLG_1 (1 << 0)
@@ -1298,7 +1298,7 @@ typedef struct {
     /* 0x0 */ f32 unk_00;
     /* 0x4 */ f32 unk_04;
     /* 0x8 */ s16 unk_08;
-} Unique0FixedData; // size = 0xC
+} Unique0ReadOnlyData; // size = 0xC
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -1310,11 +1310,11 @@ typedef struct {
     /* 0x3A */ s16 unk_3A;
     /* 0x3C */ s16 unk_3C;
     /* 0x3E */ s16 unk_3E;
-} Unique0DynamicData; // size = 0x40
+} Unique0ReadWriteData; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ Unique0FixedData fixedData;
-    /* 0x0C */ Unique0DynamicData dynamicData;
+    /* 0x00 */ Unique0ReadOnlyData roData;
+    /* 0x0C */ Unique0ReadWriteData rwData;
 } Unique0; // size = 0x4C
 
 #define UNIQ0_FLG_1 (1 << 0)
@@ -1329,10 +1329,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 flags;
-} Unique6FixedData; // size = 0x4
+} Unique6ReadOnlyData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Unique6FixedData fixedData;
+    /* 0x00 */ Unique6ReadOnlyData roData;
 } Unique6; // size = 0x4
 
 #define UNIQ6_FLG_1 (1 << 0)
@@ -1355,18 +1355,18 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 flags;
-} Demo1FixedData; // size = 0x4
+} Demo1ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ VecSph unk_0C;
     /* 0x14 */ VecSph unk_14;
     /* 0x1C */ s16 unk_1C;
-} Demo1DynamicData; // size = 0x20
+} Demo1ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Demo1FixedData fixedData;
-    /* 0x04 */ Demo1DynamicData dynamicData;
+    /* 0x00 */ Demo1ReadOnlyData roData;
+    /* 0x04 */ Demo1ReadWriteData rwData;
 } Demo1; // size = 0x24
 
 
@@ -1384,18 +1384,18 @@ typedef struct {
     /* 0x00 */ f32 fov;
     /* 0x04 */ f32 unk_04; // unused
     /* 0x08 */ s16 flags;
-} Demo2FixedData; // size = 0xC
+} Demo2ReadOnlyData; // size = 0xC
 
 typedef struct {
     /* 0x00 */ Vec3f initialAt;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ s16 animFrame;
     /* 0x12 */ s16 yawDir;
-} Demo2DynamicData; // size = 0x14
+} Demo2ReadWriteData; // size = 0x14
 
 typedef struct {
-    /* 0x08 */ Demo2FixedData fixedData;
-    /* 0x0C */ Demo2DynamicData dynamicData;
+    /* 0x08 */ Demo2ReadOnlyData roData;
+    /* 0x0C */ Demo2ReadWriteData rwData;
 } Demo2; // size = 0x20
 
 
@@ -1406,17 +1406,17 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 flags;
-} Demo3FixedData; // size = 0x4
+} Demo3ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 timer;
-} Demo3DynamicData; // size = 0x8
+} Demo3ReadWriteData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Demo3FixedData fixedData;
-    /* 0x04 */ Demo3DynamicData dynamicData;
+    /* 0x00 */ Demo3ReadOnlyData roData;
+    /* 0x04 */ Demo3ReadWriteData rwData;
 } Demo3; // size = 0xC
 
 
@@ -1427,7 +1427,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 flags;
-} Demo4FixedData; // size = 0x4
+} Demo4ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -1437,11 +1437,11 @@ typedef struct {
     /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;
-} Demo4DynamicData; // size = 0x24
+} Demo4ReadWriteData; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ Demo4FixedData fixedData;
-    /* 0x04 */ Demo4DynamicData dynamicData;
+    /* 0x00 */ Demo4ReadOnlyData roData;
+    /* 0x04 */ Demo4ReadWriteData rwData;
 } Demo4; // size = 0x28
 
 
@@ -1452,7 +1452,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 flags;
-} Demo5FixedData; // size = 0x4
+} Demo5ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -1463,11 +1463,11 @@ typedef struct {
     /* 0x1C */ VecSph unk_1C;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 timer;
-} Demo5DynamicData; // size = 0x28
+} Demo5ReadWriteData; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ Demo5FixedData fixedData;
-    /* 0x04 */ Demo5DynamicData dynamicData;
+    /* 0x00 */ Demo5ReadOnlyData roData;
+    /* 0x04 */ Demo5ReadWriteData rwData;
 } Demo5; // size = 0x2C
 
 
@@ -1478,7 +1478,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
-} Demo0FixedData; // size = 0x4
+} Demo0ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1488,11 +1488,11 @@ typedef struct {
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
-} Demo0DynamicData; // size = 0x1C
+} Demo0ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Demo0FixedData fixedData;
-    /* 0x04 */ Demo0DynamicData dynamicData;
+    /* 0x00 */ Demo0ReadOnlyData roData;
+    /* 0x04 */ Demo0ReadWriteData rwData;
 } Demo0; // size = 0x20
 
 
@@ -1520,15 +1520,15 @@ typedef struct {
     /* 0x14 */ s16 timerInit;
     /* 0x16 */ s16 pitch;
     /* 0x18 */ s16 flags;
-} Special5FixedData; // size = 0x1C
+} Special5ReadOnlyData; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ s16 animTimer;
-} Special5DynamicData; // size = 0x4
+} Special5ReadWriteData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Special5FixedData fixedData;
-    /* 0x1C */ Special5DynamicData dynamicData;
+    /* 0x00 */ Special5ReadOnlyData roData;
+    /* 0x1C */ Special5ReadWriteData rwData;
 } Special5; // size = 0x20
 
 
@@ -1575,18 +1575,18 @@ typedef struct {
     /* 0x0C */ f32 fov;
     /* 0x10 */ s16 spiralDoorCsLength;
     /* 0x12 */ s16 flags;
-} Special8FixedData; // size = 0x14
+} Special8ReadOnlyData; // size = 0x14
 
 typedef struct {
     /* 0x00 */ Vec3f eye;
     /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
     /* 0x0E */ s16 fov;
-} Special8DynamicData; // size = 0x10
+} Special8ReadWriteData; // size = 0x10
 
 typedef struct {
     /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special8FixedData fixedData;
-    /* 0x20 */ Special8DynamicData dynamicData;
+    /* 0x0C */ Special8ReadOnlyData roData;
+    /* 0x20 */ Special8ReadWriteData rwData;
 } Special8; // size = 0x30
 
 #define SPEC8_FLG_1 (1 << 0)
@@ -1607,16 +1607,16 @@ typedef struct {
     /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 fov;
     /* 0x08 */ s16 flags;
-} Special9FixedData; // size = 0xC
+} Special9ReadOnlyData; // size = 0xC
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
-} Special9DynamicData; // size = 0x4
+} Special9ReadWriteData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special9FixedData fixedData;
-    /* 0x18 */ Special9DynamicData dynamicData;
+    /* 0x0C */ Special9ReadOnlyData roData;
+    /* 0x18 */ Special9ReadWriteData rwData;
 } Special9; // size = 0x1C
 
 #define SPEC9_FLG_1 (1 << 0)
