@@ -83,20 +83,20 @@
 
 // Camera stateFlags. Variety of generic flags
 #define CAM_STATE_0 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
-#define CAM_STATE_1 (1 << 1)
+#define CAM_STATE_CHECK_WATER (1 << 1)
 #define CAM_STATE_2 (1 << 2)
 #define CAM_STATE_3 (1 << 3)
 #define CAM_STATE_4 (1 << 4)
 #define CAM_STATE_5 (1 << 5)
 #define CAM_STATE_6 (1 << 6)
 #define CAM_STATE_7 (1 << 7)
-#define CAM_STATE_8 (1 << 8)
+#define CAM_STATE_UNDERWATER (1 << 8)
 #define CAM_STATE_9 (1 << 9)
 #define CAM_STATE_10 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
 #define CAM_STATE_11 (1 << 11)
 #define CAM_STATE_12 (1 << 12)
 #define CAM_STATE_13 (1 << 13)
-#define CAM_STATE_14 (1 << 14)
+#define CAM_STATE_INITIALIZED (1 << 14)
 #define CAM_STATE_15 ((s16)(1 << 15))
 
 // Camera viewFlags. Set params related to view
@@ -1372,17 +1372,17 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
+    /* 0x00 */ s16 interfaceFlags;
 } Demo0ReadOnlyData; // size = 0x4
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ VecSph unk_04;
-    /* 0x0C */ VecSph unk_0C;
+    /* 0x04 */ VecSph subAtToEye;
+    /* 0x0C */ VecSph atToEye;
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
+    /* 0x1A */ s16 timer;
 } Demo0ReadWriteData; // size = 0x1C
 
 typedef struct {
