@@ -29,9 +29,10 @@ void Rand_Seed(u32 seed) {
 
 /**
  * Returns a pseudo-random float between 0.0f and 1.0f from the internal PRNG.
- * 
- * @note Works by generating the next integer, masking it to an IEEE-754 compliant float between 1.0f and 2.0f, and subtracting 1.0f.
- * 
+ *
+ * @note Works by generating the next integer, masking it to an IEEE-754 compliant float between 1.0f and 2.0f, and
+ * subtracting 1.0f.
+ *
  * @remark This is also recommended by Numerical Recipes, pp. 284-5.
  */
 f32 Rand_ZeroOne(void) {
@@ -54,7 +55,7 @@ f32 Rand_Centered(void) {
 
 /**
  * Seeds a provided pseudo-random number with a provided starting value.
- * 
+ *
  * @see Rand_Seed
  */
 void Rand_Seed_Variable(u32* rndNum, u32 seed) {
@@ -63,7 +64,7 @@ void Rand_Seed_Variable(u32* rndNum, u32 seed) {
 
 /**
  * Generates the next pseudo-random number from the provided rndNum.
- * 
+ *
  * @see Rand_Next
  */
 u32 Rand_Next_Variable(u32* rndNum) {
@@ -72,7 +73,7 @@ u32 Rand_Next_Variable(u32* rndNum) {
 
 /**
  * Generates the next pseudo-random float between 0.0f and 1.0f from the provided rndNum.
- * 
+ *
  * @see Rand_ZeroOne
  */
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
@@ -84,7 +85,7 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
 
 /**
  * Generates the next pseudo-random float between -0.5f and 0.5f from the provided rndNum.
- * 
+ *
  * @see Rand_ZeroOne, Rand_Centered
  */
 f32 Rand_Centered_Variable(u32* rndNum) {
