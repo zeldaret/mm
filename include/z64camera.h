@@ -335,7 +335,7 @@ typedef enum {
     /* 0x06 */ CAM_DATA_YAWDIFFRANGE,
     /* 0x07 */ CAM_DATA_FOV,
     /* 0x08 */ CAM_DATA_08,
-    /* 0x09 */ CAM_DATA_FLAGS,
+    /* 0x09 */ CAM_DATA_INTERFACE_FLAGS,
     /* 0x0A */ CAM_DATA_10,
     /* 0x0B */ CAM_DATA_11,
     /* 0x0C */ CAM_DATA_12,
@@ -406,7 +406,7 @@ typedef struct {
  */
 
 #define FLAGS_FIXED_DATA(interfaceFlags) \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
@@ -424,7 +424,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -479,7 +479,7 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 #define NORMAL2_FLAG_1 (1 << 1)
 
@@ -498,7 +498,7 @@ typedef struct {
     { posStepScale, CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -548,7 +548,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -600,7 +600,7 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }, \
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }
 
@@ -615,7 +615,7 @@ typedef struct {
     { data05,       CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }, \
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }, \
     { data11,       CAM_DATA_11 }, \
     { data12,       CAM_DATA_12 }, \
     { data18,       CAM_DATA_18 }
@@ -679,7 +679,7 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 #define PARALLEL2_FLAG_1 (1 << 1)
 
@@ -698,7 +698,7 @@ typedef struct {
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -748,7 +748,7 @@ typedef struct {
     { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
-    { interfaceFlags,        CAM_DATA_FLAGS }
+    { interfaceFlags,        CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -805,7 +805,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { interfaceFlags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
     { data11,  CAM_DATA_11 }, \
     { data18,  CAM_DATA_18 }
 
@@ -865,7 +865,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
-    { interfaceFlags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
     { data11,  CAM_DATA_11 }
 
 typedef struct {
@@ -923,7 +923,7 @@ typedef struct {
     { fov,     CAM_DATA_FOV }, \
     { data08,  CAM_DATA_08 }, \
     { data04,  CAM_DATA_04 }, \
-    { interfaceFlags,   CAM_DATA_FLAGS }, \
+    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }, \
     { data18,  CAM_DATA_18 }
 
 typedef struct {
@@ -973,7 +973,7 @@ typedef struct {
     { data10,      CAM_DATA_10 }, \
     { data18,      CAM_DATA_18 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }, \
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }, \
     { data04,      CAM_DATA_04 }, \
     { data12,      CAM_DATA_12 }
 
@@ -1021,7 +1021,7 @@ typedef struct {
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1056,7 +1056,7 @@ typedef struct {
     { data04,      CAM_DATA_04 }, \
     { data05,      CAM_DATA_05 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1098,7 +1098,7 @@ typedef struct {
  */
 
 #define FIXED3_FIXED_DATA(interfaceFlags) \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
@@ -1115,7 +1115,7 @@ typedef struct {
     { data17,  CAM_DATA_17 }, \
     { data18,  CAM_DATA_18 }, \
     { fov,     CAM_DATA_FOV }, \
-    { interfaceFlags,   CAM_DATA_FLAGS }
+    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1153,7 +1153,7 @@ typedef struct {
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { fov,         CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -1187,7 +1187,7 @@ typedef struct {
 #define UNIQUE0_FIXED_DATA(yOffset, data04, interfaceFlags) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data04,      CAM_DATA_04 }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
@@ -1240,7 +1240,7 @@ typedef struct {
 
 #define UNIQUE7_FIXED_DATA(fov, interfaceFlags) \
     { fov,      CAM_DATA_FOV }, \
-    { interfaceFlags,       CAM_DATA_FLAGS }
+    { interfaceFlags,       CAM_DATA_INTERFACE_FLAGS }
 
 
 /*================================
@@ -1273,7 +1273,7 @@ typedef struct {
 #define DEMO2_FIXED_DATA(fov, data08, interfaceFlags) \
     { fov,    CAM_DATA_FOV }, \
     { data08, CAM_DATA_08 }, \
-    { interfaceFlags,  CAM_DATA_FLAGS }
+    { interfaceFlags,  CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 fov;
@@ -1404,7 +1404,7 @@ typedef struct {
     { atMaxLERPScale, CAM_DATA_FOV }, \
     { timerInit,      CAM_DATA_08 }, \
     { pitch,          CAM_DATA_12 }, \
-    { interfaceFlags,          CAM_DATA_FLAGS }
+    { interfaceFlags,          CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1461,7 +1461,7 @@ typedef struct {
     { posStepScale,       CAM_DATA_05 }, \
     { fov,                CAM_DATA_FOV }, \
     { spiralDoorCsLength, CAM_DATA_12 }, \
-    { interfaceFlags,              CAM_DATA_FLAGS }
+    { interfaceFlags,              CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -1495,7 +1495,7 @@ typedef struct {
 #define SPECIAL9_FIXED_DATA(yOffset, fov, interfaceFlags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { fov,     CAM_DATA_FOV }, \
-    { interfaceFlags,   CAM_DATA_FLAGS }
+    { interfaceFlags,   CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
