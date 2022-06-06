@@ -34,7 +34,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801660B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Fini.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
 
@@ -46,7 +46,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166B30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167814.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
@@ -56,7 +56,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
 
 s32 Play_InCsMode(GlobalContext* globalCtx) {
     return (globalCtx->csCtx.state != 0) || Player_InCsMode(&globalCtx->state);
@@ -195,7 +195,7 @@ s32 Play_CameraSetAtEyeUp(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f*
 }
 
 s32 Play_CameraSetFov(GlobalContext* globalCtx, s16 camId, f32 fov) {
-    s32 ret = Camera_SetViewParam(globalCtx->cameraPtrs[camId], 0x20, &fov) & 1;
+    s32 ret = Camera_SetViewParam(globalCtx->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
 
     if (1) {}
     return ret;

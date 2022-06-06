@@ -81,22 +81,22 @@
 #define CAM_BEHAVIOR_BGCAM_2 (1 << 6)
 
 // Camera stateFlags. Variety of generic flags
-#define CAM_STATE_1 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
-#define CAM_STATE_2 (1 << 1)
-#define CAM_STATE_4 (1 << 2)
-#define CAM_STATE_8 (1 << 3)
-#define CAM_STATE_10 (1 << 4)
-#define CAM_STATE_20 (1 << 5)
-#define CAM_STATE_40 (1 << 6)
-#define CAM_STATE_80 (1 << 7)
-#define CAM_STATE_100 (1 << 8)
-#define CAM_STATE_200 (1 << 9)
-#define CAM_STATE_400 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
-#define CAM_STATE_800 (1 << 11)
-#define CAM_STATE_1000 (1 << 12)
-#define CAM_STATE_2000 (1 << 13)
-#define CAM_STATE_4000 (1 << 14)
-#define CAM_STATE_8000 (1 << 15)
+#define CAM_STATE_0 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
+#define CAM_STATE_1 (1 << 1)
+#define CAM_STATE_2 (1 << 2)
+#define CAM_STATE_3 (1 << 3)
+#define CAM_STATE_4 (1 << 4)
+#define CAM_STATE_5 (1 << 5)
+#define CAM_STATE_6 (1 << 6)
+#define CAM_STATE_7 (1 << 7)
+#define CAM_STATE_8 (1 << 8)
+#define CAM_STATE_9 (1 << 9)
+#define CAM_STATE_10 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
+#define CAM_STATE_11 (1 << 11)
+#define CAM_STATE_12 (1 << 12)
+#define CAM_STATE_13 (1 << 13)
+#define CAM_STATE_14 (1 << 14)
+#define CAM_STATE_15 ((s16)(1 << 15))
 
 // Camera viewFlags. Set params related to view
 #define CAM_VIEW_AT (1 << 0) // camera->at
