@@ -1892,8 +1892,8 @@ s32 Camera_Normal1(Camera* camera) {
     s16 temp_a0_3; // May be fake
     Vec3f* new_var3;
 
-    Normal1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Normal1);
-    Normal1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Normal1);
+    Normal1ReadOnlyData* roData = &camera->paramData.norm1.roData;
+    Normal1ReadWriteData* rwData = &camera->paramData.norm1.rwData);
 
     // sp48 = &camera->at;
     // sp4C;/
@@ -2274,8 +2274,8 @@ s32 Camera_Normal2(Camera* camera) {
  * Riding Epona and Zora
  */
 s32 Camera_Normal3(Camera* camera) {
-    Normal3ReadOnlyData* roData = CAM_GET_STATIC_DATA(Normal3);
-    Normal3ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Normal3);
+    Normal3ReadOnlyData* roData = &camera->paramData.norm3.roData;
+    Normal3ReadWriteData* rwData = &camera->paramData.norm3.rwData;
     f32 sp8C;
     f32 sp90;
     f32 temp_f2; // multi-use temp
@@ -2492,8 +2492,8 @@ s32 Camera_Normal0(Camera* camera) {
     s16 phi_a0;
     SubCamData* bgCamData;
     f32 new_var;
-    Normal0ReadOnlyData* roData = CAM_GET_STATIC_DATA(Normal0);
-    Normal0ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Normal0);
+    Normal0ReadOnlyData* roData = &camera->paramData.norm0.roData;
+    Normal0ReadWriteData* rwData = &camera->paramData.norm0.rwData;
 
     if (phi_a1) {}
 
@@ -2670,8 +2670,8 @@ s32 Camera_Parallel1(Camera* camera) {
     SubCamData* bgCamData;
     s16 sp72;
     s16 tangle;
-    Parallel1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Parallel1);
-    Parallel1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Parallel1);
+    Parallel1ReadOnlyData* roData = &camera->paramData.para1.roData;
+    Parallel1ReadWriteData* rwData = &camera->paramData.para1.rwData;
     s32 new_var3;
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     s16 new_var2;
@@ -3027,8 +3027,8 @@ s32 Camera_Jump2(Camera* camera) {
     s32 sp88;
     CamColChk sp60;
     PosRot* sp2C = &camera->trackActorPosRot;
-    Jump2ReadOnlyData* roData = CAM_GET_STATIC_DATA(Jump2);
-    Jump2ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Jump2);
+    Jump2ReadOnlyData* roData = &camera->paramData.jump2.roData;
+    Jump2ReadWriteData* rwData = &camera->paramData.jump2.rwData;
     f32 phi_f2;
     f32 yNormal; // used twice
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
@@ -3210,8 +3210,8 @@ s32 Camera_Jump3(Camera* camera) {
     f32 pad3; // UNUSED - Available for temp
     f32 pad4; // UNUSED - Available for temp
     f32 sp78;
-    Jump3ReadOnlyData* roData = CAM_GET_STATIC_DATA(Jump3);
-    Jump3ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Jump3);
+    Jump3ReadOnlyData* roData = &camera->paramData.jump3.roData;
+    Jump3ReadWriteData* rwData = &camera->paramData.jump3.rwData;
     Vec3f sp64;
     f32 sp60;
     f32 sp5C;
@@ -3468,8 +3468,8 @@ s32 Camera_Jump0(Camera* camera) {
 
 #ifdef NON_EQUIVALENT
 s32 Camera_Battle1(Camera* camera) {
-    Battle1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Battle1);
-    Battle1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Battle1);
+    Battle1ReadOnlyData* roData = &camera->paramData.batt1.roData;
+    Battle1ReadWriteData* rwData = &camera->paramData.batt1.rwData;
     Vec3f sp120;
     Vec3f sp114;
     f32 sp104;
@@ -3918,8 +3918,8 @@ s32 Camera_KeepOn1(Camera* camera) {
 
     s16 phi_v1_3;
     s16 phi_a0;
-    KeepOn1ReadOnlyData* roData = CAM_GET_STATIC_DATA(KeepOn1);
-    KeepOn1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(KeepOn1);
+    KeepOn1ReadOnlyData* roData = &camera->paramData.keep1.roData;
+    KeepOn1ReadWriteData* rwData = &camera->paramData.keep1.rwData;
     s16 temp_v0_3;
     s16 new_var4;
 
@@ -4249,8 +4249,8 @@ s32 Camera_KeepOn3(Camera* camera) {
     s16 sp6A;
     s16 phi_a3;
     PosRot* sp3C = &camera->trackActorPosRot;
-    KeepOn3ReadOnlyData* roData = CAM_GET_STATIC_DATA(KeepOn3);
-    KeepOn3ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(KeepOn3);
+    KeepOn3ReadOnlyData* roData = &camera->paramData.keep3.roData;
+    KeepOn3ReadWriteData* rwData = &camera->paramData.keep3.rwData;
     f32 trackHeight;
     s32 i;
 
@@ -4488,8 +4488,8 @@ s32 Camera_KeepOn4(Camera* camera) {
     s16 sp9C;
     s16 pad1;
     PosRot* sp38 = &camera->trackActorPosRot;
-    KeepOn4ReadOnlyData* roData = CAM_GET_STATIC_DATA(KeepOn4);
-    KeepOn4ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(KeepOn4);
+    KeepOn4ReadOnlyData* roData = &camera->paramData.keep4.roData;
+    KeepOn4ReadWriteData* rwData = &camera->paramData.keep4.rwData;
     f32 trackHeight;
     s32 bgId;
     s16 camMode;
@@ -4726,8 +4726,8 @@ s32 Camera_Fixed1(Camera* camera) {
     PosRot* sp50;
     PosRot* sp4C;
     VecSph sp44;
-    Fixed1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Fixed1);
-    Fixed1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Fixed1);
+    Fixed1ReadOnlyData* roData = &camera->paramData.fixd1.roData;
+    Fixed1ReadWriteData* rwData = &camera->paramData.fixd1.rwData;
 
     OLib_Vec3fDiffToVecSphGeo(&sp7C, at, eye);
 
@@ -4830,8 +4830,8 @@ s32 Camera_Fixed2(Camera* camera) {
     Player* player;
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     Actor* actor;
-    Fixed2ReadOnlyData* roData = CAM_GET_STATIC_DATA(Fixed2);
-    Fixed2ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Fixed2);
+    Fixed2ReadOnlyData* roData = &camera->paramData.fixd2.roData;
+    Fixed2ReadWriteData* rwData = &camera->paramData.fixd2.rwData;
     CameraModeValue* values;
     Vec3f sp44;
 
@@ -5075,8 +5075,8 @@ s32 Camera_Subj1(Camera* camera) {
     f32 temp_f0_2;
     s16 sp4E;
     s16 sp4C;
-    Subj1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Subj1);
-    Subj1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Subj1);
+    Subj1ReadOnlyData* roData = &camera->paramData.subj1.roData;
+    Subj1ReadWriteData* rwData = &camera->paramData.subj1.rwData;
     CameraModeValue* values;
     f32 temp_f0;
     f32 trackHeight;
@@ -5242,8 +5242,8 @@ s32 Camera_Unique2(Camera* camera) {
     VecSph sp68;
     VecSph sp60;
     s32 pad[3];
-    Unique2ReadOnlyData* roData = CAM_GET_STATIC_DATA(Unique2);
-    Unique2ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Unique2);
+    Unique2ReadOnlyData* roData = &camera->paramData.uniq2.roData;
+    Unique2ReadWriteData* rwData = &camera->paramData.uniq2.rwData;
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     Vec3f* eyeNext = &camera->eyeNext;
     CameraModeValue* values;
@@ -5371,8 +5371,8 @@ s32 Camera_Unique0(Camera* camera) {
     f32 sp74;
     s32 pad;
     s16 temp_v1;
-    Unique0ReadOnlyData* roData = CAM_GET_STATIC_DATA(Unique0);
-    Unique0ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Unique0);
+    Unique0ReadOnlyData* roData = &camera->paramData.uniq0.roData;
+    Unique0ReadWriteData* rwData = &camera->paramData.uniq0.rwData;
     CameraModeValue* values;
     Vec3f sp54;
 
@@ -5550,7 +5550,7 @@ s32 Camera_Unique6(Camera* camera) {
     CameraModeValue* values;
     Vec3f playerPosDisp;
     PosRot* playerPosRot = &camera->trackActorPosRot;
-    Unique6ReadOnlyData* roData = CAM_GET_STATIC_DATA(Unique6);
+    Unique6ReadOnlyData* roData = &camera->paramData.uniq6.roData;
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
@@ -5614,8 +5614,8 @@ s32 Camera_Demo1(Camera* camera) {
     VecSph sp88;
     PosRot sp74;
     PosRot targetHead;
-    Demo1ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo1);
-    Demo1ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo1);
+    Demo1ReadOnlyData* roData = &camera->paramData.demo1.roData;
+    Demo1ReadWriteData* rwData = &camera->paramData.demo1.rwData;
     s32 pad;
 
     if (camera->actionFuncState == 0) {
@@ -5809,8 +5809,8 @@ s32 Camera_Demo2(Camera* camera) {
     VecSph* sp4C = D_801B9E64;
     Vec3f* sp48 = D_801B9E84;
     Actor* trackActor = camera->trackActor;
-    Demo2ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo2);
-    Demo2ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo2);
+    Demo2ReadOnlyData* roData = &camera->paramData.demo2.roData;
+    Demo2ReadWriteData* rwData = &camera->paramData.demo2.rwData;
 
     if (((trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
          (((Player*)trackActor)->transformation == PLAYER_FORM_GORON))) {
@@ -6026,8 +6026,8 @@ s32 Camera_Demo3(Camera* camera) {
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
     Vec3f* eyeNext = &camera->eyeNext;
-    Demo3ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo3);
-    Demo3ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo3);
+    Demo3ReadOnlyData* roData = &camera->paramData.demo3.roData;
+    Demo3ReadWriteData* rwData = &camera->paramData.demo3.rwData;
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
     Actor_GetFocus(&playerHead, camera->trackActor);
@@ -6107,8 +6107,8 @@ s32 Camera_Demo4(Camera* camera) {
     PosRot playerHead;
     f32 sp58;
     f32 sin;
-    Demo4ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo4);
-    Demo4ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo4);
+    Demo4ReadOnlyData* roData = &camera->paramData.demo4.roData;
+    Demo4ReadWriteData* rwData = &camera->paramData.demo4.rwData;
     s32 pad[2];
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
@@ -6248,8 +6248,8 @@ s32 Camera_Demo5(Camera* camera) {
     f32 new_var;
     f32 sp58;
     f32 sin;
-    Demo5ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo5);
-    Demo5ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo5);
+    Demo5ReadOnlyData* roData = &camera->paramData.demo5.roData;
+    Demo5ReadWriteData* rwData = &camera->paramData.demo5.rwData;
     CameraModeValue* values;
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
@@ -6362,8 +6362,8 @@ s32 Camera_Demo0(Camera* camera) {
     Vec3f* mainEye = &camera->eye;
     Vec3f* subEye = &subCam->eye;
     Vec3f* at = &camera->at;
-    Demo0ReadOnlyData* roData = CAM_GET_STATIC_DATA(Demo0);
-    Demo0ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Demo0);
+    Demo0ReadOnlyData* roData = &camera->paramData.demo0.roData;
+    Demo0ReadWriteData* rwData = &camera->paramData.demo0.rwData;
 
     if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
@@ -6496,8 +6496,8 @@ s32 Camera_Special5(Camera* camera) {
     VecSph atToEye;
     VecSph atToEyeNext;
     PosRot* playerPosRot = &camera->trackActorPosRot;
-    Special5ReadOnlyData* roData = CAM_GET_STATIC_DATA(Special5);
-    Special5ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Special5);
+    Special5ReadOnlyData* roData = &camera->paramData.spec5.roData;
+    Special5ReadWriteData* rwData = &camera->paramData.spec5.rwData;
     f32 rand;
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
 
@@ -6581,9 +6581,9 @@ s32 Camera_Special8(Camera* camera) {
     Vec3f posOffsetTarget;
     f32 yNormal;
     f32 trackHeight = Camera_GetTrackedActorHeight(camera);
-    DoorParams* doorParams = CAM_GET_DOOR_PARAMS(Special8);
-    Special8ReadOnlyData* roData = CAM_GET_STATIC_DATA(Special8);
-    Special8ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Special8);
+    DoorParams* doorParams = &camera->paramData.doorParams;
+    Special8ReadOnlyData* roData = &camera->paramData.spec8.roData;
+    Special8ReadWriteData* rwData = &camera->paramData.spec8.rwData;
     s32 pad[2];
 
     Camera_UnsetFlags(camera, CAM_FLAG2_10);
@@ -6683,9 +6683,9 @@ s32 Camera_Special9(Camera* camera) {
     PosRot sp84;
     Vec3f* eyeNext = &camera->eyeNext;
     PosRot* sp40 = &camera->trackActorPosRot;
-    DoorParams* doorParams = CAM_GET_DOOR_PARAMS(Special9);
-    Special9ReadOnlyData* roData = CAM_GET_STATIC_DATA(Special9);
-    Special9ReadWriteData* rwData = CAM_GET_DYNAMIC_DATA(Special9);
+    DoorParams* doorParams = &camera->paramData.doorParams;
+    Special9ReadOnlyData* roData = &camera->paramData.spec9.roData;
+    Special9ReadWriteData* rwData = &camera->paramData.spec9.rwData;
     s32 sp50[1];
     SubCamData* bgCamData;
 
@@ -7841,7 +7841,7 @@ s16 Camera_UnsetFlags(Camera* camera, s16 flags) {
 
 s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 arg3, s16 timer1, s16 timer2,
                          s16 timer3) {
-    DoorParams* doorParams = (DoorParams*)camera->actionFuncHeap;
+    DoorParams* doorParams = &camera->paramData.doorParams;
 
     if (camera->setting == CAM_SET_DOORC) {
         return 0;

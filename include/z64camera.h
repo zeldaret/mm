@@ -403,82 +403,12 @@ typedef struct {
 
 
 /*================================
- *   MAIN CAMERA STRUCT
- *================================
- */
-
-typedef struct Camera {
-    /* 0x000 */ char actionFuncHeap[0x50]; // function Data, acts like a heap that's reset every time a new action function is switched to
-    /* 0x050 */ Vec3f at;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f up;
-    /* 0x074 */ Vec3f eyeNext;
-    /* 0x080 */ Vec3f quakeOffset;
-    /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ Actor* trackActor; // the actor the camera is focused on. Most often Player, but can be any actor
-    /* 0x094 */ PosRot trackActorPosRot;
-    /* 0x0A8 */ Actor* target; // the actor that is being z-targeted
-    /* 0x0AC */ PosRot targetPosRot;
-    /* 0x0C0 */ f32 rUpdateRateInv;
-    /* 0x0C4 */ f32 pitchUpdateRateInv;
-    /* 0x0C8 */ f32 yawUpdateRateInv;
-    /* 0x0CC */ f32 yOffsetUpdateRate;
-    /* 0x0D0 */ f32 xzOffsetUpdateRate;
-    /* 0x0D4 */ f32 fovUpdateRate;
-    /* 0x0D8 */ f32 xzSpeed;
-    /* 0x0DC */ f32 dist;
-    /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f atActorOffset;
-    /* 0x0F0 */ Vec3f trackActorOffset;
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 atLERPStepScale;
-    /* 0x104 */ f32 playerFloorHeight;
-    /* 0x108 */ Vec3f floorNorm;
-    /* 0x114 */ f32 waterYPos;
-    /* 0x118 */ s32 waterPrevBgCamDataId;
-    /* 0x11C */ s32 waterPrevCamSetting;
-    /* 0x120 */ s16 waterQuakeId;
-    /* 0x122 */ s16 unk122;
-    /* 0x124 */ void* data0;
-    /* 0x128 */ void* data1;
-    /* 0x12C */ s16 data2;
-    /* 0x12E */ s16 data3;
-    /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132;
-    /* 0x134 */ Vec3s inputDir;
-    /* 0x13A */ Vec3s camDir;
-    /* 0x140 */ s16 status;
-    /* 0x142 */ s16 setting;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ s16 bgId;
-    /* 0x148 */ s16 bgCamDataId;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
-    /* 0x14E */ s16 childCamId;
-    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ s16 prevSetting;
-    /* 0x156 */ s16 nextCamSceneDataId;
-    /* 0x158 */ s16 nextBgId;
-    /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 actionFuncState; // Determines the current state of the camera action function
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
-    /* 0x164 */ s16 camId;
-    /* 0x166 */ s16 prevBgCamDataId;
-    /* 0x168 */ s16 unk168;
-    /* 0x16C */ Vec3f meshActorPos;
-} Camera; // size = 0x178
-
-
-/*================================
  *   CAMERA MINI-HEAP
  *================================
  */
 
 /**
- * Each camera has its own mini-heap stored within the first 50 bytes, called camera->actionFuncHeap
+ * Each camera has its own mini-heap stored within the first 50 bytes, called camera->paramData
  * This heap is used by action functions to store data that needs to persist over multiple calls to the action function
  * Every action function has its own custom structs to store data in a way customized to that particular function
  * This data is broken up into two types:
@@ -489,9 +419,6 @@ typedef struct Camera {
 /**
  * Everything below in this file is for these customized functions
  */
-
-#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncHeap)->roData
-#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncHeap)->rwData
 
 // Camera will reload static data from camera_data
 #define RELOAD_PARAMS \
@@ -1552,7 +1479,7 @@ typedef struct {
     };
 } DoorParams; // size = 0xC
 
-#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->actionFuncHeap)->doorParams
+#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->paramData)->doorParams
 
 
 /*================================
@@ -1584,10 +1511,9 @@ typedef struct {
 } Special8ReadWriteData; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special8ReadOnlyData roData;
-    /* 0x20 */ Special8ReadWriteData rwData;
-} Special8; // size = 0x30
+    /* 0x00 */ Special8ReadOnlyData roData;
+    /* 0x14 */ Special8ReadWriteData rwData;
+} Special8; // size = 0x24
 
 #define SPEC8_FLG_1 (1 << 0)
 #define SPEC8_FLG_8 (1 << 3)
@@ -1614,14 +1540,115 @@ typedef struct {
 } Special9ReadWriteData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special9ReadOnlyData roData;
-    /* 0x18 */ Special9ReadWriteData rwData;
-} Special9; // size = 0x1C
+    /* 0x00 */ Special9ReadOnlyData roData;
+    /* 0x0C */ Special9ReadWriteData rwData;
+} Special9; // size = 0x10
 
 #define SPEC9_FLG_1 (1 << 0)
 #define SPEC9_FLG_2 (1 << 1)
 #define SPEC9_FLG_8 (1 << 3)
+
+typedef union {
+    Normal1 norm1;
+    Normal3 norm3;
+    Normal0 norm0;
+    Parallel1 para1;
+    Jump2 jump2;
+    Jump3 jump3;
+    Battle1 batt1;
+    KeepOn1 keep1;
+    KeepOn3 keep3;
+    KeepOn4 keep4;
+    Fixed1 fixd1;
+    Fixed2 fixd2;
+    Subj1 subj1;
+    Unique2 uniq2;
+    Unique0 uniq0;
+    Unique6 uniq6;
+    Demo1 demo1;
+    Demo2 demo2;
+    Demo3 demo3;
+    Demo4 demo4;
+    Demo5 demo5;
+    Demo0 demo0;
+    Special5 spec5;
+    struct {
+        /* 0x0 */ DoorParams doorParams;
+        /* 0xC */ union {
+            Special8 spec8;
+            Special9 spec9;
+        };
+    };
+} CamParamData; // size = 0x50
+
+/*================================
+ *   MAIN CAMERA STRUCT
+ *================================
+ */
+
+typedef struct Camera {
+    /* 0x000 */ CamParamData paramData; // function Data, acts like a heap that's reset every time a new action function is switched to
+    /* 0x050 */ Vec3f at;
+    /* 0x05C */ Vec3f eye;
+    /* 0x068 */ Vec3f up;
+    /* 0x074 */ Vec3f eyeNext;
+    /* 0x080 */ Vec3f quakeOffset;
+    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x090 */ Actor* trackActor; // the actor the camera is focused on. Most often Player, but can be any actor
+    /* 0x094 */ PosRot trackActorPosRot;
+    /* 0x0A8 */ Actor* target; // the actor that is being z-targeted
+    /* 0x0AC */ PosRot targetPosRot;
+    /* 0x0C0 */ f32 rUpdateRateInv;
+    /* 0x0C4 */ f32 pitchUpdateRateInv;
+    /* 0x0C8 */ f32 yawUpdateRateInv;
+    /* 0x0CC */ f32 yOffsetUpdateRate;
+    /* 0x0D0 */ f32 xzOffsetUpdateRate;
+    /* 0x0D4 */ f32 fovUpdateRate;
+    /* 0x0D8 */ f32 xzSpeed;
+    /* 0x0DC */ f32 dist;
+    /* 0x0E0 */ f32 speedRatio;
+    /* 0x0E4 */ Vec3f atActorOffset;
+    /* 0x0F0 */ Vec3f trackActorOffset;
+    /* 0x0FC */ f32 fov;
+    /* 0x100 */ f32 atLERPStepScale;
+    /* 0x104 */ f32 playerFloorHeight;
+    /* 0x108 */ Vec3f floorNorm;
+    /* 0x114 */ f32 waterYPos;
+    /* 0x118 */ s32 waterPrevBgCamDataId;
+    /* 0x11C */ s32 waterPrevCamSetting;
+    /* 0x120 */ s16 waterQuakeId;
+    /* 0x122 */ s16 unk122;
+    /* 0x124 */ void* data0;
+    /* 0x128 */ void* data1;
+    /* 0x12C */ s16 data2;
+    /* 0x12E */ s16 data3;
+    /* 0x130 */ s16 uid;
+    /* 0x132 */ UNK_TYPE1 pad132;
+    /* 0x134 */ Vec3s inputDir;
+    /* 0x13A */ Vec3s camDir;
+    /* 0x140 */ s16 status;
+    /* 0x142 */ s16 setting;
+    /* 0x144 */ s16 mode;
+    /* 0x146 */ s16 bgId;
+    /* 0x148 */ s16 bgCamDataId;
+    /* 0x14A */ s16 flags1;
+    /* 0x14C */ s16 flags2;
+    /* 0x14E */ s16 childCamId;
+    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x152 */ s16 unk152;
+    /* 0x154 */ s16 prevSetting;
+    /* 0x156 */ s16 nextCamSceneDataId;
+    /* 0x158 */ s16 nextBgId;
+    /* 0x15A */ s16 roll;
+    /* 0x15C */ s16 paramFlags;
+    /* 0x15E */ s16 actionFuncState; // Determines the current state of the camera action function
+    /* 0x160 */ s16 unk160;
+    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
+    /* 0x164 */ s16 camId;
+    /* 0x166 */ s16 prevBgCamDataId;
+    /* 0x168 */ s16 unk168;
+    /* 0x16C */ Vec3f meshActorPos;
+} Camera; // size = 0x178
 
 
 #endif
