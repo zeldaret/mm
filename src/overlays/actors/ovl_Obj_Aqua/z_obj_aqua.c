@@ -268,7 +268,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
     s32 framesTemp;
     s32 pad;
-    s16 yaw = Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamId]) + 0x8000;
+    s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

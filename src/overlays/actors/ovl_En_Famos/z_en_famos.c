@@ -549,7 +549,7 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            Camera_AddQuake(globalCtx->cameraPtrs[globalCtx->activeCamId], 2, 15, 10);
+            Camera_AddQuake(GET_ACTIVE_CAM(globalCtx), 2, 15, 10);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
