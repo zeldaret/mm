@@ -7,72 +7,103 @@
 #define CAM_DEG_TO_BINANG(degrees) (s16)((degrees) * 182.04167f + .5f)
 #define CAM_BINANG_TO_DEG(binang) ((f32)(binang) * (360.0001525f / 65535.0f))
 
-// Camera Id flags
 #define NUM_CAMS 4
-#define CAM_ID_MAIN 0
-#define CAM_ID_SUB_FIRST 1
-#define CAM_ID_NONE -1
-#define CAM_ID_ACTIVE -1
 
-// Camera shrink window flags
-#define SHRINKWINVAL_NONE 0x0000
-#define SHRINKWINVAL_SMALL 0x1000
-#define SHRINKWINVAL_MEDIUM 0x2000
-#define SHRINKWINVAL_LARGE 0x3000
-#define SHRINKWINVAL_NONE_4 0x4000
-#define SHRINKWIN_MAG 0x8000
-#define SHRINKWINVAL_PREV 0xF000
-#define SHRINKWIN_MASK 0xF000
-#define SHRINKWINVAL_MASK 0x7000
+// Camera IDs are indices into `cameraPtrs`
+#define CAM_ID_MAIN 0 // The index of the main camera
+#define CAM_ID_SUB_FIRST 1 // The index sub cameras start at
+#define CAM_ID_NONE -1 // Used to indicate no camera. Can be used to default to the active camera in some scenarios
 
-// Camera Interface flags
-#define IFACE_ALPHA(alpha) ((alpha) << 8)
-#define IFACE_ALPHA_MASK (0x0F00)
+#define SUB_CAM_ID_DONE 0 // Used in some actors for variables holding sub camera IDs to indicate "subcam is finished"
 
-// Camera bg surface flags
-#define FLG_ADJSLOPE (1 << 0)
-#define FLG_OFFGROUND (1 << 7)
+#define CAM_HUD_ALPHA_SHIFT 8
+#define CAM_HUD_ALPHA_MASK (0x0F00)
+#define CAM_HUD_ALPHA(alpha) (((alpha) & 0xF) << CAM_HUD_ALPHA_SHIFT)
+
+#define CAM_HUD_ALPHA_50 CAM_HUD_ALPHA(0)
+#define CAM_HUD_ALPHA_1 CAM_HUD_ALPHA(1)
+#define CAM_HUD_ALPHA_2 CAM_HUD_ALPHA(2)
+#define CAM_HUD_ALPHA_3 CAM_HUD_ALPHA(3)
+#define CAM_HUD_ALPHA_4 CAM_HUD_ALPHA(4)
+#define CAM_HUD_ALPHA_5 CAM_HUD_ALPHA(5)
+#define CAM_HUD_ALPHA_6 CAM_HUD_ALPHA(6)
+#define CAM_HUD_ALPHA_7 CAM_HUD_ALPHA(7)
+#define CAM_HUD_ALPHA_8 CAM_HUD_ALPHA(8)
+#define CAM_HUD_ALPHA_9 CAM_HUD_ALPHA(9)
+#define CAM_HUD_ALPHA_A CAM_HUD_ALPHA(10)
+#define CAM_HUD_ALPHA_B CAM_HUD_ALPHA(11)
+#define CAM_HUD_ALPHA_C CAM_HUD_ALPHA(12)
+#define CAM_HUD_ALPHA_D CAM_HUD_ALPHA(13)
+#define CAM_HUD_ALPHA_IGNORE CAM_HUD_ALPHA(0xF)
+
+/**
+ * shrinkWindowFlag: determines the size of the letter-box shrink window. See CAM_SHRINKWINVAL_* enums.
+ *                  Can also add on the flag ( | CAM_SHRINKWIN_INSTANT) to make the window shrink immediately
+ * interfaceAlpha: hides certain hud icons
+ *    - A value of 0 in camera is translated to an interface alpha of 50, 
+ *      which is the value to restore all hud icons to the screen (CAM_HUD_ALPHA_50)
+ *    - A value of 0xF in camera results in no change in the alpha (CAM_HUD_ALPHA_IGNORE)
+ * funcFlags: Custom flags for functions
+ */
+#define CAM_INTERFACE_FLAGS(shrinkWindowFlag, interfaceAlpha, funcFlags) \
+    (((shrinkWindowFlag) & CAM_SHRINKWIN_MASK) | (interfaceAlpha) | ((funcFlags) & 0xFF))
+
+// Shrinking the window from the top and bottom with black borders (letterboxing)
+#define CAM_SHRINKWIN_MASK 0xF000
+
+#define CAM_SHRINKWINVAL_MASK 0x7000
+#define CAM_SHRINKWINVAL_NONE 0x0000
+// small/medium/large black borders
+#define CAM_SHRINKWINVAL_SMALL 0x1000
+#define CAM_SHRINKWINVAL_MEDIUM 0x2000
+#define CAM_SHRINKWINVAL_LARGE 0x3000
+#define CAM_SHRINKWINVAL_NONE_4 0x4000
+
+#define CAM_SHRINKWIN_INSTANT 0x8000 // Bit to determine whether to set the current value directly (on), or to set the shrink-value target (off) 
+
+#define CAM_SHRINKWINVAL_IGNORE 0xF000 // No change in shrink window, keep the previous values
+
 
 #define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
 
-// Camera flags1. Flags spcifically for settings, modes, and scene/bg/cs camData
-// Used to store current state, but not read from with only 1 exception (possibly read from outside of camera)
+// Camera behaviorFlags. Flags specifically for settings, modes, and bgCam
+// Used to store current state, only CAM_BEHAVIOR_SETTING_1 and CAM_BEHAVIOR_BG_2 are read from and used in logic
 // Setting (0x1, 0x10)
-#define CAM_FLAG1_SET_USE_PRIORITY (1 << 0) // Use settings priority system
-#define CAM_FLAG1_SET_2 (1 << 4)
+#define CAM_BEHAVIOR_SETTING_USE_PRIORITY (1 << 0) // Use settings priority system
+#define CAM_BEHAVIOR_SETTING_2 (1 << 4)
 // Mode (0x2, 0x20)
-#define CAM_FLAG1_MODE_1 (1 << 1)
-#define CAM_FLAG1_MODE_2 (1 << 5)
-// scene Data (0x4, 0x40)
-#define CAM_FLAG1_SCENE_DATA_1 (1 << 2)
-#define CAM_FLAG1_SCENE_DATA_2 (1 << 6)
+#define CAM_BEHAVIOR_MODE_1 (1 << 1)
+#define CAM_BEHAVIOR_MODE_2 (1 << 5)
+// bgCam (0x4, 0x40)
+#define CAM_BEHAVIOR_BGCAM_1 (1 << 2)
+#define CAM_BEHAVIOR_BGCAM_2 (1 << 6)
 
-// Camera flags2. Variety of generic flags
-#define CAM_FLAG2_1 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
-#define CAM_FLAG2_2 (1 << 1)
-#define CAM_FLAG2_4 (1 << 2)
-#define CAM_FLAG2_8 (1 << 3)
-#define CAM_FLAG2_10 (1 << 4)
-#define CAM_FLAG2_20 (1 << 5)
-#define CAM_FLAG2_40 (1 << 6)
-#define CAM_FLAG2_80 (1 << 7)
-#define CAM_FLAG2_100 (1 << 8)
-#define CAM_FLAG2_200 (1 << 9)
-#define CAM_FLAG2_400 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
-#define CAM_FLAG2_800 (1 << 11)
-#define CAM_FLAG2_1000 (1 << 12)
-#define CAM_FLAG2_2000 (1 << 13)
-#define CAM_FLAG2_4000 (1 << 14)
-#define CAM_FLAG2_8000 (1 << 15)
+// Camera stateFlags. Variety of generic flags
+#define CAM_STATE_0 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
+#define CAM_STATE_1 (1 << 1)
+#define CAM_STATE_2 (1 << 2)
+#define CAM_STATE_3 (1 << 3)
+#define CAM_STATE_4 (1 << 4)
+#define CAM_STATE_5 (1 << 5)
+#define CAM_STATE_6 (1 << 6)
+#define CAM_STATE_7 (1 << 7)
+#define CAM_STATE_8 (1 << 8)
+#define CAM_STATE_9 (1 << 9)
+#define CAM_STATE_10 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
+#define CAM_STATE_11 (1 << 11)
+#define CAM_STATE_12 (1 << 12)
+#define CAM_STATE_13 (1 << 13)
+#define CAM_STATE_14 (1 << 14)
+#define CAM_STATE_15 ((s16)(1 << 15))
 
-// Camera paramFlags. Each corresponds to a struct member from the camera struct
-#define CAM_PARAM_FLAG_1 (1 << 0)
-#define CAM_PARAM_FLAG_2 (1 << 1)
-#define CAM_PARAM_FLAG_4 (1 << 2)
-#define CAM_PARAM_FLAG_8 (1 << 3)
-#define CAM_PARAM_FLAG_10 (1 << 4)
-#define CAM_PARAM_FLAG_20 (1 << 5)
-#define CAM_PARAM_FLAG_40 (1 << 6)
+// Camera viewFlags. Set params related to view
+#define CAM_VIEW_AT (1 << 0) // camera->at
+#define CAM_VIEW_EYE (1 << 1) // camera->eye and camera->eyeNext
+#define CAM_VIEW_UP (1 << 2) // camera->up
+#define CAM_VIEW_TARGET (1 << 3) // camera->target
+#define CAM_VIEW_TARGET_POS (1 << 4) // camera->targetPosRot.pos
+#define CAM_VIEW_FOV (1 << 5) // camera->fov
+#define CAM_VIEW_ROLL (1 << 6) // camera->roll
 
 /**
  * Camera Status type
@@ -384,8 +415,8 @@ typedef struct Camera {
     /* 0x144 */ s16 mode;
     /* 0x146 */ s16 bgId;
     /* 0x148 */ s16 bgCamDataId;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
+    /* 0x14A */ s16 behaviorFlags;
+    /* 0x14C */ s16 stateFlags;
     /* 0x14E */ s16 childCamId;
     /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x152 */ s16 unk152;
@@ -393,8 +424,8 @@ typedef struct Camera {
     /* 0x156 */ s16 nextCamSceneDataId;
     /* 0x158 */ s16 nextBgId;
     /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 animState; // Determines the current state of the current camera behaviour function
+    /* 0x15C */ s16 viewFlags;
+    /* 0x15E */ s16 animState; // Determines the current state of the current camera behavior function
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x164 */ s16 camId;
