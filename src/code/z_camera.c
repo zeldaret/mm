@@ -838,7 +838,7 @@ void func_800CC938(Camera* camera) {
  */
 s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
     // Math_FAtan2F in OoT
-    return DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
+    return CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
 }
 
 // BSS
@@ -908,8 +908,8 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
 
     phi_f16 = (D_801EDBF4 - camera->playerFloorHeight) * 0.8f;
     phi_f18 = (D_801EDBF8 - camera->playerFloorHeight) * 0.19999999f;
-    temp_s0 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f16, sp30)));
-    temp_s1 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f18, sp2C)));
+    temp_s0 = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f16, sp30)));
+    temp_s1 = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f18, sp2C)));
     return temp_s0 + temp_s1;
 }
 
@@ -1071,35 +1071,35 @@ void Camera_ResetActionFuncState(Camera* camera, s32 mode) {
     camera->actionFuncState = 0;
 }
 
-void Camera_UpdateInterface(s32 flags) {
+void Camera_UpdateInterface(s32 interfaceFlags) {
     s32 interfaceAlpha;
 
-    if ((flags & SHRINKWIN_MASK) != SHRINKWINVAL_PREV) {
-        switch (flags & SHRINKWINVAL_MASK) {
-            case SHRINKWINVAL_SMALL:
-                sCameraShrinkWindowVal = 0x1A;
+    if ((interfaceFlags & CAM_SHRINKWIN_MASK) != CAM_SHRINKWINVAL_IGNORE) {
+        switch (interfaceFlags & CAM_SHRINKWINVAL_MASK) {
+            case CAM_SHRINKWINVAL_SMALL:
+                sCameraShrinkWindowVal = 26;
                 break;
-            case SHRINKWINVAL_MEDIUM:
-                sCameraShrinkWindowVal = 0x1B;
+            case CAM_SHRINKWINVAL_MEDIUM:
+                sCameraShrinkWindowVal = 27;
                 break;
-            case SHRINKWINVAL_LARGE:
-                sCameraShrinkWindowVal = 0x20;
+            case CAM_SHRINKWINVAL_LARGE:
+                sCameraShrinkWindowVal = 32;
                 break;
             default:
                 sCameraShrinkWindowVal = 0;
                 break;
         }
 
-        if (flags & SHRINKWIN_MAG) {
+        if (interfaceFlags & CAM_SHRINKWIN_INSTANT) {
             ShrinkWindow_SetLetterboxMagnitude(sCameraShrinkWindowVal);
         } else {
             ShrinkWindow_SetLetterboxTarget(sCameraShrinkWindowVal);
         }
     }
 
-    if ((flags & IFACE_ALPHA_MASK) != IFACE_ALPHA_MASK) {
-        interfaceAlpha = (flags & IFACE_ALPHA_MASK) >> 8;
-        if (interfaceAlpha == 0) {
+    if ((interfaceFlags & CAM_HUD_ALPHA_MASK) != CAM_HUD_ALPHA_IGNORE) {
+        interfaceAlpha = (interfaceFlags & CAM_HUD_ALPHA_MASK) >> CAM_HUD_ALPHA_SHIFT;
+        if (interfaceAlpha == (CAM_HUD_ALPHA_50 >> CAM_HUD_ALPHA_SHIFT)) {
             interfaceAlpha = 50;
         }
         if (interfaceAlpha != sCameraInterfaceAlpha) {
@@ -2310,7 +2310,7 @@ s32 Camera_Normal3(Camera* camera) {
         fixedData->yOffset = READ_STATIC_DATA_VAL * temp_f2;
         fixedData->distMin = READ_STATIC_DATA_VAL * temp_f2;
         fixedData->distMax = READ_STATIC_DATA_VAL * temp_f2;
-        fixedData->pitchTarget = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->pitchTarget = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
         fixedData->yawUpdateRateInv = READ_STATIC_DATA_VAL;
         fixedData->pitchUpdateRateInv = READ_STATIC_DATA_VAL;
         fixedData->fovTarget = READ_STATIC_DATA_VAL;
@@ -2510,7 +2510,7 @@ s32 Camera_Normal0(Camera* camera) {
         fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
         fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
         fixedData->unk_08 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
-        fixedData->unk_1C = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_1C = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
         fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_10 = READ_SCALED_STATIC_DATA_VAL;
         fixedData->unk_14 = READ_STATIC_DATA_VAL;
@@ -2689,8 +2689,8 @@ s32 Camera_Parallel1(Camera* camera) {
         fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         fixedData->unk_08 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_20 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
-        fixedData->unk_22 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_20 = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_22 = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
         fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_10 = READ_STATIC_DATA_VAL;
         fixedData->unk_14 = READ_STATIC_DATA_VAL;
@@ -3278,7 +3278,7 @@ s32 Camera_Jump3(Camera* camera) {
         fixedData->unk_04 = READ_STATIC_DATA_VAL * spD0;
         if (1) {}
         fixedData->unk_08 = READ_STATIC_DATA_VAL * spD0;
-        fixedData->unk_20 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_20 = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
         fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_10 = READ_STATIC_DATA_VAL;
         fixedData->unk_14 = READ_STATIC_DATA_VAL * 0.01f;
@@ -3725,9 +3725,9 @@ s32 Camera_Battle1(Camera* camera) {
             temp_f14 = SQ(sp104) / (new_var3 + (2.0f - (360.0f * temp_f12)));
 
             if (sp8A >= 0) {
-                sp88 = DEGF_TO_BINANG(temp_f14);
+                sp88 = CAM_DEG_TO_BINANG(temp_f14);
             } else {
-                sp88 = -DEGF_TO_BINANG(temp_f14);
+                sp88 = -CAM_DEG_TO_BINANG(temp_f14);
             }
 
             spBC.yaw = (s16)(sp94.yaw + 0x8000) + (s16)(sp88 + 0x8000);
@@ -4104,7 +4104,7 @@ s32 Camera_KeepOn1(Camera* camera) {
             spE8.yaw = (s16)(spC0.yaw + 0x8000) + (s16)(phi_v1_3 + 0x8000);
         } else {
             new_var = (1.0f - camera->speedRatio) * 0.05f; // TODO: Fake temp?
-            phi_v1_3 = (temp_v0_3 >= 0) ? DEGF_TO_BINANG(spFC) : -DEGF_TO_BINANG(spFC);
+            phi_v1_3 = (temp_v0_3 >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
             if (phi_a0) {} // TODO: Fake to shaft a registers
             spE8.yaw = (s16)(spC0.yaw - (s16)((phi_v1_3 - temp_v0_3) * new_var));
         }
@@ -4327,10 +4327,10 @@ s32 Camera_KeepOn3(Camera* camera) {
         }
 
         swingAngle = LERPIMP(fixedData->unk_14, fixedData->unk_18, phi_f14);
-        sp98.pitch = DEGF_TO_BINANG(swingAngle) + ((s16) - (spA0.pitch * fixedData->unk_1C));
+        sp98.pitch = CAM_DEG_TO_BINANG(swingAngle) + ((s16) - (spA0.pitch * fixedData->unk_1C));
         swingAngle = LERPIMP(fixedData->unk_0C, fixedData->unk_10, phi_f14);
 
-        phi_a3 = DEGF_TO_BINANG(swingAngle);
+        phi_a3 = CAM_DEG_TO_BINANG(swingAngle);
 
         sp78 = 1;
         if ((camera->target->category == ACTORCAT_DOOR) || (camera->target->id == ACTOR_EN_TALK)) {
@@ -4418,7 +4418,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         dynamicData->unk_04 = (f32)(s16)(sp98.yaw - sp80.yaw) / temp_f0;
         dynamicData->unk_08 = (f32)(s16)(sp98.pitch - sp80.pitch) / temp_f0;
         dynamicData->unk_00 = (sp98.r - sp80.r) / temp_f0;
-        sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_IGNORE, CAM_HUD_ALPHA_IGNORE, 0);
         return true;
     }
 
@@ -4446,7 +4446,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     Camera_UpdateAtActorOffset(camera, &sp3C->pos);
     camera->dist = OLib_Vec3fDist(at, eye);
     if (camera->flags2 & CAM_FLAG2_8) {
-        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
         Camera_SetUpdateRatesSlow(camera);
         camera->atLERPStepScale = 0.0f;
 
@@ -4601,31 +4601,31 @@ s32 Camera_KeepOn4(Camera* camera) {
 
             switch (fixedData->unk_1C & (KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2)) {
                 case KEEP4_FLG_2:
-                    spA2 = DEGF_TO_BINANG(fixedData->unk_08);
+                    spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08);
                     spA0 = BINANG_SUB(BINANG_ROT180(sp38->rot.y), spA8.yaw) < 0
-                               ? BINANG_ROT180(sp38->rot.y) + DEGF_TO_BINANG(fixedData->unk_0C)
-                               : BINANG_ROT180(sp38->rot.y) - DEGF_TO_BINANG(fixedData->unk_0C);
+                               ? BINANG_ROT180(sp38->rot.y) + CAM_DEG_TO_BINANG(fixedData->unk_0C)
+                               : BINANG_ROT180(sp38->rot.y) - CAM_DEG_TO_BINANG(fixedData->unk_0C);
                     break;
                 case (KEEP4_FLG_8 | KEEP4_FLG_4):
-                    spA2 = DEGF_TO_BINANG(fixedData->unk_08);
+                    spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08);
                     pad1 = BINANG_ROT180(sp38->rot.y);
-                    spA0 = pad1 + DEGF_TO_BINANG(fixedData->unk_0C);
+                    spA0 = pad1 + CAM_DEG_TO_BINANG(fixedData->unk_0C);
                     break;
                 case KEEP4_FLG_4:
-                    spA2 = DEGF_TO_BINANG(fixedData->unk_08);
-                    spA0 = DEGF_TO_BINANG(fixedData->unk_0C);
+                    spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08);
+                    spA0 = CAM_DEG_TO_BINANG(fixedData->unk_0C);
                     break;
                 case (KEEP4_FLG_4 | KEEP4_FLG_2):
-                    spA2 = spA8.pitch + DEGF_TO_BINANG(fixedData->unk_08);
-                    spA0 = spA8.yaw + DEGF_TO_BINANG(fixedData->unk_0C);
+                    spA2 = spA8.pitch + CAM_DEG_TO_BINANG(fixedData->unk_08);
+                    spA0 = spA8.yaw + CAM_DEG_TO_BINANG(fixedData->unk_0C);
                     break;
                 case KEEP4_FLG_8:
                     if (camera->target != NULL) {
                         Actor_GetWorldPosShapeRot(&sp60, camera->target);
-                        spA2 = DEGF_TO_BINANG(fixedData->unk_08) - sp60.rot.x;
+                        spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08) - sp60.rot.x;
                         spA0 = (BINANG_SUB(BINANG_ROT180(sp60.rot.y), spA8.yaw) > 0)
-                                   ? BINANG_ROT180(sp60.rot.y) + DEGF_TO_BINANG(fixedData->unk_0C)
-                                   : BINANG_ROT180(sp60.rot.y) - DEGF_TO_BINANG(fixedData->unk_0C);
+                                   ? BINANG_ROT180(sp60.rot.y) + CAM_DEG_TO_BINANG(fixedData->unk_0C)
+                                   : BINANG_ROT180(sp60.rot.y) - CAM_DEG_TO_BINANG(fixedData->unk_0C);
 
                         spCC[1] = camera->target;
                         sp9C++;
@@ -4634,16 +4634,16 @@ s32 Camera_KeepOn4(Camera* camera) {
                 case (KEEP4_FLG_8 | KEEP4_FLG_2):
                     if (camera->target != 0) {
                         Actor_GetWorld(&sp4C, camera->target);
-                        spA2 = DEGF_TO_BINANG(fixedData->unk_08);
+                        spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08);
                         sp9E = Camera_CalcXZAngle(&sp4C.pos, &sp38->pos);
-                        spA0 = (BINANG_SUB(sp9E, spA8.yaw) > 0) ? sp9E + DEGF_TO_BINANG(fixedData->unk_0C)
-                                                                : sp9E - DEGF_TO_BINANG(fixedData->unk_0C);
+                        spA0 = (BINANG_SUB(sp9E, spA8.yaw) > 0) ? sp9E + CAM_DEG_TO_BINANG(fixedData->unk_0C)
+                                                                : sp9E - CAM_DEG_TO_BINANG(fixedData->unk_0C);
                         spCC[1] = camera->target;
                         sp9C++;
                         break;
                     }
                 case (KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2):
-                    spA2 = DEGF_TO_BINANG(fixedData->unk_08);
+                    spA2 = CAM_DEG_TO_BINANG(fixedData->unk_08);
                     spA0 = spA8.yaw;
                     break;
                 default:
@@ -5490,7 +5490,7 @@ s32 Camera_Unique0(Camera* camera) {
                 if (dynamicData->unk_3C > 0) {
                     dynamicData->unk_3C--;
                     if (dynamicData->unk_3C == 0) {
-                        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+                        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
                     }
                 } else {
                     dynamicData->unk_00 = sp40->pos;
@@ -5957,7 +5957,7 @@ s32 Camera_Demo2(Camera* camera) {
             eyeOffset.pitch = 0;
             eyeOffset.yaw = atToEye.yaw;
             dynamicData->unk_0C = 0.1f;
-            sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(4);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_4, 0);
 
             if (!(((dynamicData->animFrame < 0) || (camera->xzSpeed > 0.001f) ||
                    CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
@@ -5976,7 +5976,7 @@ s32 Camera_Demo2(Camera* camera) {
             Camera_SetFlags(camera, CAM_FLAG2_10 | CAM_FLAG2_4);
             Camera_UnsetFlags(camera, CAM_FLAG2_8);
             func_800CC938(camera);
-            sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
         skipeyeUpdate:
             skipUpdateEye = true;
             break;
@@ -6165,7 +6165,7 @@ s32 Camera_Demo4(Camera* camera) {
             Camera_LERPCeilVec3f(&playerHead.pos, at, 0.2f, 0.2f, 0.1f);
 
             sp58 = (dynamicData->unk_22 * (30.0f / 19.0f));
-            camera->roll = DEGF_TO_BINANG(sp58 * dynamicData->unk_0C);
+            camera->roll = CAM_DEG_TO_BINANG(sp58 * dynamicData->unk_0C);
 
             sp58 = 1.0f / (38 - dynamicData->unk_22);
             dynamicData->unk_22++;
@@ -6312,7 +6312,7 @@ s32 Camera_Demo5(Camera* camera) {
             playerHead.pos.y -= (playerHead.pos.y - camera->trackActorPosRot.pos.y) * 0.2f;
             Camera_LERPCeilVec3f(&playerHead.pos, at, 0.1f, 0.1f, 0.1f);
             new_var = (dynamicData->timer * (10.0f / 23.0f));
-            camera->roll = DEGF_TO_BINANG(dynamicData->unk_0C * new_var);
+            camera->roll = CAM_DEG_TO_BINANG(dynamicData->unk_0C * new_var);
             new_var = 1.0f / dynamicData->timer;
             atToEye.r = Camera_LERPCeilF(dynamicData->unk_14, atToEye.r, new_var, 0.1f);
             dynamicData->timer--;
@@ -6516,7 +6516,7 @@ s32 Camera_Special5(Camera* camera) {
         fixedData->yOffset = (READ_SCALED_STATIC_DATA_VAL * trackHeight) * yNormal;
         fixedData->eyeDist = READ_STATIC_DATA_VAL;
         fixedData->minDistForRot = READ_STATIC_DATA_VAL;
-        fixedData->pitch = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->pitch = CAM_DEG_TO_BINANG(READ_STATIC_DATA_VAL);
         fixedData->fovTarget = READ_STATIC_DATA_VAL;
         fixedData->atMaxLERPScale = READ_SCALED_STATIC_DATA_VAL;
         fixedData->timerInit = READ_STATIC_DATA_VAL;
@@ -6653,7 +6653,7 @@ s32 Camera_Special8(Camera* camera) {
     } else {
         // Cutscene is finished
         Camera_SetFlags(camera, CAM_FLAG2_400 | CAM_FLAG2_10);
-        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
 
         // Wait for user input to move to the next camera action function
         if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
@@ -6815,7 +6815,7 @@ s32 Camera_Special9(Camera* camera) {
         default:
             // Door is closed and is waiting for user input to toggle to a new setting
             Camera_SetFlags(camera, CAM_FLAG2_400 | CAM_FLAG2_10);
-            sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
 
             if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) ||
@@ -6920,7 +6920,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     camera->up.z = camera->up.x = 0.0f;
     camera->atLERPStepScale = 1;
     camera->up.y = 1.0f;
-    sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
+    sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_IGNORE, CAM_HUD_ALPHA_IGNORE, 0);
     sCameraInitSceneTimer = 3;
 }
 
@@ -7023,10 +7023,10 @@ dummy:;
     Camera_ResetActionFuncState(camera, camera->mode);
 
     if (camera == &camera->globalCtx->mainCamera) {
-        sCameraInterfaceFlags = SHRINKWIN_MAG | SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE | CAM_SHRINKWIN_INSTANT, CAM_HUD_ALPHA_2, 0);
         func_800F15D8(camera);
     } else {
-        sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
+        sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_2, 0);
     }
     Camera_CheckWater(camera);
 }
@@ -7403,10 +7403,10 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     if (camera->status == CAM_STATUS_ACTIVE) {
         if (((sCameraInitSceneTimer != 0) || func_800CB854(camera)) && (camera->camId == CAM_ID_MAIN)) {
             // Surpresses the interface for the first few frames of a scene
-            sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_2, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else if ((camera->globalCtx->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
-            sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
+            sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_IGNORE, CAM_HUD_ALPHA_IGNORE, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else {
             Camera_UpdateInterface(sCameraInterfaceFlags);
@@ -7435,7 +7435,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         viewEye.z = camera->eye.z + quake.eyeOffset.z;
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
         Camera_CalcUpFromPitchYawRoll(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.rollOffset);
-        viewFov = camera->fov + BINANG_TO_DEGF(quake.zoom);
+        viewFov = camera->fov + CAM_BINANG_TO_DEG(quake.zoom);
     } else if (sIsFalse) {
         //! @bug: Condition is impossible to achieve
         viewAt = camera->at;
@@ -7800,7 +7800,7 @@ s32 Camera_SetParam(Camera* camera, s32 paramFlag, void* value) {
                 camera->up = *(Vec3f*)value;
                 break;
             case CAM_PARAM_FLAG_40:
-                camera->roll = DEGF_TO_BINANG(*(f32*)value);
+                camera->roll = CAM_DEG_TO_BINANG(*(f32*)value);
                 break;
             case CAM_PARAM_FLAG_20:
                 camera->fov = *(f32*)value;
