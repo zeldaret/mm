@@ -4296,8 +4296,7 @@ beginseg
     name "ovl_Obj_Boat"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boat/z_obj_boat.o"
-    include "build/data/ovl_Obj_Boat/ovl_Obj_Boat.data.o"
-    include "build/data/ovl_Obj_Boat/ovl_Obj_Boat.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Boat/ovl_Obj_Boat_reloc.o"
 endseg
 
 beginseg
