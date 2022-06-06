@@ -244,7 +244,7 @@ void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2) {
 
     if (arg2 <= 0) {
         Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
-        globalCtx->cameraPtrs[CAM_ID_MAIN]->childCamId = globalCtx->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = CAM_ID_MAIN;
+        globalCtx->cameraPtrs[CAM_ID_MAIN]->childCamId = globalCtx->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = 0;
     }
 }
 

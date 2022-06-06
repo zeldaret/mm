@@ -256,19 +256,19 @@ void EnKakasi_CheckPlayerPosition(EnKakasi* this, GlobalContext* globalCtx) {
  * something to do with cutscene camera?
  */
 void func_8096FAAC(EnKakasi* this, GlobalContext* globalCtx) {
-    if (this->cutsceneCamId != CAM_ID_MAIN) {
-        Math_ApproachF(&this->unk214.x, this->unk238.x, 0.4f, 4.0f);
-        Math_ApproachF(&this->unk214.y, this->unk238.y, 0.4f, 4.0f);
-        Math_ApproachF(&this->unk214.z, this->unk238.z, 0.4f, 4.0f);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Math_ApproachF(&this->subCamEye.x, this->subCamEyeNext.x, 0.4f, 4.0f);
+        Math_ApproachF(&this->subCamEye.y, this->subCamEyeNext.y, 0.4f, 4.0f);
+        Math_ApproachF(&this->subCamEye.z, this->subCamEyeNext.z, 0.4f, 4.0f);
 
-        Math_ApproachF(&this->unk220.x, this->unk244.x, 0.4f, 4.0f);
-        Math_ApproachF(&this->unk220.y, this->unk244.y, 0.4f, 4.0f);
-        Math_ApproachF(&this->unk220.z, this->unk244.z, 0.4f, 4.0f);
+        Math_ApproachF(&this->subCamAt.x, this->subCamAtNext.x, 0.4f, 4.0f);
+        Math_ApproachF(&this->subCamAt.y, this->subCamAtNext.y, 0.4f, 4.0f);
+        Math_ApproachF(&this->subCamAt.z, this->subCamAtNext.z, 0.4f, 4.0f);
 
-        Math_ApproachF(&this->unk20C, this->unk210, 0.3f, 10.0f);
+        Math_ApproachF(&this->subCamFov, this->subCamFovNext, 0.3f, 10.0f);
 
-        Play_CameraSetAtEye(globalCtx, this->cutsceneCamId, &this->unk220, &this->unk214);
-        Play_CameraSetFov(globalCtx, this->cutsceneCamId, this->unk20C);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_CameraSetFov(globalCtx, this->subCamId, this->subCamFov);
     }
 }
 
@@ -458,7 +458,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                         this->actionFunc = EnKakasi_DancingRemark;
                     } else {
                         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
-                        this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+                        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
                         this->actionFunc = EnKakasi_DancingRemark;
                     }
                 }
@@ -547,9 +547,9 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
     this->actor.textId = 0x1646;
     Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
-    this->cutsceneCamId = CAM_ID_MAIN;
-    this->unk20C = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamId = SUB_CAM_ID_DONE;
+    this->subCamFov = 0.0f;
+    this->subCamFovNext = 60.0f;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
     this->unkState196 = 2;
     this->actionFunc = EnKakasi_OcarinaRemark;
@@ -575,7 +575,7 @@ void EnKakasi_OcarinaRemark(EnKakasi* this, GlobalContext* globalCtx) {
         } else {
             this->unkState1A8 = 1;
             ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
-            this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+            this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
             Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
             this->actionFunc = EnKakasi_TeachingSong;
         }
@@ -598,7 +598,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             return;
         }
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
-        this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
         this->unkState1A8 = 1;
         this->unkState1A8 = 1;
@@ -606,15 +606,15 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
 
     if (this->unkState1A8 == 1) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
-        this->unk238.x = D_80971DCC[this->unk190].x;
-        this->unk238.y = D_80971DCC[this->unk190].y;
-        this->unk238.z = D_80971DCC[this->unk190].z;
+        this->subCamEyeNext.x = D_80971DCC[this->unk190].x;
+        this->subCamEyeNext.y = D_80971DCC[this->unk190].y;
+        this->subCamEyeNext.z = D_80971DCC[this->unk190].z;
 
-        Math_Vec3f_Copy(&tempVec, &this->unk238);
-        OLib_DbCameraVec3fSum(&this->actor.home, &tempVec, &this->unk238, 1);
-        Math_Vec3f_Copy(&this->unk244, &this->unk22C);
-        Math_Vec3f_Copy(&this->unk214, &this->unk238);
-        Math_Vec3f_Copy(&this->unk220, &this->unk244);
+        Math_Vec3f_Copy(&tempVec, &this->subCamEyeNext);
+        OLib_DbCameraVec3fSum(&this->actor.home, &tempVec, &this->subCamEyeNext, 1);
+        Math_Vec3f_Copy(&this->subCamAtNext, &this->unk22C);
+        Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
+        Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
         func_8096FAAC(this, globalCtx);
         func_8096FBB8(this, globalCtx);
 
@@ -625,7 +625,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
-            this->cutsceneCamId = CAM_ID_MAIN;
+            this->subCamId = SUB_CAM_ID_DONE;
             this->actor.textId = 0x1647;
             this->unkState1A8 = 2;
             this->unkMsgState1AC = 5;
@@ -659,12 +659,12 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCt
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
-    this->cutsceneCamId = CAM_ID_MAIN;
+    this->subCamId = SUB_CAM_ID_DONE;
     this->unkMsgState1AC = 5;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
-    this->unk20C = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamFov = 0.0f;
+    this->subCamFovNext = 60.0f;
 }
 
 void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
@@ -712,24 +712,24 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         }
         Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
-        this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         func_800B7298(globalCtx, &this->actor, 0x56);
         this->unkState1A8 = 1;
     }
 
-    if (this->cutsceneCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
         EnKakasi_CheckPlayerPosition(this, globalCtx);
-        this->unk238.x = D_80971FA0[this->unk190].x;
-        this->unk238.y = D_80971FA0[this->unk190].y;
-        this->unk238.z = D_80971FA0[this->unk190].z;
-        Math_Vec3f_Copy(&vec3fCopy, &this->unk238);
-        OLib_DbCameraVec3fSum(&this->actor.home, &vec3fCopy, &this->unk238, 1);
-        this->unk244.x = D_80971FE8[this->unk190].x + this->unk22C.x;
-        this->unk244.y = D_80971FE8[this->unk190].y + this->unk22C.y;
-        this->unk244.z = D_80971FE8[this->unk190].z + this->unk22C.z;
-        Math_Vec3f_Copy(&this->unk214, &this->unk238);
-        Math_Vec3f_Copy(&this->unk220, &this->unk244);
+        this->subCamEyeNext.x = D_80971FA0[this->unk190].x;
+        this->subCamEyeNext.y = D_80971FA0[this->unk190].y;
+        this->subCamEyeNext.z = D_80971FA0[this->unk190].z;
+        Math_Vec3f_Copy(&vec3fCopy, &this->subCamEyeNext);
+        OLib_DbCameraVec3fSum(&this->actor.home, &vec3fCopy, &this->subCamEyeNext, 1);
+        this->subCamAtNext.x = D_80971FE8[this->unk190].x + this->unk22C.x;
+        this->subCamAtNext.y = D_80971FE8[this->unk190].y + this->unk22C.y;
+        this->subCamAtNext.z = D_80971FE8[this->unk190].z + this->unk22C.z;
+        Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
+        Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
     }
 
     func_8096FAAC(this, globalCtx);
@@ -798,7 +798,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
-        this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (currentDay == 3 && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
@@ -811,8 +811,8 @@ void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    this->unk20C = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamFov = 0.0f;
+    this->subCamFovNext = 60.0f;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     func_8016566C(0xB4);
@@ -829,19 +829,19 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 3000, 0);
     this->unk22C.y = this->actor.home.pos.y + 50.0f;
 
-    this->unk238.x = D_80971E38[this->unk190].x;
-    this->unk238.y = D_80971E38[this->unk190].y;
-    this->unk238.z = D_80971E38[this->unk190].z;
-    Math_Vec3f_Copy(&localVec3f, &this->unk238);
-    OLib_DbCameraVec3fSum(&this->actor.home, &localVec3f, &this->unk238, 1);
+    this->subCamEyeNext.x = D_80971E38[this->unk190].x;
+    this->subCamEyeNext.y = D_80971E38[this->unk190].y;
+    this->subCamEyeNext.z = D_80971E38[this->unk190].z;
+    Math_Vec3f_Copy(&localVec3f, &this->subCamEyeNext);
+    OLib_DbCameraVec3fSum(&this->actor.home, &localVec3f, &this->subCamEyeNext, 1);
 
     if (1) {}
-    this->unk244.x = D_80971EEC[this->unk190].x + this->unk22C.x;
-    this->unk244.y = D_80971EEC[this->unk190].y + this->unk22C.y;
-    this->unk244.z = D_80971EEC[this->unk190].z + this->unk22C.z;
+    this->subCamAtNext.x = D_80971EEC[this->unk190].x + this->unk22C.x;
+    this->subCamAtNext.y = D_80971EEC[this->unk190].y + this->unk22C.y;
+    this->subCamAtNext.z = D_80971EEC[this->unk190].z + this->unk22C.z;
     if (this->unk190 != 6 && this->unk190 != 7) {
-        Math_Vec3f_Copy(&this->unk214, &this->unk238);
-        Math_Vec3f_Copy(&this->unk220, &this->unk244);
+        Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
+        Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
     }
     if (this->unk190 >= 7 && this->unk190 != 0xE) {
         this->actor.shape.rot.y += 0x800;
@@ -960,30 +960,30 @@ void EnKakasi_SetupDigAway(EnKakasi* this) {
     }
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    this->unk210 = 60.0f;
-    this->unk20C = 60.0f;
+    this->subCamFovNext = 60.0f;
+    this->subCamFov = 60.0f;
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     this->unkState196 = 4;
     this->actionFunc = EnKakasi_DiggingAway;
 }
 
 void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
-    Vec3f tempunk238;
+    Vec3f tempsubCamEyeNext;
     Vec3f tempWorldPos;
 
-    if (this->cutsceneCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
-        this->unk238.x = D_80972030.x;
-        this->unk238.y = D_80972030.y;
-        this->unk238.z = D_80972030.z;
+        this->subCamEyeNext.x = D_80972030.x;
+        this->subCamEyeNext.y = D_80972030.y;
+        this->subCamEyeNext.z = D_80972030.z;
 
-        Math_Vec3f_Copy(&tempunk238, &this->unk238);
-        OLib_DbCameraVec3fSum(&this->actor.home, &tempunk238, &this->unk238, 1);
-        this->unk244.x = ((f32)D_8097203C.x) + this->unk22C.x; // cast req
-        this->unk244.y = ((f32)D_8097203C.y) + this->unk22C.y;
-        this->unk244.z = ((f32)D_8097203C.z) + this->unk22C.z;
-        Math_Vec3f_Copy(&this->unk214, &this->unk238);
-        Math_Vec3f_Copy(&this->unk220, &this->unk244);
+        Math_Vec3f_Copy(&tempsubCamEyeNext, &this->subCamEyeNext);
+        OLib_DbCameraVec3fSum(&this->actor.home, &tempsubCamEyeNext, &this->subCamEyeNext, 1);
+        this->subCamAtNext.x = ((f32)D_8097203C.x) + this->unk22C.x; // cast req
+        this->subCamAtNext.y = ((f32)D_8097203C.y) + this->unk22C.y;
+        this->subCamAtNext.z = ((f32)D_8097203C.z) + this->unk22C.z;
+        Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
+        Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
         func_8096FAAC(this, globalCtx);
     }
 
@@ -1124,7 +1124,7 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk1BC.x != 0.0f || this->unk1BC.z != 0.0f) {
             Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk1BC);
             this->actor.focus.pos.y += 10.0f;
-            if (this->cutsceneCamId == CAM_ID_MAIN) {
+            if (this->subCamId == SUB_CAM_ID_DONE) {
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             } else {
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.home.rot);

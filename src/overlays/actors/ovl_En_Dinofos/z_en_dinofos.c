@@ -363,11 +363,11 @@ void func_8089A9B0(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089ABF4(EnDinofos* this, GlobalContext* globalCtx) {
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
         Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->subCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
             func_800B724C(globalCtx, &this->actor, 6);
