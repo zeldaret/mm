@@ -65,50 +65,47 @@
 
 #define CAM_SHRINKWINVAL_IGNORE 0xF000 // No change in shrink window, keep the previous values
 
-// Camera bg surface flags
-#define FLG_ADJSLOPE (1 << 0)
-#define FLG_OFFGROUND (1 << 7)
 
 #define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
 
-// Camera flags1. Flags spcifically for settings, modes, and scene/bg/cs camData
-// Used to store current state, but not read from with only 1 exception (possibly read from outside of camera)
+// Camera behaviorFlags. Flags specifically for settings, modes, and bgCam
+// Used to store current state, only CAM_BEHAVIOR_SETTING_1 and CAM_BEHAVIOR_BG_2 are read from and used in logic
 // Setting (0x1, 0x10)
-#define CAM_FLAG1_SET_USE_PRIORITY (1 << 0) // Use settings priority system
-#define CAM_FLAG1_SET_2 (1 << 4)
+#define CAM_BEHAVIOR_SETTING_USE_PRIORITY (1 << 0) // Use settings priority system
+#define CAM_BEHAVIOR_SETTING_2 (1 << 4)
 // Mode (0x2, 0x20)
-#define CAM_FLAG1_MODE_1 (1 << 1)
-#define CAM_FLAG1_MODE_2 (1 << 5)
-// scene Data (0x4, 0x40)
-#define CAM_FLAG1_SCENE_DATA_1 (1 << 2)
-#define CAM_FLAG1_SCENE_DATA_2 (1 << 6)
+#define CAM_BEHAVIOR_MODE_1 (1 << 1)
+#define CAM_BEHAVIOR_MODE_2 (1 << 5)
+// bgCam (0x4, 0x40)
+#define CAM_BEHAVIOR_BGCAM_1 (1 << 2)
+#define CAM_BEHAVIOR_BGCAM_2 (1 << 6)
 
-// Camera flags2. Variety of generic flags
-#define CAM_FLAG2_1 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
-#define CAM_FLAG2_2 (1 << 1)
-#define CAM_FLAG2_4 (1 << 2)
-#define CAM_FLAG2_8 (1 << 3)
-#define CAM_FLAG2_10 (1 << 4)
-#define CAM_FLAG2_20 (1 << 5)
-#define CAM_FLAG2_40 (1 << 6)
-#define CAM_FLAG2_80 (1 << 7)
-#define CAM_FLAG2_100 (1 << 8)
-#define CAM_FLAG2_200 (1 << 9)
-#define CAM_FLAG2_400 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
-#define CAM_FLAG2_800 (1 << 11)
-#define CAM_FLAG2_1000 (1 << 12)
-#define CAM_FLAG2_2000 (1 << 13)
-#define CAM_FLAG2_4000 (1 << 14)
-#define CAM_FLAG2_8000 (1 << 15)
+// Camera stateFlags. Variety of generic flags
+#define CAM_STATE_1 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
+#define CAM_STATE_2 (1 << 1)
+#define CAM_STATE_4 (1 << 2)
+#define CAM_STATE_8 (1 << 3)
+#define CAM_STATE_10 (1 << 4)
+#define CAM_STATE_20 (1 << 5)
+#define CAM_STATE_40 (1 << 6)
+#define CAM_STATE_80 (1 << 7)
+#define CAM_STATE_100 (1 << 8)
+#define CAM_STATE_200 (1 << 9)
+#define CAM_STATE_400 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
+#define CAM_STATE_800 (1 << 11)
+#define CAM_STATE_1000 (1 << 12)
+#define CAM_STATE_2000 (1 << 13)
+#define CAM_STATE_4000 (1 << 14)
+#define CAM_STATE_8000 (1 << 15)
 
-// Camera paramFlags. Each corresponds to a struct member from the camera struct
-#define CAM_PARAM_FLAG_1 (1 << 0)
-#define CAM_PARAM_FLAG_2 (1 << 1)
-#define CAM_PARAM_FLAG_4 (1 << 2)
-#define CAM_PARAM_FLAG_8 (1 << 3)
-#define CAM_PARAM_FLAG_10 (1 << 4)
-#define CAM_PARAM_FLAG_20 (1 << 5)
-#define CAM_PARAM_FLAG_40 (1 << 6)
+// Camera viewFlags. Set params related to view
+#define CAM_VIEW_AT (1 << 0) // camera->at
+#define CAM_VIEW_EYE (1 << 1) // camera->eye and camera->eyeNext
+#define CAM_VIEW_UP (1 << 2) // camera->up
+#define CAM_VIEW_TARGET (1 << 3) // camera->target
+#define CAM_VIEW_TARGET_POS (1 << 4) // camera->targetPosRot.pos
+#define CAM_VIEW_FOV (1 << 5) // camera->fov
+#define CAM_VIEW_ROLL (1 << 6) // camera->roll
 
 /**
  * Camera Status type
@@ -406,36 +403,6 @@ typedef struct {
  *   CAMERA MINI-HEAP
  *================================
  */
-
-/**
- * Each camera has its own mini-heap stored within the first 50 bytes, called camera->paramData
- * This heap is used by action functions to store data that needs to persist over multiple calls to the action function
- * Every action function has its own custom structs to store data in a way customized to that particular function
- * This data is broken up into two types:
- *     - Fixed Data: Camera Action-Function data that is predefined in Camera_Data.c. Is read-only data (a majority of camera_data is for this type of data)
- *     - Dynamic Data: Camera Action-Function data that is calculated at run-time but needs to persist over multiple function calls
- */
-
-/**
- * Everything below in this file is for these customized functions
- */
-
-// Camera will reload static data from camera_data
-#define RELOAD_PARAMS \
-    (camera->actionFuncState == 0 || camera->actionFuncState == 10 || camera->actionFuncState == 20)
-
-/**
- * All static data is stored in memory as s16, and then converted to the appropriate type during runtime.
- * If a small f32 is being stored as an s16, it is common to store that value 100 times larger than the original value.
- * This is then scaled back down during runtime with the SCALED_STATIC_DATA macro.
- */
-#define SCALED_STATIC_DATA(x) ((x) * 0.01f)
-
-// Load the next setting from camera_data.c
-#define READ_STATIC_DATA_VAL ((values++)->val)
-// Load the next setting from camera_data.c and scale
-#define READ_SCALED_STATIC_DATA_VAL SCALED_STATIC_DATA(READ_STATIC_DATA_VAL)
-
 
 #define FLAGS_FIXED_DATA(flags) \
     { flags,       CAM_DATA_FLAGS }
@@ -1631,8 +1598,8 @@ typedef struct Camera {
     /* 0x144 */ s16 mode;
     /* 0x146 */ s16 bgId;
     /* 0x148 */ s16 bgCamDataId;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
+    /* 0x14A */ s16 behaviorFlags;
+    /* 0x14C */ s16 stateFlags;
     /* 0x14E */ s16 childCamId;
     /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x152 */ s16 unk152;
@@ -1640,8 +1607,8 @@ typedef struct Camera {
     /* 0x156 */ s16 nextCamSceneDataId;
     /* 0x158 */ s16 nextBgId;
     /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 actionFuncState; // Determines the current state of the camera action function
+    /* 0x15C */ s16 viewFlags;
+    /* 0x15E */ s16 animState; // Determines the current state of the camera action function
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x164 */ s16 camId;

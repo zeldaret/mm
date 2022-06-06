@@ -149,9 +149,9 @@ s32 Play_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* e
     s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
     Camera* camera = globalCtx->cameraPtrs[camIdx];
 
-    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_1, at);
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
     ret *= 2;
-    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_2, eye);
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
 
     camera->dist = Math3D_Distance(at, eye);
 
@@ -173,11 +173,11 @@ s32 Play_CameraSetAtEyeUp(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f*
     s16 camIdx = (camId == CAM_ID_NONE) ? globalCtx->activeCamId : camId;
     Camera* camera = globalCtx->cameraPtrs[camIdx];
 
-    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_1, at);
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
     ret <<= 1;
-    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_2, eye);
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
     ret <<= 1;
-    ret |= Camera_SetParam(camera, CAM_PARAM_FLAG_4, up);
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
 
     camera->dist = Math3D_Distance(at, eye);
 
@@ -195,7 +195,7 @@ s32 Play_CameraSetAtEyeUp(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f*
 }
 
 s32 Play_CameraSetFov(GlobalContext* globalCtx, s16 camId, f32 fov) {
-    s32 ret = Camera_SetParam(globalCtx->cameraPtrs[camId], 0x20, &fov) & 1;
+    s32 ret = Camera_SetViewParam(globalCtx->cameraPtrs[camId], 0x20, &fov) & 1;
 
     if (1) {}
     return ret;
