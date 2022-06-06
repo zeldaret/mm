@@ -88,7 +88,7 @@
 #define CAM_STATE_5 (1 << 5)
 #define CAM_STATE_6 (1 << 6)
 #define CAM_STATE_7 (1 << 7)
-#define CAM_STATE_8 (1 << 8)
+#define CAM_STATE_UNDERWATER (1 << 8)
 #define CAM_STATE_9 (1 << 9)
 #define CAM_STATE_10 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
 #define CAM_STATE_11 (1 << 11)
