@@ -78,17 +78,17 @@ InitChainEntry D_80B6E748[] = {
 // suggested name: BgKin2Bombwall_HadNearbyACCollision
 // The distance here actually matters:
 // replacing 6400.0f by a distance too large makes the wall explode from a bomb quite far away.
-s32 func_80B6E020(BgKin2Bombwall* arg0, GlobalContext* arg1) {
-    Actor* bombwallCollider;
+s32 func_80B6E020(BgKin2Bombwall *this, GlobalContext *globalCtx) {
+    Actor *bombwallCollider;
 
-    if ((arg0->collider.base.acFlags & 2) != 0) {
-        bombwallCollider = arg0->collider.base.ac;
-        if ((bombwallCollider != 0) &&
-            (Math3D_Vec3fDistSq(&arg0->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
-            return 1;
+    if (this->collider.base.acFlags & 2) {
+        bombwallCollider = this->collider.base.ac;
+        if ((bombwallCollider != NULL) && 
+            (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 // first idea: with all the random numbers fetched, this is probably related to particle effects from slashing or
