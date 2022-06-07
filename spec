@@ -879,8 +879,8 @@ beginseg
     name "ovl_En_Hata"
     compress
     include "build/src/overlays/actors/ovl_En_Hata/z_en_hata.o"
-    include "build/data/ovl_En_Hata/ovl_En_Hata.data.o"
-    include "build/data/ovl_En_Hata/ovl_En_Hata.reloc.o"
+    //include "build/data/ovl_En_Hata/ovl_En_Hata.data.o"
+    include "build/src/overlays/actors/ovl_En_Hata/ovl_En_Hata_reloc.o"
 endseg
 
 beginseg
