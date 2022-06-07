@@ -153,8 +153,8 @@ void func_80C0A120(BgAstrBombwall* this, GlobalContext* globalCtx) {
         } else {
             var_v0 = 0x20;
         }
-        EffectSsKakera_Spawn(globalCtx, &spBC, &spAC, &spBC, -260, var_v0, 20, 0, 0, 10, 0, 0, 0x32, -1, OBJECT_ASTR_OBJ,
-                             object_astr_obj_DL_002178);
+        EffectSsKakera_Spawn(globalCtx, &spBC, &spAC, &spBC, -260, var_v0, 20, 0, 0, 10, 0, 0, 0x32, -1,
+                             OBJECT_ASTR_OBJ, object_astr_obj_DL_002178);
     }
 }
 
