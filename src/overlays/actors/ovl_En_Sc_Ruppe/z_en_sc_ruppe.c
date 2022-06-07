@@ -67,55 +67,55 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BD6910(EnScRuppe* this, GlobalContext* globalCtx) {
-    Collider_UpdateCylinder(&this->actor, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(globalCtx, this, 32.0f, 30.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 32.0f, 30.0f, 0.0f, 4);
 }
 
-s32 func_80BD697C(s16 this) {
-    switch (this) {
+s32 func_80BD697C(s16 rupeeIndex) {
+    switch (rupeeIndex) {
         case 0:
             if (gSaveContext.save.weekEventReg[53] & 4) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~4;
-                return 1;
+                return true;
             }
             break;
         case 1:
             if (gSaveContext.save.weekEventReg[53] & 0x80) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~0x80;
-                return 1;
+                return true;
             }
             break;
         case 2:
             if (gSaveContext.save.weekEventReg[54] & 1) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~1;
-                return 1;
+                return true;
             }
             break;
         case 3:
             if (gSaveContext.save.weekEventReg[54] & 2) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~2;
-                return 1;
+                return true;
             }
             break;
         case 4:
             if (gSaveContext.save.weekEventReg[54] & 4) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~4;
-                return 1;
+                return true;
             }
             break;
         case 5:
             if ((gSaveContext.save.weekEventReg[54] & 8)) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~8;
-                return 1;
+                return true;
             }
             break;
     }
-    return 0;
+    return false;
 }
 
 void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx) {
-    if (this->collider.base.ocFlags1 & 2) {
+    if (this->collider.base.ocFlags1 & OC1_HIT) {
         this->rupeeDisplayTime = 0;
         this->actor.gravity = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
@@ -146,15 +146,16 @@ void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
 }
 
 void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderCylinder* collider;
     EnScRuppe* this = THIS;
+    ColliderCylinder* collider = &this->collider;
+    ;
 
     collider = &this->collider;
     Collider_InitCylinder(globalCtx, collider);
     Collider_InitAndSetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    this->rupeeIndex = this->actor.params & 31;
+    this->rupeeIndex = this->actor.params & 0x1F;
     if ((this->rupeeIndex < 0) || (this->rupeeIndex >= 5)) {
         this->rupeeIndex = 0;
     }
