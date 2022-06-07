@@ -214,18 +214,18 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 }
 
 /**
- * Fills the weightArray to be used with time paths
+ * Fills the knot vector to be used with time paths
  *
- * This default weightArray is just an array of the point indicies as floats,
+ * This default knots is just an array of the point indicies as floats,
  * offset to start at the index of the interpolation order minus 1.
  *
- * @param[out] weightArray an array of values that are used to compute the progress and the individual weights
+ * @param[out] knots an array of values that are used to compute the progress and the individual weights
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
  * @param[in] numPoints the number of points to fill, generally the path count + order
  *
  * @note `SubS_TimePathing_Update` assumes order to be 3, see SUBS_TIME_PATHING_ORDER
  */
-void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoints) {
+void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
     s32 i;
     f32 val = 0.0f;
 
@@ -233,7 +233,7 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoint
         if ((i >= order) && (i < (numPoints - order + 1))) {
             val += 1.0f;
         }
-        weightArray[i] = val;
+        knots[i] = val;
     }
 }
 
@@ -246,12 +246,12 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoint
  * @param[in] totalTime how much time the path should take to travel
  * @param[in] pathCount the path count
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see `SubS_TimePathing_FillKnots`
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
 s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
-                                     s32 order, f32 weightArray[]) {
+                                     s32 order, f32 knots[]) {
     s32 i;
     s32 j;
     s32 k;
@@ -262,7 +262,7 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
         return 0;
     }
 
-    // When using the weightArray from `SubS_TimePathing_FillWeightArray` these nested loops seem to simplify to
+    // When using the knots from `SubS_TimePathing_FillKnots` these nested loops seem to simplify to
     // *progress = (f32)elapsedTime / (f32)waypointTime;
     waypointTimeInv = 1.0f / waypointTime;
     k = 0;
@@ -271,7 +271,7 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
             if (k == elapsedTime) {
                 break;
             }
-            *progress += (weightArray[i + 1] - weightArray[i]) * waypointTimeInv;
+            *progress += (knots[i + 1] - knots[i]) * waypointTimeInv;
             k++;
         }
     }
@@ -282,13 +282,15 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
 /**
  * Computes the interpolation weights to be used with time paths
  *
+ * Seems to use some kind of B-Spline interpolation algorithm
+ *
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] progress see `SubS_TimePathing_ComputeProgress`
  * @param[in] waypoint the current waypoint
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see `SubS_TimePathing_FillKnots`
  * @param[out] weights how much to weight each point considered
  */
-void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 weightArray[], f32 weights[]) {
+void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 knots[], f32 weights[]) {
     f32 weightsTemp[10][11];
     s32 i;
     s32 j;
@@ -304,17 +306,15 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
 
     for (i = 1; i < order; i++) {
         for (j = waypoint - i, k = (order - 1) - i; j <= waypoint; j++, k++) {
-            if (weightArray[j + i] != weightArray[j]) {
-                weightsTemp[i][k] =
-                    ((progress - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * weightsTemp[i - 1][k];
+            if (knots[j + i] != knots[j]) {
+                weightsTemp[i][k] = ((progress - knots[j]) / (knots[j + i] - knots[j])) * weightsTemp[i - 1][k];
             } else {
                 weightsTemp[i][k] = 0.0f;
             }
 
-            if (weightArray[j + i + 1] != weightArray[j + 1]) {
+            if (knots[j + i + 1] != knots[j + 1]) {
                 weightsTemp[i][k] +=
-                    ((weightArray[j + i + 1] - progress) / (weightArray[j + i + 1] - weightArray[j + 1])) *
-                    weightsTemp[i - 1][k + 1];
+                    ((knots[j + i + 1] - progress) / (knots[j + i + 1] - knots[j + 1])) * weightsTemp[i - 1][k + 1];
             }
         }
     }
@@ -332,10 +332,10 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] waypoint the current waypoint
  * @param[in] points the path's points
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see `SubS_TimePathing_FillKnots`
  */
 void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[],
-                                         f32 weightArray[]) {
+                                         f32 knots[]) {
     f32 xPos;
     f32 zPos;
     f32 weights[11];
@@ -344,7 +344,7 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
     f32 weightedTotal;
     s32 i;
 
-    SubS_TimePathing_ComputeWeights(order, progress, waypoint, weightArray, weights);
+    SubS_TimePathing_ComputeWeights(order, progress, waypoint, knots, weights);
     weightedTotal = 0.0f;
     weightedZ = 0.0f;
     weightedX = 0.0f;
@@ -373,14 +373,14 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
  * @param[in] waypointTime how much time per each waypoint
  * @param[in] totalTime how much time the path should take to travel
  * @param[in,out] waypoint the current waypoint, this and the previous two points will be used to compute the targetPos
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see `SubS_TimePathing_FillKnots`
  * @param[out] targetPos the computed position to move to
  * @param[in] timeSpeed how fast time moves
  *
  * @return s32 returns true when the end has been reached.
  */
 s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint,
-                            f32 weightArray[], Vec3f* targetPos, s32 timeSpeed) {
+                            f32 knots[], Vec3f* targetPos, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
     f32 endX;
@@ -391,14 +391,14 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
         state = 2;
     } else {
         state = SubS_TimePathing_ComputeProgress(progress, *elapsedTime, waypointTime, totalTime, path->count,
-                                                 SUBS_TIME_PATHING_ORDER, weightArray);
+                                                 SUBS_TIME_PATHING_ORDER, knots);
     }
 
     switch (state) {
         case 1: // Haven't reached the end of the path
             reachedEnd = false;
             SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
-                                                *waypoint, points, weightArray);
+                                                *waypoint, points, knots);
             break;
         case 2: // Have reached the end of the path
             endX = points[path->count - 1].x;

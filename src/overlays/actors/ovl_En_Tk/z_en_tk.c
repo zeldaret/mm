@@ -384,7 +384,7 @@ void func_80AECE0C(EnTk* this, GlobalContext* globalCtx) {
 
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     EnDoor* door;
-    f32 weightArray[265];
+    f32 knots[265];
     Vec3f sp94;
     Vec3f sp88;
     Vec3f timePathTargetPos;
@@ -392,13 +392,12 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     s32 sp74;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk_3CE & 4)) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
         this->actor.world.pos.y = timePathTargetPos.y;
     } else {
@@ -422,8 +421,8 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     this->timePathTargetPos = gZeroVec3f;
 
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_3CE |= 8;
     } else {
         sp94 = this->actor.world.pos;

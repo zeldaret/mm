@@ -88,19 +88,18 @@ void func_80953B40(BgIngate* this) {
 }
 
 s32 func_80953BEC(BgIngate* this) {
-    f32 weightArray[265];
+    f32 knots[265];
     Vec3f sp68;
     Vec3f sp5C;
     Vec3f timePathTargetPos;
     s16 yaw;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk160 & 1)) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         this->unk160 |= 1;
     } else {
         timePathTargetPos = this->timePathTargetPos;
@@ -109,8 +108,8 @@ s32 func_80953BEC(BgIngate* this) {
     this->dyna.actor.world.pos.z = timePathTargetPos.z;
     this->timePathTargetPos = gZeroVec3f;
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk160 |= 2;
     } else {
         sp68 = this->dyna.actor.world.pos;

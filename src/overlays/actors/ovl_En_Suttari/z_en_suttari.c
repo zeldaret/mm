@@ -775,7 +775,7 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* sch
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    f32 weightArray[265];
+    f32 knots[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f timePathTargetPos;
@@ -783,13 +783,12 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     s32 sp50 = 0;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (this->unk42C == 0) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
         this->actor.world.pos.y = timePathTargetPos.y;
         this->unk42C = 1;
@@ -805,8 +804,8 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->timePathTargetPos = gZeroVec3f;
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk430 = 1;
     } else {
         sp70 = this->actor.world.pos;
