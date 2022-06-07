@@ -470,7 +470,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
 void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params);
 s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
-s32 EnItem00_CanDropBigFairy(GlobalContext* globalCtx, s32 index, s32 collectibleFlag);
+s32 Item_CanDropBigFairy(GlobalContext* globalCtx, s32 index, s32 collectibleFlag);
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2);
 void EffectBlure_AddSpace(EffectBlure* this);
 void EffectBlure_Init1(void* thisx, void* initParamsx);

@@ -17,7 +17,7 @@
 void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTsubo_Draw(Actor* this, GlobalContext* globalCtx);
+void ObjTsubo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
 void ObjTsubo_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
@@ -195,7 +195,7 @@ void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.shape.shadowScale = 1.8f;
         this->homeRoom = this->actor.room;
         if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
-            if (EnItem00_CanDropBigFairy(globalCtx, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
+            if (Item_CanDropBigFairy(globalCtx, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
                 this->unk_198 = true;
             }
         }
@@ -220,14 +220,12 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f pos;
     Vec3f vel;
-    ObjTsuboData* typeData;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 randf;
     f32 sin;
     f32 cos;
     f32 scale;
     s32 pad2;
-
-    typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
 
     for (i = 0, rot = 0; i < 18; rot += 0x4E20, i++) {
         sin = Math_SinS(rot);
@@ -302,15 +300,12 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     s32 phi_s0;
     Vec3f pos;
     Vec3f vel;
-    Vec3f* worldPos;
-    ObjTsuboData* typeData;
+    Vec3f* worldPos = &this->actor.world.pos;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 sin;
     f32 cos;
     f32 scale;
-    s32 pad;
 
-    worldPos = &this->actor.world.pos;
-    typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     pos.y = worldPos->y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
@@ -349,15 +344,13 @@ void ObjTsubo_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     s32 i;
     Vec3f pos;
     Vec3f vel;
-    Vec3f* worldPos;
-    ObjTsuboData* typeData;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    Vec3f* worldPos = &this->actor.world.pos;
     f32 sin;
     f32 cos;
     s32 phi_s0;
     s16 scale;
 
-    typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
-    worldPos = &this->actor.world.pos;
     pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
@@ -394,13 +387,11 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
     s32 phi_s0;
     Vec3f pos;
     Vec3f vel;
-    ObjTsuboData* typeData;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     f32 randf;
     f32 temp_f20;
     f32 cos;
     f32 sin;
-
-    typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
 
     for (i = 0, rot = 0; i < 13; i++, rot += 0x4E20) {
         randf = Rand_ZeroOne();
@@ -477,7 +468,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
         //! player->currentMask, but in this case is garbage in the collider
         func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
-    } else if (this->unk_19B != 0 ||
+    } else if ((this->unk_19B != 0) ||
                (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;

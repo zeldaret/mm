@@ -1185,6 +1185,6 @@ s32 func_800A817C(s32 index) {
     return D_801AE214[index];
 }
 
-s32 EnItem00_CanDropBigFairy(GlobalContext* globalCtx, s32 index, s32 collectibleFlag) {
+s32 Item_CanDropBigFairy(GlobalContext* globalCtx, s32 index, s32 collectibleFlag) {
     return (func_800A8150(index) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(globalCtx, collectibleFlag));
 }
