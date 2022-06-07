@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tsubo.h"
+#include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_tsubo/object_tsubo.h"
 #include "objects/object_racetsubo/object_racetsubo.h"
@@ -16,26 +17,23 @@
 void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
-
-void func_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
-void func_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
-void func_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx);
-void func_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx);
-void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx);
-void func_RacePotBreak3(ObjTsubo* this, GlobalContext* globalCtx);
-
 void ObjTsubo_Draw(Actor* this, GlobalContext* globalCtx);
 
+void ObjTsubo_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
+void ObjTsubo_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx);
+void ObjTsubo_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2);
+void ObjTsubo_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2);
+void ObjTsubo_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2);
+void ObjTsubo_RacePotBreak3(ObjTsubo* this, GlobalContext* globalCtx2);
 void func_80928914(ObjTsubo* this);
-void func_809289B4(ObjTsubo* this);
-void func_80928D6C(ObjTsubo* this);
-void func_80928E74(ObjTsubo* this);
-void func_809291DC(ObjTsubo* this);
-
 void func_80928928(ObjTsubo* this, GlobalContext* globalCtx);
+void func_809289B4(ObjTsubo* this);
 void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx);
+void func_80928D6C(ObjTsubo* this);
 void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx);
+void func_80928E74(ObjTsubo* this);
 void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx);
+void func_809291DC(ObjTsubo* this);
 void func_8092926C(ObjTsubo* this, GlobalContext* globalCtx);
 
 s16 D_80929500 = 0;
@@ -70,13 +68,13 @@ typedef struct {
 
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
-      func_PotBreak1, func_PotBreak2, func_PotBreak3 },
-    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45, func_RacePotBreak1,
-      func_RacePotBreak2, func_RacePotBreak3 },
-    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, func_PotBreak1, func_PotBreak2,
-      func_PotBreak3 },
+      ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
+      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
+    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
+      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
-      func_PotBreak1, func_PotBreak2, func_PotBreak3 },
+      ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -107,44 +105,44 @@ static InitChainEntry sInitChain[] = {
 
 s32 func_809275C0(ObjTsubo* this, GlobalContext* globalCtx) {
     s32 chestFlag = -1;
-    s32 unkParams = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
+    s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
 
-    if (unkParams & 3 & 0xF) {
-        chestFlag = ((unkParams & (0xFF << 2)) >> 2) & 0xFF;
+    if (ENSW_GETS_3(skulltulaParams)) {
+        chestFlag = ENSW_GETS_3FC(skulltulaParams);
     }
 
     return (chestFlag < 0) == true || !Flags_GetTreasure(globalCtx, chestFlag);
 }
 
 void func_8092762C(ObjTsubo* this, GlobalContext* globalCtx) {
-    if (!OBJ_TSUBO_P0010(&this->actor) && OBJ_TSUBO_ZROT(&this->actor) != 2) {
-        Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, OBJ_TSUBO_P000F(&this->actor) * 0x10);
+    if (!OBJ_TSUBO_P0010(&this->actor) && (OBJ_TSUBO_ZROT(&this->actor) != 2)) {
+        Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, OBJ_TSUBO_P000F(&this->actor) << 4);
     }
 }
 
 void func_80927690(ObjTsubo* this, GlobalContext* globalCtx) {
     s32 itemDrop;
 
-    if (this->unk197 == 0 && OBJ_TSUBO_ZROT(&this->actor) != 2) {
+    if (!this->unk_197 && OBJ_TSUBO_ZROT(&this->actor) != 2) {
         itemDrop = func_800A8150(OBJ_TSUBO_P003F(&this->actor));
         if (itemDrop > ITEM00_NO_DROP) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos, (OBJ_TSUBO_PFE00(&this->actor) << 8) | itemDrop);
-            this->unk197 = 1;
+            this->unk_197 = true;
         }
     }
 }
 
-void ObjTsubo_SpawnEnMkk(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
+void ObjTsubo_SpawnBoes(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MKK, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 2);
 }
 
-void ObjTsubo_SpawnEnSw(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
+void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
     Actor* child;
     s32 params;
 
-    if (func_809275C0(this, globalCtx) != 0) {
-        params = (OBJ_TSUBO_P001F(&this->actor) * 4) | 0xFF01;
+    if (func_809275C0(this, globalCtx)) {
+        params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
         child = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, params);
         if (child != NULL) {
@@ -157,31 +155,28 @@ void ObjTsubo_SpawnEnSw(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
 
 void func_80927818(ObjTsubo* this, GlobalContext* globalCtx, s32 arg2) {
     if (OBJ_TSUBO_ZROT(&this->actor) == 1) {
-        ObjTsubo_SpawnEnMkk(this, globalCtx, arg2);
+        ObjTsubo_SpawnBoes(this, globalCtx, arg2);
     } else if (OBJ_TSUBO_ZROT(&this->actor) == 2) {
-        ObjTsubo_SpawnEnSw(this, globalCtx, arg2);
+        ObjTsubo_SpawnGoldSkulltula(this, globalCtx, arg2);
     }
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, GlobalContext* globalCtx) {
-    return globalCtx->sceneNum != SCENE_HAKUGIN_BS && globalCtx->sceneNum != SCENE_INISIE_BS;
+    return (globalCtx->sceneNum != SCENE_HAKUGIN_BS) && (globalCtx->sceneNum != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, GlobalContext* globalCtx) {
-    if (this->unk197 == 0 && globalCtx->roomCtx.currRoom.num != this->homeRoom) {
-        this->unk197 = 1;
+    if (!this->unk_197 && globalCtx->roomCtx.currRoom.num != this->homeRoom) {
+        this->unk_197 = true;
     }
 }
 
 void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjTsubo* this = (ObjTsubo*)thisx;
     s32 pad;
-    s32 type;
-    s16 pad2;
-    s32 sp2C;
-
-    type = OBJ_TSUBO_GET_TYPE(&this->actor);
-    sp2C = OBJ_TSUBO_ZROT(&this->actor);
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
+    s32 pad2;
+    s32 sp2C = OBJ_TSUBO_ZROT(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, sPotTypeData[type].scale);
@@ -199,13 +194,13 @@ void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.shape.shadowScale = 1.8f;
         this->homeRoom = this->actor.room;
-        if (type != OBJ_TSUBO_TYPE_3 && sp2C != 2) {
+        if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
             if (EnItem00_CanDropBigFairy(globalCtx, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
-                this->unk198 = 1;
+                this->unk_198 = true;
             }
         }
-        if (type == OBJ_TSUBO_TYPE_3 || sp2C != 2 || !func_809275C0(this, globalCtx)) {
-            this->unk19A = -1;
+        if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, globalCtx)) {
+            this->unk_19A = -1;
         }
         func_80928914(this);
     }
@@ -218,7 +213,7 @@ void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     Collider_DestroyCylinder(globalCtx, &this->cylinderCollider);
 }
 
-void func_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
     s16 rot;
     s32 i;
     s32 phi_s0;
@@ -227,19 +222,19 @@ void func_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
     Vec3f vel;
     ObjTsuboData* typeData;
     f32 randf;
-    f32 sinf;
-    f32 cosf;
+    f32 sin;
+    f32 cos;
     f32 scale;
     s32 pad2;
 
     typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
 
     for (i = 0, rot = 0; i < 18; rot += 0x4E20, i++) {
-        sinf = Math_SinS(rot);
-        cosf = Math_CosS(rot);
-        pos.x = sinf * 8.0f;
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 8.0f;
         pos.y = Rand_ZeroOne() * 12.0f + 2.0f;
-        pos.z = cosf * 8.0f;
+        pos.z = cos * 8.0f;
         vel.x = pos.x * 0.23f;
         vel.y = Rand_ZeroOne() * 5.0f + 2.5f;
         vel.z = pos.z * 0.23f;
@@ -254,34 +249,32 @@ void func_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 110.0f + 15.0f;
-        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50,
-                             -1, typeData->objId, typeData->shardDL);
+        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+                             typeData->objId, typeData->shardDL);
     }
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 30.0f, 2, 20, 50, 1);
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 30.0f, 2, 10, 80, 1);
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
 }
 
-void func_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
+void ObjTsubo_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
     s16 rot;
     s32 phi_s0;
     s32 i;
-    ObjTsuboData* typeData;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
     Vec3f pos;
     Vec3f vel;
     f32 randf;
-    f32 sinf;
-    f32 cosf;
+    f32 sin;
+    f32 cos;
     f32 scale;
     s32 pad[2];
 
-    typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
-
     for (i = 0, rot = 0; i < 20; rot += 0x4E20, i++) {
-        sinf = Math_SinS(rot);
-        cosf = Math_CosS(rot);
-        pos.x = sinf * 10.0f;
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 10.0f;
         pos.y = Rand_ZeroOne() * 20.0f + 2.0f;
-        pos.z = cosf * 10.0f;
+        pos.z = cos * 10.0f;
         vel.x = pos.x * 0.3f;
         vel.y = Rand_ZeroOne() * 10.0f + 2.0f;
         vel.z = pos.z * 0.3f;
@@ -295,14 +288,14 @@ void func_RacePotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
             phi_s0 = 0xA0;
         }
         scale = Rand_ZeroOne() * 160.0f + 15.0f;
-        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 0x14, 0, 0, scale, 0, 0, 50,
-                             -1, typeData->objId, typeData->shardDL);
+        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+                             typeData->objId, typeData->shardDL);
     }
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 50.0f, 2, 0x28, 0x32, 1);
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 50.0f, 2, 0x14, 0x50, 1);
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 50.0f, 2, 40, 50, true);
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 50.0f, 2, 20, 80, true);
 }
 
-void func_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
+void ObjTsubo_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = (GlobalContext*)globalCtx2;
     s16 rot;
     s32 i;
@@ -311,8 +304,8 @@ void func_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     Vec3f vel;
     Vec3f* worldPos;
     ObjTsuboData* typeData;
-    f32 sinf;
-    f32 cosf;
+    f32 sin;
+    f32 cos;
     f32 scale;
     s32 pad;
 
@@ -327,13 +320,13 @@ void func_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     }
     pos.x = worldPos->x;
     pos.z = worldPos->z;
-    EffectSsGRipple_Spawn(globalCtx, &pos, 0xC8, 0x258, 0);
+    EffectSsGRipple_Spawn(globalCtx, &pos, 200, 600, 0);
     for (i = 0, rot = 0; i < 13; rot += 0x4E20, i++) {
-        sinf = Math_SinS(rot);
-        cosf = Math_CosS(rot);
-        pos.x = sinf * 8.0f;
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 8.0f;
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
-        pos.z = cosf * 8.0f;
+        pos.z = cos * 8.0f;
         vel.x = pos.x * 0.2f;
         vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
         vel.z = pos.z * 0.2f;
@@ -344,12 +337,12 @@ void func_PotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 105.0f + 10.0f;
-        EffectSsKakera_Spawn(globalCtx, &pos, &vel, worldPos, -170, phi_s0, 0x32, 5, 0, scale, 0, 0, 70, -1,
+        EffectSsKakera_Spawn(globalCtx, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
                              typeData->objId, typeData->shardDL);
     }
 }
 
-void func_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
+void ObjTsubo_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = (GlobalContext*)globalCtx2;
     s32 pad;
     s16 rot;
@@ -358,8 +351,8 @@ void func_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     Vec3f vel;
     Vec3f* worldPos;
     ObjTsuboData* typeData;
-    f32 sinf;
-    f32 cosf;
+    f32 sin;
+    f32 cos;
     s32 phi_s0;
     s16 scale;
 
@@ -370,18 +363,17 @@ void func_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
         pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->x;
         pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->z;
-        EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 0x15E);
+        EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;
     pos.z = worldPos->z;
-    EffectSsGRipple_Spawn(globalCtx, &pos, 0x12C, 0x2BC, 0);
-
+    EffectSsGRipple_Spawn(globalCtx, &pos, 300, 700, 0);
     for (i = 0, rot = 0; i < 15; rot += 0x4E20, i++) {
-        sinf = Math_SinS(rot);
-        cosf = Math_CosS(rot);
-        pos.x = sinf * 10.0f;
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 10.0f;
         pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
-        pos.z = cosf * 10.0f;
+        pos.z = cos * 10.0f;
         vel.x = pos.x * 0.3f;
         vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
         vel.z = pos.z * 0.3f;
@@ -390,12 +382,12 @@ void func_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
         phi_s0 = Rand_ZeroOne() < 0.2f ? 0xC0 : 0xA0;
         scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &vel, worldPos, -170, phi_s0, 0x32, 5, 0, scale, 0, 0, 70, -1,
+        EffectSsKakera_Spawn(globalCtx, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
                              typeData->objId, typeData->shardDL);
     }
 }
 
-void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
+void ObjTsubo_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = (GlobalContext*)globalCtx2;
     s32 i;
     s16 rot;
@@ -405,8 +397,8 @@ void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
     ObjTsuboData* typeData;
     f32 randf;
     f32 temp_f20;
-    f32 cosf;
-    f32 sinf;
+    f32 cos;
+    f32 sin;
 
     typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
 
@@ -414,11 +406,11 @@ void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
         randf = Rand_ZeroOne();
         temp_f20 = (1.0f - SQ(randf)) * 4.8f + 3.2f;
         if (this) {}
-        sinf = Math_SinS(rot);
-        cosf = Math_CosS(rot);
-        pos.x = sinf * temp_f20;
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * temp_f20;
         pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
-        pos.z = cosf * temp_f20;
+        pos.z = cos * temp_f20;
         vel.x = pos.x * 0.4f;
         vel.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
         vel.z = pos.z * 0.4f;
@@ -429,7 +421,7 @@ void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
         } else {
             phi_s0 = 0x20;
         }
-        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 0x32, 3, 0,
+        EffectSsKakera_Spawn(globalCtx, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
                              (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objId, typeData->shardDL);
     }
     for (i = 0; i < 7; i++) {
@@ -438,7 +430,7 @@ void func_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
     }
 }
 
-void func_RacePotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
+void ObjTsubo_RacePotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
 }
 
 void func_80928914(ObjTsubo* this) {
@@ -456,40 +448,40 @@ void func_80928928(ObjTsubo* this, GlobalContext* globalCtx) {
 
 void func_809289B4(ObjTsubo* this) {
     this->actor.draw = ObjTsubo_Draw;
-    this->actor.flags |= 0x10;
-    this->unk195 = 0;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->unk_195 = false;
     this->actionFunc = func_809289E4;
 }
 
 void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
     ObjTsuboData* typeData;
+    s32 pad;
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
     s32 pad2;
-    s32 type;
-    s32 pad3;
-    s32 sp3C;
+    s32 acHit = (this->cylinderCollider.base.acFlags & AC_HIT) != 0;
 
-    type = OBJ_TSUBO_GET_TYPE(&this->actor);
-    sp3C = (this->cylinderCollider.base.acFlags & 2) != 0;
-    if (sp3C != 0) {
-        this->cylinderCollider.base.acFlags &= ~2;
+    if (acHit) {
+        this->cylinderCollider.base.acFlags &= ~AC_HIT;
     }
-    if ((this->cylinderCollider.base.ocFlags1 & 2) != 0) {
-        this->cylinderCollider.base.ocFlags1 &= ~2;
+    if (this->cylinderCollider.base.ocFlags1 & OC1_HIT) {
+        this->cylinderCollider.base.ocFlags1 &= ~OC1_HIT;
     }
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.room = -1;
-        this->actor.flags |= 0x10;
-        if (type != OBJ_TSUBO_TYPE_3 && func_800A817C(OBJ_TSUBO_P003F(&this->actor))) {
+        this->actor.flags |= ACTOR_FLAG_10;
+        if ((type != OBJ_TSUBO_TYPE_3) && func_800A817C(OBJ_TSUBO_P003F(&this->actor))) {
             func_80927690(this, globalCtx);
         }
         func_80927818(this, globalCtx, 0);
-        func_800B8E58(&this->actor, NA_SE_PL_PULL_UP_POT);
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+        //! player->currentMask, but in this case is garbage in the collider
+        func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
-    } else if (this->pad19B != 0 ||
-               (sp3C != 0 && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC) != 0)) {
+    } else if (this->unk_19B != 0 ||
+               (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
-        this->pad19B = 0;
-        if ((this->actor.bgCheckFlags & 0x20) && this->actor.depthInWater > 15.0f) {
+        this->unk_19B = 0;
+        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, globalCtx);
         } else {
             typeData->breakPot1(this, globalCtx);
@@ -507,29 +499,24 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
             func_809291DC(this);
         }
     } else {
-        if (this->unk195 == 0) {
+        if (!this->unk_195) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
             if ((this->actor.bgCheckFlags & 1) &&
                 DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL) {
-                this->unk195 = 1;
-                this->actor.flags &= ~0x10;
+                this->unk_195 = true;
+                this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
-        if (this->actor.xzDistToPlayer < 800.0f || gSaveContext.save.entranceIndex == 0xD010) {
+        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entranceIndex == 0xD010)) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->cylinderCollider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    s32 absYawDiff;
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
+                    s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (yawDiff < 0) {
-                        absYawDiff = -yawDiff;
-                    } else {
-                        absYawDiff = yawDiff;
-                    }
                     if (absYawDiff >= 0x5556) {
                         Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
                     }
@@ -552,7 +539,7 @@ void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomCtx.currRoom.num;
         Actor_MoveWithGravity(&this->actor);
-        this->actor.flags &= ~(1 << 26);
+        this->actor.flags &= ~ACTOR_FLAG_4000000;
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
         func_80928E74(this);
     } else {
@@ -565,7 +552,7 @@ void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx) {
 }
 
 void func_80928E74(ObjTsubo* this) {
-    this->unk194 = 0x50;
+    this->unk_194 = 80;
     this->actor.colChkInfo.mass = 180;
     D_80929500 = (Rand_ZeroOne() - 0.78f) * 4500.0f;
     D_80929508 = (Rand_ZeroOne() - 0.5f) * 2000.0f;
@@ -577,22 +564,20 @@ void func_80928E74(ObjTsubo* this) {
 void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx) {
     s32 pad;
     ObjTsuboData* typeData;
-    s32 type;
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
     s32 pad2;
-    s32 atHit;
+    s32 atHit = (this->cylinderCollider.base.atFlags & AT_HIT) != 0;
 
-    type = OBJ_TSUBO_GET_TYPE(&this->actor);
-    atHit = (this->cylinderCollider.base.atFlags & AT_HIT) != 0;
     if (atHit) {
         this->cylinderCollider.base.atFlags &= ~AT_HIT;
     }
     func_8092788C(this, globalCtx);
 
-    if (this->unk194 > 0) {
-        this->unk194 -= 1;
+    if (this->unk_194 > 0) {
+        this->unk_194--;
     }
     typeData = &sPotTypeData[type];
-    if ((this->actor.bgCheckFlags & 0xB) || atHit || this->unk194 <= 0) {
+    if ((this->actor.bgCheckFlags & 0xB) || atHit || (this->unk_194 <= 0)) {
         typeData->breakPot1(this, globalCtx);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, globalCtx);
@@ -634,12 +619,12 @@ void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx) {
 
 void func_809291DC(ObjTsubo* this) {
     this->actor.draw = NULL;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
-    this->unk197 = 0;
+    this->unk_197 = false;
     this->actor.shape.rot.x = this->actor.home.rot.x;
     this->actor.world.rot.x = this->actor.home.rot.x;
     this->actor.velocity.y = 0.0f;
@@ -647,26 +632,25 @@ void func_809291DC(ObjTsubo* this) {
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.world.rot.y = this->actor.home.rot.y;
     Actor_SetScale(&this->actor, 0.0f);
-    this->unk194 = 0x7F;
+    this->unk_194 = 127;
     this->actionFunc = func_8092926C;
 }
 
 void func_8092926C(ObjTsubo* this, GlobalContext* globalCtx) {
     f32 scale;
 
-    if (this->unk194 > 0) {
-        this->unk194 -= 1;
-        if (this->unk194 == 0) {
+    if (this->unk_194 > 0) {
+        this->unk_194--;
+        if (this->unk_194 == 0) {
             this->actor.draw = ObjTsubo_Draw;
         }
     } else {
         scale = sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)].scale;
-        if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f) != 0) {
-            this->actor.flags |= 0x04000000;
+        if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f)) {
+            this->actor.flags |= ACTOR_FLAG_4000000;
             func_809289B4(this);
         }
-        this->actor.scale.y = this->actor.scale.x;
-        this->actor.scale.z = this->actor.scale.x;
+        this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
     }
 }
 
@@ -689,28 +673,28 @@ void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.shape.shadowDraw = NULL;
     }
-    if (this->unk197 == 0) {
-        if (this->unk198 != 0) {
+    if (!this->unk_197) {
+        if (this->unk_198) {
             globalCtx->actorCtx.unk5 |= 8;
-            this->actor.flags |= 0x10;
+            this->actor.flags |= ACTOR_FLAG_10;
         }
-        if (this->unk19A >= 0) {
-            if (this->unk19A == 0) {
+        if (this->unk_19A >= 0) {
+            if (this->unk_19A == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
-                    this->unk19A = Rand_S16Offset(40, 80);
+                    this->unk_19A = Rand_S16Offset(40, 80);
                 } else {
-                    this->unk19A = 8;
+                    this->unk_19A = 8;
                 }
             } else {
-                this->unk19A -= 1;
+                this->unk_19A--;
             }
         }
     }
 }
 
-void ObjTsubo_Draw(Actor* this, GlobalContext* globalCtx2) {
+void ObjTsubo_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = (GlobalContext*)globalCtx2;
 
-    Gfx_DrawDListOpa(globalCtx, sPotTypeData[OBJ_TSUBO_GET_TYPE(this)].modelDL);
+    Gfx_DrawDListOpa(globalCtx, sPotTypeData[OBJ_TSUBO_GET_TYPE(thisx)].modelDL);
 }

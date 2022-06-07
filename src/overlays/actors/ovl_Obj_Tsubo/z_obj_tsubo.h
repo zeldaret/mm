@@ -7,30 +7,29 @@ struct ObjTsubo;
 
 typedef void (*ObjTsuboActionFunc)(struct ObjTsubo*, GlobalContext*);
 
-typedef void (*ObjTsuboUnkFunc)(struct ObjTsubo* this, GlobalContext* globalCtx);
+typedef void (*ObjTsuboUnkFunc)(struct ObjTsubo*, GlobalContext*);
 
 typedef struct ObjTsubo {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjTsuboActionFunc actionFunc;
     /* 0x0148 */ ColliderCylinder cylinderCollider;
-    /* 0x0194 */ s8 unk194;
-    /* 0x0195 */ s8 unk195;
+    /* 0x0194 */ s8 unk_194;
+    /* 0x0195 */ s8 unk_195;
     /* 0x0196 */ s8 homeRoom;
-    /* 0x0197 */ s8 unk197;
-    /* 0x0198 */ s8 unk198;
+    /* 0x0197 */ s8 unk_197;
+    /* 0x0198 */ s8 unk_198;
     /* 0x0199 */ s8 objBankIdx;
-    /* 0x019A */ s8 unk19A;
-    /* 0x019B */ u8 pad19B;
-
+    /* 0x019A */ s8 unk_19A;
+    /* 0x019B */ u8 unk_19B;
 } ObjTsubo; // size = 0x19C
 
 extern const ActorInit Obj_Tsubo_InitVars;
 
 typedef enum {
-    OBJ_TSUBO_TYPE_0,
-    OBJ_TSUBO_TYPE_1,
-    OBJ_TSUBO_TYPE_2,
-    OBJ_TSUBO_TYPE_3,
+    /* 0 */ OBJ_TSUBO_TYPE_0,
+    /* 1 */ OBJ_TSUBO_TYPE_1,
+    /* 2 */ OBJ_TSUBO_TYPE_2,
+    /* 3 */ OBJ_TSUBO_TYPE_3
 } ObjTsuboType;
 
 #define OBJ_TSUBO_P000F(thisx) ((thisx)->params & 0x0F)
