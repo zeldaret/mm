@@ -214,7 +214,7 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* arg0) {
 }
 
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* arg0, GlobalContext* arg1) {
-    arg0->unk_1AC[0] += -1;
+    arg0->unk_1AC[0]--;
     if ((s32)arg0->unk_1AC[0] <= 0) {
         ActorCutscene_Stop((s16)arg0->dyna.actor.cutscene);
         Actor_MarkForDeath(&arg0->dyna.actor);
