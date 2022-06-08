@@ -551,7 +551,7 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10); // camera shake?
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
             // spawn crator on floor
