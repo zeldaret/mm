@@ -175,7 +175,7 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
                 phi_fp = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             if (globalCtx) {}
             temp_f20 = (f32)ptr->unk_02 / ptr->unk_01;
@@ -185,9 +185,9 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, D_80BF5960[ptr->unk_00 - 4].r, D_80BF5960[ptr->unk_00 - 4].g,
                            D_80BF5960[ptr->unk_00 - 4].b, 0);
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -195,7 +195,7 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF5934[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
@@ -368,7 +368,6 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
     return false;
 }
 
-#ifdef NON_MATCHING
 s32 func_80BF43FC(EnRg* this) {
     Vec3f sp9C;
     Vec3f sp90;
@@ -378,11 +377,11 @@ s32 func_80BF43FC(EnRg* this) {
     f32 phi_f20 = 0.0f;
     s32 temp_s7 = ENRG_GET_7F80(&this->actor);
     s32 phi_s4 = -1;
-    s16 phi_s6 = 0;
     s32 temp_s5 = this->unk_344;
+    s16 phi_s6 = 0;
     s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
 
-    while (true) {
+    do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
         if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
@@ -393,17 +392,10 @@ s32 func_80BF43FC(EnRg* this) {
             phi_s4 = phi_s0;
         }
         phi_s0++;
-        if ((temp_s5 == 18) || (phi_s0 >= D_80BF57E4[temp_s5 + 1][temp_s7])) {
-            break;
-        }
-    }
+    } while ((temp_s5 != 18) && (phi_s0 < D_80BF57E4[temp_s5 + 1][temp_s7]));
 
     return phi_s4;
 }
-#else
-s32 func_80BF43FC(EnRg* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rg/func_80BF43FC.s")
-#endif
 
 s32 func_80BF4560(EnRg* this, GlobalContext* globalCtx) {
     s32 temp_v0 = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -812,14 +804,14 @@ void func_80BF547C(EnRg* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
-                             this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
+                     this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_0091A8);

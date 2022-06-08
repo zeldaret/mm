@@ -202,8 +202,8 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
         sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        __sinf(0.0f);
-        __cosf(0.0f);
+        sinf(0.0f);
+        cosf(0.0f);
         arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
         arg1->z = Math_Acot2F(1.0f, -sp24 * sp20);
     }
@@ -1190,9 +1190,9 @@ void EnDg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == DOG_LIMB_HEAD) {
         if (this->actionFunc == func_8098BBEC) {
             sp20.x = 5000.0f;
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         } else if (this->actionFunc != func_8098BC54) {
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         }
     }
 }
@@ -1236,10 +1236,10 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->unk_294.x);
-    Matrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateXFApply(this->unk_294.x);
+    Matrix_RotateZF(this->unk_294.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDg_OverrideLimbDraw, EnDg_PostLimbDraw, &this->actor);

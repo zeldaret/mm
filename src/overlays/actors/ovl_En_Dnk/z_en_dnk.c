@@ -285,10 +285,10 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
-        Matrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
@@ -311,9 +311,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -361,10 +361,10 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
-        Matrix_CopyCurrentState(&sp5C);
-        func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_MultVec3f(&sp50, &sp44);
+        Matrix_Get(&sp5C);
+        Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->unk_28C & 0x10) {
@@ -388,9 +388,9 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

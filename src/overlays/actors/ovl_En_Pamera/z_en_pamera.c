@@ -546,7 +546,7 @@ void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnPamera* this = THIS;
 
     if (limbIndex == PAMERA_LIMB_HAIR) {
-        Matrix_MultiplyVector3fByState(&D_80BDA5F0, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BDA5F0, &this->actor.focus.pos);
     }
 }
 

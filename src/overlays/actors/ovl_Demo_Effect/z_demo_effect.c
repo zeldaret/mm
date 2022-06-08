@@ -297,15 +297,15 @@ void func_808CE078(Actor* thisx, GlobalContext* globalCtx2) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->unk_168[0], this->unk_168[1], this->unk_168[2], 255);
 
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-    Matrix_StatePush();
-    Matrix_InsertZRotation_s(sp46, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Push();
+    Matrix_RotateZS(sp46, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
 
-    Matrix_StatePop();
-    Matrix_InsertZRotation_s(sp46 * -1, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_RotateZS(sp46 * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);

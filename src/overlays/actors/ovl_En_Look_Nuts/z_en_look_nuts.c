@@ -334,11 +334,11 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
             effectPos.y += 30.0f;
             effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
-            Matrix_StatePush();
-            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_Push();
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelOffset.z = 20.0f;
-            Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-            Matrix_StatePop();
+            Matrix_MultVec3f(&effectVelOffset, &effectVel);
+            Matrix_Pop();
             if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;
                 if (gSaveContext.save.isNight) {

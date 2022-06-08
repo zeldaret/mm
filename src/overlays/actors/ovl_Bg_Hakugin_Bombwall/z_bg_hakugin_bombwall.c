@@ -121,10 +121,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#ifdef NON_MATCHING
-// Breaks relocs
 void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
-    s32 temp;
+    f32 temp;
     Vec3f spF0;
     Vec3f spE4;
     Vec3f spD8;
@@ -135,21 +133,21 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     s32 i;
     s32 j;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < 6; i++) {
-        temp = i + 1;
+        temp = (i + 1) * (80.0f / 3.0f);
         for (j = 0; j < ARRAY_COUNT(D_80ABD020); j++) {
             spD8.x = D_80ABD020[j] + (s32)((u32)Rand_Next() >> 0x1C);
-            spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + (temp * 26.666666f);
+            spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp;
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-            spCC.x = ((Rand_ZeroOne() - 0.5f) * 7.0f) + (spD8.x * 0.07777778f);
+            spCC.x = ((Rand_ZeroOne() - 0.5f) * 7.0f) + (spD8.x * (7.0f / 90.0f));
             spCC.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
             spCC.z = spD8.z * 0.3f;
 
-            Matrix_MultiplyVector3fByState(&spD8, &spF0);
-            Matrix_MultiplyVector3fByState(&spCC, &spE4);
+            Matrix_MultVec3f(&spD8, &spF0);
+            Matrix_MultVec3f(&spCC, &spE4);
 
             spF0.x += this->dyna.actor.world.pos.x;
             spF0.y += this->dyna.actor.world.pos.y;
@@ -176,9 +174,6 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABBFC0.s")
-#endif
 
 void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     s32 pad;
@@ -250,7 +245,7 @@ void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     spA8.y = 0.0f;
     spB4.y = 0.3f;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s1 = 0; i < 21; i++, phi_s1 += 0x618) {
         temp_f20 = Math_SinS(phi_s1);
@@ -266,9 +261,9 @@ void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         spB4.x = spA8.x * -0.09f;
         spB4.z = spA8.z * -0.09f;
 
-        Matrix_MultiplyVector3fByState(&sp9C, &spC0);
-        Matrix_MultiplyVector3fByState(&spA8, &spCC);
-        Matrix_MultiplyVector3fByState(&spB4, &spD8);
+        Matrix_MultVec3f(&sp9C, &spC0);
+        Matrix_MultVec3f(&spA8, &spCC);
+        Matrix_MultVec3f(&spB4, &spD8);
 
         spC0.x += this->dyna.actor.world.pos.x;
         spC0.y += this->dyna.actor.world.pos.y;

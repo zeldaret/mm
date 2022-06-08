@@ -734,9 +734,9 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.draw = EnBigpo_DrawLantern;
     this->actor.shape.shadowDraw = NULL;
-    this->actor.world.pos.x = this->drawMtxF.wx;
-    this->actor.world.pos.y = this->drawMtxF.wy;
-    this->actor.world.pos.z = this->drawMtxF.wz;
+    this->actor.world.pos.x = this->drawMtxF.xw;
+    this->actor.world.pos.y = this->drawMtxF.yw;
+    this->actor.world.pos.z = this->drawMtxF.zw;
 
     Actor_SetScale(&this->actor, 0.014f);
     this->actor.gravity = -1.0f;
@@ -1249,31 +1249,31 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 7) {
         // we scale the vec3f... then do nothing with it?
-        Matrix_GetStateTranslationAndScaledY(1400.0f, &unusedVec);
+        Matrix_MultVecY(1400.0f, &unusedVec);
         if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer > 18)) {
             if (this->actor.scale.x != 0.0f) {
                 Matrix_Scale(0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x,
                              1);
             }
         }
-        Matrix_CopyCurrentState(&this->drawMtxF);
+        Matrix_Get(&this->drawMtxF);
     }
 
     limbByte = D_80B65078[limbIndex];
     if (limbByte != -1) {
         if (limbByte < 3) {
-            Matrix_GetStateTranslation(&this->limbPos[limbByte]);
+            Matrix_MultZero(&this->limbPos[limbByte]);
         } else if (limbByte == 3) {
-            Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecX(3000.0f, &this->limbPos[limbByte]);
         } else if (limbByte == 4) {
-            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecY(-2000.0f, &this->limbPos[limbByte]);
         } else {
             v2ptr = &this->limbPos[limbByte + 1];
             v1ptr = D_80B65084;
-            Matrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecX(-4000.0f, &this->limbPos[limbByte]);
 
             for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
-                Matrix_MultiplyVector3fByState(v1ptr, v2ptr);
+                Matrix_MultVec3f(v1ptr, v2ptr);
                 v2ptr++;
                 v1ptr++;
             }
@@ -1315,7 +1315,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
                             this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
-    Matrix_SetCurrentState(&this->drawMtxF);
+    Matrix_Put(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         EnBigpo_DrawCircleFlames(&this->actor, globalCtx);
@@ -1344,7 +1344,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                               this->mainColor.a * 2);
 
-    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1386,7 +1386,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
-    Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+    Matrix_MultVecY(1400.0f, &vec2);
     Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
                             this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
 
@@ -1415,11 +1415,11 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
     MtxF* mtfxPtr;
     s32 i;
 
-    mtfxPtr = Matrix_GetCurrentState();
+    mtfxPtr = Matrix_GetCurrent();
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
+    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         fireRadius = 500;
@@ -1439,9 +1439,9 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
                                   this->fires[i].pos.z, 170, 255, 255, fireRadius);
-        mtfxPtr->wx = firePtr->pos.x;
-        mtfxPtr->wy = firePtr->pos.y;
-        mtfxPtr->wz = firePtr->pos.z;
+        mtfxPtr->xw = firePtr->pos.x;
+        mtfxPtr->yw = firePtr->pos.y;
+        mtfxPtr->zw = firePtr->pos.z;
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
