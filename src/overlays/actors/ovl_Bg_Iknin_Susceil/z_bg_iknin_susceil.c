@@ -76,7 +76,7 @@ void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 verticalM
     Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quake, countdown);
     if (arg4 == 1) {
-        Rumble_Request(10000.0f, 255, 20, 150);
+        Rumble_Request(SQ(100.0f), 255, 20, 150);
     } else if (arg4 == 2) {
         Rumble_Request(SQ(100.0f), 180, 20, 100);
     } else if (arg4 == 3) {
