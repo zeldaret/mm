@@ -624,75 +624,56 @@ void func_80AEAF8C(EnLiftNuts* this) {
     this->actionFunc = func_80AEAFA0;
 }
 
-#if 0
-void func_80AEAFA0(EnLiftNuts *this, GlobalContext *globalCtx) {
-    f32 sp30;
-    s16 sp2A;
-    s16 sp28;
-    s16 sp26;
-    PosRot *sp1C;
-    PosRot *sp18;
-    PosRot *temp_a0;
-    PosRot *temp_a1;
-    f32 temp_fv0;
-    f32 var_fv0;
-    s16 temp_v0;
-    s16 temp_v1;
-    s16 var_a3;
-    s16 var_v0;
-    s32 var_a3_2;
-
+void func_80AEAFA0(EnLiftNuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    
-    temp_a1 = &this->actor.home;
-    temp_a0 = &globalCtx->actorCtx.actorLists[2].first->world;
+    f32 dist;
+    f32 fv0;
+    s16 yaw;
+    s16 sp28;
+    s16 yawDiff;
+
     sp28 = this->actor.yawTowardsPlayer - 0x8000;
-    sp1C = temp_a0;
-    sp18 = temp_a1;
-    temp_v0 = Math_Vec3f_Yaw(&temp_a0->pos, &temp_a1->pos);
-    temp_v1 = temp_v0 - sp28;
-    sp26 = temp_v1;
-    sp2A = temp_v0;
-    temp_fv0 = Math_Vec3f_DistXZ(&temp_a0->pos, &temp_a1->pos);
-    var_a3 = sp2A;
-    if (this->actor.xzDistToPlayer < temp_fv0) {
-        var_v0 = temp_v1;
-        if (temp_v1 < 0) {
-            var_v0 = -temp_v1;
-        }
-        if (var_v0 < 0x2000) {
-            if (temp_v1 > 0) {
-                var_a3_2 = (var_a3 + 0x2000) << 0x10;
-            } else {
-                var_a3_2 = (var_a3 - 0x2000) << 0x10;
-            }
-            var_a3 = (s16) (var_a3_2 >> 0x10);
+    yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &this->actor.home.pos);
+    yawDiff = yaw - sp28;
+    dist = Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos);
+
+    if (this->actor.xzDistToPlayer < dist) {
+        if (ABS_ALT(yawDiff) < 0x2000) {
+            yaw = (yawDiff > 0) ? (yaw + 0x2000) : (yaw - 0x2000);
         }
     }
-    if (temp_fv0 < 5.0f) {
-        var_fv0 = 10.0f;
-    } else if (temp_fv0 < 30.0f) {
-        var_fv0 = 40.0f;
+    if (dist < 5.0f) {
+        fv0 = 10.0f;
+    } else if (dist < 30.0f) {
+        fv0 = 40.0f;
     } else {
-        var_fv0 = 80.0f;
+        fv0 = 80.0f;
     }
+
     globalCtx->actorCtx.unk268 = 1;
-    sp30 = temp_fv0;
-    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, var_fv0, var_a3);
-    if (temp_fv0 < 5.0f) {
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, fv0, yaw);
+    if (dist < 5.0f) {
         func_80AEA0B4(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAFA0.s")
-#endif
 
 void func_80AEB114(EnLiftNuts* this) {
     func_801A2BB8(NA_BGM_MINI_GAME_2);
     this->actionFunc = func_80AEB148;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB148.s")
+void func_80AEB148(EnLiftNuts *this, GlobalContext *globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->stateFlags3 & 0x200) {
+        this->actor.speedXZ = 2.0f;
+        gSaveContext.eventInf[3] |= 0x10;
+        func_8010E9F0(4, 0);
+        func_80AE9B4C(1, 2);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
+        func_80AEB280(this);
+    }
+}
 
 void func_80AEB1C8(EnLiftNuts* this) {
     this->actor.speedXZ = 2.0f;
@@ -702,7 +683,18 @@ void func_80AEB1C8(EnLiftNuts* this) {
     this->actionFunc = func_80AEB230;
 }
 
+#if 0
+void func_80AEB230(EnLiftNuts *this, GlobalContext *globalCtx) {
+    if ((gSaveContext.unk_3DE0[4] != 0) || (gSaveContext.unk_3DE0[5] != 0)) {
+        Player* player = GET_PLAYER(globalCtx);
+
+        player->stateFlags1 &= ~0x20;
+        func_80AEB280(this);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB230.s")
+#endif
 
 void func_80AEB280(EnLiftNuts* this) {
     this->actionFunc = func_80AEB294;
