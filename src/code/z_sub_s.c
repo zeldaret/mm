@@ -216,14 +216,14 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 /**
  * Fills the knot vector to be used with time paths
  *
- * This default knots is just an array of the point indicies as floats,
- * offset to start at the index of the interpolation order minus 1.
+ * The default knot vector just pads with `order` additional knots of the first knot at the front and of the last knot
+ * at the end.
  *
  * @param[out] knots an array of values that are used to compute the progress and the individual weights
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
  * @param[in] numPoints the number of points to fill, generally the path count + order
  *
- * @note `SubS_TimePathing_Update` assumes order to be 3, see SUBS_TIME_PATHING_ORDER
+ * @note SubS_TimePathing_Update() assumes order to be 3, see SUBS_TIME_PATHING_ORDER
  */
 void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
     s32 i;
@@ -246,7 +246,7 @@ void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
  * @param[in] totalTime how much time the path should take to travel
  * @param[in] pathCount the path count
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
- * @param[in] knots see `SubS_TimePathing_FillKnots`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  *
  * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
  */
@@ -262,7 +262,7 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
         return 0;
     }
 
-    // When using the knots from `SubS_TimePathing_FillKnots` these nested loops seem to simplify to
+    // When using the knots from SubS_TimePathing_FillKnots() these nested loops seem to simplify to
     // *progress = (f32)elapsedTime / (f32)waypointTime;
     waypointTimeInv = 1.0f / waypointTime;
     k = 0;
@@ -285,9 +285,9 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
  * Seems to use some kind of B-Spline interpolation algorithm
  *
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
- * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
  * @param[in] waypoint the current waypoint
- * @param[in] knots see `SubS_TimePathing_FillKnots`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  * @param[out] weights how much to weight each point considered
  */
 void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 knots[], f32 weights[]) {
@@ -326,13 +326,13 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
 /**
  * Computes the X and Z component of the position to move to in time based paths
  *
- * @param[out] x
- * @param[out] z
- * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[out] x computed x position
+ * @param[out] z computed z position
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] waypoint the current waypoint
  * @param[in] points the path's points
- * @param[in] knots see `SubS_TimePathing_FillKnots`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  */
 void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[],
                                          f32 knots[]) {
@@ -368,16 +368,20 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
  *  - Updating the time
  *
  * @param[in] path
- * @param[out] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[out] progress see SubS_TimePathing_ComputeProgress()
  * @param[in,out] elapsedTime how much time has passed
  * @param[in] waypointTime how much time per each waypoint
  * @param[in] totalTime how much time the path should take to travel
  * @param[in,out] waypoint the current waypoint, this and the previous two points will be used to compute the targetPos
- * @param[in] knots see `SubS_TimePathing_FillKnots`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  * @param[out] targetPos the computed position to move to
  * @param[in] timeSpeed how fast time moves
  *
  * @return s32 returns true when the end has been reached.
+ *
+ * @note this system/function makes a couple assumptions about the order used:
+ *      1. the order is assumed to be 3,  see SUBS_TIME_PATHING_ORDER
+ *      2. even if SUBS_TIME_PATHING_ORDER is updated, the order can only be a max of 10
  */
 s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint,
                             f32 knots[], Vec3f* targetPos, s32 timeSpeed) {
@@ -733,7 +737,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
  * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to move forward
  * @param progress the progress towards a given waypoint, used to compute the weights
- * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
+ * @param direction the direction along the path to move, 1 for forwards, anything else for backwards
  * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
  *
  * @return s32 true if actor reached the end of the path in this iteration, false otherwise
@@ -1040,7 +1044,7 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
  * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
- * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
+ * @param[in] options various options to adjust how the actor turns, see SubS_ComputeTurnToPointRot()
  */
 s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
                      TurnOptionsSet* options) {

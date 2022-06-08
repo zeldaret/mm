@@ -73,10 +73,10 @@ void func_80953B40(BgIngate* this) {
     s32 temp;
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
-        this->timePathTotalTime = 0xFA0;
+        this->timePathTotalTime = 4 * 1000;
         this->timePathTimeSpeed = 4;
     } else {
-        this->timePathTotalTime = 0x7D0;
+        this->timePathTotalTime = 1 * 2000;
         this->timePathTimeSpeed = 1;
     }
     temp = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
