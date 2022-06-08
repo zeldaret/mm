@@ -16,26 +16,36 @@ void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AEA910(EnLiftNuts* this, GlobalContext* globalCtx);
+
+s32 func_80AE9B8C(void);
 void func_80AE9F70(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA044(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA0B4(EnLiftNuts* this);
 void func_80AEA128(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA1A0(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEABF0(EnLiftNuts* this);
 void func_80AEAC64(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEACF8(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEAEAC(EnLiftNuts* this);
 void func_80AEAF14(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEAF8C(EnLiftNuts* this);
 void func_80AEAFA0(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB114(EnLiftNuts* this);
 void func_80AEB148(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB1C8(EnLiftNuts* this);
 void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB280(EnLiftNuts* this);
 void func_80AEB294(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB428(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB584(EnLiftNuts* this);
 void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB684(EnLiftNuts* this);
 void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB828(EnLiftNuts* this);
 void func_80AEB8A4(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB934(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB974(EnLiftNuts* this);
 void func_80AEB9E0(EnLiftNuts* this, GlobalContext* globalCtx);
 
 const ActorInit En_Lift_Nuts_InitVars = {
@@ -255,11 +265,266 @@ void func_80AEA128(EnLiftNuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA1A0.s")
+void func_80AEA1A0(EnLiftNuts* this, GlobalContext* globalCtx) {
+    s32 pad;
+    OSTime time;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA7A4.s")
+    if (((func_80AE9B4C(0, 3) != 0) || (func_80AE9B4C(0, 1) != 0)) && (this->unk_34E == 1)) {
+        this->actor.flags |= 0x10000;
+    } else if (this->actor.xzDistToPlayer > 120.0f) {
+        func_80AE9FC8(this);
+    }
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (func_80AE9B4C(0, 0)) {
+                switch (CURRENT_DAY) {
+                    case 1:
+                        if ((gSaveContext.save.time >= 0xFAAB) || (gSaveContext.save.time < 0x4001)) {
+                            Message_StartTextbox(globalCtx, 0x27F7, &this->actor);
+                            this->textId = 0x27F7;
+                        } else if ((gSaveContext.save.weekEventReg[0xE] & 0x10) != 0) {
+                            Message_StartTextbox(globalCtx, 0x27D9, &this->actor);
+                            this->textId = 0x27D9;
+                        } else {
+                            Message_StartTextbox(globalCtx, 0x27DA, &this->actor);
+                            this->textId = 0x27DA;
+                        }
+                        break;
+                    case 2:
+                        if ((gSaveContext.save.time >= 0xFAAB) || (gSaveContext.save.time < 0x4001)) {
+                            Message_StartTextbox(globalCtx, 0x27F7U, &this->actor);
+                            this->textId = 0x27F7;
+                        } else {
+                            if ((gSaveContext.save.weekEventReg[0xE] & 0x20) != 0) {
+                                Message_StartTextbox(globalCtx, 0x27DB, &this->actor);
+                                this->textId = 0x27DB;
+                                break;
+                            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEA910.s")
+                            if ((gSaveContext.save.weekEventReg[0xE] & 0x10) != 0) {
+                                Message_StartTextbox(globalCtx, 0x27DC, &this->actor);
+                                this->textId = 0x27DC;
+                            } else {
+                                Message_StartTextbox(globalCtx, 0x27DD, &this->actor);
+                                this->textId = 0x27DD;
+                            }
+                        }
+                        break;
+                    case 3:
+                        if ((gSaveContext.save.time >= 0xFAAB) || (gSaveContext.save.time < 0x4001)) {
+                            Message_StartTextbox(globalCtx, 0x27F7, &this->actor);
+                            this->textId = 0x27F7;
+                        } else if ((gSaveContext.save.weekEventReg[0xE] & 0x40) != 0) {
+                            Message_StartTextbox(globalCtx, 0x27DE, &this->actor);
+                            this->textId = 0x27DE;
+                        } else if (func_80AE9B8C() == 2) {
+                            Message_StartTextbox(globalCtx, 0x27DF, &this->actor);
+                            this->textId = 0x27DF;
+                        } else if (func_80AE9B8C() == 1) {
+                            Message_StartTextbox(globalCtx, 0x27E0, &this->actor);
+                            this->textId = 0x27E0;
+                        } else {
+                            Message_StartTextbox(globalCtx, 0x27E1, &this->actor);
+                            this->textId = 0x27E1;
+                            break;
+                        }
+                        break;
+                }
+            } else if (func_80AE9B4C(0, 3)) {
+                if (Flags_GetSwitch(globalCtx, 0x40)) {
+                    Flags_UnsetSwitch(globalCtx, 0x40);
+                    Inventory_SaveDekuPlaygroundHighScore(4);
+                    if (((gSaveContext.save.weekEventReg[0xE] & 0x10)) &&
+                        ((gSaveContext.save.weekEventReg[0xE] & 0x20)) && ((CURRENT_DAY) == 3)) {
+                        this->unk_354 = 0;
+                        Message_StartTextbox(globalCtx, 0x27F4, &this->actor);
+                        this->textId = 0x27F4;
+                    } else {
+                        Message_StartTextbox(globalCtx, 0x27EE, &this->actor);
+                        this->textId = 0x27EE;
+                    }
+                } else {
+                    time = gSaveContext.unk_3DE0[4];
+                    if (((time >= (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1])))) {
+                        if (gSaveContext.unk_3DE0[4] < 0x2EE0) {
+                            Message_StartTextbox(globalCtx, 0x27F9, &this->actor);
+                            this->textId = 0x27F9;
+                        } else {
+                            Message_StartTextbox(globalCtx, 0x27EB, &this->actor);
+                            this->textId = 0x27EB;
+                        }
+                    } else {
+                        Message_StartTextbox(globalCtx, 0x27ED, &this->actor);
+                        this->textId = 0x27ED;
+                    }
+                }
+                Flags_UnsetSwitch(globalCtx, 0x41);
+                this->actor.flags &= 0xFFFEFFFF;
+            } else if (Flags_GetSwitch(globalCtx, 0x42) == 0) {
+                Flags_SetSwitch(globalCtx, 0x42);
+                Message_StartTextbox(globalCtx, 0x27E6, &this->actor);
+                this->textId = 0x27E6;
+            } else {
+                switch (CURRENT_DAY) {
+                    case 1:
+                        Message_StartTextbox(globalCtx, 0x27E7, &this->actor);
+                        this->textId = 0x27E7;
+                        break;
+                    case 2:
+                        Message_StartTextbox(globalCtx, 0x27E8, &this->actor);
+                        this->textId = 0x27E8;
+                        break;
+                    case 3:
+                        Message_StartTextbox(globalCtx, 0x27E9, &this->actor);
+                        this->textId = 0x27E9;
+                        break;
+                }
+            }
+        } else {
+            Message_StartTextbox(globalCtx, 0x27D8, &this->actor);
+            this->textId = 0x27D8;
+        }
+        func_80AEABF0(this);
+    } else if ((func_80AE9AC4(this, 0)) || (this->unk_34E == 1)) {
+        if (this->unk_34E == 1) {
+            func_800B8614(&this->actor, globalCtx, 200.0f);
+        } else if (this->actor.playerHeightRel >= -13.0f) {
+            func_800B8614(&this->actor, globalCtx, 100.0f);
+        }
+    }
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000, 0x500);
+}
+
+void func_80AEA7A4(EnLiftNuts* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    if (Message_ShouldAdvance(globalCtx)) {
+        switch (this->textId) {
+            case 0x27E2:
+                if (globalCtx->msgCtx.choiceIndex == 0) {
+                    if (gSaveContext.save.playerData.rupees >= 10) {
+                        func_8019F208();
+                        Message_StartTextbox(globalCtx, 0x27E5, &this->actor);
+                        this->textId = 0x27E5;
+                        func_801159EC(-10);
+                    } else {
+                        play_sound(0x4806);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+                        Message_StartTextbox(globalCtx, 0x27E4, &this->actor);
+                        this->textId = 0x27E4;
+                    }
+                } else {
+                    func_8019F230();
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+                    Message_StartTextbox(globalCtx, 0x27E3, &this->actor);
+                    this->textId = 0x27E3;
+                }
+                break;
+            case 0x238D:
+                if (globalCtx->msgCtx.choiceIndex == 0) {
+                    player->stateFlags1 |= 0x20;
+                    func_80AEB1C8(this);
+                } else {
+                    func_80AE9FC8(this);
+                }
+                break;
+            default:
+                func_80AE9FC8(this);
+                break;
+        }
+    }
+}
+
+void func_80AEA910(EnLiftNuts* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (Message_ShouldAdvance(globalCtx)) {
+        switch (this->textId) {
+            case 0x27D9:
+            case 0x27DA:
+            case 0x27DB:
+            case 0x27DC:
+            case 0x27DD:
+            case 0x27DE:
+            case 0x27DF:
+            case 0x27E0:
+            case 0x27E1:
+                Message_StartTextbox(globalCtx, 0x27E2, &this->actor);
+                this->textId = 0x27E2;
+                break;
+            case 0x27E3:
+            case 0x27E4:
+                func_80AE9FC8(this);
+                break;
+            case 0x27E5:
+                func_801477B4(globalCtx);
+                player->stateFlags1 |= 0x20;
+                func_80AEAEAC(this);
+                break;
+            case 0x27E6:
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+                switch (CURRENT_DAY) {
+                    case 1:
+                        Message_StartTextbox(globalCtx, 0x27E7, &this->actor);
+                        this->textId = 0x27E7;
+                        break;
+                    case 2:
+                        Message_StartTextbox(globalCtx, 0x27E8, &this->actor);
+                        this->textId = 0x27E8;
+                        break;
+                    case 3:
+                        Message_StartTextbox(globalCtx, 0x27E9, &this->actor);
+                        this->textId = 0x27E9;
+                        break;
+                }
+                break;
+            case 0x27E7:
+            case 0x27E8:
+            case 0x27E9:
+                Message_StartTextbox(globalCtx, 0x27FA, &this->actor);
+                this->textId = 0x27FA;
+                break;
+            case 0x27FA:
+                func_801477B4(globalCtx);
+                player->stateFlags1 &= ~0x20;
+                func_80AEB114(this);
+                break;
+            case 0x27EE:
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 0x10);
+                Message_StartTextbox(globalCtx, 0x27EF, &this->actor);
+                this->textId = 0x27EF;
+                break;
+            case 0x27EF:
+                func_801477B4(globalCtx);
+                func_80AEB584(this);
+                func_80AEB598(this, globalCtx);
+                break;
+            case 0x27F1:
+                Message_StartTextbox(globalCtx, 0x27F2, &this->actor);
+                this->textId = 0x27F2;
+                break;
+            case 0x27F2:
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+                Message_StartTextbox(globalCtx, 0x27F3, &this->actor);
+                this->textId = 0x27F3;
+                break;
+            case 0x27F4:
+                func_801477B4(globalCtx);
+                func_80AEB584(this);
+                func_80AEB598(this, globalCtx);
+                break;
+            case 0x27F5:
+                func_801477B4(globalCtx);
+                func_80AE9B4C(1, 0);
+                player->stateFlags1 &= ~0x20;
+                func_80AE9FC8(this);
+                break;
+            case 0x27F9:
+                Message_StartTextbox(globalCtx, 0x27ED, &this->actor);
+                this->textId = 0x27ED;
+                break;
+        }
+    }
+}
 
 void func_80AEABF0(EnLiftNuts* this) {
     this->unk_354 = 0;
@@ -273,7 +538,7 @@ void func_80AEABF0(EnLiftNuts* this) {
     this->actionFunc = func_80AEAC64;
 }
 
-void func_80AEAC64(EnLiftNuts *this, GlobalContext *globalCtx) {
+void func_80AEAC64(EnLiftNuts* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if ((this->textId == 0x27EE) || (this->textId == 0x27F4) || (this->textId == 0x27F5)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 10);
@@ -284,7 +549,56 @@ void func_80AEAC64(EnLiftNuts *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEACF8.s")
+void func_80AEACF8(EnLiftNuts* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    switch (Message_GetState(&globalCtx->msgCtx)) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            break;
+        case 4:
+            func_80AEA7A4(this, globalCtx);
+            break;
+        case 5:
+            func_80AEA910(this, globalCtx);
+            break;
+        case 6:
+            if (Message_ShouldAdvance(globalCtx)) {
+                player->stateFlags1 &= ~0x20;
+                func_80AE9FC8(this);
+                func_80AE9AC4(this, 2);
+                if (func_80AE9B4C(0, 3)) {
+                    func_80AE9B4C(1, 0);
+                }
+            }
+            break;
+    }
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x2000, 0x500);
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        switch (this->textId) {
+            case 0x27EE:
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 11);
+                break;
+            case 0x27EF:
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 1);
+                break;
+            case 0x27F4:
+                if (this->unk_354 == 0) {
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 11);
+                    this->unk_354++;
+                } else if (this->unk_354 == 4) {
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80AEBD50, 12);
+                    this->unk_354 = 0;
+                } else {
+                    this->unk_354++;
+                }
+                break;
+        }
+    }
+    func_80AEB974(this);
+}
 
 void func_80AEAEAC(EnLiftNuts* this) {
     this->actor.speedXZ = 2.0f;
@@ -294,13 +608,13 @@ void func_80AEAEAC(EnLiftNuts* this) {
     this->actionFunc = func_80AEAF14;
 }
 
-void func_80AEAF14(EnLiftNuts *this, GlobalContext *globalCtx) {
+void func_80AEAF14(EnLiftNuts* this, GlobalContext* globalCtx) {
     f32 dist;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 10, 0x1000, 0x500);
     dist = Math_Vec3f_StepTo(&this->actor.world.pos, &this->vec_1D8, this->actor.speedXZ);
     this->actor.world.pos.y += this->actor.gravity;
-    
+
     if (dist == 0.0f) {
         func_80AEAF8C(this);
     }
@@ -310,17 +624,89 @@ void func_80AEAF8C(EnLiftNuts* this) {
     this->actionFunc = func_80AEAFA0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAFA0.s")
+#if 0
+void func_80AEAFA0(EnLiftNuts *this, GlobalContext *globalCtx) {
+    f32 sp30;
+    s16 sp2A;
+    s16 sp28;
+    s16 sp26;
+    PosRot *sp1C;
+    PosRot *sp18;
+    PosRot *temp_a0;
+    PosRot *temp_a1;
+    f32 temp_fv0;
+    f32 var_fv0;
+    s16 temp_v0;
+    s16 temp_v1;
+    s16 var_a3;
+    s16 var_v0;
+    s32 var_a3_2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB114.s")
+    Player* player = GET_PLAYER(globalCtx);
+    
+    temp_a1 = &this->actor.home;
+    temp_a0 = &globalCtx->actorCtx.actorLists[2].first->world;
+    sp28 = this->actor.yawTowardsPlayer - 0x8000;
+    sp1C = temp_a0;
+    sp18 = temp_a1;
+    temp_v0 = Math_Vec3f_Yaw(&temp_a0->pos, &temp_a1->pos);
+    temp_v1 = temp_v0 - sp28;
+    sp26 = temp_v1;
+    sp2A = temp_v0;
+    temp_fv0 = Math_Vec3f_DistXZ(&temp_a0->pos, &temp_a1->pos);
+    var_a3 = sp2A;
+    if (this->actor.xzDistToPlayer < temp_fv0) {
+        var_v0 = temp_v1;
+        if (temp_v1 < 0) {
+            var_v0 = -temp_v1;
+        }
+        if (var_v0 < 0x2000) {
+            if (temp_v1 > 0) {
+                var_a3_2 = (var_a3 + 0x2000) << 0x10;
+            } else {
+                var_a3_2 = (var_a3 - 0x2000) << 0x10;
+            }
+            var_a3 = (s16) (var_a3_2 >> 0x10);
+        }
+    }
+    if (temp_fv0 < 5.0f) {
+        var_fv0 = 10.0f;
+    } else if (temp_fv0 < 30.0f) {
+        var_fv0 = 40.0f;
+    } else {
+        var_fv0 = 80.0f;
+    }
+    globalCtx->actorCtx.unk268 = 1;
+    sp30 = temp_fv0;
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, var_fv0, var_a3);
+    if (temp_fv0 < 5.0f) {
+        func_80AEA0B4(this);
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEAFA0.s")
+#endif
+
+void func_80AEB114(EnLiftNuts* this) {
+    func_801A2BB8(NA_BGM_MINI_GAME_2);
+    this->actionFunc = func_80AEB148;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB148.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB1C8.s")
+void func_80AEB1C8(EnLiftNuts* this) {
+    this->actor.speedXZ = 2.0f;
+    gSaveContext.eventInf[3] |= 0x10;
+    func_8010E9F0(4, 0);
+    func_80AE9B4C(1, 2);
+    this->actionFunc = func_80AEB230;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB230.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB280.s")
+void func_80AEB280(EnLiftNuts* this) {
+    this->actionFunc = func_80AEB294;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB294.s")
 
