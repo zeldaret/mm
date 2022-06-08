@@ -214,16 +214,16 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 }
 
 /**
- * Fills the knot vector to be used with time paths
+ * Fills the knot array to be used with time paths
  *
- * The default knot vector just pads with `order` additional knots of the first knot at the front and of the last knot
+ * The default knot array just pads with `order` duplicate knots of the first knot at the front and of the last knot
  * at the end.
  *
  * @param[out] knots an array of values that are used to compute the progress and the individual weights
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
  * @param[in] numPoints the number of points to fill, generally the path count + order
  *
- * @note SubS_TimePathing_Update() assumes order to be 3, see SUBS_TIME_PATHING_ORDER
+ * @note Same note as SubS_TimePathing_Update()
  */
 void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
     s32 i;
@@ -237,6 +237,12 @@ void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
     }
 }
 
+typedef enum {
+    /* 0 */ SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR,
+    /* 1 */ SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH,
+    /* 2 */ SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+} SUBS_TIME_PATHING_PROGRESS_STATUS;
+
 /**
  * Computes the progress to be used with time paths
  *
@@ -248,7 +254,7 @@ void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
  * @param[in] knots see SubS_TimePathing_FillKnots()
  *
- * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
+ * @return see SUBS_TIME_PATHING_PROGRESS_STATUS
  */
 s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
                                      s32 order, f32 knots[]) {
@@ -259,7 +265,7 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
 
     *progress = 0.0f;
     if ((waypointTime <= 0) || (elapsedTime < 0)) {
-        return 0;
+        return SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR;
     }
 
     // When using the knots from SubS_TimePathing_FillKnots() these nested loops seem to simplify to
@@ -276,7 +282,8 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
         }
     }
 
-    return (elapsedTime == totalTime) ? 2 : 1;
+    return (elapsedTime == totalTime) ? SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+                                      : SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH;
 }
 
 /**
@@ -379,7 +386,7 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
  *
  * @return s32 returns true when the end has been reached.
  *
- * @note this system/function makes a couple assumptions about the order used:
+ * @note This system/function makes a couple assumptions about the order used:
  *      1. the order is assumed to be 3,  see SUBS_TIME_PATHING_ORDER
  *      2. even if SUBS_TIME_PATHING_ORDER is updated, the order can only be a max of 10
  */
@@ -392,19 +399,19 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
     s32 reachedEnd = false;
 
     if (*waypoint >= path->count) {
-        state = 2;
+        state = SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END;
     } else {
         state = SubS_TimePathing_ComputeProgress(progress, *elapsedTime, waypointTime, totalTime, path->count,
                                                  SUBS_TIME_PATHING_ORDER, knots);
     }
 
     switch (state) {
-        case 1: // Haven't reached the end of the path
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH:
             reachedEnd = false;
             SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
                                                 *waypoint, points, knots);
             break;
-        case 2: // Have reached the end of the path
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END:
             endX = points[path->count - 1].x;
             endZ = points[path->count - 1].z;
             targetPos->x = endX * 1;
@@ -431,6 +438,8 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
  * @param[in] path
  * @param[in] waypoint the current waypoint, this and the previous two points will be used to compute the target pos
  * @param[out] targetPos the computed position to move to, only the Y component has meaning
+ *
+ * @note Same note as SubS_TimePathing_Update()
  */
 void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* targetPos) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -730,6 +739,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
     return true;
 }
 
+// WeightPathing System is completely unused
 /**
  * Moves an actor based on a weight based algorithm that takes into account 4 points along the path
  *
@@ -741,8 +751,6 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
  * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
  *
  * @return s32 true if actor reached the end of the path in this iteration, false otherwise
- *
- * @note this function is unused
  */
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart) {
     Vec3f worldPos = actor->world.pos;
