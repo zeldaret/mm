@@ -3,17 +3,21 @@
 
 #include "global.h"
 
+#define OBJBOAT_GET_PARAMS (this->dyna.actor.params)
+#define OBJBOAT_GET_07 (this->dyna.actor.params >> 0x07)
+#define OBJBOAT_GET_4000 (this->dyna.actor.params & 0x4000)
+
 struct ObjBoat;
 
 typedef struct ObjBoat {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ u8 unk15C;
-    /* 0x15D */ s8 unk15D;
-    /* 0x15E */ u8 unk15E;
-    /* 0x15F */ u8 unk15F;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ UNK_TYPE1 pad162;
-    /* 0x163 */ u8 unk163;
+    /* 0x15C */ u8 posX;
+    /* 0x15D */ s8 rotY;
+    /* 0x15E */ u8 unk_15E;
+    /* 0x15F */ u8 unk_15F;
+    /* 0x160 */ s16 unk_160;
+    /* 0x162 */ UNK_TYPE1 pad_162;
+    /* 0x163 */ u8 unk_163;
     /* 0x164 */ Vec3s* unk164;
 } ObjBoat;
 
