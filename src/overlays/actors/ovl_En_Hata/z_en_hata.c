@@ -66,20 +66,20 @@ void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->skelAnime.playSpeed += 1.0f + Rand_ZeroFloat(1.25f);
 
     sp34.x = globalCtx->envCtx.windDir.x;
-    sp34.y = (globalCtx->envCtx.windDir.y) + ((1.0f - phi_fv0) * 240.0f);
+    sp34.y = globalCtx->envCtx.windDir.y + ((1.0f - phi_fv0) * 240.0f);
     sp34.y = CLAMP(sp34.y, -118.0f, 118.0f);
     sp34.z = globalCtx->envCtx.windDir.z;
 
     phi_fv0 = CLAMP(phi_fv0, 0.1f, 0.4f);
-    Math_ApproachF(&this->unk2A4.x, sp34.x, phi_fv0, 1000.0f);
-    Math_ApproachF(&this->unk2A4.y, sp34.y, phi_fv0, 1000.0f);
-    Math_ApproachF(&this->unk2A4.z, sp34.z, phi_fv0, 1000.0f);
+    Math_ApproachF(&this->unk_2A4.x, sp34.x, phi_fv0, 1000.0f);
+    Math_ApproachF(&this->unk_2A4.y, sp34.y, phi_fv0, 1000.0f);
+    Math_ApproachF(&this->unk_2A4.z, sp34.z, phi_fv0, 1000.0f);
 
-    sp34 = this->unk2A4;
-    this->unk29C = Math_Vec3f_Pitch(&gZeroVec3f, &sp34);
-    this->unk29C = -this->unk29C;
-    this->unk2A0 = Math_Vec3f_Yaw(&gZeroVec3f, &sp34);
-    this->unk2A0 += -0x4000;
+    sp34 = this->unk_2A4;
+    this->unk_29C = Math_Vec3f_Pitch(&gZeroVec3f, &sp34);
+    this->unk_29C = -this->unk_29C;
+    this->unk_2A0 = Math_Vec3f_Yaw(&gZeroVec3f, &sp34);
+    this->unk_2A0 += -0x4000;
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -87,8 +87,8 @@ s32 func_8089EC68(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     EnHata* this = THIS;
 
     if ((limbIndex == 4) || (limbIndex == 13)) {
-        rot->y += this->unk29C;
-        rot->z += this->unk2A0;
+        rot->y += this->unk_29C;
+        rot->z += this->unk_2A0;
     }
     return false;
 }
