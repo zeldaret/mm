@@ -172,6 +172,6 @@
         <DList Name="gDmZl4FlutePtrDl" Offset="0x24E40" />
         <Texture Name="gDmZl4FluteHoleTex" OutName="flute_hole" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
         
-        <TextureAnimation Name="gDmZlEmptyTextAnim" Offset="0x24F50" />
+        <TextureAnimation Name="gDmZlEmptyTexAnim" Offset="0x24F50" />
     </File>
 </Root>
