@@ -166,7 +166,7 @@ void DmZl_UpdateFace(DmZl* this) {
     switch (this->nextEyeState) {
         case 0:
             if (this->blinkTimer == 0) {
-                this->blinkTimer = Rand_S16Offset(0x1E, 0x1E);
+                this->blinkTimer = Rand_S16Offset(30, 30);
             }
             break;
         case 1:
