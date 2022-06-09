@@ -21,8 +21,7 @@ void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx);
 void func_80C1EC60(DmBal* this, GlobalContext* globalCtx);
 void func_80C1ED0C(DmBal* this);
 void func_80C1ED64(DmBal* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, f32 arg4);
-s32 DmBal_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                           Actor* thisx); 
+s32 DmBal_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void DmBal_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit Dm_Bal_InitVars = {
@@ -38,35 +37,14 @@ const ActorInit Dm_Bal_InitVars = {
 };
 
 static AnimationInfo D_80C1F170[0xE] = {
-    { (AnimationHeader*)0x060005FC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x06000840, 1.5f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x06000840, 1.5f, 0.0f, 0.0f, 2, -4.0f },
-    { (AnimationHeader*)0x0600A7DC, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { (AnimationHeader*)0x0600B1E8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x0600B604, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x0600C498, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { (AnimationHeader*)0x0600C8D8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x0600C8D8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { (AnimationHeader*)0x0600C498, 1.0f, 23.0f, 0.0f, 2, -8.0f },
-    { (AnimationHeader*)0x0600D530, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x06000C78, 1.0f, 0.0f, 0.0f, 0, -2.0f },
-    { (AnimationHeader*)0x0600CB78, 1.0f, 0.0f, 0.0f, 0, -2.0f },
-    { (AnimationHeader*)0x06001804, 1.0f, 0.0f, 0.0f, 0, -2.0f },
+    { 0x060005FC, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { 0x06000840, 1.5f, 0.0f, 0.0f, 0, -8.0f },
+    { 0x06000840, 1.5f, 0.0f, 0.0f, 2, -4.0f }, { 0x0600A7DC, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { 0x0600B1E8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { 0x0600B604, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { 0x0600C498, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { 0x0600C8D8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { 0x0600C8D8, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { 0x0600C498, 1.0f, 23.0f, 0.0f, 2, -8.0f },
+    { 0x0600D530, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { 0x06000C78, 1.0f, 0.0f, 0.0f, 0, -2.0f },
+    { 0x0600CB78, 1.0f, 0.0f, 0.0f, 0, -2.0f }, { 0x06001804, 1.0f, 0.0f, 0.0f, 0, -2.0f },
 };
-
-static u16 D_80C1F2C0 = 0x63;
-Vec3s D_80C1F2C4 = { 0, 0x4110,0 };
-s32 D_80C1F2D0[4] = { 0x06006050, 0x060094D0, 0, 0 };
-
-
-
-
-extern UNK_TYPE D_060005FC;
-extern UNK_TYPE D_06001804;
-//extern Vec3f D_80C1F2C4;
-//extern FlexSkeletonHeader D_0600A6D0;
-//extern AnimationInfo D_80C1F170;
-//extern s32 D_80C1F2D0[];
 
 void DmBal_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmBal* this = THIS;
@@ -75,9 +53,9 @@ void DmBal_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->unk144, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC,
-                       &this->morphTable, &this->joinTable, 0x21);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, &this->morphTable,
+                       &this->joinTable, 0x21);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->unk334 = 0x3C;
     this->unk198 = 0;
     this->unk336 = 0;
@@ -85,7 +63,6 @@ void DmBal_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DmBal_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    DmBal* this = THIS;
 }
 
 void func_80C1EAC4(DmBal* this) {
@@ -95,11 +72,10 @@ void func_80C1EAC4(DmBal* this) {
 void func_80C1EAD8(DmBal* this, GlobalContext* globalCtx) {
 }
 
-//#ifdef NON_MATCHING // because of static u16 D_80C1F2C0
-
 void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx) {
-    static u16 D_80C1F2C0;
+    static u16 D_80C1F2C0 = 0x63;
     s32 actionIndex;
+
     if (Cutscene_CheckActorAction(globalCtx, 0x238)) {
         actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x238);
 
@@ -109,20 +85,20 @@ void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx) {
                 case 1:
                     this->unk336 = 0;
                     this->unk198 = 0;
-                    Actor_ChangeAnimationByInfo(&this->unk144, &D_80C1F170, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 0);
                     break;
                 case 2:
                     this->unk336 = 1;
-                    Actor_ChangeAnimationByInfo(&this->unk144, &D_80C1F170, 0xC);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 12);
                     break;
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->unk144, &D_80C1F170, 0xD);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 13);
                     break;
             }
         } else if (D_80C1F2C0 == 3) {
-            if (Animation_OnFrame(&this->unk144, 0.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 this->unk336 = 1;
-            } else if (Animation_OnFrame(&this->unk144, 29.0f)) {
+            } else if (Animation_OnFrame(&this->skelAnime, 29.0f)) {
                 this->unk336 = 0;
                 this->unk198 = 0;
             }
@@ -136,9 +112,9 @@ void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx) {
         D_80C1F2C0 = 0x63;
     }
 }
-//#else
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/func_80C1EAE8.s")
-//#endif
+
+Vec3f D_80C1F2C4 = { 0.0f, 9.0f, 0.0f }; // Data location necessary to match, as func_80C1EAE8 contains D_80C1F2C0
+u32 D_80C1F2D0[] = { 0x06006050, 0x060094D0, 0, 0 };
 
 void func_80C1EC60(DmBal* this, GlobalContext* globalCtx) {
     f32 temp_fv1;
@@ -176,23 +152,22 @@ void func_80C1ED0C(DmBal* this) {
 }
 
 void func_80C1ED64(DmBal* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, f32 arg4) {
-    Actor* temp_v0;
+    Actor* paper;
 
-    temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x2A4, arg2->x, arg2->y, arg2->z, (s16)0, (s16)0, (s16)0, 0);
-    if (temp_v0 != NULL) {
-        temp_v0->velocity = *arg3;
-        temp_v0->gravity = arg4;
+    paper = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_PAPER, arg2->x, arg2->y, arg2->z, 0, 0, 0, 0);
+    if (paper != NULL) {
+        paper->velocity = *arg3;
+        paper->gravity = arg4;
     }
 }
 
-//#ifdef NON_MATCHING
 void DmBal_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DmBal* this = (DmBal*)thisx;
+    DmBal* this = THIS;
     f32 sp44;
     Vec3f sp3C;
     Vec3f sp30;
 
-    if ((Animation_OnFrame(&this->unk144, 29.0f) != 0) && (this->unk144.animation == &object_bal_Anim_001804FrameData)) {
+    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
         sp3C = this->actor.world.pos;
         sp30 = D_80C1F2C4;
         sp3C.x += 7.0f * Math_SinS(this->actor.shape.rot.y);
@@ -207,14 +182,11 @@ void DmBal_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80C1EAE8(this, globalCtx);
     func_80C1EC60(this, globalCtx);
     func_80C1ED0C(this);
-    SkelAnime_Update(&this->unk144);
+    SkelAnime_Update(&this->skelAnime);
 }
-//#else
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Update.s")
-//#endif
 
 s32 DmBal_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    DmBal* this = (DmBal*)thisx;
+    DmBal* this = THIS;
     s16 pad1;
     s16 temp_ft5;
     s16 pad2;
@@ -228,25 +200,21 @@ s32 DmBal_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         Matrix_RotateZS(-temp_ft5, MTXMODE_APPLY);
         Matrix_RotateXS(-sp1C, MTXMODE_APPLY);
     }
-    return 0;
+    return false;
 }
 
 void DmBal_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-//#ifdef NON_MATCHING // because of static D_80C1F2D0
 void DmBal_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmBal* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
-               gSegments[(u32)(D_80C1F2D0[this->unk198] * 0x10) >> 0x1C] + (D_80C1F2D0[this->unk198] & 0xFFFFFF) +
+               gSegments[(D_80C1F2D0[this->unk198] * 0x10) >> 0x1C] + (D_80C1F2D0[this->unk198] & 0xFFFFFF) +
                    0x80000000);
-    SkelAnime_DrawFlexOpa(globalCtx, this->unk144.skeleton, this->unk144.jointTable, (s32)this->unk144.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           DmBal_OverrideLimbDraw, DmBal_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-//#else
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Draw.s")
-//#endif
