@@ -127,10 +127,10 @@
         <!-- this one is weird... -->
         <Animation Name="gDmZl4Anim_016328" Offset="0x16328" />
         <Animation Name="gDmZl4Anim_016924" Offset="0x16924" />
-        <!-- washing hands is important -->
+        <!-- washing hands is important? no idea what this is -->
         <Animation Name="gDmZl4Anim_016E04" Offset="0x16E04" />
         <Animation Name="gDmZl4Anim_0175F4" Offset="0x175F4" />
-        <!-- caught peeking at ganondorf -->
+        <!-- caught peeking at ganondorf through the window? -->
         <Animation Name="gDmZl4Anim_018B58" Offset="0x18B58" />
         <Animation Name="gDmZl4Anim_018FA8" Offset="0x18FA8" />
         <Animation Name="gDmZl4Anim_0193F8" Offset="0x193F8" />
@@ -139,7 +139,7 @@
         <!-- writing the letter for OoT progression -->
         <Animation Name="gDmZl4Anim_01ABB8" Offset="0x1ABB8" />
         <Animation Name="gDmZl4Anim_01AFE0" Offset="0x1AFE0" />
-        <!-- head tilting while talking to you about her dreams of ganondorf -->
+        <!-- head tilting while talking to you about her dreams of ganondorf? -->
         <Animation Name="gDmZl4Anim_01B388" Offset="0x1B388" />
         <Animation Name="gDmZl4Anim_01B7B0" Offset="0x1B7B0" />
         <Animation Name="gDmZl4Anim_01BC00" Offset="0x1BC00" />
@@ -147,21 +147,21 @@
         <Animation Name="gDmZl4Anim_01E714" Offset="0x1E714" />
         <Animation Name="gDmZl4Anim_01EA68" Offset="0x1EA68" />
         <Animation Name="gDmZl4Anim_01EFCC" Offset="0x1EFCC" />
-        <!-- do you understand what I said, head tilt -->
+        <!-- do you understand what I said, head tilt? -->
         <Animation Name="gDmZl4Anim_01F578" Offset="0x1F578" />
         <Animation Name="gDmZl4Anim_01FDBC" Offset="0x1FDBC" />
         <Animation Name="gDmZl4Anim_0205F8" Offset="0x205F8" />
         <Animation Name="gDmZl4Anim_020E6C" Offset="0x20E6C" />
         <Animation Name="gDmZl4Anim_021360" Offset="0x21360" />
         <Animation Name="gDmZl4Anim_02167C" Offset="0x2167C" />
-        <!-- turning to face her sie to talk to link next to window? -->
+        <!-- turning to face her side to talk to link next to window? -->
         <Animation Name="gDmZl4Anim_02205C" Offset="0x2205C" />
         <Animation Name="gDmZl4Anim_022840" Offset="0x22840" />
         <Animation Name="gDmZl4Anim_022BE8" Offset="0x22BE8" />
         <!-- showing off something to her side? -->
         <Animation Name="gDmZl4Anim_0235D4" Offset="0x235D4" />
         <Animation Name="gDmZl4Anim_023A50" Offset="0x23A50" />
-        <!-- shock? you chose no at the wrong time -->
+        <!-- shock? you chose no at the wrong time? -->
         <Animation Name="gDmZl4Anim_0241F4" Offset="0x241F4" />
         <Animation Name="gDmZl4Anim_024510" Offset="0x24510" />
         <!-- arms behind back head down -->

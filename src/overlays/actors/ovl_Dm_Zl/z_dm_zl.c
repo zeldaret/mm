@@ -65,7 +65,7 @@ typedef enum {
     ZELDA_MOUTH_OPEN,
 } DmZlMouthTextures;
 
-static TexturePtr  sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     gDmZl4EyeOpenLookingUpRightTex,
     gDmZl4EyeOpenHalf2Tex,
     gDmZl4EyeOpenClosedTex,
@@ -73,9 +73,6 @@ static TexturePtr  sEyeTextures[] = {
     gDmZl4EyeHalf1Tex,
     gDmZl4EyeOpenLookingLeftTex,
     gDmZl4EyeOpenLookingRightTex,
-    NULL,
-    NULL,
-    NULL,
 };
 
 void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animation[], u16 index) {
@@ -96,7 +93,7 @@ void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unused2BA = 0;
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    // NULL jointTable, NULL morphTable, limbcount == 0 ? surprised this works
+    // these three set to NULL should mean they are dynamically allocated
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
     DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], ZELDA_ANIM_FACING_AWAY);
     Actor_SetScale(&this->actor, 0.01f);
@@ -112,7 +109,7 @@ void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx) {
 void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x66) != 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x66)) { // currently in cutscene
         actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x66);
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             s16 nextAnimationIndex = ZELDA_ANIM_FACING_AWAY;
@@ -141,10 +138,12 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
     }
 
-    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) &&
-        (((actionIndex = this->animationIndex) == 1) || (actionIndex == 3) || (actionIndex == 5))) {
-        this->animationIndex++;
-        DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], ZELDA_ANIM_FACING_AWAY);
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
+        actionIndex = this->animationIndex;
+        if ((actionIndex == 1) || (actionIndex == 3) || (actionIndex == 5)) {
+            this->animationIndex++;
+            DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], ZELDA_ANIM_FACING_AWAY);
+        }
     }
 }
 
