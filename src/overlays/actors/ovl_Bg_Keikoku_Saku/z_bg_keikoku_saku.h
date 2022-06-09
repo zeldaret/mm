@@ -3,17 +3,18 @@
 
 #include "global.h"
 
+#define ACTOR_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+
 struct BgKeikokuSaku;
 
 typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, GlobalContext*);
 
 typedef struct BgKeikokuSaku {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
-    /* 0x015C */ BgKeikokuSakuActionFunc actionFunc;
-    /* 0x0160 */ char unk_160[0x4];
-} BgKeikokuSaku; // size = 0x164
-
+    /* 0x000 */ DynaPolyActor Dyna;
+    /* 0x15C */ BgKeikokuSakuActionFunc actionFunc;
+    /* 0x160 */ s16 unk160;
+    /* 0x162 */ s16 unk162;
+} BgKeikokuSaku; // Size = 0x164
 extern const ActorInit Bg_Keikoku_Saku_InitVars;
 
 #endif // Z_BG_KEIKOKU_SAKU_H
