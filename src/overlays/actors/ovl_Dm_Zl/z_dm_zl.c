@@ -59,21 +59,26 @@ static TexturePtr sMouthTextures[4] = {
 };
 
 typedef enum {
-    ZELDA_MOUTH_NEUTRAL,
-    ZELDA_MOUTH_SMILING,
-    ZELDA_MOUTH_FROWNING,
-    ZELDA_MOUTH_OPEN,
+    /* 0 */ ZELDA_MOUTH_NEUTRAL,
+    /* 1 */ ZELDA_MOUTH_SMILING,
+    /* 2 */ ZELDA_MOUTH_FROWNING,
+    /* 3 */ ZELDA_MOUTH_OPEN,
 } DmZlMouthTextures;
 
 static TexturePtr sEyeTextures[] = {
-    gDmZl4EyeOpenLookingUpRightTex,
-    gDmZl4EyeOpenHalf2Tex,
-    gDmZl4EyeOpenClosedTex,
-    gDmZl4EyeWideTex,
-    gDmZl4EyeHalf1Tex,
-    gDmZl4EyeOpenLookingLeftTex,
-    gDmZl4EyeOpenLookingRightTex,
+    gDmZl4EyeOpenNormalTex, gDmZl4EyeBlinkingTex,        gDmZl4EyeClosedTex,           gDmZl4EyeWideTex,
+    gDmZl4EyeHappyTex,      gDmZl4EyeOpenLookingLeftTex, gDmZl4EyeOpenLookingRightTex,
 };
+
+typedef enum {
+    /* 0 */ ZELDA_EYE_OPEN_NORMAL,
+    /* 1 */ ZELDA_EYE_BLINKING,
+    /* 2 */ ZELDA_EYE_CLOSED,
+    /* 3 */ ZELDA_EYE_WIDE,
+    /* 4 */ ZELDA_EYE_HAPPY,
+    /* 5 */ ZELDA_EYE_OPEN_LOOKING_LEFT,
+    /* 6 */ ZELDA_EYE_OPEN_LOOKING_RIGHT,
+} DmZlEyeTextures;
 
 void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animation[], u16 index) {
     f32 endFrame;
@@ -171,29 +176,29 @@ void DmZl_UpdateFace(DmZl* this) {
             break;
         case 1:
             if (this->blinkTimer == 0) {
-                this->eyeTextureIndex1 = this->eyeTextureIndex2 = 2;
+                this->eyeTextureIndex1 = this->eyeTextureIndex2 = ZELDA_EYE_CLOSED;
             }
             break;
         case 2:
             if (this->blinkTimer == 0) {
-                this->eyeTextureIndex1 = 5;
-                this->eyeTextureIndex2 = 6;
+                this->eyeTextureIndex1 = ZELDA_EYE_OPEN_LOOKING_LEFT;
+                this->eyeTextureIndex2 = ZELDA_EYE_OPEN_LOOKING_RIGHT;
             }
             break;
         case 3:
             if (this->blinkTimer == 0) {
-                this->eyeTextureIndex1 = 6;
-                this->eyeTextureIndex2 = 5;
+                this->eyeTextureIndex1 = ZELDA_EYE_OPEN_LOOKING_RIGHT;
+                this->eyeTextureIndex2 = ZELDA_EYE_OPEN_LOOKING_LEFT;
             }
             break;
         case 4:
             if (this->blinkTimer == 0) {
-                this->eyeTextureIndex1 = this->eyeTextureIndex2 = 3;
+                this->eyeTextureIndex1 = this->eyeTextureIndex2 = ZELDA_EYE_WIDE;
             }
             break;
         case 5:
             if (this->blinkTimer == 0) {
-                this->eyeTextureIndex1 = this->eyeTextureIndex2 = 4;
+                this->eyeTextureIndex1 = this->eyeTextureIndex2 = ZELDA_EYE_HAPPY;
             }
             break;
         case 6:
@@ -220,7 +225,7 @@ void DmZl_UpdateFace(DmZl* this) {
 
     if (this->animationIndex == ZELDA_ANIM_PLAYING_OCARINA) {
         // override blinking: eyes closed while playing ocarina
-        this->eyeTextureIndex1 = this->eyeTextureIndex2 = 2;
+        this->eyeTextureIndex1 = this->eyeTextureIndex2 = ZELDA_EYE_CLOSED;
     }
 }
 
