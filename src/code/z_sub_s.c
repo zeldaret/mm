@@ -386,7 +386,7 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
  *
  * @return s32 returns true when the end has been reached.
  *
- * @note This system/function makes a couple assumptions about the order used:
+ * @note This system/function makes a couple of assumptions about the order used:
  *      1. the order is assumed to be 3,  see SUBS_TIME_PATHING_ORDER
  *      2. even if SUBS_TIME_PATHING_ORDER is updated, the order can only be a max of 10
  */
