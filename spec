@@ -2902,7 +2902,7 @@ beginseg
     name "ovl_Bg_Keikoku_Saku"
     compress
     include "build/src/overlays/actors/ovl_Bg_Keikoku_Saku/z_bg_keikoku_saku.o"
-    include "build/data/ovl_Bg_Keikoku_Saku/ovl_Bg_Keikoku_Saku.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Keikoku_Saku/ovl_Bg_Keikoku_Saku_reloc.o"
 endseg
 
 beginseg
