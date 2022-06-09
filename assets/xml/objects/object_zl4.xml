@@ -1,7 +1,6 @@
 ﻿<Root>
+    <!-- Child Zelda: from the cutscene where Deku Link recalls how to play Song of Time after getting his Ocarina back -->
     <File Name="object_zl4" Segment="6">
-        <!-- Child Zelda: from the cutscene where Deku Link recalls how to play Song of Time after getting his Ocarina back -->
-
         <Animation Name="gDmZl4IdleAnim" Offset="0x654" />
         <Texture Name="gDmZl4DressTLUT" OutName="dress_tlut" Format="rgba16" Width="16" Height="16" Offset="0x670" />
         <Texture Name="gDmZl4EyeTLUT" OutName="eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x870" />
@@ -54,30 +53,30 @@
         <Texture Name="gDmZl4UndershirtWrinklesTex" OutName="undershirt_wrinkles" Format="ci8" Width="16" Height="16" Offset="0x5CB0" />
         <Texture Name="gDmZl4PendantTex" OutName="pendant" Format="rgba16" Width="32" Height="32" Offset="0x5DB0" />
 
-        <DList Name="gDmZl4ChestDl" Offset="0xA630" />
-        <DList Name="gDmZl4HeadDl" Offset="0xAFC8" />
-        <DList Name="gDmZl4RightUpperArmDl" Offset="0xB8D8" />
-        <DList Name="gDmZl4RightForArmDl" Offset="0xBB40" />
-        <DList Name="gDmZl4RightHandDl" Offset="0xBC90" />
-        <DList Name="gDmZl4LightUpperArmDl" Offset="0xBE70" />
-        <DList Name="gDmZl4LightForArmDl" Offset="0xC0E0" />
-        <DList Name="gDmZl4LightHandDl" Offset="0xC230" />
+        <DList Name="gDmZl4ChestDL" Offset="0xA630" />
+        <DList Name="gDmZl4HeadDL" Offset="0xAFC8" />
+        <DList Name="gDmZl4RightUpperArmDL" Offset="0xB8D8" />
+        <DList Name="gDmZl4RightForearmDL" Offset="0xBB40" />
+        <DList Name="gDmZl4RightHandDL" Offset="0xBC90" />
+        <DList Name="gDmZl4LeftUpperArmDL" Offset="0xBE70" />
+        <DList Name="gDmZl4LeftForearmDL" Offset="0xC0E0" />
+        <DList Name="gDmZl4LeftHandDL" Offset="0xC230" />
         <!-- unk frilly clothing, dress in shape for horse riding? not used in any Zl4 display list -->
         <DList Name="object_zl4_DL_00C410" Offset="0xC410" />
         <!-- top piece of above dl -->
-        <DList Name="gDmZl4WaistDl" Offset="0xC8D0" />
+        <DList Name="gDmZl4WaistDL" Offset="0xC8D0" />
 
-        <DList Name="gDmZl4Dress1Dl" Offset="0xD0E8" />
-        <DList Name="gDmZl4Dress2Dl" Offset="0xD2A0" />
-        <DList Name="gDmZl4Dress3Dl" Offset="0xD460" />
-        <DList Name="gDmZl4RightLegDl" Offset="0xD598" />
-        <DList Name="gDmZl4RightBootDl" Offset="0xD5E8" />
-        <DList Name="gDmZl4LeftLegDl" Offset="0xD728" />
-        <DList Name="gDmZl4LeftBootDl" Offset="0xD778" />
+        <DList Name="gDmZl4Dress1DL" Offset="0xD0E8" />
+        <DList Name="gDmZl4Dress2DL" Offset="0xD2A0" />
+        <DList Name="gDmZl4Dress3DL" Offset="0xD460" />
+        <DList Name="gDmZl4RightLegDL" Offset="0xD598" />
+        <DList Name="gDmZl4RightBootDL" Offset="0xD5E8" />
+        <DList Name="gDmZl4LeftLegDL" Offset="0xD728" />
+        <DList Name="gDmZl4LeftBootDL" Offset="0xD778" />
 
         <!-- Ocarina in this actor too... couldn't have just made it a different object? why do we need like 4 copies of this.. -->
         <Texture Name="gDmZl4OcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
-        <DList Name="gDmZl4OcarinaDl" Offset="0xDE08" />
+        <DList Name="gDmZl4OcarinaDL" Offset="0xDE08" />
 
         <!-- Child Zelda Skeleton, Copy of OoT -->
         <Limb Name="gDmZl4RootLimb" Type="Standard" EnumName="ZL4_LIMB_ROOT" Offset="0xDF28" />
@@ -91,10 +90,10 @@
         <Limb Name="gDmZl4Dress3Limb" Type="Standard" EnumName="ZL4_LIMB_DRESS_3" Offset="0xDF88" />
         <Limb Name="gDmZl4TorsoLimb" Type="Standard" EnumName="ZL4_LIMB_TORSO" Offset="0xDF94" />
         <Limb Name="gDmZl4LeftUpperArmLimb" Type="Standard" EnumName="ZL4_LIMB_LEFT_UPPER_ARM" Offset="0xDFA0" />
-        <Limb Name="gDmZl4LeftForarmLimb" Type="Standard" EnumName="ZL4_LIMB_LEFT_FORARM" Offset="0xDFAC" />
+        <Limb Name="gDmZl4LeftForearmLimb" Type="Standard" EnumName="ZL4_LIMB_LEFT_FOREARM" Offset="0xDFAC" />
         <Limb Name="gDmZl4LeftHandLimb" Type="Standard" EnumName="ZL4_LIMB_LEFT_HAND" Offset="0xDFB8" />
         <Limb Name="gDmZl4RightUpperArmLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_UPPER_ARM" Offset="0xDFC4" />
-        <Limb Name="gDmZl4RightForarmLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_FORARM" Offset="0xDFD0" />
+        <Limb Name="gDmZl4RightForearmLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_FOREARM" Offset="0xDFD0" />
         <Limb Name="gDmZl4RightHandLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_HAND" Offset="0xDFDC" />
         <Limb Name="gDmZl4HeadLimb" Type="Standard" EnumName="ZL4_LIMB_HEAD" Offset="0xDFE8" />
         <Skeleton Name="gZl4Skeleton" Type="Flex" LimbType="Standard" LimbNone="ZL4_LIMB_NONE" LimbMax="ZL4_LIMB_MAX" EnumName="zl4_Limbs" Offset="0xE038" />
@@ -108,15 +107,15 @@
         <Animation Name="gDmZl4FacingAwayIdle" Offset="0x11294" />
 
         <!-- Used in MM -->
-        <Animation Name="gDmZl4GivingItemToLinkStartAnim" Offset="0x11BB8" />
-        <Animation Name="gDmZl4GivingItemToLinkLoopAnim" Offset="0x122E0" />
+        <Animation Name="gDmZl4GivingItemStartAnim" Offset="0x11BB8" />
+        <Animation Name="gDmZl4GivingItemLoopAnim" Offset="0x122E0" />
         <Animation Name="gDmZl4RaisingOcarinaToPlayAnim" Offset="0x12A84" />
         <Animation Name="gDmZl4PlayingOcarinaAnim" Offset="0x1303C" />
 
         <!-- She does a Backflip -->
-        <Animation Name="gDmZl4BackFlipAnim" Offset="0x13934" />
-        <Animation Name="gDmZl4BackFlipPrepareAnim" Offset="0x13F2C" />
-        <Animation Name="gDmZl4BackFlipPrepareHoldingReadyAnim" Offset="0x14558" />
+        <Animation Name="gDmZl4BackflipAnim" Offset="0x13934" />
+        <Animation Name="gDmZl4BackflipPrepareAnim" Offset="0x13F2C" />
+        <Animation Name="gDmZl4BackflipPrepareHoldingReadyAnim" Offset="0x14558" />
 
         <!-- Used in MM --> 
         <Animation Name="gDmZl4TurningAround2Anim" Offset="0x15494" />
@@ -168,8 +167,9 @@
         <Animation Name="gDmZl4Anim_024B68" Offset="0x24B68" />
 
         <!-- Flute, unused? -->
-        <DList Name="gDmZl4FluteDl" Offset="0x24D80" />
-        <DList Name="gDmZl4FlutePtrDl" Offset="0x24E40" />
+        <DList Name="gDmZl4FluteDL" Offset="0x24D80" />
+        <!-- Calls gDmZl4FluteDL then ends -->
+        <DList Name="gDmZl4FluteWrapperDL" Offset="0x24E40" />
         <Texture Name="gDmZl4FluteHoleTex" OutName="flute_hole" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
         
         <TextureAnimation Name="gDmZlEmptyTexAnim" Offset="0x24F50" />

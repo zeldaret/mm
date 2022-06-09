@@ -34,8 +34,8 @@ static AnimationInfo sAnimations[7] = {
     { &gDmZl4FacingAwayHandsOverEmblemLoop, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
     { &gDmZl4TurningAround2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
     { &gDmZl4HandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
-    { &gDmZl4GivingItemToLinkStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
-    { &gDmZl4GivingItemToLinkLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gDmZl4GivingItemStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
+    { &gDmZl4GivingItemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
     { &gDmZl4RaisingOcarinaToPlayAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
     { &gDmZl4PlayingOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
 };
@@ -244,7 +244,7 @@ void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) && (this->animationIndex < ZELDA_ANIM_MAX)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDl);
+            gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDL);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
