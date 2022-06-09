@@ -10,7 +10,7 @@ struct BgKeikokuSaku;
 typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, GlobalContext*);
 
 typedef struct BgKeikokuSaku {
-    /* 0x000 */ DynaPolyActor Dyna;
+    /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgKeikokuSakuActionFunc actionFunc;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 unk162;

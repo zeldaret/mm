@@ -35,24 +35,23 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
 void BgKeikokuSaku_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgKeikokuSaku* this = THIS;
     s32 pad;
-    CollisionHeader* colHeader;
+    CollisionHeader* colHeader = NULL;
 
-    colHeader = NULL;
-    DynaPolyActor_Init(&this->Dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
-    this->Dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->Dyna.actor, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     this->unk160 = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
     if (Flags_GetSwitch(globalCtx, this->unk160)) {
-        this->Dyna.actor.world.pos.z = 2659.0f;
-        return;
+        this->dyna.actor.world.pos.z = 2659.0f;
+    } else {
+        this->actionFunc = func_80A5389C;
     }
-    this->actionFunc = func_80A5389C;
 }
 
 void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgKeikokuSaku* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->Dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80A5389C(BgKeikokuSaku* this, GlobalContext* globalCtx) {
@@ -62,10 +61,10 @@ void func_80A5389C(BgKeikokuSaku* this, GlobalContext* globalCtx) {
 }
 
 void func_80A538E0(BgKeikokuSaku* this, GlobalContext* globalCtx) {
-    Actor_PlaySfxAtPos(&this->Dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
-    this->Dyna.actor.world.pos.z -= 2.0f + gGameInfo->data[0x968];
-    if (this->Dyna.actor.world.pos.z < (gGameInfo->data[0x969] + 2660.0f)) {
-        Actor_PlaySfxAtPos(&this->Dyna.actor, 0x280EU);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
+    this->dyna.actor.world.pos.z -= 2.0f + BREG(8);
+    if (this->dyna.actor.world.pos.z < (BREG(9) + 2660.0f)) {
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
         this->unk162 = 30;
         this->actionFunc = func_80A53994;
     }
@@ -83,12 +82,12 @@ void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk162) {
         this->unk162--;
     }
-    this->Dyna.actor.world.pos.x = gGameInfo->data[0x965] + this->Dyna.actor.home.pos.x;
-    this->Dyna.actor.world.pos.y = gGameInfo->data[0x966] + this->Dyna.actor.home.pos.y;
-    this->Dyna.actor.world.pos.z = gGameInfo->data[0x967] + this->Dyna.actor.home.pos.z;
-    this->Dyna.actor.scale.x = (gGameInfo->data[0x96A] / 1000.0f) + 0.1f;
-    this->Dyna.actor.scale.y = (gGameInfo->data[0x96B] / 1000.0f) + 0.1f;
-    this->Dyna.actor.scale.z = (gGameInfo->data[0x96C] / 1000.0f) + 0.1f;
+    this->dyna.actor.world.pos.x = BREG(5) + this->dyna.actor.home.pos.x;
+    this->dyna.actor.world.pos.y = BREG(6) + this->dyna.actor.home.pos.y;
+    this->dyna.actor.world.pos.z = BREG(7) + this->dyna.actor.home.pos.z;
+    this->dyna.actor.scale.x = (BREG(10) / 1000.0f) + 0.1f;
+    this->dyna.actor.scale.y = (BREG(11) / 1000.0f) + 0.1f;
+    this->dyna.actor.scale.z = (BREG(12) / 1000.0f) + 0.1f;
     this->actionFunc(this, globalCtx);
 }
 
