@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define DMOPSTAGE_GET_TYPE(this) (((this)->dyna.actor.params & 0xFF))
+#define DMOPSTAGE_GET_TYPE(thisx) (((thisx)->params & 0xFF))
 
 struct DmOpstage;
 
