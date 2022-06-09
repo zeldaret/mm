@@ -26,10 +26,10 @@ void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx);
 void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx);
 void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx);
 void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx);
-void DmStk_ClockTower_StartFirstVersionIntroCutscene(DmStk* this, GlobalContext* globalCtx);
-void DmStk_ClockTower_WaitForFirstVersionIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
-void DmStk_ClockTower_StartSecondVersionIntroCutscene(DmStk* this, GlobalContext* globalCtx);
-void DmStk_ClockTower_WaitForSecondVersionIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, GlobalContext* globalCtx);
 void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, GlobalContext* globalCtx);
 void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
 void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx);
@@ -568,7 +568,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, GlobalContext* globalC
  * it handles the variation of the cutscene that plays the first time the player reaches the
  * top of the Clock Tower, which is slightly longer.
  */
-void DmStk_PlaySfxForClockTowerIntroCutsceneFirstVersion(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
@@ -756,7 +756,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, GlobalContext* global
  * it handles the variation of the cutscene that plays the second or later time the player
  * reaches the top of the Clock Tower, which is slightly shorter.
  */
-void DmStk_PlaySfxForClockTowerIntroCutsceneSecondVersion(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
     static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
@@ -872,7 +872,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, GlobalContext*
  * it handles the variation of the cutscene that plays the first time the player warps to the
  * moon, which is slightly longer.
  */
-void DmStk_PlaySfxForMoonWarpCutsceneFirstVersion(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -894,7 +894,7 @@ void DmStk_PlaySfxForMoonWarpCutsceneFirstVersion(DmStk* this, GlobalContext* gl
  * it handles the variation of the cutscene that plays the second or later time the player
  * warps to the moon, which is slightly shorter.
  */
-void DmStk_PlaySfxForMoonWarpCutsceneSecondVersion(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -946,19 +946,19 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_PlaySfxForClockTowerIntroCutsceneFirstVersion(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         DmStk_PlaySfxForDroppingOcarinaCutscene(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        DmStk_PlaySfxForClockTowerIntroCutsceneSecondVersion(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 3) {
                         DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        DmStk_PlaySfxForMoonWarpCutsceneFirstVersion(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneVersion1(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        DmStk_PlaySfxForMoonWarpCutsceneSecondVersion(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneVersion2(this, globalCtx);
                     }
                 }
                 break;
@@ -1053,10 +1053,10 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = DmStk_ClockTower_StartFirstVersionIntroCutscene;
+                        this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion1;
                     } else {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = DmStk_ClockTower_StartSecondVersionIntroCutscene;
+                        this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion2;
                     }
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
@@ -1187,16 +1187,16 @@ void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void DmStk_ClockTower_StartFirstVersionIntroCutscene(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(9)) {
         ActorCutscene_Start(9, &this->actor);
-        this->actionFunc = DmStk_ClockTower_WaitForFirstVersionIntroCutsceneToEnd;
+        this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(9);
     }
 }
 
-void DmStk_ClockTower_WaitForFirstVersionIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SK_ANIMATION_CALL_DOWN_MOON_LOOP;
         this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
@@ -1205,16 +1205,16 @@ void DmStk_ClockTower_WaitForFirstVersionIntroCutsceneToEnd(DmStk* this, GlobalC
     }
 }
 
-void DmStk_ClockTower_StartSecondVersionIntroCutscene(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(11)) {
         ActorCutscene_Start(11, &this->actor);
-        this->actionFunc = DmStk_ClockTower_WaitForSecondVersionIntroCutsceneToEnd;
+        this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(11);
     }
 }
 
-void DmStk_ClockTower_WaitForSecondVersionIntroCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
         DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
