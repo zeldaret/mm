@@ -5,7 +5,6 @@
  */
 
 #include "z_en_hata.h"
-#include "objects/object_hata/object_hata.h"
 
 #define FLAGS 0x00000000
 
@@ -35,8 +34,7 @@ void EnHata_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHata* this = THIS;
     f32 endFrame;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, &this->jointTable, &this->morphTable,
-                   21);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable, 21);
     endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
     Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, 0, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
