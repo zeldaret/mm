@@ -20,7 +20,7 @@
 
         <!-- Unused Eyes DisplayList and Texture -->
         <DList Name="gSkullKidUnusedEyesDL" Offset="0x7E10" />
-        <Texture Name="gSkullKidUnusedEyeTex" OutName="skull_kid_unused_eye" Format="rgba16" Width="8" Height="8" Offset="0x7EA0" />
+        <Texture Name="gSkullKidUnusedEyeTex" OutName="skull_kid_unused_eye" Format="rgba16" Width="8" Height="8" Offset="0x7EA0" /> <!-- Duplicate of gSkullKidEyeTex -->
 
         <!-- Various Hand DisplayLists -->
         <DList Name="gSkullKidUntexturedLeftHand" Offset="0x84C0" />
@@ -45,7 +45,7 @@
         <!-- Skull Kid Limb DisplayLists -->
         <DList Name="gSkullKidTorsoDL" Offset="0xF6F0" />
         <DList Name="gSkullKidNeckDL" Offset="0xF8B8" /> <!-- Renders a single triangle instead of a normal-looking limb -->
-        <DList Name="gSkullKidOoTStyleHeadDL" Offset="0xF908" /> <!-- Unused in the final game -->
+        <DList Name="gSkullKidHeadWithLipsDL" Offset="0xF908" /> <!-- Unused in the final game. Has lips instead of beak, similar to how he looks in OoT. -->
         <DList Name="gSkullKidHatBrimDL" Offset="0xFA78" />
         <DList Name="gSkullKidHatRingsDL" Offset="0xFBD0" />
         <DList Name="gSkullKidHatNarrowSectionDL" Offset="0xFCE8" />
@@ -115,14 +115,14 @@
         <Texture Name="gSkullKidLinkMaskHairTex" OutName="skull_kid_link_mask_hair" Format="rgba16" Width="16" Height="16" Offset="0x17420" />
         <Texture Name="gSkullKidLinkMaskHatTex" OutName="skull_kid_link_mask_hat" Format="rgba16" Width="8" Height="16" Offset="0x17620" />
         <Texture Name="gSkullKidLinkMaskEarTex" OutName="skull_kid_link_mask_ear" Format="rgba16" Width="16" Height="16" Offset="0x17720" />
-        <Texture Name="gSkullKidDuplicateMajorasMaskEyeTex" OutName="skull_kid_duplicate_majoras_mask_eye" Format="rgba16" Width="32" Height="32" Offset="0x17920" />
+        <Texture Name="gSkullKidUnusedMajorasMaskEyeTex" OutName="skull_kid_unused_majoras_mask_eye" Format="rgba16" Width="32" Height="32" Offset="0x17920" /> <!-- Duplicate of gSkullKidMajorasMaskEyeTex -->
         <Texture Name="gSkullKidMajorasMaskFaceTex" OutName="skull_kid_majoras_mask_face" Format="rgba16" Width="32" Height="64" Offset="0x18120" />
         <Texture Name="gSkullKidMajorasMaskSpikes1Tex" OutName="skull_kid_majoras_mask_spikes_1" Format="rgba16" Width="16" Height="16" Offset="0x19120" />
         <Texture Name="gSkullKidMajorasMaskSpikes2Tex" OutName="skull_kid_majoras_mask_spikes_2" Format="rgba16" Width="16" Height="16" Offset="0x19320" />
         <Texture Name="gSkullKidMajorasMaskSpikes3Tex" OutName="skull_kid_majoras_mask_spikes_3" Format="rgba16" Width="16" Height="16" Offset="0x19520" />
         <Texture Name="gSkullKidMajorasMaskSpikes4Tex" OutName="skull_kid_majoras_mask_spikes_4" Format="rgba16" Width="16" Height="16" Offset="0x19720" />
         <Texture Name="gSkullKidMajorasMaskBackTex" OutName="skull_kid_majoras_mask_back" Format="rgba16" Width="32" Height="32" Offset="0x19920" />
-        <Texture Name="gSkullKidDuplicateEyeTex" OutName="skull_kid_duplicate_eye" Format="rgba16" Width="8" Height="8" Offset="0x1A120" />
+        <Texture Name="gSkullKidUnusedEye2Tex" OutName="skull_kid_unused_eye2" Format="rgba16" Width="8" Height="8" Offset="0x1A120" /> <!-- Duplicate of gSkullKidEyeTex -->
         <Texture Name="gSkullKidHandTex" OutName="skull_kid_hand" Format="rgba16" Width="16" Height="32" Offset="0x1A1A0" />
         <Texture Name="gSkullKidEyeTex" OutName="skull_kid_eye" Format="rgba16" Width="8" Height="8" Offset="0x1A5A0" />
         <Texture Name="gSkullKidBeakTex" OutName="skull_kid_beak" Format="rgba16" Width="16" Height="16" Offset="0x1A620" />

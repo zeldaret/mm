@@ -16,7 +16,7 @@
         <DList Name="gSkullKidMajorasMaskCurseOverlayDL" Offset="0x7840" />
         <Texture Name="gSkullKidMajorasMaskCurseOverlayMaskTex" OutName="skull_kid_majoras_mask_curse_overlay_mask" Format="i8" Width="32" Height="32" Offset="0x7A48" />
         <Texture Name="gSkullKidMajorasMaskCurseOverlayElectricityTex" OutName="skull_kid_majoras_mask_curse_overlay_electricity" Format="i8" Width="32" Height="64" Offset="0x7E48" />
-        <TextureAnimation Name="gSkullKidMajorasMaskCurseOverlayTexScroll" Offset="0x8658" />
+        <TextureAnimation Name="gSkullKidMajorasMaskCurseOverlayTexAnim" Offset="0x8658" />
 
         <!-- Assets for the effects displayed on the sides of the screen when Skull Kid curses Link or calls down the moon -->
         <DList Name="object_stk2_DL_008920" Offset="0x8920" />
@@ -33,16 +33,16 @@
         <Animation Name="object_stk2_Anim_00A6D4" Offset="0xA6D4" />
 
         <!-- Clock Tower Ocarina Limb DisplayLists -->
-        <DList Name="object_stk2_DL_00A840" Offset="0xA840" />
+        <DList Name="gClockTowerOcarinaOfTimeDL" Offset="0xA840" />
 
         <!-- Clock Tower Ocarina Textures -->
-        <Texture Name="object_stk2_Tex_00A958" OutName="tex_00A958" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
+        <Texture Name="gClockTowerOcarinaOfTimeTex" OutName="clock_tower_ocarina_of_time" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
 
         <!-- Clock Tower Ocarina Limbs -->
-        <Limb Name="object_stk2_Standardlimb_00AD58" Type="Standard" EnumName="OBJECT_STK2_LIMB_01" Offset="0xAD58" />
+        <Limb Name="gClockTowerOcarinaOfTimeRootLimb" Type="Standard" EnumName="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_ROOT" Offset="0xAD58" />
 
         <!-- Clock Tower Ocarina Skeleton -->
-        <Skeleton Name="object_stk2_Skel_013158" Type="Flex" LimbType="Standard" LimbNone="OBJECT_STK2_LIMB_NONE" LimbMax="OBJECT_STK2_LIMB_MAX" EnumName="object_stk2_Limbs" Offset="0xAD68" />
+        <Skeleton Name="gClockTowerOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_NONE" LimbMax="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_MAX" EnumName="ClockTowerOcarinaOfTimeLimbs" Offset="0xAD68" />
 
         <!-- Skull Kid Animations -->
         <Animation Name="gSkullKidLaughStartAnim" Offset="0xC270" /> <!-- Original name is "oowarai" ("laughing loudly") -->
