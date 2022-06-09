@@ -46,11 +46,11 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DmOpstage_SetupAction(this, func_80A9FA58);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    params = DMOPSTAGE_GET_FF;
+    params = DMOPSTAGE_GET_TYPE(this);
     if (params == 0) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_keikoku_demo_Colheader_001C98);
-        params = DMOPSTAGE_GET_FF;
+        params = DMOPSTAGE_GET_TYPE(this);
     }
     if (params > 0) {
         this->posX = this->dyna.actor.world.pos.x;
@@ -65,7 +65,7 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_FF == 0) {
+    if (DMOPSTAGE_GET_TYPE(this) == 0) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -104,9 +104,8 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s32 params;
     DmOpstage* this = THIS;
-    params = DMOPSTAGE_GET_FF;
+    s32 params = DMOPSTAGE_GET_TYPE(this);
 
     if (params > 0) {
         Matrix_Translate(this->dyna.actor.world.pos.x + this->posX, this->dyna.actor.world.pos.y + this->posY,
@@ -114,7 +113,7 @@ void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     }
-    switch (DMOPSTAGE_GET_FF) {
+    switch (DMOPSTAGE_GET_TYPE(this)) {
         case 0:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_000978);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_000970);

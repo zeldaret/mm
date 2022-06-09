@@ -3,12 +3,12 @@
 
 #include "global.h"
 
-#define DMOPSTAGE_GET_FF (((this)->dyna.actor.params & 0xFF))
+#define DMOPSTAGE_GET_TYPE(this) (((this)->dyna.actor.params & 0xFF))
 
 struct DmOpstage;
 
 typedef void (*DmOpstageActionFunc)(struct DmOpstage*, GlobalContext*);
-typedef struct DmOpstage {
+typedef struct DmOpstage { 
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ char pad_15C[0x44];
     /* 0x1A0 */ DmOpstageActionFunc actionFunc;
