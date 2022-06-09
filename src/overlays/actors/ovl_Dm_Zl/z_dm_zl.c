@@ -51,7 +51,7 @@ typedef enum {
     ZELDA_ANIM_MAX,
 } DmZlAnimations;
 
-static u64* sMouthTextures[4] = {
+static TexturePtr sMouthTextures[4] = {
     gZl4MouthNeutralTex,
     gZl4MouthOpenSmilingTex,
     gZl4MouthFrowningTex,
@@ -65,7 +65,7 @@ typedef enum {
     ZELDA_MOUTH_OPEN,
 } DmZlMouthTextures;
 
-static u64* sEyeTextures[0xA] = {
+static TexturePtr  sEyeTextures[] = {
     gDmZl4EyeOpenLookingUpRightTex,
     gDmZl4EyeOpenHalf2Tex,
     gDmZl4EyeOpenClosedTex,
@@ -98,13 +98,12 @@ void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // NULL jointTable, NULL morphTable, limbcount == 0 ? surprised this works
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
-    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+    DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], ZELDA_ANIM_FACING_AWAY);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmZl_DoNothing;
 }
 
 void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    DmZl* this = THIS;
 }
 
 void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx) {
@@ -236,7 +235,7 @@ void DmZl_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 DmZl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
