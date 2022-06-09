@@ -44,7 +44,7 @@ typedef struct DmStk {
     /* 0x0336 */ s8 objectStkObjectIndex;
     /* 0x0337 */ s8 objectStk2ObjectIndex;
     /* 0x0338 */ s8 objectStk3ObjectIndex;
-    /* 0x0339 */ u8 hitCount;
+    /* 0x0339 */ u8 deflectCount;
     /* 0x033A */ u8 dekuPipesCutsceneState;
     /* 0x033B */ u8 shouldDraw;
 } DmStk; // size = 0x33C

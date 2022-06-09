@@ -1020,7 +1020,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         this->tatlMessageTimer = 0;
-        this->hitCount = 0;
+        this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animationId = SK_ANIMATION_IDLE;
         this->fogR = globalCtx->lightCtx.unk7;
@@ -1268,9 +1268,9 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
-    this->hitCount++;
-    if (this->hitCount >= 3) {
-        this->hitCount = 0;
+    this->deflectCount++;
+    if (this->deflectCount >= 3) {
+        this->deflectCount = 0;
         if (!(player->stateFlags2 & 0x8000000)) {
             // That won't do you any good
             Message_StartTextbox(globalCtx, 0x2013, &this->actor);
