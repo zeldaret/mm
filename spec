@@ -4953,8 +4953,7 @@ beginseg
     name "ovl_Bg_Ikninside"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikninside/z_bg_ikninside.o"
-    include "build/data/ovl_Bg_Ikninside/ovl_Bg_Ikninside.data.o"
-    include "build/data/ovl_Bg_Ikninside/ovl_Bg_Ikninside.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ikninside/ovl_Bg_Ikninside_reloc.o"
 endseg
 
 beginseg
