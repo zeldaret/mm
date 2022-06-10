@@ -23,6 +23,7 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
@@ -40,6 +41,7 @@
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"
+#include "z64schedule.h"
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
@@ -305,11 +307,6 @@ typedef struct {
 } NmiBuff; // size >= 0x18
 
 typedef struct {
-    /* 0x00 */ s16 intPart[16];
-    /* 0x20 */ u16 fracPart[16];
-} RSPMatrix; // size = 0x40
-
-typedef struct {
     /* 0x0 */ s8 letterboxTarget;
     /* 0x1 */ s8 letterboxMagnitude;
     /* 0x2 */ s8 pillarboxTarget;
@@ -382,13 +379,6 @@ typedef struct {
     /* 0x18 */ s16 unk18;
     /* 0x1A */ s16 unk1A;
 } s80874650; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ f32 x[4];
-    /* 0x10 */ f32 y[4];
-    /* 0x20 */ f32 z[4];
-    /* 0x30 */ f32 w[4];
-} z_Matrix; // size = 0x40
 
 typedef union {
     F3DVertexColor color;
@@ -884,7 +874,7 @@ typedef struct {
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees; 
+    /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ MessageTableEntry* messageEntryTable;
     /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
@@ -1157,7 +1147,7 @@ typedef struct {
 typedef enum {
     /* 0 */ DISTORTION_INACTIVE,
     /* 1 */ DISTORTION_ACTIVE,
-    /* 2 */ DISTORTION_SETUP,
+    /* 2 */ DISTORTION_SETUP
 } DistortionState;
 
 typedef struct {
@@ -1224,7 +1214,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
- 
+
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1323,7 +1313,7 @@ struct GlobalContext {
     /* 0x18760 */ DoorContext doorCtx;
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void* unk_18770; //! @TODO: Determine function prototype
+    /* 0x18770 */ void (*unk_18770)(struct GlobalContext* globalCtx, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
     /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
     /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
@@ -1399,12 +1389,6 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
-
-typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ Color_RGBA8 color;
@@ -1426,16 +1410,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* monoDl;
 } VisMono; // size = 0x18
-
-typedef enum {
-    MTXMODE_NEW,  // generates a new matrix
-    MTXMODE_APPLY // applies transformation to the current matrix
-} MatrixMode;
-
-typedef struct {
-    /* 0x00 */ u16 intPart[4][4];
-    /* 0x20 */ u16 fracPart[4][4];
-} MatrixInternal; // size = 0x40
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;
@@ -1497,6 +1471,20 @@ enum fram_mode {
 };
 
 typedef struct {
+    /* 0x00 */ UNK_TYPE1 unk_00[0x14];
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ UNK_TYPE1 unk_1A[0x3];
+    /* 0x0C */ u8 unk_1D;
+    /* 0x1E */ UNK_TYPE1 unk_1E[0xC];
+    /* 0x2A */ s16 unk_2A;
+    /* 0x1E */ UNK_TYPE1 unk_2C[0x1];
+    /* 0x2D */ u8 unk_2D;
+    /* 0x2E */ UNK_TYPE1 unk_2E[2];
+} DbCameraUnkSubStruct; // size = 0x30
+
+typedef struct {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
@@ -1505,18 +1493,12 @@ typedef struct {
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
-    /* 0x10 */ UNK_TYPE1 unk_10[0x2C];
-    /* 0x3C */ UNK_TYPE1 unk_3C[0x01];
-    /* 0x3D */ u8 unk_3D;
-    /* 0x3E */ UNK_TYPE1 unk_3E[0x02];
-    /* 0x40 */ UNK_TYPE1 unk_40[0x2C];
-    /* 0x6C */ UNK_TYPE1 unk_6C[0x01];
-    /* 0x6D */ u8 unk_6D;
-    /* 0x6E */ UNK_TYPE1 unk_6E[0x02];
+    /* 0x10 */ DbCameraUnkSubStruct unk_10;
+    /* 0x40 */ DbCameraUnkSubStruct unk_40;
     /* 0x70 */ UNK_PTR unk_70;
     /* 0x74 */ UNK_PTR unk_74;
     /* 0x78 */ UNK_PTR unk_78;
     /* 0x7C */ Camera* camera;
-} struct_801F4D48; // size = 0x80
+} DbCameraUnkStruct; // size = 0x80
 
 #endif

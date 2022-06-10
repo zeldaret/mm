@@ -45,10 +45,10 @@ Vec3f D_80B6669C = { 150.0f, 425.0f, 40.0f };
 Vec3f D_80B666A8 = { 0.0f, 140.0f, 40.0f };
 Vec3f D_80B666B4 = { 0.0f, 565.0f, 40.0f };
 
-Gfx* D_80B666C0 = object_dora_DL_002080;
-Gfx* D_80B666C4 = object_dora_DL_002180;
-Gfx* D_80B666C8 = object_dora_DL_002380;
-Gfx* D_80B666CC = object_dora_DL_002280;
+Gfx* D_80B666C0 = gKendoKanbanTopRightDL;
+Gfx* D_80B666C4 = gKendoKanbanTopLeftDL;
+Gfx* D_80B666C8 = gKendoKanbanBottomRightDL;
+Gfx* D_80B666CC = gKendoKanbanBottomLeftDL;
 
 Vec3f D_80B666D0 = { -300.0f, 850.0f, 40.0f };
 Vec3f D_80B666DC = { 10.0f, 850.0f, 40.0f };
@@ -173,13 +173,13 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
 
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                          &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         for (j = 0; j < ARRAY_COUNT(sp70); j++) {
-            Matrix_MultiplyVector3fByState(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
+            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &sp70[0], &sp70[1], &sp70[2]);
     }
@@ -339,14 +339,14 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
         this->unk_2FC = index;
         this->unk_2E4 = this->unk_29C[index];
 
-        Matrix_StatePush();
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                              &this->actor.shape.rot);
+        Matrix_Push();
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                     &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&this->unk_2E4, &this->actor.world.pos);
+        Matrix_MultVec3f(&this->unk_2E4, &this->actor.world.pos);
         this->actor.world.pos = sp5C;
         this->actor.prevPos = this->actor.world.pos;
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -472,10 +472,10 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_dora_DL_000180);
+        gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
-        Matrix_InsertRotationAroundUnitVector_s(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
+        Matrix_Translate(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -499,10 +499,10 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        Matrix_MultiplyVector3fByState(&this->unk_29C[i], &this->unk_26C[i]);
+        Matrix_MultVec3f(&this->unk_29C[i], &this->unk_26C[i]);
     }
 
-    Matrix_MultiplyVector3fByState(&this->unk_2CC, &this->unk_2D8);
+    Matrix_MultVec3f(&this->unk_2CC, &this->unk_2D8);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Draw.s")

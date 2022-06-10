@@ -737,7 +737,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    Matrix_MultiplyVector3fByState(sFocusOffset, &this->actor.focus.pos);
+    Matrix_MultVec3f(sFocusOffset, &this->actor.focus.pos);
 
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
@@ -807,11 +807,11 @@ void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
         translation.x = (-(globalCtx->view.eye.x - thisx->world.pos.x) * scale) + globalCtx->view.eye.x;
         translation.y = (-(globalCtx->view.eye.y - thisx->world.pos.y) * scale) + globalCtx->view.eye.y;
         translation.z = (-(globalCtx->view.eye.z - thisx->world.pos.z) * scale) + globalCtx->view.eye.z;
-        Matrix_InsertTranslation(translation.x, translation.y, translation.z, MTXMODE_NEW);
+        Matrix_Translate(translation.x, translation.y, translation.z, MTXMODE_NEW);
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(thisx->shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
     }
 
     EnFall_LodMoon_Draw(thisx, globalCtx);
@@ -870,11 +870,10 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         if (debrisParticles[i].modelIndex < 3) {
-            Matrix_InsertTranslation(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-            Matrix_InsertRotation(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
-                                  MTXMODE_APPLY);
+            Matrix_RotateZYX(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
+                             MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);

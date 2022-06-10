@@ -656,7 +656,6 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         0x0721, 0x0722, 0x0723, 0x0724, 0x072C,
     };
     Player* player = GET_PLAYER(globalCtx);
-    s16 idx;
 
     func_80C012E0(this);
     func_80C0113C(this, 21, 1.0f);
@@ -683,10 +682,8 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         return;
     }
 
-    idx = gSaveContext.save.bombersCaughtNum;
-    Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
-    idx = gSaveContext.save.bombersCaughtNum;
-    gSaveContext.save.bombersCaughtOrder[idx] = this->unk_2C8 + 1;
+    Message_StartTextbox(globalCtx, D_80C03230[((void)0, gSaveContext.save.bombersCaughtNum)], &this->actor);
+    gSaveContext.save.bombersCaughtOrder[((void)0, gSaveContext.save.bombersCaughtNum)] = this->unk_2C8 + 1;
     gSaveContext.save.bombersCaughtNum++;
 
     if (gSaveContext.save.bombersCaughtNum > 4) {

@@ -4,15 +4,24 @@
 #include "z64actor.h"
 #include "z64scene.h"
 
+#include "code/sub_s/sub_s.h"
+
+extern Vec3f gOneVec3f;
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
     /* 2 */ SUBS_CUTSCENE_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, void*);
+//! @TODO: rename based on func_8013E748 and func_800B8500
+typedef s32 (*func_8013E748_VerifyFunc)(struct GlobalContext*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
+
+#define SUBS_SHADOW_TEX_WIDTH 64
+#define SUBS_SHADOW_TEX_HEIGHT 64
+#define SUBS_SHADOW_TEX_SIZE ((s32)sizeof(u8[SUBS_SHADOW_TEX_HEIGHT][SUBS_SHADOW_TEX_WIDTH]))
 
 #define ACTOR_PATHING_RETURN_TO_START (1 << 0)
 #define ACTOR_PATHING_SWITCH_DIRECTION (1 << 1)
@@ -28,6 +37,20 @@ typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
     (ACTOR_PATHING_REACHED_POINT_PERMANENT | ACTOR_PATHING_REACHED_POINT_TEMPORARY)
 #define ACTOR_PATHING_REACHED_END \
     (ACTOR_PATHING_REACHED_END_PERMANENT | ACTOR_PATHING_REACHED_END_TEMPORARY)
+
+typedef struct TurnOptions {
+    /* 0x0 */ u16 rotMax; // binary angles
+    /* 0x2 */ u16 slowness; // larger for slower rotation, cannot be 0
+    /* 0x4 */ u16 rotStepMin; // degrees
+    /* 0x6 */ u16 rotStepMax; // degrees
+} TurnOptions; // size = 0x8
+
+typedef struct TurnOptionsSet {
+    /* 0x00 */ TurnOptions headRotX;
+    /* 0x08 */ TurnOptions headRotY;
+    /* 0x10 */ TurnOptions torsoRotX;
+    /* 0x18 */ TurnOptions torsoRotY;
+} TurnOptionsSet; // size = 0x20
 
 struct ActorPathing;
 typedef void (*ActorPathingComputeFunc)(struct GlobalContext*, struct ActorPathing*);

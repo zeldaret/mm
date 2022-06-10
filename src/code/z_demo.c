@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
@@ -22,7 +21,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
-struct_801F4D48 sCutsceneCameraInfo;
+DbCameraUnkStruct sCutsceneCameraInfo;
 u16 D_801F4DC8[10];
 UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
@@ -133,7 +132,6 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
     u8 isStartFrame = false;
     f32 progress;
     SceneTableEntry* loadedScene;
-    u16 time;
 
     if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
         return;
@@ -251,11 +249,9 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x12:
             if (!gSaveContext.save.isNight) {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = time - (u16)REG(15);
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)REG(15);
             } else {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = time - (u16)(2 * REG(15));
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * REG(15));
             }
             break;
         case 0x13:
@@ -329,10 +325,9 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
                 D_801BB15C = csCtx->frames;
 
                 if (REG(15) != 0) {
-                    time = gSaveContext.save.time;
-                    gSaveContext.save.time = (u16)REG(15) + time;
-                    time = gSaveContext.save.time;
-                    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+                    gSaveContext.save.time =
+                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
                 }
             }
             break;
@@ -1418,6 +1413,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     }
 }
 #else
+void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 #endif
 

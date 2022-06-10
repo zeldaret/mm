@@ -145,8 +145,8 @@ void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1) {
             continue;
         }
 
-        Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-        Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+        Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+        Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
         Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
 
         mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -182,7 +182,7 @@ void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
         thisx->world.pos.y = thisx->floorHeight;
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
-        func_8018219C(&sp38, &thisx->shape.rot, 1);
+        Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
         this->unk_20A = func_800C9BB8(&globalCtx->colCtx, thisx->floorPoly, sp34);
     }

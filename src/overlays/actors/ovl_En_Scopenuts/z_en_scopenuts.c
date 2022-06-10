@@ -331,7 +331,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (Message_ShouldAdvance(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.playerData.rupees < this->unk_358) {
@@ -817,7 +817,7 @@ void EnScopenuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Acto
     }
 
     if (limbIndex == 24) {
-        Matrix_RotateY(this->unk_340, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_340, MTXMODE_APPLY);
     }
 }
 
