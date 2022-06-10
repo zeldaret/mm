@@ -41,7 +41,7 @@ static InitChainEntry sInitChain[] = {
 
 s16 func_80B9AF50(ObjBoat* this, Vec3f* arg0) {
     s16 yaw;
-    Vec3s* temp = &this->unk164[(s32)this->posX];
+    Vec3s* temp = &this->unk_164[(s32)this->posX];
 
     Math_Vec3s_ToVec3f(arg0, &temp[this->rotY]);
     yaw = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, arg0);
@@ -58,15 +58,15 @@ void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 3);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
-    if (OBJBOAT_GET_PARAMS < 0) {
+    if (OBJBOAT_GET_PARAMS(thisx) < 0) {
         this->dyna.actor.update = (void (*)(Actor*, GlobalContext*))func_80B9B428;
     } else {
-        path = &globalCtx->setupPathList[OBJBOAT_GET_07 & 0x1F];
+        path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(thisx) & 0x1F];
         this->unk_163 = path->count - 1;
-        this->unk164 = Lib_SegmentedToVirtual(path->points);
+        this->unk_164 = Lib_SegmentedToVirtual(path->points);
         this->rotY = 1;
-        this->dyna.actor.world.pos.x = this->unk164[this->posX].x;
-        this->dyna.actor.world.pos.z = this->unk164[this->posX].z;
+        this->dyna.actor.world.pos.x = this->unk_164[this->posX].x;
+        this->dyna.actor.world.pos.z = this->unk_164[this->posX].z;
         this->dyna.actor.shape.rot.y = func_80B9AF50(this, &sp24);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         this->rotY = -this->rotY;
@@ -80,10 +80,10 @@ void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B9B124(ObjBoat* this) {
-    this->unk_160 += 0x3E8;
+    this->unk_160 += 1000;
     this->dyna.actor.world.pos.y = Math_SinS(this->unk_160) + this->dyna.actor.home.pos.y;
-    this->dyna.actor.shape.rot.x = (s16)(s32)(Math_SinS(this->unk_160) * 100.0f);
-    this->dyna.actor.shape.rot.z = (s16)(s32)(Math_SinS((s16)(this->unk_160 * 2)) * 50.0f);
+    this->dyna.actor.shape.rot.x = (Math_SinS(this->unk_160) * 100.0f);
+    this->dyna.actor.shape.rot.z = (Math_SinS((s16)(this->unk_160 * 2)) * 50.0f);
 }
 
 void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -100,7 +100,8 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
     sp3C = 0.0f;
     sp3A = this->dyna.actor.shape.rot.y;
     if ((currentAction) || ((DynaPolyActor_IsInRidingFallingState(&this->dyna)))) {
-        if ((this->unk_15F == 0) && (OBJBOAT_GET_4000 || ((currentAction != 0) && (this->posX == this->unk_15E)))) {
+        if ((this->unk_15F == 0) &&
+            (OBJBOAT_GET_4000(thisx) || ((currentAction != 0) && (this->posX == this->unk_15E)))) {
             this->rotY = -this->rotY;
             if (this->rotY > 0) {
                 this->unk_15E = this->unk_163;
@@ -119,7 +120,7 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (Math_Vec3f_DistXZ(&this->dyna.actor.world.pos, &sp2C) < 200.0f) {
             this->posX += this->rotY;
             if (this->posX == this->unk_15E) {
-                if (OBJBOAT_GET_4000) {
+                if (OBJBOAT_GET_4000(thisx)) {
                     this->posX = 0;
                 } else if (this->dyna.actor.speedXZ == 0.0f) {
                     this->posX = 0;
@@ -127,7 +128,7 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            sp3C = this->rotY * (OBJBOAT_GET_4000 ? 5.0f : 3.0f);
+            sp3C = this->rotY * (OBJBOAT_GET_4000(thisx) ? 5.0f : 3.0f);
         }
     }
     if (player->csMode != 0x1A) {
@@ -151,26 +152,26 @@ void func_80B9B428(ObjBoat* this, GlobalContext* globalCtx2) {
         if (this->unk_15F != actionIndex->action) {
             this->dyna.actor.shape.rot.x = actionIndex->urot.x;
             if (actionIndex->action != 1) {
-                Path* var_v0_2 = &globalCtx->setupPathList[OBJBOAT_GET_07 & 0x1F];
+                Path* path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor) & 0x1F];
                 if (actionIndex->action == 3) {
-                    var_v0_2 = &globalCtx->setupPathList[var_v0_2->unk1];
+                    path = &globalCtx->setupPathList[path->unk1];
                 }
-                this->unk_163 = var_v0_2->count;
-                this->unk164 = Lib_SegmentedToVirtual(var_v0_2->points);
-                Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->unk164);
+                this->unk_163 = path->count;
+                this->unk_164 = Lib_SegmentedToVirtual(path->points);
+                Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->unk_164);
                 this->dyna.actor.speedXZ = actionIndex->urot.z * 0.005493164f;
-                this->unk164++;
+                this->unk_164++;
                 this->posX = 1;
             }
             this->unk_15F = actionIndex->action;
         } else {
             if (actionIndex->action != 1) {
-                Vec3f sp34;
-                f32 temp;
-                Math_Vec3s_ToVec3f(&sp34, this->unk164);
-                temp = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &sp34, this->dyna.actor.speedXZ);
-                if ((this->posX < this->unk_163) && (temp < this->dyna.actor.speedXZ)) {
-                    this->unk164++;
+                Vec3f vec;
+                f32 step;
+                Math_Vec3s_ToVec3f(&vec, this->unk_164);
+                step = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &vec, this->dyna.actor.speedXZ);
+                if ((this->posX < this->unk_163) && (step < this->dyna.actor.speedXZ)) {
+                    this->unk_164++;
                     this->posX++;
                 }
             }
