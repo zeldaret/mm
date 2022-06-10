@@ -16,9 +16,9 @@ typedef struct DmBal {
     /* 0x190 */ f32 unk_190; 
     /* 0x194 */ f32 unk_194;
     /* 0x198 */ s32 unk_198;
+    /* 0x262 */ Vec3s jointTable[OBJECT_BAL_LIMB_MAX];
     /* 0x19C */ Vec3s morphTable[OBJECT_BAL_LIMB_MAX];
-    /* 0x262 */ Vec3s joinTable[OBJECT_BAL_LIMB_MAX];
-    /* 0x328 */ char pad_328[12];
+    /* 0x328 */ UNK_TYPE1 pad_328[12];
     /* 0x334 */ s16 unk_334;
     /* 0x336 */ s16 unk_336; 
     /* 0x338 */ s16 unk_338;

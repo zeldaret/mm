@@ -60,8 +60,8 @@ void DmBal_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->morphTable,
-                       this->joinTable, OBJECT_BAL_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
+                       this->morphTable, OBJECT_BAL_LIMB_MAX);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->unk_334 = 0x3C;
     this->unk_198 = 0;
@@ -120,7 +120,7 @@ void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx) {
 }
 
 Vec3f D_80C1F2C4 = { 0.0f, 9.0f, 0.0f };
-u32 D_80C1F2D0[] = { &object_bal_Tex_006050, &object_bal_Tex_0094D0 };
+TexturePtr D_80C1F2D0[] = { &object_bal_Tex_006050, &object_bal_Tex_0094D0 };
 
 void func_80C1EC60(DmBal* this, GlobalContext* globalCtx) {
     f32 temp_fv1;
