@@ -92,13 +92,13 @@ void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx
         accel.x = velocity.x * -0.05f;
         accel.y = -0.15f;
         accel.z = velocity.z * -0.05f;
-        EffectSsKiraKira_SpawnSmallYellow(globalCtx, &pos, &velocity, &accel);
+        EffectSsKirakira_SpawnSmallYellow(globalCtx, &pos, &velocity, &accel);
     }
 }
 
 void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgIkanaDharma* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
+    BgIkanaDharma* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.scale.x = 0.3f;
@@ -149,8 +149,10 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalC
     if (wasHit) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
+
     if (wasHit && sFirstHitBgIkanaDharma == NULL) {
         s32 temp_v0_2;
+
         sFirstHitBgIkanaDharma = this2;
         Flags_SetSwitch(globalCtx, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
         temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer + 0x8000);
@@ -165,7 +167,8 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalC
         if (temp_v0_3 < 0) {
             temp_v0_3 = -temp_v0_3; // this line is the reason temp_v0_3 isn't s16
         }
-        if (temp_v0_3 >= 0x4001) {
+
+        if (temp_v0_3 > 0x4000) {
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
@@ -216,7 +219,8 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (this->actionFunc == BgIkanaDharma_UpdateNormalState) {
         DynaPolyActor* actorBelow;
-        u32 pad, pad2;
+        s32 pad[2];
+
         func_800B4AEC(globalCtx, &this->dyna.actor, 30.0f);
         actorBelow = DynaPoly_GetActor(&globalCtx->colCtx, this->dyna.actor.floorBgId);
         if (actorBelow == NULL) {
@@ -224,6 +228,7 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
             if (this->dyna.actor.bgCheckFlags & 2) {
                 s16 quake = Quake_Add(globalCtx->cameraPtrs[globalCtx->activeCamera], 3);
+                
                 Quake_SetSpeed(quake, 21536);
                 Quake_SetQuakeValues(quake, 4, 0, 0, 0);
                 Quake_SetCountdown(quake, 12);
@@ -235,20 +240,25 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
             }
+
             this->dyna.actor.velocity.y = 0.0f;
         }
     } else {
         f32 phi_f0 = this->dyna.actor.scale.x * 300.0f;
+
         if (phi_f0 < 2.0f) {
             phi_f0 = 2.0f;
         }
+
         Actor_MoveWithGravity(&this->dyna.actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 20.0f, phi_f0, 0.0f, 5);
     }
+
     Actor_SetFocus(&this->dyna.actor, 40.0f);
 }
 
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaDharma* this = THIS;
+
     Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_0008C8);
 }
