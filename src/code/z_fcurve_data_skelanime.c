@@ -6,7 +6,8 @@
  * - 3 scales,
  * - 3 rotations,
  * - 3 positions
- * (note the position is stored in the animations instead of being stored in the limbs like SkelAnime would). Otherwise the structure is similar to an ordinary SkelAnime-compatible skeleton.
+ * (note the position is stored in the animations instead of being stored in the limbs like SkelAnime would). Otherwise
+ * the structure is similar to an ordinary SkelAnime-compatible skeleton.
  *
  * The animations are significantly more complex than SkelAnime. A curve animation consists of 4 parts:
  * - a header (really a footer, for it is always last in the object file)
@@ -18,7 +19,7 @@
  * constant data; there are no gaps for nonzero interpolation count.
  * If the interpolation count N for a property is larger than 0, the next N elements of the interpolation data array
  * are used to interpolate the value of the property, using Curve_Interpolate.
- * 
+ *
  * Curve limbs may use LOD:
  * - lower detail draws only the first displaylist
  * - higher detail draws both.

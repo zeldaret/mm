@@ -76,7 +76,7 @@ f32 Curve_Interpolate(f32 x, CurveInterpKnot* knots, s32 knotCount) {
                     f32 t = (x - (f32)knots[cur].abscissa) / ((f32)knots[next].abscissa - (f32)knots[cur].abscissa);
 
                     return Curve_CubicHermiteSpline(t, diff * (1.0f / 30.0f), knots[cur].ordinate, knots[next].ordinate,
-                                         knots[cur].rightGradient, knots[next].leftGradient);
+                                                    knots[cur].rightGradient, knots[next].leftGradient);
                 }
             }
         }

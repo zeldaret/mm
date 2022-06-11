@@ -160,9 +160,7 @@ void func_808CD998(DemoEffect* this, GlobalContext* globalCtx) {
 }
 
 void func_808CDAD0(f32 alphaScale) {
-    static u8 sAlphaTypes[] = {
-        1, 1, 2, 0, 1, 1, 2, 0, 1, 2, 0, 2, 1, 0, 1, 0, 2, 0, 2, 2, 0
-    };
+    static u8 sAlphaTypes[] = { 1, 1, 2, 0, 1, 1, 2, 0, 1, 2, 0, 2, 1, 0, 1, 0, 2, 0, 2, 2, 0 };
     Vtx* vtx = Lib_SegmentedToVirtual(object_efc_tw_Vtx_000060);
     s32 i;
     u8 alphas[3];
