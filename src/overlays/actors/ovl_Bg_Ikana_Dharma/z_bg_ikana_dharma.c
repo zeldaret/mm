@@ -100,7 +100,7 @@ void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y = 0.1f;
     this->dyna.actor.scale.z = 0.3f;
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ikana_obj_Colheader_000C50);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gStoneTowerTemplePunchablePillarCol);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     if (!BGIKANADHARMA_IS_CHILD(&this->dyna.actor)) {
@@ -255,5 +255,5 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaDharma* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_0008C8);
+    Gfx_DrawDListOpa(globalCtx, gStoneTowerTemplePunchablePillarDL);
 }
