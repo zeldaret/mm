@@ -1028,7 +1028,8 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
             ikEffect = &this->unk_550[i];
             if (ikEffect->ikEffectEnable) {
-                Matrix_SetTranslateRotateYXZ(ikEffect->ikEffectWorldPos.x, ikEffect->ikEffectWorldPos.y, ikEffect->ikEffectWorldPos.z, &ikEffect->ikEffectRot);
+                Matrix_SetTranslateRotateYXZ(ikEffect->ikEffectWorldPos.x, ikEffect->ikEffectWorldPos.y,
+                                             ikEffect->ikEffectWorldPos.z, &ikEffect->ikEffectRot);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
 
                 gSPMatrix(gfxOpa++, Matrix_NewMtx(globalCtx->state.gfxCtx),
