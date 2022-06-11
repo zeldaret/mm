@@ -62,7 +62,7 @@
         <Texture Name="object_ik_Tex_0119A0" OutName="tex_0119A0" Format="rgba16" Width="16" Height="16" Offset="0x119A0" />
         <Texture Name="object_ik_Tex_011BA0" OutName="tex_011BA0" Format="rgba16" Width="16" Height="16" Offset="0x11BA0" />
         <Texture Name="object_ik_Tex_011DA0" OutName="tex_011DA0" Format="ia16" Width="32" Height="32" Offset="0x11DA0" />
-        <Texture Name="gGerudoLeftEyeTex" OutName="gerudoLeftEyeTex" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
+        <Texture Name="gGerudoEyeTex" OutName="gerudo_eye_tex" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
         <Texture Name="object_ik_Tex_012DA0" OutName="tex_012DA0" Format="ci8" Width="16" Height="16" Offset="0x12DA0" />
         <Texture Name="object_ik_Tex_012EA0" OutName="tex_012EA0" Format="ia8" Width="16" Height="16" Offset="0x12EA0" />
         <!-- <Blob Name="object_ik_Blob_012FA0" Size="0xF0" Offset="0x12FA0" /> -->

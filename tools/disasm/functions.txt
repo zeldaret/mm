@@ -7107,7 +7107,7 @@
     0x8092B03C:("EnIk_SetupCutscene",),
     0x8092B098:("EnIk_PlayCutscene",),
     0x8092B1B4:("EnIk_UpdateDamage",),
-    0x8092B46C:("EnIk_ArmorDestroyed",),
+    0x8092B46C:("EnIk_UpdateArmor",),
     0x8092B5FC:("EnIk_Update",),
     0x8092B900:("EnIk_OverrideLimbDraw",),
     0x8092B93C:("EnIk_PostLimbDraw",),

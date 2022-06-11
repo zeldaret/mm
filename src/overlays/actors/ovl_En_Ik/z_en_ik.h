@@ -11,11 +11,11 @@ typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 #define IK_GET_FF(thisx) ((thisx)->params & 0xFF)
 
 typedef struct {
-    /* 0x00 */ Gfx* unk_00;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3s unk_1C;
-    /* 0x24 */ s32 unk_24;
+    /* 0x00 */ Gfx* ikEffectDList;
+    /* 0x04 */ Vec3f ikEffectWorldPos;
+    /* 0x10 */ Vec3f ikEffectVelocity;
+    /* 0x1C */ Vec3s ikEffectRot;
+    /* 0x24 */ s32 ikEffectEnable;
 } EnIkStruct; // size = 0x28
 
 typedef struct EnIk {
@@ -26,8 +26,8 @@ typedef struct EnIk {
     /* 0x02F0 */ EnIkActionFunc actionFunc;
     /* 0x02F4 */ u8 drawArmorFlags; // Value is 0 when Iron knuckle has armor, then changes to 5 for when armor is lost
     /* 0x02F5 */ u8 drawDmgEffType;
-    /* 0x02F6 */ s16 counter;
-    /* 0x02F8 */ s16 unk_2F8;
+    /* 0x02F6 */ s16 timer;
+    /* 0x02F8 */ s16 blurEffectSpawnLock;
     /* 0x02FA */ s16 subCamId;
     /* 0x02FC */ s16 invincibilityFrames;
     /* 0x0300 */ s32 effectIndex;
