@@ -6,7 +6,7 @@
 #include "z64curve.h"
 
 #define FCURVE_INTERP_CUBIC 0  // Interpolate using a Hermite cubic spline
-#define FCURVE_INTERP_NONE 1 << 0   // Return the value at the left endpoint instead of interpolating
+#define FCURVE_INTERP_NONE 1   // Return the value at the left endpoint instead of interpolating
 #define FCURVE_INTERP_LINEAR 2 // Interpolate linearly
 
 /**
