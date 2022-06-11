@@ -1,8 +1,8 @@
 /**
- * File: z_fcurve_data_skelanime.c
- * Description: Curve skeleton animation system
+ * @file z_fcurve_data_skelanime.c
+ * @brief Curve skeleton animation system
  *
- * A curve skeleton has a fixed number of limbs, each of which has 9 propetries that may be changed by the animation:
+ * A curve skeleton has a fixed number of limbs, each of which has 9 properties that may be changed by the animation:
  * - 3 scales,
  * - 3 rotations,
  * - 3 positions
@@ -10,10 +10,10 @@
  * the structure is similar to an ordinary SkelAnime-compatible skeleton.
  *
  * The animations are significantly more complex than SkelAnime. A curve animation consists of 4 parts:
- * - a header (really a footer, for it is always last in the object file)
- * - a list of counts for the 9 properties of each limb (u8)
+ * - a header (CurveAnimationHeader)
+ * - a list of counts, one for each of the 9 properties of each limb (u8)
  * - a list of interpolation data (CurveInterpKnot). The length is the sum of the counts.
- * - a list of constant data (). The length is the number of 0 in counts.
+ * - a list of constant data (s16[9]). The length is the number of 0s in counts.
  *
  * If the interpolation count for a property is 0, the value of the property is copied from the next number in the
  * constant data; there are no gaps for nonzero interpolation count.
@@ -40,7 +40,7 @@ void SkelCurve_Clear(SkelCurve* skelCurve) {
 }
 
 /**
- * Initialises the SkelCurve struct and mallocs the joint data.
+ * Initialises the SkelCurve struct and mallocs the joint table.
  *
  * @return bool always true
  */
@@ -59,7 +59,7 @@ s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeleton
 }
 
 /**
- * Frees the joint data.
+ * Frees the joint table.
  */
 void SkelCurve_Destroy(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     if (skelCurve->jointTable != NULL) {
@@ -80,11 +80,10 @@ typedef enum {
     /* 0 */ SKELCURVE_VEC_TYPE_SCALE,
     /* 1 */ SKELCURVE_VEC_TYPE_ROTATION,
     /* 2 */ SKELCURVE_VEC_TYPE_POSIITON,
-    /* 3 */ SKELCURVE_VEC_TYPE_MAX,
+    /* 3 */ SKELCURVE_VEC_TYPE_MAX
 } SkelCurveVecType;
 
 #define SKELCURVE_SCALE_SCALE 1024.0f
-#define SKELCURVE_SCALE_ROTATION (32768.0f / 180.0f)
 #define SKELCURVE_SCALE_POSITION 100
 
 /**
@@ -118,9 +117,12 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     }
 
     for (curLimb = 0; curLimb < skelCurve->limbCount; curLimb++) {
-        for (vecType = SKELCURVE_VEC_TYPE_SCALE; vecType < SKELCURVE_VEC_TYPE_MAX;
-             vecType++) {                         // scale/rotation/position
-            for (coord = 0; coord < 3; coord++) { // x/y/z
+
+        // scale/rotation/position
+        for (vecType = SKELCURVE_VEC_TYPE_SCALE; vecType < SKELCURVE_VEC_TYPE_MAX; vecType++) {
+
+            // x/y/z
+            for (coord = 0; coord < 3; coord++) {
                 f32 transformValue;
 
                 if (*knotCounts == 0) {
@@ -135,7 +137,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
                         *jointData = transformValue * SKELCURVE_SCALE_SCALE;
                     } else if (vecType == SKELCURVE_VEC_TYPE_ROTATION) {
                         // Convert value from degrees to a binary angle
-                        *jointData = transformValue * SKELCURVE_SCALE_ROTATION;
+                        *jointData = DEG_TO_BINANG(transformValue);
                     } else { // SKELCURVE_VEC_TYPE_POSIITON
                         // Model to world scale conversion
                         *jointData = transformValue * SKELCURVE_SCALE_POSITION;
@@ -228,7 +230,6 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// The first and last arguments are used inconsistently in different actors.
 void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelCurve* skelCurve,
                     OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     if (skelCurve->jointTable != NULL) {

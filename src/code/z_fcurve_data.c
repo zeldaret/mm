@@ -1,11 +1,12 @@
 /**
- * File: z_fcurve_data.c
- * Description: Interpolation functions for use with Curve SkelAnime
+ * @file z_fcurve_data.c
+ * @brief Interpolation functions for use with Curve SkelAnime
  */
 #include "global.h"
+#include "z64curve.h"
 
 #define FCURVE_INTERP_CUBIC 0  // Interpolate using a Hermite cubic spline
-#define FCURVE_INTERP_NONE 1   // Return the value at the left endpoint instead of interpolating
+#define FCURVE_INTERP_NONE 1 << 0   // Return the value at the left endpoint instead of interpolating
 #define FCURVE_INTERP_LINEAR 2 // Interpolate linearly
 
 /**
@@ -60,6 +61,7 @@ f32 Curve_Interpolate(f32 x, CurveInterpKnot* knots, s32 knotCount) {
 
         for (cur = 0;; cur++) {
             s32 next = cur + 1;
+
             // Find the subinterval in which x lies
             if (x < knots[next].abscissa) {
                 if (knots[cur].flags & FCURVE_INTERP_NONE) {

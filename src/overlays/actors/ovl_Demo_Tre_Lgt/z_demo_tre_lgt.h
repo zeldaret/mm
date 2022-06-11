@@ -2,10 +2,10 @@
 #define Z_DEMO_TRE_LGT_H
 
 #include "global.h"
+#include "z64curve.h"
 
 struct DemoTreLgt;
 
-// 0x144 is curve
 typedef struct DemoTreLgt {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x34];

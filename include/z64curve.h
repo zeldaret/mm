@@ -49,12 +49,12 @@ typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* sk
 
 
 
-f32 Curve_Interpolate(f32 x, CurveInterpKnot* transData, s32 refIdx);
+f32 Curve_Interpolate(f32 x, CurveInterpKnot* knots, s32 knotCount);
 
 void SkelCurve_Clear(SkelCurve* skelCurve);
-s32 SkelCurve_Init(struct GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* limbListSeg, CurveAnimationHeader* transUpdIdx);
+s32 SkelCurve_Init(struct GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg, CurveAnimationHeader* animation);
 void SkelCurve_Destroy(struct GlobalContext* globalCtx, SkelCurve* skelCurve);
-void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* transUpdIdx, f32 arg2, f32 endFrame, f32 curFrame, f32 playSpeed);
+void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* animation, f32 arg2, f32 endFrame, f32 curFrame, f32 playSpeed);
 s32 SkelCurve_Update(struct GlobalContext* globalCtx, SkelCurve* skelCurve);
 void SkelCurve_Draw(Actor* actor, struct GlobalContext* globalCtx, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
 

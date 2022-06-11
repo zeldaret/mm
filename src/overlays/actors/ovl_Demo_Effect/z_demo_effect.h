@@ -2,6 +2,7 @@
 #define Z_DEMO_EFFECT_H
 
 #include "global.h"
+#include "z64curve.h"
 
 struct DemoEffect;
 
