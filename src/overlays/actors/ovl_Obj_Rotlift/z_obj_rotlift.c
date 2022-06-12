@@ -55,7 +55,7 @@ void func_80B95E20(ObjRotlift* this) {
     Actor** actorUpdate;
     f32 rotShift;
     s32 i;
-    actorUpdate = this->unk15C;
+    actorUpdate = this->actorPtr;
 
     for (i = 0, rotShift = 300.0f; i < 2; i++, actorUpdate++) {
         actor = *actorUpdate;
@@ -83,7 +83,7 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     params = OBJROTLIFT_GET_1(thisx);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if (params == 0) {
-        for (actor = this->unk15C, i = 0; i < 2; i++, actor++) {
+        for (actor = this->actorPtr, i = 0; i < 2; i++, actor++) {
             if (!(OBJROTLIFT_GET_4000(thisx)) || (i)) {
                 spawnParams = 0;
             } else {

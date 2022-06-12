@@ -11,7 +11,7 @@ struct ObjRotlift;
 
 typedef struct ObjRotlift {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ Actor* unk15C[2];
+    /* 0x15C */ Actor* actorPtr[2];
 } ObjRotlift; // size = 0x164
 
 typedef struct AnimatedThing {
