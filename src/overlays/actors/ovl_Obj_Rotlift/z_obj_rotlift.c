@@ -51,23 +51,24 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80B95E20(ObjRotlift* this) {
-    Actor* actor;
-    Actor** actorUpdate;
-    f32 rotShift;
+    ObjEtcetera** dekuFlower = this->dekuFlowers;
+    ObjEtcetera* curDekuFlower;
+    f32 posOffset = 300.0f;
     s32 i;
-    actorUpdate = this->actorPtr;
 
-    for (i = 0, rotShift = 300.0f; i < 2; i++, actorUpdate++) {
-        actor = *actorUpdate;
-        if (actor->update == NULL) {
-            *actorUpdate = NULL;
+    for (i = 0; i < ARRAY_COUNT(this->dekuFlowers); i++, dekuFlower++) {
+        curDekuFlower = *dekuFlower;
+        if (curDekuFlower->dyna.actor.update == NULL) {
+            *dekuFlower = NULL;
         } else {
-            actor->world.pos.x = (Math_SinS(this->dyna.actor.shape.rot.y) * rotShift) + this->dyna.actor.world.pos.x;
-            actor->world.pos.y = this->dyna.actor.world.pos.y + (380.0f * this->dyna.actor.scale.y);
-            actor->world.pos.z = (Math_CosS(this->dyna.actor.shape.rot.y) * rotShift) + this->dyna.actor.world.pos.z;
-            actor->shape.rot.y = this->dyna.actor.shape.rot.y;
+            curDekuFlower->dyna.actor.world.pos.x =
+                this->dyna.actor.world.pos.x + posOffset * Math_SinS(this->dyna.actor.shape.rot.y);
+            curDekuFlower->dyna.actor.world.pos.y = this->dyna.actor.world.pos.y + 380.0f * this->dyna.actor.scale.y;
+            curDekuFlower->dyna.actor.world.pos.z =
+                this->dyna.actor.world.pos.z + posOffset * Math_CosS(this->dyna.actor.shape.rot.y);
+            curDekuFlower->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y;
         }
-        rotShift -= 600.0f;
+        posOffset -= 600.0f;
     }
 }
 
@@ -78,21 +79,21 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s32 spawnParams;
     s32 i;
     AnimatedThing* animated;
-    Actor** actor;
+    ObjEtcetera** actor;
 
     params = OBJROTLIFT_GET_1(thisx);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if (params == 0) {
-        for (actor = this->actorPtr, i = 0; i < 2; i++, actor++) {
+        for (actor = this->dekuFlowers, i = 0; i < 2; i++, actor++) {
             if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
                 spawnParams = 0;
             } else {
                 spawnParams = 0x100;
             }
-            *actor = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ETCETERA,
-                                        this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                        this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, spawnParams);
+            *actor = (ObjEtcetera*)Actor_SpawnAsChild(
+                &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
+                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, spawnParams);
         }
         func_80B95E20(this);
     }
