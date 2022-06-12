@@ -84,7 +84,7 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if (params == 0) {
         for (actor = this->actorPtr, i = 0; i < 2; i++, actor++) {
-            if (!(OBJROTLIFT_GET_4000(thisx)) || (i)) {
+            if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
                 spawnParams = 0;
             } else {
                 spawnParams = 0x100;
