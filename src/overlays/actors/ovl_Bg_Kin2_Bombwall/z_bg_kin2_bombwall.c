@@ -25,8 +25,8 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall*);
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall*, GlobalContext*);
 
 extern Gfx D_06000128[];
-extern Gfx D_060002C0[]; //name idea : translucentDlist
-extern Gfx D_06000360[]; //name idea : opaqueDlist
+extern Gfx D_060002C0[]; // name idea : translucentDlist
+extern Gfx D_06000360[]; // name idea : opaqueDlist
 extern CollisionHeader D_06000490;
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
@@ -66,8 +66,8 @@ Color_RGBA8 envColor = { 140, 140, 140, 255 };
 
 Vec3f dustAccel = { 0.0f, 0.33f, 0.0f };
 
-s8 D_80B6E730[] = { -60, -34, -8, 18, 44 }; //Used to generate a random vector to modify the dust position vector.
-s16 scales[] = { 25, 23, 21, 19, 17, 15, 13, 10 }; //Scales for random explosion debris.
+s8 D_80B6E730[] = { -60, -34, -8, 18, 44 }; // Used to generate a random vector to modify the dust position vector.
+s16 scales[] = { 25, 23, 21, 19, 17, 15, 13, 10 }; // Scales for random explosion debris.
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -81,7 +81,7 @@ s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall* this, GlobalContext* globalCt
 
     if (this->collider.base.acFlags & AC_HIT) {
         bombwallCollider = this->collider.base.ac;
-        //Distance check required to only react to sufficiently close explosions.
+        // Distance check required to only react to sufficiently close explosions.
         if ((bombwallCollider != NULL) &&
             (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
             return true;
@@ -94,7 +94,7 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
     s32 i;
     Vec3f pos;
     Vec3f velocity;
-    Vec3f spD8; 
+    Vec3f spD8;
     Vec3f spCC;
     s32 j;
     s32 k;
@@ -141,8 +141,8 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
             } else {
                 phi_s1 = 0;
             }
-            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, scales[k],
-                                 phi_s1, 0, 50, -1, OBJECT_KIN2_OBJ, D_06000128);
+            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, scales[k], phi_s1, 0, 50, -1,
+                                 OBJECT_KIN2_OBJ, D_06000128);
         }
     }
 }
@@ -221,7 +221,7 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) 
 
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Bombwall* this = THIS;
-    
+
     this->actionFunc(this, globalCtx);
 }
 
