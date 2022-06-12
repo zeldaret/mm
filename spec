@@ -4244,8 +4244,7 @@ beginseg
     name "ovl_Obj_Rotlift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Rotlift/z_obj_rotlift.o"
-    include "build/data/ovl_Obj_Rotlift/ovl_Obj_Rotlift.data.o"
-    include "build/data/ovl_Obj_Rotlift/ovl_Obj_Rotlift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Rotlift/ovl_Obj_Rotlift_reloc.o"
 endseg
 
 beginseg

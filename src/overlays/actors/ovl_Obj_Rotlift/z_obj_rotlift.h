@@ -3,12 +3,22 @@
 
 #include "global.h"
 
+#define OBJROTLIFT_GET_PARAMS(thisx) ((thisx)->params)
+#define OBJROTLIFT_GET_01(thisx) ((thisx)->params & 1)
+#define OBJROTLIFT_GET_4000(thisx) ((thisx)->params & 0x4000)
+
 struct ObjRotlift;
 
 typedef struct ObjRotlift {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ Actor* unk15C[2];
 } ObjRotlift; // size = 0x164
+
+typedef struct AnimatedThing {
+    /* 0x0 */ Gfx* dList;
+    /* 0x4 */ AnimatedMaterial* animMat;
+    /* 0x8 */ CollisionHeader* colHeader;
+} AnimatedThing; // size = 0xC
 
 extern const ActorInit Obj_Rotlift_InitVars;
 
