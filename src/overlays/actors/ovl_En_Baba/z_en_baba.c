@@ -150,8 +150,11 @@ static TurnOptionsSet sTurnOptions = {
 };
 
 s32 EnBaba_FindBombShopkeeper(EnBaba* this, GlobalContext* globalCtx) {
-    // the bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
-    this->bombShopkeeper = SubS_FindActor(globalCtx, this->bombShopkeeper, ACTORCAT_NPC, ACTOR_EN_OSSAN);
+    //! The bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
+    //! Note if there are other `EnOssan` actors, it may find that instance instead
+    //! in which case `EnSob1` struct acceses would be incorrect
+    this->bombShopkeeper =
+        (EnSob1*)SubS_FindActor(globalCtx, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
 
     if (this->bombShopkeeper != NULL) {
         return true;
@@ -208,41 +211,41 @@ void EnBaba_HandleConversation(EnBaba* this, GlobalContext* globalCtx) {
             break;
 
         case 0x660:
-            Actor_ChangeFocus(&this->actor, globalCtx, this->bombShopkeeper);
+            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
             this->textId = 0x661;
             break;
 
         case 0x661:
-            Actor_ChangeFocus(this->bombShopkeeper, globalCtx, &this->actor);
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, globalCtx, &this->actor);
             this->textId = 0x662;
             break;
 
         case 0x662:
-            Actor_ChangeFocus(&this->actor, globalCtx, this->bombShopkeeper);
+            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
             this->textId = 0x663;
             gSaveContext.save.weekEventReg[73] |= 1;
             this->flags |= ENBABA_END_CONVERSATION;
             break;
 
         case 0x65A:
-            Actor_ChangeFocus(&this->actor, globalCtx, this->bombShopkeeper);
+            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
             this->textId = 0x65B;
             break;
 
         case 0x65B:
-            Actor_ChangeFocus(this->bombShopkeeper, globalCtx, &this->actor);
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, globalCtx, &this->actor);
             this->textId = 0x65C;
             break;
 
         case 0x65C:
-            Actor_ChangeFocus(&this->actor, globalCtx, this->bombShopkeeper);
+            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
             this->textId = 0x65D;
             gSaveContext.save.weekEventReg[73] |= 2;
             this->flags |= ENBABA_END_CONVERSATION;
             break;
 
         case 0x65E:
-            Actor_ChangeFocus(&this->actor, globalCtx, this->bombShopkeeper);
+            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
             this->textId = 0x65F;
             this->flags |= ENBABA_END_CONVERSATION;
             break;

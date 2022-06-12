@@ -2,6 +2,7 @@
 #define Z_EN_BABA_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Sob1/z_en_sob1.h"
 #include "objects/object_bba/object_bba.h"
 
 struct EnBaba;
@@ -21,7 +22,7 @@ typedef enum {
 
 typedef struct EnBaba {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Actor* bombShopkeeper;
+    /* 0x144 */ EnSob1* bombShopkeeper;
     /* 0x148 */ EnBabaActionFunc actionFunc;
     /* 0x14C */ UNK_TYPE1 unk14C[4];
     /* 0x150 */ SkelAnime skelAnime;
