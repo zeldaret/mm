@@ -8,15 +8,15 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_10000000)
 
-#define THIS ((BgKin2Bombwall*)thisx)
+#define THIS ((BgKin2Bombwall*)(thisx))
 
 void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_80B6E020(BgKin2Bombwall*, GlobalContext*);
-void func_80B6E090(BgKin2Bombwall*, GlobalContext*);
+s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall*, GlobalContext*);
+void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall*, GlobalContext*);
 void BgKin2Bombwall_SetupWait(BgKin2Bombwall*);
 void BgKin2Bombwall_Wait(BgKin2Bombwall*, GlobalContext*);
 void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall*);
@@ -25,9 +25,9 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall*);
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall*, GlobalContext*);
 
 extern Gfx D_06000128[];
-extern Gfx D_060002C0[];
-extern Gfx D_06000360[];
-extern Gfx D_06000490[];
+extern Gfx D_060002C0[]; //name idea : translucentDlist
+extern Gfx D_06000360[]; //name idea : opaqueDlist
+extern CollisionHeader D_06000490;
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
@@ -41,7 +41,7 @@ ActorInit Bg_Kin2_Bombwall_InitVars = {
     (ActorFunc)BgKin2Bombwall_Draw,
 };
 
-ColliderCylinderInit D_80B6E6F0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -61,29 +61,27 @@ ColliderCylinderInit D_80B6E6F0 = {
     { 60, 60, 0, { 0, 0, 0 } },
 };
 
-Color_RGBA8 D_80B6E71C = { 0xD2, 0xD2, 0xD2, 0xFF };
-Color_RGBA8 D_80B6E720 = { 0x8C, 0x8C, 0x8C, 0xFF };
+Color_RGBA8 primColor = { 210, 210, 210, 255 };
+Color_RGBA8 envColor = { 140, 140, 140, 255 };
 
-Vec3f D_80B6E724 = { 0.0f, 0.33f, 0.0f };
+Vec3f dustAccel = { 0.0f, 0.33f, 0.0f };
 
-s8 D_80B6E730[] = { -0x3C, -0x22, -8, 0x12, 0x2C };
-s16 D_80B6E738[] = { 0x19, 0x17, 0x15, 0x13, 0x11, 0xF, 0xD, 0xA };
+s8 D_80B6E730[] = { -60, -34, -8, 18, 44 }; //Used to generate a random vector to modify the dust position vector.
+s16 scales[] = { 25, 23, 21, 19, 17, 15, 13, 10 }; //Scales for random explosion debris.
 
-InitChainEntry D_80B6E748[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-// suggested name: BgKin2Bombwall_HadNearbyACCollision
-// The distance here actually matters:
-// replacing 6400.0f by a distance too large makes the wall explode from a bomb quite far away.
-s32 func_80B6E020(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall* this, GlobalContext* globalCtx) {
     Actor* bombwallCollider;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         bombwallCollider = this->collider.base.ac;
+        //Distance check required to only react to sufficiently close explosions.
         if ((bombwallCollider != NULL) &&
             (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &bombwallCollider->world.pos) < 6400.0f)) {
             return true;
@@ -92,28 +90,26 @@ s32 func_80B6E020(BgKin2Bombwall* this, GlobalContext* globalCtx) {
     return false;
 }
 
-// first idea: with all the random numbers fetched, this is probably related to particle effects from slashing or
-// blowing up
-void func_80B6E090(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f pos;
     Vec3f velocity;
-    Vec3f spD8;
+    Vec3f spD8; 
     Vec3f spCC;
     s32 j;
-    s32 temp_s3;
+    s32 k;
     f32 temp_a0;
-    s32 temp_s2;
+    s32 pad;
     s16 phi_s0;
     s16 phi_s1;
 
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
 
-    for (i = 0, temp_s3 = 0; i < 6; i++) {
+    for (i = 0, k = 0; i < 6; i++) {
         temp_a0 = (i + 1) * 15.f;
         for (j = 0; j < ARRAY_COUNT(D_80B6E730); j++) {
-            temp_s3++;
-            temp_s3 &= 7;
+            k++;
+            k &= 7;
 
             spD8.x = D_80B6E730[j] + (s32)(((u32)Rand_Next()) >> 0x1C);
             spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp_a0;
@@ -136,17 +132,17 @@ void func_80B6E090(BgKin2Bombwall* this, GlobalContext* globalCtx) {
                 phi_s0 = 0x40;
             }
 
-            if (temp_s3 < 2 || Rand_Next() > 0) {
+            if (k < 2 || Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
-                func_800B0E48(globalCtx, &pos, &gZeroVec3f, &D_80B6E724, &D_80B6E71C, &D_80B6E720,
-                              (((u32)Rand_Next() >> 0x1B) + 0x46),
-                              ((((u32)Rand_Next()) >> 0x1A) + 0x3C)); // for dust spawn
+                func_800B0E48(globalCtx, &pos, &gZeroVec3f, &dustAccel, &primColor, &envColor,
+                              (((u32)Rand_Next() >> 0x1B) + 70),
+                              ((((u32)Rand_Next()) >> 0x1A) + 60)); // for dust spawn
             } else {
                 phi_s1 = 0;
             }
-            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x226, phi_s0, 0x1E, 0, 0, D_80B6E738[temp_s3],
-                                 phi_s1, 0, 0x32, -1, 0x1F5, D_06000128);
+            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, scales[k],
+                                 phi_s1, 0, 50, -1, OBJECT_KIN2_OBJ, D_06000128);
         }
     }
 }
@@ -155,16 +151,16 @@ void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Bombwall* this = THIS;
     ColliderCylinder* bombwallCollider;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80B6E748);
-    DynaPolyActor_Init((DynaPolyActor*)this, 0);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 0);
     bombwallCollider = &this->collider;
     Collider_InitCylinder(globalCtx, bombwallCollider);
     if (Flags_GetSwitch(globalCtx, BG_KIN2_BOMBWALL_SWITCH_FLAG(this))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
-    DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)this, (CollisionHeader*)&D_06000490);
-    Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &D_80B6E6F0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000490);
+    Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
     Actor_SetFocus(&this->dyna.actor, 60.0f);
     BgKin2Bombwall_SetupWait(this);
@@ -182,8 +178,8 @@ void BgKin2Bombwall_SetupWait(BgKin2Bombwall* this) {
 }
 
 void BgKin2Bombwall_Wait(BgKin2Bombwall* this, GlobalContext* globalCtx) {
-    if (func_80B6E020(this, globalCtx)) { // checks if AC collision happened
-        this->collider.base.acFlags &= 0xFFFD;
+    if (BgKin2Bombwall_IsHitFromNearby(this, globalCtx)) { // checks if AC collision happened
+        this->collider.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         BgKin2Bombwall_SetupPlayCutscene(this);
     } else {
@@ -199,10 +195,10 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* arg1) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         Flags_SetSwitch(arg1, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
-        SoundSource_PlaySfxAtFixedWorldPos(arg1, &this->dyna.actor.world.pos, 0x3C, 0x2810U);
+        SoundSource_PlaySfxAtFixedWorldPos(arg1, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
         func_800C62BC(arg1, &arg1->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
-        func_80B6E090(this, arg1); // not sure yet, but takes care of the explosion effects and particles like dust.
+        BgKin2Bombwall_SpawnEffects(this, arg1);
         BgKin2Bombwall_SetupEndCutscene(this);
 
     } else {
@@ -211,13 +207,13 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* arg1) {
 }
 
 void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this) {
-    this->unk_1AC[0] = 0x28;
+    this->timer = 0x28;
     this->actionFunc = BgKin2Bombwall_EndCutscene;
 }
 
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) {
-    this->unk_1AC[0]--;
-    if (this->unk_1AC[0] <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Actor_MarkForDeath(&this->dyna.actor);
     }
@@ -225,11 +221,13 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) 
 
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Bombwall* this = THIS;
+    
     this->actionFunc(this, globalCtx);
 }
 
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Bombwall* this = THIS;
-    Gfx_DrawDListOpa(globalCtx, (Gfx*)&D_06000360);
+
+    Gfx_DrawDListOpa(globalCtx, D_06000360);
     Gfx_DrawDListXlu(globalCtx, D_060002C0);
 }
