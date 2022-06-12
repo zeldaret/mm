@@ -34,7 +34,8 @@ void EnHata_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHata* this = THIS;
     f32 endFrame;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable, OBJECT_HATA_LIMB_MAX);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
+                   OBJECT_HATA_LIMB_MAX);
     endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
     Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, 0, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
@@ -81,7 +82,8 @@ void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                            Actor* thisx) {
     EnHata* this = THIS;
 
     if ((limbIndex == 4) || (limbIndex == 13)) {
