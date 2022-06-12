@@ -32,7 +32,7 @@ const ActorInit Bg_Ikninside_InitVars = {
     (ActorFunc)BgIkninside_Draw,
 };
 
-static Gfx* D_80C076A0[2] = { object_ikninside_obj_DL_00A748, object_ikninside_obj_DL_00A5A8 };
+static Gfx* D_80C076A0[] = { object_ikninside_obj_DL_00A748, object_ikninside_obj_DL_00A5A8 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -68,7 +68,7 @@ void BgIkninside_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    if (Flags_GetSwitch(globalCtx, DMIKNINSIDE_GET_SWITCH(thisx) >> 9)) {
+    if (Flags_GetSwitch(globalCtx, DMIKNINSIDE_GET_SWITCH(thisx))) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
@@ -86,8 +86,8 @@ void func_80C07220(BgIkninside* this, GlobalContext* globalCtx) {
 void func_80C07230(BgIkninside* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.cutscene == -1) {
         this->actionFunc = func_80C07220;
-    } else if (ActorCutscene_GetCurrentIndex() == 124) {
-        ActorCutscene_Stop(124);
+    } else if (ActorCutscene_GetCurrentIndex() == 0x7c) {
+        ActorCutscene_Stop(0x7c);
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -105,11 +105,11 @@ void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
     f32 speed;
     s32 i;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         if ((this->collider.info.acHitInfo != NULL) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000)) {
             for (i = 0; i < 20; i++) {
                 altitude = Rand_S16Offset(0x1800, 0x2800);
-                azimuth = ((u32)Rand_Next() >> 0x10);
+                azimuth = (u32)Rand_Next() >> 0x10;
                 speed = Rand_ZeroFloat(3.0f) + 8.0f;
                 velocity.x = speed * Math_CosS(altitude) * Math_SinS(azimuth);
                 velocity.y = speed * Math_SinS(altitude) + Rand_ZeroFloat(5.0f);
@@ -119,7 +119,7 @@ void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
                 pos.z = Rand_ZeroFloat(10.0f) * velocity.z + this->dyna.actor.world.pos.z;
                 EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80C076D4, 0, 30, 566, 25, D_80C076A0[i & 1]);
             }
-            Flags_SetSwitch(globalCtx, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor) >> 9);
+            Flags_SetSwitch(globalCtx, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
             this->actionFunc = func_80C07230;
             this->dyna.actor.draw = NULL;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -128,12 +128,12 @@ void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
         }
     }
     if (this->unk_1AA > 0) {
-        if (this->unk_1AA & 1) {
+        if ((this->unk_1AA % 2) != 0) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 1.0f;
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
         }
-        this->unk_1AA += -1;
+        this->unk_1AA--;
     } else {
         this->unk_1AA = 0;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
