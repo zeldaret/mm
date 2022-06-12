@@ -72,7 +72,7 @@ void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx
     f32 initialRadius = this->dyna.actor.scale.x * 200.0f;
     f32 initialY = this->dyna.actor.scale.y * 50.0f;
 
-    for (i = 0; i != 4; i++) {
+    for (i = 0; i < 4; i++) {
         f32 speed = (Rand_ZeroOne() * 5.0f) + 5.0f;
         s16 angle = ((u32)Rand_Next() >> 0x12) + this->dyna.actor.world.rot.y + 0x6000;
         f32 dirX = Math_SinS(angle);
@@ -185,7 +185,7 @@ void BgIkanaDharma_WaitToStartCutscene(BgIkanaDharma* this, GlobalContext* globa
 }
 
 void BgIkanaDharma_BeginCutsceneState(BgIkanaDharma* this) {
-    this->cutsceneFramesRemaining = 0xA;
+    this->cutsceneFramesRemaining = 10;
     this->actionFunc = BgIkanaDharma_UpdateCutscene;
 }
 
