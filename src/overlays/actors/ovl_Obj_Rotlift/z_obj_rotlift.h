@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define OBJROTLIFT_GET_PARAMS(thisx) ((thisx)->params)
-#define OBJROTLIFT_GET_01(thisx) ((thisx)->params & 1)
+#define OBJROTLIFT_GET_1(thisx) ((thisx)->params & 1)
 #define OBJROTLIFT_GET_4000(thisx) ((thisx)->params & 0x4000)
 
 struct ObjRotlift;

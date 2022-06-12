@@ -80,7 +80,7 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     AnimatedThing* animated;
     Actor** actor;
 
-    params = OBJROTLIFT_GET_01(thisx);
+    params = OBJROTLIFT_GET_1(thisx);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if (params == 0) {
         for (actor = this->unk15C, i = 0; i < 2; i++, actor++) {
@@ -114,7 +114,7 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
     s16 dirShift;
     s32 direction;
 
-    if (OBJROTLIFT_GET_01(thisx) == 0) {
+    if (OBJROTLIFT_GET_1(thisx) == 0) {
         func_80B95E20(this);
     }
     if (OBJROTLIFT_GET_PARAMS(thisx) >= 0) {
@@ -131,7 +131,7 @@ void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     AnimatedThing* animated;
 
-    animated = &D_80B96160[OBJROTLIFT_GET_01(thisx)];
+    animated = &D_80B96160[OBJROTLIFT_GET_1(thisx)];
     AnimatedMat_Draw(globalCtx, animated->animMat);
     Gfx_DrawDListOpa(globalCtx, animated->dList);
 }
