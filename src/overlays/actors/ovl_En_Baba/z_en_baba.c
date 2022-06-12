@@ -13,7 +13,7 @@
 #define ENBABA_END_CONVERSATION (1 << 0)
 #define ENBABA_VISIBLE (1 << 1)
 #define ENBABA_KNOCKED_OVER (1 << 2) // Don't track player
-#define ENBABA_TYPE_IDLE (1 << 3)    // autotalk and set next entrance
+#define ENBABA_AUTOTALK (1 << 3)     // autotalk and set next entrance
 #define ENBABA_GIVE_BLAST_MASK (1 << 5)
 #define ENBABA_GAVE_BLAST_MASK (1 << 6)
 #define ENBABA_DRAW_SHADOW (1 << 7)
@@ -164,7 +164,7 @@ void EnBaba_HandleConversation(EnBaba* this, GlobalContext* globalCtx) {
 
     switch (this->textId) {
         case 0:
-            if (this->flags & ENBABA_TYPE_IDLE) {
+            if (this->flags & ENBABA_AUTOTALK) {
                 if (gSaveContext.save.weekEventReg[33] & 8) {
                     this->textId = 0x2A34;
                     break;
@@ -514,7 +514,7 @@ void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
             }
 
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
-            this->flags |= ENBABA_TYPE_IDLE;
+            this->flags |= ENBABA_AUTOTALK;
             this->actionFunc = EnBaba_Idle;
         } else {
             Actor_MarkForDeath(&this->actor);
@@ -540,16 +540,16 @@ void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void EnBaba_Idle(EnBaba* this, GlobalContext* globalCtx) {
-    if ((this->flags & ENBABA_TYPE_IDLE) || (this->bombShopkeeper != NULL) ||
+    if ((this->flags & ENBABA_AUTOTALK) || (this->bombShopkeeper != NULL) ||
         EnBaba_FindBombShopkeeper(this, globalCtx)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             EnBaba_HandleConversation(this, globalCtx);
-            if (this->flags & ENBABA_TYPE_IDLE) {
+            if (this->flags & ENBABA_AUTOTALK) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
             }
             this->actionFunc = EnBaba_Converse;
         } else if (this->actor.xzDistToPlayer < 100.0f) {
-            if (this->flags & ENBABA_TYPE_IDLE) {
+            if (this->flags & ENBABA_AUTOTALK) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
             func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -577,7 +577,7 @@ void EnBaba_Converse(EnBaba* this, GlobalContext* globalCtx) {
                 this->flags &= ~ENBABA_END_CONVERSATION;
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                if (this->flags & ENBABA_TYPE_IDLE) {
+                if (this->flags & ENBABA_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (globalCtx->msgCtx.unk120B1 == 0) {
                             gSaveContext.save.weekEventReg[81] |= 2;
