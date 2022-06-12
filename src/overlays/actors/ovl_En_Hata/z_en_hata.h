@@ -12,7 +12,7 @@ typedef struct EnHata {
     /* 0x1A0 */ Vec3s jointTable[OBJECT_HATA_LIMB_MAX];
     /* 0x21E */ Vec3s morphTable[OBJECT_HATA_LIMB_MAX];
     /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ char pad_29E;
+    /* 0x29E */ UNK_TYPE1 pad_29E;
     /* 0x2A0 */ s16 unk_2A0;
     /* 0x2A4 */ Vec3f unk_2A4;
 } EnHata; /* size = 0x2B0 */
