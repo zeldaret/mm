@@ -120,7 +120,7 @@ void func_80C1EAE8(DmBal* this, GlobalContext* globalCtx) {
 }
 
 Vec3f D_80C1F2C4 = { 0.0f, 9.0f, 0.0f };
-TexturePtr D_80C1F2D0[] = { &object_bal_Tex_006050, &object_bal_Tex_0094D0 };
+TexturePtr D_80C1F2D0[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
 
 void func_80C1EC60(DmBal* this, GlobalContext* globalCtx) {
     f32 temp_fv1;
