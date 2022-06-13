@@ -63,7 +63,6 @@
         <DList Name="gDmZl4LeftHandDL" Offset="0xC230" />
         <!-- unk frilly clothing, dress in shape for horse riding? not used in any Zl4 display list -->
         <DList Name="object_zl4_DL_00C410" Offset="0xC410" />
-        <!-- top piece of above dl -->
         <DList Name="gDmZl4WaistDL" Offset="0xC8D0" />
 
         <DList Name="gDmZl4Dress1DL" Offset="0xD0E8" />
@@ -74,7 +73,7 @@
         <DList Name="gDmZl4LeftLegDL" Offset="0xD728" />
         <DList Name="gDmZl4LeftBootDL" Offset="0xD778" />
 
-        <!-- Ocarina in this actor too... couldn't have just made it a different object? why do we need like 4 copies of this.. -->
+        <!-- Ocarina rendered on her right hand limb when teaching Song Of Time -->
         <Texture Name="gDmZl4OcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
         <DList Name="gDmZl4OcarinaDL" Offset="0xDE08" />
 
@@ -166,9 +165,8 @@
         <!-- arms behind back head down -->
         <Animation Name="gDmZl4Anim_024B68" Offset="0x24B68" />
 
-        <!-- Flute, unused? -->
+        <!-- Flute, unused -->
         <DList Name="gDmZl4FluteDL" Offset="0x24D80" />
-        <!-- Calls gDmZl4FluteDL then ends -->
         <DList Name="gDmZl4FluteWrapperDL" Offset="0x24E40" />
         <Texture Name="gDmZl4FluteHoleTex" OutName="flute_hole" Format="rgba16" Width="16" Height="8" Offset="0x24E50" />
         
