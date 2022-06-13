@@ -111,7 +111,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             temp = rumbleMgr->unk_04[index];
         }
 
-        // Keep track for how long this have been rumbling (almost) non stop
+        // Keep track of how long rumbling has been (almost) nonstop enabled
         if (temp == 0) {
             rumbleMgr->unk_108++;
             if (rumbleMgr->unk_108 > 5) {
