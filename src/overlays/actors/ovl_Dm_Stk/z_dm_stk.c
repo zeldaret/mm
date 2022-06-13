@@ -9,7 +9,6 @@
  */
 
 #include "z_dm_stk.h"
-#include "objects/object_stk/object_stk.h"
 #include "objects/object_stk2/object_stk2.h"
 #include "objects/object_stk3/object_stk3.h"
 
@@ -318,11 +317,14 @@ void DmStk_LoadObjectForAnimation(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * This function is always called with unusedExtraOffset = 0.
+ */
 void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
-                           u16 index) {
+                           u16 unusedExtraOffset) {
     DmStk_LoadObjectForAnimation(this, globalCtx);
 
-    animation += index;
+    animation += unusedExtraOffset;
 
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame,
                      (animation->frameCount < 0.0f) ? Animation_GetLastFrame(&animation->animation->common)
