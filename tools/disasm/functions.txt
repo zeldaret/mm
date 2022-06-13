@@ -16220,7 +16220,7 @@
     0x80BEC080:("EffLastday_Update",),
     0x80BEC0A4:("func_80BEC0A4",),
     0x80BEC0DC:("EffLastday_Draw",),
-    0x80BEC240:("BgIkanaDharma_CreateParticles",),
+    0x80BEC240:("BgIkanaDharma_SpawnEffects",),
     0x80BEC3F4:("BgIkanaDharma_Init",),
     0x80BEC560:("BgIkanaDharma_Destroy",),
     0x80BEC5C4:("BgIkanaDharma_SetupWaitForHit",),

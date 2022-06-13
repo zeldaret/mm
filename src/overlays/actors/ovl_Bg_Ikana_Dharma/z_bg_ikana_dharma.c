@@ -64,7 +64,7 @@ static InitChainEntry sInitChain[] = {
 
 static BgIkanaDharma* sFirstHitBgIkanaDharma;
 
-void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx) {
+void BgIkanaDharma_SpawnEffects(BgIkanaDharma* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f pos;
     Vec3f velocity;
@@ -114,7 +114,7 @@ void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx2) {
             Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_IKANA_DHARMA,
                                           this->dyna.actor.world.pos.x, segmentY, this->dyna.actor.world.pos.z,
                                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
-                                          this->dyna.actor.shape.rot.z, BGIKANADHARMA_PARAM(0, true, 0),
+                                          this->dyna.actor.shape.rot.z, BGIKANADHARMA_PARAMS(0, true, 0),
                                           this->dyna.actor.cutscene, this->dyna.actor.unk20, NULL);
         }
 
@@ -208,7 +208,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, GlobalContext* glob
     } else {
         this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
         this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
-        BgIkanaDharma_CreateParticles(this, globalCtx);
+        BgIkanaDharma_SpawnEffects(this, globalCtx);
     }
 }
 
