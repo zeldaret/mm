@@ -277,11 +277,11 @@ void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(sIronKnuckleArmorType); i++) {
             sIronKnuckleArmorType[i][IK_TYPE_SILVER - 1] =
-                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_SILVER - 1]);
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][0]);
             sIronKnuckleArmorType[i][IK_TYPE_BLACK - 1] =
-                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_BLACK - 1]);
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][1]);
             sIronKnuckleArmorType[i][IK_TYPE_WHITE - 1] =
-                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_WHITE - 1]);
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][2]);
         }
         sDisplayListDesegmented = true;
     }
