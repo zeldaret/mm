@@ -15,12 +15,13 @@ void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaDharma_BeginNormalState(BgIkanaDharma* this);
-void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalCtx);
-void BgIkanaDharma_BeginWaitToStartCutscene(BgIkanaDharma* this);
-void BgIkanaDharma_WaitToStartCutscene(BgIkanaDharma* this, GlobalContext* globalCtx);
-void BgIkanaDharma_BeginCutsceneState(BgIkanaDharma* this);
-void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx);
+
+void BgIkanaDharma_SetupWaitForHit(BgIkanaDharma* this);
+void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, GlobalContext* globalCtx);
+void BgIkanaDharma_SetupStartCutscene(BgIkanaDharma* this);
+void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, GlobalContext* globalCtx);
+void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
+void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
@@ -91,8 +92,8 @@ void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx
     }
 }
 
-void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
-    GlobalContext* globalCtx2 = globalCtx;
+void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     BgIkanaDharma* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -110,17 +111,17 @@ void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < numSegments; i++) {
             segmentY += 60.0f;
-            Actor_SpawnAsChildAndCutscene(&globalCtx2->actorCtx, globalCtx, ACTOR_BG_IKANA_DHARMA,
+            Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_IKANA_DHARMA,
                                           this->dyna.actor.world.pos.x, segmentY, this->dyna.actor.world.pos.z,
                                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
-                                          this->dyna.actor.shape.rot.z, BGIKANADHARMA_FLAG_IS_CHILD,
+                                          this->dyna.actor.shape.rot.z, BGIKANADHARMA_PARAM(0, true, 0),
                                           this->dyna.actor.cutscene, this->dyna.actor.unk20, NULL);
         }
 
         this->dyna.actor.bgCheckFlags |= 1;
     }
 
-    BgIkanaDharma_BeginNormalState(this);
+    BgIkanaDharma_SetupWaitForHit(this);
 }
 
 void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -133,12 +134,12 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgIkanaDharma_BeginNormalState(BgIkanaDharma* this) {
-    this->actionFunc = BgIkanaDharma_UpdateNormalState;
+void BgIkanaDharma_SetupWaitForHit(BgIkanaDharma* this) {
+    this->actionFunc = BgIkanaDharma_WaitForHit;
     this->dyna.actor.speedXZ = 0.0f;
 }
 
-void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalCtx) {
+void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, GlobalContext* globalCtx) {
     s32 wasHit = (this->collider.base.acFlags & AC_HIT) != 0;
     Player* player = GET_PLAYER(globalCtx);
     BgIkanaDharma* this2 = this;
@@ -157,7 +158,7 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalC
         this->dyna.actor.world.rot.y = tempAngle1 + tempAngle2 + 0xF000;
         this->dyna.actor.speedXZ = 20.0f;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
-        BgIkanaDharma_BeginWaitToStartCutscene(this);
+        BgIkanaDharma_SetupStartCutscene(this);
     } else if ((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40 && sFirstHitBgIkanaDharma == NULL &&
                this->dyna.actor.xzDistToPlayer < 420.0f) {
         tempAngle1 = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y);
@@ -170,26 +171,26 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalC
     }
 }
 
-void BgIkanaDharma_BeginWaitToStartCutscene(BgIkanaDharma* this) {
+void BgIkanaDharma_SetupStartCutscene(BgIkanaDharma* this) {
     ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-    this->actionFunc = BgIkanaDharma_WaitToStartCutscene;
+    this->actionFunc = BgIkanaDharma_StartCutscene;
 }
 
-void BgIkanaDharma_WaitToStartCutscene(BgIkanaDharma* this, GlobalContext* globalCtx) {
+void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        BgIkanaDharma_BeginCutsceneState(this);
+        BgIkanaDharma_SetupWaitForCutsceneToEnd(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void BgIkanaDharma_BeginCutsceneState(BgIkanaDharma* this) {
+void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this) {
     this->cutsceneFramesRemaining = 10;
-    this->actionFunc = BgIkanaDharma_UpdateCutscene;
+    this->actionFunc = BgIkanaDharma_WaitForCutsceneToEnd;
 }
 
-void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx) {
+void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, GlobalContext* globalCtx) {
     if (this->cutsceneFramesRemaining > 0) {
         this->cutsceneFramesRemaining--;
 
@@ -215,7 +216,7 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaDharma* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    if (this->actionFunc == BgIkanaDharma_UpdateNormalState) {
+    if (this->actionFunc == BgIkanaDharma_WaitForHit) {
         DynaPolyActor* actorBelow;
         s32 pad[2];
 
