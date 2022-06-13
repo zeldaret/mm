@@ -8,15 +8,15 @@ struct EnIk;
 
 typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 
-#define IK_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define IK_GET_ARMOR_TYPE(thisx) ((thisx)->params & 0xFF)
 
 typedef struct {
-    /* 0x00 */ Gfx* ikEffectDList;
-    /* 0x04 */ Vec3f ikEffectWorldPos;
-    /* 0x10 */ Vec3f ikEffectVelocity;
-    /* 0x1C */ Vec3s ikEffectRot;
-    /* 0x24 */ s32 ikEffectEnable;
-} EnIkStruct; // size = 0x28
+    /* 0x00 */ Gfx* dList;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f vel;
+    /* 0x1C */ Vec3s rot;
+    /* 0x24 */ s32 enabled;
+} IronKnuckleEffect; // size = 0x28
 
 typedef struct EnIk {
     /* 0x0000 */ Actor actor;
@@ -39,7 +39,7 @@ typedef struct EnIk {
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;
     /* 0x0498 */ ColliderTrisElement shieldColliderItems[2];
-    /* 0x0550 */ EnIkStruct unk_550[7];
+    /* 0x0550 */ IronKnuckleEffect unk_550[7];
 } EnIk; // size = 0x668
 
 extern const ActorInit En_Ik_InitVars;

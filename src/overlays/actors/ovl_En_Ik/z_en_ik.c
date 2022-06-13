@@ -11,19 +11,10 @@
 #define THIS ((EnIk*)thisx)
 
 typedef enum {
-    /* 0 */ IK_TYPE_SILVER,
+    /* 0 */ IK_TYPE_SILVER = 1,
     /* 1 */ IK_TYPE_BLACK,
     /* 2 */ IK_TYPE_WHITE
 } EnIkType;
-
-typedef enum {
-    /* 0x0 */ DMG_EFF_HIT,
-    /* 0x4 */ DMG_EFF_FIRE = 0x2,
-    /* 0x0 */ DMG_EFF_ICE,
-    /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
-    /* 0xF */ DMG_EFF_NONE = 0xF,
-
-} EnIkDmgEff;
 
 void EnIk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -54,8 +45,8 @@ void EnIk_SetupBlock(EnIk* this);
 void EnIk_Block(EnIk* this, GlobalContext* globalCtx);
 void EnIk_SetupReactToAttack(EnIk* this, s32 arg1);
 void EnIk_ReactToAttack(EnIk* this, GlobalContext* globalCtx);
-void EnIk_SetupDeath(EnIk* this);
-void EnIk_Death(EnIk* this, GlobalContext* globalCtx);
+void EnIk_SetupDie(EnIk* this);
+void EnIk_Die(EnIk* this, GlobalContext* globalCtx);
 void EnIk_Frozen(EnIk* this, GlobalContext* globalCtx);
 void EnIk_SetupCutscene(EnIk* this);
 void EnIk_PlayCutscene(EnIk* this, GlobalContext* globalCtx);
@@ -173,31 +164,40 @@ static ColliderQuadInit sQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+typedef enum {
+    /* 0x0 */ DMG_EFF_HIT,
+    /* 0x4 */ DMG_EFF_FIRE = 0x2,
+    /* 0x0 */ DMG_EFF_ICE,
+    /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
+    /* 0xF */ DMG_EFF_IMMUNE = 0xF,
+
+} EnIkDmgEff;
+
 static DamageTable sDamageTableArmor = {
-    /* Deku Nut       */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Deku Stick     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Horse trample  */ DMG_ENTRY(0, DMG_EFF_HIT),
     /* Explosives     */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Zora boomerang */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Normal arrow   */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_HIT),
     /* Sword          */ DMG_ENTRY(1, DMG_EFF_HIT),
     /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_HIT),
-    /* Fire arrow     */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Ice arrow      */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Ice arrow      */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Light arrow    */ DMG_ENTRY(1, DMG_EFF_LIGHT_SPARKS),
-    /* Goron spikes   */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Deku spin      */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(0, DMG_EFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Deku spin      */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Deku bubble    */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* Deku launch    */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Zora barrier   */ DMG_ENTRY(0, DMG_EFF_HIT),
     /* Normal shield  */ DMG_ENTRY(0, DMG_EFF_HIT),
     /* Light ray      */ DMG_ENTRY(0, DMG_EFF_HIT),
     /* Thrown object  */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Zora punch     */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Spin attack    */ DMG_ENTRY(1, DMG_EFF_HIT),
     /* Sword beam     */ DMG_ENTRY(0, DMG_EFF_HIT),
     /* Normal Roll    */ DMG_ENTRY(0, DMG_EFF_HIT),
@@ -216,7 +216,7 @@ static DamageTable sDamageTableNoArmor = {
     /* Zora boomerang */ DMG_ENTRY(1, DMG_EFF_HIT),
     /* Normal arrow   */ DMG_ENTRY(1, DMG_EFF_HIT),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_HIT),
     /* Sword          */ DMG_ENTRY(1, DMG_EFF_HIT),
     /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_HIT),
@@ -269,16 +269,19 @@ void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderItems);
     Collider_InitAndSetQuad(globalCtx, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTableArmor, &sColChkInfoInit);
-    this->actor.params = IK_GET_FF(&this->actor);
+    this->actor.params = IK_GET_ARMOR_TYPE(&this->actor);
     this->actor.params--;
 
     Effect_Add(globalCtx, &this->effectIndex, EFFECT_BLURE2, 0, 0, &sBlureInit);
     if (!sDisplayListDesegmented) {
 
         for (i = 0; i < ARRAY_COUNT(sIronKnuckleArmorType); i++) {
-            sIronKnuckleArmorType[i][IK_TYPE_SILVER] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_SILVER]);
-            sIronKnuckleArmorType[i][IK_TYPE_BLACK] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_BLACK]);
-            sIronKnuckleArmorType[i][IK_TYPE_WHITE] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_WHITE]);
+            sIronKnuckleArmorType[i][IK_TYPE_SILVER - 1] =
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_SILVER - 1]);
+            sIronKnuckleArmorType[i][IK_TYPE_BLACK - 1] =
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_BLACK - 1]);
+            sIronKnuckleArmorType[i][IK_TYPE_WHITE - 1] =
+                Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][IK_TYPE_WHITE - 1]);
         }
         sDisplayListDesegmented = true;
     }
@@ -668,15 +671,15 @@ void EnIk_ReactToAttack(EnIk* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnIk_SetupDeath(EnIk* this) {
+void EnIk_SetupDie(EnIk* this) {
     this->actor.speedXZ = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gIronKnuckleDeathAnim, -4.0f);
     this->timer = 24;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DEAD);
-    this->actionFunc = EnIk_Death;
+    this->actionFunc = EnIk_Die;
 }
 
-void EnIk_Death(EnIk* this, GlobalContext* globalCtx) {
+void EnIk_Die(EnIk* this, GlobalContext* globalCtx) {
     static Vec3f sEffectVelAndAccel = { 0.0f, 0.5f, 0.0f };
     s32 i;
     Vec3f effectPos;
@@ -716,7 +719,9 @@ void EnIk_SetupFrozen(EnIk* this) {
 }
 
 void EnIk_Frozen(EnIk* this, GlobalContext* globalCtx) {
-    DECR(this->timer);
+    if (this->timer != 0) {
+        this->timer--;
+    }
     if (this->timer == 0) {
         EnIk_Thaw(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
@@ -752,7 +757,7 @@ void EnIk_PlayCutscene(EnIk* this, GlobalContext* globalCtx) {
         if (this->actor.colChkInfo.health != 0) {
             EnIk_SetupReactToAttack(this, false);
         } else {
-            EnIk_SetupDeath(this);
+            EnIk_SetupDie(this);
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -774,13 +779,13 @@ void EnIk_UpdateDamage(EnIk* this, GlobalContext* globalCtx) {
         this->colliderTris.base.acFlags &= ~AC_BOUNCED;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
     } else if (this->colliderCylinder.base.acFlags & AC_HIT) {
-        s32 isArmorBroke = false;
+        s32 isArmorBroken = false;
 
         Actor_SetDropFlag(&this->actor, &this->colliderCylinder.info);
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
-        if ((this->actor.colChkInfo.damageEffect != DMG_EFF_NONE) &&
+        if ((this->actor.colChkInfo.damageEffect != DMG_EFF_IMMUNE) &&
             ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0))) {
+             (!(this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)))) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 12);
             this->invincibilityFrames = 12;
             EnIk_Thaw(this, globalCtx);
@@ -788,13 +793,13 @@ void EnIk_UpdateDamage(EnIk* this, GlobalContext* globalCtx) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 if (this->drawArmorFlags == 0) {
                     this->actor.colChkInfo.health = 9;
-                    isArmorBroke = true;
+                    isArmorBroken = true;
                 } else {
                     Enemy_StartFinishingBlow(globalCtx, &this->actor);
                     func_801A2ED8();
                 }
             }
-            if (isArmorBroke == true) {
+            if (isArmorBroken == true) {
                 this->drawArmorFlags = 1;
                 this->colliderCylinder.base.colType = 3;
                 this->actor.colChkInfo.damageTable = &sDamageTableNoArmor;
@@ -837,27 +842,27 @@ void EnIk_UpdateDamage(EnIk* this, GlobalContext* globalCtx) {
 void EnIk_UpdateArmor(EnIk* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
-    EnIkStruct* ikEffect;
+    IronKnuckleEffect* ikEffect;
     Vec3f effectPos;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
         ikEffect = &this->unk_550[i];
 
-        if (ikEffect->ikEffectEnable) {
-            Math_Vec3f_Sum(&ikEffect->ikEffectWorldPos, &ikEffect->ikEffectVelocity, &ikEffect->ikEffectWorldPos);
-            ikEffect->ikEffectVelocity.y += -1.5f;
-            if (ikEffect->ikEffectWorldPos.y < this->actor.floorHeight) {
-                ikEffect->ikEffectEnable = false;
-                ikEffect->ikEffectWorldPos.y = this->actor.floorHeight;
+        if (ikEffect->enabled) {
+            Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->vel, &ikEffect->pos);
+            ikEffect->vel.y += -1.5f;
+            if (ikEffect->pos.y < this->actor.floorHeight) {
+                ikEffect->enabled = false;
+                ikEffect->pos.y = this->actor.floorHeight;
 
                 for (i = 0; i < 4; i++) {
-                    effectPos.x = randPlusMinusPoint5Scaled(20.0f) + ikEffect->ikEffectWorldPos.x;
-                    effectPos.y = Rand_ZeroFloat(20.0f) + ikEffect->ikEffectWorldPos.y;
-                    effectPos.z = randPlusMinusPoint5Scaled(20.0f) + ikEffect->ikEffectWorldPos.z;
+                    effectPos.x = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.x;
+                    effectPos.y = Rand_ZeroFloat(20.0f) + ikEffect->pos.y;
+                    effectPos.z = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.z;
                     func_800B3030(globalCtx, &effectPos, &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
                 }
 
-                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ikEffect->ikEffectWorldPos, 11, NA_SE_EN_EXTINCT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ikEffect->pos, 11, NA_SE_EN_EXTINCT);
             }
         }
     }
@@ -931,8 +936,8 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnIk_UpdateArmor(this, globalCtx);
 }
 
-static s8 D_8092C1A8[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  -1, -1, -1,
-                           -1, -1, -1, -1, -1, -1, 3,  5,  4,  6,  1,  2,  -1, -1, 0,  0 };
+s8 D_8092C1A8[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  -1, -1, -1,
+                    -1, -1, -1, -1, -1, -1, 3,  5,  4,  6,  1,  2,  -1, -1, 0,  0 };
 
 s32 EnIk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
@@ -954,7 +959,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnIk* this = THIS;
     s32 sp80 = D_8092C1A8[limbIndex];
     Gfx* xlu;
-    EnIkStruct* ikEffect;
+    IronKnuckleEffect* ikEffect;
     s16 sp76;
     Vec3f vtxC;
     Vec3f vtxD;
@@ -966,16 +971,16 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         if (sp80 > 0) {
             ikEffect = &this->unk_550[sp80];
             mf = Matrix_GetCurrent();
-            ikEffect->ikEffectWorldPos.x = mf->mf[3][0];
-            ikEffect->ikEffectWorldPos.y = mf->mf[3][1];
-            ikEffect->ikEffectWorldPos.z = mf->mf[3][2];
-            Matrix_MtxFToYXZRot(mf, &ikEffect->ikEffectRot, false);
-            ikEffect->ikEffectEnable = true;
+            ikEffect->pos.x = mf->mf[3][0];
+            ikEffect->pos.y = mf->mf[3][1];
+            ikEffect->pos.z = mf->mf[3][2];
+            Matrix_MtxFToYXZRot(mf, &ikEffect->rot, false);
+            ikEffect->enabled = true;
             sp76 = D_8092BFA0[sp80].unk04 + ((Rand_Next() >> 0x13) + this->actor.shape.rot.y);
-            ikEffect->ikEffectVelocity.x = Math_SinS(sp76) * 5.0f;
-            ikEffect->ikEffectVelocity.y = 6.0f;
-            ikEffect->ikEffectVelocity.z = Math_CosS(sp76) * 5.0f;
-            ikEffect->ikEffectDList = *dList;
+            ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
+            ikEffect->vel.y = 6.0f;
+            ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
+            ikEffect->dList = *dList;
         }
         if (limbIndex == IRON_KNUCKLE_LIMB_WAIST) {
             this->drawArmorFlags |= 0x2;
@@ -1024,7 +1029,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
     Gfx* gfxOpa;
     Gfx* gfxXlu;
     s32 sp54;
-    EnIkStruct* ikEffect;
+    IronKnuckleEffect* ikEffect;
     s32 i;
 
     if (this->drawArmorFlags == (0x1 | 0x2)) {
@@ -1036,14 +1041,13 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
             ikEffect = &this->unk_550[i];
-            if (ikEffect->ikEffectEnable) {
-                Matrix_SetTranslateRotateYXZ(ikEffect->ikEffectWorldPos.x, ikEffect->ikEffectWorldPos.y,
-                                             ikEffect->ikEffectWorldPos.z, &ikEffect->ikEffectRot);
+            if (ikEffect->enabled) {
+                Matrix_SetTranslateRotateYXZ(ikEffect->pos.x, ikEffect->pos.y, ikEffect->pos.z, &ikEffect->rot);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
 
                 gSPMatrix(gfxOpa++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(gfxOpa++, ikEffect->ikEffectDList);
+                gSPDisplayList(gfxOpa++, ikEffect->dList);
 
                 if (D_8092BFA0[i].unk00 != NULL) {
                     gSPMatrix(gfxXlu++, Matrix_NewMtx(globalCtx->state.gfxCtx),
