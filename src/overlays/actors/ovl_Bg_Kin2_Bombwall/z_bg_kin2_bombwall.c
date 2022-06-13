@@ -27,7 +27,7 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall*, GlobalContext*);
 extern Gfx D_06000128[];
 extern Gfx D_060002C0[]; // name idea : translucentDlist
 extern Gfx D_06000360[]; // name idea : opaqueDlist
-extern CollisionHeader D_06000490;
+extern CollisionHeader D_06000490; 
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
