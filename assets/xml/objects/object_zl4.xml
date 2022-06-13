@@ -32,7 +32,7 @@
 
         <!-- Eye Textures -->
         <Texture Name="gDmZl4EyeOpenNormalTex" OutName="eye_open_normal" Format="ci8" Width="32" Height="32" Offset="0x2AF0" TlutOffset="0x870"/>
-        <Texture Name="gDmZl4EyeBlinkingTex" OutName="eye_blinking" Format="ci8" Width="32" Height="32" Offset="0x2EF0" TlutOffset="0x870"/>
+        <Texture Name="gDmZl4EyeHalfTex" OutName="eye_blinking" Format="ci8" Width="32" Height="32" Offset="0x2EF0" TlutOffset="0x870"/>
         <Texture Name="gDmZl4EyeClosedTex" OutName="eye_closed" Format="ci8" Width="32" Height="32" Offset="0x32F0" TlutOffset="0x870"/>
         <Texture Name="gDmZl4EyeWideTex" OutName="eye_wide" Format="ci8" Width="32" Height="32" Offset="0x36F0" TlutOffset="0x870"/>
         <Texture Name="gDmZl4EyeHappyTex" OutName="eye_happy" Format="ci8" Width="32" Height="32" Offset="0x3AF0" TlutOffset="0x870"/>

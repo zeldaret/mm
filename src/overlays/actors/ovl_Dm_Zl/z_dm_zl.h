@@ -20,13 +20,10 @@ typedef struct DmZl {
     /* 0x2B5 */ u8 nextEyeState;   // used to control eye state, but not set by our actor, outside of actor?
     /* 0x2B6 */ u8 nextMouthState; // used to control mouth state, but not set by our actor, outside of actor?
     /* 0x2B8 */ s16 blinkTimer;
-    /* 0x2BA */ s16 unused2BA; // init to 0, unread/unchanged by DmZl after
+    /* 0x2BA */ s16 unk_2BA; // set but not used by this actor.
     /* 0x2BC */ UNK_TYPE1 pad2BC[0x18]; // unused by DmZl
 } DmZl; // size = 0x2D4
 
 extern const ActorInit Dm_Zl_InitVars;
-
-// vanilla params are 0x0000, never checked or used
-#define DMZL_TYPE_SOT_CUTCSENE 0
 
 #endif // Z_DM_ZL_H

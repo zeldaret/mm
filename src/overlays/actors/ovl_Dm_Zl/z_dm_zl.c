@@ -30,7 +30,7 @@ const ActorInit Dm_Zl_InitVars = {
     (ActorFunc)DmZl_Draw,
 };
 
-static AnimationInfo sAnimations[7] = {
+static AnimationInfo sAnimations[] = {
     { &gDmZl4FacingAwayHandsOverEmblemLoop, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
     { &gDmZl4TurningAround2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
     { &gDmZl4HandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
@@ -41,17 +41,17 @@ static AnimationInfo sAnimations[7] = {
 };
 
 typedef enum {
-    ZELDA_ANIM_FACING_AWAY,
-    ZELDA_ANIM_TURNING_TOWARD_PLAYER,
-    ZELDA_ANIM_FACING_PLAYER,
-    ZELDA_ANIM_GIVING_OCARINA_START,
-    ZELDA_ANIM_GIVING_OCARINA,
-    ZELDA_ANIM_PLAYING_OCARINA_START,
-    ZELDA_ANIM_PLAYING_OCARINA,
-    ZELDA_ANIM_MAX,
+    /* 0 */ ZELDA_ANIM_FACING_AWAY,
+    /* 1 */ ZELDA_ANIM_TURNING_TOWARD_PLAYER,
+    /* 3 */ ZELDA_ANIM_FACING_PLAYER,
+    /* 4 */ ZELDA_ANIM_GIVING_OCARINA_START,
+    /* 5 */ ZELDA_ANIM_GIVING_OCARINA,
+    /* 6 */ ZELDA_ANIM_PLAYING_OCARINA_START,
+    /* 7 */ ZELDA_ANIM_PLAYING_OCARINA,
+    /* 8 */ ZELDA_ANIM_MAX,
 } DmZlAnimations;
 
-static TexturePtr sMouthTextures[4] = {
+static TexturePtr sMouthTextures[] = {
     gZl4MouthNeutralTex,
     gZl4MouthOpenSmilingTex,
     gZl4MouthFrowningTex,
@@ -66,7 +66,7 @@ typedef enum {
 } DmZlMouthTextures;
 
 static TexturePtr sEyeTextures[] = {
-    gDmZl4EyeOpenNormalTex, gDmZl4EyeBlinkingTex,        gDmZl4EyeClosedTex,           gDmZl4EyeWideTex,
+    gDmZl4EyeOpenNormalTex, gDmZl4EyeHalfTex,        gDmZl4EyeClosedTex,           gDmZl4EyeWideTex,
     gDmZl4EyeHappyTex,      gDmZl4EyeOpenLookingLeftTex, gDmZl4EyeOpenLookingRightTex,
 };
 
@@ -94,8 +94,8 @@ void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DmZl* this = THIS;
 
-    this->animationIndex = 0;
-    this->unused2BA = 0;
+    this->animationIndex = ZELDA_ANIM_FACING_AWAY;
+    this->unk_2BA = 0;
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
@@ -143,7 +143,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
     }
 
-    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         actionIndex = this->animationIndex;
         if ((actionIndex == 1) || (actionIndex == 3) || (actionIndex == 5)) {
             this->animationIndex++;
@@ -169,39 +169,39 @@ void DmZl_UpdateFace(DmZl* this) {
     }
 
     switch (this->nextEyeState) {
-        case 0:
+        case ZELDA_EYE_OPEN_NORMAL:
             if (this->blinkTimer == 0) {
                 this->blinkTimer = Rand_S16Offset(30, 30);
             }
             break;
-        case 1:
+        case ZELDA_EYE_BLINKING:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_CLOSED;
             }
             break;
-        case 2:
+        case ZELDA_EYE_CLOSED:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_LEFT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_RIGHT;
             }
             break;
-        case 3:
+        case ZELDA_EYE_WIDE:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_RIGHT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_LEFT;
             }
             break;
-        case 4:
+        case ZELDA_EYE_HAPPY:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_WIDE;
             }
             break;
-        case 5:
+        case ZELDA_EYE_OPEN_LOOKING_LEFT:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_HAPPY;
             }
             break;
-        case 6:
+        case ZELDA_EYE_OPEN_LOOKING_RIGHT:
             if (this->blinkTimer >= 3) {
                 this->blinkTimer = 0;
             }
@@ -212,13 +212,13 @@ void DmZl_UpdateFace(DmZl* this) {
         default:
             this->mouthTextureIndex = ZELDA_MOUTH_NEUTRAL;
             break;
-        case 1:
+        case ZELDA_MOUTH_SMILING:
             this->mouthTextureIndex = ZELDA_MOUTH_SMILING;
             break;
-        case 2:
+        case ZELDA_MOUTH_FROWNING:
             this->mouthTextureIndex = ZELDA_MOUTH_FROWNING;
             break;
-        case 3:
+        case ZELDA_MOUTH_OPEN:
             this->mouthTextureIndex = ZELDA_MOUTH_OPEN;
             break;
     }
@@ -246,7 +246,7 @@ void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     DmZl* this = THIS;
 
     if (limbIndex == ZL4_LIMB_RIGHT_HAND) {
-        if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) && (this->animationIndex < ZELDA_ANIM_MAX)) {
+        if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) && (this->animationIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDL);
