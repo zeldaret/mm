@@ -66,8 +66,13 @@ typedef enum {
 } DmZlMouthTextures;
 
 static TexturePtr sEyeTextures[] = {
-    gDmZl4EyeOpenNormalTex, gDmZl4EyeHalfTex,        gDmZl4EyeClosedTex,           gDmZl4EyeWideTex,
-    gDmZl4EyeHappyTex,      gDmZl4EyeOpenLookingLeftTex, gDmZl4EyeOpenLookingRightTex,
+    gDmZl4EyeOpenNormalTex,
+    gDmZl4EyeHalfTex,
+    gDmZl4EyeClosedTex,
+    gDmZl4EyeWideTex,
+    gDmZl4EyeHappyTex,
+    gDmZl4EyeOpenLookingLeftTex,
+    gDmZl4EyeOpenLookingRightTex,
 };
 
 typedef enum {
@@ -114,7 +119,7 @@ void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx) {
 void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x66)) { // currently in cutscene
+    if (Cutscene_CheckActorAction(globalCtx, 0x66)) {
         actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x66);
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             s16 nextAnimationIndex = ZELDA_ANIM_FACING_AWAY;
@@ -246,7 +251,8 @@ void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     DmZl* this = THIS;
 
     if (limbIndex == ZL4_LIMB_RIGHT_HAND) {
-        if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) && (this->animationIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
+        if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) &&
+            (this->animationIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDL);
