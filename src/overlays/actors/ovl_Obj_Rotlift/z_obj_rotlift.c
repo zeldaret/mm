@@ -117,19 +117,19 @@ void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjRotlift* this = THIS;
-    s16 dirShift;
-    s32 direction;
+    s16 angShift;
+    s32 angVelocity;
 
     if (OBJROTLIFT_GET_TYPE(&this->dyna.actor) == 0) {
         ObjRotlift_MoveDekuFlowers(this);
     }
     if (thisx->params >= 0) {
-        direction = -0xC8;
+        angVelocity = -0xC8;
     } else {
-        direction = 0xC8;
+        angVelocity = 0xC8;
     }
-    dirShift = direction;
-    this->dyna.actor.shape.rot.y += dirShift;
+    angShift = angVelocity;
+    this->dyna.actor.shape.rot.y += angShift;
 }
 
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
