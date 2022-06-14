@@ -105,12 +105,12 @@ void BgAstrBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(globalCtx, &this->collider);
-    if (Flags_GetSwitch(globalCtx, OBJBgAstrBombwall_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(globalCtx, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
     this->dyna.actor.flags |= ACTOR_FLAG_10000000;
-    if (Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements) == 0) {
+    if (!Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -165,7 +165,7 @@ void func_80C0A378(BgAstrBombwall* this) {
 void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Flags_SetSwitch(globalCtx, OBJBgAstrBombwall_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(globalCtx, BGASTRBOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
         func_80C0A400(this, globalCtx);
         return;
     }
@@ -219,7 +219,7 @@ void BgAstrBombwall_Draw(Actor* thixs, GlobalContext* globalCtx) {
         xlu = POLY_XLU_DISP;
         gSPDisplayList(&xlu[0], &sSetupDL[25 * 6]);
         gSPMatrix(&xlu[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSetGeometryMode(&xlu[2], 0x400000);
+        gSPSetGeometryMode(&xlu[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&xlu[3], object_astr_obj_DL_0022E0);
         POLY_XLU_DISP = &xlu[4];
         CLOSE_DISPS(globalCtx->state.gfxCtx);

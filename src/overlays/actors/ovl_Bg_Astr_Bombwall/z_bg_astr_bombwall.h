@@ -5,7 +5,7 @@
 
 struct BgAstrBombwall;
 
-#define OBJBgAstrBombwall_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define BGASTRBOMBWALL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
 typedef struct BgAstrBombwall {
