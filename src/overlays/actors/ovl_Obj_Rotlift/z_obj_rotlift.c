@@ -16,7 +16,12 @@ void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B95E20(ObjRotlift* this);
+void ObjRotlift_MoveDekuFlowers(ObjRotlift* this);
+typedef struct ModelInfo {
+    /* 0x0 */ Gfx* dList;
+    /* 0x4 */ AnimatedMaterial* animMat;
+    /* 0x8 */ CollisionHeader* colHeader;
+} ModelInfo; // size = 0xC
 
 const ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
@@ -30,7 +35,7 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Draw,
 };
 
-struct AnimatedThing D_80B96160[] = {
+struct ModelInfo D_80B96160[] = {
     {
         object_rotlift_DL_000400,
         object_rotlift_Matanimheader_001F98,
@@ -50,7 +55,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-void func_80B95E20(ObjRotlift* this) {
+void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
     ObjEtcetera** dekuFlower = this->dekuFlowers;
     ObjEtcetera* curDekuFlower;
     f32 posOffset = 300.0f;
@@ -73,35 +78,35 @@ void func_80B95E20(ObjRotlift* this) {
 }
 
 void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjRotlift* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
-    s32 params;
-    s32 spawnParams;
+    ObjRotlift* this = THIS;
+    s32 type;
+    s32 dekuFlowerType;
     s32 i;
-    AnimatedThing* animated;
-    ObjEtcetera** actor;
+    ModelInfo* sModelInfo;
+    ObjEtcetera** dekuFlowers;
 
-    params = OBJROTLIFT_GET_1(thisx);
+    type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    if (params == 0) {
-        for (actor = this->dekuFlowers, i = 0; i < 2; i++, actor++) {
+    if (type == 0) {
+        for (dekuFlowers = this->dekuFlowers, i = 0; i < 2; i++, dekuFlowers++) {
             if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
-                spawnParams = 0;
+                dekuFlowerType = 0;
             } else {
-                spawnParams = 0x100;
+                dekuFlowerType = 0x100;
             }
-            *actor = (ObjEtcetera*)Actor_SpawnAsChild(
+            *dekuFlowers = (ObjEtcetera*)Actor_SpawnAsChild(
                 &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, spawnParams);
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerType);
         }
-        func_80B95E20(this);
+        ObjRotlift_MoveDekuFlowers(this);
     }
     DynaPolyActor_Init(&this->dyna, 3);
 
-    animated = &D_80B96160[params];
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, animated->colHeader);
-    animated->animMat = Lib_SegmentedToVirtual(animated->animMat);
+    sModelInfo = &D_80B96160[type];
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sModelInfo->colHeader);
+    sModelInfo->animMat = Lib_SegmentedToVirtual(sModelInfo->animMat);
 }
 
 void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -115,10 +120,10 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
     s16 dirShift;
     s32 direction;
 
-    if (OBJROTLIFT_GET_1(thisx) == 0) {
-        func_80B95E20(this);
+    if (OBJROTLIFT_GET_TYPE(&this->dyna.actor) == 0) {
+        ObjRotlift_MoveDekuFlowers(this);
     }
-    if (OBJROTLIFT_GET_PARAMS(thisx) >= 0) {
+    if (thisx->params >= 0) {
         direction = -0xC8;
     } else {
         direction = 0xC8;
@@ -128,11 +133,11 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjRotlift* this = THIS;
     s32 pad;
-    AnimatedThing* animated;
+    ObjRotlift* this = THIS;
+    ModelInfo* sModelInfo;
 
-    animated = &D_80B96160[OBJROTLIFT_GET_1(thisx)];
-    AnimatedMat_Draw(globalCtx, animated->animMat);
-    Gfx_DrawDListOpa(globalCtx, animated->dList);
+    sModelInfo = &D_80B96160[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
+    AnimatedMat_Draw(globalCtx, sModelInfo->animMat);
+    Gfx_DrawDListOpa(globalCtx, sModelInfo->dList);
 }
