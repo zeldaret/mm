@@ -65,9 +65,9 @@ void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = GET_PARAM1(this);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, 1);
     if (sColHeaders[this->unk_160] != NULL) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, sColHeaders[this->unk_160]);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sColHeaders[this->unk_160]);
     }
     this->dyna.actor.bgCheckFlags |= 0x400;
     switch (this->unk_160) {
@@ -76,18 +76,18 @@ void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx2) {
             break;
         case 1:
             if (!sRingsHaveSpawned) {
-                sRingCount = (gSaveContext.weekEventReg[24] & 4) ? 25 : 20;
+                sRingCount = (gSaveContext.save.weekEventReg[24] & 4) ? 25 : 20;
                 for (i = 0; i < sRingCount; i++) {
                     sRingNotCollected[i] = false;
                 }
                 sRingsHaveSpawned = true;
             }
             if (GET_PARAM2(this) != 0) {
-                if (!(gSaveContext.weekEventReg[24] & 4)) {
+                if (!(gSaveContext.save.weekEventReg[24] & 4)) {
                     Actor_MarkForDeath(&this->dyna.actor);
                     return;
                 }
-            } else if (gSaveContext.weekEventReg[24] & 4) {
+            } else if (gSaveContext.save.weekEventReg[24] & 4) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -108,7 +108,7 @@ void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnTwig* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80AC0A54(EnTwig* this, GlobalContext* globalCtx) {
@@ -141,10 +141,10 @@ void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx) {
             this->unk_17A++;
         }
     }
-    func_8013E4B0(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
+    SubS_ConstructPlane(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
     if ((sCurrentRing == GET_PARAM3(this)) && Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist,
                                                           &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
-        if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &sp40) <=
+        if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <=
             SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
             func_80AC0CC4(this, globalCtx);
             return;
@@ -196,7 +196,7 @@ void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx) {
             sp6C.x = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.x;
             sp6C.y = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.y;
             sp6C.z = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.z;
-            EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &sKiraVel, &sKiraAccel, &sColorWhite, &sColorYellow, 1000,
+            EffectSsKirakira_SpawnDispersed(globalCtx, &sp6C, &sKiraVel, &sKiraAccel, &sColorWhite, &sColorYellow, 1000,
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
@@ -234,10 +234,10 @@ void EnTwig_Draw(EnTwig* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk_160) {
         case 1:
-            func_800BDFC0(globalCtx, D_06001C38);
+            Gfx_DrawDListOpa(globalCtx, D_06001C38);
             break;
         case 2:
-            func_800BDFC0(globalCtx, D_060014C8);
+            Gfx_DrawDListOpa(globalCtx, D_060014C8);
             break;
     }
 }

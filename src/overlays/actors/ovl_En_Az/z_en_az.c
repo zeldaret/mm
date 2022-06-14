@@ -60,7 +60,7 @@ void func_80A97E48(EnAz* this, GlobalContext* globalCtx);
 void func_80A97EAC(EnAz* this, GlobalContext* globalCtx);
 void func_80A97F9C(EnAz* this, GlobalContext* globalCtx);
 
-static struct_80B8E1A8 D_80A99010[14] = {
+static AnimationSpeedInfo D_80A99010[14] = {
     { 0x600BCFC, 1.0f, 0, -10.0f }, { 0x600C94C, 1.0f, 0, -5.0f }, { 0x6008960, 1.0f, 0, -5.0f },
     { 0x6008BB4, 1.0f, 0, -5.0f },  { 0x600925C, 1.0f, 0, -5.0f }, { 0x6009B4C, 1.0f, 0, -5.0f },
     { 0x60086AC, 1.0f, 0, -5.0f },  { 0x6007D3C, 1.0f, 0, -5.0f }, { 0x6008EAC, 2.0f, 0, -5.0f },
@@ -114,14 +114,14 @@ extern Gfx D_0601ABF0[];
 
 void func_80A94A30(EnAz* this) {
     this->actor.velocity.y += this->actor.gravity;
-    if (this->actor.velocity.y < this->actor.minVelocityY) {
-        this->actor.velocity.y = this->actor.minVelocityY;
+    if (this->actor.velocity.y < this->actor.terminalVelocity) {
+        this->actor.velocity.y = this->actor.terminalVelocity;
     }
 }
 
 void func_80A94A64(EnAz* this) {
     func_80A94A30(this);
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 s32 func_80A94A90(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
@@ -140,7 +140,7 @@ void func_80A94AB8(EnAz* this, GlobalContext* globalCtx, s32 arg2) {
 void func_80A94B20(GlobalContext* globalCtx) {
     Actor* ring = NULL;
     do {
-        ring = func_ActorCategoryIterateById(globalCtx, ring, ACTORCAT_MISC, ACTOR_EN_TWIG);
+        ring = SubS_FindActor(globalCtx, ring, ACTORCAT_MISC, ACTOR_EN_TWIG);
         if (ring != NULL) {
             if ((ring->params & 0xF) == 1) {
                 Actor_MarkForDeath(ring);
@@ -157,7 +157,7 @@ s32 func_80A94B98(EnAz* this, GlobalContext* globalCtx) {
 
     do {
         if (1) {}
-        ring = (EnTwig*)func_ActorCategoryIterateById(globalCtx, misc, ACTORCAT_MISC, ACTOR_EN_TWIG);
+        ring = (EnTwig*)SubS_FindActor(globalCtx, misc, ACTORCAT_MISC, ACTOR_EN_TWIG);
         if ((ring != NULL) && ((ring->dyna.actor.params & 0xF) == 1) && !(ring->unk_16C & 1)) {
             ret = true;
             break;
@@ -187,27 +187,27 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.targetMode = 1;
     switch (GET_PARAM1(thisx)) {
         case 0:
-            phi_v1 = (gSaveContext.entranceIndex == 0x8E00) && (gSaveContext.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 2:
-            phi_v1 = (gSaveContext.entranceIndex != 0x8E10) || !(gSaveContext.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entranceIndex != 0x8E10) || !(gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 4:
-            phi_v1 = gSaveContext.entranceIndex != 0x8E20;
+            phi_v1 = gSaveContext.save.entranceIndex != 0x8E20;
             break;
         case 1:
-            phi_v1 = (gSaveContext.entranceIndex == 0x8E00) && (gSaveContext.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && (gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         case 3:
-            phi_v1 = (gSaveContext.entranceIndex != 0x8E10) || (gSaveContext.weekEventReg[24] & 4);
+            phi_v1 = (gSaveContext.save.entranceIndex != 0x8E10) || (gSaveContext.save.weekEventReg[24] & 4);
             break;
         case 5:
-            phi_v1 = gSaveContext.entranceIndex != 0x8E20;
+            phi_v1 = gSaveContext.save.entranceIndex != 0x8E20;
             break;
         case 6:
-            phi_v1 = (gSaveContext.entranceIndex == 0x8E00) && !(gSaveContext.weekEventReg[93] & 1);
+            phi_v1 = (gSaveContext.save.entranceIndex == 0x8E00) && !(gSaveContext.save.weekEventReg[93] & 1);
             phi_v1 = !phi_v1;
             break;
         default:
@@ -228,12 +228,12 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->unk_2F8 == 0) {
         this->unk_374 |= 2;
     }
-    func_8013E3B8(&this->actor, &this->unk_3D0, 1);
+    SubS_FillCutscenesList(&this->actor, &this->unk_3D0, 1);
     if (D_80A9913C == NULL) {
         D_80A9913C = THIS;
         this->unk_374 |= 1;
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     if (this->unk_374 & 2) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007438, &D_0600C94C, this->jointTable, this->morphTable,
                          0x18);
@@ -249,25 +249,25 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->collider.dim.yShift = this->collider.dim.yShift * 1.2f;
     }
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 5);
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 22.0f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 22.0f)) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
     }
-    Animation_Change(&this->skelAnime, D_80A99010[0].animationSeg, 1.0f,
-                         Animation_GetLastFrame(&D_80A99010[0].animationSeg->common) * Rand_ZeroOne(),
-                         Animation_GetLastFrame(&D_80A99010[0].animationSeg->common), D_80A99010[0].mode,
-                         D_80A99010[0].transitionRate);
+    Animation_Change(&this->skelAnime, D_80A99010[0].animation, 1.0f,
+                         Animation_GetLastFrame(&D_80A99010[0].animation->common) * Rand_ZeroOne(),
+                         Animation_GetLastFrame(&D_80A99010[0].animation->common), D_80A99010[0].mode,
+                         D_80A99010[0].morphFrames);
     this->unk_37E = 0;
     this->unk_380 = 0;
     this->unk_384 = 0;
     this->actor.gravity = -1.0f;
     this->unk_376 = this->unk_374;
-    func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
 
-    switch (gSaveContext.entranceIndex) {
+    switch (gSaveContext.save.entranceIndex) {
         case 0x8E00:
-            if (gSaveContext.weekEventReg[93] & 1) {
+            if (gSaveContext.save.weekEventReg[93] & 1) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
                     this->actor.flags |= 9;
@@ -290,30 +290,30 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
             if (!(this->unk_374 & 2)) {
                 this->actor.flags |= 0x10009;
             }
-            if (gSaveContext.entranceIndex == 0x8E30) {
+            if (gSaveContext.save.entranceIndex == 0x8E30) {
                 this->unk_2FA = 0xA;
             }
             func_80A97C0C(this, globalCtx);
             break;
         case 0x8E10:
-            if (gSaveContext.weekEventReg[93] & 1) {
-                if (gSaveContext.weekEventReg[24] & 4) {
+            if (gSaveContext.save.weekEventReg[93] & 1) {
+                if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 8;
                 } else {
                     this->unk_2FA = 6;
                 }
             } else {
-                if (gSaveContext.weekEventReg[24] & 4) {
+                if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 3;
                 } else {
                     this->unk_2FA = 1;
                 }
             }
             if (this->unk_374 & 1) {
-                func_8013DC40(globalCtx->setupPathList, GET_PARAM2(thisx),
+                SubS_CopyPointFromPathList(globalCtx->setupPathList, GET_PARAM2(thisx),
                               globalCtx->setupPathList[GET_PARAM2(thisx)].count - 1, &D_80A99E80);
             }
-            if (gSaveContext.weekEventReg[24] & 4) {
+            if (gSaveContext.save.weekEventReg[24] & 4) {
                 if (this->unk_374 & 2) {
                     func_80A97D5C(this, globalCtx);
                 } else {
@@ -326,14 +326,14 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
             }
             break;
         case 0x8E20:
-            if (gSaveContext.weekEventReg[93] & 1) {
-                if (gSaveContext.weekEventReg[24] & 4) {
+            if (gSaveContext.save.weekEventReg[93] & 1) {
+                if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 9;
                 } else {
                     this->unk_2FA = 7;
                 }
             } else {
-                if (gSaveContext.weekEventReg[24] & 4) {
+                if (gSaveContext.save.weekEventReg[24] & 4) {
                     this->unk_2FA = 4;
                 } else {
                     this->unk_2FA = 2;
@@ -363,7 +363,7 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->brother = NULL;
         do {
             this->brother =
-                (EnAz*)func_ActorCategoryIterateById(globalCtx, &this->brother->actor, ACTORCAT_NPC, ACTOR_EN_AZ);
+                (EnAz*)SubS_FindActor(globalCtx, &this->brother->actor, ACTORCAT_NPC, ACTOR_EN_AZ);
             if (this->brother != NULL) {
                 if (sp4E == GET_PARAM1(&this->brother->actor)) {
                     break;
@@ -377,7 +377,7 @@ void EnAz_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     EnAz* this = THIS;
 
-    if (gSaveContext.entranceIndex != 0x8E10) {
+    if (gSaveContext.save.entranceIndex != 0x8E10) {
         gSaveContext.unk_3DD0[4] = 5;
     }
     Collider_DestroyCylinder(globalCtx2, &this->collider);
@@ -414,7 +414,7 @@ s32 func_80A95534(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         }
     }
     Math_SmoothStepToF(&temp_s0->actor.speedXZ, temp_s0->unk_36C, 0.8f, 2.0f, 0.0f);
-    arg1->unk_64 = func_8013E054;
+    arg1->unk_64 = SubS_ActorPathing_MoveWithGravity;
     if (arg1->unk_4C <= temp_s0->actor.speedXZ) {
         ret = 1;
     }
@@ -466,7 +466,7 @@ s32 func_80A95730(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         Math_SmoothStepToS(&temp_s0->unk_39E, temp_s0->actor.world.rot.x, 2, sp3C, 0);
         Math_SmoothStepToS(&temp_s0->actor.shape.rot.y, temp_s0->actor.world.rot.y, 2, sp38, 0);
     }
-    arg1->unk_64 = func_8013E07C;
+    arg1->unk_64 = SubS_ActorPathing_MoveWithoutGravityReverse;
     return ret;
 }
 
@@ -513,7 +513,7 @@ s32 func_80A958B0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         Math_SmoothStepToS(&temp_s0->unk_39E, temp_s0->actor.world.rot.x, 2, sp2C, 0);
         Math_SmoothStepToS(&temp_s0->actor.shape.rot.y, temp_s0->actor.world.rot.y, 2, sp28, 0);
     }
-    arg1->unk_64 = func_8013E07C;
+    arg1->unk_64 = SubS_ActorPathing_MoveWithoutGravityReverse;
     return ret;
 }
 
@@ -524,9 +524,9 @@ s32 func_80A95B34(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
     if (temp_s0->unk_374 & 0x100) {
         if (!(temp_s0->unk_374 & 8)) {
             if (temp_s0->unk_374 & 2) {
-                func_8013E1C8(&temp_s0->skelAnime, D_80A99010, 8, &temp_s0->animIndex);
+                SubS_ChangeAnimationBySpeedInfo(&temp_s0->skelAnime, D_80A99010, 8, &temp_s0->animIndex);
             } else {
-                func_8013E1C8(&temp_s0->skelAnime, D_80A99010, 2, &temp_s0->animIndex);
+                SubS_ChangeAnimationBySpeedInfo(&temp_s0->skelAnime, D_80A99010, 2, &temp_s0->animIndex);
             }
             temp_s0->unk_374 |= 8;
         }
@@ -537,7 +537,7 @@ s32 func_80A95B34(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         }
     } else if (temp_s0->actor.bgCheckFlags & 1) {
         if (temp_s0->unk_374 & 8) {
-            func_8013E1C8(&temp_s0->skelAnime, D_80A99010, 1, &temp_s0->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&temp_s0->skelAnime, D_80A99010, 1, &temp_s0->animIndex);
             temp_s0->unk_374 &= ~8;
         }
         ret = func_80A95534(globalCtx, arg1);
@@ -551,7 +551,7 @@ void func_80A95C5C(EnAz* this, GlobalContext* globalCtx) {
     this->actor.draw = NULL;
     this->actor.world.pos.y = this->actor.home.pos.y + 120.0f;
     this->actor.gravity = -1.0f;
-    func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
     this->actor.flags &= ~0x9;
     this->actor.bgCheckFlags &= ~0x21;
     this->unk_3C0 = 0;
@@ -564,13 +564,13 @@ void func_80A95CEC(EnAz* this, GlobalContext* globalCtx) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->actor.draw = EnAz_Draw;
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else {
             if (this->actor.bgCheckFlags & 2) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
-            if (func_8013E2D4(&this->actor, 0x7C, this->unk_3D0, 1)) {
+            if (SubS_StartActorCutscene(&this->actor, 0x7C, this->unk_3D0, 1)) {
                 func_80A97C0C(this, globalCtx);
             }
         }
@@ -580,12 +580,12 @@ void func_80A95CEC(EnAz* this, GlobalContext* globalCtx) {
 void func_80A95DA0(EnAz* this, GlobalContext* globalCtx) {
     EnDno_ActorUnkStruct* sp40 = &this->unk_300;
 
-    func_8013DCE0(globalCtx, &this->actor.world.pos, &this->actor, sp40, globalCtx->setupPathList,
+    SubS_ActorPathing_Init(globalCtx, &this->actor.world.pos, &this->actor, sp40, globalCtx->setupPathList,
                   this->actor.params & 0xFF, 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speedXZ = 4.0f;
     this->actor.gravity = 0.0f;
-    func_8013E1C8(&this->skelAnime, D_80A99010, 2, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 2, &this->animIndex);
     this->actor.flags |= 9;
     this->actor.bgCheckFlags &= ~0x21;
     this->unk_374 |= 0x1000;
@@ -594,12 +594,12 @@ void func_80A95DA0(EnAz* this, GlobalContext* globalCtx) {
 }
 
 void func_80A95E88(EnAz* this, GlobalContext* globalCtx) {
-    func_8013DE04(globalCtx, &this->unk_300, func_80A982E0, func_80A95B34, func_8013E054, func_8013E0A4);
-    if (this->actor.yDistToWater > 8.0f) {
+    SubS_ActorPathing_Update(globalCtx, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity, SubS_ActorPathing_SetNextPoint);
+    if (this->actor.depthInWater > 8.0f) {
         if (this->unk_374 & 2) {
             if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) &&
                 (this->skelAnime.curFrame >= 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
             }
         } else {
             func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -634,9 +634,9 @@ void func_80A95FE8(EnAz* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0xE38, 0x38E);
         this->actor.shape.rot.z = 0;
-        Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+        Actor_MoveWithoutGravityReverse(&this->actor);
     } else {
-        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
         this->unk_374 &= ~0x1000;
         this->actor.gravity = -1.0f;
         this->actor.speedXZ = 0.0f;
@@ -648,7 +648,7 @@ void func_80A95FE8(EnAz* this, GlobalContext* globalCtx) {
             func_80A97C0C(this, globalCtx);
             ActorCutscene_Stop(this->unk_3D0);
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -658,29 +658,29 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
     s32 ret = 2;
     EnAz* brother = this->brother;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
         case 5:
         case 6:
-            if ((globalCtx->msgCtx.unk11F04 == 0x10DD) && (this->unk_374 & 0x8000)) {
-                if (func_8013E2D4(&brother->actor, brother->unk_3D0, 0x7C, 1)) {
+            if ((globalCtx->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
+                if (SubS_StartActorCutscene(&brother->actor, brother->unk_3D0, 0x7C, 1)) {
                     brother->unk_374 |= 0x8000;
-                    globalCtx->msgCtx.unk11F22 = 0x44;
+                    globalCtx->msgCtx.msgMode = 0x44;
                     ret = 0;
                 }
-            } else if (func_80147624(globalCtx)) {
+            } else if (Message_ShouldAdvance(globalCtx)) {
                 ret = 3;
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x70:
                     case 0xCD:
-                        gSaveContext.weekEventReg[24] &= (u8)~1;
+                        gSaveContext.save.weekEventReg[24] &= (u8)~1;
                         this->actor.textId = 0x10F2;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
                         break;
                     case 4302:
                         this->actor.textId = 0x10CF;
-                        gSaveContext.weekEventReg[16] |= 0x40;
+                        gSaveContext.save.weekEventReg[16] |= 0x40;
                         break;
                     case 4303:
                         this->actor.textId = 0x10D0;
@@ -688,34 +688,34 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                     case 4304:
                         this->actor.textId = 0x10D1;
                         ret = 3;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 5, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 5, &this->animIndex);
                         break;
                     case 4305:
                         this->actor.textId = 0x10D2;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 4306:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
                             this->actor.textId = 0x10D6;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 5, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 5, &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10D3;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
                         }
                         break;
                     case 4307:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
                         break;
                     case 4308:
                         this->actor.textId = 0x10D2;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 4310:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
                         func_80A979DC(this, globalCtx);
                         this->unk_2FA = 1;
                         ret = 0;
@@ -748,7 +748,7 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         break;
                     case 4313:
                         if ((this->unk_2FA == 3) || (this->unk_2FA == 8)) {
-                            gSaveContext.weekEventReg[24] &= (u8)~4;
+                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
                         }
                         func_80A94AB8(this, globalCtx, 0);
                         func_80A979DC(this, globalCtx);
@@ -756,18 +756,18 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         break;
                     case 4314:
                         this->actor.textId = 0x10DB;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 4315:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            globalCtx->msgCtx.unk11F22 = 0x44;
+                            globalCtx->msgCtx.msgMode = 0x44;
                             this->unk_2FA = 1;
                             ret = 0;
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10DC;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
                         }
                         break;
                     case 4316:
@@ -800,7 +800,7 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                     case 4322:
                         this->actor.textId = 0x10E3;
                         ret = 3;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 4323:
                         func_80A98EFC(this, globalCtx, 0x10E4, 0, 4);
@@ -817,8 +817,8 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10E6;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 9, &this->animIndex);
-                            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 9, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
                         }
                         break;
                     case 4326:
@@ -827,16 +827,16 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         ret = 0;
                         break;
                     case 4327:
-                        gSaveContext.weekEventReg[24] &= (u8)~4;
+                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
                         func_80A94AB8(this, globalCtx, 0);
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         func_80A979DC(this, globalCtx);
                         ret = 0;
                         break;
                     case 4328:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         this->unk_2FA = 3;
                         ret = 0;
                         break;
@@ -850,7 +850,7 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         break;
                     case 4331:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
-                            globalCtx->msgCtx.unk11F22 = 0x44;
+                            globalCtx->msgCtx.msgMode = 0x44;
                             func_8019F208();
                             switch (this->unk_2FA) {
                                 case 4:
@@ -869,8 +869,8 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10EC;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 7, &this->animIndex);
-                            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 7, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
                         }
                         break;
                     case 4332:
@@ -879,7 +879,7 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         break;
                     case 4333:
                         if ((this->unk_2FA == 4) || (this->unk_2FA == 9)) {
-                            gSaveContext.weekEventReg[24] &= (u8)~4;
+                            gSaveContext.save.weekEventReg[24] &= (u8)~4;
                         }
                         func_80A94AB8(this, globalCtx, 0);
                         func_80A979DC(this, globalCtx);
@@ -898,22 +898,22 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         ret = 0;
                         break;
                     case 4337:
-                        gSaveContext.weekEventReg[93] |= 1;
-                        if (gSaveContext.weekEventReg[23] & 0x80) {
+                        gSaveContext.save.weekEventReg[93] |= 1;
+                        if (gSaveContext.save.weekEventReg[23] & 0x80) {
                             this->unk_3CC = 4;
                         } else {
                             this->unk_3CC = 90;
-                            gSaveContext.weekEventReg[23] |= 0x80;
+                            gSaveContext.save.weekEventReg[23] |= 0x80;
                         }
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         ret = 7;
                         break;
                     case 4338:
                     case 4361:
-                        gSaveContext.weekEventReg[24] &= (u8)~4;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         func_80A94AB8(this, globalCtx, 0);
                         func_80A979DC(this, globalCtx);
                         ret = 0;
@@ -937,34 +937,34 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                     case 4343:
                         this->actor.textId = 0x10F8;
                         ret = 3;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 4344:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.weekEventReg[25] & 1) {
+                            if (gSaveContext.save.weekEventReg[25] & 1) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
                             }
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 5, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 5, &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10F9;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
-                            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
                         }
                         break;
                     case 4345:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
                         break;
                     case 4346:
                     case 4359:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         this->unk_2FA = 6;
                         ret = 0;
                         break;
@@ -979,23 +979,23 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                     case 4349:
                         this->actor.textId = 0x10FE;
                         ret = 3;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         break;
                     case 4350:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.weekEventReg[25] & 1) {
+                            if (gSaveContext.save.weekEventReg[25] & 1) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
                             }
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10FF;
-                            func_8013E1C8(&this->skelAnime, D_80A99010, 9, &this->animIndex);
-                            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 9, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
                         }
                         break;
                     case 4351:
@@ -1003,17 +1003,17 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         ret = 0;
                         break;
                     case 4352:
-                        gSaveContext.weekEventReg[24] &= (u8)~4;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         func_80A94AB8(this, globalCtx, 0);
                         func_80A979DC(this, globalCtx);
                         ret = 0;
                         break;
                     case 4353:
                     case 4360:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         this->unk_2FA = 8;
                         ret = 0;
                         break;
@@ -1030,27 +1030,27 @@ s32 func_80A9617C(EnAz* this, GlobalContext* globalCtx) {
                         ret = 0;
                         break;
                     case 4357:
-                        if (gSaveContext.weekEventReg[25] & 1) {
+                        if (gSaveContext.save.weekEventReg[25] & 1) {
                             this->unk_3CC = 5;
                         } else {
                             this->unk_3CC = 12;
-                            gSaveContext.weekEventReg[25] |= 1;
+                            gSaveContext.save.weekEventReg[25] |= 1;
                         }
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         ret = 7;
                         break;
                     case 4358:
-                        gSaveContext.weekEventReg[24] &= (u8)~4;
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
-                        func_8013E1C8(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
+                        gSaveContext.save.weekEventReg[24] &= (u8)~4;
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0, &brother->animIndex);
                         func_80A94AB8(this, globalCtx, 0);
                         func_80A979DC(this, globalCtx);
                         ret = 0;
                         break;
                     case 4309:
                     default:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
                         break;
@@ -1075,29 +1075,29 @@ void func_80A97114(EnAz* this, GlobalContext* globalCtx) {
         case 4314:
         case 4317:
         case 4329:
-            func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
             break;
         case 4334:
         case 4339:
         case 4347:
         case 4354:
-            func_8013E1C8(&this->skelAnime, D_80A99010, 9, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 9, &this->animIndex);
             sp20 = 1;
             break;
         case 4338:
         case 4358:
         case 4361:
-            func_8013E1C8(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0xB, &this->animIndex);
             if (brother != NULL) {
-                func_8013E1C8(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
+                SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xB, &brother->animIndex);
             }
             break;
     }
     if ((brother != NULL) && sp20) {
         if (this->unk_374 & 2) {
-            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xD, &brother->animIndex);
         } else {
-            func_8013E1C8(&brother->skelAnime, D_80A99010, 0xC, &brother->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, D_80A99010, 0xC, &brother->animIndex);
         }
     }
     this->unk_374 &= ~0x20;
@@ -1113,16 +1113,16 @@ s32 func_80A97274(EnAz* this, GlobalContext* globalCtx) {
     switch (this->unk_2FA) {
         case 0:
         default:
-            gSaveContext.weekEventReg[24] &= (u8)~4;
-            if (!(gSaveContext.weekEventReg[16] & 0x40)) {
+            gSaveContext.save.weekEventReg[24] &= (u8)~4;
+            if (!(gSaveContext.save.weekEventReg[16] & 0x40)) {
                 textId = 0x10CE;
             } else {
                 textId = 0x10D4;
             }
             break;
         case 2:
-            if (gSaveContext.weekEventReg[24] & 1) {
-                gSaveContext.weekEventReg[24] |= 4;
+            if (gSaveContext.save.weekEventReg[24] & 1) {
+                gSaveContext.save.weekEventReg[24] |= 4;
                 this->unk_3C0 = 0;
                 textId = 0x10DD;
             } else {
@@ -1130,26 +1130,26 @@ s32 func_80A97274(EnAz* this, GlobalContext* globalCtx) {
             }
             break;
         case 4:
-            if (gSaveContext.weekEventReg[24] & 1) {
+            if (gSaveContext.save.weekEventReg[24] & 1) {
                 textId = 0x10EE;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 5:
-            gSaveContext.weekEventReg[24] &= (u8)~4;
+            gSaveContext.save.weekEventReg[24] &= (u8)~4;
             textId = 0x10F3;
             break;
         case 7:
-            if (gSaveContext.weekEventReg[24] & 1) {
-                gSaveContext.weekEventReg[24] |= 4;
+            if (gSaveContext.save.weekEventReg[24] & 1) {
+                gSaveContext.save.weekEventReg[24] |= 4;
                 textId = 0x10FB;
             } else {
                 textId = 0x10E9;
             }
             break;
         case 9:
-            if (gSaveContext.weekEventReg[24] & 1) {
+            if (gSaveContext.save.weekEventReg[24] & 1) {
                 textId = 0x1102;
             } else {
                 textId = 0x10E9;
@@ -1220,7 +1220,7 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
         func_80151938(globalCtx, this->actor.textId);
         this->unk_378 = 2;
     } else if (this->unk_378 == 5) {
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         this->unk_378 = 2;
     } else {
         if ((this->unk_378 == 6) || (this->unk_378 == 7)) {
@@ -1233,8 +1233,8 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
                     this->unk_378 = 0;
                 }
             } else {
-                func_800B8A1C(&this->actor, globalCtx, this->unk_3CC, this->actor.xzDistToPlayer,
-                              this->actor.yDistToPlayer);
+                Actor_PickUp(&this->actor, globalCtx, this->unk_3CC, this->actor.xzDistToPlayer,
+                              this->actor.playerHeightRel);
             }
         }
         if (this->unk_378 == 9) {
@@ -1243,22 +1243,22 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
             if (temp_a0 == 0) {
                 switch (this->unk_3D2) {
                     case 0x10CE:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 4, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 4, &this->animIndex);
                         break;
                     case 0x10D4:
-                        func_8013E1C8(&this->skelAnime, D_80A99010, 5, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 5, &this->animIndex);
                         break;
                 }
-                func_801518B0(globalCtx, this->unk_3D2, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_3D2, &this->actor);
                 this->actor.textId = this->unk_3D2;
                 this->unk_378 = 2;
             }
         } else if (((this->unk_378 == 0) || (this->unk_378 == 1)) && (this->unk_374 & 0x20)) {
             if (this->unk_378 == 1) {
-                if (func_800B84D0(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
                     func_80A97114(this, globalCtx);
                     this->unk_378 = 2;
-                } else if (func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer,
+                } else if (func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                          -1) != 0) {
                     this->actor.textId = func_80A973B4(this, globalCtx);
                 }
@@ -1283,14 +1283,14 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
                         Math_SmoothStepToS(&this->unk_3D6, 0, 3, 0x71C, 0);
                     }
                 }
-                if (func_800B84D0(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
                     func_80A97114(this, globalCtx);
                     this->unk_378 = 2;
                     if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                         this->unk_378 = 9;
                     }
                 } else {
-                    func_800B8898(globalCtx, &this->actor, &sp56, &sp54);
+                    Actor_GetScreenPos(globalCtx, &this->actor, &sp56, &sp54);
                     if ((sp56 >= 0) && (sp56 <= 320) && (sp54 >= 0) && (sp54 <= 240) &&
                         func_800B8500(&this->actor, globalCtx, 120.0f, 120.0f, 0)) {
                         this->unk_3D2 = func_80A97274(this, globalCtx);
@@ -1312,7 +1312,7 @@ void func_80A979DC(EnAz* this, GlobalContext* globalCtx) {
 
 void func_80A979F4(EnAz* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80A97A28(EnAz* this, GlobalContext* globalCtx) {
@@ -1320,8 +1320,8 @@ void func_80A97A28(EnAz* this, GlobalContext* globalCtx) {
 }
 
 void func_80A97A40(EnAz* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, 0, -1, 0)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+    if (SubS_StartActorCutscene(&this->actor, 0, -1, 0)) {
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A97A9C(this, globalCtx);
     }
@@ -1332,29 +1332,29 @@ void func_80A97A9C(EnAz* this, GlobalContext* globalCtx) {
 }
 
 void func_80A97AB4(EnAz* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
-            func_801518B0(globalCtx, 0x10D7, NULL);
+            Message_StartTextbox(globalCtx, 0x10D7, NULL);
             return;
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx) != 0) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x10D7:
                         func_80151938(globalCtx, 0x10D8);
                         break;
                     case 0x10D8:
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            globalCtx->msgCtx.unk11F22 = 0x44;
+                            globalCtx->msgCtx.msgMode = 0x44;
                             func_800FD750(0x25);
                             func_80A94AB8(this, globalCtx, 1);
                             func_80A979DC(this, globalCtx);
                         } else {
                             func_8019F230();
-                            if (gSaveContext.weekEventReg[24] & 4) {
-                                gSaveContext.weekEventReg[24] &= (u8)~4;
+                            if (gSaveContext.save.weekEventReg[24] & 4) {
+                                gSaveContext.save.weekEventReg[24] &= (u8)~4;
                             }
                             func_80151938(globalCtx, 0x10D9);
                         }
@@ -1383,11 +1383,11 @@ void func_80A97C24(EnAz* this, GlobalContext* globalCtx) {
 
 void func_80A97C4C(EnAz* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) && (this->animIndex == 0xB)) {
-        func_8013E1C8(&this->skelAnime, D_80A99010, 0, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 0, &this->animIndex);
     }
     func_80A97410(this, globalCtx);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
-        gSaveContext.weekEventReg[24] &= (u8)~1;
+        gSaveContext.save.weekEventReg[24] &= (u8)~1;
         func_800FD750(0x25);
         globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
@@ -1396,7 +1396,7 @@ void func_80A97C4C(EnAz* this, GlobalContext* globalCtx) {
         gSaveContext.nextTransition = 3;
         func_80A979DC(this, globalCtx);
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -1409,7 +1409,7 @@ void func_80A97D5C(EnAz* this, GlobalContext* globalCtx) {
     globalCtx->interfaceCtx.unk_280 = 1;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         func_8010E9F0(4, 0x78);
-    } else if (gSaveContext.weekEventReg[25] & 1) {
+    } else if (gSaveContext.save.weekEventReg[25] & 1) {
         func_8010E9F0(4, 0x64);
     } else {
         func_8010E9F0(4, 0x6E);
@@ -1424,18 +1424,18 @@ void func_80A97E48(EnAz* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
         func_80A97EAC(this, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void func_80A97EAC(EnAz* this, GlobalContext* globalCtx) {
-    func_8013DCE0(globalCtx, &this->actor.world.pos, &this->actor, &this->unk_300, globalCtx->setupPathList,
+    SubS_ActorPathing_Init(globalCtx, &this->actor.world.pos, &this->actor, &this->unk_300, globalCtx->setupPathList,
                   this->actor.params & 0xFF, 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speedXZ = 8.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 6.0f;
-    func_8013E1C8(&this->skelAnime, D_80A99010, 2, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, 2, &this->animIndex);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~9;
     this->actor.bgCheckFlags &= ~0x21;
@@ -1455,16 +1455,16 @@ void func_80A97F9C(EnAz* this, GlobalContext* globalCtx) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.unk_1C & 0x20)) {
-        func_8013DE04(globalCtx, &this->unk_300, func_80A982E0, func_80A95B34, func_8013E054, func_8013E0A4);
+        SubS_ActorPathing_Update(globalCtx, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity, SubS_ActorPathing_SetNextPoint);
     }
-    if (!(this->unk_374 & 0x10) && func_800C9B90(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+    if (!(this->unk_374 & 0x10) && SurfaceType_IsHorseBlocked(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         this->unk_374 |= 0x10;
     }
-    if (func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+    if (SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
         if (func_80A94B98(this, globalCtx)) {
-            gSaveContext.weekEventReg[24] &= (u8)~1;
+            gSaveContext.save.weekEventReg[24] &= (u8)~1;
         } else {
-            gSaveContext.weekEventReg[24] |= 1;
+            gSaveContext.save.weekEventReg[24] |= 1;
         }
         gSaveContext.unk_3DD0[4] = 5;
         this->unk_374 &= ~0x10;
@@ -1490,11 +1490,11 @@ void func_80A97F9C(EnAz* this, GlobalContext* globalCtx) {
                 this->unk_37A = (Rand_ZeroOne() * 70.0f) + 10.0f;
             }
         }
-        if (this->actor.yDistToWater > 8.0f) {
+        if (this->actor.depthInWater > 8.0f) {
             if (this->unk_374 & 2) {
                 if ((this->skelAnime.curFrame < this->skelAnime.playSpeed) &&
                     (this->skelAnime.curFrame >= 0.0f)) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
                 }
             } else {
                 func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -1526,14 +1526,14 @@ void func_80A982E0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
 }
 
 void func_80A98414(EnAz* this, GlobalContext* globalCtx) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (itemAction != NULL) {
         if (itemAction->id == ACTOR_EN_FISH) {
             EnFish* fish = (EnFish*)itemAction;
 
             if ((fish->actor.params < 0) && (fish->actor.room == this->actor.room) &&
-                (Math3D_DistanceSquared(&this->actor.world.pos, &fish->actor.world.pos) < SQ(200.0f))) {
+                (Math3D_Vec3fDistSq(&this->actor.world.pos, &fish->actor.world.pos) < SQ(200.0f))) {
                 fish->unk_276 = 0x14;
                 fish->unk_274 = Actor_YawBetweenActors(&fish->actor, &this->actor);
             }
@@ -1547,7 +1547,7 @@ void EnAz_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnAz* this = THIS;
 
     this->unk_374 &= ~0x100;
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 22.0f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 22.0f)) {
         if (!(this->unk_376 & 0x100)) {
             this->unk_374 |= 0x200;
         }
@@ -1556,12 +1556,12 @@ void EnAz_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_374 |= 0x400;
     }
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
     if (this->unk_374 & 0x200) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER);
     }
     if (this->unk_374 & 0x400) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
     }
     this->unk_37E++;
     if (this->unk_37E >= 4) {
@@ -1703,12 +1703,12 @@ void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if ((this->actor.yDistToWater >= 28.0f) && (this->actor.speedXZ > 0.5f)) {
-        Matrix_InsertTranslation(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, 0);
-        Matrix_RotateY(this->actor.shape.rot.y, 1);
-        Matrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
-        Matrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
-        Matrix_InsertXRotation_s(this->unk_39E, 1);
+    if ((this->actor.depthInWater >= 28.0f) && (this->actor.speedXZ > 0.5f)) {
+        Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, 0);
+        Matrix_RotateYS(this->actor.shape.rot.y, 1);
+        Matrix_RotateXS(this->actor.shape.rot.x, 1);
+        Matrix_RotateZS(this->actor.shape.rot.z, 1);
+        Matrix_RotateXS(this->unk_39E, 1);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
         func_8012C2DC(globalCtx->state.gfxCtx);
         if (this->unk_374 & 2) {
@@ -1716,12 +1716,12 @@ void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Vec3f sp98;
             f32 sp94;
 
-            Matrix_InsertTranslation(0.0f, 0.0f, -2000.0f, 1);
+            Matrix_Translate(0.0f, 0.0f, -2000.0f, 1);
             for (i = 0; i < 5; i++) {
-                Matrix_StatePush();
+                Matrix_Push();
                 func_80A98F94(D_80A9930C[i], this->unk_39C, &sp94);
                 AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(D_80A99180[i]));
-                Matrix_InsertTranslation(0.0f, sp94 * 100.0f, i * -930.0f, 1);
+                Matrix_Translate(0.0f, sp94 * 100.0f, i * -930.0f, 1);
                 Matrix_Scale(1.1f, 0.95f, 1.0f, 1);
                 func_80124618(D_80A991A4[i], this->unk_39C, &sp98);
                 Matrix_Scale(sp98.x, sp98.y, sp98.z, 1);
@@ -1734,12 +1734,12 @@ void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                 }
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
                 gSPDisplayList(POLY_XLU_DISP++, D_80A9916C[i]);
-                Matrix_StatePop();
+                Matrix_Pop();
             }
         } else {
-            Matrix_StatePush();
-            Matrix_InsertTranslation(0.0f, 2000.0f, -2000.0f, 1);
-            Matrix_InsertZRotation_s(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), 1);
+            Matrix_Push();
+            Matrix_Translate(0.0f, 2000.0f, -2000.0f, 1);
+            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), 1);
             Matrix_Scale(D_80A993AC[this->unk_384].x, D_80A993AC[this->unk_384].y, 0.0f, 1);
             if (this->unk_374 & 0x800) {
                 gSPSegment(POLY_XLU_DISP++, 8, Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 255, 255, 255, 255));
@@ -1748,9 +1748,9 @@ void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             }
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
             gSPDisplayList(POLY_XLU_DISP++, D_0601ABF0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(0.0f, 2000.0f, -2100.0f, 1);
-            Matrix_InsertZRotation_s(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), 1);
+            Matrix_Pop();
+            Matrix_Translate(0.0f, 2000.0f, -2100.0f, 1);
+            Matrix_RotateZS(D_80A993D0[this->unk_384].z * (0x10000 / 360.0f), 1);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, 1);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
             gSPDisplayList(POLY_XLU_DISP++, D_0601AD00);
@@ -1789,12 +1789,12 @@ void func_80A98E48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnAz* this = THIS;
 
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&D_80A99410, &this->unk_3A8);
+        Matrix_MultVec3f(&D_80A99410, &this->unk_3A8);
         Math_SmoothStepToF(&this->unk_3A4, this->unk_3A8.y - this->actor.world.pos.y, 0.8f, 10.0f, 0.01f);
         if (this->unk_374 & 2) {
-            Matrix_MultiplyVector3fByState(&D_80A9941C, &this->unk_3B4);
+            Matrix_MultVec3f(&D_80A9941C, &this->unk_3B4);
         } else {
-            Matrix_MultiplyVector3fByState(&D_80A99428, &this->unk_3B4);
+            Matrix_MultVec3f(&D_80A99428, &this->unk_3B4);
         }
     }
 }
@@ -1802,15 +1802,15 @@ void func_80A98E48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 void func_80A98EFC(EnAz* this, GlobalContext* globalCtx, u16 textId, s32 arg3, s32 arg4) {
     EnAz* temp_s0 = this->brother;
 
-    func_800B86C8(&this->actor, globalCtx, &temp_s0->actor);
+    Actor_ChangeFocus(&this->actor, globalCtx, &temp_s0->actor);
     if (arg3 >= 0) {
-        func_8013E1C8(&this->skelAnime, D_80A99010, arg3, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80A99010, arg3, &this->animIndex);
     }
     this->actor.textId = 0;
     temp_s0->actor.textId = textId;
     temp_s0->unk_378 = 5;
     if ((arg4 >= 0) && (arg4 != temp_s0->animIndex)) {
-        func_8013E1C8(&temp_s0->skelAnime, D_80A99010, arg4, &temp_s0->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&temp_s0->skelAnime, D_80A99010, arg4, &temp_s0->animIndex);
     }
     this->unk_378 = 0;
 }
