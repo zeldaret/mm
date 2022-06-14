@@ -61,7 +61,7 @@ void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (OBJBOAT_GET_PARAMS(thisx) < 0) {
         this->dyna.actor.update = (void (*)(Actor*, GlobalContext*))func_80B9B428;
     } else {
-        path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(thisx) & 0x1F];
+        path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(thisx)];
         this->unk_163 = path->count - 1;
         this->unk_164 = Lib_SegmentedToVirtual(path->points);
         this->rotY = 1;
@@ -152,7 +152,7 @@ void func_80B9B428(ObjBoat* this, GlobalContext* globalCtx2) {
         if (this->unk_15F != actionIndex->action) {
             this->dyna.actor.shape.rot.x = actionIndex->urot.x;
             if (actionIndex->action != 1) {
-                Path* path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor) & 0x1F];
+                Path* path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
                 if (actionIndex->action == 3) {
                     path = &globalCtx->setupPathList[path->unk1];
                 }

@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define OBJBOAT_GET_PARAMS(thisx) ((thisx)->params)
-#define OBJBOAT_GET_PATH(thisx) ((thisx)->params >> 0x07)
+#define OBJBOAT_GET_PATH(thisx) (((thisx)->params >> 0x07) & 0x1F)
 #define OBJBOAT_GET_4000(thisx) ((thisx)->params & 0x4000)
 
 struct ObjBoat;
