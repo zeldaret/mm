@@ -134,4 +134,8 @@ typedef struct {
     /* 0x101 */ u8 map[PFS_INODE_DIST_MAP];
 } __OSInodeCache; // size = 0x202
 
+s32 __osCheckPackId(OSPfs* pfs, __OSPackId* check);
+s32 __osGetId(OSPfs* pfs);
+s32 osPfsChecker(OSPfs* pfs);
+
 #endif

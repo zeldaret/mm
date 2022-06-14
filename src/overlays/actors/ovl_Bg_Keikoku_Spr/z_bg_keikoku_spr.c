@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_keikoku_spr.h"
+#include "objects/object_keikoku_obj/object_keikoku_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -34,13 +35,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
 
-extern Gfx D_06000100[];
-extern AnimatedMaterial D_060001F8;
-extern Gfx D_06000300[];
-extern AnimatedMaterial D_060003F8;
-extern Gfx D_06000500[];
-extern AnimatedMaterial D_060005F8;
-
 void BgKeikokuSpr_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(thisx, sInitChain);
 }
@@ -56,13 +50,13 @@ void BgKeikokuSpr_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060001F8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06000100);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060003F8));
-    gSPDisplayList(POLY_XLU_DISP++, D_06000300);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060005F8));
-    gSPDisplayList(POLY_XLU_DISP++, D_06000500);
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0003F8));
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
+    gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000500);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

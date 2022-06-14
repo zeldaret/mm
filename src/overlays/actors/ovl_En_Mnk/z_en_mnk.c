@@ -1,6 +1,12 @@
+/*
+ * File: z_en_mnk.c
+ * Overlay: ovl_En_Mnk
+ * Description: Monkey
+ */
+
 #include "z_en_mnk.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnMnk*)thisx)
 

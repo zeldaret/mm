@@ -1,6 +1,12 @@
+/*
+ * File: z_bg_icefloe.c
+ * Overlay: ovl_Bg_Icefloe
+ * Description: Ice Platform Created by Ice Arrow
+ */
+
 #include "z_bg_icefloe.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIcefloe*)thisx)
 

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_haka_bombwall.c
+ * Overlay: ovl_Bg_Haka_Bombwall
+ * Description: Beneath the Grave - Bombable Wall
+ */
+
 #include "z_bg_haka_bombwall.h"
 
 #define FLAGS 0x00000000

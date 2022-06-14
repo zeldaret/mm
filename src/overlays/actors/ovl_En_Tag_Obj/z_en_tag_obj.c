@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tag_obj.c
+ * Overlay: ovl_En_Tag_Obj
+ * Description:
+ */
+
 #include "z_en_tag_obj.h"
 
 #define FLAGS 0x00000000
@@ -41,7 +47,7 @@ const ActorInit En_Tag_Obj_InitVars = {
 };
 
 void EnTagObj_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnTagObj* this = (EnTagObj*)thisx;
+    EnTagObj* this = THIS;
 
     this->hasSpawnedSeahorse = 0;
 }
@@ -50,7 +56,7 @@ void EnTagObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTagObj_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnTagObj* this = (EnTagObj*)thisx;
+    EnTagObj* this = THIS;
 
     if (!this->hasSpawnedSeahorse) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,

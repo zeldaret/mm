@@ -1,6 +1,12 @@
+/*
+ * File: z_boss_hakugin.c
+ * Overlay: ovl_Boss_Hakugin
+ * Description: Goht
+ */
+
 #include "z_boss_hakugin.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 

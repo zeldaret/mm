@@ -5,11 +5,14 @@
 #include "Globals.h"
 #include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
+#include "WarningHandler.h"
+#include "ZSkeleton.h"
 
 REGISTER_ZFILENODE(Limb, ZLimb);
 
 ZLimb::ZLimb(ZFile* nParent) : ZResource(nParent), segmentStruct(nParent)
 {
+	RegisterOptionalAttribute("EnumName");
 	RegisterOptionalAttribute("LimbType");
 	RegisterOptionalAttribute("Type");
 }
@@ -30,6 +33,12 @@ void ZLimb::ParseXML(tinyxml2::XMLElement* reader)
 {
 	ZResource::ParseXML(reader);
 
+	auto& enumNameXml = registeredAttributes.at("EnumName").value;
+	if (enumNameXml != "")
+	{
+		enumName = enumNameXml;
+	}
+
 	// Reading from a <Skeleton/>
 	std::string limbType = registeredAttributes.at("LimbType").value;
 	if (limbType == "")  // Reading from a <Limb/>
@@ -37,17 +46,15 @@ void ZLimb::ParseXML(tinyxml2::XMLElement* reader)
 
 	if (limbType == "")
 	{
-		throw std::runtime_error(StringHelper::Sprintf("ZLimb::ParseXML: Error in '%s'.\n"
-		                                               "\t Missing 'LimbType' attribute in xml.\n",
-		                                               name.c_str()));
+		HANDLE_ERROR_RESOURCE(WarningType::MissingAttribute, parent, this, rawDataIndex,
+		                      "missing 'LimbType' attribute in <Limb>", "");
 	}
 
 	type = GetTypeByAttributeName(limbType);
 	if (type == ZLimbType::Invalid)
 	{
-		throw std::runtime_error(StringHelper::Sprintf("ZLimb::ParseXML: Error in '%s'.\n"
-		                                               "\t Invalid 'LimbType' found: '%s'.\n",
-		                                               name.c_str(), limbType.c_str()));
+		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                      "invalid value found for 'LimbType' attribute", "");
 	}
 }
 
@@ -109,8 +116,12 @@ void ZLimb::ParseRawData()
 		}
 		break;
 
-	default:
-		throw std::runtime_error("Invalid ZLimb type");
+	case ZLimbType::Curve:
+	case ZLimbType::Legacy:
+		break;
+
+	case ZLimbType::Invalid:
+		assert(!"whoops");
 		break;
 	}
 }
@@ -226,8 +237,8 @@ std::string ZLimb::GetBodySourceCode() const
 	{
 		std::string childName;
 		std::string siblingName;
-		Globals::Instance->GetSegmentedPtrName(childPtr, parent, "Gfx", childName);
-		Globals::Instance->GetSegmentedPtrName(siblingPtr, parent, "Gfx", siblingName);
+		Globals::Instance->GetSegmentedPtrName(childPtr, parent, "LegacyLimb", childName);
+		Globals::Instance->GetSegmentedPtrName(siblingPtr, parent, "LegacyLimb", siblingName);
 
 		entryStr += StringHelper::Sprintf("%s,\n", dListStr.c_str());
 		entryStr +=
@@ -238,11 +249,24 @@ std::string ZLimb::GetBodySourceCode() const
 	}
 	else
 	{
+		std::string childStr;
+		std::string siblingStr;
+		if (limbsTable != nullptr)
+		{
+			childStr = limbsTable->GetLimbEnumName(childIndex);
+			siblingStr = limbsTable->GetLimbEnumName(siblingIndex);
+		}
+		else
+		{
+			childStr = StringHelper::Sprintf("0x%02X", childIndex);
+			siblingStr = StringHelper::Sprintf("0x%02X", siblingIndex);
+		}
+
 		if (type != ZLimbType::Curve)
 		{
 			entryStr += StringHelper::Sprintf("{ %i, %i, %i }, ", transX, transY, transZ);
 		}
-		entryStr += StringHelper::Sprintf("0x%02X, 0x%02X,\n", childIndex, siblingIndex);
+		entryStr += StringHelper::Sprintf("%s, %s,\n", childStr.c_str(), siblingStr.c_str());
 
 		switch (type)
 		{
@@ -348,6 +372,11 @@ ZLimbType ZLimb::GetTypeByAttributeName(const std::string& attrName)
 		return ZLimbType::Legacy;
 	}
 	return ZLimbType::Invalid;
+}
+
+void ZLimb::SetLimbIndex(uint8_t nLimbIndex)
+{
+	limbIndex = nLimbIndex;
 }
 
 void ZLimb::DeclareDList(segptr_t dListSegmentedPtr, const std::string& prefix,

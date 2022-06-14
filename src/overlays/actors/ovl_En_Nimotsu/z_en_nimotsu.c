@@ -1,6 +1,12 @@
+/*
+ * File: z_en_nimotsu.c
+ * Overlay: ovl_En_Nimotsu
+ * Description: Bomb Shop Bag Stolen by Sakon
+ */
+
 #include "z_en_nimotsu.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnNimotsu*)thisx)
 

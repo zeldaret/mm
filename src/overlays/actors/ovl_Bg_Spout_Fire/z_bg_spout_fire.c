@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_spout_fire.c
+ * Overlay: ovl_Bg_Spout_Fire
+ * Description: Proximity-Activated Fire Wall Spawner
+ */
+
 #include "z_bg_spout_fire.h"
 
 #define FLAGS 0x00000000

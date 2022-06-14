@@ -1,15 +1,22 @@
-#include "z_obj_blockstop.h"
+/*
+ * File: z_obj_blockstop.c
+ * Overlay: ovl_Obj_Blockstop
+ * Description: Push Block Trigger - Blockstop switch triggered by pushblock (Snowhead)
+ */
 
-#define FLAGS 0x00000010
+#include "z_obj_blockstop.h"
+#include "overlays/actors/ovl_Obj_Oshihiki/z_obj_oshihiki.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBlockstop*)thisx)
 
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809466F0(ObjBlockstop* this, GlobalContext* globalCtx);
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx);
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
     ACTORCAT_PROP,
@@ -22,12 +29,47 @@ const ActorInit Obj_Blockstop_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjBlockstop* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Init.s")
+    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        Actor_MarkForDeath(&this->actor);
+    }
+    this->actionFunc = ObjBlockstop_CheckForBlock;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809466F0.s")
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx) {
+    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809467E8.s")
+    while (prop != NULL) {
+        if ((prop->id == ACTOR_OBJ_OSHIHIKI) && (fabsf(prop->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
+            (fabsf(prop->world.pos.z - this->actor.world.pos.z) < 20.0f) &&
+            (fabsf(prop->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Update.s")
+            s32 params = OBJOSHIHIKI_GET_F(prop);
+            if (params < 3) {
+                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                this->actionFunc = ObjBlockstop_TryPlayCutscene;
+            }
+        }
+        prop = prop->next;
+    }
+}
+
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        Flags_SetSwitch(globalCtx, this->actor.params);
+        if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        }
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+}
+
+void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjBlockstop* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}

@@ -7,8 +7,9 @@
 #include "z_obj_boyo.h"
 #include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/object_boyo/object_boyo.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoyo*)thisx)
 
@@ -56,9 +57,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000300[];
-extern AnimatedMaterial D_06000E88;
-
 void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
@@ -67,7 +65,7 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_190 = Lib_SegmentedToVirtual(&D_06000E88);
+    this->unk_190 = Lib_SegmentedToVirtual(object_boyo_Matanimheader_000E88);
 }
 
 void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
@@ -121,8 +119,8 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
 }
 
 void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjBoyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjBoyo* this = THIS;
     Actor* target;
     s32 num;
 
@@ -182,5 +180,5 @@ void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->unk_190);
-    func_800BDFC0(globalCtx, D_06000300);
+    Gfx_DrawDListOpa(globalCtx, object_boyo_DL_000300);
 }

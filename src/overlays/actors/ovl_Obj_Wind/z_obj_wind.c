@@ -1,6 +1,12 @@
+/*
+ * File: z_obj_wind.c
+ * Overlay: ovl_Obj_Wind
+ * Description: Updraft Current (STT) and Water Current (PFInterior)
+ */
+
 #include "z_obj_wind.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjWind*)thisx)
 

@@ -1,6 +1,12 @@
+/*
+ * File: z_en_door_etc.c
+ * Overlay: ovl_En_Door_Etc
+ * Description: Wooden Door
+ */
+
 #include "z_en_door_etc.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnDoorEtc*)thisx)
 

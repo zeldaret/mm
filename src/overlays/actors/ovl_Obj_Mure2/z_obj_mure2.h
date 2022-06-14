@@ -10,7 +10,7 @@ typedef void (*ObjMure2ActionFunc)(struct ObjMure2*, GlobalContext*);
 typedef struct ObjMure2 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjMure2ActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x38];
+    /* 0x0148 */ char unk_148[0x38];
 } ObjMure2; // size = 0x180
 
 extern const ActorInit Obj_Mure2_InitVars;

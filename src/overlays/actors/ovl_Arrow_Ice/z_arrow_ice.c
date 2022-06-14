@@ -7,7 +7,7 @@
 #include "z_arrow_ice.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((ArrowIce*)thisx)
 
@@ -17,7 +17,6 @@ void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx);
-void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx);
 
 #include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
@@ -39,8 +38,6 @@ const ActorInit Arrow_Ice_InitVars = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
-
-extern Gfx D_0E0002E0[];
 
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -96,7 +93,6 @@ void ArrowIce_LerpFiredPosition(Vec3f* firedPos, Vec3f* icePos, f32 scale) {
 
 void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
     f32 scale;
-    f32 offset;
     u16 timer;
 
     if (this->actor.projectedW < 50.0f) {
@@ -113,12 +109,12 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
         this->timer--;
 
         if (this->timer >= 8) {
-            offset = ((this->timer - 8) * (1.0f / 24.0f));
+            f32 offset = ((this->timer - 8) * (1.0f / 24.0f));
+
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
-            this->height += ((2.0f - this->height) * 0.1f);
+            this->height = F32_LERPIMP(this->height, 2.0f, 0.1f);
             if (this->timer < 16) {
-                if (1) {}
                 this->alpha = ((this->timer * 35) - 280);
             }
         }
@@ -164,7 +160,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
@@ -180,7 +176,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
 
-    if ((globalCtx->msgCtx.unk11F22 == 0xE) || (globalCtx->msgCtx.unk11F22 == 0x12)) {
+    if ((globalCtx->msgCtx.msgMode == 0xE) || (globalCtx->msgCtx.msgMode == 0x12)) {
         Actor_MarkForDeath(&this->actor);
         return;
     } else {
@@ -200,10 +196,10 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
-        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         // Draw blue effect over the screen when arrow hits
@@ -214,27 +210,27 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
-            gSPDisplayList(POLY_XLU_DISP++, D_0E0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
 
         // Draw ice on the arrow
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
-        Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
         if (this->timer != 0) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            Matrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
         Matrix_Scale(this->radius * 0.2f, this->height * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, sIceArrowDL);
+        gSPDisplayList(POLY_XLU_DISP++, gIceArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - (stateFrames * 5) % 512, 0, 128, 32, 1,
                                         511 - (stateFrames * 10) % 512, 511 - (stateFrames * 10) % 512, 4, 16));
-        gSPDisplayList(POLY_XLU_DISP++, sIceArrowVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gIceArrowModelDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

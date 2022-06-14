@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_bell.h"
+#include "objects/object_f52_obj/object_f52_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjBell*)thisx)
 
@@ -111,14 +112,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-extern CollisionHeader D_06001BA8;
-extern Gfx D_06000570[]; // Bell post
-extern Gfx D_06000698[]; // Bell
-extern Gfx D_060007A8[]; // Bell Base
-extern Gfx D_06000840[]; // Bell Shadow
-extern Gfx D_060008D0[]; // Bell Hook
-extern Gfx D_06000960[]; // Bell Designs
-
 s32 func_80A35510(ObjBell* this, s32 arg1) {
     Vec3f bumperPos;
     Vec3f worldPos;
@@ -126,19 +119,16 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
 
     if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
         phi_a3 = true;
-    } else {
-        phi_a3 = phi_a3;
     }
 
     switch (arg1) {
         case 0:
-            this->unk_21C += this->unk_21C > 1000.0f ? 250.0f : 1000.0f;
+            this->unk_21C += ((this->unk_21C > 1000.0f) ? 250.0f : 1000.0f);
             break;
         case 1:
-            this->unk_21C += this->unk_21C > 3000.0f ? 750.0f : 3000.0f;
+            this->unk_21C += ((this->unk_21C > 3000.0f) ? 750.0f : 3000.0f);
             break;
         case 2:
-            if (1) {}
             this->unk_21C += 9000.0f;
             break;
     }
@@ -198,11 +188,11 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 1);
                 break;
             case 14:
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 2);
                 break;
             default:
@@ -223,49 +213,49 @@ void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
 }
 
 void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
-    Matrix_RotateY(thisx->world.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(thisx->world.rot.x, MTXMODE_APPLY);
-    Matrix_RotateY(-thisx->world.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateYS(thisx->world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(thisx->world.rot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(-thisx->world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000698);
-    gSPDisplayList(POLY_OPA_DISP++, D_060008D0);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000960);
-    gSPDisplayList(POLY_OPA_DISP++, D_060007A8);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000698);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0008D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000960);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0007A8);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000570);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000570);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06000840);
+    gSPDisplayList(POLY_XLU_DISP++, object_f52_obj_DL_000840);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_f52_obj_Colheader_001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
     Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
     Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);
@@ -275,7 +265,7 @@ void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroySphere(globalCtx, &this->collider1);
     Collider_DestroySphere(globalCtx, &this->collider2);
 }
@@ -300,9 +290,9 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80A35BD4(thisx, globalCtx);
     func_80A359B4(thisx, globalCtx);
     Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.modelSphere.center);
-    Matrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultVec3f(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere.center, &sp24);
     Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.modelSphere.center);
-    Matrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultVec3f(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp24);
 }

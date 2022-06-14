@@ -1,6 +1,12 @@
+/*
+ * File: z_obj_boat.c
+ * Overlay: ovl_Obj_Boat
+ * Description: Pirate Boat
+ */
+
 #include "z_obj_boat.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoat*)thisx)
 

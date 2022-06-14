@@ -4,9 +4,9 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/simonlindholm/asm-differ.git
+	remote = https://github.com/simonlindholm/asm-differ
 	branch = main
-	commit = f30d43aceba6291aa3c08b7317b0458b6d734321
-	parent = e977dfeb374c6de4076ca9a0f44ba5a6a701d849
+	commit = 1236288d1520335c2bfb672078fec65084d7cb5c
+	parent = 2c5690701a350c7e7c3d6252dff925ad65d59910
 	method = merge
 	cmdver = 0.4.3

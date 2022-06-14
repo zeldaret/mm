@@ -1,3 +1,9 @@
+/*
+ * File: z_en_snowwd.c
+ * Overlay: ovl_En_Snowwd
+ * Description: Snow-Covered Tree
+ */
+
 #include "z_en_snowwd.h"
 
 #define FLAGS 0x00000000

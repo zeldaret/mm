@@ -13,6 +13,8 @@ SQ = "int"
 CLAMP = "int"
 CLOCK_TIME = "int"
 CURRENT_DAY = "int"
+CHECK_NEWF = "int"
+NULL = "int"
 
 [decompme.compilers]
 "tools/ido_recomp/linux/7.1/cc" = "ido7.1"

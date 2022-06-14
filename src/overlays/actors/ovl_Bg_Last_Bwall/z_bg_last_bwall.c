@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_last_bwall.c
+ * Overlay: ovl_Bg_Last_Bwall
+ * Description: Link Moon Dungeon - Bombable, Climbable Wall
+ */
+
 #include "z_bg_last_bwall.h"
 
 #define FLAGS 0x00000000

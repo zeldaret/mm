@@ -18,11 +18,11 @@ struct ObjKibako2;
 typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, GlobalContext*);
 
 typedef struct ObjKibako2 {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ColliderCylinder collider;
-    /* 0x01A8 */ ObjKibako2ActionFunc actionFunc;
-    /* 0x01AC */ s8 unk_1AC;
-    /* 0x01AD */ s8 skulltulaNoiseTimer;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ ObjKibako2ActionFunc actionFunc;
+    /* 0x1AC */ s8 unk_1AC;
+    /* 0x1AD */ s8 skulltulaNoiseTimer;
 } ObjKibako2; // size = 0x1B0
 
 extern const ActorInit Obj_Kibako2_InitVars;

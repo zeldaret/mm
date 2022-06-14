@@ -1,6 +1,12 @@
+/*
+ * File: z_en_dt.c
+ * Overlay: ovl_En_Dt
+ * Description: Mayor Dotour
+ */
+
 #include "z_en_dt.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDt*)thisx)
 

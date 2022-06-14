@@ -1,6 +1,12 @@
+/*
+ * File: z_en_twig.c
+ * Overlay: ovl_En_Twig
+ * Description: Beaver Race Ring
+ */
+
 #include "z_en_twig.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTwig*)thisx)
 
@@ -136,7 +142,7 @@ void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx) {
         }
     }
     func_8013E4B0(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
-    if ((sCurrentRing == GET_PARAM3(this)) && func_8017D2FC(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist,
+    if ((sCurrentRing == GET_PARAM3(this)) && Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist,
                                                           &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
         if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &sp40) <=
             SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {

@@ -1,6 +1,12 @@
+/*
+ * File: z_en_zod.c
+ * Overlay: ovl_En_Zod
+ * Description: Zora Drummer Tijo
+ */
+
 #include "z_en_zod.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnZod*)thisx)
 

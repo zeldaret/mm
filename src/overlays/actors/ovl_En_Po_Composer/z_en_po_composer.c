@@ -1,6 +1,12 @@
+/*
+ * File: z_en_po_composer.c
+ * Overlay: ovl_En_Po_Composer
+ * Description: Poe Composers
+ */
+
 #include "z_en_po_composer.h"
 
-#define FLAGS 0x02100019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnPoComposer*)thisx)
 

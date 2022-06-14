@@ -2,8 +2,11 @@
 #define Z_EN_OSSAN_H
 
 #include "global.h"
-
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_ani/object_ani.h"
+#include "objects/object_fsn/object_fsn.h"
+
+#define ENOSSAN_LIMB_MAX MAX(FSN_LIMB_MAX + 1, ANI_LIMB_MAX)
 
 struct EnOssan;
 
@@ -50,9 +53,9 @@ typedef struct EnOssan {
     /* 0x2CC */ Vec3s unk2CC; // Set but never used
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
-    /* 0x31E */ Vec3s jointTable[19];
-    /* 0x390 */ Vec3s morphTable[19];
-    /* 0x402 */ s16 animationIdx;
+    /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
+    /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
+    /* 0x402 */ s16 animationIndex;
     /* 0x404 */ Vec3s headRotPartTimeWorker;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
@@ -67,12 +70,6 @@ typedef enum {
     /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
-
-typedef enum {
-    /* 0 */ ENOSSAN_CUTSCENESTATE_STOPPED,
-    /* 1 */ ENOSSAN_CUTSCENESTATE_WAITING,
-    /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
-} EnOssanCutsceneState;
 
 extern const ActorInit En_Ossan_InitVars;
 
