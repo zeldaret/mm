@@ -17,6 +17,7 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjRotlift_MoveDekuFlowers(ObjRotlift* this);
+
 typedef struct ModelInfo {
     /* 0x0 */ Gfx* dList;
     /* 0x4 */ AnimatedMaterial* animMat;
@@ -80,16 +81,15 @@ void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
 void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjRotlift* this = THIS;
-    s32 type;
+    s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     s32 dekuFlowerType;
     s32 i;
     ModelInfo* sModelInfo;
     ObjEtcetera** dekuFlowers;
 
-    type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if (type == 0) {
-        for (dekuFlowers = this->dekuFlowers, i = 0; i < 2; i++, dekuFlowers++) {
+        for (dekuFlowers = this->dekuFlowers, i = 0; i < ARRAY_COUNT(this->dekuFlowers); i++, dekuFlowers++) {
             if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
                 dekuFlowerType = 0;
             } else {
@@ -136,8 +136,8 @@ void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjRotlift* this = THIS;
     ModelInfo* sModelInfo;
-
     sModelInfo = &D_80B96160[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
+
     AnimatedMat_Draw(globalCtx, sModelInfo->animMat);
     Gfx_DrawDListOpa(globalCtx, sModelInfo->dList);
 }
