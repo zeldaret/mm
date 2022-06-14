@@ -24,9 +24,9 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall*, GlobalContext*);
 void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall*);
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall*, GlobalContext*);
 
-extern Gfx D_06000128[];
-extern Gfx D_060002C0[]; // name idea : translucentDlist
-extern Gfx D_06000360[]; // name idea : opaqueDlist
+extern Gfx D_06000128[]; // debris
+extern Gfx D_060002C0[]; // wall crack
+extern Gfx D_06000360[]; // bombable wall
 extern CollisionHeader D_06000490;
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
@@ -191,14 +191,14 @@ void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this) {
     this->actionFunc = BgKin2Bombwall_PlayCutscene;
 }
 
-void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* arg1) {
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(arg1, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
-        SoundSource_PlaySfxAtFixedWorldPos(arg1, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(arg1, &arg1->colCtx.dyna, this->dyna.bgId);
+        Flags_SetSwitch(globalCtx, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
+        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
-        BgKin2Bombwall_SpawnEffects(this, arg1);
+        BgKin2Bombwall_SpawnEffects(this, globalCtx);
         BgKin2Bombwall_SetupEndCutscene(this);
 
     } else {
