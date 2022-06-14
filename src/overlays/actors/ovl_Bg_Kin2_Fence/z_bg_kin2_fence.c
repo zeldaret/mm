@@ -270,5 +270,5 @@ void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_kin2_obj_DL_000828);
+    Gfx_DrawDListOpa(globalCtx, gOceanSpiderHouseFireplaceGrateDL);
 }
