@@ -11,14 +11,14 @@ struct ItemEtcetera;
 typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, GlobalContext*);
 
 typedef struct ItemEtcetera {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ItemEtceteraActionFunc funcSetup;
-    /* 0x148 */ s16 unk_148;
-    /* 0x14A */ s16 unk_14A;
-    /* 0x14C */ u8 unk_14C;
-    /* 0x14D */ ActorFunc drawFunc;
-    /* 0x0151 */ ItemEtceteraActionFunc actionFunc;
-} ItemEtcetera; // size = 0x155
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ItemEtceteraActionFunc funcSetup;
+    /* 0x148 */ s16 itemDrawIndex;
+    /* 0x14A */ s16 itemID;
+    /* 0x14C */ u8 objIndex;
+    /* 0x150 */ ActorFunc drawFunc;
+    /* 0x154 */ ItemEtceteraActionFunc actionFunc;
+} ItemEtcetera; // size = 0x158
 
 extern const ActorInit Item_Etcetera_InitVars;
 
