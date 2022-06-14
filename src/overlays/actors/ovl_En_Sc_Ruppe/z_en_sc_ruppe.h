@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define SCRUPPE_GET_PARAMS(thisx) ((thisx)->params & 0x1F)
+
 struct EnScRuppe;
 
 typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, GlobalContext*);

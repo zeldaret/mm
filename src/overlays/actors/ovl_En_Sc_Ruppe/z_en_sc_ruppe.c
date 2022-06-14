@@ -135,6 +135,7 @@ void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
         }
     } else {
         f32 scale;
+
         this->rupeeDisplayTime++;
         this->actor.world.pos = player->actor.world.pos;
         this->actor.world.pos.y += 40.0f;
@@ -148,14 +149,12 @@ void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
 void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnScRuppe* this = THIS;
     ColliderCylinder* collider = &this->collider;
-    ;
 
-    collider = &this->collider;
     Collider_InitCylinder(globalCtx, collider);
     Collider_InitAndSetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    this->rupeeIndex = this->actor.params & 0x1F;
+    this->rupeeIndex = SCRUPPE_GET_PARAMS(thisx);
     if ((this->rupeeIndex < 0) || (this->rupeeIndex >= 5)) {
         this->rupeeIndex = 0;
     }
