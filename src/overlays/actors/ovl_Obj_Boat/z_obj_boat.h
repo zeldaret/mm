@@ -3,16 +3,15 @@
 
 #include "global.h"
 
-#define OBJBOAT_GET_PARAMS(thisx) ((thisx)->params)
-#define OBJBOAT_GET_PATH(thisx) (((thisx)->params >> 0x07) & 0x1F)
+#define OBJBOAT_GET_PATH(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJBOAT_GET_4000(thisx) ((thisx)->params & 0x4000)
 
 struct ObjBoat;
 
 typedef struct ObjBoat {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ u8 posX;
-    /* 0x15D */ s8 rotY;
+    /* 0x15C */ u8 unk_15C;
+    /* 0x15D */ s8 unk_15D;
     /* 0x15E */ u8 unk_15E;
     /* 0x15F */ u8 unk_15F;
     /* 0x160 */ s16 unk_160;
