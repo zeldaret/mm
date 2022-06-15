@@ -36,7 +36,7 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Draw,
 };
 
-struct ModelInfo D_80B96160[] = {
+struct ModelInfo sModelInfo[] = {
     {
         object_rotlift_DL_000400,
         object_rotlift_Matanimheader_001F98,
@@ -84,7 +84,7 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     s32 dekuFlowerType;
     s32 i;
-    ModelInfo* sModelInfo;
+    ModelInfo* modelInfo;
     ObjEtcetera** dekuFlowers;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -104,9 +104,9 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
     DynaPolyActor_Init(&this->dyna, 3);
 
-    sModelInfo = &D_80B96160[type];
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sModelInfo->colHeader);
-    sModelInfo->animMat = Lib_SegmentedToVirtual(sModelInfo->animMat);
+    modelInfo = &sModelInfo[type];
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, modelInfo->colHeader);
+    modelInfo->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
 }
 
 void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -135,9 +135,8 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjRotlift* this = THIS;
-    ModelInfo* sModelInfo;
-    sModelInfo = &D_80B96160[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
+    ModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
-    AnimatedMat_Draw(globalCtx, sModelInfo->animMat);
-    Gfx_DrawDListOpa(globalCtx, sModelInfo->dList);
+    AnimatedMat_Draw(globalCtx, modelInfo->animMat);
+    Gfx_DrawDListOpa(globalCtx, modelInfo->dList);
 }
