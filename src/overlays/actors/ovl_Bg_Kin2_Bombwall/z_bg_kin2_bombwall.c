@@ -61,12 +61,12 @@ static ColliderCylinderInit sCylinderInit = {
     { 60, 60, 0, { 0, 0, 0 } },
 };
 
-Color_RGBA8 primColor = { 210, 210, 210, 255 };
-Color_RGBA8 envColor = { 140, 140, 140, 255 };
+static Color_RGBA8 sPrimColor = { 210, 210, 210, 255 };
+static Color_RGBA8 sEnvColor = { 140, 140, 140, 255 };
 
-Vec3f dustAccel = { 0.0f, 0.33f, 0.0f };
+static Vec3f sDustAccel = { 0.0f, 0.33f, 0.0f };
 
-s8 D_80B6E730[] = { -60, -34, -8, 18, 44 }; // Used to generate a random vector to modify the dust position vector.
+static s8 sRandomYOffsets[] = { -60, -34, -8, 18, 44 }; // Used to generate a random vector to modify the dust position vector.
 s16 scales[] = { 25, 23, 21, 19, 17, 15, 13, 10 }; // Scales for random explosion debris.
 
 static InitChainEntry sInitChain[] = {
