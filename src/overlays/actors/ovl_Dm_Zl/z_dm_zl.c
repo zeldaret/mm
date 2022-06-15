@@ -152,7 +152,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         actionIndex = this->animationIndex;
-        if ((actionIndex == 1) || (actionIndex == 3) || (actionIndex == 5)) {
+        if ((actionIndex == ZELDA_ANIM_TURNING_TOWARD_PLAYER) || (actionIndex == ZELDA_ANIM_FACING_PLAYER) || (actionIndex == ZELDA_ANIM_GIVING_OCARINA)) {
             this->animationIndex++;
             DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
         }
