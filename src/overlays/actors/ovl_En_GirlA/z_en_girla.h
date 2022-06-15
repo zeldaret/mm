@@ -25,7 +25,7 @@ typedef struct ShopItemEntry {
 
 typedef struct EnGirlA {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk144[0x44];
+    /* 0x144 */ UNK_TYPE1 unk144[0x44];
     /* 0x188 */ EnGirlAActionFunc actionFunc;
     /* 0x18C */ s8 objIndex;
     /* 0x190 */ EnGirlAActionFunc mainActionFunc;
@@ -104,6 +104,7 @@ typedef enum {
 	/* 40 */ SI_SWORD_GILDED,
 	/* 41 */ SI_SHIELD_HERO_4,
 	/* 42 */ SI_SHIELD_MIRROR,
+    /* 43 */ SI_MAX
 } EnGirlAShopItemId;
 
 extern const ActorInit En_GirlA_InitVars;
@@ -122,7 +123,7 @@ typedef struct {
     /* 0x28 */ f32 arrowTexX;
     /* 0x2C */ f32 arrowTexY;
     /* 0x30 */ f32 texZ; // Used for both stickTexZ and arrowTexZ
-    /* 0x34 */ s32 isEnabled;
+    /* 0x34 */ u32 isEnabled;
 } StickDirectionPrompt; // size = 0x38
 
 typedef struct ShopItem {

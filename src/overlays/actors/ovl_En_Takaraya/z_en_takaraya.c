@@ -1,6 +1,12 @@
+/*
+ * File: z_en_takaraya.c
+ * Overlay: ovl_En_Takaraya
+ * Description: Treasure Chest Shop Gal
+ */
+
 #include "z_en_takaraya.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 

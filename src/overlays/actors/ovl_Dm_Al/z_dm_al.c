@@ -1,6 +1,12 @@
+/*
+ * File: z_dm_al.c
+ * Overlay: ovl_Dm_Al
+ * Description: Madame Aroma (cutscene)
+ */
+
 #include "z_dm_al.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((DmAl*)thisx)
 

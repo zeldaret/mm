@@ -1,0 +1,50 @@
+﻿<Root>
+    <File Name="object_zod" Segment="6">
+        <Animation Name="object_zod_Anim_0002E8" Offset="0x2E8" />
+        <Animation Name="object_zod_Anim_000894" Offset="0x894" />
+        <Animation Name="object_zod_Anim_000A9C" Offset="0xA9C" />
+        <Animation Name="object_zod_Anim_000D94" Offset="0xD94" />
+        <DList Name="object_zod_DL_0039A0" Offset="0x39A0" />
+        <DList Name="object_zod_DL_003DA0" Offset="0x3DA0" />
+        <DList Name="object_zod_DL_004018" Offset="0x4018" />
+        <DList Name="object_zod_DL_004130" Offset="0x4130" />
+        <DList Name="object_zod_DL_004258" Offset="0x4258" />
+        <DList Name="object_zod_DL_0043E8" Offset="0x43E8" />
+        <DList Name="object_zod_DL_004500" Offset="0x4500" />
+        <DList Name="object_zod_DL_004628" Offset="0x4628" />
+        <DList Name="object_zod_DL_0047B8" Offset="0x47B8" />
+        <Texture Name="object_zod_Tex_004B50" OutName="tex_004B50" Format="rgba16" Width="8" Height="8" Offset="0x4B50" />
+        <Texture Name="object_zod_Tex_004BD0" OutName="tex_004BD0" Format="rgba16" Width="32" Height="32" Offset="0x4BD0" />
+        <Texture Name="object_zod_Tex_0053D0" OutName="tex_0053D0" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
+        <Texture Name="object_zod_Tex_0055D0" OutName="tex_0055D0" Format="rgba16" Width="8" Height="8" Offset="0x55D0" />
+        <Texture Name="object_zod_Tex_005650" OutName="tex_005650" Format="rgba16" Width="32" Height="32" Offset="0x5650" />
+        <!-- <Blob Name="object_zod_Blob_005E50" Size="0x2800" Offset="0x5E50" /> -->
+        <DList Name="object_zod_DL_00A460" Offset="0xA460" />
+        <DList Name="object_zod_DL_00A550" Offset="0xA550" />
+        <DList Name="object_zod_DL_00A5E0" Offset="0xA5E0" />
+        <DList Name="object_zod_DL_00A670" Offset="0xA670" />
+        <DList Name="object_zod_DL_00A700" Offset="0xA700" />
+        <DList Name="object_zod_DL_00A8F8" Offset="0xA8F8" />
+        <DList Name="object_zod_DL_00AAF0" Offset="0xAAF0" />
+        <DList Name="object_zod_DL_00ACE8" Offset="0xACE8" />
+        <DList Name="object_zod_DL_00AEE0" Offset="0xAEE0" />
+        <DList Name="object_zod_DL_00B0D8" Offset="0xB0D8" />
+        <Texture Name="object_zod_Tex_00B348" OutName="tex_00B348" Format="rgba16" Width="32" Height="32" Offset="0xB348" />
+        <Texture Name="object_zod_Tex_00BB48" OutName="tex_00BB48" Format="rgba16" Width="32" Height="32" Offset="0xBB48" />
+        <Texture Name="object_zod_Tex_00C348" OutName="tex_00C348" Format="rgba16" Width="8" Height="8" Offset="0xC348" />
+        <Texture Name="object_zod_Tex_00C3C8" OutName="tex_00C3C8" Format="rgba16" Width="32" Height="32" Offset="0xC3C8" />
+        <Texture Name="object_zod_Tex_00CBC8" OutName="tex_00CBC8" Format="rgba16" Width="16" Height="16" Offset="0xCBC8" />
+        <Texture Name="object_zod_Tex_00CDC8" OutName="tex_00CDC8" Format="rgba16" Width="32" Height="32" Offset="0xCDC8" />
+        <Limb Name="object_zod_Standardlimb_00D5C8" Type="Standard" EnumName="OBJECT_ZOD_LIMB_01" Offset="0xD5C8" />
+        <Limb Name="object_zod_Standardlimb_00D5D4" Type="Standard" EnumName="OBJECT_ZOD_LIMB_02" Offset="0xD5D4" />
+        <Limb Name="object_zod_Standardlimb_00D5E0" Type="Standard" EnumName="OBJECT_ZOD_LIMB_03" Offset="0xD5E0" />
+        <Limb Name="object_zod_Standardlimb_00D5EC" Type="Standard" EnumName="OBJECT_ZOD_LIMB_04" Offset="0xD5EC" />
+        <Limb Name="object_zod_Standardlimb_00D5F8" Type="Standard" EnumName="OBJECT_ZOD_LIMB_05" Offset="0xD5F8" />
+        <Limb Name="object_zod_Standardlimb_00D604" Type="Standard" EnumName="OBJECT_ZOD_LIMB_06" Offset="0xD604" />
+        <Limb Name="object_zod_Standardlimb_00D610" Type="Standard" EnumName="OBJECT_ZOD_LIMB_07" Offset="0xD610" />
+        <Limb Name="object_zod_Standardlimb_00D61C" Type="Standard" EnumName="OBJECT_ZOD_LIMB_08" Offset="0xD61C" />
+        <Limb Name="object_zod_Standardlimb_00D628" Type="Standard" EnumName="OBJECT_ZOD_LIMB_09" Offset="0xD628" />
+        <Skeleton Name="object_zod_Skel_00D658" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOD_LIMB_NONE" LimbMax="OBJECT_ZOD_LIMB_MAX" EnumName="object_zod_Limbs" Offset="0xD658" />
+        <Animation Name="object_zod_Anim_00D9B0" Offset="0xD9B0" />
+    </File>
+</Root>

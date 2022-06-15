@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_gi_insect" Segment="6">
+        <DList Name="object_gi_insect_DL_000830" Offset="0x830" />
+        <DList Name="object_gi_insect_DL_000B20" Offset="0xB20" />
+    </File>
+</Root>

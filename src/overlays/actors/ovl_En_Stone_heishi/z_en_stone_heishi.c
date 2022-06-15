@@ -1,6 +1,12 @@
+/*
+ * File: z_en_stone_heishi.c
+ * Overlay: ovl_En_Stone_heishi
+ * Description: Shiro
+ */
+
 #include "z_en_stone_heishi.h"
 
-#define FLAGS 0x00000089
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80)
 
 #define THIS ((EnStoneheishi*)thisx)
 

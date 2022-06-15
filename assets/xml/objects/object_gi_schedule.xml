@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_gi_schedule" Segment="6">
+        <DList Name="object_gi_schedule_DL_0006C0" Offset="0x6C0" />
+        <DList Name="object_gi_schedule_DL_000B78" Offset="0xB78" />
+        <Texture Name="object_gi_schedule_Tex_000B80" OutName="tex_000B80" Format="i4" Width="16" Height="8" Offset="0xB80" />
+        <Texture Name="object_gi_schedule_Tex_000BC0" OutName="tex_000BC0" Format="i4" Width="64" Height="32" Offset="0xBC0" />
+        <Texture Name="object_gi_schedule_Tex_000FC0" OutName="tex_000FC0" Format="i8" Width="32" Height="32" Offset="0xFC0" />
+        <Texture Name="object_gi_schedule_Tex_0013C0" OutName="tex_0013C0" Format="i4" Width="32" Height="64" Offset="0x13C0" />
+        <Texture Name="object_gi_schedule_Tex_0017C0" OutName="tex_0017C0" Format="i4" Width="16" Height="32" Offset="0x17C0" />
+    </File>
+</Root>

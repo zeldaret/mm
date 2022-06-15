@@ -1,4 +1,5 @@
 #include "global.h"
+#include "system_malloc.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_flashrom/func_801857C0.s")
 

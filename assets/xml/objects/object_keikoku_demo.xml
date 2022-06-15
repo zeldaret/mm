@@ -1,0 +1,21 @@
+﻿<Root>
+    <File Name="object_keikoku_demo" Segment="6">
+        <DList Name="object_keikoku_demo_DL_000970" Offset="0x970" />
+        <DList Name="object_keikoku_demo_DL_000978" Offset="0x978" />
+        <Texture Name="object_keikoku_demo_Tex_000C50" OutName="tex_000C50" Format="rgba16" Width="32" Height="32" Offset="0xC50" />
+        <Texture Name="object_keikoku_demo_Tex_001450" OutName="tex_001450" Format="rgba16" Width="32" Height="32" Offset="0x1450" />
+        <Collision Name="object_keikoku_demo_Colheader_001C98" Offset="0x1C98" />
+        <DList Name="object_keikoku_demo_DL_002870" Offset="0x2870" />
+        <DList Name="object_keikoku_demo_DL_002878" Offset="0x2878" />
+        <DList Name="object_keikoku_demo_DL_003060" Offset="0x3060" />
+        <DList Name="object_keikoku_demo_DL_003068" Offset="0x3068" />
+        <DList Name="object_keikoku_demo_DL_003720" Offset="0x3720" />
+        <DList Name="object_keikoku_demo_DL_003728" Offset="0x3728" />
+        <Texture Name="object_keikoku_demo_Tex_003930" OutName="tex_003930" Format="ia16" Width="32" Height="32" Offset="0x3930" />
+        <Texture Name="object_keikoku_demo_Tex_004130" OutName="tex_004130" Format="rgba16" Width="32" Height="32" Offset="0x4130" />
+        <!-- <Blob Name="object_keikoku_demo_Blob_004930" Size="0x6600" Offset="0x4930" /> -->
+        <Texture Name="object_keikoku_demo_Tex_00AF30" OutName="tex_00AF30" Format="rgba16" Width="16" Height="64" Offset="0xAF30" />
+        <Texture Name="object_keikoku_demo_Tex_00B730" OutName="tex_00B730" Format="i4" Width="64" Height="64" Offset="0xB730" />
+        <!-- <Blob Name="object_keikoku_demo_Blob_00BF30" Size="0x1400" Offset="0xBF30" /> -->
+    </File>
+</Root>

@@ -1,0 +1,18 @@
+﻿<Root>
+    <File Name="object_gi_rupy" Segment="6">
+        <DList Name="object_gi_rupy_DL_0004A0" Offset="0x4A0" />
+        <DList Name="object_gi_rupy_DL_0004C0" Offset="0x4C0" />
+        <DList Name="object_gi_rupy_DL_0004E0" Offset="0x4E0" />
+        <DList Name="object_gi_rupy_DL_000500" Offset="0x500" />
+        <DList Name="object_gi_rupy_DL_000520" Offset="0x520" />
+        <DList Name="object_gi_rupy_DL_000540" Offset="0x540" />
+        <DList Name="object_gi_rupy_DL_000560" Offset="0x560" />
+        <DList Name="object_gi_rupy_DL_000580" Offset="0x580" />
+        <DList Name="object_gi_rupy_DL_0005A0" Offset="0x5A0" />
+        <DList Name="object_gi_rupy_DL_0005C0" Offset="0x5C0" />
+        <DList Name="object_gi_rupy_DL_0005E0" Offset="0x5E0" />
+        <DList Name="object_gi_rupy_DL_000600" Offset="0x600" />
+        <DList Name="object_gi_rupy_DL_000620" Offset="0x620" />
+        <DList Name="object_gi_rupy_DL_000730" Offset="0x730" />
+    </File>
+</Root>

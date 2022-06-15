@@ -68,7 +68,9 @@ for (dma = rom->dma; (unsigned)(dma - rom->dma) < rom->dma_num; ++dma)
 
 #define PROGRESS_A_B (int)(dma - rom->dma), rom->dma_num
 
-#define ALIGN16(x) (((x) + 0xF) & ~0xF)
+#define ALIGN(x, n) (((x) + ((n)-1)) & ~((n)-1))
+#define ALIGN16(x) 	ALIGN(x, 16)
+#define ALIGN8MB(x) ALIGN(x, 8 * 0x100000)
 
 /*
  *
@@ -936,7 +938,7 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 	
 	cache = rom->cache;
 	
-	if (compsz > rom->data_sz || mb <= 0)
+	if (compsz > rom->data_sz || mb < 0)
 		die("invalid mb argument %d", mb);
 	
 	/* get encoding functions */
@@ -1057,31 +1059,13 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 	/* sort by original start, ascending */
 	DMASORT(rom, sortfunc_dma_start_ascend);
 	
-	if (matching)
-	{
-		/* fill the entire (compressed) rom space with 00010203...FF...
-		   in order to match retail rom padding                         */
-		unsigned char n = 0; // will intentionally overflow
-		for (unsigned int j = 0; j < compsz; j++, n++)
-		{
-			rom->data[j] = n;
-		}
-	}
-	else
-	{
-		/* zero the entire (compressed) rom space */
-		memset(rom->data, 0, compsz);
-	}
-	
-	/* go through dma table, injecting compressed files */
+	/* determine physical addresses for each segment */
 	comp_total = 0;
 	DMA_FOR_EACH
 	{
-		unsigned char *dst;
 		char *fn = dma->compname;
 		unsigned int sz;
 		unsigned int sz16;
-		fprintf(printer, "\r""injecting file %d/%d: ", PROGRESS_A_B);
 		
 		if (dma->deleted)
 			continue;
@@ -1114,9 +1098,6 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 		if (sz16 & 15)
 			sz16 += 16 - (sz16 & 15);
 		
-		/* put the files in */
-		dst = rom->data + comp_total;
-		
 		dma->Pstart = comp_total;
 		if (dma->compress)
 		{
@@ -1130,26 +1111,66 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 			dma->Pend = 0;
 		comp_total += sz16;
 		
-		if (dma->Pend > compsz)
+		if (mb != 0 && dma->Pend > compsz)
 			die("ran out of compressed rom space");
+	}
+
+	/* adaptive final size */
+	if (mb == 0)
+		compsz = ALIGN8MB(comp_total);
+	
+	if (matching)
+	{
+		/* fill the entire (compressed) rom space with 00010203...FF...
+		   in order to match retail rom padding                         */
+		unsigned char n = 0; /* will intentionally overflow */
+		for (unsigned int j = 0; j < compsz; j++, n++)
+		{
+			rom->data[j] = n;
+		}
+	}
+	else
+	{
+		/* zero the entire (compressed) rom space */
+		memset(rom->data, 0, compsz);
+	}
+	
+	/* inject compressed files */
+	comp_total = 0;
+	DMA_FOR_EACH
+	{
+		unsigned char *dst;
+		char *fn = dma->compname;
+		unsigned int sz;
+		fprintf(printer, "\r""injecting file %d/%d: ", PROGRESS_A_B);
+		
+		if (dma->deleted)
+			continue;
+		
+		dst = rom->data + dma->Pstart;
 		
 		/* external cached file logic */
 		if (cache)
 		{
+			/* skip entries that don't reference compressed files */
+			if (!fn)
+				continue;
+
 			/* load file into rom at offset */
 			dst = file_load_into(cache_codec, fn, &sz, dst);
 		}
-		
 		/* otherwise, a simple memcpy */
 		else
 		{
 			memcpy(dst, dma->compbuf, dma->compSz);
-			if (matching)
-			{
-				// since matching rom padding is not zero but file padding is zero,
-				// fill file padding space with zeros
-				memset(dst + dma->compSz, 0, ALIGN16(dma->compSz) - dma->compSz);
-			}
+			sz = dma->compSz;
+		}
+
+		if (matching)
+		{
+			/* since matching rom padding is not zero but file padding is zero,
+				fill file padding space with zeros                              */
+			memset(dst + sz, 0, ALIGN16(sz) - sz);
 		}
 	}
 	fprintf(printer, "\r""injecting file %d/%d: ", dma_num, dma_num);

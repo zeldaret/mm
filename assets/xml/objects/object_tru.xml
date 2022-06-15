@@ -1,0 +1,108 @@
+﻿<Root>
+    <File Name="object_tru" Segment="6">
+        <DList Name="object_tru_DL_000390" Offset="0x390" />
+        <DList Name="object_tru_DL_0004C8" Offset="0x4C8" />
+        <Texture Name="object_tru_Tex_000560" OutName="tex_000560" Format="rgba16" Width="16" Height="32" Offset="0x560" />
+        <Texture Name="object_tru_Tex_000960" OutName="tex_000960" Format="rgba16" Width="32" Height="32" Offset="0x960" />
+        <Texture Name="object_tru_Tex_001160" OutName="tex_001160" Format="rgba16" Width="32" Height="32" Offset="0x1160" />
+        <DList Name="object_tru_DL_001F90" Offset="0x1F90" />
+        <DList Name="object_tru_DL_0020C8" Offset="0x20C8" />
+        <DList Name="object_tru_DL_002160" Offset="0x2160" />
+        <Texture Name="object_tru_Tex_002168" OutName="tex_002168" Format="i4" Width="16" Height="16" Offset="0x2168" />
+        <Animation Name="object_tru_Anim_002BD8" Offset="0x2BD8" />
+        <Animation Name="object_tru_Anim_003698" Offset="0x3698" />
+        <Animation Name="object_tru_Anim_00446C" Offset="0x446C" />
+        <Animation Name="object_tru_Anim_007FA0" Offset="0x7FA0" />
+        <Animation Name="object_tru_Anim_009348" Offset="0x9348" />
+        <DList Name="object_tru_DL_00B730" Offset="0xB730" />
+        <DList Name="object_tru_DL_00B940" Offset="0xB940" />
+        <DList Name="object_tru_DL_00BA88" Offset="0xBA88" />
+        <DList Name="object_tru_DL_00BBB8" Offset="0xBBB8" />
+        <DList Name="object_tru_DL_00C630" Offset="0xC630" />
+        <DList Name="object_tru_DL_00C730" Offset="0xC730" />
+        <DList Name="object_tru_DL_00C810" Offset="0xC810" />
+        <DList Name="object_tru_DL_00C860" Offset="0xC860" />
+        <DList Name="object_tru_DL_00C960" Offset="0xC960" />
+        <DList Name="object_tru_DL_00CA40" Offset="0xCA40" />
+        <DList Name="object_tru_DL_00CB50" Offset="0xCB50" />
+        <DList Name="object_tru_DL_00CCC0" Offset="0xCCC0" />
+        <DList Name="object_tru_DL_00CFA8" Offset="0xCFA8" />
+        <DList Name="object_tru_DL_00D0C0" Offset="0xD0C0" />
+        <DList Name="object_tru_DL_00D1D0" Offset="0xD1D0" />
+        <DList Name="object_tru_DL_00D2E0" Offset="0xD2E0" />
+        <DList Name="object_tru_DL_00D450" Offset="0xD450" />
+        <DList Name="object_tru_DL_00D738" Offset="0xD738" />
+        <DList Name="object_tru_DL_00DA38" Offset="0xDA38" />
+        <DList Name="object_tru_DL_00DB50" Offset="0xDB50" />
+        <DList Name="object_tru_DL_00DC40" Offset="0xDC40" />
+        <DList Name="object_tru_DL_00DC88" Offset="0xDC88" />
+        <DList Name="object_tru_DL_00DD38" Offset="0xDD38" />
+        <DList Name="object_tru_DL_00DDD0" Offset="0xDDD0" />
+        <DList Name="object_tru_DL_00DE18" Offset="0xDE18" />
+        <DList Name="object_tru_DL_00DEC8" Offset="0xDEC8" />
+        <Animation Name="object_tru_Anim_00EEDC" Offset="0xEEDC" />
+        <Animation Name="object_tru_Anim_00F9A0" Offset="0xF9A0" />
+        <Animation Name="object_tru_Anim_0108AC" Offset="0x108AC" />
+        <Animation Name="object_tru_Anim_011F88" Offset="0x11F88" />
+        <Animation Name="object_tru_Anim_014728" Offset="0x14728" />
+        <Animation Name="object_tru_Anim_015068" Offset="0x15068" />
+        <Animation Name="object_tru_Anim_015CA0" Offset="0x15CA0" />
+        <Animation Name="object_tru_Anim_016B4C" Offset="0x16B4C" />
+        <Texture Name="object_tru_TLUT_016B60" OutName="tlut_016B60" Format="rgba16" Width="16" Height="16" Offset="0x16B60" />
+        <Texture Name="object_tru_TLUT_016D60" OutName="tlut_016D60" Format="rgba16" Width="16" Height="16" Offset="0x16D60" />
+        <Texture Name="object_tru_TLUT_016F60" OutName="tlut_016F60" Format="rgba16" Width="16" Height="16" Offset="0x16F60" />
+        <Texture Name="object_tru_TLUT_017160" OutName="tlut_017160" Format="rgba16" Width="16" Height="16" Offset="0x17160" />
+        <Texture Name="object_tru_TLUT_017360" OutName="tlut_017360" Format="rgba16" Width="16" Height="16" Offset="0x17360" />
+        <Texture Name="object_tru_TLUT_017560" OutName="tlut_017560" Format="rgba16" Width="16" Height="16" Offset="0x17560" />
+        <Texture Name="object_tru_Tex_017760" OutName="tex_017760" Format="rgba16" Width="32" Height="32" Offset="0x17760" />
+        <Texture Name="object_tru_Tex_017F60" OutName="tex_017F60" Format="rgba16" Width="16" Height="16" Offset="0x17F60" />
+        <Texture Name="object_tru_Tex_018160" OutName="tex_018160" Format="rgba16" Width="16" Height="16" Offset="0x18160" />
+        <Texture Name="object_tru_Tex_018360" OutName="tex_018360" Format="rgba16" Width="16" Height="16" Offset="0x18360" />
+        <Texture Name="object_tru_Tex_018560" OutName="tex_018560" Format="ci8" Width="16" Height="8" Offset="0x18560" />
+        <Texture Name="object_tru_Tex_0185E0" OutName="tex_0185E0" Format="ci8" Width="8" Height="8" Offset="0x185E0" />
+        <Texture Name="object_tru_Tex_018620" OutName="tex_018620" Format="rgba16" Width="8" Height="32" Offset="0x18620" />
+        <Texture Name="object_tru_Tex_018820" OutName="tex_018820" Format="rgba16" Width="8" Height="8" Offset="0x18820" />
+        <Texture Name="object_tru_Tex_0188A0" OutName="tex_0188A0" Format="ci8" Width="8" Height="8" Offset="0x188A0" />
+        <Texture Name="object_tru_Tex_0188E0" OutName="tex_0188E0" Format="rgba16" Width="4" Height="8" Offset="0x188E0" />
+        <Texture Name="object_tru_Tex_018920" OutName="tex_018920" Format="ci8" Width="8" Height="16" Offset="0x18920" />
+        <Texture Name="object_tru_Tex_0189A0" OutName="tex_0189A0" Format="rgba16" Width="8" Height="8" Offset="0x189A0" />
+        <Texture Name="object_tru_Tex_018A20" OutName="tex_018A20" Format="rgba16" Width="16" Height="32" Offset="0x18A20" />
+        <Texture Name="object_tru_Tex_018E20" OutName="tex_018E20" Format="rgba16" Width="16" Height="8" Offset="0x18E20" />
+        <Texture Name="object_tru_Tex_018F20" OutName="tex_018F20" Format="ci8" Width="8" Height="8" Offset="0x18F20" />
+        <Texture Name="object_tru_Tex_018F60" OutName="tex_018F60" Format="ci8" Width="8" Height="8" Offset="0x18F60" />
+        <Texture Name="object_tru_Tex_018FA0" OutName="tex_018FA0" Format="rgba16" Width="32" Height="32" Offset="0x18FA0" />
+        <Texture Name="object_tru_Tex_0197A0" OutName="tex_0197A0" Format="rgba16" Width="32" Height="32" Offset="0x197A0" />
+        <Texture Name="object_tru_Tex_019FA0" OutName="tex_019FA0" Format="rgba16" Width="32" Height="32" Offset="0x19FA0" />
+        <Texture Name="object_tru_Tex_01A7A0" OutName="tex_01A7A0" Format="rgba16" Width="8" Height="8" Offset="0x1A7A0" />
+        <DList Name="object_tru_DL_01A820" Offset="0x1A820" />
+        <DList Name="object_tru_DL_01A830" Offset="0x1A830" />
+        <Limb Name="object_tru_Standardlimb_01A8C0" Type="Standard" EnumName="OBJECT_TRU_LIMB_01" Offset="0x1A8C0" />
+        <Limb Name="object_tru_Standardlimb_01A8CC" Type="Standard" EnumName="OBJECT_TRU_LIMB_02" Offset="0x1A8CC" />
+        <Limb Name="object_tru_Standardlimb_01A8D8" Type="Standard" EnumName="OBJECT_TRU_LIMB_03" Offset="0x1A8D8" />
+        <Limb Name="object_tru_Standardlimb_01A8E4" Type="Standard" EnumName="OBJECT_TRU_LIMB_04" Offset="0x1A8E4" />
+        <Limb Name="object_tru_Standardlimb_01A8F0" Type="Standard" EnumName="OBJECT_TRU_LIMB_05" Offset="0x1A8F0" />
+        <Limb Name="object_tru_Standardlimb_01A8FC" Type="Standard" EnumName="OBJECT_TRU_LIMB_06" Offset="0x1A8FC" />
+        <Limb Name="object_tru_Standardlimb_01A908" Type="Standard" EnumName="OBJECT_TRU_LIMB_07" Offset="0x1A908" />
+        <Limb Name="object_tru_Standardlimb_01A914" Type="Standard" EnumName="OBJECT_TRU_LIMB_08" Offset="0x1A914" />
+        <Limb Name="object_tru_Standardlimb_01A920" Type="Standard" EnumName="OBJECT_TRU_LIMB_09" Offset="0x1A920" />
+        <Limb Name="object_tru_Standardlimb_01A92C" Type="Standard" EnumName="OBJECT_TRU_LIMB_0A" Offset="0x1A92C" />
+        <Limb Name="object_tru_Standardlimb_01A938" Type="Standard" EnumName="OBJECT_TRU_LIMB_0B" Offset="0x1A938" />
+        <Limb Name="object_tru_Standardlimb_01A944" Type="Standard" EnumName="OBJECT_TRU_LIMB_0C" Offset="0x1A944" />
+        <Limb Name="object_tru_Standardlimb_01A950" Type="Standard" EnumName="OBJECT_TRU_LIMB_0D" Offset="0x1A950" />
+        <Limb Name="object_tru_Standardlimb_01A95C" Type="Standard" EnumName="OBJECT_TRU_LIMB_0E" Offset="0x1A95C" />
+        <Limb Name="object_tru_Standardlimb_01A968" Type="Standard" EnumName="OBJECT_TRU_LIMB_0F" Offset="0x1A968" />
+        <Limb Name="object_tru_Standardlimb_01A974" Type="Standard" EnumName="OBJECT_TRU_LIMB_10" Offset="0x1A974" />
+        <Limb Name="object_tru_Standardlimb_01A980" Type="Standard" EnumName="OBJECT_TRU_LIMB_11" Offset="0x1A980" />
+        <Limb Name="object_tru_Standardlimb_01A98C" Type="Standard" EnumName="OBJECT_TRU_LIMB_12" Offset="0x1A98C" />
+        <Limb Name="object_tru_Standardlimb_01A998" Type="Standard" EnumName="OBJECT_TRU_LIMB_13" Offset="0x1A998" />
+        <Limb Name="object_tru_Standardlimb_01A9A4" Type="Standard" EnumName="OBJECT_TRU_LIMB_14" Offset="0x1A9A4" />
+        <Limb Name="object_tru_Standardlimb_01A9B0" Type="Standard" EnumName="OBJECT_TRU_LIMB_15" Offset="0x1A9B0" />
+        <Limb Name="object_tru_Standardlimb_01A9BC" Type="Standard" EnumName="OBJECT_TRU_LIMB_16" Offset="0x1A9BC" />
+        <Limb Name="object_tru_Standardlimb_01A9C8" Type="Standard" EnumName="OBJECT_TRU_LIMB_17" Offset="0x1A9C8" />
+        <Limb Name="object_tru_Standardlimb_01A9D4" Type="Standard" EnumName="OBJECT_TRU_LIMB_18" Offset="0x1A9D4" />
+        <Limb Name="object_tru_Standardlimb_01A9E0" Type="Standard" EnumName="OBJECT_TRU_LIMB_19" Offset="0x1A9E0" />
+        <Limb Name="object_tru_Standardlimb_01A9EC" Type="Standard" EnumName="OBJECT_TRU_LIMB_1A" Offset="0x1A9EC" />
+        <Skeleton Name="object_tru_Skel_01AA60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRU_LIMB_NONE" LimbMax="OBJECT_TRU_LIMB_MAX" EnumName="object_tru_Limbs" Offset="0x1AA60" />
+        <Animation Name="object_tru_Anim_01B5C4" Offset="0x1B5C4" />
+    </File>
+</Root>

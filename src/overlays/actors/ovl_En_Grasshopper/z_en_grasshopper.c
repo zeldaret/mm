@@ -1,6 +1,12 @@
+/*
+ * File: z_en_grasshopper.c
+ * Overlay: ovl_En_Grasshopper
+ * Description: Dragonfly
+ */
+
 #include "z_en_grasshopper.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnGrasshopper*)thisx)
 

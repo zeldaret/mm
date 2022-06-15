@@ -1,0 +1,46 @@
+﻿<Root>
+    <File Name="object_nb" Segment="6">
+        <Animation Name="object_nb_Anim_000290" Offset="0x290" />
+        <Animation Name="object_nb_Anim_00052C" Offset="0x52C" />
+        <Animation Name="object_nb_Anim_0006D4" Offset="0x6D4" />
+        <Animation Name="object_nb_Anim_000990" Offset="0x990" />
+        <DList Name="object_nb_DL_004A70" Offset="0x4A70" />
+        <DList Name="object_nb_DL_005170" Offset="0x5170" />
+        <DList Name="object_nb_DL_005430" Offset="0x5430" />
+        <DList Name="object_nb_DL_0056F0" Offset="0x56F0" />
+        <DList Name="object_nb_DL_005988" Offset="0x5988" />
+        <DList Name="object_nb_DL_005AA8" Offset="0x5AA8" />
+        <DList Name="object_nb_DL_006390" Offset="0x6390" />
+        <Texture Name="object_nb_TLUT_006910" OutName="tlut_006910" Format="rgba16" Width="16" Height="16" Offset="0x6910" />
+        <Texture Name="object_nb_TLUT_006B10" OutName="tlut_006B10" Format="rgba16" Width="16" Height="16" Offset="0x6B10" />
+        <Texture Name="object_nb_TLUT_006D10" OutName="tlut_006D10" Format="rgba16" Width="16" Height="16" Offset="0x6D10" />
+        <Texture Name="object_nb_Tex_006F10" OutName="tex_006F10" Format="ci8" Width="8" Height="8" Offset="0x6F10" />
+        <Texture Name="object_nb_Tex_006F50" OutName="tex_006F50" Format="ci8" Width="16" Height="16" Offset="0x6F50" />
+        <Texture Name="object_nb_Tex_007050" OutName="tex_007050" Format="ci8" Width="16" Height="16" Offset="0x7050" />
+        <Texture Name="object_nb_Tex_007150" OutName="tex_007150" Format="ci8" Width="16" Height="8" Offset="0x7150" />
+        <Texture Name="object_nb_Tex_0071D0" OutName="tex_0071D0" Format="ci8" Width="16" Height="32" Offset="0x71D0" />
+        <Texture Name="object_nb_Tex_0073D0" OutName="tex_0073D0" Format="ci8" Width="16" Height="8" Offset="0x73D0" />
+        <Texture Name="object_nb_Tex_007450" OutName="tex_007450" Format="ci8" Width="16" Height="8" Offset="0x7450" />
+        <Texture Name="object_nb_Tex_0074D0" OutName="tex_0074D0" Format="ci8" Width="16" Height="8" Offset="0x74D0" />
+        <Texture Name="object_nb_Tex_007550" OutName="tex_007550" Format="ci8" Width="16" Height="16" Offset="0x7550" />
+        <Texture Name="object_nb_Tex_007650" OutName="tex_007650" Format="i8" Width="16" Height="16" Offset="0x7650" />
+        <Texture Name="object_nb_Tex_007750" OutName="tex_007750" Format="rgba16" Width="8" Height="8" Offset="0x7750" />
+        <Texture Name="object_nb_Tex_0077D0" OutName="tex_0077D0" Format="ci8" Width="16" Height="16" Offset="0x77D0" />
+        <Texture Name="object_nb_Tex_0078D0" OutName="tex_0078D0" Format="ci8" Width="16" Height="16" Offset="0x78D0" />
+        <Texture Name="object_nb_Tex_0079D0" OutName="tex_0079D0" Format="ci8" Width="32" Height="16" Offset="0x79D0" />
+        <Texture Name="object_nb_Tex_007BD0" OutName="tex_007BD0" Format="ci8" Width="16" Height="16" Offset="0x7BD0" />
+        <Texture Name="object_nb_Tex_007CD0" OutName="tex_007CD0" Format="ci8" Width="16" Height="16" Offset="0x7CD0" />
+        <Texture Name="object_nb_Tex_007DD0" OutName="tex_007DD0" Format="ci8" Width="16" Height="16" Offset="0x7DD0" />
+        <Texture Name="object_nb_Tex_007ED0" OutName="tex_007ED0" Format="ci8" Width="16" Height="16" Offset="0x7ED0" />
+        <Texture Name="object_nb_Tex_007FD0" OutName="tex_007FD0" Format="ci8" Width="32" Height="64" Offset="0x7FD0" />
+        <Texture Name="object_nb_Tex_0087D0" OutName="tex_0087D0" Format="ci8" Width="32" Height="32" Offset="0x87D0" />
+        <Limb Name="object_nb_Standardlimb_008BD0" Type="Standard" EnumName="OBJECT_NB_LIMB_01" Offset="0x8BD0" />
+        <Limb Name="object_nb_Standardlimb_008BDC" Type="Standard" EnumName="OBJECT_NB_LIMB_02" Offset="0x8BDC" />
+        <Limb Name="object_nb_Standardlimb_008BE8" Type="Standard" EnumName="OBJECT_NB_LIMB_03" Offset="0x8BE8" />
+        <Limb Name="object_nb_Standardlimb_008BF4" Type="Standard" EnumName="OBJECT_NB_LIMB_04" Offset="0x8BF4" />
+        <Limb Name="object_nb_Standardlimb_008C00" Type="Standard" EnumName="OBJECT_NB_LIMB_05" Offset="0x8C00" />
+        <Limb Name="object_nb_Standardlimb_008C0C" Type="Standard" EnumName="OBJECT_NB_LIMB_06" Offset="0x8C0C" />
+        <Limb Name="object_nb_Standardlimb_008C18" Type="Standard" EnumName="OBJECT_NB_LIMB_07" Offset="0x8C18" />
+        <Skeleton Name="object_nb_Skel_008C40" Type="Flex" LimbType="Standard" LimbNone="OBJECT_NB_LIMB_NONE" LimbMax="OBJECT_NB_LIMB_MAX" EnumName="object_nb_Limbs" Offset="0x8C40" />
+    </File>
+</Root>

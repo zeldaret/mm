@@ -1,0 +1,39 @@
+﻿<Root>
+    <File Name="object_hata" Segment="6">
+        <Collision Name="object_hata_Colheader_0000C0" Offset="0xC0" />
+        <Animation Name="object_hata_Anim_000444" Offset="0x444" />
+        <Texture Name="object_hata_Tex_000460" OutName="tex_000460" Format="rgba16" Width="32" Height="32" Offset="0x460" />
+        <Texture Name="object_hata_Tex_000C60" OutName="tex_000C60" Format="rgba16" Width="32" Height="32" Offset="0xC60" />
+        <Texture Name="object_hata_Tex_001460" OutName="tex_001460" Format="ia8" Width="128" Height="32" Offset="0x1460" />
+        <DList Name="object_hata_DL_0026D0" Offset="0x26D0" />
+        <DList Name="object_hata_DL_002850" Offset="0x2850" />
+        <DList Name="object_hata_DL_002920" Offset="0x2920" />
+        <DList Name="object_hata_DL_0029F0" Offset="0x29F0" />
+        <DList Name="object_hata_DL_002AC0" Offset="0x2AC0" />
+        <DList Name="object_hata_DL_002B90" Offset="0x2B90" />
+        <DList Name="object_hata_DL_002C60" Offset="0x2C60" />
+        <DList Name="object_hata_DL_002D30" Offset="0x2D30" />
+        <DList Name="object_hata_DL_002E00" Offset="0x2E00" />
+        <Limb Name="object_hata_Standardlimb_002E90" Type="Standard" EnumName="OBJECT_HATA_LIMB_01" Offset="0x2E90" />
+        <Limb Name="object_hata_Standardlimb_002E9C" Type="Standard" EnumName="OBJECT_HATA_LIMB_02" Offset="0x2E9C" />
+        <Limb Name="object_hata_Standardlimb_002EA8" Type="Standard" EnumName="OBJECT_HATA_LIMB_03" Offset="0x2EA8" />
+        <Limb Name="object_hata_Standardlimb_002EB4" Type="Standard" EnumName="OBJECT_HATA_LIMB_04" Offset="0x2EB4" />
+        <Limb Name="object_hata_Standardlimb_002EC0" Type="Standard" EnumName="OBJECT_HATA_LIMB_05" Offset="0x2EC0" />
+        <Limb Name="object_hata_Standardlimb_002ECC" Type="Standard" EnumName="OBJECT_HATA_LIMB_06" Offset="0x2ECC" />
+        <Limb Name="object_hata_Standardlimb_002ED8" Type="Standard" EnumName="OBJECT_HATA_LIMB_07" Offset="0x2ED8" />
+        <Limb Name="object_hata_Standardlimb_002EE4" Type="Standard" EnumName="OBJECT_HATA_LIMB_08" Offset="0x2EE4" />
+        <Limb Name="object_hata_Standardlimb_002EF0" Type="Standard" EnumName="OBJECT_HATA_LIMB_09" Offset="0x2EF0" />
+        <Limb Name="object_hata_Standardlimb_002EFC" Type="Standard" EnumName="OBJECT_HATA_LIMB_0A" Offset="0x2EFC" />
+        <Limb Name="object_hata_Standardlimb_002F08" Type="Standard" EnumName="OBJECT_HATA_LIMB_0B" Offset="0x2F08" />
+        <Limb Name="object_hata_Standardlimb_002F14" Type="Standard" EnumName="OBJECT_HATA_LIMB_0C" Offset="0x2F14" />
+        <Limb Name="object_hata_Standardlimb_002F20" Type="Standard" EnumName="OBJECT_HATA_LIMB_0D" Offset="0x2F20" />
+        <Limb Name="object_hata_Standardlimb_002F2C" Type="Standard" EnumName="OBJECT_HATA_LIMB_0E" Offset="0x2F2C" />
+        <Limb Name="object_hata_Standardlimb_002F38" Type="Standard" EnumName="OBJECT_HATA_LIMB_0F" Offset="0x2F38" />
+        <Limb Name="object_hata_Standardlimb_002F44" Type="Standard" EnumName="OBJECT_HATA_LIMB_10" Offset="0x2F44" />
+        <Limb Name="object_hata_Standardlimb_002F50" Type="Standard" EnumName="OBJECT_HATA_LIMB_11" Offset="0x2F50" />
+        <Limb Name="object_hata_Standardlimb_002F5C" Type="Standard" EnumName="OBJECT_HATA_LIMB_12" Offset="0x2F5C" />
+        <Limb Name="object_hata_Standardlimb_002F68" Type="Standard" EnumName="OBJECT_HATA_LIMB_13" Offset="0x2F68" />
+        <Limb Name="object_hata_Standardlimb_002F74" Type="Standard" EnumName="OBJECT_HATA_LIMB_14" Offset="0x2F74" />
+        <Skeleton Name="object_hata_Skel_002FD0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_HATA_LIMB_NONE" LimbMax="OBJECT_HATA_LIMB_MAX" EnumName="object_hata_Limbs" Offset="0x2FD0" />
+    </File>
+</Root>

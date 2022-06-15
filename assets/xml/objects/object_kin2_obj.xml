@@ -1,0 +1,34 @@
+﻿<Root>
+    <File Name="object_kin2_obj" Segment="6">
+        <DList Name="object_kin2_obj_DL_000120" Offset="0x120" />
+        <DList Name="object_kin2_obj_DL_000128" Offset="0x128" />
+        <DList Name="object_kin2_obj_DL_0002C0" Offset="0x2C0" />
+        <DList Name="object_kin2_obj_DL_000360" Offset="0x360" />
+        <Collision Name="object_kin2_obj_Colheader_000490" Offset="0x490" />
+        <DList Name="object_kin2_obj_DL_000650" Offset="0x650" />
+        <DList Name="object_kin2_obj_DL_000658" Offset="0x658" />
+        <Collision Name="object_kin2_obj_Colheader_000798" Offset="0x798" />
+        <DList Name="object_kin2_obj_DL_000820" Offset="0x820" />
+        <DList Name="object_kin2_obj_DL_000828" Offset="0x828" />
+        <Collision Name="object_kin2_obj_Colheader_000908" Offset="0x908" />
+        <DList Name="object_kin2_obj_DL_000CA0" Offset="0xCA0" />
+        <DList Name="object_kin2_obj_DL_000CA8" Offset="0xCA8" />
+        <Collision Name="object_kin2_obj_Colheader_000F80" Offset="0xF80" />
+        <DList Name="object_kin2_obj_DL_0010F0" Offset="0x10F0" />
+        <DList Name="object_kin2_obj_DL_0010F8" Offset="0x10F8" />
+        <Collision Name="object_kin2_obj_Colheader_001328" Offset="0x1328" />
+        <!-- <Blob Name="object_kin2_obj_Blob_001354" Size="0x2C" Offset="0x1354" /> -->
+        <Texture Name="object_kin2_obj_TLUT_001380" OutName="tlut_001380" Format="rgba16" Width="4" Height="4" Offset="0x1380" />
+        <!-- <Blob Name="object_kin2_obj_Blob_0013A0" Size="0x20" Offset="0x13A0" /> -->
+        <Texture Name="object_kin2_obj_Tex_0013C0" OutName="tex_0013C0" Format="ia8" Width="64" Height="64" Offset="0x13C0" />
+        <Texture Name="object_kin2_obj_Tex_0023C0" OutName="tex_0023C0" Format="rgba16" Width="32" Height="32" Offset="0x23C0" />
+        <Texture Name="object_kin2_obj_Tex_002BC0" OutName="tex_002BC0" Format="rgba16" Width="32" Height="32" Offset="0x2BC0" />
+        <Texture Name="object_kin2_obj_Tex_0033C0" OutName="tex_0033C0" Format="ci4" Width="64" Height="64" Offset="0x33C0" />
+        <Texture Name="object_kin2_obj_Tex_003BC0" OutName="tex_003BC0" Format="rgba16" Width="32" Height="64" Offset="0x3BC0" />
+        <Texture Name="object_kin2_obj_Tex_004BC0" OutName="tex_004BC0" Format="rgba16" Width="32" Height="64" Offset="0x4BC0" />
+        <Texture Name="object_kin2_obj_Tex_005BC0" OutName="tex_005BC0" Format="rgba16" Width="32" Height="32" Offset="0x5BC0" />
+        <Texture Name="object_kin2_obj_Tex_0063C0" OutName="tex_0063C0" Format="rgba16" Width="32" Height="64" Offset="0x63C0" />
+        <Texture Name="object_kin2_obj_Tex_0073C0" OutName="tex_0073C0" Format="rgba16" Width="32" Height="32" Offset="0x73C0" />
+        <Texture Name="object_kin2_obj_Tex_007BC0" OutName="tex_007BC0" Format="i4" Width="64" Height="64" Offset="0x7BC0" />
+    </File>
+</Root>

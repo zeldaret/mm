@@ -1,6 +1,12 @@
+/*
+ * File: z_en_tg.c
+ * Overlay: ovl_En_Tg
+ * Description: Target Game (Honey & Darling)
+ */
+
 #include "z_en_tg.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTg*)thisx)
 

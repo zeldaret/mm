@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_stonemask" Segment="6">
+        <DList Name="object_gi_stonemask_DL_000A10" Offset="0xA10" />
+        <DList Name="object_gi_stonemask_DL_000E48" Offset="0xE48" />
+        <Texture Name="object_gi_stonemask_Tex_000E50" OutName="tex_000E50" Format="i8" Width="16" Height="16" Offset="0xE50" />
+        <Texture Name="object_gi_stonemask_Tex_000F50" OutName="tex_000F50" Format="i8" Width="32" Height="32" Offset="0xF50" />
+    </File>
+</Root>

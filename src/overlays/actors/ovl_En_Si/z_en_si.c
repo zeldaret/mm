@@ -1,6 +1,12 @@
+/*
+ * File: z_en_si.c
+ * Overlay: ovl_En_Si
+ * Description: Golden Skulltula Token
+ */
+
 #include "z_en_si.h"
 
-#define FLAGS 0x00000201
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_200)
 
 #define THIS ((EnSi*)thisx)
 

@@ -1,6 +1,12 @@
+/*
+ * File: z_dm_char08.c
+ * Overlay: ovl_Dm_Char08
+ * Description: Large Great Bay Turtle
+ */
+
 #include "z_dm_char08.h"
 
-#define FLAGS 0x02000000
+#define FLAGS (ACTOR_FLAG_2000000)
 
 #define THIS ((DmChar08*)thisx)
 

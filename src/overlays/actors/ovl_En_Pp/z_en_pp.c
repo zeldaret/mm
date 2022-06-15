@@ -1,6 +1,12 @@
+/*
+ * File: z_en_pp.c
+ * Overlay: ovl_En_Pp
+ * Description: Hiploop
+ */
+
 #include "z_en_pp.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnPp*)thisx)
 

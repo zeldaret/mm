@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_gold_dust" Segment="6">
+        <DList Name="object_gi_gold_dust_DL_000880" Offset="0x880" />
+        <DList Name="object_gi_gold_dust_DL_000888" Offset="0x888" />
+        <Texture Name="object_gi_gold_dust_Tex_000B40" OutName="tex_000B40" Format="i8" Width="32" Height="32" Offset="0xB40" />
+        <Texture Name="object_gi_gold_dust_Tex_000F40" OutName="tex_000F40" Format="i4" Width="32" Height="32" Offset="0xF40" />
+    </File>
+</Root>

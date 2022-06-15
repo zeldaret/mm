@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ENTALK_GET_TEXT_ID(thisx) (((thisx)->params & 0x3F) + 0x1C00)
+
 struct EnTalk;
 
 typedef void (*EnTalkActionFunc)(struct EnTalk*, GlobalContext*);

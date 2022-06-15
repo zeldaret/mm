@@ -1,0 +1,86 @@
+﻿<Root>
+    <File Name="object_stk2" Segment="6">
+        <Animation Name="object_stk2_Anim_00055C" Offset="0x55C" />
+        <!-- <Blob Name="object_stk2_Blob_00056C" Size="0x24" Offset="0x56C" /> -->
+        <Animation Name="object_stk2_Anim_00130C" Offset="0x130C" />
+        <!-- <Blob Name="object_stk2_Blob_00131C" Size="0x54" Offset="0x131C" /> -->
+        <Animation Name="object_stk2_Anim_0035C8" Offset="0x35C8" />
+        <Animation Name="object_stk2_Anim_004580" Offset="0x4580" />
+        <!-- <Blob Name="object_stk2_Blob_004590" Size="0x50" Offset="0x4590" /> -->
+        <Animation Name="object_stk2_Anim_0049C8" Offset="0x49C8" />
+        <Animation Name="object_stk2_Anim_0070DC" Offset="0x70DC" />
+        <DList Name="object_stk2_DL_007840" Offset="0x7840" />
+        <Texture Name="object_stk2_Tex_007A48" OutName="tex_007A48" Format="i8" Width="32" Height="32" Offset="0x7A48" />
+        <Texture Name="object_stk2_Tex_007E48" OutName="tex_007E48" Format="i8" Width="32" Height="64" Offset="0x7E48" />
+        <TextureAnimation Name="object_stk2_Matanimheader_008658" Offset="0x8658" />
+        <DList Name="object_stk2_DL_008920" Offset="0x8920" />
+        <DList Name="object_stk2_DL_008A38" Offset="0x8A38" />
+        <Texture Name="object_stk2_Tex_008B50" OutName="tex_008B50" Format="i8" Width="32" Height="64" Offset="0x8B50" />
+        <Texture Name="object_stk2_Tex_009350" OutName="tex_009350" Format="i8" Width="32" Height="32" Offset="0x9350" />
+        <Texture Name="object_stk2_Tex_009750" OutName="tex_009750" Format="i8" Width="32" Height="64" Offset="0x9750" />
+        <TextureAnimation Name="object_stk2_Matanimheader_009F60" Offset="0x9F60" />
+        <Animation Name="object_stk2_Anim_00A104" Offset="0xA104" />
+        <Animation Name="object_stk2_Anim_00A2BC" Offset="0xA2BC" />
+        <Animation Name="object_stk2_Anim_00A4C4" Offset="0xA4C4" />
+        <Animation Name="object_stk2_Anim_00A6D4" Offset="0xA6D4" />
+        <DList Name="object_stk2_DL_00A840" Offset="0xA840" />
+        <Texture Name="object_stk2_Tex_00A958" OutName="tex_00A958" Format="rgba16" Width="32" Height="16" Offset="0xA958" />
+        <!-- <Blob Name="object_stk2_Blob_00AD58" Size="0x28" Offset="0xAD58" /> -->
+        <Animation Name="object_stk2_Anim_00C270" Offset="0xC270" />
+        <!-- <Blob Name="object_stk2_Blob_00C280" Size="0x60" Offset="0xC280" /> -->
+        <Animation Name="object_stk2_Anim_00CBB8" Offset="0xCBB8" />
+        <!-- <Blob Name="object_stk2_Blob_00CBC8" Size="0x28" Offset="0xCBC8" /> -->
+        <Animation Name="object_stk2_Anim_00D830" Offset="0xD830" />
+        <!-- <Blob Name="object_stk2_Blob_00D840" Size="0x50" Offset="0xD840" /> -->
+        <Animation Name="object_stk2_Anim_00E6EC" Offset="0xE6EC" />
+        <Animation Name="object_stk2_Anim_00EEC0" Offset="0xEEC0" />
+        <Animation Name="object_stk2_Anim_0101A4" Offset="0x101A4" />
+        <Animation Name="object_stk2_Anim_010B60" Offset="0x10B60" />
+        <Animation Name="object_stk2_Anim_0110B4" Offset="0x110B4" />
+        <Animation Name="object_stk2_Anim_011FB0" Offset="0x11FB0" />
+        <Animation Name="object_stk2_Anim_012A58" Offset="0x12A58" />
+        <Animation Name="object_stk2_Anim_0141E4" Offset="0x141E4" />
+        <Animation Name="object_stk2_Anim_016910" Offset="0x16910" />
+        <!-- <Blob Name="object_stk2_Blob_016920" Size="0xC0" Offset="0x16920" /> -->
+        <Animation Name="object_stk2_Anim_018ED0" Offset="0x18ED0" />
+        <!-- <Blob Name="object_stk2_Blob_018EE0" Size="0xC0" Offset="0x18EE0" /> -->
+        <Animation Name="object_stk2_Anim_01AA80" Offset="0x1AA80" />
+        <Animation Name="object_stk2_Anim_01C114" Offset="0x1C114" />
+        <!-- <Blob Name="object_stk2_Blob_01C124" Size="0x6C" Offset="0x1C124" /> -->
+        <Animation Name="object_stk2_Anim_01D07C" Offset="0x1D07C" />
+        <Animation Name="object_stk2_Anim_01DDE0" Offset="0x1DDE0" />
+        <!-- <Blob Name="object_stk2_Blob_01DDF0" Size="0x40" Offset="0x1DDF0" /> -->
+        <Animation Name="object_stk2_Anim_01EF50" Offset="0x1EF50" />
+        <!-- <Blob Name="object_stk2_Blob_01EF60" Size="0x50" Offset="0x1EF60" /> -->
+        <Animation Name="object_stk2_Anim_01F9E4" Offset="0x1F9E4" />
+        <Animation Name="object_stk2_Anim_020CAC" Offset="0x20CAC" />
+        <Animation Name="object_stk2_Anim_02200C" Offset="0x2200C" />
+        <Animation Name="object_stk2_Anim_02336C" Offset="0x2336C" />
+        <Animation Name="object_stk2_Anim_0259F4" Offset="0x259F4" />
+        <!-- <Blob Name="object_stk2_Blob_025A04" Size="0xCC" Offset="0x25A04" /> -->
+        <Animation Name="object_stk2_Anim_0266C8" Offset="0x266C8" />
+        <!-- <Blob Name="object_stk2_Blob_0266D8" Size="0x48" Offset="0x266D8" /> -->
+        <Animation Name="object_stk2_Anim_026CF4" Offset="0x26CF4" />
+        <!-- <Blob Name="object_stk2_Blob_026D04" Size="0x1C" Offset="0x26D04" /> -->
+        <Animation Name="object_stk2_Anim_027CF4" Offset="0x27CF4" />
+        <Animation Name="object_stk2_Anim_028F28" Offset="0x28F28" />
+        <Animation Name="object_stk2_Anim_029A04" Offset="0x29A04" />
+        <Animation Name="object_stk2_Anim_02A2D8" Offset="0x2A2D8" />
+        <Animation Name="object_stk2_Anim_02AD54" Offset="0x2AD54" />
+        <Animation Name="object_stk2_Anim_02DC64" Offset="0x2DC64" />
+        <!-- <Blob Name="object_stk2_Blob_02DC74" Size="0xDC" Offset="0x2DC74" /> -->
+        <Animation Name="object_stk2_Anim_02E9A0" Offset="0x2E9A0" />
+        <!-- <Blob Name="object_stk2_Blob_02E9B0" Size="0x40" Offset="0x2E9B0" /> -->
+        <Animation Name="object_stk2_Anim_02FA70" Offset="0x2FA70" />
+        <Animation Name="object_stk2_Anim_03021C" Offset="0x3021C" />
+        <Animation Name="object_stk2_Anim_031210" Offset="0x31210" />
+        <Animation Name="object_stk2_Anim_0322FC" Offset="0x322FC" />
+        <Animation Name="object_stk2_Anim_032AE0" Offset="0x32AE0" />
+        <Animation Name="object_stk2_Anim_03323C" Offset="0x3323C" />
+        <Animation Name="object_stk2_Anim_034FD8" Offset="0x34FD8" />
+        <Animation Name="object_stk2_Anim_036964" Offset="0x36964" />
+        <Animation Name="object_stk2_Anim_037B94" Offset="0x37B94" />
+        <Animation Name="object_stk2_Anim_03967C" Offset="0x3967C" />
+        <Animation Name="object_stk2_Anim_03A8F8" Offset="0x3A8F8" />
+    </File>
+</Root>

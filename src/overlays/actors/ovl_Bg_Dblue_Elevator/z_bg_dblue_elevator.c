@@ -1,6 +1,12 @@
+/*
+ * File: z_bg_dblue_elevator.c
+ * Overlay: ovl_Bg_Dblue_Elevator
+ * Description: Great Bay Temple - Elevator
+ */
+
 #include "z_bg_dblue_elevator.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgDblueElevator*)thisx)
 

@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_bombf" Segment="6">
+        <DList Name="object_bombf_DL_000340" Offset="0x340" />
+        <DList Name="object_bombf_DL_000408" Offset="0x408" />
+        <DList Name="object_bombf_DL_000530" Offset="0x530" />
+        <Texture Name="object_bombf_Tex_0005D8" OutName="tex_0005D8" Format="rgba16" Width="32" Height="32" Offset="0x5D8" />
+        <Texture Name="object_bombf_Tex_000DD8" OutName="tex_000DD8" Format="rgba16" Width="16" Height="32" Offset="0xDD8" />
+        <Texture Name="object_bombf_Tex_0011D8" OutName="tex_0011D8" Format="ia16" Width="32" Height="32" Offset="0x11D8" />
+        <Texture Name="object_bombf_Tex_0019D8" OutName="tex_0019D8" Format="rgba16" Width="4" Height="4" Offset="0x19D8" />
+    </File>
+</Root>

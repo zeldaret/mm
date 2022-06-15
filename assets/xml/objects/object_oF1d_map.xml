@@ -1,0 +1,108 @@
+﻿<Root>
+    <File Name="object_oF1d_map" Segment="6">
+        <DList Name="object_oF1d_map_DL_0003D0" Offset="0x3D0" />
+        <DList Name="object_oF1d_map_DL_000458" Offset="0x458" />
+        <DList Name="object_oF1d_map_DL_0008C0" Offset="0x8C0" />
+        <DList Name="object_oF1d_map_DL_000948" Offset="0x948" />
+        <DList Name="object_oF1d_map_DL_000D50" Offset="0xD50" />
+        <DList Name="object_oF1d_map_DL_000DD8" Offset="0xDD8" />
+        <DList Name="object_oF1d_map_DL_001560" Offset="0x1560" />
+        <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" />
+        <Texture Name="object_oF1d_map_Tex_001770" OutName="tex_001770" Format="rgba16" Width="32" Height="64" Offset="0x1770" />
+        <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" />
+        <Texture Name="object_oF1d_map_Tex_002F70" OutName="tex_002F70" Format="i4" Width="32" Height="32" Offset="0x2F70" />
+        <DList Name="object_oF1d_map_DL_0031A0" Offset="0x31A0" />
+        <DList Name="object_oF1d_map_DL_003258" Offset="0x3258" />
+        <DList Name="object_oF1d_map_DL_003280" Offset="0x3280" />
+        <DList Name="object_oF1d_map_DL_003298" Offset="0x3298" />
+        <DList Name="object_oF1d_map_DL_003330" Offset="0x3330" />
+        <DList Name="object_oF1d_map_DL_003340" Offset="0x3340" />
+        <Animation Name="object_oF1d_map_Anim_003650" Offset="0x3650" />
+        <Animation Name="object_oF1d_map_Anim_0039D8" Offset="0x39D8" />
+        <Animation Name="object_oF1d_map_Anim_003E28" Offset="0x3E28" />
+        <DList Name="object_oF1d_map_DL_004DB0" Offset="0x4DB0" />
+        <Texture Name="object_oF1d_map_TLUT_005340" OutName="tlut_005340" Format="rgba16" Width="16" Height="16" Offset="0x5340" />
+        <Texture Name="object_oF1d_map_Tex_005540" OutName="tex_005540" Format="ci8" Width="16" Height="16" Offset="0x5540" />
+        <Texture Name="object_oF1d_map_Tex_005640" OutName="tex_005640" Format="rgba16" Width="32" Height="32" Offset="0x5640" />
+        <Texture Name="object_oF1d_map_Tex_005E40" OutName="tex_005E40" Format="ci8" Width="16" Height="16" Offset="0x5E40" />
+        <Texture Name="object_oF1d_map_Tex_005F40" OutName="tex_005F40" Format="ci8" Width="32" Height="32" Offset="0x5F40" />
+        <Texture Name="object_oF1d_map_Tex_006340" OutName="tex_006340" Format="ci8" Width="16" Height="16" Offset="0x6340" />
+        <Texture Name="object_oF1d_map_Tex_006440" OutName="tex_006440" Format="rgba16" Width="32" Height="32" Offset="0x6440" />
+        <Texture Name="object_oF1d_map_Tex_006C40" OutName="tex_006C40" Format="rgba16" Width="16" Height="16" Offset="0x6C40" />
+        <DList Name="object_oF1d_map_DL_007A60" Offset="0x7A60" />
+        <DList Name="object_oF1d_map_DL_007A68" Offset="0x7A68" />
+        <Texture Name="object_oF1d_map_TLUT_007EF0" OutName="tlut_007EF0" Format="rgba16" Width="16" Height="16" Offset="0x7EF0" />
+        <Texture Name="object_oF1d_map_Tex_0080F0" OutName="tex_0080F0" Format="ci8" Width="16" Height="16" Offset="0x80F0" />
+        <Texture Name="object_oF1d_map_Tex_0081F0" OutName="tex_0081F0" Format="ci8" Width="8" Height="8" Offset="0x81F0" />
+        <Texture Name="object_oF1d_map_Tex_008230" OutName="tex_008230" Format="ci8" Width="8" Height="16" Offset="0x8230" />
+        <Texture Name="object_oF1d_map_Tex_0082B0" OutName="tex_0082B0" Format="ci8" Width="32" Height="64" Offset="0x82B0" />
+        <Texture Name="object_oF1d_map_Tex_008AB0" OutName="tex_008AB0" Format="ci8" Width="16" Height="16" Offset="0x8AB0" />
+        <DList Name="object_oF1d_map_DL_0091A0" Offset="0x91A0" />
+        <DList Name="object_oF1d_map_DL_0091A8" Offset="0x91A8" />
+        <Texture Name="object_oF1d_map_TLUT_0094E0" OutName="tlut_0094E0" Format="rgba16" Width="16" Height="16" Offset="0x94E0" />
+        <Texture Name="object_oF1d_map_Tex_0096E0" OutName="tex_0096E0" Format="ci8" Width="16" Height="16" Offset="0x96E0" />
+        <Texture Name="object_oF1d_map_Tex_0097E0" OutName="tex_0097E0" Format="ci8" Width="8" Height="8" Offset="0x97E0" />
+        <Texture Name="object_oF1d_map_Tex_009820" OutName="tex_009820" Format="ci8" Width="8" Height="16" Offset="0x9820" />
+        <Texture Name="object_oF1d_map_Tex_0098A0" OutName="tex_0098A0" Format="ci8" Width="32" Height="64" Offset="0x98A0" />
+        <Animation Name="object_oF1d_map_Anim_00A118" Offset="0xA118" />
+        <DList Name="object_oF1d_map_DL_00CC50" Offset="0xCC50" />
+        <DList Name="object_oF1d_map_DL_00CF70" Offset="0xCF70" />
+        <DList Name="object_oF1d_map_DL_00D688" Offset="0xD688" />
+        <DList Name="object_oF1d_map_DL_00D808" Offset="0xD808" />
+        <DList Name="object_oF1d_map_DL_00D938" Offset="0xD938" />
+        <DList Name="object_oF1d_map_DL_00DBB8" Offset="0xDBB8" />
+        <DList Name="object_oF1d_map_DL_00DD38" Offset="0xDD38" />
+        <DList Name="object_oF1d_map_DL_00DE68" Offset="0xDE68" />
+        <DList Name="object_oF1d_map_DL_00E070" Offset="0xE070" />
+        <DList Name="object_oF1d_map_DL_00E130" Offset="0xE130" />
+        <DList Name="object_oF1d_map_DL_00E218" Offset="0xE218" />
+        <DList Name="object_oF1d_map_DL_00E348" Offset="0xE348" />
+        <DList Name="object_oF1d_map_DL_00E610" Offset="0xE610" />
+        <DList Name="object_oF1d_map_DL_00E6F8" Offset="0xE6F8" />
+        <DList Name="object_oF1d_map_DL_00E828" Offset="0xE828" />
+        <Texture Name="object_oF1d_map_TLUT_00EA78" OutName="tlut_00EA78" Format="rgba16" Width="16" Height="16" Offset="0xEA78" />
+        <Texture Name="object_oF1d_map_Tex_00EC78" OutName="tex_00EC78" Format="rgba16" Width="16" Height="16" Offset="0xEC78" />
+        <Texture Name="object_oF1d_map_Tex_00EE78" OutName="tex_00EE78" Format="ci8" Width="16" Height="16" Offset="0xEE78" />
+        <Texture Name="object_oF1d_map_Tex_00EF78" OutName="tex_00EF78" Format="ci8" Width="16" Height="16" Offset="0xEF78" />
+        <Texture Name="object_oF1d_map_Tex_00F078" OutName="tex_00F078" Format="ci8" Width="32" Height="32" Offset="0xF078" />
+        <Texture Name="object_oF1d_map_Tex_00F478" OutName="tex_00F478" Format="ci8" Width="32" Height="16" Offset="0xF478" />
+        <Texture Name="object_oF1d_map_Tex_00F678" OutName="tex_00F678" Format="ci8" Width="32" Height="32" Offset="0xF678" />
+        <Texture Name="object_oF1d_map_Tex_00FA78" OutName="tex_00FA78" Format="ci8" Width="8" Height="8" Offset="0xFA78" />
+        <Texture Name="object_oF1d_map_Tex_00FAB8" OutName="tex_00FAB8" Format="ci8" Width="8" Height="16" Offset="0xFAB8" />
+        <Texture Name="object_oF1d_map_Tex_00FB38" OutName="tex_00FB38" Format="ci8" Width="32" Height="64" Offset="0xFB38" />
+        <Texture Name="object_oF1d_map_Tex_010338" OutName="tex_010338" Format="ci8" Width="16" Height="16" Offset="0x10338" />
+        <Texture Name="object_oF1d_map_Tex_010438" OutName="tex_010438" Format="ci8" Width="32" Height="32" Offset="0x10438" />
+        <Texture Name="object_oF1d_map_Tex_010838" OutName="tex_010838" Format="ci8" Width="32" Height="32" Offset="0x10838" />
+        <Texture Name="object_oF1d_map_Tex_010C38" OutName="tex_010C38" Format="ci8" Width="32" Height="32" Offset="0x10C38" />
+        <Texture Name="object_oF1d_map_Tex_011038" OutName="tex_011038" Format="ci8" Width="32" Height="32" Offset="0x11038" />
+        <Texture Name="object_oF1d_map_Tex_011438" OutName="tex_011438" Format="rgba16" Width="8" Height="8" Offset="0x11438" />
+        <Texture Name="object_oF1d_map_Tex_0114B8" OutName="tex_0114B8" Format="ci8" Width="16" Height="16" Offset="0x114B8" />
+        <Texture Name="object_oF1d_map_Tex_0115B8" OutName="tex_0115B8" Format="rgba16" Width="32" Height="16" Offset="0x115B8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119B8" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_01" Offset="0x119B8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119C4" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_02" Offset="0x119C4" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119D0" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_03" Offset="0x119D0" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119DC" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_04" Offset="0x119DC" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119E8" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_05" Offset="0x119E8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119F4" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_06" Offset="0x119F4" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A00" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_07" Offset="0x11A00" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A0C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_08" Offset="0x11A0C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A18" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_09" Offset="0x11A18" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A24" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0A" Offset="0x11A24" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A30" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0B" Offset="0x11A30" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A3C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0C" Offset="0x11A3C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A48" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0D" Offset="0x11A48" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A54" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0E" Offset="0x11A54" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A60" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0F" Offset="0x11A60" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A6C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_10" Offset="0x11A6C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A78" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_11" Offset="0x11A78" />
+        <Skeleton Name="object_oF1d_map_Skel_011AC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OF1D_MAP_LIMB_NONE" LimbMax="OBJECT_OF1D_MAP_LIMB_MAX" EnumName="object_oF1d_map_Limbs" Offset="0x11AC8" />
+        <Animation Name="object_oF1d_map_Anim_011D98" Offset="0x11D98" />
+        <Animation Name="object_oF1d_map_Anim_012DE0" Offset="0x12DE0" />
+        <Animation Name="object_oF1d_map_Anim_0135E8" Offset="0x135E8" />
+        <Animation Name="object_oF1d_map_Anim_013DB0" Offset="0x13DB0" />
+        <Animation Name="object_oF1d_map_Anim_0143AC" Offset="0x143AC" />
+        <Animation Name="object_oF1d_map_Anim_014CE0" Offset="0x14CE0" />
+        <DList Name="object_oF1d_map_DL_014CF0" Offset="0x14CF0" />
+        <DList Name="object_oF1d_map_DL_014D00" Offset="0x14D00" />
+    </File>
+</Root>

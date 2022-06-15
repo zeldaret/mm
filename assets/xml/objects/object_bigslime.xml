@@ -1,0 +1,131 @@
+﻿<Root>
+    <!-- Assets for the Gekko, Minislime, and Bigslime -->
+    <File Name="object_bigslime" Segment="6">
+        <Animation Name="gGekkoFullFistPumpAnim" Offset="0x994" />
+        <Animation Name="gGekkoSurpriseJumpAnim" Offset="0x10F4" />
+        <Animation Name="gGekkoCallAnim" Offset="0x1B08" />
+        <Animation Name="gGekkoCrawlAnim" Offset="0x1E14" />
+        <Animation Name="gGekkoFallInAirAnim" Offset="0x1F20" />
+        <Animation Name="gGekkoFloorIdleAnim" Offset="0x225C" />
+        <Animation Name="gGekkoDamagedAnim" Offset="0x276C" />
+        <Animation Name="gGekkoJumpUpAnim" Offset="0x2E0C" />
+        <Animation Name="gGekkoRecoverAnim" Offset="0x30E4" />
+        <Animation Name="gGekkoJabPunchAnim" Offset="0x347C" />
+        <Animation Name="gGekkoJumpForwardAnim" Offset="0x39C4" />
+        <Animation Name="gGekkoKickAnim" Offset="0x3F28" />
+        <Animation Name="gGekkoFallOnGroundAnim" Offset="0x4298" />
+        <Animation Name="gGekkoStandingIdleAnim" Offset="0x4680" />
+        <Animation Name="gGekkoJumpOnSnapperAnim" Offset="0x4894" />
+        <Animation Name="gGekkoQuickFistPumpAnim" Offset="0x4D50" />
+        <Animation Name="gGekkoSqueezeAnim" Offset="0x50B8" />
+        <Animation Name="gGekkoLandOnSnapperAnim" Offset="0x52EC" />
+        <Animation Name="gGekkoWiggleAnim" Offset="0x5694" />
+        <Animation Name="gGekkoKnockbackAnim" Offset="0x5D54" />
+        <Animation Name="gGekkoLookAroundAnim" Offset="0x66B4" />
+        <Animation Name="gGekkoNervousIdleAnim" Offset="0x69FC" />
+        <Animation Name="gGekkoHookPunchAnim" Offset="0x70C4" />
+        <Animation Name="gGekkoSwimForwardAnim" Offset="0x7790" />
+
+        <DList Name="gGekkoRightEyeDL" Offset="0x9D90" />
+        <DList Name="gGekkoLeftEyeDL" Offset="0x9FF0" />
+        <DList Name="gGekkoJawDL" Offset="0xA250" />
+        <DList Name="gGekkoHeadDL" Offset="0xA510" />
+        <DList Name="gGekkoRightHandDL" Offset="0xAAF8" />
+        <DList Name="gGekkoRightWristDL" Offset="0xABB0" />
+        <DList Name="gGekkoRightForearmDL" Offset="0xAC78" />
+        <DList Name="gGekkoRightUpperArmDL" Offset="0xAD88" />
+        <DList Name="gGekkoLeftHandDL" Offset="0xAE98" />
+        <DList Name="gGekkoLeftWristDL" Offset="0xAF50" />
+        <DList Name="gGekkoLeftForearmDL" Offset="0xB030" />
+        <DList Name="gGekkoLeftUpperArmDL" Offset="0xB140" />
+        <DList Name="gGekkoTorsoDL" Offset="0xB250" />
+        <DList Name="gGekkoRightFootDL" Offset="0xB4D8" />
+        <DList Name="gGekkoRightAnkleDL" Offset="0xB660" />
+        <DList Name="gGekkoRightShinDL" Offset="0xB770" />
+        <DList Name="gGekkoRightThighDL" Offset="0xB880" />
+        <DList Name="gGekkoLeftFootDL" Offset="0xB9A8" />
+        <DList Name="gGekkoLeftAnkleDL" Offset="0xBB30" />
+        <DList Name="gGekkoLeftShinDL" Offset="0xBC40" />
+        <DList Name="gGekkoLeftThighDL" Offset="0xBD50" />
+        <DList Name="gGekkoWaistDL" Offset="0xBE78" />
+
+        <Texture Name="gGekkoArmLegTLUT" OutName="gekko_arm_leg_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC028" />
+        <Texture Name="gGekkoBodyTLUT" OutName="gekko_body_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC228" />
+        <Texture Name="gGekkoHeadTLUT" OutName="gekko_head_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC428" />
+        
+        <Texture Name="gGekkoNostrilTex" OutName="gekko_nostril" Format="rgba16" Width="8" Height="8" Offset="0xC628" />
+        <Texture Name="gGekkoEyeTex" OutName="gekko_eye" Format="rgba16" Width="16" Height="16" Offset="0xC6A8" />
+        <Texture Name="gGekkoSpots1Tex" OutName="gekko_spots_1" Format="rgba16" Width="16" Height="16" Offset="0xC8A8" />
+        <Texture Name="gGekkoBellyTex" OutName="gekko_belly" Format="rgba16" Width="16" Height="32" Offset="0xCAA8" />
+        <Texture Name="gGekkoSpots2Tex" OutName="gekko_spots_2" Format="ci8" Width="16" Height="32" Offset="0xCEA8" />
+        <Texture Name="gGekkoToothTex" OutName="gekko_tooth" Format="rgba16" Width="16" Height="16" Offset="0xD0A8" />
+        <Texture Name="gGekkoMouthTex" OutName="gekko_mouth" Format="rgba16" Width="16" Height="8" Offset="0xD2A8" />
+        <Texture Name="gGekkoEyebrowTex" OutName="gekko_eyebrow" Format="rgba16" Width="8" Height="8" Offset="0xD3A8" />
+        <Texture Name="gGekkoFinTex" OutName="gekko_fin" Format="rgba16" Width="32" Height="16" Offset="0xD428" />
+        <Texture Name="gGekkoSpots3Tex" OutName="gekko_spots_3" Format="ci8" Width="32" Height="32" Offset="0xD828" />
+        <Texture Name="gGekkoSwirlTex" OutName="gekko_swirl" Format="ci8" Width="16" Height="32" Offset="0xDC28" />
+        
+        <Limb Name="gGekkoRootLimb" Type="Standard" Offset="0xDE28" />
+        <Limb Name="gGekkoWaistLimb" Type="Standard" Offset="0xDE34" />
+        <Limb Name="gGekkoLeftThighLimb" Type="Standard" Offset="0xDE40" />
+        <Limb Name="gGekkoLeftShinLimb" Type="Standard" Offset="0xDE4C" />
+        <Limb Name="gGekkoLeftAnkleLimb" Type="Standard" Offset="0xDE58" />
+        <Limb Name="gGekkoLeftFootLimb" Type="Standard" Offset="0xDE64" />
+        <Limb Name="gGekkoRightThighLimb" Type="Standard" Offset="0xDE70" />
+        <Limb Name="gGekkoRightShinLimb" Type="Standard" Offset="0xDE7C" />
+        <Limb Name="gGekkoRightAnkleLimb" Type="Standard" Offset="0xDE88" />
+        <Limb Name="gGekkoRightFootLimb" Type="Standard" Offset="0xDE94" />
+        <Limb Name="gGekkoTorsoLimb" Type="Standard" Offset="0xDEA0" />
+        <Limb Name="gGekkoLeftUpperArmLimb" Type="Standard" Offset="0xDEAC" />
+        <Limb Name="gGekkoLeftForearmLimb" Type="Standard" Offset="0xDEB8" />
+        <Limb Name="gGekkoLeftWristLimb" Type="Standard" Offset="0xDEC4" />
+        <Limb Name="gGekkoLeftHandLimb" Type="Standard" Offset="0xDED0" />
+        <Limb Name="gGekkoRightUpperArmLimb" Type="Standard" Offset="0xDEDC" />
+        <Limb Name="gGekkoRightForearmLimb" Type="Standard" Offset="0xDEE8" />
+        <Limb Name="gGekkoRightWristLimb" Type="Standard" Offset="0xDEF4" />
+        <Limb Name="gGekkoRightHandLimb" Type="Standard" Offset="0xDF00" />
+        <Limb Name="gGekkoHeadLimb" Type="Standard" Offset="0xDF0C" />
+        <Limb Name="gGekkoJawLimb" Type="Standard" Offset="0xDF18" />
+        <Limb Name="gGekkoLeftEyeLimb" Type="Standard" Offset="0xDF24" />
+        <Limb Name="gGekkoRightEyeLimb" Type="Standard" Offset="0xDF30" />
+        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" Offset="0xDF98" />
+
+        <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" />
+        <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" />
+        <Animation Name="gGekkoBoxingStanceAnim" Offset="0xF990" />
+        
+        <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" />
+        <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" />
+        <Texture Name="gBigslimeShockwave1Tex" OutName="bigslime_shockwave_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
+        <Blob Name="object_bigslime_zeroes_Blob_010028" Size="0x400" Offset="0x10028" />
+        <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shockwave_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
+        <Blob Name="object_bigslime_zeroes_Blob_0104A8" Size="0x88" Offset="0x104A8" />
+        
+        <DList Name="gBigslimeNormalDL" Offset="0x10530" />
+
+        <!-- Reads vtx from segment 9 set by sBigslimeDynamicVtx -->
+        <DList Name="gBigslimeVtxDL" Offset="0x105E8" />
+        <!-- Reads vtx from segment 9 set by sBigslimeTargetVtx -->
+        <DList Name="gBigslimeFrozenVtxDL" Offset="0x10B80" />
+
+        <TextureAnimation Name="gBigslimeFrozenTexAnim" Offset="0x10C48" />
+        <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" />
+        <TextureAnimation Name="gMinislimeFrozenTexAnim" Offset="0x10EC8" />
+
+        <DList Name="gBigslimeIceShardDL" Offset="0x10F20" />
+        <DList Name="gBigslimeIceShardVtxDL" Offset="0x10FE0" />
+        <TextureAnimation Name="gBigslimeIceShardTexAnim" Offset="0x11008" />
+        
+        <DList Name="gBigslimeShadowDL" Offset="0x11050" />
+        <DList Name="gMinislimeNormalDL" Offset="0x113B0" />
+
+        <Texture Name="gBigslimeBubbleTex" OutName="bigslime_bubble" Format="i4" Width="16" Height="16" Offset="0x11580" />
+        <Texture Name="gBigslimeShadowTex" OutName="bigslime_shadow" Format="i8" Width="32" Height="32" Offset="0x11600" />
+        
+        <!-- Used also for minislime -->
+        <Texture Name="gBigslimeNormal1Tex" OutName="bigslime_normal_1" Format="rgba16" Width="32" Height="32" Offset="0x11A00" />
+        <Texture Name="gBigslimeNormal2Tex" OutName="bigslime_normal_2" Format="i4" Width="64" Height="64" Offset="0x12200" />
+        <Texture Name="gBigslimeFrozen1Tex" OutName="bigslime_frozen_1" Format="i4" Width="64" Height="64" Offset="0x12A00" />
+        <Texture Name="gBigslimeFrozen2Tex" OutName="bigslime_frozen_2" Format="i4" Width="32" Height="32" Offset="0x13200" />
+    </File>
+</Root>

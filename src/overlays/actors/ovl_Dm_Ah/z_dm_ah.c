@@ -1,6 +1,12 @@
+/*
+ * File: z_dm_ah.c
+ * Overlay: ovl_Dm_Ah
+ * Description: Anju's Mother (cutscene)
+ */
+
 #include "z_dm_ah.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((DmAh*)thisx)
 

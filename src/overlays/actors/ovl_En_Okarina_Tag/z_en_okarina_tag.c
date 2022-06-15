@@ -1,6 +1,12 @@
+/*
+ * File: z_en_okarina_tag.c
+ * Overlay: ovl_En_Okarina_Tag
+ * Description:
+ */
+
 #include "z_en_okarina_tag.h"
 
-#define FLAGS 0x0A000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnOkarinaTag*)thisx)
 

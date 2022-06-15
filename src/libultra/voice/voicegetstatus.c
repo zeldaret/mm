@@ -12,7 +12,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
 
     do {
         if (ret != CONT_ERR_CONTRFAIL) {
-            __osContPifRam.pifstatus = CONT_CMD_READ_BUTTON;
+            __osContPifRam.status = CONT_CMD_READ_BUTTON;
 
             for (i = 0; i < port; i++, *ptr++ = 0) {
                 ;
@@ -24,7 +24,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
             ptr += 4;
             *ptr = CONT_CMD_END;
 
-            __osContLastCmd = CONT_CMD_END;
+            __osContLastPoll = CONT_CMD_END;
             ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
             osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         }

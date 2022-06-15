@@ -1,6 +1,6 @@
 #include "PR/ultratypes.h"
 #include "osint.h"
-#include "stdint.h"
+#include "libc/stdint.h"
 #include "global.h"
 
 uintptr_t osVirtualToPhysical(void* virtualAddress) {

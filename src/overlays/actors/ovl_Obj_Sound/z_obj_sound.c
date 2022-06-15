@@ -1,6 +1,12 @@
+/*
+ * File: z_obj_sound.c
+ * Overlay: ovl_Obj_Sound
+ * Description: Plays certain sounds (e.g., swamp waterfall noise)
+ */
+
 #include "z_obj_sound.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjSound*)thisx)
 

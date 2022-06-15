@@ -1,17 +1,17 @@
 #include "global.h"
 
 s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, size_t size) {
-    if (__osSpDeviceBusy() != 0) {
+    if (__osSpDeviceBusy()) {
         return -1;
     }
 
-    *(vu32*)0xA4040000 = devAddr;
-    *(vu32*)0xA4040004 = osVirtualToPhysical(dramAddr);
+    HW_REG(SP_MEM_ADDR_REG, u32) = devAddr;
+    HW_REG(SP_DRAM_ADDR_REG, u32) = osVirtualToPhysical(dramAddr);
 
-    if (direction == 0) {
-        *(vu32*)0xA404000C = size - 1;
+    if (direction == OS_READ) {
+        HW_REG(SP_WR_LEN_REG, u32) = size - 1;
     } else {
-        *(vu32*)0xA4040008 = size - 1;
+        HW_REG(SP_RD_LEN_REG, u32) = size - 1;
     }
 
     return 0;

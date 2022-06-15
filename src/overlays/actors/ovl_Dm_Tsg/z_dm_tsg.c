@@ -1,6 +1,12 @@
+/*
+ * File: z_dm_tsg.c
+ * Overlay: ovl_Dm_Tsg
+ * Description: Handles all the masks scrolling by as Link falls in the intro
+ */
+
 #include "z_dm_tsg.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmTsg*)thisx)
 

@@ -1,6 +1,12 @@
+/*
+ * File: z_en_lift_nuts.c
+ * Overlay: ovl_En_Lift_Nuts
+ * Description: Deku Scrub Playground - Employee
+ */
+
 #include "z_en_lift_nuts.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnLiftNuts*)thisx)
 

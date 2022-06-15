@@ -1,0 +1,53 @@
+﻿<Root>
+    <File Name="object_rs" Segment="6">
+        <DList Name="object_rs_DL_000970" Offset="0x970" />
+        <Texture Name="object_rs_Tex_000C08" OutName="tex_000C08" Format="i8" Width="32" Height="32" Offset="0xC08" />
+        <DList Name="object_rs_DL_0036F0" Offset="0x36F0" />
+        <DList Name="object_rs_DL_003778" Offset="0x3778" />
+        <DList Name="object_rs_DL_003AF0" Offset="0x3AF0" />
+        <DList Name="object_rs_DL_003ED0" Offset="0x3ED0" />
+        <DList Name="object_rs_DL_003FF0" Offset="0x3FF0" />
+        <DList Name="object_rs_DL_004108" Offset="0x4108" />
+        <DList Name="object_rs_DL_004308" Offset="0x4308" />
+        <DList Name="object_rs_DL_004428" Offset="0x4428" />
+        <DList Name="object_rs_DL_004540" Offset="0x4540" />
+        <DList Name="object_rs_DL_004738" Offset="0x4738" />
+        <DList Name="object_rs_DL_0048D0" Offset="0x48D0" />
+        <DList Name="object_rs_DL_004A20" Offset="0x4A20" />
+        <DList Name="object_rs_DL_004B88" Offset="0x4B88" />
+        <DList Name="object_rs_DL_004D20" Offset="0x4D20" />
+        <DList Name="object_rs_DL_004E70" Offset="0x4E70" />
+        <Texture Name="object_rs_TLUT_004FD8" OutName="tlut_004FD8" Format="rgba16" Width="16" Height="16" Offset="0x4FD8" />
+        <Texture Name="object_rs_Tex_0051D8" OutName="tex_0051D8" Format="ci8" Width="8" Height="8" Offset="0x51D8" />
+        <Texture Name="object_rs_Tex_005218" OutName="tex_005218" Format="ci8" Width="8" Height="8" Offset="0x5218" />
+        <Texture Name="object_rs_Tex_005258" OutName="tex_005258" Format="ci8" Width="8" Height="32" Offset="0x5258" />
+        <Texture Name="object_rs_Tex_005358" OutName="tex_005358" Format="ci8" Width="16" Height="16" Offset="0x5358" />
+        <Texture Name="object_rs_Tex_005458" OutName="tex_005458" Format="rgba16" Width="32" Height="32" Offset="0x5458" />
+        <Texture Name="object_rs_Tex_005C58" OutName="tex_005C58" Format="ci8" Width="32" Height="64" Offset="0x5C58" />
+        <Texture Name="object_rs_Tex_006458" OutName="tex_006458" Format="rgba16" Width="16" Height="16" Offset="0x6458" />
+        <Texture Name="object_rs_Tex_006658" OutName="tex_006658" Format="rgba16" Width="8" Height="8" Offset="0x6658" />
+        <Texture Name="object_rs_Tex_0066D8" OutName="tex_0066D8" Format="rgba16" Width="16" Height="16" Offset="0x66D8" />
+        <Texture Name="object_rs_Tex_0068D8" OutName="tex_0068D8" Format="ci8" Width="16" Height="16" Offset="0x68D8" />
+        <Texture Name="object_rs_Tex_0069D8" OutName="tex_0069D8" Format="ci8" Width="32" Height="32" Offset="0x69D8" />
+        <Animation Name="object_rs_Anim_00788C" Offset="0x788C" />
+        <Animation Name="object_rs_Anim_008268" Offset="0x8268" />
+        <Animation Name="object_rs_Anim_0087BC" Offset="0x87BC" />
+        <Animation Name="object_rs_Anim_009120" Offset="0x9120" />
+        <Limb Name="object_rs_Standardlimb_009130" Type="Standard" EnumName="OBJECT_RS_LIMB_01" Offset="0x9130" />
+        <Limb Name="object_rs_Standardlimb_00913C" Type="Standard" EnumName="OBJECT_RS_LIMB_02" Offset="0x913C" />
+        <Limb Name="object_rs_Standardlimb_009148" Type="Standard" EnumName="OBJECT_RS_LIMB_03" Offset="0x9148" />
+        <Limb Name="object_rs_Standardlimb_009154" Type="Standard" EnumName="OBJECT_RS_LIMB_04" Offset="0x9154" />
+        <Limb Name="object_rs_Standardlimb_009160" Type="Standard" EnumName="OBJECT_RS_LIMB_05" Offset="0x9160" />
+        <Limb Name="object_rs_Standardlimb_00916C" Type="Standard" EnumName="OBJECT_RS_LIMB_06" Offset="0x916C" />
+        <Limb Name="object_rs_Standardlimb_009178" Type="Standard" EnumName="OBJECT_RS_LIMB_07" Offset="0x9178" />
+        <Limb Name="object_rs_Standardlimb_009184" Type="Standard" EnumName="OBJECT_RS_LIMB_08" Offset="0x9184" />
+        <Limb Name="object_rs_Standardlimb_009190" Type="Standard" EnumName="OBJECT_RS_LIMB_09" Offset="0x9190" />
+        <Limb Name="object_rs_Standardlimb_00919C" Type="Standard" EnumName="OBJECT_RS_LIMB_0A" Offset="0x919C" />
+        <Limb Name="object_rs_Standardlimb_0091A8" Type="Standard" EnumName="OBJECT_RS_LIMB_0B" Offset="0x91A8" />
+        <Limb Name="object_rs_Standardlimb_0091B4" Type="Standard" EnumName="OBJECT_RS_LIMB_0C" Offset="0x91B4" />
+        <Limb Name="object_rs_Standardlimb_0091C0" Type="Standard" EnumName="OBJECT_RS_LIMB_0D" Offset="0x91C0" />
+        <Limb Name="object_rs_Standardlimb_0091CC" Type="Standard" EnumName="OBJECT_RS_LIMB_0E" Offset="0x91CC" />
+        <Limb Name="object_rs_Standardlimb_0091D8" Type="Standard" EnumName="OBJECT_RS_LIMB_0F" Offset="0x91D8" />
+        <Skeleton Name="object_rs_Skel_009220" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RS_LIMB_NONE" LimbMax="OBJECT_RS_LIMB_MAX" EnumName="object_rs_Limbs" Offset="0x9220" />
+    </File>
+</Root>

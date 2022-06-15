@@ -1,6 +1,13 @@
-#include "z_bg_kin2_fence.h"
+/*
+ * File: z_bg_kin2_fence.c
+ * Overlay: ovl_Bg_Kin2_Fence
+ * Description: Ocean Spider House - Fireplace Grate
+ */
 
-#define FLAGS 0x00000010
+#include "z_bg_kin2_fence.h"
+#include "objects/object_kin2_obj/object_kin2_obj.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgKin2Fence*)thisx)
 
@@ -112,22 +119,19 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000828[];
-extern CollisionHeader D_06000908;
-
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
 
-    if (elements[0].info.bumperFlags & 2) {
+    if (elements[0].info.bumperFlags & BUMP_HIT) {
         return 0;
     }
-    if (elements[1].info.bumperFlags & 2) {
+    if (elements[1].info.bumperFlags & BUMP_HIT) {
         return 1;
     }
-    if (elements[2].info.bumperFlags & 2) {
+    if (elements[2].info.bumperFlags & BUMP_HIT) {
         return 2;
     }
-    if (elements[3].info.bumperFlags & 2) {
+    if (elements[3].info.bumperFlags & BUMP_HIT) {
         return 3;
     }
     return -1;
@@ -138,12 +142,12 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
     Vec3f sp58;
     s32 pad[2];
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        Matrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 6000, -10);
+        Matrix_MultVec3f(&eyeSparkleSpawnPositions[mask][i], &sp58);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
 
@@ -152,12 +156,12 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i = 0;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kin2_obj_Colheader_000908);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < 4; i++) {
@@ -174,7 +178,7 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
@@ -190,7 +194,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
+            nextMask = (s8)gSaveContext.save.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
@@ -222,7 +226,7 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
 void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(globalCtx, this->dyna.actor.params & 0x7F);
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }
@@ -266,5 +270,5 @@ void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000828);
+    Gfx_DrawDListOpa(globalCtx, object_kin2_obj_DL_000828);
 }

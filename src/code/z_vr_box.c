@@ -103,7 +103,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
         if (globalCtx->envCtx.unk_11 == 0) {
@@ -120,7 +120,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
         size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
@@ -129,7 +129,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
         DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
                                SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
     }
 }
 
@@ -140,7 +140,7 @@ void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) 
     func_801431E8(gameState, skyboxCtx, skyType);
 
     if (skyType != 0) {
-        skyboxCtx->unk17C = THA_AllocEndAlign16(&gameState->heap, 0x3840);
+        skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
         if (skyType == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)

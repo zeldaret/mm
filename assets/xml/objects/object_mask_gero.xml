@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_mask_gero" Segment="10">
+        <DList Name="object_mask_gero_DL_000DC0" Offset="0xDC0" />
+        <Texture Name="object_mask_gero_TLUT_001388" OutName="tlut_001388" Format="rgba16" Width="16" Height="16" Offset="0x1388" />
+        <Texture Name="object_mask_gero_Tex_001588" OutName="tex_001588" Format="ci8" Width="16" Height="16" Offset="0x1588" />
+        <Texture Name="object_mask_gero_Tex_001688" OutName="tex_001688" Format="rgba16" Width="32" Height="32" Offset="0x1688" />
+        <Texture Name="object_mask_gero_Tex_001E88" OutName="tex_001E88" Format="ci8" Width="16" Height="16" Offset="0x1E88" />
+        <Texture Name="object_mask_gero_Tex_001F88" OutName="tex_001F88" Format="ci8" Width="32" Height="32" Offset="0x1F88" />
+        <Texture Name="object_mask_gero_Tex_002388" OutName="tex_002388" Format="ci8" Width="16" Height="16" Offset="0x2388" />
+        <Texture Name="object_mask_gero_Tex_002488" OutName="tex_002488" Format="rgba16" Width="32" Height="32" Offset="0x2488" />
+        <Texture Name="object_mask_gero_Tex_002C88" OutName="tex_002C88" Format="rgba16" Width="16" Height="16" Offset="0x2C88" />
+    </File>
+</Root>

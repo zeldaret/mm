@@ -1,6 +1,12 @@
+/*
+ * File: z_bg_hakugin_elvpole.c
+ * Overlay: ovl_Bg_Hakugin_Elvpole
+ * Description: Raisable pillar in Snowhead Temple Map room
+ */
+
 #include "z_bg_hakugin_elvpole.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgHakuginElvpole*)thisx)
 

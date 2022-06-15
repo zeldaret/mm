@@ -1,0 +1,120 @@
+﻿<Root>
+    <File Name="object_harfgibud" Segment="6">
+        <Animation Name="object_harfgibud_Anim_000370" Offset="0x370" />
+        <Animation Name="object_harfgibud_Anim_001138" Offset="0x1138" />
+        <Animation Name="object_harfgibud_Anim_0015D4" Offset="0x15D4" />
+        <Animation Name="object_harfgibud_Anim_001960" Offset="0x1960" />
+        <Animation Name="object_harfgibud_Anim_00260C" Offset="0x260C" />
+        <DList Name="object_harfgibud_DL_005790" Offset="0x5790" />
+        <DList Name="object_harfgibud_DL_005878" Offset="0x5878" />
+        <DList Name="object_harfgibud_DL_005978" Offset="0x5978" />
+        <DList Name="object_harfgibud_DL_005A60" Offset="0x5A60" />
+        <DList Name="object_harfgibud_DL_005B50" Offset="0x5B50" />
+        <DList Name="object_harfgibud_DL_005C50" Offset="0x5C50" />
+        <DList Name="object_harfgibud_DL_005D38" Offset="0x5D38" />
+        <DList Name="object_harfgibud_DL_005E28" Offset="0x5E28" />
+        <DList Name="object_harfgibud_DL_005ED0" Offset="0x5ED0" />
+        <DList Name="object_harfgibud_DL_0065B0" Offset="0x65B0" />
+        <DList Name="object_harfgibud_DL_0067C8" Offset="0x67C8" />
+        <DList Name="object_harfgibud_DL_006988" Offset="0x6988" />
+        <DList Name="object_harfgibud_DL_006B80" Offset="0x6B80" />
+        <DList Name="object_harfgibud_DL_006C80" Offset="0x6C80" />
+        <DList Name="object_harfgibud_DL_006DB8" Offset="0x6DB8" />
+        <DList Name="object_harfgibud_DL_006EA0" Offset="0x6EA0" />
+        <DList Name="object_harfgibud_DL_006F98" Offset="0x6F98" />
+        <Texture Name="object_harfgibud_TLUT_0070A0" OutName="tlut_0070A0" Format="rgba16" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="object_harfgibud_Tex_0072A0" OutName="tex_0072A0" Format="i8" Width="64" Height="32" Offset="0x72A0" />
+        <Texture Name="object_harfgibud_Tex_007AA0" OutName="tex_007AA0" Format="ci8" Width="8" Height="8" Offset="0x7AA0" />
+        <Texture Name="object_harfgibud_Tex_007AE0" OutName="tex_007AE0" Format="ci8" Width="8" Height="16" Offset="0x7AE0" />
+        <Texture Name="object_harfgibud_Tex_007B60" OutName="tex_007B60" Format="ci8" Width="8" Height="8" Offset="0x7B60" />
+        <Texture Name="object_harfgibud_Tex_007BA0" OutName="tex_007BA0" Format="ci8" Width="8" Height="8" Offset="0x7BA0" />
+        <Texture Name="object_harfgibud_Tex_007BE0" OutName="tex_007BE0" Format="ci8" Width="32" Height="32" Offset="0x7BE0" />
+        <Texture Name="object_harfgibud_Tex_007FE0" OutName="tex_007FE0" Format="ci8" Width="16" Height="16" Offset="0x7FE0" />
+        <Texture Name="object_harfgibud_Tex_0080E0" OutName="tex_0080E0" Format="rgba16" Width="16" Height="16" Offset="0x80E0" />
+        <Texture Name="object_harfgibud_Tex_0082E0" OutName="tex_0082E0" Format="i8" Width="8" Height="8" Offset="0x82E0" />
+        <Texture Name="object_harfgibud_Tex_008320" OutName="tex_008320" Format="rgba16" Width="8" Height="8" Offset="0x8320" />
+        <Texture Name="object_harfgibud_Tex_0083A0" OutName="tex_0083A0" Format="ci8" Width="16" Height="8" Offset="0x83A0" />
+        <Texture Name="object_harfgibud_Tex_008420" OutName="tex_008420" Format="i8" Width="8" Height="8" Offset="0x8420" />
+        <Limb Name="object_harfgibud_Standardlimb_008460" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_01" Offset="0x8460" />
+        <Limb Name="object_harfgibud_Standardlimb_00846C" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_02" Offset="0x846C" />
+        <Limb Name="object_harfgibud_Standardlimb_008478" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_03" Offset="0x8478" />
+        <Limb Name="object_harfgibud_Standardlimb_008484" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_04" Offset="0x8484" />
+        <Limb Name="object_harfgibud_Standardlimb_008490" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_05" Offset="0x8490" />
+        <Limb Name="object_harfgibud_Standardlimb_00849C" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_06" Offset="0x849C" />
+        <Limb Name="object_harfgibud_Standardlimb_0084A8" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_07" Offset="0x84A8" />
+        <Limb Name="object_harfgibud_Standardlimb_0084B4" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_08" Offset="0x84B4" />
+        <Limb Name="object_harfgibud_Standardlimb_0084C0" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_09" Offset="0x84C0" />
+        <Limb Name="object_harfgibud_Standardlimb_0084CC" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0A" Offset="0x84CC" />
+        <Limb Name="object_harfgibud_Standardlimb_0084D8" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0B" Offset="0x84D8" />
+        <Limb Name="object_harfgibud_Standardlimb_0084E4" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0C" Offset="0x84E4" />
+        <Limb Name="object_harfgibud_Standardlimb_0084F0" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0D" Offset="0x84F0" />
+        <Limb Name="object_harfgibud_Standardlimb_0084FC" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0E" Offset="0x84FC" />
+        <Limb Name="object_harfgibud_Standardlimb_008508" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_0F" Offset="0x8508" />
+        <Limb Name="object_harfgibud_Standardlimb_008514" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_10" Offset="0x8514" />
+        <Limb Name="object_harfgibud_Standardlimb_008520" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_11" Offset="0x8520" />
+        <Limb Name="object_harfgibud_Standardlimb_00852C" Type="Standard" EnumName="OBJECT_HARFGIBUD_1_LIMB_12" Offset="0x852C" />
+        <Skeleton Name="object_harfgibud_Skel_008580" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HARFGIBUD_1_LIMB_NONE" LimbMax="OBJECT_HARFGIBUD_1_LIMB_MAX" EnumName="object_harfgibud_1_Limbs" Offset="0x8580" />
+        <Animation Name="object_harfgibud_Anim_009D44" Offset="0x9D44" />
+        <Animation Name="object_harfgibud_Anim_00A164" Offset="0xA164" />
+        <Animation Name="object_harfgibud_Anim_00AE1C" Offset="0xAE1C" />
+        <TextureAnimation Name="object_harfgibud_Matanimheader_00AE50" Offset="0xAE50" />
+        <Animation Name="object_harfgibud_Anim_00B644" Offset="0xB644" />
+        <DList Name="object_harfgibud_DL_00E860" Offset="0xE860" />
+        <DList Name="object_harfgibud_DL_00E9E0" Offset="0xE9E0" />
+        <DList Name="object_harfgibud_DL_00EB28" Offset="0xEB28" />
+        <DList Name="object_harfgibud_DL_00EC48" Offset="0xEC48" />
+        <DList Name="object_harfgibud_DL_00EE50" Offset="0xEE50" />
+        <DList Name="object_harfgibud_DL_00EF98" Offset="0xEF98" />
+        <DList Name="object_harfgibud_DL_00F0B8" Offset="0xF0B8" />
+        <DList Name="object_harfgibud_DL_00F248" Offset="0xF248" />
+        <DList Name="object_harfgibud_DL_00F2F0" Offset="0xF2F0" />
+        <DList Name="object_harfgibud_DL_00F838" Offset="0xF838" />
+        <DList Name="object_harfgibud_DL_00FAA8" Offset="0xFAA8" />
+        <DList Name="object_harfgibud_DL_00FC10" Offset="0xFC10" />
+        <DList Name="object_harfgibud_DL_00FE08" Offset="0xFE08" />
+        <DList Name="object_harfgibud_DL_00FF10" Offset="0xFF10" />
+        <DList Name="object_harfgibud_DL_010078" Offset="0x10078" />
+        <DList Name="object_harfgibud_DL_0102B8" Offset="0x102B8" />
+        <DList Name="object_harfgibud_DL_0103C0" Offset="0x103C0" />
+        <Texture Name="object_harfgibud_TLUT_010578" OutName="tlut_010578" Format="rgba16" Width="16" Height="16" Offset="0x10578" />
+        <Texture Name="object_harfgibud_Tex_010778" OutName="tex_010778" Format="ci8" Width="8" Height="8" Offset="0x10778" />
+        <Texture Name="object_harfgibud_Tex_0107B8" OutName="tex_0107B8" Format="ci8" Width="16" Height="16" Offset="0x107B8" />
+        <Texture Name="object_harfgibud_Tex_0108B8" OutName="tex_0108B8" Format="ci8" Width="8" Height="16" Offset="0x108B8" />
+        <Texture Name="object_harfgibud_Tex_010938" OutName="tex_010938" Format="ci8" Width="8" Height="8" Offset="0x10938" />
+        <Texture Name="object_harfgibud_Tex_010978" OutName="tex_010978" Format="ci8" Width="32" Height="16" Offset="0x10978" />
+        <Texture Name="object_harfgibud_Tex_010B78" OutName="tex_010B78" Format="ci8" Width="8" Height="8" Offset="0x10B78" />
+        <Texture Name="object_harfgibud_Tex_010BB8" OutName="tex_010BB8" Format="rgba16" Width="8" Height="16" Offset="0x10BB8" />
+        <Texture Name="object_harfgibud_Tex_010CB8" OutName="tex_010CB8" Format="rgba16" Width="16" Height="16" Offset="0x10CB8" />
+        <Texture Name="object_harfgibud_Tex_010EB8" OutName="tex_010EB8" Format="i8" Width="8" Height="8" Offset="0x10EB8" />
+        <Texture Name="object_harfgibud_Tex_010EF8" OutName="tex_010EF8" Format="rgba16" Width="16" Height="16" Offset="0x10EF8" />
+        <Texture Name="object_harfgibud_Tex_0110F8" OutName="tex_0110F8" Format="i8" Width="8" Height="8" Offset="0x110F8" />
+        <Texture Name="object_harfgibud_Tex_011138" OutName="tex_011138" Format="rgba16" Width="32" Height="32" Offset="0x11138" />
+        <Texture Name="object_harfgibud_Tex_011938" OutName="tex_011938" Format="rgba16" Width="32" Height="32" Offset="0x11938" />
+        <Texture Name="object_harfgibud_Tex_012138" OutName="tex_012138" Format="rgba16" Width="32" Height="32" Offset="0x12138" />
+        <Limb Name="object_harfgibud_Standardlimb_012938" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_01" Offset="0x12938" />
+        <Limb Name="object_harfgibud_Standardlimb_012944" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_02" Offset="0x12944" />
+        <Limb Name="object_harfgibud_Standardlimb_012950" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_03" Offset="0x12950" />
+        <Limb Name="object_harfgibud_Standardlimb_01295C" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_04" Offset="0x1295C" />
+        <Limb Name="object_harfgibud_Standardlimb_012968" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_05" Offset="0x12968" />
+        <Limb Name="object_harfgibud_Standardlimb_012974" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_06" Offset="0x12974" />
+        <Limb Name="object_harfgibud_Standardlimb_012980" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_07" Offset="0x12980" />
+        <Limb Name="object_harfgibud_Standardlimb_01298C" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_08" Offset="0x1298C" />
+        <Limb Name="object_harfgibud_Standardlimb_012998" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_09" Offset="0x12998" />
+        <Limb Name="object_harfgibud_Standardlimb_0129A4" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0A" Offset="0x129A4" />
+        <Limb Name="object_harfgibud_Standardlimb_0129B0" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0B" Offset="0x129B0" />
+        <Limb Name="object_harfgibud_Standardlimb_0129BC" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0C" Offset="0x129BC" />
+        <Limb Name="object_harfgibud_Standardlimb_0129C8" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0D" Offset="0x129C8" />
+        <Limb Name="object_harfgibud_Standardlimb_0129D4" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0E" Offset="0x129D4" />
+        <Limb Name="object_harfgibud_Standardlimb_0129E0" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_0F" Offset="0x129E0" />
+        <Limb Name="object_harfgibud_Standardlimb_0129EC" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_10" Offset="0x129EC" />
+        <Limb Name="object_harfgibud_Standardlimb_0129F8" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_11" Offset="0x129F8" />
+        <Limb Name="object_harfgibud_Standardlimb_012A04" Type="Standard" EnumName="OBJECT_HARFGIBUD_2_LIMB_12" Offset="0x12A04" />
+        <Skeleton Name="object_harfgibud_Skel_012A58" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HARFGIBUD_2_LIMB_NONE" LimbMax="OBJECT_HARFGIBUD_2_LIMB_MAX" EnumName="object_harfgibud_2_Limbs" Offset="0x12A58" />
+        <Animation Name="object_harfgibud_Anim_013684" Offset="0x13684" />
+        <Animation Name="object_harfgibud_Anim_014220" Offset="0x14220" />
+        <Animation Name="object_harfgibud_Anim_014A9C" Offset="0x14A9C" />
+        <Animation Name="object_harfgibud_Anim_0152EC" Offset="0x152EC" />
+        <Animation Name="object_harfgibud_Anim_015C70" Offset="0x15C70" />
+        <Animation Name="object_harfgibud_Anim_0165F0" Offset="0x165F0" />
+    </File>
+</Root>

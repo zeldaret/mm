@@ -1,15 +1,16 @@
-#ifndef _Z64SCENE_H_
-#define _Z64SCENE_H_
+#ifndef Z64SCENE_H
+#define Z64SCENE_H
 
 #include "ultra64.h"
 #include "z64dma.h"
+#include "z64cutscene.h"
 #include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
+    /* 0x00 */ uintptr_t vromStart;
+    /* 0x04 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
 
 typedef struct {
@@ -290,12 +291,12 @@ typedef struct {
 typedef struct {
     struct {
         s8 room;    // Room to switch to
-        s8 effects; // How the camera reacts during the transition
+        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x00 */ sides[2]; // 0 = front, 1 = back
     /* 0x04 */ s16   id;
     /* 0x06 */ Vec3s pos;
     /* 0x0C */ s16   rotY;
-    /* 0x0E */ s16   params;
+    /* 0x0E */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -309,13 +310,6 @@ typedef struct {
     /* 0x8 */ Vec3s rot;
     /* 0xE */ s16 params;
 } ActorEntry; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32 data;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
-} CutsceneEntry; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8 spawn;
@@ -496,10 +490,12 @@ typedef struct {
 } MinimapChest; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ s16 type;
-    /* 0x00 */ s16 numPoints;
-    /* 0x00 */ Vec3s* points;
-} CsCameraEntry;
+    /* 0x0 */ s16 setting;
+    /* 0x2 */ s16 numData;
+    /* 0x4 */ Vec3s* data;
+} CsCamData; // size = 0x8
+
+typedef CsCamData CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
@@ -649,7 +645,8 @@ typedef enum {
     /* 0x6D */ SCENE_ICHIBA,
     /* 0x6E */ SCENE_BACKTOWN,
     /* 0x6F */ SCENE_CLOCKTOWER,
-    /* 0x70 */ SCENE_ALLEY
+    /* 0x70 */ SCENE_ALLEY,
+    /* 0x71 */ SCENE_MAX
 } SceneID;
 
 // SceneTableEntry draw configs

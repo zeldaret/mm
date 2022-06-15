@@ -1,4 +1,5 @@
 #include "global.h"
+#include "ultra64/motor.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_GetControllerBitmask.s")
 

@@ -1,6 +1,12 @@
+/*
+ * File: z_shot_sun.c
+ * Overlay: ovl_Shot_Sun
+ * Description:
+ */
+
 #include "z_shot_sun.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((ShotSun*)thisx)
 
