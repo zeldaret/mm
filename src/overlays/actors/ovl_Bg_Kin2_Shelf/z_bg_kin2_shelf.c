@@ -51,8 +51,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-CollisionHeader* D_80B70780[] = { &gOceanSpiderHouseChestOfDrawersCol,
-                                  &gOceanSpiderHouseBookshelfCol }; // nightstand then bookshelf
+CollisionHeader* D_80B70780[] = { &gOceanSpiderHouseChestOfDrawersCol, &gOceanSpiderHouseBookshelfCol };
 
 Gfx* D_80B70788[] = { gOceanSpiderHouseChestOfDrawersDL, gOceanSpiderHouseBookshelfDL };
 
