@@ -8,7 +8,7 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_10000000)
 
-#define THIS ((BgKin2Bombwall*)(thisx))
+#define THIS ((BgKin2Bombwall*)thisx)
 
 void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
