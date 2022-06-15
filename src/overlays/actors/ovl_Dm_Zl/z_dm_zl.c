@@ -138,6 +138,9 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
             s16 nextAnimationIndex = ZELDA_ANIM_FACING_AWAY;
 
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+                default:
+                case 1:
+                    break;
                 case 2:
                     nextAnimationIndex = ZELDA_ANIM_TURNING_TOWARD_PLAYER;
                     break;
@@ -146,9 +149,6 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
                     break;
                 case 4:
                     nextAnimationIndex = ZELDA_ANIM_PLAYING_OCARINA_START;
-                    break;
-                case 1:
-                default:
                     break;
             }
 
@@ -175,7 +175,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
 
 /**
  * Updates the eye blinking and state, and mouth textures.
- *  (Copy-Paste from OoT, unused)
+ *  (Copy-Paste from OoT, Unused in MM)
  */
 void DmZl_UpdateFace(DmZl* this) {
     if (this->blinkTimer > 0) {
