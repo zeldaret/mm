@@ -158,23 +158,23 @@ extern CollisionHeader D_06002358;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Destroy.s")
 
-void BgIkanaMirror_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    BgIkanaMirror *this = THIS;
-    s32 temp_s0;
-    ColliderQuad *phi_s1;
-    s32 phi_s0;
-    
-    phi_s0 = 0;
+void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ColliderQuad* var_s1;
+    s32 var_s0;
+    BgIkanaMirror* this = (BgIkanaMirror* ) thisx;
+
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->unk144);
     Collider_DestroyTris(globalCtx, &this->unk15C);
-    
-    phi_s1 = &this->unk4B8;
-    for(phi_s0 = 0 ; phi_s0 < 256; phi_s0+=0x80){
-        Collider_DestroyQuad(globalCtx, phi_s1);
-        //temp_s0 = phi_s0 + 0x80;
-        phi_s1++;
-        //phi_s0 = temp_s0;
+    // var_s0 = 0;
+    // var_s1 = &this->unk4B8;
+    for (var_s0 = 0; var_s0 < 2; var_s0++) {
+        Collider_DestroyQuad(globalCtx, &this->unk4B8[var_s0]);
     }
+    // do {
+    //     Collider_DestroyQuad(globalCtx, var_s1);
+    //     var_s0 += 0x80;
+    //     var_s1 += 0x80;
+    // } while (var_s0 != 0x100);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA84.s")
