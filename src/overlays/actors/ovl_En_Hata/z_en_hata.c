@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hata.h"
+#include "objects/object_hata/object_hata.h"
 
 #define FLAGS 0x00000000
 
@@ -14,8 +15,6 @@ void EnHata_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHata_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2);
 void EnHata_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Hata_InitVars = {
     ACTOR_EN_HATA,
@@ -30,14 +29,14 @@ const ActorInit En_Hata_InitVars = {
 };
 
 void EnHata_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s32 rand;
     EnHata* this = THIS;
+    s32 rand;
     f32 endFrame;
 
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
                    OBJECT_HATA_LIMB_MAX);
     endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
-    Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, 0, 0.0f);
+    Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
     this->skelAnime.curFrame = rand;
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hata_Colheader_0000C0);
@@ -58,7 +57,7 @@ void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnHata* this = THIS;
     Vec3f sp34;
     f32 phi_fv0;
-    f32 phi_fv0_3;
+    s32 pad;
 
     phi_fv0 = CLAMP(globalCtx->envCtx.windSpeed / 120.0f, 0.0f, 1.0f);
     this->skelAnime.playSpeed = 2.75f * phi_fv0;
@@ -86,7 +85,7 @@ s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                             Actor* thisx) {
     EnHata* this = THIS;
 
-    if ((limbIndex == 4) || (limbIndex == 13)) {
+    if ((limbIndex == OBJECT_HATA_LIMB_04) || (limbIndex == OBJECT_HATA_LIMB_0D)) {
         rot->y += this->unk_29C;
         rot->z += this->unk_2A0;
     }
