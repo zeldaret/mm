@@ -16,8 +16,6 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void BgAstrBombwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, ColliderTris* collider);
-void func_80C0A120(BgAstrBombwall* this, GlobalContext* globalCtx);
 void func_80C0A378(BgAstrBombwall* this);
 void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx);
 void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx);
@@ -167,9 +165,9 @@ void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         Flags_SetSwitch(globalCtx, BGASTRBOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
         func_80C0A400(this, globalCtx);
-        return;
+    } else {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80C0A400(BgAstrBombwall* this, GlobalContext* globalCtx) {
