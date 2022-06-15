@@ -6,6 +6,7 @@
 
 #include "z_en_sc_ruppe.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScRuppe*)thisx)
@@ -15,15 +16,21 @@ void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BD6910(EnScRuppe* this, GlobalContext* globalCtx);
-s32 func_80BD697C(s16 this);
-void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx);
 void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /* 0 */ RUPPE_GREEN,
+    /* 1 */ RUPPE_BLUE,
+    /* 2 */ RUPPE_RED,
+    /* 3 */ RUPPE_ORANGE,
+    /* 4 */ RUPPE_PURPLE,
+    /* 5 */ RUPPE_SILVER,
+} RuppeType;
 
 typedef struct {
     /* 0x0 */ TexturePtr tex;
     /* 0x4 */ s16 amount;
-} RupeeInfo;
+} RuppeInfo;
 
 const ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
@@ -37,13 +44,13 @@ const ActorInit En_Sc_Ruppe_InitVars = {
     (ActorFunc)EnScRuppe_Draw,
 };
 
-RupeeInfo sRupeeInfo[] = {
+RuppeInfo sRupeeInfo[] = {
     { gameplay_keep_Tex_061FC0, 1 },   // Green rupee
     { gameplay_keep_Tex_061FE0, 5 },   // Blue rupee
     { gameplay_keep_Tex_062000, 20 },  // Red rupee
     { gameplay_keep_Tex_062040, 200 }, // Orange rupee
     { gameplay_keep_Tex_062020, 50 },  // Purple rupee
-    { gameplay_keep_Tex_062060, 10 },  // Gray rupee (unused)
+    { gameplay_keep_Tex_062060, 10 },  // Silver rupee (unused)
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -66,45 +73,45 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-void func_80BD6910(EnScRuppe* this, GlobalContext* globalCtx) {
+void EnScRuppe_UpdateCollision(EnScRuppe* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 32.0f, 30.0f, 0.0f, 4);
 }
 
-s32 func_80BD697C(s16 rupeeIndex) {
-    switch (rupeeIndex) {
-        case 0:
+s32 func_80BD697C(s16 ruppeIndex) {
+    switch (ruppeIndex) {
+        case RUPPE_GREEN:
             if (gSaveContext.save.weekEventReg[53] & 4) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~4;
                 return true;
             }
             break;
-        case 1:
+        case RUPPE_BLUE:
             if (gSaveContext.save.weekEventReg[53] & 0x80) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~0x80;
                 return true;
             }
             break;
-        case 2:
+        case RUPPE_RED:
             if (gSaveContext.save.weekEventReg[54] & 1) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~1;
                 return true;
             }
             break;
-        case 3:
+        case RUPPE_ORANGE:
             if (gSaveContext.save.weekEventReg[54] & 2) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~2;
                 return true;
             }
             break;
-        case 4:
+        case RUPPE_PURPLE:
             if (gSaveContext.save.weekEventReg[54] & 4) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~4;
                 return true;
             }
             break;
-        case 5:
+        case RUPPE_SILVER:
             if ((gSaveContext.save.weekEventReg[54] & 8)) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~8;
                 return true;
@@ -116,10 +123,10 @@ s32 func_80BD697C(s16 rupeeIndex) {
 
 void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        this->rupeeDisplayTime = 0;
+        this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
-        func_801159EC(sRupeeInfo[this->rupeeIndex].amount);
+        func_801159EC(sRupeeInfo[this->ruppeIndex].amount);
         this->actionFunc = func_80BD6B18;
     }
     this->actor.shape.rot.y += 0x1F4;
@@ -129,17 +136,17 @@ void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx) {
 void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->rupeeDisplayTime > 30) {
-        if (func_80BD697C(this->rupeeIndex)) {
+    if (this->ruppeDisplayTime > 30) {
+        if (func_80BD697C(this->ruppeIndex)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         f32 scale;
 
-        this->rupeeDisplayTime++;
+        this->ruppeDisplayTime++;
         this->actor.world.pos = player->actor.world.pos;
         this->actor.world.pos.y += 40.0f;
-        scale = (30.0f - this->rupeeDisplayTime) * 0.001f;
+        scale = (30.0f - this->ruppeDisplayTime) * 0.001f;
         Actor_SetScale(&this->actor, scale);
     }
     this->actor.shape.rot.y += 0x3E8;
@@ -154,9 +161,9 @@ void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    this->rupeeIndex = SCRUPPE_GET_PARAMS(thisx);
-    if ((this->rupeeIndex < 0) || (this->rupeeIndex >= 5)) {
-        this->rupeeIndex = 0;
+    this->ruppeIndex = SCRUPPE_GET_PARAMS(thisx);
+    if ((this->ruppeIndex < RUPPE_GREEN) || (this->ruppeIndex >= RUPPE_SILVER)) {
+        this->ruppeIndex = RUPPE_GREEN;
     }
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80BD6A8C;
@@ -174,7 +181,7 @@ void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnScRuppe* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_80BD6910(this, globalCtx);
+    EnScRuppe_UpdateCollision(this, globalCtx);
 }
 
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -182,10 +189,12 @@ void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnScRuppe* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
     func_800B8050(&this->actor, globalCtx, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->rupeeIndex].tex));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->ruppeIndex].tex));
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
