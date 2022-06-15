@@ -25,7 +25,7 @@ void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A982E0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1);
+void func_80A982E0(GlobalContext* globalCtx, ActorPathing* arg1);
 void func_80A98414(EnAz* this, GlobalContext* globalCtx);
 s32 func_80A98DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_80A98E48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
@@ -124,8 +124,8 @@ void func_80A94A64(EnAz* this) {
     Actor_UpdatePos(&this->actor);
 }
 
-s32 func_80A94A90(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    func_80A94A64((EnAz*)arg1->unk_48);
+s32 func_80A94A90(GlobalContext* globalCtx, ActorPathing* arg1) {
+    func_80A94A64((EnAz*)arg1->actor);
     return false;
 }
 
@@ -384,53 +384,53 @@ void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 f32 func_80A954AC(EnAz* this) {
-    EnDno_ActorUnkStruct* pad = &this->unk_300;
+    ActorPathing* pad = &this->unk_300;
     Vec3f sp28;
     Vec3f sp1C;
 
-    sp28.x = pad->unk_20.x - this->actor.world.pos.x;
-    sp28.y = pad->unk_20.y - this->actor.world.pos.y;
-    sp28.z = pad->unk_20.z - this->actor.world.pos.z;
-    sp1C.x = pad->unk_20.x - pad->unk_38.x;
-    sp1C.y = pad->unk_20.y - pad->unk_38.y;
-    sp1C.z = pad->unk_20.z - pad->unk_38.z;
+    sp28.x = pad->curPoint.x - this->actor.world.pos.x;
+    sp28.y = pad->curPoint.y - this->actor.world.pos.y;
+    sp28.z = pad->curPoint.z - this->actor.world.pos.z;
+    sp1C.x = pad->curPoint.x - pad->prevPoint.x;
+    sp1C.y = pad->curPoint.y - pad->prevPoint.y;
+    sp1C.z = pad->curPoint.z - pad->prevPoint.z;
     return Math3D_Parallel(&sp28, &sp1C);
 }
 
-s32 func_80A95534(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_s0 = arg1->unk_48;
+s32 func_80A95534(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_s0 = (EnAz*) arg1->actor;
     s32 ret = 0;
 
     temp_s0->actor.world.rot.x = 0;
     Math_SmoothStepToS(&temp_s0->unk_39E, temp_s0->actor.world.rot.x, 2, 0x71C, 0);
     Math_SmoothStepToS(&temp_s0->actor.shape.rot.x, 0, 2, 0x71C, 0);
-    Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->unk_56, 1, 0xE38, 0);
+    Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->rotToCurPoint.y, 1, 0xE38, 0);
     Math_SmoothStepToS(&temp_s0->actor.shape.rot.y, temp_s0->actor.world.rot.y, 2, 0x71C, 0);
     temp_s0->actor.gravity = -1.0f;
     temp_s0->unk_36C = 1.5f;
-    if (arg1->unk_10 == arg1->unk_18) {
-        if (arg1->unk_4C < temp_s0->unk_36C) {
-            temp_s0->unk_36C = arg1->unk_4C;
+    if (arg1->curPointIndex == arg1->endPointIndex) {
+        if (arg1->distSqToCurPointXZ < temp_s0->unk_36C) {
+            temp_s0->unk_36C = arg1->distSqToCurPointXZ;
         }
     }
     Math_SmoothStepToF(&temp_s0->actor.speedXZ, temp_s0->unk_36C, 0.8f, 2.0f, 0.0f);
-    arg1->unk_64 = SubS_ActorPathing_MoveWithGravity;
-    if (arg1->unk_4C <= temp_s0->actor.speedXZ) {
+    arg1->moveFunc = SubS_ActorPathing_MoveWithGravity;
+    if (arg1->distSqToCurPointXZ <= temp_s0->actor.speedXZ) {
         ret = 1;
     }
     return ret;
 }
 
-s32 func_80A9565C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_s0 = (EnAz*)arg1->unk_48;
+s32 func_80A9565C(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_s0 = (EnAz*)arg1->actor;
     s32 ret = 0;
     f32 temp_f0;
 
     temp_s0->actor.gravity = -1.0f;
-    arg1->unk_64 = func_80A94A90;
+    arg1->moveFunc = func_80A94A90;
     temp_s0->unk_374 |= 0x2000;
     temp_f0 = func_80A954AC(temp_s0);
-    if ((arg1->unk_4C < SQ(temp_s0->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
+    if ((arg1->distSqToCurPointXZ < SQ(temp_s0->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
         ret = 1;
     } else {
         temp_s0->unk_39E = temp_s0->actor.world.rot.x =
@@ -439,8 +439,8 @@ s32 func_80A9565C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
     return ret;
 }
 
-s32 func_80A95730(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_s0 = (EnAz*)arg1->unk_48;
+s32 func_80A95730(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_s0 = (EnAz*)arg1->actor;
     s32 ret = false;
     f32 temp_f0;
     f32 sp40;
@@ -450,28 +450,28 @@ s32 func_80A95730(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
 
     temp_s0->actor.gravity = 0.0f;
     temp_f0 = func_80A954AC(temp_s0);
-    if ((arg1->unk_4C < SQ(temp_s0->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
+    if ((arg1->distSqToCurPointXZ < SQ(temp_s0->actor.speedXZ)) || (temp_f0 <= 0.0f)) {
         ret = true;
     } else {
-        sp40 = SQ(temp_s0->actor.speedXZ) / arg1->unk_50;
-        sp34 = ABS(arg1->unk_54 - temp_s0->actor.world.rot.x);
+        sp40 = SQ(temp_s0->actor.speedXZ) / arg1->distSqToCurPoint;
+        sp34 = ABS(arg1->rotToCurPoint.x - temp_s0->actor.world.rot.x);
 
         sp3C = (s32)(sp34 * sp40) + 0xAAA;
-        sp34 = ABS(arg1->unk_56 - temp_s0->actor.world.rot.y);
+        sp34 = ABS(arg1->rotToCurPoint.y - temp_s0->actor.world.rot.y);
 
-        Math_SmoothStepToS(&temp_s0->actor.world.rot.x, arg1->unk_54, 1, sp3C, 0);
+        Math_SmoothStepToS(&temp_s0->actor.world.rot.x, arg1->rotToCurPoint.x, 1, sp3C, 0);
         sp38 = (s32)(sp34 * sp40) + 0xAAA;
-        Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->unk_56, 1, sp38, 0);
+        Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->rotToCurPoint.y, 1, sp38, 0);
 
         Math_SmoothStepToS(&temp_s0->unk_39E, temp_s0->actor.world.rot.x, 2, sp3C, 0);
         Math_SmoothStepToS(&temp_s0->actor.shape.rot.y, temp_s0->actor.world.rot.y, 2, sp38, 0);
     }
-    arg1->unk_64 = SubS_ActorPathing_MoveWithoutGravityReverse;
+    arg1->moveFunc = SubS_ActorPathing_MoveWithoutGravityReverse;
     return ret;
 }
 
-s32 func_80A958B0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_s0 = arg1->unk_48;
+s32 func_80A958B0(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_s0 = (EnAz*) arg1->actor;
     s32 ret = false;
     f32 pad;
     f32 phi_f0;
@@ -499,26 +499,26 @@ s32 func_80A958B0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
     }
     Math_SmoothStepToF(&temp_s0->actor.speedXZ, temp_s0->unk_36C, 0.8f, 2.0f, 0.0f);
     temp1 = func_80A954AC(temp_s0);
-    if ((arg1->unk_4C < SQ(temp_s0->actor.speedXZ)) || (temp1 <= 0.0f)) {
+    if ((arg1->distSqToCurPointXZ < SQ(temp_s0->actor.speedXZ)) || (temp1 <= 0.0f)) {
         ret = true;
     } else {
-        sp3C = SQ(temp_s0->actor.speedXZ) / arg1->unk_50;
-        sp30 = ABS(arg1->unk_54 - temp_s0->actor.world.rot.x);
+        sp3C = SQ(temp_s0->actor.speedXZ) / arg1->distSqToCurPoint;
+        sp30 = ABS(arg1->rotToCurPoint.x - temp_s0->actor.world.rot.x);
         sp2C = (s32)(sp30 * sp3C) + 0xAAA;
-        sp30 = ABS(arg1->unk_56 - temp_s0->actor.world.rot.y);
+        sp30 = ABS(arg1->rotToCurPoint.y - temp_s0->actor.world.rot.y);
 
-        Math_SmoothStepToS(&temp_s0->actor.world.rot.x, arg1->unk_54, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s0->actor.world.rot.x, arg1->rotToCurPoint.x, 1, sp2C, 0);
         sp28 = (s32)(sp30 * sp3C) + 0xAAA;
-        Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->unk_56, 1, sp28, 0);
+        Math_SmoothStepToS(&temp_s0->actor.world.rot.y, arg1->rotToCurPoint.y, 1, sp28, 0);
         Math_SmoothStepToS(&temp_s0->unk_39E, temp_s0->actor.world.rot.x, 2, sp2C, 0);
         Math_SmoothStepToS(&temp_s0->actor.shape.rot.y, temp_s0->actor.world.rot.y, 2, sp28, 0);
     }
-    arg1->unk_64 = SubS_ActorPathing_MoveWithoutGravityReverse;
+    arg1->moveFunc = SubS_ActorPathing_MoveWithoutGravityReverse;
     return ret;
 }
 
-s32 func_80A95B34(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_s0 = arg1->unk_48;
+s32 func_80A95B34(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_s0 = (EnAz*) arg1->actor;
     s32 ret;
 
     if (temp_s0->unk_374 & 0x100) {
@@ -578,7 +578,7 @@ void func_80A95CEC(EnAz* this, GlobalContext* globalCtx) {
 }
 
 void func_80A95DA0(EnAz* this, GlobalContext* globalCtx) {
-    EnDno_ActorUnkStruct* sp40 = &this->unk_300;
+    ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(globalCtx, &this->actor.world.pos, &this->actor, sp40, globalCtx->setupPathList,
                   this->actor.params & 0xFF, 0, 0, 1, 1);
@@ -589,7 +589,7 @@ void func_80A95DA0(EnAz* this, GlobalContext* globalCtx) {
     this->actor.flags |= 9;
     this->actor.bgCheckFlags &= ~0x21;
     this->unk_374 |= 0x1000;
-    Math_Vec3f_Copy(&this->actor.world.pos, &sp40->unk_20);
+    Math_Vec3f_Copy(&this->actor.world.pos, &sp40->curPoint);
     this->actionFunc = func_80A95E88;
 }
 
@@ -1255,7 +1255,7 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
             }
         } else if (((this->unk_378 == 0) || (this->unk_378 == 1)) && (this->unk_374 & 0x20)) {
             if (this->unk_378 == 1) {
-                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                     func_80A97114(this, globalCtx);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
@@ -1283,7 +1283,7 @@ void func_80A97410(EnAz* this, GlobalContext* globalCtx) {
                         Math_SmoothStepToS(&this->unk_3D6, 0, 3, 0x71C, 0);
                     }
                 }
-                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                     func_80A97114(this, globalCtx);
                     this->unk_378 = 2;
                     if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
@@ -1454,7 +1454,7 @@ void func_80A97F9C(EnAz* this, GlobalContext* globalCtx) {
         SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
-    if (!(this->unk_300.unk_1C & 0x20)) {
+    if (!(this->unk_300.flags & 0x20)) {
         SubS_ActorPathing_Update(globalCtx, &this->unk_300, func_80A982E0, func_80A95B34, SubS_ActorPathing_MoveWithGravity, SubS_ActorPathing_SetNextPoint);
     }
     if (!(this->unk_374 & 0x10) && SurfaceType_IsHorseBlocked(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
@@ -1504,25 +1504,25 @@ void func_80A97F9C(EnAz* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A982E0(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    EnAz* temp_v1 = arg1->unk_48;
+void func_80A982E0(GlobalContext* globalCtx, ActorPathing* arg1) {
+    EnAz* temp_v1 = (EnAz*) arg1->actor;
     Vec3f sp28;
 
-    arg1->unk_20.x = arg1->unk_08[arg1->unk_10].x;
+    arg1->curPoint.x = arg1->points[arg1->curPointIndex].x;
     if ((temp_v1->actor.bgCheckFlags & 1) != 0) {
-        arg1->unk_20.y = arg1->unk_08[arg1->unk_10].y;
+        arg1->curPoint.y = arg1->points[arg1->curPointIndex].y;
     } else {
-        arg1->unk_20.y = arg1->unk_08[arg1->unk_10].y - temp_v1->unk_3A4;
+        arg1->curPoint.y = arg1->points[arg1->curPointIndex].y - temp_v1->unk_3A4;
     }
-    arg1->unk_20.z = arg1->unk_08[arg1->unk_10].z;
-    sp28.x = arg1->unk_20.x - arg1->unk_44->x;
-    sp28.y = arg1->unk_20.y - arg1->unk_44->y;
-    sp28.z = arg1->unk_20.z - arg1->unk_44->z;
-    arg1->unk_4C = Math3D_XZLengthSquared(sp28.x, sp28.z);
-    arg1->unk_50 = Math3D_LengthSquared(&sp28);
-    arg1->unk_56 = Math_FAtan2F(sp28.z, sp28.x);
-    arg1->unk_54 = Math_FAtan2F(sqrtf(arg1->unk_4C), -sp28.y);
-    arg1->unk_58 = 0;
+    arg1->curPoint.z = arg1->points[arg1->curPointIndex].z;
+    sp28.x = arg1->curPoint.x - arg1->worldPos->x;
+    sp28.y = arg1->curPoint.y - arg1->worldPos->y;
+    sp28.z = arg1->curPoint.z - arg1->worldPos->z;
+    arg1->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
+    arg1->distSqToCurPoint = Math3D_LengthSquared(&sp28);
+    arg1->rotToCurPoint.y = Math_FAtan2F(sp28.z, sp28.x);
+    arg1->rotToCurPoint.x = Math_FAtan2F(sqrtf(arg1->distSqToCurPointXZ), -sp28.y);
+    arg1->rotToCurPoint.z = 0;
 }
 
 void func_80A98414(EnAz* this, GlobalContext* globalCtx) {

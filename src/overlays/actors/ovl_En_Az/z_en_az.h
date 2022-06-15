@@ -17,7 +17,7 @@ typedef struct EnAz {
     s16 unk_2F8;
     s16 unk_2FA; // cutscene state?
     s32 animIndex;
-    EnDno_ActorUnkStruct unk_300;
+    ActorPathing unk_300;
     f32 unk_36C;
     char unk370[4];
     u16 unk_374; // flags of some sort
