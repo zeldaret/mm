@@ -98,7 +98,8 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    if ((globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.frames == 480)) {
+    if ((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0) &&
+        (globalCtx->csCtx.frames == 480)) {
         func_8019F128(NA_SE_EV_NAVY_FLY_REBIRTH);
     }
 }
