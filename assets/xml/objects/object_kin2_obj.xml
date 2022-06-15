@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_kin2_obj" Segment="6">
         <DList Name="object_kin2_obj_DL_000120" Offset="0x120" />
-        <DList Name="gOceanSpiderHouseDebrisDL" Offset="0x128" />
+        <DList Name="gOceanSpiderHouseBombableWallDebrisDL" Offset="0x128" />
         <DList Name="gOceanSpiderHouseBombableWallCrackDL" Offset="0x2C0" />
         <DList Name="gOceanSpiderHouseBombableWallDL" Offset="0x360" />
         <Collision Name="gOceanSpiderHouseBombableWallColHeader" Offset="0x490" />
@@ -28,7 +28,7 @@
         <Texture Name="gOceanSpiderHouseNightstandBackTex" OutName="ocean_spider_house_nightstand_back" Format="rgba16" Width="32" Height="64" Offset="0x4BC0" />
         <Texture Name="gOceanSpiderHouseNightstandTopTex" OutName="ocean_spider_house_nightstand_top" Format="rgba16" Width="32" Height="32" Offset="0x5BC0" />
         <Texture Name="gOceanSpiderHouseBookshelfBooksTex" OutName="ocean_spider_house_bookshelf_books" Format="rgba16" Width="32" Height="64" Offset="0x63C0" />
-        <Texture Name="gOceanSpiderHouseDebrisTex1" OutName="ocean_spider_house_debris_1" Format="rgba16" Width="32" Height="32" Offset="0x73C0" />
-        <Texture Name="gOceanSpiderHouseDebrisTex2" OutName="ocean_spider_house_debris_2" Format="i4" Width="64" Height="64" Offset="0x7BC0" />
+        <Texture Name="gOceanSpiderHouseBombableWallDebrisTex1" OutName="ocean_spider_house_debris_1" Format="rgba16" Width="32" Height="32" Offset="0x73C0" />
+        <Texture Name="gOceanSpiderHouseBombableWallDebrisTex2" OutName="ocean_spider_house_debris_2" Format="i4" Width="64" Height="64" Offset="0x7BC0" />
     </File>
 </Root>

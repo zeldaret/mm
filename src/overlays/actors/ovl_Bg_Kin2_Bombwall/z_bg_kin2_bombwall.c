@@ -15,19 +15,12 @@ void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall*, GlobalContext*);
-void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall*, GlobalContext*);
-void BgKin2Bombwall_SetupWait(BgKin2Bombwall*);
-void BgKin2Bombwall_Wait(BgKin2Bombwall*, GlobalContext*);
-void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall*);
-void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall*, GlobalContext*);
-void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall*);
-void BgKin2Bombwall_EndCutscene(BgKin2Bombwall*, GlobalContext*);
-
-extern Gfx D_06000128[]; // debris
-extern Gfx D_060002C0[]; // wall crack
-extern Gfx D_06000360[]; // bombable wall
-extern CollisionHeader D_06000490;
+void BgKin2Bombwall_SetupWait(BgKin2Bombwall* this);
+void BgKin2Bombwall_Wait(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this);
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this);
+void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx);
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
@@ -133,7 +126,7 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
                 phi_s1 = 0;
             }
             EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, sScales[k], phi_s1, 0, 50,
-                                 -1, OBJECT_KIN2_OBJ, D_06000128);
+                                 -1, OBJECT_KIN2_OBJ, gOceanSpiderHouseBombableWallDebrisDL);
         }
     }
 }
@@ -157,7 +150,7 @@ void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->dyna.actor);
 
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000490);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gOceanSpiderHouseBombableWallColHeader);
         Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
         Actor_SetFocus(&this->dyna.actor, 60.0f);
@@ -206,7 +199,7 @@ void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx)
 }
 
 void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this) {
-    this->timer = 0x28;
+    this->timer = 40;
     this->actionFunc = BgKin2Bombwall_EndCutscene;
 }
 
@@ -227,6 +220,6 @@ void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Bombwall* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, D_06000360);
-    Gfx_DrawDListXlu(globalCtx, D_060002C0);
+    Gfx_DrawDListOpa(globalCtx, gOceanSpiderHouseBombableWallDL);
+    Gfx_DrawDListXlu(globalCtx, gOceanSpiderHouseBombableWallCrackDL);
 }
