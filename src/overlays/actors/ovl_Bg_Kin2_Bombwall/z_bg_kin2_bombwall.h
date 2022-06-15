@@ -1,5 +1,6 @@
 #ifndef Z_BG_KIN2_BOMBWALL_H
 #define Z_BG_KIN2_BOMBWALL_H
+
 #define BG_KIN2_BOMBWALL_SWITCH_FLAG(thisx) (thisx->dyna.actor.params & 0x7F)
 
 #include "global.h"
