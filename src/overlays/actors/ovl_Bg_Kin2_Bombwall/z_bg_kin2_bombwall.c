@@ -148,9 +148,8 @@ void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, bombwallCollider);
     if (Flags_GetSwitch(globalCtx, BG_KIN2_BOMBWALL_SWITCH_FLAG(this))) {
         Actor_MarkForDeath(&this->dyna.actor);
-
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gOceanSpiderHouseBombableWallColHeader);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gOceanSpiderHouseBombableWallCol);
         Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
         Actor_SetFocus(&this->dyna.actor, 60.0f);
