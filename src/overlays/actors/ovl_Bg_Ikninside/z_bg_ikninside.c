@@ -16,8 +16,6 @@ void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C07220(BgIkninside* this, GlobalContext* globalCtx);
-void func_80C07230(BgIkninside* this, GlobalContext* globalCtx);
 void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Ikninside_InitVars = {
@@ -86,8 +84,8 @@ void func_80C07220(BgIkninside* this, GlobalContext* globalCtx) {
 void func_80C07230(BgIkninside* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.cutscene == -1) {
         this->actionFunc = func_80C07220;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7c) {
-        ActorCutscene_Stop(0x7c);
+    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+        ActorCutscene_Stop(0x7C);
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -117,7 +115,8 @@ void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
                 pos.x = Rand_ZeroFloat(10.0f) * velocity.x + this->dyna.actor.world.pos.x;
                 pos.y = Rand_ZeroFloat(1.0f) * velocity.y + this->dyna.actor.world.pos.y;
                 pos.z = Rand_ZeroFloat(10.0f) * velocity.z + this->dyna.actor.world.pos.z;
-                EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80C076D4, 0, 30, 566, 25, D_80C076A0[i & 1]);
+                EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &D_80C076D4, 0, 30, OBJECT_IKNINSIDE_OBJ, 25,
+                                    D_80C076A0[i & 1]);
             }
             Flags_SetSwitch(globalCtx, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
             this->actionFunc = func_80C07230;
