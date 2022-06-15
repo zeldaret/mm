@@ -115,7 +115,7 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
             spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp_a0;
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-            spCC.x = (2.0f * (Rand_ZeroOne() - 0.5f)) + (spD8.x * 0.018461538f);
+            spCC.x = (2.0f * (Rand_ZeroOne() - 0.5f)) + (spD8.x * (6.0f / 325.0f));
             spCC.y = (Rand_ZeroOne() * 7.0f) + 4.0f;
             spCC.z = spD8.z * 0.3f;
 
