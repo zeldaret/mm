@@ -22,7 +22,6 @@ typedef struct BgIkanaMirror {
     /* 0x17C */ ColliderTrisElement unk17C;         /* inferred */
     /* 0x1D8 */ char pad1D8[0x2E0];                 /* maybe part of unk17C[9]? */
     /* 0x4B8 */ ColliderQuad unk4B8[2];                /* inferred */
-    /* 0x538 */ char pad538[0x80];
     /* 0x5B8 */ BgIkanaMirrorActionFunc actionFunc;
     /* 0x5BC */ AnimatedMaterial *unk5BC;           /* inferred */
     /* 0x5C0 */ AnimatedMaterial *unk5C0;           /* inferred */
