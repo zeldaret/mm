@@ -1018,7 +1018,8 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnSob1_HandleCanBuyItem(globalCtx, this);

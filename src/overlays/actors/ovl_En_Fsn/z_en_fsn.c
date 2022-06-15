@@ -882,7 +882,8 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1210,7 +1211,8 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
 
     if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, globalCtx);

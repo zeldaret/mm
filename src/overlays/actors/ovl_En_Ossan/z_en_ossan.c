@@ -1053,7 +1053,8 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 
     if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnOssan_HandleCanBuyItem(globalCtx, this);

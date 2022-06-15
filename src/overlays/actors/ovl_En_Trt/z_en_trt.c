@@ -707,7 +707,8 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) && Message_ShouldAdvance(globalCtx)) {
+            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+                Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(globalCtx, this);
