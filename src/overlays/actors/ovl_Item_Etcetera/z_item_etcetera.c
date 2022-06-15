@@ -43,8 +43,9 @@ static s16 D_8092024C[] = {
     GID_47,     GID_4F,     GID_50,     GID_51,     GID_53,     GID_13,     GID_01,
 };
 
-static s16 D_80920268[] = { GI_5A, GI_5A,   GI_5A,   GI_5A,   GI_5A,   GI_5A,   GI_KEY_SMALL,
-                            GI_25, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE };
+static s16 D_80920268[] = {
+    GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_KEY_SMALL, GI_25, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE,
+};
 
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc) {
     this->actionFunc = actionFunc;
