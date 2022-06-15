@@ -98,29 +98,87 @@ static InitChainEntry D_80B8021C[] = {
 
 #endif
 
+void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1); /* static */
+void func_80B7FBA4(BgIkanaMirror *arg0, GlobalContext *arg1);
+
+
 extern ColliderTrisElementInit D_80B7FF50[9];
 extern ColliderTrisInit D_80B8016C;
 extern ColliderQuadInit D_80B8017C;
+extern Vec3f D_80B8019C;
+extern Vec3f D_80B801A8;
+extern Vec3f D_80B801B4;
+extern Vec3f D_80B801C0;
 extern ColliderQuadInit D_80B801FC;
 extern InitChainEntry D_80B8021C[];
 
-extern UNK_TYPE D_06001E18;
-extern UNK_TYPE D_06002358;
+extern Gfx* D_06001E18;
+extern CollisionHeader D_06002358;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7F730.s")
+
+// void func_80B7F730(BgIkanaMirror *arg0) {
+//     Vec3f sp84;
+//     Vec3f sp78;
+//     Vec3f sp6C;
+//     Vec3f sp60;
+//     Vec3f *temp_s0;
+//     Vec3f *phi_s1;
+//     Vec3f *phi_s0;
+//     Vec3f *phi_s4;
+//     Vec3f *phi_s3;
+//     ColliderQuad *phi_s2;
+
+//     Matrix_Push();
+//     Matrix_SetTranslateRotateYXZ(arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, (Vec3s *) arg0 + 0xBC);
+//     phi_s1 = &D_80B8019C;
+//     phi_s0 = &D_80B801A8;
+//     phi_s4 = &D_80B801B4;
+//     phi_s3 = &D_80B801C0;
+//     phi_s2 = &arg0->unk4B8;
+//     do {
+//         Matrix_MultVec3f(phi_s1, &sp84);
+//         Matrix_MultVec3f(phi_s0, &sp78);
+//         Matrix_MultVec3f(phi_s4, &sp6C);
+//         Matrix_MultVec3f(phi_s3, &sp60);
+//         Collider_SetQuadVertices(phi_s2, &sp84, &sp78, &sp6C, &sp60);
+//         temp_s0 = phi_s0 + 0x50;
+//         phi_s1 += 0x50;
+//         phi_s0 = temp_s0;
+//         phi_s4 += 0x50;
+//         phi_s3 += 0x50;
+//         phi_s2 += 0x80;
+//     } while (temp_s0 != (&D_80B801A8 + 0xA0));
+//     Matrix_Pop();
+// }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA84.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA84.s")
+
+void func_80B7FA84(BgIkanaMirror *arg0) {
+    arg0->unk5C8 = 0;
+    arg0->actionFunc = func_80B7FA9C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FB84.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FB84.s")
+
+void func_80B7FB84(BgIkanaMirror *arg0) {
+    arg0->actor.flags |= 0x20;
+    arg0->actionFunc = func_80B7FBA4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
+
+void BgIkanaMirror_Update(Actor *thisx, GlobalContext *globalCtx) {
+    BgIkanaMirror *this = (BgIkanaMirror *) thisx;
+    this->actionFunc(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
