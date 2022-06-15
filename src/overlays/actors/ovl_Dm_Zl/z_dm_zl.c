@@ -5,7 +5,6 @@
  */
 
 #include "z_dm_zl.h"
-#include "objects/object_zl4/object_zl4.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -162,7 +161,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
 
 /**
  * Updates the eye blinking and state, and mouth textures.
- *  (Assumption: these modifications are from outside of this actor by a cutscene).
+ *  (Copy-Paste from OoT, unused)
  */
 void DmZl_UpdateFace(DmZl* this) {
     if (this->blinkTimer > 0) {
@@ -176,6 +175,7 @@ void DmZl_UpdateFace(DmZl* this) {
         this->eyeTextureIndexLeft = this->blinkTimer;
     }
 
+    // TODO these are wrong, fix them
     switch (this->nextEyeState) {
         case ZELDA_EYE_OPEN_NORMAL:
             if (this->blinkTimer == 0) {
@@ -232,7 +232,6 @@ void DmZl_UpdateFace(DmZl* this) {
     }
 
     if (this->animationIndex == ZELDA_ANIM_PLAYING_OCARINA) {
-        // override blinking: eyes closed while playing ocarina
         this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_CLOSED;
     }
 }

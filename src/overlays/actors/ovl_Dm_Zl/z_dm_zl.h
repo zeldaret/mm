@@ -2,6 +2,7 @@
 #define Z_DM_ZL_H
 
 #include "global.h"
+#include "objects/object_zl4/object_zl4.h"
 
 struct DmZl;
 
@@ -10,9 +11,10 @@ typedef void (*DmZlActionFunc)(struct DmZl*, GlobalContext*);
 typedef struct DmZl {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ UNK_TYPE1 pad188[0xD8]; // unused by DmZl
+    /* 0x188 */ Vec3s jointTable[ZL4_LIMB_MAX]; // these tables are not referenced directly, loaded dynamically
+    /* 0x1F4 */ Vec3s morphTable[ZL4_LIMB_MAX];
     /* 0x260 */ DmZlActionFunc actionFunc;
-    /* 0x264 */ UNK_TYPE1 pad264[0x4C]; // unused by DmZl
+    /* 0x264 */ ColliderCylinder collider; // unused, assumed to be here based on OoT documentation
     /* 0x2B0 */ s16 animationIndex;
     /* 0x2B2 */ u8 eyeTextureIndexLeft;
     /* 0x2B3 */ u8 eyeTextureIndexRight;
