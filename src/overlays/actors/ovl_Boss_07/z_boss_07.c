@@ -8,6 +8,7 @@
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_boss07/object_boss07.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -151,78 +152,6 @@ void Boss07_Top_SetupGround(Boss07* this, GlobalContext* globalCtx);
 
 void Boss07_Static_UpdateEffects(GlobalContext* globalCtx);
 void Boss07_Static_DrawEffects(GlobalContext* globalCtx);
-#endif
-
-#if 1 // object addresses
-extern AnimationHeader D_06000194;
-extern AnimationHeader D_06000428;
-extern AnimationHeader D_06000D0C;
-extern AnimationHeader D_06002C40;
-extern AnimationHeader D_06002D84;
-extern AnimationHeader D_060031E4;
-extern AnimationHeader D_06003854;
-extern AnimationHeader D_06003A64;
-extern FlexSkeletonHeader D_060099A0;
-extern AnimationHeader D_06009C7C;
-extern AnimationHeader D_06009EA8;
-extern AnimationHeader D_0600A194;
-extern AnimationHeader D_0600A400;
-extern AnimationHeader D_0600A6AC;
-extern AnimationHeader D_0600AB04;
-extern AnimationHeader D_0600AD84;
-extern AnimationHeader D_0600AE40;
-extern Gfx D_0600AFB0[];
-extern Gfx D_0600B020[];
-extern Gfx D_0600C7D8[];
-extern Gfx D_0600CEE8[];
-extern Gfx D_060149A0[];
-extern Gfx D_06016090[];
-extern Gfx D_06017DE0[];
-extern Gfx D_06019328[];
-extern SkeletonHeader D_06019C58;
-extern AnimationHeader D_06019E48;
-extern AnimationHeader D_0601DEB4;
-extern AnimationHeader D_06022BB4;
-extern AnimationHeader D_06023DAC;
-extern AnimationHeader D_06025018;
-extern AnimationHeader D_06025878;
-extern AnimationHeader D_06026204;
-extern AnimationHeader D_060269EC;
-extern AnimationHeader D_06026EA0;
-extern AnimationHeader D_06027270;
-extern Gfx D_0602EE50[];
-extern Gfx D_0602EEC8[];
-extern Gfx D_0602EEF8[];
-extern Gfx D_0602EF68[];
-extern Gfx D_0602EF88[];
-extern Gfx D_0602EFE8[];
-extern Gfx D_0602F640[];
-extern UNK_TYPE D_0602F840; // title card
-extern UNK_TYPE D_06030C40; // title card
-extern UNK_TYPE D_06032040; // title card
-extern FlexSkeletonHeader D_060335F0;
-extern AnimationHeader D_06033F80;
-extern AnimationHeader D_06034E64;
-extern AnimationHeader D_060358C4;
-extern AnimationHeader D_06036A7C;
-extern AnimationHeader D_06037ADC;
-extern AnimationHeader D_0603918C;
-extern AnimationHeader D_0603B330;
-extern AnimationHeader D_0603C4E0;
-extern AnimationHeader D_0603CBD0;
-extern AnimationHeader D_0603D224;
-extern AnimationHeader D_0603D7F0;
-extern AnimationHeader D_0603DD1C;
-extern UNK_TYPE D_0603DD30[];
-extern UNK_TYPE D_0603ED30[];
-extern UNK_TYPE D_0603F130[];
-extern UNK_TYPE D_06040130[];
-extern UNK_TYPE D_06040930[];
-extern UNK_TYPE D_06040B30[];
-extern UNK_TYPE D_06041B30[];
-extern UNK_TYPE D_06042330[];
-extern UNK_TYPE D_06043330[];
-extern UNK_TYPE D_06045B30[];
 #endif
 
 static s16 sColorsYRGB[4][3] = {
@@ -575,7 +504,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         } else if ((this->actor.params == MAJORA_MASK) || (this->actor.params == MAJORA_MASK_CS)) {
             this->actor.colChkInfo.damageTable = &sMaskDmgTable;
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-            SkelAnime_Init(globalCtx, &this->skelAnime, &D_06019C58, &D_06019E48, this->jointTable, this->morphTable,
+            SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss07_Skel_019C58, &object_boss07_Anim_019E48, this->jointTable, this->morphTable,
                            MAJORA_MASK_LIMB_COUNT);
             if (this->actor.params == MAJORA_MASK) {
                 this->actor.update = Boss07_Mask_Update;
@@ -609,7 +538,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
             }
         } else if ((this->actor.params == MAJORA_INCARNATION) || (this->actor.params == MAJORA_AFTERIMAGE)) {
             Actor_SetScale(&this->actor, 0.015000001f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060099A0, &D_0600A6AC, this->jointTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss07_Skel_0099A0, &object_boss07_Anim_00A6AC, this->jointTable,
                                this->morphTable, MAJORA_INCARNATION_LIMB_COUNT);
             if (this->actor.params == MAJORA_AFTERIMAGE) {
                 this->timers[0] = this->actor.world.rot.z;
@@ -655,7 +584,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->whipScale = 1.0;
                 Audio_QueueSeqCmd(0x8069);
             }
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060335F0, &D_0603CBD0, this->jointTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss07_Skel_0335F0, &object_boss07_Anim_03CBD0, this->jointTable,
                                this->morphTable, MAJORA_WRATH_LIMB_COUNT);
             Collider_InitAndSetJntSph(globalCtx, &this->sph1, &this->actor, &sWrathJntSphInit1, this->sphElems1);
             Collider_InitAndSetJntSph(globalCtx, &this->sph2, &this->actor, &sWrathJntSphInit2, this->sphElems2);
@@ -694,7 +623,7 @@ void Boss07_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
 
 void Boss07_Wrath_SetupIntro(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Wrath_Intro;
-    Animation_MorphToLoop(&this->skelAnime, &D_06023DAC, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_023DAC, 0.0f);
     this->actor.flags &= ~1;
     this->unk_17D8 = 0x7F00;
     this->unk_15C = 20;
@@ -756,8 +685,8 @@ void Boss07_Wrath_Intro(Boss07* this, GlobalContext* globalCtx) {
                 Math_ApproachF(&this->csCamNextAt.y, sCamPoints[dataIndex][2], 0.075f, this->csCamSpeedMod * 7.0f);
                 Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
                 if (this->unk_ABC8 == 70) {
-                    Animation_MorphToPlayOnce(&this->skelAnime, &D_06025018, -15.0f);
-                    this->unk_1D4 = Animation_GetLastFrame(&D_06025018);
+                    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_025018, -15.0f);
+                    this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_025018);
                     func_8019FE1C(&this->actor.projectedPos, NA_SE_EV_ICE_PILLAR_RISING, 1.0f);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST2_SHOUT);
                 }
@@ -779,7 +708,7 @@ void Boss07_Wrath_Intro(Boss07* this, GlobalContext* globalCtx) {
                 }
                 if (this->unk_ABC8 == 137) {
                     TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                          Lib_SegmentedToVirtual(&D_06032040), 0xA0, 0xB4, 0x80, 0x28);
+                                          Lib_SegmentedToVirtual(object_boss07_Tex_032040), 0xA0, 0xB4, 0x80, 0x28);
                 }
                 if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
                     s32 i;
@@ -823,7 +752,7 @@ void Boss07_Wrath_SetupDeath(Boss07* this, GlobalContext* globalCtx) {
     this->leftWhip.drag = this->rightWhip.drag = 2.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06022BB4, 0.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_022BB4, 0.0f);
     this->actor.flags &= ~1;
     this->csState = 0;
     this->unk_ABC8 = 0;
@@ -1066,7 +995,7 @@ void Boss07_Wrath_Death(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Wrath_SetupIdle(Boss07* this, GlobalContext* globalCtx, s16 delay) {
     this->actionFunc = Boss07_Wrath_Idle;
-    Animation_MorphToLoop(&this->skelAnime, &D_0603CBD0, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_03CBD0, -10.0f);
     if (delay != 0) {
         this->timers[0] = delay;
     } else {
@@ -1108,7 +1037,7 @@ void Boss07_Wrath_Idle(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Wrath_SetupJump(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Wrath_StartJump;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06025878, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_025878, -5.0f);
     this->actionTimer = 0;
 }
 
@@ -1154,10 +1083,10 @@ void Boss07_Wrath_SetupFlip(Boss07* this, GlobalContext* globalCtx) {
     temp = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(dz, dx) * (0x8000 / M_PI));
     if (temp < 0) {
         dx = 200.0f;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0603D224, -5.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03D224, -5.0f);
     } else {
         dx = -200.0f;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0603D7F0, -5.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03D7F0, -5.0f);
     }
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
     Matrix_MultVecX(dx, &sp30);
@@ -1197,7 +1126,7 @@ void Boss07_Wrath_SetupSidestep(Boss07* this, GlobalContext* globalCtx) {
     s16 sp22;
 
     this->actionFunc = Boss07_Wrath_Sidestep;
-    Animation_MorphToLoop(&this->skelAnime, &D_0603DD1C, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_03DD1C, -5.0f);
     phi_f14 = -this->actor.world.pos.x;
     phi_f12 = -this->actor.world.pos.z;
     sp22 = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(phi_f12, phi_f14) * (0x8000 / M_PI));
@@ -1265,38 +1194,38 @@ void Boss07_Wrath_SetupAttack(Boss07* this, GlobalContext* globalCtx) {
     }
     switch (this->actionState) {
         case 0:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06033F80, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_06033F80);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_033F80, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_033F80);
             break;
         case 1:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06034E64, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_06034E64);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_034E64, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_034E64);
             break;
         case 2:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_060358C4, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_060358C4);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_0358C4, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_0358C4);
             break;
         case 3:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06036A7C, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_06036A7C);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_036A7C, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_036A7C);
             break;
         case 4:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0603C4E0, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_0603C4E0);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03C4E0, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_03C4E0);
             func_809F4D10(&this->unk_164, 650.0f);
             this->unk_170 = 0.0f;
             break;
         case 5:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06037ADC, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_06037ADC);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_037ADC, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_037ADC);
             break;
         case 6:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0603918C, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_0603918C);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03918C, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_03918C);
             break;
         case 7:
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06026204, -5.0f);
-            this->unk_1D4 = Animation_GetLastFrame(&D_06026204);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_026204, -5.0f);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_026204);
             break;
     }
     this->actionTimer = 0;
@@ -1442,8 +1371,8 @@ void Boss07_Wrath_Attack(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Wrath_SetupGrab(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Wrath_Grab;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06026EA0, -5.0f);
-    this->unk_1D4 = Animation_GetLastFrame(&D_06026EA0);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_026EA0, -5.0f);
+    this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_026EA0);
     this->actionTimer = 0;
 }
 
@@ -1479,8 +1408,8 @@ void Boss07_Wrath_GrabPlayer(Boss07* this, GlobalContext* globalCtx) {
         Audio_PlaySfxAtPos(&sSfxPoint, NA_SE_EN_LAST3_VOICE_THROW_OLD);
         play_sound(NA_SE_EN_LAST3_COIL_ATTACK_OLD);
         this->actionFunc = Boss07_Wrath_ThrowPlayer;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_06027270, -5.0f);
-        this->unk_1D4 = Animation_GetLastFrame(&D_06027270);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_027270, -5.0f);
+        this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_027270);
         this->actionTimer = 0;
     }
     if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp2C) >= 0.0f) && (sp2C == 1)) {
@@ -1572,8 +1501,8 @@ void Boss07_Wrath_Shock(Boss07* this, GlobalContext* globalCtx) {
     }
     if (this->unk_32C > 4.0f) {
         this->actionFunc = Boss07_Wrath_ShockStun;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0603B330, -10.0f);
-        this->unk_1D4 = Animation_GetLastFrame(&D_0603B330);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03B330, -10.0f);
+        this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_03B330);
         this->unk_F7E = 0;
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
@@ -1608,8 +1537,8 @@ void Boss07_Wrath_ShockStun(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Wrath_SetupStunned(Boss07* this, GlobalContext* globalCtx) {
     if (this->actionFunc != Boss07_Wrath_Stunned) {
         this->actionFunc = Boss07_Wrath_Stunned;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0603B330, -10.0f);
-        this->unk_1D4 = Animation_GetLastFrame(&D_0603B330);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_03B330, -10.0f);
+        this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_03B330);
     }
     this->unk_158 = 10;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE_OLD);
@@ -1617,8 +1546,8 @@ void Boss07_Wrath_SetupStunned(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Wrath_SetupSpawnTop(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Wrath_SpawnTop;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060269EC, -5.0f);
-    this->unk_1D4 = Animation_GetLastFrame(&D_060269EC);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_0269EC, -5.0f);
+    this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_0269EC);
     this->actionTimer = 0;
 }
 
@@ -1695,15 +1624,15 @@ void Boss07_Wrath_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 damage
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE2_OLD);
         if (this->actionFunc != Boss07_Wrath_Damaged) {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0601DEB4, -10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_01DEB4, -10.0f);
             this->actionFunc = Boss07_Wrath_Damaged;
-            this->unk_1D4 = Animation_GetLastFrame(&D_0601DEB4);
+            this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_01DEB4);
             this->unk_ABCC = 0;
         } else if (effect == 14) {
             if (this->skelAnime.curFrame <= (this->unk_1D4 - 5.0f)) {
                 this->unk_158 = 30;
             } else {
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_0601DEB4, -5.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_01DEB4, -5.0f);
             }
         }
     }
@@ -2078,15 +2007,15 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Boss07_Wrath_SetupDeath(this, globalCtx);
     }
     if (this->unk_1D8 != 0) {
-        u16* sp74 = SEGMENTED_TO_VIRTUAL(D_06040930);
-        u16* sp70 = SEGMENTED_TO_VIRTUAL(D_0603ED30);
-        u16* sp6C = SEGMENTED_TO_VIRTUAL(D_06040130);
-        u16* sp68 = SEGMENTED_TO_VIRTUAL(D_06041B30);
-        u16* sp64 = SEGMENTED_TO_VIRTUAL(D_0603F130);
-        u16* sp60 = SEGMENTED_TO_VIRTUAL(D_06042330);
-        u16* sp5C = SEGMENTED_TO_VIRTUAL(D_06040B30);
-        u16* sp58 = SEGMENTED_TO_VIRTUAL(D_06043330);
-        u16* sp54 = SEGMENTED_TO_VIRTUAL(D_0603DD30);
+        u16* sp74 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_040930);
+        u16* sp70 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_03ED30);
+        u16* sp6C = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_040130);
+        u16* sp68 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_041B30);
+        u16* sp64 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_03F130);
+        u16* sp60 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_042330);
+        u16* sp5C = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_040B30);
+        u16* sp58 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_043330);
+        u16* sp54 = SEGMENTED_TO_VIRTUAL(object_boss07_Tex_03DD30);
 
         for (i = 0; i < this->unk_1D8; i++) {
             s32 sp50;
@@ -2255,7 +2184,7 @@ void Boss07_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* pos, Vec3f*
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, D_0602EEC8);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EEC8);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sREG(48) + 45, 35, 75, 255);
     phi_s6 = (hand == 0) ? this->unk_778 : 0;
     for (i = 0; i < (sWhipSegCount - phi_s6) - 1; i++, pos++, rot++) {
@@ -2266,11 +2195,11 @@ void Boss07_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* pos, Vec3f*
         phi_f12 = (i > 24) ? 0.025f : ((f32)(24 - i) * 1 * 0.001f) + 0.025f;
         Matrix_Scale(phi_f12, phi_f12, ((2 * arg4) + 0.5f) * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0602EEF8);
+        gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EEF8);
     }
     pos = vec2;
     rot = vec3;
-    gSPDisplayList(POLY_OPA_DISP++, D_0602EE50);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EE50);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
     for (i = 0; i < (sWhipSegCount - phi_s6) - 1; i++, pos++, rot++) {
         Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
@@ -2279,7 +2208,7 @@ void Boss07_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* pos, Vec3f*
         phi_f12 = (i > 24) ? 0.025f : ((f32)(24 - i) * 1 * 0.001f) + 0.025f;
         Matrix_Scale(phi_f12, phi_f12, ((2 * arg4) + 0.5f) * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0602EEF8);
+        gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EEF8);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -2435,7 +2364,7 @@ void Boss07_DrawDeathLights(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2)
             if (this->deathLightScale[i] > 0.0f) {
                 Matrix_Scale(this->deathLightScale[i], 1.0f, 12.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_0602EFE8);
+                gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_02EFE8);
             }
         }
         func_8012C2DC(globalCtx->state.gfxCtx);
@@ -2650,10 +2579,10 @@ void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, GlobalContext* glob
                              MTXMODE_NEW);
     Matrix_Scale(1.75f, 1.0f, 1.75f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0602EF68);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EF68);
     gDPLoadTextureBlock(POLY_OPA_DISP++, shadowTex, G_IM_FMT_I, G_IM_SIZ_8b, 0x40, 0x40, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
-    gSPDisplayList(POLY_OPA_DISP++, D_0602EF88);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02EF88);
     CLOSE_DISPS(pad3);
 }
 
@@ -2670,7 +2599,7 @@ void func_809FCBC8(Boss07* this) {
 
 void Boss07_Incarnation_SetupIntro(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Intro;
-    Animation_MorphToLoop(&this->skelAnime, &D_06002D84, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_002D84, 0.0f);
     this->actor.flags &= ~1;
     this->unk_17D8 = 0x6E00;
 }
@@ -2772,8 +2701,8 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
             break;
         case 5:
             if (this->unk_ABC8 == 20) {
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_06002C40, 0.0f);
-                this->unk_1D4 = Animation_GetLastFrame(&D_06002C40);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_002C40, 0.0f);
+                this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_002C40);
             }
             if (this->unk_ABC8 >= 20) {
                 sREG(28) = this->unk_ABC8;
@@ -2789,7 +2718,7 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
                 }
             }
             if (this->unk_ABC8 == 45) {
-                TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06030C40),
+                TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(object_boss07_Tex_030C40),
                                       0xA0, 0xB4, 0x80, 0x28);
             }
             if (this->unk_ABC8 == 20) {
@@ -2833,7 +2762,7 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
 #endif
 
 void Boss07_Incarnation_SetupTaunt(Boss07* this, GlobalContext* globalCtx) {
-    static AnimationHeader* sTauntAnims[3] = { &D_0600A6AC, &D_0600AB04, &D_0600AD84 };
+    static AnimationHeader* sTauntAnims[3] = { &object_boss07_Anim_00A6AC, &object_boss07_Anim_00AB04, &object_boss07_Anim_00AD84 };
 
     this->actionFunc = Boss07_Incarnation_Taunt;
     this->actionState = Rand_ZeroFloat(2.999f);
@@ -2863,8 +2792,8 @@ void Boss07_Incarnation_Taunt(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Incarnation_SetupStunned(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     if (this->actionFunc != Boss07_Incarnation_Stunned) {
         this->actionFunc = Boss07_Incarnation_Stunned;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_06009C7C, -10.0f);
-        this->unk_1D4 = Animation_GetLastFrame(&D_06009C7C);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_009C7C, -10.0f);
+        this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_009C7C);
     }
     this->unk_158 = 10;
     this->timers[0] = arg2;
@@ -2879,7 +2808,7 @@ void Boss07_Incarnation_Stunned(Boss07* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
     }
     if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
-        Animation_MorphToLoop(&this->skelAnime, &D_06009EA8, -5.0f);
+        Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_009EA8, -5.0f);
         this->unk_1D4 = 1000.0f;
     }
     if (this->unk_1D4 == 1000.0f) {
@@ -2894,14 +2823,14 @@ void Boss07_Incarnation_Stunned(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Incarnation_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     if (this->actionFunc != Boss07_Incarnation_Damaged) {
         this->actionFunc = Boss07_Incarnation_Damaged;
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_06000D0C, -2.0f);
-        this->unk_1D4 = Animation_GetLastFrame(&D_06000D0C);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_000D0C, -2.0f);
+        this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_000D0C);
     } else if (arg3 == 14) {
         if (this->skelAnime.curFrame <= (this->unk_1D4 - 5.0f)) {
             this->unk_158 = 30;
             this->unk_15C = 30;
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000D0C, -2.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_000D0C, -2.0f);
         }
     }
 
@@ -2930,7 +2859,7 @@ void Boss07_Incarnation_Damaged(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void Boss07_Incarnation_SetupRun(Boss07* this, GlobalContext* globalCtx) {
-    Animation_MorphToLoop(&this->skelAnime, &D_0600A400, -2.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_00A400, -2.0f);
     this->actionFunc = Boss07_Incarnation_Run;
     this->timers[0] = Rand_ZeroFloat(100.0f) + 150.0f;
     func_809FCBC8(this);
@@ -2993,7 +2922,7 @@ void Boss07_Incarnation_Run(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Incarnation_SetupAttack(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Attack;
-    Animation_MorphToLoop(&this->skelAnime, &D_06000428, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_000428, -5.0f);
     this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
     this->unk_188C = 0.0f;
 }
@@ -3018,7 +2947,7 @@ void Boss07_Incarnation_Attack(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Incarnation_SetupHopak(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Hopak;
-    Animation_MorphToLoop(&this->skelAnime, &D_06003A64, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_003A64, -5.0f);
     this->timers[0] = Rand_ZeroFloat(100.0f) + 100.0f;
     this->timers[1] = 0;
     this->unk_ABC8 = 0;
@@ -3061,7 +2990,7 @@ void Boss07_Incarnation_Hopak(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Incarnation_SetupMoonwalk(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Moonwalk;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600A194, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_00A194, -10.0f);
     this->timers[0] = Rand_ZeroFloat(50.0f) + 70.0f;
     this->timers[1] = 0;
 }
@@ -3092,7 +3021,7 @@ void Boss07_Incarnation_Moonwalk(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Incarnation_SetupPirouette(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Pirouette;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000194, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_000194, -10.0f);
     this->timers[0] = Rand_ZeroFloat(70.0f) + 70.0f;
     this->timers[1] = 0;
 }
@@ -3127,8 +3056,8 @@ void Boss07_Incarnation_Pirouette(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Incarnation_SetupDeath(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Incarnation_Death;
     Boss07_MovePlayer(globalCtx);
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000D0C, -2.0f);
-    this->unk_1D4 = Animation_GetLastFrame(&D_06000D0C);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_boss07_Anim_000D0C, -2.0f);
+    this->unk_1D4 = Animation_GetLastFrame(&object_boss07_Anim_000D0C);
     this->csState = 0;
     this->unk_ABC8 = 0;
     this->actor.flags &= ~1;
@@ -3169,7 +3098,7 @@ void Boss07_Incarnation_Death(Boss07* this, GlobalContext* globalCtx) {
             if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
                 this->unk_ABC8 = 0;
                 this->csState = 1;
-                Animation_MorphToLoop(&this->skelAnime, &D_06003854, -5.0f);
+                Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_003854, -5.0f);
             }
             break;
         case 1:
@@ -3186,7 +3115,7 @@ void Boss07_Incarnation_Death(Boss07* this, GlobalContext* globalCtx) {
                 this->csCamNextAt.z = -20.0f;
                 this->unk_17E8 = 1.0f;
                 this->unk_17EC = 0.4f;
-                Animation_MorphToLoop(&this->skelAnime, &D_060031E4, -5.0f);
+                Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_0031E4, -5.0f);
                 this->actor.shape.rot.y = 0;
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 Math_ApproachF(&this->actor.world.pos.x, 0.0f, 1.0f, 200.0f);
@@ -3519,7 +3448,7 @@ void Boss07_Incarnation_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
 void Boss07_Mask_SetupIdle(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Mask_Idle;
-    Animation_MorphToLoop(&this->skelAnime, &D_06019E48, -20.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_019E48, -20.0f);
     this->timers[2] = Rand_ZeroFloat(150.0f) + 60.0f;
     this->unk_1870 = 1.0f;
 }
@@ -3669,7 +3598,7 @@ void Boss07_Mask_Spin(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Mask_SetupStunned(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Mask_Stunned;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600AE40, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_00AE40, -10.0f);
     this->timers[0] = 100;
     this->unk_170 = 0.0f;
 }
@@ -4260,7 +4189,7 @@ void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx) {
                 Math_ApproachF(&this->actor.world.pos.y, 350.0f, 0.03f, 2.0f);
                 if (this->unk_ABC8 == 55) {
                     TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                          Lib_SegmentedToVirtual(&D_0602F840), 0xA0, 0xB4, 0x80, 0x28);
+                                          Lib_SegmentedToVirtual(object_boss07_Tex_02F840), 0xA0, 0xB4, 0x80, 0x28);
                 }
                 if (this->unk_ABC8 == 30) {
                     Audio_QueueSeqCmd(0x806B);
@@ -4320,7 +4249,7 @@ void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx) {
 
 void Boss07_Mask_SetupDeath(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss07_Mask_Death;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600AE40, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss07_Anim_00AE40, -10.0f);
     this->actor.world.rot.y = this->actor.shape.rot.y =
         Math_Acot2F(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PI);
     this->csState = 0;
@@ -4682,7 +4611,7 @@ void Boss07_Mask_DrawTentacles(Boss07* this, GlobalContext* globalCtx, Vec3f* ar
         }
         Matrix_Scale(phi_f12, phi_f12, arg4 * 0.01f * 2.3f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600B020);
+        gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_00B020);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -4710,14 +4639,14 @@ void Boss07_Mask_DrawBeam(Boss07* this, GlobalContext* globalCtx) {
         Matrix_RotateYS(-0xA00, MTXMODE_APPLY);
         Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_188C * 0.05f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_00C7D8);
         Matrix_Pop();
 
         Matrix_Translate(-250.0f, 0.0f, 200.0f, MTXMODE_APPLY);
         Matrix_RotateYS(0xA00, MTXMODE_APPLY);
         Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_188C * 0.05f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_00C7D8);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
         Matrix_Pop();
 
@@ -4740,7 +4669,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, GlobalContext* globalCtx) {
         Matrix_MultZero(&this->unk_189C);
         Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, (this->unk_1894 * 0.01f) - 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_00C7D8);
         Matrix_MultVecZ(20100.0f, &this->unk_18A8);
         if (this->unk_18C0 > 0.0f) {
             Vec3f sp50;
@@ -4753,7 +4682,7 @@ void Boss07_Mask_DrawBeam(Boss07* this, GlobalContext* globalCtx) {
             Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_18C0 * 0.01f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+            gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_00C7D8);
 
             Matrix_MultVecZ(20100.0f, &this->unk_18B4);
             Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_NEW);
@@ -4778,7 +4707,7 @@ void Boss07_Mask_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 }
 
 void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    static void* D_80A082E0[2] = { D_06042330, D_06045B30 };
+    static void* D_80A082E0[2] = { object_boss07_Tex_042330, object_boss07_Tex_045B30 };
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
@@ -4806,7 +4735,7 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, Boss07_Mask_PostLimbDraw,
                       &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
-    gSPDisplayList(POLY_OPA_DISP++, D_0600AFB0);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_00AFB0);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
 
     phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
@@ -5250,16 +5179,16 @@ void Boss07_Remains_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->actor.params) {
         case MAJORA_REMAINS + REMAINS_ODOLWA:
-            gSPDisplayList(POLY_OPA_DISP++, D_060149A0);
+            gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_0149A0);
             break;
         case MAJORA_REMAINS + REMAINS_GOHT:
-            gSPDisplayList(POLY_OPA_DISP++, D_06016090);
+            gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_016090);
             break;
         case MAJORA_REMAINS + REMAINS_GYORG:
-            gSPDisplayList(POLY_OPA_DISP++, D_06017DE0);
+            gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_017DE0);
             break;
         case MAJORA_REMAINS + REMAINS_TWINMOLD:
-            gSPDisplayList(POLY_OPA_DISP++, D_06019328);
+            gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_019328);
             break;
     }
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
@@ -5558,7 +5487,7 @@ void Boss07_Top_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Matrix_RotateYF(this->unk_178, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0602F640);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss07_DL_02F640);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -5765,7 +5694,7 @@ void Boss07_Static_DrawEffects(GlobalContext* globalCtx) {
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_0600CEE8);
+            gSPDisplayList(POLY_XLU_DISP++, object_boss07_DL_00CEE8);
         }
     }
     CLOSE_DISPS(gfxCtx);
