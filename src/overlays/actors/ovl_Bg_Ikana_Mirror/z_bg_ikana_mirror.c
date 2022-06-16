@@ -104,7 +104,7 @@ void func_80B7FBA4(BgIkanaMirror *arg0, GlobalContext *arg1);
 
 extern ColliderTrisElementInit D_80B7FF50[9];
 extern ColliderTrisInit D_80B8016C;
-extern ColliderQuadInit D_80B8017C;
+extern ColliderQuadInit D_80B8017C[];
 extern Vec3f D_80B8019C;
 extern Vec3f D_80B801A8;
 extern Vec3f D_80B801B4;
@@ -154,7 +154,110 @@ extern CollisionHeader D_06002358;
 //     Matrix_Pop();
 // }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
+
+void func_80B7F730(BgIkanaMirror *);                   /* extern */
+void func_80B7FA84(BgIkanaMirror *arg0);
+void func_80B7FB84(BgIkanaMirror *arg0);
+extern UNK_TYPE D_06001678;
+extern UNK_TYPE D_06001AD8;
+
+//ColliderTrisInit D_80B8016C = { { 0xA, 0, 0x29, 0, 0, 2 }, 9, D_80B7FF50 };
+
+void BgIkanaMirror_Init(Actor *thisx, GlobalContext *globalCtx) {
+    Vec3f sp84;
+    //Vec3f sp78;
+    //Vec3f sp6C;
+    //Vec3f sp60;
+    Vec3f sp60[3];
+    ColliderTris *sp48;
+    //ColliderQuadInit  *k;
+    ColliderTris *temp_a1;
+    s32 j;
+    s32 i;
+    Vec3f *phi_s1;
+    Vec3f *phi_s0;
+    s32 phi_s3;
+    ColliderQuad *phi_s1_2;
+    s32 k;
+    s32 phi_s4;
+    BgIkanaMirror *this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, D_80B8021C);
+    DynaPolyActor_Init((DynaPolyActor *) this, 0);
+    DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor *) this, &D_06002358);
+    temp_a1 = &this->unk15C;
+    sp48 = temp_a1;
+    Collider_InitTris(globalCtx, temp_a1);
+    Collider_SetTris(globalCtx, temp_a1, &this->actor, &D_80B8016C, &this->unk17C);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, &this->actor.shape.rot);
+
+    //phi_s3 = 0;
+    phi_s4 = 0;
+    for(i = 0; i < 9; i++) {
+        phi_s1 = phi_s4 + D_80B8016C.elements + 0x18;
+        phi_s0 = &sp60;
+        for (j = 0; j < 3; j++) {
+            Matrix_MultVec3f(phi_s1, &sp60[j]);
+            //j = phi_s0 + 0xC;
+            phi_s1 += 0xC;
+            //phi_s0 = j;
+        }
+        
+        
+// loop_2:
+//         Matrix_MultVec3f(phi_s1, phi_s0);
+//         j = phi_s0 + 0xC;
+//         phi_s1 += 0xC;
+//         phi_s0 = j;
+//         if (j != &sp84) {
+//             goto loop_2;
+//         }
+        Collider_SetTrisVertices(sp48, i, &sp60[0], &sp60[1], &sp60[2]);
+        //i = phi_s3 + 1;
+        //phi_s3 = i;
+        phi_s4 += 0x3C;
+    } 
+
+//     phi_s3 = 0;
+//     phi_s4 = 0;
+//     do {
+//         phi_s1 = phi_s4 + D_80B8016C.elements + 0x18;
+//         phi_s0 = &sp60;
+// loop_2:
+//         Matrix_MultVec3f(phi_s1, phi_s0);
+//         j = phi_s0 + 0xC;
+//         phi_s1 += 0xC;
+//         phi_s0 = j;
+//         if (j != &sp84) {
+//             goto loop_2;
+//         }
+//         Collider_SetTrisVertices(sp48, phi_s3, &sp60, &sp6C, &sp78);
+//         i = phi_s3 + 1;
+//         phi_s3 = i;
+//         phi_s4 += 0x3C;
+//     } while (i < 9);
+    //phi_s1_2 = this->unk4B8;
+    
+    for (k = 0; k < 2; k++) {
+        Collider_InitQuad(globalCtx, &this->unk4B8[k]);
+        Collider_SetQuad(globalCtx, &this->unk4B8[k], &this->actor, &D_80B8017C[k]);
+        phi_s1_2 += 0x80;
+    } 
+    
+    // k = &D_80B8017C;
+  
+    // do {
+    //     Collider_InitQuad(globalCtx, phi_s1_2);
+    //     Collider_SetQuad(globalCtx, phi_s1_2, &this->actor, k);
+    //     k = k + 0x50;
+    //     phi_s1_2 += 0x80;
+    // } while (k != (ColliderQuadInit *) D_80B8021C);
+    func_80B7F730(this);
+    this->unk5BC = Lib_SegmentedToVirtual(&D_06001678);
+    this->unk5C0 = Lib_SegmentedToVirtual(&D_06001AD8);
+    func_80B7FA84(this);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Destroy.s")
 
