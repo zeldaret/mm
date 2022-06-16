@@ -16,7 +16,6 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc);
 void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx);
 
 const ActorInit Dm_Opstage_InitVars = {
