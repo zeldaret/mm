@@ -18,15 +18,6 @@ void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx);
 
-typedef enum {
-    /* 0 */ RUPPE_GREEN,
-    /* 1 */ RUPPE_BLUE,
-    /* 2 */ RUPPE_RED,
-    /* 3 */ RUPPE_ORANGE,
-    /* 4 */ RUPPE_PURPLE,
-    /* 5 */ RUPPE_SILVER,
-} RuppeType;
-
 typedef struct {
     /* 0x0 */ TexturePtr tex;
     /* 0x4 */ s16 amount;
@@ -111,7 +102,7 @@ s32 func_80BD697C(s16 ruppeIndex) {
                 return true;
             }
             break;
-        case RUPPE_SILVER:
+        case RUPPE_UNUSED:
             if ((gSaveContext.save.weekEventReg[54] & 8)) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~8;
                 return true;
@@ -161,8 +152,8 @@ void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    this->ruppeIndex = SCRUPPE_GET_PARAMS(thisx);
-    if ((this->ruppeIndex < RUPPE_GREEN) || (this->ruppeIndex >= RUPPE_SILVER)) {
+    this->ruppeIndex = SCRUPPE_GET_TYPE(thisx);
+    if ((this->ruppeIndex < RUPPE_GREEN) || (this->ruppeIndex >= RUPPE_UNUSED)) {
         this->ruppeIndex = RUPPE_GREEN;
     }
     this->actor.speedXZ = 0.0f;
@@ -185,7 +176,7 @@ void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx* opa;
+    s32* pad;
     EnScRuppe* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
