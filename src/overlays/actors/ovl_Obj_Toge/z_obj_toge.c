@@ -182,7 +182,7 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjToge* this = THIS;
 
