@@ -183,7 +183,10 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+    GlobalContext* globalCtx = globalCtx2;
+    ObjToge* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_809A4744(ObjToge* this) {
