@@ -68,11 +68,9 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx) {
-    s16 params;
     s32 actionIndex;
 
-    params = this->dyna.actor.params;
-    if ((params & 0xFF) == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
         if (Cutscene_CheckActorAction(globalCtx, 115)) {
             actionIndex = Cutscene_GetActorActionIndex(globalCtx, 115);
             if (globalCtx->csCtx.actorActions[actionIndex]->action == 2) {
@@ -84,10 +82,10 @@ void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx) {
             }
             Cutscene_ActorTranslateAndYaw(&this->dyna.actor, globalCtx, actionIndex);
         }
-    } else if (Cutscene_CheckActorAction(globalCtx, (((params >> 8) & 0xFF) + 0x74) & 0xFFFF)) {
+    } else if (Cutscene_CheckActorAction(globalCtx, (DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74))) {
         Cutscene_ActorTranslateAndYaw(
             &this->dyna.actor, globalCtx,
-            Cutscene_GetActorActionIndex(globalCtx, (((this->dyna.actor.params >> 8) & 0xFF) + 0x74) & 0xFFFF));
+            Cutscene_GetActorActionIndex(globalCtx, (DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74)));
     }
 }
 
@@ -103,9 +101,8 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
-    s32 params = DMOPSTAGE_GET_TYPE(thisx);
 
-    if (params > 0) {
+    if (DMOPSTAGE_GET_TYPE(thisx) > 0) {
         Matrix_Translate(this->dyna.actor.world.pos.x + this->posX, this->dyna.actor.world.pos.y + this->posY,
                          this->dyna.actor.world.pos.z + this->posZ, MTXMODE_NEW);
         Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);

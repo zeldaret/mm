@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define DMOPSTAGE_GET_TYPE(thisx) (((thisx)->params & 0xFF))
+#define DMOPSTAGE_GET_08(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct DmOpstage;
 
