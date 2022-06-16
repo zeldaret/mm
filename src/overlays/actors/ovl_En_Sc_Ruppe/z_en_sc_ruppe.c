@@ -41,7 +41,7 @@ RuppeInfo sRupeeInfo[] = {
     { gameplay_keep_Tex_062000, 20 },  // Red rupee
     { gameplay_keep_Tex_062040, 200 }, // Orange rupee
     { gameplay_keep_Tex_062020, 50 },  // Purple rupee
-    { gameplay_keep_Tex_062060, 10 },  // Silver rupee (unused)
+    { gameplay_keep_Tex_062060, 10 },  // (unused)
 };
 
 static ColliderCylinderInit sCylinderInit = {
