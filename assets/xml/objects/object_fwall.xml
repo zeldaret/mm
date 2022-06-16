@@ -1,6 +1,23 @@
 ﻿<Root>
     <File Name="object_fwall" Segment="6">
         <DList Name="object_fwall_DL_000040" Offset="0x40" />
-        <!-- <Blob Name="object_fwall_Blob_0000A0" Size="0x5C00" Offset="0xA0" /> -->
+        <!-- 0xA0 to 0x3520 are leftover textures from the OOT fire jet elevator in Fire Temple -->
+        <Texture Name="object_fwall_Tex_0000A0" OutName="Tex_0000A0" Format="ia8" Width="24" Height="80" Offset="0xA0" /> 
+        <Texture Name="object_fwall_Tex_000820" OutName="Tex_000820" Format="ia8" Width="24" Height="80" Offset="0x820" />
+        <Texture Name="object_fwall_Tex_000FA0" OutName="Tex_000FA0" Format="ia8" Width="24" Height="80" Offset="0xFA0" />
+        <Texture Name="object_fwall_Tex_001720" OutName="Tex_001720" Format="ia8" Width="24" Height="80" Offset="0x1720" />
+        <Texture Name="object_fwall_Tex_001EA0" OutName="Tex_001EA0" Format="ia8" Width="24" Height="80" Offset="0x1EA0" />
+        <Texture Name="object_fwall_Tex_002620" OutName="Tex_002620" Format="ia8" Width="24" Height="80" Offset="0x2620" />
+        <Texture Name="object_fwall_Tex_002DA0" OutName="Tex_002DA0" Format="ia8" Width="24" Height="80" Offset="0x2DA0" />
+        <Texture Name="object_fwall_Tex_003520" OutName="Tex_003520" Format="ia8" Width="24" Height="80" Offset="0x3520" />
+        
+        <Texture Name="object_fwall_Tex_003CA0" OutName="Tex_003CA0" Format="ia8" Width="32" Height="32" Offset="0x3CA0" />
+        <Texture Name="object_fwall_Tex_0040A0" OutName="Tex_0040A0" Format="ia8" Width="32" Height="32" Offset="0x40A0" />
+        <Texture Name="object_fwall_Tex_0044A0" OutName="Tex_0044A0" Format="ia8" Width="32" Height="32" Offset="0x44A0" />
+        <Texture Name="object_fwall_Tex_0048A0" OutName="Tex_0048A0" Format="ia8" Width="32" Height="32" Offset="0x48A0" />
+        <Texture Name="object_fwall_Tex_004CA0" OutName="Tex_004CA0" Format="ia8" Width="32" Height="32" Offset="0x4CA0" />
+        <Texture Name="object_fwall_Tex_0050A0" OutName="Tex_0050A0" Format="ia8" Width="32" Height="32" Offset="0x50A0" />
+        <Texture Name="object_fwall_Tex_0054A0" OutName="Tex_0054A0" Format="ia8" Width="32" Height="32" Offset="0x54A0" />
+        <Texture Name="object_fwall_Tex_0058A0" OutName="Tex_0058A0" Format="ia8" Width="32" Height="32" Offset="0x58A0" />        
     </File>
 </Root>

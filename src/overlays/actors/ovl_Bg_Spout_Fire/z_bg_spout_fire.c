@@ -57,7 +57,8 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 80, 100, MASS_IMMOVABLE };
 
 static TexturePtr D_80A61194[] = {
-    0x06003CA0, 0x060040A0, 0x060044A0, 0x060048A0, 0x06004CA0, 0x060050A0, 0x060054A0, 0x060058A0,
+    object_fwall_Tex_003CA0, object_fwall_Tex_0040A0, object_fwall_Tex_0044A0, object_fwall_Tex_0048A0,
+    object_fwall_Tex_004CA0, object_fwall_Tex_0050A0, object_fwall_Tex_0054A0, object_fwall_Tex_0058A0,
 };
 
 static s32 texturesDesegmented = 0;
@@ -189,6 +190,7 @@ void BgSpoutFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* gfx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     gfx = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
     POLY_XLU_DISP = gfx;
     gSPSegment(&gfx[0], 0x08, D_80A61194[this->unk_14A]);
@@ -198,5 +200,6 @@ void BgSpoutFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
     gSPDisplayList(&gfx[4], object_fwall_DL_000040);
     POLY_XLU_DISP = &gfx[5];
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
