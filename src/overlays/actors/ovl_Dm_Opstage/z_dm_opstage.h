@@ -13,10 +13,8 @@ typedef struct DmOpstage {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ UNK_TYPE1 pad_15C[0x44];
     /* 0x1A0 */ DmOpstageActionFunc actionFunc;
-    /* 0x1A4 */ f32 posX;
-    /* 0x1A8 */ f32 posY;
-    /* 0x1AC */ f32 posZ;
-} DmOpstage;
+    /* 0x1A4 */ Vec3f pos;
+} DmOpstage; // size = 0x1B0
 
 extern const ActorInit Dm_Opstage_InitVars;
 

@@ -50,9 +50,9 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_keikoku_demo_Colheader_001C98);
     }
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > 0) {
-        this->posX = this->dyna.actor.world.pos.x;
-        this->posY = this->dyna.actor.world.pos.y;
-        this->posZ = this->dyna.actor.world.pos.z;
+        this->pos.x = this->dyna.actor.world.pos.x;
+        this->pos.y = this->dyna.actor.world.pos.y;
+        this->pos.z = this->dyna.actor.world.pos.z;
         this->dyna.actor.world.pos.x = 0.0f;
         this->dyna.actor.world.pos.y = 0.0f;
         this->dyna.actor.world.pos.z = 0.0f;
@@ -62,7 +62,7 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(thisx) == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -102,13 +102,13 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(thisx) > 0) {
-        Matrix_Translate(this->dyna.actor.world.pos.x + this->posX, this->dyna.actor.world.pos.y + this->posY,
-                         this->dyna.actor.world.pos.z + this->posZ, MTXMODE_NEW);
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > 0) {
+        Matrix_Translate(this->dyna.actor.world.pos.x + this->pos.x, this->dyna.actor.world.pos.y + this->pos.y,
+                         this->dyna.actor.world.pos.z + this->pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     }
-    switch (DMOPSTAGE_GET_TYPE(thisx)) {
+    switch (DMOPSTAGE_GET_TYPE(&this->dyna.actor)) {
         case 0:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_000978);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_000970);
