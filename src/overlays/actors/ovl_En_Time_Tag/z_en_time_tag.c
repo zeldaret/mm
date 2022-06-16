@@ -239,7 +239,7 @@ void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx) {
 void func_80ACA5F8(EnTimeTag* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            if ((ENTIMETAG_GET_SWITCHFLAG(&this->actor)) == 1) {
+            if (ENTIMETAG_GET_SWITCHFLAG(&this->actor) == 1) {
                 Message_StartTextbox(globalCtx, 0x101C, &this->actor);
             } else {
                 Message_StartTextbox(globalCtx, 0x122B, &this->actor);
@@ -263,9 +263,9 @@ void func_80ACA714(EnTimeTag* this, GlobalContext* globalCtx) {
 
 void func_80ACA724(EnTimeTag* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENTIMETAG_GET_PATH(&this->actor)];
+        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
         globalCtx->sceneLoadFlag = 0x14;
-        if (!(ENTIMETAG_GET_E000(&this->actor))) {
+        if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
         }
         this->actionFunc = func_80ACA714;
