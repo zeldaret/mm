@@ -537,7 +537,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.gravity = -2.5f;
 
-        if (thisx->params >= MAJORA_REMAINS) {
+        if (this->actor.params >= MAJORA_REMAINS) {
             this->actor.update = Boss07_Remains_Update;
             this->actor.draw = Boss07_Remains_Draw;
             if (1) {}
@@ -1950,16 +1950,17 @@ void Boss07_Wrath_DamageEffects(Boss07* this, GlobalContext* globalCtx) {
                 Math_ApproachF(&this->unk_17FC, 1.0f, 0.05f, 0.05f);
             }
             break;
+        if(1) {
         case 20:
             this->unk_1804 = 20;
             this->unk_1806 = 40;
             this->unk_17F8 = 1.0f;
-            goto test_label;
+        } else {
         case 30:
             this->unk_1804 = 21;
             this->unk_1806 = 40;
             this->unk_17F8 = 3.0f;
-        test_label:
+        }
             this->unk_1800 = 1.0f;
             this->unk_1805 = 21;
         case 21:
@@ -2702,7 +2703,7 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
         case 2:
             if (this->unk_ABC8 >= 20) {
                 if (this->unk_ABC8 == 20) {
-                    this->unk_17C8[3] = 1.0f;
+                    this->unk_17C8[3] = 1.0;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
                 Math_ApproachF(&this->unk_17B8[3], 1.0f + (this->unk_17C8[3] * sp58), 1.0f, 0.5f);
@@ -2731,14 +2732,14 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
                     this->unk_17C8[1] = 1.0f;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[1], (this->unk_17C8[1] * sp58) + 1.0f, 1.0f, 0.5f);
+                Math_ApproachF(&this->unk_17B8[1], 1.0f + (this->unk_17C8[1] * sp58), 1.0f, 0.5f);
             }
             if (this->unk_ABC8 >= 60) {
                 if (this->unk_ABC8 == 60) {
                     this->unk_17C8[0] = 1.0f;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(this->unk_17B8, (this->unk_17C8[0] * sp58) + 1.0f, 1.0f, 0.5f);
+                Math_ApproachF(this->unk_17B8, 1.0f + (this->unk_17C8[0] * sp58), 1.0f, 0.5f);
             }
             if (this->unk_ABC8 == 80) {
                 this->csState = 4;
@@ -2800,7 +2801,7 @@ void Boss07_Incarnation_Intro(Boss07* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->csCamNextEye.y, 20.0f, 0.05f, this->csCamSpeedMod * 60.0f);
             Math_ApproachF(&this->csCamNextEye.z, 220.0f, 0.05f, this->csCamSpeedMod * 180.0f);
             Math_ApproachF(&this->csCamNextAt.y, 110.0f, 0.05f, this->csCamSpeedMod * 80.0f);
-            Math_ApproachF(&this->csCamSpeedMod, 0.1f, 1.0f, 0.005f);
+            Math_ApproachF(&this->csCamSpeedMod, 0.1f, 1.f, 0.005f);
             if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
                 Camera* sp54 = Play_GetCamera(globalCtx, 0);
 
