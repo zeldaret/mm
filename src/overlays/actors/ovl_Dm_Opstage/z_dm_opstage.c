@@ -40,19 +40,16 @@ void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc) {
 }
 
 void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s32 params;
     DmOpstage* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DmOpstage_SetupAction(this, func_80A9FA58);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    params = DMOPSTAGE_GET_TYPE(thisx);
-    if (params == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_keikoku_demo_Colheader_001C98);
-        params = DMOPSTAGE_GET_TYPE(thisx);
     }
-    if (params > 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > 0) {
         this->posX = this->dyna.actor.world.pos.x;
         this->posY = this->dyna.actor.world.pos.y;
         this->posZ = this->dyna.actor.world.pos.z;
