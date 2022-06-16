@@ -10,6 +10,12 @@ typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 
 #define IK_GET_ARMOR_TYPE(thisx) ((thisx)->params & 0xFF)
 
+typedef enum {
+    /* 1 */ IK_TYPE_SILVER = 1,
+    /* 2 */ IK_TYPE_BLACK,
+    /* 3 */ IK_TYPE_WHITE
+} EnIkType;
+
 typedef struct {
     /* 0x00 */ Gfx* dList;
     /* 0x04 */ Vec3f pos;

@@ -10,12 +10,6 @@
 
 #define THIS ((EnIk*)thisx)
 
-typedef enum {
-    /* 0 */ IK_TYPE_SILVER = 1,
-    /* 1 */ IK_TYPE_BLACK,
-    /* 2 */ IK_TYPE_WHITE
-} EnIkType;
-
 void EnIk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -165,7 +159,7 @@ static ColliderQuadInit sQuadInit = {
 };
 
 typedef enum {
-    /* 0x0 */ DMG_EFF_HIT,
+    /* 0x0 */ DMG_EFF_NONE,
     /* 0x4 */ DMG_EFF_FIRE = 0x2,
     /* 0x0 */ DMG_EFF_ICE,
     /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
@@ -176,15 +170,15 @@ typedef enum {
 static DamageTable sDamageTableArmor = {
     /* Deku Nut       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Deku Stick     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* Horse trample  */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Explosives     */ DMG_ENTRY(1, DMG_EFF_HIT),
+    /* Horse trample  */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, DMG_EFF_NONE),
     /* Zora boomerang */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Normal arrow   */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_HIT),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_NONE),
     /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_HIT),
-    /* Sword          */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_HIT),
+    /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_NONE),
     /* Fire arrow     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Ice arrow      */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Light arrow    */ DMG_ENTRY(1, DMG_EFF_LIGHT_SPARKS),
@@ -193,54 +187,54 @@ static DamageTable sDamageTableArmor = {
     /* Deku bubble    */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* Deku launch    */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* Zora barrier   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Normal shield  */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Light ray      */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Thrown object  */ DMG_ENTRY(1, DMG_EFF_HIT),
+    /* Zora barrier   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, DMG_EFF_NONE),
     /* Zora punch     */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* Spin attack    */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Sword beam     */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Normal Roll    */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Unblockable    */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Powder Keg     */ DMG_ENTRY(1, DMG_EFF_HIT),
+    /* Spin attack    */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, DMG_EFF_NONE),
 };
 
 static DamageTable sDamageTableNoArmor = {
-    /* Deku Nut       */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Deku Stick     */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Horse trample  */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Explosives     */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Zora boomerang */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Normal arrow   */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_HIT),
+    /* Deku Nut       */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DMG_EFF_NONE),
     /* Hookshot       */ DMG_ENTRY(0, DMG_EFF_IMMUNE),
-    /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_HIT),
-    /* Sword          */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_HIT),
+    /* Goron punch    */ DMG_ENTRY(2, DMG_EFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(3, DMG_EFF_NONE),
     /* Fire arrow     */ DMG_ENTRY(2, DMG_EFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(2, DMG_EFF_ICE),
     /* Light arrow    */ DMG_ENTRY(2, DMG_EFF_LIGHT_SPARKS),
-    /* Goron spikes   */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Deku spin      */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Deku bubble    */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Deku launch    */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Zora barrier   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Normal shield  */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Light ray      */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Thrown object  */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Zora punch     */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Spin attack    */ DMG_ENTRY(1, DMG_EFF_HIT),
-    /* Sword beam     */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Normal Roll    */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Unblockable    */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DMG_EFF_HIT),
-    /* Powder Keg     */ DMG_ENTRY(1, DMG_EFF_HIT),
+    /* Goron spikes   */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, DMG_EFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DMG_EFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, DMG_EFF_NONE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 18, 25, 80, MASS_HEAVY };
@@ -257,7 +251,7 @@ static EffectBlureInit2 sBlureInit = {
 };
 
 void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static s32 sDisplayListDesegmented = 0;
+    static s32 sDisplayListDesegmented = false;
     s32 i;
     EnIk* this = THIS;
 
@@ -274,11 +268,10 @@ void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Effect_Add(globalCtx, &this->effectIndex, EFFECT_BLURE2, 0, 0, &sBlureInit);
     if (!sDisplayListDesegmented) {
-
         for (i = 0; i < ARRAY_COUNT(sIronKnuckleArmorType); i++) {
-            sIronKnuckleArmorType[i][IK_TYPE_SILVER - 1] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][0]);
-            sIronKnuckleArmorType[i][IK_TYPE_BLACK - 1] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][1]);
-            sIronKnuckleArmorType[i][IK_TYPE_WHITE - 1] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][2]);
+            sIronKnuckleArmorType[i][0] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][0]);
+            sIronKnuckleArmorType[i][1] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][1]);
+            sIronKnuckleArmorType[i][2] = Lib_SegmentedToVirtual(sIronKnuckleArmorType[i][2]);
         }
         sDisplayListDesegmented = true;
     }
@@ -324,7 +317,7 @@ void EnIk_HitArmor(EnIk* this, GlobalContext* globalCtx) {
 
 s32 EnIk_IsChangingAction(EnIk* this, GlobalContext* globalCtx) {
     if ((this->drawArmorFlags) && (this->actionFunc != EnIk_Block) &&
-        (func_800BE184(globalCtx, &this->actor, 100.0f, 0x2710, 0x4000, this->actor.shape.rot.y) != 0)) {
+        func_800BE184(globalCtx, &this->actor, 100.0f, 0x2710, 0x4000, this->actor.shape.rot.y)) {
         EnIk_SetupBlock(this);
         return true;
     }
@@ -332,17 +325,15 @@ s32 EnIk_IsChangingAction(EnIk* this, GlobalContext* globalCtx) {
 }
 
 s32 EnIk_ChooseAttack(EnIk* this) {
-    s16 yawDiff;
-    s32 phi_a2;
     s32 absYawDiff;
+    s32 attackSpeed;
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (fabsf(this->actor.playerHeightRel) < 150.0f)) {
 
-        phi_a2 = (this->drawArmorFlags == 0) ? 0xAAA : 0x3FFC;
-        yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-        absYawDiff = ABS_ALT(yawDiff);
+        attackSpeed = (this->drawArmorFlags == 0) ? 0xAAA : 0x3FFC;
+        absYawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
-        if (phi_a2 >= absYawDiff) {
+        if (attackSpeed >= absYawDiff) {
             if (Rand_ZeroOne() < 0.5f) {
                 EnIk_SetupVerticalAttack(this);
                 return true;
@@ -375,8 +366,8 @@ void EnIk_SetupIdle(EnIk* this) {
     } else {
         this->timer = 0;
     }
-    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, 1.0f, frameCount, frameCount, 2,
-                     this->timer);
+    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, 1.0f, frameCount, frameCount,
+                     ANIMMODE_ONCE, this->timer);
     this->actionFunc = EnIk_Idle;
     this->actor.speedXZ = 0.0f;
 }
@@ -520,9 +511,9 @@ void EnIk_TakeOutAxe(EnIk* this, GlobalContext* globalCtx) {
         if (this->skelAnime.animation == &gIronKnuckleRecoverVerticalAttackAnim) {
             EnIk_CheckActions(this, globalCtx);
         } else {
-            Animation_Change(&this->skelAnime, &gIronKnuckleRecoverVerticalAttackAnim,
-                             (this->drawArmorFlags) ? 1.5f : 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gIronKnuckleRecoverVerticalAttackAnim.common), 3, 0.0f);
+            Animation_Change(
+                &this->skelAnime, &gIronKnuckleRecoverVerticalAttackAnim, (this->drawArmorFlags) ? 1.5f : 1.0f, 0.0f,
+                Animation_GetLastFrame(&gIronKnuckleRecoverVerticalAttackAnim.common), ANIMMODE_ONCE_INTERP, 0.0f);
         }
     }
 }
@@ -531,7 +522,7 @@ void EnIk_SetupHorizontalDoubleAttack(EnIk* this) {
     this->actor.speedXZ = 0.0f;
     // If the armor has been knocked off animation is sped up
     Animation_Change(&this->skelAnime, &gIronKnuckleHorizontalAttackAnim, (this->drawArmorFlags) ? 1.3f : 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), 3,
+                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), ANIMMODE_ONCE_INTERP,
                      (this->drawArmorFlags) ? 4.0f : 10.0f);
     this->timer = 0;
     this->blurEffectSpawnLock = -1;
@@ -579,7 +570,7 @@ void EnIk_SetupSingleHorizontalAttack(EnIk* this) {
         playSpeed = 1.0f;
     }
     Animation_Change(&this->skelAnime, &gIronKnuckleHorizontalAttackAnim, playSpeed, 12.0f,
-                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), 3, 5.0f);
+                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim.common), ANIMMODE_ONCE_INTERP, 5.0f);
     this->timer = 0;
     this->blurEffectSpawnLock = -1;
     this->actionFunc = EnIk_SingleHorizontalAttack;
@@ -604,7 +595,7 @@ void EnIk_SingleHorizontalAttack(EnIk* this, GlobalContext* globalCtx) {
 
 void EnIk_SetupEndHorizontalAttack(EnIk* this) {
     Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, (this->drawArmorFlags) ? 2.0f : 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim), 3, -4.0f);
+                     Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim), ANIMMODE_ONCE_INTERP, -4.0f);
     this->actionFunc = EnIk_EndHorizontalAttack;
 }
 
@@ -617,7 +608,7 @@ void EnIk_EndHorizontalAttack(EnIk* this, GlobalContext* globalCtx) {
 void EnIk_SetupBlock(EnIk* this) {
     this->actor.speedXZ = 0.0f;
     Animation_Change(&this->skelAnime, &gIronKnuckleBlockAnim, 2.0f, 0.0f,
-                     Animation_GetLastFrame(&gIronKnuckleBlockAnim), 2, -2.0f);
+                     Animation_GetLastFrame(&gIronKnuckleBlockAnim), ANIMMODE_ONCE, -2.0f);
     this->timer = 20;
     this->actionFunc = EnIk_Block;
 }
@@ -702,9 +693,8 @@ void EnIk_Die(EnIk* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
         }
-        return;
-    }
-    if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
+        // return;
+    } else if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
 }
@@ -950,8 +940,10 @@ s32 EnIk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
     static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
-    static s8 D_8092C1E0[] = { -1, -1, -1, 0,  1, 2,  3,  4,  5,  -1, -1, -1, 6,  -1, -1, 7,
-                               -1, -1, 8,  -1, 9, 10, -1, 11, -1, 12, -1, -1, -1, -1, 0,  0 };
+    static s8 D_8092C1E0[] = {
+        -1, -1, -1, 0,  1, 2,  3,  4,  5,  -1, -1, -1, 6,  -1, -1, 7,
+        -1, -1, 8,  -1, 9, 10, -1, 11, -1, 12, -1, -1, -1, -1, 0,  0,
+    };
 
     EnIk* this = THIS;
     s32 sp80 = D_8092C1A8[limbIndex];
@@ -994,7 +986,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if ((limbIndex == IRON_KNUCKLE_LIMB_AXE) && (this->blurEffectSpawnLock != this->timer) &&
         ((this->actionFunc == EnIk_VerticalAttack) || (this->actionFunc == EnIk_HorizontalDoubleAttack) ||
          (this->actionFunc == EnIk_SingleHorizontalAttack))) {
-        Math_Vec3f_Copy(&vtxC, this->colliderQuad.dim.quad);
+        Math_Vec3f_Copy(&vtxC, &this->colliderQuad.dim.quad[0]);
         Math_Vec3f_Copy(&vtxD, &this->colliderQuad.dim.quad[1]);
         Matrix_MultVec3f(&D_8092C1C8, &vtxB);
         Matrix_MultVec3f(&D_8092C1D4, &vtxA);
