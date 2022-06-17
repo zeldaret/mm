@@ -56,29 +56,29 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 80, 100, MASS_IMMOVABLE };
 
-static TexturePtr D_80A61194[] = {
+static TexturePtr sFlameTextures[] = {
     object_fwall_Tex_003CA0, object_fwall_Tex_0040A0, object_fwall_Tex_0044A0, object_fwall_Tex_0048A0,
     object_fwall_Tex_004CA0, object_fwall_Tex_0050A0, object_fwall_Tex_0054A0, object_fwall_Tex_0058A0,
 };
 
-static s32 texturesDesegmented = 0;
+static s32 sTexturesDesegmented = false;
 
 void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     BgSpoutFire* this = THIS;
 
-    this->actor.scale.z = 0.13499999f;
-    this->actor.scale.x = 0.13499999f;
+    this->actor.scale.z = 1350.0f * 0.0001f;
+    this->actor.scale.x = 1350.0f * 0.0001f;
     this->actor.scale.y = 0.01f;
-    this->unk_14A = 0;
-    Collider_InitAndSetCylinder(globalCtx, &this->unk14C, &this->actor, &sCylinderInit);
-    this->unk14C.dim.pos.y = this->actor.world.pos.y;
+    this->flameTexIndex = 0;
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    this->collider.dim.pos.y = this->actor.world.pos.y;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    if (!texturesDesegmented) {
-        for (i = 0; i < ARRAY_COUNT(D_80A61194); i++) {
-            D_80A61194[i] = Lib_SegmentedToVirtual(D_80A61194[i]);
+    if (!sTexturesDesegmented) {
+        for (i = 0; i < ARRAY_COUNT(sFlameTextures); i++) {
+            sFlameTextures[i] = Lib_SegmentedToVirtual(sFlameTextures[i]);
         }
-        texturesDesegmented = true;
+        sTexturesDesegmented = true;
     }
     this->actionFunc = func_80A60C94;
 }
@@ -86,7 +86,7 @@ void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgSpoutFire* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->unk14C);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 s32 func_80A60C24(BgSpoutFire* this, GlobalContext* globalCtx) {
@@ -104,31 +104,29 @@ s32 func_80A60C24(BgSpoutFire* this, GlobalContext* globalCtx) {
 void func_80A60C94(BgSpoutFire* this, GlobalContext* globalCtx) {
     if (func_80A60C24(this, globalCtx)) {
         this->actor.draw = BgSpoutFire_Draw;
-        this->unk_148 = 5;
+        this->timer = 5;
         this->actionFunc = func_80A60CDC;
     }
 }
 
 void func_80A60CDC(BgSpoutFire* this, GlobalContext* globalCtx) {
-    if (this->unk_148 != 0) {
-        this->unk_148--;
+    if (this->timer != 0) {
+        this->timer--;
     }
-    if (this->unk_148 == 0) {
+    if (this->timer == 0) {
         this->actionFunc = func_80A60D10;
     }
 }
 
 void func_80A60D10(BgSpoutFire* this, GlobalContext* globalCtx) {
     if (func_80A60C24(this, globalCtx)) {
-        Math_StepToF(&this->actor.scale.y, 0.1f, 0.024999999f);
-        return;
-    }
-    if (Math_StepToF(&this->actor.scale.y, 0.01f, 0.01f)) {
+        Math_StepToF(&this->actor.scale.y, 0.1f, 2.5f * 0.01f);
+    } else if (Math_StepToF(&this->actor.scale.y, 0.01f, 0.01f)) {
         this->actor.draw = NULL;
         this->actionFunc = func_80A60C94;
-        return;
+    } else {
+        this->timer = 0;
     }
-    this->unk_148 = 0;
 }
 
 void func_80A60DA0(Actor* thisx, GlobalContext* globalCtx) {
@@ -150,37 +148,37 @@ void func_80A60E08(BgSpoutFire* this, GlobalContext* globalCtx) {
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp30, &player->actor.world.pos);
     sp30.x = CLAMP(sp30.x, -74.25f, 74.25f);
-    if (this->unk_148 == 0) {
+    if (this->timer == 0) {
         if (sp30.z > 0.0f) {
             sp30.z = -25.0f;
-            this->unk_148 = -1;
+            this->timer = -1;
         } else {
             sp30.z = 25.0f;
-            this->unk_148 = 1;
+            this->timer = 1;
         }
     } else {
-        sp30.z = this->unk_148 * 25.0f;
+        sp30.z = this->timer * 25.0f;
     }
     sin = Math_SinS(this->actor.shape.rot.y);
     cos = Math_CosS(this->actor.shape.rot.y);
-    this->unk14C.dim.pos.x = (this->actor.world.pos.x + (sp30.x * cos) + (sp30.z * sin));
-    this->unk14C.dim.pos.z = (this->actor.world.pos.z - (sp30.x * sin) + (sp30.z * cos));
+    this->collider.dim.pos.x = this->actor.world.pos.x + (sp30.x * cos) + (sp30.z * sin);
+    this->collider.dim.pos.z = this->actor.world.pos.z - (sp30.x * sin) + (sp30.z * cos);
 }
 
 void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx) {
-    s16 pad;
+    s32 pad;
     BgSpoutFire* this = THIS;
 
-    this->unk_14A = ((this->unk_14A + 1) % 8);
-    if ((this->unk14C.base.atFlags & AT_HIT)) {
-        this->unk14C.base.atFlags &= ~AT_HIT;
+    this->flameTexIndex = (this->flameTexIndex + 1) % 8;
+    if ((this->collider.base.atFlags & AT_HIT)) {
+        this->collider.base.atFlags &= ~AT_HIT;
         func_80A60DA0(&this->actor, globalCtx);
     }
     this->actionFunc(this, globalCtx);
     if (this->actionFunc == func_80A60D10) {
         func_80A60E08(this, globalCtx);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->unk14C.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk14C.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         func_800B9010(&this->actor, NA_SE_EV_FIRE_PLATE - SFX_FLAG);
     }
 }
@@ -193,8 +191,8 @@ void BgSpoutFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
     POLY_XLU_DISP = gfx;
-    gSPSegment(&gfx[0], 0x08, D_80A61194[this->unk_14A]);
-    gDPSetPrimColor(&gfx[1], 0, 0x01, 255, 255, 0, 150);
+    gSPSegment(&gfx[0], 0x08, sFlameTextures[this->flameTexIndex]);
+    gDPSetPrimColor(&gfx[1], 0, 1, 255, 255, 0, 150);
     gDPSetEnvColor(&gfx[2], 255, 0, 0, 255);
     Matrix_Translate(-55.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
