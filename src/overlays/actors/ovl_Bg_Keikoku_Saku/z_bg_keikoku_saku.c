@@ -33,15 +33,15 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
 };
 
 void BgKeikokuSaku_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgKeikokuSaku* this = THIS;
     s32 pad;
+    BgKeikokuSaku* this = THIS;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->unk160 = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
-    if (Flags_GetSwitch(globalCtx, this->unk160)) {
+    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
+    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         this->dyna.actor.world.pos.z = 2659.0f;
     } else {
         this->actionFunc = func_80A5389C;
@@ -55,7 +55,7 @@ void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A5389C(BgKeikokuSaku* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->unk160)) {
+    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         this->actionFunc = func_80A538E0;
     }
 }
@@ -65,13 +65,13 @@ void func_80A538E0(BgKeikokuSaku* this, GlobalContext* globalCtx) {
     this->dyna.actor.world.pos.z -= 2.0f + BREG(8);
     if (this->dyna.actor.world.pos.z < (BREG(9) + 2660.0f)) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
-        this->unk162 = 30;
+        this->timer = 30;
         this->actionFunc = func_80A53994;
     }
 }
 
 void func_80A53994(BgKeikokuSaku* this, GlobalContext* globalCtx) {
-    if (this->unk162 == 0) {
+    if (this->timer == 0) {
         this->actionFunc = func_80A5389C;
     }
 }
@@ -79,8 +79,8 @@ void func_80A53994(BgKeikokuSaku* this, GlobalContext* globalCtx) {
 void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgKeikokuSaku* this = THIS;
 
-    if (this->unk162) {
-        this->unk162--;
+    if (this->timer) {
+        this->timer--;
     }
     this->dyna.actor.world.pos.x = BREG(5) + this->dyna.actor.home.pos.x;
     this->dyna.actor.world.pos.y = BREG(6) + this->dyna.actor.home.pos.y;
@@ -93,8 +93,10 @@ void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_001640);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
