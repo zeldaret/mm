@@ -1,6 +1,7 @@
 ﻿<Root>
     <!-- Child Zelda: from the cutscene where Deku Link recalls how to play Song of Time after getting his Ocarina back -->
     <File Name="object_zl4" Segment="6">
+        <!-- Everything up to and including the skeleton is retained from the beginning of OoT's object_zl4 -->
         <Animation Name="gDmZl4IdleAnim" Offset="0x654" />
         <Texture Name="gDmZl4DressTLUT" OutName="dress_tlut" Format="rgba16" Width="16" Height="16" Offset="0x670" />
         <Texture Name="gDmZl4EyeTLUT" OutName="eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x870" />
