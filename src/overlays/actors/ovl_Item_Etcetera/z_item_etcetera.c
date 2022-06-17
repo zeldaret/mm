@@ -14,12 +14,11 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc);
-void func_80920044(ItemEtcetera* this, GlobalContext* globalCtx);
+void ItemEtcetera_WaitForObject(ItemEtcetera* this, GlobalContext* globalCtx);
 void func_8092009C(ItemEtcetera* this, GlobalContext* globalCtx);
 void func_809200F8(ItemEtcetera* this, GlobalContext* globalCtx);
 void func_80920164(Actor* thisx, GlobalContext* globalCtx);
-void func_809201BC(Actor* thisx, GlobalContext* globalCtx);
+void ItemEtcetera_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Item_Etcetera_InitVars = {
     ACTOR_ITEM_ETCETERA,
@@ -33,17 +32,17 @@ const ActorInit Item_Etcetera_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 D_80920230[] = {
+static s16 sObjectIds[] = {
     OBJECT_GI_BOTTLE, OBJECT_GI_BOTTLE, OBJECT_GI_BOTTLE,  OBJECT_GI_BOTTLE, OBJECT_GI_BOTTLE,
     OBJECT_GI_BOTTLE, OBJECT_GI_KEY,    OBJECT_GI_M_ARROW, OBJECT_GI_RUPY,   OBJECT_GI_RUPY,
     OBJECT_GI_RUPY,   OBJECT_GI_RUPY,   OBJECT_GI_HEARTS,  OBJECT_GI_KEY,
 };
-static s16 D_8092024C[] = {
+static s16 sDrawItemIndices[] = {
     GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_01,
     GID_47,     GID_4F,     GID_50,     GID_51,     GID_53,     GID_13,     GID_01,
 };
 
-static s16 D_80920268[] = {
+static s16 sGetItemIds[] = {
     GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_KEY_SMALL, GI_25, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE,
 };
 
@@ -52,23 +51,23 @@ void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionF
 }
 
 void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ItemEtcetera* this = THIS;
     s32 pad;
-    s32 params;
-    s32 index;
+    ItemEtcetera* this = THIS;
+    s32 type = ITEMETCETERA_GET_FF(&this->actor);
+    s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIds[type]);
 
-    params = ITEMETCETERA_GET_FF(&this->actor);
-    index = Object_GetIndex(&globalCtx->objectCtx, D_80920230[params]);
-    if (index >= 0) {
-        this->objIndex = index;
+    if (objBankIndex < 0) {
+        // assert on debug
+    } else {
+        this->objIndex = objBankIndex;
     }
-    this->itemDrawIndex = D_8092024C[params];
-    this->itemID = D_80920268[params];
-    this->funcSetup = func_8092009C;
-    this->drawFunc = func_809201BC;
+    this->giDrawId = sDrawItemIndices[type];
+    this->itemID = sGetItemIds[type];
+    this->futureActionFunc = func_8092009C;
+    this->drawFunc = ItemEtcetera_Draw;
     Actor_SetScale(&this->actor, 0.25f);
-    ItemEtcetera_SetupAction(this, func_80920044);
-    switch (params) {
+    ItemEtcetera_SetupAction(this, ItemEtcetera_WaitForObject);
+    switch (type) {
         case 7:
             Actor_SetScale(&this->actor, 0.5f);
             this->actor.draw = NULL;
@@ -81,7 +80,7 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 12:
         case 13:
             Actor_SetScale(&this->actor, 0.5f);
-            this->funcSetup = func_809200F8;
+            this->futureActionFunc = func_809200F8;
             this->drawFunc = func_80920164;
             this->actor.world.pos.y += 15.0f;
             break;
@@ -91,11 +90,11 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80920044(ItemEtcetera* this, GlobalContext* globalCtx) {
+void ItemEtcetera_WaitForObject(ItemEtcetera* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->actor.objBankIndex = this->objIndex;
         this->actor.draw = this->drawFunc;
-        this->actionFunc = this->funcSetup;
+        this->actionFunc = this->futureActionFunc;
     }
 }
 
@@ -108,7 +107,7 @@ void func_8092009C(ItemEtcetera* this, GlobalContext* globalCtx) {
 }
 
 void func_809200F8(ItemEtcetera* this, GlobalContext* globalCtx) {
-    if (Flags_GetTreasure(globalCtx, ITEMETCETERA_GET_TREASURE(&this->actor))) {
+    if (Flags_GetTreasure(globalCtx, ITEMETCETERA_GET_TREASUREFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -125,14 +124,14 @@ void func_80920164(Actor* thisx, GlobalContext* globalCtx) {
     if (globalCtx->actorCtx.unk4 == 100) {
         func_800B8050(&this->actor, globalCtx, 0);
         func_800B8118(&this->actor, globalCtx, 0);
-        GetItem_Draw(globalCtx, this->itemDrawIndex);
+        GetItem_Draw(globalCtx, this->giDrawId);
     }
 }
 
-void func_809201BC(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ItemEtcetera* this = THIS;
 
     func_800B8050(&this->actor, globalCtx, 0);
     func_800B8118(&this->actor, globalCtx, 0);
-    GetItem_Draw(globalCtx, this->itemDrawIndex);
+    GetItem_Draw(globalCtx, this->giDrawId);
 }

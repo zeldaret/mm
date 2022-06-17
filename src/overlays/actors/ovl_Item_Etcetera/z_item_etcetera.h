@@ -6,14 +6,14 @@
 struct ItemEtcetera;
 
 #define ITEMETCETERA_GET_FF(thisx) ((thisx)->params & 0xFF)
-#define ITEMETCETERA_GET_TREASURE(thisx) (((thisx)->params >> 8) & 0x1F)
+#define ITEMETCETERA_GET_TREASUREFLAG(thisx) (((thisx)->params >> 8) & 0x1F)
 
 typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, GlobalContext*);
 
 typedef struct ItemEtcetera {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ItemEtceteraActionFunc funcSetup;
-    /* 0x148 */ s16 itemDrawIndex;
+    /* 0x144 */ ItemEtceteraActionFunc futureActionFunc;
+    /* 0x148 */ s16 giDrawId;
     /* 0x14A */ s16 itemID;
     /* 0x14C */ u8 objIndex;
     /* 0x150 */ ActorFunc drawFunc;

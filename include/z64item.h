@@ -304,7 +304,7 @@ typedef enum {
     /* 0x50 */ GI_50 = 0x50,
     /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
-    /* 0x5A */ GI_5A ,
+    /* 0x5A */ GI_5A,
     /* 0x5B */ GI_POTION_RED,
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,
@@ -354,7 +354,7 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
-    /* 0x00 */ GID_01,
+    /* 0x01 */ GID_01,
     /* 0x02 */ GID_02,
     /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
