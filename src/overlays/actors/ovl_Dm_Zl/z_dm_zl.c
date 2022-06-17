@@ -166,7 +166,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
 
         if ((actionIndex == ZELDA_ANIM_TURNING_TOWARD_PLAYER) || (actionIndex == ZELDA_ANIM_GIVING_OCARINA_START) ||
             (actionIndex == ZELDA_ANIM_PLAYING_OCARINA_START)) {
-            // these animations dont loop at the end, they lead into the next animation
+            // these animations don't loop at the end, they lead into the next animation
             this->animationIndex++;
             DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
         }
