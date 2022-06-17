@@ -175,7 +175,6 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
 
 /**
  * Updates the eye blinking and state, and mouth textures.
- *  (Copy-Paste from OoT, Unused in MM)
  */
 void DmZl_UpdateFace(DmZl* this) {
     if (this->blinkTimer > 0) {
@@ -189,6 +188,7 @@ void DmZl_UpdateFace(DmZl* this) {
         this->eyeTextureIndexLeft = this->blinkTimer;
     }
 
+    // nextEyeState is never changed by this actor in MM, only ZELDA_EYE_STATE_NORMAL used.
     switch (this->nextEyeState) {
         case ZELDA_EYE_STATE_NORMAL:
             if (this->blinkTimer == 0) {
@@ -229,6 +229,7 @@ void DmZl_UpdateFace(DmZl* this) {
             break;
     }
 
+    // nextMouthState is never changed by this actor in MM, only ZELDA_MOUTH_NEUTRAL used.
     switch (this->nextMouthState) {
         default:
             this->mouthTextureIndex = ZELDA_MOUTH_NEUTRAL;
