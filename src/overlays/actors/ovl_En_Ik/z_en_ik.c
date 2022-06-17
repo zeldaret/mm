@@ -693,7 +693,6 @@ void EnIk_Die(EnIk* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
         }
-        // return;
     } else if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
