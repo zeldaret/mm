@@ -52,12 +52,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 32, 32, 0, { 0, 0, 0 } },
 };
 
-static Vec3f D_80C076D4 = { 0.0f, -1.0f, 0.0f };
-
 void BgIkninside_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninside* this = THIS;
     CollisionHeader* colHeader = NULL;
-    s16 pad;
+    s32 pad;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->actionFunc = func_80C072D0;
@@ -95,6 +93,8 @@ void func_80C07230(BgIkninside* this, GlobalContext* globalCtx) {
     }
 }
 
+static Vec3f D_80C076D4 = { 0.0f, -1.0f, 0.0f };
+
 void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
     s16 altitude;
     s16 azimuth;
@@ -123,18 +123,18 @@ void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx) {
             this->dyna.actor.draw = NULL;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         } else {
-            this->unk_1AA = 20;
+            this->timer = 20;
         }
     }
-    if (this->unk_1AA > 0) {
-        if ((this->unk_1AA % 2) != 0) {
+    if (this->timer > 0) {
+        if ((this->timer % 2) != 0) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 1.0f;
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
         }
-        this->unk_1AA--;
+        this->timer--;
     } else {
-        this->unk_1AA = 0;
+        this->timer = 0;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     }
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -148,8 +148,10 @@ void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_ikninside_obj_DL_00CC78);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
