@@ -16,7 +16,14 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx);
+void DmOpstage_FollowCutsceneScript(DmOpstage* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /* 0 */ DM_OPSTAGE_TYPE_FLOOR,
+    /* 1 */ DM_OPSTAGE_TYPE_TREE1,
+    /* 2 */ DM_OPSTAGE_TYPE_TREE2,
+    /* 3 */ DM_OPSTAGE_TYPE_TREE3,
+} DmOpStageTypes;
 
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -42,7 +49,7 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DmOpstage_SetupAction(this, func_80A9FA58);
+    DmOpstage_SetupAction(this, DmOpstage_FollowCutsceneScript);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
         DynaPolyActor_Init(&this->dyna, 0);
@@ -66,12 +73,12 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx) {
+void DmOpstage_FollowCutsceneScript(DmOpstage* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
-        if (Cutscene_CheckActorAction(globalCtx, 115)) {
-            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 115);
+        if (Cutscene_CheckActorAction(globalCtx, 0x73)) {
+            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x73);
             if (globalCtx->csCtx.actorActions[actionIndex]->action == 2) {
                 this->dyna.actor.scale.x = 0.075f;
                 this->dyna.actor.scale.z = 0.3f;
@@ -81,10 +88,10 @@ void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx) {
             }
             Cutscene_ActorTranslateAndYaw(&this->dyna.actor, globalCtx, actionIndex);
         }
-    } else if (Cutscene_CheckActorAction(globalCtx, (DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74))) {
+    } else if (Cutscene_CheckActorAction(globalCtx, DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74)) {
         Cutscene_ActorTranslateAndYaw(
             &this->dyna.actor, globalCtx,
-            Cutscene_GetActorActionIndex(globalCtx, (DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74)));
+            Cutscene_GetActorActionIndex(globalCtx, DMOPSTAGE_GET_08(&this->dyna.actor) + 0x74));
     }
 }
 
@@ -108,24 +115,24 @@ void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     }
     switch (DMOPSTAGE_GET_TYPE(&this->dyna.actor)) {
-        case 0:
+        case DM_OPSTAGE_TYPE_FLOOR:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_000978);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_000970);
-            return;
+            break;
 
-        case 1:
+        case DM_OPSTAGE_TYPE_TREE1:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_002878);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_002870);
-            return;
+            break;
 
-        case 2:
+        case DM_OPSTAGE_TYPE_TREE2:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_003068);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_003060);
-            return;
+            break;
 
-        case 3:
+        case DM_OPSTAGE_TYPE_TREE3:
             Gfx_DrawDListOpa(globalCtx, object_keikoku_demo_DL_003728);
             Gfx_DrawDListXlu(globalCtx, object_keikoku_demo_DL_003720);
-            return;
+            break;
     }
 }
