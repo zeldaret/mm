@@ -129,15 +129,15 @@ void func_80A60D10(BgSpoutFire* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A60DA0(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A60DA0(BgSpoutFire* this, GlobalContext* globalCtx) {
     s16 phi_a3;
 
-    if (Actor_IsFacingPlayer(thisx, 0x4000)) {
-        phi_a3 = thisx->shape.rot.y;
+    if (Actor_IsFacingPlayer(&this->actor, 0x4000)) {
+        phi_a3 = this->actor.shape.rot.y;
     } else {
-        phi_a3 = (thisx->shape.rot.y + 0x8000);
+        phi_a3 = (this->actor.shape.rot.y + 0x8000);
     }
-    func_800B8D98(globalCtx, thisx, 5.0f, phi_a3, 1.0f);
+    func_800B8D98(globalCtx, &this->actor, 5.0f, phi_a3, 1.0f);
 }
 
 void func_80A60E08(BgSpoutFire* this, GlobalContext* globalCtx) {
@@ -172,7 +172,7 @@ void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->flameTexIndex = (this->flameTexIndex + 1) % 8;
     if ((this->collider.base.atFlags & AT_HIT)) {
         this->collider.base.atFlags &= ~AT_HIT;
-        func_80A60DA0(&this->actor, globalCtx);
+        func_80A60DA0(this, globalCtx);
     }
     this->actionFunc(this, globalCtx);
     if (this->actionFunc == func_80A60D10) {
@@ -195,7 +195,7 @@ void BgSpoutFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(&gfx[1], 0, 1, 255, 255, 0, 150);
     gDPSetEnvColor(&gfx[2], 255, 0, 0, 255);
     Matrix_Translate(-55.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
+    gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[4], object_fwall_DL_000040);
     POLY_XLU_DISP = &gfx[5];
 

@@ -1,6 +1,7 @@
 ﻿<Root>
     <File Name="object_fwall" Segment="6">
         <DList Name="object_fwall_DL_000040" Offset="0x40" />
+        
         <!-- 0xA0 to 0x3520 are leftover textures from the OOT fire jet elevator in Fire Temple -->
         <Texture Name="gFireTempleBigVerticalFlame0Tex" OutName="Tex_0000A0" Format="ia8" Width="24" Height="80" Offset="0xA0" /> 
         <Texture Name="gFireTempleBigVerticalFlame1Tex" OutName="Tex_000820" Format="ia8" Width="24" Height="80" Offset="0x820" />
