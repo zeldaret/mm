@@ -26,7 +26,7 @@ typedef struct BgIkanaMirror {
     /* 0x5BC */ AnimatedMaterial *unk5BC;           /* inferred */
     /* 0x5C0 */ AnimatedMaterial *unk5C0;           /* inferred */
     /* 0x5C4 */ s16 unk5C4;                         /* inferred */
-    /* 0x5C6 */ s8 unk5C6;                          /* inferred */
+    /* 0x5C6 */ u8 unk5C6;                          /* inferred */
     /* 0x5C7 */ s8 unk5C7;                          /* inferred */
     /* 0x5C8 */ s8 unk5C8;                          /* inferred */
     /* 0x5C9 */ char pad5C9[3];                     /* maybe part of unk5C8[4]? */
