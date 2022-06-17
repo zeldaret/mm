@@ -80,8 +80,8 @@ void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B9B124(ObjBoat* this) {
     this->unk_160 += 1000;
     this->dyna.actor.world.pos.y = Math_SinS(this->unk_160) + this->dyna.actor.home.pos.y;
-    this->dyna.actor.shape.rot.x = (Math_SinS(this->unk_160) * 100.0f);
-    this->dyna.actor.shape.rot.z = (Math_SinS((s16)(this->unk_160 * 2)) * 50.0f);
+    this->dyna.actor.shape.rot.x = Math_SinS(this->unk_160) * 100.0f;
+    this->dyna.actor.shape.rot.z = Math_SinS(this->unk_160 * 2) * 50.0f;
 }
 
 void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -101,7 +101,7 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 this->unk_15E = 0;
             }
-            this->unk_15F = 0x3C;
+            this->unk_15F = 60;
         }
     } else if (this->dyna.actor.speedXZ == 0.0f) {
         if (this->unk_15F != 0) {
@@ -187,5 +187,5 @@ void func_80B9B428(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoat* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, (Gfx*)&object_kaizoku_obj_DL_007630);
+    Gfx_DrawDListOpa(globalCtx, object_kaizoku_obj_DL_007630);
 }
