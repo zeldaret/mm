@@ -72,37 +72,37 @@ void EnScRuppe_UpdateCollision(EnScRuppe* this, GlobalContext* globalCtx) {
 
 s32 func_80BD697C(s16 ruppeIndex) {
     switch (ruppeIndex) {
-        case RUPPE_GREEN:
+        case RUPEE_GREEN:
             if (gSaveContext.save.weekEventReg[53] & 4) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~4;
                 return true;
             }
             break;
-        case RUPPE_BLUE:
+        case RUPEE_BLUE:
             if (gSaveContext.save.weekEventReg[53] & 0x80) {
                 gSaveContext.save.weekEventReg[53] &= (u8)~0x80;
                 return true;
             }
             break;
-        case RUPPE_RED:
+        case RUPEE_RED:
             if (gSaveContext.save.weekEventReg[54] & 1) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~1;
                 return true;
             }
             break;
-        case RUPPE_ORANGE:
+        case RUPEE_ORANGE:
             if (gSaveContext.save.weekEventReg[54] & 2) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~2;
                 return true;
             }
             break;
-        case RUPPE_PURPLE:
+        case RUPEE_PURPLE:
             if (gSaveContext.save.weekEventReg[54] & 4) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~4;
                 return true;
             }
             break;
-        case RUPPE_UNUSED:
+        case RUPEE_UNUSED:
             if ((gSaveContext.save.weekEventReg[54] & 8)) {
                 gSaveContext.save.weekEventReg[54] &= (u8)~8;
                 return true;
@@ -153,8 +153,8 @@ void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     this->ruppeIndex = SCRUPPE_GET_TYPE(thisx);
-    if ((this->ruppeIndex < RUPPE_GREEN) || (this->ruppeIndex >= RUPPE_UNUSED)) {
-        this->ruppeIndex = RUPPE_GREEN;
+    if ((this->ruppeIndex < RUPEE_GREEN) || (this->ruppeIndex >= RUPEE_UNUSED)) {
+        this->ruppeIndex = RUPEE_GREEN;
     }
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80BD6A8C;

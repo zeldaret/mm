@@ -18,12 +18,12 @@ typedef struct EnScRuppe {
 } EnScRuppe; // size = 0x198
 
 typedef enum {
-    /* 0 */ RUPPE_GREEN,
-    /* 1 */ RUPPE_BLUE,
-    /* 2 */ RUPPE_RED,
-    /* 3 */ RUPPE_ORANGE,
-    /* 4 */ RUPPE_PURPLE,
-    /* 5 */ RUPPE_UNUSED,
+    /* 0 */ RUPEE_GREEN,
+    /* 1 */ RUPEE_BLUE,
+    /* 2 */ RUPEE_RED,
+    /* 3 */ RUPEE_ORANGE,
+    /* 4 */ RUPEE_PURPLE,
+    /* 5 */ RUPEE_UNUSED,
 } RupeeType;
 
 extern const ActorInit En_Sc_Ruppe_InitVars;
