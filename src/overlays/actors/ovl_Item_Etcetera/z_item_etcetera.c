@@ -68,21 +68,22 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.25f);
     ItemEtcetera_SetupAction(this, ItemEtcetera_WaitForObject);
     switch (type) {
-        case 7:
+        case ITEM_ETC_ARROW_FIRE:
             Actor_SetScale(&this->actor, 0.5f);
             this->actor.draw = NULL;
             this->actor.shape.yOffset = 50.0f;
             break;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
+        case ITEM_ETC_RUPEE_GREEN_CHEST_GAME:
+        case ITEM_ETC_RUPEE_BLUE_CHEST_GAME:
+        case ITEM_ETC_RUPEE_RED_CHEST_GAME:
+        case ITEM_ETC_RUPEE_PURPLE_CHEST_GAME:
+        case ITEM_ETC_HEART_PIECE_CHEST_GAME:
+        case ITEM_ETC_KEY_SMALL_CHEST_GAME:
             Actor_SetScale(&this->actor, 0.5f);
             this->futureActionFunc = func_809200F8;
             this->drawFunc = func_80920164;
             this->actor.world.pos.y += 15.0f;
+        default:
             break;
     }
 }
