@@ -26,7 +26,7 @@ typedef struct ObjTsubo {
     /* 0x0196 */ s8 homeRoom;
     /* 0x0197 */ s8 unk_197;
     /* 0x0198 */ s8 unk_198;
-    /* 0x0199 */ s8 objBankIdx;
+    /* 0x0199 */ s8 objBankIndex;
     /* 0x019A */ s8 unk_19A;
     /* 0x019B */ u8 unk_19B;
 } ObjTsubo; // size = 0x19C

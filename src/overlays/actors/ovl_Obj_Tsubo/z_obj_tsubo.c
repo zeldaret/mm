@@ -123,7 +123,7 @@ void func_8092762C(ObjTsubo* this, GlobalContext* globalCtx) {
 void func_80927690(ObjTsubo* this, GlobalContext* globalCtx) {
     s32 itemDrop;
 
-    if (!this->unk_197 && OBJ_TSUBO_ZROT(&this->actor) != 2) {
+    if (!this->unk_197 && (OBJ_TSUBO_ZROT(&this->actor) != 2)) {
         itemDrop = func_800A8150(OBJ_TSUBO_P003F(&this->actor));
         if (itemDrop > ITEM00_NO_DROP) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos, (OBJ_TSUBO_PFE00(&this->actor) << 8) | itemDrop);
@@ -166,7 +166,7 @@ s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, GlobalContext* globalCtx) 
 }
 
 void func_8092788C(ObjTsubo* this, GlobalContext* globalCtx) {
-    if (!this->unk_197 && globalCtx->roomCtx.currRoom.num != this->homeRoom) {
+    if (!this->unk_197 && (globalCtx->roomCtx.currRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -188,8 +188,8 @@ void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->cylinderCollider.dim.radius = sPotTypeData[type].radius;
     this->cylinderCollider.dim.height = sPotTypeData[type].height;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->objBankIdx = Object_GetIndex(&globalCtx->objectCtx, sPotTypeData[type].objId);
-    if (this->objBankIdx < 0) {
+    this->objBankIndex = Object_GetIndex(&globalCtx->objectCtx, sPotTypeData[type].objId);
+    if (this->objBankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.shape.shadowScale = 1.8f;
@@ -238,7 +238,6 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, GlobalContext* globalCtx) {
         vel.z = pos.z * 0.23f;
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
         randf = Rand_ZeroOne();
-
         if (randf < 0.2f) {
             phi_s0 = 0x60;
         } else if (randf < 0.6f) {
@@ -371,10 +370,12 @@ void ObjTsubo_RacePotBreak2(ObjTsubo* this, GlobalContext* globalCtx2) {
         vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
         vel.z = pos.z * 0.3f;
         Math_Vec3f_Sum(&pos, worldPos, &pos);
-
-        phi_s0 = Rand_ZeroOne() < 0.2f ? 0xC0 : 0xA0;
+        if (Rand_ZeroOne() < 0.2f) {
+            phi_s0 = 0xC0;
+        } else {
+            phi_s0 = 0xA0;
+        }
         scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
-
         EffectSsKakera_Spawn(globalCtx, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
                              typeData->objId, typeData->shardDL);
     }
@@ -406,7 +407,6 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, GlobalContext* globalCtx2) {
         vel.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
         vel.z = pos.z * 0.4f;
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
-
         if (Rand_ZeroOne() < 0.2f) {
             phi_s0 = 0x40;
         } else {
@@ -431,8 +431,8 @@ void func_80928914(ObjTsubo* this) {
 void func_80928928(ObjTsubo* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIdx)) {
-        this->actor.objBankIndex = this->objBankIdx;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIndex)) {
+        this->actor.objBankIndex = this->objBankIndex;
         func_809289B4(this);
     }
 }
@@ -494,7 +494,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
             if ((this->actor.bgCheckFlags & 1) &&
-                DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL) {
+                (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_195 = true;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
@@ -508,7 +508,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (absYawDiff >= 0x5556) {
+                    if (absYawDiff > DEGF_TO_BINANG(120.0f)) {
                         Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
                     }
                 }
