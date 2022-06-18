@@ -150,8 +150,8 @@ void func_80C1ED64(DmBal* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* ar
 Vec3f D_80C1F2C4 = { 0.0f, 9.0f, 0.0f };
 
 void DmBal_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DmBal* this = THIS;
     s32 pad;
+    DmBal* this = THIS;
     Vec3f sp3C;
     Vec3f sp30;
 
@@ -174,7 +174,7 @@ void DmBal_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 DmBal_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    DmBal* this = (DmBal*)THIS;
+    DmBal* this = THIS;
     Vec3s rots;
 
     if (limbIndex == 6) {
