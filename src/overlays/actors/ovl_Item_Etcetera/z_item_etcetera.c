@@ -17,7 +17,7 @@ void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_WaitForObject(ItemEtcetera* this, GlobalContext* globalCtx);
 void func_8092009C(ItemEtcetera* this, GlobalContext* globalCtx);
 void func_809200F8(ItemEtcetera* this, GlobalContext* globalCtx);
-void func_80920164(Actor* thisx, GlobalContext* globalCtx);
+void ItemEtcetera_DrawThroughLens(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Item_Etcetera_InitVars = {
@@ -81,7 +81,7 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM_ETC_KEY_SMALL_CHEST_GAME:
             Actor_SetScale(&this->actor, 0.5f);
             this->futureActionFunc = func_809200F8;
-            this->drawFunc = func_80920164;
+            this->drawFunc = ItemEtcetera_DrawThroughLens;
             this->actor.world.pos.y += 15.0f;
         default:
             break;
@@ -119,7 +119,7 @@ void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-void func_80920164(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_DrawThroughLens(Actor* thisx, GlobalContext* globalCtx) {
     ItemEtcetera* this = THIS;
 
     if (globalCtx->actorCtx.unk4 == 100) {

@@ -10,16 +10,6 @@ struct ItemEtcetera;
 
 typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, GlobalContext*);
 
-typedef struct ItemEtcetera {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ ItemEtceteraActionFunc futureActionFunc;
-    /* 0x148 */ s16 giDrawId;
-    /* 0x14A */ s16 itemID;
-    /* 0x14C */ u8 objIndex;
-    /* 0x150 */ ActorFunc drawFunc;
-    /* 0x154 */ ItemEtceteraActionFunc actionFunc;
-} ItemEtcetera; // size = 0x158
-
 typedef enum {
     /* 0x00 */ ITEM_ETC_BOTTLE_1,
     /* 0x01 */ ITEM_ETC_BOTTLE_2,
@@ -36,6 +26,16 @@ typedef enum {
     /* 0x0C */ ITEM_ETC_HEART_PIECE_CHEST_GAME,
     /* 0x0D */ ITEM_ETC_KEY_SMALL_CHEST_GAME
 } ItemEtceteraType;
+
+typedef struct ItemEtcetera {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ItemEtceteraActionFunc futureActionFunc;
+    /* 0x148 */ s16 giDrawId;
+    /* 0x14A */ s16 itemID;
+    /* 0x14C */ u8 objIndex;
+    /* 0x150 */ ActorFunc drawFunc;
+    /* 0x154 */ ItemEtceteraActionFunc actionFunc;
+} ItemEtcetera; // size = 0x158
 
 extern const ActorInit Item_Etcetera_InitVars;
 
