@@ -43,7 +43,7 @@ void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x20F)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x20F) != 0) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
             globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action) {
             this->transpInit |= 2;
@@ -57,7 +57,7 @@ void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx) {
     if ((this->actor.home.rot.z != 0) && (this->actor.draw != NULL)) {
         func_800B9010(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
     }
-    if (this->transpInit & 2) {
+    if ((this->transpInit & 2) != 0) {
         if (this->transparency < 240) {
             this->transparency += 25;
         } else {
@@ -76,14 +76,14 @@ void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EffZoraband* this = THIS;
 
-    if (this->transparency) {
+    if (this->transparency != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_RotateYS((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), MTXMODE_APPLY);
         AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (this->actor.home.rot.z) {
+        if (this->actor.home.rot.z != 0) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 100, this->transparency);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 200, 0, 255);
         } else {
