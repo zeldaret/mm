@@ -52,6 +52,11 @@ static TransformUpdateIndex* sBoxLightAnimations[] = {
     &gBoxLightChildCurveAnim,
 };
 
+typedef enum {
+    /* 0x00 */ DEMO_TRE_LGT_ACTION_WAIT, // wait until animation is needed
+    /* 0x01 */ DEMO_TRE_LGT_ACTION_ANIMATE
+} DemoTreLgtAction;
+
 static DemoTreLgtActionFunc sActionFuncs[] = {
     DemoTreLgt_Wait,
     DemoTreLgt_Animate,
@@ -101,7 +106,7 @@ void DemoTreLgt_SetupAnimate(DemoTreLgt* this, GlobalContext* globalCtx, f32 fra
 }
 
 void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx) {
-    f32 curFrame = this->skelCurve.animCurFrame;
+    f32 curFrame = this->skelCurve.curFrame;
 
     if (curFrame < D_808E1490[this->animationType].unk4) {
         this->colorAlpha1 = 255;
@@ -136,7 +141,7 @@ void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx) {
     sActionFuncs[this->action](this, globalCtx);
 }
 
-s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex, Actor* thisx) {
+s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, Actor* thisx) {
     s32 pad;
     DemoTreLgt* this = THIS;
 
@@ -148,8 +153,8 @@ s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCu
 
     if (limbIndex == OBJECT_BOX_LIGHT_LIMB_01) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha1);
-    } else if (limbIndex == OBJECT_BOX_LIGHT_LIMB_13 || limbIndex == OBJECT_BOX_LIGHT_LIMB_07 ||
-               limbIndex == OBJECT_BOX_LIGHT_LIMB_04 || limbIndex == OBJECT_BOX_LIGHT_LIMB_10) {
+    } else if ((limbIndex == OBJECT_BOX_LIGHT_LIMB_13) || (limbIndex == OBJECT_BOX_LIGHT_LIMB_07) ||
+               (limbIndex == OBJECT_BOX_LIGHT_LIMB_04) || (limbIndex == OBJECT_BOX_LIGHT_LIMB_10)) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha2);
     }
 
