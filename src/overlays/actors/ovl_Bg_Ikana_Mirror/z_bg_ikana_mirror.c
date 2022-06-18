@@ -287,7 +287,7 @@ void func_80B7FB84(BgIkanaMirror* arg0) {
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaMirror* this = (BgIkanaMirror*)thisx;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, globalCtx); 
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
