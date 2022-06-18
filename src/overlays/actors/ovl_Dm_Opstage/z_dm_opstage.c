@@ -18,13 +18,6 @@ void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, GlobalContext* globalCtx);
 
-typedef enum {
-    /* 0 */ DM_OPSTAGE_TYPE_FLOOR,
-    /* 1 */ DM_OPSTAGE_TYPE_TREE1,
-    /* 2 */ DM_OPSTAGE_TYPE_TREE2,
-    /* 3 */ DM_OPSTAGE_TYPE_TREE3,
-} DmOpStageTypes;
-
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
     ACTORCAT_ITEMACTION,
@@ -51,11 +44,11 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DmOpstage_SetupAction(this, DmOpstage_FollowCutsceneScript);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DM_OPSTAGE_TYPE_FLOOR) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_keikoku_demo_Colheader_001C98);
     }
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DM_OPSTAGE_TYPE_FLOOR) {
         this->pos.x = this->dyna.actor.world.pos.x;
         this->pos.y = this->dyna.actor.world.pos.y;
         this->pos.z = this->dyna.actor.world.pos.z;
@@ -68,7 +61,7 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DM_OPSTAGE_TYPE_FLOOR) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -76,7 +69,7 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DM_OPSTAGE_TYPE_FLOOR) {
         if (Cutscene_CheckActorAction(globalCtx, 0x73)) {
             actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x73);
             if (globalCtx->csCtx.actorActions[actionIndex]->action == 2) {
@@ -108,7 +101,7 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > 0) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DM_OPSTAGE_TYPE_FLOOR) {
         Matrix_Translate(this->dyna.actor.world.pos.x + this->pos.x, this->dyna.actor.world.pos.y + this->pos.y,
                          this->dyna.actor.world.pos.z + this->pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);

@@ -16,6 +16,13 @@ typedef struct DmOpstage {
     /* 0x1A4 */ Vec3f pos;
 } DmOpstage; // size = 0x1B0
 
+typedef enum {
+    /* 0 */ DM_OPSTAGE_TYPE_FLOOR,
+    /* 1 */ DM_OPSTAGE_TYPE_TREE1,
+    /* 2 */ DM_OPSTAGE_TYPE_TREE2,
+    /* 3 */ DM_OPSTAGE_TYPE_TREE3,
+} DmOpStageTypes;
+
 extern const ActorInit Dm_Opstage_InitVars;
 
 #endif // Z_DM_OPSTAGE_H
