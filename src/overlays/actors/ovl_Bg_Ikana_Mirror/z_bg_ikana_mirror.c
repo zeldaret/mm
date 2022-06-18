@@ -4,6 +4,8 @@
  * Description: Stone Tower Temple - Mirror
  */
 
+//credits: darkeye, Isghj, EllipticEllipsis, mzxrules,
+
 #include "z_bg_ikana_mirror.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -105,11 +107,8 @@ void func_80B7FBA4(BgIkanaMirror* arg0, GlobalContext* arg1);
 extern ColliderTrisElementInit D_80B7FF50[9];
 extern ColliderTrisInit D_80B8016C;
 extern ColliderQuadInit D_80B8017C[2];
-// extern Vec3f D_80B8019C[2];
-// extern Vec3f D_80B801A8[2];
-// extern Vec3f D_80B801B4[2];
-// extern Vec3f D_80B801C0[2];
-// extern ColliderQuadInit D_80B801FC;
+
+//extern ColliderQuadInit D_80B801FC;
 extern InitChainEntry D_80B8021C[];
 
 extern Gfx* D_060014B0;
@@ -118,26 +117,6 @@ extern Gfx* D_06001E18;
 extern CollisionHeader D_06002358;
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7F730.s")
-
-// typedef struct {
-//                Vec3f quad[4];
-//                Vec3s dcMid;
-//                Vec3s baMid;
-//                f32 acDist;
-// } ColliderQuadDim;
-// typedef struct {
-//                Vec3f quad[4];
-// } ColliderQuadDimInit;
-// typedef struct {
-//                Collider base;
-//                ColliderInfo info;
-//                ColliderQuadDim dim;
-// } ColliderQuad;
-// typedef struct {
-//                ColliderInit base;
-//                ColliderInfoInit info;
-//                ColliderQuadDimInit dim;
-// } ColliderQuadInit;
 
 void func_80B7F730(BgIkanaMirror *arg0){
   ColliderQuad *new_var;
@@ -162,73 +141,6 @@ void func_80B7F730(BgIkanaMirror *arg0){
 
   Matrix_Pop();
 }
-
-// void func_80B7F730(BgIkanaMirror *arg0)
-// {
-//   // Vec3f sp78;
-//   // Vec3f sp6C;
-//   ColliderQuad *new_var;
-//   // Vec3f sp84;
-//   s32 i;
-//   Vec3f sp60[4];
-//   Matrix_Push();
-//   Matrix_SetTranslateRotateYXZ(arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, &arg0->actor.shape.rot);
-//   for (i = 0; i < 2; i++)
-//   {
-//     Matrix_MultVec3f(&D_80B8019C[i].dim.quad[0], &sp60[3]);
-//     new_var = &arg0->unk4B8[i];
-//     Matrix_MultVec3f(&D_80B801C0[i].dim.quad[1], &sp60[2]);
-//     Matrix_MultVec3f(&D_80B801B4[i].dim.quad[2], &sp60[1]);
-//     Matrix_MultVec3f(&D_80B8019C[i].dim.quad[3], &sp60[0]);
-//     Collider_SetQuadVertices(new_var, &sp60[3], &sp60[2], &sp60[1], &sp60[0]);
-//   }
-
-//   Matrix_Pop();
-// }
-
-
-// void func_80B7F730(BgIkanaMirror *arg0)
-// {
-//   Vec3f sp84;
-//   Vec3f sp78;
-//   Vec3f sp6C;
-//   Vec3f *new_var4;
-//   Vec3f sp60;
-//   Vec3f *phi_s1;
-//   Vec3f *phi_s0;
-//   Vec3f *phi_s4;
-//   Vec3f *phi_s3;
-//   Vec3f *new_var3;
-//   ColliderQuad *phi_s2;
-  
-//   Matrix_Push();
-//   Matrix_SetTranslateRotateYXZ(arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, &arg0->actor.shape.rot);
- 
-//  phi_s1 = D_80B8019C; 
-//  phi_s2 = arg0->unk4B8;
-//   new_var4 = (Vec3f *) ((&D_80B801A8) + 0xA0);
-//  phi_s3 = D_80B801C0; 
-//  phi_s4 = D_80B801B4; 
-//  phi_s0 = D_80B801A8;
-//   do {
-//     // new_var2 = phi_s2;
-//     Matrix_MultVec3f(phi_s1, &sp84);
-//     Matrix_MultVec3f(phi_s0, &sp78);
-//     Matrix_MultVec3f(phi_s4, &sp6C);
-//     Matrix_MultVec3f(phi_s3, &sp60);
-//     // new_var = &sp6C;
-//     Collider_SetQuadVertices(phi_s2, &sp84, &sp78, &sp6C, &sp60);
-//     phi_s1 = (Vec3f*) (((s32) phi_s1)+0x50);
-//     phi_s0 = (Vec3f*) (((s32) phi_s0)+0x50);
-//     phi_s4 = (Vec3f*) (((s32) phi_s4)+0x50);
-//     phi_s3 = (Vec3f*) (((s32) phi_s3)+0x50);
-//     phi_s2 = (ColliderQuad*) (((s32) phi_s2)+0x80);
-//   }
-//   while ((new_var3 = new_var4) != phi_s0);
-//   Matrix_Pop();
-// }
-
-
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
 
@@ -299,7 +211,66 @@ void func_80B7FA84(BgIkanaMirror* arg0) {
     arg0->actionFunc = func_80B7FA9C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA9C.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA9C.s")
+
+void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
+{
+  s16 temp_v1;
+  s8 temp_v0_4;
+  u8 temp_v0;
+  u8 temp_v0_2;
+  u8 temp_v0_3;
+  s32 phi_a2;
+  temp_v0 = arg0->unk5C7;
+  phi_a2 = 0;
+  if (((s32) temp_v0) >= 0x65)
+  {
+    arg0->unk5C7 = temp_v0 - 0x64;
+  }
+  else
+  {
+    arg0->unk5C7 = 0;
+  }
+  temp_v0_2 = arg0->unk15C.base.acFlags;
+  if ((arg0->unk15C.base.acFlags & 2) != 0)
+  {
+    temp_v1 = arg0->unk5C4;
+    arg0->unk15C.base.acFlags = arg0->unk15C.base.acFlags & 0xFFFD;
+    arg0->unk5C8 = 0;
+    if (((s32) temp_v1) < 0x190)
+    {
+      arg0->unk5C4 = temp_v1 + 1;
+    }
+    temp_v0_3 = arg0->unk5C6;
+    if (((s32) temp_v0_3) < 0xC3)
+    {
+      arg0->unk5C6 = temp_v0_3 + 0x3C;
+    }
+    else
+    {
+      arg0->unk5C6 = 0xFF;
+    }
+  }
+  else
+  {
+    temp_v0_4 = arg0->unk5C8;
+    if (((s32) temp_v0_4) > 0)
+    {
+      phi_a2 = 1;
+    }
+    else
+      if (((s32) arg0->unk5C4) > 0)
+    {
+      arg0->unk5C8 = temp_v0_4 + 1;
+    }
+  }
+  if (phi_a2 != 0)
+  {
+    func_80B7FB84(arg0);
+    return;
+  }
+  CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->unk15C.base);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FB84.s")
 
@@ -310,6 +281,8 @@ void func_80B7FB84(BgIkanaMirror* arg0) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
 
+
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -319,6 +292,7 @@ void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
 
+//score: 3198
 // void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
 //     GraphicsContext* new_var8;
 //     AnimatedMaterial* new_var6;
