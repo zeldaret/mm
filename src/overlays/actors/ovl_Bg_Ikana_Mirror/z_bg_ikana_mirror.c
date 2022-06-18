@@ -279,9 +279,76 @@ void func_80B7FB84(BgIkanaMirror* arg0) {
     arg0->actionFunc = func_80B7FBA4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
 
+void func_80B7FBA4(BgIkanaMirror *arg0, GlobalContext *arg1) {
+    s16 temp_v0_3;
+    // s32 temp_s0;
+    s32 temp_s0_2;
+    u8 temp_v0;
+    u8 temp_v0_2;
+    u8 temp_v1;
+    BgIkanaMirror *phi_v0;
+    s32 phi_s0;
+    s32 i;
+    s32 j;
+    Collider *phi_s1;
+    s32 phi_s0_2;
 
+    phi_v0 = arg0;
+    phi_s0 = 0;
+    phi_s0_2 = 0;
+    for(i = 0; i<2; i++){
+        temp_v1 = phi_v0->unk4B8[0].base.atFlags;
+        // temp_s0 = phi_s0 + 0x80;
+        //phi_s0 = temp_s0;
+        if ((temp_v1 & 2) != 0) {
+            phi_v0->unk4B8[0].base.atFlags = temp_v1 & ~2; //find symbol for that 2. probably ATFLAGS or close to that.
+        }
+        phi_v0++;
+    }
+    // do {
+    //     temp_v1 = phi_v0->unk4B8[0].base.atFlags;
+    //     temp_s0 = phi_s0 + 0x80;
+    //     phi_s0 = temp_s0;
+    //     if ((temp_v1 & 2) != 0) {
+    //         phi_v0->unk4B8[0].base.atFlags = temp_v1 & ~2;
+    //     }
+    //     phi_v0 += 0x80;
+    // } while (temp_s0 < 0x100);
+    temp_v0 = arg0->unk5C7;
+    if ((s32) temp_v0 < 0x9B) {
+        arg0->unk5C7 = temp_v0 + 0x64;
+    } else {
+        arg0->unk5C7 = 0xFF;
+    }
+    temp_v0_2 = arg0->unk5C6;
+    phi_s1 = &arg0->unk4B8[0].base;
+    if ((s32) temp_v0_2 >= 0x3D) {
+        arg0->unk5C6 = temp_v0_2 - 0x3C;
+    } else {
+        arg0->unk5C6 = 0;
+    }
+    temp_v0_3 = arg0->unk5C4;
+    if ((s32) temp_v0_3 > 0) {
+        arg0->unk5C4 = temp_v0_3 - 1;
+        for(j = 0; j < 2; j++)
+        {
+            CollisionCheck_SetAT(arg1, &arg1->colChkCtx, phi_s1);
+            phi_s1++;
+        }
+        
+        // do {
+        //     CollisionCheck_SetAT(arg1, &arg1->colChkCtx, phi_s1);
+        //     // temp_s0_2 = phi_s0_2 + 0x80;
+        //     // phi_s1 += 0x80;
+        //     // phi_s0_2 = temp_s0_2;
+        // } while (temp_s0_2 != 0x100);
+        return;
+    }
+    arg0->actor.flags &= -0x21; //definitely not just -0x21. find meaning.
+    func_80B7FA84(arg0);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
 
