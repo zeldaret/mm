@@ -3858,8 +3858,7 @@ beginseg
     name "ovl_Bg_Botihasira"
     compress
     include "build/src/overlays/actors/ovl_Bg_Botihasira/z_bg_botihasira.o"
-    include "build/data/ovl_Bg_Botihasira/ovl_Bg_Botihasira.data.o"
-    include "build/data/ovl_Bg_Botihasira/ovl_Bg_Botihasira.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Botihasira/ovl_Bg_Botihasira_reloc.o"
 endseg
 
 beginseg
