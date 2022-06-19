@@ -120,8 +120,8 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
                 phi_s0 |= 1;
                 phi_s1 = 1;
                 func_800B0E48(globalCtx, &pos, &gZeroVec3f, &sDustAccel, &sPrimColor, &sEnvColor,
-                              (((u32)Rand_Next() >> 0x1B) + 70),
-                              ((((u32)Rand_Next()) >> 0x1A) + 60)); // for dust spawn
+                              ((Rand_Next() >> 0x1B) + 70),
+                              (((Rand_Next()) >> 0x1A) + 60)); // for dust spawn
             } else {
                 phi_s1 = 0;
             }
