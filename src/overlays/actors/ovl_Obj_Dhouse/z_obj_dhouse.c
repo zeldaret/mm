@@ -263,13 +263,13 @@ void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
 
         ptr2->unk_18 = (Rand_ZeroOne() * 0.057f) + 0.003f;
 
-        ptr2->unk_1C.x = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.y = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.z = (u32)Rand_Next() >> 0x10;
+        ptr2->unk_1C.x = Rand_Next() >> 0x10;
+        ptr2->unk_1C.y = Rand_Next() >> 0x10;
+        ptr2->unk_1C.z = Rand_Next() >> 0x10;
 
-        ptr2->unk_22 = ((u32)Rand_Next() >> 0x11) - 0x3FFF;
-        ptr2->unk_24 = ((u32)Rand_Next() >> 0x13) - 0xFFF;
-        ptr2->unk_26 = ((u32)Rand_Next() >> 0x12) - 0x1FFF;
+        ptr2->unk_22 = (Rand_Next() >> 0x11) - 0x3FFF;
+        ptr2->unk_24 = (Rand_Next() >> 0x13) - 0xFFF;
+        ptr2->unk_26 = (Rand_Next() >> 0x12) - 0x1FFF;
         ptr2->unk_29 = 0;
         ptr2->unk_28 = 40;
 
@@ -307,13 +307,13 @@ void func_80B13170(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
         ptr2->unk_00.y = (ptr2->unk_00.y * 23.0f) + sp98.y + 15.0f;
         ptr2->unk_00.z = (ptr2->unk_00.z * 80.0f) + sp98.z;
 
-        ptr2->unk_1C.x = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.y = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.z = (u32)Rand_Next() >> 0x10;
+        ptr2->unk_1C.x = Rand_Next() >> 0x10;
+        ptr2->unk_1C.y = Rand_Next() >> 0x10;
+        ptr2->unk_1C.z = Rand_Next() >> 0x10;
 
-        ptr2->unk_22 = ((u32)Rand_Next() >> 0x12) - 0x1FFF;
-        ptr2->unk_24 = ((u32)Rand_Next() >> 0x13) - 0xFFF;
-        ptr2->unk_26 = ((u32)Rand_Next() >> 0x12) - 0x1FFF;
+        ptr2->unk_22 = (Rand_Next() >> 0x12) - 0x1FFF;
+        ptr2->unk_24 = (Rand_Next() >> 0x13) - 0xFFF;
+        ptr2->unk_26 = (Rand_Next() >> 0x12) - 0x1FFF;
 
         ptr2->unk_28 = 40;
 
@@ -356,13 +356,13 @@ void func_80B13474(ObjDhouse* this, GlobalContext* globalCtx, Vec3f* arg2) {
         ptr2->unk_00.y = ((ptr2->unk_00.y - 0.4f) * 20.0f) + arg2->y;
         ptr2->unk_00.z = (ptr2->unk_00.z * 40.0f) + arg2->z;
 
-        ptr2->unk_1C.x = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.y = (u32)Rand_Next() >> 0x10;
-        ptr2->unk_1C.z = (u32)Rand_Next() >> 0x10;
+        ptr2->unk_1C.x = Rand_Next() >> 0x10;
+        ptr2->unk_1C.y = Rand_Next() >> 0x10;
+        ptr2->unk_1C.z = Rand_Next() >> 0x10;
 
-        ptr2->unk_22 = ((u32)Rand_Next() >> 0x12) - 0x1FFF;
-        ptr2->unk_24 = ((u32)Rand_Next() >> 0x13) - 0xFFF;
-        ptr2->unk_26 = ((u32)Rand_Next() >> 0x12) - 0x1FFF;
+        ptr2->unk_22 = (Rand_Next() >> 0x12) - 0x1FFF;
+        ptr2->unk_24 = (Rand_Next() >> 0x13) - 0xFFF;
+        ptr2->unk_26 = (Rand_Next() >> 0x12) - 0x1FFF;
 
         ptr2->unk_28 = 40;
         ptr2->unk_18 = (Rand_ZeroOne() * 0.07f) + 0.003f;

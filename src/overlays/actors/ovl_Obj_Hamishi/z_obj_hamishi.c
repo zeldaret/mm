@@ -170,7 +170,7 @@ void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.shape.rot.y == 0) {
-        this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+        this->actor.shape.rot.y = Rand_Next() >> 0x10;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actor.home.rot.y = this->actor.shape.rot.y;
     }

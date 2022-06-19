@@ -381,7 +381,7 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.shape.rot.y == 0) {
-        this->actor.shape.rot.y = ((u32)Rand_Next() >> 0x10);
+        this->actor.shape.rot.y = (Rand_Next() >> 0x10);
         this->actor.home.rot.y = this->actor.shape.rot.y;
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
@@ -401,11 +401,11 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     EnKusa_SetupWaitObject(this);
     if (D_809366B4) {
-        D_80936CD8 = ((u32)Rand_Next() >> 0x10);
-        D_80936CDA = ((u32)Rand_Next() >> 0x10);
-        D_80936CDC = ((u32)Rand_Next() >> 0x10);
-        D_80936CDE = ((u32)Rand_Next() >> 0x10);
-        D_80936CE0 = ((u32)Rand_Next() >> 0x10);
+        D_80936CD8 = Rand_Next() >> 0x10;
+        D_80936CDA = Rand_Next() >> 0x10;
+        D_80936CDC = Rand_Next() >> 0x10;
+        D_80936CDE = Rand_Next() >> 0x10;
+        D_80936CE0 = Rand_Next() >> 0x10;
         D_809366B4 = false;
         EnKusa_Sway();
         kusaGameplayFrames = globalCtx->gameplayFrames;

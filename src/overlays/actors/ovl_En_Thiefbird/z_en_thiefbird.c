@@ -196,7 +196,7 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
             ptr->unk_0C.z = randPlusMinusPoint5Scaled(5.0f);
             ptr->unk_1C = Rand_ZeroFloat(1000.0f);
             ptr->unk_18 = (Rand_ZeroFloat(20.0f) + 40.0f) * 0.0001f;
-            ptr->unk_1E = Rand_Next() >> 0x10;
+            ptr->unk_1E = (s32)Rand_Next() >> 0x10;
             arg1--;
             if (arg1 == 0) {
                 break;
