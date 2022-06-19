@@ -30,7 +30,7 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-static AnimationInfo sAnimations[] = { { &object_rs_Anim_00788C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
+static AnimationInfo sAnimations[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
@@ -44,7 +44,7 @@ void EnRsn_Init(Actor* thisx, PlayState* play) {
     EnRsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBombShopkeeperSkel, &gBombShopkeeperWalkAnim, NULL, NULL, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     func_80C25D40(this);
 }
@@ -67,30 +67,28 @@ void EnRsn_Update(Actor* thisx, PlayState* play) {
 s32 EnRsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRsn* this = THIS;
 
-    if (limbIndex == 14) {
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_RIGHT_HAND) {
         Matrix_RotateXS(this->unk1D8.y, MTXMODE_APPLY);
     }
     return false;
 }
 
-static Vec3f D_80C26028 = { 0.0f, 0.0f, 0.0f };
-
-void EnRsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnRsn* this = THIS;
-    Vec3f sp18 = D_80C26028;
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 14) {
-        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
+    if (limbIndex == BOMB_SHOPKEEPER_LIMB_RIGHT_HAND) {
+        Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
     }
 }
 
 void EnRsn_Draw(Actor* thisx, PlayState* play) {
     EnRsn* this = THIS;
 
-    OPEN_DISPS(play->state.gfxCtx);
-    func_8012C5B0(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_rs_Tex_005458));
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C5B0(globalCtx->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyeTex));
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
 }

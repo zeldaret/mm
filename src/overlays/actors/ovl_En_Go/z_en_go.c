@@ -187,16 +187,16 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronDropKegAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiveringSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
     { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -249,7 +249,7 @@ void func_80A11144(EnGoStruct* ptr, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_0031A0);
+                gSPDisplayList(POLY_XLU_DISP++, gGoronSteamMaterialDL);
                 flag = true;
             }
 
@@ -269,7 +269,7 @@ void func_80A11144(EnGoStruct* ptr, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_003258);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
 
             Matrix_Pop();
             if (play->state.gfxCtx) {}
@@ -325,7 +325,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
+                gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
                 flag = true;
             }
             Matrix_Push();
@@ -344,7 +344,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
-            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
             Matrix_Pop();
         }
@@ -515,12 +515,15 @@ void func_80A1203C(EnGo* this) {
     }
 }
 
-void func_80A1213C(EnGo* this, PlayState* play) {
-    func_80A11EC0(this->unk_3F8, play, object_oF1d_map_DL_0003D0, object_oF1d_map_DL_000458, 1);
-    func_80A11EC0(this->unk_3F8, play, object_oF1d_map_DL_0008C0, object_oF1d_map_DL_000948, 2);
-    func_80A11EC0(this->unk_3F8, play, object_oF1d_map_DL_000D50, object_oF1d_map_DL_000DD8, 3);
-    func_80A11144(this->unk_3F8, play);
-    func_80A115B4(this->unk_3F8, play);
+void func_80A1213C(EnGo* this, GlobalContext* globalCtx) {
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL,
+                  1);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL,
+                  2);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL,
+                  3);
+    func_80A11144(this->unk_3F8, globalCtx);
+    func_80A115B4(this->unk_3F8, globalCtx);
 }
 
 s32 func_80A121F4(PlayState* play) {
@@ -1459,8 +1462,8 @@ void func_80A14798(EnGo* this, PlayState* play) {
     if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, play) || (this->unk_289 < 0) ||
         SubS_IsObjectLoaded(this->unk_289, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
-                           this->morphTable, 18);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+                           GORON_LIMB_MAX);
 
         this->unk_3DC = -1;
         func_80A12C48(this, play, 2);
@@ -1965,8 +1968,8 @@ void func_80A15B80(EnGo* this, PlayState* play) {
 
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? object_oF1d_map_DL_001560 : object_oF1d_map_DL_0091A8);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2059,8 +2062,7 @@ void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void func_80A15FEC(Actor* thisx, PlayState* play) {
     static TexturePtr D_80A1670C[] = {
-        object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
-        object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
+        gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
     };
     EnGo* this = THIS;
 

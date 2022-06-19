@@ -312,8 +312,8 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
     s32 i;
     s32 rand;
 
-    if ((this->unk_2FC > 100) || func_80C14BCC(this, play)) {
-        rand = (u32)Rand_Next() % 3;
+    if ((this->unk_2FC > 100) || func_80C14BCC(this, globalCtx)) {
+        rand = Rand_Next() % 3;
 
         this->unk_2FC = 0;
         if (rand < this->unk_218) {

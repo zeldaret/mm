@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64load.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 

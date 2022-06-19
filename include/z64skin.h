@@ -78,8 +78,8 @@ typedef struct {
     /* 0x04C */ SkelAnime skelAnime;
 } Skin; // size = 0x90
 
-typedef void (*SkinPostDraw)(struct Actor*, struct PlayState*, Skin*);
-typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct PlayState*, s32, Skin*);
+typedef void (*SkinPostDraw)(struct Actor* thisx, struct PlayState* play, Skin* skin);
+typedef s32 (*SkinOverrideLimbDraw)(struct Actor* thisx, struct PlayState* play, s32 limbIndex, Skin* skin);
 
 #define SKIN_DRAW_FLAG_CUSTOM_TRANSFORMS (1 << 0)
 #define SKIN_DRAW_FLAG_CUSTOM_MATRIX     (1 << 1)

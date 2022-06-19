@@ -6,7 +6,8 @@
 #include "objects/object_ani/object_ani.h"
 #include "objects/object_fsn/object_fsn.h"
 
-#define ENOSSAN_LIMB_MAX MAX(FSN_LIMB_MAX + 1, ANI_LIMB_MAX)
+// Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
+#define ENOSSAN_LIMB_MAX MAX((s32)FSN_LIMB_MAX + 1, (s32)ANI_LIMB_MAX)
 
 struct EnOssan;
 

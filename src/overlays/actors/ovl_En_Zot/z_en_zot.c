@@ -86,8 +86,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
-    Animation_PlayLoop(&this->skelAnime, &object_zo_Anim_00DE20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
+    Animation_PlayLoop(&this->skelAnime, &gZoraStandAnim);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
@@ -235,9 +235,9 @@ void EnZot_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &object_zo_Anim_00DE20, &gZoraWalkAnim,         &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
-        &object_zo_Anim_00FDF0, &object_zo_Anim_010B18, &object_zo_Anim_011424, &object_zo_Anim_00EDF0,
-        &object_zo_Anim_00DF54, &object_zo_Anim_00DF54,
+        &gZoraStandAnim,           &gZoraWalkAnim,           &gZoraSitAnim,           &gZoraRunAnim,
+        &gZoraFixSpeakerStartAnim, &gZoraFixSpeakerLoopAnim, &gZoraFixSpeakerEndAnim, &gZoraBobHandAnim,
+        &gZoraListenAnim,          &gZoraListenAnim,
     };
 
     if ((arg1 >= 0) && (arg1 < 10)) {

@@ -2089,9 +2089,9 @@ void EnBigslime_SetupIdleLookAround(EnBigslime* this) {
     this->idleTimer = 60;
     this->actor.speedXZ = 0.0f;
     if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
-        this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
+        this->gekkoYaw = this->gekkoRot.y + (Rand_Next() >> 20) + 0x2000;
     } else {
-        this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
+        this->gekkoYaw = this->gekkoRot.y - (Rand_Next() >> 20) - 0x2000;
     }
     this->actionFunc = EnBigslime_IdleLookAround;
 }
@@ -2111,9 +2111,9 @@ void EnBigslime_IdleLookAround(EnBigslime* this, PlayState* play) {
     if ((this->skelAnime.animation == &gGekkoNervousIdleAnim) &&
         Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
         if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
-            this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
+            this->gekkoYaw = this->gekkoRot.y + (Rand_Next() >> 20) + 0x2000;
         } else {
-            this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
+            this->gekkoYaw = this->gekkoRot.y - (Rand_Next() >> 20) - 0x2000;
         }
     }
 
@@ -2700,9 +2700,9 @@ void EnBigslime_AddIceShardEffect(EnBigslime* this, PlayState* play) {
             iceShardEffect->pos.x = (targetVtx->n.ob[0] * this->actor.scale.x) + this->actor.world.pos.x;
             iceShardEffect->pos.y = (targetVtx->n.ob[1] * this->actor.scale.y) + this->actor.world.pos.y;
             iceShardEffect->pos.z = (targetVtx->n.ob[2] * this->actor.scale.z) + this->actor.world.pos.z;
-            iceShardEffect->rotation.x = Rand_Next() >> 0x10;
-            iceShardEffect->rotation.y = Rand_Next() >> 0x10;
-            iceShardEffect->rotation.z = Rand_Next() >> 0x10;
+            iceShardEffect->rotation.x = (s32)Rand_Next() >> 0x10;
+            iceShardEffect->rotation.y = (s32)Rand_Next() >> 0x10;
+            iceShardEffect->rotation.z = (s32)Rand_Next() >> 0x10;
             iceShardEffect->isActive = true;
             randPitch = Rand_S16Offset(0x1000, 0x3000);
             vtxZ = targetVtx->n.ob[2];
@@ -2742,9 +2742,9 @@ void EnBigslime_UpdateEffects(EnBigslime* this) {
             if (iceShardEffect->pos.y < (GBT_ROOM_5_MIN_Y - 20.0f)) {
                 iceShardEffect->isActive = false;
             }
-            iceShardEffect->rotation.x += (s16)(((u32)Rand_Next() >> 0x17) + 0x700);
-            iceShardEffect->rotation.y += (s16)(((u32)Rand_Next() >> 0x17) + 0x900);
-            iceShardEffect->rotation.z += (s16)(((u32)Rand_Next() >> 0x17) + 0xB00);
+            iceShardEffect->rotation.x += (s16)((Rand_Next() >> 0x17) + 0x700);
+            iceShardEffect->rotation.y += (s16)((Rand_Next() >> 0x17) + 0x900);
+            iceShardEffect->rotation.z += (s16)((Rand_Next() >> 0x17) + 0xB00);
         }
     }
 

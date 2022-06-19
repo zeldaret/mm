@@ -486,7 +486,7 @@ void func_80B67B50(EnSth* this, PlayState* play) {
     } else {
         this->unk_29C &= ~1;
         gSaveContext.save.weekEventReg[34] |= 8;
-        Actor_PickUp(&this->actor, play, GI_MASK_CAPTAIN, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
 

@@ -192,9 +192,9 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
         iceShardEffect->pos.y =
             this->actor.world.pos.y + (((iceShardEffect->vel.y * 2.0f) - 1.0f) * 400.0f * this->actor.scale.y);
         iceShardEffect->pos.z = this->actor.world.pos.z + (400.0f * this->actor.scale.z) * iceShardEffect->vel.z;
-        iceShardEffect->rotation.x = Rand_Next() >> 0x10;
-        iceShardEffect->rotation.y = Rand_Next() >> 0x10;
-        iceShardEffect->rotation.z = Rand_Next() >> 0x10;
+        iceShardEffect->rotation.x = (s32)Rand_Next() >> 0x10;
+        iceShardEffect->rotation.y = (s32)Rand_Next() >> 0x10;
+        iceShardEffect->rotation.z = (s32)Rand_Next() >> 0x10;
         iceShardEffect->isActive = true;
         Math_Vec3f_ScaleAndStore(&iceShardEffect->vel, Rand_ZeroFloat(3.0f) + 7.0f, &iceShardEffect->vel);
         iceShardEffect->scale = (Rand_ZeroFloat(6.0f) + 2.0f) * 0.001f;
@@ -276,8 +276,8 @@ void EnMinislime_SetupBreakFromBigslime(EnMinislime* this) {
     this->actor.gravity = -1.0f;
     this->frozenScale = 0.1f;
     this->actor.world.rot.x = Rand_S16Offset(0x800, 0x800);
-    this->actor.shape.rot.x = (s16)(Rand_Next() >> 0x10);
-    this->actor.shape.rot.z = (s16)(Rand_Next() >> 0x10);
+    this->actor.shape.rot.x = (s32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.z = (s32)Rand_Next() >> 0x10;
     this->actor.scale.x = 0.15f;
     this->actor.scale.y = 0.075f;
     this->actor.scale.z = 0.15f;
@@ -437,7 +437,7 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
             if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
                 this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
             } else {
-                this->actor.world.rot.y += (s16)(Rand_Next() >> 19);
+                this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
             }
         }
         this->idleTimer = 20;

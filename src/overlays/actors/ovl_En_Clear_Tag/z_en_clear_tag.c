@@ -11,10 +11,22 @@
 
 #define THIS ((EnClearTag*)thisx)
 
-void EnClearTag_Init(Actor* thisx, PlayState* play);
-void EnClearTag_Destroy(Actor* thisx, PlayState* play);
-void EnClearTag_Update(Actor* thisx, PlayState* play);
-void EnClearTag_Draw(Actor* thisx, PlayState* play);
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_EFFECT_AVAILABLE,
+    /* 0x01 */ CLEAR_TAG_EFFECT_DEBRIS,
+    /* 0x02 */ CLEAR_TAG_EFFECT_FIRE, // never set to, remnant of OoT
+    /* 0x03 */ CLEAR_TAG_EFFECT_SMOKE,
+    /* 0x04 */ CLEAR_TAG_EFFECT_FLASH,
+    /* 0x05 */ CLEAR_TAG_EFFECT_LIGHT_RAYS,
+    /* 0x06 */ CLEAR_TAG_EFFECT_SHOCKWAVE,
+    /* 0x07 */ CLEAR_TAG_EFFECT_SPLASH,
+    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
+} ClearTagEffectType;
+
+void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
@@ -82,15 +94,15 @@ static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static TexturePtr sSplashTex[] = {
-    gExplosionSplashTex1,
-    gExplosionSplashTex2,
-    gExplosionSplashTex3,
-    gExplosionSplashTex4,
-    gExplosionSplashTex5,
-    gExplosionSplashTex6,
-    gExplosionSplashTex7,
-    gExplosionSplashTex8,
+static TexturePtr sWaterSplashTextures[] = {
+    gEffWaterSplash1Tex,
+    gEffWaterSplash2Tex,
+    gEffWaterSplash3Tex,
+    gEffWaterSplash4Tex,
+    gEffWaterSplash5Tex,
+    gEffWaterSplash6Tex,
+    gEffWaterSplash7Tex,
+    gEffWaterSplash8Tex,
     NULL,
     NULL,
     NULL,
@@ -831,7 +843,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
+                gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
             }
         }
     }
@@ -972,7 +984,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sSplashTex[effect->actionTimer]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sWaterSplashTextures[effect->actionTimer]));
             func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
             isMaterialApplied++;
@@ -996,7 +1008,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                         Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
+                        gSPDisplayList(POLY_XLU_DISP++, gEffWaterSplashDL);
                     }
                 }
             }
