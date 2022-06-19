@@ -109,17 +109,19 @@ typedef struct {
 
 #define IS_ZERO(f) (fabsf(f) < 0.008f)
 
-// Trig macros
-#define DEGF_TO_BINANG(degreesf) (s16)(degreesf * 182.04167f + .5f)
-#define RADF_TO_BINANG(radf) (s16)(radf * (0x8000 / M_PI))
-#define RADF_TO_DEGF(radf) (radf * (180.0f / M_PI))
-#define DEGF_TO_RADF(degf) (degf * (M_PI / 180.0f))
+// Angle conversion macros
+#define DEG_TO_BINANG(degrees) (s16)((degrees) * (0x8000 / 180.0f))
+#define DEGF_TO_BINANG(degreesf) (s16)((degreesf) * 182.04167f + .5f)
+#define RADF_TO_BINANG(radf) (s16)((radf) * (0x8000 / M_PI))
+#define RADF_TO_DEGF(radf) ((radf) * (180.0f / M_PI))
+#define DEGF_TO_RADF(degf) ((degf) * (M_PI / 180.0f))
+#define BINANG_TO_DEGF(binang) ((f32)binang * (360.0001525f / 65535.0f))
+#define BINANG_TO_RAD(binang) (((f32)binang / 0x8000) * M_PI)
+
+// Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
 #define BINANG_SUB(a, b) ((s16)(a - b))
 #define BINANG_ADD(a, b) ((s16)(a + b))
-#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
-#define BINANG_TO_DEGF(binang) ((f32)binang * (360.0001525f / 65535.0f))
-#define BINANG_TO_RAD(binang) (((f32)binang / 0x8000) * M_PI)
 
 // Vector macros
 #define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))
