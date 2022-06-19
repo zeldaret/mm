@@ -478,7 +478,7 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 22.5f)) {
-        this->unk_3D4 = (u32)Rand_Next() % 0x7D0;
+        this->unk_3D4 = Rand_Next() % 0x7D0;
     }
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;

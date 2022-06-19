@@ -201,7 +201,7 @@ void func_80ACE850(EnFuMato* this, GlobalContext* globalCtx) {
     s32 phi_s2;
     s32 i;
 
-    this->unk_308 = (u32)Rand_Next() % ARRAY_COUNT(this->unk_1B8);
+    this->unk_308 = Rand_Next() % ARRAY_COUNT(this->unk_1B8);
     this->unk_302 = 1;
     this->dyna.actor.gravity = -1.0f;
     this->dyna.actor.velocity.y = Rand_ZeroOne();
