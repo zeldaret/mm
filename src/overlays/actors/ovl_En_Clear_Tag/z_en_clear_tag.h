@@ -5,18 +5,6 @@
 
 struct EnClearTag;
 
-typedef enum {
-    /* 0x00 */ CLEAR_TAG_EFFECT_AVAILABLE,
-    /* 0x01 */ CLEAR_TAG_EFFECT_DEBRIS,
-    /* 0x02 */ CLEAR_TAG_EFFECT_FIRE, // never set to, remnant of OoT
-    /* 0x03 */ CLEAR_TAG_EFFECT_SMOKE,
-    /* 0x04 */ CLEAR_TAG_EFFECT_FLASH,
-    /* 0x05 */ CLEAR_TAG_EFFECT_LIGHT_RAYS,
-    /* 0x06 */ CLEAR_TAG_EFFECT_SHOCKWAVE,
-    /* 0x07 */ CLEAR_TAG_EFFECT_SPLASH,
-    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
-} ClearTagEffectType;
-
 typedef struct EnClearTagEffect {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 actionTimer;
