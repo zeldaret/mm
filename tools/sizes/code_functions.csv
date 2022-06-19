@@ -2283,12 +2283,12 @@ asm/non_matchings/code/code_80140E80/func_80141200.s,func_80141200,0x80141200,0x
 asm/non_matchings/code/code_80140E80/func_8014151C.s,func_8014151C,0x8014151C,0x57
 asm/non_matchings/code/code_80140E80/func_80141678.s,func_80141678,0x80141678,0x40
 asm/non_matchings/code/code_80140E80/func_80141778.s,func_80141778,0x80141778,0x4E
-asm/non_matchings/code/z_vismono/func_801418B0.s,func_801418B0,0x801418B0,0x14
-asm/non_matchings/code/z_vismono/func_80141900.s,func_80141900,0x80141900,0x9
-asm/non_matchings/code/z_vismono/func_80141924.s,func_80141924,0x80141924,0xC4
-asm/non_matchings/code/z_vismono/func_80141C34.s,func_80141C34,0x80141C34,0x8B
+asm/non_matchings/code/z_vismono/VisMono_Init.s,VisMono_Init,0x801418B0,0x14
+asm/non_matchings/code/z_vismono/VisMono_Destroy.s,VisMono_Destroy,0x80141900,0x9
+asm/non_matchings/code/z_vismono/VisMono_DesaturateTLUT.s,VisMono_DesaturateTLUT,0x80141924,0xC4
+asm/non_matchings/code/z_vismono/VisMono_DesaturateDList.s,VisMono_DesaturateDList,0x80141C34,0x8B
 asm/non_matchings/code/z_vismono/VisMono_Draw.s,VisMono_Draw,0x80141E60,0x7B
-asm/non_matchings/code/z_vismono/func_8014204C.s,func_8014204C,0x8014204C,0x1D
+asm/non_matchings/code/z_vismono/VisMono_DrawOld.s,VisMono_DrawOld,0x8014204C,0x1D
 asm/non_matchings/code/code_801420C0/func_801420C0.s,func_801420C0,0x801420C0,0xD
 asm/non_matchings/code/code_801420C0/func_801420F4.s,func_801420F4,0x801420F4,0x3
 asm/non_matchings/code/code_801420C0/func_80142100.s,func_80142100,0x80142100,0xD0
