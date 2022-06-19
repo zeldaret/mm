@@ -26,7 +26,7 @@ static u8 sScheduleScript[] = {
     /* 0x11 */ SCHEDULE_CMD_RET_NONE(),
 };
 
-static s32 D_80BFDEB4[0x1D] = {
+static s32 sMsgEventScript[] = {
     0x0E29480C, 0x0E00FF2B, 0x52,       0x5F2C29,   0x4A0C2F00, 0xC1509,    0xE29,      0x4B0C1509,
     0xE29,      0x4C0C1200, 0x4908001D, 0x09000006, 0xC0000,    0x13000C2F, 0x2E2D,     0x282D00,
     0x0D0C1149, 0x08115A80, 0x10090000, 0x06000200, 0x130002,   0x2F00002E, 0x2D000D0C, 0x115A8010,
@@ -45,8 +45,7 @@ const ActorInit En_Bjt_InitVars = {
     (ActorFunc)EnBjt_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BFDF48 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT1,
         AT_NONE,
@@ -66,15 +65,8 @@ static ColliderCylinderInit D_80BFDF48 = {
     { 10, 68, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80BFDF74 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80BFDF80[] = {
-    { (AnimationHeader*)0x060007B8, 1.0f, 0, -1, 0, 0 },  { (AnimationHeader*)0x060007B8, 1.0f, 0, -1, 0, -4 },
-    { (AnimationHeader*)0x060000FC, 1.0f, 0, -1, 0, -4 }, { (AnimationHeader*)0x060003A8, 1.0f, 0, -1, 0, -4 },
-    { (AnimationHeader*)0x06000564, 1.0f, 0, -1, 0, -4 }, { (AnimationHeader*)0x06000218, 1.0f, 0, -1, 0, -4 },
-};
-static Vec3f D_80BFDFE0 = { 0.0f, 8.0f, 10.0f };
 // extern u8 D_80BFDEA0[];
 // extern s32 D_80BFDEB4[];
 // extern ColliderCylinderInit D_80BFDF48;
@@ -82,41 +74,48 @@ static Vec3f D_80BFDFE0 = { 0.0f, 8.0f, 10.0f };
 // extern AnimationInfoS D_80BFDF80[];
 // extern Vec3f D_80BFDFE0;
 
-extern FlexSkeletonHeader D_06002390;
+// extern FlexSkeletonHeader D_06002390;
 
-void func_80BFD2E0(EnBjt* this) {
-    this->skelAnime.playSpeed = this->unk238;
+void EnBjt_UpdateAnimation(EnBjt* this) {
+    this->skelAnime.playSpeed = this->animPlaySpead;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BFD30C(EnBjt* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+static AnimationInfoS sAnimationInfo[] = {
+    { 0x060007B8, 1.0f, 0, -1, 0, 0 },  { 0x060007B8, 1.0f, 0, -1, 0, -4 }, { 0x060000FC, 1.0f, 0, -1, 0, -4 },
+    { 0x060003A8, 1.0f, 0, -1, 0, -4 }, { 0x06000564, 1.0f, 0, -1, 0, -4 }, { 0x06000218, 1.0f, 0, -1, 0, -4 },
+};
 
-    if ((arg1 == 0) || (arg1 == 1)) {
-        if (!((this->unk250 == 0) || (this->unk250 == 1))) {
-            phi_v1 = true;
+s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 changed = false;
+
+    if ((animIndex == 0) || (animIndex == 1)) {
+        if (!((this->curAnimIndex == 0) || (this->curAnimIndex == 1))) {
+            changeAnim = true;
         }
-    } else if (arg1 != this->unk250) {
-        phi_v1 = true;
-    }
-    if (phi_v1) {
-        this->unk250 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BFDF80, arg1);
-        this->unk238 = this->skelAnime.playSpeed;
+    } else if (this->curAnimIndex != animIndex) {
+        changeAnim = true;
     }
 
-    return ret;
+    if (changeAnim) {
+        this->curAnimIndex = animIndex;
+        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpead = this->skelAnime.playSpeed;
+    }
+
+    return changed;
 }
 
 void func_80BFD3A4(EnBjt* this, GlobalContext* globalCtx) {
+    static Vec3f D_80BFDFE0 = { 0.0f, 8.0f, 10.0f };
     s32 pad;
-    Vec3f sp28;
+    Vec3f pos;
     f32 height;
 
-    if (this->unk234 & 0x280) {
-        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80BFDFE0, &sp28);
-        Math_Vec3f_ToVec3s(&this->collider.dim.pos, &sp28);
+    if (this->stateFlags & 0x280) {
+        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80BFDFE0, &pos);
+        Math_Vec3f_ToVec3s(&this->collider.dim.pos, &pos);
         height = this->actor.focus.pos.y - this->actor.world.pos.y;
         this->collider.dim.height = height;
         this->collider.dim.radius = 0x20;
@@ -124,7 +123,7 @@ void func_80BFD3A4(EnBjt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BFD434(s32 exchangeItem) {
+s32 EnBjt_TakeItem(s32 exchangeItem) {
     switch (exchangeItem) {
         case EXCH_ITEM_LETTER_TO_KAFEI:
             func_801149A0(ITEM_LETTER_TO_KAFEI, SLOT(ITEM_LETTER_TO_KAFEI));
@@ -148,57 +147,66 @@ s32 func_80BFD434(s32 exchangeItem) {
     return 0;
 }
 
+#define TARGET_SCALE 0.017f
+
 // EnBjt_AppearAnim
+/**
+ * @return boolean true if scale is set to final value
+ */
 s32 func_80BFD4FC(EnBjt* this) {
-    s32 ret = false;
+    s32 finished = false;
     f32 temp_f0;
 
-    if (this->unk248 == 0) {
+    if (!this->playedSfx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_APPEAR);
-        this->unk248 = 1;
+        this->playedSfx = true;
     }
-    Math_ApproachF(&this->actor.scale.x, 0.017f, 0.21f, 0.3f);
-    if ((0.017f - this->actor.scale.x) < 0.017f / 100.0f) {
-        this->actor.scale.x = 0.017f;
-        this->unk234 |= 0x200;
-        this->unk234 &= ~0x80;
-        ret = true;
+    Math_ApproachF(&this->actor.scale.x, TARGET_SCALE, 0.21f, 0.3f);
+    if ((TARGET_SCALE - this->actor.scale.x) < TARGET_SCALE / 100.0f) {
+        this->actor.scale.x = TARGET_SCALE;
+        this->stateFlags |= 0x200;
+        this->stateFlags &= ~0x80;
+        finished = true;
     }
-    temp_f0 = (this->actor.scale.x / 0.017f) * 4.0f;
+    temp_f0 = (this->actor.scale.x / TARGET_SCALE) * 4.0f;
     this->unk23C = temp_f0;
     this->actor.world.pos.y = this->actor.home.pos.y + temp_f0;
     Actor_SetScale(&this->actor, this->actor.scale.x);
 
-    return ret;
+    return finished;
 }
 
 // EnBjt_VanishAnim
+/**
+ * @return boolean true if scalie is set to final value
+ */
 s32 func_80BFD5E4(EnBjt* this) {
-    s32 ret = false;
+    s32 finished = false;
     f32 temp_f0;
 
-    if (this->unk248 == 0) {
+    if (!this->playedSfx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_VANISH);
-        this->unk248 = 1;
+        this->playedSfx = true;
     }
     Math_ApproachF(&this->actor.scale.x, 0.0f, 0.21f, 0.3f);
-    if (this->actor.scale.x < 0.017f / 100.0f) {
-        this->unk234 &= ~0x100;
+    if (this->actor.scale.x < TARGET_SCALE / 100.0f) {
         this->actor.scale.x = 0.0f;
-        ret = true;
+        this->stateFlags &= ~0x100;
+        finished = true;
     }
-    temp_f0 = (this->actor.scale.x / 0.017f) * 4.0f;
+    temp_f0 = (this->actor.scale.x / TARGET_SCALE) * 4.0f;
     this->unk23C = temp_f0;
     this->actor.world.pos.y = this->actor.home.pos.y + temp_f0;
     Actor_SetScale(&this->actor, this->actor.scale.x);
-    return ret;
+
+    return finished;
 }
 
-s32 func_80BFD6BC(EnBjt* this, GlobalContext* globalCtx) {
+s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 var_v1;
+    EnBjt* this = THIS;
     s32 itemAP;
-    s32 ret = 0;
+    s32 scriptBranch = 0;
 
     switch (this->unk240) {
         case 0:
@@ -210,66 +218,71 @@ s32 func_80BFD6BC(EnBjt* this, GlobalContext* globalCtx) {
                     }
                 case 16:
                     itemAP = func_80123810(globalCtx);
-                    if ((itemAP == 0x2B) || (itemAP == 0x2D) || (itemAP == 0x2F) || (itemAP == 0x30) ||
-                        (itemAP == 0x31) || (itemAP == 0x33)) {
-                        func_80BFD30C(this, 1);
-                        this->unk248 = 0;
+                    if ((itemAP == EXCH_ITEM_DEED_LAND) || (itemAP == EXCH_ITEM_LETTER_TO_KAFEI) ||
+                        (itemAP == EXCH_ITEM_DEED_SWAMP) || (itemAP == EXCH_ITEM_DEED_MOUNTAIN) ||
+                        (itemAP == EXCH_ITEM_DEED_OCEAN) || (itemAP == EXCH_ITEM_LETTER_MAMA)) {
+                        EnBjt_ChangeAnimation(this, 1);
+                        this->playedSfx = false;
                         this->unk240++;
-                        ret = 1;
+                        scriptBranch = 1;
                     } else if (itemAP < 0) {
-                        this->unk248 = 0;
+                        this->playedSfx = false;
                         this->unk240++;
-                        ret = 3;
+                        scriptBranch = 3;
                     } else if (itemAP != 0) {
-                        this->unk248 = 0;
+                        this->playedSfx = false;
                         this->unk240++;
-                        ret = 2;
+                        scriptBranch = 2;
                     }
                     break;
             }
             break;
+
         case 1:
             if (player->exchangeItemId != EXCH_ITEM_NONE) {
-                func_80BFD434(player->exchangeItemId);
+                EnBjt_TakeItem(player->exchangeItemId);
                 player->exchangeItemId = 0;
             }
             if (func_80BFD5E4(this)) {
                 this->unk242 = 60;
                 this->unk240++;
-                ret = 1;
+                scriptBranch = 1;
             }
             break;
+
         case 2:
             if (DECR(this->unk242) == 0) {
-                func_80BFD30C(this, 5);
-                this->unk248 = 0;
+                EnBjt_ChangeAnimation(this, 5);
+                this->playedSfx = false;
                 this->unk240++;
             } else if (this->unk242 == 10) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_WATER);
             }
             break;
+
         case 3:
             if (func_80BFD4FC(this)) {
                 this->unk240++;
-                ret = 1;
+                scriptBranch = 1;
             }
             break;
+
         case 4:
-            func_80BFD30C(this, 4);
+            EnBjt_ChangeAnimation(this, 4);
             this->unk240++;
-            ret = 1;
+            scriptBranch = 1;
             break;
     }
-    return ret;
+    return scriptBranch;
 }
 
 s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk234 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->unk234 |= 8;
-        SubS_UpdateFlags(&this->unk234, 0, 7);
-        this->unk24C = func_80BFD6BC;
+    if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        this->stateFlags |= 8;
+        SubS_UpdateFlags(&this->stateFlags, 0, 7);
+        this->msgEventCallback = func_80BFD6BC;
         this->unk240 = 0;
         this->actionFunc = func_80BFDA48;
         ret = true;
@@ -279,26 +292,26 @@ s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
 
 s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 phi_v1 = globalCtx->msgCtx.currentTextId;
+    u16 curTextId = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x440) {
-        this->unk234 |= 0x10;
-        if (this->unk236 != phi_v1) {
-            switch (phi_v1) {
+        this->stateFlags |= 0x10;
+        if (this->textId != curTextId) {
+            switch (curTextId) {
                 case 0x2949:
-                    func_80BFD30C(this, 2);
+                    EnBjt_ChangeAnimation(this, 2);
                     break;
 
                 case 0x294A:
-                    func_80BFD30C(this, 3);
+                    EnBjt_ChangeAnimation(this, 3);
                     break;
             }
         }
-        this->unk236 = phi_v1;
+        this->textId = curTextId;
     } else {
-        if (this->unk234 & 0x10) {
-            this->unk234 &= ~0x10;
-            func_80BFD30C(this, 0);
+        if (this->stateFlags & 0x10) {
+            this->stateFlags &= ~0x10;
+            EnBjt_ChangeAnimation(this, 0);
         }
     }
     return 0;
@@ -307,11 +320,11 @@ s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
 void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->actor, globalCtx, D_80BFDEB4, this->unk24C, &this->unk1DC)) {
+    if (func_8010BF58(&this->actor, globalCtx, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
-        SubS_UpdateFlags(&this->unk234, 3, 7);
-        this->unk234 &= ~8;
-        this->unk1DC = 0;
+        SubS_UpdateFlags(&this->stateFlags, 3, 7);
+        this->stateFlags &= ~8;
+        this->msgEventArg4 = 0;
         this->actionFunc = func_80BFDAE8;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);
@@ -319,38 +332,38 @@ void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx) {
-    ScheduleResult schResult;
+    ScheduleResult scheduleOutput;
 
-    if (!Schedule_RunScript(globalCtx, sScheduleScript, &schResult)) {
-        schResult.result = 0;
+    if (!Schedule_RunScript(globalCtx, sScheduleScript, &scheduleOutput)) {
+        scheduleOutput.result = 0;
     }
-    if (schResult.result == 1) {
-        if (this->unk234 & 0x80) {
+    if (scheduleOutput.result == 1) {
+        if (this->stateFlags & 0x80) {
             if (func_80BFD4FC(this)) {
-                SubS_UpdateFlags(&this->unk234, 3, 7);
+                SubS_UpdateFlags(&this->stateFlags, 3, 7);
             }
-        } else if (this->unk234 & 0x100) {
+        } else if (this->stateFlags & 0x100) {
             func_80BFD5E4(this);
-        } else if (this->unk234 & 0x200) {
+        } else if (this->stateFlags & 0x200) {
             if ((fabsf(this->actor.playerHeightRel) > 70.0f) || (this->actor.xzDistToPlayer > 140.0f) ||
                 (gSaveContext.save.weekEventReg[90] & 0x80)) {
-                SubS_UpdateFlags(&this->unk234, 0, 7);
-                this->unk248 = 0;
-                this->unk234 &= ~0x200;
-                this->unk234 |= 0x100;
+                SubS_UpdateFlags(&this->stateFlags, 0, 7);
+                this->playedSfx = false;
+                this->stateFlags &= ~0x200;
+                this->stateFlags |= 0x100;
             }
         } else if ((fabsf(this->actor.playerHeightRel) < 20.0f) && (this->actor.xzDistToPlayer < 70.0f) &&
                    !(gSaveContext.save.weekEventReg[90] & 0x80)) {
-            this->unk234 |= 0x80;
-            this->unk248 = 0;
+            this->stateFlags |= 0x80;
+            this->playedSfx = false;
         }
-        this->unk1D8 = schResult.result;
+        this->scheduleResult = scheduleOutput.result;
     } else {
         this->actor.flags |= ACTOR_FLAG_8000000;
         Actor_SetScale(&this->actor, 0.0f);
-        this->unk234 = 0;
-        this->unk24C = NULL;
-        this->unk1D8 = 0;
+        this->stateFlags = 0;
+        this->msgEventCallback = NULL;
+        this->scheduleResult = 0;
     }
 }
 
@@ -358,15 +371,16 @@ void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBjt* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06002390, NULL, this->unk1E0, this->unk20A, 7);
-    this->unk250 = -1;
-    func_80BFD30C(this, 0);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BFDF48);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80BFDF74);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
+                       TOILET_HAND_LIMB_MAX);
+    this->curAnimIndex = -1;
+    EnBjt_ChangeAnimation(this, 0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.flags |= ACTOR_FLAG_8000000;
     Actor_SetScale(&this->actor, 0.0f);
-    this->unk1D8 = 0;
-    this->unk234 = 0;
+    this->scheduleResult = 0;
+    this->stateFlags = 0;
     this->actionFunc = func_80BFDAE8;
 }
 
@@ -380,9 +394,9 @@ void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     func_80BFD984(this, globalCtx);
 
-    if (this->unk1D8 != 0) {
-        func_80BFD2E0(this);
-        func_8013C964(&this->actor, globalCtx, 60.0f, 10.0f, 0, this->unk234 & 7);
+    if (this->scheduleResult != 0) {
+        EnBjt_UpdateAnimation(this);
+        func_8013C964(&this->actor, globalCtx, 60.0f, 10.0f, 0, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
         func_80BFD3A4(this, globalCtx);
     }
@@ -391,7 +405,7 @@ void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBjt* this = THIS;
 
-    if (this->unk1D8 != 0) {
+    if (this->scheduleResult != 0) {
         func_8012C28C(globalCtx->state.gfxCtx);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, NULL, NULL, &this->actor);
