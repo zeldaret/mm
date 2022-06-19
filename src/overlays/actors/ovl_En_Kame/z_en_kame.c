@@ -294,8 +294,8 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
             if ((temp_v0 == 0) || (temp_v0 == 1)) {
                 func_800B1210(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);
             } else if (temp_v0 == 14) {
-                func_800B0DE0(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58,
-                              550, 100);
+                func_800B0DE0(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58, 550,
+                              100);
             }
         }
     }
@@ -670,9 +670,9 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
                     this->drawDmgEffScale = 0.6f;
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
-                                this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                                this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
                 if (!Actor_ApplyDamage(&this->actor)) {
@@ -806,8 +806,8 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80AD8E34[this->unk_29C]);
 
-    SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable,
-                          this->skelAnime1.dListCount, func_80AD8A48, func_80AD8AF8, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable, this->skelAnime1.dListCount,
+                          func_80AD8A48, func_80AD8AF8, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
@@ -821,8 +821,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 Enkame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 Enkame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKame* this = THIS;
 
     if (limbIndex == 1) {
@@ -839,6 +838,6 @@ void func_80AD8D64(Actor* thisx, PlayState* play) {
     EnKame* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable,
-                          this->skelAnime2.dListCount, Enkame_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable, this->skelAnime2.dListCount,
+                          Enkame_OverrideLimbDraw, NULL, &this->actor);
 }

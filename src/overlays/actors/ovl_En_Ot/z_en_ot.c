@@ -177,15 +177,15 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
             switch (this->unk_344) {
                 case 0:
-                    this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly,
-                                                                          &bgId, &this->actor.world.pos) +
+                    this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &bgId,
+                                                                          &this->actor.world.pos) +
                                               50.0f;
                     if (gSaveContext.save.weekEventReg[84] & 0x10) {
                         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_MultVecZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
-                        this->unk_360 = (EnOt*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, sp64.x, sp64.y,
-                                                           sp64.z, 0, BINANG_ROT180(this->actor.shape.rot.y), 1,
+                        this->unk_360 = (EnOt*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, sp64.x, sp64.y, sp64.z,
+                                                           0, BINANG_ROT180(this->actor.shape.rot.y), 1,
                                                            ENOT_GET_3FFF(&this->actor) | 0x8000);
                         if (this->unk_360 != NULL) {
                             this->unk_360->unk_360 = this;
@@ -878,8 +878,8 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
 void func_80B5D648(EnOt* this, PlayState* play) {
     func_80B5B2E0(play, &this->actor.world.pos, this->unk_346, &this->unk_348, &this->unk_340);
     Math_Vec3f_Copy(&this->unk_330, &this->actor.world.pos);
-    SubS_ActorPathing_Init(play, &this->unk_330, &this->actor, &this->actorPath, play->setupPathList,
-                           this->unk_346, 0, 0, this->unk_340, 0);
+    SubS_ActorPathing_Init(play, &this->unk_330, &this->actor, &this->actorPath, play->setupPathList, this->unk_346, 0,
+                           0, this->unk_340, 0);
     this->unk_32C = 0;
     this->actorPath.pointOffset.x = 0.0f;
     this->actorPath.pointOffset.y = 0.0f;
@@ -1036,8 +1036,8 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnOt_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnOt_PostLimbDraw, &this->actor);
     Matrix_Translate(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
     Matrix_Scale(0.0882f, 0.0882f, 0.0882f, MTXMODE_APPLY);
 
@@ -1153,8 +1153,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
         }
     }

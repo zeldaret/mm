@@ -117,8 +117,8 @@ void BgIcicle_Break(BgIcicle* this, PlayState* play, f32 arg2) {
             velocity.z = randPlusMinusPoint5Scaled(7.0f);
             velocity.y = (Rand_ZeroOne() * 4.0f) + 8.0f;
 
-            EffectSsEnIce_Spawn(play, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor,
-                                &envColor, 30);
+            EffectSsEnIce_Spawn(play, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor, &envColor,
+                                30);
         }
     }
 }

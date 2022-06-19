@@ -837,8 +837,7 @@ void EnHintSkb_Update(Actor* thisx, PlayState* play) {
     func_80C21320(this, play);
 }
 
-s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHintSkb* this = THIS;
     f32 temp_f10;
 

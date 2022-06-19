@@ -39,8 +39,8 @@ void EnTest5_Init(Actor* thisx, PlayState* play2) {
     f32 ySurface;
 
     // If not spawned above a water source, immediately despawn
-    if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                              &ySurface, &water)) {
+    if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                              &water)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -73,8 +73,7 @@ void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play) {
         if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
             playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
             fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-            Actor_PickUp(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer,
-                         fabsf(this->actor.playerHeightRel));
+            Actor_PickUp(&this->actor, play, GI_MAX, this->actor.xzDistToPlayer, fabsf(this->actor.playerHeightRel));
         }
     }
 }

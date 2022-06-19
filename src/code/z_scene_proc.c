@@ -83,10 +83,9 @@ void AnimatedMat_DrawTexScroll(PlayState* play, s32 segment, void* params) {
  * Returns a pointer to a two layer texture scroll displaylist.
  */
 Gfx* AnimatedMat_TwoLayerTexScroll(PlayState* play, AnimatedMatTexScrollParams* params) {
-    return Gfx_TwoTexScroll(play->state.gfxCtx, 0, params[0].xStep * sMatAnimStep,
-                            -(params[0].yStep * sMatAnimStep), params[0].width, params[0].height, 1,
-                            params[1].xStep * sMatAnimStep, -(params[1].yStep * sMatAnimStep), params[1].width,
-                            params[1].height);
+    return Gfx_TwoTexScroll(play->state.gfxCtx, 0, params[0].xStep * sMatAnimStep, -(params[0].yStep * sMatAnimStep),
+                            params[0].width, params[0].height, 1, params[1].xStep * sMatAnimStep,
+                            -(params[1].yStep * sMatAnimStep), params[1].width, params[1].height);
 }
 
 /**
@@ -522,9 +521,9 @@ void Scene_DrawConfig3(PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0B, Gfx_TexScroll(play->state.gfxCtx, 0, (frames * 1) % 128, 32, 32));
 
-    gSPSegment(POLY_XLU_DISP++, 0x0C,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (frames * 50) % 2048, 8, 512, 1, 0, (frames * 60) % 2048,
-                                8, 512));
+    gSPSegment(
+        POLY_XLU_DISP++, 0x0C,
+        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (frames * 50) % 2048, 8, 512, 1, 0, (frames * 60) % 2048, 8, 512));
 
     gSPSegment(POLY_OPA_DISP++, 0x0D,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (frames * 1) % 128, 32, 32));
@@ -551,8 +550,8 @@ void Scene_DrawConfig4(PlayState* play) {
     frames = play->gameplayFrames;
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1,
-                                frames % 128, (frames * 1) % 128, 32, 32));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 127 - frames % 128, (frames * 1) % 128, 32, 32, 1, frames % 128,
+                                (frames * 1) % 128, 32, 32));
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 128, 128, 128, 128);
@@ -733,8 +732,8 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
 
         switch (i) {
             case 0:
-                if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) &&
-                    Flags_GetSwitch(play, 0x35) && Flags_GetSwitch(play, 0x36)) {
+                if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
+                    Flags_GetSwitch(play, 0x36)) {
                     lodFrac = 255;
                 }
                 break;
@@ -749,8 +748,7 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
                 }
                 break;
             case 3:
-                if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38) &&
-                    Flags_GetSwitch(play, 0x39)) {
+                if (Flags_GetSwitch(play, 0x37) && Flags_GetSwitch(play, 0x38) && Flags_GetSwitch(play, 0x39)) {
                     lodFrac = 68;
                 }
                 break;
@@ -770,8 +768,7 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
                 }
                 break;
             case 7:
-                if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
-                    Flags_GetSwitch(play, 0x36)) {
+                if (Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) && Flags_GetSwitch(play, 0x36)) {
                     lodFrac = 68;
                 }
                 break;

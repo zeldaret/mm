@@ -235,8 +235,8 @@ void func_8098D47C(ObjComb* this, PlayState* play) {
             phi_v0 = 0x20;
         }
 
-        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1, OBJECT_COMB,
+                             object_comb_DL_001040);
     }
 }
 
@@ -296,8 +296,8 @@ void func_8098D99C(ObjComb* this, PlayState* play) {
 
     if (func_8098CE40(this, play)) {
         params = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
-        temp_v0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x,
-                              this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, params);
+        temp_v0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
+                              this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, params);
 
         if (temp_v0 != NULL) {
             temp_v0->parent = &this->actor;

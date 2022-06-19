@@ -454,8 +454,8 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     Vec3f sp70;
 
     if (gSaveContext.save.weekEventReg[55] & 0x80) {
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT,
-                           200.0f, 0, 0, 0, ENDOORWARP1_FF_1);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
+                           0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -513,12 +513,10 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 
-    Collider_InitAndSetJntSph(play, &this->headCollider, &this->actor, &sHeadJntSphInit,
-                              this->headColliderElements);
-    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sBodyJntSphInit,
-                              this->bodyColliderElements);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable,
-                       this->morphTable, GYORG_LIMB_MAX);
+    Collider_InitAndSetJntSph(play, &this->headCollider, &this->actor, &sHeadJntSphInit, this->headColliderElements);
+    Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sBodyJntSphInit, this->bodyColliderElements);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable, this->morphTable,
+                       GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
     // gSaveContext.eventInf[5] & 0x40: intro cutscene already watched
@@ -725,8 +723,8 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
             Boss03_SetupCatchPlayer(this, play, sp43);
 
             if (sp43 != 0) {
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x,
-                            this->waterHeight, player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1056,8 +1054,8 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 8) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 20, 15);
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0,
-                        0x96, ENWATEREFFECT_780);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
+                        ENWATEREFFECT_780);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1529,8 +1527,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
 
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
-                            this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -1611,10 +1609,10 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
             if (this->actor.scale.x <= 0.0111f) {
                 this->unk_242 = 2;
-                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f,
-                                   PLATFORM_HEIGHT, 200.0f, 0, 0, 0, ENDOORWARP1_FF_1);
-                Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x,
-                            PLATFORM_HEIGHT, this->actor.focus.pos.z, 0, 0, 0, 0);
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f,
+                                   0, 0, 0, ENDOORWARP1_FF_1);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x, PLATFORM_HEIGHT,
+                            this->actor.focus.pos.z, 0, 0, 0, 0);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
                 Audio_StopSfxByPos(&this->actor.projectedPos);
@@ -2014,8 +2012,8 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
-                        this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2166,8 +2164,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 Boss03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 Boss03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss03* this = THIS;
 
     if ((limbIndex == GYORG_LIMB_UPPER_TRUNK) || (limbIndex == GYORG_LIMB_LOWER_TRUNK) ||
@@ -2276,8 +2273,8 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
 
         Matrix_RotateYF(this->unk_260, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
         POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
 
@@ -2415,8 +2412,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleModelDL);
         }
     }

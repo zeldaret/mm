@@ -1421,8 +1421,7 @@ void EnMaYto_Update(Actor* thisx, PlayState* play) {
     func_80B90C78(this, play);
 }
 
-s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
     Vec3s sp4;
 

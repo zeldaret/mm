@@ -197,8 +197,7 @@ void func_80AA884C(DmChar01* this, PlayState* play) {
 
 void func_80AA88A8(DmChar01* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 135)) {
-        if (play->csCtx.frames ==
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)]->startFrame) {
+        if (play->csCtx.frames == play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)]->startFrame) {
             D_80AAAE24 = 1;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }

@@ -529,8 +529,8 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            Message_StartTextbox(play,
-                                                 D_80BA50DC[((void)0, gSaveContext.save.playerForm) - 1].unk2, NULL);
+                            Message_StartTextbox(play, D_80BA50DC[((void)0, gSaveContext.save.playerForm) - 1].unk2,
+                                                 NULL);
                         }
                     }
                     return 0;
@@ -587,8 +587,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     for (i = 0; i < 4; i++) {
         if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
-            Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
-                        -1);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0, -1);
         }
     }
     func_80BA402C(this, play);
@@ -731,8 +730,8 @@ void EnToto_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
     Scene_SetRenderModeXlu(play, 0, 1);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

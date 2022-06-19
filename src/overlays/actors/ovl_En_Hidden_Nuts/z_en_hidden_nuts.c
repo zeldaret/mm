@@ -175,8 +175,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
             sp74.x += randPlusMinusPoint5Scaled(15.0f);
             sp74.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
-                                              1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30, 1);
         }
         this->unk_218 = 30;
     }
@@ -218,8 +217,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
             sp78.x += randPlusMinusPoint5Scaled(15.0f);
             sp78.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
-                                              1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30, 1);
         }
         this->unk_218 = 30;
     }
@@ -331,8 +329,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     s16 sp4E = 0;
     Vec3f sp40;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50,
-                             &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
         (this->actor.world.pos.y < sp50)) {
         this->actor.velocity.y = 0.0f;
         Math_Vec3f_Copy(&sp40, &this->actor.world.pos);

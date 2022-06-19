@@ -176,8 +176,8 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
-    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAcceleration, &sPrimColors[index],
-                                    &sEnvColors[index], 1000, life);
+    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAcceleration, &sPrimColors[index], &sEnvColors[index],
+                                    1000, life);
 }
 
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
@@ -572,8 +572,8 @@ void EnElforg_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnElforg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx, Gfx** gfx) {
+s32 EnElforg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                              Gfx** gfx) {
     EnElforg* this = THIS;
 
     if (this->direction < 0) {

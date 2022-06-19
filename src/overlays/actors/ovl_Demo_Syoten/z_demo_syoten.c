@@ -78,9 +78,9 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
             func_801835EC(&this->unk_144, &object_syoten_Blob_00023C);
             this->actor.draw = NULL;
             this->actionFunc = func_80C16A74;
-            this->actor.child = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST,
-                                                   this->actor.world.pos.x, this->actor.world.pos.y,
-                                                   this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
+            this->actor.child =
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
+                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
             this->unk_3F0 = 0x215;
             Actor_SetScale(&this->actor, 0.05f);
             break;
@@ -314,8 +314,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
 
             case 4:
                 this->actor.speedXZ =
-                    play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->urot.z *
-                    0.005493164f;
+                    play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->urot.z * 0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;

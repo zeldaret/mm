@@ -409,8 +409,8 @@ void EnSb_Draw(Actor* thisx, PlayState* play) {
     s16 fireDecr;
 
     func_800B8050(&this->actor, play, 1);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnSb_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnSb_PostLimbDraw, &this->actor);
     if (this->fireCount != 0) {
         this->actor.colorFilterTimer++;
         fireDecr = this->fireCount - 1;

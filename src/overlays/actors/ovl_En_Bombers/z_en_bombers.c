@@ -119,8 +119,8 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
         if (gSaveContext.save.weekEventReg[75] & 0x40) {
             if (this->unk_2BE == ENBOMBERS_F_0) {
                 EnBomBowlMan* bomBowlMan = (EnBomBowlMan*)Actor_Spawn(
-                    &play->actorCtx, play, ACTOR_EN_BOM_BOWL_MAN, this->actor.world.pos.x,
-                    this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
+                    &play->actorCtx, play, ACTOR_EN_BOM_BOWL_MAN, this->actor.world.pos.x, this->actor.world.pos.y,
+                    this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
 
                 if (bomBowlMan != NULL) {
                     s32 cs = this->actor.cutscene;
@@ -259,8 +259,8 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C, &colPoly, true,
-                                            false, false, true, &sp48)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C, &colPoly, true, false,
+                                            false, true, &sp48)) {
                     this->unk_2A8 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C03824(this, 16, 1.0f);
@@ -491,8 +491,7 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnBombers_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnBombers_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBombers* this = THIS;
 
     if (limbIndex == OBJECT_CS_LIMB_0F) {

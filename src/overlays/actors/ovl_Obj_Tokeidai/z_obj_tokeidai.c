@@ -186,9 +186,8 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
             type = OBJ_TOKEIDAI_TYPE(&this->actor);
             if (type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN ||
                 type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_TERMINA_FIELD) {
-                this->actor.child =
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HANABI, this->actor.world.pos.x,
-                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                this->actor.child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HANABI, this->actor.world.pos.x,
+                                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
             }
         }
 
@@ -760,9 +759,8 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, PlayState* play) {
             type = OBJ_TOKEIDAI_TYPE(&this->actor);
             if (type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN ||
                 type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_TERMINA_FIELD) {
-                this->actor.child =
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HANABI, this->actor.world.pos.x,
-                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                this->actor.child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HANABI, this->actor.world.pos.x,
+                                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
             }
         }
 

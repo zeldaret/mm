@@ -170,8 +170,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &object_vm_Skel_003F60, &object_vm_Anim_000068, this->jointTable,
                    this->morphTable, 11);
     Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
-    Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit,
-                              this->colliderJntSphElements);
+    Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     params = ENVM_GET_FF00(thisx);
@@ -258,8 +257,8 @@ void func_808CC610(EnVm* this, PlayState* play) {
                                   sp3A)) {
         this->unk_214--;
         if (this->unk_214 == 0) {
-            EffectSsDeadDd_Spawn(play, &this->unk_228, &gZeroVec3f, &gZeroVec3f, &D_808CD5BC, &D_808CD5C0, 150,
-                                 -25, 16, 20);
+            EffectSsDeadDd_Spawn(play, &this->unk_228, &gZeroVec3f, &gZeroVec3f, &D_808CD5BC, &D_808CD5C0, 150, -25, 16,
+                                 20);
             func_808CC788(this);
         }
     }
@@ -487,8 +486,8 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         Matrix_MultVecZ(1600.0f, &this->unk_228);
         Matrix_MultVecZ(this->unk_224 * 71.428566f, &this->unk_234);
 
-        if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &sp4C, true,
-                                    true, false, true, &sp48)) {
+        if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &sp4C, true, true,
+                                    false, true, &sp48)) {
             this->unk_224 = Math_Vec3f_DistXYZ(&this->actor.focus.pos, &sp5C) - 5.0f;
             this->unk_210 = 2;
             Math_Vec3f_Copy(&this->unk_234, &sp5C);

@@ -474,8 +474,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     }
 }
 
-s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
@@ -527,8 +526,8 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
         sp54 = Matrix_GetCurrent();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw,
-                               sp54->zw, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))),
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw, sp54->zw,
+                               this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))),
                                this->unk_38E.z, -1);
         } else if (!((EnJcMato*)this->actor.child)->hitFlag) {
             this->actor.child->world.pos.x = sp54->xw;

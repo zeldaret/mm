@@ -246,10 +246,10 @@ void func_808B8C48(DoorWarp1* this, PlayState* play) {
         s16 params = DOORWARP1_GET_FF00_2(&this->dyna.actor);
 
         params |= 6;
-        Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DOOR_WARP1,
-                           this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 10.0f,
-                           this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y,
-                           this->dyna.actor.world.rot.z, params);
+        Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DOOR_WARP1, this->dyna.actor.world.pos.x,
+                           this->dyna.actor.world.pos.y + 10.0f, this->dyna.actor.world.pos.z,
+                           this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+                           params);
         DoorWarp1_SetupAction(this, func_808BAAF4);
     } else {
         DoorWarp1_SetupAction(this, func_808BABF4);
@@ -505,10 +505,9 @@ void func_808B98A8(DoorWarp1* this, PlayState* play) {
 void func_808B9B30(DoorWarp1* this, PlayState* play) {
     if (fabsf(this->dyna.actor.xzDistToPlayer) >= 60.0f) {
         if (func_808B849C(this, play)) {
-            this->unk_1A0 =
-                (DmHina*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DM_HINA,
-                                            this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                            this->dyna.actor.world.pos.z, 0, 0, 0, func_808B849C(this, play) - 1);
+            this->unk_1A0 = (DmHina*)Actor_SpawnAsChild(
+                &play->actorCtx, &this->dyna.actor, play, ACTOR_DM_HINA, this->dyna.actor.world.pos.x,
+                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, 0, 0, func_808B849C(this, play) - 1);
         }
         DoorWarp1_SetupAction(this, func_808B9BE8);
     }
@@ -1001,8 +1000,8 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
 
         sp94 *= 2;
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100,
-                                    0x100, 1, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100, 1,
+                                    sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
 
         Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,

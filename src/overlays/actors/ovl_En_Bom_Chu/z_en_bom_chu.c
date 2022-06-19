@@ -192,8 +192,8 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
     }
 }
 
-s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-                               CollisionPoly** poly, s32* bgId) {
+s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
+                               s32* bgId) {
     if ((BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
         (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30))) {
         return true;
@@ -327,8 +327,8 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
     EnBom* bomb;
     s32 i;
 
-    bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+    bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                               this->actor.world.pos.z, 0, 0, 0, 0);
 
     this->shouldTimerCountDown = true;
     this->isMoving = false;
@@ -508,8 +508,8 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
 
         waterY = this->actor.world.pos.y;
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &waterY, &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterY,
+                                 &waterBox)) {
             this->actor.depthInWater = waterY - this->actor.world.pos.y;
 
             if (this->actor.depthInWater < 0.0f) {

@@ -414,7 +414,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                 }
                 break;
 
-            case 0x334D:                                  // Asks if you understood her explanation.
+            case 0x334D:                             // Asks if you understood her explanation.
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     s32 aux;
 

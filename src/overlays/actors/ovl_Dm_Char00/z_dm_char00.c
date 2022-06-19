@@ -539,8 +539,8 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     this->unk_262 = DMCHAR00_GET_F800(thisx);
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140,
-                   this->jointTable, this->morphTable, 7);
+    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
+                   this->morphTable, 7);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     func_80AA5580(&this->skelAnime, sAnimations, 0);
     Actor_SetScale(thisx, 0.01f);
@@ -853,8 +853,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) &&
-        (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
@@ -893,8 +892,8 @@ void DmChar00_Update(Actor* thisx, PlayState* play) {
     func_80AA62FC(this, play);
 }
 
-s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx, Gfx** gfx) {
+s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                              Gfx** gfx) {
     DmChar00* this = THIS;
     f32 sp28;
     Vec3f sp1C;
@@ -915,10 +914,9 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     s32 pad;
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
 
-    if ((play->csCtx.state == 0) &&
-        ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
-         (play->roomCtx.currRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
-         (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
+    if ((play->csCtx.state == 0) && ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
+                                     (play->roomCtx.currRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
+                                     (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }
 

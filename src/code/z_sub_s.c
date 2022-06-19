@@ -151,8 +151,8 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(play, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
-                                         postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(play, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                         transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_Pop();
     return gfx;
@@ -766,8 +766,7 @@ s32 SubS_IsFloorAbove(PlayState* play, Vec3f* pos, f32 distAbove) {
 
     posA = posB = *pos;
     posB.y += distAbove;
-    return BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true,
-                                   &bgId);
+    return BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true, &bgId);
 }
 
 s32 SubS_CopyPointFromPathList(Path* paths, s32 pathIndex, s32 pointIndex, Vec3f* dst) {
@@ -787,9 +786,8 @@ u8 SubS_GetPathCount(Path* paths, s32 index) {
     return path->count;
 }
 
-void SubS_ActorPathing_Init(PlayState* play, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath,
-                            Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex,
-                            u8 flags) {
+void SubS_ActorPathing_Init(PlayState* play, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath, Path* paths,
+                            s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex, u8 flags) {
     Path* path;
 
     actorPath->setupPathList = play->setupPathList;
@@ -817,9 +815,9 @@ void SubS_ActorPathing_Init(PlayState* play, Vec3f* worldPos, Actor* actor, Acto
     actorPath->prevFlags = flags;
 }
 
-s32 SubS_ActorPathing_Update(PlayState* play, ActorPathing* actorPath,
-                             ActorPathingComputeFunc computePointInfoFunc, ActorPathingUpdateFunc updateActorInfoFunc,
-                             ActorPathingUpdateFunc moveFunc, ActorPathingUpdateFunc setNextPointFunc) {
+s32 SubS_ActorPathing_Update(PlayState* play, ActorPathing* actorPath, ActorPathingComputeFunc computePointInfoFunc,
+                             ActorPathingUpdateFunc updateActorInfoFunc, ActorPathingUpdateFunc moveFunc,
+                             ActorPathingUpdateFunc setNextPointFunc) {
     s32 shouldSetNextPoint;
     s32 reupdate;
 
@@ -1053,18 +1051,18 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
  * The callback should return `true` when the actor is succesfully verified.
  */
-Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory,
-                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
+Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
+                            void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
         actorIter = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actorIter != NULL && (actorId != actorIter->id ||
-                                 (actorId == actorIter->id &&
-                                  (verifyActor == NULL ||
-                                   (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
+    while (actorIter != NULL &&
+           (actorId != actorIter->id ||
+            (actorId == actorIter->id &&
+             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 

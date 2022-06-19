@@ -312,7 +312,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
     s32 i;
     s32 rand;
 
-    if ((this->unk_2FC > 100) || func_80C14BCC(this, globalCtx)) {
+    if ((this->unk_2FC > 100) || func_80C14BCC(this, play)) {
         rand = Rand_Next() % 3;
 
         this->unk_2FC = 0;
@@ -609,8 +609,7 @@ void EnJgameTsn_Update(Actor* thisx, PlayState* play) {
     func_80C14D58(this, play);
 }
 
-s32 EnJgamesTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 Actor* thisx) {
+s32 EnJgamesTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnJgameTsn* this = THIS;
     s16 temp_v0 = this->unk_2EC.x >> 1;
 

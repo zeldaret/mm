@@ -256,8 +256,7 @@ void EnZo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable,
-                       ZORA_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
     EnZo_SetAnimation(&this->skelAnime, 0);
 
     Collider_InitCylinder(play, &this->collider);

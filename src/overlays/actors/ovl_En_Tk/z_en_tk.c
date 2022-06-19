@@ -225,8 +225,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_tk_Skel_00B9E8, NULL, this->jointTable, this->morphTable,
-                       18);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_tk_Skel_00B9E8, NULL, this->jointTable, this->morphTable, 18);
     Animation_Change(&this->skelAnime, &object_tk_Anim_0030A4, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_tk_Anim_0030A4.common), 0, 0.0f);
     this->unk_318 = 0;
@@ -1123,8 +1122,8 @@ void func_80AEEB88(EnTk* this, PlayState* play) {
         sp68.y = this->actor.world.pos.y + 50.0f;
         sp68.z += this->actor.world.pos.z;
 
-        temp = BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &sp74, &sp68) -
-               this->actor.world.pos.y;
+        temp =
+            BgCheck_EntityRaycastFloor3(&play->colCtx, &this->actor.floorPoly, &sp74, &sp68) - this->actor.world.pos.y;
         if (temp <= -80.0f) {
             break;
         }
@@ -1310,8 +1309,7 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, 5);
 
-    if ((this->unk_2B0 == 0) &&
-        (func_800C9B40(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 12)) {
+    if ((this->unk_2B0 == 0) && (func_800C9B40(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 12)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
         this->unk_2CA |= 0x200;
         this->actor.velocity.y = 0.0f;

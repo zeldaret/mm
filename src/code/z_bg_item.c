@@ -125,16 +125,16 @@ s32 DynaPolyActor_ValidateMove(PlayState* play, DynaPolyActor* dynaActor, s16 st
     endPos.y = startPos.y;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
 
-    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
-                                true, &bgId, &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true,
+                                &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
     startPos.z = (dynaActor->actor.world.pos.z * 2.0f) - startPos.z;
     endPos.x = sign * adjustedEndRadius * sin + startPos.x;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
-    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
-                                true, &bgId, &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true,
+                                &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     return true;

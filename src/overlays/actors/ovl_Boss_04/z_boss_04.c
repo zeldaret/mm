@@ -172,8 +172,8 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F8 = 1.0f;
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_boss04_Skel_0045E8, &object_boss04_Anim_00004C,
-                       this->jointTable, this->morphtable, 9);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_boss04_Skel_0045E8, &object_boss04_Anim_00004C, this->jointTable,
+                       this->morphtable, 9);
     spA8.y = this->actor.world.pos.y + 200.0f;
 
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
@@ -216,8 +216,8 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     for (i = 0; i < 82; i++) {
         Matrix_RotateYS(phi_s0_2, MTXMODE_NEW);
         Matrix_MultVecZ(phi_f20, &sp90);
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x,
-                           phi_f24, this->unk_6F0 + sp90.z, 0, 0, 0, i);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x, phi_f24,
+                           this->unk_6F0 + sp90.z, 0, 0, 0, i);
         phi_f20 += 2.5f;
         phi_s0_2 += 0x1300;
     }
@@ -329,8 +329,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->unk_708 = 13;
                 this->unk_704 = 0;
                 this->unk_2DA = 10;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->unk_748 = 20;
             }
@@ -549,8 +549,8 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
     }
 
     if ((this->unk_1F8 == 2) || (this->unk_1F8 == 5)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                    this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                    this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
     }
 
@@ -769,8 +769,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss04* this = THIS;
 
     if (limbIndex == KREG(32)) {

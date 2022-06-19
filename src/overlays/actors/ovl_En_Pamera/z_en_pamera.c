@@ -136,8 +136,8 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC,
-                       this->jointTable, this->morphTable, PAMERA_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC, this->jointTable,
+                       this->morphTable, PAMERA_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit2);
@@ -531,8 +531,7 @@ void EnPamera_Update(Actor* thisx, PlayState* play) {
     func_80BD93F4(this, play);
 }
 
-s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPamera* this = THIS;
 
     if (limbIndex == PAMERA_LIMB_HAIR) {

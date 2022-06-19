@@ -358,7 +358,7 @@ void func_80A9B554(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         spA0.x = Math_SinS(val) * temp_f20 + spB8.x;
         spA0.y = (Rand_ZeroOne() * 1.2f - 0.1f) * spE4 + spB8.y;
         spA0.z = Math_CosS(val) * temp_f20 + spB8.z;
-        func_800B0E48(globalCtx, &spA0, &gZeroVec3f, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
+        func_800B0E48(play, &spA0, &gZeroVec3f, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
                       ((s32)Rand_Next() >> 0x1A) + 0x82, ((s32)Rand_Next() >> 0x1A) + 0x6E);
     }
 
@@ -645,8 +645,7 @@ void func_80A9C634(BgHakuginPost* this, PlayState* play) {
         spA0.x = spAC.x * -0.08f;
         spA0.y = 0.8f;
         spA0.z = spAC.z * -0.08f;
-        func_800B0DE0(play, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 2500,
-                      -250);
+        func_800B0DE0(play, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 2500, -250);
     }
 }
 
@@ -1022,8 +1021,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;
             func_80A9B384(&sp68);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_80A9D900[unkStruct1->unk_00]);
         }
     }

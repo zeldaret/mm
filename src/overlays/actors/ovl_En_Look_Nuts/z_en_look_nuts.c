@@ -345,8 +345,8 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     drawFlag = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
-                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50,
-                                                 &this->isPlayerDetected, drawFlag);
+                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
+                                                 drawFlag);
                 }
             }
 

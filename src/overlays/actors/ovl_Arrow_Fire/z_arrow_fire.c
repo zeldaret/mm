@@ -286,9 +286,8 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
 
         FireArrow_SetQuadVerticies(this);
         gSPDisplayList(POLY_XLU_DISP++, gFireArrowMaterialDL);
-        gSPDisplayList(POLY_XLU_DISP++,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 255 - ((frames * 2) % 256), 0, 64, 32, 1,
-                                        255 - (frames % 256), 511 - ((frames * 10) % 512), 64, 64));
+        gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 255 - ((frames * 2) % 256), 0, 64, 32,
+                                                         1, 255 - (frames % 256), 511 - ((frames * 10) % 512), 64, 64));
         gSPDisplayList(POLY_XLU_DISP++, gFireArrowModelDL);
 
         CLOSE_DISPS(play->state.gfxCtx);

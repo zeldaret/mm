@@ -267,8 +267,7 @@ void func_80A11144(EnGoStruct* ptr, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
 
             Matrix_Pop();
@@ -341,8 +340,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
             gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
@@ -515,15 +513,12 @@ void func_80A1203C(EnGo* this) {
     }
 }
 
-void func_80A1213C(EnGo* this, GlobalContext* globalCtx) {
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL,
-                  1);
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL,
-                  2);
-    func_80A11EC0(this->unk_3F8, globalCtx, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL,
-                  3);
-    func_80A11144(this->unk_3F8, globalCtx);
-    func_80A115B4(this->unk_3F8, globalCtx);
+void func_80A1213C(EnGo* this, PlayState* play) {
+    func_80A11EC0(this->unk_3F8, play, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL, 1);
+    func_80A11EC0(this->unk_3F8, play, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL, 2);
+    func_80A11EC0(this->unk_3F8, play, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL, 3);
+    func_80A11144(this->unk_3F8, play);
+    func_80A115B4(this->unk_3F8, play);
 }
 
 s32 func_80A121F4(PlayState* play) {
@@ -1462,7 +1457,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
     if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, play) || (this->unk_289 < 0) ||
         SubS_IsObjectLoaded(this->unk_289, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+        SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
         this->unk_3DC = -1;
@@ -1968,7 +1963,7 @@ void func_80A15B80(EnGo* this, PlayState* play) {
 
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

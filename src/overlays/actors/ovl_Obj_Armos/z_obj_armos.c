@@ -334,8 +334,8 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
         this->unk_250.y = this->dyna.actor.world.pos.y + 20.0f;
         this->unk_250.z = (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z;
 
-        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly,
-                                                                   &sp2C, &this->dyna.actor, &this->unk_250);
+        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+                                                                   &this->dyna.actor, &this->unk_250);
     }
 }
 

@@ -163,7 +163,7 @@ s32 DoorSpiral_GetObjectType(PlayState* play) {
     } else {
         // Set the type based on if link is in a dungeon scene, or the overworld
         type = (Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON
-                                                                                    : SPIRAL_OBJECT_OVERWORLD;
+                                                                               : SPIRAL_OBJECT_OVERWORLD;
     }
 
     return type;
@@ -222,8 +222,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play) {
 /**
  * Finds the distance between the stairs and the player.
  */
-f32 DoorSpiral_GetDistFromPlayer(PlayState* play, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
-                                 f32 spiralHeight) {
+f32 DoorSpiral_GetDistFromPlayer(PlayState* play, DoorSpiral* this, f32 yOffset, f32 spiralWidth, f32 spiralHeight) {
     Player* player = GET_PLAYER(play);
     Vec3f target;
     Vec3f offset;
@@ -249,8 +248,7 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, PlayState* play) {
 
     if (!Player_InCsMode(&play->state)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
-        f32 dist =
-            DoorSpiral_GetDistFromPlayer(play, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
+        f32 dist = DoorSpiral_GetDistFromPlayer(play, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
 
         if (fabsf(dist) < 64.0f) {
             s16 angle = player->actor.shape.rot.y - this->actor.shape.rot.y;
@@ -328,8 +326,7 @@ void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
 
             func_8012C28C(play->state.gfxCtx);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, spiralInfo->spiralDL[this->orientation]);
 
             CLOSE_DISPS(play->state.gfxCtx);

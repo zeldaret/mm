@@ -203,8 +203,8 @@ void func_8095D804(Actor* thisx, PlayState* play) {
         spC4.y += (Rand_ZeroOne() * 7.0f) + 6.0f;
         spC4.z += (Rand_ZeroOne() - 0.5f) * 11.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &spB8, &spC4, &spB8, -420, ((s32)Rand_Next() > 0) ? 65 : 33, 30, 5, 0,
-                             D_8095F74C[i], 3, 10, 40, -1, temp, phi_s4);
+        EffectSsKakera_Spawn(play, &spB8, &spC4, &spB8, -420, ((s32)Rand_Next() > 0) ? 65 : 33, 30, 5, 0, D_8095F74C[i],
+                             3, 10, 40, -1, temp, phi_s4);
     }
 }
 
@@ -254,8 +254,8 @@ void func_8095DABC(Actor* thisx, PlayState* play) {
             phi_v1 = -320;
         }
 
-        EffectSsKakera_Spawn(play, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i],
-                             5, 2, 70, 0, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
+        EffectSsKakera_Spawn(play, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i], 5, 2,
+                             70, 0, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 }
 
@@ -364,8 +364,8 @@ s32 func_8095E2B0(EnIshi* this, PlayState* play) {
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                                &sp30, &sp28) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+                                &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;
     }

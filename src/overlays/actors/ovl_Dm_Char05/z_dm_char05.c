@@ -595,8 +595,7 @@ void DmChar05_Update(Actor* thisx, PlayState* play) {
     func_80AAD4A8(this, play);
 }
 
-s32 DmChar05_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 DmChar05_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
@@ -615,8 +614,8 @@ void func_80AAD998(Actor* thisx, PlayState* play) {
             func_8012C28C(play->state.gfxCtx);
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_19C, this->unk_1A0, this->unk_1A4, this->unk_1A8,
                                        this->unk_1AC, this->unk_1B0);
-            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              DmChar05_OverrideLimbDraw, DmChar05_PostLimbDraw, &this->actor);
+            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
+                              DmChar05_PostLimbDraw, &this->actor);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -632,8 +631,8 @@ void func_80AADA90(Actor* thisx, PlayState* play) {
         if (Cutscene_CheckActorAction(play, 473) &&
             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 473)]->action != 1)) {
             func_8012C28C(play->state.gfxCtx);
-            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              DmChar05_OverrideLimbDraw, DmChar05_PostLimbDraw, &this->actor);
+            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
+                              DmChar05_PostLimbDraw, &this->actor);
         }
     } else if (this->unk_18E == 1) {
         func_80AADE78(play, this);
@@ -666,8 +665,8 @@ void func_80AADC00(Actor* thisx, PlayState* play) {
         if ((play->csCtx.actorActions[actionIndex]->action != 1) &&
             (play->csCtx.actorActions[actionIndex]->action != 4)) {
             func_8012C28C(play->state.gfxCtx);
-            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              DmChar05_OverrideLimbDraw, DmChar05_PostLimbDraw, &this->actor);
+            SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
+                              DmChar05_PostLimbDraw, &this->actor);
         }
 
         if (play->csCtx.actorActions[actionIndex]->action == 4) {

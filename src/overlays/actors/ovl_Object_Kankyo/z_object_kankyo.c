@@ -251,8 +251,8 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spCC * 120.0f);
                 temp_f30 = play->view.eye.z + (spC8 * 120.0f);
 
-                magnitude = sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) +
-                                  SQ(play->envCtx.windDir.z));
+                magnitude =
+                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
@@ -270,8 +270,7 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
 
                 this->unk_14C[i].unk_0C += sinf((this->unk_144 + (i * 100.0f)) * 0.01f) + (spC4 * 10.0f * phi_f20);
                 this->unk_14C[i].unk_14 += cosf((this->unk_148 + (i * 100.0f)) * 0.01f) + (spBC * 10.0f * phi_f20);
-                this->unk_14C[i].unk_10 -=
-                    this->unk_14C[i].unk_18 - (spC0 * 3.0f * (play->envCtx.windSpeed / 100.0f));
+                this->unk_14C[i].unk_10 -= this->unk_14C[i].unk_18 - (spC0 * 3.0f * (play->envCtx.windSpeed / 100.0f));
 
                 temp_f22 = (-Camera_GetCamDirPitch(GET_ACTIVE_CAM(play)) * 0.012f) + 40.0f;
                 if (temp_f22 < -40.0f) {
@@ -310,8 +309,7 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                     this->unk_14C[i].unk_08 = temp_f30 + temp_120;
                 }
 
-                if ((this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10) <
-                    ((play->view.eye.y - temp_f22) - 40.0f)) {
+                if ((this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10) < ((play->view.eye.y - temp_f22) - 40.0f)) {
                     this->unk_14C[i].unk_1C = 0;
                 }
                 break;
@@ -415,8 +413,8 @@ void func_808DCDB4(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spA8 * 120.0f);
                 temp_f18 = play->view.eye.z + (spA4 * 120.0f);
 
-                magnitude = sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) +
-                                  SQ(play->envCtx.windDir.z));
+                magnitude =
+                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
@@ -568,8 +566,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
 
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
         }
     }
@@ -627,8 +624,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
 
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
@@ -719,8 +715,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
             temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
         }
     }

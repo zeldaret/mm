@@ -422,22 +422,19 @@ void func_80B324B0(EnZoraegg* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, this->actorActionCmd)) {
         if (this->unk_1EA & 4) {
             if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action ==
-                 3)) {
+                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 3)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
                 this->unk_1EA &= ~4;
             }
         } else {
             if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
-                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action ==
-                 4)) {
+                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 4)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
                 this->unk_1EA |= 4;
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play,
-                                      Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
         if ((this->unk_1EA & 4) && Animation_OnFrame(&this->skelAnime, this->unk_1E4)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -459,8 +456,7 @@ void func_80B32644(EnZoraegg* this, PlayState* play) {
     if (!Cutscene_CheckActorAction(play, this->actorActionCmd)) {
         this->actionFunc = func_80B324B0;
     } else {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play,
-                                      Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
         if (this->unk_1EE > 25) {
             this->unk_1EE -= 25;
@@ -485,8 +481,7 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play,
-                                  Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -509,8 +504,7 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play,
-                                  Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_0);
@@ -544,8 +538,7 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
         }
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, play,
-                                  Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+    Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 97.0f) || Animation_OnFrame(&this->skelAnime, 101.0f) ||
         Animation_OnFrame(&this->skelAnime, 105.0f)) {
@@ -605,8 +598,7 @@ void func_80B32C34(EnZoraegg* this, PlayState* play) {
     this->actor.focus.pos.y += 10.0f;
     sp30 = this->actor.world.pos.y;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
-                             &sp34)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp34)) {
         if ((this->actor.world.pos.y + 50.0f) < sp30) {
             this->actionFunc = func_80B32BB8;
         }
@@ -627,8 +619,7 @@ void func_80B32D08(EnZoraegg* this, PlayState* play) {
     this->actor.focus.pos.y += 10.0f;
     sp40 = this->actor.world.pos.y;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
-                             &sp44)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40, &sp44)) {
         if (this->actor.world.pos.y < sp40) {
             sp34.x = this->actor.world.pos.x;
             sp34.y = sp40;
@@ -752,8 +743,7 @@ void func_80B331C8(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 EnZoraegg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnZoraegg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZoraegg* this = THIS;
 
     switch (this->unk_1EC) {

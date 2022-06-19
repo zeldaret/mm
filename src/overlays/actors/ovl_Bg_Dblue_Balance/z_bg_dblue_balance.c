@@ -147,8 +147,8 @@ s32 func_80B82454(BgDblueBalance* this, PlayState* play) {
 
     Matrix_MultVec3f(&sp48, &sp3C);
 
-    this->unk_15C = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
-                                                 sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x100);
+    this->unk_15C = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x, sp3C.y, sp3C.z,
+                                                 0, this->dyna.actor.shape.rot.y, 0, 0x100);
     if (this->unk_15C == NULL) {
         sp58 = false;
     } else {
@@ -159,8 +159,8 @@ s32 func_80B82454(BgDblueBalance* this, PlayState* play) {
     sp48.x = 138.28f;
     Matrix_MultVec3f(&sp48, &sp3C);
 
-    this->unk_160 = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
-                                                 sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x200);
+    this->unk_160 = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x, sp3C.y, sp3C.z,
+                                                 0, this->dyna.actor.shape.rot.y, 0, 0x200);
     if (this->unk_160 == NULL) {
         sp58 = false;
     } else {
@@ -176,8 +176,8 @@ void func_80B8259C(BgDblueBalance* this, PlayState* play) {
     WaterBox* sp30;
     f32 sp2C;
 
-    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x,
-                               this->dyna.actor.world.pos.z, &sp2C, &sp30)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &sp2C,
+                               &sp30)) {
         this->dyna.actor.depthInWater = sp2C - this->dyna.actor.world.pos.y;
         this->unk_228 = sp2C;
         if ((this->dyna.actor.depthInWater < 150.0f) && (this->dyna.actor.depthInWater > -150.0f)) {
@@ -715,8 +715,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
 
                     temp = ptr->unk_0E * (f32)this->unk_183 * 0.003921569f;
                     gDPSetEnvColor(gfx++, 0, 0, 0, temp);
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
                 }
             }

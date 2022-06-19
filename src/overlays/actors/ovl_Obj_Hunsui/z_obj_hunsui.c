@@ -506,8 +506,8 @@ void func_80B9D334(ObjHunsui* this, PlayState* play) {
             this->unk_174 = 240;
         }
     } else {
-        Actor* dblueMovebg = SubS_FindActorCustom(play, &this->dyna.actor, NULL, ACTORCAT_BG,
-                                                  ACTOR_BG_DBLUE_MOVEBG, NULL, func_80B9D288);
+        Actor* dblueMovebg = SubS_FindActorCustom(play, &this->dyna.actor, NULL, ACTORCAT_BG, ACTOR_BG_DBLUE_MOVEBG,
+                                                  NULL, func_80B9D288);
 
         if (dblueMovebg != NULL) {
             this->unk_1B4 = (BgDblueMovebg*)dblueMovebg;
@@ -658,8 +658,8 @@ void func_80B9DA60(Actor* thisx, PlayState* play) {
             OPEN_DISPS(play->state.gfxCtx);
 
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (play->gameplayFrames % 128) * -9, 0x20,
-                                        0x20, 1, 0, (play->gameplayFrames % 128) * -8, 0x20, 0x20));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (play->gameplayFrames % 128) * -9, 0x20, 0x20, 1, 0,
+                                        (play->gameplayFrames % 128) * -8, 0x20, 0x20));
             gSPSegment(POLY_XLU_DISP++, 0x09,
                        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, (s32)this->unk_1AC, 0x20, 0x20, 1, 0,
                                         (s32)this->unk_1B0, 0x20, 0x20));

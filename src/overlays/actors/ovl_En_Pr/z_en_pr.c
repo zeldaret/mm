@@ -151,9 +151,9 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F8 = &this->actor;
 
     for (i = 0; i < temp_s4; i++) {
-        prz = (EnPrz*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PRZ,
-                                         this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
-                                         this->actor.world.rot.y, 0, i + 1);
+        prz = (EnPrz*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PRZ, this->actor.world.pos.x,
+                                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y,
+                                         0, i + 1);
         if (prz != NULL) {
             prz->unk_220 = this->unk_2F8;
             this->unk_2F8 = &prz->actor;
@@ -201,8 +201,8 @@ s32 func_80A324E0(EnPr* this, PlayState* play) {
         return 1;
     }
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                             &this->unk_2B4, &sp40)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
+                             &sp40)) {
         if ((this->unk_2B4 - 30.0f) < this->actor.world.pos.y) {
             this->unk_2B8 = this->unk_2B4 - 30.0f;
             return 2;
@@ -321,8 +321,8 @@ void func_80A32A40(EnPr* this, PlayState* play) {
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp34.y = randPlusMinusPoint5Scaled(50.0f) + this->actor.home.pos.y;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                             &this->unk_2B4, &sp30)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
+                             &sp30)) {
         if (sp34.y < (this->unk_2B4 - 30.0f)) {
             this->unk_2B8 = sp34.y;
         } else {
@@ -428,8 +428,8 @@ void func_80A32F48(EnPr* this, PlayState* play) {
         this->unk_208 = 0;
     }
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                             &this->unk_2B4, &sp2C)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
+                             &sp2C)) {
         if ((this->unk_2B4 - 100.0f) < this->actor.world.pos.y) {
             this->unk_212 += 0xBB8;
             this->unk_2C4 = 2.0f * Math_SinS(this->unk_212);
@@ -459,8 +459,8 @@ void func_80A33098(EnPr* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect == 4) {
                 this->drawDmgEffAlpha = 40;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
-                            this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
+                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
 
             if ((player->stateFlags1 & 0x8000000) && (this->actor.colChkInfo.damageEffect == 5)) {
@@ -602,8 +602,8 @@ void EnPr_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->unk_2D0);
 
         Scene_SetRenderModeXlu(play, 0, 1);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, EnPr_OverrideLimbDraw, EnPr_PostLimbDraw, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              EnPr_OverrideLimbDraw, EnPr_PostLimbDraw, &this->actor);
     } else {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_2D0);

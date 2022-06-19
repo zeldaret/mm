@@ -165,8 +165,8 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
 
     Math_Vec3f_Copy(&sp84, &this->actor.world.pos);
     sp84.y += 1600.0f;
-    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp84, &this->unk1C0, &sp94, false, false,
-                                true, true, &sp90)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp84, &this->unk1C0, &sp94, false, false, true,
+                                true, &sp90)) {
         this->unk1CC = this->actor.world.pos.y - this->unk1C0.y;
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -352,8 +352,8 @@ void ObjChan_CreateSmashParticles(ObjChan* this, PlayState* play) {
             phi_s0 = 0x20;
         }
         new_var2 = spA4 * Rand_ZeroOne();
-        EffectSsKakera_Spawn(play, &spDC, &spD0, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, spA8 + new_var2,
-                             0, 0, 50, -1, OBJECT_TSUBO, object_tsubo_DL_001960);
+        EffectSsKakera_Spawn(play, &spDC, &spD0, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, spA8 + new_var2, 0, 0,
+                             50, -1, OBJECT_TSUBO, object_tsubo_DL_001960);
     }
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);

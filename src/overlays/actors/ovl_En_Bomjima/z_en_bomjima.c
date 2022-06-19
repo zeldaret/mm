@@ -282,8 +282,8 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
                 sp60.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true,
-                                            false, false, true, &sp4C)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true, false,
+                                            false, true, &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80BFE494(this, 19, 1.0f);
@@ -663,8 +663,8 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
         spA0.y += y * (2.0f + (i * 0.2f));
         spA0.z += z * (2.0f + (i * 0.2f));
 
-        temp_s3 = (EnBombal*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOMJIMA, spA0.x,
-                                                spA0.y, spA0.z, 0, 0, 0, i + 32);
+        temp_s3 = (EnBombal*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOMJIMA, spA0.x, spA0.y,
+                                                spA0.z, 0, 0, 0, i + 32);
         if (temp_s3 != NULL) {
             s32 index = (i * 2) - 2;
 
@@ -1036,8 +1036,7 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnBomjima_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnBomjima_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBomjima* this = THIS;
 
     if (limbIndex == 8) {

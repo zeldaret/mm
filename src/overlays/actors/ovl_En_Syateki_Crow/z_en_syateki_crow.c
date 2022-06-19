@@ -244,8 +244,7 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
     }
 
     if (this->unk_1C4 > 20) {
-        func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0,
-                      0);
+        func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->unk_27A++;
         syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
         func_809CA5D4(this);
@@ -286,8 +285,7 @@ void EnSyatekiCrow_Update(Actor* thisx, PlayState* play) {
     func_809CACD0(this, play);
 }
 
-s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                   Actor* thisx) {
+s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {

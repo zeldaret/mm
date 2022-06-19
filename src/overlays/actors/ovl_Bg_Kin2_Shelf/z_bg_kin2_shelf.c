@@ -186,8 +186,7 @@ s32 func_80B6FEBC(BgKin2Shelf* this, PlayState* play) {
 }
 
 s32 func_80B6FF28(BgKin2Shelf* this, PlayState* play) {
-    return (this->unk_165 > 8) && func_80B6FE48(this, play) && func_80B6FEBC(this, play) &&
-           !func_80B6FE08(this, play);
+    return (this->unk_165 > 8) && func_80B6FE48(this, play) && func_80B6FEBC(this, play) && !func_80B6FE08(this, play);
 }
 
 void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {

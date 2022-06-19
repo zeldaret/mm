@@ -343,8 +343,8 @@ void func_80998300(EnGs* this, PlayState* play) {
     }
 }
 
-f32 func_80998334(EnGs* this, PlayState* play, f32* arg2, f32* arg3, s16* arg4, f32 arg5, f32 arg6, f32 arg7,
-                  s32 arg8, s32 arg9) {
+f32 func_80998334(EnGs* this, PlayState* play, f32* arg2, f32* arg3, s16* arg4, f32 arg5, f32 arg6, f32 arg7, s32 arg8,
+                  s32 arg9) {
     f32 sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
 
     if (arg9 == 0) {
@@ -531,10 +531,9 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
         this->unk_1DC = 0.5f;
         this->unk_1E0 = 0.0f;
     } else if (this->unk_19D == 1) {
-        if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
-                          0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) &&
-                (Message_GetState(&play->msgCtx) == 0)) {
+        if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7, 0) ==
+            0.0f) {
+            if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) && (Message_GetState(&play->msgCtx) == 0)) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(play, 0x20D2, NULL);
@@ -565,8 +564,8 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
     } else if (this->unk_19D == 1) {
         this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
-        if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7,
-                          0) == 0.0f) {
+        if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7, 0) ==
+            0.0f) {
             this->unk_19A &= ~1;
             sp34 = 0;
         }
@@ -616,8 +615,8 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_19D += 1;
         }
-    } else if ((this->unk_19D == 4) && (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4,
-                                                      1.0f, 0.03f, 0.001f, 5, 0) == 0.0f)) {
+    } else if ((this->unk_19D == 4) && (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 1.0f,
+                                                      0.03f, 0.001f, 5, 0) == 0.0f)) {
         this->unk_19A &= ~1;
         sp3C = 0;
     }
@@ -820,8 +819,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             sp6C.y = this->actor.world.pos.y + 7.0f;
             sp6C.z = this->actor.world.pos.z + (2.0f * sp60.z);
 
-            func_800B0EB0(play, &sp6C, &sp60, &dustAccel, &dustPrim, &dustEnv, Rand_ZeroFloat(50.0f) + 200.0f, 40,
-                          15);
+            func_800B0EB0(play, &sp6C, &sp60, &dustAccel, &dustPrim, &dustEnv, Rand_ZeroFloat(50.0f) + 200.0f, 40, 15);
         }
 
         func_800B9010(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);

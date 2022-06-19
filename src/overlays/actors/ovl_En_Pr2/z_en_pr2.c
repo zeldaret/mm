@@ -487,8 +487,8 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->unk_228, &this->actor.world.pos);
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->unk_200, &sp40)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_200,
+                                 &sp40)) {
             if ((this->unk_200 - 40.0f) < this->unk_21C.y) {
                 this->unk_21C.y = this->unk_200 - 40.0f;
             }
@@ -572,8 +572,8 @@ void func_80A75310(EnPr2* this, PlayState* play) {
             this->unk_1D6 = true;
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->unk_200, &sp74)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_200,
+                                 &sp74)) {
             frame = this->unk_200 - 15.0f;
 
             if (frame <= this->actor.world.pos.y) {
@@ -717,8 +717,7 @@ void func_80A75950(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     }
 }
 
-s32 func_80A759D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 func_80A759D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnPr2* this = THIS;
 
     if (this->unk_1E0 < 10) {
@@ -744,16 +743,16 @@ void EnPr2_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->unk_1F4);
 
         Scene_SetRenderModeXlu(play, 0, 1);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_80A758E8, func_80A75950, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              func_80A758E8, func_80A75950, &this->actor);
     } else {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1F4);
 
         Scene_SetRenderModeXlu(play, 1, 2);
         POLY_XLU_DISP =
-            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                               this->skelAnime.dListCount, func_80A759D8, NULL, &this->actor, POLY_XLU_DISP);
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               func_80A759D8, NULL, &this->actor, POLY_XLU_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

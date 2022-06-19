@@ -47,8 +47,8 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTanron4* this = THIS;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable,
-                       this->morphTable, OBJECT_TANRON4_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
+                       OBJECT_TANRON4_LIMB_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
     thisx->speedXZ = 3.0f + KREG(48);
@@ -277,7 +277,7 @@ void EnTanron4_Draw(Actor* thisx, PlayState* play) {
 
     if (this->timeInfluence < 1400.0f) {
         Matrix_RotateZS(this->roll, MTXMODE_APPLY);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, NULL, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              NULL, NULL, &this->actor);
     }
 }

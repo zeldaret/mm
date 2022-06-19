@@ -142,8 +142,8 @@ void EnKarebaba_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8,
-                   this->jointTable, this->morphTable, 8);
+    SkelAnime_Init(play, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8, this->jointTable,
+                   this->morphTable, 8);
 
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit1);
     Collider_UpdateCylinder(&this->actor, &this->collider2);
@@ -658,8 +658,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         if ((this->unk_1EE > 40) || (this->unk_1EE & 1)) {
             Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_003070);
         }
     } else if (this->actionFunc != func_808F254C) {
@@ -686,8 +685,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < sp94; i++) {
             Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
             Matrix_MultZero(&this->limbPos[1 + i]);

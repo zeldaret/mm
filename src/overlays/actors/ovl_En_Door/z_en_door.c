@@ -400,8 +400,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gDoorCol);
     }
-    SkelAnime_Init(play, &this->skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
-                   this->limbTable, 5);
+    SkelAnime_Init(play, &this->skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable, this->limbTable, 5);
     if (this->unk_1A4 == 5) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
@@ -439,8 +438,7 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
     EnDoor* this = (EnDoor*)thisx;
 
     if (this->unk_1A4 != 7) {
-        TransitionActorEntry* transitionEntry =
-            &play->doorCtx.transitionActorList[(u16)this->dyna.actor.params >> 0xA];
+        TransitionActorEntry* transitionEntry = &play->doorCtx.transitionActorList[(u16)this->dyna.actor.params >> 0xA];
         if (transitionEntry->id < 0) {
             transitionEntry->id = -transitionEntry->id;
         }
@@ -620,8 +618,7 @@ void EnDoor_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     TransitionActorEntry* transitionEntry;
     EnDoor* this = THIS;
 
@@ -665,8 +662,8 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
         } else {
             func_8012C28C(play->state.gfxCtx);
         }
-        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDoor_OverrideLimbDraw,
-                          NULL, &this->dyna.actor);
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDoor_OverrideLimbDraw, NULL,
+                          &this->dyna.actor);
         if (this->dyna.actor.world.rot.y != 0) {
             if (this->dyna.actor.world.rot.y > 0) {
                 gSPDisplayList(POLY_OPA_DISP++, gDoorRightDL);

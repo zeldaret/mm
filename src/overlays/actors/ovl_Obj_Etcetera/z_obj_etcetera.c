@@ -260,8 +260,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
         switch (type) {
             case DEKU_FLOWER_TYPE_PINK:
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_Init(play, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim,
-                               this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
+                SkelAnime_Init(play, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim, this->jointTable,
+                               this->morphTable, DEKU_FLOWER_LIMB_MAX);
                 this->dList = gPinkDekuFlowerIdleDL;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:

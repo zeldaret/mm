@@ -335,8 +335,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         } else if (gSaveContext.save.time == CLOCK_TIME(6, 0)) {
             this->unk_144 = 0;
             func_80A41D70(this, play);
-            if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->unk_144] >= 0) &&
-                !(play->actorCtx.unk5 & 2)) {
+            if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->unk_144] >= 0) && !(play->actorCtx.unk5 & 2)) {
                 player->stateFlags1 |= 0x200;
             }
         } else {
@@ -369,8 +368,8 @@ void EnTest4_Destroy(Actor* thisx, PlayState* play) {
 void func_80A42AB8(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->unk_18B4A == 0) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
-        (play->roomCtx.unk31 == 0) && (func_8016A168() == 0)) {
+    if ((play->unk_18B4A == 0) && !Play_InCsMode(play) && (play->numSetupActors <= 0) && (play->roomCtx.unk31 == 0) &&
+        (func_8016A168() == 0)) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->unk_144];
         s16 temp_a3;
@@ -448,8 +447,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     } else {
                         playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&play->state, RESTART_MODE_RETURN, entranceIndex, player->unk_3CE,
-                                        playerParams, &player->unk_3C0, player->unk_3CC);
+                    Play_SetRespawnData(&play->state, RESTART_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
+                                        &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
                         play->nextEntranceIndex = 0x5400;

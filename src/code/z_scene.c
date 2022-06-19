@@ -28,8 +28,8 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     u32 spaceSize;
     s32 i;
 
-    if (play->sceneNum == SCENE_CLOCKTOWER || play->sceneNum == SCENE_TOWN ||
-        play->sceneNum == SCENE_BACKTOWN || play->sceneNum == SCENE_ICHIBA) {
+    if (play->sceneNum == SCENE_CLOCKTOWER || play->sceneNum == SCENE_TOWN || play->sceneNum == SCENE_BACKTOWN ||
+        play->sceneNum == SCENE_ICHIBA) {
         spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
     } else if (play->sceneNum == SCENE_MILK_BAR) {
         spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
@@ -146,8 +146,8 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     s16 playerObjectId;
     void* nextObject;
 
-    play->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
-                                play->setupEntranceList[play->curSpawn].spawn;
+    play->linkActorEntry =
+        (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
     if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
         (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0x0CFF)) {
         // Skull Kid Object

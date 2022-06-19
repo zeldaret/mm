@@ -1299,9 +1299,9 @@ void func_80B452EC(EnInvadepoh* this, PlayState* play) {
     s32 i;
 
     for (i = 0; i < this->unk379; i++) {
-        D_80B50320[i] = (EnInvadepoh*)Actor_Spawn(
-            &play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, 0, 0, (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
+        D_80B50320[i] = (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x,
+                                                  this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                                  (i & 7) | ((phi_s2 << 8) & 0x7F00) | 0x10);
         if (phi_s2 != 0xFF) {
             Path* path = &play->setupPathList[phi_s2];
             phi_s2 = path->unk1;
@@ -1697,8 +1697,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_InitParentCow(EnInvadepoh* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChainParentCow);
     this->actor.update = func_80B47FA8;
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                       0x30);
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x30);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
@@ -2258,8 +2257,8 @@ void func_80B479E8(EnInvadepoh* this, PlayState* play) {
 
     this->counter++;
     if (this->actionTimer == 8) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                    this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 3, CLEAR_TAG_SMOKE);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y - 10.0f,
+                    this->actor.world.pos.z, 0, 0, 3, CLEAR_TAG_SMOKE);
     }
 
     if (this->actionTimer == 8) {
@@ -2283,8 +2282,8 @@ void func_80B47BAC(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001D80,
-                           this->jointTable, this->morphTable, 14);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001D80, this->jointTable,
+                           this->morphTable, 14);
         this->skelAnime.curFrame = (this->actor.params & 7) * this->skelAnime.endFrame * 0.125f;
         func_80B444BC(this, play);
         func_80B442E4(this);
@@ -2366,8 +2365,7 @@ void func_80B47FA8(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
-        SkelAnime_InitFlex(play, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable,
-                           COW_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable, COW_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gCowMooAnim);
     }
 }
@@ -2524,8 +2522,8 @@ void func_80B48620(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable,
+                           this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
         Animation_PlayLoop(&this->skelAnime, &object_ma1_Anim_009E58);
         func_80B482D4(this);
@@ -2728,8 +2726,8 @@ void func_80B48FB0(Actor* thisx, PlayState* play) {
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
         this->actor.textId = 0x3330;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable,
+                           this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, play);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -3080,8 +3078,8 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
+                           this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, play);
         func_80B44570(this);
@@ -3311,8 +3309,8 @@ void func_80B4A9C8(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
+                           this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, play);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
@@ -3486,8 +3484,8 @@ void func_80B4B0C4(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
+                           this->morphTable, 23);
         Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
         substruct = &this->behaviorInfo;
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
@@ -3875,8 +3873,8 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720,
-                           this->jointTable, this->morphTable, 22);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720, this->jointTable,
+                           this->morphTable, 22);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
@@ -4089,8 +4087,8 @@ void func_80B4CE54(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
-                           this->jointTable, this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
+                           this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4278,8 +4276,8 @@ void func_80B4D670(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001674,
-                           this->jointTable, this->morphTable, 14);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001674, this->jointTable,
+                           this->morphTable, 14);
         if (invadepohType < 3) {
             func_80B453F4(this, play, invadepohType);
             func_80B4D15C(this);
@@ -4322,8 +4320,7 @@ void func_80B4D7B8(PlayState* play) {
             temp_v0 = play->gameplayFrames;
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(play->state.gfxCtx, 0, temp_s5, 0, 0x20, 0x40, 1, 0, temp_s6, 0x20, 0x40));
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_02E510);
         }
     }
@@ -4334,8 +4331,7 @@ void func_80B4D9B4(Actor* thisx, PlayState* play) {
     func_80B4D7B8(play);
 }
 
-s32 func_80B4D9D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 func_80B4D9D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     return 0;
 }
 
@@ -4414,8 +4410,7 @@ void func_80B4DB14(Actor* thisx, PlayState* play) {
                                      &this->actor.shape.rot);
         Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z,
                      MTXMODE_APPLY);
-        gSPMatrix(spCC->polyXlu.p++, Matrix_NewMtx(play->state.gfxCtx),
-                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(spCC->polyXlu.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(spCC->polyXlu.p++, object_uch_DL_000720);
     }
 
@@ -4445,8 +4440,7 @@ void func_80B4DB14(Actor* thisx, PlayState* play) {
         gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
         sp6C->polyXlu.p = gfx;
         if ((this->alienAlpha > 128) && func_80B456A8(play, &sp74)) {
-            func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp74, 10.0f, 9.0f,
-                          0, 0);
+            func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp74, 10.0f, 9.0f, 0, 0);
         }
     }
 
@@ -4474,8 +4468,8 @@ void func_80B4E1B0(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
     func_8012C5B0(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }
 
 s32 func_80B4E200(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -4539,8 +4533,7 @@ void func_80B4E3F0(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
     gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     if (func_80B456A8(play, &sp5C)) {
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0,
-                      0);
+        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0, 0);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

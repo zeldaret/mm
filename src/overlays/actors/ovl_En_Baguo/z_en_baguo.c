@@ -126,8 +126,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     EnBaguo* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable,
-                   NEJIRON_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, NEJIRON_LIMB_MAX);
     this->actor.hintId = 0xB;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
@@ -176,8 +175,8 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, PlayState* play) {
     this->actor.world.rot.y += 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
-                                 10, 8.0f, 500, 10, 1);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
+                                 8.0f, 500, 10, 1);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -281,8 +280,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
     this->actor.world.rot.y -= 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
-                                 10, 8.0f, 500, 10, 1);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
+                                 8.0f, 500, 10, 1);
     }
 
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
@@ -346,8 +345,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                                                (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
                 }
 
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_DEAD);
 

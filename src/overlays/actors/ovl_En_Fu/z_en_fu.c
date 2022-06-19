@@ -194,8 +194,8 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74,
-                           this->jointTable, this->morphTable, 21);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74, this->jointTable,
+                           this->morphTable, 21);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -218,8 +218,8 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;
 
-            this->unk_2D4 = (BgFuMizu*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_FU_MIZU, sp40.x, sp40.y,
-                                                   sp40.z, 0, 0, 0, 0);
+            this->unk_2D4 =
+                (BgFuMizu*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_FU_MIZU, sp40.x, sp40.y, sp40.z, 0, 0, 0, 0);
         } else {
             this->unk_2D4 = NULL;
         }
@@ -1461,8 +1461,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }
     }

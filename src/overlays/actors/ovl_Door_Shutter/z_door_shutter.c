@@ -222,8 +222,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A22A0) - 1; i++, bossDoorInfo++) {
-            if ((play->sceneNum == bossDoorInfo->dungeonScene) ||
-                (play->sceneNum == bossDoorInfo->bossScene)) {
+            if ((play->sceneNum == bossDoorInfo->dungeonScene) || (play->sceneNum == bossDoorInfo->bossScene)) {
                 break;
             }
         }
@@ -550,9 +549,8 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     if (this->actor.room >= 0) {
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp44, &player->actor.world.pos);
 
-        this->actor.room = play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)]
-                               .sides[(sp44.z < 0.0f) ? 0 : 1]
-                               .room;
+        this->actor.room =
+            play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
 
         if (room != this->actor.room) {
             Room temp = play->roomCtx.currRoom;
@@ -702,8 +700,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
         if ((this->unk_168 != 0.0f) && (sp44->unk_04 != 0)) {
             Matrix_Translate(0.0f, sp44->unk_08 * (1.0f - this->unk_168), sp44->translateZ, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sp44->unk_04);
         }
 

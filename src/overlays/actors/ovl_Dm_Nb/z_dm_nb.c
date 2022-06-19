@@ -70,8 +70,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable,
-                       8);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable, 8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;

@@ -287,9 +287,8 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                     this->unk_1E0 = 255.0f;
                     this->unk_19C = 1.0f;
 
-                    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_MIR_RAY2,
-                                       this->actor.world.pos.x, this->actor.world.pos.y - 200.0f,
-                                       this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
+                    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_MIR_RAY2, this->actor.world.pos.x,
+                                       this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
 
                     if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
                         this->unk_A04.x = this->actor.world.pos.x - 200.0f;

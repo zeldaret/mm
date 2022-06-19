@@ -321,8 +321,8 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     s32 params;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140,
-                   this->jointTable, this->morphTable, 7);
+    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
+                   this->morphTable, 7);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 
@@ -437,8 +437,8 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
                 s32 i;
 
                 for (i = 0; i < 8; i++) {
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, thisx->world.pos.x,
-                                thisx->world.pos.y - 30.0f, thisx->world.pos.z, 0, 0, 0, 6);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, thisx->world.pos.x, thisx->world.pos.y - 30.0f,
+                                thisx->world.pos.z, 0, 0, 0, 6);
                 }
             }
             break;
@@ -676,7 +676,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         func_80115908(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                              (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                                         (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
@@ -906,8 +906,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
         if ((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
             (play->csCtx.currentCsIndex == 0) &&
-            ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) ||
-             (play->csCtx.frames == 591))) {
+            ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) || (play->csCtx.frames == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
@@ -1259,8 +1258,8 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
         envColor.g = this->outerColor.g;
         envColor.b = this->outerColor.b;
 
-        EffectSsKirakira_SpawnDispersed(play, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor,
-                                        1000, sparkleLife);
+        EffectSsKirakira_SpawnDispersed(play, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor, 1000,
+                                        sparkleLife);
     }
 }
 
@@ -1268,8 +1267,8 @@ void func_8088F9E4(Actor* thisx, PlayState* play) {
     EnElf* this = THIS;
     s32 bgId;
 
-    thisx->floorHeight = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &thisx->floorPoly, &bgId,
-                                                       &this->actor, &thisx->world.pos);
+    thisx->floorHeight =
+        BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &thisx->floorPoly, &bgId, &this->actor, &thisx->world.pos);
     thisx->shape.shadowAlpha = 50;
 }
 
@@ -1516,8 +1515,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     this->elfMsg = NULL;
     this->timer++;
 
-    if ((this->unk_240 >= 0.0f) && func_800FD2B4(play, SQ(this->unk_240) * this->unk_240,
-                                                 player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
+    if ((this->unk_240 >= 0.0f) &&
+        func_800FD2B4(play, SQ(this->unk_240) * this->unk_240, player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
         Math_StepToF(&this->unk_240, -0.05f, 0.05f);
     }
 

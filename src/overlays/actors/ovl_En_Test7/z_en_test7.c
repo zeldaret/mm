@@ -933,8 +933,8 @@ void EnTest7_Update(Actor* thisx, PlayState* play) {
     func_80AF118C(play, this->unk_15C, this, (this->unk_144 & 8) != 0, (this->unk_144 & 0x10) != 0);
 }
 
-s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags,
-                  Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
+s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags, Actor* thisx,
+                  Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     EnTest7* this = THIS;
     Vec3f sp18;
 
@@ -975,7 +975,6 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     func_80AF14FC(play, this->unk_15C);
 
     if (this->unk_144 & 4) {
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos,
-                      70.0f, 5.0f, 0, 0);
+        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f, 5.0f, 0, 0);
     }
 }

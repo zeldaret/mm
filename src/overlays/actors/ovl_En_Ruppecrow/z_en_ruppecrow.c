@@ -276,9 +276,9 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
 
     if (EnRuppecrow_CanSpawnBlueRupees(play) && (this->rupeeIndex % 5) == 4) {
         if (this->rupeeIndex == 19) {
-            rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00,
-                                           this->actor.world.pos.x + xOffset, this->actor.world.pos.y,
-                                           this->actor.world.pos.z, 0x0, 0x0, 0x0, ITEM00_RUPEE_RED);
+            rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
+                                           this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0,
+                                           ITEM00_RUPEE_RED);
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
@@ -287,9 +287,9 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
             rupee->unk152 = 60;
             this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
         } else {
-            rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00,
-                                           this->actor.world.pos.x + xOffset, this->actor.world.pos.y,
-                                           this->actor.world.pos.z, 0x0, 0x0, 0x0, ITEM00_RUPEE_BLUE);
+            rupee = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
+                                           this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0,
+                                           ITEM00_RUPEE_BLUE);
             this->rupees[rupeeIndex] = rupee;
             this->rupees[rupeeIndex]->actor.gravity = -5.0f;
             this->rupees[rupeeIndex]->actor.velocity.y = 0.0f;
@@ -610,8 +610,8 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & 0x1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
             EnRuppecrow_ShatterIce(this, play);
-            func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f),
-                          0x0, 0x0);
+            func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f), 0x0,
+                          0x0);
 
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
             Actor_MarkForDeath(&this->actor);
@@ -668,6 +668,6 @@ void EnRuppecrow_Draw(Actor* thisx, PlayState* play) {
     EnRuppecrow* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

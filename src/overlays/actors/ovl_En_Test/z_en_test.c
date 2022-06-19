@@ -172,8 +172,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
-        thisx->floorHeight =
-            BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
+        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
             Actor_MarkForDeath(thisx);
@@ -225,8 +224,8 @@ void EnTest_Update(Actor* thisx, PlayState* play) {
     func_80862EDC(this->unk_20C);
 }
 
-s32 EnTest_OverrideKeyframeDraw(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
-                                u8* flags, Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
+s32 EnTest_OverrideKeyframeDraw(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags,
+                                Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     EnTest* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);

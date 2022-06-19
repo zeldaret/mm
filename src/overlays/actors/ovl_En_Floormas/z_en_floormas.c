@@ -182,9 +182,9 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    this->actor.child = Actor_SpawnAsChildAndCutscene(
-        &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
-        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.unk20, NULL);
+    this->actor.child = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x,
+                                                      this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                                      params + 0x10, -1, this->actor.unk20, NULL);
     if (this->actor.child == NULL) {
         Actor_MarkForDeath(this->actor.parent);
         Actor_MarkForDeath(&this->actor);
@@ -1064,9 +1064,9 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             this->drawDmgEffAlpha = 4.0f;
                             this->drawDmgEffScale = 0.55f;
                             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                        this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
-                                        this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
+                                        0,
                                         (this->actor.scale.x > 0.009f) ? CLEAR_TAG_LARGE_LIGHT_RAYS
                                                                        : CLEAR_TAG_SMALL_LIGHT_RAYS);
                         }
@@ -1144,8 +1144,8 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx, Gfx** gfx) {
+s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                                Gfx** gfx) {
     EnFloormas* this = THIS;
 
     if (limbIndex == WALLMASTER_LIMB_ROOT) {
@@ -1155,8 +1155,7 @@ s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
-                             Gfx** gfx) {
+void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnFloormas* this = THIS;
 
     if (D_808D393C[limbIndex] != -1) {

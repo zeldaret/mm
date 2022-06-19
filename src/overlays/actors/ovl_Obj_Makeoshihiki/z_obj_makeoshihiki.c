@@ -66,8 +66,8 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
     this->pathCount = path->count;
     childPointIndex = ObjMakeoshihiki_GetChildSpawnPointIndex(this, play);
     childPoint = &this->pathPoints[childPointIndex];
-    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_OSHIHIKI, childPoint->x,
-                           childPoint->y, childPoint->z, 0, 0, 0, 0xFFF1) == NULL) {
+    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_OSHIHIKI, childPoint->x, childPoint->y,
+                           childPoint->z, 0, 0, 0, 0xFFF1) == NULL) {
         Actor_MarkForDeath(&this->actor);
     }
 }

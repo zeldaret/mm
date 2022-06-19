@@ -73,9 +73,9 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    childActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG,
-                                    this->actor.world.pos.x, this->actor.world.pos.y + 12.0f, this->actor.world.pos.z,
-                                    this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
+    childActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x,
+                                    this->actor.world.pos.y + 12.0f, this->actor.world.pos.z, this->actor.world.rot.x,
+                                    this->actor.world.rot.y, this->actor.world.rot.z,
                                     ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_BUBBLE);
     if (childActor != NULL) {
         childActor->parent = &this->actor;

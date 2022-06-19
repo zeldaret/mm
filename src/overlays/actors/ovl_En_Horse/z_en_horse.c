@@ -647,8 +647,7 @@ void EnHorse_ResetRace(EnHorse* this, PlayState* play) {
 s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 1) || (func_800B7128(GET_PLAYER(play)) == true) ||
-        (player->stateFlags1 & 0x100000) ||
+    if ((player->stateFlags1 & 1) || (func_800B7128(GET_PLAYER(play)) == true) || (player->stateFlags1 & 0x100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == 19) || (player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != 0) ||
         (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & 0x20) || (player->csMode != 0)) {
@@ -833,23 +832,20 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         EnHorse_InitInactive(this);
     } else if (thisx->params == ENHORSE_3) {
         EnHorse_InitIngoHorse(this);
-        this->rider =
-            (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
-                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
+        this->rider = (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                                         thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->unk_398 = 14.34f;
     } else if (thisx->params == ENHORSE_4) {
         func_80881634(this);
         this->unk_398 = 14.34f;
-        this->rider =
-            (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
-                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
+        this->rider = (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                                         thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 1);
         this->unk_1EC |= 0x100;
     } else if (thisx->params == ENHORSE_5) {
         func_80881634(this);
         this->unk_398 = 14.525f;
-        this->rider =
-            (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
-                               thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 2);
+        this->rider = (EnIn*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_IN, thisx->world.pos.x, thisx->world.pos.y,
+                                         thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, 1, 2);
         this->unk_1EC |= 0x100;
     } else if (thisx->params == ENHORSE_9) {
         EnHorse_InitCutscene(this, play);
@@ -1005,8 +1001,8 @@ void EnHorse_Frozen(EnHorse* this, PlayState* play) {
     }
 }
 
-void EnHorse_UpdateSpeed(EnHorse* this, PlayState* play, f32 brakeDecel, f32 brakeAngle, f32 minStickMag,
-                         f32 decel, f32 baseSpeed, s16 turnSpeed) {
+void EnHorse_UpdateSpeed(EnHorse* this, PlayState* play, f32 brakeDecel, f32 brakeAngle, f32 minStickMag, f32 decel,
+                         f32 baseSpeed, s16 turnSpeed) {
     f32 phi_f0;
     f32 stickMag;
     s16 stickAngle;
@@ -1712,8 +1708,7 @@ void EnHorse_LowJump(EnHorse* this, PlayState* play) {
         Vec3f pos = this->actor.world.pos;
 
         pos.y = this->actor.floorHeight - 5.0f;
-        temp_f0 =
-            BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &colPoly, &floorBgId, &this->actor, &pos);
+        temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &colPoly, &floorBgId, &this->actor, &pos);
         if ((this->actor.floorHeight - 120.0f) < temp_f0) {
             this->actor.floorHeight = temp_f0;
             this->actor.floorPoly = colPoly;
@@ -1811,8 +1806,7 @@ void EnHorse_HighJump(EnHorse* this, PlayState* play) {
         Vec3f pos = this->actor.world.pos;
 
         pos.y = this->actor.floorHeight - 5.0f;
-        temp_f0 =
-            BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &colPoly, &floorBgId, &this->actor, &pos);
+        temp_f0 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &colPoly, &floorBgId, &this->actor, &pos);
         if ((this->actor.floorHeight - 120.0f) < temp_f0) {
             this->actor.floorHeight = temp_f0;
             this->actor.floorPoly = colPoly;
@@ -3443,8 +3437,8 @@ void EnHorse_Vec3fOffset(Vec3f* src, s16 yaw, f32 dist, f32 height, Vec3f* dst) 
     dst->z = (Math_CosS(yaw) * dist) + src->z;
 }
 
-s32 EnHorse_CalcFloorHeight(EnHorse* this, PlayState* play, Vec3f* pos, CollisionPoly** polyFloor,
-                            f32* floorHeight, s32* bgId) {
+s32 EnHorse_CalcFloorHeight(EnHorse* this, PlayState* play, Vec3f* pos, CollisionPoly** polyFloor, f32* floorHeight,
+                            s32* bgId) {
     f32 waterY;
     WaterBox* waterbox;
 
@@ -3533,8 +3527,8 @@ void EnHorse_CheckFloors(EnHorse* this, PlayState* play) {
     WaterBox* waterbox;
     f32 dist;
 
-    if ((WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                &waterHeight, &waterbox) == true) &&
+    if ((WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterHeight,
+                                &waterbox) == true) &&
         (this->actor.floorHeight < waterHeight)) {
         EnHorse_ObstructMovement(this, play, 1, galloping);
         return;
@@ -3698,8 +3692,7 @@ void EnHorse_BgCheckSlowMoving(EnHorse* this, PlayState* play) {
     end.x += 30.0f * Math_SinS(this->actor.world.rot.y);
     end.y += 30.0f * Math_SinS(-this->actor.shape.rot.x);
     end.z += 30.0f * Math_CosS(this->actor.world.rot.y);
-    if (BgCheck_EntityLineTest1(&play->colCtx, &start, &end, &intersect, &colPoly, true, false, false, true,
-                                &bgId)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &start, &end, &intersect, &colPoly, true, false, false, true, &bgId)) {
         EnHorse_ResolveCollision(this, play, colPoly);
     }
 }
@@ -3813,8 +3806,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
         }
 
         if (((movingFast == false) && (intersectDist < 80.0f)) || ((movingFast == true) && (intersectDist < 150.0f))) {
-            if ((play->sceneNum != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) &&
-                (this->playerControlled == true)) {
+            if ((play->sceneNum != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) && (this->playerControlled == true)) {
                 if (movingFast == false) {
                     this->stateFlags |= ENHORSE_FORCE_REVERSING;
                 } else if (movingFast == true) {
@@ -3984,9 +3976,9 @@ void func_80886C00(EnHorse* this, PlayState* play) {
 
     if (((this->action == ENHORSE_ACT_MOUNTED_GALLOP) || (this->action == ENHORSE_ACT_MOUNTED_REARING) ||
          (this->action == ENHORSE_ACT_STOPPING)) &&
-        (CHECK_BTN_ALL(input->press.button, BTN_A) || (func_801A5100() == 5)) &&
-        (play->interfaceCtx.unk_212 == 8) && !(this->stateFlags & ENHORSE_BOOST) &&
-        !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
+        (CHECK_BTN_ALL(input->press.button, BTN_A) || (func_801A5100() == 5)) && (play->interfaceCtx.unk_212 == 8) &&
+        !(this->stateFlags & ENHORSE_BOOST) && !(this->stateFlags & ENHORSE_FLAG_8) &&
+        !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             func_8013ECE0(0.0f, 180, 20, 100);
             this->stateFlags |= ENHORSE_BOOST;

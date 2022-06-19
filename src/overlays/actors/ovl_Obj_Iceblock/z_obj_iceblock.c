@@ -786,8 +786,7 @@ void func_80A2508C(ObjIceblock* this, PlayState* play) {
             sp34.z = (this->dyna.actor.scale.z * sp34.z) + this->dyna.actor.world.pos.z;
 
             if ((this->unk_244 - 3.0f) < sp34.y) {
-                EffectSsIceSmoke_Spawn(play, &sp34, &sp40, &gZeroVec3f,
-                                       (s32)(this->dyna.actor.scale.y * 1300.0f) + 60);
+                EffectSsIceSmoke_Spawn(play, &sp34, &sp40, &gZeroVec3f, (s32)(this->dyna.actor.scale.y * 1300.0f) + 60);
             }
         }
     }
@@ -1365,7 +1364,7 @@ void func_80A265C0(ObjIceblock* this, PlayState* play) {
         ptr->unk_0E = Rand_S16Offset(900, 600);
         ptr->unk_04 = (2.0f * Rand_ZeroOne()) + 1.0f;
         ptr->unk_14 = Rand_Next() >> 0x10;
-        func_80A24B74(this, globalCtx);
+        func_80A24B74(this, play);
     }
 
     func_80A237A4(this);

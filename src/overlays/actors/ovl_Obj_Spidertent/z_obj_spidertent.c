@@ -499,8 +499,8 @@ void func_80B300F4(ObjSpidertent* thisx, PlayState* play, TriNorm* triNorm, Vec3
                 spB8.y = sp80->unk_08 * sp94.y;
                 spB8.z = sp80->unk_08 * sp94.z;
 
-                EffectSsDeadDb_Spawn(play, &spC4, &spB8, &gZeroVec3f, &sp80->unk_10, &sp80->unk_14, sp80->unk_0C,
-                                     0, sp80->unk_0E);
+                EffectSsDeadDb_Spawn(play, &spC4, &spB8, &gZeroVec3f, &sp80->unk_10, &sp80->unk_14, sp80->unk_0C, 0,
+                                     sp80->unk_0E);
             }
 
             phi_f22 += temp_f24;

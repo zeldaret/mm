@@ -131,8 +131,8 @@ void EnTrt_SpawnShopItems(EnTrt* this, PlayState* play, ShopItem* shopItem) {
             this->items[i] = NULL;
         } else {
             this->items[i] =
-                (EnGirlA*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
-                                      shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
+                (EnGirlA*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_GIRLA, shopItem->spawnPos.x, shopItem->spawnPos.y,
+                                      shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
@@ -1565,8 +1565,7 @@ void EnTrt_DrawCursor(PlayState* play, EnTrt* this, f32 x, f32 y, f32 z, u8 draw
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnTrt_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
-                       f32 dy) {
+void EnTrt_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx, f32 dy) {
     f32 unk;
     s32 ulx;
     s32 uly;

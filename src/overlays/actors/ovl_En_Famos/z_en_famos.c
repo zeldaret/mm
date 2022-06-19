@@ -180,8 +180,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
                    FAMOS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
-    Collider_InitAndSetJntSph(play, &this->emblemCollider, &this->actor, &sJntSphInit,
-                              this->emblemColliderElements);
+    Collider_InitAndSetJntSph(play, &this->emblemCollider, &this->actor, &sJntSphInit, this->emblemColliderElements);
 
     if (!sAnimatedMaterialsDesgmented) { // init animated materials
         for (i = 0; i < ARRAY_COUNT(sEmblemAnimatedMats); i++) {
@@ -793,8 +792,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnFamos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnFamos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFamos* this = THIS;
 
     if (limbIndex == FAMOS_LIMB_BODY) {

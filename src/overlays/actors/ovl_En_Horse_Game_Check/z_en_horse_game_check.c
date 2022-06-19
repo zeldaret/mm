@@ -71,8 +71,8 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     this->dyna.actor.floorPoly = NULL;
     this->dyna.actor.world.pos.y += 100.0f;
 
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor2(
-        play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
+    this->dyna.actor.floorHeight =
+        BgCheck_EntityRaycastFloor2(play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
     this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight + 3.0f;
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
                   this->dyna.actor.world.pos.z, &sp38);
@@ -124,14 +124,14 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     func_8010E9F0(4, 0);
     play->interfaceCtx.unk_280 = 1;
 
-    this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0,
-                                         0x7FFF, 0, 0x2004);
+    this->horse1 =
+        (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x2004);
     if (this->horse1 == NULL) {
         __assert("../z_en_horse_game_check.c", 1517);
     }
 
-    this->horse2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0,
-                                         0x7FFF, 0, 0x2005);
+    this->horse2 =
+        (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x2005);
     if (this->horse2 == NULL) {
         __assert("../z_en_horse_game_check.c", 1526);
     }
@@ -367,8 +367,8 @@ s32 func_808F96E4(EnHorseGameCheck* this, PlayState* play) {
     this->dyna.actor.floorPoly = NULL;
     this->dyna.actor.world.pos.y += 100.0f;
 
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor2(
-        play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
+    this->dyna.actor.floorHeight =
+        BgCheck_EntityRaycastFloor2(play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
     this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight + 1.0f;
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
                   this->dyna.actor.world.pos.z, &sp38);

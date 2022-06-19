@@ -68,9 +68,8 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     sCurrentPythonIndex++;
 
     if (!(gSaveContext.save.weekEventReg[13] & 1)) {
-        this->deepPython =
-            Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y, pos.z,
-                               0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
+        this->deepPython = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y,
+                                              pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
         if (this->deepPython != NULL) {
             EnDragon* dragon = (EnDragon*)this->deepPython;

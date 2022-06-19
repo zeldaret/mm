@@ -535,8 +535,7 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                         Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor)) ? false : true;
 
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
-                    ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit,
-                                                  isSwitchFlagNotSet);
+                    ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, isSwitchFlagNotSet);
                 }
                 break;
             case OBJSWITCH_SUBTYPE_RESET:

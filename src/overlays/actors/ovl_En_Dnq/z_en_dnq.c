@@ -416,8 +416,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable,
-                       33);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -467,6 +466,6 @@ void EnDnq_Draw(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

@@ -347,8 +347,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     EnJa* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable,
-                       16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable, 16);
     this->unk_36C = -1;
     func_80BC192C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -469,8 +468,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                     break;
             }
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
             Matrix_Pop();
@@ -599,11 +597,11 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         func_8012C28C(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08,
-                   Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g,
-                                D_80BC37AC[phi_t2].b, D_80BC37AC[phi_t2].a));
+                   Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g, D_80BC37AC[phi_t2].b,
+                                D_80BC37AC[phi_t2].a));
         gSPSegment(POLY_OPA_DISP++, 0x09,
-                   Gfx_EnvColor(play->state.gfxCtx, D_80BC37B4[phi_t2].r, D_80BC37B4[phi_t2].g,
-                                D_80BC37B4[phi_t2].b, D_80BC37B4[phi_t2].a));
+                   Gfx_EnvColor(play->state.gfxCtx, D_80BC37B4[phi_t2].r, D_80BC37B4[phi_t2].g, D_80BC37B4[phi_t2].b,
+                                D_80BC37B4[phi_t2].a));
         gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_80BC37BC[this->unk_362]));
         gDPPipeSync(POLY_OPA_DISP++);
 

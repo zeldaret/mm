@@ -189,8 +189,8 @@ void func_80B83EA4(BgDblueWaterfall* this, PlayState* play) {
             spBC.x = spC8.x * -0.02f;
             spBC.z = spC8.z * -0.02f;
 
-            EffectSsEnIce_Spawn(play, &spD4, (Rand_ZeroOne() * 0.3f) + 0.1f, &spC8, &spBC, &D_80B8539C,
-                                &D_80B853A0, 30);
+            EffectSsEnIce_Spawn(play, &spD4, (Rand_ZeroOne() * 0.3f) + 0.1f, &spC8, &spBC, &D_80B8539C, &D_80B853A0,
+                                30);
         }
     }
 }
@@ -227,8 +227,8 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
     }
 }
 
-void func_80B84348(BgDblueWaterfall* this, PlayState* play, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6,
-                   f32 arg7, s32 arg8) {
+void func_80B84348(BgDblueWaterfall* this, PlayState* play, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
+                   s32 arg8) {
     static s16 D_80B853A4 = 0;
     s32 pad;
     f32 spB8 = 1.0f / arg8;
@@ -275,8 +275,7 @@ void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
     f32 sp30;
 
-    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
-                               &sp3C)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp3C)) {
         if (sp30 < sp34) {
             this->unk_198 = sp34;
         } else {
@@ -614,8 +613,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_dblue_object_DL_003358);
         }
 

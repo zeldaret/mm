@@ -132,8 +132,7 @@ s32 func_80A68860(EnMushi2* this, PlayState* play) {
         return true;
     }
 
-    return WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                  &sp30, &sp34);
+    return WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp34);
 }
 
 s32 func_80A68910(EnMushi2* this, PlayState* play) {
@@ -466,8 +465,8 @@ s32 func_80A69468(EnMushi2* this, PlayState* play) {
     posB.y = (y + sp50.y) + this->actor.world.pos.y;
     posB.z = (z + sp50.z) + this->actor.world.pos.z;
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &posB, &this->unk_33C, &this->poly, true,
-                                true, true, true, &this->polyBgId)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &posB, &this->unk_33C, &this->poly, true, true,
+                                true, true, &this->polyBgId)) {
         this->unk_30C |= 6;
         return true;
     }
@@ -533,8 +532,8 @@ void func_80A697C4(EnMushi2* this, PlayState* play) {
             func_80A6969C(this, play);
         }
 
-        if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                   &sp2C, &sp30)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
+                                   &sp30)) {
             this->actor.depthInWater = sp2C - this->actor.world.pos.y;
             if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;
@@ -682,8 +681,8 @@ s32 func_80A69EE4(EnMushi2* this, PlayState* play) {
     f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                &waterSurface, &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
         (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
@@ -750,8 +749,8 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
-    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C,
-                   this->jointTable, this->morphTable, 24);
+    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C, this->jointTable,
+                   this->morphTable, 24);
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -759,8 +758,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 30;
     sp3C = func_80A69EE4(this, play);
 
-    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) &&
-        !ENMUSHI2_GET_3(&this->actor)) {
+    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) && !ENMUSHI2_GET_3(&this->actor)) {
         func_80A6A024(this);
     }
 
@@ -769,7 +767,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->unk_30C = 1;
 
     if (sp3C != 0) {
-        func_80A69F5C(&this->actor, globalCtx);
+        func_80A69F5C(&this->actor, play);
         this->actor.world.rot.y = Rand_Next() >> 0x10;
         func_80A6AE14(this);
     } else {
@@ -1035,7 +1033,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
     if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.depthInWater > 5.0f) &&
         (this->actor.depthInWater < 30.0f) && ((s32)(Rand_Next() & 0x1FF) < this->unk_368)) {
-        EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
                              ((Rand_ZeroOne() * 4.0f) + 2.0f) * this->actor.scale.x);
     }
 

@@ -157,8 +157,8 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
             temp = -450;
         }
 
-        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD52C8[i & 3], phi_t0, 0, 50,
-                             -1, OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
+        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD52C8[i & 3], phi_t0, 0, 50, -1,
+                             OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
     }
 
     Matrix_Pop();

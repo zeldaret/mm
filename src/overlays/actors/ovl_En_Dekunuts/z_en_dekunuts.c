@@ -118,8 +118,8 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubIdleAnim, this->jointTable,
-                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubIdleAnim, this->jointTable, this->morphTable,
+                   DEKU_SCRUB_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
@@ -233,8 +233,7 @@ void func_808BD7D4(EnDekunuts* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_190 == 0) ||
-        ((this->actor.xzDistToPlayer < 120.0f) && Player_GetMask(play) != PLAYER_MASK_STONE)) {
+    if ((this->unk_190 == 0) || ((this->actor.xzDistToPlayer < 120.0f) && Player_GetMask(play) != PLAYER_MASK_STONE)) {
         func_808BDC9C(this);
     }
 }
@@ -318,8 +317,8 @@ void func_808BDA4C(EnDekunuts* this, PlayState* play) {
         pos.z = (Math_CosS(this->actor.shape.rot.y) * val) + this->actor.world.pos.z;
         params = (this->actor.params == ENDEKUNUTS_GET_FF00_2) ? ENDEKUNUTS_GET_FF00_2 : ENDEKUNUTS_GET_FF00_0;
 
-        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z,
-                        this->actor.world.rot.x, this->actor.shape.rot.y, 0, params) != NULL) {
+        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z, this->actor.world.rot.x,
+                        this->actor.shape.rot.y, 0, params) != NULL) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && Animation_OnFrame(&this->skelAnime, 12.0f)) {
@@ -541,8 +540,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xE0);
         Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10,
-                                 gDekuScrubFlowerFragmentDL);
+        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, gDekuScrubFlowerFragmentDL);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -606,9 +604,9 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
-                                this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                                this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_SMALL_LIGHT_RAYS);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                     this->drawDmgEffAlpha = 4.0f;
@@ -661,8 +659,7 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
     f32 arg1, arg2, arg3;
     f32 currentFrame;

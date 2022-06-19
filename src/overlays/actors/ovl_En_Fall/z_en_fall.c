@@ -313,8 +313,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
     static s32 sGiantsCutsceneState = 0;
 
-    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 &&
-        play->csCtx.currentCsIndex == 0) {
+    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && play->csCtx.currentCsIndex == 0) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (play->csCtx.state != 0) {
@@ -510,8 +509,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
     s32 pad;
 
     if (Cutscene_CheckActorAction(play, 517) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 517)]->action == 2 &&
-        this->actor.draw == NULL) {
+        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 517)]->action == 2 && this->actor.draw == NULL) {
         EnFall_MoonsTear_Initialize(this);
     }
 
@@ -522,8 +520,8 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
             gSaveContext.save.weekEventReg[74] |= 0x20;
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
             this->actor.draw = NULL;
             this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
@@ -573,8 +571,7 @@ void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
 void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
-    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 &&
-        play->csCtx.currentCsIndex == 2) {
+    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 2) {
         play->skyboxCtx.rotY -= 0.05f;
     }
 
@@ -874,8 +871,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, PlayState* play) {
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             Matrix_RotateZYX(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
                              MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);
         }
     }

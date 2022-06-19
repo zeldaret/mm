@@ -341,17 +341,17 @@ void func_80B0FBF0(EnGb2* this, PlayState* play) {
     s16 end = ARRAY_COUNT(sp90);
 
     for (i = 0; i < end; i++) {
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, sp90[i].x, sp90[i].y,
-                           sp90[i].z, sp78[i].x, sp78[i].y, sp78[i].z, sp68[i]);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, sp90[i].x, sp90[i].y, sp90[i].z,
+                           sp78[i].x, sp78[i].y, sp78[i].z, sp68[i]);
     }
 }
 
 void func_80B0FD8C(EnGb2* this, PlayState* play) {
     this->unk_280++;
     this->unk_268 = this->actor.child;
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS,
-                       D_80B119B0[this->unk_280].unk_04.x, D_80B119B0[this->unk_280].unk_04.y,
-                       D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0, D_80B119B0[this->unk_280].unk_10);
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, D_80B119B0[this->unk_280].unk_04.x,
+                       D_80B119B0[this->unk_280].unk_04.y, D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0,
+                       D_80B119B0[this->unk_280].unk_10);
 }
 
 void func_80B0FE18(PlayState* play) {
@@ -455,9 +455,9 @@ void func_80B10240(EnGb2* this, PlayState* play) {
     this->unk_268 = NULL;
     if (ActorCutscene_GetCanPlayNext(this->unk_282[0])) {
         ActorCutscene_Start(this->unk_282[0], &this->actor);
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->unk_27C,
-                           D_80B119B0[this->unk_280].unk_04.x, D_80B119B0[this->unk_280].unk_04.y,
-                           D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0, this->unk_27E);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->unk_27C, D_80B119B0[this->unk_280].unk_04.x,
+                           D_80B119B0[this->unk_280].unk_04.y, D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0,
+                           this->unk_27E);
         if (this->unk_280 == 0) {
             func_8010E9F0(1, 180);
         }
@@ -840,8 +840,7 @@ void func_80B11268(EnGb2* this, PlayState* play) {
     if (play->roomCtx.currRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
-        if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) &&
-            Flags_GetClear(play, 5)) {
+        if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) && Flags_GetClear(play, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
             this->actor.flags |= ACTOR_FLAG_1;
@@ -1012,18 +1011,18 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
         Scene_SetRenderModeXlu(play, 0, 1);
-        POLY_OPA_DISP = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                           this->skelAnime.dListCount, EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw,
-                                           &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP =
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_28A);
 
         Scene_SetRenderModeXlu(play, 1, 2);
-        POLY_XLU_DISP = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                           this->skelAnime.dListCount, EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw,
-                                           &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP =
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

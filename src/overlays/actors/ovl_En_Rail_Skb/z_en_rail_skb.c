@@ -168,8 +168,8 @@ void func_80B708C0(EnRailSkb* this, PlayState* play) {
 
         for (i = 1; (i < this->unk_2E8) && (i < 10); i++) {
             D_80B7348C++;
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_RAIL_SKB, 0.0f, 0.0f, 0.0f, 0, 0,
-                               0, this->actor.params);
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_RAIL_SKB, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                               this->actor.params);
         }
         D_80B7348C = 0;
     }
@@ -296,8 +296,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
         this->unk_3F8 = 0;
     }
 
-    if ((play->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) &&
-        (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -1082,8 +1081,7 @@ void EnRailSkb_Update(Actor* thisx, PlayState* play) {
     func_80B725C0(this, play);
 }
 
-s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRailSkb* this = THIS;
     s16 abs;
 

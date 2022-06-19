@@ -258,8 +258,8 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
             spB4.y = 0.0f;
             spB4.z = 7.0f * temp_f22 * temp_f20;
 
-            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x32, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x32,
+                                 8, 0xE);
             phi_s2 += 0x2AAA;
         }
 
@@ -415,8 +415,8 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
             spDC.y = temp_f22 * ((6.5f * temp_f28) * spB0);
             spDC.z = (6.5f * temp_f28) * ((temp_f22 * sp90) - (spA4 * temp_f20));
 
-            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x3C, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x3C,
+                                 8, 0xE);
             temp_s3 += 0x2AAA;
         }
 

@@ -627,8 +627,7 @@ void EnGinkoMan_Update(Actor* thisx, PlayState* play) {
     EnGinkoMan_FacePlayer(this, play);
 }
 
-s32 EnGinkoMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+s32 EnGinkoMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {

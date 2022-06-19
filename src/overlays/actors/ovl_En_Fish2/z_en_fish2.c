@@ -157,8 +157,8 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.params == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC,
-                           this->jointTable, this->morphTable, 24);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC, this->jointTable,
+                           this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.save.weekEventReg[81] & 0x10) {
@@ -369,9 +369,8 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_334 == BGCHECK_Y_MIN) &&
-        !WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                              &this->unk_334, &waterbox)) {
+    if ((this->unk_334 == BGCHECK_Y_MIN) && !WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x,
+                                                                  this->actor.world.pos.z, &this->unk_334, &waterbox)) {
         this->unk_334 = this->actor.world.pos.y;
     }
 
@@ -540,8 +539,7 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
     Vec3f sp60;
 
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &play->view.eye), 1,
-                       0x1388, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &play->view.eye), 1, 0x1388, 0);
     Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
     if (this->unk_2B4 != 0) {
         Math_Vec3f_Copy(&sp60, &this->unk_318);
@@ -903,8 +901,8 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
         WaterBox* sp78;
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->unk_334, &sp78)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_334,
+                                 &sp78)) {
             Vec3f sp6C;
             s32 i;
 
@@ -1009,8 +1007,8 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
                 f32 phi_f20 = 0;
                 WaterBox* sp4C;
 
-                if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x,
-                                         this->actor.world.pos.z, &this->unk_334, &sp4C)) {
+                if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &this->unk_334, &sp4C)) {
                     phi_f20 = D_80B2B3A8[temp_s0_2] + (this->unk_334 - this->unk_2D8);
                     phi_f2 = D_80B2B3A8[temp_s0_2 + 1] + this->unk_2D4;
                 }
@@ -1035,8 +1033,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnFish2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnFish2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFish2* this = THIS;
 
     if ((limbIndex == 20) || (limbIndex == 21)) {

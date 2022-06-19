@@ -122,8 +122,7 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
-            if (!(play->envCtx.unk_1E == 0) ||
-                ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
+            if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
                 if (D_801BDBB0 != weatherMode) {
@@ -144,16 +143,14 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
 // again with the unused parameters
 // called WeatherTag_CheckRestoreWeather in OOT
-u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20,
-                 u16 new24) {
+u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24) {
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
-            if (!(play->envCtx.unk_1E == 0) ||
-                ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
+            if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
 
                 D_801BDBB8 = 0;
                 D_801BDBB0 = 0;
@@ -473,8 +470,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, PlayState* play) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) <
-        Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
@@ -484,9 +480,9 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) &&
-        (play->msgCtx.currentTextId == 0x5E6) && (!FrameAdvance_IsEnabled(&play->state)) &&
-        (play->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
+    if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
+        (!FrameAdvance_IsEnabled(&play->state)) && (play->sceneLoadFlag == 0) &&
+        (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
         if (REG(15) != 0) {

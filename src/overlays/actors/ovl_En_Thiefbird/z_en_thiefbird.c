@@ -1036,8 +1036,7 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 Actor* thisx) {
+s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnThiefbird* this = THIS;
 
     if ((limbIndex == 10) || (limbIndex == 11)) {

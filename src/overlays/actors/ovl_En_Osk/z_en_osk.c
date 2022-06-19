@@ -207,10 +207,8 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, this->unk_258)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
+            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
             func_80BF5F70(this);
         }
         func_80BF609C(this, play);
@@ -333,10 +331,8 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, this->unk_258)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
+            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
             func_80BF6314(this);
         }
         func_80BF6478(this);
@@ -472,10 +468,8 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, this->unk_258)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
+            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
             func_80BF67A8(this);
         }
         func_80BF68E0(this);
@@ -522,8 +516,8 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
 
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, func_80BF6C54, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          func_80BF6C54, &this->actor);
 
     {
         s16 sp62;

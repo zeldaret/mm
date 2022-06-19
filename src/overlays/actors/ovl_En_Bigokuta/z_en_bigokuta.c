@@ -97,8 +97,8 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     EnBigokuta* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gBigOctoSkel, &gBigOctoIdleAnim, this->jointTable,
-                       this->morphTable, BIGOKUTA_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBigOctoSkel, &gBigOctoIdleAnim, this->jointTable, this->morphTable,
+                       BIGOKUTA_LIMB_MAX);
 
     Collider_InitAndSetCylinder(play, &this->shellCollider, &this->actor, &sShellCylinderInit);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->actor, &sBodyCylinderInit);
@@ -187,8 +187,8 @@ s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {
     WaterBox* box;
     s32 bgId;
 
-    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId,
-                                                          &this->actor, &this->actor.world.pos);
+    this->actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
     if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
                                 &this->actor.home.pos.y, &box) ||
         (this->actor.home.pos.y <= this->actor.floorHeight)) {
@@ -497,9 +497,9 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                            this->bodyCollider.info.bumper.hitPos.x, this->bodyCollider.info.bumper.hitPos.y,
-                            this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
+                            this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
         }
 
@@ -552,8 +552,8 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx, Gfx** gfx) {
+s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                                Gfx** gfx) {
     if (limbIndex == BIGOKUTA_LIMB_HEAD) {
         EnBigokuta* this = THIS;
         s32 envColor;
@@ -621,8 +621,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
-                             Gfx** gfx) {
+void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static s8 D_80AC45BC[] = {
         -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7,
     };
@@ -658,17 +657,17 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_OPA_DISP;
         gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, 255);
-        POLY_OPA_DISP = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                           this->skelAnime.dListCount, EnBigokuta_OverrideLimbDraw,
-                                           EnBigokuta_PostLimbDraw, &this->actor, &gfx[2]);
+        POLY_OPA_DISP =
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               EnBigokuta_OverrideLimbDraw, EnBigokuta_PostLimbDraw, &this->actor, &gfx[2]);
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gfx = POLY_XLU_DISP;
         gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
         gDPSetEnvColor(&gfx[1], 0, 0, 0, (this->actor.scale.y * 7727.273f));
         POLY_XLU_DISP =
-            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                               this->skelAnime.dListCount, NULL, EnBigokuta_PostLimbDraw, &this->actor, &gfx[2]);
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               NULL, EnBigokuta_PostLimbDraw, &this->actor, &gfx[2]);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,

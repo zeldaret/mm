@@ -366,8 +366,8 @@ void EnTanron3_CheckCollisions(EnTanron3* this, PlayState* play) {
     if (player->actor.world.pos.y > 350.0f) {
         if (this->atCollider.base.atFlags & AT_HIT) {
             this->atCollider.base.atFlags &= ~AT_HIT;
-            func_800B8D50(play, NULL, 3.0f, Math_FAtan2F(-player->actor.world.pos.z, -player->actor.world.pos.x),
-                          5.0f, 0);
+            func_800B8D50(play, NULL, 3.0f, Math_FAtan2F(-player->actor.world.pos.z, -player->actor.world.pos.x), 5.0f,
+                          0);
         }
     }
     if (this->acCollider.base.acFlags & AC_HIT) {
@@ -428,8 +428,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnTanron3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnTanron3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTanron3* this = THIS;
 
     if (limbIndex == GYORG_SMALL_FISH_LIMB_ROOT) {

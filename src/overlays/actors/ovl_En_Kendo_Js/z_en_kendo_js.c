@@ -112,9 +112,9 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     if ((CURRENT_DAY == 3) &&
         !((gSaveContext.save.time <= CLOCK_TIME(23, 0)) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)))) {
         if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.home.pos.x,
-                        this->actor.home.pos.y, this->actor.home.pos.z - 10.0f, this->actor.home.rot.x,
-                        this->actor.home.rot.y, this->actor.home.rot.z, 0x10);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.home.pos.x, this->actor.home.pos.y,
+                        this->actor.home.pos.z - 10.0f, this->actor.home.rot.x, this->actor.home.rot.y,
+                        this->actor.home.rot.z, 0x10);
             Actor_MarkForDeath(&this->actor);
         } else {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
@@ -600,8 +600,8 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
         }
 
         play_sound(NA_SE_SY_FOUND);
-        func_80B279F0(this, globalCtx, (((s32)Rand_Next() & 0xFF) % 3) + 1);
-        func_80B279F0(this, globalCtx, (((s32)Rand_Next() & 0xFF) % 3) + 4);
+        func_80B279F0(this, play, (((s32)Rand_Next() & 0xFF) % 3) + 1);
+        func_80B279F0(this, play, (((s32)Rand_Next() & 0xFF) % 3) + 4);
         this->unk_290 = 0;
         this->unk_284++;
     } else if (this->unk_290 == 120) {
@@ -746,8 +746,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
     func_80B27880(this, play);
 }
 
-s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKendoJs* this = THIS;
 
     if (limbIndex == 12) {

@@ -10,46 +10,46 @@
 
 #define THIS ((EnGirlA*)thisx)
 
-void EnGirlA_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGirlA_Init(Actor* thisx, PlayState* play);
+void EnGirlA_Destroy(Actor* thisx, PlayState* play);
+void EnGirlA_Update(Actor* thisx, PlayState* play);
+void EnGirlA_Draw(Actor* thisx, PlayState* play);
 
-void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx);
-void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx);
+void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play);
+void EnGirlA_Update2(EnGirlA* this, PlayState* play);
 
-s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyArrows(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBag20BombShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombs(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBottleStolen(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuySword(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionRed(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyArrows(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyNuts(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyShieldHero(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyStick(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyMaskAllNight(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBagCuriosityShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBag20BombShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBag30BombShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombchus(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombs(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBottleStolen(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuySword(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyShieldMirror(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyFairy(PlayState* play, EnGirlA* this);
 
-void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyArrows(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyNuts(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyShieldHero(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyStick(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombchus(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombs(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBottle(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuySword(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_BuyBottleItem(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyArrows(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyNuts(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyShieldHero(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyStick(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyMaskAllNight(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombBag(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombchus(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombs(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBottle(PlayState* play, EnGirlA* this);
+void EnGirlA_BuySword(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
-void EnGirlA_BuyFanfare(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
 const ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
@@ -341,8 +341,8 @@ s32 EnGirlA_CanBuyBombs(PlayState* play, EnGirlA* this) {
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyBottleStolen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+s32 EnGirlA_CanBuyBottleStolen(PlayState* play, EnGirlA* this) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;

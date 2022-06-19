@@ -71,8 +71,8 @@ void func_80B965D0(EnZot* this, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++, points++) {
             if (this->unk_2D8[i] == NULL) {
-                this->unk_2D8[i] = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_TSUBO, points->x, points->y,
-                                               points->z, 0, 0, 0, 0x13F);
+                this->unk_2D8[i] = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_TSUBO, points->x, points->y, points->z,
+                                               0, 0, 0, 0x13F);
             }
         }
     }
@@ -86,7 +86,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
     Animation_PlayLoop(&this->skelAnime, &gZoraStandAnim);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

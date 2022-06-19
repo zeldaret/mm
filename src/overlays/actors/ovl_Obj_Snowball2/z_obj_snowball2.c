@@ -92,8 +92,7 @@ void func_80B38E88(ObjSnowball2* this, PlayState* play) {
     if (this->unk_1AE == 0) {
         temp_v0 = func_800A8150(ENOBJSNOWBALL2_GET_3F(&this->actor));
         if (temp_v0 >= 0) {
-            Item_DropCollectible(play, &this->actor.world.pos,
-                                 (ENOBJSNOWBALL2_GET_7F00(&this->actor) << 8) | temp_v0);
+            Item_DropCollectible(play, &this->actor.world.pos, (ENOBJSNOWBALL2_GET_7F00(&this->actor) << 8) | temp_v0);
             this->unk_1AE = 1;
         }
     }
@@ -177,8 +176,8 @@ void func_80B39108(ObjSnowball2* this, PlayState* play) {
             phi_v0 = 0;
         }
 
-        EffectSsKakera_Spawn(play, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50,
-                             -1, OBJECT_GOROIWA, D_80B3A91C[i & 3]);
+        EffectSsKakera_Spawn(play, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50, -1,
+                             OBJECT_GOROIWA, D_80B3A91C[i & 3]);
 
         spD0.x += (Rand_ZeroOne() - 0.5f) * 40.0f;
         spD0.y += (Rand_ZeroOne() - 0.3f) * 45.0f;
@@ -376,8 +375,7 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
         if (this->unk_1AD == 0) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) &&
-                (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_1AD = 1;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
@@ -480,7 +478,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
             if (this->actor.bgCheckFlags & 0x40) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
-        } else if ((((globalCtx->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&
+        } else if ((((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&
                    (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {
             func_80B395EC(&this->actor, play);
         }
@@ -567,8 +565,8 @@ void func_80B3A500(ObjSnowball2* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     this->actor.world.pos.y += this->actor.velocity.y;
 
-    if (((globalCtx->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) {
-        func_80B395C4(globalCtx, &this->actor.home.pos);
+    if (((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) {
+        func_80B395C4(play, &this->actor.home.pos);
     }
 
     if (this->unk_1AC <= 0) {

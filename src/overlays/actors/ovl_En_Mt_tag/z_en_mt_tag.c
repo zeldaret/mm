@@ -131,8 +131,8 @@ s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, PlayState* play) {
  * The player can have a checkpoint number of -1 if they move far enough backwards
  * from the starting line.
  */
-s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingCheckpoint,
-                                 f32* outPerpendicularPointX, f32* outPerpendicularPointZ) {
+s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingCheckpoint, f32* outPerpendicularPointX,
+                                 f32* outPerpendicularPointZ) {
     s32 curentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
     f32 minLineLengthSq = 0.0f;

@@ -306,8 +306,8 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
 
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
-        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
-                             0x50, -1, 1, gKakeraLeafMiddle);
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
+                             -1, 1, gKakeraLeafMiddle);
 
         pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
         pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
@@ -318,8 +318,8 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
 
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
-        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
-                             0x50, -1, 1, gKakeraLeafTip);
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
+                             -1, 1, gKakeraLeafTip);
     }
 }
 
@@ -327,9 +327,9 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     u32 numBugs;
 
     for (numBugs = 0; numBugs < 3; numBugs++) {
-        Actor* bug = Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, 0, 0, 1, this->actor.cutscene, this->actor.unk20, 0);
+        Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
+                                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
+                                                   this->actor.cutscene, this->actor.unk20, 0);
 
         if (bug == NULL) {
             break;
@@ -343,8 +343,8 @@ s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play) {
     f32 ySurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                &ySurface, &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
         return true;
     }

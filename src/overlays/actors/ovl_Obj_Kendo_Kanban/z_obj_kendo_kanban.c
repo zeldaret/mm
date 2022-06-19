@@ -248,9 +248,8 @@ void func_80B658A4(ObjKendoKanban* this, PlayState* play) {
             this->actor.velocity = D_80B66678;
             this->unk_2CC = D_80B666A8;
 
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
-                               this->actor.home.pos.x, this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0,
-                               3);
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
+                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, 3);
 
             this->unk_29C[0] = D_80B666F4;
             this->unk_29C[1] = D_80B6670C;

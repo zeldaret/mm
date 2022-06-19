@@ -348,8 +348,7 @@ void func_808D93BC(EnSw* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-                  s32* bgId) {
+s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32* bgId) {
     s32 ret = false;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&
@@ -664,8 +663,8 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         if (this->actor.colChkInfo.damageEffect == 4) {
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -1054,8 +1053,8 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                 sp5C.x += this->unk_368.x * 10.0f;
                 sp5C.y += this->unk_368.y * 10.0f;
                 sp5C.z += this->unk_368.z * 10.0f;
-                if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SI, sp5C.x, sp5C.y,
-                                       sp5C.z, 0, 0, 0, this->actor.params) != NULL) {
+                if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SI, sp5C.x, sp5C.y, sp5C.z, 0, 0,
+                                       0, this->actor.params) != NULL) {
                     play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
                 Actor_MarkForDeath(&this->actor);
@@ -1158,8 +1157,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
     if (!func_808D9968(this, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
-                       30);
+        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 

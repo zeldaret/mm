@@ -365,7 +365,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
     s16 nextAnimation;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        if (Actor_HasParent(&this->actor, play)) {               // picked up
+        if (Actor_HasParent(&this->actor, play)) {                    // picked up
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->heldTimer = 30;

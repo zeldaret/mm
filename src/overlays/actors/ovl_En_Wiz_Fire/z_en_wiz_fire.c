@@ -640,9 +640,8 @@ void func_80A4B0C8(EnWizFire* this, PlayState* play) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 215, 215, 215, (s8)this->unk_1FC);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames & 0x7F,
-                                    -play->state.frames & 0x7F, 0x20, 0x40, 1, play->state.frames & 0xFF,
-                                    play->state.frames & 0xFF, 0x10, 0x10));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames & 0x7F, -play->state.frames & 0x7F, 0x20,
+                                    0x40, 1, play->state.frames & 0xFF, play->state.frames & 0xFF, 0x10, 0x10));
 
         Matrix_RotateYS(0, MTXMODE_APPLY);
 
@@ -682,10 +681,9 @@ void func_80A4B33C(EnWizFire* this, PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames % 128,
-                                    (-play->state.frames * 6) % 256, 0x20, 0x40, 1,
-                                    (play->state.frames * 2) % 128, (-play->state.frames * 6) % 256, 0x20,
-                                    0x40));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames % 128, (-play->state.frames * 6) % 256,
+                                    0x20, 0x40, 1, (play->state.frames * 2) % 128, (-play->state.frames * 6) % 256,
+                                    0x20, 0x40));
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 80, 0, 0, (s8)this->unk_1FC);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 100);
@@ -700,8 +698,8 @@ void func_80A4B33C(EnWizFire* this, PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (-play->state.frames * 3) % 128, 0, 0x20, 0x20, 1,
-                                    0, (-play->state.frames * 10) % 256, 0x20, 0x40));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (-play->state.frames * 3) % 128, 0, 0x20, 0x20, 1, 0,
+                                    (-play->state.frames * 10) % 256, 0x20, 0x40));
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 100, 50, 0, 255);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 235, 240, 128);
@@ -744,8 +742,7 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002B40);
         }
     }
@@ -857,8 +854,8 @@ void func_80A4BF78(EnWizFire* this, PlayState* play) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, ptr->unk_06);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_01 * 3) & 0x7F,
-                                        (ptr->unk_01 * 0xF) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_01 * 3) & 0x7F, (ptr->unk_01 * 0xF) & 0xFF,
+                                        0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
             Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);

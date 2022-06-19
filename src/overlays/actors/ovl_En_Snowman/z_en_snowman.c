@@ -196,19 +196,19 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
 
     thisx->params &= 7;
     if (EN_SNOWMAN_GET_TYPE(thisx) < EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gEenoSkel, &gEenoEmergeAnim, this->jointTable,
-                           this->morphTable, EENO_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gEenoSkel, &gEenoEmergeAnim, this->jointTable, this->morphTable,
+                           EENO_LIMB_MAX);
         SkelAnime_InitFlex(play, &this->snowPileSkelAnime, &gEenoSnowPileSkel, &gEenoSnowPileMoveAnim,
                            this->snowPileJointTable, this->snowPileMorphTable, EENO_SNOW_PILE_LIMB_MAX);
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sEenoCylinderInit);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_LARGE) {
             thisx->flags |= ACTOR_FLAG_400;
-            Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
-                               thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
-            thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN,
-                                                          thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0,
-                                                          0, 0, EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
+            Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x, thisx->world.pos.y,
+                               thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
+            thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
+                                                          thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0,
+                                                          EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
             if ((thisx->child == NULL) || (thisx->parent == NULL)) {
                 if (thisx->child != NULL) {
                     Actor_MarkForDeath(thisx->child);
@@ -759,8 +759,7 @@ void EnSnowman_Dead(EnSnowman* this, PlayState* play) {
                             sSnowballFragmentDLs[i % 3]);
     }
 
-    func_800B0DE0(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500,
-                  30);
+    func_800B0DE0(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_YMAJIN_DEAD_BREAK);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
@@ -1092,8 +1091,8 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
                 scale *= 2;
             }
 
-            func_800B0DE0(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor,
-                          500, 30);
+            func_800B0DE0(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500,
+                          30);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
             // EnSnowman_SpawnBigSnowballFragmentEffects only fworks with snowballPos, so we need
@@ -1178,8 +1177,8 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnSnowman_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnSnowman_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                             this->drawDmgEffScale * this->eenoScale, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

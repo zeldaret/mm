@@ -211,8 +211,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.targetMode = 3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim,
-                       this->jointTable, this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
+                       this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
 
     for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &limbScale);
@@ -479,8 +479,8 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
-        func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000,
-                      BREG(56) + 10.0f, 0);
+        func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000, BREG(56) + 10.0f,
+                      0);
     } else if (curFrame < 10.0f) {
         player->actor.freezeTimer = 10;
     }
@@ -506,8 +506,8 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->action = EN_RAF_ACTION_EXPLODE;
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
-    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0,
-                0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
+                CLEAR_TAG_SMALL_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
@@ -720,8 +720,8 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     this->bobOffset = 2.0f * Math_SinS(this->bobPhase);
     if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x,
-                                 this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                                 &ySurface, &waterBox)) {
             ySurface -= this->bobOffset + BREG(59);
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {

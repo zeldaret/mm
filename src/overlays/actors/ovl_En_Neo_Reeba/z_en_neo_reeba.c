@@ -232,8 +232,8 @@ void EnNeoReeba_Sink(EnNeoReeba* this, PlayState* play) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, -2000.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupWaitUnderground(this);
     } else if (play->gameplayFrames % 4 == 0) {
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1,
-                                 8.0f, 500, 10, 1);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
+                                 500, 10, 1);
     }
 
     if (this->sinkRiseRate < 300.0f) {
@@ -256,8 +256,8 @@ void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, PlayState* play) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupChooseAction(this);
     } else if (play->gameplayFrames % 4 == 0) {
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1,
-                                 8.0f, 500, 10, 1);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
+                                 500, 10, 1);
     }
 
     if (this->sinkRiseRate > 20.0f) {
@@ -279,8 +279,8 @@ void EnNeoReeba_SetupMove(EnNeoReeba* this) {
 void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
     f32 remainingDist = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->targetPos, this->actor.speedXZ);
 
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
-                             0xFA, 0xA, 1);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f, 0xFA,
+                             0xA, 1);
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
@@ -431,8 +431,8 @@ void EnNeoReeba_DamageAnim(EnNeoReeba* this, PlayState* play) {
             this->actor.scale.z *= 1.5f;
         }
 
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1,
-                                 4.0f, 250, 10, 1);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
+                                 250, 10, 1);
         this->actionTimer--;
     }
 }
@@ -681,8 +681,7 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
             iceVel.x = (Rand_Centered() * 3.0f) + xVel;
             iceVel.z = (Rand_Centered() * 3.0f) + zVel;
             iceVel.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
-            EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor,
-                                30);
+            EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor, 30);
         }
     }
 }
@@ -716,8 +715,7 @@ void EnNeoReeba_Update(Actor* thisx, PlayState* play) {
     EnNeoReeba_SinkIfStoneMask(this, play);
 }
 
-s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNeoReeba* this = THIS;
 
     if ((limbIndex == OBJECT_RB_LIMB_03) && (this->rotationSpeed != 0.0f)) {
@@ -734,8 +732,8 @@ void EnNeoReeba_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     OPEN_DISPS(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x01, 255, 255, 255, 255);
-    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnNeoReeba_OverrideLimbDraw,
-                      NULL, &this->actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnNeoReeba_OverrideLimbDraw, NULL,
+                      &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->stunTimer > 0) {

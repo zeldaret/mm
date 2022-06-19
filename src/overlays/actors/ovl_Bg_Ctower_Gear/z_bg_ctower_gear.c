@@ -86,7 +86,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 340);
+                EffectSsGSplash_Spawn(play, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 340);
             }
         }
     }
@@ -104,7 +104,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 280);
+                    EffectSsGSplash_Spawn(play, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 280);
                 }
             }
         }

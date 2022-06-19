@@ -263,8 +263,7 @@ s32 Collider_DestroyJntSphElementDim(PlayState* play, ColliderJntSphElementDim* 
     return 1;
 }
 
-s32 Collider_SetJntSphElementDim(PlayState* play, ColliderJntSphElementDim* dest,
-                                 ColliderJntSphElementDimInit* src) {
+s32 Collider_SetJntSphElementDim(PlayState* play, ColliderJntSphElementDim* dest, ColliderJntSphElementDimInit* src) {
     dest->limb = src->limb;
     dest->modelSphere = src->modelSphere;
     dest->scale = src->scale * 0.01f;
@@ -424,8 +423,8 @@ s32 Collider_SetJntSph(PlayState* play, ColliderJntSph* sphereGroup, Actor* acto
 /**
  * Fully initializes a ColliderJntSph using the values in `src`, placing the element array in elements.
  */
-s32 Collider_InitAndSetJntSph(PlayState* play, ColliderJntSph* sphereGroup, Actor* actor,
-                              ColliderJntSphInit* src, ColliderJntSphElement* elements) {
+s32 Collider_InitAndSetJntSph(PlayState* play, ColliderJntSph* sphereGroup, Actor* actor, ColliderJntSphInit* src,
+                              ColliderJntSphElement* elements) {
     Collider_InitJntSph(play, sphereGroup);
     Collider_SetJntSph(play, sphereGroup, actor, src, elements);
     return 0;
@@ -516,8 +515,7 @@ s32 Collider_DestroyCylinder(PlayState* play, ColliderCylinder* collider) {
  * Sets up the ColliderCylinder using the values in src and sets it to the actor specified in src. Uses default
  * OC2_TYPE_1 and COLTYPE_0.
  */
-s32 Collider_SetCylinderToActor(PlayState* play, ColliderCylinder* collider,
-                                ColliderCylinderInitToActor* src) {
+s32 Collider_SetCylinderToActor(PlayState* play, ColliderCylinder* collider, ColliderCylinderInitToActor* src) {
     Collider_SetBaseToActor(play, &collider->base, &src->base);
     Collider_SetInfo(play, &collider->info, &src->info);
     Collider_SetCylinderDim(play, &collider->dim, &src->dim);
@@ -538,8 +536,7 @@ s32 Collider_SetCylinderType1(PlayState* play, ColliderCylinder* collider, Actor
 /**
  * Sets up the ColliderCylinder using the values in src.
  */
-s32 Collider_SetCylinder(PlayState* play, ColliderCylinder* collider, Actor* actor,
-                         ColliderCylinderInit* src) {
+s32 Collider_SetCylinder(PlayState* play, ColliderCylinder* collider, Actor* actor, ColliderCylinderInit* src) {
     Collider_SetBase(play, &collider->base, actor, &src->base);
     Collider_SetInfo(play, &collider->info, &src->info);
     Collider_SetCylinderDim(play, &collider->dim, &src->dim);
@@ -549,8 +546,7 @@ s32 Collider_SetCylinder(PlayState* play, ColliderCylinder* collider, Actor* act
 /**
  * Fully initializes a ColliderCylinder using the values in src.
  */
-s32 Collider_InitAndSetCylinder(PlayState* play, ColliderCylinder* collider, Actor* actor,
-                                ColliderCylinderInit* src) {
+s32 Collider_InitAndSetCylinder(PlayState* play, ColliderCylinder* collider, Actor* actor, ColliderCylinderInit* src) {
     Collider_InitCylinder(play, collider);
     Collider_SetCylinder(play, collider, actor, src);
     return 1;
@@ -991,8 +987,7 @@ s32 Collider_SetSphere(PlayState* play, ColliderSphere* collider, Actor* actor, 
 /**
  * Fully initializes a ColliderSphere using the values in src.
  */
-s32 Collider_InitAndSetSphere(PlayState* play, ColliderSphere* collider, Actor* actor,
-                              ColliderSphereInit* src) {
+s32 Collider_InitAndSetSphere(PlayState* play, ColliderSphere* collider, Actor* actor, ColliderSphereInit* src) {
     Collider_InitSphere(play, collider);
     Collider_SetSphere(play, collider, actor, src);
     return 0;
@@ -1584,8 +1579,8 @@ HitInfo sHitInfo[] = {
 /**
  * Handles hitmarks, blood, and sound effects for each AC collision, determined by the AC collider's colType
  */
-void CollisionCheck_HitEffects(PlayState* play, Collider* at, ColliderInfo* atInfo, Collider* ac,
-                               ColliderInfo* acInfo, Vec3f* hitPos) {
+void CollisionCheck_HitEffects(PlayState* play, Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo,
+                               Vec3f* hitPos) {
     if (acInfo->bumperFlags & BUMP_NO_HITMARK) {
         return;
     }
@@ -1748,8 +1743,8 @@ void CollisionCheck_AC_JntSphVsJntSph(PlayState* play, CollisionCheckContext* co
                     } else {
                         Math_Vec3f_Copy(&hitPos, &atPos);
                     }
-                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info,
-                                             &acPos, &hitPos);
+                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info, &acPos,
+                                             &hitPos);
 
                     if (!(ac->base.ocFlags2 & OC2_FIRST_ONLY)) {
                         return;
@@ -1763,8 +1758,7 @@ void CollisionCheck_AC_JntSphVsJntSph(PlayState* play, CollisionCheckContext* co
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC) {
+void CollisionCheck_AC_JntSphVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderJntSphElement* atElem;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
@@ -1803,8 +1797,7 @@ void CollisionCheck_AC_JntSphVsCyl(PlayState* play, CollisionCheckContext* colCt
                 } else {
                     Math_Vec3f_Copy(&hitPos, &atPos);
                 }
-                CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &ac->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &ac->info, &acPos, &hitPos);
                 return;
             }
         }
@@ -1814,8 +1807,7 @@ void CollisionCheck_AC_JntSphVsCyl(PlayState* play, CollisionCheckContext* colCt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_JntSphVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderJntSphElement* atElem;
     ColliderTris* ac = (ColliderTris*)colAC;
@@ -1840,8 +1832,8 @@ void CollisionCheck_AC_JntSphVsTris(PlayState* play, CollisionCheckContext* colC
 
                     Math_Vec3s_ToVec3f(&atPos, &atElem->dim.worldSphere.center);
                     CollisionCheck_TrisAvgPoint(acElem, &acPos);
-                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info,
-                                             &acPos, &hitPos);
+                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info, &acPos,
+                                             &hitPos);
                     return;
                 }
             }
@@ -1852,8 +1844,7 @@ void CollisionCheck_AC_JntSphVsTris(PlayState* play, CollisionCheckContext* colC
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_JntSphVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_JntSphVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderJntSph* at = (ColliderJntSph*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
     Vec3f hitPos;
@@ -1937,8 +1928,7 @@ void CollisionCheck_AC_JntSphVsSphere(PlayState* play, CollisionCheckContext* co
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC) {
+void CollisionCheck_AC_CylVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderJntSph* ac = (ColliderJntSph*)colAC;
     f32 overlapSize;
@@ -1990,8 +1980,7 @@ void CollisionCheck_AC_CylVsJntSph(PlayState* play, CollisionCheckContext* colCt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                Collider* colAC) {
+void CollisionCheck_AC_CylVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
     f32 overlapSize;
@@ -2043,8 +2032,7 @@ void CollisionCheck_AC_CylVsCyl(PlayState* play, CollisionCheckContext* colCtxt,
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC) {
+void CollisionCheck_AC_CylVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
     ColliderTrisElement* acElem;
@@ -2069,8 +2057,7 @@ void CollisionCheck_AC_CylVsTris(PlayState* play, CollisionCheckContext* colCtxt
 
                 Math_Vec3s_ToVec3f(&atPos, &at->dim.pos);
                 CollisionCheck_TrisAvgPoint(acElem, &acPos);
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos, &hitPos);
                 return;
             }
         }
@@ -2080,8 +2067,7 @@ void CollisionCheck_AC_CylVsTris(PlayState* play, CollisionCheckContext* colCtxt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC) {
+void CollisionCheck_AC_CylVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
 
@@ -2104,16 +2090,14 @@ void CollisionCheck_AC_CylVsQuad(PlayState* play, CollisionCheckContext* colCtxt
 
             Math_Vec3s_ToVec3f(&atPos, &at->dim.pos);
             CollisionCheck_QuadAvgPoint(ac, &acPos);
-            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos,
-                                     &D_801EDE00);
+            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EDE00);
         } else if (Math3D_ColCylinderTri(&at->dim, &D_801EF638, &D_801EDE00) != 0) {
             Vec3f atPos;
             Vec3f acPos;
 
             Math_Vec3s_ToVec3f(&atPos, &at->dim.pos);
             CollisionCheck_QuadAvgPoint(ac, &acPos);
-            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos,
-                                     &D_801EDE00);
+            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EDE00);
         }
     }
 }
@@ -2121,8 +2105,7 @@ void CollisionCheck_AC_CylVsQuad(PlayState* play, CollisionCheckContext* colCtxt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_CylVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC) {
+void CollisionCheck_AC_CylVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderCylinder* at = (ColliderCylinder*)colAT;
     ColliderSphere* ac = (ColliderSphere*)colAC;
     f32 overlapSize;
@@ -2168,8 +2151,7 @@ void CollisionCheck_AC_CylVsSphere(PlayState* play, CollisionCheckContext* colCt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_TrisVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderJntSphElement* acElem;
     ColliderJntSph* ac = (ColliderJntSph*)colAC;
@@ -2194,8 +2176,8 @@ void CollisionCheck_AC_TrisVsJntSph(PlayState* play, CollisionCheckContext* colC
 
                     Math_Vec3s_ToVec3f(&acPos, &acElem->dim.worldSphere.center);
                     CollisionCheck_TrisAvgPoint(atElem, &atPos);
-                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info,
-                                             &acPos, &hitPos);
+                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info, &acPos,
+                                             &hitPos);
 
                     if (!(ac->base.ocFlags2 & OC2_FIRST_ONLY)) {
                         return;
@@ -2209,8 +2191,7 @@ void CollisionCheck_AC_TrisVsJntSph(PlayState* play, CollisionCheckContext* colC
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC) {
+void CollisionCheck_AC_TrisVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
     ColliderTrisElement* atElem;
@@ -2243,8 +2224,7 @@ void CollisionCheck_AC_TrisVsCyl(PlayState* play, CollisionCheckContext* colCtxt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC) {
+void CollisionCheck_AC_TrisVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderTrisElement* atElem;
     ColliderTris* ac = (ColliderTris*)colAC;
@@ -2268,8 +2248,8 @@ void CollisionCheck_AC_TrisVsTris(PlayState* play, CollisionCheckContext* colCtx
 
                     CollisionCheck_TrisAvgPoint(atElem, &atPos);
                     CollisionCheck_TrisAvgPoint(acElem, &acPos);
-                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info,
-                                             &acPos, &D_801EDE20);
+                    CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &acElem->info, &acPos,
+                                             &D_801EDE20);
                     return;
                 }
             }
@@ -2280,8 +2260,7 @@ void CollisionCheck_AC_TrisVsTris(PlayState* play, CollisionCheckContext* colCtx
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC) {
+void CollisionCheck_AC_TrisVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
     ColliderTrisElement* atElem;
@@ -2319,8 +2298,7 @@ void CollisionCheck_AC_TrisVsQuad(PlayState* play, CollisionCheckContext* colCtx
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_TrisVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_TrisVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderTris* at = (ColliderTris*)colAT;
     ColliderTrisElement* atElem;
     ColliderSphere* ac = (ColliderSphere*)colAC;
@@ -2343,8 +2321,7 @@ void CollisionCheck_AC_TrisVsSphere(PlayState* play, CollisionCheckContext* colC
 
                 Math_Vec3s_ToVec3f(&acPos, &ac->dim.worldSphere.center);
                 CollisionCheck_TrisAvgPoint(atElem, &atPos);
-                CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &ac->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &at->base, &atElem->info, &atPos, &ac->base, &ac->info, &acPos, &hitPos);
             }
         }
     }
@@ -2353,8 +2330,7 @@ void CollisionCheck_AC_TrisVsSphere(PlayState* play, CollisionCheckContext* colC
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_QuadVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderJntSphElement* acElem;
     Vec3f hitPos;
     ColliderQuad* at = (ColliderQuad*)colAT;
@@ -2384,8 +2360,7 @@ void CollisionCheck_AC_QuadVsJntSph(PlayState* play, CollisionCheckContext* colC
                 }
                 Math_Vec3s_ToVec3f(&acPos, &acElem->dim.worldSphere.center);
                 CollisionCheck_QuadAvgPoint(at, &atPos);
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos, &hitPos);
 
                 if (!(ac->base.ocFlags2 & OC2_FIRST_ONLY)) {
                     break;
@@ -2398,8 +2373,7 @@ void CollisionCheck_AC_QuadVsJntSph(PlayState* play, CollisionCheckContext* colC
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC) {
+void CollisionCheck_AC_QuadVsCyl(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderCylinder* ac = (ColliderCylinder*)colAC;
 
@@ -2424,8 +2398,7 @@ void CollisionCheck_AC_QuadVsCyl(PlayState* play, CollisionCheckContext* colCtxt
 
                 CollisionCheck_QuadAvgPoint(at, &atPos);
                 Math_Vec3s_ToVec3f(&acPos, &ac->dim.pos);
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos,
-                                         &D_801EDFE0);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EDFE0);
                 return;
             }
         }
@@ -2436,8 +2409,7 @@ void CollisionCheck_AC_QuadVsCyl(PlayState* play, CollisionCheckContext* colCtxt
 
                 CollisionCheck_QuadAvgPoint(at, &atPos);
                 Math_Vec3s_ToVec3f(&acPos, &ac->dim.pos);
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos,
-                                         &D_801EDFE0);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EDFE0);
             }
         }
     }
@@ -2446,8 +2418,7 @@ void CollisionCheck_AC_QuadVsCyl(PlayState* play, CollisionCheckContext* colCtxt
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC) {
+void CollisionCheck_AC_QuadVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
     ColliderTrisElement* acElem;
@@ -2488,8 +2459,7 @@ void CollisionCheck_AC_QuadVsTris(PlayState* play, CollisionCheckContext* colCtx
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC) {
+void CollisionCheck_AC_QuadVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     ColliderQuad* ac = (ColliderQuad*)colAC;
     s32 i;
@@ -2519,8 +2489,7 @@ void CollisionCheck_AC_QuadVsQuad(PlayState* play, CollisionCheckContext* colCtx
 
                 CollisionCheck_QuadAvgPoint(at, &atPos);
                 CollisionCheck_QuadAvgPoint(ac, &acPos);
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos,
-                                         &D_801EE0D8);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &ac->info, &acPos, &D_801EE0D8);
                 return;
             }
         }
@@ -2530,8 +2499,7 @@ void CollisionCheck_AC_QuadVsQuad(PlayState* play, CollisionCheckContext* colCtx
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_QuadVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_QuadVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderQuad* at = (ColliderQuad*)colAT;
     Vec3f hitPos;
     ColliderSphere* ac = (ColliderSphere*)colAC;
@@ -2600,8 +2568,7 @@ void CollisionCheck_AC_SphereVsJntSph(PlayState* play, CollisionCheckContext* co
                 } else {
                     Math_Vec3f_Copy(&hitPos, &atPos);
                 }
-                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos,
-                                         &hitPos);
+                CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos, &hitPos);
             }
         }
     }
@@ -2657,8 +2624,7 @@ void CollisionCheck_AC_SphereVsCylinder(PlayState* play, CollisionCheckContext* 
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_SphereVsTris(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     ColliderTris* ac = (ColliderTris*)colAC;
     ColliderTrisElement* acElem;
@@ -2681,8 +2647,7 @@ void CollisionCheck_AC_SphereVsTris(PlayState* play, CollisionCheckContext* colC
 
             Math_Vec3s_ToVec3f(&atPos, &at->dim.worldSphere.center);
             CollisionCheck_TrisAvgPoint(acElem, &acPos);
-            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos,
-                                     &hitPos);
+            CollisionCheck_SetATvsAC(play, &at->base, &at->info, &atPos, &ac->base, &acElem->info, &acPos, &hitPos);
             return;
         }
     }
@@ -2691,8 +2656,7 @@ void CollisionCheck_AC_SphereVsTris(PlayState* play, CollisionCheckContext* colC
 /**
  * AC overlap check. Calculates the center of each collider element and the point of contact.
  */
-void CollisionCheck_AC_SphereVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC) {
+void CollisionCheck_AC_SphereVsQuad(PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC) {
     ColliderSphere* at = (ColliderSphere*)colAT;
     Vec3f hitPos;
     ColliderQuad* ac = (ColliderQuad*)colAC;
@@ -2772,8 +2736,8 @@ void CollisionCheck_SetJntSphHitFX(PlayState* play, CollisionCheckContext* colCt
             Vec3f hitPos;
 
             Math_Vec3s_ToVec3f(&hitPos, &element->info.bumper.hitPos);
-            CollisionCheck_HitEffects(play, element->info.acHit, element->info.acHitInfo, &jntSph->base,
-                                      &element->info, &hitPos);
+            CollisionCheck_HitEffects(play, element->info.acHit, element->info.acHitInfo, &jntSph->base, &element->info,
+                                      &hitPos);
             element->info.acHitInfo->toucherFlags |= TOUCH_DREW_HITMARK;
             return;
         }
@@ -2810,8 +2774,8 @@ void CollisionCheck_SetTrisHitFX(PlayState* play, CollisionCheckContext* colCtxt
             Vec3f hitPos;
 
             Math_Vec3s_ToVec3f(&hitPos, &element->info.bumper.hitPos);
-            CollisionCheck_HitEffects(play, element->info.acHit, element->info.acHitInfo, &tris->base,
-                                      &element->info, &hitPos);
+            CollisionCheck_HitEffects(play, element->info.acHit, element->info.acHitInfo, &tris->base, &element->info,
+                                      &hitPos);
             element->info.acHitInfo->toucherFlags |= TOUCH_DREW_HITMARK;
             return;
         }
@@ -2955,8 +2919,8 @@ s32 CollisionCheck_GetMassType(u8 mass) {
  * Sets OC collision flags for OC collider overlaps. If both colliders are attached to actors and can push,
  * also performs an elastic collision where both colliders are moved apart in proportion to their masses.
  */
-void CollisionCheck_SetOCvsOC(PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos,
-                              Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap) {
+void CollisionCheck_SetOCvsOC(PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right,
+                              ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap) {
     f32 pad;
     f32 leftDispRatio;
     f32 rightDispRatio;
@@ -3053,8 +3017,7 @@ void CollisionCheck_SetOCvsOC(PlayState* play, Collider* left, ColliderInfo* lef
 /**
  * OC overlap check for two JntSphs
  */
-void CollisionCheck_OC_JntSphVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r) {
+void CollisionCheck_OC_JntSphVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
     ColliderJntSph* left = (ColliderJntSph*)l;
     ColliderJntSph* right = (ColliderJntSph*)r;
     ColliderJntSphElement* leftElem;
@@ -3119,8 +3082,7 @@ void CollisionCheck_OC_JntSphVsCyl(PlayState* play, CollisionCheckContext* colCt
 /**
  * OC overlap check for a JntSph and Sphere
  */
-void CollisionCheck_OC_JntSphVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r) {
+void CollisionCheck_OC_JntSphVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
     ColliderJntSph* left = (ColliderJntSph*)l;
     ColliderSphere* right = (ColliderSphere*)r;
     ColliderJntSphElement* leftElem;
@@ -3169,8 +3131,8 @@ void CollisionCheck_OC_CylVsCyl(PlayState* play, CollisionCheckContext* colCtxt,
 
             Math_Vec3s_ToVec3f(&leftPos, &left->dim.pos);
             Math_Vec3s_ToVec3f(&rightPos, &right->dim.pos);
-            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info,
-                                     &rightPos, overlap);
+            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info, &rightPos,
+                                     overlap);
         }
     }
 }
@@ -3191,8 +3153,8 @@ void CollisionCheck_OC_CylVsSphere(PlayState* play, CollisionCheckContext* colCt
 
             Math_Vec3s_ToVec3f(&leftPos, &left->dim.pos);
             Math_Vec3s_ToVec3f(&rightPos, &right->dim.worldSphere.center);
-            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info,
-                                     &rightPos, overlap);
+            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info, &rightPos,
+                                     overlap);
         }
     }
 }
@@ -3200,8 +3162,7 @@ void CollisionCheck_OC_CylVsSphere(PlayState* play, CollisionCheckContext* colCt
 /**
  * OC overlap check for a Sphere and JntSph
  */
-void CollisionCheck_OC_SphereVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r) {
+void CollisionCheck_OC_SphereVsJntSph(PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
     CollisionCheck_OC_JntSphVsSphere(play, colCtxt, r, l);
 }
 
@@ -3215,8 +3176,7 @@ void CollisionCheck_OC_SphereVsCyl(PlayState* play, CollisionCheckContext* colCt
 /**
  * OC overlap check for two Spheres
  */
-void CollisionCheck_OC_SphereVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r) {
+void CollisionCheck_OC_SphereVsSphere(PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r) {
     ColliderSphere* left = (ColliderSphere*)l;
     ColliderSphere* right = (ColliderSphere*)r;
     f32 overlap;
@@ -3229,8 +3189,8 @@ void CollisionCheck_OC_SphereVsSphere(PlayState* play, CollisionCheckContext* co
 
             Math_Vec3s_ToVec3f(&leftPos, &left->dim.worldSphere.center);
             Math_Vec3s_ToVec3f(&rightPos, &right->dim.worldSphere.center);
-            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info,
-                                     &rightPos, overlap);
+            CollisionCheck_SetOCvsOC(play, &left->base, &left->info, &leftPos, &right->base, &right->info, &rightPos,
+                                     overlap);
         }
     }
 }
@@ -3496,8 +3456,8 @@ void CollisionCheck_Damage(PlayState* play, CollisionCheckContext* colCtxt) {
 /**
  * Checks if the line segment ab intersects any of the ColliderJntSph's elements
  */
-s32 CollisionCheck_LineOC_JntSph(PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider,
-                                 Vec3f* a, Vec3f* b) {
+s32 CollisionCheck_LineOC_JntSph(PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a,
+                                 Vec3f* b) {
     ColliderJntSph* jntSph = (ColliderJntSph*)collider;
     s32 i;
 
@@ -3538,8 +3498,8 @@ s32 CollisionCheck_LineOC_Cyl(PlayState* play, CollisionCheckContext* colChkCtx,
 /**
  * Checks if the line segment ab intersects the ColliderSphere
  */
-s32 CollisionCheck_LineOC_Sphere(PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider,
-                                 Vec3f* a, Vec3f* b) {
+s32 CollisionCheck_LineOC_Sphere(PlayState* play, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a,
+                                 Vec3f* b) {
     ColliderSphere* sphere = (ColliderSphere*)collider;
 
     if (!(sphere->info.ocElemFlags & OCELEM_ON)) {
@@ -3563,8 +3523,8 @@ ColChkLineFunc sOCLineCheckFuncs[] = {
  * Checks if the line segment ab intersects any OC colliders, excluding those attached to actors
  * on the exclusion list. Returns true if there are any intersections and false otherwise.
  */
-s32 CollisionCheck_LineOC(PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b,
-                          Actor** exclusions, s32 numExclusions) {
+s32 CollisionCheck_LineOC(PlayState* play, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b, Actor** exclusions,
+                          s32 numExclusions) {
     ColChkLineFunc lineCheck;
     Collider** col;
     s32 i;
@@ -3612,8 +3572,8 @@ s32 CollisionCheck_LineOCCheckAll(PlayState* play, CollisionCheckContext* colCtx
  * Checks if the line segment ab intersects any OC colliders, excluding those attached to actors on the exclusion list.
  * Returns true if there are any intersections and false otherwise.
  */
-s32 CollisionCheck_LineOCCheck(PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b,
-                               Actor** exclusions, s32 numExclusions) {
+s32 CollisionCheck_LineOCCheck(PlayState* play, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b, Actor** exclusions,
+                               s32 numExclusions) {
     return CollisionCheck_LineOC(play, colCtxt, a, b, exclusions, numExclusions);
 }
 
@@ -3669,8 +3629,7 @@ void Collider_SetTrisVertices(ColliderTris* collider, s32 index, Vec3f* a, Vec3f
 /**
  * Sets the specified ColliderTrisElement's dim using the values in src
  */
-void Collider_SetTrisDim(PlayState* play, ColliderTris* collider, s32 index,
-                         ColliderTrisElementDimInit* init) {
+void Collider_SetTrisDim(PlayState* play, ColliderTris* collider, s32 index, ColliderTrisElementDimInit* init) {
     ColliderTrisElement* element = &collider->elements[index];
 
     Collider_SetTrisElementDim(play, &element->dim, init);

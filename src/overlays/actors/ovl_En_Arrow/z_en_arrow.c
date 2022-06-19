@@ -256,8 +256,8 @@ void func_8088A894(EnArrow* this, PlayState* play) {
     temp_f0 = sp4C / temp_f0;
     Math_Vec3f_Scale(&sp68, temp_f0);
     Math_Vec3f_Sum(&this->unk_264->world.pos, &sp68, &sp5C);
-    if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_264->world.pos, &sp5C, &sp50, &sp74, true, true, true,
-                                true, &sp44)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &this->unk_264->world.pos, &sp5C, &sp50, &sp74, true, true, true, true,
+                                &sp44)) {
         this->unk_264->world.pos.x = ((sp5C.x <= sp50.x) ? 1.0f : -1.0f) + sp50.x;
         this->unk_264->world.pos.y = ((sp5C.y <= sp50.y) ? 1.0f : -1.0f) + sp50.y;
         this->unk_264->world.pos.z = ((sp5C.z <= sp50.z) ? 1.0f : -1.0f) + sp50.z;
@@ -272,8 +272,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
     Vec3f sp44;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50,
-                             &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
         (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & 0x20)) {
         this->actor.bgCheckFlags |= 0x20;
 
@@ -380,8 +379,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
             if (this->actor.params == ENARROW_8) {
                 iREG(50) = -1;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x,
-                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, this->actor.speedXZ == 0.0f);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_FIRE1, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, 0, 0, 0, this->actor.speedXZ == 0.0f);
                 sp82 = NA_SE_IT_DEKU;
             } else {
                 sp82 = NA_SE_IT_SLING_REFLECT;
@@ -471,8 +470,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
-                                                   &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8);
+        this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp9C,
+                                                   &this->actor.wallPoly, true, true, true, true, &spA8);
         if (this->unk_262 != 0) {
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
@@ -491,8 +490,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Math_Vec3f_Sum(&this->unk_228, &this->unk_268, &sp60);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &sp54);
 
-            if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &sp54, &sp9C, &spAC, true, true, true, true,
-                                        &spA8)) {
+            if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &sp54, &sp9C, &spAC, true, true, true, true, &spA8)) {
                 this->unk_264->world.pos.x = ((sp54.x <= sp9C.x) ? 1.0f : -1.0f) + sp9C.x;
                 this->unk_264->world.pos.y = ((sp54.y <= sp9C.y) ? 1.0f : -1.0f) + sp9C.y;
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
@@ -679,8 +677,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_ReplaceRotation(&gIdentityMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F9F0);
         } else {
@@ -690,8 +687,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,
                               COMBINED, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x7F, 230, 225, 150, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06FAE0);
         }
 

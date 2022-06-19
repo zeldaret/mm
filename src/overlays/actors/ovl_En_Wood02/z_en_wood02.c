@@ -101,8 +101,7 @@ Gfx* D_808C4D70[] = {
 s32 EnWood02_SpawnZoneCheck(EnWood02* this, PlayState* play, Vec3f* arg2) {
     f32 phi_f12;
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg2, &this->actor.projectedPos,
-                                 &this->actor.projectedW);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg2, &this->actor.projectedPos, &this->actor.projectedW);
 
     if (this->actor.projectedW == 0.0f) {
         phi_f12 = 1000.0f;
@@ -152,9 +151,9 @@ void EnWood02_SpawnOffspring(EnWood02* this, PlayState* play) {
                 }
 
                 childParams = ((this->unk_144 << 8) & 0xFF00) | (this->actor.params + 1);
-                child = (EnWood02*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_WOOD02,
-                                                      childPos.x, childPos.y, childPos.z, this->actor.world.rot.x,
-                                                      sSpawnAngle[i], unk, childParams);
+                child = (EnWood02*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_WOOD02, childPos.x,
+                                                      childPos.y, childPos.z, this->actor.world.rot.x, sSpawnAngle[i],
+                                                      unk, childParams);
                 if (child != NULL) {
                     child->unk_14A[0] = i;
                     this->unk_14A[i] |= 1;
@@ -408,8 +407,8 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
                 Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);
 
                 for (i = 3; i >= 0; i--) {
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y,
-                                dropsSpawnPt.z, 0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z,
+                                0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
                 }
             }
 

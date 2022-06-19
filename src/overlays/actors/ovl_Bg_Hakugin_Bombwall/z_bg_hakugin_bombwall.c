@@ -162,15 +162,14 @@ void func_80ABBFC0(BgHakuginBombwall* this, PlayState* play) {
             if ((s32)Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
-                func_800B0E48(globalCtx, &spF0, &gZeroVec3f, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
+                func_800B0E48(play, &spF0, &gZeroVec3f, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
                               (Rand_Next() >> 0x1B) + 70, (Rand_Next() >> 0x1A) + 60);
             } else {
                 phi_s1 = 0;
             }
 
-            EffectSsKakera_Spawn(play, &spF0, &spE4, &spF0, -550, phi_s0, 30, 0, 0,
-                                 (s32)(Rand_ZeroOne() * 22.0f) + 5, phi_s1, 0, 50, -1, OBJECT_HAKUGIN_OBJ,
-                                 object_hakugin_obj_DL_009830);
+            EffectSsKakera_Spawn(play, &spF0, &spE4, &spF0, -550, phi_s0, 30, 0, 0, (s32)(Rand_ZeroOne() * 22.0f) + 5,
+                                 phi_s1, 0, 50, -1, OBJECT_HAKUGIN_OBJ, object_hakugin_obj_DL_009830);
         }
     }
 }
@@ -223,8 +222,8 @@ void func_80ABC2E0(BgHakuginBombwall* this, PlayState* play) {
                              OBJECT_HAKUGIN_OBJ, object_hakugin_obj_DL_009830);
 
         if ((i & 1) == 0) {
-            func_800B0E48(globalCtx, &spC8, &D_80ABD034, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
-                          (Rand_Next() >> 0x1B) + 60, (Rand_Next() >> 0x1A) + 50);
+            func_800B0E48(play, &spC8, &D_80ABD034, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1B) + 60,
+                          (Rand_Next() >> 0x1A) + 50);
         }
     }
 }
@@ -269,7 +268,7 @@ void func_80ABC58C(BgHakuginBombwall* this, PlayState* play) {
         spC0.y += this->dyna.actor.world.pos.y;
         spC0.z += this->dyna.actor.world.pos.z;
 
-        func_800B0E48(globalCtx, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+        func_800B0E48(play, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
                       (Rand_Next() >> 0x1B) + 60);
     }
 }
@@ -303,7 +302,7 @@ void func_80ABC7FC(BgHakuginBombwall* this, PlayState* play) {
         spB8.x = spAC.x * -0.095f;
         spB8.z = spAC.z * -0.095f;
 
-        func_800B0E48(globalCtx, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+        func_800B0E48(play, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
                       (Rand_Next() >> 0x1B) + 60);
     }
 }
@@ -368,8 +367,7 @@ s32 func_80ABCC00(Actor* thisx, PlayState* play) {
             if (this->collider.base.ac != NULL) {
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->collider.base.ac->world.pos) <
                     D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)].unk_1C) {
-                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50,
-                                                       NA_SE_EV_WALL_BROKEN);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
                     return true;
                 }
             }

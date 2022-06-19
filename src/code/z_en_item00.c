@@ -855,8 +855,8 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
     } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
         param7F00 >>= 8;
         if (!Flags_GetCollectible(play, param7F00)) {
-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0,
-                        0, param7F00);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0,
+                        param7F00);
         }
     } else if (((paramFF == ITEM00_FLEXIBLE) || (newParamFF == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
         newParamFF = params & 0xFF;
@@ -867,9 +867,8 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
-            spawnedActor =
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
-                            spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
+            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
+                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
                     SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
@@ -881,8 +880,8 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
             params = func_800A7650(newParamFF);
         }
         if ((s32)params != ITEM00_NO_DROP) {
-            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
-                                       spawnPos->z, 0, 0, 0, (s32)params | param8000 | param7F00);
+            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0,
+                                       0, 0, (s32)params | param8000 | param7F00);
             if ((spawnedActor != NULL) && (param8000 == 0)) {
                 if (param10000 == 0) {
                     spawnedActor->velocity.y = 8.0f;
@@ -925,9 +924,8 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
         } else {
-            spawnedActor =
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
-                            spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
+            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
+                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F) == 0) {
             SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
@@ -935,8 +933,8 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
     } else {
         params = func_800A7650(params & 0xFF);
         if (params != ITEM00_NO_DROP) {
-            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
-                                       spawnPos->z, 0, 0, 0, (s32)params | param8000 | param7F00);
+            spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y, spawnPos->z, 0,
+                                       0, 0, (s32)params | param8000 | param7F00);
             if (spawnedActor != NULL) {
                 if (param8000 == 0) {
                     spawnedActor->velocity.y = 0.0f;
@@ -1084,8 +1082,8 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (dropId == ITEM00_FLEXIBLE) {
             if (gSaveContext.save.playerData.health <= 0x10) {
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                            spawnPos->z, 0, 0, 0, 2);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
+                            2);
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
@@ -1129,8 +1127,8 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                 if (param8000 == 0) {
                     dropId = func_800A7650(dropId);
                     if (dropId != (u8)ITEM00_NO_DROP) {
-                        spawnedActor = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00,
-                                                              spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
+                        spawnedActor = (EnItem00*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ITEM00, spawnPos->x,
+                                                              spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
                         if ((spawnedActor != 0) && (dropId != (u8)ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
                             spawnedActor->actor.speedXZ = 2.0f;

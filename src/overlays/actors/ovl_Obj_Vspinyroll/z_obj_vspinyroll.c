@@ -194,8 +194,8 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
         spCC.x += 30.0f * this->unk_3B4.x;
         spCC.z += 30.0f * this->unk_3B4.z;
 
-        if (BgCheck_EntityLineTest3(&play->colCtx, &spD8, &spCC, &spC0, &unk_1A8->unk_000[i].collisionPoly, true,
-                                    false, false, true, &unk_1A8->unk_000[i].bgId, &this->dyna.actor, 0.0f)) {
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spD8, &spCC, &spC0, &unk_1A8->unk_000[i].collisionPoly, true, false,
+                                    false, true, &unk_1A8->unk_000[i].bgId, &this->dyna.actor, 0.0f)) {
             if ((arg3 != 0) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
                 spA8.x = ptr->unk_00.x * 0.2f;
                 spA8.y = ptr->unk_00.y;

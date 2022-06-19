@@ -148,8 +148,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENSTH_F_5:
-            if (!(gSaveContext.save.weekEventReg[13] & 0x20) ||
-                (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
+            if (!(gSaveContext.save.weekEventReg[13] & 0x20) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -486,7 +485,7 @@ void func_80B67B50(EnSth* this, PlayState* play) {
     } else {
         this->unk_29C &= ~1;
         gSaveContext.save.weekEventReg[34] |= 8;
-        Actor_PickUp(&this->actor, globalCtx, GI_MASK_TRUTH, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
 
@@ -581,8 +580,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
             if ((gSaveContext.save.weekEventReg[34] & 0x10) || (gSaveContext.save.weekEventReg[34] & 0x20) ||
-                (gSaveContext.save.weekEventReg[34] & 0x40) ||
-                (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
+                (gSaveContext.save.weekEventReg[34] & 0x40) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {

@@ -125,8 +125,8 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C,
-                   this->jointTable, this->morphTable, 28);
+    SkelAnime_Init(play, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C, this->jointTable,
+                   this->morphTable, 28);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -320,8 +320,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 2, 0xC00, 0x300);
     }
 
-    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f) &&
-        (Player_GetMask(play) != PLAYER_MASK_STONE)) {
+    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         EnFirefly_SetupDiveAttack(this);
     }
 }
@@ -727,8 +726,8 @@ void EnFirefly_Update(Actor* thisx, PlayState* play2) {
         10.0f * Math_SinS(this->actor.shape.rot.x) * Math_CosS(this->actor.shape.rot.y) + this->actor.world.pos.z;
 }
 
-s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx, Gfx** gfx) {
+s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                               Gfx** gfx) {
     EnFirefly* this = THIS;
 
     if (this->isInvisible && (play->actorCtx.unk4 != 0x64)) {

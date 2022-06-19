@@ -931,8 +931,8 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESTART_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
-                                    player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                Play_SetRespawnData(&play->state, RESTART_MODE_DOWN, Entrance_CreateIndexFromSpawn(0), player->unk_3CE,
+                                    0xBFF, &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
                 if (0) {}
@@ -1005,8 +1005,8 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
-                                     this->actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                     5, 4.0f, 200, 10, 1);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
@@ -1071,8 +1071,8 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
     }
     if (this->actor.shape.yOffset < -10.0f) {
         if ((play->gameplayFrames % 8) == 0) {
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
-                                     this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                     10, 8.0f, 500, 10, 1);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
@@ -1155,6 +1155,6 @@ void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 void EnKakasi_Draw(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          NULL, EnKakasi_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
+                          EnKakasi_PostLimbDraw, &this->actor);
 }

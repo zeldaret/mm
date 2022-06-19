@@ -695,8 +695,7 @@ void EnBaba_Update(Actor* thisx, PlayState* play) {
     func_80BA8DF4(this, play);
 }
 
-s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBaba* this = THIS;
 
     if (limbIndex == 6) {

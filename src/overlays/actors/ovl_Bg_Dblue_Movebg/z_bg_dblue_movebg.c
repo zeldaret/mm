@@ -347,8 +347,7 @@ void func_80A2A1E0(BgDblueMovebg* this, PlayState* play) {
 
     if (play->roomCtx.currRoom.num != this->unk_170) {
         if (play->roomCtx.currRoom.num != this->unk_171) {
-            if ((play->roomCtx.prevRoom.num != this->unk_170) &&
-                (play->roomCtx.prevRoom.num != this->unk_171)) {
+            if ((play->roomCtx.prevRoom.num != this->unk_170) && (play->roomCtx.prevRoom.num != this->unk_171)) {
                 D_80A2BBF4.unk_01 = 0;
                 Actor_MarkForDeath(&this->dyna.actor);
             }
@@ -630,8 +629,7 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
 
     if (play->roomCtx.currRoom.num != this->unk_170) {
         if (play->roomCtx.currRoom.num != this->unk_171) {
-            if ((play->roomCtx.prevRoom.num != this->unk_170) &&
-                (play->roomCtx.prevRoom.num != this->unk_171)) {
+            if ((play->roomCtx.prevRoom.num != this->unk_170) && (play->roomCtx.prevRoom.num != this->unk_171)) {
                 D_80A2BBF4.unk_00 = 0;
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
@@ -828,11 +826,10 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
             for (j = 0; j < ARRAY_COUNT(this->unk_1D8); j++) {
                 if (this->unk_1D8[j][i] > 0) {
                     if (this->unk_1F8[j][i] > 0.1f) {
-                        gSPSegment(
-                            gfx++, 0x09,
-                            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0,
-                                             (s32)(((play->gameplayFrames % 128) * -9.0f) / this->unk_1F8[j][i]),
-                                             0x20, 0x20, 1, 0, 0, 0x20, 0x20));
+                        gSPSegment(gfx++, 0x09,
+                                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0,
+                                                    (s32)(((play->gameplayFrames % 128) * -9.0f) / this->unk_1F8[j][i]),
+                                                    0x20, 0x20, 1, 0, 0, 0x20, 0x20));
                     }
                     Matrix_Push();
                     Matrix_RotateXS(i * 0x2000, MTXMODE_APPLY);
@@ -844,8 +841,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.y,
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.z, MTXMODE_APPLY);
 
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
                     gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
 

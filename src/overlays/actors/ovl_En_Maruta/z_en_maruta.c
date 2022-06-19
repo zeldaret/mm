@@ -497,9 +497,9 @@ void func_80B37CA0(EnMaruta* this, PlayState* play) {
 
                 temp = (temp << 8) & 0xFF00;
                 this->unk_210 = D_80B386CC[player->swordAnimation];
-                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MARUTA,
-                                   this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
-                                   this->actor.shape.rot.y, 0, temp);
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MARUTA, this->actor.world.pos.x,
+                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+                                   temp);
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 if ((this->unk_210 == 5) || ((this->unk_210 == 7) && (player->swordAnimation == 0xC))) {
                     func_80B37590(this, play);

@@ -1590,8 +1590,8 @@ void EnOssan_DrawCursor(PlayState* play, EnOssan* this, f32 x, f32 y, f32 z, u8 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnOssan_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t,
-                         f32 dx, f32 dy) {
+void EnOssan_DrawTextRec(PlayState* play, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
+                         f32 dy) {
     f32 unk;
     s32 ulx;
     s32 uly;
@@ -1668,8 +1668,8 @@ void EnOssan_DrawStickDirectionPrompts(PlayState* play, EnOssan* this) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos,
-                                              Vec3s* rot, Actor* thisx) {
+s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                              Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_HEAD) {
@@ -1678,8 +1678,8 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gf
     return false;
 }
 
-s32 EnOssan_PartTimeWorker_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos,
-                                            Vec3s* rot, Actor* thisx) {
+s32 EnOssan_PartTimeWorker_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                            Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
@@ -1689,8 +1689,7 @@ s32 EnOssan_PartTimeWorker_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx*
     return false;
 }
 
-void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                           Actor* thisx) {
+void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_PELVIS || limbIndex == FSN_LIMB_LEFT_UPPER_ARM || limbIndex == FSN_LIMB_RIGHT_UPPER_ARM) {
@@ -1699,8 +1698,7 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx**
     }
 }
 
-void EnOssan_PartTimeWorker_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                         Actor* thisx) {
+void EnOssan_PartTimeWorker_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 

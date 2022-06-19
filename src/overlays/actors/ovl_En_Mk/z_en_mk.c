@@ -133,8 +133,7 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 3:
             case 4:
             case 5:
-                func_809592E0(this,
-                              play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action - 1);
+                func_809592E0(this, play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action - 1);
                 break;
         }
     } else {

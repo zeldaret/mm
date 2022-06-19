@@ -132,8 +132,8 @@ s32 func_80ACBA60(ObjAqua* this, PlayState* play) {
     f32 ySurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                &ySurface, &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
         return true;
     }
@@ -156,8 +156,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
     this->alpha = 255;
     if (func_80ACBA60(this, play)) {
         for (i = 0; i < 8; i++) {
-            EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f,
-                                 (Rand_ZeroOne() * 0.09f) + 0.03f);
+            EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
         }
         func_80ACBDCC(this);
     } else {

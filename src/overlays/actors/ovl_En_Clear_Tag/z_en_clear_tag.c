@@ -23,10 +23,10 @@ typedef enum {
     /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
 } ClearTagEffectType;
 
-void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_Init(Actor* thisx, PlayState* play);
+void EnClearTag_Destroy(Actor* thisx, PlayState* play);
+void EnClearTag_Update(Actor* thisx, PlayState* play);
+void EnClearTag_Draw(Actor* thisx, PlayState* play);
 
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
@@ -890,9 +890,8 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                            128);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColor.r, (s8)effect->primColor.g,
                             (s8)effect->primColor.b, (s8)effect->primColor.a);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
@@ -916,9 +915,8 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
 
             // Draw the fire effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColor.a);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
@@ -999,8 +997,8 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->position.y;
-                if (WaterBox_GetSurface1(play, &play->colCtx, effect->position.x + vec.x,
-                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(play, &play->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
+                                         &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_Translate(effect->position.x + vec.x, ySurface, effect->position.z + vec.z, MTXMODE_NEW);

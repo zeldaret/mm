@@ -295,8 +295,8 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
-                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true,
-                                            false, false, true, &sp44)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true, false,
+                                            false, true, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C0113C(this, 20, 1.0f);
@@ -346,8 +346,8 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
 void func_80C01984(EnBomjimb* this, PlayState* play) {
     func_80C012E0(this);
     this->unk_2E4 =
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x,
-                    this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 2);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
+                    this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 2);
     if (this->unk_2E4 != NULL) {
         func_80C0113C(this, 11, 1.0f);
     }
@@ -556,8 +556,8 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false,
-                                true, &sp60)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false, true,
+                                &sp60)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -863,8 +863,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBomjimb* this = THIS;
 
     if (limbIndex == 15) {

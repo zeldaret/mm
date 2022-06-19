@@ -181,9 +181,8 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
             this->unk_2D8[code] = this;
         } else {
             Math_Vec3f_Copy(&sp7C, &D_809C61A0[i]);
-            bomBowlMan =
-                (EnBomBowlMan*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOM_BOWL_MAN,
-                                                  sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
+            bomBowlMan = (EnBomBowlMan*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOM_BOWL_MAN,
+                                                           sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
             if (bomBowlMan != NULL) {
                 if (i == 2) {
                     this->unk_2D8[0] = bomBowlMan;
@@ -331,8 +330,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.unk120B1 == 0) &&
-        ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+    if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->sceneLoadFlag = 0x14;
@@ -449,8 +447,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.unk120B1 == 0) &&
-            ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+        if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -633,8 +630,7 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  Actor* thisx) {
+s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBomBowlMan* this = THIS;
 
     if (limbIndex == 15) {

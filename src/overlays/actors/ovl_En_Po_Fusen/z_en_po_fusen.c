@@ -26,8 +26,7 @@ void EnPoFusen_InitFuse(EnPoFusen* this);
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
 void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
-s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx);
+s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
@@ -109,8 +108,8 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(play, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040,
-                       this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(play, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040, this->jointTable,
+                       this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
@@ -240,8 +239,8 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 }
 
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
-    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
+                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_MarkForDeath(&this->actor);
 }
@@ -269,8 +268,7 @@ void EnPoFusen_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPoFusen* this = THIS;
     f32 zScale;
     f32 yScale;

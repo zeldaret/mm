@@ -89,8 +89,7 @@ void func_80B3E168(EnDaiParticle* particle, PlayState* play2) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(particle->unk_34, particle->unk_34, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_0002E8);
 
             Matrix_Pop();
@@ -178,8 +177,8 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_12HAKUGINMAE) &&
-        (play->csCtx.currentCsIndex == 0) && !(gSaveContext.save.weekEventReg[30] & 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
+        !(gSaveContext.save.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -514,8 +513,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     EnDai* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
-                       19);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);
     Actor_SetScale(&this->actor, 0.2f);

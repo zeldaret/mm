@@ -37,7 +37,7 @@ const ActorInit Demo_Effect_InitVars = {
     (ActorFunc)NULL,
 };
 
-void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoEffect_Init(Actor* thisx, PlayState* play) {
     static s16 sEffectTypeObjects[] = {
         OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, GAMEPLAY_KEEP,
         GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP,
@@ -54,7 +54,7 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (sEffectTypeObjects[type] == GAMEPLAY_KEEP) {
         objectIndex = 0;
     } else {
-        objectIndex = Object_GetIndex(&globalCtx->objectCtx, sEffectTypeObjects[type]);
+        objectIndex = Object_GetIndex(&play->objectCtx, sEffectTypeObjects[type]);
     }
 
     if (objectIndex < 0) {
@@ -103,7 +103,7 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_808CD940;
 }
 
-void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoEffect_Destroy(Actor* thisx, PlayState* play) {
     DemoEffect* this = THIS;
 
     switch (DEMO_EFFECT_GET_TYPE(&this->actor)) {
@@ -111,7 +111,7 @@ void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         case DEMO_EFFECT_TYPE_1:
         case DEMO_EFFECT_TYPE_2:
         case DEMO_EFFECT_TYPE_3:
-            SkelCurve_Destroy(globalCtx, &this->skelCurve);
+            SkelCurve_Destroy(play, &this->skelCurve);
             break;
 
         default:
@@ -119,15 +119,15 @@ void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_808CD940(DemoEffect* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->initObjectIndex)) {
+void func_808CD940(DemoEffect* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->initObjectIndex)) {
         this->actor.objBankIndex = this->initObjectIndex;
         this->actor.draw = this->initDrawFunc;
         this->actionFunc = this->initActionFunc;
     }
 }
 
-void func_808CD998(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CD998(DemoEffect* this, PlayState* play) {
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
 
     if (SkelCurve_Init(play, &this->skelCurve, &object_efc_tw_Skel_0012E8, &object_efc_tw_CurveAnim_000050)) {}
@@ -176,7 +176,7 @@ void func_808CDAD0(f32 alphaScale) {
     }
 }
 
-void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx) {
+void func_808CDBDC(DemoEffect* this, PlayState* play) {
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
     f32 scale;
     f32 alphaScale;
@@ -251,10 +251,10 @@ void DemoEffect_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-s32 func_808CDE78(GlobalContext* globalCtx, SkelCurve* skelCurve, s32 limbIndex, Actor* thisx) {
+s32 func_808CDE78(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* thisx) {
     s32 pad;
     DemoEffect* this = THIS;
-    u32 frames = globalCtx->gameplayFrames;
+    u32 frames = play->gameplayFrames;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -263,8 +263,8 @@ s32 func_808CDE78(GlobalContext* globalCtx, SkelCurve* skelCurve, s32 limbIndex,
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->envXluColor[0], this->envXluColor[1], this->envXluColor[2], 255);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (frames * 6) % 1024, 255 - ((frames * 16) % 256), 0x100,
-                                0x40, 1, (frames * 4) % 512, 127 - ((frames * 12) % 128), 0x80, 0x20));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, (frames * 6) % 1024, 255 - ((frames * 16) % 256), 0x100, 0x40, 1,
+                                (frames * 4) % 512, 127 - ((frames * 12) % 128), 0x80, 0x20));
 
     CLOSE_DISPS(play->state.gfxCtx);
 

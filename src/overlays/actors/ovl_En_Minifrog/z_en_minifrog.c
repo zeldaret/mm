@@ -602,8 +602,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 1) {
         pos->z -= 500.0f;
     }

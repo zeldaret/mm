@@ -551,8 +551,8 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
 
     if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == 0)) {
-        D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,
-                                                    0.0f, 60.0f, 0.0f, 0, 0, 0, 1);
+        D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
+                                                    0.0f, 0, 0, 0, 1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
     }
 
@@ -574,8 +574,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         }
         XREG(41) = KREG(14) + 20;
         this->unk_01AC = 1.0f;
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0,
-                           0, 0);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0, 0, 0);
     } else if (this->actor.params == 100) {
         this->actor.update = func_809DC218;
         this->actor.draw = NULL;
@@ -619,8 +618,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
 
         this->unk_014C = Rand_ZeroFloat(1000.0f);
         this->unk_1678 = 22;
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BOSS_02, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                           100);
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_BOSS_02, 0.0f, 0.0f, 0.0f, 0, 0, 0, 100);
     }
 }
 
@@ -1150,8 +1148,7 @@ void func_809DC218(Actor* thisx, PlayState* play) {
             sp24.y = 2000.0f;
         }
 
-        if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&play->colCtx, &sp20, &sp24)) ||
-            (D_809E0422 != 0)) {
+        if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&play->colCtx, &sp20, &sp24)) || (D_809E0422 != 0)) {
             this->actor.flags &= ~ACTOR_FLAG_1;
         } else {
             this->actor.flags |= ACTOR_FLAG_1;
@@ -1538,15 +1535,14 @@ void func_809DD2F8(PlayState* play) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 185, 140, 70, phi_a0);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, effect->unk_26 + (i * 3),
-                                        (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, effect->unk_26 + (i * 3), (effect->unk_26 + (i * 3)) * 5,
+                                        32, 64, 1, 0, 0, 32, 32));
 
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
@@ -1566,8 +1562,7 @@ void func_809DD2F8(PlayState* play) {
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0,
                          MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_01A620);
         }
     }
@@ -1586,8 +1581,7 @@ void func_809DD2F8(PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
         }
     }
@@ -1603,15 +1597,14 @@ void func_809DD2F8(PlayState* play) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 30, 30, 30, (u8)effect->unk_2C);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, effect->unk_26 + (i * 3),
-                                        (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, effect->unk_26 + (i * 3), (effect->unk_26 + (i * 3)) * 5,
+                                        32, 64, 1, 0, 0, 32, 32));
 
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gTwinmoldDustModelDL);
         }
     }
@@ -2215,16 +2208,14 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
                     this->unk_1D7E = 0;
                     if (D_809E0422 == 0) {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0,
-                                    0);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
                         phi_f0 = 60.0f;
                     } else {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0,
-                                    35);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0, 35);
                         phi_f0 = 3155.0f;
                     }
-                    D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play,
-                                                                ACTOR_DOOR_WARP1, 0.0f, phi_f0, 0.0f, 0, 0, 0, 1);
+                    D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,
+                                                                0.0f, phi_f0, 0.0f, 0, 0, 0, 1);
 
                     if (D_809E0422 == 0) {
                         D_809E0434->unk_203 = 0;

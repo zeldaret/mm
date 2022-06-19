@@ -178,8 +178,8 @@ void func_80A51648(EnDnk* this, PlayState* play) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
-                               this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
+                SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 

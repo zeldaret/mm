@@ -22,6 +22,8 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
+    "globalCtx": "play",
+    "globalCtx2": "play2",
     
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
@@ -627,6 +629,7 @@ wordReplace = {
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
     "struct_80B8E1A8": "AnimationSpeedInfo",
+    "GlobalContext": "PlayState",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

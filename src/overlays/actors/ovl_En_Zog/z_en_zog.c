@@ -1064,8 +1064,8 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
 
         POLY_XLU_DISP = &gfx[3];
         POLY_XLU_DISP =
-            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                               this->skelAnime.dListCount, NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
+            SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
     } else {
         func_8012C28C(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -1077,8 +1077,8 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(&gfx[2], 0, 0, 0, 255);
 
         POLY_OPA_DISP = &gfx[3];
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, EnZog_PostLimbDraw, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              NULL, EnZog_PostLimbDraw, &this->actor);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -145,8 +145,8 @@ s32 func_80A75FA4(EnPrz* this, PlayState* play) {
     WaterBox* sp2C;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                             &this->unk_210, &sp2C)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
+                             &sp2C)) {
         temp_f0 = BREG(10) + (this->unk_210 - 10.0f);
         if (temp_f0 < this->actor.world.pos.y) {
             this->unk_1D8.y = temp_f0;
@@ -210,8 +210,8 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
     sp38.x += Math_SinS(this->actor.world.rot.y) * 40.0f;
     sp38.z += Math_CosS(this->actor.world.rot.y) * 40.0f;
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp38, &sp48, &sp54, true, false, false,
-                                true, &sp44)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp38, &sp48, &sp54, true, false, false, true,
+                                &sp44)) {
         return true;
     }
     return false;
@@ -393,8 +393,8 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.z, this->unk_1FC, 5, 0x2710, 0x3E8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1FE, 5, 0x2710, 0x3E8);
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                             &this->unk_210, &sp7C)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
+                             &sp7C)) {
         if ((this->unk_210 - 15.0f) <= this->actor.world.pos.y) {
             phi_s0 = true;
         } else {
@@ -512,8 +512,8 @@ void EnPrz_Draw(Actor* thisx, PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->unk_1EC);
 
         Scene_SetRenderModeXlu(play, 0, 1);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_80A76F70, func_80A76FCC, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              func_80A76F70, func_80A76FCC, &this->actor);
     } else {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1EC);

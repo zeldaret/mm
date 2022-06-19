@@ -121,6 +121,6 @@ void EnDrs_Draw(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
     func_8012C5B0(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnDrs_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnDrs_PostLimbDraw, &this->actor);
 }

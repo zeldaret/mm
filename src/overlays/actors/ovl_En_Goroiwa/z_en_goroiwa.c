@@ -469,8 +469,7 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
                 sp60.y = this->actor.world.pos.y + 50.0f;
                 sp60.z = this->actor.world.pos.z;
 
-                temp_f14 =
-                    BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &poly, &bgId, &this->actor, &sp60);
+                temp_f14 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &poly, &bgId, &this->actor, &sp60);
                 temp_f2 = temp_f14 - this->actor.world.pos.y;
 
                 if (fabsf(temp_f2) < (fabsf(this->actor.velocity.y) + 0.01f)) {
@@ -501,8 +500,8 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
         WaterBox* sp44;
         f32 sp40;
 
-        if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                   &sp40, &sp44)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
+                                   &sp44)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {
@@ -622,8 +621,7 @@ void func_8093FC6C(EnGoroiwa* this, PlayState* play) {
         spA8.y = spB4.y * -0.05f;
         spA8.z = spB4.z * -0.02f;
 
-        EffectSsIceSmoke_Spawn(play, &spC0, &spB4, &spA8,
-                               ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f24 * 10.0f);
+        EffectSsIceSmoke_Spawn(play, &spC0, &spB4, &spA8, ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f24 * 10.0f);
     }
 
     for (i = 0, phi_s0 = 0; i < sp80; i++, phi_s0 += temp) {
@@ -1491,8 +1489,8 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                     sp50.x = this->actor.world.pos.x;
                     sp50.y = this->actor.world.pos.y + 50.0f;
                     sp50.z = this->actor.world.pos.z;
-                    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly,
-                                                                          &bgId, &this->actor, &sp50);
+                    this->actor.floorHeight =
+                        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp50);
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
                         this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {

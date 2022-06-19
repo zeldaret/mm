@@ -260,8 +260,7 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
     D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
 
-    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4, -1, 10,
-                        NULL);
+    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4, -1, 10, NULL);
 }
 
 void func_80897390(EnPeehat* this, PlayState* play) {
@@ -272,9 +271,8 @@ void func_80897390(EnPeehat* this, PlayState* play) {
     this->colliderCylinder.base.acFlags &= ~AC_HIT;
 
     for (i = 3 - this->unk_2AC; i > 0; i--) {
-        actor =
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PEEHAT, this->actor.world.pos.x,
-                               this->actor.world.pos.y + 50.0f, this->actor.world.pos.z, 0, phi_s2, 0, 1);
+        actor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PEEHAT, this->actor.world.pos.x,
+                                   this->actor.world.pos.y + 50.0f, this->actor.world.pos.z, 0, phi_s2, 0, 1);
         phi_s2 += 0x5555;
 
         if (actor != NULL) {
@@ -724,9 +722,9 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 1.1f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                this->colliderSphere.info.bumper.hitPos.x, this->colliderSphere.info.bumper.hitPos.y,
-                                this->colliderSphere.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
+                                this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
+                                0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);
                 func_808984E0(this);
@@ -800,8 +798,8 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
 
             for (i = 1; i >= 0; i--) {
-                if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70,
-                                            true, true, false, true, &sp6C)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, true,
+                                            true, false, true, &sp6C)) {
                     func_800BBFB0(play, &sp74, 0.0f, 1, 300, 150, 1);
                     func_80897258(play, this, &sp74, 0.0f, 1.5f);
                 }
@@ -831,8 +829,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPeehat* this = THIS;
     s32 pad;
 

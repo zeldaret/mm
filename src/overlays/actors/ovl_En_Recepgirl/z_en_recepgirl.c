@@ -182,8 +182,7 @@ void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     EnRecepgirl_UpdateEyes(this);
 }
 
-s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 Actor* thisx) {
+s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {

@@ -295,8 +295,8 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
     this->unk_330.a = 200;
     Math_Vec3f_Copy(&this->unk_314, &gOneVec3f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
-                   this->jointTable, this->morphTable, 31);
+    SkelAnime_Init(play, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20, this->jointTable,
+                   this->morphTable, 31);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
@@ -406,8 +406,7 @@ void func_80876BD0(EnDodongo* this, PlayState* play, s32 arg2) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffScale = 0.75f;
         this->drawDmgEffAlpha = 4.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                    this->collider1.elements[arg2].info.bumper.hitPos.x,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider1.elements[arg2].info.bumper.hitPos.x,
                     this->collider1.elements[arg2].info.bumper.hitPos.y,
                     this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
     }
@@ -431,8 +430,7 @@ void func_80876D28(EnDodongo* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider1.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, &this->limbPos[0], 9, 2, this->unk_334 * 0.3f,
-                              this->unk_334 * 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, &this->limbPos[0], 9, 2, this->unk_334 * 0.3f, this->unk_334 * 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -1056,8 +1054,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDodongo* this = THIS;
 
     if (limbIndex == 1) {

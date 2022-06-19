@@ -123,8 +123,8 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable,
-                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable, this->morphTable,
+                   DEKU_SCRUB_LIMB_MAX);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -425,8 +425,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
             func_8012C28C(play->state.gfxCtx);
             Matrix_Translate(temp_f20.x, temp_f20.y, temp_f20.z, MTXMODE_NEW);
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gDekuScrubFlowerDL);
 
             CLOSE_DISPS(play->state.gfxCtx);

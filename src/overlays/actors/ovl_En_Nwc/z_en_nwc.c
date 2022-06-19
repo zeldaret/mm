@@ -244,8 +244,8 @@ void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectIndex)) {
         gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->niwObjectIndex].segment);
 
-        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable,
-                           this->morphTable, NIW_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+                           NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, 0.0f);
 
         gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->nwcObjectIndex].segment);
@@ -521,6 +521,6 @@ void EnNwc_DrawAdultBody(Actor* thisx, PlayState* play) {
     EnNwc* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->niwSkeleton.skeleton, this->niwSkeleton.jointTable,
-                          this->niwSkeleton.dListCount, EnNwc_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(play, this->niwSkeleton.skeleton, this->niwSkeleton.jointTable, this->niwSkeleton.dListCount,
+                          EnNwc_OverrideLimbDraw, NULL, &this->actor);
 }

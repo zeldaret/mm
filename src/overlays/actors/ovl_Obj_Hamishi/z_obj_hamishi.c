@@ -125,8 +125,8 @@ void func_809A10F4(ObjHamishi* this, PlayState* play) {
             gravity = -320;
         }
 
-        EffectSsKakera_Spawn(play, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i],
-                             3, 0, 70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
+        EffectSsKakera_Spawn(play, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i], 3, 0,
+                             70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 
     func_800BBFB0(play, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
@@ -152,8 +152,8 @@ s32 func_809A1408(ObjHamishi* this, PlayState* play) {
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                                &sp30, &sp28) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+                                &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;
     }

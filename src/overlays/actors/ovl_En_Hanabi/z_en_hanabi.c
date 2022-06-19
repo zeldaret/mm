@@ -163,8 +163,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
             }
             Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (sp53 != arg0->unk_02) {
                 gDPPipeSync(POLY_XLU_DISP++);
