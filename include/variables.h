@@ -3562,7 +3562,7 @@ extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 // other segments
 extern GfxMasterList D_0E000000;
 extern Mtx D_01000000;
-extern UNK_TYPE D_0F000000;
+extern u16 D_0F000000[];
 
 
 #endif
