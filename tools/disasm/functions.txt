@@ -137,7 +137,7 @@
     0x80085468:("StackCheck_GetState",),
     0x800854E0:("StackCheck_CheckAll",),
     0x80085538:("StackCheck_Check",),
-    0x80085570:("GfxPrint_InitDlist",),
+    0x80085570:("GfxPrint_Setup",),
     0x800859BC:("GfxPrint_SetColor",),
     0x80085A08:("GfxPrint_SetPosPx",),
     0x80085A2C:("GfxPrint_SetPos",),

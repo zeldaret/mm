@@ -3878,7 +3878,7 @@ _DW({									\
 
 #define	gDPLoadTextureBlock_4b(pkt, timg, fmt, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, G_IM_SIZ_16b, 1, timg);		\
 	gDPSetTile(pkt, fmt, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,	\
 		cmt, maskt, shiftt, cms, masks, shifts);		\
@@ -3893,7 +3893,7 @@ _DW({									\
 	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
 		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
 		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 /* Load fix rww 27jun95 */
 /* The S at the end means odd lines are already word Swapped */
@@ -4246,7 +4246,7 @@ _DW({									\
 #define	gDPLoadMultiTile_4b(pkt, timg, tmem, rtile, fmt, width, height,	\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, G_IM_SIZ_8b, ((width)>>1), timg);	\
 	gDPSetTile(pkt, fmt, G_IM_SIZ_8b, 			        \
 		   (((((lrs)-(uls)+1)>>1)+7)>>3), tmem,			\
@@ -4268,7 +4268,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #define	gsDPLoadTextureTile_4b(timg, fmt, width, height,		\
 		uls, ult, lrs, lrt, pal,				\
@@ -4431,7 +4431,7 @@ _DW({									\
 #ifndef _HW_VERSION_1
 
 #define gDPLoadTLUT(pkt, count, tmemaddr, dram)				\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dram);	\
 	gDPTileSync(pkt);						\
 	gDPSetTile(pkt, 0, 0, 0, tmemaddr,				\
@@ -4439,7 +4439,7 @@ _DW({									\
 	gDPLoadSync(pkt);						\
 	gDPLoadTLUTCmd(pkt, G_TX_LOADTILE, ((count)-1));		\
 	gDPPipeSync(pkt);						\
-}
+})
 
 #else /* **** WORKAROUND hardware 1 load_tlut bug ****** */
 
