@@ -78,7 +78,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
         Matrix_RotateXS(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
         for (i = 0; i < 4; i++) {
-            if ((u32)Rand_Next() >= 0x40000000) {
+            if (Rand_Next() >= 0x40000000) {
                 splashOffset.x = sExitSplashOffsets[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = sExitSplashOffsets[i].y;
                 splashOffset.z = sExitSplashOffsets[i].z;
@@ -86,7 +86,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 340);
+                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 340);
             }
         }
     }
@@ -104,7 +104,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 280);
+                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 280);
                 }
             }
         }

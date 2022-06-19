@@ -188,7 +188,6 @@ typedef struct {
 
 typedef void (*PlayerFuncD58)(struct GlobalContext*, struct Player*);
 
-
 typedef struct Player {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s8 currentShield;
