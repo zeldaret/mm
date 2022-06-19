@@ -177,11 +177,11 @@ s32 EnSob1_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_CUP);
 }
 
 u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
@@ -555,8 +555,8 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_UpdateJoystickInputState(GlobalContext* globalCtx, EnSob1* this) {
-    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
-    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&globalCtx->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&globalCtx->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -611,7 +611,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if ((talkState == 5) && Message_ShouldAdvance(globalCtx) &&
-        !EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+        !EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
@@ -661,7 +661,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+            if (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
                 if (!Message_ShouldAdvance(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
                     if (this->stickAccumX > 0) {
                         cursorIndex = EnSob1_SetCursorIndexFromNeutral(this, 2);
@@ -913,7 +913,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
         EnSob1_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnSob1_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
+            if (!EnSob1_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(&globalCtx->state))) {
                 EnSob1_CursorLeftRight(globalCtx, this);
                 cursorIndex = this->cursorIndex;
                 if (cursorIndex != prevCursorIndex) {
@@ -1021,7 +1021,8 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnSob1_HandleCanBuyItem(globalCtx, this);
