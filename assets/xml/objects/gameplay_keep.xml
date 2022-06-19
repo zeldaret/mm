@@ -1114,8 +1114,8 @@
         <DList Name="gFrozenIceDL" Offset="0x50648" />
         <DList Name="gFrozenIceVtxDL" Offset="0x506E0" />
         <DList Name="gameplay_keep_DL_050D10" Offset="0x50D10" />
-        <Texture Name="gameplay_keep_Tex_050E80" OutName="tex_050E80" Format="i4" Width="32" Height="32" Offset="0x50E80" />
-        <DList Name="gameplay_keep_DL_0510B0" Offset="0x510B0" />
+        <Texture Name="gEffIceSmokeTex" OutName="eff_ice_smoke" Format="i4" Width="32" Height="32" Offset="0x50E80" />
+        <DList Name="gEffIceSmokeDL" Offset="0x510B0" />
         <DList Name="gFrozenSteamDL" Offset="0x51180" />
         <DList Name="gFrozenSteamVtxDL" Offset="0x51238" />
         <Animation Name="gameplay_keep_Anim_05140C" Offset="0x5140C" />
