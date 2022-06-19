@@ -340,108 +340,8 @@ void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
 
-//score: 3198
-// void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
-//     GraphicsContext* new_var8;
-//     AnimatedMaterial* new_var6;
-//     s32 new_var;
-//     f32 sp38;
-//     AnimatedMaterial* new_var3;
-//     Gfx* temp_v0_10;
-//     Gfx* temp_v0;
-//     Gfx* temp_v0_2;
-//     Gfx* temp_v0_3;
-//     f32 new_var7;
-//     Gfx* temp_v0_4;
-//     GlobalContext* new_var5;
-//     Gfx* temp_v0_5;
-//     Gfx* temp_v0_7;
-//     Gfx* temp_v0_8;
-//     Gfx* temp_v0_9;
-//     GraphicsContext* new_var2;
-//     GraphicsContext* temp_a0;
-//     GraphicsContext* temp_s0;
-//     Gfx** new_var11;
-//     f32 temp_ft1;
-//     s8 temp_v0_6;
-//     f32 phi_ft1;
-//     BgIkanaMirror* this = (BgIkanaMirror*)thisx;
-//     new_var = this->unk5C6;
-//     temp_a0 = ((0, globalCtx))->state.gfxCtx;
-//     temp_s0 = temp_a0;
-//     func_8012C28C(temp_s0);
-//     func_8012C2DC(globalCtx->state.gfxCtx);
-//     temp_v0 = temp_s0->polyOpa.p;
-//     new_var8 = temp_s0;
-//     temp_s0->polyOpa.p++; //move to polyOpa.d? or next in an array?
-//     temp_v0->words.w0 = 0xDA380003;
-//     if (1) {
-//         new_var6 = this->unk5C0;
-//         temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-//     }
-//     temp_v0_2 = temp_s0->polyOpa.p;
-//     temp_s0->polyOpa.p = 1 + temp_v0_2;
-//     temp_v0_2->words.w1 = (u32)(&D_06001E18);
-//     temp_v0_2->words.w0 = 0xDE000000;
-//     if (((s32)new_var) > 0) {
-//         new_var3 = this->unk5BC;
-//         AnimatedMat_Draw(globalCtx, new_var3);
-//         temp_v0_3 = new_var8->polyXlu.p;
-//         new_var8->polyXlu.p = temp_v0_3 + 1;
-//         temp_v0_3->words.w0 = 0xFA000080;
-//         new_var5 = globalCtx;
-//         temp_v0_3->words.w1 = new_var | (~0xFF);
-//         temp_v0_4 = new_var8->polyXlu.p;
-//         new_var8->polyXlu.p = temp_v0_4 + 1;
-//         temp_v0_4->words.w0 = 0xDA380003;
-//         temp_v0_4->words.w1 = Matrix_NewMtx(new_var5->state.gfxCtx);
-//     dummy_label_941816:;
-
-//         if (1) {
-//             temp_v0_5 = new_var8->polyXlu.p;
-//             new_var8->polyXlu.p = temp_v0_5 + 1;
-//             temp_v0_5->words.w1 = (u32)(&D_060014B0);
-//         }
-//         temp_v0_5->words.w0 = 0xDE000000;
-//     }
-//     temp_v0_6 = this->unk5C7;
-//     if (((s32)temp_v0_6) > 0) {
-//         temp_ft1 = (f32)temp_v0_6;
-//         phi_ft1 = (f32)temp_v0_6;
-//         if (((s32)temp_v0_6) < 0) {
-//             phi_ft1 = 4294967296.0f + temp_ft1;
-//         }
-//         new_var7 = phi_ft1 * 0.003921569f;
-//         AnimatedMat_Draw(new_var5, new_var6);
-//         temp_v0_7 = new_var8->polyXlu.p;
-//         temp_s0->polyXlu.p = temp_v0_7;
-//         temp_s0->polyXlu.p = temp_s0->polyXlu.p + 1;
-//         new_var2 = temp_s0;
-//         phi_ft1 = new_var7 * 123.0f;
-//         temp_v0_7->words.w0 = 0xFA000080;
-//         temp_v0_7->words.w1 = (((s32)phi_ft1) & 0xFF) | (~0xFF);
-//         if ((temp_v0_9 && temp_v0_9) && temp_v0_9) {}
-//         temp_v0_8 = temp_s0->polyXlu.p;
-//         new_var2->polyXlu.p = temp_v0_8 + 1;
-//         temp_v0_8->words.w0 = 0xFB000000;
-//         temp_v0_8->words.w1 = (((s32)(new_var7 * 185.0f)) & 0xFF) | 0xD7D7FF00;
-//         temp_v0_9 = new_var2->polyXlu.p;
-//         new_var2->polyXlu.p = temp_v0_9 + 1;
-//         temp_v0_9->words.w0 = 0xDA380003;
-//         new_var11 = &D_06001880;
-//         temp_v0_9->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-//         if (0, (&new_var5->state) && (&new_var5->state)) {}
-//         temp_v0_10 = new_var2->polyXlu.p;
-//         new_var2->polyXlu.p = temp_s0->polyXlu.p;
-//         new_var2->polyXlu.p = new_var2->polyXlu.p + 1;
-//         temp_v0_10->words.w1 = (u32)new_var11;
-//         temp_v0_10->words.w0 = 0xDE000000;
-//     }
-// }
-
-//from last mips2c:
 void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    Gfx *sp4C;
+    Gfx *sp4C; 
     Gfx *sp40;
     f32 sp38;
     Gfx *sp24;
@@ -509,12 +409,14 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_s0->polyXlu.p = temp_v0_8 + 8;
         temp_v0_8->words.w0 = 0xFB000000;
         temp_v0_8->words.w1 = ((s32) (temp_fv0 * 185.0f) & 0xFF) | 0xD7D7FF00;
-       
-        gSPMatrix(POLY_XLU_DISP++,  Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &D_06001880);
-        // temp_v0_10 = temp_s0->polyXlu.p;
-        // temp_s0->polyXlu.p = temp_v0_10 + 8;
-        // temp_v0_10->words.w1 = (u32) &D_06001880;
-        // temp_v0_10->words.w0 = 0xDE000000;
+        temp_v0_9 = temp_s0->polyXlu.p;
+        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_v0_9->words.w0 = 0xDA380003;
+        sp24 = temp_v0_9;
+        sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_v0_10 = temp_s0->polyXlu.p;
+        temp_s0->polyXlu.p = temp_v0_10 + 8;
+        temp_v0_10->words.w1 = (u32) &D_06001880;
+        temp_v0_10->words.w0 = 0xDE000000;
     }
 }
