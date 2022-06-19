@@ -40,8 +40,8 @@ extern UNK_TYPE4 D_80096C30;
 extern StackEntry* sStackInfoListStart;
 extern StackEntry* sStackInfoListEnd;
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
-// extern UNK_TYPE1 sGfxPrintUnkTLUT;
-// extern UNK_TYPE1 sGfxPrintUnkData;
+// extern UNK_TYPE1 sGfxPrintRainbowTLUT;
+// extern UNK_TYPE1 sGfxPrintRainbowData;
 // extern UNK_TYPE1 sGfxPrintFontData;
 // extern UNK_TYPE4 D_80097524;
 // extern u32 sRandInt;
@@ -3562,7 +3562,7 @@ extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 // other segments
 extern GfxMasterList D_0E000000;
 extern Mtx D_01000000;
-extern UNK_TYPE D_0F000000;
+extern u16 D_0F000000[];
 
 
 #endif

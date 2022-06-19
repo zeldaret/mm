@@ -333,7 +333,7 @@ void EnZow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-AnimationHeader* sAnimations[] = { &gZoraTreadingWaterAnim, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
+static AnimationHeader* sAnimations[] = { &gZoraTreadingWaterAnim, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
 
 void func_80BDD04C(EnZow* this, s16 arg1, u8 arg2) {
     if ((arg1 >= 0) && (arg1 < 3)) {

@@ -299,7 +299,7 @@ void func_80AE0460(EnTsn* this, GlobalContext* globalCtx) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_95, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_SEAHORSE, 2000.0f, 1000.0f);
     }
 }
 

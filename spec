@@ -768,8 +768,7 @@ beginseg
     name "ovl_En_Box"
     compress
     include "build/src/overlays/actors/ovl_En_Box/z_en_box.o"
-    include "build/data/ovl_En_Box/ovl_En_Box.data.o"
-    include "build/data/ovl_En_Box/ovl_En_Box.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Box/ovl_En_Box_reloc.o"
 endseg
 
 beginseg
@@ -1193,8 +1192,7 @@ beginseg
     name "ovl_Demo_Tre_Lgt"
     compress
     include "build/src/overlays/actors/ovl_Demo_Tre_Lgt/z_demo_tre_lgt.o"
-    include "build/data/ovl_Demo_Tre_Lgt/ovl_Demo_Tre_Lgt.data.o"
-    include "build/data/ovl_Demo_Tre_Lgt/ovl_Demo_Tre_Lgt.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Tre_Lgt/ovl_Demo_Tre_Lgt_reloc.o"
 endseg
 
 beginseg
@@ -1967,8 +1965,7 @@ beginseg
     name "ovl_Effect_Ss_Extra"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.o"
-    include "build/data/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra.data.o"
-    include "build/data/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra_reloc.o"
 endseg
 
 beginseg
@@ -4214,8 +4211,7 @@ beginseg
     name "ovl_Obj_Tokei_Turret"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tokei_Turret/z_obj_tokei_turret.o"
-    include "build/data/ovl_Obj_Tokei_Turret/ovl_Obj_Tokei_Turret.data.o"
-    include "build/data/ovl_Obj_Tokei_Turret/ovl_Obj_Tokei_Turret.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tokei_Turret/ovl_Obj_Tokei_Turret_reloc.o"
 endseg
 
 beginseg
