@@ -4278,8 +4278,7 @@ beginseg
     name "ovl_Obj_Y2lift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Y2lift/z_obj_y2lift.o"
-    include "build/data/ovl_Obj_Y2lift/ovl_Obj_Y2lift.data.o"
-    include "build/data/ovl_Obj_Y2lift/ovl_Obj_Y2lift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Y2lift/ovl_Obj_Y2lift_reloc.o"
 endseg
 
 beginseg
