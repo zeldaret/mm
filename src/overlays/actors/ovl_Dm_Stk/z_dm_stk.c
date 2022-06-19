@@ -1,11 +1,14 @@
 /*
  * File: z_dm_stk.c
  * Overlay: ovl_Dm_Stk
- * Description: Skull Kid (cutscene)
+ * Description: Skull Kid. Also manages Majora's Mask in the cutscene where its backstory is explained.
+ *
+ * This actor is responsible for some somewhat unintuitive things. For example, during certain cutscenes,
+ * it is responsible for handling the player's sound effects as well. As another example, this actor makes
+ * time pass when the player looks through the Astral Observatory telescope.
  */
 
 #include "z_dm_stk.h"
-#include "objects/object_stk/object_stk.h"
 #include "objects/object_stk2/object_stk2.h"
 #include "objects/object_stk3/object_stk3.h"
 
@@ -18,20 +21,134 @@ void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AA16F4(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1704(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1714(DmStk* this, GlobalContext* globalCtx);
-void func_80AA17F8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA18D8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA192C(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1998(DmStk* this, GlobalContext* globalCtx);
-void func_80AA19EC(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1A50(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1AC8(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx);
-void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
-void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
-void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx);
+void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx);
+void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx);
+void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx);
+void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /*  0 */ SK_ANIMATION_SHAKE_HEAD,
+    /*  1 */ SK_ANIMATION_WALK,
+    /*  2 */ SK_ANIMATION_LOOK_AROUND, // Not used in the final game
+    /*  3 */ SK_ANIMATION_IDLE,
+    /*  4 */ SK_ANIMATION_UNUSED_IDLE, // Unused duplicate of SK_ANIMATION_IDLE
+    /*  5 */ SK_ANIMATION_BENT_OVER_HEAD_TWITCH,
+    /*  6 */ SK_ANIMATION_GLITCHY_HORSE_RIDE_START, // Not used in the final game
+    /*  7 */ SK_ANIMATION_RECLINING_FLOAT,
+    /*  8 */ SK_ANIMATION_CURSE_START,
+    /*  9 */ SK_ANIMATION_CURSE_LOOP,
+    /* 10 */ SK_ANIMATION_LAUGH_START,
+    /* 11 */ SK_ANIMATION_LAUGH_LOOP,
+    /* 12 */ SK_ANIMATION_HIDE_OCARINA_START,
+    /* 13 */ SK_ANIMATION_HIDE_OCARINA_LOOP,
+    /* 14 */ SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING,
+    /* 15 */ SK_ANIMATION_PLAY_OCARINA_AND_LAUGH,
+    /* 16 */ SK_ANIMATION_PICK_UP_OCARINA, // Not used in the final game
+    /* 17 */ SK_ANIMATION_LOOK_AT_OCARINA, // Not used in the final game
+    /* 18 */ SK_ANIMATION_KICK_OVER_LINK,
+    /* 19 */ SK_ANIMATION_SEARCH_LINK,
+    /* 20 */ SK_ANIMATION_UNUSED_KICK_OVER_LINK, // Unused duplicate of SK_ANIMATION_KICK_OVER_LINK
+    /* 21 */ SK_ANIMATION_UNUSED_SEARCH_LINK,    // Unused duplicate of SK_ANIMATION_SEARCH_LINK
+    /* 22 */ SK_ANIMATION_HORSE_RIDE_START,
+    /* 23 */ SK_ANIMATION_HORSE_RIDE_LOOP,
+    /* 24 */ SK_ANIMATION_RAISE_MASK_START,
+    /* 25 */ SK_ANIMATION_RAISE_MASK_LOOP,
+    /* 26 */ SK_ANIMATION_LOWER_MASK,
+    /* 27 */ SK_ANIMATION_JUMP_WHILE_HIDING_OCARINA,
+    /* 28 */ SK_ANIMATION_HORSE_RIDE_AND_ROTATE, // Used when Link gets thrown off his horse
+    /* 29 */ SK_ANIMATION_PLAY_OCARINA_WHILE_FLOATING,
+    /* 30 */ SK_ANIMATION_FLOATING_TURN_AROUND,
+    /* 31 */ SK_ANIMATION_OCARINA_JUGGLE,
+    /* 32 */ SK_ANIMATION_CALL_DOWN_MOON_START,
+    /* 33 */ SK_ANIMATION_CALL_DOWN_MOON_LOOP,
+    /* 34 */ SK_ANIMATION_SMACK_FAIRY_START,
+    /* 35 */ SK_ANIMATION_SMACK_FAIRY_LOOP,
+    /* 36 */ SK_ANIMATION_HIT_BY_BUBBLE,
+    /* 37 */ SK_ANIMATION_DROP_OCARINA,
+    /* 38 */ SK_ANIMATION_FLOATING_ARMS_CROSSED,
+    /* 39 */ SK_ANIMATION_DEFLECT_ATTACK,
+    /* 40 */ SK_ANIMATION_TELESCOPE_LOOK_UP_START,
+    /* 41 */ SK_ANIMATION_TELESCOPE_LOOK_UP_LOOP,
+    /* 42 */ SK_ANIMATION_SURPRISE_START,
+    /* 43 */ SK_ANIMATION_SURPRISE_LOOP,
+    /* 44 */ SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START,
+    /* 45 */ SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_LOOP,
+    /* 46 */ SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START,
+    /* 47 */ SK_ANIMATION_HOLD_HEAD_AND_SHAKE_LOOP,
+    /* 48 */ SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START,
+    /* 49 */ SK_ANIMATION_HOLD_HEAD_AND_SCREAM_LOOP,
+    /* 50 */ SK_ANIMATION_HUDDLE_WITH_FAIRIES,
+    /* 51 */ SK_ANIMATION_SEARCH_MASK_SALESMAN,
+    /* 52 */ SK_ANIMATION_HOLD_UP_MASK_START,
+    /* 53 */ SK_ANIMATION_HOLD_UP_MASK_LOOP,
+    /* 54 */ SK_ANIMATION_SHIVER,
+    /* 55 */ SK_ANIMATION_DRAW,
+    /* 56 */ SK_ANIMATION_BENT_OVER_LOOK_UP,
+    /* 57 */ SK_ANIMATION_SPANK,
+    /* 58 */ SK_ANIMATION_HIP_SHAKE_AND_JUMP,
+    /* 59 */ SK_ANIMATION_PLAY_FLUTE,
+    /* 60 */ SK_ANIMATION_CARTWHEEL,
+    /* 61 */ SK_ANIMATION_LIE_FLAT,
+    /* 62 */ SK_ANIMATION_DANGLE_FROM_MASK_START,
+    /* 63 */ SK_ANIMATION_DANGLE_FROM_MASK_LOOP,
+    /* 64 */ SK_ANIMATION_DROPPED_FROM_MASK,
+    /* 65 */ SK_ANIMATION_LOOK_UP_AT_GIANTS,
+    /* 66 */ SK_ANIMATION_ASHAMED_START,
+    /* 67 */ SK_ANIMATION_ASHAMED_LOOP,
+    /* 68 */ SK_ANIMATION_LOOK_LEFT_START,
+    /* 69 */ SK_ANIMATION_LOOK_LEFT_LOOP,
+    /* 70 */ SK_ANIMATION_SNIFF,
+    /* 71 */ SK_ANIMATION_LAUGH_AFTER_SNIFF,
+} SkullKidAnimationIndex;
+
+typedef enum {
+    /* 0 */ SK_MASK_TYPE_NO_MASK,
+    /* 1 */ SK_MASK_TYPE_NORMAL,
+    /* 2 */ SK_MASK_TYPE_GLOWING_EYES,
+    /* 3 */ SK_MASK_TYPE_FADING_OUT,
+    /* 9 */ SK_MASK_TYPE_RAISED = 9,
+} SkullKidMaskType;
+
+typedef enum {
+    /* 0 */ SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE,
+    /* 1 */ SK_HAND_TYPE_HOLDING_LINK_MASK,
+    /* 2 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK,
+    /* 3 */ SK_HAND_TYPE_HOLDING_OCARINA,
+    /* 4 */ SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
+    /* 5 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
+    /* 6 */ SK_HAND_TYPE_HOLDING_FLUTE,
+    /* 9 */ SK_HAND_TYPE_DEFAULT = 9,
+} SkullKidHandType;
+
+typedef enum {
+    /* 0 */ SK_FADE_IN_STATE_NONE,
+    /* 1 */ SK_FADE_IN_STATE_START,
+    /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG,
+    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
+} SkullKidFadeInState;
+
+typedef enum {
+    /* 0 */ SK_FADE_OUT_STATE_NONE,
+    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT,
+} SkullKidFadeOutState;
+
+typedef enum {
+    /* 0 */ SK_DEKU_PIPES_CS_STATE_NOT_READY,
+    /* 1 */ SK_DEKU_PIPES_CS_STATE_READY,
+    /* 2 */ SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA,
+    /* 3 */ SK_DEKU_PIPES_CS_STATE_START,
+    /* 4 */ SK_DEKU_PIPES_CS_STATE_END
+} SkullKidDekuPipesCutsceneState;
 
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
@@ -103,101 +220,111 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidShakeHeadAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLookAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidBentOverHeadTwitchAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidGlitchyHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidRecliningFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidCurseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidCurseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLaughStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLaughLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHideOcarinaStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHideOcarinaLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidPickUpOcarinaAndStartPlayingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidPlayOcarinaAndLaughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidPickUpOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLookAtOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHorseRideLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidRaiseMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidRaiseMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLowerMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidJumpWhileHidingOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHorseRideAndRotateAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidPlayOcarinaWhileFloatingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidFloatingTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidOcarinaJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidCallDownMoonStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidCallDownMoonLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidSmackFairyStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidSmackFairyLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHitByBubbleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidDropOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidFloatingArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidDeflectAttackAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidTelescopeLookUpStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidTelescopeLookUpLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidSurpriseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidSurpriseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLookAroundForGiantsStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLookAroundForGiantsLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHoldHeadAndShakeStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHoldHeadAndShakeLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHoldHeadAndScreamStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHoldHeadAndScreamLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHuddleWithFairiesAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidSearchMaskSalesmanAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHoldUpMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHoldUpMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidShiverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidDrawAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidBentOverLookUpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidSpankAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHipShakeAndJumpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidPlayFluteAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidCartwheelAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidDangleFromMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidDroppedFromMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLookUpAtGiantsAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidAshamedStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidAshamedLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidLookLeftStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLookLeftLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidLaughAfterSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
-    s32 objectIdx;
+/**
+ * Ensures the correct object for the current animation is in segment 6.
+ */
+void DmStk_LoadObjectForAnimation(DmStk* this, GlobalContext* globalCtx) {
+    s32 objectIndex;
 
-    if (((this->unk_2E0 >= 0) && (this->unk_2E0 <= 5)) || (this->unk_2E0 == 32) || (this->unk_2E0 == 33) ||
-        (this->unk_2E0 == 40) || (this->unk_2E0 == 41)) {
-        objectIdx = this->unk_336;
-    } else if (this->unk_2E0 > 64) {
-        objectIdx = this->unk_338;
+    if (((this->animationId >= SK_ANIMATION_SHAKE_HEAD) && (this->animationId <= SK_ANIMATION_BENT_OVER_HEAD_TWITCH)) ||
+        (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_START) ||
+        (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) ||
+        (this->animationId == SK_ANIMATION_TELESCOPE_LOOK_UP_START) ||
+        (this->animationId == SK_ANIMATION_TELESCOPE_LOOK_UP_LOOP)) {
+        objectIndex = this->objectStkObjectIndex;
+    } else if (this->animationId >= SK_ANIMATION_LOOK_UP_AT_GIANTS) {
+        objectIndex = this->objectStk3ObjectIndex;
     } else {
-        objectIdx = this->unk_337;
+        objectIndex = this->objectStk2ObjectIndex;
     }
 
-    if (objectIdx >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objectIdx].segment);
+    if (objectIndex >= 0) {
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objectIndex].segment);
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
-    func_80A9FDB0(this, globalCtx);
+/**
+ * This function is always called with unusedExtraOffset = 0.
+ */
+void DmStk_ChangeAnimation(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
+                           u16 unusedExtraOffset) {
+    DmStk_LoadObjectForAnimation(this, globalCtx);
 
-    animation += index;
+    animation += unusedExtraOffset;
 
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame,
                      (animation->frameCount < 0.0f) ? Animation_GetLastFrame(&animation->animation->common)
@@ -205,7 +332,12 @@ void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, 
                      animation->mode, animation->morphFrames);
 }
 
-void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the first part of the intro cutscene, i.e., the cutscene
+ * that starts when the player start a new game and ends when the screen fades to white
+ * after Skull Kid steals Epona.
+ */
+void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames + 20) {
         case 1195:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -291,13 +423,22 @@ void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA00CC(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * This is supposed to play a bell sound in the title cutscene where the Skull Kid is
+ * looking at the moon on top of the Clock Tower. However, it doesn't actually play
+ * any sound in-game, since all sound effects are muted when it plays.
+ */
+void DmStk_PlaySfxForTitleCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 535) {
         func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
     }
 }
 
-void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the second part of the intro cutscene, i.e., the cutscene
+ * that starts after the fade-to-white and ends when the player gains control.
+ */
+void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 78:
         case 89:
@@ -325,7 +466,11 @@ void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0158(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene where Skull Kid steals Majora's Mask from
+ * the Happy Mask Salesman.
+ */
+void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 18:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
@@ -341,7 +486,12 @@ void func_80AA0158(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the first part of the curse cutscene, i.e., the cutscene
+ * that starts when Link falls down the large hole and ends with a fade-to-black to
+ * the hallucinatory Deku Scrubs scene.
+ */
+void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 415:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
@@ -362,7 +512,12 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the second part of the curse cutscene, i.e., the cutscene
+ * that starts once the hallucinatory Deku Scrubs scene is over and ends when the player
+ * gains control.
+ */
+void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -410,8 +565,13 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
-    static s32 D_80AA3CB8 = 0;
+/**
+ * Handles sound effects for the intro cutscene at the top of the Clock Tower. Specifically,
+ * it handles the variation of the cutscene that plays the first time the player reaches the
+ * top of the Clock Tower, which is slightly longer.
+ */
+void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
+    static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
         case 140:
@@ -436,7 +596,7 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->unk_2E0 == 31) && (globalCtx->csCtx.frames < 700)) {
+    if ((this->animationId == SK_ANIMATION_OCARINA_JUGGLE) && (globalCtx->csCtx.frames < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
@@ -445,33 +605,44 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
     }
 
     if (globalCtx->csCtx.frames >= 700) {
-        if (D_80AA3CB8 < 128) {
-            if ((D_80AA3CB8 & 0x1F) == 0) {
+        if (sMoonCallTimer < 128) {
+            if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
-            } else if ((D_80AA3CB8 & 0x1F) == 16) {
+            } else if ((sMoonCallTimer & 0x1F) == 16) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
-            D_80AA3CB8++;
+
+            sMoonCallTimer++;
         }
     } else {
-        D_80AA3CB8 = 0;
+        sMoonCallTimer = 0;
     }
 }
 
-void func_80AA05F0(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene where Skull Kid drops the Ocarina of Time.
+ */
+void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     }
 }
 
-void func_80AA0634(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene where Skull Kid is shivering in the rain.
+ */
+void DmStk_PlaySfxForShiveringInRainCutscene(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.frames >= 642) && (globalCtx->csCtx.frames < 845)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
 
-void func_80AA066C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene where Skull Kid is playing with Tatl and Tael
+ * in Termina Field.
+ */
+void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 58:
         case 61:
@@ -493,7 +664,12 @@ void func_80AA066C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA071C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the first part of the ending cutscene, i.e., the cutscene
+ * that starts after the Dawn of the New Day screen and ends with a fade to black as
+ * the Giants are walking away.
+ */
+void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 5:
             func_801A4A28(12);
@@ -505,7 +681,11 @@ void func_80AA071C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the second part of the ending cutscene, i.e., the cutscene
+ * that starts after a fade-to-black and ends after the credits start.
+ */
+void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->csCtx.frames) {
@@ -554,7 +734,7 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->unk_2E0 == 0) {
+    if (this->animationId == SK_ANIMATION_SHAKE_HEAD) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
@@ -562,19 +742,24 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
         }
-    } else if (this->unk_2E0 == 71) {
+    } else if (this->animationId == SK_ANIMATION_LAUGH_AFTER_SNIFF) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
-    } else if ((this->unk_2E0 == 70) &&
+    } else if ((this->animationId == SK_ANIMATION_SNIFF) &&
                (Animation_OnFrame(&this->skelAnime, 16.0f) || Animation_OnFrame(&this->skelAnime, 23.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_NOSE);
     }
 }
 
-void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
-    static s32 D_80AA3CBC = 0;
+/**
+ * Handles sound effects for the intro cutscene at the top of the Clock Tower. Specifically,
+ * it handles the variation of the cutscene that plays the second or later time the player
+ * reaches the top of the Clock Tower, which is slightly shorter.
+ */
+void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
+    static s32 sMoonCallTimer = 0;
 
     switch (globalCtx->csCtx.frames) {
         case 40:
@@ -596,27 +781,32 @@ void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
     }
 
     if (globalCtx->csCtx.frames >= 408) {
-        if (D_80AA3CBC < 128) {
-            if ((D_80AA3CBC & 0x1F) == 0) {
+        if (sMoonCallTimer < 128) {
+            if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
-            } else if ((D_80AA3CBC & 0x1F) == 16) {
+            } else if ((sMoonCallTimer & 0x1F) == 16) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
-            D_80AA3CBC++;
+
+            sMoonCallTimer++;
         }
     } else {
-        D_80AA3CBC = 0;
+        sMoonCallTimer = 0;
     }
 }
 
-void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
-    this->unk_310.x = this->actor.projectedPos.x;
-    this->unk_310.y = this->actor.projectedPos.y;
-    this->unk_310.z = this->actor.projectedPos.z;
+/**
+ * Handles sound effects for the cutscene that plays after the player plays the
+ * Oath to Order at the top of the Clock Tower.
+ */
+void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, GlobalContext* globalCtx) {
+    this->oathToOrderCutsceneVoicePos.x = this->actor.projectedPos.x;
+    this->oathToOrderCutsceneVoicePos.y = this->actor.projectedPos.y;
+    this->oathToOrderCutsceneVoicePos.z = this->actor.projectedPos.z;
 
     switch (globalCtx->csCtx.frames) {
         case 64:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -636,11 +826,11 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 
         case 486:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -652,7 +842,7 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 594:
-            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
     }
 
@@ -679,7 +869,12 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene before the player warps to the moon. Specifically,
+ * it handles the variation of the cutscene that plays the first time the player warps to the
+ * moon, which is slightly longer.
+ */
+void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -696,7 +891,12 @@ void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0E1C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for the cutscene before the player warps to the moon. Specifically,
+ * it handles the variation of the cutscene that plays the second or later time the player
+ * warps to the moon, which is slightly shorter.
+ */
+void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
@@ -713,31 +913,34 @@ void func_80AA0E1C(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles sound effects for all cutscenes.
+ */
+void DmStk_PlaySfxForCutscenes(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         switch (globalCtx->sceneNum) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    func_80A9FED8(this, globalCtx);
+                    DmStk_PlaySfxForIntroCutsceneFirstPart(this, globalCtx);
                 } else if (gSaveContext.sceneSetupIndex == 0) {
-                    func_80AA0100(this, globalCtx);
+                    DmStk_PlaySfxForIntroCutsceneSecondPart(this, globalCtx);
                 } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.currentCsIndex == 0)) {
-                    func_80AA0158(this, globalCtx);
+                    DmStk_PlaySfxForObtainingMajorasMaskCutscene(this, globalCtx);
                 }
                 break;
 
             case SCENE_CLOCKTOWER:
                 if (gSaveContext.sceneSetupIndex == 1) {
-                    func_80AA00CC(this, globalCtx);
+                    DmStk_PlaySfxForTitleCutscene(this, globalCtx);
                 }
                 break;
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA01C0(this, globalCtx);
+                        DmStk_PlaySfxForCurseCutsceneFirstPart(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA0264(this, globalCtx);
+                        DmStk_PlaySfxForCurseCutsceneSecondPart(this, globalCtx);
                     }
                 }
                 break;
@@ -745,19 +948,19 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0420(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA05F0(this, globalCtx);
+                        DmStk_PlaySfxForDroppingOcarinaCutscene(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        func_80AA09DC(this, globalCtx);
+                        DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 3) {
-                        func_80AA0B08(this, globalCtx);
+                        DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0DA8(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneVersion1(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA0E1C(this, globalCtx);
+                        DmStk_PlaySfxForMoonWarpCutsceneVersion2(this, globalCtx);
                     }
                 }
                 break;
@@ -765,35 +968,35 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA0634(this, globalCtx);
+                        DmStk_PlaySfxForShiveringInRainCutscene(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 2) {
-                        func_80AA066C(this, globalCtx);
+                        DmStk_PlaySfxForPlayingWithFairiesCutscene(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
                     if (globalCtx->csCtx.currentCsIndex == 0) {
-                        func_80AA071C(this, globalCtx);
+                        DmStk_PlaySfxForEndingCutsceneFirstPart(this, globalCtx);
                     } else if (globalCtx->csCtx.currentCsIndex == 1) {
-                        func_80AA076C(this, globalCtx);
+                        DmStk_PlaySfxForEndingCutsceneSecondPart(this, globalCtx);
                     }
                 }
                 break;
         }
     }
 
-    if (this->unk_2E0 == 1) {
+    if (this->animationId == SK_ANIMATION_WALK) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
         }
-    } else if (this->unk_2E0 == 19) {
+    } else if (this->animationId == SK_ANIMATION_SEARCH_LINK) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f) ||
             Animation_OnFrame(&this->skelAnime, 20.0f) || Animation_OnFrame(&this->skelAnime, 27.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CALM_HIT);
         }
-    } else if (this->unk_2E0 == 14) {
+    } else if (this->animationId == SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
         }
-    } else if (this->unk_2E0 == 15) {
+    } else if (this->animationId == SK_ANIMATION_PLAY_OCARINA_AND_LAUGH) {
         if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
         }
@@ -808,42 +1011,43 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DmStk* this = THIS;
 
-    this->unk_33B = 1;
-    if (this->actor.params != 1) {
-        this->unk_33A = 0;
-        this->unk_336 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
-        this->unk_337 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
-        this->unk_338 = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
-        if (this->unk_336 < 0) {
+    this->shouldDraw = true;
+    if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
+        this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_NOT_READY;
+        this->objectStkObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK);
+        this->objectStk2ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK2);
+        this->objectStk3ObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_STK3);
+        if (this->objectStkObjectIndex < 0) {
             Actor_MarkForDeath(&this->actor);
         }
 
-        this->unk_328 = 0;
-        this->unk_339 = 0;
-        this->unk_32C = 1;
-        this->unk_2E0 = 3;
-        this->unk_2E8 = globalCtx->lightCtx.unk7;
-        this->unk_2EC = globalCtx->lightCtx.unk8;
-        this->unk_2F0 = globalCtx->lightCtx.unk9;
+        this->tatlMessageTimer = 0;
+        this->deflectCount = 0;
+        this->maskType = SK_MASK_TYPE_NORMAL;
+        this->animationId = SK_ANIMATION_IDLE;
+        this->fogR = globalCtx->lightCtx.unk7;
+        this->fogG = globalCtx->lightCtx.unk8;
+        this->fogB = globalCtx->lightCtx.unk9;
 
         if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
-            this->unk_2E4 = 0;
-            this->unk_2F8 = 0;
-            this->unk_2FC = 1000;
-            this->unk_300 = 1.0f;
-            this->actionFunc = func_80AA1704;
+            this->alpha = 0;
+            this->fogN = 0;
+            this->fogF = 1000;
+            this->fogScale = 1.0f;
+            this->actionFunc = DmStk_DoNothing;
         } else if (globalCtx->sceneNum == SCENE_OKUJOU) {
-            this->unk_2E4 = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
-            this->unk_335 = 0;
+            this->alpha = 255;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
+            this->hasBeenHit = false;
 
             Collider_InitCylinder(globalCtx, &this->collider);
 
             if (gSaveContext.save.entranceIndex == 0x2C00) {
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (gSaveContext.unk_3DD0[3] == 0) {
+                        // Starts a 5 minute (300 second) timer until the moon falls.
                         func_8010E9F0(3, 300);
                         XREG(80) = 200;
                         XREG(81) = 115;
@@ -851,32 +1055,35 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = func_80AA18D8;
+                        this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion1;
                     } else {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
-                        this->actionFunc = func_80AA1998;
+                        this->actionFunc = DmStk_ClockTower_StartIntroCutsceneVersion2;
                     }
 
                 } else if (gSaveContext.sceneSetupIndex == 3) {
-                    this->unk_2E0 = 38;
+                    this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                     if (gSaveContext.unk_3DD0[3] == 0) {
+                        // This code is called when the Giants fail to stop the moon.
+                        // Starts a 1 minute (60 second) timer until the moon falls.
                         func_8010E9F0(3, 60);
                         XREG(80) = 200;
                         XREG(81) = 115;
                     }
+
                     this->actor.world.pos.y = 120.0f;
                     sCylinderInit.base.colType = COLTYPE_WOOD;
-                    this->actionFunc = func_80AA27EC;
+                    this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
-                    this->unk_2E0 = 38;
-                    this->actionFunc = func_80AA16F4;
+                    this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
+                    this->actionFunc = DmStk_ClockTower_DoNothing;
                 }
             } else {
-                this->unk_33A = 1;
-                this->unk_2E0 = 38;
+                this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_READY;
+                this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                 this->actor.world.pos.y = 120.0f;
                 sCylinderInit.base.colType = COLTYPE_WOOD;
-                this->actionFunc = func_80AA27EC;
+                this->actionFunc = DmStk_ClockTower_Idle;
             }
 
             Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -886,35 +1093,37 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (!(globalCtx->actorCtx.unk5 & 2)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->unk_32C = 2;
-            this->unk_2E4 = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
-            this->unk_2E0 = 5;
-            this->actionFunc = func_80AA1714;
+
+            this->maskType = SK_MASK_TYPE_GLOWING_EYES;
+            this->alpha = 255;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
+            this->animationId = SK_ANIMATION_BENT_OVER_HEAD_TWITCH;
+            this->actionFunc = DmStk_WaitForTelescope;
         } else {
             if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->unk_32C = 2;
-            this->unk_2E4 = 255;
-            this->unk_2F8 = 996;
-            this->unk_2FC = 1000;
-            this->unk_300 = 0.7f;
-            this->actionFunc = func_80AA1704;
+
+            this->maskType = SK_MASK_TYPE_GLOWING_EYES;
+            this->alpha = 255;
+            this->fogN = 996;
+            this->fogF = 1000;
+            this->fogScale = 0.7f;
+            this->actionFunc = DmStk_DoNothing;
         }
 
-        this->unk_32D = 9;
-        this->unk_32E = 0;
-        this->unk_32F = 0;
-        this->unk_330 = 0;
-        this->unk_2E4 = this->unk_2E4;
+        this->handType = SK_HAND_TYPE_DEFAULT;
+        this->fadeInState = SK_FADE_IN_STATE_NONE;
+        this->fadeOutState = SK_FADE_OUT_STATE_NONE;
+        this->fadeOutTimer = 0;
+        this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
-        this->unk_334 = 99;
+        this->csAction = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_stk_Skel_013328, NULL, NULL, NULL, 0);
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     }
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -929,111 +1138,121 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80AA16F4(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 }
 
-void func_80AA1704(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_DoNothing(DmStk* this, GlobalContext* globalCtx) {
 }
 
-void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
-    Vec3f sp1C;
+/**
+ * Waits around until the player zooms the telescope in on Skull Kid,
+ * then starts the telescope cutscene.
+ */
+void DmStk_WaitForTelescope(DmStk* this, GlobalContext* globalCtx) {
+    Vec3f screenPos;
 
     if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
-        func_80169474(globalCtx, &this->actor.world.pos, &sp1C);
+        func_80169474(globalCtx, &this->actor.world.pos, &screenPos);
         if (globalCtx->view.fovy < 25.0f) {
-            if ((sp1C.x >= 70.0f) && (sp1C.x < 250.0f) && (sp1C.y >= 30.0f) && (sp1C.y < 210.0f)) {
+            if ((screenPos.x >= 70.0f) && (screenPos.x < 250.0f) && (screenPos.y >= 30.0f) && (screenPos.y < 210.0f)) {
                 func_800FE484();
-                this->actionFunc = func_80AA17F8;
+                this->actionFunc = DmStk_StartTelescopeCutscene;
             }
         }
     }
 }
 
-void func_80AA17F8(DmStk* this, GlobalContext* globalCtx) {
-    s16 sp1E = this->actor.cutscene;
-    s16 sp1C = ActorCutscene_GetAdditionalCutscene(sp1E);
-    s16 sp18 = ActorCutscene_GetAdditionalCutscene(sp1C);
+/**
+ * Plays the cutscene in the telescope where the Moon's Tear falls.
+ */
+void DmStk_StartTelescopeCutscene(DmStk* this, GlobalContext* globalCtx) {
+    s16 dayOneAndTwoCutscene = this->actor.cutscene;
+    s16 dayThreeCutscene = ActorCutscene_GetAdditionalCutscene(dayOneAndTwoCutscene);
+    s16 finalHoursCutscene = ActorCutscene_GetAdditionalCutscene(dayThreeCutscene);
     s16 cutscene;
 
     if (gSaveContext.save.day < 3) {
-        cutscene = sp1E;
+        cutscene = dayOneAndTwoCutscene;
     } else if ((gSaveContext.save.weekEventReg[8] & 0x40) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
-        cutscene = sp18;
+        cutscene = finalHoursCutscene;
     } else {
-        cutscene = sp1C;
+        cutscene = dayThreeCutscene;
     }
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
         ActorCutscene_Start(cutscene, &this->actor);
         func_800FE498();
-        this->actionFunc = func_80AA1704;
+        this->actionFunc = DmStk_DoNothing;
     } else {
         ActorCutscene_SetIntentToPlay(cutscene);
     }
 }
 
-void func_80AA18D8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(9)) {
         ActorCutscene_Start(9, &this->actor);
-        this->actionFunc = func_80AA192C;
+        this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(9);
     }
 }
 
-void func_80AA192C(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->unk_2E0 = 33;
-        this->unk_32D = 3;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
-        this->actionFunc = func_80AA2720;
+        this->animationId = SK_ANIMATION_CALL_DOWN_MOON_LOOP;
+        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        this->actionFunc = DmStk_ClockTower_IdleWithOcarina;
     }
 }
 
-void func_80AA1998(DmStk* this, GlobalContext* globalCtx) {
-    if (ActorCutscene_GetCanPlayNext(0xB)) {
-        ActorCutscene_Start(0xB, &this->actor);
-        this->actionFunc = func_80AA19EC;
+void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(11)) {
+        ActorCutscene_Start(11, &this->actor);
+        this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(0xB);
+        ActorCutscene_SetIntentToPlay(11);
     }
 }
 
-void func_80AA19EC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        this->unk_2E0 = 38;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
-        this->actionFunc = func_80AA27EC;
+        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
 
-void func_80AA1A50(DmStk* this, GlobalContext* globalCtx) {
-    if (ActorCutscene_GetCanPlayNext(0xA)) {
+void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(10)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
-        ActorCutscene_Start(0xA, &this->actor);
+        ActorCutscene_Start(10, &this->actor);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.shape.rot.y = this->actor.shape.rot.x;
         this->actor.world.rot.y = this->actor.shape.rot.x;
-        this->actionFunc = func_80AA1AC8;
+        this->actionFunc = DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(0xA);
+        ActorCutscene_SetIntentToPlay(10);
     }
 }
 
-void func_80AA1AC8(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != 0) && (globalCtx->csCtx.frames > 20)) {
-        this->actionFunc = func_80AA27EC;
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
 
-void func_80AA1AF8(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Makes Skull Kid bob up and down and face the player.
+ */
+void DmStk_ClockTower_AdjustHeightAndRotation(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sin;
 
-    this->unk_32A += 0x4B0;
-    sin = Math_SinS(this->unk_32A) * 10.0f;
+    this->bobPhase += 0x4B0;
+    sin = Math_SinS(this->bobPhase) * 10.0f;
     Math_SmoothStepToF(&this->actor.world.pos.y, 160.0f + sin, 0.2f, 1.0f, 0.0001f);
 
     this->actor.world.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
@@ -1043,148 +1262,161 @@ void func_80AA1AF8(DmStk* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.x = this->actor.world.rot.x;
 }
 
-void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Starts the deflection animation and, depending on how many times Skull Kid has been hit,
+ * prints a message taunting the player.
+ */
+void DmStk_ClockTower_DeflectHit(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_80AA1AF8(this, globalCtx);
-    this->unk_339++;
-    if (this->unk_339 >= 3) {
-        this->unk_339 = 0;
+    DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
+    this->deflectCount++;
+    if (this->deflectCount >= 3) {
+        this->deflectCount = 0;
         if (!(player->stateFlags2 & 0x8000000)) {
+            // That won't do you any good
             Message_StartTextbox(globalCtx, 0x2013, &this->actor);
         }
     }
 
-    this->unk_2E0 = 39;
-    func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+    this->animationId = SK_ANIMATION_DEFLECT_ATTACK;
+    DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
-    this->actionFunc = func_80AA1C64;
+    this->actionFunc = DmStk_ClockTower_WaitForDeflectionToEnd;
 }
 
-void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
-    func_80AA1AF8(this, globalCtx);
+/**
+ * Resets Skull Kid back to his idle state once the deflection animation ends.
+ * If he is hit again before the animation ends, this function will make his deflection restart.
+ */
+void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, GlobalContext* globalCtx) {
+    DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->unk_2E0 = 38;
-        func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
-        this->actionFunc = func_80AA27EC;
+        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
+        DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
+        this->actionFunc = DmStk_ClockTower_Idle;
     }
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        this->actionFunc = func_80AA1B9C;
+        this->actionFunc = DmStk_ClockTower_DeflectHit;
     }
 }
 
-void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Updates a variety of states based on Skull Kid's current cutscene, including his current
+ * animation, his hand/mask type, his fade in/fade out state, and his current cutscene action.
+ */
+void DmStk_UpdateCutscenes(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp_v0;
+    s32 actorActionIndex;
 
     if (Cutscene_CheckActorAction(globalCtx, 107)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 107);
+        actorActionIndex = Cutscene_GetActorActionIndex(globalCtx, 107);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
-            if (this->unk_334 != globalCtx->csCtx.actorActions[temp_v0]->action) {
-                this->unk_334 = globalCtx->csCtx.actorActions[temp_v0]->action;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actorActionIndex]->startFrame) {
+            if (this->csAction != globalCtx->csCtx.actorActions[actorActionIndex]->action) {
+                this->csAction = globalCtx->csCtx.actorActions[actorActionIndex]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
-                    this->unk_32D = 6;
+                    this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
                 } else {
-                    this->unk_32D = 9;
+                    this->handType = SK_HAND_TYPE_DEFAULT;
                 }
 
-                switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
+                switch (globalCtx->csCtx.actorActions[actorActionIndex]->action) {
                     case 0:
                     case 1:
-                        this->unk_2E0 = 3;
+                        this->animationId = SK_ANIMATION_IDLE;
                         break;
 
                     case 2:
-                        this->unk_2E0 = 1;
+                        this->animationId = SK_ANIMATION_WALK;
                         break;
 
                     case 3:
-                        this->unk_2E0 = 20;
+                        this->animationId = SK_ANIMATION_UNUSED_KICK_OVER_LINK;
                         break;
 
                     case 4:
-                        this->unk_2E0 = 18;
+                        this->animationId = SK_ANIMATION_KICK_OVER_LINK;
                         break;
 
                     case 6:
-                        this->unk_2E0 = 16;
-                        this->unk_32D = 3;
+                        this->animationId = SK_ANIMATION_PICK_UP_OCARINA;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 7:
-                        this->unk_2E0 = 14;
-                        this->unk_32D = 3;
+                        this->animationId = SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 8:
-                        this->unk_2E0 = 0;
+                        this->animationId = SK_ANIMATION_SHAKE_HEAD;
                         break;
 
                     case 9:
-                        this->unk_2E0 = 3;
-                        this->unk_32E = 1;
+                        this->animationId = SK_ANIMATION_IDLE;
+                        this->fadeInState = SK_FADE_IN_STATE_START;
                         break;
 
                     case 12:
-                        this->unk_2E0 = 12;
-                        this->unk_32D = 3;
+                        this->animationId = SK_ANIMATION_HIDE_OCARINA_START;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 13:
-                        this->unk_2E0 = 27;
-                        this->unk_32D = 3;
+                        this->animationId = SK_ANIMATION_JUMP_WHILE_HIDING_OCARINA;
+                        this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         break;
 
                     case 14:
-                        this->unk_2E0 = 22;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_START;
                         break;
 
                     case 15:
-                        this->unk_2E0 = 23;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_LOOP;
                         break;
 
                     case 16:
-                        this->unk_2E0 = 28;
+                        this->animationId = SK_ANIMATION_HORSE_RIDE_AND_ROTATE;
                         break;
 
                     case 17:
-                        this->unk_2E0 = 7;
+                        this->animationId = SK_ANIMATION_RECLINING_FLOAT;
                         break;
 
                     case 18:
-                        this->unk_2E0 = 8;
+                        this->animationId = SK_ANIMATION_CURSE_START;
                         break;
 
                     case 19:
-                        this->unk_2E0 = 10;
+                        this->animationId = SK_ANIMATION_LAUGH_START;
                         break;
 
                     case 20:
-                        this->unk_2E0 = 24;
+                        this->animationId = SK_ANIMATION_RAISE_MASK_START;
                         break;
 
                     case 21:
-                        this->unk_2E0 = 26;
+                        this->animationId = SK_ANIMATION_LOWER_MASK;
                         break;
 
                     case 22:
-                        this->unk_2E0 = 29;
+                        this->animationId = SK_ANIMATION_PLAY_OCARINA_WHILE_FLOATING;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 23:
-                        this->unk_2E0 = 30;
-                        this->unk_32D = 4;
+                        this->animationId = SK_ANIMATION_FLOATING_TURN_AROUND;
+                        this->handType = SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 24:
-                        this->unk_2E0 = 32;
+                        this->animationId = SK_ANIMATION_CALL_DOWN_MOON_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
@@ -1193,148 +1425,148 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 26:
-                        this->unk_2E0 = 34;
+                        this->animationId = SK_ANIMATION_SMACK_FAIRY_START;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 27:
-                        this->unk_2E0 = 36;
+                        this->animationId = SK_ANIMATION_HIT_BY_BUBBLE;
                         if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
-                            this->unk_32D = 3;
+                            this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
                         }
                         break;
 
                     case 28:
-                        this->unk_2E0 = 37;
-                        this->unk_32D = 4;
+                        this->animationId = SK_ANIMATION_DROP_OCARINA;
+                        this->handType = SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA;
                         break;
 
                     case 30:
-                        this->unk_2E0 = 38;
+                        this->animationId = SK_ANIMATION_FLOATING_ARMS_CROSSED;
                         break;
 
                     case 31:
-                        this->unk_2E0 = 39;
+                        this->animationId = SK_ANIMATION_DEFLECT_ATTACK;
                         break;
 
                     case 32:
-                        this->unk_2E0 = 42;
+                        this->animationId = SK_ANIMATION_SURPRISE_START;
                         break;
 
                     case 33:
-                        this->unk_2E0 = 44;
+                        this->animationId = SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START;
                         break;
 
                     case 34:
-                        this->unk_2E0 = 46;
+                        this->animationId = SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START;
                         break;
 
                     case 35:
-                        this->unk_2E0 = 48;
+                        this->animationId = SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START;
                         break;
 
                     case 36:
-                        this->unk_2E0 = 50;
+                        this->animationId = SK_ANIMATION_HUDDLE_WITH_FAIRIES;
                         break;
 
                     case 37:
-                        this->unk_2E0 = 51;
+                        this->animationId = SK_ANIMATION_SEARCH_MASK_SALESMAN;
                         break;
 
                     case 38:
-                        this->unk_2E0 = 52;
+                        this->animationId = SK_ANIMATION_HOLD_UP_MASK_START;
                         break;
 
                     case 39:
-                        this->unk_2E0 = 54;
+                        this->animationId = SK_ANIMATION_SHIVER;
                         break;
 
                     case 40:
-                        this->unk_2E0 = 55;
+                        this->animationId = SK_ANIMATION_DRAW;
                         break;
 
                     case 41:
-                        this->unk_2E0 = 40;
+                        this->animationId = SK_ANIMATION_TELESCOPE_LOOK_UP_START;
                         break;
 
                     case 42:
-                        this->unk_2E0 = 5;
+                        this->animationId = SK_ANIMATION_BENT_OVER_HEAD_TWITCH;
                         break;
 
                     case 43:
-                        this->unk_2E0 = 56;
+                        this->animationId = SK_ANIMATION_BENT_OVER_LOOK_UP;
                         break;
 
                     case 44:
-                        this->unk_2E0 = 57;
+                        this->animationId = SK_ANIMATION_SPANK;
                         break;
 
                     case 45:
-                        this->unk_2E0 = 58;
-                        this->unk_32F = 1;
+                        this->animationId = SK_ANIMATION_HIP_SHAKE_AND_JUMP;
+                        this->fadeOutState = SK_FADE_OUT_STATE_FADING_OUT;
                         break;
 
                     case 46:
-                        this->unk_32D = 6;
-                        this->unk_2E0 = 59;
+                        this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
+                        this->animationId = SK_ANIMATION_PLAY_FLUTE;
                         break;
 
                     case 47:
-                        this->unk_2E0 = 60;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 48:
-                        this->unk_2E0 = 60;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 49:
-                        this->unk_2E0 = 65;
+                        this->animationId = SK_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 50:
-                        this->unk_2E0 = 66;
+                        this->animationId = SK_ANIMATION_ASHAMED_START;
                         break;
 
                     case 51:
-                        this->unk_2E0 = 68;
+                        this->animationId = SK_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 52:
-                        this->unk_2E0 = 70;
+                        this->animationId = SK_ANIMATION_SNIFF;
                         break;
 
                     case 53:
-                        this->unk_2E0 = 60;
+                        this->animationId = SK_ANIMATION_CARTWHEEL;
                         break;
 
                     case 54:
-                        this->unk_2E0 = 61;
+                        this->animationId = SK_ANIMATION_LIE_FLAT;
                         break;
 
                     case 55:
-                        this->unk_2E0 = 62;
+                        this->animationId = SK_ANIMATION_DANGLE_FROM_MASK_START;
                         break;
 
                     case 56:
-                        this->unk_2E0 = 64;
+                        this->animationId = SK_ANIMATION_DROPPED_FROM_MASK;
                         break;
 
                     case 57:
-                        this->unk_2E0 = 65;
+                        this->animationId = SK_ANIMATION_LOOK_UP_AT_GIANTS;
                         break;
 
                     case 58:
-                        this->unk_2E0 = 66;
+                        this->animationId = SK_ANIMATION_ASHAMED_START;
                         break;
 
                     case 59:
-                        this->unk_2E0 = 68;
+                        this->animationId = SK_ANIMATION_LOOK_LEFT_START;
                         break;
 
                     case 60:
-                        this->unk_2E0 = 70;
+                        this->animationId = SK_ANIMATION_SNIFF;
                         break;
 
                     case 5:
@@ -1342,129 +1574,131 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
                         break;
 
                     default:
-                        this->unk_2E0 = 0;
+                        this->animationId = SK_ANIMATION_SHAKE_HEAD;
                         break;
                 }
 
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actorActionIndex);
     } else {
-        this->unk_334 = 99;
+        this->csAction = 99;
     }
 
-    if (this->unk_32E == 1) {
-        Math_SmoothStepToF(&this->unk_300, 0.7f, 0.1f, 0.007f, 0.005f);
-        if (this->unk_300 < 0.71f) {
-            this->unk_300 = 0.7f;
-            this->unk_2F8 = 800;
-            this->unk_32E++;
-        }
-        this->unk_2E8 = globalCtx->lightCtx.unk7 * this->unk_300;
-        this->unk_2EC = globalCtx->lightCtx.unk8 * this->unk_300;
-        this->unk_2F0 = globalCtx->lightCtx.unk9 * this->unk_300;
-
-    } else if (this->unk_32E == 2) {
-        if (this->unk_2F8 < 996) {
-            this->unk_2F8 += 10;
+    if (this->fadeInState == SK_FADE_IN_STATE_START) {
+        Math_SmoothStepToF(&this->fogScale, 0.7f, 0.1f, 0.007f, 0.005f);
+        if (this->fogScale < 0.71f) {
+            this->fogScale = 0.7f;
+            this->fogN = 800;
+            this->fadeInState++;
         }
 
-        if (this->unk_2F8 > 996) {
-            this->unk_32E++;
-            this->unk_2F8 = 996;
-        }
-    } else if (this->unk_32E == 3) {
-        if (this->unk_2E4 < 128) {
-            this->unk_2E4 += 3;
+        this->fogR = globalCtx->lightCtx.unk7 * this->fogScale;
+        this->fogG = globalCtx->lightCtx.unk8 * this->fogScale;
+        this->fogB = globalCtx->lightCtx.unk9 * this->fogScale;
+    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
+        if (this->fogN < 996) {
+            this->fogN += 10;
         }
 
-        if (this->unk_2E4 < 255) {
-            this->unk_2E4 += 20;
+        if (this->fogN > 996) {
+            this->fadeInState++;
+            this->fogN = 996;
+        }
+    } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_ALPHA) {
+        if (this->alpha < 128) {
+            this->alpha += 3;
+        }
+
+        if (this->alpha < 255) {
+            this->alpha += 20;
         } else {
-            this->unk_2E4 = 255;
-            this->unk_32E = 0;
+            this->alpha = 255;
+            this->fadeInState = SK_FADE_IN_STATE_NONE;
         }
     }
 
-    if (this->unk_32F == 1) {
-        if (this->unk_330 > 40) {
-            this->unk_32C = 3;
+    if (this->fadeOutState == SK_FADE_OUT_STATE_FADING_OUT) {
+        if (this->fadeOutTimer > 40) {
+            this->maskType = SK_MASK_TYPE_FADING_OUT;
         }
 
-        this->unk_330++;
-        if (this->unk_330 >= 44) {
-            this->unk_2E4 -= 35;
-            if (this->unk_2E4 < 0) {
-                this->unk_2E4 = 0;
-                this->unk_32F = 0;
+        this->fadeOutTimer++;
+        if (this->fadeOutTimer >= 44) {
+            this->alpha -= 35;
+            if (this->alpha < 0) {
+                this->alpha = 0;
+                this->fadeOutState = SK_FADE_OUT_STATE_NONE;
                 gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
-                    this->unk_33B = 0;
+                    this->shouldDraw = false;
                 }
             }
         }
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        switch (this->unk_2E0) {
-            case 2:
-            case 8:
-            case 10:
-            case 12:
-            case 14:
-            case 16:
-            case 18:
-            case 20:
-            case 22:
-            case 24:
-            case 30:
-            case 32:
-            case 34:
-            case 40:
-            case 42:
-            case 44:
-            case 46:
-            case 48:
-            case 52:
-            case 62:
-            case 66:
-            case 68:
-            case 70:
-                this->unk_2E0++;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+        switch (this->animationId) {
+            case SK_ANIMATION_LOOK_AROUND:
+            case SK_ANIMATION_CURSE_START:
+            case SK_ANIMATION_LAUGH_START:
+            case SK_ANIMATION_HIDE_OCARINA_START:
+            case SK_ANIMATION_PICK_UP_OCARINA_AND_START_PLAYING:
+            case SK_ANIMATION_PICK_UP_OCARINA:
+            case SK_ANIMATION_KICK_OVER_LINK:
+            case SK_ANIMATION_UNUSED_KICK_OVER_LINK:
+            case SK_ANIMATION_HORSE_RIDE_START:
+            case SK_ANIMATION_RAISE_MASK_START:
+            case SK_ANIMATION_FLOATING_TURN_AROUND:
+            case SK_ANIMATION_CALL_DOWN_MOON_START:
+            case SK_ANIMATION_SMACK_FAIRY_START:
+            case SK_ANIMATION_TELESCOPE_LOOK_UP_START:
+            case SK_ANIMATION_SURPRISE_START:
+            case SK_ANIMATION_LOOK_AROUND_FOR_GIANTS_START:
+            case SK_ANIMATION_HOLD_HEAD_AND_SHAKE_START:
+            case SK_ANIMATION_HOLD_HEAD_AND_SCREAM_START:
+            case SK_ANIMATION_HOLD_UP_MASK_START:
+            case SK_ANIMATION_DANGLE_FROM_MASK_START:
+            case SK_ANIMATION_ASHAMED_START:
+            case SK_ANIMATION_LOOK_LEFT_START:
+            case SK_ANIMATION_SNIFF:
+                this->animationId++;
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
 
-            case 26:
-                this->unk_2E0 = 3;
-                this->unk_32C = 1;
-                this->unk_32D = 9;
-                func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
+            case SK_ANIMATION_LOWER_MASK:
+                this->animationId = SK_ANIMATION_IDLE;
+                this->maskType = SK_MASK_TYPE_NORMAL;
+                this->handType = SK_HAND_TYPE_DEFAULT;
+                DmStk_ChangeAnimation(this, globalCtx, &this->skelAnime, &sAnimations[this->animationId], 0);
                 break;
         }
     }
 
-    if (((this->unk_2E0 == 24) && (this->skelAnime.curFrame >= 16.0f)) || (this->unk_2E0 == 25) ||
-        (this->unk_2E0 == 26)) {
-        this->unk_32C = 9;
-        this->unk_32D = 2;
-    } else if (((this->unk_2E0 >= 50) && (this->unk_2E0 < 56)) || ((this->unk_2E0 > 58) && (this->unk_2E0 <= 60)) ||
+    if (((this->animationId == SK_ANIMATION_RAISE_MASK_START) && (this->skelAnime.curFrame >= 16.0f)) ||
+        (this->animationId == SK_ANIMATION_RAISE_MASK_LOOP) || (this->animationId == SK_ANIMATION_LOWER_MASK)) {
+        this->maskType = SK_MASK_TYPE_RAISED;
+        this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK;
+    } else if (((this->animationId >= SK_ANIMATION_HUDDLE_WITH_FAIRIES) && (this->animationId <= SK_ANIMATION_DRAW)) ||
+               ((this->animationId >= SK_ANIMATION_PLAY_FLUTE) && (this->animationId <= SK_ANIMATION_CARTWHEEL)) ||
                ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
-        this->unk_32C = 0;
-        if ((this->unk_2E0 == 52) || (this->unk_2E0 == 53)) {
-            this->unk_32D = 5;
+        this->maskType = SK_MASK_TYPE_NO_MASK;
+        if ((this->animationId == SK_ANIMATION_HOLD_UP_MASK_START) ||
+            (this->animationId == SK_ANIMATION_HOLD_UP_MASK_LOOP)) {
+            this->handType = SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE;
         }
     }
 
-    if (this->unk_2E0 == 64) {
-        this->unk_32C = 0;
+    if (this->animationId == SK_ANIMATION_DROPPED_FROM_MASK) {
+        this->maskType = SK_MASK_TYPE_NO_MASK;
     }
 }
 
-void func_80AA26CC(DmStk* this, GlobalContext* globalCtx) {
+void DmStk_UpdateCollision(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1472,108 +1706,122 @@ void func_80AA26CC(DmStk* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles Skull Kid when he is at the top of the Clock Tower with the Ocarina of Time.
+ * If he is hit in this state, he will drop the Ocarina.
+ *
+ * If the player waits a while while Skull Kid is in this state, they will see a message
+ * from Tatl telling them to hurry up and do something.
+ */
+void DmStk_ClockTower_IdleWithOcarina(DmStk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->csCtx.state == 0) {
-        func_80AA1AF8(this, globalCtx);
+        DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
-        this->unk_328++;
-        if (this->unk_328 > 800) {
-            this->unk_328 = 0;
+        this->tatlMessageTimer++;
+        if (this->tatlMessageTimer > 800) {
+            this->tatlMessageTimer = 0;
             if (!(player->stateFlags2 & 0x8000000)) {
+                // Why are you just standing around?
                 Message_StartTextbox(globalCtx, 0x2014, &this->actor);
             }
         }
+
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-            this->unk_335 = 1;
-            this->actionFunc = func_80AA1A50;
+            this->hasBeenHit = true;
+            this->actionFunc = DmStk_ClockTower_StartDropOcarinaCutscene;
         }
     }
 }
 
-void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
+/**
+ * Handles Skull Kid when he is at the top of the Clock Tower after the Ocarina of Time
+ * has been returned to the player.
+ * If he is hit in this state, he will just deflect the attack.
+ */
+void DmStk_ClockTower_Idle(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
-        func_80AA1AF8(this, globalCtx);
+        DmStk_ClockTower_AdjustHeightAndRotation(this, globalCtx);
         this->actor.flags |= ACTOR_FLAG_1;
 
-        if (this->unk_2E0 == 33) {
+        if (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;
         } else {
             this->actor.targetArrowOffset = 200.0f;
         }
 
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-            this->unk_335 = 1;
-            this->actionFunc = func_80AA1B9C;
+            this->hasBeenHit = true;
+            this->actionFunc = DmStk_ClockTower_DeflectHit;
         }
     }
 }
 
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
-    u16 time;
 
-    if (this->actor.params != 1) {
-        if (this->unk_2E0 == 33) {
+    if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
+        if (this->animationId == SK_ANIMATION_CALL_DOWN_MOON_LOOP) {
             Actor_SetFocus(&this->actor, 40.0f);
         } else {
             Actor_SetFocus(&this->actor, 6.0f);
         }
 
-        func_80A9FDB0(this, globalCtx);
+        DmStk_LoadObjectForAnimation(this, globalCtx);
 
-        if (this->unk_2E0 != 61) {
+        if (this->animationId != SK_ANIMATION_LIE_FLAT) {
             SkelAnime_Update(&this->skelAnime);
         }
 
-        this->unk_2E4 = this->unk_2E4;
+        this->alpha = this->alpha;
 
         this->actionFunc(this, globalCtx);
 
         if (globalCtx->sceneNum == SCENE_OKUJOU) {
-            func_80AA26CC(this, globalCtx);
+            DmStk_UpdateCollision(this, globalCtx);
         }
 
-        func_80AA1D1C(this, globalCtx);
-        func_80AA0E90(this, globalCtx);
+        DmStk_UpdateCutscenes(this, globalCtx);
+        DmStk_PlaySfxForCutscenes(this, globalCtx);
 
-        switch (this->unk_33A) {
-            case 1:
+        // This handles the cutscene where the player takes out the Deku Pipes for the first time.
+        switch (this->dekuPipesCutsceneState) {
+            case SK_DEKU_PIPES_CS_STATE_READY:
                 if (func_800B8718(&this->actor, &globalCtx->state)) {
-                    this->unk_33A = 2;
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA;
                 } else {
                     func_800B874C(&this->actor, globalCtx, this->actor.xzDistToPlayer,
                                   fabsf(this->actor.playerHeightRel));
                 }
                 break;
 
-            case 2:
-                if (ActorCutscene_GetCanPlayNext(0x10)) {
-                    this->unk_33A = 3;
-                    ActorCutscene_Start(0x10, &this->actor);
-                    this->actionFunc = func_80AA27EC;
+            case SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA:
+                if (ActorCutscene_GetCanPlayNext(16)) {
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_START;
+                    ActorCutscene_Start(16, &this->actor);
+                    this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
-                    ActorCutscene_SetIntentToPlay(0x10);
+                    ActorCutscene_SetIntentToPlay(16);
                 }
                 break;
 
-            case 3:
+            case SK_DEKU_PIPES_CS_STATE_START:
                 if (globalCtx->csCtx.state == 0) {
-                    this->unk_33A = 4;
+                    this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_END;
                 }
                 break;
         }
 
+        // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
+        // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
         if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
             (globalCtx->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (globalCtx->csCtx.state == 0)) {
-            time = gSaveContext.save.time;
-            gSaveContext.save.time = (u16)REG(15) + time;
+            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
             if (REG(15) != 0) {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
             }
         }
     }
@@ -1588,27 +1836,28 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 DmStk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     DmStk* this = THIS;
 
-    if (limbIndex == 15) {
-        if ((this->unk_32D == 0) || (this->unk_32D == 1) || (this->unk_32D == 3)) {
+    if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
+        if ((this->handType == SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE) ||
+            (this->handType == SK_HAND_TYPE_HOLDING_LINK_MASK) || (this->handType == SK_HAND_TYPE_HOLDING_OCARINA)) {
             *dList = NULL;
         }
-    } else if (limbIndex == 12) {
-        switch (this->unk_32D) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 6:
+    } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
+        switch (this->handType) {
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK:
+            case SK_HAND_TYPE_HOLDING_OCARINA:
+            case SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
+            case SK_HAND_TYPE_HOLDING_FLUTE:
                 *dList = NULL;
                 break;
 
-            case 9:
-                if (this->unk_2E4 == 255) {
+            case SK_HAND_TYPE_DEFAULT:
+                if (this->alpha == 255) {
                     *dList = NULL;
                 }
                 break;
         }
-    } else if (limbIndex == 17) {
+    } else if (limbIndex == SKULL_KID_LIMB_HEAD) {
         *dList = NULL;
     }
 
@@ -1620,145 +1869,147 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     s32 pad2;
     DmStk* this = THIS;
 
-    if (limbIndex == 17) {
-        Matrix_GetStateTranslation(&this->unk_304);
+    if (limbIndex == SKULL_KID_LIMB_HEAD) {
+        Matrix_MultZero(&this->headPos);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if ((this->unk_2E0 == 69) || (this->unk_2E0 == 11) || (this->unk_2E0 == 71)) {
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AEC0);
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AE30);
+        if ((this->animationId == SK_ANIMATION_LOOK_LEFT_LOOP) || (this->animationId == SK_ANIMATION_LAUGH_LOOP) ||
+            (this->animationId == SK_ANIMATION_LAUGH_AFTER_SNIFF)) {
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidLaughingHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidLaughingEyesDL);
         } else {
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A5C0);
-            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A530);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidNormalHeadDL);
+            gSPDisplayList(POLY_OPA_DISP++, gSkullKidNormalEyesDL);
         }
 
-        switch (this->unk_32C) {
-            case 0:
+        switch (this->maskType) {
+            case SK_MASK_TYPE_NO_MASK:
                 break;
 
-            case 1:
+            case SK_MASK_TYPE_NORMAL:
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1) &&
                     (globalCtx->csCtx.frames < 1400)) {
-                    if (this->unk_2F8 == this->unk_2FC) {
-                        this->unk_2FC = this->unk_2F8;
+                    if (this->fogN == this->fogF) {
+                        this->fogF = this->fogN;
                     }
-                    POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_2E8, this->unk_2EC, this->unk_2F0,
-                                               this->unk_2F4, this->unk_2F8, this->unk_2FC);
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                    POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->fogR, this->fogG, this->fogB, this->fogA,
+                                               this->fogN, this->fogF);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
                 } else {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 }
                 break;
 
-            case 2:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_005870);
+            case SK_MASK_TYPE_GLOWING_EYES:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMaskEyesDL);
 
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
-                    (this->unk_337 >= 0)) {
-                    Matrix_StatePush();
+                    (this->objectStk2ObjectIndex >= 0)) {
+                    Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
+                    gSegments[6] =
+                        PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_337].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
-                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_stk2_Matanimheader_008658));
-                    Gfx_DrawDListOpa(globalCtx, object_stk2_DL_007840);
-                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
+                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexAnim));
+                    Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMaskCurseOverlayDL);
+                    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
                 break;
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    } else if (limbIndex == 15) {
+    } else if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (this->unk_32D != 5) {
+        if (this->handType != SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         }
 
-        switch (this->unk_32D) {
-            case 0:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009AC0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0046B0);
+        switch (this->handType) {
+            case SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedRightHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
-            case 1:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009710);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0053C0);
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMaskHoldingRightHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
-            case 3:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009DA0);
+            case SK_HAND_TYPE_HOLDING_OCARINA:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHand);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
                 break;
 
-            case 5:
-                Matrix_InsertTranslation(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
-                Matrix_RotateY(0x6142, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-0x1988, MTXMODE_APPLY);
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE:
+                Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
+                Matrix_RotateYS(0x6142, MTXMODE_APPLY);
+                Matrix_RotateXS(-0x1988, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 break;
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    } else if (limbIndex == 12) {
+    } else if (limbIndex == SKULL_KID_LIMB_LEFT_HAND) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        switch (this->unk_32D) {
-            case 0:
+        switch (this->handType) {
+            case SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
                 break;
 
-            case 1:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0084C0);
+            case SK_HAND_TYPE_HOLDING_LINK_MASK:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedLeftHand);
                 break;
 
-            case 2:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0079F0);
+            case SK_HAND_TYPE_HOLDING_MAJORAS_MASK:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
-            case 3:
+            case SK_HAND_TYPE_HOLDING_OCARINA:
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
-            case 4:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+            case SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
                 break;
 
-            case 6:
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_008A80);
-                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_016620);
+            case SK_HAND_TYPE_HOLDING_FLUTE:
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteHoldingLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
-            case 9:
-                if (this->unk_2E4 == 255) {
-                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0087B0);
+            case SK_HAND_TYPE_DEFAULT:
+                if (this->alpha == 255) {
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHand);
                 }
                 break;
         }
@@ -1776,25 +2027,25 @@ void DmStk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmStk* this = THIS;
 
-    if (this->unk_33B != 0) {
-        if (this->actor.params == 1) {
-            Gfx_DrawDListOpa(globalCtx, object_stk_DL_006BB0);
+    if (this->shouldDraw) {
+        if (DM_STK_GET_TYPE(&this->actor) == DM_STK_TYPE_MAJORAS_MASK) {
+            Gfx_DrawDListOpa(globalCtx, gSkullKidMajorasMask1DL);
             return;
         }
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objectStkObjectIndex].segment);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        this->unk_2E4 = this->unk_2E4;
+        this->alpha = this->alpha;
         func_8012C28C(globalCtx->state.gfxCtx);
 
-        if (this->unk_2E4 < 255) {
+        if (this->alpha < 255) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_2E4);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
 
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,

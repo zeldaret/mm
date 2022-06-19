@@ -1550,11 +1550,11 @@ void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
     if (D_809942FC[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_809942FC[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_809942FC[limbIndex]]);
     }
 
     if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
-        Matrix_GetStateTranslationAndScaledX(1200.0f, &sp20);
+        Matrix_MultVecX(1200.0f, &sp20);
         this->collider3.dim.pos.x = sp20.x;
         this->collider3.dim.pos.y = sp20.y;
         this->collider3.dim.pos.z = sp20.z;

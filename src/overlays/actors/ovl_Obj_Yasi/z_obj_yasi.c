@@ -42,11 +42,11 @@ void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_obj_yasi_Colheader_001428);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gPalmTreeCol);
 
     this->dyna.actor.home.rot.y = 0;
 
-    if (OBJYASI_IS_WIDE(thisx)) {
+    if (PALM_TREE_IS_WIDE(thisx)) {
         this->dyna.actor.scale.x = 0.2f;
         this->dyna.actor.scale.z = 0.2f;
     }
@@ -85,17 +85,17 @@ void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjYasi* this = THIS;
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
 
     if (this->dyna.actor.shape.rot.x != 0) {
-        Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y), MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y), MTXMODE_APPLY);
     } else {
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     }
 
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, object_obj_yasi_DL_000360);
+    Gfx_DrawDListOpa(globalCtx, gPalmTreeDL);
 }

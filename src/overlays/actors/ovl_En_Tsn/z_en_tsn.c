@@ -299,7 +299,7 @@ void func_80AE0460(EnTsn* this, GlobalContext* globalCtx) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_95, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_SEAHORSE, 2000.0f, 1000.0f);
     }
 }
 
@@ -614,7 +614,7 @@ void EnTsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp18 = D_80AE11BC;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
 

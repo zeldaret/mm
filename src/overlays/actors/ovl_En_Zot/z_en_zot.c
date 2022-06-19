@@ -87,7 +87,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
-    Animation_PlayLoop(&this->skelAnime, &object_zo_Anim_00DE20);
+    Animation_PlayLoop(&this->skelAnime, &gZoraStandAnim);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -235,9 +235,9 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &object_zo_Anim_00DE20, &gZoraWalkAnim,         &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
-        &object_zo_Anim_00FDF0, &object_zo_Anim_010B18, &object_zo_Anim_011424, &object_zo_Anim_00EDF0,
-        &object_zo_Anim_00DF54, &object_zo_Anim_00DF54,
+        &gZoraStandAnim,           &gZoraWalkAnim,           &gZoraSitAnim,           &gZoraRunAnim,
+        &gZoraFixSpeakerStartAnim, &gZoraFixSpeakerLoopAnim, &gZoraFixSpeakerEndAnim, &gZoraBobHandAnim,
+        &gZoraListenAnim,          &gZoraListenAnim,
     };
 
     if ((arg1 >= 0) && (arg1 < 10)) {
@@ -1356,15 +1356,15 @@ s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 pad;
 
     if (limbIndex == 15) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2C4.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2C4.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2C4.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2C4.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(this->unk_2CA.y * -1, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2CA.x * -1, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2CA.y * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2CA.x * -1, MTXMODE_APPLY);
     }
 
     if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&
@@ -1380,7 +1380,7 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnZot* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80B99934, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B99934, &this->actor.focus.pos);
     }
 }
 

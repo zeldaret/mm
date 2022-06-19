@@ -187,16 +187,16 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronDropKegAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiveringSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
     { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -249,11 +249,11 @@ void func_80A11144(EnGoStruct* ptr, GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_0031A0);
+                gSPDisplayList(POLY_XLU_DISP++, gGoronSteamMaterialDL);
                 flag = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = ((f32)ptr->unk_02 / ptr->unk_01);
             temp *= 255;
@@ -263,15 +263,15 @@ void func_80A11144(EnGoStruct* ptr, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_02 + (i * 3)) * 3,
                                         (ptr->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_003258);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronSteamModelDL);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             if (globalCtx->state.gfxCtx) {}
         }
     }
@@ -325,10 +325,10 @@ void func_80A115B4(EnGoStruct* ptr, GlobalContext* globalCtx) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
+                gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
                 flag = true;
             }
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = (f32)ptr->unk_02 / ptr->unk_01;
 
@@ -337,16 +337,16 @@ void func_80A115B4(EnGoStruct* ptr, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, D_80A16670[(s32)ptr->unk_00 - 4].r, D_80A16670[(s32)ptr->unk_00 - 4].g,
                            D_80A16670[(s32)ptr->unk_00 - 4].b, 0);
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
-            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
         if (globalCtx->state.gfxCtx) {}
     }
@@ -465,12 +465,12 @@ void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* ar
                 flag = true;
             }
 
-            Matrix_StatePush();
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Push();
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(ptr->unk_0A.z, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(ptr->unk_0A.x, MTXMODE_APPLY);
-            Matrix_RotateY(ptr->unk_0A.y, MTXMODE_APPLY);
+            Matrix_RotateZS(ptr->unk_0A.z, MTXMODE_APPLY);
+            Matrix_RotateXS(ptr->unk_0A.x, MTXMODE_APPLY);
+            Matrix_RotateYS(ptr->unk_0A.y, MTXMODE_APPLY);
 
             if (1) {
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -478,7 +478,7 @@ void func_80A11EC0(EnGoStruct* ptr, GlobalContext* globalCtx, Gfx* arg2, Gfx* ar
                 gSPDisplayList(POLY_OPA_DISP++, arg3);
             }
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
@@ -516,9 +516,12 @@ void func_80A1203C(EnGo* this) {
 }
 
 void func_80A1213C(EnGo* this, GlobalContext* globalCtx) {
-    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_0003D0, object_oF1d_map_DL_000458, 1);
-    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_0008C0, object_oF1d_map_DL_000948, 2);
-    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_000D50, object_oF1d_map_DL_000DD8, 3);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronLargeSnowballFragmentMaterialDL, gGoronLargeSnowballFragmentModelDL,
+                  1);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronMediumSnowballFragmentMaterialDL, gGoronMediumSnowballFragmentModelDL,
+                  2);
+    func_80A11EC0(this->unk_3F8, globalCtx, gGoronSmallSnowballFragmentMaterialDL, gGoronSmallSnowballFragmentModelDL,
+                  3);
     func_80A11144(this->unk_3F8, globalCtx);
     func_80A115B4(this->unk_3F8, globalCtx);
 }
@@ -1067,14 +1070,13 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
     u32 frames2;
 
     if (this->unk_390 & 0x400) {
-        Matrix_StatePush();
+        Matrix_Push();
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(arg2 * 0.7f, arg2 * 0.8f, arg2, MTXMODE_APPLY);
         func_800B8118(&this->actor, globalCtx, 0);
 
@@ -1088,7 +1090,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -1460,8 +1462,8 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
         SubS_IsObjectLoaded(this->unk_289, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
-                           this->morphTable, 18);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+                           GORON_LIMB_MAX);
 
         this->unk_3DC = -1;
         func_80A12C48(this, globalCtx, 2);
@@ -1951,12 +1953,12 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
-                             this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
+                     this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
 
     if (this->unk_390 & 0x100) {
         Matrix_Scale(this->actor.scale.x * 8.0f, this->actor.scale.y * 8.0f, this->actor.scale.z * 8.0f, MTXMODE_APPLY);
@@ -1964,10 +1966,10 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     }
 
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? object_oF1d_map_DL_001560 : object_oF1d_map_DL_0091A8);
+    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? gGoronSnowballDL : gGoronRolledUpDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1978,7 +1980,7 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     s32 idx;
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_8) && (limbIndex == 10)) {
-        Matrix_GetStateTranslation(&sp30);
+        Matrix_MultZero(&sp30);
         sp30.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }
@@ -2011,57 +2013,56 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGo* this = THIS;
     u16 temp_v0;
-    s32 phi_v1;
-    s32 phi_v0;
+    s32 stepRot;
+    s32 overrideRot;
 
     if (this->unk_390 & 0x40) {
-        phi_v1 = false;
+        stepRot = false;
     } else {
-        phi_v1 = true;
+        stepRot = true;
     }
 
     if (this->unk_390 & 0x10) {
-        phi_v0 = true;
+        overrideRot = true;
     } else {
-        phi_v0 = false;
+        overrideRot = false;
     }
 
-    if (!phi_v1) {
-        phi_v0 = false;
+    if (!stepRot) {
+        overrideRot = false;
     }
 
     switch (limbIndex) {
         case 17:
-            func_8013AD9C(this->unk_3B0 + this->unk_3B4 + 0x4000,
-                          this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
-                          &this->unk_2A8, phi_v1, phi_v0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
+            SubS_UpdateLimb(this->unk_3B0 + this->unk_3B4 + 0x4000,
+                            this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
+                            &this->unk_2A8, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_2A8.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_2A8.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_RotateYS(this->unk_2A8.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_2A8.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_2A8.z, MTXMODE_APPLY);
+            Matrix_Push();
             break;
 
         case 10:
-            func_8013AD9C(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
-                          &this->unk_2AE, phi_v1, phi_v0);
-            Matrix_StatePop();
-            Matrix_InsertTranslation(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
+            SubS_UpdateLimb(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
+                            &this->unk_2AE, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_2AE.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_2AE.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_2AE.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_RotateYS(this->unk_2AE.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_2AE.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_2AE.z, MTXMODE_APPLY);
+            Matrix_Push();
             break;
     }
 }
 
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A1670C[] = {
-        object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
-        object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
+        gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
     };
     EnGo* this = THIS;
 
@@ -2073,7 +2074,7 @@ void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A1670C[this->unk_3BE]));
 
         if (this->unk_3DC == 14) {
-            Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnGo_OverrideLimbDraw, NULL, EnGo_TransfromLimbDraw,
