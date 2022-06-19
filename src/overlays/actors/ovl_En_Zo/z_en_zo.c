@@ -5,7 +5,6 @@
  */
 
 #include "z_en_zo.h"
-#include "objects/object_zo/object_zo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -257,7 +256,8 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable,
+                       ZORA_LIMB_MAX);
     EnZo_SetAnimation(&this->skelAnime, 0);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -291,19 +291,20 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
                           Gfx** gfx) {
     EnZo* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == ZORA_LIMB_TORSO) {
         Matrix_RotateXS(-this->upperBodyRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == ZORA_LIMB_TORSO) || (limbIndex == ZORA_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == ZORA_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
     }
@@ -318,13 +319,13 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (sBodyParts[limbIndex] >= 0) {
         Matrix_MultVec3f(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
     }
-    if (limbIndex == 15) {
+    if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
-    if (limbIndex == 4) {
+    if (limbIndex == ZORA_LIMB_LEFT_FOOT) {
         Matrix_MultVec3f(&zeroVec, &this->leftFootPos);
     }
-    if (limbIndex == 7) {
+    if (limbIndex == ZORA_LIMB_RIGHT_FOOT) {
         Matrix_MultVec3f(&zeroVec, &this->rightFootPos);
     }
 }

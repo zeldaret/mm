@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64load.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -4781,7 +4782,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
         yaw = Actor_YawToPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {
-            randomYaw = (Rand_Next() >> 0x13) + yaw;
+            randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;
 
             velocity.z = Rand_ZeroFloat(5.0f);
 

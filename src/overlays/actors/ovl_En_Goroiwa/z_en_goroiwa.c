@@ -599,7 +599,7 @@ void func_8093FC6C(EnGoroiwa* this, GlobalContext* globalCtx) {
     temp = 0x10000 / sp80;
 
     for (i = 0, phi_s0 = 0; i < sp80; i++, phi_s0 += temp) {
-        temp_s3 = (u32)Rand_Next() >> 0x10;
+        temp_s3 = Rand_Next() >> 0x10;
         temp_f20 = Math_SinS(temp_s3);
         temp_f22 = Math_CosS(temp_s3);
 
@@ -701,7 +701,7 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
                     phi_s1 = D_80942E0C[sp120][0];
                     phi_s3 = 1;
                     phi_f22 = 0.8f;
-                    if (Rand_Next() > 0) {
+                    if ((s32)Rand_Next() > 0) {
                         phi_s0 = 0x21;
                     } else {
                         phi_s0 = 0x41;
@@ -779,7 +779,7 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
             phi_s7 = arg2[0];
             phi_fp = -0x190;
             spC8 = 1;
-            if (Rand_Next() > 0) {
+            if ((s32)Rand_Next() > 0) {
                 phi_s0 = 0x21;
             } else {
                 phi_s0 = 0x41;
@@ -856,7 +856,7 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
             if ((i & 3) == 1) {
                 phi_s1 = arg2[1];
                 phi_s2 = -0x154;
-                if (Rand_Next() > 0) {
+                if ((s32)Rand_Next() > 0) {
                     phi_s0 = 0x21;
                 } else {
                     phi_s0 = 0x41;
@@ -864,7 +864,7 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
             } else {
                 phi_s1 = arg2[0];
                 phi_s2 = -0x190;
-                if (Rand_Next() > 0) {
+                if ((s32)Rand_Next() > 0) {
                     phi_s0 = 0x21;
                 } else {
                     phi_s0 = 0x41;

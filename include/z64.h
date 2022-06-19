@@ -23,12 +23,14 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "gfxprint.h"
 #include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
+#include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"
@@ -290,15 +292,6 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x00 */ u32 textSize;
-    /* 0x04 */ u32 dataSize;
-    /* 0x08 */ u32 rodataSize;
-    /* 0x0C */ u32 bssSize;
-    /* 0x10 */ u32 nRelocations;
-    /* 0x14 */ u32 relocations[1];
-} OverlayRelocationSection; // size >= 0x18
-
-typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;
     /* 0x08 */ OSTime duration;
@@ -415,27 +408,6 @@ typedef struct {
     /* 0x35 */ u8 osSyncPrintfEnabled;
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
-
-typedef struct GfxPrint {
-    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
-    /* 0x04 */ Gfx* dlist;
-    /* 0x08 */ u16 posX;
-    /* 0x0A */ u16 posY;
-    /* 0x0C */ u16 baseX;
-    /* 0x0E */ u8 baseY;
-    /* 0x0F */ u8 flag;
-    /* 0x10 */ Color_RGBA8_u32 color;
-    /* 0x14 */ char unk_14[0x1C]; // unused
-} GfxPrint; // size = 0x30
-
-typedef enum {
-    GFXPRINT_FLAG1 = 1,
-    GFXPRINT_USE_RGBA16 = 2,
-    GFXPRINT_FLAG4 = 4,
-    GFXPRINT_UPDATE_MODE = 8,
-    GFXPRINT_FLAG64 = 0x40,
-    GFXPRINT_OPEN = 0x80
-} GfxPrintFlag;
 
 typedef struct {
     /* 0x00 */ u8 countdown;
@@ -815,11 +787,17 @@ typedef struct {
 } PreRenderParams; // size = 0x28
 
 typedef struct {
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 unk01;
+} MsgCtx11F00;
+
+typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
     /* 0x11EF4 */ char unk_11EF4[0x4];
     /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
+    /* 0x11F00 */ MsgCtx11F00* unk11F00;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
