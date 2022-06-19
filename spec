@@ -3387,8 +3387,7 @@ beginseg
     name "ovl_En_Time_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Time_Tag/z_en_time_tag.o"
-    include "build/data/ovl_En_Time_Tag/ovl_En_Time_Tag.data.o"
-    include "build/data/ovl_En_Time_Tag/ovl_En_Time_Tag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Time_Tag/ovl_En_Time_Tag_reloc.o"
 endseg
 
 beginseg
