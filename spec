@@ -3133,8 +3133,7 @@ beginseg
     name "ovl_Dm_Opstage"
     compress
     include "build/src/overlays/actors/ovl_Dm_Opstage/z_dm_opstage.o"
-    include "build/data/ovl_Dm_Opstage/ovl_Dm_Opstage.data.o"
-    include "build/data/ovl_Dm_Opstage/ovl_Dm_Opstage.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Opstage/ovl_Dm_Opstage_reloc.o"
 endseg
 
 beginseg
