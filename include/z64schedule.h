@@ -6,7 +6,7 @@
 /*
   Schedule is a subsystem that acts as a way to make decisions based on the
   time and scene (and a limited selection of items). It is utilized by writing
-  a script that is encoded into bytecode and ran, returning the result in a
+  a script that is encoded into bytecode and run, returning the result in a
   struct. The returned result can be a value or a encoded time value.
 
   The scripts contain 2 kinds of instructions:
