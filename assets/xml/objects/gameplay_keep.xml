@@ -1110,7 +1110,7 @@
         <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
         <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
-        <DList Name="gameplay_keep_DL_050550" Offset="0x50550" />
+        <DList Name="gEffIceFragmentDL" Offset="0x50550" />
         <DList Name="gFrozenIceDL" Offset="0x50648" />
         <DList Name="gFrozenIceVtxDL" Offset="0x506E0" />
         <DList Name="gameplay_keep_DL_050D10" Offset="0x50D10" />
