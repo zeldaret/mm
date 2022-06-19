@@ -57,9 +57,8 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 80, 100, MASS_IMMOVABLE };
 
 static TexturePtr sFlameTextures[] = {
-    gFwallFireball0Tex_Tex_003CA0, gFwallFireball1Tex_Tex_0040A0, gFwallFireball2Tex_Tex_0044A0,
-    gFwallFireball3Tex_Tex_0048A0, gFwallFireball4Tex_Tex_004CA0, gFwallFireball5Tex_Tex_0050A0,
-    gFwallFireball6Tex_Tex_0054A0, gFwallFireball7Tex_Tex_0058A0,
+    gFwallFireball0Tex, gFwallFireball1Tex, gFwallFireball2Tex, gFwallFireball3Tex,
+    gFwallFireball4Tex, gFwallFireball5Tex, gFwallFireball6Tex, gFwallFireball7Tex,
 };
 
 static s32 sTexturesDesegmented = false;
