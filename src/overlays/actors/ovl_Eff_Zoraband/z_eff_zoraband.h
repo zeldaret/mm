@@ -11,8 +11,8 @@ typedef void (*EffZorabandActionFunc)(struct EffZoraband*, GlobalContext*);
 
 typedef struct EffZoraband {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s16 transparency;
-    /* 0x146 */ u16 transpInit;
+    /* 0x144 */ s16 alpha;
+    /* 0x146 */ u16 stateFlags;
     /* 0x148 */ EffZorabandActionFunc actionFunc;
 } EffZoraband; // size = 0x14C
 

@@ -35,7 +35,7 @@ void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EffZoraband_Mikau_FadeOut;
-    this->transparency = 0;
+    this->alpha = 0;
     this->actor.shape.rot.z = 0;
 }
 
@@ -46,7 +46,7 @@ void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 0x20F) != 0) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
             globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action) {
-            this->transpInit |= 2;
+            this->stateFlags |= 2;
         }
         if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action == 7) {
             this->actor.draw = NULL;
@@ -57,11 +57,11 @@ void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx) {
     if ((this->actor.home.rot.z != 0) && (this->actor.draw != NULL)) {
         func_800B9010(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
     }
-    if ((this->transpInit & 2) != 0) {
-        if (this->transparency < 240) {
-            this->transparency += 25;
+    if (this->stateFlags & 2) {
+        if (this->alpha < 240) {
+            this->alpha += 25;
         } else {
-            this->transparency = 255;
+            this->alpha = 255;
         }
     }
 }
@@ -76,7 +76,7 @@ void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EffZoraband* this = THIS;
 
-    if (this->transparency != 0) {
+    if (this->alpha != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
@@ -84,14 +84,14 @@ void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->actor.home.rot.z != 0) {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 100, this->transparency);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 100, this->alpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 200, 0, 255);
         } else {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 100, 255, this->transparency);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 0, 100, 255, this->alpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 100, 255);
         }
         gSPDisplayList(POLY_XLU_DISP++, object_zoraband_DL_000180);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 200, 255, 255, this->transparency);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 200, 255, 255, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 255);
         gSPDisplayList(POLY_XLU_DISP++, object_zoraband_DL_0002A8);
 
