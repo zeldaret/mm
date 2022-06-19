@@ -5605,7 +5605,7 @@
     0x8089E8E0:("EnHata_Init",),
     0x8089E9DC:("EnHata_Destroy",),
     0x8089EA10:("EnHata_Update",),
-    0x8089EC68:("func_8089EC68",),
+    0x8089EC68:("EnHata_OverrideLimbDraw",),
     0x8089ECBC:("EnHata_Draw",),
     0x8089ED90:("EnZl1_Init",),
     0x8089EDA0:("EnZl1_Destroy",),
