@@ -12,19 +12,7 @@
         <Animation Name="gIronKnuckleFrontHitAnim" Offset="0x5254" />
         <Animation Name="gIronKnuckleRunAnim" Offset="0x57F4" />
         <Animation Name="gIronKnuckleWalkAnim" Offset="0x6294" />
-        <Array Name="gObjectIkVtx_006730" Count="90" Offset="0x6730">
-            <Vtx/>
-        </Array>
-        <Array Name="gObjectIkVtx_007120" Count="282" Offset="0x7120">
-            <Vtx/>
-        </Array>
-        <Array Name="gObjectIkVtx_008AE06" Count="99" Offset="0x8AE0">
-            <Vtx/>
-        </Array>
-        <Array Name="gObjectIkVtx_009290" Count="47" Offset="0x9290">
-            <Vtx/>
-        </Array>
-        <Array Name="gObjectIkVtx_009740" Count="48" Offset="0x9740">
+        <Array Name="gObjectIkVtx_009740" Count="566" Offset="0x6730">
             <Vtx/>
         </Array>
         <DList Name="gIronKnuckleArmorFrontDL" Offset="0x9A40" />
