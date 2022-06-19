@@ -116,7 +116,7 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
                 phi_s0 = 0x40;
             }
 
-            if (k < 2 || Rand_Next() > 0) {
+            if (k < 2 || (s32)Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
                 func_800B0E48(globalCtx, &pos, &gZeroVec3f, &sDustAccel, &sPrimColor, &sEnvColor,
