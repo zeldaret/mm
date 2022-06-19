@@ -4627,8 +4627,7 @@ beginseg
     name "ovl_En_Sc_Ruppe"
     compress
     include "build/src/overlays/actors/ovl_En_Sc_Ruppe/z_en_sc_ruppe.o"
-    include "build/data/ovl_En_Sc_Ruppe/ovl_En_Sc_Ruppe.data.o"
-    include "build/data/ovl_En_Sc_Ruppe/ovl_En_Sc_Ruppe.reloc.o"
+    include "build/src/overlays/actors//ovl_En_Sc_Ruppe/ovl_En_Sc_Ruppe_reloc.o"
 endseg
 
 beginseg
