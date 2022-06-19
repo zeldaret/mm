@@ -104,12 +104,7 @@ void FaultDrawer_SetInputCallback(FaultDrawerCallback callback);
 void FaultDrawer_Init(void);
 void func_80084940(void);
 void func_80084968(void);
-void Load_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart);
-s32 Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 allocatedVRamAddr, u32 allocatedBytes);
-void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart);
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart);
-s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr);
-void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd);
+
 void PadUtils_Init(Input* input);
 void func_80085150(void);
 void PadUtils_ResetPressRel(Input* input);

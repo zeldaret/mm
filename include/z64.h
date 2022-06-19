@@ -291,15 +291,6 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x00 */ u32 textSize;
-    /* 0x04 */ u32 dataSize;
-    /* 0x08 */ u32 rodataSize;
-    /* 0x0C */ u32 bssSize;
-    /* 0x10 */ u32 nRelocations;
-    /* 0x14 */ u32 relocations[1];
-} OverlayRelocationSection; // size >= 0x18
-
-typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;
     /* 0x08 */ OSTime duration;
