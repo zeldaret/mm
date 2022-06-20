@@ -739,6 +739,7 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
     return true;
 }
 
+// WeightPathing System is completely unused
 /**
  * Moves an actor based on a weight based algorithm that takes into account 4 points along the path
  *
@@ -746,12 +747,10 @@ s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 
  * @param path
  * @param waypoint the current waypoint, this and the previous three points will be used to move forward
  * @param progress the progress towards a given waypoint, used to compute the weights
- * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
+ * @param direction the direction along the path to move, 1 for forwards, anything else for backwards
  * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
  *
  * @return s32 true if actor reached the end of the path in this iteration, false otherwise
- *
- * @note this function is unused
  */
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart) {
     Vec3f worldPos = actor->world.pos;
@@ -1053,7 +1052,7 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
  * @param[in,out] trackTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
- * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
+ * @param[in] options various options to adjust how the actor turns, see SubS_ComputeTrackPointRot()
  */
 s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
                     Vec3s* torsoRot, TrackOptionsSet* options) {
