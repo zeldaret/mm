@@ -370,7 +370,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->unk_18B4A == 0) && !Play_InCsMode(globalCtx) && (globalCtx->numSetupActors <= 0) &&
-        (globalCtx->roomCtx.unk31 == 0) && (func_8016A168() == 0)) {
+        (globalCtx->roomCtx.unk31 == 0) && (!Play_IsDebugCamEnabled())) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->unk_144];
         s16 temp_a3;

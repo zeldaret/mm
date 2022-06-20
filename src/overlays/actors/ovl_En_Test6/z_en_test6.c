@@ -407,7 +407,7 @@ void func_80A916F0(EnTest6* this, GlobalContext* globalCtx) {
 }
 
 void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
     s16 temp_s0;
     Player* player = GET_PLAYER(globalCtx);
     Camera* sp78;
@@ -628,7 +628,7 @@ void func_80A92118(EnTest6* this, GlobalContext* globalCtx) {
 }
 
 void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
     Player* player = GET_PLAYER(globalCtx);
     Camera* camera;
     s32 pad;

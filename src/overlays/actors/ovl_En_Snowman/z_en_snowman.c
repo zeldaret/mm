@@ -319,7 +319,7 @@ void EnSnowman_SpawnBigSnowballFragmentEffects(EnSnowman* this, GlobalContext* g
 
     for (i = 0; i < 15; i++) {
         altitude = Rand_S16Offset(0x1800, 0x2800);
-        azimuth = ((u32)Rand_Next() >> 0x10);
+        azimuth = Rand_Next() >> 0x10;
         speed = Rand_ZeroFloat(3.0f) + 8.0f;
         velocity.x = (speed * Math_CosS(altitude)) * Math_SinS(azimuth);
         velocity.y = speed * Math_SinS(altitude);
@@ -406,9 +406,9 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, GlobalContext* globalCtx) {
     } else if (this->actor.bgCheckFlags & 8) {
         this->snowPileTargetRotY = this->actor.wallYaw;
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 200.0f) {
-        this->snowPileTargetRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + (Rand_Next() >> 0x14);
+        this->snowPileTargetRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
     } else if (Rand_ZeroOne() < 0.02f) {
-        this->snowPileTargetRotY += (s16)((((u32)Rand_Next() >> 0x13) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->snowPileTargetRotY += (s16)(((Rand_Next() >> 0x13) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
 }
 
@@ -746,7 +746,7 @@ void EnSnowman_Dead(EnSnowman* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < 15; i++) {
         altitude = Rand_S16Offset(0x1000, 0x3000);
-        azimuth = ((u32)Rand_Next() >> 0x10);
+        azimuth = (Rand_Next() >> 0x10);
         speed = Rand_ZeroFloat(2.0f) + 4.0f;
         velocity.x = (speed * Math_CosS(altitude)) * Math_SinS(azimuth);
         velocity.y = speed * Math_SinS(altitude);

@@ -67,7 +67,7 @@ void func_80147564(GlobalContext* globalCtx) {
 
 s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* controller = CONTROLLER1(globalCtx);
+    Input* controller = CONTROLLER1(&globalCtx->state);
 
     if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
@@ -86,7 +86,7 @@ s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
 
 s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* controller = CONTROLLER1(globalCtx);
+    Input* controller = CONTROLLER1(&globalCtx->state);
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
@@ -117,7 +117,7 @@ void func_801477B4(GlobalContext* globalCtx) {
 void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
     static s16 held = 0;
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* curInput = CONTROLLER1(globalCtx);
+    Input* curInput = CONTROLLER1(&globalCtx->state);
 
     if ((curInput->rel.stick_y > 29) && held == 0) {
         held = 1;

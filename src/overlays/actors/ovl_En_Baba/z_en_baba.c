@@ -121,7 +121,7 @@ static u8 D_80BAA488[] = {
 
 s32 D_80BAA4A8[] = { -1, -1, 0 };
 
-static TurnOptionsSet sTurnOptions = {
+static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
@@ -300,11 +300,11 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
 
-        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
-                         &this->torsoRot, &sTurnOptions);
+        SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
+                        &this->torsoRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
-        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
@@ -319,35 +319,35 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp26 = (u16)(gSaveContext.save.time - 0x3FFC);
+    u16 sp26 = SCHEDULE_TIME_NOW;
     u16 temp;
     u8 sp23 = ENBABA_GET_3F00(&this->actor);
 
     if (D_80BAA4A8[arg2->result] >= 0) {
-        this->unk_410 = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->result]);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->result]);
     }
 
-    if (this->unk_410 == NULL) {
+    if (this->timePath == NULL) {
         return false;
     }
 
-    if ((this->unk_434 != 0) && (this->unk_436 >= 0)) {
+    if ((this->unk_434 != 0) && (this->timePathTimeSpeed >= 0)) {
         temp = sp26;
     } else {
         temp = arg2->time0;
     }
 
     if (arg2->time1 < temp) {
-        this->unk_424 = (temp - arg2->time1) + 0xFFFF;
+        this->timePathTotalTime = (temp - arg2->time1) + 0xFFFF;
     } else {
-        this->unk_424 = arg2->time1 - temp;
+        this->timePathTotalTime = arg2->time1 - temp;
     }
 
-    this->unk_430 = sp26 - temp;
-    temp = this->unk_410->count - 2;
-    this->unk_428 = this->unk_424 / temp;
+    this->timePathElapsedTime = sp26 - temp;
+    temp = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / temp;
     this->unk_438 = 0;
-    this->unk_42C = (this->unk_430 / this->unk_428) + 2;
+    this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
     this->unk_43C = 0;
     return true;
 }
@@ -372,52 +372,54 @@ s32 func_80BA9110(EnBaba* this, GlobalContext* globalCtx, ScheduleResult* arg2) 
 }
 
 s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
-    f32 sp7C[265];
+    f32 knots[265];
     Vec3f sp70;
     Vec3f sp64;
-    Vec3f sp58;
+    Vec3f timePathTargetPos;
     s32 sp54 = 0;
     s32 sp50 = 0;
     s32 pad;
 
-    func_8013AF00(sp7C, 3, this->unk_410->count + 3);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
 
     if (this->unk_438 == 0) {
-        sp58 = gZeroVec3f;
+        timePathTargetPos = gZeroVec3f;
 
-        func_8013B6B0(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424, &this->unk_42C, sp7C,
-                      &sp58, this->unk_436);
-        func_8013B878(globalCtx, this->unk_410, this->unk_42C, &sp58);
-        this->actor.world.pos.y = sp58.y;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
+        this->actor.world.pos.y = timePathTargetPos.y;
         this->unk_438 = 1;
     } else {
-        sp58 = this->unk_414;
+        timePathTargetPos = this->timePathTargetPos;
     }
 
-    this->actor.world.pos.x = sp58.x;
-    this->actor.world.pos.z = sp58.z;
+    this->actor.world.pos.x = timePathTargetPos.x;
+    this->actor.world.pos.z = timePathTargetPos.z;
 
     if (SubS_InCsMode(globalCtx)) {
-        sp54 = this->unk_430;
-        sp50 = this->unk_42C;
-        sp58 = this->actor.world.pos;
+        sp54 = this->timePathElapsedTime;
+        sp50 = this->timePathWaypoint;
+        timePathTargetPos = this->actor.world.pos;
     }
 
-    this->unk_414 = gZeroVec3f;
+    this->timePathTargetPos = gZeroVec3f;
 
-    if (func_8013B6B0(this->unk_410, &this->unk_420, &this->unk_430, this->unk_428, this->unk_424, &this->unk_42C, sp7C,
-                      &this->unk_414, this->unk_436)) {
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_43C = 1;
     } else {
         sp70 = this->actor.world.pos;
-        sp64 = this->unk_414;
+        sp64 = this->timePathTargetPos;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
     if (SubS_InCsMode(globalCtx)) {
-        this->unk_430 = sp54;
-        this->unk_42C = sp50;
-        this->unk_414 = sp58;
+        this->timePathElapsedTime = sp54;
+        this->timePathWaypoint = sp50;
+        this->timePathTargetPos = timePathTargetPos;
     }
 
     return false;
@@ -598,7 +600,7 @@ void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx) {
 void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
     ScheduleResult sp20;
 
-    this->unk_436 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (!Schedule_RunScript(globalCtx, D_80BAA488, &sp20) ||
         ((this->unk_434 != sp20.result) && !func_80BA9110(this, globalCtx, &sp20))) {

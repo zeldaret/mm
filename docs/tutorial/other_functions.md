@@ -422,7 +422,7 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     ? sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    Actor_TrackPlayer(globalCtx, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
@@ -440,13 +440,13 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     ? sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    Actor_TrackPlayer(globalCtx, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
-Now, our problem is `func_800E9250`. The arguments all look terrible! Indeed, if we look at the actual function in `src/code/code_800E8EA0.c` (found by searching), we find that it should be
+Now, our problem is `Actor_TrackPlayer`. The arguments all look terrible! Indeed, if we look at the actual function in `src/code/code_800E8EA0.c` (found by searching), we find that it should be
 ```C
-s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5)
+s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos)
 ```
 So mips2c has made a bit of a mess here:
 - the third argument should be a `Vec3s`. Hence `this + 0x2AE` is a `Vec3s*`, and so `this->unk_2AE` is a `Vec3s`
@@ -460,7 +460,7 @@ void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
     Vec3s sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```
@@ -490,7 +490,7 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     Vec3s sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```

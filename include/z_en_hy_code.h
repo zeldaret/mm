@@ -57,10 +57,10 @@ typedef struct EnHy {
     /* 0x205 */ u8 isRightFootOnGround;
     /* 0x206 */ Vec3s jointTable[ENHY_LIMB_MAX];
     /* 0x266 */ Vec3s morphTable[ENHY_LIMB_MAX];
-    /* 0x2C6 */ Vec3s turnTarget;
+    /* 0x2C6 */ Vec3s trackTarget;
     /* 0x2CC */ Vec3s headRot;
     /* 0x2D2 */ Vec3s torsoRot;
-    /* 0x2D8 */ Vec3s tmpTurnTarget;
+    /* 0x2D8 */ Vec3s tmptrackTarget;
     /* 0x2DE */ Vec3s tmpHeadRot;
     /* 0x2E4 */ Vec3s tmpTorsoRot;
     /* 0x2EA */ s16 limbRotTableY[16];

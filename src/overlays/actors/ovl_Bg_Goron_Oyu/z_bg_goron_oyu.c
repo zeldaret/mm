@@ -20,7 +20,7 @@ void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx);
 void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx);
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx);
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Goron_Oyu_InitVars = {
@@ -108,7 +108,7 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx) {
     s16 scale;
     Vec3f pos1;
     Vec3f pos2;
@@ -178,7 +178,7 @@ void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgGoronOyu* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    BgGoronOyu_SpawnParticles(this, globalCtx);
+    BgGoronOyu_SpawnEffects(this, globalCtx);
 }
 
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {

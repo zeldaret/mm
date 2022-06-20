@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64load.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -2003,11 +2004,11 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
-            if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
-                 (getItemId == GI_DEED_LAND) ||
-                 (((player->heldActor != NULL) || (actor == player->targetActor)) &&
+            if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
+                 getItemId == GI_DEED_LAND ||
+                 ((player->heldActor != NULL || actor == player->targetActor) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
-                (!(player->stateFlags1 & 0x20000800))) {
+                !(player->stateFlags1 & 0x20000800)) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
 
@@ -4282,7 +4283,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(globalCtx);
     f32 phi_f2;
 
-    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
+    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &globalCtx->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
@@ -4484,9 +4485,10 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
     }
 }
 
-s32 func_800BE63C(struct EnBox* chest) {
-    if ((chest->unk_1F1 == 5) || (chest->unk_1F1 == 6) || (chest->unk_1F1 == 7) || (chest->unk_1F1 == 8) ||
-        (chest->unk_1F1 == 0xC)) {
+s32 Actor_IsSmallChest(struct EnBox* chest) {
+    if (chest->type == ENBOX_TYPE_SMALL || chest->type == ENBOX_TYPE_SMALL_INVISIBLE ||
+        chest->type == ENBOX_TYPE_SMALL_ROOM_CLEAR || chest->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL ||
+        chest->type == ENBOX_TYPE_SMALL_SWITCH_FLAG) {
         return true;
     }
     return false;
@@ -4782,7 +4784,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
         yaw = Actor_YawToPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {
-            randomYaw = (Rand_Next() >> 0x13) + yaw;
+            randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;
 
             velocity.z = Rand_ZeroFloat(5.0f);
 
