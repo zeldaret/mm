@@ -21,9 +21,9 @@ typedef struct EnBjt {
     /* 0x234 */ u16 stateFlags;
     /* 0x236 */ u16 textId;
     /* 0x238 */ f32 animPlaySpead;
-    /* 0x23C */ f32 unk23C;
+    /* 0x23C */ f32 heightOffset;
     /* 0x240 */ s16 unk240;
-    /* 0x242 */ s16 unk242;
+    /* 0x242 */ s16 timer;
     /* 0x244 */ char unk244[4];
     /* 0x248 */ s32 playedSfx;
     /* 0x24C */ MsgEventFunc msgEventCallback;

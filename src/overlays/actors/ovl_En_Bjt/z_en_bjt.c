@@ -76,22 +76,32 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 // extern FlexSkeletonHeader D_06002390;
 
-void EnBjt_UpdateAnimation(EnBjt* this) {
-    this->skelAnime.playSpeed = this->animPlaySpead;
-    SkelAnime_Update(&this->skelAnime);
-}
+typedef enum {
+    /* -1 */ TOILET_HAND_ANIM_NONE = -1,
+    /*  0 */ TOILET_HAND_ANIM_0,
+    /*  1 */ TOILET_HAND_ANIM_1,
+    /*  2 */ TOILET_HAND_ANIM_2,
+    /*  3 */ TOILET_HAND_ANIM_THUMBS_UP,
+    /*  4 */ TOILET_HAND_ANIM_4,
+    /*  5 */ TOILET_HAND_ANIM_5,
+} ToiletHandAnimations;
 
 static AnimationInfoS sAnimationInfo[] = {
     { 0x060007B8, 1.0f, 0, -1, 0, 0 },  { 0x060007B8, 1.0f, 0, -1, 0, -4 }, { 0x060000FC, 1.0f, 0, -1, 0, -4 },
     { 0x060003A8, 1.0f, 0, -1, 0, -4 }, { 0x06000564, 1.0f, 0, -1, 0, -4 }, { 0x06000218, 1.0f, 0, -1, 0, -4 },
 };
 
+void EnBjt_UpdateAnimation(EnBjt* this) {
+    this->skelAnime.playSpeed = this->animPlaySpead;
+    SkelAnime_Update(&this->skelAnime);
+}
+
 s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
     s32 changeAnim = false;
     s32 changed = false;
 
-    if ((animIndex == 0) || (animIndex == 1)) {
-        if (!((this->curAnimIndex == 0) || (this->curAnimIndex == 1))) {
+    if ((animIndex == TOILET_HAND_ANIM_0) || (animIndex == TOILET_HAND_ANIM_1)) {
+        if (!((this->curAnimIndex == TOILET_HAND_ANIM_0) || (this->curAnimIndex == TOILET_HAND_ANIM_1))) {
             changeAnim = true;
         }
     } else if (this->curAnimIndex != animIndex) {
@@ -107,14 +117,14 @@ s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
     return changed;
 }
 
-void func_80BFD3A4(EnBjt* this, GlobalContext* globalCtx) {
-    static Vec3f D_80BFDFE0 = { 0.0f, 8.0f, 10.0f };
+void EnBjt_UpdateCollision(EnBjt* this, GlobalContext* globalCtx) {
+    static Vec3f sColliderBasePos = { 0.0f, 8.0f, 10.0f };
     s32 pad;
     Vec3f pos;
     f32 height;
 
     if (this->stateFlags & 0x280) {
-        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80BFDFE0, &pos);
+        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sColliderBasePos, &pos);
         Math_Vec3f_ToVec3s(&this->collider.dim.pos, &pos);
         height = this->actor.focus.pos.y - this->actor.world.pos.y;
         this->collider.dim.height = height;
@@ -147,56 +157,52 @@ s32 EnBjt_TakeItem(s32 exchangeItem) {
     return 0;
 }
 
-#define TARGET_SCALE 0.017f
+#define FULLY_GROWN_SCALE 0.017f
 
-// EnBjt_AppearAnim
 /**
  * @return boolean true if scale is set to final value
  */
-s32 func_80BFD4FC(EnBjt* this) {
+s32 EnBjt_Appear(EnBjt* this) {
     s32 finished = false;
-    f32 temp_f0;
 
     if (!this->playedSfx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_APPEAR);
         this->playedSfx = true;
     }
-    Math_ApproachF(&this->actor.scale.x, TARGET_SCALE, 0.21f, 0.3f);
-    if ((TARGET_SCALE - this->actor.scale.x) < TARGET_SCALE / 100.0f) {
-        this->actor.scale.x = TARGET_SCALE;
+
+    Math_ApproachF(&this->actor.scale.x, FULLY_GROWN_SCALE, 0.21f, 0.3f);
+    if ((FULLY_GROWN_SCALE - this->actor.scale.x) < FULLY_GROWN_SCALE / 100.0f) {
+        this->actor.scale.x = FULLY_GROWN_SCALE;
         this->stateFlags |= 0x200;
         this->stateFlags &= ~0x80;
         finished = true;
     }
-    temp_f0 = (this->actor.scale.x / TARGET_SCALE) * 4.0f;
-    this->unk23C = temp_f0;
-    this->actor.world.pos.y = this->actor.home.pos.y + temp_f0;
+    this->heightOffset = (this->actor.scale.x / FULLY_GROWN_SCALE) * 4.0f;
+    this->actor.world.pos.y = this->actor.home.pos.y + this->heightOffset;
     Actor_SetScale(&this->actor, this->actor.scale.x);
 
     return finished;
 }
 
-// EnBjt_VanishAnim
 /**
- * @return boolean true if scalie is set to final value
+ * @return boolean true if scale is set to final value
  */
-s32 func_80BFD5E4(EnBjt* this) {
+s32 EnBjt_Vanish(EnBjt* this) {
     s32 finished = false;
-    f32 temp_f0;
 
     if (!this->playedSfx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_HAND_VANISH);
         this->playedSfx = true;
     }
+
     Math_ApproachF(&this->actor.scale.x, 0.0f, 0.21f, 0.3f);
-    if (this->actor.scale.x < TARGET_SCALE / 100.0f) {
+    if (this->actor.scale.x < FULLY_GROWN_SCALE / 100.0f) {
         this->actor.scale.x = 0.0f;
         this->stateFlags &= ~0x100;
         finished = true;
     }
-    temp_f0 = (this->actor.scale.x / TARGET_SCALE) * 4.0f;
-    this->unk23C = temp_f0;
-    this->actor.world.pos.y = this->actor.home.pos.y + temp_f0;
+    this->heightOffset = (this->actor.scale.x / FULLY_GROWN_SCALE) * 4.0f;
+    this->actor.world.pos.y = this->actor.home.pos.y + this->heightOffset;
     Actor_SetScale(&this->actor, this->actor.scale.x);
 
     return finished;
@@ -221,7 +227,7 @@ s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
                     if ((itemAP == EXCH_ITEM_DEED_LAND) || (itemAP == EXCH_ITEM_LETTER_TO_KAFEI) ||
                         (itemAP == EXCH_ITEM_DEED_SWAMP) || (itemAP == EXCH_ITEM_DEED_MOUNTAIN) ||
                         (itemAP == EXCH_ITEM_DEED_OCEAN) || (itemAP == EXCH_ITEM_LETTER_MAMA)) {
-                        EnBjt_ChangeAnimation(this, 1);
+                        EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_1);
                         this->playedSfx = false;
                         this->unk240++;
                         scriptBranch = 1;
@@ -243,32 +249,32 @@ s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
                 EnBjt_TakeItem(player->exchangeItemId);
                 player->exchangeItemId = 0;
             }
-            if (func_80BFD5E4(this)) {
-                this->unk242 = 60;
+            if (EnBjt_Vanish(this)) {
+                this->timer = 60;
                 this->unk240++;
                 scriptBranch = 1;
             }
             break;
 
         case 2:
-            if (DECR(this->unk242) == 0) {
-                EnBjt_ChangeAnimation(this, 5);
+            if (DECR(this->timer) == 0) {
+                EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_5);
                 this->playedSfx = false;
                 this->unk240++;
-            } else if (this->unk242 == 10) {
+            } else if (this->timer == 10) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TOILET_WATER);
             }
             break;
 
         case 3:
-            if (func_80BFD4FC(this)) {
+            if (EnBjt_Appear(this)) {
                 this->unk240++;
                 scriptBranch = 1;
             }
             break;
 
         case 4:
-            EnBjt_ChangeAnimation(this, 4);
+            EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_4);
             this->unk240++;
             scriptBranch = 1;
             break;
@@ -299,20 +305,18 @@ s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
         if (this->textId != curTextId) {
             switch (curTextId) {
                 case 0x2949:
-                    EnBjt_ChangeAnimation(this, 2);
+                    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_2);
                     break;
 
                 case 0x294A:
-                    EnBjt_ChangeAnimation(this, 3);
+                    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_THUMBS_UP);
                     break;
             }
         }
         this->textId = curTextId;
-    } else {
-        if (this->stateFlags & 0x10) {
-            this->stateFlags &= ~0x10;
-            EnBjt_ChangeAnimation(this, 0);
-        }
+    } else if (this->stateFlags & 0x10) {
+        this->stateFlags &= ~0x10;
+        EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_0);
     }
     return 0;
 }
@@ -339,11 +343,11 @@ void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx) {
     }
     if (scheduleOutput.result == 1) {
         if (this->stateFlags & 0x80) {
-            if (func_80BFD4FC(this)) {
+            if (EnBjt_Appear(this)) {
                 SubS_UpdateFlags(&this->stateFlags, 3, 7);
             }
         } else if (this->stateFlags & 0x100) {
-            func_80BFD5E4(this);
+            EnBjt_Vanish(this);
         } else if (this->stateFlags & 0x200) {
             if ((fabsf(this->actor.playerHeightRel) > 70.0f) || (this->actor.xzDistToPlayer > 140.0f) ||
                 (gSaveContext.save.weekEventReg[90] & 0x80)) {
@@ -373,8 +377,8 @@ void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
                        TOILET_HAND_LIMB_MAX);
-    this->curAnimIndex = -1;
-    EnBjt_ChangeAnimation(this, 0);
+    this->curAnimIndex = TOILET_HAND_ANIM_NONE;
+    EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_0);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.flags |= ACTOR_FLAG_8000000;
@@ -398,7 +402,7 @@ void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnBjt_UpdateAnimation(this);
         func_8013C964(&this->actor, globalCtx, 60.0f, 10.0f, 0, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
-        func_80BFD3A4(this, globalCtx);
+        EnBjt_UpdateCollision(this, globalCtx);
     }
 }
 
