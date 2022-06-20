@@ -5,6 +5,7 @@
  */
 
 #include "z_en_torch.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
 
 #define FLAGS 0x00000000
 
@@ -17,7 +18,9 @@ const ActorInit En_Torch_InitVars = {
     (ActorFunc)EnTorch_Init, (ActorFunc)NULL,     (ActorFunc)NULL, (ActorFunc)NULL,
 };
 
-static u8 sChestContents[] = { 0x02, 0x04, 0x05, 0x06, 0x36, 0x3A, 0x14, 0x14 };
+static u8 sChestContents[] = {
+    GI_RUPEE_BLUE, GI_RUPEE_RED, GI_RUPEE_PURPLE, GI_RUPEE_SILVER, GI_BOMBCHUS_1, GI_BOMBCHUS_5, GI_BOMBS_1, GI_BOMBS_1,
+};
 
 void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch* this = THIS;
@@ -25,6 +28,6 @@ void EnTorch_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOX, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
-                (sChestContents[(returnData >> 0x5) & 0x7] << 0x5) | 0x5000 | (returnData & 0x1F));
+                ENBOX_PARAMS(ENBOX_TYPE_SMALL, sChestContents[(returnData >> 0x5) & 0x7], returnData));
     Actor_MarkForDeath(&this->actor);
 }
