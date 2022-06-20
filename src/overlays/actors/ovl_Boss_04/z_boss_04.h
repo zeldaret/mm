@@ -13,7 +13,7 @@ typedef struct Boss04 {
     /* 0x0188 */ Vec3s jointTable[9];
     /* 0x01BE */ Vec3s morphtable[9];
     /* 0x01F4 */ s16 unk_1F4;
-    /* 0x01F6 */ s8 unk_1F6;
+    /* 0x01F6 */ u8 unk_1F6;
     /* 0x01F7 */ u8 unk_1F7;
     /* 0x01F8 */ s16 unk_1F8;
     /* 0x01FA */ s16 unk_1FA;

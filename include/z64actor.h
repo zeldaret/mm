@@ -256,6 +256,9 @@ struct EnItem00;
 
 typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
 
+#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
+
 typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
@@ -296,24 +299,6 @@ typedef enum {
     /* 0x0B */ ACTORCAT_CHEST,
     /* 0x0C */ ACTORCAT_MAX
 } ActorType;
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ f32 startFrame;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 mode;
-    /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} ActorAnimationEntryS; // size = 0x10
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -404,6 +389,18 @@ typedef struct ActorContext {
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;
 } ActorContext; // size = 0x284
+
+typedef enum {
+    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
+    /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
+    /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
+    /* 21 */ ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS,
+    /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL = 30,
+    /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
+    /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
+} ActorDrawDamageEffectType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
@@ -1178,7 +1175,7 @@ typedef enum {
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif

@@ -37,15 +37,15 @@ typedef struct EnBigokuta {
     /* 0x0144 */ EnBigokutaUnkFunc unkFunc; // possibly something to do with photographing
     /* 0x0148 */ SkelAnime skelAnime;
     /* 0x018C */ EnBigokutaActionFunc actionFunc;
-    /* 0x0190 */ u8 drawEffect;
+    /* 0x0190 */ u8 drawDmgEffType;
     /* 0x0192 */ s16 timer;
     /* 0x0194 */ s16 camId;
     /* 0x0196 */ s16 cutscene;
     /* 0x0198 */ Vec3s jointTable[BIGOKUTA_LIMB_MAX];
     /* 0x0210 */ Vec3s morphTable[BIGOKUTA_LIMB_MAX];
-    /* 0x0288 */ f32 drawEffectAlpha;
-    /* 0x028C */ f32 drawEffectScale;
-    /* 0x0290 */ f32 drawEffectSteamScale; // only affects DRAWEFFECT_ICE
+    /* 0x0288 */ f32 drawDmgEffAlpha;
+    /* 0x028C */ f32 drawDmgEffScale;
+    /* 0x0290 */ f32 drawDmgEffFrozenSteamScale; // only affects DRAWEFFECT_ICE
     /* 0x0294 */ Vec3f playerPos;
     /* 0x02A0 */ Vec3f playerHoldPos;
     /* 0x02AC */ Vec3f camAt;

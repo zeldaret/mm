@@ -8,7 +8,7 @@
 #include "objects/object_fr/object_fr.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00004209
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
 
 #define THIS ((EnFg*)thisx)
 
@@ -95,11 +95,11 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_fr_Anim_001534, 1.0f, 0, -1, 0, 0 },
-    { &object_fr_Anim_001534, 1.0f, 0, -1, 0, -4 },
-    { &object_fr_Anim_0011C0, 1.0f, 0, -1, 0, -4 },
-    { &object_fr_Anim_0007BC, 1.0f, 0, -1, 2, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
@@ -111,11 +111,11 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
+                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].morphFrames);
     }
     return ret;
 }
@@ -177,7 +177,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
@@ -190,7 +190,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_HOOKSHOT:
             break;
         case FG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
             rotX = this->collider.base.ac->world.rot.x;
@@ -203,7 +203,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             this->actionFunc = EnFg_DoNothing;
             break;
         case FG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
@@ -238,7 +238,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             rotY = ac->world.rot.y;
@@ -254,7 +254,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_HOOKSHOT:
             break;
         case FG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
@@ -321,7 +321,7 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    this->actor.flags |= 0x4000;
+    this->actor.flags |= ACTOR_FLAG_4000;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = -1.6f;
     this->actionFunc = EnFg_Idle;
@@ -377,16 +377,16 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_Push();
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_StatePop();
+        Matrix_Pop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
+        Matrix_MultVec3f(&vec1, &this->actor.focus.pos);
     }
 }
 
@@ -398,9 +398,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_StatePush();
+    Matrix_Push();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -471,8 +471,8 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
             alpha = (255.0f / 16.0f) * dustEffect->timer;
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
             gDPPipeSync(POLY_XLU_DISP++);
-            Matrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

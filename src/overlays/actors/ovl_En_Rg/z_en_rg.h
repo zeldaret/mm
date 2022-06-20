@@ -48,7 +48,7 @@ typedef struct EnRg {
     /* 0x033C */ s32 unk_33C;
     /* 0x0340 */ s32 unk_340;
     /* 0x0344 */ s32 unk_344;
-    /* 0x0348 */ s32 unk_348;
+    /* 0x0348 */ s32 numCheckpointsAheadOfPlayer;
     /* 0x034C */ EnRgStruct unk_34C[32];
 } EnRg; // size = 0xACC
 

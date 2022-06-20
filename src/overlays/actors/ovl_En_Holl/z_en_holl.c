@@ -39,7 +39,7 @@
 
 #include "z_en_holl.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnHoll*)thisx)
 
@@ -218,7 +218,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
 
 void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 useViewEye = D_801D0D50 || globalCtx->csCtx.state != 0;
+    s32 useViewEye = gDbgCamEnabled || globalCtx->csCtx.state != 0;
     Vec3f transformedPlayerPos;
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
@@ -330,7 +330,7 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         dl = Gfx_CallSetupDL(dl, dlIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
-            Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+            Matrix_RotateYF(M_PI, MTXMODE_APPLY);
         }
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);

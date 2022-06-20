@@ -1,12 +1,12 @@
 /*
  * File: z_en_s_goro.c
  * Overlay: ovl_En_S_Goro
- * Description: Goron Complaining About Crying / Bomb Shop Goron
+ * Description: Goron in Goron Shrine / Bomb Shop Goron
  */
 
 #include "z_en_s_goro.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnSGoro*)thisx)
 

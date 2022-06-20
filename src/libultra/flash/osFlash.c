@@ -1,14 +1,13 @@
-#include "prevent_bss_reordering.h"
 #include "ultra64.h"
 #include "global.h"
 
-static s32 framDeviceInfo[4];
-static OSIoMesg framDeviceInfoQuery;
-static OSMesgQueue __osFlashMessageQ;
-static OSPiHandle __osFlashHandler;
-static OSMesg __osFlashMsgBuf;
-static s32 __osFlashVersion;
-static UNK_TYPE1 D_801FD0FC[0x14];
+s32 framDeviceInfo[4];
+OSIoMesg framDeviceInfoQuery;
+OSMesgQueue __osFlashMessageQ;
+OSPiHandle __osFlashHandler;
+OSMesg __osFlashMsgBuf;
+s32 __osFlashVersion;
+UNK_TYPE1 D_801FD0FC[0x14];
 
 typedef enum {
     FLASH_OLD,

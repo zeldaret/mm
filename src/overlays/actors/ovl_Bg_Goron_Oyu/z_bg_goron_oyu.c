@@ -7,7 +7,7 @@
 #include "z_bg_goron_oyu.h"
 #include "objects/object_oyu/object_oyu.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgGoronOyu*)thisx)
 
@@ -20,7 +20,7 @@ void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx);
 void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx);
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx);
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Goron_Oyu_InitVars = {
@@ -91,7 +91,7 @@ void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        Actor_PickUp(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
+        Actor_PickUp(&this->dyna.actor, globalCtx, GI_MAX, this->dyna.actor.xzDistToPlayer,
                      fabsf(this->dyna.actor.playerHeightRel));
     }
 }
@@ -108,7 +108,7 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx) {
     s16 scale;
     Vec3f pos1;
     Vec3f pos2;
@@ -178,7 +178,7 @@ void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgGoronOyu* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    BgGoronOyu_SpawnParticles(this, globalCtx);
+    BgGoronOyu_SpawnEffects(this, globalCtx);
 }
 
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {

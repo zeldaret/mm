@@ -80,9 +80,9 @@ void Title_Draw(GameState* thisx) {
 
     Title_RenderView(this, 0.0f, 150.0f, 300.0f);
     func_8012C28C(this->gameState.gfxCtx);
-    Matrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
+    Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(0, titleRotation, 0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
@@ -119,7 +119,7 @@ void Title_Draw(GameState* thisx) {
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->gameState.gfxCtx);
 
@@ -145,7 +145,7 @@ void Title_Main(GameState* thisx) {
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_80146E40(&this->gameState, &this->sramCtx);
+    Sram_InitSram(&this->gameState, &this->sramCtx);
     ShrinkWindow_Destroy();
     CIC6105_Nop80081828();
 }
@@ -159,7 +159,7 @@ void Title_Init(GameState* thisx) {
     DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
 
     Game_SetFramerateDivisor(thisx, 1);
-    Matrix_StateAlloc(thisx);
+    Matrix_Init(thisx);
     ShrinkWindow_Init();
     View_Init(&this->view, thisx->gfxCtx);
 
@@ -173,7 +173,7 @@ void Title_Init(GameState* thisx) {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = 1;
+    gSaveContext.unk_3F3F = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

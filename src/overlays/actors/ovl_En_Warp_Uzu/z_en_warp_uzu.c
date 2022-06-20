@@ -7,7 +7,7 @@
 #include "z_en_warp_uzu.h"
 #include "objects/object_warp_uzu/object_warp_uzu.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnWarpUzu*)thisx)
 
@@ -80,8 +80,8 @@ void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
     this->actor.textId = 0;
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&D_80A664FC, &sp24);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultVec3f(&D_80A664FC, &sp24);
     Math_Vec3f_Sum(&this->actor.world.pos, &sp24, &this->actor.focus.pos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.shape.rot);
     this->actionFunc = func_80A66278;
@@ -112,8 +112,8 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x22A0;
-    gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(globalCtx);
+    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = globalCtx->nextEntranceIndex;
+    func_80169EFC(&globalCtx->state);
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }

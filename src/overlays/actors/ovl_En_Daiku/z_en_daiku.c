@@ -7,7 +7,7 @@
 #include "z_en_daiku.h"
 #include "objects/object_daiku/object_daiku.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDaiku*)thisx)
 
@@ -67,7 +67,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
         this->unk_288 = ENDAIKU_GET_FF00(&this->actor);
-        this->unk_258 = func_8013D648(globalCtx, this->unk_288, 0x3F);
+        this->unk_258 = SubS_GetPathByIndex(globalCtx, this->unk_288, 0x3F);
     } else if (this->unk_278 == ENDAIKU_PARAMS_FF_2) {
         this->unk_264 = -2000;
     }
@@ -76,11 +76,12 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= 0x8000000;
-        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        this->actor.flags |= ACTOR_FLAG_8000000;
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if ((gSaveContext.day == 3) && gSaveContext.isNight) {
+    } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -133,14 +134,14 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
-        if (!func_8013D68C(this->unk_258, this->unk_25C, &this->unk_26C)) {
+        if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
 }
 
 void func_80943820(EnDaiku* this) {
-    s32 day = gSaveContext.day - 1;
+    s32 day = gSaveContext.save.day - 1;
 
     switch (this->unk_278) {
         case 0:
@@ -167,7 +168,7 @@ void func_80943820(EnDaiku* this) {
 void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.curFrame;
     s32 pad;
-    s32 day = gSaveContext.day - 1;
+    s32 day = gSaveContext.save.day - 1;
     s32 pad2;
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
@@ -241,7 +242,7 @@ void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80943820(this);
     }
@@ -255,7 +256,7 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.day == 3) && (gSaveContext.isNight)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

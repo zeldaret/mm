@@ -7,7 +7,7 @@
 #include "z_boss_04.h"
 #include "objects/object_boss04/object_boss04.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -179,8 +179,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
         spA8.x = D_809EE1F8[i].x + this->actor.world.pos.x;
         spA8.z = D_809EE1F8[i].z + this->actor.world.pos.z;
-        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, 1, 0, 0, 1,
-                                    &spA4)) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, true, false, false,
+                                    true, &spA4)) {
             if (i == 0) {
                 this->unk_6D8 = spB4.x;
             } else if (i == 1) {
@@ -214,8 +214,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_6F6 = 82;
     phi_s0_2 = 0;
     for (i = 0; i < 82; i++) {
-        Matrix_RotateY(phi_s0_2, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(phi_f20, &sp90);
+        Matrix_RotateYS(phi_s0_2, MTXMODE_NEW);
+        Matrix_MultVecZ(phi_f20, &sp90);
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x,
                            phi_f24, this->unk_6F0 + sp90.z, 0, 0, 0, i);
         phi_f20 += 2.5f;
@@ -231,7 +231,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
@@ -245,7 +245,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     this->unk_1FE = 15;
     if ((this->unk_708 != 0) && (this->unk_708 < 10)) {
         this->actor.world.pos.y = (Math_SinS(this->unk_1F4 * 512) * 10.0f) + (this->actor.floorHeight + 160.0f);
-        Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
     }
 
     switch (this->unk_708) {
@@ -259,10 +259,10 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                    this->unk_70A = func_801694DC(globalCtx);
-                    func_80169590(globalCtx, 0, 1);
-                    func_80169590(globalCtx, this->unk_70A, 7);
+                    Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                    this->unk_70A = Play_CreateSubCamera(globalCtx);
+                    Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                    Play_CameraChangeStatus(globalCtx, this->unk_70A, 7);
                     func_800B7298(globalCtx, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -339,7 +339,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
         case 1:
             player->actor.shape.rot.y = 0x7FFF;
             player->actor.world.rot.y = player->actor.shape.rot.y;
-            Matrix_GetStateTranslationAndScaledZ(-100.0f, &this->unk_70C);
+            Matrix_MultVecZ(-100.0f, &this->unk_70C);
 
             this->unk_70C.x += player->actor.world.pos.x;
             this->unk_70C.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
@@ -358,7 +358,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
         case 2:
         case 3:
-            Matrix_GetStateTranslationAndScaledZ(500.0f, &this->unk_70C);
+            Matrix_MultVecZ(500.0f, &this->unk_70C);
             this->unk_70C.x += this->actor.world.pos.x;
             this->unk_70C.y += this->actor.world.pos.y - 50.0f;
             this->unk_70C.z += this->actor.world.pos.z;
@@ -380,7 +380,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_704 > 140) {
-                Camera* sp5C = Play_GetCamera(globalCtx, MAIN_CAM);
+                Camera* sp5C = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 this->unk_708 = 0;
                 func_809ECD00(this, globalCtx);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 sp5C->at = this->unk_718;
                 func_80169AFC(globalCtx, this->unk_70A, 0);
                 this->unk_70A = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 gSaveContext.eventInf[6] |= 1;
@@ -400,14 +400,14 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     if (this->unk_70A != 0) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         if (this->unk_748 != 0) {
             this->unk_748--;
         }
         Math_Vec3f_Copy(&sp50, &this->unk_718);
         sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
         Play_CameraSetAtEye(globalCtx, this->unk_70A, &sp50, &this->unk_70C);
-        func_80169940(globalCtx, this->unk_70A, this->unk_744);
+        Play_CameraSetFov(globalCtx, this->unk_70A, this->unk_744);
         Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -521,7 +521,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     func_801A2ED8();
     this->unk_1F6 = 10;
 }
@@ -542,7 +542,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -591,82 +591,82 @@ void func_809ED50C(Boss04* this) {
     this->unk_2DE += this->unk_2E2;
     this->unk_2DC += this->unk_2E0;
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6BC);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
+    Matrix_MultZero(&this->unk_6BC);
     Matrix_Scale(this->actor.scale.x * 13.0f, this->actor.scale.y * 13.0f, this->actor.scale.z * 16.0f, MTXMODE_APPLY);
-    Matrix_RotateY(this->unk_2DC, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->unk_2DE, MTXMODE_APPLY);
-    Matrix_StatePush();
+    Matrix_RotateYS(this->unk_2DC, MTXMODE_APPLY);
+    Matrix_RotateXS(this->unk_2DE, MTXMODE_APPLY);
+    Matrix_Push();
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
-        Matrix_RotateStateAroundXAxis(0.3926991f);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_2E4[i]);
+        Matrix_RotateXFApply(0.3926991f);
+        Matrix_MultVecZ(100.0f, &this->unk_2E4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_3A4[i]);
+        Matrix_RotateXFApply(0.41887903f);
+        Matrix_MultVecZ(92.0f, &this->unk_3A4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_458); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_458[i]);
+        Matrix_RotateXFApply(0.41887903f);
+        Matrix_MultVecZ(92.0f, &this->unk_458[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_50C); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_50C[i]);
+        Matrix_RotateXFApply(0.5711987f);
+        Matrix_MultVecZ(71.0f, &this->unk_50C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_590); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_590[i]);
+        Matrix_RotateXFApply(0.5711987f);
+        Matrix_MultVecZ(71.0f, &this->unk_590[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_614); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_614[i]);
+        Matrix_RotateXFApply(1.0471976f);
+        Matrix_MultVecZ(38.0f, &this->unk_614[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_65C); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_65C[i]);
+        Matrix_RotateXFApply(1.0471976f);
+        Matrix_MultVecZ(38.0f, &this->unk_65C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
-    Matrix_InsertTranslation(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Pop();
+    Matrix_Push();
+    Matrix_Translate(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
-    Matrix_GetStateTranslation(&this->unk_6A4);
-    Matrix_StatePop();
-    Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6B0);
+    Matrix_MultZero(&this->unk_6A4);
+    Matrix_Pop();
+    Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_MultZero(&this->unk_6B0);
 }
 
 void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
@@ -747,9 +747,9 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_809ED45C(this, globalCtx);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
@@ -805,10 +805,10 @@ void Boss04_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Vec3f sp18;
 
     if (limbIndex == 1) {
-        Matrix_GetStateTranslationAndScaledY(-500.0f, &this->actor.focus.pos);
-        Matrix_MultiplyVector3fByState(&D_809EE228, &sp18);
+        Matrix_MultVecY(-500.0f, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809EE228, &sp18);
         func_809EC040(0, &this->collider1, &sp18);
-        Matrix_MultiplyVector3fByState(&D_809EE234, &sp18);
+        Matrix_MultVec3f(&D_809EE234, &sp18);
         func_809EC040(0, &this->collider2, &sp18);
     }
 }
@@ -824,7 +824,7 @@ void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 800.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 800.0f, MTXMODE_APPLY);
     Matrix_Scale(this->unk_6F8, this->unk_6FC, this->unk_700, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           Boss04_OverrideLimbDraw, Boss04_PostLimbDraw, &this->actor);
@@ -837,9 +837,9 @@ void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
         gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
 
-        Matrix_InsertTranslation(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

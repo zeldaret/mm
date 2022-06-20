@@ -7,7 +7,7 @@
 #include "z_obj_aqua.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjAqua*)thisx)
 
@@ -123,7 +123,7 @@ void func_80ACBA10(ObjAqua* this) {
 
     func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                   &sp2C);
-    func_8018219C(&sp2C, &this->actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, false);
 }
 
 s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {
@@ -268,7 +268,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
     s32 framesTemp;
     s32 pad;
-    s16 yaw = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+    s16 yaw = Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -284,12 +284,12 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (actionFuncTemp) {
         s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
 
-        Matrix_InsertZRotation_s(rotation, MTXMODE_APPLY);
+        Matrix_RotateZS(rotation, MTXMODE_APPLY);
         Matrix_Scale(1.3f, 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(rotation * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(rotation * -1, MTXMODE_APPLY);
         Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     }
-    Matrix_RotateY(yaw, MTXMODE_APPLY);
+    Matrix_RotateYS(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

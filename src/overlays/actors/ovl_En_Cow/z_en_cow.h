@@ -2,10 +2,10 @@
 #define Z_EN_COW_H
 
 #include "global.h"
+#include "objects/object_cow/object_cow.h"
 
 #define EN_COW_TYPE(thisx) ((thisx)->params & 0xF)
 
-#define EN_COW_FLAG_IS_TAIL (1 << 0) // This is never set but it is cleared for tail types
 #define EN_COW_FLAG_PLAYER_HAS_APPROACHED (1 << 1)
 #define EN_COW_FLAG_WONT_GIVE_MILK (1 << 2)
 
@@ -18,16 +18,6 @@ typedef enum {
 struct EnCow;
 
 typedef void (*EnCowActionFunc)(struct EnCow*, GlobalContext*);
-
-typedef enum {
-    /* 0 */ COW_LIMB_NONE,
-    /* 1 */ COW_LIMB_ROOT,
-    /* 2 */ COW_LIMB_HEAD,
-    /* 3 */ COW_LIMB_JAW,
-    /* 4 */ COW_LIMB_NOSE,
-    /* 5 */ COW_LIMB_NOSE_RING,
-    /* 6 */ COW_LIMB_MAX,
-} ObjectCowLimbs;
 
 typedef struct EnCow {
     /* 0x0000 */ Actor actor;

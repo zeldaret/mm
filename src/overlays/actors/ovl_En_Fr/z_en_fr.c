@@ -6,7 +6,7 @@
 
 #include "z_en_fr.h"
 
-#define FLAGS 0x40000000
+#define FLAGS (ACTOR_FLAG_40000000)
 
 #define THIS ((EnFr*)thisx)
 
@@ -45,8 +45,8 @@ void EnFr_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
-        this->actor.flags &= ~0x40000000;
+        this->actor.flags &= ~ACTOR_FLAG_40000000;
     } else {
-        this->actor.flags |= 0x40000000;
+        this->actor.flags |= ACTOR_FLAG_40000000;
     }
 }

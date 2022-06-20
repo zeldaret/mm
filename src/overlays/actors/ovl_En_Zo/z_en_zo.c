@@ -5,9 +5,8 @@
  */
 
 #include "z_en_zo.h"
-#include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZo*)thisx)
 
@@ -19,8 +18,6 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx);
 void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx);
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx);
-
-typedef enum { ZO_DMG_EFF_NONE } EnZoDamageEffect;
 
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
@@ -57,50 +54,53 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Horse trample  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Explosives     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora boomerang */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron punch    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Sword          */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Fire arrow     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Ice arrow      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Light arrow    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron spikes   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku spin      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora barrier   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Sword beam     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, 0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0),
+    /* Horse trample  */ DMG_ENTRY(0, 0),
+    /* Explosives     */ DMG_ENTRY(0, 0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0),
+    /* Hookshot       */ DMG_ENTRY(0, 0),
+    /* Goron punch    */ DMG_ENTRY(0, 0),
+    /* Sword          */ DMG_ENTRY(0, 0),
+    /* Goron pound    */ DMG_ENTRY(0, 0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0),
+    /* Light arrow    */ DMG_ENTRY(0, 0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0),
+    /* Deku spin      */ DMG_ENTRY(0, 0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0),
+    /* Deku launch    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0),
+    /* Normal shield  */ DMG_ENTRY(0, 0),
+    /* Light ray      */ DMG_ENTRY(0, 0),
+    /* Thrown object  */ DMG_ENTRY(0, 0),
+    /* Zora punch     */ DMG_ENTRY(0, 0),
+    /* Spin attack    */ DMG_ENTRY(0, 0),
+    /* Sword beam     */ DMG_ENTRY(0, 0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0),
+    /* Unblockable    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &gZoraIdleAnim, 1.0f, 0, -1, 0, 0 },       { &gZoraIdleAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraSurfacingAnim, 1.0f, 0, -1, 0, -4 }, { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraArmsOpenAnim, 1.0f, 0, -1, 0, -4 },  { &gZoraThrowRupeeAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraWalkAnim, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraArmsOpenAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraThrowRupeeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
-s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
-u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+s8 sBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
+s8 sParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
+u8 sShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
@@ -110,11 +110,11 @@ s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
         didChange = true;
         frameCount = sAnimations[index].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[index].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[index].animation);
         }
-        Animation_Change(skelAnime, sAnimations[index].animationSeg, sAnimations[index].playbackSpeed,
-                         sAnimations[index].frame, frameCount, sAnimations[index].mode,
-                         sAnimations[index].transitionRate);
+        Animation_Change(skelAnime, sAnimations[index].animation, sAnimations[index].playSpeed,
+                         sAnimations[index].startFrame, frameCount, sAnimations[index].mode,
+                         sAnimations[index].morphFrames);
     }
     return didChange;
 }
@@ -140,12 +140,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
 
-    this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
+    this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
+    this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
@@ -173,20 +173,25 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
-    static u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static TrackOptionsSet sTrackOptions = {
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+        { 0xFA0, 4, 1, 3 },
+        { 0x1770, 4, 1, 6 },
+    };
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f focus;
+    Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
-    if (func_8013D5E8(this->actor.shape.rot.y, 10000, this->actor.yawTowardsPlayer)) {
-        focus.x = player->actor.world.pos.x;
-        focus.y = player->bodyPartsPos[7].y + 3.0f;
-        focus.z = player->actor.world.pos.z;
-        func_8013D2E0(&focus, &this->actor.focus.pos, &this->actor.shape.rot, &this->headRotTarget, &this->headRot,
-                      &this->upperBodyRot, D_8099F5AC);
+    if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
+        point.x = player->actor.world.pos.x;
+        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.z = player->actor.world.pos.z;
+        SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
+                        &this->upperBodyRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->headRotTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->headRotTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 1000, 1);
 
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);
@@ -196,7 +201,7 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     }
 
     EnZo_Blink(this, 3);
-    func_8013D9C8(globalCtx, this->limbRotY, this->limbRotZ, 20);
+    SubS_FillLimbRotTables(globalCtx, this->limbRotY, this->limbRotZ, 20);
 }
 
 void EnZo_Walk(EnZo* this, GlobalContext* globalCtx) {
@@ -217,7 +222,7 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     speed = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->path, this->waypoint, &pos) && func_8013D768(&this->actor, &pos, speed)) {
+    if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
             this->waypoint = 0;
@@ -251,14 +256,15 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable,
+                       ZORA_LIMB_MAX);
     EnZo_SetAnimation(&this->skelAnime, 0);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = func_8013D648(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
+    this->path = SubS_GetPathByIndex(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;
@@ -285,19 +291,20 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
                           Gfx** gfx) {
     EnZo* this = THIS;
 
-    if (limbIndex == 15) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    if (limbIndex == ZORA_LIMB_HEAD) {
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->upperBodyRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->upperBodyRot.x, MTXMODE_APPLY);
+    if (limbIndex == ZORA_LIMB_TORSO) {
+        Matrix_RotateXS(-this->upperBodyRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == ZORA_LIMB_TORSO) || (limbIndex == ZORA_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == ZORA_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
     }
@@ -309,17 +316,17 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (D_8099F578[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
+    if (sBodyParts[limbIndex] >= 0) {
+        Matrix_MultVec3f(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
     }
-    if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+    if (limbIndex == ZORA_LIMB_HEAD) {
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
-    if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->leftFootPos);
+    if (limbIndex == ZORA_LIMB_LEFT_FOOT) {
+        Matrix_MultVec3f(&zeroVec, &this->leftFootPos);
     }
-    if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->rightFootPos);
+    if (limbIndex == ZORA_LIMB_RIGHT_FOOT) {
+        Matrix_MultVec3f(&zeroVec, &this->rightFootPos);
     }
 }
 
@@ -335,9 +342,9 @@ static Gfx sTransparencyDlist[] = {
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8) * SQ(64));
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;
-    TexturePtr eyeTextures[] = { &gZoraEyeOpenTex, &gZoraEyeHalfTex, &gZoraEyeClosedTex };
+    TexturePtr eyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -351,16 +358,17 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    Matrix_InsertXRotation_s(0, 0);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
-    for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8) * SQ(64); i++) {
+    for (i = 0, shadowTexIter = shadowTex; i < SUBS_SHADOW_TEX_SIZE; i++) {
         *shadowTexIter = 0;
         shadowTexIter++;
     }
     for (i = 0; i < 5; i++) {
-        func_8013CD64(this->unk_364, &this->actor.world.pos, shadowTex, i / 5.0f, 15, D_8099F59C, D_8099F58C);
+        SubS_GenShadowTex(this->bodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f,
+                          ARRAY_COUNT(this->bodyPartsPos), sShadowSizes, sParentBodyParts);
     }
 
-    func_8013CF04(&this->actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->actor, &globalCtx->state, shadowTex);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS 0x08000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -70,7 +70,7 @@ void EnWizFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 3;
     this->unk_172 = 10;
     this->unk_1FC = 255.0f;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     if (!func_8012405C(globalCtx)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
@@ -108,19 +108,19 @@ void EnWizFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnWizFire* this = THIS;
 
     if (this->unk_162 == 0) {
-        globalCtx->envCtx.unk_8C.fogColor[2] = 0;
-        globalCtx->envCtx.unk_8C.fogColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogNear = globalCtx->envCtx.unk_8C.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[2] = 0;
+        globalCtx->envCtx.lightSettings.fogColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogNear = globalCtx->envCtx.lightSettings.fogColor[2];
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -134,9 +134,9 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
     }
 
     this->unk_16E = 0;
-    Matrix_StatePush();
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
+    Matrix_Push();
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
 
     if (this->unk_162 != 0) {
         sp44.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
@@ -144,8 +144,8 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
         sp44.z = 12.0f;
     }
 
-    Matrix_MultiplyVector3fByState(&sp44, &this->actor.velocity);
-    Matrix_StatePop();
+    Matrix_MultVec3f(&sp44, &this->actor.velocity);
+    Matrix_Pop();
     this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
     this->unk_168 = 50;
     if (this->unk_162 != 0) {
@@ -202,11 +202,11 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
         if (this->unk_162 == 1) {
             this->unk_16A = 10;
 
-            Matrix_StatePush();
-            Matrix_RotateY((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_Push();
+            Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
-            Matrix_MultiplyVector3fByState(&sp54, &this->actor.velocity);
-            Matrix_StatePop();
+            Matrix_MultVec3f(&sp54, &this->actor.velocity);
+            Matrix_Pop();
 
             this->actor.velocity.y = 6.0f;
             this->actor.gravity = -0.7f;
@@ -483,37 +483,37 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 phi_f0 = 968.0f;
             }
 
-            globalCtx->envCtx.unk_8C.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
+            globalCtx->envCtx.lightSettings.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
 
-            globalCtx->envCtx.unk_8C.ambientColor[0] =
+            globalCtx->envCtx.lightSettings.ambientColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.ambientColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[1] =
+            globalCtx->envCtx.lightSettings.ambientColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.ambientColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[2] =
+            globalCtx->envCtx.lightSettings.ambientColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.ambientColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor1[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor1[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor1[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor1[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor2[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.fogColor[0] =
+            globalCtx->envCtx.lightSettings.fogColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.fogColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[1] =
+            globalCtx->envCtx.lightSettings.fogColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.fogColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[2] =
+            globalCtx->envCtx.lightSettings.fogColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.fogColor[2]) * this->unk_204;
         }
     }
@@ -629,8 +629,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
     if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -645,7 +644,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
                                     -globalCtx->state.frames & 0x7F, 0x20, 0x40, 1, globalCtx->state.frames & 0xFF,
                                     globalCtx->state.frames & 0xFF, 0x10, 0x10));
 
-        Matrix_RotateY(0, MTXMODE_APPLY);
+        Matrix_RotateYS(0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005750);
@@ -664,9 +663,8 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
     if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Push();
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -678,11 +676,10 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 245, 255, 128);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003120);
 
-        Matrix_StatePop();
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_Pop();
+        Matrix_Push();
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames % 128,
@@ -698,9 +695,9 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_Pop();
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (-globalCtx->state.frames * 3) % 128, 0, 0x20, 0x20, 1,
@@ -727,7 +724,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = 9; i >= this->unk_16E; i--) {
         f32 temp_f20 = this->actor.scale.x - (i * -0.0019f);
@@ -741,11 +738,11 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 220, 255, 235, 0);
             }
 
-            Matrix_InsertTranslation(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset,
-                                     this->unk_178[i].z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset, this->unk_178[i].z,
+                             MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_InsertZRotation_s(this->actor.world.rot.z, MTXMODE_APPLY);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -753,7 +750,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -770,8 +767,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z,
-                             MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->unk_14C + this->unk_154, this->unk_14C + this->unk_158, this->unk_14C + this->unk_15C,
                  MTXMODE_APPLY);
 
@@ -781,7 +777,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 100, 50, 0, (s8)this->unk_1FC);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 235, 245, 255);
 
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002630);
@@ -864,8 +860,8 @@ void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_01 * 3) & 0x7F,
                                         (ptr->unk_01 * 0xF) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_0C, ptr->unk_0C, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

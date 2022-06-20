@@ -238,7 +238,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags |= 0x11; // always update and can target
+            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10); // always update and can target
 
             transformationHeight = sTransformationHeight[player->transformation];
 

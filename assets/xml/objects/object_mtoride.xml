@@ -31,7 +31,7 @@
         <TextureAnimation Name="object_mtoride_Matanimheader_00AA50" Offset="0xAA50" />
         <DList Name="object_mtoride_DL_00AF90" Offset="0xAF90" />
         <DList Name="object_mtoride_DL_00AF98" Offset="0xAF98" />
-        <!-- <Blob Name="object_mtoride_Blob_00B1A0" Size="0x10" Offset="0xB1A0" /> -->
+        <TextureAnimation Name="object_mtoride_Matanimheader_00B1A0" Offset="0xB1A0" />
         <DList Name="object_mtoride_DL_00DE50" Offset="0xDE50" />
         <DList Name="object_mtoride_DL_00DF18" Offset="0xDF18" />
         <DList Name="object_mtoride_DL_00F3C0" Offset="0xF3C0" />
@@ -40,7 +40,7 @@
         <DList Name="object_mtoride_DL_00FAE0" Offset="0xFAE0" />
         <DList Name="object_mtoride_DL_00FAE8" Offset="0xFAE8" />
         <Collision Name="object_mtoride_Colheader_00FE5C" Offset="0xFE5C" />
-        <!-- <Blob Name="object_mtoride_Blob_00FE90" Size="0x10" Offset="0xFE90" /> -->
+        <TextureAnimation Name="object_mtoride_Matanimheader_00FE90" Offset="0xFE90" />
         <Collision Name="object_mtoride_Colheader_010C3C" Offset="0x10C3C" />
         <DList Name="object_mtoride_DL_010EF0" Offset="0x10EF0" />
         <DList Name="object_mtoride_DL_010FD8" Offset="0x10FD8" />

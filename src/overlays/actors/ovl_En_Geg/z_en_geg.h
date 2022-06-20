@@ -14,10 +14,8 @@ typedef struct EnGeg {
     /* 0x18C */ ColliderCylinder colliderCylinder;
     /* 0x1D8 */ ColliderSphere colliderSphere;
     /* 0x230 */ u16 unk_230;
-    /* 0x232 */ s16 unk_232;
-    /* 0x234 */ UNK_TYPE1 unk234[4];
-    /* 0x238 */ s16 unk_238;
-    /* 0x23A */ UNK_TYPE1 unk23A[0x4];
+    /* 0x232 */ s16 unk_232[3];
+    /* 0x238 */ s16 unk_238[3];
     /* 0x23E */ s16 unk_23E;
     /* 0x240 */ s16 unk_240;
     /* 0x242 */ s16 unk_242;

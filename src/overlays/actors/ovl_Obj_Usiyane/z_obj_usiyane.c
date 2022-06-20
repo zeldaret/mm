@@ -6,7 +6,7 @@
 
 #include "z_obj_usiyane.h"
 
-#define FLAGS 0x00000020
+#define FLAGS (ACTOR_FLAG_20)
 
 #define THIS ((ObjUsiyane*)thisx)
 

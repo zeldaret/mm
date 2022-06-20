@@ -7,7 +7,7 @@
 #include "z_en_ssh.h"
 #include "objects/object_ssh/object_ssh.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSsh*)thisx)
 
@@ -151,8 +151,8 @@ s32 EnSsh_CheckCeilingPos(EnSsh* this, GlobalContext* globalCtx) {
     posB.x = this->actor.world.pos.x;
     posB.y = this->actor.world.pos.y + 1000.0f;
     posB.z = this->actor.world.pos.z;
-    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, 0, 0, 1,
-                                 1, &bgId)) {
+    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, false,
+                                 false, true, true, &bgId)) {
         return false;
     }
     return true;
@@ -172,10 +172,10 @@ void EnSsh_AddBlureVertex(EnSsh* this) {
     p2Base.y *= this->colliderScale;
     p2Base.z *= this->colliderScale;
 
-    Matrix_StatePush();
-    Matrix_MultiplyVector3fByState(&p1Base, &p1);
-    Matrix_MultiplyVector3fByState(&p2Base, &p2);
-    Matrix_StatePop();
+    Matrix_Push();
+    Matrix_MultVec3f(&p1Base, &p1);
+    Matrix_MultVec3f(&p2Base, &p2);
+    Matrix_Pop();
     EffectBlure_AddVertex(Effect_GetByIndex(this->blureIdx), &p1, &p2);
 }
 
@@ -425,11 +425,11 @@ void EnSsh_Sway(EnSsh* this) {
         swayVecBase.y = Math_CosS(swayAngle) * temp_f20;
         swayVecBase.z = 0.0f;
 
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
-        Matrix_InsertYRotation_f(this->actor.world.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&swayVecBase, &swayVec);
-        Matrix_StatePop();
+        Matrix_Push();
+        Matrix_Translate(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
+        Matrix_RotateYF(this->actor.world.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
+        Matrix_MultVec3f(&swayVecBase, &swayVec);
+        Matrix_Pop();
 
         this->actor.shape.rot.z = -(swayAngle * 2);
         this->actor.world.pos.x = swayVec.x;
@@ -592,11 +592,11 @@ s32 EnSsh_SetCylinderOC(EnSsh* this, GlobalContext* globalCtx) {
         colliderOffsets[i].y *= this->colliderScale;
         colliderOffsets[i].z *= this->colliderScale;
 
-        Matrix_StatePush();
-        Matrix_InsertTranslation(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
-        Matrix_InsertYRotation_f(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&colliderOffsets[i], &colliderPos);
-        Matrix_StatePop();
+        Matrix_Push();
+        Matrix_Translate(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
+        Matrix_RotateYF(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
+        Matrix_MultVec3f(&colliderOffsets[i], &colliderPos);
+        Matrix_Pop();
 
         this->collider1[3 + i].dim.pos.x = colliderPos.x;
         this->collider1[3 + i].dim.pos.y = colliderPos.y;
@@ -683,8 +683,8 @@ void EnSsh_Wait(EnSsh* this, GlobalContext* globalCtx) {
 void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
     EnSsh_Bob(this, globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x904:
             case 0x905:
             case 0x906:
@@ -693,7 +693,7 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
             case 0x911:
             case 0x912:
             case 0x914:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             default:
@@ -707,13 +707,13 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
 void func_809756D0(EnSsh* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
-    if (gSaveContext.weekEventReg[34] & 8) {
+    if (gSaveContext.save.weekEventReg[34] & 8) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.weekEventReg[34] |= 8;
+        gSaveContext.save.weekEventReg[34] |= 8;
     }
-    func_801518B0(globalCtx, phi_a1, &this->actor);
+    Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }
 
 void EnSsh_Idle(EnSsh* this, GlobalContext* globalCtx) {

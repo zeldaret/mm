@@ -30,13 +30,22 @@ const ActorInit En_Item00_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AT_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER },
-    { ELEMTYPE_UNK0,
-      { 0x00000000, 0x00, 0x00 },
-      { 0x00000010, 0x00, 0x00 },
-      TOUCH_NONE | TOUCH_SFX_NORMAL,
-      BUMP_ON,
-      OCELEM_NONE },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AT_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000010, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
@@ -59,9 +68,9 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
     s32 getItemId = GI_NONE;
-    s32 sp30 = (this->actor.params & 0x8000) ? 1 : 0;
+    s32 sp30 = ENITEM00_GET_8000(&this->actor) ? 1 : 0;
 
-    this->collectibleFlag = (this->actor.params & 0x7F00) >> 8;
+    this->collectibleFlag = ENITEM00_GET_7F00(&this->actor);
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
@@ -337,7 +346,7 @@ void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
         pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
-        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        EffectSsKirakira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
     if ((this->actor.bgCheckFlags & 3) != 0) {
         if (this->actor.velocity.y > -2.0f) {
@@ -394,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.y = this->actor.world.pos.y + ((Rand_ZeroOne() - 0.5f) * 10.0f);
         pos.z = this->actor.world.pos.z + ((Rand_ZeroOne() - 0.5f) * 10.0f);
-        EffectSsKiraKira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
+        EffectSsKirakira_SpawnSmall(globalCtx, &pos, &D_801ADF18, &D_801ADF24, &D_801ADF10, &D_801ADF14);
     }
 
     if (this->actor.bgCheckFlags & 0x0003) {
@@ -806,20 +815,18 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 s16 func_800A7650(s16 dropId) {
-    s16 healthCapacity;
-
     if ((((dropId == ITEM00_BOMBS_A) || (dropId == ITEM00_BOMBS_0) || (dropId == ITEM00_BOMBS_B)) &&
          (INV_CONTENT(ITEM_BOMB) == ITEM_NONE)) ||
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
          (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
-        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.magicLevel == 0))) {
+        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) &&
+         (gSaveContext.save.playerData.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
     if (dropId == ITEM00_HEART) {
-        healthCapacity = gSaveContext.healthCapacity;
-        if (healthCapacity == gSaveContext.health) {
+        if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -1040,7 +1047,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         dropQuantity = sDropTableAmounts[params + dropTableIndex];
 
         if (dropId == ITEM00_MASK) {
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_HUMAN:
                     dropId = ITEM00_ARROWS_10;
                     break;
@@ -1076,26 +1083,27 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         }
 
         if (dropId == ITEM00_FLEXIBLE) {
-            if (gSaveContext.health <= 0x10) {
+            if (gSaveContext.save.playerData.health <= 0x10) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
                 SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
-            if (gSaveContext.health <= 0x30) {
+            if (gSaveContext.save.playerData.health <= 0x30) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 3;
-            } else if (gSaveContext.health <= 0x50) {
+            } else if (gSaveContext.save.playerData.health <= 0x50) {
                 params = 0x10;
                 dropId = ITEM00_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.magicLevel != 0) && (gSaveContext.magic == 0)) {
+            } else if ((gSaveContext.save.playerData.magicLevel != 0) && (gSaveContext.save.playerData.magic == 0)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.magicLevel != 0) && ((gSaveContext.magicLevel >> 1) >= gSaveContext.magic)) {
+            } else if ((gSaveContext.save.playerData.magicLevel != 0) &&
+                       ((gSaveContext.save.playerData.magicLevel >> 1) >= gSaveContext.save.playerData.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
@@ -1107,7 +1115,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
-            } else if (gSaveContext.rupees < 11) {
+            } else if (gSaveContext.save.playerData.rupees < 11) {
                 params = 0xA0;
                 dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;
@@ -1130,7 +1138,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
-                            spawnedActor->actor.flags = spawnedActor->actor.flags | 0x10;
+                            spawnedActor->actor.flags = spawnedActor->actor.flags | ACTOR_FLAG_10;
                             if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_PIECE) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {

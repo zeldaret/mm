@@ -26,12 +26,17 @@ void func_80AD4FE4(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD5234(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx);
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt2_InitVars = {
@@ -103,18 +108,18 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_80AD3380(SkelAnime* skelAnime, ActorAnimationEntryS* animation, s32 arg2) {
+void func_80AD3380(SkelAnime* skelAnime, AnimationInfoS* animation, s32 arg2) {
     f32 phi_f0;
 
     animation += arg2;
 
     if (animation->frameCount < 0) {
-        phi_f0 = Animation_GetLastFrame(animation->animationSeg);
+        phi_f0 = Animation_GetLastFrame(animation->animation);
     } else {
         phi_f0 = animation->frameCount;
     }
-    Animation_Change(skelAnime, animation->animationSeg, animation->playbackSpeed, animation->frame, phi_f0,
-                     animation->mode, animation->transitionRate);
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
+                     animation->mode, animation->morphFrames);
 }
 
 void func_80AD341C(EnTrt2* this, GlobalContext* globalCtx) {
@@ -126,13 +131,13 @@ void func_80AD341C(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((gSaveContext.weekEventReg[85] & 0x10) && !(gSaveContext.weekEventReg[84] & 0x40)) {
+    if ((gSaveContext.save.weekEventReg[85] & 0x10) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (gSaveContext.weekEventReg[16] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
         this->unk_3A8 = 0x838;
-    } else if (gSaveContext.weekEventReg[17] & 1) {
+    } else if (gSaveContext.save.weekEventReg[17] & 1) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -198,7 +203,7 @@ void func_80AD36EC(EnTrt2* this, GlobalContext* globalCtx) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = func_8013D648(globalCtx, this->path->unk1, -1);
+                this->path = SubS_GetPathByIndex(globalCtx, this->path->unk1, -1);
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
                 ActorCutscene_SetIntentToPlay(this->unk_3DA);
@@ -325,9 +330,9 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
 
     func_80AD46F8(this);
     if (this->unk_3D8) {
-        func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
-    } else if ((sp27 == 5) && func_80147624(globalCtx)) {
+    } else if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         func_80AD3380(&this->skelAnime, sAnimations, 6);
@@ -337,7 +342,7 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
-    func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
 
     if (this->unk_3A8 == 0x838) {
         this->unk_3B2 = 11;
@@ -354,15 +359,15 @@ void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (Interface_HasEmptyBottle()) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_3B2 = 12;
         } else {
-            gSaveContext.weekEventReg[85] |= 0x10;
+            gSaveContext.save.weekEventReg[85] |= 0x10;
             this->unk_3A8 = 0x88E;
-            func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
         }
     }
@@ -372,18 +377,18 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 6) {
-        if (func_80147624(globalCtx)) {
-            if ((Interface_HasEmptyBottle() && !(gSaveContext.weekEventReg[84] & 0x40)) ||
-                !(gSaveContext.weekEventReg[12] & 0x10)) {
+        if (Message_ShouldAdvance(globalCtx)) {
+            if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
+                !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 this->unk_3B2 = 12;
             } else {
-                gSaveContext.weekEventReg[85] |= 0x10;
+                gSaveContext.save.weekEventReg[85] |= 0x10;
                 this->unk_3A8 = 0x88E;
-                func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
             }
         }
-    } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_3B2 = 12;
@@ -392,13 +397,13 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD3FF4(EnTrt2* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (!(gSaveContext.weekEventReg[12] & 0x10)) {
-            gSaveContext.weekEventReg[12] |= 0x10;
+        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            gSaveContext.save.weekEventReg[12] |= 0x10;
         }
-        gSaveContext.weekEventReg[84] |= 0x40;
+        gSaveContext.save.weekEventReg[84] |= 0x40;
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (gSaveContext.weekEventReg[12] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
         Actor_PickUp(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
@@ -406,7 +411,7 @@ void func_80AD3FF4(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD40AC(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->unk_3B2 = 13;
     }
@@ -423,7 +428,7 @@ void func_80AD4110(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, globalCtx);
@@ -432,11 +437,11 @@ void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
             globalCtx->msgCtx.unk12023 = 4;
             if (this->unk_3A8 == 0x84C) {
                 func_80AD3380(&this->skelAnime, sAnimations, 6);
-                this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                this->path = SubS_GetPathByIndex(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
-                func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
             } else {
                 this->actor.textId = 0;
                 this->unk_3B2 = 15;
@@ -509,7 +514,7 @@ void func_80AD4550(EnTrt2* this, GlobalContext* globalCtx) {
         this->unk_3B2 = 17;
     }
 
-    if ((sp23 == 5) && func_80147624(globalCtx)) {
+    if ((sp23 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
     }
@@ -703,7 +708,7 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;
@@ -724,20 +729,20 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (gSaveContext.weekEventReg[12] & 8) {
+    if (gSaveContext.save.weekEventReg[12] & 8) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if (gSaveContext.weekEventReg[84] & 0x40) {
+    if (gSaveContext.save.weekEventReg[84] & 0x40) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     if ((globalCtx->sceneNum == SCENE_20SICHITAI) || (globalCtx->sceneNum == SCENE_20SICHITAI2)) {
-        if (gSaveContext.day == 2) {
-            if (!(gSaveContext.weekEventReg[15] & 0x80)) {
-                gSaveContext.weekEventReg[15] |= 0x80;
+        if (gSaveContext.save.day == 2) {
+            if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
+                gSaveContext.save.weekEventReg[15] |= 0x80;
                 this->unk_3B2 = 3;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -747,14 +752,14 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-    } else if (gSaveContext.day == 2) {
-        if (gSaveContext.weekEventReg[15] & 0x80) {
+    } else if (gSaveContext.save.day == 2) {
+        if (gSaveContext.save.weekEventReg[15] & 0x80) {
             this->unk_3B2 = 4;
         } else {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-    } else if (gSaveContext.day == 3) {
+    } else if (gSaveContext.save.day == 3) {
         this->unk_3B2 = 4;
     }
     this->actionFunc = func_80AD4FE4;
@@ -849,9 +854,9 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
-    func_8018219C(&sp28, &sp68, 0);
+    Matrix_MultVec3f(&sp70, &sp7C);
+    Matrix_Get(&sp28);
+    Matrix_MtxFToYXZRot(&sp28, &sp68, false);
 
     *arg2 = sp7C;
 
@@ -890,24 +895,24 @@ void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
     if (limbIndex == 21) {
         func_80AD5394(this->unk_3D4, this->unk_3D6, &this->unk_3C8, &this->unk_3C2, phi_v0);
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_3C2.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+        Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_3C2.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_3C2.z, MTXMODE_APPLY);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
 }
 
-void EnTrt2_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTrt2_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt2* this = THIS;
 
     if (limbIndex == 21) {
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_3C2.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_3C2.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_3C2.z, MTXMODE_APPLY);
     }
 }
 
@@ -929,7 +934,7 @@ void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTrt2_OverrideLimbDraw, EnTrt2_PostLimbDraw,
-                                   EnTrt2_UnkDraw, &this->actor);
+                                   EnTrt2_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

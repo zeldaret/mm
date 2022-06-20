@@ -259,7 +259,7 @@ void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx) {
 void ObjMure_CulledState(ObjMure* this, GlobalContext* globalCtx) {
     if (fabsf(this->actor.projectedPos.z) < sZClip[this->type]) {
         this->actionFunc = ObjMure_ActiveState;
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         ObjMure_SpawnActors(this, globalCtx);
     }
 }
@@ -382,7 +382,7 @@ void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx) {
     ObjMure_CheckChildren(this, globalCtx);
     if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         ObjMure_KillActors(this, globalCtx);
     } else if (sTypeGroupBehaviorFunc[this->type] != NULL) {
         sTypeGroupBehaviorFunc[this->type](this, globalCtx);

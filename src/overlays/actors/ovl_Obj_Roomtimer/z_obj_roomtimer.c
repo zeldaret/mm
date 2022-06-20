@@ -6,7 +6,7 @@
 
 #include "z_obj_roomtimer.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjRoomtimer*)thisx)
 
@@ -68,7 +68,7 @@ void func_80973D3C(ObjRoomtimer* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80973DE0;
     } else if (this->actor.params != 0x1FF && gSaveContext.unk_3DD0[4] == 0) {
         play_sound(NA_SE_OC_ABYSS);
-        func_80169EFC(globalCtx);
+        func_80169EFC(&globalCtx->state);
         Actor_MarkForDeath(&this->actor);
     }
 }

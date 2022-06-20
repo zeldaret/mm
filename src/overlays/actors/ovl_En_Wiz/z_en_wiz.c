@@ -6,7 +6,9 @@
 
 #include "z_en_wiz.h"
 
-#define FLAGS 0x88101035
+#define FLAGS                                                                                            \
+    (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000 | ACTOR_FLAG_100000 | \
+     ACTOR_FLAG_8000000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
 

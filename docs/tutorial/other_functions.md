@@ -1,7 +1,7 @@
 # The rest of the functions in the actor
 
-Up: [Contents](contents.md)
-Previous: [Beginning decompilation: the Init function and the Actor struct](beginning_decomp.md)
+- Up: [Contents](contents.md)
+- Previous: [Beginning decompilation: the Init function and the Actor struct](beginning_decomp.md)
 
 ## Now what?
 
@@ -288,7 +288,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         func_80C10148(this);
         return;
     }
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
             Flags_SetSwitch(globalCtx, (s32) this->actor.params);
@@ -347,7 +347,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
@@ -378,7 +378,7 @@ There remains one thing we need to fix before trying to compile it, namely `*(&g
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
 ```
-so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.weekEventReg[63] & 0x80)` will do.
+so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.weekEventReg[63] & 0x80)` will do.
 
 Running `./diff.py -mwo3 func_80C102D4` and scrolling down, we discover that this doesn't match!
 
@@ -397,7 +397,7 @@ somehow we skipped over `t0`. Where is this in the code? The `153` in the middle
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
 ```
 
 If you look at the conditionals and the declaration of `temp_v0_2`, you may notice something odd: `temp_v0_2` is a `u8`. Therefore the `& 0xFF` does nothing! It's surprisingly common for this to happen, be it leaving out a `& 0xFF` or adding an extraneous one. If we remove it, we get a match:
@@ -422,7 +422,7 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     ? sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    Actor_TrackPlayer(globalCtx, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
@@ -440,13 +440,13 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     ? sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    Actor_TrackPlayer(globalCtx, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
-Now, our problem is `func_800E9250`. The arguments all look terrible! Indeed, if we look at the actual function in `src/code/code_800E8EA0.c` (found by searching), we find that it should be
+Now, our problem is `Actor_TrackPlayer`. The arguments all look terrible! Indeed, if we look at the actual function in `src/code/code_800E8EA0.c` (found by searching), we find that it should be
 ```C
-s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5)
+s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos)
 ```
 So mips2c has made a bit of a mess here:
 - the third argument should be a `Vec3s`. Hence `this + 0x2AE` is a `Vec3s*`, and so `this->unk_2AE` is a `Vec3s`
@@ -460,7 +460,7 @@ void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
     Vec3s sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```
@@ -490,7 +490,7 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     Vec3s sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```

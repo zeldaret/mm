@@ -7,7 +7,7 @@
 #include "z_en_dai.h"
 #include "objects/object_dai/object_dai.h"
 
-#define FLAGS 0x02000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDai*)thisx)
 
@@ -33,28 +33,27 @@ const ActorInit En_Dai_InitVars = {
 
 static Vec3f D_80B3FBF0 = { 1.0f, 1.0f, 1.0f };
 
-EnDaiParticle* func_80B3DFF0(EnDaiParticle* particle, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5,
-                             s32 arg6) {
+EnDaiEffect* func_80B3DFF0(EnDaiEffect* effect, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
     s32 i;
 
-    for (i = 0; i < 32; i++, particle++) {
-        if (!particle->isEnabled) {
-            particle->isEnabled = true;
-            particle->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
-            particle->unk_02 = particle->unk_01;
-            particle->unk_10 = arg1;
-            particle->unk_1C = arg2;
-            particle->unk_28 = arg3;
-            particle->unk_34 = arg4;
-            particle->unk_38 = arg5;
-            return particle;
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->unk_01 = (Rand_ZeroOne() * (2.0f * (arg6 / 3.0f))) + (arg6 / 3.0f);
+            effect->unk_02 = effect->unk_01;
+            effect->unk_10 = arg1;
+            effect->unk_1C = arg2;
+            effect->unk_28 = arg3;
+            effect->unk_34 = arg4;
+            effect->unk_38 = arg5;
+            return effect;
         }
     }
 
     return NULL;
 }
 
-void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
+void func_80B3E168(EnDaiEffect* effect, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 pad;
     s32 isDisplayListSet = false;
@@ -65,8 +64,8 @@ void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < 32; i++, particle++) {
-        if (particle->isEnabled == true) {
+    for (i = 0; i < EN_DAI_EFFECT_COUNT; i++, effect++) {
+        if (effect->isEnabled == true) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!isDisplayListSet) {
@@ -74,26 +73,26 @@ void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
                 isDisplayListSet = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
-            alpha = (particle->unk_02 / (f32)particle->unk_01);
+            alpha = (effect->unk_02 / (f32)effect->unk_01);
             alpha *= 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (particle->unk_02 + (i * 3)) * 3,
-                                        (particle->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (effect->unk_02 + (i * 3)) * 3,
+                                        (effect->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(particle->unk_10.x, particle->unk_10.y, particle->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_Scale(particle->unk_34, particle->unk_34, 1.0f, MTXMODE_APPLY);
+            Matrix_Translate(effect->unk_10.x, effect->unk_10.y, effect->unk_10.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_0002E8);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
@@ -101,23 +100,23 @@ void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
 }
 
 s32 func_80B3E460(EnDai* this) {
-    EnDaiParticle* particle = &this->particles[0];
+    EnDaiEffect* effect = this->effects;
     s32 i;
     s32 count;
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isEnabled && particle->unk_02) {
-            particle->unk_10.x += particle->unk_28.x;
-            particle->unk_02--;
-            particle->unk_10.y += particle->unk_28.y;
-            particle->unk_10.z += particle->unk_28.z;
-            particle->unk_28.x += particle->unk_1C.x;
-            particle->unk_28.y += particle->unk_1C.y;
-            particle->unk_28.z += particle->unk_1C.z;
-            particle->unk_34 += particle->unk_38;
+    for (i = 0, count = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled && effect->unk_02) {
+            effect->unk_10.x += effect->unk_28.x;
+            effect->unk_02--;
+            effect->unk_10.y += effect->unk_28.y;
+            effect->unk_10.z += effect->unk_28.z;
+            effect->unk_28.x += effect->unk_1C.x;
+            effect->unk_28.y += effect->unk_1C.y;
+            effect->unk_28.z += effect->unk_1C.z;
+            effect->unk_34 += effect->unk_38;
             count++;
-        } else if (particle->isEnabled) {
-            particle->isEnabled = false;
+        } else if (effect->isEnabled) {
+            effect->isEnabled = false;
         }
     }
 
@@ -125,21 +124,25 @@ s32 func_80B3E460(EnDai* this) {
 }
 
 s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
-    func_80B3E168(this->particles, globalCtx);
+    func_80B3E168(this->effects, globalCtx);
     return 0;
 }
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static ActorAnimationEntryS D_80B3FBFC[] = {
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, 0 },  { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_007354, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_000CEC, 1.0f, 0, -1, 2, -4 },
-        { &object_dai_Anim_0069DC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, 0 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_002E58, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_006590, 1.0f, 0, -1, 2, -4 },
+    static AnimationInfoS D_80B3FBFC[] = {
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     };
 
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:
@@ -165,7 +168,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_A70 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80B3FBFC, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B3FBFC, arg1);
     }
 
     return ret;
@@ -175,7 +178,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+        (globalCtx->csCtx.currentCsIndex == 0) && !(gSaveContext.save.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -190,7 +193,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     } else if (this->unk_1CE & 0x10) {
         this->unk_1CE &= ~0x10;
         this->unk_1CE |= 0x200;
-        gSaveContext.weekEventReg[30] |= 1;
+        gSaveContext.save.weekEventReg[30] |= 1;
         this->actionFunc = func_80B3F00C;
     }
 
@@ -202,7 +205,7 @@ s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
 
     if (this->unk_1CE & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_1CE, 0, 7);
+            SubS_UpdateFlags(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;
         }
@@ -321,7 +324,7 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
         sp5C.y = -40.0f;
 
         Lib_Vec3f_TranslateAndRotateY(&this->unk_1E4, this->unk_1D4, &sp50, &sp74);
-        func_80B3DFF0(this->particles, sp74, sp68, sp5C, 0.03f, 0.04f, 0x10);
+        func_80B3DFF0(this->effects, sp74, sp68, sp5C, 0.03f, 0.04f, 0x10);
     }
 
     return 0;
@@ -424,7 +427,7 @@ void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
 
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, NULL, &this->unk_1D0)) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
     } else {
@@ -440,13 +443,12 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
     static s32 D_80B3FE38[] = {
         0, 0, 6, 7, 8,
     };
-
     s32 sp2C = 0;
     s32 sp28;
 
-    if (func_800EE29C(globalCtx, 0x1D8)) {
-        sp2C = func_800EE200(globalCtx, 0x1D8);
-        sp28 = globalCtx->csCtx.npcActions[sp2C]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 472)) {
+        sp2C = Cutscene_GetActorActionIndex(globalCtx, 472);
+        sp28 = globalCtx->csCtx.actorActions[sp2C]->action;
         if (this->unk_1CC != (u8)sp28) {
             func_80B3E5DC(this, D_80B3FE38[sp28]);
             switch (sp28) {
@@ -504,7 +506,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_800EDF24(&this->actor, globalCtx, sp2C);
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp2C);
 }
 
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -522,21 +524,21 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (gSaveContext.weekEventReg[33] & 0x80) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+    if (gSaveContext.save.weekEventReg[33] & 0x80) {
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
         this->actionFunc = func_80B3F00C;
         return;
     }
 
-    if (gSaveContext.weekEventReg[30] & 1) {
+    if (gSaveContext.save.weekEventReg[30] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;
@@ -561,7 +563,7 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
-                func_8013C964(&this->actor, globalCtx, 0.0f, 0.0f, 0, this->unk_1CE & 7);
+                func_8013C964(&this->actor, globalCtx, 0.0f, 0.0f, EXCH_ITEM_NONE, this->unk_1CE & 7);
             }
             func_80B3E460(this);
         }
@@ -577,7 +579,7 @@ s32 EnDai_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_1E4);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_1E4);
     }
 
     if (limbIndex == 10) {
@@ -599,15 +601,15 @@ void EnDai_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             D_80B3FE4C.x = sREG(0);
             D_80B3FE4C.y = sREG(1);
             D_80B3FE4C.z = sREG(2);
-            Matrix_MultiplyVector3fByState(&D_80B3FE4C, &this->actor.focus.pos);
+            Matrix_MultVec3f(&D_80B3FE4C, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-            Matrix_CopyCurrentState(&sp24);
-            func_8018219C(&sp24, &sp64, 0);
+            Matrix_Get(&sp24);
+            Matrix_MtxFToYXZRot(&sp24, &sp64, false);
             this->unk_1D4 = BINANG_SUB(sp64.y, 0x4000);
             break;
 
         case 10:
-            Matrix_CopyCurrentState(&this->unk_18C);
+            Matrix_Get(&this->unk_18C);
             break;
     }
 }
@@ -659,7 +661,7 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
                                            this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
                                            EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
     if (this->unk_1CE & 0x40) {
-        Matrix_SetCurrentState(&this->unk_18C);
+        Matrix_Put(&this->unk_18C);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
@@ -691,7 +693,7 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                                this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
                                                EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
-        Matrix_SetCurrentState(&this->unk_18C);
+        Matrix_Put(&this->unk_18C);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);
@@ -710,7 +712,7 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         POLY_XLU_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                                this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
                                                EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
-        Matrix_SetCurrentState(&this->unk_18C);
+        Matrix_Put(&this->unk_18C);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);

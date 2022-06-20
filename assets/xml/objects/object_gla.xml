@@ -44,28 +44,28 @@
         <DList Name="object_gla_DL_008628" Offset="0x8628" />
         <DList Name="object_gla_DL_0086E0" Offset="0x86E0" />
         <DList Name="object_gla_DL_0087D0" Offset="0x87D0" />
-        <Limb Name="object_gla_Standardlimb_008C88" Type="Standard" Offset="0x8C88" />
-        <Limb Name="object_gla_Standardlimb_008C94" Type="Standard" Offset="0x8C94" />
-        <Limb Name="object_gla_Standardlimb_008CA0" Type="Standard" Offset="0x8CA0" />
-        <Limb Name="object_gla_Standardlimb_008CAC" Type="Standard" Offset="0x8CAC" />
-        <Limb Name="object_gla_Standardlimb_008CB8" Type="Standard" Offset="0x8CB8" />
-        <Limb Name="object_gla_Standardlimb_008CC4" Type="Standard" Offset="0x8CC4" />
-        <Limb Name="object_gla_Standardlimb_008CD0" Type="Standard" Offset="0x8CD0" />
-        <Limb Name="object_gla_Standardlimb_008CDC" Type="Standard" Offset="0x8CDC" />
-        <Limb Name="object_gla_Standardlimb_008CE8" Type="Standard" Offset="0x8CE8" />
-        <Limb Name="object_gla_Standardlimb_008CF4" Type="Standard" Offset="0x8CF4" />
-        <Limb Name="object_gla_Standardlimb_008D00" Type="Standard" Offset="0x8D00" />
-        <Limb Name="object_gla_Standardlimb_008D0C" Type="Standard" Offset="0x8D0C" />
-        <Limb Name="object_gla_Standardlimb_008D18" Type="Standard" Offset="0x8D18" />
-        <Limb Name="object_gla_Standardlimb_008D24" Type="Standard" Offset="0x8D24" />
-        <Limb Name="object_gla_Standardlimb_008D30" Type="Standard" Offset="0x8D30" />
-        <Limb Name="object_gla_Standardlimb_008D3C" Type="Standard" Offset="0x8D3C" />
-        <Limb Name="object_gla_Standardlimb_008D48" Type="Standard" Offset="0x8D48" />
-        <Limb Name="object_gla_Standardlimb_008D54" Type="Standard" Offset="0x8D54" />
-        <Limb Name="object_gla_Standardlimb_008D60" Type="Standard" Offset="0x8D60" />
-        <Limb Name="object_gla_Standardlimb_008D6C" Type="Standard" Offset="0x8D6C" />
-        <Limb Name="object_gla_Standardlimb_008D78" Type="Standard" Offset="0x8D78" />
-        <Skeleton Name="object_gla_Skel_008DD8" Type="Flex" LimbType="Standard" Offset="0x8DD8" />
+        <Limb Name="object_gla_Standardlimb_008C88" Type="Standard" EnumName="OBJECT_GLA_LIMB_01" Offset="0x8C88" />
+        <Limb Name="object_gla_Standardlimb_008C94" Type="Standard" EnumName="OBJECT_GLA_LIMB_02" Offset="0x8C94" />
+        <Limb Name="object_gla_Standardlimb_008CA0" Type="Standard" EnumName="OBJECT_GLA_LIMB_03" Offset="0x8CA0" />
+        <Limb Name="object_gla_Standardlimb_008CAC" Type="Standard" EnumName="OBJECT_GLA_LIMB_04" Offset="0x8CAC" />
+        <Limb Name="object_gla_Standardlimb_008CB8" Type="Standard" EnumName="OBJECT_GLA_LIMB_05" Offset="0x8CB8" />
+        <Limb Name="object_gla_Standardlimb_008CC4" Type="Standard" EnumName="OBJECT_GLA_LIMB_06" Offset="0x8CC4" />
+        <Limb Name="object_gla_Standardlimb_008CD0" Type="Standard" EnumName="OBJECT_GLA_LIMB_07" Offset="0x8CD0" />
+        <Limb Name="object_gla_Standardlimb_008CDC" Type="Standard" EnumName="OBJECT_GLA_LIMB_08" Offset="0x8CDC" />
+        <Limb Name="object_gla_Standardlimb_008CE8" Type="Standard" EnumName="OBJECT_GLA_LIMB_09" Offset="0x8CE8" />
+        <Limb Name="object_gla_Standardlimb_008CF4" Type="Standard" EnumName="OBJECT_GLA_LIMB_0A" Offset="0x8CF4" />
+        <Limb Name="object_gla_Standardlimb_008D00" Type="Standard" EnumName="OBJECT_GLA_LIMB_0B" Offset="0x8D00" />
+        <Limb Name="object_gla_Standardlimb_008D0C" Type="Standard" EnumName="OBJECT_GLA_LIMB_0C" Offset="0x8D0C" />
+        <Limb Name="object_gla_Standardlimb_008D18" Type="Standard" EnumName="OBJECT_GLA_LIMB_0D" Offset="0x8D18" />
+        <Limb Name="object_gla_Standardlimb_008D24" Type="Standard" EnumName="OBJECT_GLA_LIMB_0E" Offset="0x8D24" />
+        <Limb Name="object_gla_Standardlimb_008D30" Type="Standard" EnumName="OBJECT_GLA_LIMB_0F" Offset="0x8D30" />
+        <Limb Name="object_gla_Standardlimb_008D3C" Type="Standard" EnumName="OBJECT_GLA_LIMB_10" Offset="0x8D3C" />
+        <Limb Name="object_gla_Standardlimb_008D48" Type="Standard" EnumName="OBJECT_GLA_LIMB_11" Offset="0x8D48" />
+        <Limb Name="object_gla_Standardlimb_008D54" Type="Standard" EnumName="OBJECT_GLA_LIMB_12" Offset="0x8D54" />
+        <Limb Name="object_gla_Standardlimb_008D60" Type="Standard" EnumName="OBJECT_GLA_LIMB_13" Offset="0x8D60" />
+        <Limb Name="object_gla_Standardlimb_008D6C" Type="Standard" EnumName="OBJECT_GLA_LIMB_14" Offset="0x8D6C" />
+        <Limb Name="object_gla_Standardlimb_008D78" Type="Standard" EnumName="OBJECT_GLA_LIMB_15" Offset="0x8D78" />
+        <Skeleton Name="object_gla_Skel_008DD8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GLA_LIMB_NONE" LimbMax="OBJECT_GLA_LIMB_MAX" EnumName="object_gla_Limbs" Offset="0x8DD8" />
         <Animation Name="object_gla_Anim_0091D0" Offset="0x91D0" />
         <Animation Name="object_gla_Anim_009D1C" Offset="0x9D1C" />
         <Animation Name="object_gla_Anim_00A344" Offset="0xA344" />

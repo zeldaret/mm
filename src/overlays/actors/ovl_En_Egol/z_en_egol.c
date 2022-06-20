@@ -6,7 +6,7 @@
 
 #include "z_en_egol.h"
 
-#define FLAGS 0x80000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnEgol*)thisx)
 

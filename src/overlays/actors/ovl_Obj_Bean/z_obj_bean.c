@@ -140,24 +140,24 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Vec3f sp88;
     MtxF sp48;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&D_80939018, &spAC);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVec3f(&D_80939018, &spAC);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
-    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, 1, 1, 1, 1, &spB8,
-                                &this->dyna.actor)) {
+    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true,
+                                true, &spB8, &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;
         func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                       this->dyna.actor.world.pos.z, &sp48);
-        Matrix_SetCurrentState(&sp48);
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&sp48);
-        func_8018219C(&sp48, &this->dyna.actor.shape.rot, 0);
+        Matrix_Put(&sp48);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_Get(&sp48);
+        Matrix_MtxFToYXZRot(&sp48, &this->dyna.actor.shape.rot, false);
         return true;
     }
     return false;
@@ -234,7 +234,7 @@ void func_809372D0(ObjBean* this) {
 
     sp34 = Math3D_Vec3fMagnitude(&actor->velocity);
     temp_f2 = D_80938FF8[this->unk_1DE].x;
-    temp_f12 = D_80938FF8[this->unk_1DE].y;
+    temp_f12 = D_80938FF8[this->unk_1DE].z;
     if (sp34 < (actor->speedXZ * 8.0f)) {
         temp_f2 = ((temp_f2 - 2.0f) * 0.1f) + 2.0f;
         temp_f12 *= 0.4f;
@@ -303,8 +303,8 @@ void func_809375C8(ObjBean* this, GlobalContext* globalCtx) {
 
 void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
     static Gfx* D_80939024[] = {
-        gameplay_keep_DL_0527F0,
-        gameplay_keep_DL_0528B0,
+        gKakeraLeafMiddle,
+        gKakeraLeafTip,
     };
     Vec3f spC4;
     Vec3f spB8;
@@ -346,7 +346,7 @@ void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
             phi_v0 = 0x40;
         }
         EffectSsKakera_Spawn(globalCtx, &spC4, &spB8, &spC4, phi_s3, phi_v0, 40, 3, 0, temp_s2, 0, 0,
-                             (temp_s2 >> 3) + 40, -1, 1, D_80939024[i & 1]);
+                             (temp_s2 >> 3) + 40, -1, GAMEPLAY_KEEP, D_80939024[i & 1]);
     }
 }
 
@@ -948,8 +948,8 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1FE & 1) {
-        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+        Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_1B8, this->unk_1B8, this->unk_1B8, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

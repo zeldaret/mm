@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "objects/object_tokei_step/object_tokei_step.h"
 
-#define FLAGS 0x00400010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
 #define THIS ((ObjTokeiStep*)thisx)
 
@@ -52,11 +52,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
-    MtxF* mtx = Matrix_GetCurrentState();
+    MtxF* mtx = Matrix_GetCurrent();
 
-    mtx->wx = panel->pos.x;
-    mtx->wy = panel->pos.y;
-    mtx->wz = panel->pos.z;
+    mtx->xw = panel->pos.x;
+    mtx->yw = panel->pos.y;
+    mtx->zw = panel->pos.z;
 }
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
@@ -75,13 +75,13 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     Vec3f dustSpawnOffset;
     Vec3f dustSpawnPos;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     dustSpawnOffset.y = 115.0f;
     dustSpawnOffset.z = -10.0f;
     for (i = 0; i < 7; i++) {
         dustSpawnOffset.x = sDustSpawnXOffsets[i];
-        Matrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
+        Matrix_MultVec3f(&dustSpawnOffset, &dustSpawnPos);
         dustSpawnPos.x += panel->pos.x;
         dustSpawnPos.y += panel->pos.y;
         dustSpawnPos.z += panel->pos.z;
@@ -96,15 +96,15 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     Vec3f panelOffset;
     s32 pad;
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
     panelOffset.y = 0.0f;
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.z = i * -20.0f;
-        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultVec3f(&panelOffset, &panel->pos);
         panel->posChangeY = 0.0f;
         panel->numBounces = 0;
     }
@@ -115,15 +115,15 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
     ObjTokeiStepPanel* panel;
     Vec3f panelOffset;
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.y = sPanelXOffsets[i];
         panelOffset.z = i * -20.0f;
-        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultVec3f(&panelOffset, &panel->pos);
     }
 }
 
@@ -193,11 +193,11 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.time < CLOCK_TIME(6, 0))) || (gSaveContext.day >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (gSaveContext.save.day >= 4)) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);
@@ -221,9 +221,10 @@ void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
 void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
-    if (func_800EE29C(globalCtx, 0x86)) {
-        action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x86)];
-        if ((action->startFrame == globalCtx->csCtx.frames) && (action->unk0 != 0)) {
+    if (Cutscene_CheckActorAction(globalCtx, 134)) {
+        action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 134)];
+
+        if ((action->startFrame == globalCtx->csCtx.frames) && (action->action != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);
         }
@@ -250,7 +251,7 @@ void ObjTokeiStep_Open(ObjTokeiStep* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this) {
-    this->dyna.actor.flags &= ~0x10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     this->actionFunc = ObjTokeiStep_DoNothingOpen;
 }
 

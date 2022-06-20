@@ -6,7 +6,7 @@
 
 #include "z_en_viewer.h"
 
-#define FLAGS 0x00200030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000)
 
 #define THIS ((EnViewer*)thisx)
 

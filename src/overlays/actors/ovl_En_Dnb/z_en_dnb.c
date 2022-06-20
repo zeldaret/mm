@@ -8,7 +8,7 @@
 #include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x000000B0
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
 
 #define THIS ((EnDnb*)thisx)
 
@@ -33,50 +33,50 @@ const ActorInit En_Dnb_InitVars = {
     (ActorFunc)EnDnb_Draw,
 };
 
-void func_80A4FDD0(EnDnbParticle* particle, EnDnb* this, s16* alloc, s32 idx) {
+void func_80A4FDD0(EnDnbEffect* effect, EnDnb* this, s16* alloc, s32 idx) {
     Vec3f sp1C;
     s32 idx2 = idx * 3;
 
     sp1C.x = alloc[idx2 + 0] + this->dyna.actor.world.pos.x;
     sp1C.y = alloc[idx2 + 1] + this->dyna.actor.world.pos.y;
     sp1C.z = alloc[idx2 + 2] + this->dyna.actor.world.pos.z;
-    particle->unk_00 = sp1C;
-    particle->unk_0C = sp1C;
-    particle->unk_24 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp1C);
-    particle->unk_18 = gZeroVec3s;
+    effect->unk_00 = sp1C;
+    effect->unk_0C = sp1C;
+    effect->unk_24 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp1C);
+    effect->unk_18 = gZeroVec3s;
 }
 
-s32 func_80A4FEBC(EnDnbParticle* particle, f32 arg1) {
+s32 func_80A4FEBC(EnDnbEffect* effect, f32 arg1) {
     s32 ret = false;
 
-    if ((DECR(particle->unk_26) == 0) && (arg1 < particle->unk_0C.y)) {
-        Math_ApproachF(&particle->unk_30, 1.0f, 0.4f, 1.0f);
-        particle->unk_2C += particle->unk_34;
-        particle->unk_0C.x += particle->unk_30 * Math_SinS(particle->unk_24);
-        particle->unk_0C.z += particle->unk_30 * Math_CosS(particle->unk_24);
-        particle->unk_0C.y += particle->unk_2C;
-        if (particle->unk_0C.y <= arg1) {
-            particle->unk_0C.y = arg1;
+    if ((DECR(effect->unk_26) == 0) && (arg1 < effect->unk_0C.y)) {
+        Math_ApproachF(&effect->unk_30, 1.0f, 0.4f, 1.0f);
+        effect->unk_2C += effect->unk_34;
+        effect->unk_0C.x += effect->unk_30 * Math_SinS(effect->unk_24);
+        effect->unk_0C.z += effect->unk_30 * Math_CosS(effect->unk_24);
+        effect->unk_0C.y += effect->unk_2C;
+        if (effect->unk_0C.y <= arg1) {
+            effect->unk_0C.y = arg1;
         }
-        particle->unk_18.x += particle->unk_1E.x;
-        particle->unk_18.y += particle->unk_1E.y;
-        particle->unk_18.z += particle->unk_1E.z;
+        effect->unk_18.x += effect->unk_1E.x;
+        effect->unk_18.y += effect->unk_1E.y;
+        effect->unk_18.z += effect->unk_1E.z;
         ret = true;
     }
 
     return ret;
 }
 
-void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
-    particle->unk_0C = particle->unk_00;
-    particle->unk_1E.x = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_1E.y = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_1E.z = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_18 = gZeroVec3s;
-    particle->unk_30 = 40.0f;
-    particle->unk_2C = 0.0f;
-    particle->unk_26 = arg1;
-    particle->unk_34 = (Rand_ZeroOne() * -2.0f) - 2.0f;
+void func_80A4FFE8(EnDnbEffect* effect, s16 arg1) {
+    effect->unk_0C = effect->unk_00;
+    effect->unk_1E.x = (Rand_ZeroOne() - 0.5f) * 400.0f;
+    effect->unk_1E.y = (Rand_ZeroOne() - 0.5f) * 400.0f;
+    effect->unk_1E.z = (Rand_ZeroOne() - 0.5f) * 400.0f;
+    effect->unk_18 = gZeroVec3s;
+    effect->unk_30 = 40.0f;
+    effect->unk_2C = 0.0f;
+    effect->unk_26 = arg1;
+    effect->unk_34 = (Rand_ZeroOne() * -2.0f) - 2.0f;
 }
 
 s32 func_80A500F8(EnDnb* this) {
@@ -107,9 +107,9 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
-    alloc = (s16*)Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        func_80A4FDD0(&this->particles[i], this, alloc, i);
+    alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+        func_80A4FDD0(&this->effects[i], this, alloc, i);
     }
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
@@ -126,8 +126,8 @@ void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->unk_0D30 == 0) {
-        for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-            func_80A4FFE8(&this->particles[i], ((53 - i) / 18) * 4);
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+            func_80A4FFE8(&this->effects[i], ((53 - i) / 18) * 4);
         }
 
         for (i = 0; i < ARRAY_COUNT(this->unk_0D38); i++) {
@@ -141,8 +141,8 @@ void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80A500F8(this);
         }
 
-        for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-            func_80A4FEBC(&this->particles[i], this->dyna.actor.world.pos.y);
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+            func_80A4FEBC(&this->effects[i], this->dyna.actor.world.pos.y);
         }
 
         this->unk_0D30--;
@@ -158,18 +158,17 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
-        Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+        Matrix_Push();
+        Matrix_Translate(this->effects[i].unk_0C.x, this->effects[i].unk_0C.y, this->effects[i].unk_0C.z, MTXMODE_NEW);
+        Matrix_RotateXS(this->effects[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->effects[i].unk_18.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gfx[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -183,18 +182,17 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
-        Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+        Matrix_Push();
+        Matrix_Translate(this->effects[i].unk_0C.x, this->effects[i].unk_0C.y, this->effects[i].unk_0C.z, MTXMODE_NEW);
+        Matrix_RotateXS(this->effects[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->effects[i].unk_18.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gfx[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -275,16 +273,16 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;
             }
-            Matrix_StatePush();
+            Matrix_Push();
 
             if (1) {};
             arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
 
-            Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -292,7 +290,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             sp5C += 1;
         }
     }

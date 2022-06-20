@@ -130,27 +130,27 @@
         <DList Name="object_link_child_DL_01DB60" Offset="0x1DB60" />
         <!-- <Blob Name="object_link_child_Blob_01DB88" Size="0x1B0" Offset="0x1DB88" /> -->
         <DList Name="object_link_child_DL_01DFA8" Offset="0x1DFA8" />
-        <Limb Name="object_link_child_Lodlimb_01E0A0" Type="LOD" Offset="0x1E0A0" />
-        <Limb Name="object_link_child_Lodlimb_01E0B0" Type="LOD" Offset="0x1E0B0" />
-        <Limb Name="object_link_child_Lodlimb_01E0C0" Type="LOD" Offset="0x1E0C0" />
-        <Limb Name="object_link_child_Lodlimb_01E0D0" Type="LOD" Offset="0x1E0D0" />
-        <Limb Name="object_link_child_Lodlimb_01E0E0" Type="LOD" Offset="0x1E0E0" />
-        <Limb Name="object_link_child_Lodlimb_01E0F0" Type="LOD" Offset="0x1E0F0" />
-        <Limb Name="object_link_child_Lodlimb_01E100" Type="LOD" Offset="0x1E100" />
-        <Limb Name="object_link_child_Lodlimb_01E110" Type="LOD" Offset="0x1E110" />
-        <Limb Name="object_link_child_Lodlimb_01E120" Type="LOD" Offset="0x1E120" />
-        <Limb Name="object_link_child_Lodlimb_01E130" Type="LOD" Offset="0x1E130" />
-        <Limb Name="object_link_child_Lodlimb_01E140" Type="LOD" Offset="0x1E140" />
-        <Limb Name="object_link_child_Lodlimb_01E150" Type="LOD" Offset="0x1E150" />
-        <Limb Name="object_link_child_Lodlimb_01E160" Type="LOD" Offset="0x1E160" />
-        <Limb Name="object_link_child_Lodlimb_01E170" Type="LOD" Offset="0x1E170" />
-        <Limb Name="object_link_child_Lodlimb_01E180" Type="LOD" Offset="0x1E180" />
-        <Limb Name="object_link_child_Lodlimb_01E190" Type="LOD" Offset="0x1E190" />
-        <Limb Name="object_link_child_Lodlimb_01E1A0" Type="LOD" Offset="0x1E1A0" />
-        <Limb Name="object_link_child_Lodlimb_01E1B0" Type="LOD" Offset="0x1E1B0" />
-        <Limb Name="object_link_child_Lodlimb_01E1C0" Type="LOD" Offset="0x1E1C0" />
-        <Limb Name="object_link_child_Lodlimb_01E1D0" Type="LOD" Offset="0x1E1D0" />
-        <Limb Name="object_link_child_Lodlimb_01E1E0" Type="LOD" Offset="0x1E1E0" />
-        <Skeleton Name="object_link_child_Skel_01E244" Type="Flex" LimbType="Standard" Offset="0x1E244" />
+        <Limb Name="object_link_child_Lodlimb_01E0A0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_01" Offset="0x1E0A0" />
+        <Limb Name="object_link_child_Lodlimb_01E0B0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_02" Offset="0x1E0B0" />
+        <Limb Name="object_link_child_Lodlimb_01E0C0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_03" Offset="0x1E0C0" />
+        <Limb Name="object_link_child_Lodlimb_01E0D0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_04" Offset="0x1E0D0" />
+        <Limb Name="object_link_child_Lodlimb_01E0E0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_05" Offset="0x1E0E0" />
+        <Limb Name="object_link_child_Lodlimb_01E0F0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_06" Offset="0x1E0F0" />
+        <Limb Name="object_link_child_Lodlimb_01E100" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_07" Offset="0x1E100" />
+        <Limb Name="object_link_child_Lodlimb_01E110" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_08" Offset="0x1E110" />
+        <Limb Name="object_link_child_Lodlimb_01E120" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_09" Offset="0x1E120" />
+        <Limb Name="object_link_child_Lodlimb_01E130" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0A" Offset="0x1E130" />
+        <Limb Name="object_link_child_Lodlimb_01E140" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0B" Offset="0x1E140" />
+        <Limb Name="object_link_child_Lodlimb_01E150" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0C" Offset="0x1E150" />
+        <Limb Name="object_link_child_Lodlimb_01E160" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0D" Offset="0x1E160" />
+        <Limb Name="object_link_child_Lodlimb_01E170" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0E" Offset="0x1E170" />
+        <Limb Name="object_link_child_Lodlimb_01E180" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_0F" Offset="0x1E180" />
+        <Limb Name="object_link_child_Lodlimb_01E190" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_10" Offset="0x1E190" />
+        <Limb Name="object_link_child_Lodlimb_01E1A0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_11" Offset="0x1E1A0" />
+        <Limb Name="object_link_child_Lodlimb_01E1B0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_12" Offset="0x1E1B0" />
+        <Limb Name="object_link_child_Lodlimb_01E1C0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_13" Offset="0x1E1C0" />
+        <Limb Name="object_link_child_Lodlimb_01E1D0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_14" Offset="0x1E1D0" />
+        <Limb Name="object_link_child_Lodlimb_01E1E0" Type="LOD" EnumName="OBJECT_LINK_CHILD_LIMB_15" Offset="0x1E1E0" />
+        <Skeleton Name="object_link_child_Skel_01E244" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_CHILD_LIMB_NONE" LimbMax="OBJECT_LINK_CHILD_LIMB_MAX" EnumName="object_link_child_Limbs" Offset="0x1E244" />
     </File>
 </Root>

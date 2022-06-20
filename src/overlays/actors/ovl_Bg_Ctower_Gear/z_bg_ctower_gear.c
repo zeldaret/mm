@@ -7,7 +7,7 @@
 #include "z_bg_ctower_gear.h"
 #include "objects/object_ctower_rot/object_ctower_rot.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgCtowerGear*)thisx)
 
@@ -74,37 +74,37 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     s16 rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
 
     if (flag40 && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
-        Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
+        Matrix_RotateXS(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
         for (i = 0; i < 4; i++) {
-            if ((u32)Rand_Next() >= 0x40000000) {
+            if (Rand_Next() >= 0x40000000) {
                 splashOffset.x = sExitSplashOffsets[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = sExitSplashOffsets[i].y;
                 splashOffset.z = sExitSplashOffsets[i].z;
-                Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                Matrix_MultVec3f(&splashOffset, &splashSpawnPos);
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 340);
+                EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 340);
             }
         }
     }
     if ((rotZ < 0x1F4) && (rotZ >= 0)) {
         if (flag40) {
-            Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 2; j++) {
                     splashOffset.x = sEnterSplashOffsets[i].x + (Rand_ZeroOne() * 10.0f);
                     splashOffset.y = sEnterSplashOffsets[i].y;
                     splashOffset.z = sEnterSplashOffsets[i].z;
-                    Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                    Matrix_MultVec3f(&splashOffset, &splashSpawnPos);
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
-                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, ((u32)Rand_Next() >> 25) + 280);
+                    EffectSsGSplash_Spawn(globalCtx, &splashSpawnPos, NULL, NULL, 0, (Rand_Next() >> 25) + 280);
                 }
             }
         }
@@ -163,8 +163,8 @@ void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
-    if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 104)) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 104)]->action) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

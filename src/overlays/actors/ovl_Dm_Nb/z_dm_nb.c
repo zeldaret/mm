@@ -7,7 +7,7 @@
 #include "z_dm_nb.h"
 #include "objects/object_nb/object_nb.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((DmNb*)thisx)
 
@@ -28,14 +28,14 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-static ActorAnimationEntryS D_80C1E200[] = { &object_nb_Anim_000990, 1.0f, 0, -1, 0, 0 };
+static AnimationInfoS D_80C1E200[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
-    s32 ret = 0;
+    s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
     }
     return ret;
 }
@@ -43,7 +43,7 @@ s32 func_80C1DED0(DmNb* this, s32 arg1) {
 void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
     u16 actionUnk0;
-    u32 actionIndex;
+    s32 actionIndex;
 
     if (globalCtx->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
@@ -51,14 +51,14 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (func_800EE29C(globalCtx, 0x232)) {
-            actionIndex = func_800EE200(globalCtx, 0x232);
-            actionUnk0 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+        if (Cutscene_CheckActorAction(globalCtx, 562)) {
+            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 562);
+            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->action;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);
             }
-            func_800EDF24(&this->actor, globalCtx, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
@@ -74,7 +74,7 @@ void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
                        8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1DF18;
 }

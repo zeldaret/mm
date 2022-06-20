@@ -7,7 +7,7 @@
 #include "z_obj_tree.h"
 #include "objects/object_tree/object_tree.h"
 
-#define FLAGS 0x02000000
+#define FLAGS (ACTOR_FLAG_2000000)
 
 #define THIS ((ObjTree*)thisx)
 
@@ -189,7 +189,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_000680);
 
-    Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+    Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_0007C8);
 

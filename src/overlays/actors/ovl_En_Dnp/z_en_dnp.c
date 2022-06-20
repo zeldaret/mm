@@ -7,7 +7,7 @@
 #include "z_en_dnp.h"
 #include "objects/object_dnp/object_dnp.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnDnp*)thisx)
 
@@ -56,20 +56,33 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },
-    { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00625C, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80B3DE58[] = {
@@ -122,7 +135,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
@@ -189,12 +202,12 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->unk_322 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
-        func_8013AED4(&this->unk_322, 0, 7);
+    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
         this->unk_32E = 0;
@@ -211,15 +224,15 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_324 = 0xFF;
         }
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
-        this->actor.flags |= 1;
-        func_8013AED4(&this->unk_322, 3, 7);
+        this->actor.flags |= ACTOR_FLAG_1;
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
     }
@@ -231,18 +244,18 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     static s32 D_80B3DE74[] = {
         0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.weekEventReg[29] |= 0x40;
+        gSaveContext.save.weekEventReg[29] |= 0x40;
     }
 
-    if (func_800EE29C(globalCtx, 0x65)) {
-        temp_v0 = func_800EE200(globalCtx, 0x65);
-        val = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 101)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 101);
+        val = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_324 != (u8)val) {
             func_80B3CC38(this, D_80B3DE74[val]);
             if (this->unk_340 == 16) {
@@ -268,7 +281,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_80B3CC38(this, this->unk_340 + 1);
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 
@@ -298,7 +311,7 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
 
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, NULL, &this->unk_328)) {
-        func_8013AED4(&this->unk_322, 3, 7);
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
     } else {
@@ -310,8 +323,8 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
-            this->actor.flags |= 1;
-            func_8013AED4(&this->unk_322, 3, 7);
+            this->actor.flags |= ACTOR_FLAG_1;
+            SubS_UpdateFlags(&this->unk_322, 3, 7);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
             this->actor.scale.x = 0.0085f;
@@ -324,7 +337,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.weekEventReg[23] |= 0x20;
+        gSaveContext.save.weekEventReg[23] |= 0x20;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -345,20 +358,20 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
     if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.00085000007f);
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
-                !(gSaveContext.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
+                !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
-        func_8013AED4(&this->unk_322, 3, 7);
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
+        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -394,10 +407,10 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, globalCtx, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);
+        func_8013C964(&this->actor, globalCtx, sp2C, sp28, EXCH_ITEM_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, globalCtx);
     }
@@ -412,9 +425,9 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
-    Matrix_CopyCurrentState(&sp2C);
-    func_8018219C(&sp2C, &sp6C, 0);
+    Matrix_MultVec3f(&gZeroVec3f, &sp74);
+    Matrix_Get(&sp2C);
+    Matrix_MtxFToYXZRot(&sp2C, &sp6C, false);
     *arg2 = sp74;
     if (arg4 == 0) {
         if (arg5 != 0) {
@@ -455,13 +468,13 @@ void EnDnp_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     if (limbIndex == 12) {
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
-        Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_1E4.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_1E4.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_RotateYS(this->unk_1E4.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1E4.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1E4.z, MTXMODE_APPLY);
+        Matrix_Push();
     }
 }
 

@@ -176,7 +176,7 @@ void func_80A1B3D0(void) {
 }
 
 void func_80A1B840(MtxF* matrix) {
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = (f32*)&temp->mf[0];
     f32* tmp2 = (f32*)&matrix->mf[0];
     s32 i;
@@ -208,9 +208,9 @@ void func_80A1B9CC(ObjFlowerpot* this, GlobalContext* globalCtx) {
 }
 
 void func_80A1BA04(ObjFlowerpot* this, Vec3f* arg1) {
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                          &this->actor.shape.rot);
-    Matrix_MultiplyVector3fByState(&D_80A1D408, arg1);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 &this->actor.shape.rot);
+    Matrix_MultVec3f(&D_80A1D408, arg1);
 }
 
 void func_80A1BA44(ObjFlowerpot* this, GlobalContext* globalCtx) {
@@ -399,13 +399,13 @@ void ObjFlowerpot_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     if (this->actor.shape.rot.y == 0) {
-        this->actor.shape.rot.y = this->actor.world.rot.y = (u32)Rand_Next() >> 0x10;
+        this->actor.shape.rot.y = this->actor.world.rot.y = Rand_Next() >> 0x10;
     }
 
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                          &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+                                 &this->actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
     Collider_UpdateSpheres(1, &this->collider);
@@ -415,11 +415,11 @@ void ObjFlowerpot_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A1C818(this);
 
     if (D_80A1D404) {
-        D_80A1DA38 = (u32)Rand_Next() >> 0x10;
-        D_80A1DA3A = (u32)Rand_Next() >> 0x10;
-        D_80A1DA3C = (u32)Rand_Next() >> 0x10;
-        D_80A1DA3E = (u32)Rand_Next() >> 0x10;
-        D_80A1DA40 = (u32)Rand_Next() >> 0x10;
+        D_80A1DA38 = Rand_Next() >> 0x10;
+        D_80A1DA3A = Rand_Next() >> 0x10;
+        D_80A1DA3C = Rand_Next() >> 0x10;
+        D_80A1DA3E = Rand_Next() >> 0x10;
+        D_80A1DA40 = Rand_Next() >> 0x10;
         D_80A1D404 = false;
         func_80A1B3D0();
         D_80A1D830 = globalCtx->gameplayFrames;
@@ -447,7 +447,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
         func_80A1CBF8(this);
         this->actor.room = -1;
         this->actor.colChkInfo.mass = 180;
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         if (func_800A817C(ENOBJFLOWERPOT_GET_3F(&this->actor))) {
             func_80A1B914(this, globalCtx);
         }
@@ -465,7 +465,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
         func_80A1BD80(this, globalCtx);
         func_80A1B994(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
-    } else if ((this->collider.elements[0].info.bumperFlags & 2) &&
+    } else if ((this->collider.elements[0].info.bumperFlags & BUMP_HIT) &&
                (this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x058BFFBC)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, globalCtx);
@@ -477,10 +477,10 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
         func_80A1B994(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     } else {
-        if (this->collider.elements[1].info.bumperFlags & 2) {
+        if (this->collider.elements[1].info.bumperFlags & BUMP_HIT) {
             if (!(this->unk_1EA & 2)) {
                 this->unk_1EA |= 2;
-                this->collider.elements[1].info.bumperFlags &= ~0x1;
+                this->collider.elements[1].info.bumperFlags &= ~BUMP_ON;
                 func_80A1C0FC(this, globalCtx);
                 func_80A1B914(this, globalCtx);
                 func_80A1B9CC(this, globalCtx);
@@ -493,7 +493,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
             if (this->actor.bgCheckFlags & 1) {
                 if (this->actor.colChkInfo.mass == MASS_IMMOVABLE) {
                     if (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL) {
-                        this->actor.flags &= ~0x10;
+                        this->actor.flags &= ~ACTOR_FLAG_10;
                         this->unk_1EA &= ~0x1;
                     }
                 } else if (Math3D_Vec3fDistSq(&this->actor.world.pos, &this->actor.prevPos) < 0.01f) {
@@ -518,7 +518,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
                     s16 temp_v0_3 = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
 
                     if (ABS_ALT(temp_v0_3) >= 0x5556) {
-                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }

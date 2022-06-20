@@ -7,7 +7,7 @@
 #include "z_bg_kin2_fence.h"
 #include "objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgKin2Fence*)thisx)
 
@@ -122,16 +122,16 @@ static InitChainEntry sInitChain[] = {
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
 
-    if (elements[0].info.bumperFlags & 2) {
+    if (elements[0].info.bumperFlags & BUMP_HIT) {
         return 0;
     }
-    if (elements[1].info.bumperFlags & 2) {
+    if (elements[1].info.bumperFlags & BUMP_HIT) {
         return 1;
     }
-    if (elements[2].info.bumperFlags & 2) {
+    if (elements[2].info.bumperFlags & BUMP_HIT) {
         return 2;
     }
-    if (elements[3].info.bumperFlags & 2) {
+    if (elements[3].info.bumperFlags & BUMP_HIT) {
         return 3;
     }
     return -1;
@@ -142,12 +142,12 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
     Vec3f sp58;
     s32 pad[2];
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        Matrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
+        Matrix_MultVec3f(&eyeSparkleSpawnPositions[mask][i], &sp58);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
 
@@ -160,8 +160,8 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kin2_obj_Colheader_000908);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < 4; i++) {
@@ -194,7 +194,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
-            nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
+            nextMask = (s8)gSaveContext.save.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;

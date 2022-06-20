@@ -13,7 +13,7 @@ typedef struct EnDodongo {
     /* 0x188 */ Vec3s jointTable[31];
     /* 0x242 */ Vec3s morphTable[31];
     /* 0x2FC */ EnDodongoActionFunc actionFunc;
-    /* 0x300 */ u8 unk_300;
+    /* 0x300 */ u8 drawDmgEffType;
     /* 0x302 */ s16 timer;
     /* 0x304 */ s16 unk_304;
     /* 0x306 */ s16 unk_306;
@@ -24,10 +24,10 @@ typedef struct EnDodongo {
     /* 0x330 */ Color_RGBA8 unk_330;
     /* 0x334 */ f32 unk_334;
     /* 0x338 */ s32 unk_338;
-    /* 0x33C */ f32 unk_33C;
-    /* 0x340 */ f32 unk_340;
-    /* 0x344 */ f32 unk_344;
-    /* 0x348 */ Vec3f unk_348[9];
+    /* 0x33C */ f32 drawDmgEffAlpha;
+    /* 0x340 */ f32 drawDmgEffScale;
+    /* 0x344 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x348 */ Vec3f limbPos[9];
     /* 0x3B4 */ ColliderJntSph collider1;
     /* 0x3D4 */ ColliderJntSphElement collider1Elements[10];
     /* 0x654 */ ColliderJntSph collider2;

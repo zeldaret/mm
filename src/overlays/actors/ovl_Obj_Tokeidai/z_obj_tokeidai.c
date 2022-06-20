@@ -32,7 +32,7 @@
 #include "z_obj_tokeidai.h"
 #include "objects/object_obj_tokeidai/object_obj_tokeidai.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjTokeidai*)thisx)
 
@@ -87,8 +87,8 @@ static InitChainEntry sInitChain[] = {
  * angle can differ from the target angle if the panel is in
  * the middle of rotating.
  */
-s32 ObjTokeidai_GetTargetSunMoonPanelRotation() {
-    if (gSaveContext.isNight) {
+s32 ObjTokeidai_GetTargetSunMoonPanelRotation(void) {
+    if (gSaveContext.save.isNight) {
         return 0x8000;
     }
     return 0;
@@ -122,15 +122,15 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, GlobalContext* globalCtx) 
     ObjTokeidai_SetupClockOrExteriorGear(this);
 
     if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0)) ||
+         (globalCtx->csCtx.currentCsIndex == 0)) ||
         ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0))) {
+         (globalCtx->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
-        gSaveContext.weekEventReg[8] |= 0x40;
+        gSaveContext.save.weekEventReg[8] |= 0x40;
     } else {
         this->actionFunc = ObjTokeidai_ExteriorGear_Idle;
     }
@@ -141,11 +141,11 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
     ObjTokeidai_Clock_Init(this);
 
     if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0)) ||
+         (globalCtx->csCtx.currentCsIndex == 0)) ||
         ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0))) {
+         (globalCtx->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
         this->actor.world.pos.z += -Math_CosS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
@@ -169,16 +169,16 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
     this->actor.draw = ObjTokeidai_Counterweight_Draw;
     this->opaDList = gClockTowerCounterweightDL;
     this->xluDList = gClockTowerSpotlightDL;
-    if (gSaveContext.isNight) {
+    if (gSaveContext.save.isNight) {
         this->spotlightIntensity = 100;
     } else {
         this->spotlightIntensity = 0;
     }
 
     if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0)) ||
+         (globalCtx->csCtx.currentCsIndex == 0)) ||
         ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (globalCtx->csCtx.unk_12 == 0))) {
+         (globalCtx->csCtx.currentCsIndex == 0))) {
         this->spotlightIntensity = 0;
         ObjTokeidai_SetupTowerOpening(this);
 
@@ -199,7 +199,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
                 this->actor.child->home.rot.x = 0x12C;
             }
         }
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->spotlightIntensity = 0;
         this->actor.world.pos.y += this->actor.scale.y * -2160.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 5400.0f;
@@ -221,7 +221,7 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->xRotation = 0;
     this->yTranslation = 0;
     this->clockFaceZTranslation = 0;
-    this->clockTime = gSaveContext.time;
+    this->clockTime = gSaveContext.save.time;
     this->actor.home.rot.x = 0;
 
     switch (OBJ_TOKEIDAI_TYPE(&this->actor)) {
@@ -336,7 +336,8 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, GlobalContext* globalC
 }
 
 void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x84) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 132) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 2) {
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
         this->actor.speedXZ = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
@@ -403,7 +404,8 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, GlobalContext* globalCtx
 }
 
 void ObjTokeidai_TowerClock_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x84) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 132) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 1) {
         this->actionFunc = ObjTokeidai_TowerClock_SlideOff;
         this->slidingClockFaceAngle = 0;
         this->aerialClockFaceSpeed = -0xD;
@@ -420,7 +422,8 @@ void ObjTokeidai_Counterweight_Collapse(ObjTokeidai* this, GlobalContext* global
 }
 
 void ObjTokeidai_Counterweight_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x84) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 3) {
+    if (Cutscene_CheckActorAction(globalCtx, 132) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 3) {
         this->actionFunc = ObjTokeidai_Counterweight_Collapse;
         this->xRotation = 0;
         this->actor.velocity.y = 0.0f;
@@ -436,26 +439,28 @@ void ObjTokeidai_TerminaFieldWalls_Collapse(ObjTokeidai* this, GlobalContext* gl
 }
 
 void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 132) != 0 &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 1) {
         this->actionFunc = ObjTokeidai_TerminaFieldWalls_Collapse;
     }
 }
 
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 5) {
-        gSaveContext.weekEventReg[8] |= 0x40;
+    if (Cutscene_CheckActorAction(globalCtx, 132) != 0 &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 5) {
+        gSaveContext.save.weekEventReg[8] |= 0x40;
         if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-             (globalCtx->csCtx.unk_12 == 0)) ||
+             (globalCtx->csCtx.currentCsIndex == 0)) ||
             ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-             (globalCtx->csCtx.unk_12 == 0))) {
-            func_801A3F54(false);
-            gSaveContext.cutscene = 0;
+             (globalCtx->csCtx.currentCsIndex == 0))) {
+            Audio_SetCutsceneFlag(false);
+            gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
             globalCtx->sceneLoadFlag = 0x14;
-            globalCtx->nextEntranceIndex = gSaveContext.respawn[1].entranceIndex;
+            globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
             globalCtx->unk_1887F = 2;
-            if (gSaveContext.respawn[1].playerParams == 0xCFF) {
+            if (gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0xCFF) {
                 gSaveContext.nextTransition = 0x15;
             } else {
                 gSaveContext.nextTransition = 2;
@@ -588,8 +593,9 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, GlobalContext* globa
 }
 
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if ((func_800EE29C(globalCtx, 0x84) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 4) ||
-        (gSaveContext.weekEventReg[8] & 0x40)) {
+    if ((Cutscene_CheckActorAction(globalCtx, 132) &&
+         globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 132)]->action == 4) ||
+        (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
 }
@@ -611,8 +617,8 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
-        (gSaveContext.weekEventReg[8] & 0x40)) {
+    if (((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
+        (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
         this->actor.draw = NULL;
@@ -620,10 +626,10 @@ void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globa
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
-    if (CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         ObjTokeidai_SetupTowerOpening(this);
         return true;
     }
@@ -684,10 +690,10 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
 }
 
 void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
-        gSaveContext.weekEventReg[8] |= 0x40;
+        gSaveContext.save.weekEventReg[8] |= 0x40;
         return;
     }
 
@@ -701,21 +707,21 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
         }
-        this->clockTime = gSaveContext.time;
+        this->clockTime = gSaveContext.save.time;
         if (this->actor.home.rot.x != 0) {
             ObjTokeidai_Clock_Init(this);
             this->actor.home.rot.x = 0;
         }
     }
 
-    if (CURRENT_DAY != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY != 3 || gSaveContext.save.time >= CLOCK_TIME(6, 0)) {
         ObjTokeidai_RotateOnMinuteChange(this, true);
     }
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
 }
 
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    this->clockTime = gSaveContext.time;
+    this->clockTime = gSaveContext.save.time;
     ObjTokeidai_RotateOnMinuteChange(this, true);
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
 }
@@ -734,7 +740,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx) 
                 ActorCutscene_GetCurrentIndex() == -1) {
                 this->actor.draw = NULL;
             }
-            this->clockTime = gSaveContext.time;
+            this->clockTime = gSaveContext.save.time;
             if (this->actor.home.rot.x != 0) {
                 ObjTokeidai_SetupClockOrExteriorGear(this);
                 this->actor.home.rot.x = 0;
@@ -769,7 +775,7 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx)
         }
     } else {
         this->actor.shape.rot.y -= 0x40;
-        if (gSaveContext.isNight) {
+        if (gSaveContext.save.isNight) {
             if (this->spotlightIntensity < 100) {
                 this->spotlightIntensity += 4;
             }
@@ -813,22 +819,22 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_RotateXS(-this->xRotation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
 
-    Matrix_StatePush();
-    Matrix_InsertZRotation_s(-this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
+    Matrix_Push();
+    Matrix_RotateZS(-this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerMinuteRingDL);
-    Matrix_StatePop();
+    Matrix_Pop();
 
-    Matrix_InsertTranslation(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockCenterAndHandDL);
 
-    Matrix_InsertZRotation_s(-this->clockFaceRotation * 2, MTXMODE_APPLY);
+    Matrix_RotateZS(-this->clockFaceRotation * 2, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
@@ -837,8 +843,8 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
     }
 
-    Matrix_InsertTranslation(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
-    Matrix_RotateY((s16)this->sunMoonPanelRotation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
+    Matrix_RotateYS(this->sunMoonPanelRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
 
@@ -850,12 +856,12 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 gameplayFrames = globalCtx->gameplayFrames;
     ObjTokeidai* this = THIS;
 
-    Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -5480.0f, 80.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 5480.0f, -80.0f, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -5480.0f, 80.0f, MTXMODE_APPLY);
+    Matrix_RotateXS(-this->xRotation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 5480.0f, -80.0f, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -882,13 +888,13 @@ void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
-    Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
-    Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(-this->xRotation, MTXMODE_APPLY);
+    Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerExteriorGearDL);

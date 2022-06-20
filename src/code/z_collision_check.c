@@ -1145,7 +1145,7 @@ ColChkResetFunc sATResetFuncs[] = {
 s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1171,7 +1171,7 @@ s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetAT_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1205,7 +1205,7 @@ ColChkResetFunc sACResetFuncs[] = {
 s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1231,7 +1231,7 @@ s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot
  */
 s32 CollisionCheck_SetAC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1265,7 +1265,7 @@ ColChkResetFunc sOCResetFuncs[] = {
 s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1291,7 +1291,7 @@ s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1323,7 +1323,7 @@ s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* co
 s32 CollisionCheck_SetOCLine(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, OcLine* line) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
 
@@ -3691,7 +3691,7 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
             D_801EE1C0.x = collider->elements[i].dim.modelSphere.center.x;
             D_801EE1C0.y = collider->elements[i].dim.modelSphere.center.y;
             D_801EE1C0.z = collider->elements[i].dim.modelSphere.center.z;
-            Matrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
+            Matrix_MultVec3f(&D_801EE1C0, &D_801EE1D0);
             collider->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
             collider->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
             collider->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
@@ -3733,7 +3733,7 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
         D_801EE1E0.x = collider->dim.modelSphere.center.x;
         D_801EE1E0.y = collider->dim.modelSphere.center.y;
         D_801EE1E0.z = collider->dim.modelSphere.center.z;
-        Matrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
+        Matrix_MultVec3f(&D_801EE1E0, &D_801EE1F0);
         collider->dim.worldSphere.center.x = D_801EE1F0.x;
         collider->dim.worldSphere.center.y = D_801EE1F0.y;
         collider->dim.worldSphere.center.z = D_801EE1F0.z;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 #include "objects/object_po_fusen/object_po_fusen.h"
 
-#define FLAGS 0x80100030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnPoFusen*)thisx)
 
@@ -147,7 +147,7 @@ void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
-    struct Actor* actorPtr;
+    Actor* actorPtr;
 
     actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
@@ -288,10 +288,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+        Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-zRot, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(-xRot, MTXMODE_APPLY);
+        Matrix_RotateZS(-zRot, MTXMODE_APPLY);
+        Matrix_RotateXS(-xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {

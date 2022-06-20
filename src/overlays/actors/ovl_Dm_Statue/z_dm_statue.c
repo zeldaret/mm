@@ -7,7 +7,7 @@
 #include "z_dm_statue.h"
 #include "objects/object_smtower/object_smtower.h"
 
-#define FLAGS 0x04000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
 
 #define THIS ((DmStatue*)thisx)
 

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -82,7 +82,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -153,12 +153,12 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_Translate(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
     Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->zRot, MTXMODE_APPLY);
+    Matrix_RotateZS(this->zRot, MTXMODE_APPLY);
     Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->zRot * -1, MTXMODE_APPLY);
+    Matrix_RotateZS(this->zRot * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);

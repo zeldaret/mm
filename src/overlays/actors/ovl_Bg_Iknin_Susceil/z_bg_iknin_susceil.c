@@ -7,7 +7,7 @@
 #include "z_bg_iknin_susceil.h"
 #include "objects/object_ikninside_obj/object_ikninside_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgIkninSusceil*)thisx)
 
@@ -56,7 +56,7 @@ s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
 
-    return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
+    return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.z) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
 }
 
 void func_80C0A804(BgIkninSusceil* this, GlobalContext* globalCtx) {

@@ -12,8 +12,8 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     s32 seen;
     s32 count = 0;
 
-    gSaveContext.pictoFlags0 = 0;
-    gSaveContext.pictoFlags1 = 0;
+    gSaveContext.save.pictoFlags0 = 0;
+    gSaveContext.save.pictoFlags1 = 0;
 
     if (globalCtx->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
@@ -76,19 +76,19 @@ s32 func_8013A240(GlobalContext* globalCtx) {
 
 void func_8013A41C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.pictoFlags0 |= (1 << flag);
+        gSaveContext.save.pictoFlags0 |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.pictoFlags1 |= (1 << flag);
+        gSaveContext.save.pictoFlags1 |= (1 << flag);
     }
 }
 
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.pictoFlags0 &= ~(1 << flag);
+        gSaveContext.save.pictoFlags0 &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.pictoFlags1 &= ~(1 << flag);
+        gSaveContext.save.pictoFlags1 &= ~(1 << flag);
     }
 }
 
@@ -96,10 +96,10 @@ u32 func_8013A4C4(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
 
     if (flag < 0x20) {
-        return saveCtx->pictoFlags0 & (1 << flag);
+        return saveCtx->save.pictoFlags0 & (1 << flag);
     } else {
         flag &= 0x1F;
-        return saveCtx->pictoFlags1 & (1 << flag);
+        return saveCtx->save.pictoFlags1 & (1 << flag);
     }
 }
 
@@ -114,12 +114,10 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s16 y;
     f32 distance;
     CollisionPoly* poly;
-    Camera* camera;
+    Camera* camera = GET_ACTIVE_CAM(globalCtx);
     Actor* actors[2];
     s32 ret = 0;
     s32 bgId;
-
-    camera = GET_ACTIVE_CAM(globalCtx);
 
     distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
@@ -127,8 +125,8 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret = 0x3F;
     }
 
-    x = func_8013A504(func_800DFCB4(camera) + rot->x);
-    y = func_8013A504(func_800DFCDC(camera) - (s16)(rot->y - 0x7FFF));
+    x = func_8013A504(Camera_GetCamDirPitch(camera) + rot->x);
+    y = func_8013A504(Camera_GetCamDirYaw(camera) - BINANG_SUB(rot->y, 0x7FFF));
     if ((0 < angleError) && ((angleError < x) || (angleError < y))) {
         func_8013A41C(0x3E);
         ret |= 0x3E;
@@ -137,7 +135,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     Actor_GetProjectedPos(globalCtx, pos, &screenSpace, &distance);
     x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
-    if ((x < 0) || (0x96 < x) || (y < 0) || (0x69 < y)) {
+    if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {
         func_8013A41C(0x3D);
         ret |= 0x3D;
     }

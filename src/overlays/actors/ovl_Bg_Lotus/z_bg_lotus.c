@@ -47,7 +47,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
-    this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
+    this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
 }
 
@@ -82,7 +82,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
 
         if (this->timer2 == 0) {
             this->timer2 = 96;
-            this->dyna.actor.world.rot.y += (s16)(Rand_Next() >> 0x12);
+            this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
 
@@ -97,9 +97,9 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.playerForm != PLAYER_FORM_DEKU) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
-                this->dyna.actor.flags |= 0x10;
+                this->dyna.actor.flags |= ACTOR_FLAG_10;
                 this->actionFunc = BgLotus_Sink;
                 return;
             }
@@ -152,7 +152,7 @@ void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->dyna.actor.world.pos.y = CLAMP_MIN(this->height, this->dyna.actor.floorHeight);
-        this->dyna.actor.flags &= ~0x10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         this->timer2 = 96;
         this->actionFunc = BgLotus_Wait;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;

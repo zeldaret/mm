@@ -7,7 +7,7 @@
 #include "z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnBom*)thisx)
 
@@ -169,7 +169,7 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider2.elements[0].dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider2.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    this->actor.flags |= 0x100000;
+    this->actor.flags |= ACTOR_FLAG_100000;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_808714D4;
@@ -301,7 +301,7 @@ void func_808714D4(EnBom* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80871058;
         this->actor.room = globalCtx->roomCtx.currRoom.num;
-        this->actor.flags &= ~0x100000;
+        this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         if (this->isPowderKeg) {
@@ -337,7 +337,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
     Color_RGBA8 sp80;
 
     if (this->collider2.elements->dim.modelSphere.radius == 0) {
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
@@ -350,28 +350,28 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[0] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[0] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[1] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[1] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[2] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[2] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[0] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[0] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[1] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[1] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[2] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[2] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
@@ -383,8 +383,8 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         spCC = Rand_ZeroFloat(M_PI);
 
         for (i = 0; i < 15; i++) {
-            Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
+            Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
+            Matrix_MultVecZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
@@ -400,7 +400,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
                         sp84 = D_80872E94;
                         sp80 = D_80872E94;
                     }
-                    Matrix_GetStateTranslationAndScaledZ(5.0f, &sp94);
+                    Matrix_MultVecZ(5.0f, &sp94);
                     sp88.x = sp88.z = 0.0f;
                     sp94.y = 2.0f;
                     sp88.y = 0.2f;
@@ -455,7 +455,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         thisx->gravity = -1.2f;
         if (this->timer != 0) {
-            if (!this->isPowderKeg || (func_808715B8 == this->actionFunc) || !func_801690CC(globalCtx)) {
+            if (!this->isPowderKeg || (func_808715B8 == this->actionFunc) || !Play_InCsMode(globalCtx)) {
                 this->timer--;
             }
         }
@@ -533,10 +533,10 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0,
                             0, this->isPowderKeg);
                 func_800BC848(thisx, globalCtx, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
-                globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] =
-                    globalCtx->envCtx.unk_8C.diffuseColor1[2] = 250;
-                globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] =
-                    globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
+                globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
+                    globalCtx->envCtx.lightSettings.diffuseColor1[2] = 250;
+                globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.ambientColor[1] =
+                    globalCtx->envCtx.lightSettings.ambientColor[2] = 250;
                 func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
@@ -606,14 +606,14 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (!this->isPowderKeg) {
             func_800B8050(&this->actor, globalCtx, 0);
-            Matrix_MultiplyVector3fByState(&D_80872EE0, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
 
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_RotateXS(0x4000, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -629,15 +629,15 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 s16 sp4A = this->actor.world.rot.y - this->actor.shape.rot.y;
                 f32 sp44 = (1000.0f / Math_CosS(ABS_ALT((s16)(this->unk_1FA % 10922)) - 0x1555)) + -1000.0f;
 
-                Matrix_RotateY(sp4A, MTXMODE_APPLY);
-                Matrix_InsertTranslation(0.0f, sp44, 0.0f, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(this->unk_1FA, MTXMODE_APPLY);
-                Matrix_RotateY(-sp4A, MTXMODE_APPLY);
+                Matrix_RotateYS(sp4A, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, sp44, 0.0f, MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk_1FA, MTXMODE_APPLY);
+                Matrix_RotateYS(-sp4A, MTXMODE_APPLY);
             }
 
-            Matrix_MultiplyVector3fByState(&D_80872EEC, &this->actor.home.pos);
-            Matrix_MultiplyVector3fByState(&D_80872EF8, &sp58);
-            Matrix_MultiplyVector3fByState(&D_80872F04, &sp4C);
+            Matrix_MultVec3f(&D_80872EEC, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EF8, &sp58);
+            Matrix_MultVec3f(&D_80872F04, &sp4C);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -675,14 +675,14 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
     f32 temp_f26 = Math_Vec3f_DistXYZ(arg3, arg1);
     s32 spB0;
     f32 temp_f2;
-    f32 sqrt;
+    f32 distXZ;
 
     Math_Vec3f_Copy(&ptr->unk_00, arg1);
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
     ptr->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-    sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-    ptr->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+    distXZ = sqrtf(SQXZ(spCC));
+    ptr->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
 
@@ -721,8 +721,8 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         }
 
         ptr2->unk_18 = Math_FAtan2F(spCC.z, spCC.x);
-        sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
-        ptr2->unk_1A = Math_FAtan2F(sqrt, spCC.y);
+        distXZ = sqrtf(SQXZ(spCC));
+        ptr2->unk_1A = Math_FAtan2F(distXZ, spCC.y);
 
         ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
         ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
@@ -776,8 +776,8 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-    Matrix_InsertRotation(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
+    Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+    Matrix_RotateZYX(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -787,8 +787,8 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
     ptr2 = &D_80874650[1];
 
     for (i = 1; i < temp_s5; i++, ptr2++) {
-        Matrix_InsertTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
-        Matrix_InsertRotation(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
+        Matrix_Translate(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
+        Matrix_RotateZYX(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

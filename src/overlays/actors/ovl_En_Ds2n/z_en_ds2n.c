@@ -6,7 +6,7 @@
 
 #include "z_en_ds2n.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDs2n*)thisx)
 

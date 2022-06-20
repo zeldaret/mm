@@ -121,7 +121,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 
     if (ObjKibako2_ContainsSkulltula(this, globalCtx)) {
         actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
-        yRotation = ((u32)Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
+        yRotation = (Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula =
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                         this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0, actorSpawnParam);
@@ -161,7 +161,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
                           KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
-            this->dyna.actor.flags |= 0x10;
+            this->dyna.actor.flags |= ACTOR_FLAG_10;
         }
     }
     if ((contents != CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, globalCtx)) {
@@ -210,7 +210,7 @@ void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
     if (ObjKibako2_ShouldBreak(this)) {
         ObjKibako2_Break(this, globalCtx);
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        this->dyna.actor.flags |= 0x10;
+        this->dyna.actor.flags |= ACTOR_FLAG_10;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->actionFunc = ObjKibako2_Kill;
