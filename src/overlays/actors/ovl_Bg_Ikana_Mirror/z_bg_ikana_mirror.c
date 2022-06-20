@@ -218,7 +218,7 @@ void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
   s16 temp_v1;
   s8 temp_v0_4;
   u8 temp_v0;
-  u8 temp_v0_2;
+  // u8 temp_v0_2;
   u8 temp_v0_3;
   s32 phi_a2;
   temp_v0 = arg0->unk5C7;
@@ -231,7 +231,7 @@ void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
   {
     arg0->unk5C7 = 0;
   }
-  temp_v0_2 = arg0->unk15C.base.acFlags;
+  // temp_v0_2 = arg0->unk15C.base.acFlags;
   if ((arg0->unk15C.base.acFlags & 2) != 0)
   {
     temp_v1 = arg0->unk5C4;
@@ -341,29 +341,18 @@ void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
 
 void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    Gfx *sp4C; 
-    Gfx *sp40;
-    f32 sp38;
-    Gfx *sp24;
-    Gfx *temp_v0;
     Gfx *temp_v0_10;
     Gfx *temp_v0_2;
     Gfx *temp_v0_3;
-    Gfx *temp_v0_4;
-    Gfx *temp_v0_5;
-    Gfx *temp_v0_7;
-    Gfx *temp_v0_8;
-    Gfx *temp_v0_9;
+
     GraphicsContext *temp_a0;
-    GraphicsContext *temp_s0;
     f32 temp_ft1;
     f32 temp_fv0;
     u8 temp_v0_6;
-    f32 phi_ft1;
     BgIkanaMirror *this = (BgIkanaMirror *) thisx;
 
     temp_a0 = globalCtx->state.gfxCtx;
-    temp_s0 = temp_a0;
+    // temp_s0 = temp_a0;
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -383,8 +372,8 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     if ((s32) this->unk5C6 > 0) {
         AnimatedMat_Draw(globalCtx, this->unk5BC);
-        temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_v0_3 = temp_a0->polyXlu.p;
+        temp_a0->polyXlu.p = temp_v0_3 + 8;
         temp_v0_3->words.w0 = 0xFA000080;
         temp_v0_3->words.w1 = this->unk5C6 | ~0xFF;
 
@@ -404,12 +393,11 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0_6 = this->unk5C7;
     if ((s32) temp_v0_6 > 0) {
         temp_ft1 = (f32) temp_v0_6;
-        phi_ft1 = temp_ft1;
         if ((s32) temp_v0_6 < 0) {
-            phi_ft1 = temp_ft1 + 4294967296.0f;
+            temp_ft1+=4294967296.0f;
         }
-        temp_fv0 = phi_ft1 * (1.0f/255.0f);
-        sp38 = temp_fv0;
+        temp_fv0 = temp_ft1 * (1.0f/255.0f);
+      
         AnimatedMat_Draw(globalCtx, this->unk5C0);
         // temp_v0_7 = temp_s0->polyXlu.p;
         // temp_s0->polyXlu.p = temp_v0_7 + 8;
@@ -430,8 +418,8 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
         // sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        temp_v0_10 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_10 + 8;
+        temp_v0_10 = temp_a0->polyXlu.p;
+        temp_a0->polyXlu.p = temp_v0_10 + 8;
         temp_v0_10->words.w1 = (u32) &D_06001880;
         temp_v0_10->words.w0 = 0xDE000000;
         // gSPDisplayList(POLY_XLU_DISP++, D_06001880); //must fix (gives higher diff score)
