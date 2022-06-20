@@ -1334,8 +1334,7 @@ beginseg
     name "ovl_Item_Etcetera"
     compress
     include "build/src/overlays/actors/ovl_Item_Etcetera/z_item_etcetera.o"
-    include "build/data/ovl_Item_Etcetera/ovl_Item_Etcetera.data.o"
-    include "build/data/ovl_Item_Etcetera/ovl_Item_Etcetera.reloc.o"
+    include "build/src/overlays/actors/ovl_Item_Etcetera/ovl_Item_Etcetera_reloc.o"
 endseg
 
 beginseg
@@ -1370,8 +1369,7 @@ beginseg
     name "ovl_Obj_Tsubo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.data.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tsubo/ovl_Obj_Tsubo_reloc.o"
 endseg
 
 beginseg

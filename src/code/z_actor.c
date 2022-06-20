@@ -4281,7 +4281,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(globalCtx);
     f32 phi_f2;
 
-    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
+    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &globalCtx->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);

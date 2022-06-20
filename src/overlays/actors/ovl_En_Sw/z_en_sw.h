@@ -7,8 +7,10 @@ struct EnSw;
 
 typedef void (*EnSwActionFunc)(struct EnSw*, GlobalContext*);
 
-#define ENSW_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
-#define ENSW_GET_3FC(thisx) (((thisx)->params & 0x3FC) >> 2)
+#define ENSW_GETS_3(params) ((params & 3) & 0xFF)
+#define ENSW_GET_3(thisx) (ENSW_GETS_3((thisx)->params))
+#define ENSW_GETS_3FC(params) (((params & 0x3FC) >> 2) & 0xFF)
+#define ENSW_GET_3FC(thisx) (ENSW_GETS_3FC((thisx)->params))
 #define ENSW_GET_FF00(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
 
 typedef struct EnSw {

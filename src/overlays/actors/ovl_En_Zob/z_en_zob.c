@@ -726,7 +726,7 @@ void EnZob_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_2F4 & 1) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_2F6, &this->unk_2FC, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2F6, &this->unk_2FC, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_2F6.x, 0, 6, 6200, 100);
         Math_SmoothStepToS(&this->unk_2F6.y, 0, 6, 6200, 100);
