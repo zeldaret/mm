@@ -1554,7 +1554,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnOssan_UpdateItemSelectedProperty(this);
         EnOssan_UpdateStickDirectionPromptAnim(this);
         EnOssan_UpdateCursorAnim(this);
-        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
         Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_Update(&this->skelAnime);

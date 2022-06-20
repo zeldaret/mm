@@ -917,7 +917,7 @@ s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
 
     bcopy(cmd, &sp1C, sizeof(s32));
     cmd += sizeof(s32);
-    if (func_8016A168() == 0) {
+    if (!Play_IsDebugCamEnabled()) {
         func_80161998(cmd, &sCutsceneCameraInfo);
     }
     return sp1C + sizeof(s32);

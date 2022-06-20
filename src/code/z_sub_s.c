@@ -1010,7 +1010,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
  * @param[in] stepMin the minimun step in degrees
  * @param[in] stepMax the maximum step in degrees
  */
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
+s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
     s16 prevRot = *rot;
     f32 step;
     f32 prevRotStep;
@@ -1046,42 +1046,42 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
 /**
  * Computes the necessary HeadRot and TorsoRot to smoothly turn an actors's head and torso to a point
  *
- * @param[in] point the point to turn to
+ * @param[in] target the point to turn to
  * @param[in] focusPos the actor's focus postion
  * @param[in] shapeRot the actor's shape rotation
- * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
+ * @param[in,out] trackTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
- * @param[in] options various options to adjust how the actor turns, see SubS_ComputeTurnToPointRot()
+ * @param[in] options various options to adjust how the actor turns, see SubS_ComputeTrackPointRot()
  */
-s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
-                     TurnOptionsSet* options) {
+s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
+                    Vec3s* torsoRot, TrackOptionsSet* options) {
     s16 pitch;
     s16 yaw;
     s16 pad;
     s16 targetY;
-    f32 diffX = point->x - focusPos->x;
+    f32 diffX = target->x - focusPos->x;
     s16 targetX;
-    f32 diffZ = point->z - focusPos->z;
+    f32 diffZ = target->z - focusPos->z;
 
     yaw = Math_FAtan2F(diffZ, diffX);
-    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
-    Math_SmoothStepToS(&turnTarget->x, pitch, 4, 0x2710, 0);
-    Math_SmoothStepToS(&turnTarget->y, yaw, 4, 0x2710, 0);
+    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
+    Math_SmoothStepToS(&trackTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&trackTarget->y, yaw, 4, 0x2710, 0);
 
     targetX =
-        SubS_ComputeTurnToPointRot(&headRot->x, options->headRotX.rotMax, turnTarget->x, options->headRotX.slowness,
-                                   options->headRotX.rotStepMin, options->headRotX.rotStepMax);
+        SubS_ComputeTrackPointRot(&headRot->x, options->headRotX.rotMax, trackTarget->x, options->headRotX.slowness,
+                                  options->headRotX.rotStepMin, options->headRotX.rotStepMax);
     //! @bug: torsoRotX uses headRotX slowness
-    SubS_ComputeTurnToPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
-                               options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
+                              options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
 
-    targetY = turnTarget->y - shapeRot->y;
-    SubS_ComputeTurnToPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
-                               options->headRotY.rotStepMin, options->headRotY.rotStepMax);
-    SubS_ComputeTurnToPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
-                               options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
-                               options->torsoRotY.rotStepMax);
+    targetY = trackTarget->y - shapeRot->y;
+    SubS_ComputeTrackPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
+                              options->headRotY.rotStepMin, options->headRotY.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
+                              options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
+                              options->torsoRotY.rotStepMax);
 
     return true;
 }
@@ -1438,7 +1438,6 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
  * @param[out] plane the computed plane
  *
  * @note the unit input vector is expected to already be normalized (only uses are with the z unit vector)
- *
  */
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
     f32 sin;
@@ -1561,9 +1560,9 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
  * @param[in] torsoZRotStepMax the max torso's Z rotation step
  * @param[in] torsoXRotStepMax the max torso's X rotation step
  */
-s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
-                         s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
-                         u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
+s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                        s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
+                        u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
     s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
     s16 pad;
     s16 pad2;

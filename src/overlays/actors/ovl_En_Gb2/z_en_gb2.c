@@ -974,7 +974,7 @@ void EnGb2_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (!(this->unk_26C & 0x100)) {
         func_80B0F5E0(this, globalCtx);
     }
-    func_800E9250(globalCtx, &this->actor, &this->unk_270, &this->unk_276, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_270, &this->unk_276, this->actor.focus.pos);
 }
 
 s32 EnGb2_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,

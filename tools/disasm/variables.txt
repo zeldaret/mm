@@ -2171,7 +2171,7 @@
     0x801D0CD8:("TransitionFade_InitVars","UNK_PTR","",0x4),
     0x801D0D00:("D_801D0D00","UNK_TYPE1","",0x1),
     0x801D0D28:("TransitionCircle_InitVars","UNK_PTR","",0x4),
-    0x801D0D50:("D_801D0D50","UNK_TYPE4","",0x4),
+    0x801D0D50:("gDbgCamEnabled","UNK_TYPE4","",0x4),
     0x801D0D54:("D_801D0D54","UNK_TYPE1","",0x1),
     0x801D0D58:("D_801D0D58","UNK_TYPE2","",0x2),
     0x801D0D5C:("D_801D0D5C","UNK_TYPE2","",0x2),

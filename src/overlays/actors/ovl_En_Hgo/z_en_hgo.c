@@ -315,7 +315,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD0B8C(EnHgo* this, GlobalContext* globalCtx) {
-    func_800E9250(globalCtx, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
     if (this->unk_30E > 2) {
         this->unk_30E--;
     } else if (this->unk_30E == 2) {
@@ -337,7 +337,7 @@ void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     SkelAnime_Update(&this->skelAnime);
     if (func_80BD0898(this, globalCtx)) {
-        func_800E8F08(&this->unk_300, &this->unk_306);
+        Actor_TrackNone(&this->unk_300, &this->unk_306);
     } else if (this->actionFunc != func_80BD0410) {
         if (this->actionFunc != func_80BD0434) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
