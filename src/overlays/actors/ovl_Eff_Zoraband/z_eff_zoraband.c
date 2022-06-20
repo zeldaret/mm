@@ -16,7 +16,7 @@ void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2);
 
-void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx);
+void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx);
 
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
@@ -34,7 +34,7 @@ void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx) {
     EffZoraband* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
-    this->actionFunc = EffZoraband_Mikau_FadeOut;
+    this->actionFunc = EffZoraband_MikauFadeOut;
     this->alpha = 0;
     this->actor.shape.rot.z = 0;
 }
@@ -42,7 +42,7 @@ void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void EffZoraband_Mikau_FadeOut(EffZoraband* this, GlobalContext* globalCtx) {
+void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 0x20F) != 0) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
             globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action) {
