@@ -517,7 +517,7 @@ void EnMm3_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_2B0 & 1) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_2A0, &this->unk_2A6, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2A0, &this->unk_2A6, this->actor.focus.pos);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);

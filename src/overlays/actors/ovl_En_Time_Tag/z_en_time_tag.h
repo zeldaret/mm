@@ -7,6 +7,11 @@ struct EnTimeTag;
 
 typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, GlobalContext*);
 
+#define ENTIMETAG_GET_1F(thisx) ((thisx)->params & 0x1F)
+#define ENTIMETAG_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENTIMETAG_GET_1FE0(thisx) (((thisx)->params & 0x1FE0) >> 0x5)
+#define ENTIMETAG_GET_E000(thisx) (((thisx)->params & 0xE000) >> 0xD)
+
 typedef struct EnTimeTag {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnTimeTagActionFunc actionFunc;

@@ -846,7 +846,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
-    func_800E9250(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
 }
 
 s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,

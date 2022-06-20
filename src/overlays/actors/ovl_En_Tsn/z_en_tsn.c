@@ -299,7 +299,7 @@ void func_80AE0460(EnTsn* this, GlobalContext* globalCtx) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_95, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_SEAHORSE, 2000.0f, 1000.0f);
     }
 }
 
@@ -568,7 +568,7 @@ void EnTsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_220 & 1) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_222, &this->unk_228, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_222, &this->unk_228, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_222.x, 0, 6, 0x1838, 0x64);
         Math_SmoothStepToS(&this->unk_222.y, 0, 6, 0x1838, 0x64);

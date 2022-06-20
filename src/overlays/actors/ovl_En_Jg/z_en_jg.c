@@ -992,7 +992,8 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
             EnJg_SpawnBreath(this, globalCtx);
         }
 
-        func_800E9250(globalCtx, &this->actor, &this->unusedRotation1, &this->unusedRotation2, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unusedRotation1, &this->unusedRotation2,
+                          this->actor.focus.pos);
     }
     this->actionFunc(this, globalCtx);
 }

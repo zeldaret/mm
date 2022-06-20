@@ -135,7 +135,7 @@ static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
 
     /* Intra-byte navigation */
 
