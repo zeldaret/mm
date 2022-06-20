@@ -53,9 +53,8 @@ static ColliderCylinderInit sCylinderInit = {
 void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgBotihasira* this = THIS;
-    CollisionHeader* colHeader;
+    CollisionHeader* colHeader = NULL;
 
-    colHeader = NULL;
     if (this->dyna.actor.params == 0) {
         DynaPolyActor_Init(&this->dyna, 0);
         CollisionHeader_GetVirtual(&object_botihasira_Colheader_001BD8, &colHeader);
@@ -64,9 +63,7 @@ void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     }
     this->actionFunc = BgBotihasira_DoNothing;
-    this->dyna.actor.scale.x = 0.1f;
-    this->dyna.actor.scale.y = 0.1f;
-    this->dyna.actor.scale.z = 0.1f;
+    this->dyna.actor.scale.z = this->dyna.actor.scale.y = this->dyna.actor.scale.x = 0.1f;
 }
 
 void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx) {
