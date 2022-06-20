@@ -21,9 +21,9 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_SetIdle(EnEncount2* this);
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
-void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx);
-void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
+void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx);
 
 const ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
@@ -166,8 +166,8 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
                 CLEAR_TAG_LARGE_EXPLOSION);
 
-    for (i = 0; i < ARRAY_COUNT(this->particles) / 2; ++i) {
-        EnEncount2_InitParticles(this, &curPos, 10);
+    for (i = 0; i < ARRAY_COUNT(this->effects) / 2; ++i) {
+        EnEncount2_InitEffects(this, &curPos, 10);
     }
 
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
@@ -195,7 +195,7 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->dyna.actor);
-    EnEncount2_UpdateParticles(this, globalCtx);
+    EnEncount2_UpdateEffects(this, globalCtx);
 
     if (!this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dyna.actor);
@@ -210,16 +210,16 @@ void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000A00);
         Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000D78);
     }
-    EnEncount2_DrawParticles(this, globalCtx);
+    EnEncount2_DrawEffects(this, globalCtx);
 }
 
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
+void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     s16 i;
-    EnEncount2Particle* sPtr = this->particles;
+    EnEncount2Effect* sPtr = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
-        if (!sPtr->enabled) {
-            sPtr->enabled = true;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
+        if (!sPtr->isEnabled) {
+            sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
             sPtr->alpha = 0xFF;
@@ -228,9 +228,9 @@ void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
 
-            sPtr->vel.x = Rand_ZeroOne() - 0.5f;
-            sPtr->vel.y = Rand_ZeroOne() - 0.5f;
-            sPtr->vel.z = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.x = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.y = Rand_ZeroOne() - 0.5f;
+            sPtr->velocity.z = Rand_ZeroOne() - 0.5f;
 
             sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
@@ -238,42 +238,42 @@ void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     }
 }
 
-void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
-    EnEncount2Particle* sPtr = this->particles;
+    EnEncount2Effect* sPtr = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
-        if (sPtr->enabled) {
-            sPtr->pos.x += sPtr->vel.x;
-            sPtr->pos.y += sPtr->vel.y;
-            sPtr->pos.z += sPtr->vel.z;
-            sPtr->vel.x += sPtr->accel.x;
-            sPtr->vel.y += sPtr->accel.y;
-            sPtr->vel.z += sPtr->accel.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
+        if (sPtr->isEnabled) {
+            sPtr->pos.x += sPtr->velocity.x;
+            sPtr->pos.y += sPtr->velocity.y;
+            sPtr->pos.z += sPtr->velocity.z;
+            sPtr->velocity.x += sPtr->accel.x;
+            sPtr->velocity.y += sPtr->accel.y;
+            sPtr->velocity.z += sPtr->accel.z;
 
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
                 sPtr->alpha -= 10;
                 if (sPtr->alpha < 10) {
-                    sPtr->enabled = 0;
+                    sPtr->isEnabled = 0;
                 }
             }
         }
     }
 }
 
-void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx) {
     s16 i;
-    EnEncount2Particle* sPtr;
+    EnEncount2Effect* sPtr;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    sPtr = this->particles;
+    sPtr = this->effects;
     func_8012C28C(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
-        if (sPtr->enabled) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
+        if (sPtr->isEnabled) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);

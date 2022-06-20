@@ -1728,7 +1728,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
-    f32 weightArray[265];
+    f32 knots[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f timePathTargetPos;
@@ -1738,13 +1738,12 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     sp50 = 0;
     sp54 = 0;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk_356 & 8)) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
         this->actor.world.pos.y = timePathTargetPos.y;
         this->unk_356 |= 8;
@@ -1764,8 +1763,8 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     this->timePathTargetPos = gZeroVec3f;
 
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_356 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;

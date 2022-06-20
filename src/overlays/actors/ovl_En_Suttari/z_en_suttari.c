@@ -120,7 +120,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-static TurnOptionsSet sTurnOptions = {
+static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
@@ -530,11 +530,11 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
             point.x = player->actor.world.pos.x;
             point.y = player->bodyPartsPos[7].y + 3.0f;
             point.z = player->actor.world.pos.z;
-            SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
-                             &this->torsoRot, &sTurnOptions);
+            SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
+                            &this->torsoRot, &sTrackOptions);
         } else {
-            Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 0x3E8, 1);
-            Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 0x3E8, 1);
             Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
             Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
             Math_SmoothStepToS(&this->torsoRot.x, 0, 4, 0x3E8, 1);
@@ -773,7 +773,7 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleOutput* sch
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    f32 weightArray[265];
+    f32 knots[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f timePathTargetPos;
@@ -781,13 +781,12 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     s32 sp50 = 0;
     s32 pad;
 
-    SubS_TimePathing_FillWeightArray(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (this->unk42C == 0) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &timePathTargetPos, this->timePathTimeSpeed);
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
         this->actor.world.pos.y = timePathTargetPos.y;
         this->unk42C = 1;
@@ -803,8 +802,8 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->timePathTargetPos = gZeroVec3f;
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
-                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
-                                weightArray, &this->timePathTargetPos, this->timePathTimeSpeed)) {
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk430 = 1;
     } else {
         sp70 = this->actor.world.pos;

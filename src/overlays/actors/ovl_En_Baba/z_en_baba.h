@@ -34,7 +34,7 @@ typedef struct EnBaba {
     /* 0x1EA */ UNK_TYPE1 unk1EA[0x1C];
     /* 0x206 */ Vec3s jointTable[BBA_LIMB_MAX];
     /* 0x272 */ Vec3s morphTable[BBA_LIMB_MAX];
-    /* 0x2DE */ Vec3s turnTarget;
+    /* 0x2DE */ Vec3s trackTarget;
     /* 0x2E4 */ Vec3s headRot;
     /* 0x2EA */ Vec3s torsoRot;
     /* 0x2F0 */ UNK_TYPE1 unk2F0[0x12];

@@ -210,8 +210,8 @@ void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     this->actor.colChkInfo.mass = this->unk_25C * 30.0f;
-    this->unk_244 = (u32)Rand_Next() >> 0x10;
-    this->unk_246 = (u32)Rand_Next() >> 0x10;
+    this->unk_244 = Rand_Next() >> 0x10;
+    this->unk_246 = Rand_Next() >> 0x10;
 
     if (sp36 == ENFISH_0) {
         this->actor.flags |= ACTOR_FLAG_10;
@@ -707,12 +707,12 @@ void func_8091EFE8(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.speedXZ *= 0.5f;
     }
 
-    if (!((u32)Rand_Next() >> 0x1B) || ((this->actor.bgCheckFlags & 8) && !((u32)Rand_Next() >> 0x1E)) ||
+    if (((Rand_Next() >> 0x1B) == 0) || ((this->actor.bgCheckFlags & 8) && ((Rand_Next() >> 0x1E) == 0)) ||
         !(this->actor.bgCheckFlags & 0x20)) {
         temp_f0 = Rand_ZeroOne();
         sp34 = (1.0f - SQ(temp_f0)) * sp3C->home.rot.x;
         sp30 = Rand_ZeroOne() * sp3C->home.rot.z;
-        sp2E = (u32)Rand_Next() >> 0x10;
+        sp2E = Rand_Next() >> 0x10;
         this->actor.home.pos.x = (Math_SinS(sp2E) * sp34) + sp3C->world.pos.x;
         this->actor.home.pos.y = sp3C->world.pos.y + sp30;
         this->actor.home.pos.z = (Math_CosS(sp2E) * sp34) + sp3C->world.pos.z;

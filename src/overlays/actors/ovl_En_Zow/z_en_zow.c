@@ -188,7 +188,7 @@ void func_80BDC830(EnZowStruct* ptr, GlobalContext* globalCtx) {
         if (ptr->unk_00 == 1) {
             if (!flag) {
                 gDPPipeSync(POLY_XLU_DISP++);
-                gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_00D220);
+                gSPDisplayList(POLY_XLU_DISP++, gZoraRippleMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
                 if (1) {}
                 flag = true;
@@ -201,7 +201,7 @@ void func_80BDC830(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_00D288);
+            gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
         }
     }
 
@@ -219,7 +219,7 @@ void func_80BDC9DC(EnZowStruct* ptr, GlobalContext* globalCtx) {
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 3) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_0029F0);
+                gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleMaterialDL);
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
@@ -233,7 +233,7 @@ void func_80BDC9DC(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_002A50);
+            gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
         }
     }
 
@@ -251,7 +251,7 @@ void func_80BDCB84(EnZowStruct* ptr, GlobalContext* globalCtx) {
     for (i = 0; i < 15; i++, ptr++) {
         if (ptr->unk_00 == 2) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_002BA0);
+                gSPDisplayList(POLY_XLU_DISP++, gZoraSplashMaterialDL);
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
                 if (1) {}
@@ -266,7 +266,7 @@ void func_80BDCB84(EnZowStruct* ptr, GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_zo_DL_002C10);
+            gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
         }
     }
 
@@ -333,7 +333,7 @@ void EnZow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-AnimationHeader* sAnimations[] = { &object_zo_Anim_004168, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
+static AnimationHeader* sAnimations[] = { &gZoraTreadingWaterAnim, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
 
 void func_80BDD04C(EnZow* this, s16 arg1, u8 arg2) {
     if ((arg1 >= 0) && (arg1 < 3)) {

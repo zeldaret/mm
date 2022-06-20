@@ -25,19 +25,19 @@ typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 #define SUBS_SHADOW_TEX_HEIGHT 64
 #define SUBS_SHADOW_TEX_SIZE ((s32)sizeof(u8[SUBS_SHADOW_TEX_HEIGHT][SUBS_SHADOW_TEX_WIDTH]))
 
-typedef struct TurnOptions {
+typedef struct TrackOptions {
     /* 0x0 */ u16 rotMax; // binary angles
     /* 0x2 */ u16 slowness; // larger for slower rotation, cannot be 0
     /* 0x4 */ u16 rotStepMin; // degrees
     /* 0x6 */ u16 rotStepMax; // degrees
-} TurnOptions; // size = 0x8
+} TrackOptions; // size = 0x8
 
-typedef struct TurnOptionsSet {
-    /* 0x00 */ TurnOptions headRotX;
-    /* 0x08 */ TurnOptions headRotY;
-    /* 0x10 */ TurnOptions torsoRotX;
-    /* 0x18 */ TurnOptions torsoRotY;
-} TurnOptionsSet; // size = 0x20
+typedef struct TrackOptionsSet {
+    /* 0x00 */ TrackOptions headRotX;
+    /* 0x08 */ TrackOptions headRotY;
+    /* 0x10 */ TrackOptions torsoRotX;
+    /* 0x18 */ TrackOptions torsoRotY;
+} TrackOptionsSet; // size = 0x20
 
 #define ACTOR_PATHING_RETURN_TO_START (1 << 0)
 #define ACTOR_PATHING_SWITCH_DIRECTION (1 << 1)
@@ -93,14 +93,14 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
 
 void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
 
-void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 numPoints, s32 len);
-s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 timeElapsed, s32 waypointTime, s32 totalTime, s32 pathCount, s32 numPoints, f32 weightArray[]);
-void SubS_TimePathing_ComputeWeights(s32 numPoints, f32 progress, s32 waypoint, f32 weightArray[], f32 weights[]);
-void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 numPoints, s32 waypoint, Vec3s points[], f32 weightArray[]);
-s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* timeElapsed, s32 waypointTime, s32 totalTime, s32* waypoint, f32 weightArray[], Vec3f* point, s32 timeSpeed);
-void SubS_TimePathing_ComputeInitialY(struct GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* point);
+void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints);
+s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount, s32 order, f32 knots[]);
+void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 knots[], f32 weights[]);
+void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[], f32 knots[]);
+s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint, f32 knots[], Vec3f* targetPos, s32 timeSpeed);
+void SubS_TimePathing_ComputeInitialY(struct GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* targetPos);
 
-Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 limit);
+Path* SubS_GetAdditionalPath(struct GlobalContext* globalCtx, u8 pathIndex, s32 max);
 
 Actor* SubS_FindNearestActor(Actor* actor, struct GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
 
@@ -121,8 +121,8 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
 void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
-s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot, TurnOptionsSet* options);
+s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
+s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
@@ -165,6 +165,6 @@ s32 func_8013E748(Actor* actor, struct GlobalContext* globalCtx, f32 xzRange, f3
 s32 SubS_ActorAndPlayerFaceEachOther(struct GlobalContext* globalCtx, Actor* actor, void* data);
 s32 func_8013E8F8(Actor* actor, struct GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol, s16 actorYawTol);
 
-s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
+s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
 
 #endif

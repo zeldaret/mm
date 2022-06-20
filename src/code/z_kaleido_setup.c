@@ -60,7 +60,7 @@ void func_800F4A10(GlobalContext* globalCtx) {
 }
 
 void KaleidoSetup_Update(GlobalContext* globalCtx) {
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Player* player = GET_PLAYER(globalCtx);
     PauseContext* pauseCtx = &globalCtx->pauseCtx;

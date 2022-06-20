@@ -97,7 +97,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static TurnOptionsSet sTurnOptions = {
+static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
@@ -113,11 +113,11 @@ void EnBba01_UpdateModel(EnBba01* this, GlobalContext* globalCtx) {
         point.x = player->actor.world.pos.x;
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
-        SubS_TurnToPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.turnTarget,
-                         &this->enHy.headRot, &this->enHy.torsoRot, &sTurnOptions);
+        SubS_TrackPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.trackTarget,
+                        &this->enHy.headRot, &this->enHy.torsoRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->enHy.turnTarget.x, 0, 4, 0x3E8, 1);
-        Math_SmoothStepToS(&this->enHy.turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.trackTarget.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
@@ -134,7 +134,7 @@ s32 EnBba01_TestIsTalking(EnBba01* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmpTurnTarget = this->enHy.turnTarget;
+        this->enHy.tmptrackTarget = this->enHy.trackTarget;
         this->enHy.tmpHeadRot = this->enHy.headRot;
         this->enHy.tmpTorsoRot = this->enHy.torsoRot;
         this->enHy.tmpActionFunc = this->enHy.actionFunc;
@@ -197,7 +197,7 @@ void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx) {
             break;
         case 2:
             this->actor.textId = 0;
-            this->turnTarget = this->tmpTurnTarget;
+            this->trackTarget = this->tmptrackTarget;
             this->headRot = this->tmpHeadRot;
             this->torsoRot = this->tmpTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;

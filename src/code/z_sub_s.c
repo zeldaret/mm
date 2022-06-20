@@ -214,18 +214,18 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
 }
 
 /**
- * Fills the weightArray to be used with time paths
+ * Fills the knot array to be used with time paths
  *
- * This default weightArray is just an array of the point indicies as floats,
- * offset to start at the index of the interpolation order minus 1.
+ * The default knot array just pads with `order` duplicate knots of the first knot at the front and of the last knot
+ * at the end.
  *
- * @param[out] weightArray an array of values that are used to compute the progress and the individual weights
+ * @param[out] knots an array of values that are used to compute the progress and the individual weights
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
  * @param[in] numPoints the number of points to fill, generally the path count + order
  *
- * @note `SubS_TimePathing_Update` assumes order to be 3, see SUBS_TIME_PATHING_ORDER
+ * @note Same note as SubS_TimePathing_Update()
  */
-void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoints) {
+void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
     s32 i;
     f32 val = 0.0f;
 
@@ -233,9 +233,15 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoint
         if ((i >= order) && (i < (numPoints - order + 1))) {
             val += 1.0f;
         }
-        weightArray[i] = val;
+        knots[i] = val;
     }
 }
+
+typedef enum {
+    /* 0 */ SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR,
+    /* 1 */ SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH,
+    /* 2 */ SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+} SUBS_TIME_PATHING_PROGRESS_STATUS;
 
 /**
  * Computes the progress to be used with time paths
@@ -246,12 +252,12 @@ void SubS_TimePathing_FillWeightArray(f32 weightArray[], s32 order, s32 numPoint
  * @param[in] totalTime how much time the path should take to travel
  * @param[in] pathCount the path count
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  *
- * @return s32 0 for error, 1 if still on the path, and 2 if the end of the path should be reached
+ * @return see SUBS_TIME_PATHING_PROGRESS_STATUS
  */
 s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
-                                     s32 order, f32 weightArray[]) {
+                                     s32 order, f32 knots[]) {
     s32 i;
     s32 j;
     s32 k;
@@ -259,10 +265,10 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
 
     *progress = 0.0f;
     if ((waypointTime <= 0) || (elapsedTime < 0)) {
-        return 0;
+        return SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR;
     }
 
-    // When using the weightArray from `SubS_TimePathing_FillWeightArray` these nested loops seem to simplify to
+    // When using the knots from SubS_TimePathing_FillKnots() these nested loops seem to simplify to
     // *progress = (f32)elapsedTime / (f32)waypointTime;
     waypointTimeInv = 1.0f / waypointTime;
     k = 0;
@@ -271,24 +277,27 @@ s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypoin
             if (k == elapsedTime) {
                 break;
             }
-            *progress += (weightArray[i + 1] - weightArray[i]) * waypointTimeInv;
+            *progress += (knots[i + 1] - knots[i]) * waypointTimeInv;
             k++;
         }
     }
 
-    return (elapsedTime == totalTime) ? 2 : 1;
+    return (elapsedTime == totalTime) ? SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+                                      : SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH;
 }
 
 /**
  * Computes the interpolation weights to be used with time paths
  *
+ * Seems to use some kind of B-Spline interpolation algorithm
+ *
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
- * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
  * @param[in] waypoint the current waypoint
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  * @param[out] weights how much to weight each point considered
  */
-void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 weightArray[], f32 weights[]) {
+void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 knots[], f32 weights[]) {
     f32 weightsTemp[10][11];
     s32 i;
     s32 j;
@@ -304,17 +313,15 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
 
     for (i = 1; i < order; i++) {
         for (j = waypoint - i, k = (order - 1) - i; j <= waypoint; j++, k++) {
-            if (weightArray[j + i] != weightArray[j]) {
-                weightsTemp[i][k] =
-                    ((progress - weightArray[j]) / (weightArray[j + i] - weightArray[j])) * weightsTemp[i - 1][k];
+            if (knots[j + i] != knots[j]) {
+                weightsTemp[i][k] = ((progress - knots[j]) / (knots[j + i] - knots[j])) * weightsTemp[i - 1][k];
             } else {
                 weightsTemp[i][k] = 0.0f;
             }
 
-            if (weightArray[j + i + 1] != weightArray[j + 1]) {
+            if (knots[j + i + 1] != knots[j + 1]) {
                 weightsTemp[i][k] +=
-                    ((weightArray[j + i + 1] - progress) / (weightArray[j + i + 1] - weightArray[j + 1])) *
-                    weightsTemp[i - 1][k + 1];
+                    ((knots[j + i + 1] - progress) / (knots[j + i + 1] - knots[j + 1])) * weightsTemp[i - 1][k + 1];
             }
         }
     }
@@ -326,16 +333,16 @@ void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 
 /**
  * Computes the X and Z component of the position to move to in time based paths
  *
- * @param[out] x
- * @param[out] z
- * @param[in] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[out] x computed x position
+ * @param[out] z computed z position
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
  * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
  * @param[in] waypoint the current waypoint
  * @param[in] points the path's points
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  */
 void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[],
-                                         f32 weightArray[]) {
+                                         f32 knots[]) {
     f32 xPos;
     f32 zPos;
     f32 weights[11];
@@ -344,7 +351,7 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
     f32 weightedTotal;
     s32 i;
 
-    SubS_TimePathing_ComputeWeights(order, progress, waypoint, weightArray, weights);
+    SubS_TimePathing_ComputeWeights(order, progress, waypoint, knots, weights);
     weightedTotal = 0.0f;
     weightedZ = 0.0f;
     weightedX = 0.0f;
@@ -368,19 +375,23 @@ void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order
  *  - Updating the time
  *
  * @param[in] path
- * @param[out] progress see `SubS_TimePathing_ComputeProgress`
+ * @param[out] progress see SubS_TimePathing_ComputeProgress()
  * @param[in,out] elapsedTime how much time has passed
  * @param[in] waypointTime how much time per each waypoint
  * @param[in] totalTime how much time the path should take to travel
  * @param[in,out] waypoint the current waypoint, this and the previous two points will be used to compute the targetPos
- * @param[in] weightArray see `SubS_TimePathing_FillWeightArray`
+ * @param[in] knots see SubS_TimePathing_FillKnots()
  * @param[out] targetPos the computed position to move to
  * @param[in] timeSpeed how fast time moves
  *
  * @return s32 returns true when the end has been reached.
+ *
+ * @note This system/function makes a couple of assumptions about the order used:
+ *      1. the order is assumed to be 3, see SUBS_TIME_PATHING_ORDER
+ *      2. even if SUBS_TIME_PATHING_ORDER is updated, the order can only be a max of 10
  */
 s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint,
-                            f32 weightArray[], Vec3f* targetPos, s32 timeSpeed) {
+                            f32 knots[], Vec3f* targetPos, s32 timeSpeed) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 state;
     f32 endX;
@@ -388,19 +399,19 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
     s32 reachedEnd = false;
 
     if (*waypoint >= path->count) {
-        state = 2;
+        state = SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END;
     } else {
         state = SubS_TimePathing_ComputeProgress(progress, *elapsedTime, waypointTime, totalTime, path->count,
-                                                 SUBS_TIME_PATHING_ORDER, weightArray);
+                                                 SUBS_TIME_PATHING_ORDER, knots);
     }
 
     switch (state) {
-        case 1: // Haven't reached the end of the path
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH:
             reachedEnd = false;
             SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
-                                                *waypoint, points, weightArray);
+                                                *waypoint, points, knots);
             break;
-        case 2: // Have reached the end of the path
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END:
             endX = points[path->count - 1].x;
             endZ = points[path->count - 1].z;
             targetPos->x = endX * 1;
@@ -427,6 +438,8 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
  * @param[in] path
  * @param[in] waypoint the current waypoint, this and the previous two points will be used to compute the target pos
  * @param[out] targetPos the computed position to move to, only the Y component has meaning
+ *
+ * @note Same note as SubS_TimePathing_Update()
  */
 void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* targetPos) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -998,7 +1011,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
  * @param[in] stepMin the minimun step in degrees
  * @param[in] stepMax the maximum step in degrees
  */
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
+s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
     s16 prevRot = *rot;
     f32 step;
     f32 prevRotStep;
@@ -1034,42 +1047,42 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
 /**
  * Computes the necessary HeadRot and TorsoRot to smoothly turn an actors's head and torso to a point
  *
- * @param[in] point the point to turn to
+ * @param[in] target the point to turn to
  * @param[in] focusPos the actor's focus postion
  * @param[in] shapeRot the actor's shape rotation
- * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
+ * @param[in,out] trackTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
  * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot`
  */
-s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
-                     TurnOptionsSet* options) {
+s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
+                    Vec3s* torsoRot, TrackOptionsSet* options) {
     s16 pitch;
     s16 yaw;
     s16 pad;
     s16 targetY;
-    f32 diffX = point->x - focusPos->x;
+    f32 diffX = target->x - focusPos->x;
     s16 targetX;
-    f32 diffZ = point->z - focusPos->z;
+    f32 diffZ = target->z - focusPos->z;
 
     yaw = Math_FAtan2F(diffZ, diffX);
-    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
-    Math_SmoothStepToS(&turnTarget->x, pitch, 4, 0x2710, 0);
-    Math_SmoothStepToS(&turnTarget->y, yaw, 4, 0x2710, 0);
+    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
+    Math_SmoothStepToS(&trackTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&trackTarget->y, yaw, 4, 0x2710, 0);
 
     targetX =
-        SubS_ComputeTurnToPointRot(&headRot->x, options->headRotX.rotMax, turnTarget->x, options->headRotX.slowness,
-                                   options->headRotX.rotStepMin, options->headRotX.rotStepMax);
+        SubS_ComputeTrackPointRot(&headRot->x, options->headRotX.rotMax, trackTarget->x, options->headRotX.slowness,
+                                  options->headRotX.rotStepMin, options->headRotX.rotStepMax);
     //! @bug: torsoRotX uses headRotX slowness
-    SubS_ComputeTurnToPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
-                               options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
+                              options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
 
-    targetY = turnTarget->y - shapeRot->y;
-    SubS_ComputeTurnToPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
-                               options->headRotY.rotStepMin, options->headRotY.rotStepMax);
-    SubS_ComputeTurnToPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
-                               options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
-                               options->torsoRotY.rotStepMax);
+    targetY = trackTarget->y - shapeRot->y;
+    SubS_ComputeTrackPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
+                              options->headRotY.rotStepMin, options->headRotY.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
+                              options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
+                              options->torsoRotY.rotStepMax);
 
     return true;
 }
@@ -1426,7 +1439,6 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
  * @param[out] plane the computed plane
  *
  * @note the unit input vector is expected to already be normalized (only uses are with the z unit vector)
- *
  */
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
     f32 sin;
@@ -1549,9 +1561,9 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
  * @param[in] torsoZRotStepMax the max torso's Z rotation step
  * @param[in] torsoXRotStepMax the max torso's X rotation step
  */
-s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
-                         s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
-                         u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
+s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                        s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
+                        u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
     s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
     s16 pad;
     s16 pad2;

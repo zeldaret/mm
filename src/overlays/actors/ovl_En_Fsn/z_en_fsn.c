@@ -127,11 +127,11 @@ s32 EnFsn_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_CUP);
 }
 
 u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
@@ -483,8 +483,8 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, GlobalContext* globalCtx, Input* in
 }
 
 void EnFsn_UpdateJoystickInputState(EnFsn* this, GlobalContext* globalCtx) {
-    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
-    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&globalCtx->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&globalCtx->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -882,7 +882,8 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1108,7 +1109,7 @@ void EnFsn_BrowseShelf(EnFsn* this, GlobalContext* globalCtx) {
         EnFsn_UpdateCursorPos(this, globalCtx);
         if (talkstate == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnFsn_HasPlayerSelectedItem(this, globalCtx, CONTROLLER1(globalCtx))) {
+            if (!EnFsn_HasPlayerSelectedItem(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
                 EnFsn_CursorLeftRight(this);
                 if (this->cursorIdx != prevCursorIdx) {
                     play_sound(NA_SE_SY_CURSOR);
@@ -1210,7 +1211,8 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
 
     if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, globalCtx);
@@ -1330,7 +1332,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
 
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) &&
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
             (!Message_ShouldAdvance(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) &&
             this->stickAccumX > 0) {
             cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
@@ -1410,6 +1412,8 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
+
+    // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
                        FSN_LIMB_MAX + 1);
     if (ENFSN_IS_SHOP(&this->actor)) {
@@ -1445,7 +1449,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
-    func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
     SubS_FillLimbRotTables(globalCtx, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {

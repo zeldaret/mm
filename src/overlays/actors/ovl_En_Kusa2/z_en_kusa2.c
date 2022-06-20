@@ -102,7 +102,7 @@ void func_80A5B160(EnKusa2* this, GlobalContext* globalCtx) {
         ptr = this->unk_194;
         actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
             &globalCtx->actorCtx, globalCtx, ACTOR_EN_KUSA2, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.unk20, NULL);
         *ptr = actor;
 
         if (*ptr != NULL) {
@@ -117,8 +117,8 @@ void func_80A5B160(EnKusa2* this, GlobalContext* globalCtx) {
             ptr = &this->unk_194[i];
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
                 &globalCtx->actorCtx, globalCtx, ACTOR_EN_KUSA2, (Math_SinS(temp_s1) * 80.0f) + this->actor.world.pos.x,
-                this->actor.world.pos.y, (Math_CosS(temp_s1) * 80.0f) + this->actor.world.pos.z, 0,
-                (u32)Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.unk20, NULL);
+                this->actor.world.pos.y, (Math_CosS(temp_s1) * 80.0f) + this->actor.world.pos.z, 0, Rand_Next() >> 0x10,
+                0, 1, this->actor.cutscene, this->actor.unk20, NULL);
             *ptr = actor;
             if (*ptr != NULL) {
                 (*ptr)->actor.room = this->actor.room;
@@ -741,7 +741,7 @@ void func_80A5CD0C(EnKusa2* this) {
     s32 pad;
 
     for (i = 0; i < 2; i++) {
-        temp_s0 = (u32)Rand_Next() & 0xFFFF;
+        temp_s0 = Rand_Next() & 0xFFFF;
         temp_f20 = Rand_ZeroOne() * 30.0f;
 
         spA8.x = Math_SinS(temp_s0) * temp_f20;
@@ -756,13 +756,13 @@ void func_80A5CD0C(EnKusa2* this) {
         spA8.y += this->actor.world.pos.y;
         spA8.z += this->actor.world.pos.z;
 
-        sp94.x = (u32)Rand_Next() & 0xFFFF;
-        sp94.y = (u32)Rand_Next() & 0xFFFF;
-        sp94.z = (u32)Rand_Next() & 0xFFFF;
+        sp94.x = Rand_Next() & 0xFFFF;
+        sp94.y = Rand_Next() & 0xFFFF;
+        sp94.z = Rand_Next() & 0xFFFF;
 
-        sp8C.x = ((u32)Rand_Next() % 0x4000) - 0x1FFF;
-        sp8C.y = ((u32)Rand_Next() % 0x2000) - 0xFFF;
-        sp8C.z = ((u32)Rand_Next() % 0x4000) - 0x1FFF;
+        sp8C.x = (Rand_Next() % 0x4000) - 0x1FFF;
+        sp8C.y = (Rand_Next() % 0x2000) - 0xFFF;
+        sp8C.z = (Rand_Next() % 0x4000) - 0x1FFF;
 
         func_80A5C2FC(&D_80A5F1C0, (Rand_ZeroOne() * 0.4f) + 0.02f, &spA8, &sp9C, &sp94, &sp8C);
     }
@@ -779,7 +779,7 @@ void func_80A5CF44(EnKusa2* this) {
     s32 phi_s2;
 
     for (i = 0, phi_s2 = 0; i < 8; i++, phi_s2 += 0x2000) {
-        temp_s0 = ((u32)Rand_Next() % 0x2000) + phi_s2;
+        temp_s0 = (Rand_Next() % 0x2000) + phi_s2;
         temp_f20 = Rand_ZeroOne() * 30.0f;
 
         spA8.x = Math_SinS(temp_s0) * temp_f20;
@@ -798,9 +798,9 @@ void func_80A5CF44(EnKusa2* this) {
         sp94.y = Rand_Next() & 0xFFFF;
         sp94.z = Rand_Next() & 0xFFFF;
 
-        sp8C.x = ((u32)Rand_Next() % 0x4000) - 0x1FFF;
-        sp8C.y = ((u32)Rand_Next() % 0x2000) - 0xFFF;
-        sp8C.z = ((u32)Rand_Next() % 0x4000) - 0x1FFF;
+        sp8C.x = (Rand_Next() % 0x4000) - 0x1FFF;
+        sp8C.y = (Rand_Next() % 0x2000) - 0xFFF;
+        sp8C.z = (Rand_Next() % 0x4000) - 0x1FFF;
 
         func_80A5C2FC(&D_80A5F1C0, (Rand_ZeroOne() * 0.45f) + 0.04f, &spA8, &sp9C, &sp94, &sp8C);
     }
@@ -819,7 +819,7 @@ void func_80A5D178(EnKusa2* this) {
     s32 pad;
 
     for (i = 0; i < 8; i++) {
-        temp_s0 = (u32)Rand_Next();
+        temp_s0 = Rand_Next();
         temp_f22 = Math_SinS(temp_s0);
         temp_f20 = Math_CosS(temp_s0);
         temp_f24 = (Rand_ZeroOne() * 40.0f) + 10.0f;
@@ -836,12 +836,12 @@ void func_80A5D178(EnKusa2* this) {
         spB0.y += this->actor.world.pos.y;
         spB0.z += this->actor.world.pos.z;
 
-        sp9C.x = (u32)Rand_Next() & 0xFFFF;
-        sp9C.y = (u32)Rand_Next() & 0xFFFF;
-        sp9C.z = (u32)Rand_Next() & 0xFFFF;
+        sp9C.x = Rand_Next() & 0xFFFF;
+        sp9C.y = Rand_Next() & 0xFFFF;
+        sp9C.z = Rand_Next() & 0xFFFF;
 
         sp94.x = Rand_S16Offset(-12000, 24000);
-        sp94.y = ((u32)Rand_Next() % 0x4000) - 0x1FFF;
+        sp94.y = (Rand_Next() % 0x4000) - 0x1FFF;
         sp94.z = Rand_S16Offset(-12000, 24000);
         func_80A5C2FC(&D_80A5F1C0, (Rand_ZeroOne() * 0.38f) + 0.02f, &spB0, &spA4, &sp9C, &sp94);
     }
@@ -868,11 +868,11 @@ void EnKusa2_Init(Actor* thisx, GlobalContext* globalCtx) {
             D_80A5EAEC = 0;
             D_80A60900 = globalCtx->gameplayFrames;
             func_80A5CAD4(&D_80A5F1C0);
-            D_80A60B08 = (u32)Rand_Next() >> 0x10;
-            D_80A60B0A = (u32)Rand_Next() >> 0x10;
-            D_80A60B0C = (u32)Rand_Next() >> 0x10;
-            D_80A60B0E = (u32)Rand_Next() >> 0x10;
-            D_80A60B10 = (u32)Rand_Next() >> 0x10;
+            D_80A60B08 = Rand_Next() >> 0x10;
+            D_80A60B0A = Rand_Next() >> 0x10;
+            D_80A60B0C = Rand_Next() >> 0x10;
+            D_80A60B0E = Rand_Next() >> 0x10;
+            D_80A60B10 = Rand_Next() >> 0x10;
             func_80A5B508();
         }
         func_80A5D5E0(this);
@@ -1048,14 +1048,14 @@ void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx) {
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
 
-        if ((u32)Rand_Next() < 0xFFFFFFF) {
+        if (Rand_Next() < 0xFFFFFFF) {
             func_80A5CD0C(this);
         }
 
         this->unk_1D0--;
         if (this->unk_1D0 <= 0) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
-            this->unk_1D0 = ((u32)Rand_Next() >> 0x1D) + 14;
+            this->unk_1D0 = (Rand_Next() >> 0x1D) + 14;
         }
 
         this->actor.floorHeight =
@@ -1152,7 +1152,7 @@ void func_80A5DEB4(EnKusa2* this, GlobalContext* globalCtx) {
         func_80A5BF38(this, 4);
         func_80A5BF84(this, globalCtx);
 
-        if ((u32)Rand_Next() < 0xFFFFFFF) {
+        if (Rand_Next() < 0xFFFFFFF) {
             func_80A5CD0C(this);
         }
 

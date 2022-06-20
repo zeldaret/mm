@@ -2656,7 +2656,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer > 0) {
         temp_v1_3 = this->actionTimer & 0x1F;
         if ((temp_v1_3 == 0) && (Rand_ZeroOne() < 0.3f)) {
-            temp_v1_3 = Rand_Next() % 4;
+            temp_v1_3 = (s32)Rand_Next() % 4;
             if (temp_v1_3 != this->rand) {
                 this->rand = temp_v1_3;
                 if (this->rand == 0) {
