@@ -11,6 +11,18 @@
 
 #define THIS ((EnClearTag*)thisx)
 
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_EFFECT_AVAILABLE,
+    /* 0x01 */ CLEAR_TAG_EFFECT_DEBRIS,
+    /* 0x02 */ CLEAR_TAG_EFFECT_FIRE, // never set to, remnant of OoT
+    /* 0x03 */ CLEAR_TAG_EFFECT_SMOKE,
+    /* 0x04 */ CLEAR_TAG_EFFECT_FLASH,
+    /* 0x05 */ CLEAR_TAG_EFFECT_LIGHT_RAYS,
+    /* 0x06 */ CLEAR_TAG_EFFECT_SHOCKWAVE,
+    /* 0x07 */ CLEAR_TAG_EFFECT_SPLASH,
+    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
+} ClearTagEffectType;
+
 void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -82,15 +94,15 @@ static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static TexturePtr sSplashTex[] = {
-    gExplosionSplashTex1,
-    gExplosionSplashTex2,
-    gExplosionSplashTex3,
-    gExplosionSplashTex4,
-    gExplosionSplashTex5,
-    gExplosionSplashTex6,
-    gExplosionSplashTex7,
-    gExplosionSplashTex8,
+static TexturePtr sWaterSplashTextures[] = {
+    gEffWaterSplash1Tex,
+    gEffWaterSplash2Tex,
+    gEffWaterSplash3Tex,
+    gEffWaterSplash4Tex,
+    gEffWaterSplash5Tex,
+    gEffWaterSplash6Tex,
+    gEffWaterSplash7Tex,
+    gEffWaterSplash8Tex,
     NULL,
     NULL,
     NULL,
@@ -102,7 +114,7 @@ static TexturePtr sSplashTex[] = {
  * Creates a debris effect.
  * Debris effects are spawned by an explosion.
  */
-void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale,
                                    f32 rotationZ) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
@@ -112,9 +124,9 @@ void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* position, Vec3f* vel
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->type = CLEAR_TAG_EFFECT_DEBRIS;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = *velocity;
-            effect->acceleration = *acceleration;
+            effect->accel = *accel;
 
             effect->scale = scale;
 
@@ -137,7 +149,7 @@ void EnClearTag_CreateDebrisEffect(EnClearTag* this, Vec3f* position, Vec3f* vel
  * Creates a smoke effect.
  * Smoke effects are spawned by an explosion.
  */
-void EnClearTag_CreateSmokeEffect(EnClearTag* this, Vec3f* position, f32 scale) {
+void EnClearTag_CreateSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
     EnClearTagEffect* effect = this->effect;
 
@@ -147,9 +159,9 @@ void EnClearTag_CreateSmokeEffect(EnClearTag* this, Vec3f* position, f32 scale) 
             effect->actionTimer = Rand_ZeroFloat(100.0f);
             effect->type = CLEAR_TAG_EFFECT_SMOKE;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = sZeroVector;
-            effect->acceleration = sZeroVector;
+            effect->accel = sZeroVector;
 
             effect->scale = scale;
             effect->maxScale = 2.0f * scale;
@@ -173,7 +185,7 @@ void EnClearTag_CreateSmokeEffect(EnClearTag* this, Vec3f* position, f32 scale) 
  * Creates an isolated smoke effect without an explosion.
  * Smoke effects are spawned directly.
  */
-void EnClearTag_CreateIsolatedSmokeEffect(EnClearTag* this, Vec3f* position, f32 scale) {
+void EnClearTag_CreateIsolatedSmokeEffect(EnClearTag* this, Vec3f* pos, f32 scale) {
     s16 i;
     EnClearTagEffect* effect = this->effect;
 
@@ -183,9 +195,9 @@ void EnClearTag_CreateIsolatedSmokeEffect(EnClearTag* this, Vec3f* position, f32
             effect->actionTimer = Rand_ZeroFloat(100.0f);
             effect->type = CLEAR_TAG_EFFECT_ISOLATED_SMOKE;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = sZeroVector;
-            effect->acceleration = sZeroVector;
+            effect->accel = sZeroVector;
 
             effect->scale = scale;
             effect->maxScale = 2.0f * scale;
@@ -217,7 +229,7 @@ void EnClearTag_CreateIsolatedSmokeEffect(EnClearTag* this, Vec3f* position, f32
  * Flash effects are spawned by an explosion or a pop.
  * Flash effects have two components: 1) a billboard flash, and 2) a light effect on the ground.
  */
-void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* position, f32 scale, f32 floorHeight) {
+void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* pos, f32 scale, f32 floorHeight) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
 
@@ -226,9 +238,9 @@ void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* position, f32 scale, 
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->type = CLEAR_TAG_EFFECT_FLASH;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = sZeroVector;
-            effect->acceleration = sZeroVector;
+            effect->accel = sZeroVector;
 
             effect->scale = 0.0f;
             effect->maxScale = scale * 3.0f;
@@ -247,7 +259,7 @@ void EnClearTag_CreateFlashEffect(EnClearTag* this, Vec3f* position, f32 scale, 
  * Creates a light ray effect.
  * Light ray effects are spawned by an explosion or pop.
  */
-void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale,
                                      f32 maxScaleTarget, s16 alphaDecrementSpeed) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
@@ -259,9 +271,9 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
 
             effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = *velocity;
-            effect->acceleration = *acceleration;
+            effect->accel = *accel;
 
             effect->scale = scale / 1000.0f;
             effect->maxScale = 1.0f;
@@ -291,8 +303,8 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
  * Creates an isolated light ray effect without an explosion or pop.
  * Light ray effects are spawned directly.
  */
-void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration,
-                                             f32 scale, f32 maxScaleTarget, s16 colorIndex, s16 alphaDecrementSpeed) {
+void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale,
+                                             f32 maxScaleTarget, s16 colorIndex, s16 alphaDecrementSpeed) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
 
@@ -301,9 +313,9 @@ void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* position, 
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = *velocity;
-            effect->acceleration = *acceleration;
+            effect->accel = *accel;
 
             effect->scale = scale / 1000.0f;
             effect->maxScale = 1.0f;
@@ -333,7 +345,7 @@ void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* position, 
  * Creates a shockwave effect
  * This effect uses concentric ring floor shadows that travel radially outward along the floor poly
  */
-void EnClearTag_CreateShockwaveEffect(EnClearTag* this, Vec3f* position, f32 maxScale, s16 actionTimer) {
+void EnClearTag_CreateShockwaveEffect(EnClearTag* this, Vec3f* pos, f32 maxScale, s16 actionTimer) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
 
@@ -342,9 +354,9 @@ void EnClearTag_CreateShockwaveEffect(EnClearTag* this, Vec3f* position, f32 max
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
             effect->type = CLEAR_TAG_EFFECT_SHOCKWAVE;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = sZeroVector;
-            effect->acceleration = sZeroVector;
+            effect->accel = sZeroVector;
 
             effect->maxScale = maxScale;
             effect->scale = 0.0f;
@@ -362,7 +374,7 @@ void EnClearTag_CreateShockwaveEffect(EnClearTag* this, Vec3f* position, f32 max
  * Creates a splash effect
  * This effect is used when EnClearTag is spawned above a waterbox
  */
-void EnClearTag_CreateSplashEffect(EnClearTag* this, Vec3f* position, s16 effectsTimer) {
+void EnClearTag_CreateSplashEffect(EnClearTag* this, Vec3f* pos, s16 effectsTimer) {
     s16 i;
     EnClearTagEffect* effect = this->effect;
 
@@ -373,9 +385,9 @@ void EnClearTag_CreateSplashEffect(EnClearTag* this, Vec3f* position, s16 effect
             effect->actionTimer = Rand_ZeroFloat(100.0f);
             effect->type = CLEAR_TAG_EFFECT_SPLASH;
 
-            effect->position = *position;
+            effect->pos = *pos;
             effect->velocity = sZeroVector;
-            effect->acceleration = sZeroVector;
+            effect->accel = sZeroVector;
 
             effect->scale = 0.0f;
             effect->maxScale = 0.0f;
@@ -633,13 +645,13 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
             effect->actionTimer++;
 
             // Perform effect physics.
-            effect->position.x += effect->velocity.x;
-            originalYPosition = effect->position.y;
-            effect->position.y += effect->velocity.y;
-            effect->position.z += effect->velocity.z;
-            effect->velocity.x += effect->acceleration.x;
-            effect->velocity.y += effect->acceleration.y;
-            effect->velocity.z += effect->acceleration.z;
+            effect->pos.x += effect->velocity.x;
+            originalYPosition = effect->pos.y;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->velocity.x += effect->accel.x;
+            effect->velocity.y += effect->accel.y;
+            effect->velocity.z += effect->accel.z;
 
             if (effect->type == CLEAR_TAG_EFFECT_DEBRIS) {
                 // Clamp the velocity to -5.0
@@ -649,12 +661,12 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
 
                 // While the effect is falling check if it has hit the ground.
                 if (effect->velocity.y < 0.0f) {
-                    sphereCenter = effect->position;
+                    sphereCenter = effect->pos;
                     sphereCenter.y += 5.0f;
 
                     // Check if the debris has hit the ground.
                     if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
-                        effect->position.y = originalYPosition;
+                        effect->pos.y = originalYPosition;
 
                         // Bounce the debris effect.
                         if (effect->bounces <= 0) {
@@ -663,14 +675,13 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                             effect->effectsTimer = Rand_ZeroFloat(20.0f) + 25.0f;
                         } else {
                             // The Debris effect is done bouncing. Set its velocity and acceleration to 0.
-                            effect->velocity.x = effect->velocity.z = effect->acceleration.y = effect->velocity.y =
-                                0.0f;
+                            effect->velocity.x = effect->velocity.z = effect->accel.y = effect->velocity.y = 0.0f;
                         }
                     }
                 }
 
                 // Rotate the debris effect.
-                if (effect->acceleration.y != 0.0f) {
+                if (effect->accel.y != 0.0f) {
                     effect->rotationY += 0.5f;
                     effect->rotationX += 0.35f;
                 }
@@ -809,7 +820,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             // Draw the debris effect.
-            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateXFApply(effect->rotationX);
@@ -827,11 +838,11 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColor.a);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColor.a);
-                func_800C0094(this->actor.floorPoly, effect->position.x, effect->position.y, effect->position.z, &mtxF);
+                func_800C0094(this->actor.floorPoly, effect->pos.x, effect->pos.y, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
+                gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
             }
         }
     }
@@ -851,8 +862,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
                 // Draw the ground flash effect.
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColor.a * 0.7f));
-                func_800C0094(this->actor.floorPoly, effect->position.x, this->actor.floorHeight, effect->position.z,
-                              &mtxF);
+                func_800C0094(this->actor.floorPoly, effect->pos.x, this->actor.floorHeight, effect->pos.z, &mtxF);
                 Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -881,7 +891,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
-            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
@@ -907,7 +917,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
-            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -929,7 +939,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
-            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -954,7 +964,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the light ray effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColor.r, (u8)effect->primColor.g,
                             (u8)effect->primColor.b, (u8)effect->primColor.a);
-            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateXFApply(effect->rotationX);
             Matrix_RotateZF(effect->rotationZ, MTXMODE_APPLY);
@@ -972,7 +982,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sSplashTex[effect->actionTimer]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sWaterSplashTextures[effect->actionTimer]));
             func_8012C9BC(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
             isMaterialApplied++;
@@ -986,17 +996,17 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * returns true if point is within the xz boundaries of an active water box, else false
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
-                ySurface = effect->position.y;
-                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x,
-                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
-                    if ((effect->position.y - ySurface) < 200.0f) {
+                ySurface = effect->pos.y;
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->pos.x + vec.x, effect->pos.z + vec.z,
+                                         &ySurface, &waterBox)) {
+                    if ((effect->pos.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
-                        Matrix_Translate(effect->position.x + vec.x, ySurface, effect->position.z + vec.z, MTXMODE_NEW);
+                        Matrix_Translate(effect->pos.x + vec.x, ySurface, effect->pos.z + vec.z, MTXMODE_NEW);
                         Matrix_RotateYF(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
+                        gSPDisplayList(POLY_XLU_DISP++, gEffWaterSplashDL);
                     }
                 }
             }

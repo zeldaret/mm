@@ -193,7 +193,7 @@ void ObjBombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp34 == OBJBOMBIWA_100_0) {
         if (this->actor.shape.rot.y == 0) {
-            this->actor.shape.rot.y = this->actor.world.rot.y = (u32)Rand_Next() >> 0x10;
+            this->actor.shape.rot.y = this->actor.world.rot.y = Rand_Next() >> 0x10;
         }
         func_80939594(this, globalCtx);
     }
@@ -387,7 +387,7 @@ void func_8093A080(ObjBombiwa* this) {
 
         ptr->unk_10 = i + 3.0f;
         ptr->unk_14.x = phi_s2;
-        ptr->unk_14.y = (u32)Rand_Next() >> 0x10;
+        ptr->unk_14.y = Rand_Next() >> 0x10;
         ptr->unk_14.z = 0;
         ptr->unk_1A = 0;
     }
