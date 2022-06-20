@@ -10,7 +10,7 @@ typedef void (*BgIcefloeActionFunc)(struct BgIcefloe*, GlobalContext*);
 typedef struct BgIcefloe {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgIcefloeActionFunc actionFunc;
-    /* 0x160 */ s32 unk_160;
+    /* 0x160 */ s32 timer;
 } BgIcefloe; // size = 0x164
 
 extern const ActorInit Bg_Icefloe_InitVars;
