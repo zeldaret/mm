@@ -43,7 +43,8 @@ static s16 sDrawItemIndices[] = {
 };
 
 static s16 sGetItemIds[] = {
-    GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_5A, GI_KEY_SMALL, GI_25, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE, GI_NONE,
+    GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_KEY_SMALL,
+    GI_25,     GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,
 };
 
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc) {
