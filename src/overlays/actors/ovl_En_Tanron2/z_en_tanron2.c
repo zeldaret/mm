@@ -564,7 +564,7 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_159 = 1;
     }
 
-    input = CONTROLLER3(globalCtx);
+    input = CONTROLLER3(&globalCtx->state);
     if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
         this->unk_158 = 1;
     }

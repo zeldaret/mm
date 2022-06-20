@@ -482,7 +482,7 @@ void EnZov_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_320 & 1) && func_80BD15A4(this, globalCtx)) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_2F0, &this->unk_2F6, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2F0, &this->unk_2F6, this->actor.focus.pos);
     } else {
         if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
             Math_SmoothStepToS(&this->unk_2F0.x, -0x1B58, 6, 0x1838, 0x64);

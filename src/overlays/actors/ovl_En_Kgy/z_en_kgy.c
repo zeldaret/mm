@@ -1090,7 +1090,7 @@ void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx) {
         sp30.z = 0;
         sp30.y = 0;
         sp30.x = 0;
-        func_800E9250(globalCtx, &this->actor, &this->unk_2CC, &sp30, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2CC, &sp30, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_2CC.x, 0, 6, 6200, 100);
         Math_SmoothStepToS(&this->unk_2CC.y, 0, 6, 6200, 100);

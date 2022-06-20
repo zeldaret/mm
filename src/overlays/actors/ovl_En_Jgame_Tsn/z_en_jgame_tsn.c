@@ -313,7 +313,7 @@ void func_80C14230(EnJgameTsn* this, GlobalContext* globalCtx) {
     s32 rand;
 
     if ((this->unk_2FC > 100) || func_80C14BCC(this, globalCtx)) {
-        rand = (u32)Rand_Next() % 3;
+        rand = Rand_Next() % 3;
 
         this->unk_2FC = 0;
         if (rand < this->unk_218) {
@@ -586,7 +586,7 @@ void func_80C14D14(EnJgameTsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80C14D58(EnJgameTsn* this, GlobalContext* globalCtx) {
-    func_800E9250(globalCtx, &this->actor, &this->unk_2EC, &this->unk_2F2, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2EC, &this->unk_2F2, this->actor.focus.pos);
 
     if (DECR(this->unk_2FA) == 0) {
         this->unk_2FA = Rand_S16Offset(60, 60);

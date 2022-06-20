@@ -56,9 +56,11 @@ typedef struct {
     Vec3f pos;
     Vec3f velocity;
     Vec3s rot;
-} EnFallDebrisParticle;
+} EnFallDebrisEffect;
 
-EnFallDebrisParticle debrisParticles[50];
+#define EN_FALL_DEBRIS_EFFECT_COUNT 50
+
+EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
@@ -115,13 +117,13 @@ void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, GlobalContext* globalCtx) 
     }
 }
 
-void EnFall_RisingDebris_ResetParticles(EnFall* this) {
+void EnFall_RisingDebris_ResetEffects(EnFall* this) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        debrisParticles[i].modelIndex = 3;
+    for (i = 0; i < ARRAY_COUNT(debrisEffects); i++) {
+        debrisEffects[i].modelIndex = 3;
     }
-    this->activeDebrisParticleCount = 0;
+    this->activeDebrisEffectCount = 0;
 }
 
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -252,7 +254,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actor.update = EnFall_RisingDebris_Update;
                 this->actor.draw = EnFall_RisingDebris_Draw;
                 this->scale = 1.0f;
-                EnFall_RisingDebris_ResetParticles(this);
+                EnFall_RisingDebris_ResetEffects(this);
                 Actor_SetScale(&this->actor, 1.0f);
                 this->actor.shape.rot.x = 0;
                 break;
@@ -631,47 +633,47 @@ void EnFall_Fireball_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->scale * 1.74f);
 }
 
-void EnFall_RisingDebris_UpdateParticles(EnFall* this) {
+void EnFall_RisingDebris_UpdateEffects(EnFall* this) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].modelIndex < 3) {
-            debrisParticles[i].pos.x += debrisParticles[i].velocity.x;
-            debrisParticles[i].pos.y += debrisParticles[i].velocity.y;
-            debrisParticles[i].pos.z += debrisParticles[i].velocity.z;
-            debrisParticles[i].rot.x += 0x64;
-            debrisParticles[i].rot.y += 0xC8;
-            debrisParticles[i].rot.z += 0x12C;
-            if ((this->actor.world.pos.y + 3000.0f) < debrisParticles[i].pos.y) {
-                debrisParticles[i].modelIndex = 3;
-                this->activeDebrisParticleCount--;
+    for (i = 0; i < ARRAY_COUNT(debrisEffects); i++) {
+        if (debrisEffects[i].modelIndex < 3) {
+            debrisEffects[i].pos.x += debrisEffects[i].velocity.x;
+            debrisEffects[i].pos.y += debrisEffects[i].velocity.y;
+            debrisEffects[i].pos.z += debrisEffects[i].velocity.z;
+            debrisEffects[i].rot.x += 0x64;
+            debrisEffects[i].rot.y += 0xC8;
+            debrisEffects[i].rot.z += 0x12C;
+            if ((this->actor.world.pos.y + 3000.0f) < debrisEffects[i].pos.y) {
+                debrisEffects[i].modelIndex = 3;
+                this->activeDebrisEffectCount--;
             }
         }
     }
 }
 
-s32 EnFall_RisingDebris_InitializeParticles(EnFall* this) {
+s32 EnFall_RisingDebris_InitializeEffect(EnFall* this) {
     s16 angle;
     s32 i;
     f32 scale;
 
-    for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].modelIndex >= 3) {
-            debrisParticles[i].modelIndex = (s32)Rand_ZeroFloat(3.0f);
-            debrisParticles[i].pos.x = this->actor.world.pos.x;
-            debrisParticles[i].pos.y = this->actor.world.pos.y;
-            debrisParticles[i].pos.z = this->actor.world.pos.z;
+    for (i = 0; i < ARRAY_COUNT(debrisEffects); i++) {
+        if (debrisEffects[i].modelIndex >= 3) {
+            debrisEffects[i].modelIndex = (s32)Rand_ZeroFloat(3.0f);
+            debrisEffects[i].pos.x = this->actor.world.pos.x;
+            debrisEffects[i].pos.y = this->actor.world.pos.y;
+            debrisEffects[i].pos.z = this->actor.world.pos.z;
             angle = randPlusMinusPoint5Scaled(0x10000);
             scale = (1.0f - (Rand_ZeroFloat(1.0f) * Rand_ZeroFloat(1.0f))) * 3000.0f;
-            debrisParticles[i].pos.x += Math_SinS(angle) * scale;
-            debrisParticles[i].pos.z += Math_CosS(angle) * scale;
-            debrisParticles[i].velocity.x = 0.0f;
-            debrisParticles[i].velocity.z = 0.0f;
-            debrisParticles[i].velocity.y = 80.0f;
-            debrisParticles[i].rot.x = randPlusMinusPoint5Scaled(0x10000);
-            debrisParticles[i].rot.y = randPlusMinusPoint5Scaled(0x10000);
-            debrisParticles[i].rot.z = randPlusMinusPoint5Scaled(0x10000);
-            this->activeDebrisParticleCount++;
+            debrisEffects[i].pos.x += Math_SinS(angle) * scale;
+            debrisEffects[i].pos.z += Math_CosS(angle) * scale;
+            debrisEffects[i].velocity.x = 0.0f;
+            debrisEffects[i].velocity.z = 0.0f;
+            debrisEffects[i].velocity.y = 80.0f;
+            debrisEffects[i].rot.x = randPlusMinusPoint5Scaled(0x10000);
+            debrisEffects[i].rot.y = randPlusMinusPoint5Scaled(0x10000);
+            debrisEffects[i].rot.z = randPlusMinusPoint5Scaled(0x10000);
+            this->activeDebrisEffectCount++;
             return true;
         }
     }
@@ -685,14 +687,14 @@ void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 451)) {
         if (Cutscene_CheckActorAction(globalCtx, 451) &&
             globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 451)]->action == 2) {
-            EnFall_RisingDebris_UpdateParticles(this);
-            EnFall_RisingDebris_InitializeParticles(this);
-        } else if (this->activeDebrisParticleCount != 0) {
-            EnFall_RisingDebris_ResetParticles(this);
+            EnFall_RisingDebris_UpdateEffects(this);
+            EnFall_RisingDebris_InitializeEffect(this);
+        } else if (this->activeDebrisEffectCount != 0) {
+            EnFall_RisingDebris_ResetEffects(this);
         }
     } else if (thisx->home.rot.x != 0) {
-        EnFall_RisingDebris_UpdateParticles(this);
-        EnFall_RisingDebris_InitializeParticles(this);
+        EnFall_RisingDebris_UpdateEffects(this);
+        EnFall_RisingDebris_InitializeEffect(this);
     }
 }
 
@@ -868,15 +870,14 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
-    for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].modelIndex < 3) {
-            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z, MTXMODE_NEW);
+    for (i = 0; i < ARRAY_COUNT(debrisEffects); i++) {
+        if (debrisEffects[i].modelIndex < 3) {
+            Matrix_Translate(debrisEffects[i].pos.x, debrisEffects[i].pos.y, debrisEffects[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-            Matrix_RotateZYX(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
-                             MTXMODE_APPLY);
+            Matrix_RotateZYX(debrisEffects[i].rot.x, debrisEffects[i].rot.y, debrisEffects[i].rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);
+            gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisEffects[i].modelIndex]);
         }
     }
 

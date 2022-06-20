@@ -28,7 +28,7 @@ typedef struct EnFsn {
     /* 0x24E */ s16 limbRotZTable[19];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1];
+    /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1]; // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
     /* 0x2F2 */ Vec3s morphTable[FSN_LIMB_MAX + 1];
     /* 0x364 */ s16 eyeTextureIdx;
     /* 0x366 */ s16 blinkTimer;

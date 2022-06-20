@@ -106,8 +106,8 @@ void func_80A2311C(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
 
 void func_80A2319C(ObjIceblock* this, f32 arg1) {
     s32 i;
-    s16 temp_s1 = (u32)Rand_Next() >> 0x10;
-    s16 temp_s2 = (u32)Rand_Next() >> 0x10;
+    s16 temp_s1 = Rand_Next() >> 0x10;
+    s16 temp_s2 = Rand_Next() >> 0x10;
     ObjIceBlockUnkStruct* ptr;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B4); i++) {
@@ -1364,7 +1364,7 @@ void func_80A265C0(ObjIceblock* this, GlobalContext* globalCtx) {
         ptr->unk_0C = Rand_S16Offset(300, 300);
         ptr->unk_0E = Rand_S16Offset(900, 600);
         ptr->unk_04 = (2.0f * Rand_ZeroOne()) + 1.0f;
-        ptr->unk_14 = (u32)Rand_Next() >> 0x10;
+        ptr->unk_14 = Rand_Next() >> 0x10;
         func_80A24B74(this, globalCtx);
     }
 
