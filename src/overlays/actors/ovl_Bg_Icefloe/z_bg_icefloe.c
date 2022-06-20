@@ -48,7 +48,7 @@ void BgIcefloe_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_icefloe_Colheader_000C90);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gIcePlatform_Col);
     if (numberSpawned >= 3) {
         s32 i;
 
@@ -174,5 +174,5 @@ void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIcefloe* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_icefloe_DL_0001E0);
+    Gfx_DrawDListOpa(globalCtx, gIcePlatform_Dlist);
 }
