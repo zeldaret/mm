@@ -343,9 +343,9 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         temp_f0 = spAC.z;
         unkStruct2->unk_10.z = ((Rand_ZeroOne() * 60.0f - 30.0f) + temp_f28 * 50.0f) * temp_f22 + temp_f0 * temp_f20;
         unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.02f;
-        unkStruct2->unk_20.x = Rand_Next() >> 0x10;
-        unkStruct2->unk_20.y = Rand_Next() >> 0x10;
-        unkStruct2->unk_20.z = Rand_Next() >> 0x10;
+        unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
+        unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
+        unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
         unkStruct2->unk_26 = (Rand_Next() & 0x3FFF) - 0x1FFF;
         unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
         unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;
@@ -359,7 +359,7 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         spA0.y = (Rand_ZeroOne() * 1.2f - 0.1f) * spE4 + spB8.y;
         spA0.z = Math_CosS(val) * temp_f20 + spB8.z;
         func_800B0E48(globalCtx, &spA0, &gZeroVec3f, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
-                      (Rand_Next() >> 0x1A) + 0x82, (Rand_Next() >> 0x1A) + 0x6E);
+                      ((s32)Rand_Next() >> 0x1A) + 0x82, ((s32)Rand_Next() >> 0x1A) + 0x6E);
     }
 
     unkStruct1Temp = func_80A9B32C(unkStruct, unkStruct1);
@@ -386,9 +386,9 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             unkStruct2->unk_10.y = 0.0f;
             unkStruct2->unk_10.z = Rand_ZeroOne() + temp_f28 * 7.0f;
             unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.075f;
-            unkStruct2->unk_20.x = Rand_Next() >> 0x10;
-            unkStruct2->unk_20.y = Rand_Next() >> 0x10;
-            unkStruct2->unk_20.z = Rand_Next() >> 0x10;
+            unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
+            unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
+            unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
             unkStruct2->unk_26 = (Rand_Next() & 0x1FFF) - 0xFFF;
             unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
             unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;

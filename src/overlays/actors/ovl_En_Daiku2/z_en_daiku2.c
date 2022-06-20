@@ -493,19 +493,19 @@ void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
     s16 i;
-    EnDaiku2Particle* particle = &this->particles[0];
+    EnDaiku2Effect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (!particle->isEnabled) {
-            particle->isEnabled = true;
-            particle->unk_04 = *arg1;
-            particle->unk_10 = *arg2;
-            particle->unk_1C = *arg3;
-            particle->unk_30 = arg4;
-            particle->unk_34 = arg5;
-            particle->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
-            particle->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
-            particle->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->unk_04 = *arg1;
+            effect->unk_10 = *arg2;
+            effect->unk_1C = *arg3;
+            effect->unk_30 = arg4;
+            effect->unk_34 = arg5;
+            effect->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
+            effect->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
+            effect->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
             break;
         }
     }
@@ -513,20 +513,20 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
 
 void func_80BE7600(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 i;
-    EnDaiku2Particle* particle = &this->particles[0];
+    EnDaiku2Effect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isEnabled) {
-            particle->unk_04.x += particle->unk_10.x;
-            particle->unk_28.x += 0x100;
-            particle->unk_28.z += 0x130;
-            particle->unk_04.y += particle->unk_10.y;
-            particle->unk_04.z += particle->unk_10.z;
-            particle->unk_10.y += particle->unk_1C.y;
-            if (particle->unk_34 != 0) {
-                particle->unk_34 -= 1;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            effect->unk_04.x += effect->unk_10.x;
+            effect->unk_28.x += 0x100;
+            effect->unk_28.z += 0x130;
+            effect->unk_04.y += effect->unk_10.y;
+            effect->unk_04.z += effect->unk_10.z;
+            effect->unk_10.y += effect->unk_1C.y;
+            if (effect->unk_34 != 0) {
+                effect->unk_34 -= 1;
             } else {
-                particle->isEnabled = false;
+                effect->isEnabled = false;
             }
         }
     }
@@ -535,7 +535,7 @@ void func_80BE7600(EnDaiku2* this, GlobalContext* globalCtx) {
 void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 i;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    EnDaiku2Particle* particle = &this->particles[0];
+    EnDaiku2Effect* effect = this->effects;
     s32 objectIdx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -547,14 +547,14 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_OPA_DISP++);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[objectIdx].segment);
 
-        for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-            if (particle->isEnabled) {
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+            if (effect->isEnabled) {
                 Matrix_Push();
-                Matrix_Translate(particle->unk_04.x, particle->unk_04.y, particle->unk_04.z, MTXMODE_NEW);
-                Matrix_RotateXS(particle->unk_28.x, MTXMODE_APPLY);
-                Matrix_RotateYS(particle->unk_28.y, MTXMODE_APPLY);
-                Matrix_RotateZS(particle->unk_28.z, MTXMODE_APPLY);
-                Matrix_Scale(particle->unk_30, particle->unk_30, particle->unk_30, MTXMODE_APPLY);
+                Matrix_Translate(effect->unk_04.x, effect->unk_04.y, effect->unk_04.z, MTXMODE_NEW);
+                Matrix_RotateXS(effect->unk_28.x, MTXMODE_APPLY);
+                Matrix_RotateYS(effect->unk_28.y, MTXMODE_APPLY);
+                Matrix_RotateZS(effect->unk_28.z, MTXMODE_APPLY);
+                Matrix_Scale(effect->unk_30, effect->unk_30, effect->unk_30, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_0009E0);

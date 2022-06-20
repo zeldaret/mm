@@ -357,7 +357,7 @@ static SceneSelectEntry sScenes[] = {
 
 void Select_UpdateMenu(SelectContext* this) {
     s32 playerForm;
-    Input* controller1 = CONTROLLER1(this);
+    Input* controller1 = CONTROLLER1(&this->state);
     s32 stickY;
     s32 pad[2];
     s16 i;

@@ -1225,7 +1225,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetFocus(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
         SkelAnime_Update(&this->skelAnime);
-        func_800E9250(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);
     }
 }
 

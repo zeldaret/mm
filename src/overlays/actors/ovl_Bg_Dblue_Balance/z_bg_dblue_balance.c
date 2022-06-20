@@ -276,7 +276,7 @@ void func_80B8296C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
     for (i = 0; i < ARRAY_COUNT(D_80B83A94); i++) {
         temp_f0 = Rand_ZeroOne();
         temp_f20 = 1.0f - SQ(temp_f0);
-        if (Rand_Next() > 0) {
+        if ((s32)Rand_Next() > 0) {
             temp_f20 = -temp_f20;
         }
 
@@ -285,7 +285,7 @@ void func_80B8296C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
 
         temp_f0 = Rand_ZeroOne();
         temp_f20 = 1.0f - SQ(temp_f0);
-        if (Rand_Next() > 0) {
+        if ((s32)Rand_Next() > 0) {
             temp_f20 = -temp_f20;
         }
         sp60.z = (temp_f20 * arg2) + arg1->z;

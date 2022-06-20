@@ -203,8 +203,8 @@ void func_8095D804(Actor* thisx, GlobalContext* globalCtx) {
         spC4.y += (Rand_ZeroOne() * 7.0f) + 6.0f;
         spC4.z += (Rand_ZeroOne() - 0.5f) * 11.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &spB8, &spC4, &spB8, -420, (Rand_Next() > 0) ? 65 : 33, 30, 5, 0, D_8095F74C[i],
-                             3, 10, 40, -1, temp, phi_s4);
+        EffectSsKakera_Spawn(globalCtx, &spB8, &spC4, &spB8, -420, ((s32)Rand_Next() > 0) ? 65 : 33, 30, 5, 0,
+                             D_8095F74C[i], 3, 10, 40, -1, temp, phi_s4);
     }
 }
 
@@ -389,7 +389,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->actor.shape.rot.y == 0) && !(this->unk_197 & 2)) {
-        this->actor.shape.rot.y = this->actor.world.rot.y = (u32)Rand_Next() >> 0x10;
+        this->actor.shape.rot.y = this->actor.world.rot.y = Rand_Next() >> 0x10;
     }
 
     Actor_SetScale(&this->actor, D_8095F6B8[sp34]);

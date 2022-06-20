@@ -119,8 +119,8 @@ s32 D_80BF57E4[][4] = {
 };
 
 AnimationInfoS D_80BF5914[] = {
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 TexturePtr D_80BF5934[] = {
@@ -153,8 +153,7 @@ EffectTireMarkInit D_80BF59F0 = {
 };
 
 TexturePtr D_80BF59F8[] = {
-    object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
-    object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
+    gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
 };
 
 void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
@@ -170,8 +169,8 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
     for (i = 0; i < 32; i++, ptr++) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
             if (!phi_fp) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, sizeof(Gfx) * 0);
-                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
+                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
                 phi_fp = true;
             }
 
@@ -193,7 +192,7 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = temp_f20 * 7.0f;
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF5934[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
             Matrix_Pop();
         }
@@ -728,8 +727,8 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSaveContext.save.entranceIndex == 0xD010) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
-                           this->morphTable, 18);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
+                           GORON_LIMB_MAX);
 
         this->unk_334 = -1;
         func_80BF409C(this, 0);
@@ -814,7 +813,7 @@ void func_80BF547C(EnRg* this, GlobalContext* globalCtx) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_0091A8);
+    gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

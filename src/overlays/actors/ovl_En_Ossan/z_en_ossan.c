@@ -199,11 +199,11 @@ s32 EnOssan_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_CUP);
 }
 
 void EnOssan_CheckValidSpawn(EnOssan* this) {
@@ -453,8 +453,8 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_UpdateJoystickInputState(GlobalContext* globalCtx, EnOssan* this) {
-    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
-    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&globalCtx->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&globalCtx->state)->rel.stick_y;
 
     this->moveHorizontal = this->moveVertical = false;
 
@@ -574,7 +574,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         } else if (this->flags & END_INTERACTION) {
             this->flags &= ~END_INTERACTION;
             EnOssan_EndInteraction(globalCtx, this);
-        } else if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+        } else if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
             EnOssan_StartShopping(globalCtx, this);
         } else {
             return;
@@ -631,7 +631,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) &&
+            if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
                 (!Message_ShouldAdvance(globalCtx) || !EnOssan_FacingShopkeeperDialogResult(this, globalCtx))) {
                 if (this->stickAccumX < 0) {
                     cursorIdx = EnOssan_SetCursorIndexFromNeutral(this, 4);
@@ -854,7 +854,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
+            if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(&globalCtx->state))) {
                 if (this->moveHorizontal) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 4);
@@ -912,7 +912,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
+            if (!EnOssan_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(&globalCtx->state))) {
                 if (this->moveHorizontal != 0) {
                     if (this->stickAccumX < 0) {
                         cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 0);
@@ -1053,7 +1053,8 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 
     if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
+        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+            Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnOssan_HandleCanBuyItem(globalCtx, this);
@@ -1124,7 +1125,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
             EnOssan_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
-            if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+            if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -1553,7 +1554,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnOssan_UpdateItemSelectedProperty(this);
         EnOssan_UpdateStickDirectionPromptAnim(this);
         EnOssan_UpdateCursorAnim(this);
-        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
+        Actor_TrackPlayer(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
         Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_Update(&this->skelAnime);
