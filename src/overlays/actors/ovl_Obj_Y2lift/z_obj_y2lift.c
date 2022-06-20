@@ -40,7 +40,7 @@ void ObjY2lift_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kaizoku_obj_Colheader_0019B0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gPirateLiftPlatformCol);
 }
 
 void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -52,41 +52,41 @@ void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     f32 temp_fv0;
-    f32 sp1C;
+    f32 targetVelocityY;
     s32 temp_v0;
     ObjY2lift* this = THIS;
 
     temp_fv0 = this->dyna.actor.world.pos.y;
-    sp1C = 0.0f;
+    targetVelocityY = 0.0f;
     temp_v0 = DynaPolyActor_IsInRidingMovingState(&this->dyna);
-    if ((temp_v0 != 0) || (DynaPolyActor_IsInRidingFallingState(&this->dyna) != 0)) {
-        if (this->unk15D == 0) {
-            this->unk15D = 1;
-            this->unk15F = 0xC;
-        } else if ((this->unk15F == 0) && (temp_v0 != 0)) {
-            this->unk15C = 0x10;
+    if (temp_v0 || DynaPolyActor_IsInRidingFallingState(&this->dyna)) {
+        if (!this->unk15D) {
+            this->unk15D = true;
+            this->unk15F = 12;
+        } else if (this->unk15F == 0 && temp_v0) {
+            this->unk15C = 16;
         }
     } else {
-        this->unk15D = 0;
+        this->unk15D = false;
     }
     if (DECR(this->unk15C) != 0) {
         temp_fv0 = this->dyna.actor.home.pos.y + 180.0f;
-        sp1C = 2.0f;
-    } else if ((temp_v0 == 0) && (this->dyna.actor.velocity.y <= 0.0f)) {
+        targetVelocityY = 2.0f;
+    } else if (!temp_v0 && this->dyna.actor.velocity.y <= 0.0f) {
         temp_fv0 = this->dyna.actor.home.pos.y;
-        sp1C = -2.0f;
+        targetVelocityY = -2.0f;
     }
-    Math_StepToF(&this->dyna.actor.velocity.y, sp1C, 0.1f);
+    Math_StepToF(&this->dyna.actor.velocity.y, targetVelocityY, 0.1f);
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
-    if (((this->dyna.actor.world.pos.y - temp_fv0) * sp1C) >= 0.0f) {
+    if (((this->dyna.actor.world.pos.y - temp_fv0) * targetVelocityY) >= 0.0f) {
         this->dyna.actor.world.pos.y = temp_fv0;
         this->dyna.actor.velocity.y = 0.0f;
-        if (this->unk15E == 0) {
-            this->unk15E = 1;
+        if (!this->unk15E) {
+            this->unk15E = true;
             this->unk15F = 12;
         }
     } else {
-        this->unk15E = 0;
+        this->unk15E = false;
         func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     }
     if (DECR(this->unk15F) != 0) {
@@ -95,5 +95,5 @@ void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_kaizoku_obj_DL_001680);
+    Gfx_DrawDListOpa(globalCtx, gPirateLiftPlatformDL);
 }
