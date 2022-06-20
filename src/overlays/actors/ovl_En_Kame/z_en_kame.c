@@ -230,7 +230,7 @@ void func_80AD7254(EnKame* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_2A4, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 40.0f) {
-        this->unk_2A4 = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + (Rand_Next() >> 0x14);
+        this->unk_2A4 = Actor_YawToPoint(&this->actor, &this->actor.home.pos) + ((s32)Rand_Next() >> 0x14);
     }
 
     this->unk_29E--;

@@ -463,7 +463,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
 
         ptr->unk_18 = (i * 1.04f) + 2.4f;
         ptr->unk_1C.x = phi_s2;
-        ptr->unk_1C.y = (u32)Rand_Next() >> 0x10;
+        ptr->unk_1C.y = Rand_Next() >> 0x10;
         ptr->unk_1C.z = 0;
         ptr->unk_22 = Rand_ZeroFloat(5000.0f);
         ptr->unk_24 = 0;
@@ -558,7 +558,7 @@ void func_80A55310(ObjHugebombiwa* this) {
         ptr->unk_18 = (i * 1.04f) + 2.4f;
 
         ptr->unk_1C.x = phi_s2;
-        ptr->unk_1C.y = (u32)Rand_Next() >> 0x10;
+        ptr->unk_1C.y = Rand_Next() >> 0x10;
         ptr->unk_1C.z = 0;
 
         ptr->unk_22 = Rand_ZeroFloat(5000.0f);

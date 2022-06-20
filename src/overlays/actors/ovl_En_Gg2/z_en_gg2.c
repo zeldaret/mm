@@ -439,7 +439,7 @@ void EnGg2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithoutGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
     func_80B3B8A4(this);
-    func_800E9250(globalCtx, &this->actor, &this->unk_1E0, &this->unk_1E6, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_1E0, &this->unk_1E6, this->actor.focus.pos);
 
     if ((this->unk_2EE == 5) || (this->unk_2EE == 7)) {
         func_800B9010(&this->actor, NA_SE_EN_SHARP_FLOAT - SFX_FLAG);

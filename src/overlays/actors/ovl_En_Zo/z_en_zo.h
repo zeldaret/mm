@@ -2,6 +2,7 @@
 #define Z_EN_ZO_H
 
 #include "global.h"
+#include "objects/object_zo/object_zo.h"
 
 struct EnZo;
 
@@ -22,9 +23,9 @@ typedef struct EnZo {
     /* 0x01F0 */ Vec3f rightFootPos;
     /* 0x01FC */ u8 isLeftFootGrounded;
     /* 0x01FD */ u8 isRightFootGrounded;
-    /* 0x01FE */ Vec3s jointTable[20];
-    /* 0x0276 */ Vec3s morphTable[20];
-    /* 0x02EE */ Vec3s turnTarget;
+    /* 0x01FE */ Vec3s jointTable[ZORA_LIMB_MAX];
+    /* 0x0276 */ Vec3s morphTable[ZORA_LIMB_MAX];
+    /* 0x02EE */ Vec3s trackTarget;
     /* 0x02F4 */ Vec3s headRot;
     /* 0x02FA */ Vec3s upperBodyRot;
     /* 0x0300 */ UNK_TYPE1 unk_300[0x12];

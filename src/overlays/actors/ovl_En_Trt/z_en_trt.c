@@ -114,11 +114,11 @@ s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&globalCtx->state)->press.button, BTN_CUP);
 }
 
 void EnTrt_SpawnShopItems(EnTrt* this, GlobalContext* globalCtx, ShopItem* shopItem) {
@@ -257,8 +257,8 @@ void EnTrt_StartShopping(GlobalContext* globalCtx, EnTrt* this) {
 }
 
 void EnTrt_UpdateJoystickInputState(GlobalContext* globalCtx, EnTrt* this) {
-    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
-    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&globalCtx->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&globalCtx->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -314,7 +314,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
     }
     if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         play_sound(NA_SE_SY_MESSAGE_PASS);
-        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
             EnTrt_StartShopping(globalCtx, this);
         }
     }
@@ -520,7 +520,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
             if ((!Message_ShouldAdvance(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
                 (this->stickAccumX > 0)) {
                 cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
@@ -622,7 +622,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
         EnTrt_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
+            if (!EnTrt_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(&globalCtx->state))) {
                 EnTrt_CursorLeftRight(globalCtx, this);
                 if (this->cursorIdx != prevCursorIdx) {
                     func_80151938(globalCtx, EnTrt_GetItemTextId(this));
@@ -707,7 +707,8 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
+            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(&globalCtx->state)) &&
+                Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(globalCtx, this);
@@ -1098,7 +1099,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
-            if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+            if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(&globalCtx->state))) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
