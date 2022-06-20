@@ -3,11 +3,11 @@
         <!-- ??? (Hand in Toilet) assets -->
 
         <!-- ??? animations -->
-        <Animation Name="object_bjt_Anim_0000FC" Offset="0xFC" />
-        <Animation Name="object_bjt_Anim_000218" Offset="0x218" />
-        <Animation Name="object_bjt_Anim_0003A8" Offset="0x3A8" />
-        <Animation Name="object_bjt_Anim_000564" Offset="0x564" />
-        <Animation Name="object_bjt_Anim_0007B8" Offset="0x7B8" />
+        <Animation Name="gToiletHandWaggingFingerAnim" Offset="0xFC" /><!-- Original name: bjt_chigau ("different/wrong") -->
+        <Animation Name="gToiletHandFistAnim" Offset="0x218" /><!-- Original name: bjt_guu ("fist") -->
+        <Animation Name="gToiletHandThumbsUpAnim" Offset="0x3A8" /><!-- Original name: bjt_ok (thumbs up, correct) -->
+        <Animation Name="gToiletHandOpenHandAnim" Offset="0x564" /><!-- Original name: bjt_par ("paper"? Open hand, palm up) -->
+        <Animation Name="gToiletHandWaitingAnim" Offset="0x7B8" /><!-- Original name: bjt_wait (flopping around grasping at air) -->
 
         <!-- ??? model -->
         <DList Name="gToiletHandIndexFingerDL" Offset="0x1570" />
