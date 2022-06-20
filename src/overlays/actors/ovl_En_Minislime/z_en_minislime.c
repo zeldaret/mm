@@ -185,18 +185,18 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
     for (; i < i_end; i++) {
         iceShardEffect = &bigslime->iceShardEffect[i];
         vecSph.pitch = Rand_S16Offset(0x1000, 0x3000);
-        iceShardEffect->vel.x = Math_CosS(vecSph.pitch) * Math_SinS(vecSph.yaw);
-        iceShardEffect->vel.y = Math_SinS(vecSph.pitch);
-        iceShardEffect->vel.z = Math_CosS(vecSph.pitch) * Math_CosS(vecSph.yaw);
-        iceShardEffect->pos.x = this->actor.world.pos.x + (400.0f * this->actor.scale.x) * iceShardEffect->vel.x;
+        iceShardEffect->velocity.x = Math_CosS(vecSph.pitch) * Math_SinS(vecSph.yaw);
+        iceShardEffect->velocity.y = Math_SinS(vecSph.pitch);
+        iceShardEffect->velocity.z = Math_CosS(vecSph.pitch) * Math_CosS(vecSph.yaw);
+        iceShardEffect->pos.x = this->actor.world.pos.x + (400.0f * this->actor.scale.x) * iceShardEffect->velocity.x;
         iceShardEffect->pos.y =
-            this->actor.world.pos.y + (((iceShardEffect->vel.y * 2.0f) - 1.0f) * 400.0f * this->actor.scale.y);
-        iceShardEffect->pos.z = this->actor.world.pos.z + (400.0f * this->actor.scale.z) * iceShardEffect->vel.z;
-        iceShardEffect->rotation.x = (s32)Rand_Next() >> 0x10;
-        iceShardEffect->rotation.y = (s32)Rand_Next() >> 0x10;
-        iceShardEffect->rotation.z = (s32)Rand_Next() >> 0x10;
-        iceShardEffect->isActive = true;
-        Math_Vec3f_ScaleAndStore(&iceShardEffect->vel, Rand_ZeroFloat(3.0f) + 7.0f, &iceShardEffect->vel);
+            this->actor.world.pos.y + (((iceShardEffect->velocity.y * 2.0f) - 1.0f) * 400.0f * this->actor.scale.y);
+        iceShardEffect->pos.z = this->actor.world.pos.z + (400.0f * this->actor.scale.z) * iceShardEffect->velocity.z;
+        iceShardEffect->rot.x = (s32)Rand_Next() >> 0x10;
+        iceShardEffect->rot.y = (s32)Rand_Next() >> 0x10;
+        iceShardEffect->rot.z = (s32)Rand_Next() >> 0x10;
+        iceShardEffect->isEnabled = true;
+        Math_Vec3f_ScaleAndStore(&iceShardEffect->velocity, Rand_ZeroFloat(3.0f) + 7.0f, &iceShardEffect->velocity);
         iceShardEffect->scale = (Rand_ZeroFloat(6.0f) + 2.0f) * 0.001f;
         vecSph.yaw += 0x1999;
     }
