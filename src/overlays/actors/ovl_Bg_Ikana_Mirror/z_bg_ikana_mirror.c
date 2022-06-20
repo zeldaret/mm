@@ -364,6 +364,7 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a0 = globalCtx->state.gfxCtx;
     temp_s0 = temp_a0;
+    // OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     
@@ -434,5 +435,7 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0_10->words.w1 = (u32) &D_06001880;
         temp_v0_10->words.w0 = 0xDE000000;
         // gSPDisplayList(POLY_XLU_DISP++, D_06001880);
+        // CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
+    // CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
