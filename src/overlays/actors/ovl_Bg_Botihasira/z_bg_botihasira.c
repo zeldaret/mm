@@ -11,12 +11,12 @@
 
 #define THIS ((BgBotihasira*)thisx)
 
-void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx2);
+void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx2);
 void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B2815C(BgBotihasira*, GlobalContext*);
+void BgBotihasira_DoNothing(BgBotihasira* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Botihasira_InitVars = {
     ACTOR_BG_BOTIHASIRA,
@@ -50,11 +50,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 27, 80, 0, { 0, 0, 0 } },
 };
 
-void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx2) {
+void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    GlobalContext* globalCtx = globalCtx2;
-    CollisionHeader* colHeader;
     BgBotihasira* this = THIS;
+    CollisionHeader* colHeader;
 
     colHeader = NULL;
     if (this->dyna.actor.params == 0) {
@@ -64,7 +63,7 @@ void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     }
-    this->actionFunc = func_80B2815C;
+    this->actionFunc = BgBotihasira_DoNothing;
     this->dyna.actor.scale.x = 0.1f;
     this->dyna.actor.scale.y = 0.1f;
     this->dyna.actor.scale.z = 0.1f;
@@ -78,7 +77,7 @@ void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B2815C(BgBotihasira* this, GlobalContext* globalCtx) {
+void BgBotihasira_DoNothing(BgBotihasira* this, GlobalContext* globalCtx) {
 }
 
 void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx2) {
@@ -87,8 +86,8 @@ void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actionFunc(this, globalCtx);
     if (this->dyna.actor.params != 0) {
-        this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * -27.0f) + this->dyna.actor.home.pos.x;
-        this->dyna.actor.world.pos.z = (Math_CosS(this->dyna.actor.world.rot.y) * 7.0f) + this->dyna.actor.home.pos.z;
+        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * -27.0f);
+        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 7.0f);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
