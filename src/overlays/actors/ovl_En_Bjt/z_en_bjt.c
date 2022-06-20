@@ -18,6 +18,12 @@ void EnBjt_Draw(Actor* thisx, PlayState* play);
 void func_80BFDA48(EnBjt* this, PlayState* play);
 void func_80BFDAE8(EnBjt* this, PlayState* play);
 
+#define TOILET_HAND_STATE_8 8       // (1 << 3)
+#define TOILET_HAND_STATE_10 0x10   // (1 << 4) // Talking
+#define TOILET_HAND_STATE_80 0x80   // (1 << 7) // Appearing
+#define TOILET_HAND_STATE_100 0x100 // (1 << 8) // Vanishing
+#define TOILET_HAND_STATE_200 0x200 // (1 << 9) // Out
+
 static u8 sScheduleScript[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x11 - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x0B - 0x0A),
@@ -123,7 +129,7 @@ void EnBjt_UpdateCollision(EnBjt* this, GlobalContext* globalCtx) {
     Vec3f pos;
     f32 height;
 
-    if (this->stateFlags & 0x280) {
+    if (this->stateFlags & (TOILET_HAND_STATE_80 | TOILET_HAND_STATE_200)) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sColliderBasePos, &pos);
         Math_Vec3f_ToVec3s(&this->collider.dim.pos, &pos);
         height = this->actor.focus.pos.y - this->actor.world.pos.y;
@@ -173,8 +179,8 @@ s32 EnBjt_Appear(EnBjt* this) {
     Math_ApproachF(&this->actor.scale.x, FULLY_GROWN_SCALE, 0.21f, 0.3f);
     if ((FULLY_GROWN_SCALE - this->actor.scale.x) < FULLY_GROWN_SCALE / 100.0f) {
         this->actor.scale.x = FULLY_GROWN_SCALE;
-        this->stateFlags |= 0x200;
-        this->stateFlags &= ~0x80;
+        this->stateFlags |= TOILET_HAND_STATE_200;
+        this->stateFlags &= ~TOILET_HAND_STATE_80;
         finished = true;
     }
     this->heightOffset = (this->actor.scale.x / FULLY_GROWN_SCALE) * 4.0f;
@@ -198,7 +204,7 @@ s32 EnBjt_Vanish(EnBjt* this) {
     Math_ApproachF(&this->actor.scale.x, 0.0f, 0.21f, 0.3f);
     if (this->actor.scale.x < FULLY_GROWN_SCALE / 100.0f) {
         this->actor.scale.x = 0.0f;
-        this->stateFlags &= ~0x100;
+        this->stateFlags &= ~TOILET_HAND_STATE_100;
         finished = true;
     }
     this->heightOffset = (this->actor.scale.x / FULLY_GROWN_SCALE) * 4.0f;
@@ -208,6 +214,15 @@ s32 EnBjt_Vanish(EnBjt* this) {
     return finished;
 }
 
+typedef enum {
+    /* 0 */ TOILET_HAND_STATE_0,
+    /* 0 */ TOILET_HAND_STATE_1,
+    /* 0 */ TOILET_HAND_STATE_2,
+    /* 0 */ TOILET_HAND_STATE_3,
+    /* 0 */ TOILET_HAND_STATE_4,
+} ToiletHandState;
+
+// msgevent callback/communication
 s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnBjt* this = THIS;
@@ -230,16 +245,18 @@ s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
                         EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_1);
                         this->playedSfx = false;
                         this->unk240++;
-                        scriptBranch = 1;
+                        scriptBranch = 1; // Right item
                     } else if (itemAP < 0) {
                         this->playedSfx = false;
                         this->unk240++;
-                        scriptBranch = 3;
+                        scriptBranch = 3; // Wrong item
                     } else if (itemAP != 0) {
                         this->playedSfx = false;
                         this->unk240++;
                         scriptBranch = 2;
                     }
+                    break;
+                default:
                     break;
             }
             break;
@@ -247,7 +264,7 @@ s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
         case 1:
             if (player->exchangeItemId != EXCH_ITEM_NONE) {
                 EnBjt_TakeItem(player->exchangeItemId);
-                player->exchangeItemId = 0;
+                player->exchangeItemId = EXCH_ITEM_NONE;
             }
             if (EnBjt_Vanish(this)) {
                 this->timer = 60;
@@ -278,15 +295,18 @@ s32 func_80BFD6BC(Actor* thisx, GlobalContext* globalCtx) {
             this->unk240++;
             scriptBranch = 1;
             break;
+        default:
+            break;
     }
     return scriptBranch;
 }
 
+// Used in Update
 s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->stateFlags |= 8;
+        this->stateFlags |= TOILET_HAND_STATE_8;
         SubS_UpdateFlags(&this->stateFlags, 0, 7);
         this->msgEventCallback = func_80BFD6BC;
         this->unk240 = 0;
@@ -296,12 +316,13 @@ s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
     return ret;
 }
 
+// Used in Update
 s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u16 curTextId = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x440) {
-        this->stateFlags |= 0x10;
+        this->stateFlags |= TOILET_HAND_STATE_10;
         if (this->textId != curTextId) {
             switch (curTextId) {
                 case 0x2949:
@@ -314,20 +335,21 @@ s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
             }
         }
         this->textId = curTextId;
-    } else if (this->stateFlags & 0x10) {
-        this->stateFlags &= ~0x10;
+    } else if (this->stateFlags & TOILET_HAND_STATE_10) {
+        this->stateFlags &= ~TOILET_HAND_STATE_10;
         EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_0);
     }
     return 0;
 }
 
+// Action function
 void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
     if (func_8010BF58(&this->actor, globalCtx, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
-        this->stateFlags &= ~8;
+        this->stateFlags &= ~TOILET_HAND_STATE_8;
         this->msgEventArg4 = 0;
         this->actionFunc = func_80BFDAE8;
     } else {
@@ -335,30 +357,32 @@ void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
     }
 }
 
+// Action function
 void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx) {
     ScheduleResult scheduleOutput;
 
     if (!Schedule_RunScript(globalCtx, sScheduleScript, &scheduleOutput)) {
         scheduleOutput.result = 0;
     }
-    if (scheduleOutput.result == 1) {
-        if (this->stateFlags & 0x80) {
+    if (scheduleOutput.result == 1) { // available
+        if (this->stateFlags & TOILET_HAND_STATE_80) {
             if (EnBjt_Appear(this)) {
                 SubS_UpdateFlags(&this->stateFlags, 3, 7);
             }
-        } else if (this->stateFlags & 0x100) {
+        } else if (this->stateFlags & TOILET_HAND_STATE_100) {
             EnBjt_Vanish(this);
-        } else if (this->stateFlags & 0x200) {
+        } else if (this->stateFlags & TOILET_HAND_STATE_200) {
+            // Vanish if player goes too far away or heart piece given
             if ((fabsf(this->actor.playerHeightRel) > 70.0f) || (this->actor.xzDistToPlayer > 140.0f) ||
                 (gSaveContext.save.weekEventReg[90] & 0x80)) {
                 SubS_UpdateFlags(&this->stateFlags, 0, 7);
                 this->playedSfx = false;
-                this->stateFlags &= ~0x200;
-                this->stateFlags |= 0x100;
+                this->stateFlags &= ~TOILET_HAND_STATE_200;
+                this->stateFlags |= TOILET_HAND_STATE_100;
             }
         } else if ((fabsf(this->actor.playerHeightRel) < 20.0f) && (this->actor.xzDistToPlayer < 70.0f) &&
                    !(gSaveContext.save.weekEventReg[90] & 0x80)) {
-            this->stateFlags |= 0x80;
+            this->stateFlags |= TOILET_HAND_STATE_80;
             this->playedSfx = false;
         }
         this->scheduleResult = scheduleOutput.result;
@@ -377,12 +401,15 @@ void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
                        TOILET_HAND_LIMB_MAX);
+
     this->curAnimIndex = TOILET_HAND_ANIM_NONE;
     EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_0);
+
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.flags |= ACTOR_FLAG_8000000;
     Actor_SetScale(&this->actor, 0.0f);
+
     this->scheduleResult = 0;
     this->stateFlags = 0;
     this->actionFunc = func_80BFDAE8;
