@@ -51,9 +51,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-CollisionHeader* D_80B70780[] = { &object_kin2_obj_Colheader_001328, &object_kin2_obj_Colheader_000F80 };
+CollisionHeader* D_80B70780[] = { &gOceanSpiderHouseChestOfDrawersCol, &gOceanSpiderHouseBookshelfCol };
 
-Gfx* D_80B70788[] = { object_kin2_obj_DL_0010F8, object_kin2_obj_DL_000CA8 };
+Gfx* D_80B70788[] = { gOceanSpiderHouseChestOfDrawersDL, gOceanSpiderHouseBookshelfDL };
 
 s32 func_80B6FB30(BgKin2Shelf* this, PlayState* play) {
     s32 temp_v1 = BGKIN2SHELF_GET_1(&this->dyna.actor);

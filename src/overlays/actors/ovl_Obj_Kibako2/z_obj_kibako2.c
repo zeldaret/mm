@@ -158,8 +158,8 @@ void ObjKibako2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
     if (contents == CONTENTS_COLLECTIBLE) {
-        if (func_800A81A4(play, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
-                          KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
+        if (Item_CanDropBigFairy(play, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
+                                 KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
         }

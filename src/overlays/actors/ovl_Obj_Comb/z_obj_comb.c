@@ -341,7 +341,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
 
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
 
-    if ((sp2C == 0) && func_800A81A4(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
+    if ((sp2C == 0) && Item_CanDropBigFairy(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
         this->unk_1B7 = 1;
         this->actor.flags |= ACTOR_FLAG_10;
     }

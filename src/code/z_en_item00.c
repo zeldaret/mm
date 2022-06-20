@@ -1183,6 +1183,6 @@ s32 func_800A817C(s32 index) {
     return D_801AE214[index];
 }
 
-s32 func_800A81A4(PlayState* play, s32 a1, s32 a2) {
-    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(play, a2));
+s32 Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag) {
+    return (func_800A8150(index) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(play, collectibleFlag));
 }

@@ -486,7 +486,7 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
 
 s32 func_808D9968(EnSw* this, PlayState* play) {
     s32 ret = false;
-    s32 param = ENSW_GET_3FC(&this->actor) & 0xFF;
+    s32 param = ENSW_GET_3FC(&this->actor);
 
     if (ENSW_GET_3(&this->actor)) {
         if ((param != 0x3F) && Flags_GetTreasure(play, param)) {

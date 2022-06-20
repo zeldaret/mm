@@ -270,5 +270,5 @@ void BgKin2Fence_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_kin2_obj_DL_000828);
+    Gfx_DrawDListOpa(play, gOceanSpiderHouseFireplaceGrateDL);
 }
