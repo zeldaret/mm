@@ -618,7 +618,7 @@ void func_80A69ADC(Actor* thisx) {
             if (Rand_ZeroOne() < this->unk_358) {
                 this->unk_366 = (sp44 >= 0.0f) ? 2000 : -2000;
             } else {
-                this->unk_366 = (Rand_Next() > 0) ? 2000 : -2000;
+                this->unk_366 = ((s32)Rand_Next() > 0) ? 2000 : -2000;
             }
             this->unk_366 += (s16)(((Rand_ZeroOne() * (1.0f - this->unk_358)) - 0.5f) * 0x400);
         } else {
@@ -634,7 +634,7 @@ void func_80A69CE0(Actor* thisx) {
 
     this->unk_360 = Rand_ZeroOne() * 1500.0f;
     this->unk_364 = 0;
-    if (Rand_Next() > 0) {
+    if ((s32)Rand_Next() > 0) {
         this->unk_366 = 2000;
     } else {
         this->unk_366 = -2000;
@@ -770,7 +770,7 @@ void EnMushi2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp3C != 0) {
         func_80A69F5C(&this->actor, globalCtx);
-        this->actor.world.rot.y = (u32)Rand_Next() >> 0x10;
+        this->actor.world.rot.y = Rand_Next() >> 0x10;
         func_80A6AE14(this);
     } else {
         func_80A6A300(this);
@@ -1034,7 +1034,7 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx) {
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
     if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.depthInWater > 5.0f) &&
-        (this->actor.depthInWater < 30.0f) && ((Rand_Next() & 0x1FF) < this->unk_368)) {
+        (this->actor.depthInWater < 30.0f) && ((s32)(Rand_Next() & 0x1FF) < this->unk_368)) {
         EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
                              ((Rand_ZeroOne() * 4.0f) + 2.0f) * this->actor.scale.x);
     }

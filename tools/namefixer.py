@@ -540,6 +540,10 @@ wordReplace = {
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
 
+    "func_800E8F08": "Actor_TrackNone",
+    "func_800E8FA4": "Actor_TrackPoint",
+    "func_800E9250": "Actor_TrackPlayer",
+
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",

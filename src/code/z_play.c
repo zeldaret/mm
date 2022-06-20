@@ -309,10 +309,8 @@ s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
-// z_demo and EnTest4
-// This data appears to be a boolean. It is only set by Play_Init.
-s32 func_8016A168(void) {
-    return D_801D0D50;
+s32 Play_IsDebugCamEnabled(void) {
+    return gDbgCamEnabled;
 }
 
 // A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
