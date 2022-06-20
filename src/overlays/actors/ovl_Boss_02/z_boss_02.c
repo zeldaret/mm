@@ -32,15 +32,15 @@ void func_809DD2F8(GlobalContext* globalCtx);
 void func_809DD934(Boss02* this, GlobalContext* globalCtx);
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
-static u8 D_809E0420;
-static u8 D_809E0421;
-static u8 D_809E0422;
-static Boss02* D_809E0424;
-static Boss02* D_809E0428;
-static Boss02* D_809E042C;
-static u8 D_809E0430;
-static DoorWarp1* D_809E0434;
-static Boss02Effects D_809E0438[150];
+u8 D_809E0420;
+u8 D_809E0421;
+u8 D_809E0422;
+Boss02* D_809E0424;
+Boss02* D_809E0428;
+Boss02* D_809E042C;
+u8 D_809E0430;
+DoorWarp1* D_809E0434;
+Boss02Effects D_809E0438[150];
 
 static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -1664,7 +1664,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
 
         case 1:
             if ((this->unk_1D14 < 80U) && (D_809E0420 != 0) &&
-                CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button,
+                CHECK_BTN_ANY(CONTROLLER1(&globalCtx->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
                 this->unk_1D78 = 1;
@@ -1713,7 +1713,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
 
         case 10:
             if ((this->unk_1D14 < 30U) && (D_809E0421 != 0) &&
-                CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button,
+                CHECK_BTN_ANY(CONTROLLER1(&globalCtx->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
                 this->unk_1D78 = 1;

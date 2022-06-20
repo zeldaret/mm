@@ -73,45 +73,47 @@ void func_80953B40(BgIngate* this) {
     s32 temp;
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
-        this->unk180 = 0xFA0;
-        this->unk168 = 4;
+        this->timePathTotalTime = 4 * 1000;
+        this->timePathTimeSpeed = 4;
     } else {
-        this->unk180 = 0x7D0;
-        this->unk168 = 1;
+        this->timePathTotalTime = 1 * 2000;
+        this->timePathTimeSpeed = 1;
     }
-    temp = this->unk164->count - 2;
-    this->unk184 = this->unk180 / temp;
-    this->unk188 = 2;
-    this->unk18C = 0;
+    temp = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+    this->timePathWaypointTime = this->timePathTotalTime / temp;
+    this->timePathWaypoint = SUBS_TIME_PATHING_ORDER - 1;
+    this->timePathElapsedTime = 0;
     this->unk160 &= ~0x1;
     this->unk160 &= ~0x2;
 }
 
 s32 func_80953BEC(BgIngate* this) {
-    f32 sp74[265];
+    f32 knots[265];
     Vec3f sp68;
     Vec3f sp5C;
-    Vec3f unkVec;
+    Vec3f timePathTargetPos;
     s16 yaw;
 
-    func_8013AF00(sp74, 3, this->unk164->count + 3);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk160 & 1)) {
-        unkVec = gZeroVec3f;
-        func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &unkVec, this->unk168);
+        timePathTargetPos = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
         this->unk160 |= 1;
     } else {
-        unkVec = this->unk170;
+        timePathTargetPos = this->timePathTargetPos;
     }
-    this->dyna.actor.world.pos.x = unkVec.x;
-    this->dyna.actor.world.pos.z = unkVec.z;
-    this->unk170 = gZeroVec3f;
-    if (func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &this->unk170, this->unk168) != 0) {
+    this->dyna.actor.world.pos.x = timePathTargetPos.x;
+    this->dyna.actor.world.pos.z = timePathTargetPos.z;
+    this->timePathTargetPos = gZeroVec3f;
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk160 |= 2;
     } else {
         sp68 = this->dyna.actor.world.pos;
-        sp5C = this->unk170;
+        sp5C = this->timePathTargetPos;
         yaw = Math_Vec3f_Yaw(&sp68, &sp5C);
         this->dyna.actor.world.rot.y = yaw;
         this->dyna.actor.shape.rot.y = yaw;
@@ -164,7 +166,7 @@ void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
     func_80953DA8(this, globalCtx);
-    if (this->unk164 != NULL) {
+    if (this->timePath != NULL) {
         func_80953B40(this);
     }
     this->unk16E = -1;
@@ -188,7 +190,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
 
         if (this->unk160 & 2) {
 
-            if (this->unk164->unk1 != 0xFF) {
+            if (this->timePath->unk1 != 0xFF) {
                 func_80953E38(globalCtx);
                 func_800B7298(globalCtx, &this->dyna.actor, 7);
                 this->dyna.actor.textId = 0x9E4;
@@ -205,7 +207,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 }
                 this->actionFunc = func_809542A0;
             }
-        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->unk164 != NULL)) {
+        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
@@ -259,9 +261,9 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
 
 void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
     if (!DECR(this->unk16A)) {
-        if (this->unk164 != NULL) {
+        if (this->timePath != NULL) {
             func_800B7298(globalCtx, &this->dyna.actor, 6);
-            this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
+            this->timePath = &globalCtx->setupPathList[this->timePath->unk1];
             func_80953F14(this, globalCtx);
             func_800FE484();
         }
@@ -285,8 +287,8 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                     func_800FE498();
                     func_8019F208();
                 } else {
-                    if (this->unk164 != NULL) {
-                        this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
+                    if (this->timePath != NULL) {
+                        this->timePath = &globalCtx->setupPathList[this->timePath->unk1];
                     }
                     func_80953F14(this, globalCtx);
                     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
@@ -327,7 +329,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (gSaveContext.save.weekEventReg[20] & 2) {
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
@@ -349,9 +351,9 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
-        if (this->unk164 != NULL) {
-            sp38 = Lib_SegmentedToVirtual(this->unk164->points);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        if (this->timePath != NULL) {
+            sp38 = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
             Math_Vec3s_ToVec3f(&sp20, &sp38[1]);
             this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&sp2C, &sp20);
@@ -360,7 +362,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
     }

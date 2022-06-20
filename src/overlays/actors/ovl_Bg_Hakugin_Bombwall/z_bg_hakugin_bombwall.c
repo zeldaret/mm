@@ -138,7 +138,7 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     for (i = 0; i < 6; i++) {
         temp = (i + 1) * (80.0f / 3.0f);
         for (j = 0; j < ARRAY_COUNT(D_80ABD020); j++) {
-            spD8.x = D_80ABD020[j] + (s32)((u32)Rand_Next() >> 0x1C);
+            spD8.x = D_80ABD020[j] + (s32)(Rand_Next() >> 0x1C);
             spD8.y = ((Rand_ZeroOne() - 0.5f) * 15.0f) + temp;
             spD8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
@@ -159,11 +159,11 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
                 phi_s0 = 64;
             }
 
-            if (Rand_Next() > 0) {
+            if ((s32)Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
                 func_800B0E48(globalCtx, &spF0, &gZeroVec3f, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
-                              ((u32)Rand_Next() >> 0x1B) + 70, ((u32)Rand_Next() >> 0x1A) + 60);
+                              (Rand_Next() >> 0x1B) + 70, (Rand_Next() >> 0x1A) + 60);
             } else {
                 phi_s1 = 0;
             }
@@ -224,7 +224,7 @@ void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
 
         if ((i & 1) == 0) {
             func_800B0E48(globalCtx, &spC8, &D_80ABD034, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
-                          ((u32)Rand_Next() >> 0x1B) + 60, ((u32)Rand_Next() >> 0x1A) + 50);
+                          (Rand_Next() >> 0x1B) + 60, (Rand_Next() >> 0x1A) + 50);
         }
     }
 }
@@ -269,8 +269,8 @@ void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         spC0.y += this->dyna.actor.world.pos.y;
         spC0.z += this->dyna.actor.world.pos.z;
 
-        func_800B0E48(globalCtx, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, ((u32)Rand_Next() >> 0x1A) + 60,
-                      ((u32)Rand_Next() >> 0x1B) + 60);
+        func_800B0E48(globalCtx, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+                      (Rand_Next() >> 0x1B) + 60);
     }
 }
 
@@ -303,8 +303,8 @@ void func_80ABC7FC(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         spB8.x = spAC.x * -0.095f;
         spB8.z = spAC.z * -0.095f;
 
-        func_800B0E48(globalCtx, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, ((u32)Rand_Next() >> 0x1A) + 60,
-                      ((u32)Rand_Next() >> 0x1B) + 60);
+        func_800B0E48(globalCtx, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+                      (Rand_Next() >> 0x1B) + 60);
     }
 }
 

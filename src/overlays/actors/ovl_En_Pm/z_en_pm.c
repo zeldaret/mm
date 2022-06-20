@@ -1207,17 +1207,17 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8
     s32 pad;
     s32 ret = false;
 
-    this->unk_234 = NULL;
+    this->timePath = NULL;
     sp2C = func_80AF7CB0(this, globalCtx, actorCat, actorId);
     if (D_80AFB430[arg2->result] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
-        if (this->unk_234 != NULL) {
-            sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
-            Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
-            Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
+        if (this->timePath != NULL) {
+            sp48 = Lib_SegmentedToVirtual(this->timePath->points);
+            Math_Vec3s_ToVec3f(&sp3C, &sp48[this->timePath->count - 2]);
+            Math_Vec3s_ToVec3f(&sp30, &sp48[this->timePath->count - 1]);
             this->actor.shape.shadowDraw = NULL;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
@@ -1238,15 +1238,15 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s16 temp;
     s32 ret = false;
 
-    this->unk_234 = NULL;
+    this->timePath = NULL;
     door = func_80AF7D60(globalCtx, arg2->result);
     if (D_80AFB430[arg2->result] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp55, D_80AFB430[arg2->result]);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp55, D_80AFB430[arg2->result]);
     }
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
-        if (this->unk_234 != 0) {
-            sp4C = Lib_SegmentedToVirtual(this->unk_234->points);
+        if (this->timePath != 0) {
+            sp4C = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
             Math_Vec3s_ToVec3f(&sp34, &sp4C[1]);
             Math_Vec3f_Copy(&this->unk_26C, &sp40);
@@ -1283,33 +1283,34 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
     s32 ret = false;
 
-    this->unk_234 = NULL;
+    this->timePath = NULL;
 
     if (D_80AFB430[arg2->result] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp2B, D_80AFB430[arg2->result]);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp2B, D_80AFB430[arg2->result]);
     }
 
-    if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
-        this->unk_234 = NULL;
+    if ((this->timePath != NULL) && (this->timePath->count < 3)) {
+        this->timePath = NULL;
     }
 
-    if (this->unk_234 != 0) {
-        if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->unk_374 >= 0)) {
+    if (this->timePath != 0) {
+        if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->timePathTimeSpeed >= 0)) {
             phi_v1 = sp2E;
         } else {
             phi_v1 = arg2->time0;
         }
 
         if (arg2->time1 < phi_v1) {
-            this->unk_248 = (phi_v1 - arg2->time1) + 0xFFFF;
+            this->timePathTotalTime = (phi_v1 - arg2->time1) + 0xFFFF;
         } else {
-            this->unk_248 = arg2->time1 - phi_v1;
+            this->timePathTotalTime = arg2->time1 - phi_v1;
         }
 
-        this->unk_254 = sp2E - phi_v1;
-        phi_v1 = this->unk_234->count - 2;
-        this->unk_24C = this->unk_248 / phi_v1;
-        this->unk_250 = (this->unk_254 / this->unk_24C) + 2;
+        this->timePathElapsedTime = sp2E - phi_v1;
+        phi_v1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
+        this->timePathWaypointTime = this->timePathTotalTime / phi_v1;
+        this->timePathWaypoint =
+            (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
@@ -1364,13 +1365,13 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 pad;
     s32 ret = false;
 
-    this->unk_234 = NULL;
+    this->timePath = NULL;
     if (D_80AFB430[arg2->result] >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
-    if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
-        sp30 = Lib_SegmentedToVirtual(this->unk_234->points);
+    if ((this->timePath != 0) && (this->timePath->count >= 2)) {
+        sp30 = Lib_SegmentedToVirtual(this->timePath->points);
         Math_Vec3s_ToVec3f(&sp40, &sp30[0]);
         Math_Vec3s_ToVec3f(&sp34, &sp30[1]);
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
@@ -1416,16 +1417,16 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
         return ret;
     }
 
-    this->unk_234 = NULL;
+    this->timePath = NULL;
     phi_a3 = D_80AFB430[arg2->result];
     if (phi_a3 >= 0) {
-        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, phi_a3);
+        this->timePath = SubS_GetAdditionalPath(globalCtx, sp4F, phi_a3);
     }
 
-    if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
-        sp30 = Lib_SegmentedToVirtual(this->unk_234->points);
-        Math_Vec3s_ToVec3f(&sp40, &sp30[this->unk_234->count - 1]);
-        Math_Vec3s_ToVec3f(&sp34, &sp30[this->unk_234->count - 2]);
+    if ((this->timePath != 0) && (this->timePath->count >= 2)) {
+        sp30 = Lib_SegmentedToVirtual(this->timePath->points);
+        Math_Vec3s_ToVec3f(&sp40, &sp30[this->timePath->count - 1]);
+        Math_Vec3s_ToVec3f(&sp34, &sp30[this->timePath->count - 2]);
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp34, &sp40);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
@@ -1703,7 +1704,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
     Vec3f* sp28;
     f32 temp;
 
-    if (!SubS_InCsMode(globalCtx) && (this->unk_374 != 0)) {
+    if (!SubS_InCsMode(globalCtx) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
@@ -1717,7 +1718,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
         sp38.y = 0.0f;
         sp38.z = this->unk_36E * temp;
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
-        this->unk_36E += this->unk_374;
+        this->unk_36E += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
@@ -1726,52 +1727,54 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
-    f32 sp7C[265];
+    f32 knots[265];
     Vec3f sp70;
     Vec3f sp64;
-    Vec3f sp58;
+    Vec3f timePathTargetPos;
     s32 sp54;
     s32 sp50;
 
     sp50 = 0;
     sp54 = 0;
 
-    func_8013AF00(sp7C, 3, this->unk_234->count + 3);
+    SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
     if (!(this->unk_356 & 8)) {
-        sp58 = gZeroVec3f;
-        func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
-                      &sp58, this->unk_374);
-        func_8013B878(globalCtx, this->unk_234, this->unk_250, &sp58);
-        this->actor.world.pos.y = sp58.y;
+        timePathTargetPos = gZeroVec3f;
+        SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &timePathTargetPos, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathTargetPos);
+        this->actor.world.pos.y = timePathTargetPos.y;
         this->unk_356 |= 8;
     } else {
-        sp58 = this->unk_238;
+        timePathTargetPos = this->timePathTargetPos;
     }
 
-    this->actor.world.pos.x = sp58.x;
-    this->actor.world.pos.z = sp58.z;
+    this->actor.world.pos.x = timePathTargetPos.x;
+    this->actor.world.pos.z = timePathTargetPos.z;
 
     if (SubS_InCsMode(globalCtx)) {
-        sp54 = this->unk_254;
-        sp50 = this->unk_250;
-        sp58 = this->actor.world.pos;
+        sp54 = this->timePathElapsedTime;
+        sp50 = this->timePathWaypoint;
+        timePathTargetPos = this->actor.world.pos;
     }
 
-    this->unk_238 = gZeroVec3f;
+    this->timePathTargetPos = gZeroVec3f;
 
-    if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
-                      &this->unk_238, this->unk_374)) {
+    if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
+                                this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
+                                &this->timePathTargetPos, this->timePathTimeSpeed)) {
         this->unk_356 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;
-        sp64 = this->unk_238;
+        sp64 = this->timePathTargetPos;
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
     if (SubS_InCsMode(globalCtx)) {
-        this->unk_254 = sp54;
-        this->unk_250 = sp50;
-        this->unk_238 = sp58;
+        this->timePathElapsedTime = sp54;
+        this->timePathWaypoint = sp50;
+        this->timePathTargetPos = timePathTargetPos;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
@@ -1989,7 +1992,7 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     u16 sp3C = 0;
     ScheduleResult sp2C;
 
-    this->unk_374 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;
