@@ -94,36 +94,36 @@ void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(parent->unk_9F8); i++) {
-        BossHakuginParticle* gohtParticle = &parent->unk_9F8[i];
-        if (gohtParticle->unk_18 < 0) {
+        BossHakuginEffect* gohtEffect = &parent->unk_9F8[i];
+        if (gohtEffect->unk_18 < 0) {
             s16 sp2E;
             s16 sp2C;
             f32 sp28;
 
-            Math_Vec3f_Copy(&gohtParticle->unk_0, arg1);
+            Math_Vec3f_Copy(&gohtEffect->unk_0, arg1);
             sp2C = Rand_S16Offset(0x1000, 0x3000);
-            sp2E = (u32)Rand_Next() >> 0x10;
+            sp2E = Rand_Next() >> 0x10;
             sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
-            gohtParticle->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
-            gohtParticle->unk_C.y = (Math_SinS(sp2C) * sp28);
-            gohtParticle->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
+            gohtEffect->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
+            gohtEffect->unk_C.y = (Math_SinS(sp2C) * sp28);
+            gohtEffect->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
             if ((arg2 == 1) || (arg2 == 3)) {
-                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.x) + arg1->x;
-                gohtParticle->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.y) + arg1->y;
-                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.z) + arg1->z;
-                gohtParticle->unk_1A = 1;
+                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.x) + arg1->x;
+                gohtEffect->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.y) + arg1->y;
+                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.z) + arg1->z;
+                gohtEffect->unk_1A = 1;
             } else {
-                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.x) + arg1->x;
-                gohtParticle->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtParticle->unk_C.y) + arg1->y;
-                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.z) + arg1->z;
-                gohtParticle->unk_1A = 0;
+                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.x) + arg1->x;
+                gohtEffect->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtEffect->unk_C.y) + arg1->y;
+                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.z) + arg1->z;
+                gohtEffect->unk_1A = 0;
             }
-            gohtParticle->unk_1C.x = Rand_Next() >> 0x10;
-            gohtParticle->unk_1C.y = Rand_Next() >> 0x10;
-            gohtParticle->unk_1C.z = Rand_Next() >> 0x10;
-            gohtParticle->unk_18 = 0x28;
+            gohtEffect->unk_1C.x = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_1C.y = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_1C.z = (s32)Rand_Next() >> 0x10;
+            gohtEffect->unk_18 = 0x28;
             return;
         }
     }
@@ -189,10 +189,10 @@ void func_80B220A8(EnHakurock* this) {
     this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
     Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
-    this->actor.world.rot.y = (Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
-    this->actor.shape.rot.x = Rand_Next() >> 0x10;
-    this->actor.shape.rot.y = Rand_Next() >> 0x10;
-    this->actor.shape.rot.z = Rand_Next() >> 0x10;
+    this->actor.world.rot.y = ((s32)Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
+    this->actor.shape.rot.x = (s32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.y = (s32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.z = (s32)Rand_Next() >> 0x10;
     this->collider.dim.radius = (this->actor.scale.x * 2500.0f);
     this->collider.dim.yShift = -this->collider.dim.radius;
     this->collider.dim.height = this->collider.dim.radius * 2;
@@ -222,8 +222,8 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     s16 angle;
 
     this->actor.draw = EnHakurock_Draw;
-    angle = (Rand_Next() >> 0x13) + player->actor.shape.rot.y;
-    this->actor.shape.rot.y = Rand_Next() >> 0x10;
+    angle = ((s32)Rand_Next() >> 0x13) + player->actor.shape.rot.y;
+    this->actor.shape.rot.y = (s32)Rand_Next() >> 0x10;
     this->actor.world.pos.x = (Math_SinS(angle) * 600.0f) + player->actor.world.pos.x;
     this->actor.world.pos.y = player->actor.world.pos.y + 700.0f;
     this->actor.world.pos.z = (Math_CosS(angle) * 600.0f) + player->actor.world.pos.z;

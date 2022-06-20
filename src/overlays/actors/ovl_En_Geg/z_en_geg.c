@@ -126,14 +126,14 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronDropKegAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -142,11 +142,11 @@ static AnimationInfoS sAnimations[] = {
     { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_0031D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_oF1d_map_Anim_014CE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronShiveringSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gGoronStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 u16 func_80BB16D0(EnGeg* this) {
@@ -866,8 +866,8 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, &object_oF1d_map_Anim_012DE0,
-                       this->jointTable, this->morphTable, 18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronSkel, &gGoronUnrollAnim, this->jointTable, this->morphTable,
+                       GORON_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -954,7 +954,7 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_004DB0);
+            gSPDisplayList(POLY_OPA_DISP++, gGoronDonGeroMaskDL);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
@@ -1035,10 +1035,10 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
 void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
     static TexturePtr D_80BB4088[] = {
-        object_oF1d_map_Tex_010438,
-        object_oF1d_map_Tex_010C38,
-        object_oF1d_map_Tex_011038,
-        object_oF1d_map_Tex_010838,
+        gGoronEyeOpenTex,
+        gGoronEyeHalfTex,
+        gGoronEyeClosedTex,
+        gGoronEyeClosed2Tex,
     };
     s32 pad;
 
@@ -1072,7 +1072,7 @@ void func_80BB3CB4(EnGeg* this, GlobalContext* globalCtx) {
     Matrix_RotateXS(sp24, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_0091A8);
+    gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -126,7 +126,7 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
         for (i = 0; i < temp_s6; i++) {
             f32 temp_f0 = (f32)i / temp_s6;
             s16 temp_s0 = ((f32)arg0->unk_18 - arg0->unk_1C) * temp_f0 + arg0->unk_1C;
-            f32 temp_f24 = 1.0f - (temp_s0 * 0.011764706f);
+            f32 temp_f24 = 1.0f - (temp_s0 * (1 / 85.0f));
             f32 temp_f26 = Rand_ZeroOne() * 0.03f * temp_f0 * temp_f24;
             f32 temp_f28;
             f32 temp_f30 = Math_SinS(temp_s0 * 0x9A6) * 45.0f + arg0->pos.x;
@@ -186,9 +186,9 @@ void EnBox_ClipToGround(EnBox* this, GlobalContext* globalCtx) {
 }
 
 void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s16 cutsceneIdx;
-    EnBox* this = (EnBox*)thisx;
     s32 pad;
+    EnBox* this = THIS;
+    s16 cutsceneIdx;
     CollisionHeader* colHeader;
     f32 animFrame;
     f32 animFrameEnd;
@@ -227,7 +227,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         EnBox_SetupAction(this, EnBox_Open);
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
         animFrame = animFrameEnd;
-    } else if ((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL || this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL) &&
+    } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(globalCtx, this->switchFlag)) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         if (Rand_ZeroOne() < 0.5f) {
@@ -238,7 +238,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->alpha = 0;
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
-    } else if ((this->type == ENBOX_TYPE_BIG_ROOM_CLEAR || this->type == ENBOX_TYPE_SMALL_ROOM_CLEAR) &&
+    } else if (((this->type == ENBOX_TYPE_BIG_ROOM_CLEAR) || (this->type == ENBOX_TYPE_SMALL_ROOM_CLEAR)) &&
                !Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         EnBox_SetupAction(this, EnBox_AppearOnRoomClear);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -250,9 +250,9 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->alpha = 0;
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
-    } else if (this->type == ENBOX_TYPE_BIG_SONG_ZELDAS_LULLABY || this->type == ENBOX_TYPE_BIG_SONG_SUNS) {
+    } else if ((this->type == ENBOX_TYPE_BIG_SONG_ZELDAS_LULLABY) || (this->type == ENBOX_TYPE_BIG_SONG_SUNS)) {
 
-    } else if ((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG || this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG) &&
+    } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG)) &&
                !Flags_GetSwitch(globalCtx, this->switchFlag)) {
         EnBox_SetupAction(this, EnBox_AppearSwitchFlag);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -265,7 +265,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
     } else {
-        if (this->type == ENBOX_TYPE_BIG_INVISIBLE || this->type == ENBOX_TYPE_SMALL_INVISIBLE) {
+        if ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)) {
             this->dyna.actor.flags |= ACTOR_FLAG_80;
         }
         EnBox_SetupAction(this, EnBox_WaitOpen);
@@ -273,7 +273,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
     }
 
-    if (this->getItem == GI_STRAY_FAIRY && !Flags_GetTreasure(globalCtx, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
+    if ((this->getItem == GI_STRAY_FAIRY) && !Flags_GetTreasure(globalCtx, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
     }
 
@@ -307,7 +307,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnBox* this = (EnBox*)thisx;
+    EnBox* this = THIS;
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
@@ -414,7 +414,7 @@ void EnBox_AppearOnRoomClear(EnBox* this, GlobalContext* globalCtx) {
 }
 
 void func_80868AFC(EnBox* this, GlobalContext* globalCtx) {
-    if (func_800F22C4(this->cutsceneIdxA, &this->dyna.actor) != 0 || this->unk_1A0 != 0) {
+    if ((func_800F22C4(this->cutsceneIdxA, &this->dyna.actor) != 0) || (this->unk_1A0 != 0)) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, globalCtx, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
@@ -433,7 +433,7 @@ void func_80868B74(EnBox* this, GlobalContext* globalCtx) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if (this->cutsceneIdxA != -1 && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
+        if ((this->cutsceneIdxA != -1) && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(globalCtx, &this->dyna.actor, 4);
             } else if (this->unk_1A0 == 22) {
@@ -461,8 +461,8 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
-    if (this->unk_1EC != 0 && (this->cutsceneIdxB < 0 || ActorCutscene_GetCurrentIndex() == this->cutsceneIdxB ||
-                               ActorCutscene_GetCurrentIndex() == -1)) {
+    if ((this->unk_1EC != 0) && ((this->cutsceneIdxB < 0) || (ActorCutscene_GetCurrentIndex() == this->cutsceneIdxB) ||
+                                 (ActorCutscene_GetCurrentIndex() == -1))) {
         if (this->unk_1EC < 0) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
@@ -489,7 +489,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
         if (this->getItem == GI_STRAY_FAIRY) {
             this->movementFlags |= ENBOX_MOVE_0x20;
         } else {
-            if (this->getItem == GI_HEART_PIECE || this->getItem == GI_BOTTLE) {
+            if ((this->getItem == GI_HEART_PIECE) || (this->getItem == GI_BOTTLE)) {
                 Flags_SetCollectible(globalCtx, this->collectableFlag);
             }
             Flags_SetTreasure(globalCtx, ENBOX_GET_CHEST_FLAG(&this->dyna.actor));
@@ -499,14 +499,14 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
         if (offset.z > -50.0f && offset.z < 0.0f && fabsf(offset.y) < 10.0f && fabsf(offset.x) < 20.0f &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, globalCtx)) {
-            if ((this->getItem == GI_HEART_PIECE || this->getItem == GI_BOTTLE) &&
+            if (((this->getItem == GI_HEART_PIECE) || (this->getItem == GI_BOTTLE)) &&
                 Flags_GetCollectible(globalCtx, this->collectableFlag)) {
                 this->getItem = GI_RECOVERY_HEART;
             }
-            if (this->getItem == GI_MASK_CAPTAIN && INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN) {
+            if ((this->getItem == GI_MASK_CAPTAIN) && (INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN)) {
                 this->getItem = GI_RECOVERY_HEART;
             }
-            if (this->getItem == GI_MASK_GIANT && INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT) {
+            if ((this->getItem == GI_MASK_GIANT) && (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT)) {
                 this->getItem = GI_RECOVERY_HEART;
             }
             Actor_PickUpNearby(&this->dyna.actor, globalCtx, -this->getItem);
@@ -568,7 +568,7 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
         }
         if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
                                     this->dyna.actor.world.pos.z, &waterSurface, &waterBox, &bgId) &&
-            this->dyna.actor.floorHeight < waterSurface) {
+            (this->dyna.actor.floorHeight < waterSurface)) {
             EffectSsBubble_Spawn(globalCtx, &this->dyna.actor.world.pos, 5.0f, 2.0f, 20.0f, 0.3f);
         }
     }
@@ -598,13 +598,13 @@ void EnBox_SpawnIceSmoke(EnBox* this, GlobalContext* globalCtx) {
 }
 
 void EnBox_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnBox* this = (EnBox*)thisx;
+    EnBox* this = THIS;
 
     if (this->movementFlags & ENBOX_MOVE_STICK_TO_GROUND) {
         this->movementFlags &= ~ENBOX_MOVE_STICK_TO_GROUND;
         EnBox_ClipToGround(this, globalCtx);
     }
-    if (this->getItem == GI_STRAY_FAIRY && !Flags_GetTreasure(globalCtx, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
+    if ((this->getItem == GI_STRAY_FAIRY) && !Flags_GetTreasure(globalCtx, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
         globalCtx->actorCtx.unk5 |= 8;
     }
     this->actionFunc(this, globalCtx);
@@ -616,8 +616,8 @@ void EnBox_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
     }
     Actor_SetFocus(&this->dyna.actor, 40.0f);
-    if (this->getItem == GI_ICE_TRAP && this->actionFunc == EnBox_Open && this->skelAnime.curFrame > 45.0f &&
-        this->iceSmokeTimer < 100) {
+    if ((this->getItem == GI_ICE_TRAP) && (this->actionFunc == EnBox_Open) && (this->skelAnime.curFrame > 45.0f) &&
+        (this->iceSmokeTimer < 100)) {
         EnBox_SpawnIceSmoke(this, globalCtx);
     }
     if (this->unk_1F4.unk_0C != NULL) {
@@ -626,8 +626,8 @@ void EnBox_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBox_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnBox* this = THIS;
     s32 pad;
+    EnBox* this = THIS;
 
     if (limbIndex == OBJECT_BOX_CHEST_LIMB_01) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -688,16 +688,17 @@ Gfx* EnBox_SetRenderMode3(GraphicsContext* gfxCtx) {
 }
 
 void EnBox_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnBox* this = (EnBox*)thisx;
     s32 pad;
+    EnBox* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->unk_1F4.unk_10 != NULL) {
         this->unk_1F4.unk_10(&this->unk_1F4, globalCtx);
     }
-    if ((this->alpha == 255 && this->type != ENBOX_TYPE_BIG_INVISIBLE && this->type != ENBOX_TYPE_SMALL_INVISIBLE) ||
+    if (((this->alpha == 255) && (this->type != ENBOX_TYPE_BIG_INVISIBLE) &&
+         (this->type != ENBOX_TYPE_SMALL_INVISIBLE)) ||
         (!CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_80) &&
-         (this->type == ENBOX_TYPE_BIG_INVISIBLE || this->type == ENBOX_TYPE_SMALL_INVISIBLE))) {
+         ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)))) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         gSPSegment(POLY_OPA_DISP++, 0x08, EnBox_SetRenderMode1(globalCtx->state.gfxCtx));
@@ -708,7 +709,7 @@ void EnBox_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-        if (this->type == ENBOX_TYPE_BIG_INVISIBLE || this->type == ENBOX_TYPE_SMALL_INVISIBLE) {
+        if ((this->type == ENBOX_TYPE_BIG_INVISIBLE) || (this->type == ENBOX_TYPE_SMALL_INVISIBLE)) {
             gSPSegment(POLY_XLU_DISP++, 0x08, EnBox_SetRenderMode3(globalCtx->state.gfxCtx));
         } else {
             gSPSegment(POLY_XLU_DISP++, 0x08, EnBox_SetRenderMode2(globalCtx->state.gfxCtx));

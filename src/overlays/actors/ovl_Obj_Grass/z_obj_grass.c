@@ -146,11 +146,11 @@ void ObjGrass_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_3288 = (u32)Rand_Next() >> 0x10;
-    this->unk_328A = (u32)Rand_Next() >> 0x10;
-    this->unk_328C = (u32)Rand_Next() >> 0x10;
-    this->unk_328E = (u32)Rand_Next() >> 0x10;
-    this->unk_3290 = (u32)Rand_Next() >> 0x10;
+    this->unk_3288 = Rand_Next() >> 0x10;
+    this->unk_328A = Rand_Next() >> 0x10;
+    this->unk_328C = Rand_Next() >> 0x10;
+    this->unk_328E = Rand_Next() >> 0x10;
+    this->unk_3290 = Rand_Next() >> 0x10;
 }
 
 void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx) {

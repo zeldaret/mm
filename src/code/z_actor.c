@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64load.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -4280,7 +4281,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(globalCtx);
     f32 phi_f2;
 
-    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
+    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &globalCtx->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
@@ -4781,7 +4782,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
         yaw = Actor_YawToPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {
-            randomYaw = (Rand_Next() >> 0x13) + yaw;
+            randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;
 
             velocity.z = Rand_ZeroFloat(5.0f);
 

@@ -216,7 +216,7 @@ void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     Vec3s sp30;
 
     this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 
@@ -287,7 +287,7 @@ That's probably as much as we can do on functions for now. Next let's think abou
 - data/bss
 - intrafunction/stack variables
 
-and this is roughly the order of preference for naming them (although not necessarily the logical order to determine what they do). This actor is quite limited in the last category: only `sp30` is unnamed at the moment. Even though `func_800E9250` is decomped, the purpose of the argument in which `sp30` is placed is not clear (and, indeed, is not named), so it's probably best to leave it unnamed for now. (With greater experience, you might analyse `func_800E9250` to work out what this argument is for, but let's not worry about that for now.)
+and this is roughly the order of preference for naming them (although not necessarily the logical order to determine what they do). This actor is quite limited in the last category: only `sp30` is unnamed at the moment. Even though `Actor_TrackPlayer` is decomped, the purpose of the argument in which `sp30` is placed is not clear (and, indeed, is not named), so it's probably best to leave it unnamed for now. (With greater experience, you might analyse `Actor_TrackPlayer` to work out what this argument is for, but let's not worry about that for now.)
 
 As for the struct, there are two unnamed variables at the moment:
 ```C
