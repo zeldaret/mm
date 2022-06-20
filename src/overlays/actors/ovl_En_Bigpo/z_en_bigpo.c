@@ -505,7 +505,7 @@ void EnBigpo_WarpingOut(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 distance = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
-    s16 randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
+    s16 randomYaw = ((s32)Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
@@ -565,7 +565,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, GlobalContext* globalCtx) {
     }
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk208, 0x200) && (Rand_ZeroOne() < 0.075f)) {
-        this->unk208 += (s16)((((u32)Rand_Next() >> 0x14) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->unk208 += (s16)(((Rand_Next() >> 0x14) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
     this->actor.world.rot.y = this->actor.shape.rot.y;
 

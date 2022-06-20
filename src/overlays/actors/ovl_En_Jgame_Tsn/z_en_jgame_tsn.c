@@ -313,7 +313,7 @@ void func_80C14230(EnJgameTsn* this, GlobalContext* globalCtx) {
     s32 rand;
 
     if ((this->unk_2FC > 100) || func_80C14BCC(this, globalCtx)) {
-        rand = (u32)Rand_Next() % 3;
+        rand = Rand_Next() % 3;
 
         this->unk_2FC = 0;
         if (rand < this->unk_218) {
