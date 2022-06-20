@@ -178,7 +178,7 @@ void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     Vec3s sp30;
 
     this->actionFunc(this, play);
-    func_800E9250(play, &this->actor, &this->headRot, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &sp30, this->actor.focus.pos);
     EnRecepgirl_UpdateEyes(this);
 }
 

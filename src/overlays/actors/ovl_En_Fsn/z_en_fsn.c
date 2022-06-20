@@ -127,11 +127,11 @@ s32 EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
 }
 
 u16 EnFsn_GetWelcome(PlayState* play) {
@@ -483,8 +483,8 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
 }
 
 void EnFsn_UpdateJoystickInputState(EnFsn* this, PlayState* play) {
-    s8 stickX = CONTROLLER1(play)->rel.stick_x;
-    s8 stickY = CONTROLLER1(play)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&play->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -882,7 +882,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
         }
     } else if (talkState == 4) {
         func_8011552C(play, 6);
-        if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(play)) && Message_ShouldAdvance(play)) {
+        if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1108,7 +1108,7 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
         EnFsn_UpdateCursorPos(this, play);
         if (talkstate == 5) {
             func_8011552C(play, 6);
-            if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(play))) {
+            if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
                 if (this->cursorIdx != prevCursorIdx) {
                     play_sound(NA_SE_SY_CURSOR);
@@ -1210,7 +1210,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 
     if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(play, 6);
-        if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(play)) && Message_ShouldAdvance(play)) {
+        if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, play);
@@ -1330,7 +1330,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
 
     if (talkState == 4) {
         func_8011552C(play, 6);
-        if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(play)) &&
+        if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
             this->stickAccumX > 0) {
             cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
@@ -1447,7 +1447,7 @@ void EnFsn_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    func_800E9250(play, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
     SubS_FillLimbRotTables(play, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {

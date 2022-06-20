@@ -846,7 +846,7 @@ void EnOsn_Update(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
-    func_800E9250(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
 }
 
 s32 EnOsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,

@@ -270,7 +270,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else {
-            if (CHECK_BTN_ANY(CONTROLLER1(play)->press.button,
+            if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
                 s32 pad;
                 this->timer = 1;

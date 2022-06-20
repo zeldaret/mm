@@ -1657,7 +1657,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
 
         case 1:
             if ((this->unk_1D14 < 80U) && (D_809E0420 != 0) &&
-                CHECK_BTN_ANY(CONTROLLER1(play)->press.button,
+                CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
                 this->unk_1D78 = 1;
@@ -1706,7 +1706,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
 
         case 10:
             if ((this->unk_1D14 < 30U) && (D_809E0421 != 0) &&
-                CHECK_BTN_ANY(CONTROLLER1(play)->press.button,
+                CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
                 this->unk_1D78 = 1;

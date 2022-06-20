@@ -586,7 +586,7 @@ void func_80C14D14(EnJgameTsn* this, PlayState* play) {
 }
 
 void func_80C14D58(EnJgameTsn* this, PlayState* play) {
-    func_800E9250(play, &this->actor, &this->unk_2EC, &this->unk_2F2, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_2EC, &this->unk_2F2, this->actor.focus.pos);
 
     if (DECR(this->unk_2FA) == 0) {
         this->unk_2FA = Rand_S16Offset(60, 60);

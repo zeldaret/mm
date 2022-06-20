@@ -61,7 +61,7 @@ void EnRsn_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    func_800E9250(play, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
 
 s32 EnRsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

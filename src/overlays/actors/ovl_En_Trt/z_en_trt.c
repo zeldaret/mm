@@ -114,11 +114,11 @@ s32 EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
 }
 
 void EnTrt_SpawnShopItems(EnTrt* this, PlayState* play, ShopItem* shopItem) {
@@ -257,8 +257,8 @@ void EnTrt_StartShopping(PlayState* play, EnTrt* this) {
 }
 
 void EnTrt_UpdateJoystickInputState(PlayState* play, EnTrt* this) {
-    s8 stickX = CONTROLLER1(play)->rel.stick_x;
-    s8 stickY = CONTROLLER1(play)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&play->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -314,7 +314,7 @@ void EnTrt_Hello(EnTrt* this, PlayState* play) {
     }
     if (talkState == 5 && Message_ShouldAdvance(play)) {
         play_sound(NA_SE_SY_MESSAGE_PASS);
-        if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(play))) {
+        if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             EnTrt_StartShopping(play, this);
         }
     }
@@ -520,7 +520,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
     } else if (talkState == 4) {
         func_8011552C(play, 6);
-        if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(play))) {
+        if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             if ((!Message_ShouldAdvance(play) || !EnTrt_FacingShopkeeperDialogResult(this, play)) &&
                 (this->stickAccumX > 0)) {
                 cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
@@ -622,7 +622,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
         EnTrt_UpdateCursorPos(play, this);
         if (talkState == 5) {
             func_8011552C(play, 6);
-            if (!EnTrt_HasPlayerSelectedItem(play, this, CONTROLLER1(play))) {
+            if (!EnTrt_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 EnTrt_CursorLeftRight(play, this);
                 if (this->cursorIdx != prevCursorIdx) {
                     func_80151938(play, EnTrt_GetItemTextId(this));
@@ -707,7 +707,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(play, 6);
-            if (!EnTrt_TestCancelOption(this, play, CONTROLLER1(play)) && Message_ShouldAdvance(play)) {
+            if (!EnTrt_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(play, this);
@@ -1098,7 +1098,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(play, item);
-            if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(play))) {
+            if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();

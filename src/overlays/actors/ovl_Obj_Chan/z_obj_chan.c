@@ -66,7 +66,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjChan_InitChandelier(ObjChan* this2, PlayState* play);
 void ObjChan_InitPot(ObjChan* this, PlayState* play);
-void ObjChan_CreateSmashParticles(ObjChan* this, PlayState* play);
+void ObjChan_CreateSmashEffects(ObjChan* this, PlayState* play);
 void ObjChan_DrawPot(Actor* thisx, PlayState* play);
 void ObjChan_DrawFire(ObjChan* this, PlayState* play);
 
@@ -305,7 +305,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
         }
     }
     if (potBreaks) {
-        ObjChan_CreateSmashParticles(this, play);
+        ObjChan_CreateSmashEffects(this, play);
         ((ObjChan*)this->actor.parent)->pots[this->myPotIndex] = NULL;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
@@ -321,7 +321,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
     }
 }
 
-void ObjChan_CreateSmashParticles(ObjChan* this, PlayState* play) {
+void ObjChan_CreateSmashEffects(ObjChan* this, PlayState* play) {
     s16 new_var = 0;
     s32 phi_s0;
     Vec3f spDC;

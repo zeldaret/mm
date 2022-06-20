@@ -846,7 +846,7 @@ void Boss03_SetupChewPlayer(Boss03* this, PlayState* play) {
 
 void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Input* input = CONTROLLER1(play);
+    Input* input = CONTROLLER1(&play->state);
     f32 jawZRotTarget;
     f32 xDiff;
     f32 yDiff;

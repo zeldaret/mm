@@ -20,7 +20,7 @@ void func_80B40100(BgGoronOyu* this, PlayState* play);
 void func_80B400C8(BgGoronOyu* this, PlayState* play);
 void func_80B401F8(BgGoronOyu* this, PlayState* play);
 void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play);
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, PlayState* play);
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play);
 void func_80B40160(BgGoronOyu* this, PlayState* play);
 
 const ActorInit Bg_Goron_Oyu_InitVars = {
@@ -108,7 +108,7 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play) {
     }
 }
 
-void BgGoronOyu_SpawnParticles(BgGoronOyu* this, PlayState* play) {
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play) {
     s16 scale;
     Vec3f pos1;
     Vec3f pos2;
@@ -178,7 +178,7 @@ void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
     BgGoronOyu* this = THIS;
 
     this->actionFunc(this, play);
-    BgGoronOyu_SpawnParticles(this, play);
+    BgGoronOyu_SpawnEffects(this, play);
 }
 
 void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {

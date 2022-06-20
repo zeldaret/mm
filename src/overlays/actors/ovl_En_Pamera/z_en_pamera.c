@@ -511,9 +511,9 @@ void func_80BD94E0(EnPamera* this, PlayState* play) {
     if ((this->actionFunc != func_80BD8B70) && (this->actionFunc != func_80BD8964) &&
         (this->actionFunc != func_80BD909C) && (this->actionFunc != func_80BD8D1C) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ == 3.0f))) {
-        func_800E9250(play, &this->actor, &this->limb9Rot, &this->limb8Rot, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->limb9Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
-        func_800E8F08(&this->limb9Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->limb9Rot, &this->limb8Rot);
     }
 }
 
@@ -855,7 +855,7 @@ void func_80BDA344(Actor* thisx, PlayState* play) {
         if (!(gSaveContext.save.weekEventReg[61] & 4)) {
             gSaveContext.save.weekEventReg[61] |= 4;
         }
-        func_800E8F08(&this->limb9Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->limb9Rot, &this->limb8Rot);
     } else {
         func_80BD94E0(this, play);
         if (this->actionFunc == func_80BD994C) {

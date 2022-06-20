@@ -67,7 +67,7 @@ void func_80147564(PlayState* play) {
 
 s32 Message_ShouldAdvance(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
-    Input* controller = CONTROLLER1(play);
+    Input* controller = CONTROLLER1(&play->state);
 
     if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
@@ -86,7 +86,7 @@ s32 Message_ShouldAdvance(PlayState* play) {
 
 s32 Message_ShouldAdvanceSilent(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
-    Input* controller = CONTROLLER1(play);
+    Input* controller = CONTROLLER1(&play->state);
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
@@ -117,7 +117,7 @@ void func_801477B4(PlayState* play) {
 void func_80148B98(PlayState* play, u8 arg1) {
     static s16 held = 0;
     MessageContext* msgCtx = &play->msgCtx;
-    Input* curInput = CONTROLLER1(play);
+    Input* curInput = CONTROLLER1(&play->state);
 
     if ((curInput->rel.stick_y > 29) && held == 0) {
         held = 1;

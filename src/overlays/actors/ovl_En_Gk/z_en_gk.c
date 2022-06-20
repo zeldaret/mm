@@ -1081,7 +1081,7 @@ void EnGk_Update(Actor* thisx, PlayState* play) {
         ((ENGK_GET_F(&this->actor) == ENGK_F_0) && !(gSaveContext.save.weekEventReg[22] & 4))) {
         func_80B507A0(this, play);
         SkelAnime_Update(&this->skelAnime);
-        func_800E9250(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
         if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
             func_80B5123C(this, play);
         }

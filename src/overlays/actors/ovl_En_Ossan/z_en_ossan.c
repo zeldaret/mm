@@ -199,11 +199,11 @@ s32 EnOssan_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
 }
 
 void EnOssan_CheckValidSpawn(EnOssan* this) {
@@ -453,8 +453,8 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_UpdateJoystickInputState(PlayState* play, EnOssan* this) {
-    s8 stickX = CONTROLLER1(play)->rel.stick_x;
-    s8 stickY = CONTROLLER1(play)->rel.stick_y;
+    s8 stickX = CONTROLLER1(&play->state)->rel.stick_x;
+    s8 stickY = CONTROLLER1(&play->state)->rel.stick_y;
 
     this->moveHorizontal = this->moveVertical = false;
 
@@ -574,7 +574,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
         } else if (this->flags & END_INTERACTION) {
             this->flags &= ~END_INTERACTION;
             EnOssan_EndInteraction(play, this);
-        } else if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(play))) {
+        } else if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             EnOssan_StartShopping(play, this);
         } else {
             return;
@@ -631,7 +631,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
     } else {
         if (talkState == 4) {
             func_8011552C(play, 6);
-            if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(play)) &&
+            if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
                 (!Message_ShouldAdvance(play) || !EnOssan_FacingShopkeeperDialogResult(this, play))) {
                 if (this->stickAccumX < 0) {
                     cursorIdx = EnOssan_SetCursorIndexFromNeutral(this, 4);
@@ -854,7 +854,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, PlayState* play) {
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == 5) {
             func_8011552C(play, 6);
-            if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(play))) {
+            if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 4);
@@ -912,7 +912,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, PlayState* play) {
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == 5) {
             func_8011552C(play, 6);
-            if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(play))) {
+            if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal != 0) {
                     if (this->stickAccumX < 0) {
                         cursorIdx = EnOssan_CursorRight(this, this->cursorIdx, 0);
@@ -1053,7 +1053,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
 
     if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(play, 6);
-        if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(play)) && Message_ShouldAdvance(play)) {
+        if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     EnOssan_HandleCanBuyItem(play, this);
@@ -1124,7 +1124,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
             EnOssan_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(play, item);
-            if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(play))) {
+            if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -1553,7 +1553,7 @@ void EnOssan_Update(Actor* thisx, PlayState* play) {
         EnOssan_UpdateItemSelectedProperty(this);
         EnOssan_UpdateStickDirectionPromptAnim(this);
         EnOssan_UpdateCursorAnim(this);
-        func_800E9250(play, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, play);
         Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_Update(&this->skelAnime);

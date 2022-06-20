@@ -235,9 +235,9 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
 
     if (gSaveContext.fileNum != 0xFEDC) {
         if (this->state == MAG_STATE_INITIAL) {
-            if (CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_START) ||
-                CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-                CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B)) {
+            if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
                 if (!EnvFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
@@ -378,9 +378,9 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                     EnMag_UpdateDisplayEffectColors(&this->actor);
 
                     if (sInputDelayTimer == 0) {
-                        if (CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_START) ||
-                            CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-                            CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B)) {
+                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                             if (play->sceneLoadFlag != 0x14) {
                                 Audio_SetCutsceneFlag(false);
                                 D_801BB12C++;
@@ -427,9 +427,9 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
 
             // Appear fully immediately if called during fade-in states.
             if ((this->state > MAG_STATE_INITIAL) && (this->state < MAG_STATE_CALLED)) {
-                if (CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_START) ||
-                    CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_A) ||
-                    CHECK_BTN_ALL(CONTROLLER1(play)->press.button, BTN_B)) {
+                if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                    CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                    CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                 }

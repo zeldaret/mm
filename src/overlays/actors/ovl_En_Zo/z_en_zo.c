@@ -173,7 +173,7 @@ void EnZo_UpdateCollider(EnZo* this, PlayState* play) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
-    static TurnOptionsSet sTurnOptions = {
+    static TrackOptionsSet sTrackOptions = {
         { 0xFA0, 4, 1, 3 },
         { 0x1770, 4, 1, 6 },
         { 0xFA0, 4, 1, 3 },
@@ -187,11 +187,11 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
         point.x = player->actor.world.pos.x;
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
-        SubS_TurnToPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->turnTarget, &this->headRot,
-                         &this->upperBodyRot, &sTurnOptions);
+        SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
+                        &this->upperBodyRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->turnTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->turnTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 1000, 1);
 
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);

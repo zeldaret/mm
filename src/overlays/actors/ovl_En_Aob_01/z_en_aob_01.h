@@ -21,7 +21,7 @@ typedef struct EnAob01 {
     /* 0x212 */ Vec3s jointTable[MAMAMU_YAN_LIMB_MAX];
     /* 0x272 */ Vec3s morphTable[MAMAMU_YAN_LIMB_MAX];
     /* 0x2D2 */ u16 unk_2D2;
-    /* 0x2D4 */ Vec3s turnTarget;
+    /* 0x2D4 */ Vec3s trackTarget;
     /* 0x2DA */ Vec3s headRot;
     /* 0x2E0 */ Vec3s torsoRot;
     /* 0x2E6 */ Vec3s unk_2E6;

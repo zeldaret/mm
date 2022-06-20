@@ -60,7 +60,7 @@ void func_800F4A10(PlayState* play) {
 }
 
 void KaleidoSetup_Update(PlayState* play) {
-    Input* input = CONTROLLER1(play);
+    Input* input = CONTROLLER1(&play->state);
     MessageContext* msgCtx = &play->msgCtx;
     Player* player = GET_PLAYER(play);
     PauseContext* pauseCtx = &play->pauseCtx;

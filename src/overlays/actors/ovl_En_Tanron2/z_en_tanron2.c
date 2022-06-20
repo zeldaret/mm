@@ -564,7 +564,7 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
         this->unk_159 = 1;
     }
 
-    input = CONTROLLER3(play);
+    input = CONTROLLER3(&play->state);
     if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
         this->unk_158 = 1;
     }

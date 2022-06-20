@@ -135,7 +135,7 @@ static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
     PlayState* play = (PlayState*)gameState;
-    Input* input = CONTROLLER1(play);
+    Input* input = CONTROLLER1(&play->state);
 
     /* Intra-byte navigation */
 

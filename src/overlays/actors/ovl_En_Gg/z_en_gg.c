@@ -729,7 +729,7 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     }
 
     func_80B35634(this, play);
-    func_800E9250(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
     func_80B351A4(this);
 }
 

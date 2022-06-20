@@ -973,7 +973,7 @@ void EnGb2_Update(Actor* thisx, PlayState* play) {
     if (!(this->unk_26C & 0x100)) {
         func_80B0F5E0(this, play);
     }
-    func_800E9250(play, &this->actor, &this->unk_270, &this->unk_276, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_270, &this->unk_276, this->actor.focus.pos);
 }
 
 s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,

@@ -633,7 +633,7 @@ void func_80B680A8(Actor* thisx, PlayState* play) {
     if (func_80B6703C(this, play) && !(this->unk_29C & 8) && (this->unk_29A != 5)) {
         sp38.x = sp38.y = sp38.z = 0;
 
-        func_800E9250(play, &this->actor, &this->unk_294, &sp38, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->unk_294, &sp38, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_294.x, 0, 6, 6200, 100);
         Math_SmoothStepToS(&this->unk_294.y, 0, 6, 6200, 100);

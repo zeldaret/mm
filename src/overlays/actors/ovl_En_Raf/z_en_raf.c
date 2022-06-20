@@ -30,9 +30,9 @@ void EnRaf_SetupDissolve(EnRaf* this);
 void EnRaf_Dissolve(EnRaf* this, PlayState* play);
 void EnRaf_SetupDormant(EnRaf* this);
 void EnRaf_Dormant(EnRaf* this, PlayState* play);
-void EnRaf_InitializeParticle(EnRaf* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
-void EnRaf_UpdateParticles(EnRaf* this, PlayState* play);
-void EnRaf_DrawParticles(EnRaf* this, PlayState* play);
+void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale, s16 timer);
+void EnRaf_UpdateEffects(EnRaf* this, PlayState* play);
+void EnRaf_DrawEffects(EnRaf* this, PlayState* play);
 
 typedef enum {
     /* 0 */ EN_RAF_ANIMATION_IDLE,
@@ -494,11 +494,11 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
 }
 
 /**
- * Creates an explosion effect/sound and spawns particles.
+ * Creates an explosion effect/sound and spawns effects.
  */
 void EnRaf_Explode(EnRaf* this, PlayState* play) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
-    Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
+    Vec3f accel = { 0.0f, 0.0f, 0.0f };
     Vec3f explosionPos;
     s32 i;
     s32 pad;
@@ -516,14 +516,14 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
 
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
     for (i = 0; i < BREG(57) + 30; i++) {
-        acceleration.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
-        acceleration.y = -0.3f;
-        acceleration.z = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        accel.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        accel.y = -0.3f;
+        accel.z = (Rand_ZeroOne() - 0.5f) * 0.5f;
         velocity.x = Rand_ZeroOne() - 0.5f;
         velocity.y = Rand_ZeroOne() * 10.0f;
         velocity.z = Rand_ZeroOne() - 0.5f;
-        EnRaf_InitializeParticle(this, &this->dyna.actor.world.pos, &velocity, &acceleration,
-                                 (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
+        EnRaf_InitializeEffect(this, &this->dyna.actor.world.pos, &velocity, &accel,
+                               (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
     }
 
     for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
@@ -742,7 +742,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
 
     Math_ApproachZeroF(&this->heightDiffFromPlayer, 0.3f, 2.0f);
     if (this->action == EN_RAF_ACTION_EXPLODE) {
-        EnRaf_UpdateParticles(this, play);
+        EnRaf_UpdateEffects(this, play);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
@@ -875,84 +875,83 @@ void EnRaf_Draw(Actor* thisx, PlayState* play) {
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
     if (this->action == EN_RAF_ACTION_EXPLODE) {
-        EnRaf_DrawParticles(this, play);
+        EnRaf_DrawEffects(this, play);
     }
 }
 
-void EnRaf_InitializeParticle(EnRaf* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
-                              s16 timer) {
+void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale, s16 timer) {
     s16 i;
-    EnRafParticle* particle = this->particles;
+    EnRafEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (!particle->isVisible) {
-            particle->isVisible = true;
-            particle->position = *position;
-            particle->velocity = *velocity;
-            particle->acceleration = *acceleration;
-            particle->scale = scale;
-            particle->timer = timer;
-            particle->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
-            particle->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
-            particle->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->pos = *pos;
+            effect->velocity = *velocity;
+            effect->accel = *accel;
+            effect->scale = scale;
+            effect->timer = timer;
+            effect->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
             return;
         }
     }
 }
 
-void EnRaf_UpdateParticles(EnRaf* this, PlayState* play) {
+void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
     s32 i;
-    EnRafParticle* particle = this->particles;
+    EnRafEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isVisible) {
-            particle->position.x += particle->velocity.x;
-            particle->position.y += particle->velocity.y;
-            particle->position.z += particle->velocity.z;
-            particle->rotation.x += 0xBB8;
-            particle->rotation.y += 0xBB8;
-            particle->rotation.z += 0xBB8;
-            particle->velocity.x += particle->acceleration.x;
-            particle->velocity.y += particle->acceleration.y;
-            particle->velocity.z += particle->acceleration.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->rotation.x += 0xBB8;
+            effect->rotation.y += 0xBB8;
+            effect->rotation.z += 0xBB8;
+            effect->velocity.x += effect->accel.x;
+            effect->velocity.y += effect->accel.y;
+            effect->velocity.z += effect->accel.z;
 
             if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
-                if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
-                    EffectSsGSplash_Spawn(play, &particle->position, NULL, NULL, 0, particle->scale * 200000.0f);
-                    SoundSource_PlaySfxAtFixedWorldPos(play, &particle->position, 50, NA_SE_EV_BOMB_DROP_WATER);
-                    particle->isVisible = false;
+                if (effect->pos.y < (this->dyna.actor.world.pos.y - 10.0f)) {
+                    EffectSsGSplash_Spawn(play, &effect->pos, NULL, NULL, 0, effect->scale * 200000.0f);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &effect->pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+                    effect->isEnabled = false;
                 }
-            } else if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
-                Math_ApproachZeroF(&particle->scale, 0.2f, 0.001f);
-                if (particle->scale <= 0.0001f) {
-                    particle->timer = 0;
+            } else if (effect->pos.y < (this->dyna.actor.world.pos.y - 10.0f)) {
+                Math_ApproachZeroF(&effect->scale, 0.2f, 0.001f);
+                if (effect->scale <= 0.0001f) {
+                    effect->timer = 0;
                 }
             }
 
-            if (particle->timer != 0) {
-                particle->timer--;
+            if (effect->timer != 0) {
+                effect->timer--;
             } else {
-                particle->isVisible = false;
+                effect->isEnabled = false;
             }
         }
     }
 }
 
-void EnRaf_DrawParticles(EnRaf* this, PlayState* play) {
+void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
     s16 i;
-    EnRafParticle* particle = this->particles;
+    EnRafEffect* effect = this->effects;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->isVisible) {
-            Matrix_Translate(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
-            Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
-            Matrix_RotateXS(particle->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(particle->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(particle->rotation.z, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);

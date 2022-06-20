@@ -450,7 +450,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_27A & 1) && !Cutscene_CheckActorAction(play, 0x7F)) {
-        func_800E9250(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);
         Math_SmoothStepToS(&this->unk_270.y, 0, 6, 0x1838, 0x64);

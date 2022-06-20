@@ -741,7 +741,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     SkelAnime_Update(&this->skelAnime);
-    func_800E9250(play, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
     func_80B279AC(this, play);
     func_80B27880(this, play);
 }

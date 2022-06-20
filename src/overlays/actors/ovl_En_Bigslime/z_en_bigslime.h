@@ -42,9 +42,9 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3f vel;
-    /* 0x18 */ s16 isActive;
-    /* 0x1A */ Vec3s rotation;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ s16 isEnabled;
+    /* 0x1A */ Vec3s rot;
     /* 0x20 */ f32 scale;
 } EnBigslimeIceShardEffect; // size = 0x24
 
