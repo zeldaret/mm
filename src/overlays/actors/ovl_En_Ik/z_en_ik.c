@@ -52,12 +52,12 @@ typedef struct {
     s16 unk04;
 } EnIkUnkStruct;
 
-EnIkUnkStruct ironKnuckleArmorMarkings[] = {
-    { gIronKnuckleHelmetTexturesDL, 0x0000 },
-    { gIronKnuckleFrontTorsoArmorTextureDL, 0x0000 },
-    { gIronKnuckleRearTorsoArmorTextureDL, 0x7FFF },
-    { gIronKnuckleRivetsTexture2DL, 0x4000 },
-    { gIronKnuckleRivetsTexture1DL, 0xC000 },
+EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
+    { gIronKnuckleHelmetMarkingDL, 0x0000 },
+    { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 },
+    { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },
+    { gIronKnuckleRivetsMarking2DL, 0x4000 },
+    { gIronKnuckleRivetsMarking1DL, 0xC000 },
     { NULL, 0x4000 },
     { NULL, 0xC000 },
 };
@@ -970,7 +970,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             ikEffect->pos.z = mf->mf[3][2];
             Matrix_MtxFToYXZRot(mf, &ikEffect->rot, false);
             ikEffect->enabled = true;
-            sp76 = ironKnuckleArmorMarkings[index].unk04 + ((Rand_Next() >> 0x13) + this->actor.shape.rot.y);
+            sp76 = sIronKnuckleArmorMarkings[index].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
             ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
             ikEffect->vel.y = 6.0f;
             ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
@@ -1007,13 +1007,13 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if ((index == 0) ||
-        ((index != -1) && (this->drawArmorFlags == 0) && (ironKnuckleArmorMarkings[index].unk00 != 0))) {
+        ((index != -1) && (this->drawArmorFlags == 0) && (sIronKnuckleArmorMarkings[index].unk00 != 0))) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         xlu = POLY_XLU_DISP;
 
         gSPMatrix(&xlu[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&xlu[1], ironKnuckleArmorMarkings[index].unk00);
+        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[index].unk00);
         POLY_XLU_DISP = &xlu[2];
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1044,10 +1044,10 @@ void EnIk_UpdateArmorDraw(EnIk* this, GlobalContext* globalCtx) {
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(gfxOpa++, ikEffect->dList);
 
-                if (ironKnuckleArmorMarkings[i].unk00 != NULL) {
+                if (sIronKnuckleArmorMarkings[i].unk00 != NULL) {
                     gSPMatrix(gfxXlu++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(gfxXlu++, ironKnuckleArmorMarkings[i].unk00);
+                    gSPDisplayList(gfxXlu++, sIronKnuckleArmorMarkings[i].unk00);
                 }
             } else {
                 sp54++;

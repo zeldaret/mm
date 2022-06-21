@@ -24,13 +24,13 @@
         <DList Name="gIronKnuckleLowerLeftPauldronDL" Offset="0xA348" />
         <DList Name="gIronKnuckleUpperRightPauldronDL" Offset="0xA408" />
         <DList Name="gIronKnuckleUpperLeftPauldronDL" Offset="0xA4F0" />
-        <DList Name="gIronKnuckleFrontTorsoArmorTextureDL" Offset="0xA5D8" />
-        <DList Name="gIronKnuckleRearTorsoArmorTextureDL" Offset="0xA6D0" />
-        <DList Name="gIronKnuckleRivetsTexture1DL" Offset="0xA780" />
-        <DList Name="gIronKnuckleRivetsTexture2DL" Offset="0xA820" />
-        <DList Name="gIronKnuckleBaseHelmetDL" Offset="0xBF80" />
-        <DList Name="gGerudoHeadDL" Offset="0xC200" />
-        <DList Name="gIronKnuckleHelmetTexturesDL" Offset="0xCF08" />
+        <DList Name="gIronKnuckleFrontTorsoArmorMarkingDL" Offset="0xA5D8" />
+        <DList Name="gIronKnuckleRearTorsoArmorMarkingDL" Offset="0xA6D0" />
+        <DList Name="gIronKnuckleRivetsMarking1DL" Offset="0xA780" />
+        <DList Name="gIronKnuckleRivetsMarking2DL" Offset="0xA820" />
+        <DList Name="gIronKnuckleBasMarkingDL" Offset="0xBF80" />
+        <DList Name="gIronKnuckleGerudoHeadDL" Offset="0xC200" />
+        <DList Name="gIronKnuckleHelmetMarkingDL" Offset="0xCF08" />
         <DList Name="gIronKnuckleTanArmorDL" Offset="0xD038" />
         <DList Name="gIronKnuckleBronzeArmorDL" Offset="0xD050" />
         <DList Name="gIronKnuckleSilverArmorDL" Offset="0xD068" />
@@ -38,36 +38,36 @@
         <DList Name="gIronKnuckleBrownArmorDL" Offset="0xD098" />
         <DList Name="gIronKnuckleWhiteArmorDL" Offset="0xD0B0" />
         <DList Name="gIronKnuckleGoldArmorDL" Offset="0xD0C8" />
-        <DList Name="object_ik_DL_00EC20" Offset="0xEC20" />
-        <DList Name="object_ik_DL_00EFD8" Offset="0xEFD8" />
-        <DList Name="object_ik_DL_00F270" Offset="0xF270" />
-        <DList Name="object_ik_DL_00F3F8" Offset="0xF3F8" />
-        <DList Name="object_ik_DL_00F690" Offset="0xF690" />
-        <DList Name="object_ik_DL_00F818" Offset="0xF818" />
-        <DList Name="object_ik_DL_00F8E0" Offset="0xF8E0" />
-        <DList Name="object_ik_DL_00FC20" Offset="0xFC20" />
-        <DList Name="object_ik_DL_00FD68" Offset="0xFD68" />
-        <DList Name="object_ik_DL_00FFA8" Offset="0xFFA8" />
-        <DList Name="object_ik_DL_010358" Offset="0x10358" />
-        <DList Name="object_ik_DL_0104A0" Offset="0x104A0" />
-        <DList Name="object_ik_DL_0106E0" Offset="0x106E0" />
+        <DList Name="gIronKnuckleTorsoDL" Offset="0xEC20" />
+        <DList Name="gIronKnuckleVambraceLeftDL" Offset="0xEFD8" />
+        <DList Name="gIronKnuckleArmLeftDL" Offset="0xF270" />
+        <DList Name="gIronKnuckleVambraceRightDL" Offset="0xF3F8" />
+        <DList Name="gIronKnuckleArmRightDL" Offset="0xF690" />
+        <DList Name="gIronKnuckleHandDL" Offset="0xF818" />
+        <DList Name="gIronKnuckleWaistDL" Offset="0xF8E0" />
+        <DList Name="gIronKnucklePauldronLeftDL" Offset="0xFC20" />
+        <DList Name="gIronKnuckleBootTipLeftDL" Offset="0xFD68" />
+        <DList Name="gIronKnuckleWaistArmorLeftDL" Offset="0xFFA8" />
+        <DList Name="gIronKnucklePauldronRightDL" Offset="0x10358" />
+        <DList Name="gIronKnuckleBootTipRightDL" Offset="0x104A0" />
+        <DList Name="gIronKnuckleWaistArmorRightDL" Offset="0x106E0" />
         <Texture Name="object_ik_TLUT_010A30" OutName="tlut_010A30" Format="rgba16" Width="16" Height="16" Offset="0x10A30" />
-        <Texture Name="object_ik_Tex_010C30" OutName="tex_010C30" Format="ia16" Width="16" Height="16" Offset="0x10C30" />
-        <Texture Name="object_ik_Tex_010E30" OutName="tex_010E30" Format="ci8" Width="16" Height="16" Offset="0x10E30" />
-        <Texture Name="gAxePomelJewel1Tex" OutName="axe_pomel_1_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x10F30" />
-        <!-- <Blob Name="object_ik_Blob_011030" Size="0x170" Offset="0x11030" /> -->
+        <Texture Name="gIronKnuckleRivet1Tex" OutName="iron_knuckle_rivet_1_tex" Format="ia16" Width="16" Height="16" Offset="0x10C30" />
+        <Texture Name="gIronKnuckleHair1Tex" OutName="iron_knuckle_hair_1_tex" Format="ci8" Width="16" Height="16" Offset="0x10E30" />
+        <Texture Name="gIronKnuckleAxePomelJewel1Tex" OutName="iron_knuckle_axe_pomel_1_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x10F30" />
+        <Texture Name="object_ik_TLUT_011030" OutName="iron_knuckle_011030_tlut" Format="rgba16" Width="4" Height="4" Offset="0x11030" />
         <Texture Name="object_ik_Tex_0111A0" OutName="tex_0111A0" Format="i4" Width="32" Height="64" Offset="0x111A0" />
         <Texture Name="object_ik_Tex_0115A0" OutName="tex_0115A0" Format="ia8" Width="32" Height="32" Offset="0x115A0" />
-        <Texture Name="object_ik_Tex_0119A0" OutName="tex_0119A0" Format="rgba16" Width="16" Height="16" Offset="0x119A0" />
-        <Texture Name="gChainMailTex" OutName="chain_mail_tex" Format="rgba16" Width="16" Height="16" Offset="0x11BA0" />
-        <Texture Name="object_ik_Tex_011DA0" OutName="tex_011DA0" Format="ia16" Width="32" Height="32" Offset="0x11DA0" />
-        <Texture Name="gGerudoEyeTex" OutName="gerudo_eye_tex" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
-        <Texture Name="gAxePomelJewel2Tex" OutName="axe_pomel_2_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x12DA0" />
-        <Texture Name="gArmorRivetTex" OutName="armor_rivet_tex" Format="ia8" Width="16" Height="16" Offset="0x12EA0" />
-        <!-- <Blob Name="object_ik_Blob_012FA0" Size="0xF0" Offset="0x12FA0" /> -->
-        <Texture Name="gForeheadJewelTex" OutName="forehead_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x13090" />
-        <Texture Name="object_ik_Tex_013190" OutName="tex_013190" Format="ci8" Width="8" Height="8" Offset="0x13190" />
-        <Texture Name="object_ik_Tex_0131D0" OutName="tex_0131D0" Format="ci8" Width="16" Height="16" Offset="0x131D0" />
+        <Texture Name="gIronKnuckleBlockPatternTex" OutName="iron_knuckle_block_pattern" Format="rgba16" Width="16" Height="16" Offset="0x119A0" />
+        <Texture Name="gIronKnuckleChainMailTex" OutName="iron_knuckle_chain_mail_tex" Format="rgba16" Width="16" Height="16" Offset="0x11BA0" />
+        <Texture Name="gIronKnuckleArmorEmblemTex" OutName="iron_knuckle_emblem_tex" Format="ia16" Width="32" Height="32" Offset="0x11DA0" />
+        <Texture Name="gIronKnuckleGerudoEyeTex" OutName="iron_knuckle_gerudo_eye_tex" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
+        <Texture Name="gIronKnuckleChestJewelTex" OutName="iron_knuckle_chest_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x12DA0" />
+        <Texture Name="gIronKnuckleArmorRivet2Tex" OutName="iron_knuckle_armor_rivet_2_tex" Format="ia8" Width="16" Height="16" Offset="0x12EA0" />
+        <Texture Name="object_ik_TLUT_012FA0" OutName="iron_knuckle_012FA0_tlut" Format="rgba16" Width="4" Height="4" Offset="0x12FA0" />
+        <Texture Name="gIronKnuckleForeheadJewelTex" OutName="iron_knuckle_forehead_jewel_tex" Format="ci8" Width="16" Height="16" Offset="0x13090" />
+        <Texture Name="gIronKnuckleGerudoSkinTex" OutName="iron_knuckle_gerudo_skin_tex" Format="ci8" Width="8" Height="8" Offset="0x13190" />
+        <Texture Name="gIronKnuckleHair2Tex" OutName="iron_knuckle_hair_2_tex" Format="ci8" Width="16" Height="16" Offset="0x131D0" />
         <Texture Name="object_ik_Tex_0132D0" OutName="tex_0132D0" Format="ci8" Width="8" Height="16" Offset="0x132D0" />
         <Texture Name="object_ik_Tex_013350" OutName="tex_013350" Format="ci8" Width="8" Height="16" Offset="0x13350" />
         <Texture Name="object_ik_Tex_0133D0" OutName="tex_0133D0" Format="ci8" Width="16" Height="16" Offset="0x133D0" />
