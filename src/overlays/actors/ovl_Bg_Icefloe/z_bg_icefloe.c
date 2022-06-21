@@ -48,7 +48,7 @@ void BgIcefloe_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gIcePlatform_Col);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gIcefloePlatformCol);
     if (numberSpawned >= 3) {
         s32 i;
 
