@@ -3729,8 +3729,7 @@ beginseg
     name "ovl_En_Onpuman"
     compress
     include "build/src/overlays/actors/ovl_En_Onpuman/z_en_onpuman.o"
-    include "build/data/ovl_En_Onpuman/ovl_En_Onpuman.data.o"
-    include "build/data/ovl_En_Onpuman/ovl_En_Onpuman.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Onpuman/ovl_En_Onpuman_reloc.o"
 endseg
 
 beginseg
