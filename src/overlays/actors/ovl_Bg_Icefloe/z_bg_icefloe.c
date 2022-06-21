@@ -174,5 +174,5 @@ void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIcefloe* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, gIcePlatform_Dlist);
+    Gfx_DrawDListOpa(globalCtx, gIcefloeIcePlatformDL);
 }
