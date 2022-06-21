@@ -43,7 +43,7 @@ void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x20F) != 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x20F)) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
             globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action) {
             this->stateFlags |= 2;
