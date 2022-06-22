@@ -4,8 +4,6 @@
  * Description: Stone Tower Temple - Mirror
  */
 
-//credits for code: darkeye, Isghj, EllipticEllipsis, mzxrules, Anon58
-//credits for data: Maide, mzxrules, Anon58.
 //credits for documentation:
 
 #include "z_bg_ikana_mirror.h"
@@ -19,8 +17,7 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx);
-// first commit
-#if 1
+
 const ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
     ACTORCAT_PROP,
@@ -37,39 +34,39 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
 static ColliderTrisElementInit D_80B7FF50[9] = {
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 21.600000381469727f, 13.699999809265137f }, { -25.299999237060547f, 6.0f, 8.399999618530273f }, { 25.299999237060547f, 6.0f, 8.399999618530273f } } },
+        { { { 0.0f, 21.6f, 13.7f }, { -25.3f, 6.0f, 8.4f }, { 25.3f, 6.0f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { -25.299999237060547f, 6.0f, 8.399999618530273f }, { 0.0f, 21.600000381469727f, 13.699999809265137f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { -25.3f, 6.0f, 8.4f }, { 0.0f, 21.6f, 13.7f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { 0.0f, 21.600000381469727f, 13.699999809265137f }, { 25.299999237060547f, 6.0f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { 0.0f, 21.6f, 13.7f }, { 25.3f, 6.0f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { -25.299999237060547f, 45.0f, 8.399999618530273f }, { -25.299999237060547f, 6.0f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { -25.3f, 45.0f, 8.4f }, { -25.3f, 6.0f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { 25.299999237060547f, 6.0f, 8.399999618530273f }, { 25.299999237060547f, 45.0f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { 25.3f, 6.0f, 8.4f }, { 25.3f, 45.0f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { -17.899999618530273f, 64.0999984741211f, 8.399999618530273f }, { -25.299999237060547f, 45.0f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { -17.9f, 64.1f, 8.4f }, { -25.3f, 45.0f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { 25.299999237060547f, 45.0f, 8.399999618530273f }, { 17.899999618530273f, 64.0999984741211f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { 25.3f, 45.0f, 8.4f }, { 17.9f, 64.1f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { 0.0f, 72.0f, 8.399999618530273f }, { -17.899999618530273f, 64.0999984741211f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { 0.0f, 72.0f, 8.4f }, { -17.9f, 64.1f, 8.4f } } },
     },
     {
         { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 0.0f, 45.0f, 13.699999809265137f }, { 17.899999618530273f, 64.0999984741211f, 8.399999618530273f }, { 0.0f, 72.0f, 8.399999618530273f } } },
+        { { { 0.0f, 45.0f, 13.7f }, { 17.9f, 64.1f, 8.4f }, { 0.0f, 72.0f, 8.4f } } },
     },
 };
 
@@ -88,21 +85,9 @@ static ColliderQuadInit D_80B8017C[2] = {{
 {
     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
     { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
-    { { { 25.299999237060547f, 20.0f, 20.0f }, { 25.299999237060547f, 20.0f, 240.0f }, { -25.299999237060547f, 20.0f, 20.0f }, { -25.299999237060547f, 20.0f, 240.0f } } },
+    { { { 25.3f, 20.0f, 20.0f }, { 25.3f, 20.0f, 240.0f }, { -25.3f, 20.0f, 20.0f }, { -25.3f, 20.0f, 240.0f } } },
 }};
 
-// static ColliderQuadInit D_80B801CC = {
-//     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
-//     { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
-//     { { { 25.299999237060547f, 20.0f, 20.0f }, { 25.299999237060547f, 20.0f, 240.0f }, { -25.299999237060547f, 20.0f, 20.0f }, { -25.299999237060547f, 20.0f, 240.0f } } },
-// };
-
-// static ColliderQuadInit sQuadInit = {
-// static ColliderQuadInit D_80B801FC = {
-//     { 0x41, AT_NONE | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK1 | OC2_HIT_PLAYER, 0x70, },
-//     { 0xC1, { 0x41A00000, 0x41, 0xA0 }, { 0xC1CA6666, 0x41, 0xA0 }, TOUCH_ON | TOUCH_HIT | TOUCH_SFX_NORMAL | TOUCH_DREW_HITMARK, BUMP_NONE | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_NONE, },
-//     { { { -1.8339854079840734e-09f, -1.8626939990440405e-09f, -1.9208972190654094e-09f }, { 221185.5625f, 0.0f, 0.003921568859368563f }, { 0.0f, 0.0f, 0.0f }, { 2.8698592549372254e-42f, 1.0761972206014595e-42f, 2.2420775429197073e-44f } } },
-// };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B8021C[] = {
@@ -112,26 +97,15 @@ static InitChainEntry D_80B8021C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
-
-// void func_80B7F730(BgIkanaMirror *);
-void func_80B7FA9C(BgIkanaMirror* arg0, GlobalContext* arg1); /* static */
+void func_80B7FA84(BgIkanaMirror* arg0);
+void func_80B7FA9C(BgIkanaMirror* arg0, GlobalContext* arg1);
+void func_80B7FB84(BgIkanaMirror* arg0);
 void func_80B7FBA4(BgIkanaMirror* arg0, GlobalContext* arg1);
 
-#if 0
-extern ColliderTrisElementInit D_80B7FF50[9];
-extern ColliderTrisInit D_80B8016C;
-extern ColliderQuadInit D_80B8017C[2];
-
-//extern ColliderQuadInit D_80B801FC;
-extern InitChainEntry D_80B8021C[];
-#endif
 extern Gfx* D_060014B0; 
 extern Gfx* D_06001880; 
 extern Gfx* D_06001E18;
 extern CollisionHeader D_06002358;
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7F730.s")
 
 void func_80B7F730(BgIkanaMirror *arg0){
   ColliderQuad *new_var;
@@ -157,15 +131,8 @@ void func_80B7F730(BgIkanaMirror *arg0){
   Matrix_Pop();
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
-
-// void func_80B7F730(BgIkanaMirror*); /* extern */
-void func_80B7FA84(BgIkanaMirror* arg0);
-void func_80B7FB84(BgIkanaMirror* arg0);
 extern UNK_TYPE D_06001678; // AnimatedMaterial
 extern UNK_TYPE D_06001AD8; // AnimatedMaterial
-
-// ColliderTrisInit D_80B8016C = { { 0xA, 0, 0x29, 0, 0, 2 }, 9, D_80B7FF50 };
 
 void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -205,8 +172,6 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80B7FA84(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Destroy.s")
-
 void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaMirror* this = THIS;
     ColliderQuad* var_s1;
@@ -219,21 +184,16 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA84.s")
-
 void func_80B7FA84(BgIkanaMirror* arg0) {
     arg0->unk5C8 = 0;
     arg0->actionFunc = func_80B7FA9C;
 }
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA9C.s")
 
 void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
 {
   s16 temp_v1;
   s8 temp_v0_4;
   u8 temp_v0;
-  // u8 temp_v0_2;
   u8 temp_v0_3;
   s32 phi_a2;
   temp_v0 = arg0->unk5C7;
@@ -246,7 +206,7 @@ void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
   {
     arg0->unk5C7 = 0;
   }
-  // temp_v0_2 = arg0->unk15C.base.acFlags;
+  
   if ((arg0->unk15C.base.acFlags & 2))
   {
     temp_v1 = arg0->unk5C4;
@@ -287,26 +247,15 @@ void func_80B7FA9C(BgIkanaMirror *arg0, GlobalContext *arg1)
   CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->unk15C.base);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FB84.s")
-
 void func_80B7FB84(BgIkanaMirror* arg0) {
     arg0->actor.flags |= 0x20;
     arg0->actionFunc = func_80B7FBA4;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
-
 void func_80B7FBA4(BgIkanaMirror *this, GlobalContext *arg1)
 {
-  // s16 temp_v0_3;
-  // s32 temp_s0_2;
-  // u8 temp_v0;
-  // u8 temp_v0_2;
-  // u8 temp_v1;
-  // BgIkanaMirror *this = thisx;
-  // s32 j;
   s32 i;
-  // s32 temp;
+
   for (i = 0; i < 2; i++)
   {
     if ((this->unk4B8[i].base.atFlags & 2))
@@ -323,6 +272,7 @@ void func_80B7FBA4(BgIkanaMirror *this, GlobalContext *arg1)
   {
     this->unk5C7 = 0xFF;
   }
+
   if (this->unk5C6 >= 61)
   {
     this->unk5C6 -= 60;
@@ -331,6 +281,7 @@ void func_80B7FBA4(BgIkanaMirror *this, GlobalContext *arg1)
   {
     this->unk5C6 = 0;
   }
+
   if (this->unk5C4 > 0)
   {
     this->unk5C4--;
@@ -338,22 +289,16 @@ void func_80B7FBA4(BgIkanaMirror *this, GlobalContext *arg1)
     {
       CollisionCheck_SetAT(arg1, &arg1->colChkCtx, &this->unk4B8[i].base);
     }
-
     return;
   }
-  // i = -0x21;
   this->actor.flags &= ~0x20;
   func_80B7FA84(this);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaMirror* this = (BgIkanaMirror*)thisx;
     this->actionFunc(this, globalCtx); 
 }
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")
 
 void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx)
 {
