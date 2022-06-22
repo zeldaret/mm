@@ -58,7 +58,7 @@ void EnOnpuman_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->unk_2A4 = 0;
-    this->unk_2A0 = 0;
+    this->unk_2A0 = NULL;
     this->actionFunc = func_80B121D8;
     this->actor.velocity.y = -10.0f;
     this->actor.terminalVelocity = -10.0f;
@@ -111,7 +111,7 @@ void func_80B1202C(EnOnpuman* this, GlobalContext* globalCtx2) {
 
             case 0x8DA:
                 func_80151938(globalCtx, 0x8D6);
-                if (this->unk_2A0 != 0) {
+                if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0x50;
                 }
                 break;
@@ -119,7 +119,7 @@ void func_80B1202C(EnOnpuman* this, GlobalContext* globalCtx2) {
             case 0x8D6:
                 this->actionFunc = func_80B11F78;
                 func_80152434(globalCtx, 0x3A);
-                if (this->unk_2A0 != 0) {
+                if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0;
                 }
                 break;
