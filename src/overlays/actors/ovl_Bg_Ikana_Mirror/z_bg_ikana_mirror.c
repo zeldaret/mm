@@ -5,21 +5,22 @@
  */
 
 //credits for code: darkeye, Isghj, EllipticEllipsis, mzxrules, Anon58
-//credits for data:
+//credits for data: Maide, mzxrules, Anon58.
 //credits for documentation:
 
 #include "z_bg_ikana_mirror.h"
+#include "objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgIkanaMirror*)thisx)
+#define THIS ((BgIkanaMirror*)thisx) 
 
 void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx);
 // first commit
-#if 0
+#if 1
 const ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
     ACTORCAT_PROP,
@@ -75,22 +76,33 @@ static ColliderTrisElementInit D_80B7FF50[9] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_80B8016C = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    9, D_80B7FF50, // sTrisElementsInit,
+    9, D_80B7FF50, 
 };
 
-// static ColliderQuadInit sQuadInit = {
-static ColliderQuadInit D_80B8017C = {
+// static ColliderQuadInit sQuadInit = { //check if some floats can be rewritten.
+static ColliderQuadInit D_80B8017C[2] = {{
     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
     { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
     { { { 0.0f, 72.0f, 20.0f }, { 0.0f, 72.0f, 240.0f }, { 0.0f, 6.0f, 20.0f }, { 0.0f, 6.0f, 240.0f } } },
-};
+},
+{
+    { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
+    { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+    { { { 25.299999237060547f, 20.0f, 20.0f }, { 25.299999237060547f, 20.0f, 240.0f }, { -25.299999237060547f, 20.0f, 20.0f }, { -25.299999237060547f, 20.0f, 240.0f } } },
+}};
+
+// static ColliderQuadInit D_80B801CC = {
+//     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
+//     { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+//     { { { 25.299999237060547f, 20.0f, 20.0f }, { 25.299999237060547f, 20.0f, 240.0f }, { -25.299999237060547f, 20.0f, 20.0f }, { -25.299999237060547f, 20.0f, 240.0f } } },
+// };
 
 // static ColliderQuadInit sQuadInit = {
-static ColliderQuadInit D_80B801FC = {
-    { 0x41, AT_NONE | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK1 | OC2_HIT_PLAYER, 0x70, },
-    { 0xC1, { 0x41A00000, 0x41, 0xA0 }, { 0xC1CA6666, 0x41, 0xA0 }, TOUCH_ON | TOUCH_HIT | TOUCH_SFX_NORMAL | TOUCH_DREW_HITMARK, BUMP_NONE | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_NONE, },
-    { { { -1.8339854079840734e-09f, -1.8626939990440405e-09f, -1.9208972190654094e-09f }, { 221185.5625f, 0.0f, 0.003921568859368563f }, { 0.0f, 0.0f, 0.0f }, { 2.8698592549372254e-42f, 1.0761972206014595e-42f, 2.2420775429197073e-44f } } },
-};
+// static ColliderQuadInit D_80B801FC = {
+//     { 0x41, AT_NONE | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK1 | OC2_HIT_PLAYER, 0x70, },
+//     { 0xC1, { 0x41A00000, 0x41, 0xA0 }, { 0xC1CA6666, 0x41, 0xA0 }, TOUCH_ON | TOUCH_HIT | TOUCH_SFX_NORMAL | TOUCH_DREW_HITMARK, BUMP_NONE | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_NONE, },
+//     { { { -1.8339854079840734e-09f, -1.8626939990440405e-09f, -1.9208972190654094e-09f }, { 221185.5625f, 0.0f, 0.003921568859368563f }, { 0.0f, 0.0f, 0.0f }, { 2.8698592549372254e-42f, 1.0761972206014595e-42f, 2.2420775429197073e-44f } } },
+// };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B8021C[] = {
@@ -102,19 +114,20 @@ static InitChainEntry D_80B8021C[] = {
 
 #endif
 
-void func_80B7F730(BgIkanaMirror *);
+// void func_80B7F730(BgIkanaMirror *);
 void func_80B7FA9C(BgIkanaMirror* arg0, GlobalContext* arg1); /* static */
 void func_80B7FBA4(BgIkanaMirror* arg0, GlobalContext* arg1);
 
+#if 0
 extern ColliderTrisElementInit D_80B7FF50[9];
 extern ColliderTrisInit D_80B8016C;
 extern ColliderQuadInit D_80B8017C[2];
 
 //extern ColliderQuadInit D_80B801FC;
 extern InitChainEntry D_80B8021C[];
-
-extern void* D_060014B0; //probably Gfx*
-extern void* D_06001880; //probably Gfx*
+#endif
+extern Gfx* D_060014B0; 
+extern Gfx* D_06001880; 
 extern Gfx* D_06001E18;
 extern CollisionHeader D_06002358;
 
@@ -127,7 +140,7 @@ void func_80B7F730(BgIkanaMirror *arg0){
   Vec3f sp78;
   Vec3f sp6C;
   Vec3f sp60;
-    ColliderQuadDimInit* dim;
+  ColliderQuadDimInit* dim;
   Matrix_Push();
   Matrix_SetTranslateRotateYXZ(arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, &arg0->actor.shape.rot);
   for (i = 0; i < 2; i++)
@@ -146,7 +159,7 @@ void func_80B7F730(BgIkanaMirror *arg0){
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
 
-void func_80B7F730(BgIkanaMirror*); /* extern */
+// void func_80B7F730(BgIkanaMirror*); /* extern */
 void func_80B7FA84(BgIkanaMirror* arg0);
 void func_80B7FB84(BgIkanaMirror* arg0);
 extern UNK_TYPE D_06001678; // AnimatedMaterial

@@ -33,6 +33,6 @@ typedef struct BgIkanaMirror {
 } BgIkanaMirror;                                    /* size = 0x5CC */
 
 
-extern const ActorInit Bg_Ikana_Mirror_InitVars;
+// extern const ActorInit Bg_Ikana_Mirror_InitVars;
 
 #endif // Z_BG_IKANA_MIRROR_H
