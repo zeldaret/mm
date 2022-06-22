@@ -1,21 +1,19 @@
 #include "global.h"
 
-static s16 D_801BF550 = 0;
+static s16 sPlayerInitialPosX = 0;
+static s16 sPlayerInitialPosZ = 0;
+static s16 sPlayerInitialDirection = 0;
 
-static s16 D_801BF554 = 0;
-
-static s16 D_801BF558 = 0;
-
-static s32 D_801BF55C[] = {
+static s32 sDungeonAndBossScenes[] = {
     SCENE_MITURIN,    SCENE_HAKUGIN,    SCENE_SEA,    SCENE_INISIE_N,  SCENE_INISIE_R,
     SCENE_MITURIN_BS, SCENE_HAKUGIN_BS, SCENE_SEA_BS, SCENE_INISIE_BS,
 };
 
-static s32 D_801BF580[] = {
+static s32 sDungeonScenes[] = {
     SCENE_MITURIN, SCENE_HAKUGIN, SCENE_SEA, SCENE_INISIE_N, SCENE_INISIE_R,
 };
 
-static s32 D_801BF594[] = {
+static s32 sBossScenes[] = {
     SCENE_MITURIN_BS,
     SCENE_HAKUGIN_BS,
     SCENE_SEA_BS,
@@ -28,13 +26,13 @@ static s32 D_801BF5A4[] = {
     SCENE_F01,
 };
 
-static s16 D_801BF5B0 = 99;
+static s16 sLastRoomNum = 99;
 
-s32 func_8010A000(PlayState* play) {
+s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < 9; i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == D_801BF55C[i]) {
+        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonAndBossScenes[i]) {
             return i;
         }
     }
@@ -42,8 +40,8 @@ s32 func_8010A000(PlayState* play) {
     return -1;
 }
 
-s32 func_8010A074(PlayState* play) {
-    if (func_8010A000(play) == -1) {
+s32 Map_IsInDungeonOrBossArea(PlayState* play) {
+    if (Map_GetDungeonOrBossAreaIndex(play) == -1) {
         return 0;
     }
 
@@ -51,18 +49,18 @@ s32 func_8010A074(PlayState* play) {
 }
 
 s32 func_8010A0A4(PlayState* play) {
-    if ((func_8010A000(play) == -1) || (func_80102EF0(play) == 0)) {
+    if ((Map_GetDungeonOrBossAreaIndex(play) == -1) || (func_80102EF0(play) == 0)) {
         return 0;
     }
 
     return 1;
 }
 
-s32 func_8010A0F0(PlayState* play) {
+s32 Map_GetDungeonAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == D_801BF580[i]) {
+        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonScenes[i]) {
             return i;
         }
     }
@@ -70,19 +68,19 @@ s32 func_8010A0F0(PlayState* play) {
     return -1;
 }
 
-s32 func_8010A164(PlayState* play) {
-    if (func_8010A0F0(play) == -1) {
+s32 Map_IsInDungeonArea(PlayState* play) {
+    if (Map_GetDungeonAreaIndex(play) == -1) {
         return 0;
     }
 
     return 1;
 }
 
-s32 func_8010A194(PlayState* play) {
+s32 Map_GetBossAreaIndex(PlayState* play) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == D_801BF594[i]) {
+        if (Play_GetOriginalSceneNumber(play->sceneNum) == sBossScenes[i]) {
             return i;
         }
     }
@@ -90,8 +88,8 @@ s32 func_8010A194(PlayState* play) {
     return -1;
 }
 
-s32 func_8010A208(PlayState* play) {
-    if (func_8010A194(play) == -1) {
+s32 Map_IsInBossArea(PlayState* play) {
+    if (Map_GetBossAreaIndex(play) == -1) {
         return 0;
     }
 
@@ -118,26 +116,26 @@ s32 func_8010A2AC(PlayState* play) {
     return 1;
 }
 
-void func_8010A2DC(PlayState* play) {
+void Map_SavePlayerInitialInfo(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    D_801BF550 = player->actor.world.pos.x;
-    D_801BF554 = player->actor.world.pos.z;
-    D_801BF558 = ((0x7FFF - player->actor.shape.rot.y) / 1024);
+    sPlayerInitialPosX = player->actor.world.pos.x;
+    sPlayerInitialPosZ = player->actor.world.pos.z;
+    sPlayerInitialDirection = ((0x7FFF - player->actor.shape.rot.y) / 0x400);
 }
 
-void func_8010A33C(PlayState* play, s16 param_2) {
+void Map_InitRoomData(PlayState* play, s16 room) {
     s32 mapIndex;
     InterfaceContext* interfaceCtx;
 
     mapIndex = gSaveContext.mapIndex;
-    func_80105C40(param_2);
-    if (param_2 >= 0) {
-        if (func_8010A074(play) != 0) {
+    func_80105C40(room);
+    if (room >= 0) {
+        if (Map_IsInDungeonOrBossArea(play) != 0) {
             interfaceCtx = &play->interfaceCtx;
             gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_18 |=
-                gBitFlags[param_2];
-            interfaceCtx->mapRoomNum = param_2;
+                gBitFlags[room];
+            interfaceCtx->mapRoomNum = room;
             interfaceCtx->unk_27A = mapIndex;
         }
     } else {
@@ -166,8 +164,8 @@ void func_8010A430(PlayState* play) {
         return;
     }
 
-    if (func_8010A074(play) != 0) {
-        temp_v0 = func_8010A000(play);
+    if (Map_IsInDungeonOrBossArea(play) != 0) {
+        temp_v0 = Map_GetDungeonOrBossAreaIndex(play);
         gSaveContext.mapIndex = temp_v0;
         switch (play->sceneNum) {
             case SCENE_MITURIN_BS:
@@ -185,12 +183,12 @@ void func_8010A430(PlayState* play) {
         }
 
         gSaveContext.unk_48C8 = temp_v0;
-        func_8010A33C(play, play->roomCtx.currRoom.num);
+        Map_InitRoomData(play, play->roomCtx.currRoom.num);
     }
 }
 
 void func_8010A54C(PlayState* play) {
-    func_80106644(play, D_801BF550, D_801BF554, D_801BF558);
+    func_80106644(play, sPlayerInitialPosX, sPlayerInitialPosZ, sPlayerInitialDirection);
 }
 
 void func_8010A580(PlayState* play) {
@@ -215,17 +213,17 @@ void func_8010A580(PlayState* play) {
     func_80105B34(play);
 
     if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0)) {
-        if (func_8010A164(play) != 0) {
+        if (Map_IsInDungeonArea(play) != 0) {
             temp_v0_2 = func_80109124(player->actor.world.pos.y);
             if (temp_v0_2 != -1) {
                 gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
                     gBitFlags[4 - temp_v0_2];
                 XREG(94) = 4 - temp_v0_2;
-                if (interfaceCtx->mapRoomNum != D_801BF5B0) {
-                    D_801BF5B0 = interfaceCtx->mapRoomNum;
+                if (interfaceCtx->mapRoomNum != sLastRoomNum) {
+                    sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }
-        } else if (func_8010A208(play) != 0) {
+        } else if (Map_IsInBossArea(play) != 0) {
             func_80105294();
             XREG(94) = 4 - func_80105318();
         }

@@ -105,7 +105,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if (func_8010A074(play)) {
+    if (Map_IsInDungeonOrBossArea(play)) {
         this->area = gSaveContext.unk_48C8 + 1;
     } else {
         // Needs to be thisx in order to match
@@ -462,7 +462,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 return;
             }
 
-            if (func_8010A074(play)) {
+            if (Map_IsInDungeonOrBossArea(play)) {
                 gSaveContext.save.inventory.strayFairies[gSaveContext.unk_48C8]++;
                 Message_StartTextbox(play, 0x11, NULL);
                 if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
