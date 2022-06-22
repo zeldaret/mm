@@ -631,6 +631,7 @@ wordReplace = {
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
     "struct_80B8E1A8": "AnimationSpeedInfo",
+    "ScheduleResult": "ScheduleOutput",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
