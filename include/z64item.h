@@ -404,7 +404,7 @@ typedef enum {
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
     /* 0x68 */ GID_SWORD_GREAT_FAIRY,
-    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6A */ GID_MASK_GREAT_FAIRY = 0x6A,
     /* 0x6B */ GID_6B,
     /* 0x70 */ GID_70 = 0x70,
     /* 0x71 */ GID_71

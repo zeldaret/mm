@@ -9,7 +9,9 @@ typedef void (*DemoGetitemActionFunc)(struct DemoGetitem*, GlobalContext*);
 
 typedef struct DemoGetitem {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x8];
+    /* 0x144 */ s16 item;
+    /* 0x146 */ u16 action;
+    /* 0x148 */ s8 object;
     /* 0x014C */ DemoGetitemActionFunc actionFunc;
 } DemoGetitem; // size = 0x150
 

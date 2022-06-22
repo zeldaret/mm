@@ -2852,8 +2852,7 @@ beginseg
     name "ovl_Demo_Getitem"
     compress
     include "build/src/overlays/actors/ovl_Demo_Getitem/z_demo_getitem.o"
-    include "build/data/ovl_Demo_Getitem/ovl_Demo_Getitem.data.o"
-    include "build/data/ovl_Demo_Getitem/ovl_Demo_Getitem.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Getitem/ovl_Demo_Getitem_reloc.o"
 endseg
 
 beginseg
