@@ -62,7 +62,7 @@ void ObjDemo_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80983634(GlobalContext* globalCtx) {
-    if ((globalCtx->sceneNum == 0x1D) && (func_801A8A50(0) == 0x6F)) {
+    if ((globalCtx->sceneNum == SCENE_CASTLE) && (func_801A8A50(0) == NA_BGM_IKANA_CASTLE)) {
         Audio_QueueSeqCmd(0x100100FF);
     }
 }
