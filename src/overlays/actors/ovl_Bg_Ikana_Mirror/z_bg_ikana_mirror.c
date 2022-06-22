@@ -380,17 +380,17 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx)
         // temp_s0->polyXlu.p = temp_v0_5 + 8;
         // temp_v0_5->words.w1 = (u32) &D_060014B0;
         // temp_v0_5->words.w0 = 0xDE000000;
-    gSPDisplayList(POLY_XLU_DISP++,(u32) &D_060014B0);
+    gSPDisplayList(POLY_XLU_DISP++,(u32) &D_060014B0); //this and above good except regs.
   }
-  temp_v0_6 = this->unk5C7;
+  // temp_v0_6 = this->unk5C7;
   if (((s32) temp_v0_6))
   {
-    temp_ft1 = (f32) temp_v0_6;
-    if (!((s32) temp_v0_6)) //impossible
-    {
-      // temp_ft1 += 4294967296.0f;
-    }
-    temp_fv0 = temp_ft1 * (1.0f / 255.0f);
+    // temp_ft1 = (f32) temp_v0_6;
+    // if (!((s32) temp_v0_6)) //impossible
+    // {
+    //   // temp_ft1 += 4294967296.0f;
+    // }
+    temp_fv0 = this->unk5C7 * (1.0f / 255.0f);
     AnimatedMat_Draw(globalCtx, this->unk5C0);
     // new_var = POLY_XLU_DISP++;
     // temp_v0_7 = temp_s0->polyXlu.p;
@@ -402,7 +402,7 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx)
         // temp_s0->polyXlu.p = temp_v0_8 + 8;
         // temp_v0_8->words.w0 = 0xFB000000;
         // temp_v0_8->words.w1 = ((s32) (temp_fv0 * 185.0f) & 0xFF) | 0xD7D7FF00;
-    gDPSetEnvColor(POLY_XLU_DISP++, 0xD7, 0xD7, 0xFF, ((s32) (temp_fv0 * 185.0f)));
+    gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, ((s32) (temp_fv0 * 185.0f))); //here and below good
      // temp_v0_9 = temp_s0->polyXlu.p;
         // temp_s0->polyXlu.p = temp_v0_9 + 8;
         // temp_v0_9->words.w0 = 0xDA380003;
