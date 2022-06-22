@@ -5,6 +5,8 @@
 - Structure of the code
 
 ## Pre-decompilation
+
+- [Introduction to git](intro_to_git.md)
 - Building the repo (follow the instructions in the [README.md](../../README.md))
 - Most of us use VSCode. Some useful information is [here](vscode.md). 
 <!-- Feel free to document Emacs/Vi/Sublime/whatever if you're familiar with them -->
