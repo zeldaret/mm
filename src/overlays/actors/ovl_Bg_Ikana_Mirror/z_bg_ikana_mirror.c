@@ -382,15 +382,15 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx)
         // temp_v0_5->words.w0 = 0xDE000000;
     gSPDisplayList(POLY_XLU_DISP++,(u32) &D_060014B0); //this and above good except regs.
   }
-  // temp_v0_6 = this->unk5C7;
-  if (((s32) temp_v0_6))
+  temp_v0_6 = this->unk5C7;
+  if (((s32) temp_v0_6) > 0)
   {
     // temp_ft1 = (f32) temp_v0_6;
     // if (!((s32) temp_v0_6)) //impossible
     // {
     //   // temp_ft1 += 4294967296.0f;
     // }
-    temp_fv0 = this->unk5C7 * (1.0f / 255.0f);
+    temp_fv0 =((f32) this->unk5C7) * (1.0f / 255.0f);
     AnimatedMat_Draw(globalCtx, this->unk5C0);
     // new_var = POLY_XLU_DISP++;
     // temp_v0_7 = temp_s0->polyXlu.p;
