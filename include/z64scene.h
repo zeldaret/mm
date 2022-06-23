@@ -469,7 +469,7 @@ typedef struct {
 } Path; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x00 */ u16 unk0;
     /* 0x02 */ UNK_TYPE2 unk2;
     /* 0x04 */ UNK_TYPE2 unk4;
     /* 0x06 */ UNK_TYPE2 unk6;

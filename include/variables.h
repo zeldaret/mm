@@ -983,7 +983,7 @@ extern u8 D_801BDBC8;
 // extern UNK_TYPE2 D_801BEBFA;
 // extern UNK_TYPE2 D_801BEBFC;
 // extern UNK_TYPE2 D_801BEC10;
-extern UNK_PTR D_801BEC14;
+extern MinimapList D_801BEC14;
 // extern UNK_TYPE4 D_801BEC1C;
 // extern UNK_TYPE4 D_801BEC20;
 // extern UNK_TYPE1 D_801BEC24;

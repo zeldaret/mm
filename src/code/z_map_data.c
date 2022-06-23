@@ -1,44 +1,157 @@
 #include "global.h"
+#include "z64map.h"
+
+extern T_D_801BED4C D_801BED4C[];
+extern T_D_801BED88 D_801BED88[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801094A0.s")
+// extern ? D_801BED40;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801094C8.s")
+// void func_801094A0(s32 arg0, ?* arg1) {
+//     *arg1 = (unaligned s32) *((arg0 * 4) + &D_801BED40);
+// }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801094F8.s")
+void func_801094C8(s32 arg0, s32 *arg1, s32 *arg2) {
+    *arg1 = D_801BED4C[arg0].unk4;
+    *arg2 = D_801BED4C[arg0].unk5;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109528.s")
+void func_801094F8(s32 arg0, s32* arg1, s32* arg2) {
+    *arg1 = D_801BED4C[arg0].unk6;
+    *arg2 = D_801BED4C[arg0].unk7;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010954C.s")
+void func_80109528(s32 arg0, s32* arg1) {
+    *arg1 = D_801BED4C[arg0].unk8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010956C.s")
+u8 func_8010954C(s32 arg0) {
+    return D_801BED4C[arg0].unk9;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010958C.s")
+s16 func_8010956C(s32 arg0) {
+    return D_801BED4C[arg0].unkA;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801095AC.s")
+s32 func_8010958C(s32 arg0) {
+    return D_801BED4C[arg0].unk0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801095DC.s")
+void func_801095AC(s32 arg0, s32 *arg1, s32 *arg2) {
+    *arg1 = D_801BED88[arg0-0x100].unk0;
+    *arg2 = D_801BED88[arg0-0x100].unk1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010960C.s")
+void func_801095DC(s32 arg0, s32* arg1, s32* arg2) {
+    *arg1 = D_801BED88[arg0-0x100].unk2;
+    *arg2 = D_801BED88[arg0-0x100].unk4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109630.s")
+void func_8010960C(s32 arg0, s32* arg1) {
+    *arg1 = D_801BED88[arg0-0x100].unk6;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109650.s")
+u8 func_80109630(s32 arg0) {
+    return D_801BED88[arg0-0x100].unk7;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109670.s")
+s16 func_80109650(s32 arg0) {
+    return D_801BED88[arg0-0x100].unk8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801096D4.s")
+s32 func_80109670(s32 arg0) {
+    s32 cond = arg0 - 0x100;
+    s32 var_s1 = 0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109714.s")
+    for(i = 1; i < cond + 1; i++) {
+        var_s1 += func_801096D4((i-1) + 0x100);
+    }
+    return var_s1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109754.s")
+s32 func_801096D4(s32 arg0) {
+    return (D_801BED88[arg0 - 0x100].unk0 * D_801BED88[arg0 - 0x100].unk1) / 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801097C8.s")
+s32 func_80109714(s32 arg0) {
+    if ((arg0 >= 0) && (arg0 < 5)) {
+        return 0;
+    }
+    if ((arg0 >= 0x100) && (arg0 < 0x162)) {
+        return 1;
+    }
+    return 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010983C.s")
+void func_80109754(s32 arg0, s32 *arg1, s32 *arg2) {
+    switch (func_80109714(arg0)) {
+    case 0:
+        func_801094C8(arg0, arg1, arg2);
+        return;
+    case 1:
+        func_801095AC(arg0, arg1, arg2);
+        return;
+    default:
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801098A0.s")
+void func_801097C8(s32 arg0, s32* arg1, s32* arg2) {
+    switch (func_80109714(arg0)) {
+    case 0:
+        func_801094F8(arg0, arg1, arg2);
+        return;
+    case 1:
+        func_801095DC(arg0, arg1, arg2);
+        return;
+    default:
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109908.s")
+void func_8010983C(s32 arg0, s32 *arg1) {
+    switch(func_80109714(arg0)){
+        default:
+            *arg1 = 0;
+            return;
+        case 0:
+            *arg1 = func_8010956C(arg0);
+            return;
+        case 1:
+            *arg1 = func_80109650(arg0);
+            return;
+    }
+}
+
+void func_801098A0(s32 arg0, s32* arg1) {
+    switch (func_80109714(arg0)) {
+    case 0:
+        func_80109528(arg0, arg1);
+        return;
+    case 1:
+        func_8010960C(arg0, arg1);
+        return;
+    default:
+        *arg1 = 0;
+        return;
+    }
+}
+
+u8 func_80109908(s32 arg0) {
+    switch (func_80109714(arg0)) {
+    case 0:
+        return func_8010954C(arg0);
+    case 1:
+        return func_80109630(arg0);
+    default:
+        return 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109964.s")
 

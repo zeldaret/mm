@@ -1774,7 +1774,7 @@ s32 func_8010A0A4(GlobalContext* globalCtx);
 // void func_8010A0F0(void);
 // void func_8010A164(void);
 // void func_8010A194(void);
-// void func_8010A208(void);
+s32 func_8010A208(GlobalContext* play);
 // void func_8010A238(void);
 // void func_8010A2AC(void);
 void func_8010A2DC(GlobalContext* globalCtx);
