@@ -715,8 +715,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
             msgCtx->msgMode = 0x27;
             return;
         } else if (msgCtx->ocarinaAction == 0x34) {
-            func_8019C300(1);
-            func_8019C300(1);
+            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrumentId(1);
             msgCtx->unk11F00->unk00 = func_8019CF9C();
             msgCtx->unk11F00->unk01 = 0;
             D_801C6A74 = D_801C6A78 = 0;
@@ -731,8 +731,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
             return;
         }
         if (msgCtx->ocarinaAction == 0x36) {
-            func_8019C300(1);
-            func_8019C300(1);
+            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrumentId(1);
             msgCtx->unk11F00->unk00 = func_8019CF9C();
             msgCtx->unk11F00->unk01 = 0;
             D_801C6A74 = D_801C6A78 = 0;
@@ -785,45 +785,45 @@ extern s16 D_801CFF88[];
 void func_8014C70C(GlobalContext* globalCtx, u16 arg1, s16 arg2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     if (arg1 == 0x83) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
     } else if ((arg1 >= 0x84) && (arg1 < 0x8B)) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
     } else if (arg1 == 0x77) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x20;
     } else if ((arg1 >= 0x61) && (arg1 < 0x6D)) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
         func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, (u8*)msgCtx->unk11EF8 + 0x1000, 0x180U);
     } else if (arg1 == 0x6D) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
         func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, (u8*)msgCtx->unk11EF8 + 0x1000, 0x1000U);
     } else if (arg1 < 0x61) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
         func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), arg1, (u8*)msgCtx->unk11EF8 + 0x1000, 0x1000U);
     } else if (arg1 == 0xCC) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
         func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), 0x15, (u8*)msgCtx->unk11EF8 + 0x1000, 0x400U);
     } else if (arg1 >= 0xB8) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
         func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), (arg1 - 0xB8), (u8*)msgCtx->unk11EF8 + 0x1000,
                       0x800U);
     } else if (arg1 >= 0x6E) {
-        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.language]);
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x18;
         func_80178E3C(SEGMENT_ROM_START(icon_item_24_static_test), (arg1 - 0x6E), (u8*)msgCtx->unk11EF8 + 0x1000,
@@ -963,10 +963,10 @@ void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s
     f32 timeInMinutes;
 
     if (arg1 == 0x20F) {
-        day = gSaveContext.day;
-        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
+        day = gSaveContext.save.day;
+        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.save.time);
     } else {
-        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
+        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.save.time);
     }
     timeInMinutes = TIME_TO_MINUTES_F(dayTime);
 
@@ -1124,7 +1124,7 @@ void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
     D_801C6A70 = 0;
     msgCtx->unk12094 = 0;
     msgCtx->unk12090 = 0;
-    if (gSaveContext.language == 0) {
+    if (gSaveContext.options.language == 0) {
         msgCtx->unk12098 = 0.88f;
         msgCtx->unk11FFC = 0x12;
         msgCtx->unk11FF8 = 0x32;
@@ -1140,7 +1140,7 @@ void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
         arg1 = 0x1705;
     }
     msgCtx->currentTextId = arg1;
-    if (gSaveContext.language == 0) {
+    if (gSaveContext.options.language == 0) {
         Message_FindMessage(globalCtx, arg1);
         msgCtx->unk11F10 = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
@@ -1425,40 +1425,40 @@ void func_80152CAC(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->ocarinaAction == 2) {
-        func_8019C300(0xA);
+        AudioOcarina_SetInstrumentId(0xA);
     } else {
         if (msgCtx->ocarinaAction == 9) {
-            func_8019C300(0xD);
+            AudioOcarina_SetInstrumentId(0xD);
         } else if (msgCtx->ocarinaAction == 7) {
-            func_8019C300(6);
+            AudioOcarina_SetInstrumentId(6);
         } else if (msgCtx->ocarinaAction == 0xA) {
-            func_8019C300(2);
+            AudioOcarina_SetInstrumentId(2);
         } else if (msgCtx->ocarinaAction == 0xC) {
-            func_8019C300(1);
+            AudioOcarina_SetInstrumentId(1);
         } else if (msgCtx->ocarinaAction == 3) {
-            func_8019C300(0xF);
+            AudioOcarina_SetInstrumentId(0xF);
         } else if (msgCtx->ocarinaAction == 0x10) {
-            func_8019C300(0xC);
+            AudioOcarina_SetInstrumentId(0xC);
         } else if (msgCtx->ocarinaAction == 6) {
-            func_8019C300(6);
+            AudioOcarina_SetInstrumentId(6);
         } else if (msgCtx->ocarinaAction == 5) {
-            func_8019C300(5);
+            AudioOcarina_SetInstrumentId(5);
         } else {
-            func_8019C300(1);
+            AudioOcarina_SetInstrumentId(1);
         }
     }
     if ((msgCtx->ocarinaAction == 0x3B) || (msgCtx->ocarinaAction == 0x3C)) {
-        func_8019C300(0xC);
+        AudioOcarina_SetInstrumentId(0xC);
         func_8019C398(0xF, 0x83);
         return;
     }
     if ((msgCtx->ocarinaAction == 0x3D) || (msgCtx->ocarinaAction == 0x3E)) {
-        func_8019C300(0xE);
+        AudioOcarina_SetInstrumentId(0xE);
         func_8019C398((msgCtx->ocarinaAction - 0x29), 0x84);
         return;
     }
     if ((msgCtx->ocarinaAction == 0x3F) || (msgCtx->ocarinaAction == 0x40)) {
-        func_8019C300(8);
+        AudioOcarina_SetInstrumentId(8);
         func_8019C398((msgCtx->ocarinaAction - 0x2B), 0x44);
         return;
     }
