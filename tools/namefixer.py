@@ -19,11 +19,10 @@ simpleReplace = {
 # Custom behaviour can be enabled by using a tuple as the value (see 
 # explanation in replace_single below)
 wordReplace = {
+    # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    "globalCtx": "play",
-    "globalCtx2": "play2",
     
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
@@ -546,6 +545,14 @@ wordReplace = {
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
 
+    # Structs
+    "ActorAnimationEntry": "AnimationInfo",
+    "ActorAnimationEntryS": "AnimationInfoS",
+    "struct_80B8E1A8": "AnimationSpeedInfo",
+    "GlobalContext": "PlayState",
+    "globalCtx": "play",
+    "globalCtx2": "play2",
+
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
@@ -628,12 +635,6 @@ wordReplace = {
     "D_04020658" : "gameplay_keep_Anim_020658",
     "D_04022B28" : "gDoorSkel",
     "D_04023100" : "gDoorCol",
-
-    # Structs
-    "ActorAnimationEntry": "AnimationInfo",
-    "ActorAnimationEntryS": "AnimationInfoS",
-    "struct_80B8E1A8": "AnimationSpeedInfo",
-    "GlobalContext": "PlayState",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
