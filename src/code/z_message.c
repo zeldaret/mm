@@ -110,6 +110,8 @@ void func_801477B4(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
+#ifdef NON_MATCHING
+
 extern s16 D_801CFD10[][3];
 extern s16 D_801CFD1C[][3];
 extern s16 D_801CFD28;
@@ -297,8 +299,9 @@ void func_80147F18(GlobalContext *globalCtx, Gfx **gfxp, s16 arg2, s16 arg3) {
         *gfxp = gfx++;
     }
 }
-
-
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
@@ -702,7 +705,6 @@ void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149F74.s")
 
-s8* func_8019CF9C(); /* extern */
 extern s16 D_801C6A74;
 extern s16 D_801C6A78;
 
@@ -717,8 +719,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
         } else if (msgCtx->ocarinaAction == 0x34) {
             AudioOcarina_SetInstrumentId(1);
             AudioOcarina_SetInstrumentId(1);
-            msgCtx->unk11F00->unk00 = func_8019CF9C();
-            msgCtx->unk11F00->unk01 = 0;
+            msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
+            msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
             func_80147564(globalCtx);
             msgCtx->unk12023 = 3;
@@ -733,8 +735,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
         if (msgCtx->ocarinaAction == 0x36) {
             AudioOcarina_SetInstrumentId(1);
             AudioOcarina_SetInstrumentId(1);
-            msgCtx->unk11F00->unk00 = func_8019CF9C();
-            msgCtx->unk11F00->unk01 = 0;
+            msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
+            msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
             func_80147564(globalCtx);
             msgCtx->unk12023 = 3;

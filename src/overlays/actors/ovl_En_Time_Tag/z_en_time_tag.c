@@ -171,7 +171,7 @@ void func_80ACA348(EnTimeTag* this, GlobalContext* globalCtx) {
 }
 
 void func_80ACA3C0(EnTimeTag* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk11F00->unk01 == 0) && (globalCtx->msgCtx.msgMode == 0x1B)) {
+    if ((globalCtx->msgCtx.unk11F00->state == 0) && (globalCtx->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
         globalCtx->msgCtx.unk11F10 = 0;
