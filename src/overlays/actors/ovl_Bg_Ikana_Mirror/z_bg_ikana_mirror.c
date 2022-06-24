@@ -204,8 +204,7 @@ extern Gfx* D_06001880;
 extern Gfx* D_06001E18;
 extern CollisionHeader D_06002358;
 
-
-//set vertices for ColliderQuad's
+// set vertices for ColliderQuad's
 void func_80B7F730(BgIkanaMirror* this) {
     ColliderQuad* collider;
     s32 i;
@@ -215,8 +214,8 @@ void func_80B7F730(BgIkanaMirror* this) {
     Vec3f d;
     ColliderQuadDimInit* dim;
     Matrix_Push();
-    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                                 &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     for (i = 0; i < 2; i++) {
         dim = &sQuadInit[i].dim;
         Matrix_MultVec3f(&dim->quad[0], &a);
@@ -233,7 +232,8 @@ void func_80B7F730(BgIkanaMirror* this) {
 extern AnimatedMaterial D_06001678; // AnimatedMaterial
 extern AnimatedMaterial D_06001AD8; // AnimatedMaterial
 
-void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) { //what should be globalCtx2? The argument or the stack variable?
+void BgIkanaMirror_Init(Actor* thisx,
+                        GlobalContext* globalCtx2) { // what should be globalCtx2? The argument or the stack variable?
     BgIkanaMirror* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     Vec3f* vtx;
@@ -247,8 +247,8 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) { //what should
     DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)this, &D_06002358);
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, &D_80B8016C, this->colliderTrisElements);
-    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                                 &this->dyna.actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 9; i++) {
         colliderElement = &D_80B8016C.elements[i];
@@ -266,8 +266,8 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) { //what should
     }
 
     func_80B7F730(this);
-    this->unk5BC = Lib_SegmentedToVirtual(&D_06001678);
-    this->unk5C0 = Lib_SegmentedToVirtual(&D_06001AD8);
+    this->emittingLightTexture = Lib_SegmentedToVirtual(&D_06001678);
+    this->absorbingLightTexture = Lib_SegmentedToVirtual(&D_06001AD8);
     func_80B7FA84(this);
 }
 
@@ -287,7 +287,7 @@ void func_80B7FA84(BgIkanaMirror* this) {
     this->actionFunc = func_80B7FA9C;
 }
 
-//at least one var for 
+// checks if light is to be absorbed.
 void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s16 temp_5C4;
     s8 temp_5C8;
@@ -295,19 +295,19 @@ void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx) {
     u8 temp_5C6;
     s32 phi_a2;
     temp_5C7 = this->unk5C7;
-    phi_a2 = 0;
-    if (((s32)temp_5C7) >= 101) {
+    phi_a2 = false;
+    if (temp_5C7 >= 101) {
         this->unk5C7 = temp_5C7 - 100;
     } else {
         this->unk5C7 = 0;
     }
 
-    if ((this->colliderTris.base.acFlags & AC_HIT)) {
-        temp_5C4 = this->unk5C4; 
-        this->colliderTris.base.acFlags&=~AC_HIT;
+    if ((this->colliderTris.base.acFlags & AC_HIT)) { // if mirror shield light touches mirror
+        temp_5C4 = this->timer;
+        this->colliderTris.base.acFlags &= ~AC_HIT;
         this->unk5C8 = 0;
-        if (((s32)temp_5C4) < 400) {
-            this->unk5C4 = temp_5C4 + 1;
+        if (temp_5C4 < 400) {
+            this->timer = temp_5C4 + 1; // timer
         }
         temp_5C6 = this->unk5C6;
         if (((s32)temp_5C6) < 195) {
@@ -317,10 +317,10 @@ void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx) {
         }
     } else {
         temp_5C8 = this->unk5C8;
-        if (((s32)temp_5C8) > 0) {
-            phi_a2 = 1;
-        } else if (((s32)this->unk5C4) > 0) { 
-            this->unk5C8 = temp_5C8 + 1;
+        if (temp_5C8 > 0) { // if emitting light
+            phi_a2 = true;
+        } else if (this->timer > 0) {    // if timer is positive
+            this->unk5C8 = temp_5C8 + 1; // set isEmittingLight
         }
     }
     if (phi_a2) {
@@ -331,23 +331,23 @@ void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx) {
 }
 
 void func_80B7FB84(BgIkanaMirror* this) {
-    this->dyna.actor.flags |= 0x20;
+    this->dyna.actor.flags |= ACTOR_FLAG_20;
     this->actionFunc = func_80B7FBA4;
 }
-
+// emitting light
 void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if ((this->colliderQuad[i].base.atFlags & 2)) {
-            this->colliderQuad[i].base.atFlags &= ~2;
+        if ((this->colliderQuad[i].base.atFlags & AT_HIT)) {
+            this->colliderQuad[i].base.atFlags &= ~AT_HIT;
         }
     }
 
-    if (this->unk5C7 < 0x9B) {
-        this->unk5C7 += 0x64;
+    if (this->unk5C7 < 155) {
+        this->unk5C7 += 100;
     } else {
-        this->unk5C7 = 0xFF;
+        this->unk5C7 = 255;
     }
 
     if (this->unk5C6 >= 61) {
@@ -356,14 +356,14 @@ void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx) {
         this->unk5C6 = 0;
     }
 
-    if (this->unk5C4 > 0) {
-        this->unk5C4--;
+    if (this->timer > 0) {
+        this->timer--;
         for (i = 0; i < 2; i++) {
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderQuad[i].base);
         }
         return;
     }
-    this->dyna.actor.flags &= ~0x20;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_20;
     func_80B7FA84(this);
 }
 
@@ -377,24 +377,25 @@ void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaMirror* this = THIS;
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
+    // draw mirror
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
     gSPDisplayList(POLY_OPA_DISP++, (u32)(&D_06001E18));
     if (this->unk5C6 > 0) {
-        AnimatedMat_Draw(globalCtx, this->unk5BC);
+        AnimatedMat_Draw(globalCtx, this->emittingLightTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk5C6);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
-        gSPDisplayList(POLY_XLU_DISP++, (u32)(&D_060014B0));
+        gSPDisplayList(POLY_XLU_DISP++, (u32)(&D_060014B0)); // mirror is releasing light
     }
     if (this->unk5C7 > 0) {
         f32 temp_fv0 = this->unk5C7 * (1.0f / 255.0f);
         s32 pad2[2];
-        AnimatedMat_Draw(globalCtx, this->unk5C0);
+        AnimatedMat_Draw(globalCtx, this->absorbingLightTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(temp_fv0 * 123.0f));
         gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, (s32)(temp_fv0 * 185.0f));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
-        gSPDisplayList(POLY_XLU_DISP++, (u32)(&D_06001880));
+        gSPDisplayList(POLY_XLU_DISP++, (u32)(&D_06001880)); // mirror is receiving light
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
