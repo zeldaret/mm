@@ -540,6 +540,7 @@ wordReplace = {
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
+    "Effect_GetGlobalCtx": "Effect_GetPlayState"
 
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
