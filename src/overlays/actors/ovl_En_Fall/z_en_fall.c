@@ -534,6 +534,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
 
 void EnFall_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
+
     this->actionFunc(this, play);
 }
 
