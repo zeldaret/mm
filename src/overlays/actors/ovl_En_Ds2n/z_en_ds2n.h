@@ -10,14 +10,13 @@ typedef void (*EnDs2nActionFunc)(struct EnDs2n*, GlobalContext*);
 
 typedef struct EnDs2n {
     /* 0x0000 */ Actor actor;
-    ///* 0x0144 */ char unk_144[0x90];
-    /* 0x144 */ char pad144[0x4C]; // unused collider?
+    /* 0x144 */ ColliderCylinder collider; // unused
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnDs2nActionFunc actionFunc;
     /* 0x1D8 */ s16 limbRotTableY[DS2N_LIMB_MAX];
     /* 0x1FE */ s16 limbRotTableZ[DS2N_LIMB_MAX];
     /* 0x224 */ Vec3s headRot;
-    /* 0x22A */ Vec3s chestRot; // set by function, but not applied to skeleton
+    /* 0x22A */ Vec3s chestRot; // set by function, but not applied in limbdraw
     /* 0x230 */ s16 blinkState;
     /* 0x232 */ s16 blinkTimer;
 

@@ -48,14 +48,13 @@
         <Texture Name="gDs2nMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="16" Offset="0x6218" TlutOffset="0x3CD8" />
 
         <!-- This blob is not fully mapped  <Blob Name="gDs2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
+        <!-- z64Utils thinks this might be an animation, but crashes on viewing. Unused. -->
+        <!-- <Animation Name="gDs2nBrokenAnim" Offset="0x6434" /> -->
 
         <!-- Unused and referenced. Exact copies of the above used textures. -->
         <Texture Name="gDs2nFingers2Tex" OutName="fingers2" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x3ED8" />
         <Texture Name="gDs2nEyeOpen2Tex" OutName="eye_open2" Format="ci8" Width="32" Height="32" Offset="0x7990" TlutOffset="0x40D8" />
         <Texture Name="gDs2nMouthOpen2Tex" OutName="mouth_open2" Format="ci8" Width="32" Height="16" Offset="0x7D90" TlutOffset="0x3CD8" />
-
-        <!-- z64Utils thinks this might be an animation, but crashes on viewing. Unused. -->
-        <Animation Name="gDs2nBrokenAnim" Offset="0x6434" />
 
         <Animation Name="gDs2nIdleAnim" Offset="0x8038" />
 
@@ -78,7 +77,7 @@
         <Limb Name="gDs2nLimb_008104" Type="Standard" EnumName="DS2N_LIMB_10" Offset="0x8104" />
         <Limb Name="gDs2nLimb_008110" Type="Standard" EnumName="DS2N_LIMB_11" Offset="0x8110" />
         <Limb Name="gDs2nHeadLimb" Type="Standard" EnumName="DS2N_LIMB_HEAD" Offset="0x811C" />
-        <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="ds2n_Limbs" Offset="0x8170" />
+        <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimbs" Offset="0x8170" />
         <!-- 8 bytes: 0x11 followed by zeros  <Blob Name="gDs2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>
 </Root>

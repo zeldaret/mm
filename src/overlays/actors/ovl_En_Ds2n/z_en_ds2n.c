@@ -33,7 +33,7 @@ const ActorInit En_Ds2n_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static Vec3f sZeroVec = { 0, 0, 0 };
@@ -107,8 +107,8 @@ void EnDs2n_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Vec3f focusOffset = sZeroVec;
 
     if ((limbIndex == DS2N_LIMB_01) || (limbIndex == DS2N_LIMB_0C) || (limbIndex == DS2N_LIMB_0F)) {
-        rot->y += (s32)(s16)Math_SinS(this->limbRotTableY[limbIndex]) * 0xC8;
-        rot->z += (s32)(s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 0xC8;
+        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 0xC8;
+        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 0xC8;
     }
 
     if (limbIndex == DS2N_LIMB_HEAD) {
