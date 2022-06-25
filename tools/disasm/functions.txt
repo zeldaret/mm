@@ -11547,7 +11547,7 @@
     0x80AA90F4:("func_80AA90F4",),
     0x80AA9140:("DmChar01_Update",),
     0x80AA922C:("DmChar01_Draw",),
-    0x80AAAE30:("func_80AAAE30",),
+    0x80AAAE30:("DmChar02_ChangeAnimationByInfo",),
     0x80AAAECC:("func_80AAAECC",),
     0x80AAAF2C:("func_80AAAF2C",),
     0x80AAAF78:("DmChar02_Init",),
