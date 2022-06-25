@@ -410,8 +410,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     s32 prevTimePathWaypoint = 0;
     s32 pad;
 
-    SubS_TimePathing_FillKnots(weightArray, SUBS_TIME_PATHING_ORDER,
-                                     this->timePath->count + SUBS_TIME_PATHING_ORDER);
+    SubS_TimePathing_FillKnots(weightArray, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
 
     if (!this->timePathIsSetup) {
         timePathPoint = gZeroVec3f;
