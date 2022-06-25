@@ -3382,8 +3382,7 @@ beginseg
     name "ovl_Bg_Open_Shutter"
     compress
     include "build/src/overlays/actors/ovl_Bg_Open_Shutter/z_bg_open_shutter.o"
-    include "build/data/ovl_Bg_Open_Shutter/ovl_Bg_Open_Shutter.data.o"
-    include "build/data/ovl_Bg_Open_Shutter/ovl_Bg_Open_Shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Open_Shutter/ovl_Bg_Open_Shutter_reloc.o"
 endseg
 
 beginseg
