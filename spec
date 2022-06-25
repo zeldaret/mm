@@ -3594,8 +3594,7 @@ beginseg
     name "ovl_Obj_Lupygamelift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Lupygamelift/z_obj_lupygamelift.o"
-    include "build/data/ovl_Obj_Lupygamelift/ovl_Obj_Lupygamelift.data.o"
-    include "build/data/ovl_Obj_Lupygamelift/ovl_Obj_Lupygamelift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Lupygamelift/ovl_Obj_Lupygamelift_reloc.o"
 endseg
 
 beginseg
