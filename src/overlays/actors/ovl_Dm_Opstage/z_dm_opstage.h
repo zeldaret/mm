@@ -10,19 +10,19 @@ struct DmOpstage;
 
 typedef void (*DmOpstageActionFunc)(struct DmOpstage*, GlobalContext*);
 
-typedef struct DmOpstage {
-    /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ UNK_TYPE1 pad15C[0x44];
-    /* 0x1A0 */ DmOpstageActionFunc actionFunc;
-    /* 0x1A4 */ Vec3f pos;
-} DmOpstage; // size = 0x1B0
-
 typedef enum {
-    /* 0 */ DMOPSTAGE_TYPE_FLOOR,
+    /* 0 */ DMOPSTAGE_TYPE_GROUND,
     /* 1 */ DMOPSTAGE_TYPE_ROOT_TREE,
     /* 2 */ DMOPSTAGE_TYPE_CUT_TREE,
     /* 3 */ DMOPSTAGE_TYPE_STRAIGHT_TREE,
 } DmOpStageTypes;
+
+typedef struct DmOpstage {
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ UNK_TYPE1 pad15C[0x44];
+    /* 0x1A0 */ DmOpstageActionFunc actionFunc;
+    /* 0x1A4 */ Vec3f drawOffset;
+} DmOpstage; // size = 0x1B0
 
 extern const ActorInit Dm_Opstage_InitVars;
 

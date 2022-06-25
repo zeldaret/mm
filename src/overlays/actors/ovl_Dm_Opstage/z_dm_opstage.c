@@ -45,15 +45,16 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage_SetupAction(this, DmOpstage_FollowCutsceneScript);
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_FLOOR) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gKeikokuDemoFloorColliderHeader);
     }
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_FLOOR) {
-        this->pos.x = this->dyna.actor.world.pos.x; // this offset lets us draw at center, but official pos is zero
-        this->pos.y = this->dyna.actor.world.pos.y;
-        this->pos.z = this->dyna.actor.world.pos.z;
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_GROUND) {
+        // trees move their world pos to map origin/center, then draw at their starting position
+        this->drawOffset.x = this->dyna.actor.world.pos.x;
+        this->drawOffset.y = this->dyna.actor.world.pos.y;
+        this->drawOffset.z = this->dyna.actor.world.pos.z;
         this->dyna.actor.world.pos.x = 0.0f;
         this->dyna.actor.world.pos.y = 0.0f;
         this->dyna.actor.world.pos.z = 0.0f;
@@ -63,7 +64,7 @@ void DmOpstage_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_FLOOR) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -71,7 +72,7 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_FLOOR) {
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         if (Cutscene_CheckActorAction(globalCtx, 0x73)) {
             actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x73);
             if (globalCtx->csCtx.actorActions[actionIndex]->action == 2) {
@@ -105,16 +106,17 @@ void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx) {
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmOpstage* this = THIS;
 
-    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_FLOOR) {
-        // offset draw from scene center (0,0,0) to our location
-        Matrix_Translate(this->dyna.actor.world.pos.x + this->pos.x, this->dyna.actor.world.pos.y + this->pos.y,
-                         this->dyna.actor.world.pos.z + this->pos.z, MTXMODE_NEW);
+    if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_GROUND) {
+        // Assumption: worldPos is being manipulated by cutscene
+        Matrix_Translate(this->dyna.actor.world.pos.x + this->drawOffset.x,
+                         this->dyna.actor.world.pos.y + this->drawOffset.y,
+                         this->dyna.actor.world.pos.z + this->drawOffset.z, MTXMODE_NEW);
         Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     }
 
     switch (DMOPSTAGE_GET_TYPE(&this->dyna.actor)) {
-        case DMOPSTAGE_TYPE_FLOOR:
+        case DMOPSTAGE_TYPE_GROUND:
             Gfx_DrawDListOpa(globalCtx, gKeikokuDemoFloorDL);
             Gfx_DrawDListXlu(globalCtx, gKeikokuDemoFloorEmptyDL);
             break;
