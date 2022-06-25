@@ -1,12 +1,12 @@
 ﻿<Root>
     <File Name="object_death" Segment="6">
-        <Animation Name="object_death_Anim_000E64" Offset="0xE64" /> <!-- Original name is "d13_atack" -->
-        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" /> <!-- Original name is "d13_callenemy" -->
-        <Animation Name="object_death_Anim_001834" Offset="0x1834" /> <!-- Original name is "d13_callingenemy" -->
-        <Animation Name="object_death_Anim_001F80" Offset="0x1F80" /> <!-- Original name is "d13_damage" -->
-        <Animation Name="object_death_Anim_002DE8" Offset="0x2DE8" /> <!-- Original name is "d13_deadhit" -->
-        <Animation Name="object_death_Anim_00352C" Offset="0x352C" /> <!-- Original name is "d13_deadwait" -->
-        <Animation Name="object_death_Anim_003CAC" Offset="0x3CAC" /> <!-- Original name is "d13_fly" -->
+        <Animation Name="gGomessScytheSwingAnim" Offset="0xE64" />
+        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" />   <!-- Start bats attack    -->
+        <Animation Name="object_death_Anim_001834" Offset="0x1834" />   <!-- Continue bats attack -->
+        <Animation Name="gGomessDamagedAnim" Offset="0x1F80" />
+        <Animation Name="gGomessBeginDeathAnim" Offset="0x2DE8" />
+        <Animation Name="gGomessDeathAnim" Offset="0x352C" />
+        <Animation Name="gGomessFloatAnim" Offset="0x3CAC" />
         <DList Name="object_death_DL_006B80" Offset="0x6B80" />
         <DList Name="object_death_DL_006D18" Offset="0x6D18" />
         <DList Name="object_death_DL_006E08" Offset="0x6E08" />
@@ -39,47 +39,47 @@
         <Texture Name="object_death_Tex_0095C8" OutName="tex_0095C8" Format="rgba16" Width="16" Height="16" Offset="0x95C8" />
         <Texture Name="object_death_Tex_0097C8" OutName="tex_0097C8" Format="rgba16" Width="4" Height="8" Offset="0x97C8" />
         <Texture Name="object_death_Tex_009808" OutName="tex_009808" Format="i4" Width="16" Height="16" Offset="0x9808" />
-        <DList Name="object_death_DL_009988" Offset="0x9988" />
-        <Texture Name="object_death_Tex_009AA0" OutName="tex_009AA0" Format="i4" Width="16" Height="16" Offset="0x9AA0" />
-        <DList Name="object_death_DL_009BA0" Offset="0x9BA0" /> <!-- Original name is "d13_cover_model" -->
-        <Texture Name="object_death_Tex_009C40" OutName="tex_009C40" Format="rgba16" Width="16" Height="16" Offset="0x9C40" />
-        <DList Name="object_death_DL_009F10" Offset="0x9F10" />
-        <DList Name="object_death_DL_009F88" Offset="0x9F88" />
-        <DList Name="object_death_DL_00A088" Offset="0xA088" />
-        <DList Name="object_death_DL_00A188" Offset="0xA188" />
-        <DList Name="object_death_DL_00A288" Offset="0xA288" />
-        <DList Name="object_death_DL_00A388" Offset="0xA388" />
-        <DList Name="object_death_DL_00A488" Offset="0xA488" />
-        <DList Name="object_death_DL_00A588" Offset="0xA588" />
-        <DList Name="object_death_DL_00A688" Offset="0xA688" />
-        <DList Name="object_death_DL_00A788" Offset="0xA788" />
-        <Texture Name="object_death_Tex_00A7B8" OutName="tex_00A7B8" Format="rgba16" Width="32" Height="16" Offset="0xA7B8" />
-        <Limb Name="object_death_Standardlimb_00ABB8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_01" Offset="0xABB8" />
-        <Limb Name="object_death_Standardlimb_00ABC4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_02" Offset="0xABC4" />
-        <Limb Name="object_death_Standardlimb_00ABD0" Type="Standard" EnumName="OBJECT_DEATH_LIMB_03" Offset="0xABD0" />
-        <Limb Name="object_death_Standardlimb_00ABDC" Type="Standard" EnumName="OBJECT_DEATH_LIMB_04" Offset="0xABDC" />
-        <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_05" Offset="0xABE8" />
-        <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_06" Offset="0xABF4" />
-        <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" EnumName="OBJECT_DEATH_LIMB_07" Offset="0xAC00" />
-        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_08" Offset="0xAC0C" />
-        <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" EnumName="OBJECT_DEATH_LIMB_09" Offset="0xAC18" />
-        <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0A" Offset="0xAC24" />
-        <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0B" Offset="0xAC30" />
-        <Limb Name="object_death_Standardlimb_00AC3C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0C" Offset="0xAC3C" />
-        <Limb Name="object_death_Standardlimb_00AC48" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0D" Offset="0xAC48" />
-        <Limb Name="object_death_Standardlimb_00AC54" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0E" Offset="0xAC54" />
-        <Limb Name="object_death_Standardlimb_00AC60" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0F" Offset="0xAC60" />
-        <Limb Name="object_death_Standardlimb_00AC6C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_10" Offset="0xAC6C" />
-        <Limb Name="object_death_Standardlimb_00AC78" Type="Standard" EnumName="OBJECT_DEATH_LIMB_11" Offset="0xAC78" />
-        <Limb Name="object_death_Standardlimb_00AC84" Type="Standard" EnumName="OBJECT_DEATH_LIMB_12" Offset="0xAC84" />
-        <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="OBJECT_DEATH_LIMB_13" Offset="0xAC90" />
-        <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_14" Offset="0xAC9C" />
-        <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_15" Offset="0xACA8" />
-        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="ObjectDeathLimb" Offset="0xAD08" />
-        <Animation Name="object_death_Anim_00B284" Offset="0xB284" /> <!-- Original name is "d13_gahaha" -->
-        <Animation Name="object_death_Anim_00B508" Offset="0xB508" /> <!-- Original name is "d13_guard" -->
-        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" /> <!-- Original name is "d13_jakin" -->
-        <TextureAnimation Name="object_death_Matanimheader_00CB84" Offset="0xCB84" />
-        <TextureAnimation Name="object_death_Matanimheader_00CBC0" Offset="0xCBC0" />
+        <DList Name="gGomessCoreDL" Offset="0x9988" />
+        <Texture Name="gGomessCoreTex" OutName="gomess_core" Format="i4" Width="16" Height="16" Offset="0x9AA0" />
+        <DList Name="gGomessBatsGuardingCoreDL" Offset="0x9BA0" />
+        <Texture Name="gGomessBatsGuardingCoreTex" OutName="gomess_bats_guarding_core" Format="rgba16" Width="16" Height="16" Offset="0x9C40" />
+        <DList Name="gGomessBatMaterialDL" Offset="0x9F10" />
+        <DList Name="gGomessBatFrame1DL" Offset="0x9F88" />
+        <DList Name="gGomessBatFrame2DL" Offset="0xA088" />
+        <DList Name="gGomessBatFrame3DL" Offset="0xA188" />
+        <DList Name="gGomessBatFrame4DL" Offset="0xA288" />
+        <DList Name="gGomessBatFrame5DL" Offset="0xA388" />
+        <DList Name="gGomessBatFrame6DL" Offset="0xA488" />
+        <DList Name="gGomessBatFrame7DL" Offset="0xA588" />
+        <DList Name="gGomessBatFrame8DL" Offset="0xA688" />
+        <DList Name="gGomessBatFrame9DL" Offset="0xA788" />
+        <Texture Name="gGomessBatTex" OutName="gomess_bat" Format="rgba16" Width="32" Height="16" Offset="0xA7B8" />
+        <Limb Name="object_death_Standardlimb_00ABB8" Type="Standard" EnumName="GOMESS_LIMB_1" Offset="0xABB8" />
+        <Limb Name="object_death_Standardlimb_00ABC4" Type="Standard" EnumName="GOMESS_LIMB_CORE_POS" Offset="0xABC4" />
+        <Limb Name="object_death_Standardlimb_00ABD0" Type="Standard" EnumName="GOMESS_LIMB_LOWER_BODY" Offset="0xABD0" />
+        <Limb Name="object_death_Standardlimb_00ABDC" Type="Standard" EnumName="GOMESS_LIMB_TORSO" Offset="0xABDC" />
+        <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" EnumName="GOMESS_LIMB_COLLAR" Offset="0xABE8" />
+        <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" EnumName="GOMESS_LIMB_HEAD_LOWER" Offset="0xABF4" />
+        <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" EnumName="GOMESS_LIMB_HEAD_UPPER" Offset="0xAC00" />
+        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="GOMESS_LIMB_8" Offset="0xAC0C" />  <!-- Antenna thing, 4 parts -->
+        <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" EnumName="GOMESS_LIMB_9" Offset="0xAC18" />
+        <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" EnumName="GOMESS_LIMB_10" Offset="0xAC24" />
+        <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" EnumName="GOMESS_LIMB_11" Offset="0xAC30" />
+        <Limb Name="object_death_Standardlimb_00AC3C" Type="Standard" EnumName="GOMESS_LIMB_CLOAK_UPPER" Offset="0xAC3C" />
+        <Limb Name="object_death_Standardlimb_00AC48" Type="Standard" EnumName="GOMESS_LIMB_CLOAK_LOWER" Offset="0xAC48" />
+        <Limb Name="object_death_Standardlimb_00AC54" Type="Standard" EnumName="GOMESS_LIMB_UPPER_ARM_LEFT" Offset="0xAC54" />
+        <Limb Name="object_death_Standardlimb_00AC60" Type="Standard" EnumName="GOMESS_LIMB_FOREARM_LEFT" Offset="0xAC60" />
+        <Limb Name="object_death_Standardlimb_00AC6C" Type="Standard" EnumName="GOMESS_LIMB_HAND_LEFT" Offset="0xAC6C" />
+        <Limb Name="object_death_Standardlimb_00AC78" Type="Standard" EnumName="GOMESS_LIMB_UPPER_ARM_RIGHT" Offset="0xAC78" />
+        <Limb Name="object_death_Standardlimb_00AC84" Type="Standard" EnumName="GOMESS_LIMB_FOREARM_RIGHT" Offset="0xAC84" />
+        <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="GOMESS_LIMB_HAND_RIGHT" Offset="0xAC90" />
+        <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_HANDLE" Offset="0xAC9C" />
+        <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="GOMESS_LIMB_SCYTHE_BLADE" Offset="0xACA8" />
+        <Skeleton Name="gGomessSkel" Type="Flex" LimbType="Standard" LimbNone="GOMESS_LIMB_NONE" LimbMax="GOMESS_LIMB_MAX" EnumName="GomessSkelLimbs" Offset="0xAD08" />
+        <Animation Name="object_death_Anim_00B284" Offset="0xB284" />   <!-- Intro anim 1 -->
+        <Animation Name="gGomessScytheSpinAnim" Offset="0xB508" />
+        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />   <!-- Intro anim 2 -->
+        <TextureAnimation Name="gGomessCoreMatAnim" Offset="0xCB84" />
+        <TextureAnimation Name="gGomessBodyMatAnim" Offset="0xCBC0" />
     </File>
 </Root>
