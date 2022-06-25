@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_keikoku_demo" Segment="6">
-        <!-- Trees and the floor of the Lost woods (DmOpstage actor) -->
+        <!-- Trees and the ground of the Lost woods (DmOpstage actor) -->
 
         <!-- DmOpstage draws both an empty XLU and non-empty OPA at the same time, each version has its own empty DL instead of reusing. -->
         <DList Name="gKeikokuDemoFloorEmptyDL" Offset="0x970" />
