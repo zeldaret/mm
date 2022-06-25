@@ -846,11 +846,11 @@ void EnDeath_DeathCutscenePart1(EnDeath* this, GlobalContext* globalCtx) {
     } else if (this->skelAnime.animation == &gGomessBeginDeathAnim) {
         this->actor.shape.rot.y += 0x2000;
         if (this->skelAnime.curFrame > 3.0f) {
-            Matrix_SetCurrentState(&this->unk_6A4);
-            Matrix_InsertXRotation_s(-0x1000, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&this->unk_6A4);
+            Matrix_Put(&this->unk_6A4);
+            Matrix_RotateXS(-0x1000, MTXMODE_APPLY);
+            Matrix_Get(&this->unk_6A4);
             this->unk_18E = false;
-            this->unk_6A4.wy += 18.0f;
+            this->unk_6A4.yw += 18.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEATH_SCYTHE);
         }
     }
@@ -918,14 +918,14 @@ void EnDeath_DeathCutscenePart2(EnDeath* this, GlobalContext* globalCtx) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
         sin = Math_SinS(camYaw);
         cos = Math_CosS(camYaw);
-        Matrix_InsertTranslation(this->actor.world.pos.x + (83.0f * sin) + (-38.0f * cos),
+        Matrix_Translate(this->actor.world.pos.x + (83.0f * sin) + (-38.0f * cos),
                                  this->actor.world.pos.y + 53.0f + 15.0f * this->actionTimer,
                                  this->actor.world.pos.z + (83.0f * cos) - (-38.0f * sin), MTXMODE_NEW);
-        Matrix_RotateY(camYaw - 0x3300, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(0x1100 - this->actionTimer * 0x1800, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-0xA00, MTXMODE_APPLY);
+        Matrix_RotateYS(camYaw - 0x3300, MTXMODE_APPLY);
+        Matrix_RotateXS(0x1100 - this->actionTimer * 0x1800, MTXMODE_APPLY);
+        Matrix_RotateZS(-0xA00, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&this->unk_6A4);
+        Matrix_Get(&this->unk_6A4);
         if (this->actionTimer == 0) {
             func_800DFD04(GET_ACTIVE_CAM(globalCtx), 2, 4, 6);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
@@ -994,7 +994,7 @@ void EnDeath_DeathCutscenePart3(EnDeath* this, GlobalContext* globalCtx) {
             sparklePos->y = (Rand_ZeroFloat(20.0f) + this->actor.world.pos.y + 4.0f * this->actionTimer) - 30.0f;
             sparklePos->z = (this->actor.world.pos.z + 30.0f * cos) - (temp_fs0 * sin);
             *temp1A9 = 255 - phi_s0 * 4;
-            EffectSsKiraKira_SpawnSmall(globalCtx, sparklePos, &sparkleVel, &sparkleAccel, &sparklePrimColor,
+            EffectSsKirakira_SpawnSmall(globalCtx, sparklePos, &sparkleVel, &sparkleAccel, &sparklePrimColor,
                                         &sparkleEnvColor);
             sparklePos++;
             temp1A9++;
@@ -1047,7 +1047,7 @@ void EnDeath_DeathCutscenePart4(EnDeath* this, GlobalContext* globalCtx) {
                 sparkleVel.x = randPlusMinusPoint5Scaled(4.0f);
                 sparkleVel.z = randPlusMinusPoint5Scaled(4.0f);
                 sparkleVel.y = Rand_ZeroFloat(2.0f) + 3.0f;
-                EffectSsKiraKira_SpawnSmall(globalCtx, &this->actor.world.pos, &sparkleVel, &sparkleAccel,
+                EffectSsKirakira_SpawnSmall(globalCtx, &this->actor.world.pos, &sparkleVel, &sparkleAccel,
                                             &sparklePrimColor, &sparkleEnvColor);
             }
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEATH_HEARTBREAK);
@@ -1326,14 +1326,14 @@ void EnDeath_DrawScytheSpinning(EnDeath* this, GlobalContext* globalCtx) {
         gDPPipeSync(dl++);
         gDPSetEnvColor(dl++, 30, 30, 0, 255 - i * 35);
 
-        Matrix_SetCurrentState(&this->unk_6A4);
-        Matrix_InsertXRotation_s(i * 0x2100, MTXMODE_APPLY);
+        Matrix_Put(&this->unk_6A4);
+        Matrix_RotateXS(i * 0x2100, MTXMODE_APPLY);
 
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(dl++, object_death_DL_006F88); // scythe handle
 
-        Matrix_InsertTranslation(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
-        Matrix_InsertRotation(-0x4000, 0, -0x4000, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
+        Matrix_RotateZYX(-0x4000, 0, -0x4000, MTXMODE_APPLY);
 
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(dl++, object_death_DL_0073D0); // scythe blade
@@ -1363,19 +1363,19 @@ void EnDeath_DrawScythe(EnDeath* this, GlobalContext* globalCtx) {
         dl = POLY_OPA_DISP;
     }
 
-    Matrix_SetCurrentState(&this->unk_6A4);
+    Matrix_Put(&this->unk_6A4);
     Matrix_Scale(this->scytheScale, this->scytheScale, this->scytheScale, MTXMODE_APPLY);
 
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[1], object_death_DL_006F88); // scythe handle
 
-    Matrix_InsertTranslation(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
-    Matrix_InsertRotation(-0x4000, 0, -0x4000, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -1084.0f, 7012.0f, MTXMODE_APPLY);
+    Matrix_RotateZYX(-0x4000, 0, -0x4000, MTXMODE_APPLY);
 
     gSPMatrix(&dl[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[3], object_death_DL_0073D0); // scythe blade
 
-    Matrix_GetStateTranslation(&this->scytheWorldPos);
+    Matrix_MultZero(&this->scytheWorldPos);
 
     if (this->actionFunc == EnDeath_Dead) {
         POLY_XLU_DISP = &dl[4];
@@ -1408,7 +1408,7 @@ void EnDeath_DrawBats(EnDeath* this, GlobalContext* globalCtx) {
     gSPDisplayList(dl++, &sSetupDL[0x19 * 6]);
     gSPDisplayList(dl++, gGomessBatMaterialDL);
 
-    cmf = Matrix_GetCurrentState();
+    cmf = Matrix_GetCurrent();
 
     if (this->actionFunc == EnDeath_Dead) {
         phi_fs2 = this->actionTimer * 0.000035f;
@@ -1433,7 +1433,7 @@ void EnDeath_DrawBats(EnDeath* this, GlobalContext* globalCtx) {
             (this->miniDeaths[i]->actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40) {
             miniDeath = this->miniDeaths[i];
 
-            Matrix_InsertRotation(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
+            Matrix_RotateZYX(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
             Matrix_Scale(phi_fs2, phi_fs2, phi_fs2, MTXMODE_APPLY);
 
             for (phi_s0 = miniDeath->unk_160, j = 0; j < ARRAY_COUNT(miniDeath->unk_160); j++, phi_s0++) {
@@ -1450,7 +1450,7 @@ void EnDeath_DrawBats(EnDeath* this, GlobalContext* globalCtx) {
 
             for (phi_s0 = miniDeath->unk_160, j = 0; j < ARRAY_COUNT(miniDeath->unk_160); j++, phi_s0++) {
                 if (phi_s0->unk_1 == 1) {
-                    Matrix_InsertRotation(0x4000, phi_s0->unk_1E, 0, MTXMODE_NEW);
+                    Matrix_RotateZYX(0x4000, phi_s0->unk_1E, 0, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
                     cmf->mf[3][0] = phi_s0->unk_4.x + sp9C.x;
                     cmf->mf[3][1] = phi_s0->unk_4.y + sp9C.y;
@@ -1468,7 +1468,7 @@ void EnDeath_DrawBats(EnDeath* this, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
             miniDeath = this->miniDeaths[i];
 
-            Matrix_InsertRotation(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
+            Matrix_RotateZYX(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
             Matrix_Scale(phi_fs2, phi_fs2, phi_fs2, MTXMODE_APPLY);
 
             for (phi_s0 = miniDeath->unk_160, j = 0; j < ARRAY_COUNT(miniDeath->unk_160); j++, phi_s0++) {
@@ -1483,7 +1483,7 @@ void EnDeath_DrawBats(EnDeath* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_18D) {
-        Matrix_InsertRotation(0x4000, this->coreRotation, 0, MTXMODE_NEW);
+        Matrix_RotateZYX(0x4000, this->coreRotation, 0, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         cmf->mf[3][0] = this->corePos.x + sp9C.x;
         cmf->mf[3][1] = this->corePos.y + sp9C.y;
@@ -1517,10 +1517,10 @@ void EnDeath_DrawFlames(EnDeath* this, GlobalContext* globalCtx2) {
 
     gDPSetEnvColor(POLY_XLU_DISP++, 230, 135, 25, 0);
 
-    Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+    Matrix_Put(&globalCtx->billboardMtxF);
     Matrix_Scale(0.00405f, 0.003f, 0.00405f, MTXMODE_APPLY);
 
-    cmf = Matrix_GetCurrentState();
+    cmf = Matrix_GetCurrent();
 
     phi_s1 = this->unk_404;
     phi_s3 = this->unk_1A9;
@@ -1544,7 +1544,7 @@ void EnDeath_DrawFlames(EnDeath* this, GlobalContext* globalCtx2) {
         phi_s3++;
     }
 
-    Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+    Matrix_Put(&globalCtx->billboardMtxF);
     Matrix_Scale(0.00405f, 0.003f, 0.00405f, MTXMODE_APPLY);
 
     if (this->actionFunc == EnDeath_Dead) {
@@ -1584,7 +1584,7 @@ void EnDeath_DrawCore(EnDeath* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     dl = POLY_OPA_DISP;
 
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[1], gGomessCoreDL);
@@ -1640,7 +1640,7 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     s8 index;
 
     if (limbIndex == GOMESS_LIMB_SCYTHE_BLADE) {
-        Matrix_GetStateTranslation(&this->scytheWorldPos);
+        Matrix_MultZero(&this->scytheWorldPos);
 
         if ((this->unk_788.base.atFlags & AT_ON) && this->unk_2EC != this->actionTimer) {
             Vec3f quad0;
@@ -1652,11 +1652,11 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             Math_Vec3f_Copy(&quad1, &this->unk_788.dim.quad[1]);
 
             if (this->actionFunc == EnDeath_EndSwingAttack) {
-                Matrix_GetStateTranslationAndScaledX(6000.0f, &pos1);
-                Matrix_MultiplyVector3fByState(&D_808C9AF4, &pos2);
+                Matrix_MultVecX(6000.0f, &pos1);
+                Matrix_MultVec3f(&D_808C9AF4, &pos2);
             } else {
-                Matrix_GetStateTranslationAndScaledY(5000.0f, &pos2);
-                Matrix_MultiplyVector3fByState(&D_808C9B00, &pos1);
+                Matrix_MultVecY(5000.0f, &pos2);
+                Matrix_MultVec3f(&D_808C9B00, &pos1);
             }
 
             Collider_SetQuadVertices(&this->unk_788, &pos2, &pos1, &quad0, &quad1);
@@ -1665,8 +1665,8 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             this->unk_2EC = this->actionTimer;
         } else if (this->unk_18C) {
             if (this->actionFunc == EnDeath_EndSwingAttack) {
-                Matrix_GetStateTranslationAndScaledX(6000.0f, &this->unk_788.dim.quad[1]);
-                Matrix_MultiplyVector3fByState(&D_808C9AF4, &this->unk_788.dim.quad[0]);
+                Matrix_MultVecX(6000.0f, &this->unk_788.dim.quad[1]);
+                Matrix_MultVec3f(&D_808C9AF4, &this->unk_788.dim.quad[0]);
             } else {
                 Matrix_MultVecY(5000.0f, &this->unk_788.dim.quad[0]);
                 Matrix_MultVec3f(&D_808C9B00, &this->unk_788.dim.quad[1]);
@@ -1676,10 +1676,10 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             this->unk_2EC = this->actionTimer;
         }
     } else if (limbIndex == GOMESS_LIMB_CORE_POS && this->actionFunc != EnDeath_Dead) {
-        Matrix_StatePush();
+        Matrix_Push();
         EnDeath_DrawCore(this, globalCtx);
-        Matrix_StatePop();
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_Pop();
+        Matrix_MultZero(&this->actor.focus.pos);
 
         this->coreCollider.dim.worldSphere.center.x = this->actor.focus.pos.x;
         this->coreCollider.dim.worldSphere.center.y = this->actor.focus.pos.y;
@@ -1692,7 +1692,7 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         if (!(this->actionFunc != EnDeath_SpinAttack && this->actionFunc != EnDeath_BlockProjectile &&
               this->actionFunc != EnDeath_IntroCutscenePart5) ||
             (this->actionFunc == EnDeath_DeathCutscenePart1 && this->unk_18E == true)) {
-            Matrix_CopyCurrentState(&this->unk_6A4);
+            Matrix_Get(&this->unk_6A4);
         }
     }
 
@@ -1700,7 +1700,7 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if (index != -1) {
         if (index < 7) {
             // get matrix translation as-is, occupies slots 0, 1, 2, 3, 4, 5, 6
-            Matrix_GetStateTranslation(&this->dmgEffectPositions[index]);
+            Matrix_MultZero(&this->dmgEffectPositions[index]);
         } else if (index == 7) {
             // 5 points using 5 offsets, occupies slots 7, 8, 9, 10, 11
             s32 i;
@@ -1709,12 +1709,12 @@ void EnDeath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
             for (effPos = &this->dmgEffectPositions[index], offset = &D_808C9B0C[0], i = 0;
                  i != ARRAY_COUNT(D_808C9B0C); i++, offset++, effPos++) {
-                Matrix_MultiplyVector3fByState(offset, effPos);
+                Matrix_MultVec3f(offset, effPos);
             }
         } else if (index == 12) {
             // get matrix translation as-is and a point offset by -2000 from it, occupies slots 12, 13
-            Matrix_GetStateTranslation(&this->dmgEffectPositions[index]);
-            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->dmgEffectPositions[index + 1]);
+            Matrix_MultZero(&this->dmgEffectPositions[index]);
+            Matrix_MultVecY(-2000.0f, &this->dmgEffectPositions[index + 1]);
         }
     }
 }
