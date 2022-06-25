@@ -92,12 +92,9 @@ void DmChar02_Init(Actor *thisx, GlobalContext *globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/DmChar02_Destroy.s")
 void DmChar02_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
-// action func
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/func_80AAB04C.s")
 void func_80AAB04C(DmChar02 *this, GlobalContext *globalCtx) {
     u8 sp2F;
     s32 actionIndex;
@@ -106,7 +103,7 @@ void func_80AAB04C(DmChar02 *this, GlobalContext *globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 0x83U) != 0) {
         actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x83U);
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {                      /* irregular */
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
             default:
                 this->unk2E0 = 0;
                 sp2F = 0;
@@ -135,7 +132,6 @@ void func_80AAB04C(DmChar02 *this, GlobalContext *globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/DmChar02_Update.s")
 void DmChar02_Update(Actor *thisx, GlobalContext *globalCtx) {
     DmChar02 *this = THIS;
     SkelAnime_Update(&this->skelAnime);
@@ -150,22 +146,18 @@ void DmChar02_Update(Actor *thisx, GlobalContext *globalCtx) {
     func_80AAAF2C(this, globalCtx);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/func_80AAB23C.s")
 s32 DmChar02_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
     return false;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/func_80AAB258.s")
 void DmChar02_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
 
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/func_80AAB270.s")
 void DmChar02_TransformLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
 
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char02/DmChar02_Draw.s")
 void DmChar02_Draw(Actor *thisx, GlobalContext *globalCtx) {
     s32 pad[2];
     DmChar02 *this = THIS;
