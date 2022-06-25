@@ -1,6 +1,8 @@
 ﻿<Root>
     <File Name="object_keikoku_demo" Segment="6">
         <!-- Trees and the ground of the Lost woods (DmOpstage actor) -->
+        <!-- the following textures have duplicates in Z2_LOSTWOODS scene:  -->
+        <!--   gKeikokuDemoYellowFlowersOnGrassTex, gKeikokuDemoFallLeavesOnGrassTex, unused: gKeikokuDemoWrinkledBarkTex -->
 
         <!-- DmOpstage draws both an empty XLU and non-empty OPA at the same time, each version has its own empty DL instead of reusing. -->
         <DList Name="gKeikokuDemoFloorEmptyDL" Offset="0x970" />
@@ -22,9 +24,9 @@
         <Texture Name="gKeikokuDemoTreeLeavesTex" OutName="tree_leaves" Format="ia16" Width="32" Height="32" Offset="0x3930" />
         <Texture Name="gKeikokuDemoTreeCutEndGrainTex" OutName="cut_end_grain" Format="rgba16" Width="32" Height="32" Offset="0x4130" />
 
-        <!-- from this point on, all assets are unused -->
+        <!-- From this point on, all assets are unused. -->
         
-        <!-- Side texture of raised bed of clover, clover on top of stems seen from side -->
+        <!-- Side texture of raised bed of clover, clover on top of stems seen from side. -->
         <Texture Name="gKeikokuDemoCloverEdgeTex" OutName="clover_edge" Format="rgba16" Width="64" Height="16" Offset="0x4930" />
         <!-- Top texture of bed of clover (like the kind of raised grass that hide gold skultula). -->
         <Texture Name="gKeikokuDemoCloverTopTex" OutName="clover_top" Format="rgba16" Width="32" Height="32" Offset="0x5130" />
@@ -41,9 +43,9 @@
         <Texture Name="gKeikokuDemoHangingMossTex" OutName="hanging_moss" Format="rgba16" Width="32" Height="32" Offset="0x8330" />
         <Texture Name="gKeikokuDemoStumpRingsDarkTex" OutName="stump_rings_dark" Format="rgba16" Width="32" Height="32" Offset="0x8B30" />
 
-        <!-- Might be mistyped, looks like pink rings to match the following stump rings texture, but pink -->
+        <!-- Might be mistyped, looks like pink rings to match the following stump rings texture, but pink. -->
         <Texture Name="gKeikokuDemoStumpRingsPinkTex" OutName="stump_rings_pink" Format="rgba16" Width="16" Height="32" Offset="0x9330" />
-        <!-- Looks like a duplicate of gKeikokuDemoTreeCutEndGrainTex, but rotated clockwise 90deg -->
+        <!-- Looks like a duplicate of gKeikokuDemoTreeCutEndGrainTex, but rotated clockwise 90deg. -->
         <Texture Name="gKeikokuDemoTreeCutEndGrain2Tex" OutName="stump_rings" Format="rgba16" Width="32" Height="32" Offset="0x9730" />
 
         <!-- Duplicates of used textures: -->
