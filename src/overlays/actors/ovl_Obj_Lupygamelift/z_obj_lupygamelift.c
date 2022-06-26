@@ -17,9 +17,9 @@ void ObjLupygamelift_Update(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Draw(Actor* thisx, PlayState* play);
 
 void func_80AF04BC(ObjLupygamelift* this);
-void func_80AF04D8(ObjLupygamelift* this, GlobalContext* globalCtx);
+void func_80AF04D8(ObjLupygamelift* this, PlayState* play);
 void func_80AF0514(ObjLupygamelift* this);
-void func_80AF0530(ObjLupygamelift* this, GlobalContext* globalCtx);
+void func_80AF0530(ObjLupygamelift* this, PlayState* play);
 
 const ActorInit Obj_Lupygamelift_InitVars = {
     ACTOR_OBJ_LUPYGAMELIFT,
@@ -40,7 +40,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjLupygamelift* this = THIS;
     Path* path;
@@ -53,10 +53,10 @@ void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
     this->timer = 0;
-    Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawSquare, 0.0f);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_raillift_Colheader_0048D0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
     this->targetSpeedXZ = thisx->home.rot.z * 0.1f;
     if (this->targetSpeedXZ < 0.0f) {
         this->targetSpeedXZ = -this->targetSpeedXZ;
@@ -65,14 +65,14 @@ void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.home.rot.y = 0;
     this->dyna.actor.home.rot.z = 0;
 
-    path = &globalCtx->setupPathList[OBJLUPYGAMELIFT_GET_PATH(thisx)];
+    path = &play->setupPathList[OBJLUPYGAMELIFT_GET_PATH(thisx)];
     this->pointIndex = OBJLUPYGAMELIFT_GET_7(thisx);
     this->count = path->count;
     if (this->pointIndex >= this->count) {
         this->pointIndex = 0;
     }
     this->points = Lib_SegmentedToVirtual(path->points);
-    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, 0x183, this->dyna.actor.world.pos.x,
+    Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x183, this->dyna.actor.world.pos.x,
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
     if (OBJLUPYGAMELIFT_GET_C(thisx) != 0) {
@@ -80,15 +80,15 @@ void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         params = 0;
     }
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GAMELUPY, this->dyna.actor.home.pos.x,
-                this->dyna.actor.home.pos.y, this->dyna.actor.home.pos.z, 0, 0, 0, params);
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_GAMELUPY, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y,
+                this->dyna.actor.home.pos.z, 0, 0, 0, params);
     func_80AF04BC(this);
 }
 
-void ObjLupygamelift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play) {
     ObjLupygamelift* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80AF0394(ObjLupygamelift* this) {
@@ -121,7 +121,7 @@ void func_80AF04BC(ObjLupygamelift* this) {
     this->actionFunc = func_80AF04D8;
 }
 
-void func_80AF04D8(ObjLupygamelift* this, GlobalContext* globalCtx) {
+void func_80AF04D8(ObjLupygamelift* this, PlayState* play) {
     if (this->timer == 0) {
         func_80AF0514(this);
     } else {
@@ -134,7 +134,7 @@ void func_80AF0514(ObjLupygamelift* this) {
     this->dyna.actor.speedXZ = this->targetSpeedXZ;
 }
 
-void func_80AF0530(ObjLupygamelift* this, GlobalContext* globalCtx) {
+void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
     f32 step;
     Vec3f target;
 
@@ -163,12 +163,12 @@ void func_80AF0530(ObjLupygamelift* this, GlobalContext* globalCtx) {
     func_80AF0394(this);
 }
 
-void ObjLupygamelift_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLupygamelift_Update(Actor* thisx, PlayState* play) {
     ObjLupygamelift* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjLupygamelift_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_raillift_DL_0071B8);
+void ObjLupygamelift_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_raillift_DL_0071B8);
 }
