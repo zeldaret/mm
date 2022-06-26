@@ -47,41 +47,42 @@ void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     Schedule_RunScript(globalCtx, sScheduleScript, &schedule);
     if (schedule.result == 1) {
-        if (this->schedule != schedule.result) {
+        if (this->scheduleResult != schedule.result) {
             this->actor.velocity.y = 0.0f;
         }
-        if ((this->velocity >= 80.0f) || (this->schedule == 0)) {
+        if ((this->verticalOffset >= 80.0f) || (this->scheduleResult == 0)) {
             this->actor.velocity.y = 0.0f;
-            this->velocity = 80.0f;
+            this->verticalOffset = 80.0f;
         } else {
-            this->velocity += 10.0f;
+            this->verticalOffset += 10.0f;
         }
     } else {
-        if (this->schedule != schedule.result) {
+        if (this->scheduleResult != schedule.result) {
             this->actor.velocity.y = 0.0f;
         }
-        if (this->velocity != 0.0f) {
+        if (this->verticalOffset != 0.0f) {
             this->actor.velocity.y -= 3.0f;
-            this->velocity += this->actor.velocity.y;
-            if (this->velocity <= 0.0f) {
+            this->verticalOffset += this->actor.velocity.y;
+            if (this->verticalOffset <= 0.0f) {
                 this->actor.velocity.y = fabsf(this->actor.velocity.y) * 0.8f;
                 if ((s32)this->actor.velocity.y == 0) {
                     this->actor.velocity.y = 0.0f;
-                    this->velocity = 0.0f;
+                    this->verticalOffset = 0.0f;
                 }
             }
         }
     }
-    this->schedule = schedule.result;
+    this->scheduleResult = schedule.result;
 }
 
 void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjShutter* this = THIS;
 
-    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->velocity, this->actor.world.pos.z,
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->verticalOffset, this->actor.world.pos.z,
                      MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
+    
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
