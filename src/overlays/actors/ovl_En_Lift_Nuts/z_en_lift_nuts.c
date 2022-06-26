@@ -734,18 +734,14 @@ void func_80AEB1C8(EnLiftNuts* this) {
     this->actionFunc = func_80AEB230;
 }
 
-#if 0
 void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx) {
-    if (gSaveContext.unk_3DE0[4] != 0) {
-        Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(globalCtx);
 
+    if (gSaveContext.unk_3DE0[4] > 0) {
         player->stateFlags1 &= ~0x20;
         func_80AEB280(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB230.s")
-#endif
 
 void func_80AEB280(EnLiftNuts* this) {
     this->actionFunc = func_80AEB294;
