@@ -19,6 +19,7 @@ void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AEA910(EnLiftNuts* this, GlobalContext* globalCtx);
 
 s32 func_80AE9B8C(void);
+void func_80AE9F28(EnLiftNuts* this);
 void func_80AE9F70(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA044(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEA0B4(EnLiftNuts* this);
@@ -37,6 +38,7 @@ void func_80AEB1C8(EnLiftNuts* this);
 void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB280(EnLiftNuts* this);
 void func_80AEB294(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB3E0(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB428(EnLiftNuts* this, GlobalContext* globalCtx);
 void func_80AEB584(EnLiftNuts* this);
 void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx);
@@ -204,7 +206,55 @@ void func_80AE9BCC(EnLiftNuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/EnLiftNuts_Init.s")
+void EnLiftNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnLiftNuts* this = THIS;
+    Path* path;
+    Vec3s* pathPos;
+    s32 pad;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_0029E8, this->jointTable,
+                       this->morphTable, 28);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AEBF28);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80AEBF54);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
+    if (this->actor.floorBgId != 0x32) {
+        DynaPolyActor* bgActor = DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId);
+
+        if (bgActor != NULL) {
+            this->actor.world.pos = bgActor->actor.world.pos;
+            this->actor.home.pos = bgActor->actor.world.pos;
+        }
+    }
+    this->actor.targetMode = 0;
+    this->unk_354 = 0;
+    this->unk_34E = 0;
+    this->unk_356 = 0;
+    this->unk_1E4 = 0;
+    this->unk_1E8 = 0;
+    this->actor.gravity = -2.0f;
+
+    path = &globalCtx->setupPathList[ENLIFTNUTS_GET_FF00(&this->actor)];
+    pathPos = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    this->vec_1D8.x = pathPos->x;
+    this->vec_1D8.y = pathPos->y;
+    this->vec_1D8.z = pathPos->z;
+    func_80AE9A20(this, globalCtx);
+    if (!Flags_GetSwitch(globalCtx, 0x41)) {
+        func_80AE9B4C(1, 0);
+        func_80AE9F28(this);
+    } else if (func_80AE9AC4(this, 0)) {
+        Player* player = GET_PLAYER(globalCtx);
+
+        player->stateFlags1 |= 0x20;
+        func_80AE9AC4(this, 1);
+        func_80AE9B4C(1, 3);
+        func_80AEA0B4(this);
+    } else {
+        func_80AE9F28(this);
+    }
+}
 
 void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnLiftNuts* this = THIS;
@@ -397,6 +447,7 @@ void func_80AEA1A0(EnLiftNuts* this, GlobalContext* globalCtx) {
 
 void func_80AEA7A4(EnLiftNuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
+
     if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x27E2:
@@ -662,7 +713,7 @@ void func_80AEB114(EnLiftNuts* this) {
     this->actionFunc = func_80AEB148;
 }
 
-void func_80AEB148(EnLiftNuts *this, GlobalContext *globalCtx) {
+void func_80AEB148(EnLiftNuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags3 & 0x200) {
@@ -684,8 +735,8 @@ void func_80AEB1C8(EnLiftNuts* this) {
 }
 
 #if 0
-void func_80AEB230(EnLiftNuts *this, GlobalContext *globalCtx) {
-    if ((gSaveContext.unk_3DE0[4] != 0) || (gSaveContext.unk_3DE0[5] != 0)) {
+void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx) {
+    if (gSaveContext.unk_3DE0[4] != 0) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 &= ~0x20;
@@ -700,14 +751,40 @@ void func_80AEB280(EnLiftNuts* this) {
     this->actionFunc = func_80AEB294;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB294.s")
+void func_80AEB294(EnLiftNuts* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    OSTime time;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB3E0.s")
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == 0x32) &&
+         (player->actor.world.pos.y < 20.0f)) ||
+        (gSaveContext.unk_3DE0[4] >= 0x2EE0)) {
+        player->stateFlags1 |= 0x20;
+        Flags_SetSwitch(globalCtx, 0x41);
+        func_80AEB3E0(this, globalCtx);
+    }
+    if (*this->ptr_1EC == 0x12C) {
+        player->stateFlags1 |= 0x20;
+
+        time = gSaveContext.unk_3DE0[4];
+        if (time < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            Flags_SetSwitch(globalCtx, 0x40);
+        }
+        Flags_SetSwitch(globalCtx, 0x41);
+        func_80AEB3E0(this, globalCtx);
+    }
+}
+
+void func_80AEB3E0(EnLiftNuts* this, GlobalContext* globalCtx) {
+    play_sound(NA_SE_SY_FOUND);
+    this->unk_354 = 0;
+    gSaveContext.unk_3DD0[4] = 6;
+    this->actionFunc = func_80AEB428;
+}
 
 #if 0
 void func_80AEB428(EnLiftNuts *this, GlobalContext *globalCtx) {
     if (this->unk_354 == 10) {
-        if (gSaveContext.unk_3DE0[4] >= 0 || ((gSaveContext.unk_E18[gSaveContext.day % 5]) < this->unk_354)) {
+        if (gSaveContext.unk_3DE0[4] > 0 || ((gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY]) < this->unk_354)) {
             Message_StartTextbox(globalCtx, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {

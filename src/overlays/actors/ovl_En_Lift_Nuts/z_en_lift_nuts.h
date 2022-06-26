@@ -7,6 +7,8 @@ struct EnLiftNuts;
 
 typedef void (*EnLiftNutsActionFunc)(struct EnLiftNuts*, GlobalContext*);
 
+#define ENLIFTNUTS_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
+
 typedef struct EnLiftNuts {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ColliderCylinder collider;
