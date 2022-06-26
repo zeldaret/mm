@@ -5,7 +5,7 @@
 
 struct DmRavine;
 
-typedef void (*DmRavineActionFunc)(struct DmRavine*, GlobalContext*);
+typedef void (*DmRavineActionFunc)(struct DmRavine*, PlayState*);
 
 typedef enum {
     /* 0 */ DM_RAVINE_STATE_INITIALIZED,

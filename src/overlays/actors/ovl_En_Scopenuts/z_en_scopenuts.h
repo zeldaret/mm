@@ -5,7 +5,7 @@
 
 struct EnScopenuts;
 
-typedef void (*EnScopenutsActionFunc)(struct EnScopenuts*, GlobalContext*);
+typedef void (*EnScopenutsActionFunc)(struct EnScopenuts*, PlayState*);
 
 #define ENSCOPENUTS_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENSCOPENUTS_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)

@@ -6,7 +6,7 @@
 
 struct EnTanron3;
 
-typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
+typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, PlayState*);
 
 #define TANRON3_WORK_TIMER_MAX 3
 

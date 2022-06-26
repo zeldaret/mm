@@ -5,7 +5,7 @@
 
 struct EnScopecoin;
 
-typedef void (*EnScopecoinActionFunc)(struct EnScopecoin*, GlobalContext*);
+typedef void (*EnScopecoinActionFunc)(struct EnScopecoin*, PlayState*);
 
 typedef struct EnScopecoin {
     /* 0x000 */ Actor actor;

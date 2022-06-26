@@ -5,7 +5,7 @@
 
 struct BgDyYoseizo;
 
-typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, GlobalContext*);
+typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
 
 typedef struct BgDyYoseizo {
     /* 0x0000 */ Actor actor;

@@ -11,25 +11,24 @@
 
 #define THIS ((EnBji01*)thisx)
 
-void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBji01_Init(Actor* thisx, PlayState* play);
+void EnBji01_Destroy(Actor* thisx, PlayState* play);
+void EnBji01_Update(Actor* thisx, PlayState* play);
+void EnBji01_Draw(Actor* thisx, PlayState* play);
 
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);
-void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD028(EnBji01* this, GlobalContext* globalCtx);
-void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx);
-void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD634(EnBji01* this, GlobalContext* globalCtx);
-void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
-void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
+void func_809CCE98(EnBji01* this, PlayState* play);
+void func_809CCEE8(EnBji01* this, PlayState* play);
+void func_809CD028(EnBji01* this, PlayState* play);
+void EnBji01_DialogueHandler(EnBji01* this, PlayState* play);
+void func_809CCDE0(EnBji01* this, PlayState* play);
+void func_809CD634(EnBji01* this, PlayState* play);
+void EnBji01_DoNothing(EnBji01* this, PlayState* play);
+void func_809CD6C0(EnBji01* this, PlayState* play);
+void func_809CD70C(EnBji01* this, PlayState* play);
+void func_809CD77C(EnBji01* this, PlayState* play);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
@@ -71,8 +70,8 @@ static AnimationSpeedInfo D_809CDC7C[] = {
     { &object_bji_Anim_00066C, 1.0f, ANIMMODE_ONCE, -5.0f }, /* Scratching chin? */
 };
 
-void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809CCDE0(EnBji01* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f pitchTarget;
     s32 pad[2];
 
@@ -83,13 +82,13 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
                         &this->torsoZRotStep, &this->torsoXRotStep, 0x1554, 0x1FFE, 0xE38, 0x1C70);
 }
 
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CCE98(EnBji01* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
 
-void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CCEE8(EnBji01* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == ENBJI01_PARAMS_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
@@ -98,24 +97,24 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.msgMode = 0;
-        globalCtx->msgCtx.unk11F10 = 0;
-        func_809CD028(this, globalCtx);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        play->msgCtx.msgMode = 0;
+        play->msgCtx.unk11F10 = 0;
+        func_809CD028(this, play);
     } else {
         if (this->moonsTear != NULL) {
             if (this->moonsTear->actor.colChkInfo.health == 1) {
-                func_809CD6C0(this, globalCtx);
+                func_809CD6C0(this, play);
                 return;
             }
         } else {
-            this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+            this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, globalCtx, 60.0f, 10.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 60.0f, 10.0f, EXCH_ITEM_NONE);
     }
 }
 
-void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CD028(EnBji01* this, PlayState* play) {
     f32 timeBeforeMoonCrash;
 
     switch (this->actor.params) {
@@ -135,7 +134,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
-                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+                    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
                     } else if (gSaveContext.save.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
@@ -163,7 +162,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     } else {
                         this->textId = 0x5F1;
                     }
-                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                   EXCH_ITEM_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
@@ -197,37 +196,37 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
-void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
+void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
         case 0:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
-            func_809CCDE0(this, globalCtx);
+            func_809CCDE0(this, play);
             if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-                Message_StartTextbox(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(play, this->textId, &this->actor);
             }
             break;
         case 4:
-            if (Message_ShouldAdvance(globalCtx)) {
+            if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
-                switch (globalCtx->msgCtx.choiceIndex) {
+                switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_801477B4(globalCtx);
-                        func_809CD634(this, globalCtx);
+                        func_801477B4(play);
+                        func_809CD634(this, play);
                         break;
                     case 1:
                         func_8019F230();
                         switch (gSaveContext.save.playerForm) {
                             case PLAYER_FORM_DEKU:
-                                func_80151938(globalCtx, 0x5F0);
+                                func_80151938(play, 0x5F0);
                                 break;
                             case PLAYER_FORM_HUMAN:
-                                func_80151938(globalCtx, 0x5F8);
+                                func_80151938(play, 0x5F8);
                                 break;
                             case PLAYER_FORM_GORON:
                             case PLAYER_FORM_ZORA:
-                                func_80151938(globalCtx, 0x5E1);
+                                func_80151938(play, 0x5E1);
                                 break;
                         }
                         break;
@@ -235,21 +234,21 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case 5:
-            if (Message_ShouldAdvance(globalCtx)) {
+            if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                switch (globalCtx->msgCtx.currentTextId) {
+                switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
-                        func_80151938(globalCtx, 0x5DF);
+                        func_80151938(play, 0x5DF);
                         break;
                     case 0x5E4:
-                        func_80151938(globalCtx, 0x5E7);
+                        func_80151938(play, 0x5E7);
                         break;
                     case 0x5E5:
-                        func_80151938(globalCtx, 0x5E0);
+                        func_80151938(play, 0x5E0);
                         break;
                     case 0x5E7:
-                        func_80151938(globalCtx, 0x5E5);
+                        func_80151938(play, 0x5E5);
                         break;
                     case 0x5DC:
                     case 0x5DD:
@@ -259,11 +258,11 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5EE:
                     case 0x5F2:
                     case 0x5F5:
-                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x5F0:
                     case 0x5F6:
-                        func_80151938(globalCtx, 0x5EF);
+                        func_80151938(play, 0x5EF);
                         break;
                     case 0x5E1:
                     case 0x5E8:
@@ -275,10 +274,10 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5F4:
                     case 0x5F7:
                     case 0x5F8:
-                        func_801477B4(globalCtx);
+                        func_801477B4(play);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
-                        func_809CCE98(this, globalCtx);
+                        func_809CCE98(this, play);
                         break;
                 }
             }
@@ -286,7 +285,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
         case 6:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            func_809CCE98(this, globalCtx);
+            func_809CCE98(this, play);
             break;
     }
     if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
@@ -294,46 +293,46 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CD634(EnBji01* this, PlayState* play) {
     func_801A5BD0(0x6F);
     Audio_QueueSeqCmd(0xE0000101);
-    globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
-    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(&globalCtx->state); /* Load new entrance? */
+    play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
+    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+    func_80169EFC(&play->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
 }
 
-void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx) {
+void EnBji01_DoNothing(EnBji01* this, PlayState* play) {
 }
 
-void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CD6C0(EnBji01* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = func_809CD70C;
 }
 
-void func_809CD70C(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CD70C(EnBji01* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
-    func_809CCDE0(this, globalCtx);
+    func_809CCDE0(this, play);
     if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-        Actor_ChangeFocus(&this->moonsTear->actor, globalCtx, &this->actor); /* Z-Target the Moon's Tear? */
+        Actor_ChangeFocus(&this->moonsTear->actor, play, &this->actor); /* Z-Target the Moon's Tear? */
         this->actionFunc = func_809CD77C;
     }
 }
 
-void func_809CD77C(EnBji01* this, GlobalContext* globalCtx) {
+void func_809CD77C(EnBji01* this, PlayState* play) {
     if (this->moonsTear->actor.colChkInfo.health == 0) {
-        func_809CCE98(this, globalCtx);
+        func_809CCE98(this, play);
     }
 }
 
-void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBji01_Init(Actor* thisx, PlayState* play) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
                        this->morphTable, BJI_LIMB_MAX);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 0;
@@ -342,20 +341,20 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+    this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.save.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
         case 0x4C10: /* Observatory from Termina Field door */
             this->actor.params = ENBJI01_PARAMS_DEFAULT;
-            func_809CCE98(this, globalCtx);
+            func_809CCE98(this, play);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= ACTOR_FLAG_10000;
             func_801A5BD0(0);
             Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;
-            func_809CCE98(this, globalCtx);
+            func_809CCE98(this, play);
             break;
         default:
             Actor_MarkForDeath(&this->actor);
@@ -363,19 +362,19 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBji01_Destroy(Actor* thisx, PlayState* play) {
     EnBji01* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBji01_Update(Actor* thisx, PlayState* play) {
     static s16 sBlinkSequence[] = { 0, 1, 2, 1, 0, 0 };
     EnBji01* this = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
+    this->actionFunc(this, play);
+    Actor_UpdateBgCheckInfo(play, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {
@@ -389,14 +388,13 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetFocus(&this->actor, 40.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBji01* this = THIS;
 
-    if ((limbIndex == BJI_LIMB_NONE) && ((globalCtx->gameplayFrames % 2) != 0)) {
+    if ((limbIndex == BJI_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
     if (limbIndex == BJI_LIMB_NONE) {
@@ -417,7 +415,7 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809CDCC8 = { 1088.0f, 1200.0f, 0.0f };
     EnBji01* this = THIS;
     Vec3f sp20;
@@ -432,14 +430,14 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBji01_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { object_bji_Tex_0049F0, object_bji_Tex_004E70, object_bji_Tex_005270 };
     EnBji01* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBji01_OverrideLimbDraw, EnBji01_PostLimbDraw, &this->actor);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

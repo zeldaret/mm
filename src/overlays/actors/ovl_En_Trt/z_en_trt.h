@@ -6,7 +6,7 @@
 
 struct EnTrt;
 
-typedef void (*EnTrtActionFunc)(struct EnTrt*, GlobalContext*);
+typedef void (*EnTrtActionFunc)(struct EnTrt*, PlayState*);
 typedef void (*EnTrtBlinkFunc)(struct EnTrt*);
 
 typedef struct EnTrt {

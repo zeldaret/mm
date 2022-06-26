@@ -10,15 +10,15 @@
 
 #define THIS ((ItemEtcetera*)thisx)
 
-void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
-void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
+void ItemEtcetera_Init(Actor* thisx, PlayState* play);
+void ItemEtcetera_Destroy(Actor* thisx, PlayState* play);
+void ItemEtcetera_Update(Actor* thisx, PlayState* play);
 
-void ItemEtcetera_WaitForObject(ItemEtcetera* this, GlobalContext* globalCtx);
-void func_8092009C(ItemEtcetera* this, GlobalContext* globalCtx);
-void func_809200F8(ItemEtcetera* this, GlobalContext* globalCtx);
-void ItemEtcetera_DrawThroughLens(Actor* thisx, GlobalContext* globalCtx);
-void ItemEtcetera_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play);
+void func_8092009C(ItemEtcetera* this, PlayState* play);
+void func_809200F8(ItemEtcetera* this, PlayState* play);
+void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
+void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Item_Etcetera_InitVars = {
     ACTOR_ITEM_ETCETERA,
@@ -51,11 +51,11 @@ void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionF
     this->actionFunc = actionFunc;
 }
 
-void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ItemEtcetera* this = THIS;
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
-    s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, sObjectIds[type]);
+    s32 objBankIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
 
     if (objBankIndex < 0) {
         // assert on debug
@@ -89,51 +89,51 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void ItemEtcetera_WaitForObject(ItemEtcetera* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
+void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->actor.objBankIndex = this->objIndex;
         this->actor.draw = this->drawFunc;
         this->actionFunc = this->futureActionFunc;
     }
 }
 
-void func_8092009C(ItemEtcetera* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_8092009C(ItemEtcetera* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        Actor_PickUp(&this->actor, globalCtx, this->itemID, 30.0f, 50.0f);
+        Actor_PickUp(&this->actor, play, this->itemID, 30.0f, 50.0f);
     }
 }
 
-void func_809200F8(ItemEtcetera* this, GlobalContext* globalCtx) {
-    if (Flags_GetTreasure(globalCtx, ITEMETCETERA_GET_TREASUREFLAG(&this->actor))) {
+void func_809200F8(ItemEtcetera* this, PlayState* play) {
+    if (Flags_GetTreasure(play, ITEMETCETERA_GET_TREASUREFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_Update(Actor* thisx, PlayState* play) {
     ItemEtcetera* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ItemEtcetera_DrawThroughLens(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
     ItemEtcetera* this = THIS;
 
-    if (globalCtx->actorCtx.unk4 == 100) {
-        func_800B8050(&this->actor, globalCtx, 0);
-        func_800B8118(&this->actor, globalCtx, 0);
-        GetItem_Draw(globalCtx, this->giDrawId);
+    if (play->actorCtx.unk4 == 100) {
+        func_800B8050(&this->actor, play, 0);
+        func_800B8118(&this->actor, play, 0);
+        GetItem_Draw(play, this->giDrawId);
     }
 }
 
-void ItemEtcetera_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ItemEtcetera_Draw(Actor* thisx, PlayState* play) {
     ItemEtcetera* this = THIS;
 
-    func_800B8050(&this->actor, globalCtx, 0);
-    func_800B8118(&this->actor, globalCtx, 0);
-    GetItem_Draw(globalCtx, this->giDrawId);
+    func_800B8050(&this->actor, play, 0);
+    func_800B8118(&this->actor, play, 0);
+    GetItem_Draw(play, this->giDrawId);
 }

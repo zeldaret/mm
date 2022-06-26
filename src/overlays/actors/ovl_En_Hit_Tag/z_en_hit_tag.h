@@ -5,7 +5,7 @@
 
 struct EnHitTag;
 
-typedef void (*EnHitTagActionFunc)(struct EnHitTag*, GlobalContext*);
+typedef void (*EnHitTagActionFunc)(struct EnHitTag*, PlayState*);
 
 #define ENHITTAG_GET_SWITCHFLAG(thisx) (s32)(((thisx)->params & 0xFE00) >> 9)
 

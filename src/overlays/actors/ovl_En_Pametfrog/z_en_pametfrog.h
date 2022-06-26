@@ -5,7 +5,7 @@
 
 struct EnPametfrog;
 
-typedef void (*EnPametfrogActionFunc)(struct EnPametfrog*, GlobalContext*);
+typedef void (*EnPametfrogActionFunc)(struct EnPametfrog*, PlayState*);
 
 typedef enum {
     /* 0x0 */ GEKKO_PRE_SNAPPER,

@@ -6,7 +6,7 @@
 
 struct EnBaguo;
 
-typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
+typedef void (*EnBaguoActionFunc)(struct EnBaguo*, PlayState*);
 
 /**
  * When a Nejiron explodes, rock particles fly out from where it exploded.
