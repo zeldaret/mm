@@ -4,7 +4,7 @@
  * Description: Stone Tower Temple - Mirror
  */
 
-// credits for documentation:
+// credits for documentation: Anon58, EllipticEllipsis
 
 #include "z_bg_ikana_mirror.h"
 #include "objects/object_ikana_obj/object_ikana_obj.h"
@@ -132,7 +132,6 @@ static ColliderTrisElementInit sTrisElementsInit[9] = {
     },
 };
 
-// static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit sTrisInit = {
     {
         COLTYPE_NONE,
@@ -194,18 +193,17 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void func_80B7FA84(BgIkanaMirror* this);
-void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx);
-void func_80B7FB84(BgIkanaMirror* this);
-void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx);
+void BgIkanaMirror_SetupCheckLightAbsorption(BgIkanaMirror* this);
+void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* globalCtx);
+void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this);
+void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx);
 
 extern Gfx D_060014B0[];
 extern Gfx D_06001880[];
 extern Gfx D_06001E18[];
 extern CollisionHeader D_06002358;
 
-// set vertices for ColliderQuad's
-void func_80B7F730(BgIkanaMirror* this) {
+void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     ColliderQuad* collider;
     s32 i;
     Vec3f a;
@@ -230,21 +228,21 @@ void func_80B7F730(BgIkanaMirror* this) {
     Matrix_Pop();
 }
 
-extern AnimatedMaterial D_06001678; // AnimatedMaterial
-extern AnimatedMaterial D_06001AD8; // AnimatedMaterial
+extern AnimatedMaterial D_06001678;
+extern AnimatedMaterial D_06001AD8;
 
 void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     BgIkanaMirror* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     Vec3f* vtx;
-    Vec3f sp60[3];
+    Vec3f vertices[3];
     ColliderTrisElementInit* colliderElement;
     s32 i;
     s32 j;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init((DynaPolyActor*)this, 0);
-    DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)this, &D_06002358);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002358);
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
@@ -254,10 +252,10 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
         colliderElement = &sTrisInit.elements[i];
         vtx = &colliderElement->dim.vtx[0];
         for (j = 0; j < 3; j++) {
-            Matrix_MultVec3f(vtx, &sp60[j]);
+            Matrix_MultVec3f(vtx, &vertices[j]);
             vtx++;
         }
-        Collider_SetTrisVertices(&this->colliderTris, i, &sp60[0], &sp60[1], &sp60[2]);
+        Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
     for (i = 0; i < 2; i++) {
@@ -265,10 +263,10 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Collider_SetQuad(globalCtx, &this->colliderQuad[i], &this->dyna.actor, &sQuadInit[i]);
     }
 
-    func_80B7F730(this);
-    this->lightEmissionTexture = Lib_SegmentedToVirtual(&D_06001678);
-    this->lightAbsorptionTexture = Lib_SegmentedToVirtual(&D_06001AD8);
-    func_80B7FA84(this);
+    BgIkanaMirror_SetQuadVertices(this);
+    this->lightAbsorptionTexture = Lib_SegmentedToVirtual(&D_06001678);
+    this->lightEmissionTexture = Lib_SegmentedToVirtual(&D_06001AD8);
+    BgIkanaMirror_SetupCheckLightAbsorption(this);
 }
 
 void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -282,56 +280,59 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7FA84(BgIkanaMirror* this) {
+//BgIkanaMirror_SetupCheckLightAbsorption
+void BgIkanaMirror_SetupCheckLightAbsorption(BgIkanaMirror* this) {
     this->isEmittingLight = 0;
-    this->actionFunc = func_80B7FA9C;
+    this->actionFunc = BgIkanaMirror_CheckLightAbsorption;
 }
 
-// checks if light is to be absorbed.
-void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx) {
-    s16 timer;
+// BgIkanaMirror_CheckLightAbsorption. or _Wait
+void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s8 isEmittingLight;
-    s32 startEmitting; // needs a suggestion/better name.
-    startEmitting = false;
-    if (this->unk5C7 >= 101) {
-        this->unk5C7 -= 100;
+    s32 startEmittingLight;
+    startEmittingLight = false;
+
+    //The light emission texture should gradually disappear from sight.
+    if (this->lightEmissionAlpha >= 101) { 
+        this->lightEmissionAlpha -= 100;
     } else {
-        this->unk5C7 = 0;
+        this->lightEmissionAlpha = 0;
     }
 
-    if ((this->colliderTris.base.acFlags & AC_HIT)) { // if mirror shield light touches mirror
-        timer = this->timer;
+    // if mirror shield light touches mirror
+    if (this->colliderTris.base.acFlags & AC_HIT) { 
         this->colliderTris.base.acFlags &= ~AC_HIT;
         this->isEmittingLight = 0;
-        if (timer < 400) {
-            this->timer = timer + 1; // timer
+        if (this->timer < 400) {
+            this->timer++;
         }
-        if (this->unk5C6 < 195) {
-            this->unk5C6 += 60;
+        if (this->lightAbsorptionAlpha < 195) {
+            this->lightAbsorptionAlpha += 60;
         } else {
-            this->unk5C6 = 255;
+            this->lightAbsorptionAlpha = 255;
         }
     } else {
         isEmittingLight = this->isEmittingLight;
-        if (isEmittingLight > 0) { // if emitting light
-            startEmitting = true;
+        if (isEmittingLight > 0) {
+            startEmittingLight = true;
         } else if (this->timer > 0) {
             this->isEmittingLight = isEmittingLight + 1;
         }
     }
-    if (startEmitting) {
-        func_80B7FB84(this);
+
+    if (startEmittingLight) {
+        BgIkanaMirror_SetupCheckLightEmission(this);
         return;
     }
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 }
 
-void func_80B7FB84(BgIkanaMirror* this) {
+void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_20;
-    this->actionFunc = func_80B7FBA4;
+    this->actionFunc = BgIkanaMirror_CheckLightEmission;
 }
-// emitting light
-void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx) {
+// emitting light. Name idea: BgIkanaMirror_CheckLightEmission
+void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
@@ -339,17 +340,17 @@ void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx) {
             this->colliderQuad[i].base.atFlags &= ~AT_HIT;
         }
     }
-
-    if (this->unk5C7 < 155) {
-        this->unk5C7 += 100;
+    
+    if (this->lightEmissionAlpha < 155) {
+        this->lightEmissionAlpha += 100;
     } else {
-        this->unk5C7 = 255;
+        this->lightEmissionAlpha = 255;
     }
 
-    if (this->unk5C6 >= 61) {
-        this->unk5C6 -= 60;
+    if (this->lightAbsorptionAlpha >= 61) {
+        this->lightAbsorptionAlpha -= 60;
     } else {
-        this->unk5C6 = 0;
+        this->lightAbsorptionAlpha = 0;
     }
 
     if (this->timer > 0) {
@@ -359,8 +360,9 @@ void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx) {
         }
         return;
     }
+    
     this->dyna.actor.flags &= ~ACTOR_FLAG_20;
-    func_80B7FA84(this);
+    BgIkanaMirror_SetupCheckLightAbsorption(this);
 }
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -370,29 +372,31 @@ void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s32 pad;
     BgIkanaMirror* this = THIS;
+    s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    // draw mirror
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06001E18);
-    if (this->unk5C6 > 0) {
-        AnimatedMat_Draw(globalCtx, this->lightEmissionTexture);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk5C6);
+
+    if (this->lightAbsorptionAlpha > 0) {
+        AnimatedMat_Draw(globalCtx, this->lightAbsorptionTexture);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->lightAbsorptionAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_060014B0); // mirror is releasing light
     }
-    if (this->unk5C7 > 0) {
-        f32 temp_fv0 = this->unk5C7 * (1.0f / 255.0f);
+    
+    if (this->lightEmissionAlpha > 0) { 
+        f32 temp_fv0 = this->lightEmissionAlpha * (1.0f / 255.0f);
         s32 pad2[2];
-        AnimatedMat_Draw(globalCtx, this->lightAbsorptionTexture);
+        AnimatedMat_Draw(globalCtx, this->lightEmissionTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(temp_fv0 * 123.0f));
         gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, (s32)(temp_fv0 * 185.0f));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_06001880); // mirror is receiving light
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
