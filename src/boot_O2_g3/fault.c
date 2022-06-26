@@ -29,7 +29,7 @@ const char* sFpuExceptions[] = {
 };
 
 void Fault_SleepImpl(u32 duration) {
-    u64 value = (duration * OS_CPU_COUNTER) / 1000ull;
+    u64 value = (duration * OS_CPU_COUNTER) / 1000ULL;
     Sleep_Cycles(value);
 }
 
