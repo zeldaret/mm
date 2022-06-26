@@ -14,12 +14,11 @@ typedef void (*ObjLupygameliftActionFunc)(struct ObjLupygamelift*, GlobalContext
 typedef struct ObjLupygamelift {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjLupygameliftActionFunc actionFunc;
-    /* 0x160 */ f32 unk_160;
-    /* 0x164 */ s32 unk_164;
-    /* 0x168 */ s32 unk_168;
-    /* 0x16C */ Vec3s* unk_16C;
-    /* 0x170 */ s16 unk_170;
-    /* 0x172 */ UNK_TYPE1 pad_172[2];
+    /* 0x160 */ f32 targetSpeedXZ;
+    /* 0x164 */ s32 count;
+    /* 0x168 */ s32 pointIndex;
+    /* 0x16C */ Vec3s* points;
+    /* 0x170 */ s16 timer;
 } ObjLupygamelift; /* size = 0x174 */
 
 extern const ActorInit Obj_Lupygamelift_InitVars;

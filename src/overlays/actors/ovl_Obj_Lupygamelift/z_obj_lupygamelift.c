@@ -44,7 +44,7 @@ void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjLupygamelift* this = THIS;
     Path* path;
-    s32 phi_v0;
+    s32 params;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     this->dyna.actor.scale.y = 0.15f;
@@ -52,35 +52,36 @@ void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
-    this->unk_170 = 0;
+    this->timer = 0;
     Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawSquare, 0.0f);
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_raillift_Colheader_0048D0);
-    this->unk_160 = thisx->home.rot.z * 0.1f;
-    if (this->unk_160 < 0.0f) {
-        this->unk_160 = -this->unk_160;
+    this->targetSpeedXZ = thisx->home.rot.z * 0.1f;
+    if (this->targetSpeedXZ < 0.0f) {
+        this->targetSpeedXZ = -this->targetSpeedXZ;
     }
     this->dyna.actor.home.rot.x = 0;
     this->dyna.actor.home.rot.y = 0;
     this->dyna.actor.home.rot.z = 0;
+
     path = &globalCtx->setupPathList[OBJLUPYGAMELIFT_GET_PATH(thisx)];
-    this->unk_168 = OBJLUPYGAMELIFT_GET_7(thisx);
-    this->unk_164 = path->count;
-    if (this->unk_168 >= this->unk_164) {
-        this->unk_168 = 0;
+    this->pointIndex = OBJLUPYGAMELIFT_GET_7(thisx);
+    this->count = path->count;
+    if (this->pointIndex >= this->count) {
+        this->pointIndex = 0;
     }
-    this->unk_16C = Lib_SegmentedToVirtual(path->points);
+    this->points = Lib_SegmentedToVirtual(path->points);
     Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, 0x183, this->dyna.actor.world.pos.x,
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
     if (OBJLUPYGAMELIFT_GET_C(thisx) != 0) {
-        phi_v0 = 1;
+        params = 1;
     } else {
-        phi_v0 = 0;
+        params = 0;
     }
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x1D2, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y,
-                this->dyna.actor.home.pos.z, 0, 0, 0, phi_v0);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GAMELUPY, this->dyna.actor.home.pos.x,
+                this->dyna.actor.home.pos.y, this->dyna.actor.home.pos.z, 0, 0, 0, params);
     func_80AF04BC(this);
 }
 
@@ -97,7 +98,6 @@ void func_80AF0394(ObjLupygamelift* this) {
     static f32 D_80AF075C = 10.0f;
     static f32 D_80AF0760 = -240.0f;
     static f32 D_80AF0764 = 30.0f;
-
     f32 new_var = D_80AF0754 - D_80AF0750;
     f32 new_var2 = D_80AF0764 - D_80AF0760;
     f32 new_var3 = D_80AF075C - D_80AF0758;
@@ -117,40 +117,40 @@ void func_80AF0394(ObjLupygamelift* this) {
 }
 
 void func_80AF04BC(ObjLupygamelift* this) {
-    this->unk_170 = 5;
+    this->timer = 5;
     this->actionFunc = func_80AF04D8;
 }
 
 void func_80AF04D8(ObjLupygamelift* this, GlobalContext* globalCtx) {
-    if (this->unk_170 == 0) {
+    if (this->timer == 0) {
         func_80AF0514(this);
     } else {
-        this->unk_170--;
+        this->timer--;
     }
 }
 
 void func_80AF0514(ObjLupygamelift* this) {
     this->actionFunc = func_80AF0530;
-    this->dyna.actor.speedXZ = this->unk_160;
+    this->dyna.actor.speedXZ = this->targetSpeedXZ;
 }
 
 void func_80AF0530(ObjLupygamelift* this, GlobalContext* globalCtx) {
     f32 step;
     Vec3f target;
 
-    target.x = (this->unk_16C[this->unk_168].x);
-    target.y = (this->unk_16C[this->unk_168].y);
-    target.z = (this->unk_16C[this->unk_168].z);
+    target.x = (this->points[this->pointIndex].x);
+    target.y = (this->points[this->pointIndex].y);
+    target.z = (this->points[this->pointIndex].z);
     step = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &target, this->dyna.actor.speedXZ);
     if (step > 30.0f) {
-        Math_SmoothStepToF(&this->dyna.actor.speedXZ, this->unk_160, 0.5f, 5.0f, 0.1f);
+        Math_SmoothStepToF(&this->dyna.actor.speedXZ, this->targetSpeedXZ, 0.5f, 5.0f, 0.1f);
     } else if (step > 0.0f) {
         Math_SmoothStepToF(&this->dyna.actor.speedXZ, 5.0f, 0.5f, 5.0f, 1.0f);
     } else {
-        if (this->unk_168 < (this->unk_164 - 1)) {
-            this->unk_168++;
+        if (this->pointIndex < (this->count - 1)) {
+            this->pointIndex++;
         } else {
-            this->unk_168 = 0;
+            this->pointIndex = 0;
         }
     }
     if (this->dyna.actor.child->update == NULL) {
