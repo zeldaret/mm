@@ -12,7 +12,7 @@ typedef struct EnOnpuman {
     /* 0x144 */ UNK_TYPE1 pad_144[0x110];
     /* 0x254 */ ColliderCylinder collider;
     /* 0x2A0 */ Actor* unk_2A0;
-    /* 0x2A4 */ u16 unk_2A4;
+    /* 0x2A4 */ u16 unk_2A4; // flags
     /* 0x2A8 */ EnOnpumanActionFunc actionFunc;
 } EnOnpuman; // size = 0x2AC
 
