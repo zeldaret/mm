@@ -18,14 +18,14 @@ typedef enum {
     /* 0x2 */ INCORRECT,
 } SIGNAL;
 
-void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjJgameLight_Init(Actor* thisx, PlayState* play);
+void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
+void ObjJgameLight_Update(Actor* thisx, PlayState* play);
+void ObjJgameLight_Draw(Actor* thisx, PlayState* play);
 
-void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx);
-void ObjJgameLight_UpdateCollision(ObjJgameLight* this, GlobalContext* globalCtx);
-void func_80C15718(ObjJgameLight* this, GlobalContext* globalCtx);
+void func_80C15474(ObjJgameLight* this, PlayState* play);
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
+void func_80C15718(ObjJgameLight* this, PlayState* play);
 
 const ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
@@ -61,7 +61,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 #include "assets/overlays/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light.c"
 
-void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
     ObjJgameLight* this = THIS;
     LightInfo* lights = &this->lightInfo;
 
@@ -83,14 +83,14 @@ void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1A8 = 0.0f;
 }
 
-void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
     ObjJgameLight* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
-void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx) {
+void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
     if (((this->actor.colChkInfo.health & 1) != 0) && (this->unk_1B6 == 0)) {
@@ -129,13 +129,13 @@ void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx) {
     Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, temp_a1 * 0.7f, 0, this->unk_1AC);
 }
 
-void ObjJgameLight_UpdateCollision(ObjJgameLight* this, GlobalContext* globalCtx) {
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void func_80C15718(ObjJgameLight* this, GlobalContext* globalCtx) {
+void func_80C15718(ObjJgameLight* this, PlayState* play) {
     if (OBJLUPYGAMELIFT_HEALTH_1(&this->actor) && (((this->unk_1B8) & 1) == 0)) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
         this->unk_1B8 = this->actor.colChkInfo.health;
@@ -156,7 +156,7 @@ void func_80C15718(ObjJgameLight* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgameLight_Update(Actor* thisx, PlayState* play) {
     ObjJgameLight* this = THIS;
 
     func_80C15718(this, globalCtx);
@@ -165,7 +165,7 @@ void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1AE++;
 }
 
-void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjJgameLight* this = THIS;
 
