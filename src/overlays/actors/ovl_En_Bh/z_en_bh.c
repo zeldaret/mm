@@ -10,10 +10,10 @@
 
 #define THIS ((EnBh*)thisx)
 
-void EnBh_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBh_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBh_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBh_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBh_Init(Actor* thisx, PlayState* play);
+void EnBh_Destroy(Actor* thisx, PlayState* play);
+void EnBh_Update(Actor* thisx, PlayState* play);
+void EnBh_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Bh_InitVars = {

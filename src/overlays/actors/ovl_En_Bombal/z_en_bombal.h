@@ -5,7 +5,7 @@
 
 struct EnBombal;
 
-typedef void (*EnBombalActionFunc)(struct EnBombal*, GlobalContext*);
+typedef void (*EnBombalActionFunc)(struct EnBombal*, PlayState*);
 
 typedef struct EnBombal {
     /* 0x0000 */ Actor actor;

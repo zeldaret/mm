@@ -5,7 +5,7 @@
 
 struct EnWdhand;
 
-typedef void (*EnWdhandActionFunc)(struct EnWdhand*, GlobalContext*);
+typedef void (*EnWdhandActionFunc)(struct EnWdhand*, PlayState*);
 
 typedef struct EnWdhand {
     /* 0x0000 */ Actor actor;

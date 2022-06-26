@@ -5,7 +5,7 @@
 
 struct EnDeath;
 
-typedef void (*EnDeathActionFunc)(struct EnDeath*, GlobalContext*);
+typedef void (*EnDeathActionFunc)(struct EnDeath*, PlayState*);
 
 typedef struct EnDeath {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnPoComposer;
 
-typedef void (*EnPoComposerActionFunc)(struct EnPoComposer*, GlobalContext*);
+typedef void (*EnPoComposerActionFunc)(struct EnPoComposer*, PlayState*);
 
 typedef struct EnPoComposer {
     /* 0x0000 */ Actor actor;

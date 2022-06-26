@@ -5,7 +5,7 @@
 
 struct ObjOshihiki;
 
-typedef void (*ObjOshihikiActionFunc)(struct ObjOshihiki*, GlobalContext*);
+typedef void (*ObjOshihikiActionFunc)(struct ObjOshihiki*, PlayState*);
 
 #define OBJOSHIHIKI_GET_F(thisx) ((thisx)->params & 0xF)
 #define OBJOSHIHIKI_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)

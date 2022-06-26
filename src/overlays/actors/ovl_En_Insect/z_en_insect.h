@@ -5,7 +5,7 @@
 
 struct EnInsect;
 
-typedef void (*EnInsectActionFunc)(struct EnInsect*, GlobalContext*);
+typedef void (*EnInsectActionFunc)(struct EnInsect*, PlayState*);
 
 #define ENINSECT_GET_1(thisx) ((thisx)->params & 1)
 

@@ -6,7 +6,7 @@
 
 struct Boss02;
 
-typedef void (*Boss02ActionFunc)(struct Boss02*, GlobalContext*);
+typedef void (*Boss02ActionFunc)(struct Boss02*, PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;

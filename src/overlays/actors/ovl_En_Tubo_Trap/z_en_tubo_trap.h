@@ -5,7 +5,7 @@
 
 struct EnTuboTrap;
 
-typedef void (*EnTuboTrapActionFunc)(struct EnTuboTrap*, GlobalContext*);
+typedef void (*EnTuboTrapActionFunc)(struct EnTuboTrap*, PlayState*);
 
 typedef struct EnTuboTrap {
     /* 0x0000 */ Actor actor;

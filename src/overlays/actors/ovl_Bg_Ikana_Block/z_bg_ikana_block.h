@@ -5,7 +5,7 @@
 
 struct BgIkanaBlock;
 
-typedef void (*BgIkanaBlockActionFunc)(struct BgIkanaBlock*, GlobalContext*);
+typedef void (*BgIkanaBlockActionFunc)(struct BgIkanaBlock*, PlayState*);
 
 typedef struct BgIkanaBlock {
     /* 0x0000 */ DynaPolyActor dyna;

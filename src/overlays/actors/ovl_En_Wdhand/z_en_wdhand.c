@@ -10,10 +10,10 @@
 
 #define THIS ((EnWdhand*)thisx)
 
-void EnWdhand_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWdhand_Init(Actor* thisx, PlayState* play);
+void EnWdhand_Destroy(Actor* thisx, PlayState* play);
+void EnWdhand_Update(Actor* thisx, PlayState* play);
+void EnWdhand_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Wdhand_InitVars = {

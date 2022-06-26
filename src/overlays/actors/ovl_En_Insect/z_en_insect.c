@@ -11,24 +11,24 @@
 
 #define THIS ((EnInsect*)thisx)
 
-void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnInsect_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnInsect_Init(Actor* thisx, PlayState* play);
+void EnInsect_Destroy(Actor* thisx, PlayState* play);
+void EnInsect_Update(Actor* thisx, PlayState* play);
+void EnInsect_Draw(Actor* thisx, PlayState* play);
 
 void func_8091AC78(EnInsect* this);
-void func_8091ACC4(EnInsect* this, GlobalContext* globalCtx);
+void func_8091ACC4(EnInsect* this, PlayState* play);
 void func_8091AE10(EnInsect* this);
-void func_8091AE5C(EnInsect* this, GlobalContext* globalCtx);
+void func_8091AE5C(EnInsect* this, PlayState* play);
 void func_8091B030(EnInsect* this);
-void func_8091B07C(EnInsect* this, GlobalContext* globalCtx);
-void func_8091B2D8(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B07C(EnInsect* this, PlayState* play);
+void func_8091B2D8(EnInsect* this, PlayState* play);
 void func_8091B3D0(EnInsect* this);
-void func_8091B440(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B440(EnInsect* this, PlayState* play);
 void func_8091B618(EnInsect* this);
-void func_8091B670(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B670(EnInsect* this, PlayState* play);
 void func_8091B928(EnInsect* this);
-void func_8091B984(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B984(EnInsect* this, PlayState* play);
 
 s16 D_8091BD60 = 0;
 
@@ -90,9 +90,9 @@ f32 EnInsect_XZDistanceSquared(Vec3f* arg0, Vec3f* arg1) {
     return SQ(arg0->x - arg1->x) + SQ(arg0->z - arg1->z);
 }
 
-s32 EnInsect_InBottleRange(EnInsect* this, GlobalContext* globalCtx) {
+s32 EnInsect_InBottleRange(EnInsect* this, PlayState* play) {
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Vec3f sp1C;
 
     if (this->actor.xzDistToPlayer < 32.0f) {
@@ -120,7 +120,7 @@ void func_8091A9E4(EnInsect* this) {
     }
 }
 
-void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnInsect_Init(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
     f32 rand;
 
@@ -131,11 +131,11 @@ void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     func_8091A8A0(this);
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C,
-                   this->jointTable, this->morphTable, 24);
+    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C, this->jointTable,
+                   this->morphTable, 24);
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     {
         ColliderJntSphElement* colliderElement = &this->collider.elements[0];
@@ -165,8 +165,8 @@ void EnInsect_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnInsect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyJntSph(globalCtx, &THIS->collider);
+void EnInsect_Destroy(Actor* thisx, PlayState* play) {
+    Collider_DestroyJntSph(play, &THIS->collider);
 }
 
 void func_8091AC78(EnInsect* this) {
@@ -175,7 +175,7 @@ void func_8091AC78(EnInsect* this) {
     this->unk_30C |= 0x100;
 }
 
-void func_8091ACC4(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091ACC4(EnInsect* this, PlayState* play) {
     f32 temp_f2;
 
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.5f, 0.0f);
@@ -211,7 +211,7 @@ void func_8091AE10(EnInsect* this) {
     this->unk_30C |= 0x100;
 }
 
-void func_8091AE5C(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091AE5C(EnInsect* this, PlayState* play) {
     s32 pad;
     f32 temp_f0;
 
@@ -251,7 +251,7 @@ void func_8091B030(EnInsect* this) {
     this->unk_30C |= 0x100;
 }
 
-void func_8091B07C(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091B07C(EnInsect* this, PlayState* play) {
     s32 pad;
     f32 speed;
     s16 frames;
@@ -265,7 +265,7 @@ void func_8091B07C(EnInsect* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos),
                            0x7D0);
     } else if (sp38) {
-        frames = globalCtx->state.frames;
+        frames = play->state.frames;
         yaw = BINANG_ROT180(this->actor.yawTowardsPlayer);
         if ((frames & 0x10) != 0) {
             if ((frames & 0x20) != 0) {
@@ -275,7 +275,7 @@ void func_8091B07C(EnInsect* this, GlobalContext* globalCtx) {
             yaw -= 0x2000;
         }
 
-        if (globalCtx) {}
+        if (play) {}
         Math_ScaledStepToS(&this->actor.world.rot.y, yaw, 0x7D0);
     }
 
@@ -302,7 +302,7 @@ void func_8091B274(EnInsect* this) {
     this->unk_30C &= ~0x100;
 }
 
-void func_8091B2D8(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091B2D8(EnInsect* this, PlayState* play) {
     if ((this->unk_312 == 20) && !(this->unk_30C & 4)) {
         this->actor.draw = EnInsect_Draw;
     } else if (this->unk_312 == 0) {
@@ -329,7 +329,7 @@ void func_8091B3D0(EnInsect* this) {
     this->unk_30C |= 8;
 }
 
-void func_8091B440(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091B440(EnInsect* this, PlayState* play) {
     s32 pad[2];
     Vec3f sp34;
 
@@ -347,7 +347,7 @@ void func_8091B440(EnInsect* this, GlobalContext* globalCtx) {
         sp34.x = Math_SinS(this->actor.shape.rot.y) * -0.6f;
         sp34.y = Math_SinS(this->actor.shape.rot.x) * 0.6f;
         sp34.z = Math_CosS(this->actor.shape.rot.y) * -0.6f;
-        func_800B1210(globalCtx, &this->actor.world.pos, &sp34, &D_8091BDCC, (Rand_ZeroOne() * 5.0f) + 8.0f,
+        func_800B1210(play, &this->actor.world.pos, &sp34, &D_8091BDCC, (Rand_ZeroOne() * 5.0f) + 8.0f,
                       (Rand_ZeroOne() * 5.0f) + 8.0f);
     }
 
@@ -364,7 +364,7 @@ void func_8091B618(EnInsect* this) {
     this->unk_30C &= ~0x100;
 }
 
-void func_8091B670(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091B670(EnInsect* this, PlayState* play) {
     s32 pad[2];
     s16 temp;
     Vec3f sp40;
@@ -401,7 +401,7 @@ void func_8091B670(EnInsect* this, GlobalContext* globalCtx) {
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y + this->actor.depthInWater;
         sp40.z = this->actor.world.pos.z;
-        EffectSsGRipple_Spawn(globalCtx, &sp40, 40, 200, 4);
+        EffectSsGRipple_Spawn(play, &sp40, 40, 200, 4);
     }
 
     if ((this->unk_312 <= 0) || ((this->unk_30C & 4) && (this->unk_314 <= 0))) {
@@ -423,13 +423,13 @@ void func_8091B928(EnInsect* this) {
     this->unk_30C |= 8;
 }
 
-void func_8091B984(EnInsect* this, GlobalContext* globalCtx) {
+void func_8091B984(EnInsect* this, PlayState* play) {
     this->actor.shape.rot.x -= 0x1F4;
     this->actor.shape.rot.y += 0xC8;
     Actor_SetScale(&this->actor, CLAMP_MIN(this->actor.scale.x - 0.00005f, 0.001f));
 
     if ((this->actor.depthInWater > 5.0f) && (this->actor.depthInWater < 30.0f) && (Rand_ZeroOne() < 0.3f)) {
-        EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, -5.0f, 5.0f, 5.0f, (Rand_ZeroOne() * 0.04f) + 0.02f);
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, -5.0f, 5.0f, 5.0f, (Rand_ZeroOne() * 0.04f) + 0.02f);
     }
 
     if (this->unk_312 <= 0) {
@@ -437,7 +437,7 @@ void func_8091B984(EnInsect* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnInsect_Update(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
     s32 phi_v0;
 
@@ -453,7 +453,7 @@ void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_314--;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.update != NULL) {
         Actor_MoveWithGravity(&this->actor);
@@ -474,10 +474,10 @@ void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (phi_v0 != 0) {
             phi_v0 |= 0x40;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 8.0f, 5.0f, 0.0f, phi_v0);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 5.0f, 0.0f, phi_v0);
         }
 
-        if (Actor_HasParent(&this->actor, globalCtx)) {
+        if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
             func_8091B274(this);
         } else if ((this->actor.xzDistToPlayer < 50.0f) && (this->actionFunc != func_8091B2D8)) {
@@ -487,11 +487,11 @@ void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx) {
                 colliderElement->dim.worldSphere.center.x = this->actor.world.pos.x;
                 colliderElement->dim.worldSphere.center.y = this->actor.world.pos.y;
                 colliderElement->dim.worldSphere.center.z = this->actor.world.pos.z;
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             }
 
-            if (!(this->unk_30C & 8) && (D_8091BD60 < 4) && EnInsect_InBottleRange(this, globalCtx) &&
-                Actor_PickUp(&this->actor, globalCtx, GI_MAX, 60.0f, 30.0f)) {
+            if (!(this->unk_30C & 8) && (D_8091BD60 < 4) && EnInsect_InBottleRange(this, play) &&
+                Actor_PickUp(&this->actor, play, GI_MAX, 60.0f, 30.0f)) {
                 D_8091BD60++;
             }
         }
@@ -500,10 +500,10 @@ void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnInsect_Draw(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
     D_8091BD60 = 0;
 }
