@@ -11,8 +11,6 @@
 
 #define THIS ((BgOpenShutter*)thisx)
 
-#define FLT_MAX 340282346638528859811704183484516925440.0f
-
 void BgOpenShutter_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -22,10 +20,10 @@ void func_80ACAD88(BgOpenShutter* this, GlobalContext* globalCtx);
 void func_80ACAE5C(BgOpenShutter* this, GlobalContext* globalCtx);
 void func_80ACAEF0(BgOpenShutter* this, GlobalContext* globalCtx);
 
-enum {
+typedef enum {
     /* 0x1 */ DOOR_OPEN = 1,
-    /* 0x2 */ DOOR_CLOSE = 2,
-};
+    /* 0x2 */ DOOR_CLOSED = 2,
+} DoorState;
 
 const ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
@@ -68,7 +66,7 @@ s8 func_80ACABA8(BgOpenShutter* this, GlobalContext* globalCtx) {
     f32 temp_fv0;
     s16 temp_v0;
 
-    if ((Player_InCsMode(&globalCtx->state) == 0) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
+    if (!Player_InCsMode(&globalCtx->state) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
         temp_fv0 = func_80ACAB10(globalCtx, &this->dyna.actor, 0.0f, 65.0f, 15.0f);
         if (fabsf(temp_fv0) < 50.0f) {
             temp_v0 = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
@@ -130,8 +128,8 @@ void func_80ACAD88(BgOpenShutter* this, GlobalContext* globalCtx) {
 void func_80ACAE5C(BgOpenShutter* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->dyna.actor.velocity.y, 15.0f, 3.0f);
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 120.0f,
-                     this->dyna.actor.velocity.y) != 0) {
-        this->unk_164 += 1;
+                     this->dyna.actor.velocity.y)) {
+        this->unk_164++;
     }
     if (this->unk_164 >= 10) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
@@ -144,10 +142,10 @@ void func_80ACAEF0(BgOpenShutter* this, GlobalContext* globalCtx) {
     s16 quake;
 
     Math_StepToF(&this->dyna.actor.velocity.y, 20.0f, 8.0f);
-    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y) != 0) {
+    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y)) {
         this->dyna.actor.floorHeight = this->dyna.actor.home.pos.y;
         Actor_SpawnFloorDustRing(globalCtx, &this->dyna.actor, &this->dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10,
-                                 1);
+                                 true);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         quake = Quake_Add(Play_GetCamera(globalCtx, CAM_ID_MAIN), 3);
         Quake_SetSpeed(quake, -0x7F18);
@@ -164,7 +162,7 @@ void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 index;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x7C) != 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x7C)) {
         index = Cutscene_GetActorActionIndex(globalCtx, 0x7C);
         if (globalCtx->csCtx.actorActions[index]->action == DOOR_OPEN) {
             if (this->actionFunc == func_80ACAD88) {
@@ -173,7 +171,7 @@ void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 this->dyna.actor.velocity.y = 0.0f;
             }
             this->unk_164 = 0;
-        } else if (globalCtx->csCtx.actorActions[index]->action == DOOR_CLOSE) {
+        } else if (globalCtx->csCtx.actorActions[index]->action == DOOR_CLOSED) {
             if (this->actionFunc == func_80ACAE5C) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
                 this->actionFunc = func_80ACAEF0;
