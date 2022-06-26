@@ -52,8 +52,8 @@ void DmChar02_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInf
                      animInfo->mode, animInfo->morphFrames);
 }
 
-void func_80AAAECC(Actor* actor, GlobalContext* globalCtx) {
-    switch (globalCtx->csCtx.frames) {
+void func_80AAAECC(Actor* actor, PlayState* play) {
+    switch (play->csCtx.frames) {
         case 0x5F:
             Actor_PlaySfxAtPos(actor, NA_SE_EV_OCARINA_BOUND_0);
             return;
@@ -65,14 +65,14 @@ void func_80AAAECC(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AAAF2C(DmChar02* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_OKUJOU) &&
-        (globalCtx->csCtx.currentCsIndex == 1)) {
-        func_80AAAECC(&this->actor, globalCtx);
+void func_80AAAF2C(DmChar02* this, PlayState* play) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_OKUJOU) &&
+        (play->csCtx.currentCsIndex == 1)) {
+        func_80AAAECC(&this->actor, play);
     }
 }
 
-void DmChar02_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar02_Init(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
     // items[0] is the ocarina
@@ -80,7 +80,7 @@ void DmChar02_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->animIndex = 0;
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
         DmChar02_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = func_80AAB04C;
@@ -90,18 +90,18 @@ void DmChar02_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void DmChar02_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar02_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80AAB04C(DmChar02* this, GlobalContext* globalCtx) {
+void func_80AAB04C(DmChar02* this, PlayState* play) {
     u8 sp2F;
     s32 actionIndex;
 
     sp2F = true;
-    if (Cutscene_CheckActorAction(globalCtx, 0x83)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x83);
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_CheckActorAction(play, 0x83)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 0x83);
+        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 default:
                     this->animIndex = 0;
                     sp2F = false;
@@ -120,7 +120,7 @@ void func_80AAB04C(DmChar02* this, GlobalContext* globalCtx) {
                 DmChar02_ChangeAnimationByInfo(&this->skelAnime, &sAnimations[this->animIndex], 0);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
     }
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->animIndex == 1) {
@@ -130,41 +130,41 @@ void func_80AAB04C(DmChar02* this, GlobalContext* globalCtx) {
     }
 }
 
-void DmChar02_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar02_Update(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
     this->unk2F0 = this->unk2F0;
-    this->actionFunc(this, globalCtx);
-    if (!Actor_HasParent(&this->actor, globalCtx)) {
-        Actor_PickUp(&this->actor, globalCtx, GI_OCARINA, 30.0f, 80.0f);
+    this->actionFunc(this, play);
+    if (!Actor_HasParent(&this->actor, play)) {
+        Actor_PickUp(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         Actor_MarkForDeath(&this->actor);
     }
-    func_80AAAF2C(this, globalCtx);
+    func_80AAAF2C(this, play);
 }
 
-s32 DmChar02_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 DmChar02_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                               Actor* thisx) {
     return false;
 }
 
-void DmChar02_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmChar02_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void DmChar02_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void DmChar02_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-void DmChar02_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar02_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
     DmChar02* this = THIS;
     s32 sp30 = false;
 
-    if ((globalCtx->csCtx.state == 0) && (this->actor.world.pos.y < 100.0f)) {
+    if ((play->csCtx.state == 0) && (this->actor.world.pos.y < 100.0f)) {
         sp30 = true;
-    } else if (Cutscene_CheckActorAction(globalCtx, 0x6B)) {
-        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x6B)]->action) {
+    } else if (Cutscene_CheckActorAction(play, 0x6B)) {
+        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x6B)]->action) {
             case 0x17:
             case 0x1C:
             case 0x26:
@@ -172,8 +172,8 @@ void DmChar02_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     if (sp30) {
-        func_8012C28C(globalCtx->state.gfxCtx);
-        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+        func_8012C28C(play->state.gfxCtx);
+        SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar02_OverrideLimbDraw, DmChar02_PostLimbDraw,
                                        DmChar02_TransformLimbDraw, &this->actor);
     }
