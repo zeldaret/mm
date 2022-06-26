@@ -4308,7 +4308,7 @@ void func_80B4D7B8(PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
     for (phi_s2 = D_80B50350, i = 0; i < 10; phi_s2++, i++) {
         if (phi_s2->unk1 > 0) {
-            temp_s5 = play->gameplayFrames + ((0x10 * i) & 0xFF) & 0x7F;
+            temp_s5 = (play->gameplayFrames + ((0x10 * i) & 0xFF)) & 0x7F;
             temp_s6 = (u8)(play->gameplayFrames * -0xF);
             Matrix_Translate(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
