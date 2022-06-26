@@ -6,6 +6,9 @@
 struct ObjJgameLight;
 
 #define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJLUPYGAMELIFT_HEALTH_1(thisx) ((thisx)->colChkInfo.health & 1)
+#define OBJLUPYGAMELIFT_HEALTH_2(thisx) ((thisx)->colChkInfo.health & 2)
+#define OBJLUPYGAMELIFT_HEALTH_4(thisx) ((thisx)->colChkInfo.health & 4)
 
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;
@@ -17,11 +20,11 @@ typedef struct ObjJgameLight {
     /* 0x1AC */ s16 unk_1AC;
     /* 0x1AE */ s16 unk_1AE;
     /* 0x1B0 */ UNK_TYPE1 pad_1B0[2];
-    /* 0x1B2 */ s16 unk_1B2;
-    /* 0x1B4 */ s16 unk_1B4;
+    /* 0x1B2 */ s16 alpha;
+    /* 0x1B4 */ s16 signal;
     /* 0x1B6 */ s16 unk_1B6;
     /* 0x1B8 */ u8 unk_1B8;
-} ObjJgameLight; /* size = 0x1BC */
+} ObjJgameLight; // size = 0x1BC
 
 extern const ActorInit Obj_Jgame_Light_InitVars;
 

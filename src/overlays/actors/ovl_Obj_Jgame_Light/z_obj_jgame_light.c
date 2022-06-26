@@ -12,13 +12,19 @@
 
 #define THIS ((ObjJgameLight*)thisx)
 
+typedef enum {
+    /* 0x0 */ NONE,
+    /* 0x1 */ CORRECT,
+    /* 0x2 */ INCORRECT,
+} SIGNAL;
+
 void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx);
-void func_80C156C4(ObjJgameLight* this, GlobalContext* globalCtx);
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, GlobalContext* globalCtx);
 void func_80C15718(ObjJgameLight* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Jgame_Light_InitVars = {
@@ -65,15 +71,15 @@ void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Lights_PointGlowSetInfo(lights, this->actor.world.pos.x, (this->actor.world.pos.y + 70.0f), this->actor.world.pos.z,
-                            0xFF, 0xFF, 0xB4, -1);
+                            255, 255, 180, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     Actor_SetFocus(&this->actor, 60.0f);
     this->actor.colChkInfo.health = 0;
     this->unk_1B8 = 0;
     this->unk_1B6 = 0;
     this->unk_1AC = 0;
-    this->unk_1B2 = 0;
-    this->unk_1B4 = 0;
+    this->alpha = 0;
+    this->signal = NONE;
     this->unk_1A8 = 0.0f;
 }
 
@@ -106,8 +112,8 @@ void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx) {
             this->unk_1AC = -1;
             if (this->unk_1A8 == 0.0f) {
                 this->unk_1B6 = 0;
-                this->actor.colChkInfo.health &= 0xFFFE;
-                this->actor.colChkInfo.health &= (s16)0xFFF7;
+                this->actor.colChkInfo.health &= ~1;
+                this->actor.colChkInfo.health &= ~8;
             }
         }
         if (this->unk_1A8 > 0.3f) {
@@ -119,36 +125,34 @@ void func_80C15474(ObjJgameLight* this, GlobalContext* globalCtx) {
     if (this->unk_1A8 > 0.1f) {
         func_800B9010(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
-    temp_a1 = (((s32)(Rand_ZeroOne() * 127.0f) + 0x80));
-    Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, (u32)(temp_a1 * 0.7f) & 0xFF, 0, this->unk_1AC);
+    temp_a1 = (((s32)(Rand_ZeroOne() * 127.0f) + 128));
+    Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, temp_a1 * 0.7f, 0, this->unk_1AC);
 }
 
-void func_80C156C4(ObjJgameLight* this, GlobalContext* globalCtx) {
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80C15718(ObjJgameLight* this, GlobalContext* globalCtx) {
-    u8 colChk;
-
-    if (((this->actor.colChkInfo.health & 1) != 0) && (((this->unk_1B8) & 1) == 0)) {
+    if (OBJLUPYGAMELIFT_HEALTH_1(&this->actor) && (((this->unk_1B8) & 1) == 0)) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
-        this->unk_1B8 = colChk = this->actor.colChkInfo.health;
+        this->unk_1B8 = this->actor.colChkInfo.health;
     }
-    if ((this->actor.colChkInfo.health & 2) != 0) {
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health & 0xFFFD;
-        this->unk_1B2 = 0x12C & 0xFFFF;
-        this->unk_1B4 = 1;
-    } else if ((this->actor.colChkInfo.health & 4) != 0) {
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health & 0xFFFB;
-        this->unk_1B2 = 0x12C;
-        this->unk_1B4 = 2;
+    if (OBJLUPYGAMELIFT_HEALTH_2(&this->actor)) {
+        this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~2;
+        this->alpha = 0x12C;
+        this->signal = CORRECT;
+    } else if (OBJLUPYGAMELIFT_HEALTH_4(&this->actor)) {
+        this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~4;
+        this->alpha = 0x12C;
+        this->signal = INCORRECT;
     }
-    if (this->unk_1B2 >= 0x10) {
-        this->unk_1B2 -= 0xF;
+    if (this->alpha >= 0x10) {
+        this->alpha -= 0xF;
     } else {
-        this->unk_1B2 = 0;
+        this->alpha = 0;
     }
 }
 
@@ -157,8 +161,8 @@ void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80C15718(this, globalCtx);
     func_80C15474(this, globalCtx);
-    func_80C156C4(this, globalCtx);
-    this->unk_1AE += 1;
+    ObjJgameLight_UpdateCollision(this, globalCtx);
+    this->unk_1AE++;
 }
 
 void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -170,22 +174,23 @@ void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &gObjectSyokudaiTypeSwitchCausesFlameDL);
-    if (this->unk_1B2 > 0) {
+    if (this->alpha > 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        if (this->unk_1B2 >= 0x100) {
+        if (this->alpha > 255) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, 255);
         } else {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->unk_1B2);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->alpha);
         }
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (this->unk_1B4 == 1) {
+        if (this->signal == CORRECT) {
             gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightCorrectDL);
-        } else if (this->unk_1B4 == 2) {
+        } else if (this->signal == INCORRECT) {
             gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightIncorrectDL);
         }
     }
     if (this->unk_1A8 != 0.0f) {
         f32 scale;
+
         func_8012C2DC(globalCtx->state.gfxCtx);
         scale = (this->unk_1A8 * 27.0f) / 10000.0f;
         gSPSegment(POLY_XLU_DISP++, 0x08,
