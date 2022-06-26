@@ -14,9 +14,9 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play);
 void DemoGetitem_Destroy(Actor* thisx, PlayState* play);
 void DemoGetitem_Update(Actor* thisx, PlayState* play);
 
-void func_80A4FB10(DemoGetitem* this, GlobalContext* globalCtx);
-void func_80A4FB68(DemoGetitem* this, GlobalContext* globalCtx2);
-void func_80A4FCF0(Actor* thisx, GlobalContext* globalCtx);
+void func_80A4FB10(DemoGetitem* this, PlayState* play);
+void func_80A4FB68(DemoGetitem* this, PlayState* play2);
+void func_80A4FCF0(Actor* thisx, PlayState* play);
 
 const ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
@@ -32,28 +32,28 @@ const ActorInit Demo_Getitem_InitVars = {
 
 static s16 bankIndex[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
 
-static s16 drawIndex[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
+static s16 csDrawIndex[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
 
-static u16 actionIndex[] = {
+static u16 csActionIndex[] = {
     0x6E,
     0x236,
 };
 
-void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 objIndex;
     s32 itemIndex;
     DemoGetitem* this = THIS;
 
     itemIndex = 0;
-    if ((this->actor.params & 0xF) == 1) {
+    if (DEMOGETITEM_GET_F(thisx) == 1) {
         itemIndex = 1;
     }
     Actor_SetScale(&this->actor, 0.25f);
     this->actionFunc = func_80A4FB10;
-    this->item = drawIndex[itemIndex];
-    this->action = actionIndex[itemIndex];
-    objIndex = Object_GetIndex(&globalCtx->objectCtx, bankIndex[itemIndex]);
+    this->item = csDrawIndex[itemIndex];
+    this->action = csActionIndex[itemIndex];
+    objIndex = Object_GetIndex(&play->objectCtx, bankIndex[itemIndex]);
     if (objIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -61,38 +61,37 @@ void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void DemoGetitem_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80A4FB10(DemoGetitem* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->object) != 0) {
+void func_80A4FB10(DemoGetitem* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->object) != 0) {
         this->actor.draw = NULL;
         this->actor.objBankIndex = this->object;
         this->actionFunc = func_80A4FB68;
     }
 }
 
-void func_80A4FB68(DemoGetitem* this, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    s16 sp22 = (globalCtx->gameplayFrames * 0x3E8) & 0xFFFF;
+void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
+    PlayState* play = play2;
+    u16 sp22 = (play->gameplayFrames * 1000) & 0xFFFF;
 
-    if (Cutscene_CheckActorAction(globalCtx, this->action) != 0) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->action)]->action != 4) {
+    if (Cutscene_CheckActorAction(play, this->action)) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->action)]->action != 4) {
             this->actor.shape.yOffset = 0.0f;
         }
-        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->action)]->action) {
+        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->action)]->action) {
             case 2:
                 this->actor.draw = func_80A4FCF0;
-                Cutscene_ActorTranslate(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->action));
-                this->actor.shape.rot.y = this->actor.shape.rot.y + 0x3E8;
+                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->action));
+                this->actor.shape.rot.y += 1000;
                 return;
             case 3:
                 Actor_MarkForDeath(&this->actor);
                 return;
             case 4:
                 this->actor.draw = func_80A4FCF0;
-                Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
-                                              Cutscene_GetActorActionIndex(globalCtx, this->action));
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->action));
                 this->actor.shape.yOffset = Math_SinS(sp22) * 15.0f;
                 return;
         }
@@ -102,16 +101,16 @@ void func_80A4FB68(DemoGetitem* this, GlobalContext* globalCtx2) {
     }
 }
 
-void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DemoGetitem_Update(Actor* thisx, PlayState* play) {
     DemoGetitem* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void func_80A4FCF0(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A4FCF0(Actor* thisx, PlayState* play) {
     DemoGetitem* this = THIS;
 
-    func_800B8050(&this->actor, globalCtx, 0);
-    func_800B8118(&this->actor, globalCtx, 0);
-    GetItem_Draw(globalCtx, this->item);
+    func_800B8050(&this->actor, play, 0);
+    func_800B8118(&this->actor, play, 0);
+    GetItem_Draw(play, this->item);
 }

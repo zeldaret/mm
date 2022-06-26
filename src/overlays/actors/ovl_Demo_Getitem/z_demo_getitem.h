@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define DEMOGETITEM_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct DemoGetitem;
 
 typedef void (*DemoGetitemActionFunc)(struct DemoGetitem*, PlayState*);
