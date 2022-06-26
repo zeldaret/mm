@@ -32,8 +32,8 @@ typedef enum {
     /* 23 */ PAMERA_LIMB_MAX
 } ObjectPameraLimbs;
 
-typedef void (*EnPameraActionFunc)(struct EnPamera*, GlobalContext*);
-typedef void (*EnPameraSetupFunc)(struct EnPamera*, GlobalContext*);
+typedef void (*EnPameraActionFunc)(struct EnPamera*, PlayState*);
+typedef void (*EnPameraSetupFunc)(struct EnPamera*, PlayState*);
 
 typedef struct EnPamera {
     /* 0x000 */ Actor actor;

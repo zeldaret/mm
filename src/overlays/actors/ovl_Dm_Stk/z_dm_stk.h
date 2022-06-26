@@ -6,7 +6,7 @@
 
 struct DmStk;
 
-typedef void (*DmStkActionFunc)(struct DmStk*, GlobalContext*);
+typedef void (*DmStkActionFunc)(struct DmStk*, PlayState*);
 
 #define DM_STK_GET_TYPE(thisx) ((thisx)->params)
 

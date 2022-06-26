@@ -378,7 +378,7 @@ typedef struct Camera {
     /* 0x068 */ Vec3f up;
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f quakeOffset;
-    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x08C */ struct PlayState* play;
     /* 0x090 */ Actor* trackActor; // the actor the camera is focused on. Most often Player, but can be any actor
     /* 0x094 */ PosRot trackActorPosRot;
     /* 0x0A8 */ Actor* target; // the actor that is being z-targeted

@@ -11,14 +11,14 @@
 
 #define THIS ((ObjTree*)thisx)
 
-void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTree_Init(Actor* thisx, PlayState* play);
+void ObjTree_Destroy(Actor* thisx, PlayState* play);
+void ObjTree_Update(Actor* thisx, PlayState* play);
+void ObjTree_Draw(Actor* thisx, PlayState* play);
 
-void ObTree_DoNothing(ObjTree* this, GlobalContext* globalCtx);
+void ObTree_DoNothing(ObjTree* this, PlayState* play);
 void ObTree_SetupDoNothing(ObjTree* this);
-void ObTree_Sway(ObjTree* this, GlobalContext* globalCtx);
+void ObTree_Sway(ObjTree* this, PlayState* play);
 
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
@@ -89,7 +89,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColchkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTree_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTree* this = THIS;
     CollisionHeader* colHeader = NULL;
@@ -101,11 +101,11 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
         CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColchkInfoInit);
 
     if (OBJTREE_ISLARGE(&this->dyna.actor)) {
@@ -118,23 +118,23 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObTree_SetupDoNothing(this);
 }
 
-void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTree_Destroy(Actor* thisx, PlayState* play) {
     ObjTree* this = THIS;
     s32 bgId;
 
     if (!OBJTREE_ISLARGE(&this->dyna.actor)) {
         bgId = this->dyna.bgId;
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, bgId);
     }
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObTree_SetupDoNothing(ObjTree* this) {
     this->actionFunc = ObTree_DoNothing;
 }
 
-void ObTree_DoNothing(ObjTree* this, GlobalContext* globalCtx) {
+void ObTree_DoNothing(ObjTree* this, PlayState* play) {
 }
 
 void ObTree_SetupSway(ObjTree* this) {
@@ -145,7 +145,7 @@ void ObTree_SetupSway(ObjTree* this) {
     this->actionFunc = ObTree_Sway;
 }
 
-void ObTree_Sway(ObjTree* this, GlobalContext* globalCtx) {
+void ObTree_Sway(ObjTree* this, PlayState* play) {
     if (this->timer > 80) {
         ObTree_SetupDoNothing(this);
         return;
@@ -159,12 +159,12 @@ void ObTree_Sway(ObjTree* this, GlobalContext* globalCtx) {
     this->timer++;
 }
 
-void ObTree_UpdateCollision(ObjTree* this, GlobalContext* globalCtx) {
+void ObTree_UpdateCollision(ObjTree* this, PlayState* play) {
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     if (this->dyna.actor.xzDistToPlayer < 600.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         if (this->dyna.actor.home.rot.y == 1) {
             this->dyna.actor.home.rot.y = 0;
             ObTree_SetupSway(this);
@@ -172,26 +172,26 @@ void ObTree_UpdateCollision(ObjTree* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTree_Update(Actor* thisx, PlayState* play) {
     ObjTree* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    ObTree_UpdateCollision(this, globalCtx);
+    this->actionFunc(this, play);
+    ObTree_UpdateCollision(this, play);
 }
 
-void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTree_Draw(Actor* thisx, PlayState* play) {
     s16 xRot = (f32)thisx->shape.rot.x;
     s16 zRot = (f32)thisx->shape.rot.z;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_000680);
 
     Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_0007C8);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

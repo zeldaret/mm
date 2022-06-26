@@ -5,7 +5,7 @@
 
 struct ObjUsiyane;
 
-typedef void (*ObjUsiyaneActionFunc)(struct ObjUsiyane*, GlobalContext*);
+typedef void (*ObjUsiyaneActionFunc)(struct ObjUsiyane*, PlayState*);
 
 typedef struct ObjUsiyane {
     /* 0x0000 */ Actor actor;

@@ -15,11 +15,11 @@ void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 flags) {
     dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
 }
 
-void DynaPolyActor_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
+void DynaPolyActor_LoadMesh(PlayState* play, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
     CollisionHeader* header = NULL;
 
     CollisionHeader_GetVirtual(meshHeader, &header);
-    dynaActor->bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &dynaActor->actor, header);
+    dynaActor->bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &dynaActor->actor, header);
 }
 
 void DynaPolyActor_ResetState(DynaPolyActor* dynaActor) {
@@ -102,7 +102,7 @@ s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
+s32 DynaPolyActor_ValidateMove(PlayState* play, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
                                s16 startHeight) {
     Vec3f startPos;
     Vec3f endPos;
@@ -125,16 +125,16 @@ s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActo
     endPos.y = startPos.y;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
 
-    if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
-                                true, &bgId, &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true,
+                                &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
     startPos.z = (dynaActor->actor.world.pos.z * 2.0f) - startPos.z;
     endPos.x = sign * adjustedEndRadius * sin + startPos.x;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
-    if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
-                                true, &bgId, &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&play->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true,
+                                &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     return true;

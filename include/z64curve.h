@@ -4,7 +4,7 @@
 #include "PR/ultratypes.h"
 #include "z64math.h"
 
-struct GlobalContext;
+struct PlayState;
 
 typedef struct {
     /* 0x0 */ u16 flags;         // Only the bottom two bits are used, although others are set in objects
@@ -44,19 +44,19 @@ typedef struct {
     /* 0x1C */ s16 (*jointTable)[9];
 } SkelCurve; // size = 0x20
 
-typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
-typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
+typedef s32 (*OverrideCurveLimbDraw)(struct PlayState* play, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
+typedef void (*PostCurveLimbDraw)(struct PlayState* play, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
 
 
 
 f32 Curve_Interpolate(f32 x, CurveInterpKnot* knots, s32 knotCount);
 
 void SkelCurve_Clear(SkelCurve* skelCurve);
-s32 SkelCurve_Init(struct GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg, CurveAnimationHeader* animation);
-void SkelCurve_Destroy(struct GlobalContext* globalCtx, SkelCurve* skelCurve);
+s32 SkelCurve_Init(struct PlayState* play, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg, CurveAnimationHeader* animation);
+void SkelCurve_Destroy(struct PlayState* play, SkelCurve* skelCurve);
 void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* animation, f32 arg2, f32 endFrame, f32 curFrame, f32 playSpeed);
-s32 SkelCurve_Update(struct GlobalContext* globalCtx, SkelCurve* skelCurve);
-void SkelCurve_Draw(Actor* actor, struct GlobalContext* globalCtx, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
+s32 SkelCurve_Update(struct PlayState* play, SkelCurve* skelCurve);
+void SkelCurve_Draw(Actor* actor, struct PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
 
 
 // ZAPD compatibility typedefs

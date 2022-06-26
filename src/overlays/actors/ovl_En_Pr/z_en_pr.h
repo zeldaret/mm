@@ -5,7 +5,7 @@
 
 struct EnPr;
 
-typedef void (*EnPrActionFunc)(struct EnPr*, GlobalContext*);
+typedef void (*EnPrActionFunc)(struct EnPr*, PlayState*);
 
 #define ENPR_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 

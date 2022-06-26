@@ -10,7 +10,7 @@
 
 struct BgIkanaDharma;
 
-typedef void (*BgIkanaDharmaActionFunc)(struct BgIkanaDharma*, GlobalContext*);
+typedef void (*BgIkanaDharmaActionFunc)(struct BgIkanaDharma*, PlayState*);
 
 typedef struct BgIkanaDharma {
     /* 0x0000 */ DynaPolyActor dyna;
