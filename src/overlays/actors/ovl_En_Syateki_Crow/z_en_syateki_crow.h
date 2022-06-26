@@ -9,7 +9,7 @@
 
 struct EnSyatekiCrow;
 
-typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, GlobalContext*);
+typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, PlayState*);
 
 typedef struct EnSyatekiCrow {
     /* 0x000 */ Actor actor;

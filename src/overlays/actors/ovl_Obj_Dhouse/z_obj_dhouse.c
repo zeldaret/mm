@@ -11,21 +11,21 @@
 
 #define THIS ((ObjDhouse*)thisx)
 
-void ObjDhouse_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjDhouse_Init(Actor* thisx, PlayState* play);
+void ObjDhouse_Destroy(Actor* thisx, PlayState* play);
+void ObjDhouse_Update(Actor* thisx, PlayState* play);
+void ObjDhouse_Draw(Actor* thisx, PlayState* play);
 
-void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
-void func_80B13170(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
+void func_80B12E7C(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
+void func_80B13170(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
 void func_80B13908(ObjDhouse* this);
-void func_80B1391C(ObjDhouse* this, GlobalContext* globalCtx);
+void func_80B1391C(ObjDhouse* this, PlayState* play);
 void func_80B1392C(ObjDhouse* this);
-void func_80B13940(ObjDhouse* this, GlobalContext* globalCtx);
+void func_80B13940(ObjDhouse* this, PlayState* play);
 void func_80B139D8(ObjDhouse* this);
-void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx);
-void func_80B13C08(Actor* thisx, GlobalContext* globalCtx);
-void func_80B13E40(Actor* thisx, GlobalContext* globalCtx);
+void func_80B139F4(ObjDhouse* this, PlayState* play);
+void func_80B13C08(Actor* thisx, PlayState* play);
+void func_80B13E40(Actor* thisx, PlayState* play);
 
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
@@ -123,27 +123,27 @@ static InitChainEntry sInitChain[] = {
 
 Vec3f D_80B13FC4 = { 160.0f, 0.0f, 240.0f };
 
-void ObjDhouse_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDhouse_Init(Actor* thisx, PlayState* play) {
     ObjDhouse* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if (Flags_GetSwitch(globalCtx, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
         this->dyna.actor.draw = func_80B13E40;
         func_80B13908(this);
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_dhouse_Colheader_008040);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_dhouse_Colheader_008040);
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         func_80B1392C(this);
     }
 }
 
-void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDhouse_Destroy(Actor* thisx, PlayState* play) {
     ObjDhouse* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B12A50(ObjDhouseStruct1* this, ObjDhouseStruct3* ptr3, Vec3f* arg2) {
@@ -166,7 +166,7 @@ void func_80B12A88(Actor* thisx) {
     }
 }
 
-void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
+void func_80B12B38(ObjDhouse* this2, PlayState* play) {
     ObjDhouse* this = this2;
     s32 i;
     f32 temp_f0;
@@ -193,14 +193,14 @@ void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
                 ptr->unk_18.z += ptr3->unk_20.z;
 
                 if (ptr->unk_1E == ptr3->unk_26) {
-                    func_80B12E7C(this, globalCtx, ptr, ptr3);
+                    func_80B12E7C(this, play, ptr, ptr3);
                 }
             }
 
             phi_s3 = false;
             if (ptr->unk_0C.y < 0.0f) {
                 func_80B12A50(ptr, ptr3, &sp80);
-                temp_f0 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp90, &sp7C, &this->dyna.actor, &sp80);
+                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, &this->dyna.actor, &sp80);
                 if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > (BGCHECK_Y_MIN + 1.0f))) {
                     phi_s3 = true;
                 }
@@ -208,7 +208,7 @@ void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
 
             if (phi_s3) {
                 ptr->unk_1E = -1;
-                func_80B13170(this, globalCtx, ptr, ptr3);
+                func_80B13170(this, play, ptr, ptr3);
             } else if (ptr->unk_1E > 60) {
                 ptr->unk_1E = -1;
             } else {
@@ -234,7 +234,7 @@ s32 func_80B12D78(ObjDhouse* this) {
     return count;
 }
 
-void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3) {
+void func_80B12E7C(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3) {
     s32 i;
     Vec3f spA0;
     Vec3f sp94;
@@ -278,13 +278,13 @@ void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
             sp88.y = ((Rand_ZeroOne() - 0.3f) * sp94.y) + ptr2->unk_00.y;
             sp88.z = ((Rand_ZeroOne() - 0.5f) * sp94.z) + ptr2->unk_00.z;
 
-            func_800B1210(globalCtx, &sp88, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 130.0f) + 20,
+            func_800B1210(play, &sp88, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 130.0f) + 20,
                           (s32)(Rand_ZeroOne() * 140.0f) + 60);
         }
     }
 }
 
-void func_80B13170(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3) {
+void func_80B13170(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3) {
     s32 i;
     Vec3f sp98;
     Vec3f sp8C;
@@ -330,13 +330,13 @@ void func_80B13170(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
             sp8C.y = (Rand_ZeroOne() * 120.0f) + ptr2->unk_00.y;
             sp8C.z = ((Rand_ZeroOne() - 0.5f) * 160.0f) + ptr2->unk_00.z;
 
-            func_800B1210(globalCtx, &sp8C, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 140.0f) + 20,
+            func_800B1210(play, &sp8C, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 140.0f) + 20,
                           (s32)(Rand_ZeroOne() * 140.0f) + 40);
         }
     }
 }
 
-void func_80B13474(ObjDhouse* this, GlobalContext* globalCtx, Vec3f* arg2) {
+void func_80B13474(ObjDhouse* this, PlayState* play, Vec3f* arg2) {
     s32 i;
     Vec3f sp88;
     ObjDhouseStruct2* ptr2;
@@ -372,12 +372,12 @@ void func_80B13474(ObjDhouse* this, GlobalContext* globalCtx, Vec3f* arg2) {
         sp88.y = (Rand_ZeroOne() * 60.0f) + ptr2->unk_00.y;
         sp88.z = ((Rand_ZeroOne() * 70.0f) - 35.0f) + ptr2->unk_00.z;
 
-        func_800B1210(globalCtx, &sp88, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 80.0f) + 20,
+        func_800B1210(play, &sp88, &gZeroVec3f, &D_80B13FA8, (s32)(Rand_ZeroOne() * 80.0f) + 20,
                       (s32)(Rand_ZeroOne() * 90.0f) + 40);
     }
 }
 
-void func_80B13724(ObjDhouse* this, GlobalContext* globalCtx) {
+void func_80B13724(ObjDhouse* this, PlayState* play) {
     f32 temp_f0;
     f32 temp_f20 = this->dyna.actor.home.pos.y - 300.0f;
     s32 i;
@@ -406,11 +406,11 @@ void func_80B13724(ObjDhouse* this, GlobalContext* globalCtx) {
 
                 if (ptr2->unk_29 & 1) {
                     temp_f0 =
-                        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp80, &sp6C, &this->dyna.actor, &ptr2->unk_00);
+                        BgCheck_EntityRaycastFloor5(&play->colCtx, &sp80, &sp6C, &this->dyna.actor, &ptr2->unk_00);
                     if (((ptr2->unk_00.y - 20.0f) < temp_f0) && (temp_f0 > BGCHECK_Y_MIN + 1.0f)) {
                         Math_Vec3f_Copy(&sp70, &ptr2->unk_00);
                         ptr2->unk_28 = 0;
-                        func_80B13474(this, globalCtx, &sp70);
+                        func_80B13474(this, play, &sp70);
                     }
                 }
             }
@@ -422,25 +422,25 @@ void func_80B13908(ObjDhouse* this) {
     this->actionFunc = func_80B1391C;
 }
 
-void func_80B1391C(ObjDhouse* this, GlobalContext* globalCtx) {
+void func_80B1391C(ObjDhouse* this, PlayState* play) {
 }
 
 void func_80B1392C(ObjDhouse* this) {
     this->actionFunc = func_80B13940;
 }
 
-void func_80B13940(ObjDhouse* this, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80B13940(ObjDhouse* this, PlayState* play2) {
+    PlayState* play = play2;
     s32 sp20 = false;
 
-    if (Flags_GetSwitch(globalCtx, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
         sp20 = true;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
     }
 
     if (sp20) {
         func_80B12A88(&this->dyna.actor);
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B13C08;
         this->dyna.actor.flags |= ACTOR_FLAG_20;
         func_80B139D8(this);
@@ -452,8 +452,8 @@ void func_80B139D8(ObjDhouse* this) {
     this->actionFunc = func_80B139F4;
 }
 
-void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx) {
-    Camera* camera = GET_ACTIVE_CAM(globalCtx);
+void func_80B139F4(ObjDhouse* this, PlayState* play) {
+    Camera* camera = GET_ACTIVE_CAM(play);
     s16 quake;
 
     if (this->unk_1370 == 117) {
@@ -480,33 +480,33 @@ void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         func_80B13908(this);
     } else {
-        func_80B12B38(this, globalCtx);
-        func_80B13724(this, globalCtx);
+        func_80B12B38(this, play);
+        func_80B13724(this, play);
     }
 }
 
-void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDhouse_Update(Actor* thisx, PlayState* play) {
     ObjDhouse* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_dhouse_DL_005A78);
+void ObjDhouse_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_dhouse_DL_005A78);
 }
 
-void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B13C08(Actor* thisx, PlayState* play) {
     ObjDhouse* this = THIS;
     ObjDhouseStruct1* ptr;
     ObjDhouseStruct2* ptr2;
     ObjDhouseStruct3* ptr3;
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_004928);
 
     for (i = 0, ptr = &this->unk_160[0], ptr3 = &D_80B13E90[0]; i < ARRAY_COUNT(this->unk_160); i++, ptr3++, ptr++) {
@@ -516,8 +516,7 @@ void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Translate(-ptr3->unk_08.x, -ptr3->unk_08.y, -ptr3->unk_08.z, MTXMODE_APPLY);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, ptr3->unk_00);
             gSPDisplayList(POLY_OPA_DISP++, ptr3->unk_04);
         }
@@ -528,15 +527,14 @@ void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &ptr2->unk_1C);
             Matrix_Scale(ptr2->unk_18, ptr2->unk_18, ptr2->unk_18, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_0081D8);
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B13E40(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_dhouse_DL_004928);
+void func_80B13E40(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_dhouse_DL_004928);
 }

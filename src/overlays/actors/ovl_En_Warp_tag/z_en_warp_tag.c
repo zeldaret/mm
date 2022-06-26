@@ -12,17 +12,17 @@
 
 #define THIS ((EnWarptag*)thisx)
 
-void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWarpTag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWarptag_Init(Actor* thisx, PlayState* play);
+void EnWarptag_Destroy(Actor* thisx, PlayState* play);
+void EnWarptag_Update(Actor* thisx, PlayState* play);
+void EnWarpTag_Draw(Actor* thisx, PlayState* play);
 
-void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, GlobalContext* globalCtx);
-void EnWarpTag_WaitForPlayer(EnWarptag* this, GlobalContext* globalCtx);
-void EnWarpTag_Unused809C09A0(EnWarptag* this, GlobalContext* globalCtx);
-void EnWarpTag_Unused809C0A20(EnWarptag* this, GlobalContext* globalCtx);
-void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx);
-void EnWarpTag_GrottoReturn(EnWarptag* this, GlobalContext* globalCtx);
+void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play);
+void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play);
+void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play);
+void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
+void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
+void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
@@ -45,7 +45,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
-void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarptag_Init(Actor* thisx, PlayState* play) {
     EnWarptag* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -58,7 +58,7 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
-            if ((this->dangeonKeepObject = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
+            if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
                 Actor_MarkForDeath(&this->dyna.actor);
             }
 
@@ -70,34 +70,34 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
     EnWarptag* this = THIS;
     if (this->dyna.actor.draw != NULL) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
 /**
  * Loads DynaPoly from GAMEPLAY_DANGEON_KEEP.
  */
-void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->dangeonKeepObject)) {
+void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObject)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
         DynaPolyActor_Init(&this->dyna, 0x1);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gWarpTagGoronTrialBaseCollider);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCollider);
         this->dyna.actor.objBankIndex = this->dangeonKeepObject;
         this->dyna.actor.draw = EnWarpTag_Draw;
     }
 }
 
-void EnWarpTag_WaitForPlayer(EnWarptag* this, GlobalContext* globalCtx) {
-    if (!Player_InCsMode(&globalCtx->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
+void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
+    if (!Player_InCsMode(&play->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(globalCtx, NULL, 0x51);
+            func_800B7298(play, NULL, 0x51);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(globalCtx, NULL, 0xF);
+            func_800B7298(play, NULL, 0xF);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -106,32 +106,32 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, GlobalContext* globalCtx) {
 /**
  * Unused ActionFunc: assigned in EnWarpTag_Init, no known variants use.
  */
-void EnWarpTag_Unused809C09A0(EnWarptag* this, GlobalContext* globalCtx) {
-    if (func_800B8718(&this->dyna.actor, &globalCtx->state)) {
+void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
+    if (func_800B8718(&this->dyna.actor, &play->state)) {
         // func above: checks for ACTOR_FLAG_20000000, returns true and resets if set, else return false
         //   this actor doesnt have that flag set default, or in init, and this is called shortly after init
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
         // also GET_WARPTAG_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(globalCtx, D_809C1000[GET_WARPTAG_3C0(&this->dyna.actor)]); // unk message function
+        func_80152434(play, D_809C1000[GET_WARPTAG_3C0(&this->dyna.actor)]); // unk message function
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
-        func_800B8804(&this->dyna.actor, globalCtx, 50.0f); // updates player->unk_A90
+        func_800B8804(&this->dyna.actor, play, 50.0f); // updates player->unk_A90
     }
 }
 
 /**
  * Unused ActionFunc: assigned by EnWarpTag_Unused809C09A0, no known variants use.
  */
-void EnWarpTag_Unused809C0A20(EnWarptag* this, GlobalContext* globalCtx) {
-    if (globalCtx->msgCtx.ocarinaMode == 9) {
-        func_800B7298(globalCtx, NULL, 7);
+void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
+    if (play->msgCtx.ocarinaMode == 9) {
+        func_800B7298(play, NULL, 7);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
 
-    } else if (globalCtx->msgCtx.ocarinaMode >= 2) {
-        globalCtx->msgCtx.ocarinaMode = 4;
+    } else if (play->msgCtx.ocarinaMode >= 2) {
+        play->msgCtx.ocarinaMode = 4;
         this->actionFunc = EnWarpTag_Unused809C09A0;
     }
 }
@@ -139,7 +139,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, GlobalContext* globalCtx) {
 /**
  * ActionFunc: Goron Trial (Moon), respawn at the beginning of goron rolling track, try again.
  */
-void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
+void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     ActorEntry* playerActorEntry;
     Player* player;
     s32 playerSpawnIndex;
@@ -149,13 +149,13 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
     u8 playerForm;
     s16 playerParams;
 
-    player = GET_PLAYER(globalCtx);
-    if (globalCtx->playerActorCsIds[4] >= 0 && ActorCutscene_GetCurrentIndex() != globalCtx->playerActorCsIds[4]) {
-        if (ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[4]) == 0) {
-            ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[4]);
+    player = GET_PLAYER(play);
+    if (play->playerActorCsIds[4] >= 0 && ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[4]) {
+        if (ActorCutscene_GetCanPlayNext(play->playerActorCsIds[4]) == 0) {
+            ActorCutscene_SetIntentToPlay(play->playerActorCsIds[4]);
 
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(globalCtx->playerActorCsIds[4], &this->dyna.actor);
+            ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
             func_800B8E58(player, NA_SE_PL_WARP_PLATE);
             func_8016566C(0);
         }
@@ -195,7 +195,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
                 entranceIndex = gSaveContext.save.entranceIndex;
 
                 playerSpawnIndex = playerSpawnIndexPerForm[playerForm];
-                playerActorEntry = &globalCtx->linkActorEntry[playerSpawnIndex];
+                playerActorEntry = &play->linkActorEntry[playerSpawnIndex];
                 newRespawnPos.x = playerActorEntry->pos.x;
                 newRespawnPos.y = playerActorEntry->pos.y;
                 newRespawnPos.z = playerActorEntry->pos.z;
@@ -209,11 +209,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
                 Play_SetRespawnData(
-                    &globalCtx->state, 0, entranceIndex, // parameter 3 is called "sceneSetup"
-                    globalCtx->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                    &play->state, 0, entranceIndex, // parameter 3 is called "sceneSetup"
+                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
-                func_80169EFC(&globalCtx->state);
+                func_80169EFC(&play->state);
                 gSaveContext.respawnFlag = ~0x4;
                 func_80165690();
             }
@@ -231,7 +231,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
 /**
  * ActionFunc: Deku Playground, return to North Clock Town.
  */
-void EnWarpTag_GrottoReturn(EnWarptag* this, GlobalContext* globalCtx) {
+void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -241,9 +241,9 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, GlobalContext* globalCtx) {
     }
 
     if (this->grottoExitDelay++ == 10) {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
-        Scene_SetExitFade(globalCtx);
-        globalCtx->sceneLoadFlag = 0x14;
+        play->nextEntranceIndex = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
+        Scene_SetExitFade(play);
+        play->sceneLoadFlag = 0x14;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}
@@ -252,22 +252,22 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarptag_Update(Actor* thisx, PlayState* play) {
     EnWarptag* this = THIS;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
 /**
  * Only draws for Goron Trial (a rainblow animated target).
  */
-void EnWarpTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gWarpTagRainbowAnimMat));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWarpTagRainbowAnimMat));
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_OPA_DISP++, gWarpTagGoronTrialBaseDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

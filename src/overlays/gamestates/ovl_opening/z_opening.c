@@ -26,7 +26,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
         GameState* thisx = &this->gameState;
         thisx->running = false;
     }
-    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, PlayState);
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
 }
 

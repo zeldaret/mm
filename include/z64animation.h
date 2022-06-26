@@ -6,7 +6,7 @@
 #include "z64dma.h"
 #include "z64math.h"
 
-struct GlobalContext;
+struct PlayState;
 struct Actor;
 struct SkelAnime;
 
@@ -189,7 +189,7 @@ typedef struct SkelAnime {
     /* 0x2C */ f32 morphRate;     // Reciprocal of the number of frames in the morph
     /* 0x30 */ union {
                     s32 (*normal)(struct SkelAnime*);// Can be Loop, Partial loop, Play once, Morph, or Tapered morph
-                    s32 (*link)(struct GlobalContext*, struct SkelAnime*); // Loop, Play once, and Morph
+                    s32 (*link)(struct PlayState*, struct SkelAnime*); // Loop, Play once, and Morph
                 } update;
     /* 0x34 */ s8 initFlags;      // Flags used when initializing Link's skeleton
     /* 0x35 */ u8 moveFlags;          // Flags used for animations that move the actor in worldspace.
@@ -198,29 +198,29 @@ typedef struct SkelAnime {
     /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
 } SkelAnime; // size = 0x44
 
-typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+typedef s32 (*OverrideLimbDrawOpa)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                    struct Actor* thisx);
 
-typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+typedef void (*PostLimbDrawOpa)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                                 struct Actor* thisx);
 
-typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+typedef s32 (*OverrideLimbDraw)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                 struct Actor* thisx, Gfx** gfx);
 
-typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+typedef void (*PostLimbDraw)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                              struct Actor* thisx, Gfx** gfx);
 
-typedef s32 (*OverrideLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+typedef s32 (*OverrideLimbDrawFlex)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                     struct Actor* thisx);
 
-typedef void (*PostLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot,
+typedef void (*PostLimbDrawFlex)(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot,
                                  struct Actor* thisx);
 
-typedef void (*TransformLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx);
+typedef void (*TransformLimbDrawOpa)(struct PlayState* play, s32 limbIndex, struct Actor* thisx);
 
-typedef void (*TransformLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx, Gfx** gfx);
+typedef void (*TransformLimbDraw)(struct PlayState* play, s32 limbIndex, struct Actor* thisx, Gfx** gfx);
 
-typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
+typedef void (*AnimationEntryCallback)(struct PlayState*, AnimationEntryData*);
 
 extern u32 link_animetion_segment;
 
@@ -251,7 +251,7 @@ typedef struct AnimationSpeedInfo {
 
 struct SkeletonInfo;
 
-typedef s32 (*UnkKeyframeCallback)(struct GlobalContext* globalCtx, struct SkeletonInfo* skeletonInfo, s32* arg2, Gfx** dList,
+typedef s32 (*UnkKeyframeCallback)(struct PlayState* play, struct SkeletonInfo* skeletonInfo, s32* arg2, Gfx** dList,
                                    u8* arg4, void* arg5);
 
 // Keyframe limb?
@@ -312,10 +312,10 @@ typedef struct SkeletonInfo {
     /* 0x2C */ s16* unk_2C;
 } SkeletonInfo;
 
-typedef s32 (*OverrideKeyframeDrawScaled)(struct GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
+typedef s32 (*OverrideKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
                                           u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
 
-typedef void (*PostKeyframeDrawScaled)(struct GlobalContext* globalCtx, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
+typedef void (*PostKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
                                        u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
 
 #endif

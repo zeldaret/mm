@@ -11,10 +11,10 @@
 
 #define THIS ((ObjRotlift*)thisx)
 
-void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2);
-void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjRotlift_Init(Actor* thisx, PlayState* play2);
+void ObjRotlift_Destroy(Actor* thisx, PlayState* play);
+void ObjRotlift_Update(Actor* thisx, PlayState* play);
+void ObjRotlift_Draw(Actor* thisx, PlayState* play);
 
 void ObjRotlift_MoveDekuFlowers(ObjRotlift* this);
 
@@ -78,8 +78,8 @@ void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
     }
 }
 
-void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjRotlift* this = THIS;
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     s32 dekuFlowerType;
@@ -96,7 +96,7 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 dekuFlowerType = 0x100;
             }
             *dekuFlowers = (ObjEtcetera*)Actor_SpawnAsChild(
-                &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
+                &play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                 this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerType);
         }
@@ -105,17 +105,17 @@ void ObjRotlift_Init(Actor* thisx, GlobalContext* globalCtx2) {
     DynaPolyActor_Init(&this->dyna, 3);
 
     modelInfo = &sModelInfo[type];
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, modelInfo->colHeader);
+    DynaPolyActor_LoadMesh(play, &this->dyna, modelInfo->colHeader);
     modelInfo->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
 }
 
-void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjRotlift_Destroy(Actor* thisx, PlayState* play) {
     ObjRotlift* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjRotlift_Update(Actor* thisx, PlayState* play) {
     ObjRotlift* this = THIS;
     s16 angShift;
     s32 angVelocity;
@@ -132,11 +132,11 @@ void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += angShift;
 }
 
-void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjRotlift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjRotlift* this = THIS;
     ModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
-    AnimatedMat_Draw(globalCtx, modelInfo->animMat);
-    Gfx_DrawDListOpa(globalCtx, modelInfo->dList);
+    AnimatedMat_Draw(play, modelInfo->animMat);
+    Gfx_DrawDListOpa(play, modelInfo->dList);
 }

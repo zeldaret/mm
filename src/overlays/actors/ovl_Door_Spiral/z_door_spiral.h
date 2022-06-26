@@ -5,7 +5,7 @@
 
 struct DoorSpiral;
 
-typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, GlobalContext*);
+typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, PlayState*);
 
 typedef struct DoorSpiral {
     /* 0x000 */ Actor actor;

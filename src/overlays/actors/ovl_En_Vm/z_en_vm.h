@@ -5,7 +5,7 @@
 
 struct EnVm;
 
-typedef void (*EnVmActionFunc)(struct EnVm*, GlobalContext*);
+typedef void (*EnVmActionFunc)(struct EnVm*, PlayState*);
 
 #define ENVM_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 

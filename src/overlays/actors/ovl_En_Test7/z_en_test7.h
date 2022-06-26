@@ -5,9 +5,9 @@
 
 struct EnTest7;
 
-typedef void (*EnTest7ActionFunc)(struct EnTest7*, GlobalContext*);
-typedef void (*EnTest7UnkFunc)(struct EnTest7*, GlobalContext*);
-typedef void (*EnTest7UnkDrawFunc)(Actor*, GlobalContext*);
+typedef void (*EnTest7ActionFunc)(struct EnTest7*, PlayState*);
+typedef void (*EnTest7UnkFunc)(struct EnTest7*, PlayState*);
+typedef void (*EnTest7UnkDrawFunc)(Actor*, PlayState*);
 
 #define ENTEST7_GET(thisx) ((thisx)->params)
 

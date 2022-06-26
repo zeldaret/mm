@@ -8,7 +8,7 @@
 
 struct DmOpstage;
 
-typedef void (*DmOpstageActionFunc)(struct DmOpstage*, GlobalContext*);
+typedef void (*DmOpstageActionFunc)(struct DmOpstage*, PlayState*);
 typedef struct DmOpstage {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ UNK_TYPE1 pad_15C[0x44];

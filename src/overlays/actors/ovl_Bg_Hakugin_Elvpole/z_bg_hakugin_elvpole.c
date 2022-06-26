@@ -10,12 +10,12 @@
 
 #define THIS ((BgHakuginElvpole*)thisx)
 
-void BgHakuginElvpole_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginElvpole_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgHakuginElvpole_Init(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Update(Actor* thisx, PlayState* play);
+void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 
-void func_80ABD92C(BgHakuginElvpole* this, GlobalContext* globalCtx);
+void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Hakugin_Elvpole_InitVars = {

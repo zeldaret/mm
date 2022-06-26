@@ -11,14 +11,14 @@
 
 #define THIS ((BgOpenShutter*)thisx)
 
-void BgOpenShutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgOpenShutter_Init(Actor* thisx, PlayState* play);
+void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
+void BgOpenShutter_Update(Actor* thisx, PlayState* play);
+void BgOpenShutter_Draw(Actor* thisx, PlayState* play);
 
-void func_80ACAD88(BgOpenShutter* this, GlobalContext* globalCtx);
-void func_80ACAE5C(BgOpenShutter* this, GlobalContext* globalCtx);
-void func_80ACAEF0(BgOpenShutter* this, GlobalContext* globalCtx);
+void func_80ACAD88(BgOpenShutter* this, PlayState* play);
+void func_80ACAE5C(BgOpenShutter* this, PlayState* play);
+void func_80ACAEF0(BgOpenShutter* this, PlayState* play);
 
 typedef enum {
     /* 0x1 */ DOOR_OPEN = 1,

@@ -7,7 +7,7 @@ struct ObjGrassCarry;
 struct ObjGrass;
 struct ObjGrassStruct1_1;
 
-typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, GlobalContext*);
+typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, PlayState*);
 
 typedef struct ObjGrassCarry {
     /* 0x0000 */ Actor actor;

@@ -6,7 +6,7 @@
 
 struct EnLookNuts;
 
-typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, GlobalContext*);
+typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, PlayState*);
 
 #define LOOKNUTS_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
 #define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
