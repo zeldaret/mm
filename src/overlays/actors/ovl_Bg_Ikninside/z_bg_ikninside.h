@@ -7,7 +7,7 @@ struct BgIkninside;
 
 #define DMIKNINSIDE_GET_SWITCH(thisx) (((thisx)->params & 0xFE00) >> 9)
 
-typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, GlobalContext*);
+typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, PlayState*);
 
 typedef struct BgIkninside {
     /* 0x000 */ DynaPolyActor dyna;

@@ -5,7 +5,7 @@
 
 struct BgIkanaBombwall;
 
-typedef void (*BgIkanaBombwallActionFunc)(struct BgIkanaBombwall*, GlobalContext*);
+typedef void (*BgIkanaBombwallActionFunc)(struct BgIkanaBombwall*, PlayState*);
 
 #define BGIKANABOMBWALL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 #define BGIKANABOMBWALL_GET_100(thisx) (((thisx)->params >> 8) & 1)

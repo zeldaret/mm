@@ -5,7 +5,7 @@
 
 struct EnHakurock;
 
-typedef void (*EnHakurockActionFunc)(struct EnHakurock*, GlobalContext*);
+typedef void (*EnHakurockActionFunc)(struct EnHakurock*, PlayState*);
 
 typedef enum {
     /* 0x0 */ EN_HAKUROCK_TYPE_UNK_0,

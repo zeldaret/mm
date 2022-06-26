@@ -6,7 +6,7 @@
 
 struct EnIk;
 
-typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
+typedef void (*EnIkActionFunc)(struct EnIk*, PlayState*);
 
 #define IK_GET_ARMOR_TYPE(thisx) ((thisx)->params & 0xFF)
 

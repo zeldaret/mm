@@ -7,7 +7,7 @@
 
 struct BgKin2Bombwall;
 
-typedef void (*BgKin2BombwallActionFunc)(struct BgKin2Bombwall*, GlobalContext*);
+typedef void (*BgKin2BombwallActionFunc)(struct BgKin2Bombwall*, PlayState*);
 
 typedef struct BgKin2Bombwall {
     /* 0x000 */ DynaPolyActor dyna;

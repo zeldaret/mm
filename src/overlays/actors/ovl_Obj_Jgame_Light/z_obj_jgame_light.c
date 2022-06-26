@@ -10,10 +10,10 @@
 
 #define THIS ((ObjJgameLight*)thisx)
 
-void ObjJgameLight_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjJgameLight_Init(Actor* thisx, PlayState* play);
+void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
+void ObjJgameLight_Update(Actor* thisx, PlayState* play);
+void ObjJgameLight_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Jgame_Light_InitVars = {

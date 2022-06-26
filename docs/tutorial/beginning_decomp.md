@@ -21,10 +21,10 @@ The actor file starts off looking like:
 #define THIS ((EnRecepgirl*)thisx)
 
 // --------------- 3 ---------------
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRecepgirl_Init(Actor* thisx, PlayState* play);
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
+void EnRecepgirl_Update(Actor* thisx, PlayState* play);
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 // --------------- 4 ---------------
 #if 0
@@ -115,7 +115,7 @@ The header file looks like this at the moment:
 
 struct EnRecepgirl;
 
-typedef void (*EnRecepgirlActionFunc)(struct EnRecepgirl*, GlobalContext*);
+typedef void (*EnRecepgirlActionFunc)(struct EnRecepgirl*, PlayState*);
 
 typedef struct EnRecepgirl {
     /* 0x0000 */ Actor actor;
@@ -141,7 +141,7 @@ The general rule for order of decompilation is
 - Next, decompile any other functions from the actor you have found in `Init`. You generally start with the action functions, because they return nothing and all take the same arguments,
 
 ```C
-void func_80whatever(EnRecepgirl* this, GlobalContext* globalCtx);
+void func_80whatever(EnRecepgirl* this, PlayState* play);
 ```
 
 - Decompile each action function in turn until you run out. Along the way, do any other functions in the actor for which you have discovered the argument types. (You are probably better doing depth-first on action functions than breadth-first: it's normally easier to follow along one branch of the actions than be thinking about several at once.)
@@ -207,14 +207,14 @@ static void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60
 static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
-void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(EnRecepgirl* this, PlayState* play) {
     EnRecepgirl* this = (EnRecepgirl *) thisx;
     void **temp_s0;
     void **phi_s0;
 
     Actor_ProcessInitChain((Actor *) this, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(play, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -225,7 +225,7 @@ void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
         D_80C106C8 = 1;
     }
     this->unk_2AC = 2;
-    if (Flags_GetSwitch(globalCtx, (s32) this->actor.params) != 0) {
+    if (Flags_GetSwitch(play, (s32) this->actor.params) != 0) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;
@@ -244,14 +244,14 @@ static void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60
 static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
-void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = (EnRecepgirl *) thisx;
     void **temp_s0;
     void **phi_s0;
 
     Actor_ProcessInitChain((Actor *) this, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(play, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -262,7 +262,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
         D_80C106C8 = 1;
     }
     this->unk_2AC = 2;
-    if (Flags_GetSwitch(globalCtx, (s32) this->actor.params) != 0) {
+    if (Flags_GetSwitch(play, (s32) this->actor.params) != 0) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;
@@ -300,14 +300,14 @@ static void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60
 static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
-void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
     void **temp_s0;
     void **phi_s0;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(play, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -318,7 +318,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
         D_80C106C8 = 1;
     }
     this->unk_2AC = 2;
-    if (Flags_GetSwitch(globalCtx, (s32) this->actor.params) != 0) {
+    if (Flags_GetSwitch(play, (s32) this->actor.params) != 0) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;
@@ -388,7 +388,7 @@ This is the combined system that handles actors' skeletons and their animations.
 ```C
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(play, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
 ```
 
@@ -396,7 +396,7 @@ An actor with SkelAnime has three structs in the Actor struct that handle it: on
 
 There are two different sorts of SkelAnime, although for decompilation purposes there is not much difference between them. Looking at the prototype of `SkelAnime_InitFlex` from `functions.h` (or even the definition in `z_skelanime.c`), 
 ```C
-void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
                       AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 ```
 we can read off the types of the various arguments:
@@ -432,7 +432,7 @@ As with the data, these externed symbols should be kept in increasing address or
 
 They are both passed to the function as pointers, so need `&` to pass the address instead of the actual data. Hence we end up with
 ```C
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 ```
 note that `this->jointTable` and `this->morphTable` are arrays, so are already effectively pointers and don't need a `&`.
 
@@ -487,14 +487,14 @@ Removing some of the declarations for data that we have accounted for, the funct
 ```C
 ? func_80C10148(EnRecepgirl *); // extern
 
-void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
     void **temp_s0;
     void **phi_s0;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
@@ -507,7 +507,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 
     this->unk_2AC = 2;
-    if (Flags_GetSwitch(globalCtx, (s32) this->actor.params) != 0) {
+    if (Flags_GetSwitch(play, (s32) this->actor.params) != 0) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;
@@ -520,7 +520,7 @@ We have one significant problem and a few minor ones left.
 
 ### Casts and boolean functions
 
-mips2c likes casting a lot: this is useful for getting types, less so when the type is changed automatically, such as in `Flags_GetSwitch(globalCtx, (s32) this->actor.params)`. Also, if we look at this function's definition, we discover it will only return `true` or `false`, so we can remove the `!= 0`.
+mips2c likes casting a lot: this is useful for getting types, less so when the type is changed automatically, such as in `Flags_GetSwitch(play, (s32) this->actor.params)`. Also, if we look at this function's definition, we discover it will only return `true` or `false`, so we can remove the `!= 0`.
 
 ### Functions called
 
@@ -529,14 +529,14 @@ One minor problem is what `func_80C10148` is: C needs a prototype to compile it 
 2. It's not used to assign a value
 
 To this experience will add a third reason:
-3. This is probably a setup function for an actionFunc, which are usually either `void (*)(ActorType*)` or `void (*)(ActorType*, GlobalContext*)`.
+3. This is probably a setup function for an actionFunc, which are usually either `void (*)(ActorType*)` or `void (*)(ActorType*, PlayState*)`.
 
 The upshot of all this is to remove mips2c's `? func_80C10148(EnRecepgirl *); // extern`, and add a `void func_80C10148(EnRecepgirl* this);` underneath the declarations for the main four functions:
 ```C
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRecepgirl_Init(Actor* thisx, PlayState* play);
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
+void EnRecepgirl_Update(Actor* thisx, PlayState* play);
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 void func_80C10148(EnRecepgirl* this);
 ```
@@ -625,12 +625,12 @@ Hence we end up with
 void func_80C10148(EnRecepgirl* this);
 [...]
 
-void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     if (D_80C106C8 == 0) {
         for (i = 0; i < 4; i++) {
@@ -641,7 +641,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     this->unk_2AC = 2;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+    if (Flags_GetSwitch(play, this->actor.params)) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;

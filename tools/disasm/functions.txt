@@ -552,7 +552,7 @@
     0x800AF050:("EffectTireMark_Update",),
     0x800AF284:("EffectTireMark_SetVertices",),
     0x800AF310:("EffectTireMark_Draw",),
-    0x800AF710:("Effect_GetGlobalCtx",),
+    0x800AF710:("Effect_GetPlayState",),
     0x800AF720:("Effect_GetByIndex",),
     0x800AF87C:("Effect_InitStatus",),
     0x800AF890:("Effect_Init",),

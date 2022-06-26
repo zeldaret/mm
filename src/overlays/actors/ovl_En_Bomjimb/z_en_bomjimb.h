@@ -5,7 +5,7 @@
 
 struct EnBomjimb;
 
-typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, GlobalContext*);
+typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, PlayState*);
 
 #define ENBOMJIMB_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMJIMB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)

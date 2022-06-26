@@ -10,14 +10,14 @@
 
 #define THIS ((ObjSwprize*)thisx)
 
-void ObjSwprize_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSwprize_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSwprize_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjSwprize_Init(Actor* thisx, PlayState* play);
+void ObjSwprize_Destroy(Actor* thisx, PlayState* play);
+void ObjSwprize_Update(Actor* thisx, PlayState* play);
 
-void func_80C25654(ObjSwprize* this, GlobalContext* globalCtx);
-void func_80C256AC(ObjSwprize* this, GlobalContext* globalCtx);
-void func_80C2572C(ObjSwprize* this, GlobalContext* globalCtx);
-void func_80C25794(ObjSwprize* this, GlobalContext* globalCtx);
+void func_80C25654(ObjSwprize* this, PlayState* play);
+void func_80C256AC(ObjSwprize* this, PlayState* play);
+void func_80C2572C(ObjSwprize* this, PlayState* play);
+void func_80C25794(ObjSwprize* this, PlayState* play);
 
 #if 0
 const ActorInit Obj_Swprize_InitVars = {

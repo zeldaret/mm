@@ -10,10 +10,10 @@
 
 #define THIS ((EnIk*)thisx)
 
-void EnIk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnIk_Init(Actor* thisx, PlayState* play);
+void EnIk_Destroy(Actor* thisx, PlayState* play);
+void EnIk_Update(Actor* thisx, PlayState* play);
+void EnIk_Draw(Actor* thisx, PlayState* play);
 
 void EnIk_Thaw(EnIk* this, GlobalContext* globalCtx);
 s32 EnIk_IsChangingAction(EnIk* this, GlobalContext* globalCtx);
