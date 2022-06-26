@@ -15,7 +15,7 @@ void ElfMsg3_Init(Actor* thisx, PlayState* play);
 void ElfMsg3_Destroy(Actor* thisx, PlayState* play);
 void ElfMsg3_Update(Actor* thisx, PlayState* play);
 
-void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx);
+void func_80A2CF7C(ElfMsg3* this, PlayState* play);
 
 const ActorInit Elf_Msg3_InitVars = {
     ACTOR_ELF_MSG3,
@@ -40,19 +40,19 @@ void ElfMsg3_SetupAction(ElfMsg3* this, ElfMsg3ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-s32 func_80A2CD1C(ElfMsg3* this, GlobalContext* globalCtx) {
+s32 func_80A2CD1C(ElfMsg3* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
-        (Flags_GetSwitch(globalCtx, this->actor.home.rot.y - 1))) {
+        (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         if (ELFMSG3_GET_SWITCH(&this->actor) != 0x7F) {
-            Flags_SetSwitch(globalCtx, ELFMSG3_GET_SWITCH(&this->actor));
+            Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor));
         }
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
-        if (Flags_GetClear(globalCtx, this->actor.room)) {
+        if (Flags_GetClear(play, this->actor.room)) {
             if (ELFMSG3_GET_SWITCH(&this->actor) != 0x7F) {
-                Flags_SetSwitch(globalCtx, ELFMSG3_GET_SWITCH(&this->actor));
+                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor));
             }
             Actor_MarkForDeath(&this->actor);
             return true;
@@ -61,18 +61,18 @@ s32 func_80A2CD1C(ElfMsg3* this, GlobalContext* globalCtx) {
     if (ELFMSG3_GET_SWITCH(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(globalCtx, ELFMSG3_GET_SWITCH(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     return false;
 }
 
-void ElfMsg3_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ElfMsg3_Init(Actor* thisx, PlayState* play) {
     ElfMsg3* this = THIS;
     s32 baseRange;
 
-    if (func_80A2CD1C(this, globalCtx) == 0) {
+    if (func_80A2CD1C(this, play) == 0) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
         if (ABS_ALT(this->actor.home.rot.x) == 0) {
             this->actor.scale.z = 0.4f;
@@ -94,7 +94,7 @@ void ElfMsg3_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ElfMsg3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ElfMsg3_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80A2CF50(ElfMsg3* this) {
@@ -104,8 +104,8 @@ s32 func_80A2CF50(ElfMsg3* this) {
     return -0x200 - (ELFMSG3_GET_FF(&this->actor));
 }
 
-void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80A2CF7C(ElfMsg3* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     EnElf* tatl = (EnElf*)player->tatlActor;
 
     if (((((player->tatlActor != NULL) &&
@@ -125,7 +125,7 @@ void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx) {
                 ActorCutscene_SetIntentToPlay(this->actor.cutscene);
             } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
                 ActorCutscene_Start(this->actor.cutscene, &this->actor);
-                func_800E0348(globalCtx->cameraPtrs[0]);
+                func_800E0348(play->cameraPtrs[0]);
             } else {
                 ActorCutscene_SetIntentToPlay(this->actor.cutscene);
             }
@@ -133,18 +133,18 @@ void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx) {
     }
 }
 
-void ElfMsg3_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ElfMsg3_Update(Actor* thisx, PlayState* play) {
     ElfMsg3* this = THIS;
 
-    if (func_80A2CD1C(this, globalCtx) == 0) {
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (func_80A2CD1C(this, play) == 0) {
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             if (ELFMSG3_GET_SWITCH(thisx) != 0x7F) {
-                Flags_SetSwitch(globalCtx, ELFMSG3_GET_SWITCH(thisx));
+                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(thisx));
             }
             Actor_MarkForDeath(&this->actor);
         } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(globalCtx, -1 - this->actor.home.rot.y))) {
-            this->actionFunc(this, globalCtx);
+                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            this->actionFunc(this, play);
         }
     }
 }
