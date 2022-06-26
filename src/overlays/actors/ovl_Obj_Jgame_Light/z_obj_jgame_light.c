@@ -179,9 +179,9 @@ void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->unk_1B4 == 1) {
-            gSPDisplayList(POLY_XLU_DISP++, &D_80C160B0);
+            gSPDisplayList(POLY_XLU_DISP++, D_80C160B0);
         } else if (this->unk_1B4 == 2) {
-            gSPDisplayList(POLY_XLU_DISP++, &D_80C16030);
+            gSPDisplayList(POLY_XLU_DISP++, D_80C16030);
         }
     }
     if (this->unk_1A8 != 0.0f) {
