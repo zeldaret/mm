@@ -2,7 +2,11 @@
 
 `git` is a version control system: it allows you to keep different versions of files at the same time. It does this using a tree system:
 
+<<<<<<< HEAD
 - A *repository* is directory containing files managed by git.
+=======
+- A *repository* is directory containing files managed by git. 
+>>>>>>> b57b4d3ed816e7030c78432d1b7893af138e3016
 - A repository has one or more *branches*. A branch can be thought of as a pointer to a specific commit.
 - A *commit* is one set of changes, the most basic "unit" when working with git. The key point about git is that it is possible to have several commits based on the same one
 - A *remote* is another copy of the same repository, usually on another computer or the Internet.
@@ -23,7 +27,11 @@ Local
                  A
 ```
 
+<<<<<<< HEAD
 Each `o` is a commit. The lines show the commit that each commit mas based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `master` and `A`, and they currently both point to the commits furthest along their respective chains.
+=======
+Each `o` is a commit. The lines show the commit that each commit mas based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `master` and `A`, and they currently both point to the commits furthest along their respective chains; this is 
+>>>>>>> b57b4d3ed816e7030c78432d1b7893af138e3016
 
 Throughout this guide, stuff in `SCREAMING_SNAKE_CASE` represents fields for you to fill in with the appropriate text, e.g. FILE should be replaced with a particular filename.
 
@@ -222,7 +230,11 @@ to
 
 (Notice that in neither case is B itself destroyed.)
 
+<<<<<<< HEAD
 Both have advantages and disadvantages.
+=======
+Both have advantages and disadvantages. 
+>>>>>>> b57b4d3ed816e7030c78432d1b7893af138e3016
 
 - Merging is conceptually simpler, but generates an additional commit.
 - Rebasing results in cleaner history and is usually easier to do because there are fewer changes in each commit, but makes it much harder to follow what has changed between commits before and after: *you should not rebase a branch other people are looking at* (e.g. in GitHub reviews, but also in other collaboration).
@@ -399,4 +411,9 @@ This guide has only covered the basics that are required to work with git on a d
 - Ask in Discord
 - consult a reference such as https://git-scm.com/docs or https://www.atlassian.com/git/tutorials
 
+<<<<<<< HEAD
 *Always ask or research before doing anything drastic, git is sophisticated enough that usually it has a way to resolve problems itself*
+=======
+*Always ask or research before doing anything drastic, git is sophisticated enough that usually it has a way to resolve problems itself*
+
+>>>>>>> b57b4d3ed816e7030c78432d1b7893af138e3016
