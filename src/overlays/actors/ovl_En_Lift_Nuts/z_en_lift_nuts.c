@@ -777,10 +777,13 @@ void func_80AEB3E0(EnLiftNuts* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80AEB428;
 }
 
-#if 0
 void func_80AEB428(EnLiftNuts *this, GlobalContext *globalCtx) {
+    s32 pad;
+    OSTime time;
+
     if (this->unk_354 == 10) {
-        if (gSaveContext.unk_3DE0[4] > 0 || ((gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY]) < this->unk_354)) {
+        time = gSaveContext.unk_3DE0[4];
+        if (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] < time) {
             Message_StartTextbox(globalCtx, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {
@@ -791,8 +794,8 @@ void func_80AEB428(EnLiftNuts *this, GlobalContext *globalCtx) {
             this->textId = 0x27EC;
         }
     } else if (this->unk_354 == 30) {
-        gSaveContext.respawn[0].entranceIndex = 0x3610;
         gSaveContext.eventInf[3] &= 0xEF;
+        gSaveContext.respawn[0].entranceIndex = 0x3610;
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&globalCtx->state);
         gSaveContext.respawnFlag = -2;
@@ -801,9 +804,6 @@ void func_80AEB428(EnLiftNuts *this, GlobalContext *globalCtx) {
     }
     this->unk_354 += 1;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AEB428.s")
-#endif
 
 void func_80AEB584(EnLiftNuts* this) {
     this->actionFunc = func_80AEB598;
