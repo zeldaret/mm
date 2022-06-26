@@ -741,7 +741,7 @@ void func_80A5CD0C(EnKusa2* this) {
     s32 pad;
 
     for (i = 0; i < 2; i++) {
-        temp_s0 = Rand_Next() & 0xFFFF;
+        temp_s0 = Rand_Next() % 0x10000;
         temp_f20 = Rand_ZeroOne() * 30.0f;
 
         spA8.x = Math_SinS(temp_s0) * temp_f20;
@@ -756,9 +756,9 @@ void func_80A5CD0C(EnKusa2* this) {
         spA8.y += this->actor.world.pos.y;
         spA8.z += this->actor.world.pos.z;
 
-        sp94.x = Rand_Next() & 0xFFFF;
-        sp94.y = Rand_Next() & 0xFFFF;
-        sp94.z = Rand_Next() & 0xFFFF;
+        sp94.x = Rand_Next() % 0x10000;
+        sp94.y = Rand_Next() % 0x10000;
+        sp94.z = Rand_Next() % 0x10000;
 
         sp8C.x = (Rand_Next() % 0x4000) - 0x1FFF;
         sp8C.y = (Rand_Next() % 0x2000) - 0xFFF;
@@ -794,9 +794,9 @@ void func_80A5CF44(EnKusa2* this) {
         spA8.y += this->actor.world.pos.y;
         spA8.z += this->actor.world.pos.z;
 
-        sp94.x = Rand_Next() & 0xFFFF;
-        sp94.y = Rand_Next() & 0xFFFF;
-        sp94.z = Rand_Next() & 0xFFFF;
+        sp94.x = Rand_Next() % 0x10000;
+        sp94.y = Rand_Next() % 0x10000;
+        sp94.z = Rand_Next() % 0x10000;
 
         sp8C.x = (Rand_Next() % 0x4000) - 0x1FFF;
         sp8C.y = (Rand_Next() % 0x2000) - 0xFFF;
@@ -836,9 +836,9 @@ void func_80A5D178(EnKusa2* this) {
         spB0.y += this->actor.world.pos.y;
         spB0.z += this->actor.world.pos.z;
 
-        sp9C.x = Rand_Next() & 0xFFFF;
-        sp9C.y = Rand_Next() & 0xFFFF;
-        sp9C.z = Rand_Next() & 0xFFFF;
+        sp9C.x = Rand_Next() % 0x10000;
+        sp9C.y = Rand_Next() % 0x10000;
+        sp9C.z = Rand_Next() % 0x10000;
 
         sp94.x = Rand_S16Offset(-12000, 24000);
         sp94.y = (Rand_Next() % 0x4000) - 0x1FFF;

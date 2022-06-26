@@ -201,7 +201,7 @@ void func_80ABC2E0(BgHakuginBombwall* this, PlayState* play) {
         spBC.y = (Rand_ZeroOne() * 17.0f) + 7.0f;
         spBC.z = ((Rand_ZeroOne() - 0.5f) * 10.0f) + (temp_f24 * 0.13333334f);
 
-        temp_s1 = (Rand_Next() & 3) + (i >> 2) + 4;
+        temp_s1 = (Rand_Next() % 4) + (i >> 2) + 4;
 
         if ((Rand_Next() % 4) == 0) {
             phi_v0 = 32;

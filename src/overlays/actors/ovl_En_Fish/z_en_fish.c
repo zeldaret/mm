@@ -304,8 +304,8 @@ void func_8091E070(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
 
-    if ((Rand_Next() & 3) == 0) {
-        if (((Rand_Next() & 7) == 0) && (this->unk_278 != 0)) {
+    if ((Rand_Next() % 4) == 0) {
+        if (((Rand_Next() % 8) == 0) && (this->unk_278 != 0)) {
             phi_a1 = 80;
         } else {
             phi_a1 = 45;

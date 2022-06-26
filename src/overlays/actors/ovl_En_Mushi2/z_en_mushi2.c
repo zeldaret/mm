@@ -916,7 +916,7 @@ void func_80A6A824(EnMushi2* this, PlayState* play) {
 }
 
 void func_80A6A984(EnMushi2* this) {
-    if (Rand_Next() & 1) {
+    if ((Rand_Next() % 2) != 0) {
         this->unk_370 = 0x800;
     } else {
         this->unk_370 = -0x800;
@@ -1032,7 +1032,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
     if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.depthInWater > 5.0f) &&
-        (this->actor.depthInWater < 30.0f) && ((s32)(Rand_Next() & 0x1FF) < this->unk_368)) {
+        (this->actor.depthInWater < 30.0f) && ((s32)(Rand_Next() % 0x200) < this->unk_368)) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
                              ((Rand_ZeroOne() * 4.0f) + 2.0f) * this->actor.scale.x);
     }

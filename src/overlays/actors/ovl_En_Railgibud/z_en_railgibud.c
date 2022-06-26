@@ -673,7 +673,7 @@ void EnRailgibud_SpawnEffectsForSinkingIntoTheGround(EnRailgibud* this, PlayStat
         rockFragmentAccel.z = Rand_Centered();
         rockFragmentVelocity.y += Rand_Centered() * 4.0f;
         EffectSsHahen_Spawn(play, &rockFragmentPos, &rockFragmentVelocity, &rockFragmentAccel, 0,
-                            (Rand_Next() & 7) + 10, -1, 10, NULL);
+                            (Rand_Next() % 8) + 10, -1, 10, NULL);
         EnRailgibud_SpawnDust(play, &rockFragmentPos, 10.0f, 10, 150, 0);
     }
 }

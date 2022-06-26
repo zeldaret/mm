@@ -954,7 +954,7 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.world.rot.x = 0;
     this->actor.world.rot.z = 0;
-    this->actor.world.rot.y = Rand_Next() & 0xFFFF;
+    this->actor.world.rot.y = Rand_Next() % 0x10000;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;

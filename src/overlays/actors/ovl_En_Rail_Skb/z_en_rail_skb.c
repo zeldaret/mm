@@ -848,7 +848,7 @@ void func_80B72430(EnRailSkb* this, PlayState* play, s32 arg2) {
 
         sp50.y += Rand_Centered() * 4.0f;
 
-        EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, (Rand_Next() & 7) + 10, -1, 10, NULL);
+        EffectSsHahen_Spawn(play, &sp5C, &sp50, &sp44, 0, (Rand_Next() % 8) + 10, -1, 10, NULL);
         func_800BBFB0(play, &sp5C, 10.0f, 1, 150, 0, 1);
     }
 }
