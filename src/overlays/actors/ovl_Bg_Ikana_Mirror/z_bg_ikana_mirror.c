@@ -193,10 +193,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgIkanaMirror_SetupCheckLightAbsorption(BgIkanaMirror* this);
-void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* globalCtx);
-void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this);
-void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx);
+void BgIkanaMirror_SetupWait(BgIkanaMirror* this);
+void BgIkanaMirror_Wait(BgIkanaMirror* this, GlobalContext* globalCtx);
+void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
+void BgIkanaMirror_EmitLight(BgIkanaMirror* this, GlobalContext* globalCtx);
 
 void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     ColliderQuad* collider;
@@ -258,7 +258,7 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     BgIkanaMirror_SetQuadVertices(this);
     this->lightAbsorptionAnimatedTexture = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightAbsorptionTexAnim);
     this->lightEmissionAnimatedTexture = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightEmissionTexAnim);
-    BgIkanaMirror_SetupCheckLightAbsorption(this);
+    BgIkanaMirror_SetupWait(this);
 }
 
 void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -272,14 +272,12 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-//BgIkanaMirror_SetupCheckLightAbsorption
-void BgIkanaMirror_SetupCheckLightAbsorption(BgIkanaMirror* this) {
+void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
     this->isEmittingLight = 0;
-    this->actionFunc = BgIkanaMirror_CheckLightAbsorption;
+    this->actionFunc = BgIkanaMirror_Wait;
 }
 
-// BgIkanaMirror_CheckLightAbsorption. or _Wait
-void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* globalCtx) {
+void BgIkanaMirror_Wait(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s8 isEmittingLight;
     s32 startEmittingLight;
     startEmittingLight = false;
@@ -313,18 +311,18 @@ void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* glob
     }
 
     if (startEmittingLight) {
-        BgIkanaMirror_SetupCheckLightEmission(this);
+        BgIkanaMirror_SetupEmitLight(this);
         return;
     }
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 }
 
-void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this) {
+void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_20;
-    this->actionFunc = BgIkanaMirror_CheckLightEmission;
+    this->actionFunc = BgIkanaMirror_EmitLight;
 }
 
-void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx) {
+void BgIkanaMirror_EmitLight(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
@@ -354,7 +352,7 @@ void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* global
     }
     
     this->dyna.actor.flags &= ~ACTOR_FLAG_20;
-    BgIkanaMirror_SetupCheckLightAbsorption(this);
+    BgIkanaMirror_SetupWait(this);
 }
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
