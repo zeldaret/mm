@@ -182,11 +182,11 @@ void Skin_DrawLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dLis
     CLOSE_DISPS(gfxCtx);
 }
 
-void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw,
+void Skin_DrawImpl(Actor* actor, PlayState* play, Skin* skin, SkinPostDraw postDraw,
                    SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6, s32 drawFlags) {
     s32 i;
     SkinLimb** skeleton;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
@@ -212,7 +212,7 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostD
         s32 segmentType;
 
         if (overrideLimbDraw != NULL) {
-            shouldDraw = overrideLimbDraw(actor, globalCtx, i, skin);
+            shouldDraw = overrideLimbDraw(actor, play, i, skin);
         }
 
         segmentType = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType;
@@ -225,7 +225,7 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostD
     }
 
     if (postDraw != NULL) {
-        postDraw(actor, globalCtx, skin);
+        postDraw(actor, play, skin);
     }
 
 close_disps:;
@@ -233,26 +233,26 @@ close_disps:;
 }
 
 // allows specifying postDraw and setTranslation
-void func_80138228(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, s32 setTranslation) {
-    Skin_DrawImpl(actor, globalCtx, skin, postDraw, NULL, setTranslation, false, 0);
+void func_80138228(Actor* actor, PlayState* play, Skin* skin, SkinPostDraw postDraw, s32 setTranslation) {
+    Skin_DrawImpl(actor, play, skin, postDraw, NULL, setTranslation, false, 0);
 }
 
 // allows specifying OverrideLimbDraw, postDraw and setTranslation
-void func_80138258(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw,
+void func_80138258(Actor* actor, PlayState* play, Skin* skin, SkinPostDraw postDraw,
                    SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation) {
-    Skin_DrawImpl(actor, globalCtx, skin, postDraw, overrideLimbDraw, setTranslation, false, 0);
+    Skin_DrawImpl(actor, play, skin, postDraw, overrideLimbDraw, setTranslation, false, 0);
 }
 
 // allows specifying OverrideLimbDraw, postDraw, setTranslation, and arg6
-void func_8013828C(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw,
+void func_8013828C(Actor* actor, PlayState* play, Skin* skin, SkinPostDraw postDraw,
                    SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6) {
-    Skin_DrawImpl(actor, globalCtx, skin, postDraw, overrideLimbDraw, setTranslation, arg6, 0);
+    Skin_DrawImpl(actor, play, skin, postDraw, overrideLimbDraw, setTranslation, arg6, 0);
 }
 
 // allows specifying all variables
-void func_801382C4(Actor* actor, GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw,
+void func_801382C4(Actor* actor, PlayState* play, Skin* skin, SkinPostDraw postDraw,
                    SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6, s32 drawFlags) {
-    Skin_DrawImpl(actor, globalCtx, skin, postDraw, overrideLimbDraw, setTranslation, arg6, drawFlags);
+    Skin_DrawImpl(actor, play, skin, postDraw, overrideLimbDraw, setTranslation, arg6, drawFlags);
 }
 
 void Skin_GetLimbPos(Skin* skin, s32 limbIndex, Vec3f* offset, Vec3f* dst) {

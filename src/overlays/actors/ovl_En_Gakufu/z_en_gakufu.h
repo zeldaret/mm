@@ -5,7 +5,7 @@
 
 struct EnGakufu;
 
-typedef void (*EnGakufuActionFunc)(struct EnGakufu*, GlobalContext*);
+typedef void (*EnGakufuActionFunc)(struct EnGakufu*, PlayState*);
 
 #define GAKUFU_GET_TYPE(thisx) ((thisx)->params & 0xF)
 

@@ -5,9 +5,9 @@
 
 struct EnPm;
 
-typedef void (*EnPmActionFunc)(struct EnPm*, GlobalContext*);
-typedef s32 (*EnPmFunc)(struct EnPm*, GlobalContext*);
-typedef s32 (*EnPmFunc2)(struct EnPm*, GlobalContext*);
+typedef void (*EnPmActionFunc)(struct EnPm*, PlayState*);
+typedef s32 (*EnPmFunc)(struct EnPm*, PlayState*);
+typedef s32 (*EnPmFunc2)(struct EnPm*, PlayState*);
 
 typedef struct EnPm {
     /* 0x0000 */ Actor actor;

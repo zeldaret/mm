@@ -10,9 +10,9 @@
 
 #define PARAMS ((EffectEnIceBlockInitParams*)initParamsx)
 
-u32 EffectEnIceBlock_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectEnIceBlock_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectEnIceBlock_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectEnIceBlock_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_En_Ice_Block_InitVars = {
     EFFECT_EN_ICE_BLOCK,
@@ -24,9 +24,9 @@ const EffectSsInit Effect_En_Ice_Block_InitVars = {
 #define rRot regs[2]
 #define rRotVel regs[3]
 
-u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, GlobalContext* globalCtx) {
-    if (((this->rObjId = Object_GetIndex(&globalCtx->objectCtx, OBJECT_ICE_BLOCK)) < 0) ||
-        (!Object_IsLoaded(&globalCtx->objectCtx, this->rObjId))) {
+u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, PlayState* play) {
+    if (((this->rObjId = Object_GetIndex(&play->objectCtx, OBJECT_ICE_BLOCK)) < 0) ||
+        (!Object_IsLoaded(&play->objectCtx, this->rObjId))) {
         this->life = -1;
         this->draw = NULL;
         return false;
@@ -35,7 +35,7 @@ u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, GlobalContext* globalCt
     }
 }
 
-u32 EffectEnIceBlock_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectEnIceBlock_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectEnIceBlockInitParams* params = PARAMS;
 
     Math_Vec3f_Copy(&this->pos, &params->pos);
@@ -48,27 +48,27 @@ u32 EffectEnIceBlock_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
 
     this->draw = EffectEnIceBlock_Draw;
     this->update = EffectEnIceBlock_Update;
-    EffectEnIceBlock_CheckIceBlockObject(this, globalCtx);
+    EffectEnIceBlock_CheckIceBlockObject(this, play);
 
     return 1;
 }
 
-void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
-    if (EffectEnIceBlock_CheckIceBlockObject(this, globalCtx)) {
+    if (EffectEnIceBlock_CheckIceBlockObject(this, play)) {
         f32 scale = this->rScale * 0.1f * 0.01f;
 
         OPEN_DISPS(gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x06,
-                   globalCtx->objectCtx.status[this->rObjId].segment); // object: OBJECT_ICE_BLOCK
+                   play->objectCtx.status[this->rObjId].segment); // object: OBJECT_ICE_BLOCK
 
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->rRot, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -79,7 +79,7 @@ void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     }
 }
 
-void EffectEnIceBlock_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectEnIceBlock_Update(PlayState* play, u32 index, EffectSs* this) {
     this->rRot += this->rRotVel;
-    EffectEnIceBlock_CheckIceBlockObject(this, globalCtx);
+    EffectEnIceBlock_CheckIceBlockObject(this, play);
 }

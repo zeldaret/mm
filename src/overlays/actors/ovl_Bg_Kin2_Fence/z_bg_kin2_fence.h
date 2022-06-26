@@ -5,7 +5,7 @@
 
 struct BgKin2Fence;
 
-typedef void (*BgKin2FenceActionFunc)(struct BgKin2Fence*, GlobalContext*);
+typedef void (*BgKin2FenceActionFunc)(struct BgKin2Fence*, PlayState*);
 
 typedef struct BgKin2Fence {
     /* 0x000 */ DynaPolyActor dyna;

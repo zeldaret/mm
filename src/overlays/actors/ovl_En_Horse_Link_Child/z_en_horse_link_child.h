@@ -6,7 +6,7 @@
 
 struct EnHorseLinkChild;
 
-typedef void (*EnHorseLinkChildUnkFunc)(struct EnHorseLinkChild*, GlobalContext*);
+typedef void (*EnHorseLinkChildUnkFunc)(struct EnHorseLinkChild*, PlayState*);
 
 typedef struct EnHorseLinkChild {
     /* 0x000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnSsh;
 
-typedef void (*EnSshActionFunc)(struct EnSsh*, GlobalContext*);
+typedef void (*EnSshActionFunc)(struct EnSsh*, PlayState*);
 
 #define SSH_STATE_STUNNED (1 << 0)
 #define SSH_STATE_GROUND_START (1 << 2)

@@ -5,7 +5,7 @@
 
 struct EnElfgrp;
 
-typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, GlobalContext*);
+typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
 
 #define ENELFGRP_GET(thisx) ((thisx)->params & 0xF)
 #define ENELFGRP_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)

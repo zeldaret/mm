@@ -5,7 +5,7 @@
 
 struct EnFish;
 
-typedef void (*EnFishUnkFunc)(Actor*, GlobalContext*);
+typedef void (*EnFishUnkFunc)(Actor*, PlayState*);
 
 enum {
     /* -1 */ ENFISH_MINUS1 = -1,

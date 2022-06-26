@@ -7,7 +7,7 @@
 
 struct EnBaba;
 
-typedef void (*EnBabaActionFunc)(struct EnBaba*, GlobalContext*);
+typedef void (*EnBabaActionFunc)(struct EnBaba*, PlayState*);
 
 #define ENBABA_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
 #define ENBABA_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)

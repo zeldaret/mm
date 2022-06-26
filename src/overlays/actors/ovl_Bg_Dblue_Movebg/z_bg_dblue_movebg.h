@@ -5,7 +5,7 @@
 
 struct BgDblueMovebg;
 
-typedef void (*BgDblueMovebgActionFunc)(struct BgDblueMovebg*, GlobalContext*);
+typedef void (*BgDblueMovebgActionFunc)(struct BgDblueMovebg*, PlayState*);
 
 #define BGDBLUEMOVEBG_GET_F(thisx) ((thisx)->params & 0xF)
 #define BGDBLUEMOVEBG_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)

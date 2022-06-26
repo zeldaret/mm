@@ -18,22 +18,22 @@
 #define ENBABA_GAVE_BLAST_MASK (1 << 6)
 #define ENBABA_DRAW_SHADOW (1 << 7)
 
-void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBaba_Init(Actor* thisx, PlayState* play);
+void EnBaba_Destroy(Actor* thisx, PlayState* play);
+void EnBaba_Update(Actor* thisx, PlayState* play);
+void EnBaba_Draw(Actor* thisx, PlayState* play);
 
-void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_Idle(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_FollowScheduleConverse(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_Converse(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_GiveBlastMask(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_GaveBlastMask(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_FollowSchedule(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_KnockedOver(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_DoNothing(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_Walk(EnBaba* this, GlobalContext* globalCtx);
-void EnBaba_FaceForward(EnBaba* this, GlobalContext* globalCtx);
+void EnBaba_FinishInit(EnBaba* this, PlayState* play);
+void EnBaba_Idle(EnBaba* this, PlayState* play);
+void EnBaba_FollowScheduleConverse(EnBaba* this, PlayState* play);
+void EnBaba_Converse(EnBaba* this, PlayState* play);
+void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play);
+void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play);
+void EnBaba_FollowSchedule(EnBaba* this, PlayState* play);
+void EnBaba_KnockedOver(EnBaba* this, PlayState* play);
+void EnBaba_DoNothing(EnBaba* this, PlayState* play);
+void EnBaba_Walk(EnBaba* this, PlayState* play);
+void EnBaba_FaceForward(EnBaba* this, PlayState* play);
 
 typedef enum {
     /* 0 */ BABA_ANIM_IDLE_HOLDING_BAG,
@@ -149,12 +149,12 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-s32 EnBaba_FindBombShopkeeper(EnBaba* this, GlobalContext* globalCtx) {
+s32 EnBaba_FindBombShopkeeper(EnBaba* this, PlayState* play) {
     //! The bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
     //! Note if there are other `EnOssan` actors, it may find that instance instead
     //! in which case `EnSob1` struct acceses would be incorrect
     this->bombShopkeeper =
-        (EnSob1*)SubS_FindActor(globalCtx, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
+        (EnSob1*)SubS_FindActor(play, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
 
     if (this->bombShopkeeper != NULL) {
         return true;
@@ -162,8 +162,8 @@ s32 EnBaba_FindBombShopkeeper(EnBaba* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnBaba_HandleConversation(EnBaba* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     switch (this->textId) {
         case 0:
@@ -211,41 +211,41 @@ void EnBaba_HandleConversation(EnBaba* this, GlobalContext* globalCtx) {
             break;
 
         case 0x660:
-            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
             this->textId = 0x661;
             break;
 
         case 0x661:
-            Actor_ChangeFocus(&this->bombShopkeeper->actor, globalCtx, &this->actor);
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
             this->textId = 0x662;
             break;
 
         case 0x662:
-            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
             this->textId = 0x663;
             gSaveContext.save.weekEventReg[73] |= 1;
             this->flags |= ENBABA_END_CONVERSATION;
             break;
 
         case 0x65A:
-            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
             this->textId = 0x65B;
             break;
 
         case 0x65B:
-            Actor_ChangeFocus(&this->bombShopkeeper->actor, globalCtx, &this->actor);
+            Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
             this->textId = 0x65C;
             break;
 
         case 0x65C:
-            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
             this->textId = 0x65D;
             gSaveContext.save.weekEventReg[73] |= 2;
             this->flags |= ENBABA_END_CONVERSATION;
             break;
 
         case 0x65E:
-            Actor_ChangeFocus(&this->actor, globalCtx, &this->bombShopkeeper->actor);
+            Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
             this->textId = 0x65F;
             this->flags |= ENBABA_END_CONVERSATION;
             break;
@@ -271,30 +271,30 @@ void EnBaba_HandleConversation(EnBaba* this, GlobalContext* globalCtx) {
             break;
     }
 
-    Message_StartTextbox(globalCtx, this->textId, &this->actor);
+    Message_StartTextbox(play, this->textId, &this->actor);
     if (this->flags & ENBABA_END_CONVERSATION) {
         if (this->flags & ENBABA_GAVE_BLAST_MASK) {
             this->flags &= ~ENBABA_GAVE_BLAST_MASK;
-            func_80151BB4(globalCtx, 0x33);
+            func_80151BB4(play, 0x33);
         }
-        func_80151BB4(globalCtx, 4);
+        func_80151BB4(play, 4);
     }
 }
 
-void EnBaba_SetNextEntrance(GlobalContext* globalCtx, u16 nextEntrance) {
-    globalCtx->nextEntranceIndex = nextEntrance;
-    globalCtx->unk_1887F = 0x40;
+void EnBaba_SetNextEntrance(PlayState* play, u16 nextEntrance) {
+    play->nextEntranceIndex = nextEntrance;
+    play->unk_1887F = 0x40;
     gSaveContext.nextTransition = 0x40;
-    globalCtx->sceneLoadFlag = 0x14;
+    play->sceneLoadFlag = 0x14;
 }
 
-void EnBaba_UpdateCollider(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_UpdateCollider(EnBaba* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x + 5.0f;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z + 22.0f;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 EnBaba_MoveForward(EnBaba* this, f32 speedTarget) {
@@ -314,8 +314,8 @@ s32 EnBaba_MoveForward(EnBaba* this, f32 speedTarget) {
     return reachedEnd;
 }
 
-void EnBaba_UpdateModel(EnBaba* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnBaba_UpdateModel(EnBaba* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f point;
 
     SkelAnime_Update(&this->skelAnime);
@@ -337,21 +337,21 @@ void EnBaba_UpdateModel(EnBaba* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
 
-    SubS_FillLimbRotTables(globalCtx, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
 
     if (this->flags & ENBABA_VISIBLE) {
-        EnBaba_UpdateCollider(this, globalCtx);
+        EnBaba_UpdateCollider(this, play);
     }
 }
 
-s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleOutput* scheduleOutput) {
+s32 EnBaba_InitTimePath(EnBaba* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 now = SCHEDULE_TIME_NOW;
     u16 startTime;
     u8 pathIndex = ENBABA_GET_PATH_INDEX(&this->actor);
     u16 numWaypoints;
 
     if (sSearchTimePathLimit[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(globalCtx, pathIndex, sSearchTimePathLimit[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, sSearchTimePathLimit[scheduleOutput->result]);
     }
 
     if (this->timePath == NULL) {
@@ -382,7 +382,7 @@ s32 EnBaba_InitTimePath(EnBaba* this, GlobalContext* globalCtx, ScheduleOutput* 
     return true;
 }
 
-s32 EnBaba_ProcessScheduleOutput(EnBaba* this, GlobalContext* globalCtx, ScheduleOutput* scheduleOutput) {
+s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success;
 
     switch (scheduleOutput->result) {
@@ -391,7 +391,7 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, GlobalContext* globalCtx, Schedul
             break;
 
         case BABA_SCHEDULE_RESULT_FOLLOW_TIME_PATH:
-            success = EnBaba_InitTimePath(this, globalCtx, scheduleOutput);
+            success = EnBaba_InitTimePath(this, play, scheduleOutput);
             break;
 
         case BABA_SCHEDULE_RESULT_KNOCKED_OVER:
@@ -401,7 +401,7 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, GlobalContext* globalCtx, Schedul
     return success;
 }
 
-s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
+s32 EnBaba_FollowTimePath(EnBaba* this, PlayState* play) {
     f32 weightArray[265];
     Vec3f worldPos;
     Vec3f timePathPointNew; // used to compute yaw after update
@@ -418,7 +418,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint,
                                 weightArray, &timePathPoint, this->timePathTimeSpeed);
-        SubS_TimePathing_ComputeInitialY(globalCtx, this->timePath, this->timePathWaypoint, &timePathPoint);
+        SubS_TimePathing_ComputeInitialY(play, this->timePath, this->timePathWaypoint, &timePathPoint);
         this->actor.world.pos.y = timePathPoint.y;
         this->timePathIsSetup = true;
     } else {
@@ -428,7 +428,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = timePathPoint.x;
     this->actor.world.pos.z = timePathPoint.z;
 
-    if (SubS_InCsMode(globalCtx)) {
+    if (SubS_InCsMode(play)) {
         prevTimePathElapsedTime = this->timePathElapsedTime;
         prevTimePathWaypoint = this->timePathWaypoint;
         timePathPoint = this->actor.world.pos;
@@ -446,7 +446,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&worldPos, &timePathPointNew);
     }
 
-    if (SubS_InCsMode(globalCtx)) {
+    if (SubS_InCsMode(play)) {
         this->timePathElapsedTime = prevTimePathElapsedTime;
         this->timePathWaypoint = prevTimePathWaypoint;
         this->timePathPoint = timePathPoint;
@@ -455,19 +455,19 @@ s32 EnBaba_FollowTimePath(EnBaba* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnBaba_HandleScheduleOutput(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_HandleScheduleOutput(EnBaba* this, PlayState* play) {
     switch (this->scheduleResult) {
         case BABA_SCHEDULE_RESULT_FOLLOW_TIME_PATH:
             gSaveContext.save.weekEventReg[58] |= 0x40;
             this->flags |= ENBABA_VISIBLE;
-            EnBaba_FollowTimePath(this, globalCtx);
+            EnBaba_FollowTimePath(this, play);
             break;
 
         case BABA_SCHEDULE_RESULT_KNOCKED_OVER:
             this->animIndex = BABA_ANIM_KNOCKED_OVER;
             this->textId = 0x2A30;
             this->actor.speedXZ = 0.0f;
-            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(play, &this->actor);
             this->flags |= ENBABA_KNOCKED_OVER;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
             this->actionFunc = EnBaba_KnockedOver;
@@ -476,20 +476,20 @@ void EnBaba_HandleScheduleOutput(EnBaba* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
 }
 
-void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBbaSkel, &gBbaWalkingHoldingBagAnim, this->jointTable,
+void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBbaSkel, &gBbaWalkingHoldingBagAnim, this->jointTable,
                        this->morphTable, BBA_LIMB_MAX);
 
     this->actor.draw = EnBaba_Draw;
     this->flags |= ENBABA_DRAW_SHADOW;
     this->actor.flags |= ACTOR_FLAG_1;
 
-    if (globalCtx->sceneNum == SCENE_BOMYA) {
+    if (play->sceneNum == SCENE_BOMYA) {
         this->flags |= ENBABA_VISIBLE;
         this->animIndex = BABA_ANIM_IDLE;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animIndex);
         this->actionFunc = EnBaba_Idle;
-    } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
+    } else if (play->sceneNum == SCENE_BACKTOWN) {
         if ((ENBABA_GET_TYPE(&this->actor) == ENBABA_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entranceIndex != 0xD670) && (ENBABA_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
@@ -541,11 +541,11 @@ void EnBaba_FinishInit(EnBaba* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBaba_Idle(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_Idle(EnBaba* this, PlayState* play) {
     if ((this->flags & ENBABA_AUTOTALK) || (this->bombShopkeeper != NULL) ||
-        EnBaba_FindBombShopkeeper(this, globalCtx)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            EnBaba_HandleConversation(this, globalCtx);
+        EnBaba_FindBombShopkeeper(this, play)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            EnBaba_HandleConversation(this, play);
             if (this->flags & ENBABA_AUTOTALK) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
             }
@@ -554,41 +554,41 @@ void EnBaba_Idle(EnBaba* this, GlobalContext* globalCtx) {
             if (this->flags & ENBABA_AUTOTALK) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, play, 100.0f);
         }
     }
 }
 
-void EnBaba_FollowScheduleConverse(EnBaba* this, GlobalContext* globalCtx) {
-    u8 talkState = Message_GetState(&globalCtx->msgCtx);
+void EnBaba_FollowScheduleConverse(EnBaba* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 5) || (talkState == 6)) && Message_ShouldAdvance(globalCtx)) {
-        globalCtx->msgCtx.msgMode = 0x43;
-        globalCtx->msgCtx.unk12023 = 4;
+    if (((talkState == 5) || (talkState == 6)) && Message_ShouldAdvance(play)) {
+        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.unk12023 = 4;
         this->actionFunc = EnBaba_FollowSchedule;
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
 }
 
-void EnBaba_Converse(EnBaba* this, GlobalContext* globalCtx) {
-    u8 talkState = Message_GetState(&globalCtx->msgCtx);
+void EnBaba_Converse(EnBaba* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     if (talkState == 5) {
-        if (Message_ShouldAdvance(globalCtx)) {
+        if (Message_ShouldAdvance(play)) {
             if (this->flags & ENBABA_END_CONVERSATION) {
                 this->flags &= ~ENBABA_END_CONVERSATION;
-                globalCtx->msgCtx.msgMode = 0x43;
-                globalCtx->msgCtx.unk12023 = 4;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.unk12023 = 4;
                 if (this->flags & ENBABA_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                        if (globalCtx->msgCtx.unk120B1 == 0) {
+                        if (play->msgCtx.unk120B1 == 0) {
                             gSaveContext.save.weekEventReg[81] |= 2;
-                            EnBaba_SetNextEntrance(globalCtx, 0xD670);
+                            EnBaba_SetNextEntrance(play, 0xD670);
                             return;
                         }
                     } else {
                         gSaveContext.save.weekEventReg[81] |= 2;
-                        EnBaba_SetNextEntrance(globalCtx, 0xD670);
+                        EnBaba_SetNextEntrance(play, 0xD670);
                     }
                 } else {
                     this->textId = 0;
@@ -596,48 +596,48 @@ void EnBaba_Converse(EnBaba* this, GlobalContext* globalCtx) {
                 }
             } else if (this->flags & ENBABA_GIVE_BLAST_MASK) {
                 this->flags &= ~ENBABA_GIVE_BLAST_MASK;
-                globalCtx->msgCtx.msgMode = 0x43;
-                globalCtx->msgCtx.unk12023 = 4;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.unk12023 = 4;
                 this->actionFunc = EnBaba_GiveBlastMask;
             } else {
-                EnBaba_HandleConversation(this, globalCtx);
+                EnBaba_HandleConversation(this, play);
             }
         }
     } else if (talkState == 6) {
-        if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk120B1 == 0)) {
+        if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
-            EnBaba_SetNextEntrance(globalCtx, 0xD670);
+            EnBaba_SetNextEntrance(play, 0xD670);
         }
     }
 }
 
-void EnBaba_GiveBlastMask(EnBaba* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->flags |= ENBABA_GAVE_BLAST_MASK;
         this->actionFunc = EnBaba_GaveBlastMask;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BLAST, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_BLAST, 300.0f, 300.0f);
     }
 }
 
-void EnBaba_GaveBlastMask(EnBaba* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        EnBaba_HandleConversation(this, globalCtx);
+void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Converse;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
-void EnBaba_FollowSchedule(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
-    if (!Schedule_RunScript(globalCtx, sSchedule, &scheduleOutput) ||
+    if (!Schedule_RunScript(play, sSchedule, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) &&
-         !EnBaba_ProcessScheduleOutput(this, globalCtx, &scheduleOutput))) {
+         !EnBaba_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->flags &= ~ENBABA_DRAW_SHADOW;
         this->actor.flags &= ~ACTOR_FLAG_1;
         scheduleOutput.result = BABA_SCHEDULE_RESULT_NONE;
@@ -647,20 +647,20 @@ void EnBaba_FollowSchedule(EnBaba* this, GlobalContext* globalCtx) {
     }
     this->scheduleResult = scheduleOutput.result;
 
-    EnBaba_HandleScheduleOutput(this, globalCtx);
+    EnBaba_HandleScheduleOutput(this, play);
 
     if (this->flags & ENBABA_VISIBLE) {
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            Message_StartTextbox(globalCtx, 0x2A39, &this->actor); // "I'm sorry"
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowScheduleConverse;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, globalCtx);
+            func_800B863C(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);
 }
 
-void EnBaba_KnockedOver(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 endFrame = Animation_GetLastFrame(sAnimations[this->animIndex].animation);
 
@@ -679,35 +679,35 @@ void EnBaba_KnockedOver(EnBaba* this, GlobalContext* globalCtx) {
     } else {
         if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
-            EnBaba_SetNextEntrance(globalCtx, 0xD670);
+            EnBaba_SetNextEntrance(play, 0xD670);
         } else {
             Actor_MoveWithGravity(&this->actor);
         }
     }
 }
 
-void EnBaba_DoNothing(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_DoNothing(EnBaba* this, PlayState* play) {
 }
 
-void EnBaba_Walk(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_Walk(EnBaba* this, PlayState* play) {
     if (EnBaba_MoveForward(this, 1.0f)) {
         this->waypoint = 0;
     }
 }
 
-void EnBaba_FaceForward(EnBaba* this, GlobalContext* globalCtx) {
+void EnBaba_FaceForward(EnBaba* this, PlayState* play) {
     this->actor.shape.rot = this->actor.world.rot;
 }
 
-void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBaba_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBaba* this = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(globalCtx, ENBABA_GET_PATH_INDEX(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENBABA_GET_PATH_INDEX(&this->actor), 0x3F);
 
     Actor_SetScale(&this->actor, 0.01f);
 
@@ -716,22 +716,22 @@ void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = EnBaba_FinishInit;
 }
 
-void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBaba_Destroy(Actor* thisx, PlayState* play) {
     EnBaba* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBaba_Update(Actor* thisx, PlayState* play) {
     EnBaba* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    EnBaba_UpdateModel(this, globalCtx);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    EnBaba_UpdateModel(this, play);
 }
 
-s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                             Actor* thisx) {
     EnBaba* this = THIS;
 
@@ -747,7 +747,7 @@ s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_NECK) && (this->inMsgState3 != 0) && ((globalCtx->state.frames % 2) == 0)) {
+    if ((limbIndex == BBA_LIMB_NECK) && (this->inMsgState3 != 0) && ((play->state.frames % 2) == 0)) {
         Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
@@ -765,7 +765,7 @@ s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     return false;
 }
 
-void EnBaba_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBaba_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnBaba* this = THIS;
     Vec3f sp18 = { 0.0f, 0.0f, 0.0f };
 
@@ -777,29 +777,29 @@ void EnBaba_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     }
 }
 
-void EnBaba_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnBaba_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBaba_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBaba* this = THIS;
     Vec3f pos;
     Vec3f scale;
 
     if (this->flags & ENBABA_VISIBLE) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C5B0(globalCtx->state.gfxCtx);
+        func_8012C5B0(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBbaEyeTex));
 
-        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+        SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw,
                                        EnBaba_TransformLimbDraw, &this->actor);
 
         if (this->flags & ENBABA_DRAW_SHADOW) {
             if ((this->animIndex == BABA_ANIM_KNOCKED_OVER) || (this->animIndex == BABA_ANIM_LYING_DOWN)) {
-                func_8012C2DC(globalCtx->state.gfxCtx);
+                func_8012C2DC(play->state.gfxCtx);
                 pos.x = this->actor.world.pos.x + 20.0f;
                 pos.y = this->actor.world.pos.y;
                 pos.z = this->actor.world.pos.z + 20.0f;
@@ -808,9 +808,9 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             scale.x = scale.y = scale.z = 0.3f;
-            func_800BC620(&pos, &scale, 255, globalCtx);
+            func_800BC620(&pos, &scale, 255, play);
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
