@@ -10,10 +10,10 @@
 
 #define THIS ((BgLastBwall*)thisx)
 
-void BgLastBwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgLastBwall_Init(Actor* thisx, PlayState* play);
+void BgLastBwall_Destroy(Actor* thisx, PlayState* play);
+void BgLastBwall_Update(Actor* thisx, PlayState* play);
+void BgLastBwall_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Last_Bwall_InitVars = {

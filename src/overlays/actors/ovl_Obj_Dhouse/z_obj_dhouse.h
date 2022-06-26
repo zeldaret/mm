@@ -5,7 +5,7 @@
 
 struct ObjDhouse;
 
-typedef void (*ObjDhouseActionFunc)(struct ObjDhouse*, GlobalContext*);
+typedef void (*ObjDhouseActionFunc)(struct ObjDhouse*, PlayState*);
 
 #define OBJDHOUSE_GET_7F(thisx) ((thisx)->params & 0x7F)
 

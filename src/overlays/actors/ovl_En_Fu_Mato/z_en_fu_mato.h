@@ -5,7 +5,7 @@
 
 struct EnFuMato;
 
-typedef void (*EnFuMatoActionFunc)(struct EnFuMato*, GlobalContext*);
+typedef void (*EnFuMatoActionFunc)(struct EnFuMato*, PlayState*);
 
 #define ENFUMATO_GET(thisx) ((thisx)->params)
 

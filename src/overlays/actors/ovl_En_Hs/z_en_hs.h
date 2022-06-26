@@ -6,7 +6,7 @@
 
 struct EnHs;
 
-typedef void (*EnHsActionFunc)(struct EnHs*, GlobalContext*);
+typedef void (*EnHsActionFunc)(struct EnHs*, PlayState*);
 
 #define HS_GET_EXIT_INDEX(thisx) ((thisx)->params & 0xF)
 

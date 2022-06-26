@@ -5,7 +5,7 @@
 
 struct EnHanabi;
 
-typedef void (*EnHanabiActionFunc)(struct EnHanabi*, GlobalContext*);
+typedef void (*EnHanabiActionFunc)(struct EnHanabi*, PlayState*);
 
 #define ENHANABI_GET_1F(thisx) ((thisx)->params & 0x1F)
 

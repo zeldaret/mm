@@ -5,7 +5,7 @@
 
 struct EnDnp;
 
-typedef void (*EnDnpActionFunc)(struct EnDnp*, GlobalContext*);
+typedef void (*EnDnpActionFunc)(struct EnDnp*, PlayState*);
 
 #define ENDNP_GET_7(thisx) ((thisx)->params & 7)
 

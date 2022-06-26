@@ -5,7 +5,7 @@
 
 struct BgKin2Shelf;
 
-typedef void (*BgKin2ShelfActionFunc)(struct BgKin2Shelf*, GlobalContext*);
+typedef void (*BgKin2ShelfActionFunc)(struct BgKin2Shelf*, PlayState*);
 
 #define BGKIN2SHELF_GET_1(thisx) ((thisx)->params & 1)
 

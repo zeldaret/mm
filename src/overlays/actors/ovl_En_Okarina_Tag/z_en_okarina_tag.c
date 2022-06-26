@@ -10,12 +10,12 @@
 
 #define THIS ((EnOkarinaTag*)thisx)
 
-void EnOkarinaTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnOkarinaTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnOkarinaTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnOkarinaTag_Init(Actor* thisx, PlayState* play);
+void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play);
+void EnOkarinaTag_Update(Actor* thisx, PlayState* play);
 
-void func_8093E518(EnOkarinaTag* this, GlobalContext* globalCtx);
-void func_8093E68C(EnOkarinaTag* this, GlobalContext* globalCtx);
+void func_8093E518(EnOkarinaTag* this, PlayState* play);
+void func_8093E68C(EnOkarinaTag* this, PlayState* play);
 
 #if 0
 const ActorInit En_Okarina_Tag_InitVars = {

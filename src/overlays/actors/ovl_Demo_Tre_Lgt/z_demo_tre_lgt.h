@@ -6,7 +6,7 @@
 
 struct DemoTreLgt;
 
-typedef void (*DemoTreLgtActionFunc)(struct DemoTreLgt* this, GlobalContext* globalCtx);
+typedef void (*DemoTreLgtActionFunc)(struct DemoTreLgt* this, PlayState* play);
 
 typedef struct DemoTreLgt {
     /* 0x000 */ Actor actor;

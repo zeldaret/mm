@@ -5,8 +5,8 @@
 
 struct EnTru;
 
-typedef void (*EnTruActionFunc)(struct EnTru*, GlobalContext*);
-typedef s32 (*EnTruUnkFunc)(Actor*, GlobalContext*);
+typedef void (*EnTruActionFunc)(struct EnTru*, PlayState*);
+typedef s32 (*EnTruUnkFunc)(Actor*, PlayState*);
 
 #define ENTRU_GET_PATH(thisx) ((thisx)->params & 0xFF)
 

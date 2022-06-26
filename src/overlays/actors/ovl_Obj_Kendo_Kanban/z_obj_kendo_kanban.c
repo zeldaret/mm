@@ -11,18 +11,18 @@
 
 #define THIS ((ObjKendoKanban*)thisx)
 
-void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
+void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play);
+void ObjKendoKanban_Update(Actor* thisx, PlayState* play);
+void ObjKendoKanban_Draw(Actor* thisx, PlayState* play);
 
 void func_80B65880(ObjKendoKanban* this);
-void func_80B65894(ObjKendoKanban* this, GlobalContext* globalCtx);
-void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx);
-void func_80B65CE0(ObjKendoKanban* this, GlobalContext* globalCtx);
-void func_80B65D68(ObjKendoKanban* this, GlobalContext* globalCtx);
-void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx);
-s32 func_80B6618C(ObjKendoKanban* this, GlobalContext* globalCtx);
+void func_80B65894(ObjKendoKanban* this, PlayState* play);
+void func_80B658A4(ObjKendoKanban* this, PlayState* play);
+void func_80B65CE0(ObjKendoKanban* this, PlayState* play);
+void func_80B65D68(ObjKendoKanban* this, PlayState* play);
+void func_80B65DA8(ObjKendoKanban* this, PlayState* play);
+s32 func_80B6618C(ObjKendoKanban* this, PlayState* play);
 
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
@@ -158,7 +158,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 Vec3f D_80B6681C = { 0.0f, 0.0f, 0.0f };
 Vec3f D_80B66828 = { 1.0f, 0.0f, 0.0f };
 
-void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     ObjKendoKanban* this = THIS;
     Vec3f sp70[3];
@@ -167,11 +167,11 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    Collider_InitCylinder(globalCtx, &this->colliderCylinder);
-    Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->colliderCylinder);
+    Collider_SetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    Collider_InitTris(globalCtx, &this->colliderTris);
-    Collider_SetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
+    Collider_InitTris(play, &this->colliderTris);
+    Collider_SetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
 
     Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  &this->actor.shape.rot);
@@ -184,7 +184,7 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetTrisVertices(&this->colliderTris, i, &sp70[0], &sp70[1], &sp70[2]);
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     this->unk_30C = OBJKENDOKANBAN_GET_F(&this->actor);
     this->actor.gravity = -2.0f;
@@ -206,26 +206,26 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
         func_80B65880(this);
     } else {
-        func_80B658A4(this, globalCtx);
+        func_80B658A4(this, play);
     }
 }
 
-void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
-    Collider_DestroyTris(globalCtx, &this->colliderTris);
+    Collider_DestroyCylinder(play, &this->colliderCylinder);
+    Collider_DestroyTris(play, &this->colliderTris);
 }
 
 void func_80B65880(ObjKendoKanban* this) {
     this->actionFunc = func_80B65894;
 }
 
-void func_80B65894(ObjKendoKanban* this, GlobalContext* globalCtx) {
+void func_80B65894(ObjKendoKanban* this, PlayState* play) {
 }
 
-void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B658A4(ObjKendoKanban* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
         if ((player->swordAnimation == 0) || (player->swordAnimation == 1) || (player->swordAnimation == 0x14)) {
@@ -234,7 +234,7 @@ void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx) {
             this->actor.velocity = D_80B6666C;
             this->unk_2CC = D_80B6669C;
 
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_OBJ_KENDO_KANBAN,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN,
                                this->actor.home.pos.x - 5.0f, this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
                                0xA);
 
@@ -248,9 +248,8 @@ void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx) {
             this->actor.velocity = D_80B66678;
             this->unk_2CC = D_80B666A8;
 
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_OBJ_KENDO_KANBAN,
-                               this->actor.home.pos.x, this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0,
-                               3);
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_KENDO_KANBAN, this->actor.home.pos.x,
+                               this->actor.home.pos.y + 5.0f, this->actor.home.pos.z, 0, 0, 0, 3);
 
             this->unk_29C[0] = D_80B666F4;
             this->unk_29C[1] = D_80B6670C;
@@ -281,11 +280,11 @@ void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B65CE0;
 }
 
-void func_80B65CE0(ObjKendoKanban* this, GlobalContext* globalCtx) {
+void func_80B65CE0(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
     this->unk_302 += this->unk_304;
-    func_80B65DA8(this, globalCtx);
+    func_80B65DA8(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
     }
@@ -295,15 +294,15 @@ void func_80B65D54(ObjKendoKanban* this) {
     this->actionFunc = func_80B65D68;
 }
 
-void func_80B65D68(ObjKendoKanban* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B65D68(ObjKendoKanban* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if (func_80B6618C(this, globalCtx) == 1) {
+    if (func_80B6618C(this, play) == 1) {
         player->unk_AC0 = 700.0f;
     }
 }
 
-void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
+void func_80B65DA8(ObjKendoKanban* this, PlayState* play) {
     Vec3f sp5C;
     s32 pad[2];
     Vec3f sp48;
@@ -349,7 +348,7 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
         Matrix_Pop();
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->actor.bgCheckFlags & 1) {
         this->actor.velocity.x *= 0.8f;
@@ -395,8 +394,8 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B6618C(ObjKendoKanban* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80B6618C(ObjKendoKanban* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 phi_v0;
     s32 phi_v1 = 0;
     s32 i;
@@ -433,11 +432,11 @@ s32 func_80B6618C(ObjKendoKanban* this, GlobalContext* globalCtx) {
     return true;
 }
 
-void func_80B66304(ObjKendoKanban* this, GlobalContext* globalCtx) {
+void func_80B66304(ObjKendoKanban* this, PlayState* play) {
     if ((this->actionFunc != func_80B65CE0) && (this->actionFunc != func_80B65D68)) {
         if (this->colliderTris.base.acFlags & AC_HIT) {
             this->colliderTris.base.acFlags &= ~AC_HIT;
-            func_80B658A4(this, globalCtx);
+            func_80B658A4(this, play);
         }
 
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
@@ -445,39 +444,39 @@ void func_80B66304(ObjKendoKanban* this, GlobalContext* globalCtx) {
         this->colliderCylinder.dim.pos.x -= (s16)(20.0f * Math_SinS(this->actor.shape.rot.y));
 
         if (this->actionFunc == func_80B65894) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
         }
 
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
     }
 }
 
-void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjKendoKanban_Update(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    func_80B66304(this, globalCtx);
+    func_80B66304(this, play);
 }
 
 #ifdef NON_MATCHING
-void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
     ObjKendoKanban* this = THIS;
     s32 i;
     Gfx* poly;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
         Matrix_RotateAxisS(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
         Matrix_Translate(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->unk_30C & OBJKENDOKANBAN_F_1) {
             gSPDisplayList(POLY_OPA_DISP++, D_80B666C0);
@@ -496,7 +495,7 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
         Matrix_MultVec3f(&this->unk_29C[i], &this->unk_26C[i]);

@@ -5,7 +5,7 @@
 
 struct EffStk;
 
-typedef void (*EffStkActionFunc)(struct EffStk*, GlobalContext*);
+typedef void (*EffStkActionFunc)(struct EffStk*, PlayState*);
 
 typedef struct EffStk {
     /* 0x0000 */ Actor actor;

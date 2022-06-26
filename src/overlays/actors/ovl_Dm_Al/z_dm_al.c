@@ -10,12 +10,12 @@
 
 #define THIS ((DmAl*)thisx)
 
-void DmAl_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmAl_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmAl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmAl_Init(Actor* thisx, PlayState* play);
+void DmAl_Destroy(Actor* thisx, PlayState* play);
+void DmAl_Update(Actor* thisx, PlayState* play);
+void DmAl_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1BDD8(DmAl* this, GlobalContext* globalCtx);
+void func_80C1BDD8(DmAl* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Al_InitVars = {
