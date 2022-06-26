@@ -61,7 +61,7 @@ Now, we can redefine the `jointTable` and `morphTable` in terms of the limb enum
 
 We can also use our new skeleton name and limb enum when initialization the skeleton like so:
 ```c
-SkelAnime_Init(globalCtx, &this->skelAnime, &gKingsChamberDekuGuardSkel, NULL, this->jointTable, this->morphTable, KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX);
+SkelAnime_Init(play, &this->skelAnime, &gKingsChamberDekuGuardSkel, NULL, this->jointTable, this->morphTable, KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX);
 ```
 
 Lastly, we can use our limb enum in `EnDns_PostLimbDraw`. Where the code originally had:

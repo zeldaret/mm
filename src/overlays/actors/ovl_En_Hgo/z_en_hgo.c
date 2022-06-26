@@ -11,22 +11,22 @@
 
 #define THIS ((EnHgo*)thisx)
 
-void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHgo_Init(Actor* thisx, PlayState* play);
+void EnHgo_Destroy(Actor* thisx, PlayState* play);
+void EnHgo_Update(Actor* thisx, PlayState* play);
+void EnHgo_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD03EC(EnHgo* this);
-void func_80BD0410(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD0434(EnHgo* this, GlobalContext* globalCtx);
+void func_80BD0410(EnHgo* this, PlayState* play);
+void func_80BD0434(EnHgo* this, PlayState* play);
 void func_80BD049C(EnHgo* this);
-void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx);
+void func_80BD04E0(EnHgo* this, PlayState* play);
 void EnHgo_SetupDialogueHandler(EnHgo* this);
-void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx);
-s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx);
-s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
+void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play);
+void func_80BD06FC(EnHgo* this, PlayState* play);
+s32 func_80BD0898(EnHgo* this, PlayState* play);
+s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
@@ -78,15 +78,15 @@ static TexturePtr sEyeTextures[] = {
     object_harfgibud_Tex_012138,
 };
 
-void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHgo_Init(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644,
                        this->jointTable, this->morphTable, HGO_LIMB_MAX);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
     thisx->targetMode = 6;
     this->unk_30C = 0;
@@ -102,10 +102,10 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHgo_Destroy(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80BD03EC(EnHgo* this) {
@@ -113,18 +113,18 @@ void func_80BD03EC(EnHgo* this) {
     this->actionFunc = func_80BD0410;
 }
 
-void func_80BD0410(EnHgo* this, GlobalContext* globalCtx) {
+void func_80BD0410(EnHgo* this, PlayState* play) {
 }
 
 void func_80BD0420(EnHgo* this) {
     this->actionFunc = func_80BD0434;
 }
 
-void func_80BD0434(EnHgo* this, GlobalContext* globalCtx) {
+void func_80BD0434(EnHgo* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.focus.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.focus.pos.z;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 void func_80BD049C(EnHgo* this) {
@@ -132,40 +132,40 @@ void func_80BD049C(EnHgo* this) {
     this->actionFunc = func_80BD04E0;
 }
 
-void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
+void func_80BD04E0(EnHgo* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
-                Message_StartTextbox(globalCtx, 0x15A5, &this->actor);
+                Message_StartTextbox(play, 0x15A5, &this->actor);
                 this->unk_314 = 0x15A5; // That mask is a gibdo
 
             } else {
-                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7; // can I research that mask
             }
         } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
-                Message_StartTextbox(globalCtx, 0x158F, &this->actor);
+                Message_StartTextbox(play, 0x158F, &this->actor);
                 this->unk_314 = 0x158F; // Isn't this a fairy
             } else {
-                Message_StartTextbox(globalCtx, 0x1593, &this->actor);
+                Message_StartTextbox(play, 0x1593, &this->actor);
                 this->unk_314 = 0x1593; // Never seen a fairy this lively
             }
         } else {
             if (!(this->unk_310 & 2)) {
                 this->unk_310 |= 2;
-                Message_StartTextbox(globalCtx, 0x1595, &this->actor);
+                Message_StartTextbox(play, 0x1595, &this->actor);
                 this->unk_314 = 0x1595; // ghost radar is reacting
             } else {
-                Message_StartTextbox(globalCtx, 0x1598, &this->actor);
+                Message_StartTextbox(play, 0x1598, &this->actor);
                 this->unk_314 = 0x1598; // you seem to be similar to a ghost
             }
         }
         EnHgo_SetupDialogueHandler(this);
     } else {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, play, 100.0f);
     }
 }
 
@@ -173,8 +173,8 @@ void EnHgo_SetupDialogueHandler(EnHgo* this) {
     this->actionFunc = EnHgo_DefaultDialogueHandler;
 }
 
-void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
+void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
         case 0:
         case 1:
         case 2:
@@ -182,10 +182,10 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
         case 4:
             break;
         case 5:
-            func_80BD06FC(this, globalCtx);
+            func_80BD06FC(this, play);
             break;
         case 6:
-            if (Message_ShouldAdvance(globalCtx)) {
+            if (Message_ShouldAdvance(play)) {
                 func_80BD049C(this);
             }
     }
@@ -193,66 +193,66 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
-    if (Message_ShouldAdvance(globalCtx)) {
+void func_80BD06FC(EnHgo* this, PlayState* play) {
+    if (Message_ShouldAdvance(play)) {
         switch (this->unk_314) {
             case 0x158F:
-                Message_StartTextbox(globalCtx, 0x1590, &this->actor);
+                Message_StartTextbox(play, 0x1590, &this->actor);
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
                 if (gSaveContext.save.weekEventReg[14] & 4) {
-                    Message_StartTextbox(globalCtx, 0x1591, &this->actor);
+                    Message_StartTextbox(play, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
                 }
-                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(play, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1591:
-                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(play, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1593:
-                Message_StartTextbox(globalCtx, 0x1594, &this->actor);
+                Message_StartTextbox(play, 0x1594, &this->actor);
                 this->unk_314 = 0x1594;
                 break;
             case 0x1595:
-                Message_StartTextbox(globalCtx, 0x1596, &this->actor);
+                Message_StartTextbox(play, 0x1596, &this->actor);
                 this->unk_314 = 0x1596;
                 break;
             case 0x1596:
-                Message_StartTextbox(globalCtx, 0x1597, &this->actor);
+                Message_StartTextbox(play, 0x1597, &this->actor);
                 this->unk_314 = 0x1597;
                 break;
             case 0x1598:
-                Message_StartTextbox(globalCtx, 0x1599, &this->actor);
+                Message_StartTextbox(play, 0x1599, &this->actor);
                 this->unk_314 = 0x1599;
                 break;
             case 0x15A5:
-                Message_StartTextbox(globalCtx, 0x15A6, &this->actor);
+                Message_StartTextbox(play, 0x15A6, &this->actor);
                 this->unk_314 = 0x15A6;
                 break;
             case 0x15A6:
-                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7;
                 break;
             case 0x15A7:
-                func_801477B4(globalCtx);
+                func_801477B4(play);
                 func_80BD049C(this);
                 break;
         }
     }
 }
 
-s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
+s32 func_80BD0898(EnHgo* this, PlayState* play) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 486)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 486);
-        if (this->unk_316 != globalCtx->csCtx.actorActions[actionIndex]->action) {
-            this->unk_316 = globalCtx->csCtx.actorActions[actionIndex]->action;
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_CheckActorAction(play, 486)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 486);
+        if (this->unk_316 != play->csCtx.actorActions[actionIndex]->action) {
+            this->unk_316 = play->csCtx.actorActions[actionIndex]->action;
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_218 = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
@@ -285,7 +285,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
                         this->unk_312 = 1;
                         if ((gSaveContext.sceneSetupIndex == 0) &&
-                            ((globalCtx->csCtx.currentCsIndex == 2) || (globalCtx->csCtx.currentCsIndex == 4))) {
+                            ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
@@ -300,13 +300,13 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return true;
     }
-    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
+    if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
         func_80BD0420(this);
     }
@@ -314,8 +314,8 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80BD0B8C(EnHgo* this, GlobalContext* globalCtx) {
-    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
+void func_80BD0B8C(EnHgo* this, PlayState* play) {
+    Actor_TrackPlayer(play, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
     if (this->unk_30E > 2) {
         this->unk_30E--;
     } else if (this->unk_30E == 2) {
@@ -330,24 +330,24 @@ void func_80BD0B8C(EnHgo* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHgo_Update(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    if (func_80BD0898(this, globalCtx)) {
+    if (func_80BD0898(this, play)) {
         Actor_TrackNone(&this->unk_300, &this->unk_306);
     } else if (this->actionFunc != func_80BD0410) {
         if (this->actionFunc != func_80BD0434) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            func_80BD0B8C(this, globalCtx);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+            func_80BD0B8C(this, play);
         }
     }
 }
 
-s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHgo* this = THIS;
 
     if (limbIndex == HGO_LIMB_PELVIS) {
@@ -357,7 +357,7 @@ s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
+void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
     EnHgo* this = THIS;
 
     if (limbIndex == HGO_LIMB_PELVIS) {
@@ -366,16 +366,16 @@ void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnHgo_Draw(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_30C]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->unk_1D8);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_00F248);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

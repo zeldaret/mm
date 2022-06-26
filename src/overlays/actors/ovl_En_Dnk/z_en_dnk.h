@@ -5,7 +5,7 @@
 
 struct EnDnk;
 
-typedef void (*EnDnkActionFunc)(struct EnDnk*, GlobalContext*);
+typedef void (*EnDnkActionFunc)(struct EnDnk*, PlayState*);
 
 #define ENDNK_GET_3(thisx) ((thisx)->params & 0x3)
 #define ENDNK_GET_3C(thisx) ((thisx)->params & 0x3C)

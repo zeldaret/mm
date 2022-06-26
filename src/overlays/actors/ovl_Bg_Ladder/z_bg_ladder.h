@@ -8,7 +8,7 @@
 
 struct BgLadder;
 
-typedef void (*BgLadderActionFn)(struct BgLadder*, GlobalContext*);
+typedef void (*BgLadderActionFn)(struct BgLadder*, PlayState*);
 
 typedef struct BgLadder {
     /* 0x000 */ DynaPolyActor dyna;

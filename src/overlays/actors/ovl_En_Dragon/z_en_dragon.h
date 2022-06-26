@@ -18,7 +18,7 @@ typedef enum {
 
 struct EnDragon;
 
-typedef void (*EnDragonActionFunc)(struct EnDragon*, GlobalContext*);
+typedef void (*EnDragonActionFunc)(struct EnDragon*, PlayState*);
 
 typedef struct EnDragon {
     /* 0x000 */ Actor actor;

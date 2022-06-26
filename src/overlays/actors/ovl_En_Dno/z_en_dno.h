@@ -5,7 +5,7 @@
 
 struct EnDno;
 
-typedef void (*EnDnoActionFunc)(struct EnDno*, GlobalContext*);
+typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 
 #define ENDNO_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)

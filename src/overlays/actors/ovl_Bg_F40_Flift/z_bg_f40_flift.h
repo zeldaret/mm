@@ -5,7 +5,7 @@
 
 struct BgF40Flift;
 
-typedef void (*BgF40FliftActionFunc)(struct BgF40Flift*, GlobalContext*);
+typedef void (*BgF40FliftActionFunc)(struct BgF40Flift*, PlayState*);
 
 typedef struct BgF40Flift {
     /* 0x0000 */ Actor actor;

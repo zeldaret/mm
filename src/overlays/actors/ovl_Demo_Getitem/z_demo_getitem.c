@@ -10,9 +10,9 @@
 
 #define THIS ((DemoGetitem*)thisx)
 
-void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoGetitem_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx);
+void DemoGetitem_Init(Actor* thisx, PlayState* play);
+void DemoGetitem_Destroy(Actor* thisx, PlayState* play);
+void DemoGetitem_Update(Actor* thisx, PlayState* play);
 
 void func_80A4FB10(DemoGetitem* this, GlobalContext* globalCtx);
 void func_80A4FB68(DemoGetitem* this, GlobalContext* globalCtx2);

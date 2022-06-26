@@ -16,15 +16,15 @@ Again our example will be taken from a small NPC: this time, `EnMs` (Bean Seller
 
 #define THIS ((EnMs*)thisx)
 
-void EnMs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMs_Init(Actor* thisx, PlayState* play);
+void EnMs_Destroy(Actor* thisx, PlayState* play);
+void EnMs_Update(Actor* thisx, PlayState* play);
+void EnMs_Draw(Actor* thisx, PlayState* play);
 
-void func_80952734(EnMs* this, GlobalContext* globalCtx);
-void func_809527F8(EnMs* this, GlobalContext* globalCtx);
-void func_809529AC(EnMs* this, GlobalContext* globalCtx);
-void func_80952A1C(EnMs *this, GlobalContext *globalCtx);
+void func_80952734(EnMs* this, PlayState* play);
+void func_809527F8(EnMs* this, PlayState* play);
+void func_809529AC(EnMs* this, PlayState* play);
+void func_80952A1C(EnMs* this, PlayState* play);
 
 const ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
@@ -56,13 +56,13 @@ extern InitChainEntry D_80952BCC[];
 extern AnimationHeader D_060005EC;
 extern FlexSkeletonHeader D_06003DC0;
 
-void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Init(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, D_80952BCC);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &D_80952BA0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinderType1(play, &this->collider, &this->actor, &D_80952BA0);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = 0xFF;
@@ -72,13 +72,13 @@ void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
 }
 
-void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Destroy(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80952734(EnMs* this, GlobalContext* globalCtx) {
+void func_80952734(EnMs* this, PlayState* play) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (gSaveContext.save.inventory.items[10] == ITEM_NONE) {
@@ -87,40 +87,40 @@ void func_80952734(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         this->actionFunc = func_809527F8;
         return;
     }
 
     if (this->actor.xzDistToPlayer < 90.0f) {
         if (ABS_ALT(temp_v1) < 0x2000) {
-            func_800B8614(&this->actor, globalCtx, 90.0f);
+            func_800B8614(&this->actor, play, 90.0f);
         }
     }
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_809527F8.s")
 
-void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_809529AC(EnMs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
-void func_80952A1C(EnMs *this, GlobalContext *globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_80151938(globalCtx, 0x936U);
+void func_80952A1C(EnMs* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        func_80151938(play, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
     }
 }
 
-void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMs* this = THIS;
 
@@ -128,16 +128,16 @@ void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetArrowOffset = 500.0f;
     Actor_SetScale(&this->actor, 0.015f);
     SkelAnime_Update(&this->skelAnime);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Draw(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                      NULL, &this->actor);
 }
 
@@ -152,53 +152,53 @@ $ ../mips_to_c/mips_to_c.py asm/non_matchings/overlays/ovl_En_Ms/func_809527F8.s
 ```
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
+void func_809527F8(EnMs* this, PlayState* play) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(play) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        if (Message_ShouldAdvance(globalCtx) != 0) {
-            func_801477B4(globalCtx);
-            Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        if (Message_ShouldAdvance(play) != 0) {
+            func_801477B4(play);
+            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
         }
         // Duplicate return node #17. Try simplifying control flow for better match
         return;
     }
-    if (Message_ShouldAdvance(globalCtx) != 0) {
-        temp_v0_2 = globalCtx->msgCtx.choiceIndex;
+    if (Message_ShouldAdvance(play) != 0) {
+        temp_v0_2 = play->msgCtx.choiceIndex;
         if (temp_v0_2 != 0) {
             if (temp_v0_2 != 1) {
 
             }
             func_8019F230();
-            func_80151938(globalCtx, 0x934U);
+            func_80151938(play, 0x934U);
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        func_801477B4(globalCtx);
+        func_801477B4(play);
         if ((s32) gSaveContext.save.playerData.rupees < 0xA) {
             play_sound(0x4806U);
-            func_80151938(globalCtx, 0x935U);
+            func_80151938(play, 0x935U);
             return;
         }
         if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
             play_sound(0x4806U);
-            func_80151938(globalCtx, 0x937U);
+            func_80151938(play, 0x937U);
             return;
         }
         func_8019F208();
-        Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+        Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
         func_801159EC(-0xA);
         this->actionFunc = func_809529AC;
     }
@@ -208,10 +208,10 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
 which is long, messy, and contains some rather nasty-looking control flow, including horrors like
 
 ```C
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(play) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
@@ -234,11 +234,11 @@ For didactic purposes, we'll use a feature of mips2c called goto-only mode to ex
 instead will produce
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
+void func_809527F8(EnMs* this, PlayState* play) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -248,24 +248,24 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(globalCtx);
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    func_801477B4(play);
+    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    temp_v0_2 = globalCtx->msgCtx.choiceIndex;
+    temp_v0_2 = play->msgCtx.choiceIndex;
     if (temp_v0_2 == 0) {
         goto block_11;
     }
@@ -274,29 +274,29 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(globalCtx);
+    func_801477B4(play);
     if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(globalCtx, 0x935U);
+    func_80151938(play, 0x935U);
     return;
 block_13:
     if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] < 0x14) {
         goto block_15;
     }
     play_sound(0x4806U);
-    func_80151938(globalCtx, 0x937U);
+    func_80151938(play, 0x937U);
     return;
 block_15:
     func_8019F208();
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(globalCtx, 0x934U);
+    func_80151938(play, 0x934U);
 block_17:
     return;
 }
@@ -316,7 +316,7 @@ The simplest sort of block label to eliminate is one that is only used once, and
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(globalCtx, 0x935U);
+    func_80151938(play, 0x935U);
     return;
 block_13:
 ```
@@ -326,7 +326,7 @@ Currently, this says to jump over the code block `play_sound...` if the conditio
 ```C
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(globalCtx, 0x935U);
+        func_80151938(play, 0x935U);
         return;
     }
 ```
@@ -336,11 +336,11 @@ Likewise, one can do this with `block_15`.
 If you examine appropriate part of the diff, you will usually find that such eliminations make no, or very little, difference to the compiled code.
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
+void func_809527F8(EnMs* this, PlayState* play) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -350,24 +350,24 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(globalCtx);
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    func_801477B4(play);
+    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    temp_v0_2 = globalCtx->msgCtx.choiceIndex;
+    temp_v0_2 = play->msgCtx.choiceIndex;
     if (temp_v0_2 == 0) {
         goto block_11;
     }
@@ -376,27 +376,27 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(globalCtx);
+    func_801477B4(play);
     
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(globalCtx, 0x935U);
+        func_80151938(play, 0x935U);
         return;
     }
     if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(globalCtx, 0x937U);
+        func_80151938(play, 0x937U);
         return;
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(globalCtx, 0x934U);
+    func_80151938(play, 0x934U);
 block_17:
     return;
 }
@@ -406,11 +406,11 @@ We can't apply this rule any more, so we need to move on to the next: `block_17`
 
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
+void func_809527F8(EnMs* this, PlayState* play) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -420,24 +420,24 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(globalCtx);
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    func_801477B4(play);
+    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    temp_v0_2 = globalCtx->msgCtx.choiceIndex;
+    temp_v0_2 = play->msgCtx.choiceIndex;
     if (temp_v0_2 == 0) {
         goto block_11;
     }
@@ -446,27 +446,27 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(globalCtx);
+    func_801477B4(play);
     
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(globalCtx, 0x935U);
+        func_80151938(play, 0x935U);
         return;
     }
     if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(globalCtx, 0x937U);
+        func_80151938(play, 0x937U);
         return;
     }
 
     func_8019F208();
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
     func_8019F230();
-    func_80151938(globalCtx, 0x934U);   
+    func_80151938(play, 0x934U);   
 }
 ```
 
@@ -475,7 +475,7 @@ Our next rule is about non-crossing blocks. If two code blocks do not contain an
 Now let's start thinking about switches. A good indicator of a switch in goto-only mode is something like
 
 ```C
-    temp_v0_2 = globalCtx->msgCtx.choiceIndex;
+    temp_v0_2 = play->msgCtx.choiceIndex;
     if (temp_v0_2 == 0) {
         goto block_11;
     }
@@ -493,23 +493,23 @@ because
 So let us rewrite the entire second half as a switch:
 
 ```C
-    switch (globalCtx->msgCtx.choiceIndex) {
+    switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(globalCtx);
+            func_801477B4(play);
             
             if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(globalCtx, 0x935U);
+                func_80151938(play, 0x935U);
                 return;
             }
             if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(globalCtx, 0x937U);
+                func_80151938(play, 0x937U);
                 return;
             }
 
             func_8019F208();
-            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
             func_801159EC(-0xA);
             this->actionFunc = func_809529AC;
             return;
@@ -518,7 +518,7 @@ So let us rewrite the entire second half as a switch:
         case 1:
         default:
             func_8019F230();
-            func_80151938(globalCtx, 0x934U);
+            func_80151938(play, 0x934U);
             break;
     }
 ```
@@ -528,19 +528,19 @@ There's a couple of other obvious things here:
 - a common pattern everywhere, a sequence of ifs with returns as the last thing inside is the same as an if-else chain, so we can rewrite these as
 
 ```C
-    switch (globalCtx->msgCtx.choiceIndex) {
+    switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(globalCtx);
+            func_801477B4(play);
             
             if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(globalCtx, 0x935U);
+                func_80151938(play, 0x935U);
             } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(globalCtx, 0x937U);
+                func_80151938(play, 0x937U);
             } else {
                 func_8019F208();
-                Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
                 func_801159EC(-0xA);
                 this->actionFunc = func_809529AC;
             }
@@ -549,7 +549,7 @@ There's a couple of other obvious things here:
         case 1:
         default:
             func_8019F230();
-            func_80151938(globalCtx, 0x934U);
+            func_80151938(play, 0x934U);
             break;
     }
 ```
@@ -557,7 +557,7 @@ There's a couple of other obvious things here:
 Well, at least the bottom half looks respectable now. Again, there is no code after the switch, so the next thing up, namely
 
 ```C
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
 ```
@@ -565,10 +565,10 @@ Well, at least the bottom half looks respectable now. Again, there is no code af
 can be swapped round and made to wrap the switch. This leaves us with
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
+void func_809527F8(EnMs* this, PlayState* play) {
     u8 temp_v0;
 
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -578,34 +578,34 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (Message_ShouldAdvance(globalCtx) == 0) {
+    if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(globalCtx);
-    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    func_801477B4(play);
+    Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (Message_ShouldAdvance(globalCtx) != 0) {
-        switch (globalCtx->msgCtx.choiceIndex) {
+    if (Message_ShouldAdvance(play) != 0) {
+        switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_801477B4(globalCtx);
+                func_801477B4(play);
                 
                 if (gSaveContext.save.playerData.rupees < 0xA) {
                     play_sound(0x4806U);
-                    func_80151938(globalCtx, 0x935U);
+                    func_80151938(play, 0x935U);
                 } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                     play_sound(0x4806U);
-                    func_80151938(globalCtx, 0x937U);
+                    func_80151938(play, 0x937U);
                 } else {
                     func_8019F208();
-                    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                    Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
                     func_801159EC(-0xA);
                     this->actionFunc = func_809529AC;
                 }
@@ -614,7 +614,7 @@ block_7:
             case 1:
             default:
                 func_8019F230();
-                func_80151938(globalCtx, 0x934U);
+                func_80151938(play, 0x934U);
                 break;
         }
     }
@@ -623,7 +623,7 @@ block_7:
 
 Now, the top of the function also looks like a switch:
 ```C
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -640,36 +640,36 @@ Interestingly, this time the blocks are the other way round. Also, the last stat
 Putting all this together, we write down a function with no gotos in it:
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
+void func_809527F8(EnMs* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
         case 6:
             this->actionFunc = func_80952734;
             break;
 
         case 5:
-            if (Message_ShouldAdvance(globalCtx) == 0) {
+            if (Message_ShouldAdvance(play) == 0) {
                 return;
             }
-            func_801477B4(globalCtx);
-            Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            func_801477B4(play);
+            Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
 
         case 4:
-            if (Message_ShouldAdvance(globalCtx) != 0) {
-                switch (globalCtx->msgCtx.choiceIndex) {
+            if (Message_ShouldAdvance(play) != 0) {
+                switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(globalCtx);
+                        func_801477B4(play);
 
                         if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(globalCtx, 0x935U);
+                            func_80151938(play, 0x935U);
                         } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(globalCtx, 0x937U);
+                            func_80151938(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
                             func_801159EC(-0xA);
                             this->actionFunc = func_809529AC;
                         }
@@ -678,7 +678,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(globalCtx, 0x934U);
+                        func_80151938(play, 0x934U);
                         break;
                 }
             }
@@ -693,35 +693,35 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
 Lastly, we can simplify `case 5` to replace the return in the if by the rest of the code, and we end up with
 
 ```C
-void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
+void func_809527F8(EnMs* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
         case 6:
             this->actionFunc = func_80952734;
             break;
 
         case 5:
-            if (Message_ShouldAdvance(globalCtx) != 0) {
-                func_801477B4(globalCtx);
-                Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            if (Message_ShouldAdvance(play) != 0) {
+                func_801477B4(play);
+                Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
             break;
 
         case 4:
-            if (Message_ShouldAdvance(globalCtx) != 0) {
-                switch (globalCtx->msgCtx.choiceIndex) {
+            if (Message_ShouldAdvance(play) != 0) {
+                switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(globalCtx);
+                        func_801477B4(play);
 
                         if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(globalCtx, 0x935U);
+                            func_80151938(play, 0x935U);
                         } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(globalCtx, 0x937U);
+                            func_80151938(play, 0x937U);
                         } else {
                             func_8019F208();
-                            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                            Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
                             func_801159EC(-0xA);
                             this->actionFunc = func_809529AC;
                         }
@@ -730,7 +730,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(globalCtx, 0x934U);
+                        func_80151938(play, 0x934U);
                         break;
                 }
             }

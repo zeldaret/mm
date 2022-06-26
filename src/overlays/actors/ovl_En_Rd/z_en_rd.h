@@ -6,7 +6,7 @@
 
 struct EnRd;
 
-typedef void (*EnRdActionFunc)(struct EnRd*, GlobalContext*);
+typedef void (*EnRdActionFunc)(struct EnRd*, PlayState*);
 typedef void (*EnRdSetupDanceFunc)(struct EnRd*);
 
 #define EN_RD_GET_80(thisx) ((thisx)->params & 0x80)

@@ -6,8 +6,8 @@
 
 struct EnTab;
 
-typedef void (*EnTabActionFunc)(struct EnTab*, GlobalContext*);
-typedef s32 (*EnTabUnkFunc)(struct EnTab*, GlobalContext*);
+typedef void (*EnTabActionFunc)(struct EnTab*, PlayState*);
+typedef s32 (*EnTabUnkFunc)(struct EnTab*, PlayState*);
 
 typedef struct EnTab {
     /* 0x0000 */ Actor actor;

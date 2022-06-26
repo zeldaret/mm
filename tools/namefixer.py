@@ -19,6 +19,7 @@ simpleReplace = {
 # Custom behaviour can be enabled by using a tuple as the value (see 
 # explanation in replace_single below)
 wordReplace = {
+    # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
@@ -539,10 +540,19 @@ wordReplace = {
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
+    "Effect_GetGlobalCtx": "Effect_GetPlayState",
 
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
+
+    # Structs
+    "ActorAnimationEntry": "AnimationInfo",
+    "ActorAnimationEntryS": "AnimationInfoS",
+    "struct_80B8E1A8": "AnimationSpeedInfo",
+    "GlobalContext": "PlayState",
+    "globalCtx": "play",
+    "globalCtx2": "play2",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
@@ -605,19 +615,19 @@ wordReplace = {
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
     "csCtx.unk_12": "csCtx.currentCsIndex",
-    "globalCtx->mf_187FC": "globalCtx->billboardMtxF",
-    "globalCtx->projectionMatrix": "globalCtx->viewProjectionMtxF",
-    "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
-    "globalCtx->envCtx.unk_8C": "globalCtx->envCtx.lightSettings",
-    "globalCtx->envCtx.unk_E5": "globalCtx->envCtx.fillScreen",
-    "globalCtx->envCtx.unk_E6": "globalCtx->envCtx.screenFillColor",
-    "globalCtx->envCtx.unk_C3": "globalCtx->envCtx.lightSettingOverride",
-    "globalCtx->envCtx.unk_DC": "globalCtx->envCtx.lightBlend",
+    "play->mf_187FC": "play->billboardMtxF",
+    "play->projectionMatrix": "play->viewProjectionMtxF",
+    "play->actorCtx.actorList[": "play->actorCtx.actorLists[",
+    "play->envCtx.unk_8C": "play->envCtx.lightSettings",
+    "play->envCtx.unk_E5": "play->envCtx.fillScreen",
+    "play->envCtx.unk_E6": "play->envCtx.screenFillColor",
+    "play->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
+    "play->envCtx.unk_DC": "play->envCtx.lightBlend",
 
-    "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
-    "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
-    "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
-    "globalCtx->msgCtx.unk11F04": "globalCtx->msgCtx.currentTextId",
+    "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
+    "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
+    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
+    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
@@ -627,11 +637,6 @@ wordReplace = {
     "D_04022B28" : "gDoorSkel",
     "D_04023100" : "gDoorCol",
 
-    # Structs
-    "ActorAnimationEntry": "AnimationInfo",
-    "ActorAnimationEntryS": "AnimationInfoS",
-    "struct_80B8E1A8": "AnimationSpeedInfo",
-
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
     "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
@@ -639,7 +644,7 @@ wordReplace = {
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
     # Example of custom behaviour:
-    # "PLAYER": ("GET_PLAYER(globalCtx)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
+    # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }
 
 # [a-zA-Z0-9_]

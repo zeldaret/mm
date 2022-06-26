@@ -6,7 +6,7 @@
 
 struct EnTanron4;
 
-typedef void (*EnTanron4ActionFunc)(struct EnTanron4*, GlobalContext*);
+typedef void (*EnTanron4ActionFunc)(struct EnTanron4*, PlayState*);
 
 typedef struct EnTanron4 {
     /* 0x000 */ Actor actor;
