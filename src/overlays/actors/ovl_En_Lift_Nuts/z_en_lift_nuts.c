@@ -127,7 +127,6 @@ void func_80AE9A80(EnLiftNuts* this, GlobalContext* globalCtx) {
 
 s32 D_80AEBF6C = 0;
 
-// Most likely a fake match
 s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
     s32* temp = &D_80AEBF6C;
     s32 temp2;
