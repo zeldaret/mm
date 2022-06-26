@@ -406,7 +406,7 @@ This leaves one piece of data unnamed, `D_80C106C8`. This is initially set to `0
 ```
 What is this doing? We need to understand that to name this variable.
 
-The N64's processors cannot use segmented addresses: they need actual RAM addresses. Therefore the segmented addresses have to be converted before being placed on a segment: this is what `Lib_SegmentedToVirtual` does. So (somewhat unusually) this loop is modifying the addresses in the actor's actual data in RAM. Having converted the addresses once, it wouldn't make any sense to convert them again, but `Init` would run every time an instantiation of the actor is created. Therefore `D_80C106C8` is present to ensure that the addresses only get converted once: it is really a boolean that indicates if the addresses have been converted. So let's call it `texturesDesegmented`, and replace its values by `true` and `false`.
+The N64's processors cannot use segmented addresses: they need actual RAM addresses. Therefore the segmented addresses have to be converted before being placed on a segment: this is what `Lib_SegmentedToVirtual` does. So (somewhat unusually) this loop is modifying the addresses in the actor's actual data in RAM. Having converted the addresses once, it wouldn't make any sense to convert them again, but `Init` would run every time an instantiation of the actor is created. Therefore `D_80C106C8` is present to ensure that the addresses only get converted once: it is really a boolean that indicates if the addresses have been converted. So let's call it `sTexturesDesegmented`, and replace its values by `true` and `false`.
 
 Finally, clearly `4` is linked to the data over which we're iterating: namely it's the size of the array. We have a macro for this, `ARRAY_COUNT(sEyeTextures)`.
 

@@ -57,7 +57,7 @@ typedef struct EnOssan {
     /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
     /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
     /* 0x402 */ s16 animationIndex;
-    /* 0x404 */ Vec3s headRotPartTimer;
+    /* 0x404 */ Vec3s partTimerHeadRot;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 

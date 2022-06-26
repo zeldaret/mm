@@ -110,7 +110,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
-    if (EnPoFusen_CheckParent(this, play) == 0) {
+    if (!EnPoFusen_CheckParent(this, play)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -121,7 +121,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
 
     this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
     this->randYRotChange = (Rand_Next() % 0x4B0) - 0x258;
-    this->avgBaseRotation = 0x1555;
+    this->avgBaseRotation = 0x10000 / 12;
     this->limb3Rot = 0;
     this->limb46Rot = 0;
     this->limb57Rot = 0;
@@ -139,6 +139,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
 
 void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
+
     Collider_DestroySphere(play, &this->collider);
 }
 
@@ -147,25 +148,23 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
 
     actorPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(&this->actor)) {
-        return 1;
+        return true;
     }
 
-    if (actorPtr != 0) {
-        do {
-            if (actorPtr->id == ACTOR_EN_MA4) {
-                this->actor.parent = actorPtr;
-                return 1;
-            }
-            actorPtr = actorPtr->next;
-        } while (actorPtr != 0);
+    while (actorPtr != NULL) {
+        if (actorPtr->id == ACTOR_EN_MA4) {
+            this->actor.parent = actorPtr;
+            return true;
+        }
+        actorPtr = actorPtr->next;
     }
 
-    return 0;
+    return false;
 }
 
 u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     if (this->actionFunc == EnPoFusen_IdleFuse) {
-        return 0;
+        return false;
     }
 
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
@@ -174,13 +173,13 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        return 1;
+        return true;
     }
 
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 
-    return 0;
+    return false;
 }
 
 void EnPoFusen_InitNoFuse(EnPoFusen* this) {
@@ -260,7 +259,7 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play) {
 void EnPoFusen_Update(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
     this->actionFunc(this, play);
-    if (EnPoFusen_CheckCollision(this, play) != 0) {
+    if (EnPoFusen_CheckCollision(this, play)) {
         EnPoFusen_IncrementRomaniPop(this);
     }
 }

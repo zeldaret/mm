@@ -104,7 +104,7 @@ const ActorInit En_Ossan_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimationsCuriosityShopMan[] = {
+static AnimationInfoS sCuriosityShopManAnimations[] = {
     { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -120,7 +120,7 @@ static AnimationInfoS sAnimationsCuriosityShopMan[] = {
     { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-static AnimationInfoS sAnimationsPartTimer[] = {
+static AnimationInfoS sPartTimerAnimations[] = {
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -137,7 +137,7 @@ static AnimationInfoS sAnimationsPartTimer[] = {
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
 
-static AnimationInfoS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimer };
+static AnimationInfoS* sAnimations[] = { sCuriosityShopManAnimations, sPartTimerAnimations };
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
@@ -236,12 +236,12 @@ void EnOssan_RotateHead(EnOssan* this, PlayState* play) {
 
     if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotPartTimer.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
-            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
         } else {
-            Math_SmoothStepToS(&this->headRotPartTimer.y, this->headRot.y, 3, 2000, 0);
-            if (ABS_ALT(this->headRotPartTimer.y - this->headRot.y) < 16) {
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
+            if (ABS_ALT(this->partTimerHeadRot.y - this->headRot.y) < 16) {
                 this->flags |= LOOKED_AT_PLAYER;
             }
         }
@@ -383,7 +383,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
             func_800B8614(&this->actor, play, 100.0f);
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -657,7 +657,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
             }
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -1683,8 +1683,8 @@ s32 EnOssan_PartTimer_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dLi
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_RotateXS(this->headRotPartTimer.y, MTXMODE_APPLY);
-        Matrix_RotateZS(this->headRotPartTimer.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->partTimerHeadRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->partTimerHeadRot.x, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1699,11 +1699,11 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx**
 }
 
 void EnOssan_PartTimer_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f sPartTimerFocusOffset = { 800.0f, 500.0f, 0.0f };
+    static Vec3f sFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_MultVec3f(&sPartTimerFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
 }
 
