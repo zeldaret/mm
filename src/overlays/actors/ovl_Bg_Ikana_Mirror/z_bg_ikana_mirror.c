@@ -199,18 +199,18 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, GlobalContext* globalCtx);
 
 void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
+    ColliderQuadDimInit* dim;
     ColliderQuad* collider;
-    s32 i;
     Vec3f a;
     Vec3f b;
     Vec3f c;
     Vec3f d;
-    ColliderQuadDimInit* dim;
+    s32 i;
 
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
         dim = &sQuadInit[i].dim;
         Matrix_MultVec3f(&dim->quad[0], &a);
         Matrix_MultVec3f(&dim->quad[1], &b);
@@ -224,8 +224,8 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
 }
 
 void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    BgIkanaMirror* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    BgIkanaMirror* this = THIS;
     Vec3f* vtx;
     Vec3f vertices[3];
     ColliderTrisElementInit* colliderElement;
@@ -240,7 +240,7 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    for (i = 0; i < 9; i++) {
+    for (i = 0; i < ARRAY_COUNT(sTrisElementsInit); i++) {
         colliderElement = &sTrisInit.elements[i];
         vtx = &colliderElement->dim.vtx[0];
         for (j = 0; j < 3; j++) {
@@ -250,7 +250,7 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
         Collider_InitQuad(globalCtx, &this->colliderQuad[i]);
         Collider_SetQuad(globalCtx, &this->colliderQuad[i], &this->dyna.actor, &sQuadInit[i]);
     }
@@ -267,7 +267,8 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(globalCtx, &this->colliderTris);
-    for (i = 0; i < 2; i++) {
+
+    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
         Collider_DestroyQuad(globalCtx, &this->colliderQuad[i]);
     }
 }
@@ -279,18 +280,17 @@ void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
 
 void BgIkanaMirror_Wait(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s8 isEmittingLight;
-    s32 startEmittingLight;
-    startEmittingLight = false;
+    s32 startEmittingLight = false;
 
-    //The light emission texture should gradually disappear from sight.
-    if (this->lightEmissionAlpha >= 101) { 
+    // The light emission texture should gradually disappear from sight.
+    if (this->lightEmissionAlpha >= 101) {
         this->lightEmissionAlpha -= 100;
     } else {
         this->lightEmissionAlpha = 0;
     }
 
-    // if light touches mirror
-    if (this->colliderTris.base.acFlags & AC_HIT) { 
+    // This checks if light is touching the mirror.
+    if (this->colliderTris.base.acFlags & AC_HIT) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
         this->isEmittingLight = 0;
         if (this->timer < 400) {
@@ -312,9 +312,9 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, GlobalContext* globalCtx) {
 
     if (startEmittingLight) {
         BgIkanaMirror_SetupEmitLight(this);
-        return;
+    } else {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 }
 
 void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
@@ -325,12 +325,12 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s32 i;
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
         if ((this->colliderQuad[i].base.atFlags & AT_HIT)) {
             this->colliderQuad[i].base.atFlags &= ~AT_HIT;
         }
     }
-    
+
     if (this->lightEmissionAlpha < 155) {
         this->lightEmissionAlpha += 100;
     } else {
@@ -345,14 +345,15 @@ void BgIkanaMirror_EmitLight(BgIkanaMirror* this, GlobalContext* globalCtx) {
 
     if (this->timer > 0) {
         this->timer--;
-        for (i = 0; i < 2; i++) {
+
+        for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderQuad[i].base);
         }
-        return;
+
+    } else {
+        this->dyna.actor.flags &= ~ACTOR_FLAG_20;
+        BgIkanaMirror_SetupWait(this);
     }
-    
-    this->dyna.actor.flags &= ~ACTOR_FLAG_20;
-    BgIkanaMirror_SetupWait(this);
 }
 
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -362,8 +363,8 @@ void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgIkanaMirror* this = THIS;
     s32 pad;
+    BgIkanaMirror* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -377,10 +378,11 @@ void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightEmissionDL);
     }
-    
-    if (this->lightEmissionAlpha > 0) { 
+
+    if (this->lightEmissionAlpha > 0) {
         f32 temp_fv0 = this->lightEmissionAlpha * (1.0f / 255.0f);
         s32 pad2[2];
+
         AnimatedMat_Draw(globalCtx, this->lightEmissionAnimatedTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(temp_fv0 * 123.0f));
         gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, (s32)(temp_fv0 * 185.0f));
