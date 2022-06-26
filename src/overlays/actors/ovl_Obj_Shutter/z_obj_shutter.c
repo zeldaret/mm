@@ -11,10 +11,10 @@
 
 #define THIS ((ObjShutter*)thisx)
 
-void ObjShutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx2);
-void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjShutter_Init(Actor* thisx, PlayState* play);
+void ObjShutter_Destroy(Actor* thisx, PlayState* play);
+void ObjShutter_Update(Actor* thisx, PlayState* play2);
+void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
@@ -28,10 +28,10 @@ const ActorInit Obj_Shutter_InitVars = {
     (ActorFunc)ObjShutter_Draw,
 };
 
-void ObjShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjShutter_Init(Actor* thisx, PlayState* play) {
 }
 
-void ObjShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 static u8 sScheduleScript[] = {
@@ -40,12 +40,12 @@ static u8 sScheduleScript[] = {
     /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(1),
 };
 
-void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx2) {
+void ObjShutter_Update(Actor* thisx, PlayState* play2) {
     ObjShutter* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     ScheduleResult schedule;
 
-    Schedule_RunScript(globalCtx, sScheduleScript, &schedule);
+    Schedule_RunScript(play, sScheduleScript, &schedule);
     if (schedule.result == 1) {
         if (this->scheduleResult != schedule.result) {
             this->actor.velocity.y = 0.0f;
@@ -75,7 +75,7 @@ void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->scheduleResult = schedule.result;
 }
 
-void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjShutter_Draw(Actor* thisx, PlayState* play) {
     ObjShutter* this = THIS;
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->verticalOffset, this->actor.world.pos.z,
@@ -83,11 +83,11 @@ void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_f53_obj_DL_0011E0);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

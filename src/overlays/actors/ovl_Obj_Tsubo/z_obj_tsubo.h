@@ -5,9 +5,9 @@
 
 struct ObjTsubo;
 
-typedef void (*ObjTsuboActionFunc)(struct ObjTsubo*, GlobalContext*);
+typedef void (*ObjTsuboActionFunc)(struct ObjTsubo*, PlayState*);
 
-typedef void (*ObjTsuboUnkFunc)(struct ObjTsubo*, GlobalContext*);
+typedef void (*ObjTsuboUnkFunc)(struct ObjTsubo*, PlayState*);
 
 #define OBJ_TSUBO_P000F(thisx) ((thisx)->params & 0x0F)
 #define OBJ_TSUBO_P001F(thisx) ((thisx)->params & 0x1F)

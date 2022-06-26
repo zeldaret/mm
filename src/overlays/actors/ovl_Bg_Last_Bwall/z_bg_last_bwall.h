@@ -5,7 +5,7 @@
 
 struct BgLastBwall;
 
-typedef void (*BgLastBwallActionFunc)(struct BgLastBwall*, GlobalContext*);
+typedef void (*BgLastBwallActionFunc)(struct BgLastBwall*, PlayState*);
 
 typedef struct BgLastBwall {
     /* 0x0000 */ Actor actor;

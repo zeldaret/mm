@@ -44,7 +44,7 @@ void SkelCurve_Clear(SkelCurve* skelCurve) {
  *
  * @return bool always true
  */
-s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg,
+s32 SkelCurve_Init(PlayState* play, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg,
                    CurveAnimationHeader* animation) {
     SkelCurveLimb** limbs;
     CurveSkeletonHeader* skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
@@ -61,7 +61,7 @@ s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeleton
 /**
  * Frees the joint table.
  */
-void SkelCurve_Destroy(GlobalContext* globalCtx, SkelCurve* skelCurve) {
+void SkelCurve_Destroy(PlayState* play, SkelCurve* skelCurve) {
     if (skelCurve->jointTable != NULL) {
         ZeldaArena_Free(skelCurve->jointTable);
     }
@@ -91,7 +91,7 @@ typedef enum {
  *
  * @return bool true when the animation has finished.
  */
-s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
+s32 SkelCurve_Update(PlayState* play, SkelCurve* skelCurve) {
     s16* jointData;
     u8* knotCounts;
     CurveAnimationHeader* animation;
@@ -108,7 +108,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     constantData = Lib_SegmentedToVirtual(animation->constantData);
     jointData = *skelCurve->jointTable;
 
-    skelCurve->curFrame += skelCurve->playSpeed * ((s32)globalCtx->state.framerateDivisor * 0.5f);
+    skelCurve->curFrame += skelCurve->playSpeed * ((s32)play->state.framerateDivisor * 0.5f);
 
     if (((skelCurve->playSpeed >= 0.0f) && (skelCurve->curFrame > skelCurve->endFrame)) ||
         ((skelCurve->playSpeed < 0.0f) && (skelCurve->curFrame < skelCurve->endFrame))) {
@@ -155,16 +155,16 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
 /**
  * Recursively draws limbs with appropriate properties.
  */
-void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skelCurve,
-                        OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
+void SkelCurve_DrawLimb(PlayState* play, s32 limbIndex, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw,
+                        PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     SkelCurveLimb* limb = Lib_SegmentedToVirtual(skelCurve->skeleton[limbIndex]);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_Push();
 
     if ((overrideLimbDraw == NULL) ||
-        ((overrideLimbDraw != NULL) && overrideLimbDraw(globalCtx, skelCurve, limbIndex, thisx))) {
+        ((overrideLimbDraw != NULL) && overrideLimbDraw(play, skelCurve, limbIndex, thisx))) {
         Vec3f scale;
         Vec3s rot;
         Vec3f pos;
@@ -191,7 +191,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
 
             dList = limb->dList[0];
             if (dList != NULL) {
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, dList);
             }
@@ -200,13 +200,13 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
 
             dList = limb->dList[0];
             if (dList != NULL) {
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, dList);
             }
             dList = limb->dList[1];
             if (dList != NULL) {
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, dList);
             }
@@ -214,25 +214,25 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
     }
 
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, skelCurve, limbIndex, thisx);
+        postLimbDraw(play, skelCurve, limbIndex, thisx);
     }
 
     if (limb->child != LIMB_DONE) {
-        SkelCurve_DrawLimb(globalCtx, limb->child, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
+        SkelCurve_DrawLimb(play, limb->child, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 
     Matrix_Pop();
 
     if (limb->sibling != LIMB_DONE) {
-        SkelCurve_DrawLimb(globalCtx, limb->sibling, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
+        SkelCurve_DrawLimb(play, limb->sibling, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelCurve* skelCurve,
-                    OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
+void SkelCurve_Draw(Actor* actor, PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw,
+                    PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     if (skelCurve->jointTable != NULL) {
-        SkelCurve_DrawLimb(globalCtx, 0, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
+        SkelCurve_DrawLimb(play, 0, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 }

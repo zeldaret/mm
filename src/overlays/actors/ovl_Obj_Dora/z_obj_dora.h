@@ -5,7 +5,7 @@
 
 struct ObjDora;
 
-typedef void (*ObjDoraActionFunc)(struct ObjDora*, GlobalContext*);
+typedef void (*ObjDoraActionFunc)(struct ObjDora*, PlayState*);
 
 typedef struct ObjDora {
     /* 0x0000 */ Actor actor;
