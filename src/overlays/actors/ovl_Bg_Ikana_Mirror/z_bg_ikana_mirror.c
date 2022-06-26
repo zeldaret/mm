@@ -198,11 +198,6 @@ void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* glob
 void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this);
 void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx);
 
-extern Gfx D_060014B0[];
-extern Gfx D_06001880[];
-extern Gfx D_06001E18[];
-extern CollisionHeader D_06002358;
-
 void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     ColliderQuad* collider;
     s32 i;
@@ -228,9 +223,6 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     Matrix_Pop();
 }
 
-extern AnimatedMaterial D_06001678;
-extern AnimatedMaterial D_06001AD8;
-
 void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     BgIkanaMirror* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
@@ -242,7 +234,7 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002358);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gStoneTowerTempleMirrorCol);
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
@@ -264,8 +256,8 @@ void BgIkanaMirror_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     BgIkanaMirror_SetQuadVertices(this);
-    this->lightAbsorptionTexture = Lib_SegmentedToVirtual(&D_06001678);
-    this->lightEmissionTexture = Lib_SegmentedToVirtual(&D_06001AD8);
+    this->lightAbsorptionAnimatedTexture = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightAbsorptionTexAnim);
+    this->lightEmissionAnimatedTexture = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightEmissionTexAnim);
     BgIkanaMirror_SetupCheckLightAbsorption(this);
 }
 
@@ -299,7 +291,7 @@ void BgIkanaMirror_CheckLightAbsorption(BgIkanaMirror* this, GlobalContext* glob
         this->lightEmissionAlpha = 0;
     }
 
-    // if mirror shield light touches mirror
+    // if light touches mirror
     if (this->colliderTris.base.acFlags & AC_HIT) { 
         this->colliderTris.base.acFlags &= ~AC_HIT;
         this->isEmittingLight = 0;
@@ -331,7 +323,7 @@ void BgIkanaMirror_SetupCheckLightEmission(BgIkanaMirror* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_20;
     this->actionFunc = BgIkanaMirror_CheckLightEmission;
 }
-// emitting light. Name idea: BgIkanaMirror_CheckLightEmission
+
 void BgIkanaMirror_CheckLightEmission(BgIkanaMirror* this, GlobalContext* globalCtx) {
     s32 i;
 
@@ -379,23 +371,23 @@ void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06001E18);
+    gSPDisplayList(POLY_OPA_DISP++, gStoneTowerTempleMirrorDL);
 
     if (this->lightAbsorptionAlpha > 0) {
-        AnimatedMat_Draw(globalCtx, this->lightAbsorptionTexture);
+        AnimatedMat_Draw(globalCtx, this->lightAbsorptionAnimatedTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->lightAbsorptionAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_060014B0); // mirror is releasing light
+        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightEmissionDL);
     }
     
     if (this->lightEmissionAlpha > 0) { 
         f32 temp_fv0 = this->lightEmissionAlpha * (1.0f / 255.0f);
         s32 pad2[2];
-        AnimatedMat_Draw(globalCtx, this->lightEmissionTexture);
+        AnimatedMat_Draw(globalCtx, this->lightEmissionAnimatedTexture);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(temp_fv0 * 123.0f));
         gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, (s32)(temp_fv0 * 185.0f));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001880); // mirror is receiving light
+        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightAbsorptionDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

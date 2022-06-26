@@ -17,15 +17,15 @@
         <DList Name="object_ikana_obj_DL_001100" Offset="0x1100" />
         <DList Name="object_ikana_obj_DL_001210" Offset="0x1210" />
         <TextureAnimation Name="object_ikana_obj_Matanimheader_001228" Offset="0x1228" />
-        <DList Name="object_ikana_obj_DL_0014B0" Offset="0x14B0" />
+        <DList Name="gStoneTowerTempleMirrorLightEmissionDL" Offset="0x14B0" />
         <DList Name="object_ikana_obj_DL_001660" Offset="0x1660" />
-        <TextureAnimation Name="object_ikana_obj_Matanimheader_001678" Offset="0x1678" />
-        <DList Name="object_ikana_obj_DL_001880" Offset="0x1880" />
+        <TextureAnimation Name="gStoneTowerTempleMirrorLightAbsorptionTexAnim" Offset="0x1678" />
+        <DList Name="gStoneTowerTempleMirrorLightAbsorptionDL" Offset="0x1880" />
         <DList Name="object_ikana_obj_DL_001AC0" Offset="0x1AC0" />
-        <TextureAnimation Name="object_ikana_obj_Matanimheader_001AD8" Offset="0x1AD8" />
+        <TextureAnimation Name="gStoneTowerTempleMirrorLightEmissionTexAnim" Offset="0x1AD8" />
         <DList Name="object_ikana_obj_DL_001E10" Offset="0x1E10" />
-        <DList Name="object_ikana_obj_DL_001E18" Offset="0x1E18" />
-        <Collision Name="object_ikana_obj_Colheader_002358" Offset="0x2358" />
+        <DList Name="gStoneTowerTempleMirrorDL" Offset="0x1E18" />
+        <Collision Name="gStoneTowerTempleMirrorCol" Offset="0x2358" />
         <DList Name="object_ikana_obj_DL_004710" Offset="0x4710" />
         <DList Name="object_ikana_obj_DL_0048A0" Offset="0x48A0" />
         <Collision Name="object_ikana_obj_Colheader_006368" Offset="0x6368" />
