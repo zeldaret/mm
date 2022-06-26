@@ -6,7 +6,7 @@
 
 struct Boss03;
 
-typedef void (*Boss03ActionFunc)(struct Boss03*, GlobalContext*);
+typedef void (*Boss03ActionFunc)(struct Boss03*, PlayState*);
 
 #define GYORG_WORK_TIMER_MAX 3
 

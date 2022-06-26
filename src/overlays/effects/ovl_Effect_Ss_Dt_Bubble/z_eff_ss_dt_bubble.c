@@ -8,9 +8,9 @@
 
 #define PARAMS ((EffectSsDtBubbleInitParams*)initParamsx)
 
-s32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsDtBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsDtBubble_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDtBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {

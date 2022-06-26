@@ -8,7 +8,7 @@
 
 struct ObjLightblock;
 
-typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, GlobalContext*);
+typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, PlayState*);
 
 typedef struct ObjLightblock {
     /* 0x0000 */ DynaPolyActor dyna;

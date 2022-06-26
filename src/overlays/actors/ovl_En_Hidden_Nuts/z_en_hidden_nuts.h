@@ -5,7 +5,7 @@
 
 struct EnHiddenNuts;
 
-typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts*, GlobalContext*);
+typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts*, PlayState*);
 
 #define ENHIDDENNUTS_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 #define ENHIDDENNUTS_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)

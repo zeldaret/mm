@@ -8,10 +8,10 @@
 
 #define PARAMS ((EffectSsDustInitParams*)initParamsx)
 
-s32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void func_809776BC(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_809777B4(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void func_809776BC(PlayState* play, u32 index, EffectSs* this);
+void func_809777B4(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Dust_InitVars = {

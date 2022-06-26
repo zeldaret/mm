@@ -5,8 +5,8 @@ s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
 f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
 f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
 
-void func_800F4A10(GlobalContext* globalCtx) {
-    PauseContext* pauseCtx = &globalCtx->pauseCtx;
+void func_800F4A10(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
 
     func_8013EE24();
@@ -59,35 +59,34 @@ void func_800F4A10(GlobalContext* globalCtx) {
     YREG(26) = -0x3840;
 }
 
-void KaleidoSetup_Update(GlobalContext* globalCtx) {
-    Input* input = CONTROLLER1(&globalCtx->state);
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    Player* player = GET_PLAYER(globalCtx);
-    PauseContext* pauseCtx = &globalCtx->pauseCtx;
+void KaleidoSetup_Update(PlayState* play) {
+    Input* input = CONTROLLER1(&play->state);
+    MessageContext* msgCtx = &play->msgCtx;
+    Player* player = GET_PLAYER(play);
+    PauseContext* pauseCtx = &play->pauseCtx;
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_R)) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == 0) && (pauseCtx->debugState == 0) && (globalCtx->gameOverCtx.state == GAMEOVER_INACTIVE)) {
-        if ((globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0)) {
+    if ((pauseCtx->state == 0) && (pauseCtx->debugState == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
+        if ((play->sceneLoadFlag == 0) && (play->unk_18B4A == 0)) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
-                if (!Play_InCsMode(globalCtx) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
-                    if ((globalCtx->unk_1887C < 2) && (gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
+                if (!Play_InCsMode(play) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
+                    if ((play->unk_1887C < 2) && (gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
                         if (!(gSaveContext.eventInf[1] & 0x80) && !(player->stateFlags1 & 0x20)) {
-                            if (!(globalCtx->actorCtx.unk5 & 2) && !(globalCtx->actorCtx.unk5 & 4)) {
-                                if ((globalCtx->actorCtx.unk268 == 0) &&
-                                    CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                            if (!(play->actorCtx.unk5 & 2) && !(play->actorCtx.unk5 & 4)) {
+                                if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
                                     pauseCtx->unk_2B9 = 0;
                                     pauseCtx->state = 1;
-                                    func_800F4A10(globalCtx);
+                                    func_800F4A10(play);
                                     pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
                                 if (pauseCtx->state == 1) {
-                                    Game_SetFramerateDivisor(&globalCtx->state, 2);
+                                    Game_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_GetLetterboxTarget() != 0) {
                                         ShrinkWindow_SetLetterboxTarget(0);
                                     }
@@ -102,8 +101,8 @@ void KaleidoSetup_Update(GlobalContext* globalCtx) {
     }
 }
 
-void KaleidoSetup_Init(GlobalContext* globalCtx) {
-    PauseContext* pauseCtx = &globalCtx->pauseCtx;
+void KaleidoSetup_Init(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
     s32 pad[2];
 
     bzero(pauseCtx, sizeof(PauseContext));
@@ -138,8 +137,8 @@ void KaleidoSetup_Init(GlobalContext* globalCtx) {
     pauseCtx->unk_2BC = 40;
     pauseCtx->unk_29E = 100;
 
-    View_Init(&pauseCtx->view, globalCtx->state.gfxCtx);
+    View_Init(&pauseCtx->view, play->state.gfxCtx);
 }
 
-void KaleidoSetup_Destroy(GlobalContext* globalCtx) {
+void KaleidoSetup_Destroy(PlayState* play) {
 }

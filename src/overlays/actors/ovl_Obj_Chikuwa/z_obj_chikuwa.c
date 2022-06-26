@@ -10,10 +10,10 @@
 
 #define THIS ((ObjChikuwa*)thisx)
 
-void ObjChikuwa_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjChikuwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjChikuwa_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjChikuwa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjChikuwa_Init(Actor* thisx, PlayState* play);
+void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
+void ObjChikuwa_Update(Actor* thisx, PlayState* play);
+void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Chikuwa_InitVars = {

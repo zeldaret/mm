@@ -5,7 +5,7 @@
 
 struct ObjSkateblock;
 
-typedef void (*ObjSkateblockActionFunc)(struct ObjSkateblock*, GlobalContext*);
+typedef void (*ObjSkateblockActionFunc)(struct ObjSkateblock*, PlayState*);
 
 #define OBJSKAEBLOCK_GET_F(thisx) ((thisx)->params & 0xF)
 

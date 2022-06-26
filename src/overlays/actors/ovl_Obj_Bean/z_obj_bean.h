@@ -5,7 +5,7 @@
 
 struct ObjBean;
 
-typedef void (*ObjBeanActionFunc)(struct ObjBean*, GlobalContext*);
+typedef void (*ObjBeanActionFunc)(struct ObjBean*, PlayState*);
 typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
 #define OBJBEAN_GET_7F(thisx, x) (((thisx)->params + (x)) & 0x7F)

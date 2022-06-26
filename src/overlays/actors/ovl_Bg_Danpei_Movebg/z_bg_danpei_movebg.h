@@ -5,7 +5,7 @@
 
 struct BgDanpeiMovebg;
 
-typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, GlobalContext*);
+typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, PlayState*);
 
 typedef struct BgDanpeiMovebg {
     /* 0x0000 */ DynaPolyActor dyna;

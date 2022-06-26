@@ -5,8 +5,8 @@
 
 struct EnAh;
 
-typedef void (*EnAhActionFunc)(struct EnAh*, GlobalContext*);
-typedef void (*EnAhUnkFunc)(struct EnAh*, GlobalContext*);
+typedef void (*EnAhActionFunc)(struct EnAh*, PlayState*);
+typedef void (*EnAhUnkFunc)(struct EnAh*, PlayState*);
 
 typedef struct EnAh {
     /* 0x0000 */ Actor actor;

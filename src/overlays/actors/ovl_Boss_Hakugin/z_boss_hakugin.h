@@ -5,7 +5,7 @@
 
 struct BossHakugin;
 
-typedef void (*BossHakuginActionFunc)(struct BossHakugin*, GlobalContext*);
+typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
 typedef struct BossHakuginEffect {
     /* 0x00 */ Vec3f unk_0;

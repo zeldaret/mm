@@ -5,7 +5,7 @@
 
 struct ObjWarpstone;
 
-typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, PlayState* play);
 
 typedef enum {
     /* 0 */ SEK_MODEL_CLOSED,

@@ -10,10 +10,10 @@
 
 #define THIS ((DmTsg*)thisx)
 
-void DmTsg_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmTsg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmTsg_Init(Actor* thisx, PlayState* play);
+void DmTsg_Destroy(Actor* thisx, PlayState* play);
+void DmTsg_Update(Actor* thisx, PlayState* play);
+void DmTsg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Dm_Tsg_InitVars = {
