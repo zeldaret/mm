@@ -728,7 +728,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                     play->unk_1887F = 3;
                     gSaveContext.nextTransition = 3;
                     Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                                      (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                                                 (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
                 } else {
                     this->actionFunc = func_80B51760;
                 }
@@ -863,8 +863,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         }
 
         if (this->unk_1E4 & 2) {
-            if ((play->msgCtx.ocarinaMode != 1) && (play->msgCtx.ocarinaMode != 3) &&
-                (play->csCtx.state == 0)) {
+            if ((play->msgCtx.ocarinaMode != 1) && (play->msgCtx.ocarinaMode != 3) && (play->csCtx.state == 0)) {
                 func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
         } else {

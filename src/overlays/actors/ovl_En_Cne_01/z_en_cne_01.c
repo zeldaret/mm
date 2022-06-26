@@ -237,8 +237,7 @@ void EnCne01_Update(Actor* thisx, PlayState* play) {
     func_809CB4A0(this, play);
 }
 
-s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnCne01* this = THIS;
     s8 bodyPart;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };

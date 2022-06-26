@@ -833,8 +833,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)),
-                                      this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -886,8 +885,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)),
-                                      this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -1019,8 +1017,8 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
 s32 func_80AF87C4(EnPm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_00KEIKOKU) &&
-        (gSaveContext.sceneSetupIndex == 9) && (play->curSpawn == 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 9) &&
+        (play->curSpawn == 1)) {
         if (!this->unk_380) {
             func_80AF7E98(this, 0);
             this->unk_258 = 255;
@@ -1481,8 +1479,8 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* arg2) {
 s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleOutput* arg2) {
     s32 ret = false;
 
-    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0,
-                           -0x3F46, 0, 0) != NULL) {
+    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0, -0x3F46, 0,
+                           0) != NULL) {
         Actor_MarkForDeath(&this->actor);
         ret = true;
     }
@@ -2058,8 +2056,7 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
-                       16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable, 16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);

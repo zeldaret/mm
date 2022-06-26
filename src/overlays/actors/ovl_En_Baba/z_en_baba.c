@@ -153,8 +153,7 @@ s32 EnBaba_FindBombShopkeeper(EnBaba* this, PlayState* play) {
     //! The bomb shopkeeper is an EnSob1, but initalizes itself with id `ACTOR_EN_OSSAN`
     //! Note if there are other `EnOssan` actors, it may find that instance instead
     //! in which case `EnSob1` struct acceses would be incorrect
-    this->bombShopkeeper =
-        (EnSob1*)SubS_FindActor(play, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
+    this->bombShopkeeper = (EnSob1*)SubS_FindActor(play, &this->bombShopkeeper->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
 
     if (this->bombShopkeeper != NULL) {
         return true;
@@ -542,8 +541,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 }
 
 void EnBaba_Idle(EnBaba* this, PlayState* play) {
-    if ((this->flags & ENBABA_AUTOTALK) || (this->bombShopkeeper != NULL) ||
-        EnBaba_FindBombShopkeeper(this, play)) {
+    if ((this->flags & ENBABA_AUTOTALK) || (this->bombShopkeeper != NULL) || EnBaba_FindBombShopkeeper(this, play)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             EnBaba_HandleConversation(this, play);
             if (this->flags & ENBABA_AUTOTALK) {
@@ -731,8 +729,7 @@ void EnBaba_Update(Actor* thisx, PlayState* play) {
     EnBaba_UpdateModel(this, play);
 }
 
-s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBaba* this = THIS;
 
     if (limbIndex == BBA_LIMB_NECK) {

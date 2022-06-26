@@ -331,8 +331,7 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 6:
         case 8:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)),
-                                      this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
             }
             this->unk_4E6++;
             sp20 = true;
@@ -781,8 +780,7 @@ void EnAl_Init(Actor* thisx, PlayState* play) {
     EnAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable,
-                       27);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable, 27);
     this->unk_4F8 = -1;
     func_80BDE27C(this, 1);
     Collider_InitAndSetCylinder(play, &this->unk_310, &this->actor, &sCylinderInit);
@@ -915,8 +913,7 @@ void EnAl_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             Matrix_Put(&this->unk_190[i]);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_80BE007C[i]);
         }
 

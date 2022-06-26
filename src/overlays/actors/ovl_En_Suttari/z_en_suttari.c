@@ -1218,8 +1218,8 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             gSaveContext.save.weekEventReg[79] |= 0x40;
             this->flags2 |= 4;
             this->actor.speedXZ = 0.0f;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -1493,8 +1493,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSuttari* this = THIS;
 
     if (limbIndex == 15) {
@@ -1533,8 +1532,8 @@ void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             if (this->actor.child == NULL) {
                 if (this->flags1 & 0x100) {
                     bombBag =
-                        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_NIMOTSU,
-                                           curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
+                        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_NIMOTSU, curState->mf[3][0],
+                                           curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
                     if (bombBag != NULL) {
                         Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, false);
                     }

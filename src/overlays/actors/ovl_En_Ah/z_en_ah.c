@@ -517,8 +517,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable,
-                       17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable, 17);
     this->unk_300 = -1;
     func_80BD2B0C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

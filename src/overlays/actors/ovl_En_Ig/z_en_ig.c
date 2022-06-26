@@ -917,8 +917,7 @@ void EnIg_Init(Actor* thisx, PlayState* play) {
     EnIg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
-                       19);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_3FC = -1;
     func_80BF1284(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
