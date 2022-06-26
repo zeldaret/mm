@@ -5,7 +5,7 @@
 
 struct EnSellnuts;
 
-typedef void (*EnSellnutsActionFunc)(struct EnSellnuts*, GlobalContext*);
+typedef void (*EnSellnutsActionFunc)(struct EnSellnuts*, PlayState*);
 
 #define ENSELLNUTS_GET_1(thisx) ((thisx)->params & 1)
 #define ENSELLNUTS_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)

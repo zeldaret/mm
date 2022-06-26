@@ -5,7 +5,7 @@
 
 struct EnHoll;
 
-typedef void (*EnHollActionFunc)(struct EnHoll*, GlobalContext*);
+typedef void (*EnHollActionFunc)(struct EnHoll*, PlayState*);
 
 typedef enum {
     /* 0 */ EN_HOLL_TYPE_DEFAULT,

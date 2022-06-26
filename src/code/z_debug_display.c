@@ -7,10 +7,10 @@ typedef struct {
     /* 0x04 */ void* drawArg; // segment address (display list or texture) passed to the draw funciton when called
 } DebugDispObjectInfo;        // size = 0x8
 
-typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, GlobalContext*);
+typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, PlayState*);
 
-void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, GlobalContext*);
-void DebugDisplay_DrawPolygon(DebugDispObject*, void*, GlobalContext*);
+void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, PlayState*);
+void DebugDisplay_DrawPolygon(DebugDispObject*, void*, PlayState*);
 
 DebugDispObject* DebugDisplay_Init(void) {
     sDebugObjectListHead = NULL;
@@ -51,44 +51,44 @@ DebugDispObjectInfo sDebugObjectInfoTable[] = {
     { 1, &sDebugDisplay2DL },
 };
 
-void DebugDisplay_DrawObjects(GlobalContext* globalCtx) {
+void DebugDisplay_DrawObjects(PlayState* play) {
     DebugDispObject* dispObj = sDebugObjectListHead;
     DebugDispObjectInfo* objInfo;
 
     while (dispObj != NULL) {
         objInfo = &sDebugObjectInfoTable[dispObj->type];
-        sDebugObjectDrawFuncTable[objInfo->drawType](dispObj, objInfo->drawArg, globalCtx);
+        sDebugObjectDrawFuncTable[objInfo->drawType](dispObj, objInfo->drawArg, play);
         dispObj = dispObj->next;
     }
 }
 
-void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C6FC(globalCtx->state.gfxCtx);
+    func_8012C6FC(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
     Matrix_Translate(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, MTXMODE_NEW);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
-    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     Matrix_RotateZYX(dispObj->rot.x, dispObj->rot.y, dispObj->rot.z, MTXMODE_APPLY);
 
     gDPLoadTextureBlock(POLY_XLU_DISP++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_XLU_DISP++, sDebugDisplaySpriteDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 Lights1 sDebugDisplayLight1 = gdSPDefLights1(128, 128, 128, 255, 255, 255, 73, 73, 73);
 
-void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C588(globalCtx->state.gfxCtx);
+    func_8012C588(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
 
@@ -96,10 +96,10 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContex
 
     Matrix_SetTranslateRotateYXZ(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, &dispObj->rot);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_XLU_DISP++, arg1);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 s32 D_801BB068[] = {
@@ -110,16 +110,16 @@ s32 D_801BB08C = 0;
 
 Gfx* func_800E99B0(GraphicsContext* gfxCtx, s32 arg1);
 
-void func_800E992C(GlobalContext* globalCtx, s32 arg1) {
+void func_800E992C(PlayState* play, s32 arg1) {
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C560(globalCtx->state.gfxCtx);
+    func_8012C560(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(globalCtx->state.gfxCtx, arg1));
+    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, arg1));
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E99B0.s")

@@ -9,7 +9,7 @@
 
 struct EnSyatekiWf;
 
-typedef void (*EnSyatekiWfActionFunc)(struct EnSyatekiWf*, GlobalContext*);
+typedef void (*EnSyatekiWfActionFunc)(struct EnSyatekiWf*, PlayState*);
 
 typedef struct EnSyatekiWf {
     /* 0x000 */ Actor actor;

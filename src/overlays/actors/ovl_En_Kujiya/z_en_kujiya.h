@@ -5,7 +5,7 @@
 
 struct EnKujiya;
 
-typedef void (*EnKujiyaActionFunc)(struct EnKujiya*, GlobalContext*);
+typedef void (*EnKujiyaActionFunc)(struct EnKujiya*, PlayState*);
 
 typedef struct EnKujiya {
     /* 0x000 */ Actor actor;

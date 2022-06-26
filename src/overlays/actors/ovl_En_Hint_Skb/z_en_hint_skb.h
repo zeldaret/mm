@@ -5,7 +5,7 @@
 
 struct EnHintSkb;
 
-typedef void (*EnHintSkbActionFunc)(struct EnHintSkb*, GlobalContext*);
+typedef void (*EnHintSkbActionFunc)(struct EnHintSkb*, PlayState*);
 
 #define ENHINTSKB_GET_FF(thisx) ((thisx)->params & 0xFF)
 

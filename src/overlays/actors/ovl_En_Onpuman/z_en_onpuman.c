@@ -10,9 +10,9 @@
 
 #define THIS ((EnOnpuman*)thisx)
 
-void EnOnpuman_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnOnpuman_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnOnpuman_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnOnpuman_Init(Actor* thisx, PlayState* play);
+void EnOnpuman_Destroy(Actor* thisx, PlayState* play);
+void EnOnpuman_Update(Actor* thisx, PlayState* play);
 
 void func_80B121D8(EnOnpuman* this, GlobalContext* globalCtx);
 

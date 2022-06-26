@@ -5,7 +5,7 @@
 
 struct BgHakuginElvpole;
 
-typedef void (*BgHakuginElvpoleActionFunc)(struct BgHakuginElvpole*, GlobalContext*);
+typedef void (*BgHakuginElvpoleActionFunc)(struct BgHakuginElvpole*, PlayState*);
 
 typedef struct BgHakuginElvpole {
     /* 0x0000 */ Actor actor;
