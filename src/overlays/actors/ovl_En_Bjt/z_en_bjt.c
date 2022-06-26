@@ -130,7 +130,7 @@ s32 EnBjt_ChangeAnimation(EnBjt* this, s32 animIndex) {
     return changed;
 }
 
-void EnBjt_UpdateCollision(EnBjt* this, GlobalContext* globalCtx) {
+void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {
     static Vec3f sColliderBasePos = { 0.0f, 8.0f, 10.0f };
     s32 pad;
     Vec3f pos;
@@ -142,7 +142,7 @@ void EnBjt_UpdateCollision(EnBjt* this, GlobalContext* globalCtx) {
         height = this->actor.focus.pos.y - this->actor.world.pos.y;
         this->collider.dim.height = height;
         this->collider.dim.radius = 0x20;
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -230,22 +230,22 @@ typedef enum {
 } ToiletHandBehaviour;
 
 // msgevent callback/communication. Follow and choose parts of script to run
-s32 EnBjt_ChooseBehaviour(Actor* thisx, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     EnBjt* this = THIS;
     s32 itemAP;
     s32 scriptBranch = 0;
 
     switch (this->behaviour) {
         case TOILET_HAND_BEHAVIOUR_WAIT_FOR_ITEM:
-            switch (Message_GetState(&globalCtx->msgCtx)) {
+            switch (Message_GetState(&play->msgCtx)) {
                 case 4:
                 case 5:
-                    if (!Message_ShouldAdvance(globalCtx)) {
+                    if (!Message_ShouldAdvance(play)) {
                         break;
                     }
                 case 16:
-                    itemAP = func_80123810(globalCtx);
+                    itemAP = func_80123810(play);
                     if ((itemAP == EXCH_ITEM_DEED_LAND) || (itemAP == EXCH_ITEM_LETTER_TO_KAFEI) ||
                         (itemAP == EXCH_ITEM_DEED_SWAMP) || (itemAP == EXCH_ITEM_DEED_MOUNTAIN) ||
                         (itemAP == EXCH_ITEM_DEED_OCEAN) || (itemAP == EXCH_ITEM_LETTER_MAMA)) {
@@ -310,10 +310,10 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // Used in Update
-s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
+s32 func_80BFD8F0(EnBjt* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->stateFlags |= TOILET_HAND_STATE_8;
         SubS_UpdateFlags(&this->stateFlags, 0, 7);
         this->msgEventCallback = EnBjt_ChooseBehaviour;
@@ -325,9 +325,9 @@ s32 func_80BFD8F0(EnBjt* this, GlobalContext* globalCtx) {
 }
 
 // Used in Update
-s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    u16 curTextId = globalCtx->msgCtx.currentTextId;
+s32 func_80BFD984(EnBjt* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    u16 curTextId = play->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x440) { // Talking, show item?
         this->stateFlags |= TOILET_HAND_STATE_10;
@@ -351,11 +351,11 @@ s32 func_80BFD984(EnBjt* this, GlobalContext* globalCtx) {
 }
 
 // Action function, based on msgEvent
-void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
+void func_80BFDA48(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
     // TODO: Casting to remove warning for now
-    if (func_8010BF58(&this->actor, globalCtx, (s32)sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (func_8010BF58(&this->actor, play, (s32)sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->stateFlags &= ~TOILET_HAND_STATE_8;
@@ -367,10 +367,10 @@ void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx) {
 }
 
 // Action function, based on schedule
-void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx) {
+void func_80BFDAE8(EnBjt* this, PlayState* play) {
     ScheduleResult scheduleOutput;
 
-    if (!Schedule_RunScript(globalCtx, sScheduleScript, &scheduleOutput)) {
+    if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
         scheduleOutput.result = 0;
     }
     if (scheduleOutput.result == 1) { // available
@@ -407,17 +407,17 @@ void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBjt_Init(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gToiletHandSkel, NULL, this->jointTable, this->morphTable,
                        TOILET_HAND_LIMB_MAX);
 
     this->curAnimIndex = TOILET_HAND_ANIM_NONE;
     EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.flags |= ACTOR_FLAG_8000000;
     Actor_SetScale(&this->actor, 0.0f);
@@ -427,30 +427,30 @@ void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80BFDAE8;
 }
 
-void EnBjt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBjt_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBjt_Update(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
-    func_80BFD8F0(this, globalCtx);
-    this->actionFunc(this, globalCtx);
-    func_80BFD984(this, globalCtx);
+    func_80BFD8F0(this, play);
+    this->actionFunc(this, play);
+    func_80BFD984(this, play);
 
     if (this->scheduleResult != 0) {
         EnBjt_UpdateAnimation(this);
-        func_8013C964(&this->actor, globalCtx, 60.0f, 10.0f, 0, this->stateFlags & 7);
+        func_8013C964(&this->actor, play, 60.0f, 10.0f, 0, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
-        EnBjt_UpdateCollision(this, globalCtx);
+        EnBjt_UpdateCollision(this, play);
     }
 }
 
-void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBjt_Draw(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
     if (this->scheduleResult != 0) {
-        func_8012C28C(globalCtx->state.gfxCtx);
-        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+        func_8012C28C(play->state.gfxCtx);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, NULL, NULL, &this->actor);
     }
 }
