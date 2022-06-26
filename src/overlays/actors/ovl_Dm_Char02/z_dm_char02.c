@@ -66,8 +66,7 @@ void func_80AAAECC(Actor* actor, PlayState* play) {
 }
 
 void func_80AAAF2C(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_OKUJOU) &&
-        (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
         func_80AAAECC(&this->actor, play);
     }
 }
@@ -145,8 +144,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     func_80AAAF2C(this, play);
 }
 
-s32 DmChar02_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 DmChar02_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
