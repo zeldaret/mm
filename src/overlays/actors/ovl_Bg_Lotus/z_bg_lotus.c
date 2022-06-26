@@ -47,7 +47,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
-    this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
+    this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
 }
 
@@ -82,7 +82,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
 
         if (this->timer2 == 0) {
             this->timer2 = 96;
-            this->dyna.actor.world.rot.y += (s16)(Rand_Next() >> 0x12);
+            this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
 

@@ -51,16 +51,16 @@ typedef struct EnTk {
     /* 0x0324 */ Vec3f unk_324[6];
     /* 0x036C */ s32 unk_36C;
     /* 0x0370 */ UNK_TYPE1 unk370[0x58];
-    /* 0x03C8 */ Path* unk_3C8;
+    /* 0x03C8 */ Path* timePath;
     /* 0x03CC */ u8 unk_3CC;
     /* 0x03CE */ u16 unk_3CE;
-    /* 0x03D0 */ s32 unk_3D0;
-    /* 0x03D4 */ Vec3f unk_3D4;
-    /* 0x03E0 */ f32 unk_3E0;
-    /* 0x03E4 */ s32 unk_3E4;
-    /* 0x03E8 */ s32 unk_3E8;
-    /* 0x03EC */ s32 unk_3EC;
-    /* 0x03F0 */ s32 unk_3F0;
+    /* 0x03D0 */ s32 timePathTimeSpeed;
+    /* 0x03D4 */ Vec3f timePathTargetPos;
+    /* 0x03E0 */ f32 timePathProgress;
+    /* 0x03E4 */ s32 timePathTotalTime;
+    /* 0x03E8 */ s32 timePathWaypointTime;
+    /* 0x03EC */ s32 timePathWaypoint;
+    /* 0x03F0 */ s32 timePathElapsedTime;
 } EnTk; // size = 0x3F4
 
 extern const ActorInit En_Tk_InitVars;

@@ -9,7 +9,7 @@ typedef void (*EnRsnActionFunc)(struct EnRsn*, GlobalContext*);
 
 typedef struct EnRsn {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk144[0x4C];
+    /* 0x144 */ UNK_TYPE1 unk144[0x4C];
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnRsnActionFunc actionFunc;
     /* 0x1D8 */ Vec3s unk1D8;

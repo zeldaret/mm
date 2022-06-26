@@ -1923,7 +1923,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
     f32 spC8;
     f32 spC4;
     f32 spC0;
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
@@ -2075,7 +2075,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
     Vec3f spA8;
     Vec3f sp9C;
     Vec3f sp90;
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
 
     D_809171FE++;
 
@@ -2864,7 +2864,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
     EnFishing* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     Player* player = GET_PLAYER(globalCtx);
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
     f32 spD8;
     f32 phi_f0;
     f32 phi_f2;
@@ -5052,7 +5052,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     f32 lureDistXZ;
     Camera* camera;
     Player* player = GET_PLAYER(globalCtx);
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
 
     playerShadowAlpha = player->actor.shape.shadowAlpha;
 
@@ -5621,7 +5621,7 @@ TexturePtr sFishingOwnerEyeTexs[] = {
 void EnFishing_DrawOwner(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFishing* this = THIS;
-    Input* input = CONTROLLER1(globalCtx);
+    Input* input = CONTROLLER1(&globalCtx->state);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

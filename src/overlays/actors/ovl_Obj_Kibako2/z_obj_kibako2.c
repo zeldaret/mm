@@ -121,7 +121,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 
     if (ObjKibako2_ContainsSkulltula(this, globalCtx)) {
         actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
-        yRotation = ((u32)Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
+        yRotation = (Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula =
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                         this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0, actorSpawnParam);
@@ -158,8 +158,8 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
     if (contents == CONTENTS_COLLECTIBLE) {
-        if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
-                          KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
+        if (Item_CanDropBigFairy(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
+                                 KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= ACTOR_FLAG_10;
         }
