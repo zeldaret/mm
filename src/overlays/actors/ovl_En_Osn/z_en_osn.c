@@ -44,7 +44,7 @@ static AnimationInfo sAnimations[] = {
     { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
