@@ -13,7 +13,7 @@ typedef struct DmChar02 {
     /* 0x188 */ char pad188[0x108];
     /* 0x290 */ DmChar02ActionFunc actionFunc;
     /* 0x294 */ char pad294[0x4C];
-    /* 0x2E0 */ s16 unk2E0;
+    /* 0x2E0 */ s16 animIndex;
     /* 0x2E2 */ char pad2E2[0xE];
     /* 0x2F0 */ u32 unk2F0;
 } DmChar02; // size = 0x2F4
