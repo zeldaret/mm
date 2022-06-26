@@ -7,7 +7,7 @@
 
 struct EnSyatekiMan;
 
-typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, GlobalContext*);
+typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
 #define ENSYATEKIMAN_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 

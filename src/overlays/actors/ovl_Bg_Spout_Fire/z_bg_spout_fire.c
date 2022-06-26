@@ -10,13 +10,13 @@
 
 #define THIS ((BgSpoutFire*)thisx)
 
-void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgSpoutFire_Init(Actor* thisx, PlayState* play);
+void BgSpoutFire_Destroy(Actor* thisx, PlayState* play);
+void BgSpoutFire_Update(Actor* thisx, PlayState* play);
 
-void func_80A60C94(BgSpoutFire* this, GlobalContext* globalCtx);
-void func_80A60CDC(BgSpoutFire* this, GlobalContext* globalCtx);
-void func_80A60D10(BgSpoutFire* this, GlobalContext* globalCtx);
+void func_80A60C94(BgSpoutFire* this, PlayState* play);
+void func_80A60CDC(BgSpoutFire* this, PlayState* play);
+void func_80A60D10(BgSpoutFire* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Spout_Fire_InitVars = {

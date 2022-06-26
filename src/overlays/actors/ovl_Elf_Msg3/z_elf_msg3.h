@@ -9,7 +9,7 @@
 
 struct ElfMsg3;
 
-typedef void (*ElfMsg3ActionFunc)(struct ElfMsg3*, GlobalContext*);
+typedef void (*ElfMsg3ActionFunc)(struct ElfMsg3*, PlayState*);
 
 typedef struct ElfMsg3 {
     /* 0x000 */ Actor actor;

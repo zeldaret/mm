@@ -11,9 +11,9 @@
 
 #define THIS ((ElfMsg3*)thisx)
 
-void ElfMsg3_Init(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg3_Update(Actor* thisx, GlobalContext* globalCtx);
+void ElfMsg3_Init(Actor* thisx, PlayState* play);
+void ElfMsg3_Destroy(Actor* thisx, PlayState* play);
+void ElfMsg3_Update(Actor* thisx, PlayState* play);
 
 void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx);
 

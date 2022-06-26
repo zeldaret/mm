@@ -5,7 +5,7 @@
 
 struct ObjBigicicle;
 
-typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, GlobalContext*);
+typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, PlayState*);
 
 #define OBJBIGICLE_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 

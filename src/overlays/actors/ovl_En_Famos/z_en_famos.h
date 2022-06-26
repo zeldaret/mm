@@ -6,7 +6,7 @@
 
 struct EnFamos;
 
-typedef void (*EnFamosActionFunc)(struct EnFamos*, GlobalContext*);
+typedef void (*EnFamosActionFunc)(struct EnFamos*, PlayState*);
 
 typedef struct EnFamosRock {
     /* 00 */ Vec3f pos;

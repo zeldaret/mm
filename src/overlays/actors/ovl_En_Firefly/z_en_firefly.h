@@ -5,7 +5,7 @@
 
 struct EnFirefly;
 
-typedef void (*EnFireflyActionFunc)(struct EnFirefly*, GlobalContext*);
+typedef void (*EnFireflyActionFunc)(struct EnFirefly*, PlayState*);
 
 typedef enum {
     /* 0 */ KEESE_FIRE_FLY,

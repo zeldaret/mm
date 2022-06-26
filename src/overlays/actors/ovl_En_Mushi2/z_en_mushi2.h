@@ -5,7 +5,7 @@
 
 struct EnMushi2;
 
-typedef void (*EnMushi2ActionFunc)(struct EnMushi2*, GlobalContext*);
+typedef void (*EnMushi2ActionFunc)(struct EnMushi2*, PlayState*);
 
 #define ENMUSHI2_GET_3(thisx) ((thisx)->params & 3)
 
