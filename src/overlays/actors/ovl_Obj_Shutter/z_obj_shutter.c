@@ -82,7 +82,7 @@ void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
                      MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
-    
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
