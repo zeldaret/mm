@@ -2,8 +2,8 @@
     <File Name="object_kaizoku_obj" Segment="6">
         <DList Name="object_kaizoku_obj_DL_0001A0" Offset="0x1A0" />
         <Texture Name="object_kaizoku_obj_Tex_000300" OutName="tex_000300" Format="rgba16" Width="32" Height="64" Offset="0x300" />
-        <DList Name="object_kaizoku_obj_DL_001680" Offset="0x1680" />
-        <Collision Name="object_kaizoku_obj_Colheader_0019B0" Offset="0x19B0" />
+        <DList Name="gPirateLiftPlatformDL" Offset="0x1680" />
+        <Collision Name="gPirateLiftPlatformCol" Offset="0x19B0" />
         <Texture Name="object_kaizoku_obj_Tex_0019E0" OutName="tex_0019E0" Format="rgba16" Width="64" Height="32" Offset="0x19E0" />
         <Texture Name="object_kaizoku_obj_Tex_0029E0" OutName="tex_0029E0" Format="rgba16" Width="16" Height="32" Offset="0x29E0" />
         <Texture Name="object_kaizoku_obj_Tex_002DE0" OutName="tex_002DE0" Format="rgba16" Width="16" Height="16" Offset="0x2DE0" />
