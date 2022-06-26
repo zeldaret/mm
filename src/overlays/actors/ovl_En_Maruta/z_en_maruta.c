@@ -380,8 +380,8 @@ void func_80B37590(EnMaruta* this, PlayState* play) {
 
     sp38 = D_80B38850[this->unk_210];
 
-    func_80B3828C(&sp38, &this->unk_194, Rand_Next() % 0x1000, Rand_Next() % 0x1000, 0);
-    this->unk_21A = Rand_Next() % 0x800;
+    func_80B3828C(&sp38, &this->unk_194, Rand_Next() & 0xFFF, Rand_Next() & 0xFFF, 0);
+    this->unk_21A = Rand_Next() & 0x7FF;
 
     if (this->unk_210 == 7) {
         this->unk_21A |= 0x3F;

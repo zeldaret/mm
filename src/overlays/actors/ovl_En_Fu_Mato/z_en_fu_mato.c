@@ -169,9 +169,9 @@ void func_80ACE680(EnFuMato* this) {
     this->dyna.actor.velocity.y = 1.0f;
     this->dyna.actor.velocity.x = 2.0f * Rand_Centered();
     this->dyna.actor.velocity.z = 2.0f * Rand_Centered();
-    this->unk_2FC.x = Rand_Next() % 0x1000;
-    this->unk_2FC.y = Rand_Next() % 0x1000;
-    this->unk_2FC.z = Rand_Next() % 0x1000;
+    this->unk_2FC.x = Rand_Next() & 0xFFF;
+    this->unk_2FC.y = Rand_Next() & 0xFFF;
+    this->unk_2FC.z = Rand_Next() & 0xFFF;
     this->unk_302 = 3;
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BOUND);
     this->actionFunc = func_80ACE718;

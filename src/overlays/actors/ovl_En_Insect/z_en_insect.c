@@ -124,7 +124,7 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
     f32 rand;
 
-    this->actor.world.rot.y = Rand_Next() % 0x10000;
+    this->actor.world.rot.y = Rand_Next() & 0xFFFF;
     this->actor.home.rot.y = this->actor.world.rot.y;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 

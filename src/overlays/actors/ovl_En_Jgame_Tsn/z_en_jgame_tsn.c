@@ -301,7 +301,7 @@ void func_80C1418C(EnJgameTsn* this, PlayState* play) {
 }
 
 void func_80C141DC(EnJgameTsn* this) {
-    this->unk_218 = Rand_Next() % 4;
+    this->unk_218 = Rand_Next() & 3;
     this->unk_2FC = 0;
     *this->unk_208[this->unk_218] |= 1;
     this->actionFunc = func_80C14230;

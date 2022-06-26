@@ -346,10 +346,10 @@ void func_80A9B554(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
         unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
         unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
-        unkStruct2->unk_26 = (Rand_Next() % 0x4000) - 0x1FFF;
-        unkStruct2->unk_28 = (Rand_Next() % 0x2000) - 0xFFF;
-        unkStruct2->unk_2A = (Rand_Next() % 0x2000) - 0xFFF;
-        unkStruct2->unk_2C = (Rand_Next() % 0x20) + 0x4B;
+        unkStruct2->unk_26 = (Rand_Next() & 0x3FFF) - 0x1FFF;
+        unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
+        unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;
+        unkStruct2->unk_2C = (Rand_Next() & 0x1F) + 0x4B;
         unkStruct2->unk_2D = 2;
     }
 
@@ -372,7 +372,7 @@ void func_80A9B554(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         for (i = 65, val = 0; i < ARRAY_COUNT(unkStruct->unk_02A4); i++, val += 0x4A7) {
             unkStruct2 = &unkStruct->unk_02A4[i];
             unkStruct2->unk_00 = Rand_ZeroOne() * 0.007f + 0.002f;
-            temp_s1_3 = (Rand_Next() % 0x800) + val;
+            temp_s1_3 = (Rand_Next() & 0x7FF) + val;
             temp_f24 = Math_SinS(temp_s1_3);
             temp_f28 = Math_CosS(temp_s1_3);
             unkStruct2->unk_04.x = temp_f24 * 225.5f + spB8.x;
@@ -389,10 +389,10 @@ void func_80A9B554(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
             unkStruct2->unk_20.x = (s32)Rand_Next() >> 0x10;
             unkStruct2->unk_20.y = (s32)Rand_Next() >> 0x10;
             unkStruct2->unk_20.z = (s32)Rand_Next() >> 0x10;
-            unkStruct2->unk_26 = (Rand_Next() % 0x2000) - 0xFFF;
-            unkStruct2->unk_28 = (Rand_Next() % 0x2000) - 0xFFF;
-            unkStruct2->unk_2A = (Rand_Next() % 0x2000) - 0xFFF;
-            unkStruct2->unk_2C = (Rand_Next() % 0x20) + 0x41;
+            unkStruct2->unk_26 = (Rand_Next() & 0x1FFF) - 0xFFF;
+            unkStruct2->unk_28 = (Rand_Next() & 0x1FFF) - 0xFFF;
+            unkStruct2->unk_2A = (Rand_Next() & 0x1FFF) - 0xFFF;
+            unkStruct2->unk_2C = (Rand_Next() & 0x1F) + 0x41;
             unkStruct2->unk_2D = 0;
         }
     }
@@ -568,7 +568,7 @@ void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         if (unkStruct->unk_0000[i].unk_34 == 2) {
             for (j = 0, val = 0; j < 3; j++, val += 0x5555) {
                 temp_f20 = Rand_ZeroOne() * 264.0f;
-                temp_s0 = (Rand_Next() % 0x1000) + val;
+                temp_s0 = (Rand_Next() & 0xFFF) + val;
                 spB8.x = Math_SinS(temp_s0) * temp_f20 + spC8->unk_14.x;
                 spB8.z = Math_CosS(temp_s0) * temp_f20 + spC8->unk_14.z;
 
@@ -594,7 +594,7 @@ void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         if ((unkStruct->unk_0000[i].unk_2F & 2) && (spC4 != NULL) && ((spC4->unk_34 == 3) || (spC4->unk_34 == 4))) {
             for (j = 0, val = 0; j < 18; j++, val += 0xE38) {
                 temp_f20 = (Rand_ZeroOne() * 0.3f + 1.0f) * 220.0f;
-                temp_s0 = (Rand_Next() % 0x1000) + val;
+                temp_s0 = (Rand_Next() & 0xFFF) + val;
                 spB8.x = Math_SinS(temp_s0) * temp_f20;
                 spB8.z = Math_CosS(temp_s0) * temp_f20;
 

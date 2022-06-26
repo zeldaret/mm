@@ -200,7 +200,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
         spCC.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
         spCC.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * 0.033333335f);
 
-        temp_v1 = (Rand_Next() % 4) + (i >> 1) + 6;
+        temp_v1 = (Rand_Next() & 3) + (i >> 1) + 6;
 
         if ((i & 3) == 0) {
             phi_v0 = 32;
