@@ -19,13 +19,13 @@ void EnOssan_Destroy(Actor* thisx, PlayState* play);
 void EnOssan_Update(Actor* thisx, PlayState* play);
 
 void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play);
-void EnOssan_PartTimeWorker_Draw(Actor* thisx, PlayState* play);
+void EnOssan_PartTimer_Draw(Actor* thisx, PlayState* play);
 
 void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play);
 u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play);
 
-void EnOssan_PartTimeWorker_Init(EnOssan* this, PlayState* play);
-u16 EnOssan_PartTimerWorker_GetWelcome(EnOssan* this, PlayState* play);
+void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play);
+u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play);
 
 void EnOssan_InitShop(EnOssan* this, PlayState* play);
 void EnOssan_Idle(EnOssan* this, PlayState* play);
@@ -120,7 +120,7 @@ static AnimationInfoS sAnimationsCuriosityShopMan[] = {
     { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-static AnimationInfoS sAnimationsPartTimeWorker[] = {
+static AnimationInfoS sAnimationsPartTimer[] = {
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -137,7 +137,7 @@ static AnimationInfoS sAnimationsPartTimeWorker[] = {
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
 
-static AnimationInfoS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimeWorker };
+static AnimationInfoS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimer };
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
@@ -236,12 +236,12 @@ void EnOssan_RotateHead(EnOssan* this, PlayState* play) {
 
     if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimer.y, this->headRot.y, 3, 2000, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
-            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
         } else {
-            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, this->headRot.y, 3, 2000, 0);
-            if (ABS_ALT(this->headRotPartTimeWorker.y - this->headRot.y) < 16) {
+            Math_SmoothStepToS(&this->headRotPartTimer.y, this->headRot.y, 3, 2000, 0);
+            if (ABS_ALT(this->headRotPartTimer.y - this->headRot.y) < 16) {
                 this->flags |= LOOKED_AT_PLAYER;
             }
         }
@@ -383,7 +383,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
             func_800B8614(&this->actor, play, 100.0f);
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -446,7 +446,7 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
         }
     } else {
         EnOssan_SetHaveMet(this);
-        this->textId = EnOssan_PartTimerWorker_GetWelcome(this, play);
+        this->textId = EnOssan_PartTimer_GetWelcome(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         EnOssan_SetupStartShopping(play, this, false);
     }
@@ -657,7 +657,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
             }
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimer.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -1368,10 +1368,10 @@ void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play) {
     this->actor.draw = EnOssan_CuriosityShopMan_Draw;
 }
 
-void EnOssan_PartTimeWorker_Init(EnOssan* this, PlayState* play) {
+void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
                        this->morphTable, 16);
-    this->actor.draw = EnOssan_PartTimeWorker_Draw;
+    this->actor.draw = EnOssan_PartTimer_Draw;
 }
 
 u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
@@ -1407,7 +1407,7 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     return sWelcomeHumanTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 }
 
-u16 EnOssan_PartTimerWorker_GetWelcome(EnOssan* this, PlayState* play) {
+u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = Text_GetFaceReaction(play, 0x36);
 
@@ -1459,7 +1459,7 @@ void EnOssan_SetHaveMet(EnOssan* this) {
 }
 
 void EnOssan_InitShop(EnOssan* this, PlayState* play) {
-    static EnOssanActionFunc sInitFuncs[] = { EnOssan_CuriosityShopMan_Init, EnOssan_PartTimeWorker_Init };
+    static EnOssanActionFunc sInitFuncs[] = { EnOssan_CuriosityShopMan_Init, EnOssan_PartTimer_Init };
     ShopItem* shopItems;
 
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
@@ -1678,13 +1678,13 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gf
     return false;
 }
 
-s32 EnOssan_PartTimeWorker_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnOssan_PartTimer_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                             Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_RotateXS(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
-        Matrix_RotateZS(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRotPartTimer.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRotPartTimer.x, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1698,12 +1698,12 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx**
     }
 }
 
-void EnOssan_PartTimeWorker_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
+void EnOssan_PartTimer_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f sPartTimerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_MultVec3f(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sPartTimerFocusOffset, &this->actor.focus.pos);
     }
 }
 
@@ -1723,7 +1723,7 @@ void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnOssan_PartTimeWorker_Draw(Actor* thisx, PlayState* play) {
+void EnOssan_PartTimer_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
     s32 pad;
     EnOssan* this = THIS;
@@ -1732,7 +1732,7 @@ void EnOssan_PartTimeWorker_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnOssan_PartTimeWorker_OverrideLimbDraw, EnOssan_PartTimeWorker_PostLimbDraw, &this->actor);
+                          EnOssan_PartTimer_OverrideLimbDraw, EnOssan_PartTimer_PostLimbDraw, &this->actor);
     EnOssan_DrawCursor(play, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(play, this);
     CLOSE_DISPS(play->state.gfxCtx);
