@@ -12,9 +12,6 @@
 
 #define THIS ((EnPoFusen*)thisx)
 
-#define GET_FUSE_LEN_PARAM(this) (((Actor*)(this))->params & 0x3FF)
-#define GET_IS_FUSE_TYPE_PARAM(this) (((Actor*)(this))->params & 0x8000)
-
 void EnPoFusen_Init(Actor* thisx, PlayState* play);
 void EnPoFusen_Destroy(Actor* thisx, PlayState* play);
 void EnPoFusen_Update(Actor* thisx, PlayState* play);
@@ -122,8 +119,8 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
         this->actor.home.pos.y = heightTemp;
     }
 
-    this->randScaleChange = ((Rand_Next() % 0xFFFEU) - 0x7FFF);
-    this->randYRotChange = ((Rand_Next() % 0x4B0U) - 0x258);
+    this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
+    this->randYRotChange = (Rand_Next() % 0x4B0) - 0x258;
     this->avgBaseRotation = 0x1555;
     this->limb3Rot = 0;
     this->limb46Rot = 0;
@@ -132,7 +129,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     this->limb9Rot = 0x71C;
     this->randBaseRotChange = 0;
 
-    if (GET_IS_FUSE_TYPE_PARAM(this)) {
+    if (GET_IS_FUSE_TYPE_PARAM(&this->actor)) {
         EnPoFusen_InitFuse(this);
         return;
     }
@@ -149,7 +146,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     Actor* actorPtr;
 
     actorPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
-    if (GET_IS_FUSE_TYPE_PARAM(this)) {
+    if (GET_IS_FUSE_TYPE_PARAM(&this->actor)) {
         return 1;
     }
 
@@ -247,9 +244,9 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
 
 void EnPoFusen_InitFuse(EnPoFusen* this) {
     s16 rotZ = this->actor.shape.rot.z;
-    this->fuse = GET_FUSE_LEN_PARAM(this);
+    this->fuse = GET_FUSE_LEN_PARAM(&this->actor);
     this->actor.shape.rot.z = 0;
-    this->randScaleChange = rotZ & 0xFFFFu;
+    this->randScaleChange = rotZ & 0xFFFF;
     this->actionFunc = EnPoFusen_IdleFuse;
 }
 

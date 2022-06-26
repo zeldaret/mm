@@ -1680,7 +1680,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
     this->actor.flags = (ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000);
-    if (INVADEPOH_TYPE(this) == TYPE_ALIEN1) {
+    if (INVADEPOH_TYPE(&this->actor) == TYPE_ALIEN1) {
         this->actor.update = func_80B4D670;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;
     } else {
@@ -1715,7 +1715,7 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, PlayState* play) {
 
 void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
     s32 pad;
-    s32 temp = INVADEPOH_TYPE(this);
+    s32 temp = INVADEPOH_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChainRomani);
 
@@ -1828,7 +1828,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_Init(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
-    D_80B4ECB0[INVADEPOH_TYPE(this)](this, play);
+    D_80B4ECB0[INVADEPOH_TYPE(&this->actor)](this, play);
 }
 
 void func_80B46BB0(EnInvadepoh* this, PlayState* play) {
@@ -1891,7 +1891,7 @@ void func_80B46D28(EnInvadepoh* this, PlayState* play) {
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
-    D_80B4ECE8[INVADEPOH_TYPE(this)](this, play);
+    D_80B4ECE8[INVADEPOH_TYPE(&this->actor)](this, play);
 }
 
 void func_80B46DA8(EnInvadepoh* this) {
@@ -4299,7 +4299,6 @@ void func_80B4D760(Actor* thisx, PlayState* play) {
 }
 
 void func_80B4D7B8(PlayState* play) {
-    s32 temp_v0;
     u32 temp_s5;
     u32 temp_s6;
     unkStruct80B50350* phi_s2;
@@ -4309,15 +4308,13 @@ void func_80B4D7B8(PlayState* play) {
     func_8012C2DC(play->state.gfxCtx);
     for (phi_s2 = D_80B50350, i = 0; i < 10; phi_s2++, i++) {
         if (phi_s2->unk1 > 0) {
-            temp_v0 = play->gameplayFrames;
-            temp_s5 = (temp_v0 + ((0x10 * i) & 0xFFU)) & 0x7F;
-            temp_s6 = (u8)(temp_v0 * -0xF);
+            temp_s5 = play->gameplayFrames + ((0x10 * i) & 0xFF) & 0x7F;
+            temp_s6 = (u8)(play->gameplayFrames * -0xF);
             Matrix_Translate(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, phi_s2->unk2);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-            temp_v0 = play->gameplayFrames;
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(play->state.gfxCtx, 0, temp_s5, 0, 0x20, 0x40, 1, 0, temp_s6, 0x20, 0x40));
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4332,7 +4329,7 @@ void func_80B4D9B4(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B4D9D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    return 0;
+    return false;
 }
 
 void func_80B4D9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -4453,7 +4450,7 @@ s32 func_80B4E120(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         EnInvadepoh* this = THIS;
         rot->x -= this->actor.shape.rot.x;
     }
-    return 0;
+    return false;
 }
 
 void func_80B4E158(Actor* thisx, PlayState* play) {
@@ -4485,7 +4482,7 @@ s32 func_80B4E200(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         rot->x += (s16)(this->behaviorInfo.unk34 * this->behaviorInfo.unk20.y);
         rot->z += this->behaviorInfo.unk40;
     }
-    return 0;
+    return false;
 }
 
 void func_80B4E2AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -4513,7 +4510,8 @@ void func_80B4E324(Actor* thisx, PlayState* play) {
 }
 
 void func_80B4E3F0(Actor* thisx, PlayState* play) {
-    s32 pad[2];
+    s32 pad;
+    EnInvadepoh* this = THIS;
     Vec3f sp5C;
 
     Matrix_Push();
@@ -4525,7 +4523,7 @@ void func_80B4E3F0(Actor* thisx, PlayState* play) {
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
     Matrix_ReplaceRotation(&play->billboardMtxF);
-    Matrix_RotateZS(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
+    Matrix_RotateZS(this->unk304, MTXMODE_APPLY);
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4549,7 +4547,7 @@ s32 func_80B4E5B0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         rot->z += this->behaviorInfo.unk20.z;
     }
 
-    return 0;
+    return false;
 }
 
 void func_80B4E61C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -4583,7 +4581,7 @@ s32 func_80B4E6E4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
         rot->x += (s16)(this->behaviorInfo.unk34 * this->behaviorInfo.unk20.y);
     }
-    return 0;
+    return false;
 }
 
 void func_80B4E784(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

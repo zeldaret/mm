@@ -19,7 +19,7 @@ void Sleep_Usec(u32 usec) {
 }
 
 void Sleep_Msec(u32 ms) {
-    Sleep_Cycles((ms * OS_CPU_COUNTER) / 1000ULL);
+    Sleep_Cycles((ms * OS_CPU_COUNTER) / 1000ull);
 }
 
 void Sleep_Sec(u32 sec) {

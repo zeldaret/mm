@@ -702,8 +702,9 @@ void Fault_ResumeThread(OSThread* t) {
     osStartThread(t);
 }
 
-void Fault_CommitFB() {
+void Fault_CommitFB(void) {
     u16* fb;
+    
     osViSetYScale(1.0f);
     osViSetMode(&osViModeNtscLan1);
     osViSetSpecialFeatures(0x42); // gama_disable|dither_fliter_enable_aa_mode3_disable

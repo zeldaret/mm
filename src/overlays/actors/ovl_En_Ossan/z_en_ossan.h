@@ -18,7 +18,7 @@ typedef struct EnOssan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnOssanActionFunc actionFunc;
-    /* 0x18C */ EnOssanActionFunc tmpActionFunc; // Used to restore back to correct browsing function
+    /* 0x18C */ EnOssanActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
     /* 0x1DE */ s8 objIndex;

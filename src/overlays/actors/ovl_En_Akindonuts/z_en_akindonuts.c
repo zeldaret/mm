@@ -296,7 +296,7 @@ s32 func_80BED140(PlayState* play) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10U) {
+    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10u) {
         return 0;
     }
 

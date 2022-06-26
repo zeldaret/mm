@@ -161,31 +161,31 @@ static ShopItem sShops[][8] = {
       { SI_POTION_RED_3, { -80, 92, -195 } } },
 };
 
-static u16 sWelcomeHumanTextIds[] = { 0X06A4, 0X06C1 };
+static u16 sWelcomeHumanTextIds[] = { 0x06A4, 0x06C1 };
 
-static u16 sTalkOptionTextIds[] = { 0X06AB, 0X06C8 };
+static u16 sTalkOptionTextIds[] = { 0x06AB, 0x06C8 };
 
-static u16 sWelcomeGoronFirstTimeTextIds[] = { 0X06A5, 0X06C2 };
+static u16 sWelcomeGoronFirstTimeTextIds[] = { 0x06A5, 0x06C2 };
 
-static u16 sWelcomeZoraFirstTimeTextIds[] = { 0X06A7, 0X06C4 };
+static u16 sWelcomeZoraFirstTimeTextIds[] = { 0x06A7, 0x06C4 };
 
-static u16 sWelcomeDekuFirstTimeTextIds[] = { 0X06A9, 0X06C6 };
+static u16 sWelcomeDekuFirstTimeTextIds[] = { 0x06A9, 0x06C6 };
 
-static u16 sWelcomeGoronTextIds[] = { 0X06A6, 0X06C3 };
+static u16 sWelcomeGoronTextIds[] = { 0x06A6, 0x06C3 };
 
-static u16 sWelcomeZoraTextIds[] = { 0X06A8, 0X06C5 };
+static u16 sWelcomeZoraTextIds[] = { 0x06A8, 0x06C5 };
 
-static u16 sWelcomeDekuTextIds[] = { 0X06AA, 0X06C7 };
+static u16 sWelcomeDekuTextIds[] = { 0x06AA, 0x06C7 };
 
-static u16 sNeedEmptyBottleTextIds[] = { 0X06BC, 0X06D9 };
+static u16 sNeedEmptyBottleTextIds[] = { 0x06BC, 0x06D9 };
 
-static u16 sNeedRupeesTextIds[] = { 0X06BD, 0X06DA };
+static u16 sNeedRupeesTextIds[] = { 0x06BD, 0x06DA };
 
-static u16 sNoRoomTextIds[] = { 0X06BE, 0X06DB };
+static u16 sNoRoomTextIds[] = { 0x06BE, 0x06DB };
 
-static u16 sBuySuccessTextIds[] = { 0X06BF, 0X06DC };
+static u16 sBuySuccessTextIds[] = { 0x06BF, 0x06DC };
 
-static u16 sCannotGetNowTextIds[] = { 0X06C0, 0X06DD };
+static u16 sCannotGetNowTextIds[] = { 0x06C0, 0x06DD };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
@@ -331,7 +331,7 @@ s32 EnOssan_TestEndInteraction(EnOssan* this, PlayState* play, Input* input) {
 
 s32 EnOssan_TestCancelOption(EnOssan* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
         return true;
     }
@@ -823,7 +823,7 @@ s32 EnOssan_HasPlayerSelectedItem(PlayState* play, EnOssan* this, Input* input) 
     }
     if (EnOssan_TestItemSelected(play)) {
         if (!item->isOutOfStock) {
-            this->tmpActionFunc = this->actionFunc;
+            this->prevActionFunc = this->actionFunc;
             func_80151938(play, this->items[this->cursorIdx]->choiceTextId);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
@@ -1060,7 +1060,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
                     break;
                 case 1:
                     func_8019F230();
-                    this->actionFunc = this->tmpActionFunc;
+                    this->actionFunc = this->prevActionFunc;
                     func_80151938(play, this->items[this->cursorIdx]->actor.textId);
                     break;
             }
@@ -1070,7 +1070,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
 
 void EnOssan_CannotBuy(EnOssan* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
 }
@@ -1083,7 +1083,7 @@ void EnOssan_CanBuy(EnOssan* this, PlayState* play) {
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(play, item);
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
 }
@@ -1679,7 +1679,7 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gf
 }
 
 s32 EnOssan_PartTimer_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                            Actor* thisx) {
+                                       Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {

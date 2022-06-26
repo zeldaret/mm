@@ -1656,7 +1656,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if ((this->unk_1D14 < 80U) && (D_809E0420 != 0) &&
+            if ((this->unk_1D14 < 80) && (D_809E0420 != 0) &&
                 CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
@@ -1664,7 +1664,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->unk_1D14 = 0;
             } else {
             label1:
-                if (this->unk_1D14 >= 50U) {
+                if (this->unk_1D14 >= 50) {
                     if (this->unk_1D14 == (u32)(BREG(43) + 60)) {
                         play_sound(NA_SE_PL_TRANSFORM_GIANT);
                     }
@@ -1677,17 +1677,17 @@ void func_809DD934(Boss02* this, PlayState* play) {
                     Math_ApproachF(&this->unk_1D64, 30.0f, 0.1f, 1.0f);
                 }
 
-                if (this->unk_1D14 > 50U) {
+                if (this->unk_1D14 > 50) {
                     Math_ApproachZeroF(&this->unk_1D58, 1.0f, 0.06f);
                 } else {
                     Math_ApproachF(&this->unk_1D58, 0.4f, 1.0f, 0.02f);
                 }
 
-                if (this->unk_1D14 == 107U) {
+                if (this->unk_1D14 == 107) {
                     this->unk_1D78 = 1;
                 }
 
-                if (this->unk_1D14 < 121U) {
+                if (this->unk_1D14 < 121) {
                     break;
                 }
 
@@ -1698,14 +1698,14 @@ void func_809DD934(Boss02* this, PlayState* play) {
             break;
 
         case 2:
-            if (this->unk_1D14 < 8U) {
+            if (this->unk_1D14 < 8) {
                 break;
             }
             sp57 = 1;
             goto block_38;
 
         case 10:
-            if ((this->unk_1D14 < 30U) && (D_809E0421 != 0) &&
+            if ((this->unk_1D14 < 30) && (D_809E0421 != 0) &&
                 CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 this->unk_1D18++;
@@ -1715,7 +1715,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             }
 
         label2:
-            if (this->unk_1D14 != 0U) {
+            if (this->unk_1D14 != 0) {
                 if (this->unk_1D14 == (u32)(BREG(44) + 10)) {
                     play_sound(NA_SE_PL_TRANSFORM_NORAML);
                 }
@@ -1726,18 +1726,18 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 Math_ApproachF(&this->unk_1D5C, 2.0f, 1.0f, 0.01f);
             }
 
-            if (this->unk_1D14 == 42U) {
+            if (this->unk_1D14 == 42) {
                 this->unk_1D78 = 1;
             }
 
-            if (this->unk_1D14 > 50U) {
+            if (this->unk_1D14 > 50) {
                 D_809E0421 = 1;
                 goto block_38;
             }
             break;
 
         case 11:
-            if (this->unk_1D14 < 8U) {
+            if (this->unk_1D14 < 8) {
                 break;
             }
 
