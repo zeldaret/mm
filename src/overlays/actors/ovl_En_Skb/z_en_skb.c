@@ -536,7 +536,7 @@ void func_80995818(EnSkb* this, PlayState* play) {
 
 void func_809958F4(EnSkb* this) {
     Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
-                     0.0f, 2, -4.0f);
+                     0.0f, ANIMMODE_ONCE, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
@@ -620,7 +620,8 @@ void func_80995C84(EnSkb* this, PlayState* play) {
 }
 
 void func_80995D3C(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f,
+                     ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->unk_3DE = 4;
     this->unk_3E4 = 0;

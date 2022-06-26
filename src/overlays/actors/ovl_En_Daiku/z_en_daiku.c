@@ -125,7 +125,8 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
         &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
     };
     static u8 D_809440C8[] = {
-        0, 0, 0, 0, 2, 0, 0, 2, 2,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
     };
 
     this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);

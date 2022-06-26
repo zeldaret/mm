@@ -2475,7 +2475,7 @@ void func_80B4843C(EnInvadepoh* this) {
     this->behaviorInfo.unk44 = 0.1f;
     this->behaviorInfo.unk48 = 2000;
     this->actionTimer = 50;
-    Animation_Change(&this->skelAnime, &object_ma1_Anim_007328, 2.0f, 0.0f, 0.0f, 0, -5.0f);
+    Animation_Change(&this->skelAnime, &object_ma1_Anim_007328, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B484EC;
 }

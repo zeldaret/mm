@@ -440,7 +440,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;

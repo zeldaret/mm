@@ -2319,7 +2319,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     s16 yawOffset;
 
     Animation_Change(&this->skelAnime, &gGekkoDamagedAnim, 0.5f, 0.0f,
-                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), 3, 0.0f);
+                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), ANIMMODE_ONCE_INTERP, 0.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->defeatTimer = 60;
     this->actor.speedXZ = 10.0f;

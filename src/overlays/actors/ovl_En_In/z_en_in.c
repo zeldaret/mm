@@ -319,7 +319,7 @@ void func_808F374C(EnIn* this, PlayState* play) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
         this->unk486 = this->unk488;
         Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->unk488]), 2, -10.0f);
+                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
     }
 }
 
@@ -1376,7 +1376,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_in_Anim_016A60), 2, 0.0f);
+                         Animation_GetLastFrame(&object_in_Anim_016A60), ANIMMODE_ONCE, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
