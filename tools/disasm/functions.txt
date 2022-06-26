@@ -16442,7 +16442,7 @@
     0x80BFD434:("EnBjt_TakeItem",),
     0x80BFD4FC:("EnBjt_Appear",),
     0x80BFD5E4:("EnBjt_Vanish",),
-    0x80BFD6BC:("func_80BFD6BC",),
+    0x80BFD6BC:("EnBjt_ChooseBehaviour",),
     0x80BFD8F0:("func_80BFD8F0",),
     0x80BFD984:("func_80BFD984",),
     0x80BFDA48:("func_80BFDA48",),

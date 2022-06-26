@@ -22,7 +22,7 @@ typedef struct EnBjt {
     /* 0x236 */ u16 textId;
     /* 0x238 */ f32 animPlaySpeed;
     /* 0x23C */ f32 heightOffset;
-    /* 0x240 */ s16 unk240;
+    /* 0x240 */ s16 behaviour;
     /* 0x242 */ s16 timer;
     /* 0x244 */ char unk244[4];
     /* 0x248 */ s32 playedSfx; // to only play once
