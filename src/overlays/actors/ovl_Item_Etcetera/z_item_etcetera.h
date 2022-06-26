@@ -8,7 +8,7 @@ struct ItemEtcetera;
 #define ITEMETCETERA_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ITEMETCETERA_GET_TREASUREFLAG(thisx) (((thisx)->params >> 8) & 0x1F)
 
-typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, GlobalContext*);
+typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, PlayState*);
 
 typedef enum {
     /* 0x00 */ ITEM_ETC_BOTTLE_1,

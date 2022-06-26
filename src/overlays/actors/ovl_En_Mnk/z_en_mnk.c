@@ -10,10 +10,10 @@
 
 #define THIS ((EnMnk*)thisx)
 
-void EnMnk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMnk_Init(Actor* thisx, PlayState* play);
+void EnMnk_Destroy(Actor* thisx, PlayState* play);
+void EnMnk_Update(Actor* thisx, PlayState* play);
+void EnMnk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Mnk_InitVars = {

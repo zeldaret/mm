@@ -11,21 +11,21 @@
 
 #define THIS ((ObjLightswitch*)thisx)
 
-void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjLightswitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjLightswitch_Draw(Actor* thisx, GlobalContext* globalCtx);
-void ObjLightswitch_PlayCinema(ObjLightswitch* this, GlobalContext* globalCtx);
+void ObjLightswitch_Init(Actor* thisx, PlayState* play);
+void ObjLightswitch_Destroy(Actor* thisx, PlayState* play);
+void ObjLightswitch_Update(Actor* thisx, PlayState* play);
+void ObjLightswitch_Draw(Actor* thisx, PlayState* play);
+void ObjLightswitch_PlayCinema(ObjLightswitch* this, PlayState* play);
 void ObjLightSwitch_SetupEnabled(ObjLightswitch* this);
-void ObjLightSwitch_Enabled(ObjLightswitch* this, GlobalContext* globalCtx);
+void ObjLightSwitch_Enabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_SetupIdle(ObjLightswitch* this);
 void ObjLightSwitch_SetupFade(ObjLightswitch* this);
-void ObjLightSwitch_Fade(ObjLightswitch* this, GlobalContext* globalCtx);
+void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play);
 void ObjLightSwitch_SetupAsleep(ObjLightswitch* this);
-void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx);
+void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play);
 void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
-void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx);
-void ObjLightswitch_Idle(ObjLightswitch* this, GlobalContext* globalCtx);
+void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
+void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
 const ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
@@ -83,11 +83,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightswitch_InitCollider(ObjLightswitch* this, PlayState* play) {
     s32 pad;
 
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->elements);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->elements);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x,
                                  this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
@@ -96,17 +96,17 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx)
     Collider_UpdateSpheres(0, &this->collider);
 }
 
-void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, GlobalContext* globalCtx, s32 set) {
+void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32 set) {
     if (this) {}
 
     if (set) {
-        Flags_SetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_SetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
     } else {
-        Flags_UnsetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_UnsetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
     }
 }
 
-void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightswitch_SpawnEffects(ObjLightswitch* this, PlayState* play) {
     Vec3f effectPos;
     f32 sinResult;
     f32 cosResult;
@@ -139,18 +139,18 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
         effectPos.y = this->actor.world.pos.y + tempResultDiff + 10.0f;
         effectPos.z = this->actor.world.pos.z + ((rand * cosResult) - (tempResult * sinResult));
 
-        EffectSsDeadDb_Spawn(globalCtx, &effectPos, &gZeroVec3f, &gZeroVec3f, &sLightswitchEffectPrimColor,
+        EffectSsDeadDb_Spawn(play, &effectPos, &gZeroVec3f, &gZeroVec3f, &sLightswitchEffectPrimColor,
                              &sLightswitchEffectEnvColor, 100, 0, 9);
     }
 }
 
-void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     ObjLightswitch* this = THIS;
     s32 pad;
     u32 isSwitchActivated;
     s32 isTriggered;
 
-    isSwitchActivated = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+    isSwitchActivated = Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetFocus(&this->actor, 0.0f);
@@ -165,7 +165,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjLightswitch_SetupIdle(this);
     }
 
-    ObjLightswitch_InitCollider(this, globalCtx);
+    ObjLightswitch_InitCollider(this, play);
 
     if (GET_LIGHTSWITCH_INVISIBLE(this)) {
         // the stone tower exterior switch is part of the scene mesh, the actor is invisble on top
@@ -177,9 +177,9 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjLightswitch_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLightswitch_Destroy(Actor* thisx, PlayState* play) {
     ObjLightswitch* this = THIS;
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void ObjLightswitch_SetAction(ObjLightswitch* this, ObjLightswitchSetupFunc setupFunc, u32 setState) {
@@ -188,10 +188,10 @@ void ObjLightswitch_SetAction(ObjLightswitch* this, ObjLightswitchSetupFunc setu
     this->actionFunc = ObjLightswitch_PlayCinema;
 }
 
-void ObjLightswitch_PlayCinema(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightswitch_PlayCinema(ObjLightswitch* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        ObjLightswitch_UpdateSwitchFlags(this, globalCtx, this->switchFlagSetType);
+        ObjLightswitch_UpdateSwitchFlags(this, play, this->switchFlagSetType);
         this->cutsceneTimer = 50;
         this->setupFunc(this);
     } else {
@@ -208,7 +208,7 @@ void ObjLightswitch_SetupIdle(ObjLightswitch* this) {
     this->actionFunc = ObjLightswitch_Idle;
 }
 
-void ObjLightswitch_Idle(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play) {
     s32 actorType = GET_LIGHTSWITCH_TYPE(this);
 
     if (this->hitState >= 10) {
@@ -229,7 +229,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
     this->actionFunc = ObjLightSwitch_Asleep;
 }
 
-void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_Asleep(ObjLightswitch* this, PlayState* play) {
     if (this->colorShiftTimer == 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
@@ -259,12 +259,12 @@ void ObjLightSwitch_SetupEnabled(ObjLightswitch* this) {
     this->actionFunc = ObjLightSwitch_Enabled;
 }
 
-void ObjLightSwitch_Enabled(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_Enabled(ObjLightswitch* this, PlayState* play) {
     s32 actorType = GET_LIGHTSWITCH_TYPE(this);
 
     if (actorType == LIGHTSWITCH_TYPE_REGULAR) {
         // switch can be disabled outside of this actor by flag
-        if (!Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this))) {
+        if (!Flags_GetSwitch(play, GET_LIGHTSWITCH_SWITCHFLAG(this))) {
             ObjLightSwitch_SetupDisabled(this);
         }
     } else if (actorType == LIGHTSWITCH_TYPE_FLIP) {
@@ -274,7 +274,7 @@ void ObjLightSwitch_Enabled(ObjLightswitch* this, GlobalContext* globalCtx) {
         }
     } else if (this->hitState == 0) {
         if (this->colorShiftTimer >= 13) {
-            ObjLightswitch_UpdateSwitchFlags(this, globalCtx, 0);
+            ObjLightswitch_UpdateSwitchFlags(this, play, 0);
             ObjLightSwitch_SetupDisabled(this);
         } else {
             this->colorShiftTimer++;
@@ -291,7 +291,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this) {
     this->actionFunc = ObjLightSwitch_Disabled;
 }
 
-void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play) {
     this->colorShiftTimer--;
     Math_StepToS(&this->edgeRotSpeed, 0, 0xA);
     this->edgeRot += this->edgeRotSpeed;
@@ -311,9 +311,9 @@ void ObjLightSwitch_SetupFade(ObjLightswitch* this) {
     this->actionFunc = ObjLightSwitch_Fade;
 }
 
-void ObjLightSwitch_Fade(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
     this->colorAlpha -= 200;
-    ObjLightswitch_SpawnEffects(this, globalCtx); // spawn burning fire effect
+    ObjLightswitch_SpawnEffects(this, play); // spawn burning fire effect
     if (this->colorAlpha < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -321,7 +321,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     ObjLightswitch* this = THIS;
     s32 pad;
 
@@ -354,22 +354,22 @@ void ObjLightswitch_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     if (this->actor.update != NULL) {
         this->previousACFlags = this->collider.base.acFlags;
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_DrawOpa(ObjLightswitch* this, PlayState* play) {
     s32 pad;
     Vec3f tempPos;
     Vec3s tempRot;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
@@ -377,7 +377,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     tempPos.z = this->actor.world.pos.z;
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sLightswitchFaceGfx[this->faceState]));
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000260);
 
@@ -386,26 +386,26 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000408);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
+void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
     s32 pad;
     Vec3f tempPos;
     Vec3s tempRot;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
@@ -413,7 +413,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     tempPos.z = this->actor.world.pos.z;
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sLightswitchFaceGfx[this->faceState]));
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000260);
 
@@ -422,25 +422,25 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000408);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void ObjLightswitch_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjLightswitch_Draw(Actor* thisx, PlayState* play) {
     ObjLightswitch* this = THIS;
     s32 alpha = (u8)(this->colorAlpha >> 6);
 
     if ((GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 255)) {
-        ObjLightSwitch_DrawXlu(this, globalCtx);
+        ObjLightSwitch_DrawXlu(this, play);
     } else {
-        ObjLightSwitch_DrawOpa(this, globalCtx);
+        ObjLightSwitch_DrawOpa(this, play);
     }
 }

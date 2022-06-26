@@ -5,7 +5,7 @@
 
 struct EnKarebaba;
 
-typedef void (*EnKarebabaActionFunc)(struct EnKarebaba*, GlobalContext*);
+typedef void (*EnKarebabaActionFunc)(struct EnKarebaba*, PlayState*);
 
 enum {
     /* 0 */ ENKAREBABA_0,

@@ -6,7 +6,7 @@
 
 struct EnHorseGameCheck;
 
-typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, GlobalContext*);
+typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, PlayState*);
 
 #define ENHORSEGAMECHECK_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENHORSEGAMECHECK_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)

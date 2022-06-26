@@ -6,7 +6,7 @@
 
 struct EnBji01;
 
-typedef void (*EnBji01ActionFunc)(struct EnBji01*, GlobalContext*);
+typedef void (*EnBji01ActionFunc)(struct EnBji01*, PlayState*);
 
 typedef enum {
     /* 00 */ BJI_LIMB_NONE,

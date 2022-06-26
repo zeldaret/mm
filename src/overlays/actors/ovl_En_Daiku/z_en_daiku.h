@@ -5,7 +5,7 @@
 
 struct EnDaiku;
 
-typedef void (*EnDaikuActionFunc)(struct EnDaiku*, GlobalContext*);
+typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 
 #define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
 #define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);

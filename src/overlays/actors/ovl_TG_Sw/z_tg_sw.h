@@ -4,7 +4,7 @@
 #include "global.h"
 
 struct TGSw;
-typedef void (*TGSwActionFunc)(struct TGSw*, GlobalContext*);
+typedef void (*TGSwActionFunc)(struct TGSw*, PlayState*);
 
 typedef struct TGSw {
     /* 0x000 */ Actor actor;

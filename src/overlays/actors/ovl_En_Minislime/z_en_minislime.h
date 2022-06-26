@@ -5,7 +5,7 @@
 
 struct EnMinislime;
 
-typedef void (*EnMinislimeActionFunc)(struct EnMinislime*, GlobalContext*);
+typedef void (*EnMinislimeActionFunc)(struct EnMinislime*, PlayState*);
 
 #define MINISLIME_NUM_SPAWN 15
 

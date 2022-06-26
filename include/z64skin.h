@@ -5,7 +5,7 @@
 
 struct GraphicsContext;
 struct GameState;
-struct GlobalContext;
+struct PlayState;
 
 /**
  * Holds a compact version of a vertex used in the Skin system (doesn't has the x, y, z positions or the flag member)
@@ -78,8 +78,8 @@ typedef struct {
     /* 0x04C */ SkelAnime skelAnime;
 } Skin; // size = 0x90
 
-typedef void (*SkinPostDraw)(struct Actor* thisx, struct GlobalContext* globalCtx, Skin* skin);
-typedef s32 (*SkinOverrideLimbDraw)(struct Actor* thisx, struct GlobalContext* globalCtx, s32 limbIndex, Skin* skin);
+typedef void (*SkinPostDraw)(struct Actor* thisx, struct PlayState* play, Skin* skin);
+typedef s32 (*SkinOverrideLimbDraw)(struct Actor* thisx, struct PlayState* play, s32 limbIndex, Skin* skin);
 
 #define SKIN_DRAW_FLAG_CUSTOM_TRANSFORMS (1 << 0)
 #define SKIN_DRAW_FLAG_CUSTOM_MATRIX     (1 << 1)
@@ -89,10 +89,10 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
 void Skin_ApplyLimbModifications(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3);
 void Skin_DrawAnimatedLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3, s32 drawFlags);
 void Skin_DrawLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dListOverride, s32 drawFlags);
-void func_80138228(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, s32 setTranslation);
-void func_80138258(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation);
-void func_8013828C(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6);
-void func_801382C4(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6, s32 drawFlags);
+void func_80138228(Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, s32 setTranslation);
+void func_80138258(Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation);
+void func_8013828C(Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6);
+void func_801382C4(Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6, s32 drawFlags);
 void Skin_GetLimbPos(Skin* skin, s32 limbIndex, Vec3f* offset, Vec3f* dst);
 void Skin_GetVertexPos(Skin* skin, s32 limbIndex, s32 vtxIndex, Vec3f* dst);
 
