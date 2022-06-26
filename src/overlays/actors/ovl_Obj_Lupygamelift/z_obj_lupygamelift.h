@@ -9,7 +9,7 @@
 
 struct ObjLupygamelift;
 
-typedef void (*ObjLupygameliftActionFunc)(struct ObjLupygamelift*, GlobalContext*);
+typedef void (*ObjLupygameliftActionFunc)(struct ObjLupygamelift*, PlayState*);
 
 typedef struct ObjLupygamelift {
     /* 0x000 */ DynaPolyActor dyna;

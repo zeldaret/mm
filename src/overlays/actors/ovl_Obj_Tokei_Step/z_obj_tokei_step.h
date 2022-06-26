@@ -5,7 +5,7 @@
 
 struct ObjTokeiStep;
 
-typedef void (*ObjTokeiStepFunc)(struct ObjTokeiStep*, struct GlobalContext*);
+typedef void (*ObjTokeiStepFunc)(struct ObjTokeiStep*, struct PlayState*);
 
 typedef struct ObjTokeiStepPanel {
     /* 0x00 */ Vec3f pos;

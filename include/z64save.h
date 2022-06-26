@@ -6,7 +6,7 @@
 #include "os.h"
 
 struct GameState;
-struct GlobalContext;
+struct PlayState;
 struct FileChooseContext;
 
 // TODO: properly name DOWN, RETURN and TOP
@@ -275,7 +275,7 @@ typedef enum SunsSongState {
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
-void Sram_SaveEndOfCycle(struct GlobalContext* globalCtx);
+void Sram_SaveEndOfCycle(struct PlayState* play);
 void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
@@ -290,8 +290,8 @@ void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
-void Sram_SaveSpecialEnterClockTown(struct GlobalContext* globalCtx);
-void Sram_SaveSpecialNewDay(struct GlobalContext* globalCtx);
+void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
+void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
 void func_80147020(SramContext* sramCtx);
 void func_80147068(SramContext* sramCtx);

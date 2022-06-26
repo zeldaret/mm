@@ -10,9 +10,9 @@
 
 #define THIS ((EnSth2*)thisx)
 
-void EnSth2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSth2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSth2_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnSth2_Init(Actor* thisx, PlayState* play);
+void EnSth2_Destroy(Actor* thisx, PlayState* play);
+void EnSth2_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Sth2_InitVars = {

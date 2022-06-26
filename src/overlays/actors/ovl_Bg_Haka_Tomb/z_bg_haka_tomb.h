@@ -5,7 +5,7 @@
 
 struct BgHakaTomb;
 
-typedef void (*BgHakaTombActionFunc)(struct BgHakaTomb*, GlobalContext*);
+typedef void (*BgHakaTombActionFunc)(struct BgHakaTomb*, PlayState*);
 
 typedef struct BgHakaTomb {
     /* 0x000 */ DynaPolyActor dyna;

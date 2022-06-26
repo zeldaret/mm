@@ -5,9 +5,9 @@
 
 struct EnGm;
 
-typedef void (*EnGmActionFunc)(struct EnGm*, GlobalContext*);
-typedef s32 (*EnGmUnkFunc)(struct EnGm*, GlobalContext*);
-typedef void (*EnGmUnkFunc2)(struct EnGm*, GlobalContext*);
+typedef void (*EnGmActionFunc)(struct EnGm*, PlayState*);
+typedef s32 (*EnGmUnkFunc)(struct EnGm*, PlayState*);
+typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
 
 #define ENGM_GET_FF(thisx) ((thisx)->params & 0xFF)
 

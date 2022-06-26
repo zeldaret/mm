@@ -11,10 +11,10 @@
 
 #define THIS ((ObjLupygamelift*)thisx)
 
-void ObjLupygamelift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjLupygamelift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjLupygamelift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjLupygamelift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjLupygamelift_Init(Actor* thisx, PlayState* play);
+void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play);
+void ObjLupygamelift_Update(Actor* thisx, PlayState* play);
+void ObjLupygamelift_Draw(Actor* thisx, PlayState* play);
 
 void func_80AF04BC(ObjLupygamelift* this);
 void func_80AF04D8(ObjLupygamelift* this, GlobalContext* globalCtx);

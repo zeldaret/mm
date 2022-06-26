@@ -5,7 +5,7 @@
 
 struct EnBaba;
 
-typedef void (*EnBabaActionFunc)(struct EnBaba*, GlobalContext*);
+typedef void (*EnBabaActionFunc)(struct EnBaba*, PlayState*);
 
 #define ENBABA_GET_3F00(thisx) (((thisx)->params & 0x3F00) >> 8)
 #define ENBABA_GET_C000(thisx) (((thisx)->params & 0xC000) >> 0xE)

@@ -5,7 +5,7 @@
 
 struct EnDai;
 
-typedef void (*EnDaiActionFunc)(struct EnDai*, GlobalContext*);
+typedef void (*EnDaiActionFunc)(struct EnDai*, PlayState*);
 
 typedef struct EnDaiEffect {
     /* 0x00 */ u8 isEnabled;

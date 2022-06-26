@@ -5,7 +5,7 @@
 
 struct ObjDriftice;
 
-typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, GlobalContext*);
+typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, PlayState*);
 
 #define OBJDRIFTICE_GET_3(thisx) ((thisx)->params & 3)
 #define OBJDRIFTICE_GET_1FC(thisx) (((thisx)->params >> 2) & 0x7F)

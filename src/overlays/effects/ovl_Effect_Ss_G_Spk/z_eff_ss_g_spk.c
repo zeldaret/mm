@@ -8,10 +8,10 @@
 
 #define PARAMS ((EffectSsGSpkInitParams*)initParamsx)
 
-s32 EffectSsGSpk_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void func_80978F40(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_80979068(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGSpk_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsGSpk_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void func_80978F40(PlayState* play, u32 index, EffectSs* this);
+void func_80979068(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_G_Spk_InitVars = {
