@@ -5,7 +5,7 @@
 
 struct ObjSwprize;
 
-typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, GlobalContext*);
+typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, PlayState*);
 
 typedef struct ObjSwprize {
     /* 0x0000 */ Actor actor;

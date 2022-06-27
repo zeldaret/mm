@@ -12,18 +12,18 @@
 
 #define THIS ((EnEncount2*)thisx)
 
-void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEncount2_Init(Actor* thisx, PlayState* play);
+void EnEncount2_Destroy(Actor* thisx, PlayState* play);
+void EnEncount2_Update(Actor* thisx, PlayState* play);
+void EnEncount2_Draw(Actor* thisx, PlayState* play);
 
-void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx);
-void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx);
-void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_Idle(EnEncount2* this, PlayState* play);
+void EnEncount2_Popped(EnEncount2* this, PlayState* play);
+void EnEncount2_Die(EnEncount2* this, PlayState* play);
 void EnEncount2_SetIdle(EnEncount2* this);
 void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
-void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx);
-void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx);
+void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
+void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
 const ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
@@ -99,17 +99,17 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnEncount2_Init(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_fusen_Colheader_002420, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
@@ -120,7 +120,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->switchFlag = -1;
     }
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag))) {
+    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -135,10 +135,10 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2_SetIdle(this);
 }
 
-void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void EnEncount2_SetIdle(EnEncount2* this) {
@@ -146,7 +146,7 @@ void EnEncount2_SetIdle(EnEncount2* this) {
     this->actionFunc = EnEncount2_Idle;
 }
 
-void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Idle(EnEncount2* this, PlayState* play) {
     this->oscillationAngle += 1500.0f;
     this->dyna.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
@@ -157,13 +157,13 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
     s32 i;
     Vec3f curPos;
 
     Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
                 CLEAR_TAG_LARGE_EXPLOSION);
 
     for (i = 0; i < ARRAY_COUNT(this->effects) / 2; ++i) {
@@ -175,16 +175,16 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
     this->actionFunc = EnEncount2_Die;
 }
 
-void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_Die(EnEncount2* this, PlayState* play) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
-            Flags_SetSwitch(globalCtx, this->switchFlag);
+            Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
 
-void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnEncount2_Update(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     s32 pad;
 
@@ -193,24 +193,24 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
     Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->dyna.actor);
-    EnEncount2_UpdateEffects(this, globalCtx);
+    EnEncount2_UpdateEffects(this, play);
 
     if (!this->isPopped) {
         Collider_UpdateSpheresElement(&this->collider, 0, &this->dyna.actor);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnEncount2_Draw(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000A00);
-        Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000D78);
+        Gfx_DrawDListOpa(play, object_fusen_DL_000A00);
+        Gfx_DrawDListOpa(play, object_fusen_DL_000D78);
     }
-    EnEncount2_DrawEffects(this, globalCtx);
+    EnEncount2_DrawEffects(this, play);
 }
 
 void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
@@ -238,7 +238,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     }
 }
 
-void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play) {
     s32 i;
     EnEncount2Effect* sPtr = this->effects;
 
@@ -263,15 +263,15 @@ void EnEncount2_UpdateEffects(EnEncount2* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx) {
+void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
     s16 i;
     EnEncount2Effect* sPtr;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
     sPtr = this->effects;
     func_8012C28C(gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
         if (sPtr->isEnabled) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
@@ -282,10 +282,9 @@ void EnEncount2_DrawEffects(EnEncount2* this, GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
-            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-            Matrix_RotateZF(DEGTORAD(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+            Matrix_RotateZF(DEGTORAD(play->state.frames * 20.0f), MTXMODE_APPLY);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
         }
     }

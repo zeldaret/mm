@@ -8,7 +8,7 @@
 
 struct DmOpstage;
 
-typedef void (*DmOpstageActionFunc)(struct DmOpstage*, GlobalContext*);
+typedef void (*DmOpstageActionFunc)(struct DmOpstage*, PlayState*);
 
 typedef enum {
     /* 0 */ DMOPSTAGE_TYPE_GROUND,

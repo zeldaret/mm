@@ -5,7 +5,7 @@
 
 struct ObjToge;
 
-typedef void (*ObjTogeActionFunc)(struct ObjToge*, GlobalContext*);
+typedef void (*ObjTogeActionFunc)(struct ObjToge*, PlayState*);
 
 #define OBJTOGE_GET_PATH(thisx) ((thisx)->params & 0xFF)
 #define OBJTOGE_GET_700(thisx) (((thisx)->params >> 8) & 7)

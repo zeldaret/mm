@@ -7,7 +7,7 @@
 
 struct EnScRuppe;
 
-typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, GlobalContext*);
+typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, PlayState*);
 
 typedef struct EnScRuppe {
     /* 0x0000 */ Actor actor;
