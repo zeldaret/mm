@@ -88,9 +88,7 @@ void ElfMsg3_Init(Actor* thisx, PlayState* play) {
             this->actor.scale.y = this->actor.home.rot.z * 0.04f;
         }
         ElfMsg3_SetupAction(this, func_80A2CF7C);
-        this->actor.shape.rot.z = 0;
-        this->actor.shape.rot.y = this->actor.shape.rot.z;
-        this->actor.shape.rot.x = this->actor.shape.rot.z;
+        this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
     }
 }
 
