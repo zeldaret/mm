@@ -3,6 +3,13 @@
 
 #include "global.h"
 
+// #define BG_NUMA_HANA_GET_TYPE(thisx) ((thisx)->params & 1)
+// #define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+
+// #define BG_KIN2_PICTURE_SWITCH_FLAG(thisx) ((thisx)-> params >> 5) & 1
+// ((temp_v0 & 0x1F) * 4) | 0xFF03)
+// temp_v0 = this->dyna.actor.params;
+
 struct BgKin2Picture;
 
 typedef void (*BgKin2PictureActionFunc)(struct BgKin2Picture*, PlayState*);
