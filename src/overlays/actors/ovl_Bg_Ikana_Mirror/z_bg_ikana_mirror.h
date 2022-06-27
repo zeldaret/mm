@@ -13,9 +13,9 @@ typedef struct BgIkanaMirror {
     /* 0x17C */ ColliderTrisElement colliderTrisElements[9];
     /* 0x4B8 */ ColliderQuad colliderQuad[2];
     /* 0x5B8 */ BgIkanaMirrorActionFunc actionFunc;
-    /* 0x5BC */ AnimatedMaterial* lightAbsorptionAnimatedTexture;
-    /* 0x5C0 */ AnimatedMaterial* lightEmissionAnimatedTexture;
-    /* 0x5C4 */ s16 timer;
+    /* 0x5BC */ AnimatedMaterial* lightAbsorptionTexScroll;
+    /* 0x5C0 */ AnimatedMaterial* lightEmissionTexScroll;
+    /* 0x5C4 */ s16 lightRayCharge;
     /* 0x5C6 */ u8 lightAbsorptionAlpha;
     /* 0x5C7 */ u8 lightEmissionAlpha;
     /* 0x5C8 */ s8 isEmittingLight;
