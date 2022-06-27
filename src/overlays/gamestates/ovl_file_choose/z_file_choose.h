@@ -1,12 +1,12 @@
-#ifndef _Z64_FILE_CHOOSE_H_
-#define _Z64_FILE_CHOOSE_H_
+#ifndef Z64_FILE_CHOOSE_H
+#define Z64_FILE_CHOOSE_H
 
 #include "global.h"
 
 void FileChoose_Init(GameState* thisx);
 void FileChoose_Destroy(GameState* thisx);
 
-typedef struct {
+typedef struct FileChooseContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
@@ -21,23 +21,35 @@ typedef struct {
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;
-    /* 0x243E8 */ Vtx* unk_243E8;
-    /* 0x243EC */ Vtx* unk_243EC;
-    /* 0x243F0 */ Vtx* unk_243F0;
-    /* 0x243F4 */ u8   newf[6][4];
-    /* 0x2440C */ u16  unk_2440C[4];
-    /* 0x24414 */ u8   unk_24414[8][4];
-    /* 0x24434 */ s16  healthCapacity[4];
-    /* 0x2443C */ s16  health[4];
-    /* 0x24444 */ u32  unk_24444[4];
-    /* 0x24454 */ s8   unk_24454[4];
-    /* 0x24458 */ u16  unk_24458[4];
-    /* 0x24460 */ s16  unk_24460[4];
-    /* 0x24468 */ u8   unk_24468[4];
-    /* 0x2446C */ s16  rupees[4];
-    /* 0x24474 */ u8   unk_24474[4];
-    /* 0x24478 */ u8   unk_24478[4];
-    /* 0x2447C */ u8   unk_2447C[4];
+    /* 0x243E8 */ u8   newf2[2][6];
+    /* 0x243F4 */ u8   newf[2][6];
+    /* 0x24400 */ UNK_TYPE1 unk_24400[0xC];
+    /* 0x2440C */ u16 unk_2440C[2];
+    /* 0x24410 */ u16 unk_24410[2];
+    /* 0x24414 */ u8 unk_24414[2][8]; // playername
+    /* 0x24424 */ u8 unk_24424[2][8]; // playername
+    /* 0x24434 */ s16 healthCapacity[2];
+    /* 0x24438 */ u16 unk_24438[2];
+    /* 0x2443C */ s16 health[2];
+    /* 0x24440 */ u16 unk_24440[2];
+    /* 0x24444 */ u32 unk_24444[2];
+    /* 0x2444C */ u32 unk_2444C[2];
+    /* 0x24454 */ s8 unk_24454[2];
+    /* 0x24456 */ u8 unk_24456[2];
+    /* 0x24458 */ u16 unk_24458[2];
+    /* 0x2445C */ u16 unk_2445C[2];
+    /* 0x24460 */ s16 unk_24460[2];
+    /* 0x24464 */ s16 unk_24464[2];
+    /* 0x24468 */ u8 unk_24468[2];
+    /* 0x2446A */ u8 unk_2446A[2];
+    /* 0x2446C */ s16 rupees[2];
+    /* 0x24470 */ s16 unk_24470[2];
+    /* 0x24474 */ s8 unk_24474[2];
+    /* 0x24476 */ s8 unk_24476[2];
+    /* 0x24478 */ s8 maskCount[2];
+    /* 0x2447A */ s8 unk_2447A[2];
+    /* 0x2447C */ s8 heartPieceCount[2];
+    /* 0x2447E */ s8 unk_2447E[2];
     /* 0x24480 */ s16  unk_24480;
     /* 0x24482 */ s16  unk_24482;
     /* 0x24484 */ s16  unk_24484;
@@ -50,7 +62,7 @@ typedef struct {
     /* 0x24492 */ s16  unk_24492[3];
     /* 0x24498 */ s16  unk_24498;
     /* 0x2449A */ s16  unk_2449A[6];
-    /* 0x244A6 */ s16  unk_244A6;
+    /* 0x244A6 */ s16  fileNum;
     /* 0x244A8 */ s16  unk_244A8;
     /* 0x244AA */ s16  unk_244AA;
     /* 0x244AC */ s16  unk_244AC;
@@ -100,5 +112,14 @@ typedef struct {
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
 } FileChooseContext; // size = 0x24558
+
+// TODO: Confirm those values has the same meaning as their OoT counterparts
+typedef enum {
+    /* 0x00 */ PAUSE_0, // PAUSE_ITEM
+    /* 0x01 */ PAUSE_1, // PAUSE_MAP
+    /* 0x02 */ PAUSE_2, // PAUSE_QUEST
+    /* 0x03 */ PAUSE_3, // PAUSE_EQUIP
+    /* 0x04 */ PAUSE_4  // PAUSE_WORLD_MAP
+} PauseMenuPage;
 
 #endif

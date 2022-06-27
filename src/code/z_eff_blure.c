@@ -309,6 +309,7 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
     Vec3s sp30;
     f32 mode4Param;
     EffectBlureElement* elem = &this->elements[index];
+    Vec3s* unusedPtr = &sp30; // Optimized out but seems necessary to match stack usage
 
     switch (this->calcMode) {
         case 1:
@@ -366,8 +367,6 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
             vec2->z = elem->p2.z;
             break;
     }
-
-    sp30 = sp30; // Optimized out but seems necessary to match stack usage
 
     if (this->flags & 0x10) {
         color1->r = color1->g = color1->b = color1->a = 255;

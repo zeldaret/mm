@@ -23,22 +23,22 @@
 
 #define PARAMS ((EffectSsGRippleInitParams*)initParamsx)
 
-u32 EffectSsGRipple_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsGRipple_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGRipple_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsGRipple_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsGRipple_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGRipple_Draw(PlayState* play, u32 index, EffectSs* this);
+
 
 const EffectSsInit Effect_Ss_G_Ripple_InitVars = {
     EFFECT_SS_G_RIPPLE,
     EffectSsGRipple_Init,
 };
 
-u32 EffectSsGRipple_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsGRipple_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsGRippleInitParams* initParams = PARAMS;
-    WaterBox* waterBox;
+    WaterBox* waterBox = NULL;
     s32 pad;
     s32 bgId;
 
-    waterBox = NULL;
     Math_Vec3f_Copy(&this->velocity, &gZeroVec3f);
     Math_Vec3f_Copy(&this->accel, &gZeroVec3f);
     Math_Vec3f_Copy(&this->pos, &initParams->pos);
@@ -58,16 +58,16 @@ u32 EffectSsGRipple_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
     this->rEnvColorG = 255;
     this->rEnvColorB = 255;
     this->rEnvColorA = 255;
-    this->rWaterBoxNum = WaterBox_GetSurface2(globalCtx, &globalCtx->colCtx, &initParams->pos, 3.0f, &waterBox, &bgId);
+    this->rWaterBoxNum = WaterBox_GetSurface2(play, &play->colCtx, &initParams->pos, 3.0f, &waterBox, &bgId);
     this->rBgId = bgId;
 
     return 1;
 }
 
-void EffectSsGRipple_DrawRipple(GlobalContext* globalCtx2, EffectSs* this, TexturePtr tex) {
-    GlobalContext* globalCtx = globalCtx2;
+void EffectSsGRipple_DrawRipple(PlayState* play2, EffectSs* this, TexturePtr tex) {
+    PlayState* play = play2;
     f32 radius;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
@@ -78,10 +78,10 @@ void EffectSsGRipple_DrawRipple(GlobalContext* globalCtx2, EffectSs* this, Textu
     OPEN_DISPS(gfxCtx);
 
     radius = this->rRadius * 0.0025f;
-    colHeader = BgCheck_GetCollisionHeader(&globalCtx->colCtx, this->rBgId);
+    colHeader = BgCheck_GetCollisionHeader(&play->colCtx, this->rBgId);
 
     if ((this->rWaterBoxNum != -1) && (colHeader != NULL) && (this->rWaterBoxNum < colHeader->numWaterBoxes)) {
-        yPos = func_800CA568(&globalCtx->colCtx, this->rWaterBoxNum, this->rBgId);
+        yPos = func_800CA568(&play->colCtx, this->rWaterBoxNum, this->rBgId);
     } else {
         yPos = this->pos.y;
     }
@@ -106,20 +106,20 @@ void EffectSsGRipple_DrawRipple(GlobalContext* globalCtx2, EffectSs* this, Textu
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsGRipple_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGRipple_Draw(PlayState* play, u32 index, EffectSs* this) {
     if (this->rLifespan == 0) {
-        EffectSsGRipple_DrawRipple(globalCtx, this, gEffWaterRippleTex);
+        EffectSsGRipple_DrawRipple(play, this, gEffWaterRippleTex);
     }
 }
 
-void EffectSsGRipple_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGRipple_Update(PlayState* play, u32 index, EffectSs* this) {
     f32 radius;
     f32 primAlpha;
     f32 envAlpha;
     WaterBox* waterBox;
     s32 bgId;
 
-    this->rWaterBoxNum = WaterBox_GetSurface2(globalCtx, &globalCtx->colCtx, &this->pos, 3.0f, &waterBox, &bgId);
+    this->rWaterBoxNum = WaterBox_GetSurface2(play, &play->colCtx, &this->pos, 3.0f, &waterBox, &bgId);
     this->rBgId = bgId;
 
     if (DECR(this->rLifespan) == 0) {

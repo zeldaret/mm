@@ -40,6 +40,6 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A787C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A78E4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/Audio_IsSfxPlaying.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A794C.s")

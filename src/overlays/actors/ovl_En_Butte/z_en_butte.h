@@ -5,7 +5,7 @@
 
 struct EnButte;
 
-typedef void (*EnButteActionFunc)(struct EnButte*, GlobalContext*);
+typedef void (*EnButteActionFunc)(struct EnButte*, PlayState*);
 
 #define ENBUTTE_GET(thisx) ((thisx)->params)
 #define ENBUTTE_GET_1(thisx) ((thisx)->params & 1)

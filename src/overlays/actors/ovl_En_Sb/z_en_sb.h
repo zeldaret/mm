@@ -5,7 +5,7 @@
 
 struct EnSb;
 
-typedef void (*EnSbActionFunc)(struct EnSb*, GlobalContext*);
+typedef void (*EnSbActionFunc)(struct EnSb*, PlayState*);
 
 typedef enum {
     /* 0x00 */ SHELLBLADE_OPEN,

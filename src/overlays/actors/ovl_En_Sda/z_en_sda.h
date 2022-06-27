@@ -5,6 +5,8 @@
 
 struct EnSda;
 
+#define ENSDA_1 1
+
 typedef struct EnSda {
     /* 0x000 */ Actor actor;
 } EnSda; // size = 0x144
