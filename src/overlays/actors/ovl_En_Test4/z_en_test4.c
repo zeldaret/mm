@@ -447,8 +447,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     } else {
                         playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE,
-                                        playerParams, &player->unk_3C0, player->unk_3CC);
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
+                                        &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
                         play->nextEntranceIndex = 0x5400;

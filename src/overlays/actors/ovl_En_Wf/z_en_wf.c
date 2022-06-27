@@ -1065,8 +1065,7 @@ void func_809928CC(EnWf* this, PlayState* play) {
         if (this->unk_2A0 != 0) {
             this->unk_2A0--;
         } else if (func_800BE184(play, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
-            if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) ||
-                ((play->gameplayFrames % 2) != 0)) {
+            if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
                 this->unk_2A0 = 10;
             } else {
                 func_8099223C(this);

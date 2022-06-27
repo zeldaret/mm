@@ -146,8 +146,8 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     s16 playerObjectId;
     void* nextObject;
 
-    play->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
-                                play->setupEntranceList[play->curSpawn].spawn;
+    play->linkActorEntry =
+        (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
     if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
         (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0x0CFF)) {
         // Skull Kid Object

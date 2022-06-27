@@ -364,8 +364,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) && (this->colliderCylinder.base.oc->category == 5))) {
             this->unk_1F8 = 1;
             this->timer = 0;
-        } else if ((this->timer > 100) &&
-                   Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
+        } else if ((this->timer > 100) && Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
             this->timer = 100;
         }
 
