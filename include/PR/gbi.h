@@ -216,6 +216,7 @@
 #define	GPACK_RGBA5551(r, g, b, a)	((((r)<<8) & 0xf800) | 		\
 					 (((g)<<3) & 0x7c0) |		\
 					 (((b)>>2) & 0x3e) | ((a) & 0x1))
+#define GPACK_IA16(i, a) (((i) << 8) | (a))
 #define	GPACK_ZDZ(z, dz)		((z) << 2 | (dz))
 
 /*
@@ -283,6 +284,7 @@
 #define G_TEXTURE_GEN		0x00040000
 #define G_TEXTURE_GEN_LINEAR	0x00080000
 #define G_LOD			0x00100000	/* NOT IMPLEMENTED */
+#define G_LIGHTING_POSITIONAL   0x00400000
 #if	(defined(F3DEX_GBI)||defined(F3DLP_GBI))
 # define G_CLIPPING		0x00800000
 #else
@@ -1347,60 +1349,329 @@ typedef union {
     long int	force_structure_alignment[4];
 } Hilite;
 
-#define gdSPDefLights0(ar,ag,ab)					\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ { 0, 0, 0},0,{ 0, 0, 0},0,{ 0, 0, 0},0}}} }
-#define gdSPDefLights1(ar,ag,ab,r1,g1,b1,x1,y1,z1)			\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}}} }
-#define gdSPDefLights2(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2)	\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}}} }
-#define gdSPDefLights3(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3)									\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}}} }
-#define gdSPDefLights4(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4)						\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}}} }
-#define gdSPDefLights5(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5)				\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}}} }
+#define gdSPDefLights0(ar,ag,ab)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { 0, 0, 0 }, 0,     \
+                    { 0, 0, 0 }, 0,     \
+                    { 0, 0, 0 }, 0      \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights1(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLights6(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5,r6,g6,b6,x6,y6,z6)		\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}},	\
-			{{ {r6,g6,b6},0,{r6,g6,b6},0,{x6,y6,z6},0}}} }
+#define gdSPDefLights2(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights3(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLights7(ar,ag,ab,r1,g1,b1,x1,y1,z1,r2,g2,b2,x2,y2,z2,r3,g3,b3,x3,y3,z3,r4,g4,b4,x4,y4,z4,r5,g5,b5,x5,y5,z5,r6,g6,b6,x6,y6,z6,r7,g7,b7,x7,y7,z7)	\
-		{ 	{{ {ar,ag,ab},0,{ar,ag,ab},0}},			\
-		       {{{ {r1,g1,b1},0,{r1,g1,b1},0,{x1,y1,z1},0}},	\
-			{{ {r2,g2,b2},0,{r2,g2,b2},0,{x2,y2,z2},0}},	\
-			{{ {r3,g3,b3},0,{r3,g3,b3},0,{x3,y3,z3},0}},	\
-			{{ {r4,g4,b4},0,{r4,g4,b4},0,{x4,y4,z4},0}},	\
-			{{ {r5,g5,b5},0,{r5,g5,b5},0,{x5,y5,z5},0}},	\
-			{{ {r6,g6,b6},0,{r6,g6,b6},0,{x6,y6,z6},0}},	\
-			{{ {r7,g7,b7},0,{r7,g7,b7},0,{x7,y7,z7},0}}} }
+#define gdSPDefLights4(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }}                      \
+            }                           \
+        }
 
+#define gdSPDefLights5(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }}                      \
+            }                           \
+        }
 
-#define gdSPDefLookAt(rightx,righty,rightz,upx,upy,upz)			    \
-		{	{{ {{0,0,0},0,{0,0,0},0,{rightx,righty,rightz},0}}, \
-			{ {{0,0x80,0},0,{0,0x80,0},0,{upx,upy,upz},0}}}   }
+#define gdSPDefLights6(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5,        \
+                       r6,g6,b6,        \
+                       x6,y6,z6)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }},                     \
+                {{                      \
+                    { r6, g6, b6 }, 0,  \
+                    { r6, g6, b6 }, 0,  \
+                    { x6, y6, z6 }, 0   \
+                }}                      \
+            }                           \
+        }
+
+#define gdSPDefLights7(ar,ag,ab,        \
+                       r1,g1,b1,        \
+                       x1,y1,z1,        \
+                       r2,g2,b2,        \
+                       x2,y2,z2,        \
+                       r3,g3,b3,        \
+                       x3,y3,z3,        \
+                       r4,g4,b4,        \
+                       x4,y4,z4,        \
+                       r5,g5,b5,        \
+                       x5,y5,z5,        \
+                       r6,g6,b6,        \
+                       x6,y6,z6,        \
+                       r7,g7,b7,        \
+                       x7,y7,z7)        \
+        {                               \
+            {{                          \
+                { ar, ag, ab }, 0,      \
+                { ar, ag, ab }, 0       \
+            }},                         \
+            {                           \
+                {{                      \
+                    { r1, g1, b1 }, 0,  \
+                    { r1, g1, b1 }, 0,  \
+                    { x1, y1, z1 }, 0   \
+                }},                     \
+                {{                      \
+                    { r2, g2, b2 }, 0,  \
+                    { r2, g2, b2 }, 0,  \
+                    { x2, y2, z2 }, 0   \
+                }},                     \
+                {{                      \
+                    { r3, g3, b3 }, 0,  \
+                    { r3, g3, b3 }, 0,  \
+                    { x3, y3, z3 }, 0   \
+                }},                     \
+                {{                      \
+                    { r4, g4, b4 }, 0,  \
+                    { r4, g4, b4 }, 0,  \
+                    { x4, y4, z4 }, 0   \
+                }},                     \
+                {{                      \
+                    { r5, g5, b5 }, 0,  \
+                    { r5, g5, b5 }, 0,  \
+                    { x5, y5, z5 }, 0   \
+                }},                     \
+                {{                      \
+                    { r6, g6, b6 }, 0,  \
+                    { r6, g6, b6 }, 0,  \
+                    { x6, y6, z6 }, 0   \
+                }},                     \
+                {{                      \
+                    { r7, g7, b7 }, 0,  \
+                    { r7, g7, b7 }, 0,  \
+                    { x7, y7, z7 }, 0   \
+                }}                      \
+            }                           \
+        }
+
+#define gdSPDefLookAt(rightx,righty,rightz,upx,upy,upz) \
+        {{                                              \
+                {{                                      \
+                    { 0, 0, 0 }, 0,                     \
+                    { 0, 0, 0 }, 0,                     \
+                    { rightx, righty, rightz }, 0       \
+                }},                                     \
+                {{                                      \
+                    { 0, 0x80, 0 }, 0,                  \
+                    { 0, 0x80, 0 }, 0,                  \
+                    { upx, upy, upz }, 0                \
+                }}                                      \
+        }}
+
+#define qs1616(e) ((s32)((e) * 0x00010000))
+
+#define IPART(x) ((qs1616(x) >> 16) & 0xFFFF)
+#define FPART(x) (qs1616(x) & 0xFFFF)
+
+#define gdSPDefMtx(     \
+        xx, yx, zx, wx, \
+        xy, yy, zy, wy, \
+        xz, yz, zz, wz, \
+        xw, yw, zw, ww) \
+    {{                                  \
+        (IPART(xx) << 0x10) | IPART(xy),  \
+        (IPART(xz) << 0x10) | IPART(xw),  \
+        (IPART(yx) << 0x10) | IPART(yy),  \
+        (IPART(yz) << 0x10) | IPART(yw),  \
+        (IPART(zx) << 0x10) | IPART(zy),  \
+        (IPART(zz) << 0x10) | IPART(zw),  \
+        (IPART(wx) << 0x10) | IPART(wy),  \
+        (IPART(wz) << 0x10) | IPART(ww),  \
+        (FPART(xx) << 0x10) | FPART(xy),  \
+        (FPART(xz) << 0x10) | FPART(xw),  \
+        (FPART(yx) << 0x10) | FPART(yy),  \
+        (FPART(yz) << 0x10) | FPART(yw),  \
+        (FPART(zx) << 0x10) | FPART(zy),  \
+        (FPART(zz) << 0x10) | FPART(zw),  \
+        (FPART(wx) << 0x10) | FPART(wy),  \
+        (FPART(wz) << 0x10) | FPART(ww),  \
+    }}
 
 /*
  *  Graphics DMA Packet
@@ -3608,7 +3879,7 @@ _DW({									\
 
 #define	gDPLoadTextureBlock_4b(pkt, timg, fmt, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, G_IM_SIZ_16b, 1, timg);		\
 	gDPSetTile(pkt, fmt, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,	\
 		cmt, maskt, shiftt, cms, masks, shifts);		\
@@ -3623,7 +3894,7 @@ _DW({									\
 	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
 		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
 		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 /* Load fix rww 27jun95 */
 /* The S at the end means odd lines are already word Swapped */
@@ -3976,7 +4247,7 @@ _DW({									\
 #define	gDPLoadMultiTile_4b(pkt, timg, tmem, rtile, fmt, width, height,	\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, G_IM_SIZ_8b, ((width)>>1), timg);	\
 	gDPSetTile(pkt, fmt, G_IM_SIZ_8b, 			        \
 		   (((((lrs)-(uls)+1)>>1)+7)>>3), tmem,			\
@@ -3998,7 +4269,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #define	gsDPLoadTextureTile_4b(timg, fmt, width, height,		\
 		uls, ult, lrs, lrt, pal,				\
@@ -4161,7 +4432,7 @@ _DW({									\
 #ifndef _HW_VERSION_1
 
 #define gDPLoadTLUT(pkt, count, tmemaddr, dram)				\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dram);	\
 	gDPTileSync(pkt);						\
 	gDPSetTile(pkt, 0, 0, 0, tmemaddr,				\
@@ -4169,7 +4440,7 @@ _DW({									\
 	gDPLoadSync(pkt);						\
 	gDPLoadTLUTCmd(pkt, G_TX_LOADTILE, ((count)-1));		\
 	gDPPipeSync(pkt);						\
-}
+})
 
 #else /* **** WORKAROUND hardware 1 load_tlut bug ****** */
 

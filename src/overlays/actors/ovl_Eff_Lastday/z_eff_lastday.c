@@ -10,15 +10,15 @@
 
 #define THIS ((EffLastday*)thisx)
 
-void EffLastday_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffLastday_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffLastday_Update(Actor* thisx, GlobalContext* globalCtx);
-void EffLastday_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EffLastday_Init(Actor* thisx, PlayState* play);
+void EffLastday_Destroy(Actor* thisx, PlayState* play);
+void EffLastday_Update(Actor* thisx, PlayState* play);
+void EffLastday_Draw(Actor* thisx, PlayState* play);
 
-void func_80BEBD0C(EffLastday* this, GlobalContext* globalCtx);
-void func_80BEBDF8(EffLastday* this, GlobalContext* globalCtx);
-void func_80BEBEB8(EffLastday* this, GlobalContext* globalCtx);
-void func_80BEBF78(EffLastday* this, GlobalContext* globalCtx);
+void func_80BEBD0C(EffLastday* this, PlayState* play);
+void func_80BEBDF8(EffLastday* this, PlayState* play);
+void func_80BEBEB8(EffLastday* this, PlayState* play);
+void func_80BEBF78(EffLastday* this, PlayState* play);
 
 #if 0
 const ActorInit Eff_Lastday_InitVars = {

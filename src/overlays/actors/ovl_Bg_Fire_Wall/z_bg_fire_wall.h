@@ -5,7 +5,7 @@
 
 struct BgFireWall;
 
-typedef void (*BgFireWallActionFunc)(struct BgFireWall*, GlobalContext*);
+typedef void (*BgFireWallActionFunc)(struct BgFireWall*, PlayState*);
 
 typedef struct BgFireWall {
     /* 0x0000 */ Actor actor;

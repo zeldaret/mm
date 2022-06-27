@@ -5,8 +5,8 @@
 
 struct EnAkindonuts;
 
-typedef void (*EnAkindonutsActionFunc)(struct EnAkindonuts*, GlobalContext*);
-typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, GlobalContext*);
+typedef void (*EnAkindonutsActionFunc)(struct EnAkindonuts*, PlayState*);
+typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, PlayState*);
 
 #define ENAKINDONUTS_GET_3(thisx) ((thisx)->params & 3)
 #define ENAKINDONUTS_GET_4(thisx) (((thisx)->params & 4) >> 2)

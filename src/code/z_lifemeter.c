@@ -33,12 +33,12 @@ TexturePtr HeartDDTextures[] = {
     gDefenseHeartThreeQuarterTex,
 };
 
-void LifeMeter_Init(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_Init(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     interfaceCtx->unkTimer = 320;
 
-    interfaceCtx->health = gSaveContext.health;
+    interfaceCtx->health = gSaveContext.save.playerData.health;
 
     interfaceCtx->lifeColorChange = 0;
     interfaceCtx->lifeColorChangeDirection = 0;
@@ -71,8 +71,8 @@ void LifeMeter_Init(GlobalContext* globalCtx) {
     sHeartsDDEnv[0][2] = sHeartsDDEnv[1][2] = 0;
 }
 
-void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_UpdateColors(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
     f32 factorBeating = interfaceCtx->lifeColorChange * 0.1f;
     f32 ddFactor;
     s32 type = 0;
@@ -167,26 +167,26 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
     sBeatingHeartsDDEnv[2] = (u8)(bFactor + 0) & 0xFF;
 }
 
-s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
-    gSaveContext.health = globalCtx->interfaceCtx.health;
+s32 LifeMeter_SaveInterfaceHealth(PlayState* play) {
+    gSaveContext.save.playerData.health = play->interfaceCtx.health;
 
     return 1;
 }
 
-s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+s32 LifeMeter_IncreaseInterfaceHealth(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     interfaceCtx->unkTimer = 320;
     interfaceCtx->health += 0x10;
-    if (globalCtx->interfaceCtx.health >= gSaveContext.health) {
-        globalCtx->interfaceCtx.health = gSaveContext.health;
+    if (play->interfaceCtx.health >= gSaveContext.save.playerData.health) {
+        play->interfaceCtx.health = gSaveContext.save.playerData.health;
         return 1;
     }
     return 0;
 }
 
-s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+s32 LifeMeter_DecreaseInterfaceHealth(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if (interfaceCtx->unkTimer != 0) {
         interfaceCtx->unkTimer--;
@@ -195,14 +195,14 @@ s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
         interfaceCtx->health -= 0x10;
         if (interfaceCtx->health <= 0) {
             interfaceCtx->health = 0;
-            globalCtx->damagePlayer(globalCtx, -(((void)0, gSaveContext.health) + 1));
+            play->damagePlayer(play, -(((void)0, gSaveContext.save.playerData.health) + 1));
             return 1;
         }
     }
     return 0;
 }
 
-void LifeMeter_Draw(GlobalContext* globalCtx) {
+void LifeMeter_Draw(PlayState* play) {
     s32 pad[5];
     TexturePtr heartTex;
     s32 curColorSet;
@@ -213,21 +213,21 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     f32 posX;
     f32 halfTexSize;
     f32 temp_f4;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Vtx* beatingHeartVtx = interfaceCtx->beatingHeartVtx;
-    s32 fractionHeartCount = gSaveContext.health % 0x10;
-    s16 healthCapacity = gSaveContext.healthCapacity / 0x10;
-    s16 fullHeartCount = gSaveContext.health / 0x10;
+    s32 fractionHeartCount = gSaveContext.save.playerData.health % 0x10;
+    s16 healthCapacity = gSaveContext.save.playerData.healthCapacity / 0x10;
+    s16 fullHeartCount = gSaveContext.save.playerData.health / 0x10;
     s32 pad2;
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
     TexturePtr temp = NULL;
-    s32 ddCount = gSaveContext.inventory.dungeonKeys[9] - 1;
+    s32 ddCount = gSaveContext.save.inventory.dungeonKeys[9] - 1;
 
     OPEN_DISPS(gfxCtx);
 
-    if ((gSaveContext.health % 0x10) == 0) {
+    if ((gSaveContext.save.playerData.health % 0x10) == 0) {
         fullHeartCount--;
     }
     offsetY = 0.0f;
@@ -391,17 +391,16 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if (interfaceCtx->lifeSizeChangeDirection != 0) {
         interfaceCtx->lifeSizeChange--;
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (Player_InCsMode(&globalCtx->state) == 0 && (globalCtx->pauseCtx.state == 0) &&
-                (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
-                // Player_InCsMode and func_801690CC : Check if in Cutscene
+            if (!Player_InCsMode(&play->state) && (play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0) &&
+                LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }
@@ -417,19 +416,19 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
+    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
         criticalThreshold = 16;
 
-    } else if (gSaveContext.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
         criticalThreshold = 24;
 
-    } else if (gSaveContext.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
+    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
         criticalThreshold = 32;
     } else {
         criticalThreshold = 44;
     }
 
-    if ((criticalThreshold >= gSaveContext.health) && (gSaveContext.health > 0)) {
+    if ((criticalThreshold >= gSaveContext.save.playerData.health) && (gSaveContext.save.playerData.health > 0)) {
         return true;
     }
     return false;

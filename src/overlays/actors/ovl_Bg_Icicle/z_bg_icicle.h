@@ -5,7 +5,7 @@
 
 struct BgIcicle;
 
-typedef void (*BgIcicleActionFunc)(struct BgIcicle*, GlobalContext*);
+typedef void (*BgIcicleActionFunc)(struct BgIcicle*, PlayState*);
 
 typedef enum {
     /* 0 */ ICICLE_STALAGMITE_RANDOM_DROP,

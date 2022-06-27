@@ -4,16 +4,17 @@
  * Description: Unused OoT Saria's Song Ocarina Effect
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_oceff_wipe3.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe3*)thisx)
 
-void OceffWipe3_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe3_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe3_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffWipe3_Init(Actor* thisx, PlayState* play);
+void OceffWipe3_Destroy(Actor* thisx, PlayState* play);
+void OceffWipe3_Update(Actor* thisx, PlayState* play);
+void OceffWipe3_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Oceff_Wipe3_InitVars = {

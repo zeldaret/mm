@@ -17,20 +17,20 @@
 #define rEnvColorB regs[8]
 #define rScaleStep regs[9]
 #define rAlphaStep regs[10]
-#define rAlphaMode regs[11] // if mode is 0 alpha decreases over time, otherwise it increases
+#define rAlphaMode regs[11]
 
 #define PARAMS ((EffectSsDeadDdInitParams*)initParamsx)
 
-u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
     EFFECT_SS_DEAD_DD,
     EffectSsDeadDd_Init,
 };
 
-u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsDeadDdInitParams* initParams = PARAMS;
 
     if (initParams->type == 0) {
@@ -91,8 +91,8 @@ u32 EffectSsDeadDd_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     return 1;
 }
 
-void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
@@ -122,7 +122,7 @@ void EffectSsDeadDd_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsDeadDd_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this) {
 
     this->rScale += this->rScaleStep;
 
