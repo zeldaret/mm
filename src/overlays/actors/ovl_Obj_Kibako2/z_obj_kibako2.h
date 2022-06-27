@@ -9,8 +9,8 @@
 #define KIBAKO2_CONTENTS(thisx) (((thisx)->params >> 0xF) & 1)
 
 typedef enum {
-    /*  0   */ CONTENTS_COLLECTIBLE,
-    /*  1   */ CONTENTS_SKULLTULA
+    /* 0 */ CONTENTS_COLLECTIBLE,
+    /* 1 */ CONTENTS_SKULLTULA
 } ObjKibako2Contents;
 
 struct ObjKibako2;

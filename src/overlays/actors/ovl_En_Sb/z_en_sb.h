@@ -8,11 +8,11 @@ struct EnSb;
 typedef void (*EnSbActionFunc)(struct EnSb*, PlayState*);
 
 typedef enum {
-    /* 0x00 */ SHELLBLADE_OPEN,
-    /* 0x01 */ SHELLBLADE_WAIT_CLOSED,
-    /* 0x02 */ SHELLBLADE_WAIT_OPEN,
-    /* 0x03 */ SHELLBLADE_LUNGE,
-    /* 0x04 */ SHELLBLADE_BOUNCE
+    /* 0 */ SHELLBLADE_OPEN,
+    /* 1 */ SHELLBLADE_WAIT_CLOSED,
+    /* 2 */ SHELLBLADE_WAIT_OPEN,
+    /* 3 */ SHELLBLADE_LUNGE,
+    /* 4 */ SHELLBLADE_BOUNCE
 } ShellbladeState;
 
 typedef struct EnSb {

@@ -8,9 +8,9 @@ struct EnOnpuman;
 typedef void (*EnOnpumanActionFunc)(struct EnOnpuman*, PlayState*);
 
 typedef struct EnOnpuman {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x164];
-    /* 0x02A8 */ EnOnpumanActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x164];
+    /* 0x2A8 */ EnOnpumanActionFunc actionFunc;
 } EnOnpuman; // size = 0x2AC
 
 extern const ActorInit En_Onpuman_InitVars;

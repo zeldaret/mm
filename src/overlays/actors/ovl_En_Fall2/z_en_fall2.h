@@ -8,9 +8,9 @@ struct EnFall2;
 typedef void (*EnFall2ActionFunc)(struct EnFall2*, PlayState*);
 
 typedef struct EnFall2 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x1A4];
-    /* 0x02E8 */ EnFall2ActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x1A4];
+    /* 0x2E8 */ EnFall2ActionFunc actionFunc;
 } EnFall2; // size = 0x2EC
 
 extern const ActorInit En_Fall2_InitVars;

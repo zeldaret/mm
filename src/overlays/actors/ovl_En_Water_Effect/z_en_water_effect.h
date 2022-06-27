@@ -19,11 +19,11 @@ typedef struct {
 } EnWaterEffectStruct; // size = 0x40
 
 enum {
-    /* 0x  1 */ ENWATEREFFECT_1 = 1,
-    /* 0x309 */ ENWATEREFFECT_777 = 777,
-    /* 0x30A */ ENWATEREFFECT_778,
-    /* 0x30B */ ENWATEREFFECT_779,
-    /* 0x30C */ ENWATEREFFECT_780,
+    /* 001 */ ENWATEREFFECT_1 = 1,
+    /* 777 */ ENWATEREFFECT_777 = 777,
+    /* 778 */ ENWATEREFFECT_778,
+    /* 779 */ ENWATEREFFECT_779,
+    /* 780 */ ENWATEREFFECT_780,
 };
 
 typedef struct EnWaterEffect {

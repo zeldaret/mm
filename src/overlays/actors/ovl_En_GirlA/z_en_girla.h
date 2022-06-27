@@ -127,8 +127,8 @@ typedef struct {
 } StickDirectionPrompt; // size = 0x38
 
 typedef struct ShopItem {
-    /* 0x00 */ s16 shopItemId;
-    /* 0x02 */ Vec3s spawnPos;
+    /* 0x0 */ s16 shopItemId;
+    /* 0x2 */ Vec3s spawnPos;
 } ShopItem; // size = 0x8;
 
 #endif // Z_EN_GIRLA_H

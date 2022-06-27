@@ -8,11 +8,11 @@ struct EnHakurock;
 typedef void (*EnHakurockActionFunc)(struct EnHakurock*, PlayState*);
 
 typedef enum {
-    /* 0x0 */ EN_HAKUROCK_TYPE_UNK_0,
-    /* 0x1 */ EN_HAKUROCK_TYPE_BOULDER,
-    /* 0x2 */ EN_HAKUROCK_TYPE_UNK_2,
-    /* 0x3 */ EN_HAKUROCK_TYPE_STALACTITE,
-    /* 0x4 */ EN_HAKUROCK_TYPE_FENCE_PILLAR
+    /* 0 */ EN_HAKUROCK_TYPE_UNK_0,
+    /* 1 */ EN_HAKUROCK_TYPE_BOULDER,
+    /* 2 */ EN_HAKUROCK_TYPE_UNK_2,
+    /* 3 */ EN_HAKUROCK_TYPE_STALACTITE,
+    /* 4 */ EN_HAKUROCK_TYPE_FENCE_PILLAR
 } EnHakurockType;
 
 typedef struct EnHakurock {

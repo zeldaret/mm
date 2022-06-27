@@ -21,16 +21,16 @@ typedef struct EnEncount2Effect{
 #define EN_ENCOUNT2_EFFECT_COUNT 200
 
 typedef struct EnEncount2 {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ EnEncount2ActionFunc actionFunc;
-    /* 0x0160 */ s16 deathTimer;
-    /* 0x0162 */ s16 isPopped;
-    /* 0x0164 */ s16 switchFlag;
-    /* 0x0168 */ f32 scale;
-    /* 0x016C */ f32 oscillationAngle;
-    /* 0x0170 */ ColliderJntSph collider;
-    /* 0x0190 */ ColliderJntSphElement colElement;
-    /* 0x01D0 */ EnEncount2Effect effects[EN_ENCOUNT2_EFFECT_COUNT];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ EnEncount2ActionFunc actionFunc;
+    /* 0x160 */ s16 deathTimer;
+    /* 0x162 */ s16 isPopped;
+    /* 0x164 */ s16 switchFlag;
+    /* 0x168 */ f32 scale;
+    /* 0x16C */ f32 oscillationAngle;
+    /* 0x170 */ ColliderJntSph collider;
+    /* 0x190 */ ColliderJntSphElement colElement;
+    /* 0x1D0 */ EnEncount2Effect effects[EN_ENCOUNT2_EFFECT_COUNT];
 } EnEncount2; // size = 0x2A70
 
 #define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))

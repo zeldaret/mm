@@ -8,8 +8,8 @@ struct ElfMsg3;
 typedef void (*ElfMsg3ActionFunc)(struct ElfMsg3*, PlayState*);
 
 typedef struct ElfMsg3 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ElfMsg3ActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ElfMsg3ActionFunc actionFunc;
 } ElfMsg3; // size = 0x148
 
 extern const ActorInit Elf_Msg3_InitVars;

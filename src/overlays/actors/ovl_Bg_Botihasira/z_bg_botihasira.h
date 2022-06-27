@@ -8,10 +8,10 @@ struct BgBotihasira;
 typedef void (*BgBotihasiraActionFunc)(struct BgBotihasira*, PlayState*);
 
 typedef struct BgBotihasira {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
-    /* 0x015C */ BgBotihasiraActionFunc actionFunc;
-    /* 0x0160 */ char unk_160[0x4C];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x18];
+    /* 0x15C */ BgBotihasiraActionFunc actionFunc;
+    /* 0x160 */ char unk_160[0x4C];
 } BgBotihasira; // size = 0x1AC
 
 extern const ActorInit Bg_Botihasira_InitVars;
