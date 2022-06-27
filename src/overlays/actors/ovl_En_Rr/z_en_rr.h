@@ -5,7 +5,7 @@
 
 struct EnRr;
 
-typedef void (*EnRrActionFunc)(struct EnRr*, GlobalContext*);
+typedef void (*EnRrActionFunc)(struct EnRr*, PlayState*);
 
 enum {
     /* 0 */ ENRR_0,

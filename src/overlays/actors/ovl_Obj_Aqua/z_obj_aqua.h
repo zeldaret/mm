@@ -8,7 +8,7 @@
 
 struct ObjAqua;
 
-typedef void (*ObjAquaActionFunc)(struct ObjAqua*, GlobalContext*);
+typedef void (*ObjAquaActionFunc)(struct ObjAqua*, PlayState*);
 
 typedef struct ObjAqua {
     /* 0x0000 */ Actor actor;

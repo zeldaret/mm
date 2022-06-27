@@ -22,16 +22,16 @@
 
 #define PARAMS ((EffectSsBlastInitParams*)initParamsx)
 
-u32 EffectSsBlast_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBlast_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBlast_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsBlast_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsBlast_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Blast_InitVars = {
     EFFECT_SS_BLAST,
     EffectSsBlast_Init,
 };
 
-u32 EffectSsBlast_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsBlast_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsBlastInitParams* initParams = PARAMS;
 
     this->pos = initParams->pos;
@@ -58,8 +58,8 @@ u32 EffectSsBlast_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 1;
 }
 
-void EffectSsBlast_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mf;
     s32 pad;
     f32 radius;
@@ -68,11 +68,11 @@ void EffectSsBlast_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
     radius = this->rScale * 0.0025f;
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);
-    func_801691F0(globalCtx, &mf, &this->pos);
+    func_801691F0(play, &mf, &this->pos);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rPrimColorA);
-    Matrix_SetCurrentState(&mf);
+    Matrix_Put(&mf);
     Matrix_Scale(radius, radius, radius, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
@@ -80,7 +80,7 @@ void EffectSsBlast_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsBlast_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBlast_Update(PlayState* play, u32 index, EffectSs* this) {
     Math_StepToS(&this->rPrimColorA, 0, this->rAlphaStep);
     this->rScale += this->rScaleStep;
 

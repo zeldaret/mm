@@ -5,7 +5,7 @@
 
 struct EnWizFire;
 
-typedef void (*EnWizFireActionFunc)(struct EnWizFire*, GlobalContext*);
+typedef void (*EnWizFireActionFunc)(struct EnWizFire*, PlayState*);
 
 typedef struct {
     /* 0x00 */ u8 unk_00;

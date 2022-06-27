@@ -10,12 +10,12 @@
 
 #define THIS ((EnTg*)thisx)
 
-void EnTg_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTg_Init(Actor* thisx, PlayState* play);
+void EnTg_Destroy(Actor* thisx, PlayState* play);
+void EnTg_Update(Actor* thisx, PlayState* play);
+void EnTg_Draw(Actor* thisx, PlayState* play);
 
-void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
+void func_8098FA70(EnTg* this, PlayState* play);
 
 #if 0
 const ActorInit En_Tg_InitVars = {

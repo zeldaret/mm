@@ -9,7 +9,7 @@
 
 struct EnTalkGibud;
 
-typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
+typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, PlayState*);
 
 typedef struct EnTalkGibud {
     /* 0x000 */ Actor actor;

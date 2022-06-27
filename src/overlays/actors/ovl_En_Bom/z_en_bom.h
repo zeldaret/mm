@@ -5,7 +5,7 @@
 
 struct EnBom;
 
-typedef void (*EnBomActionFunc)(struct EnBom*, GlobalContext*);
+typedef void (*EnBomActionFunc)(struct EnBom*, PlayState*);
 
 #define ENBOM_GETX_1(thisx) ((thisx)->shape.rot.x & 1)
 #define ENBOM_GETZ_80(thisx) ((thisx)->shape.rot.z & 0x80)
