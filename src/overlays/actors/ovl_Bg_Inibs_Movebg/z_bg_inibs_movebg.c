@@ -11,9 +11,9 @@
 
 #define THIS ((BgInibsMovebg*)thisx)
 
-void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgInibsMovebg_Init(Actor* thisx, PlayState* play);
+void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play);
+void BgInibsMovebg_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Bg_Inibs_Movebg_InitVars = {
     ACTOR_BG_INIBS_MOVEBG,
@@ -35,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgInibsMovebg_Init(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -46,13 +46,13 @@ void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_164 = D_80B96570[BGINIBSMOVEBG_GET_F(thisx)];
 }
 
-void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgInibsMovebg_Draw(Actor* thisx, PlayState* play) {
     BgInibsMovebg* this = THIS;
 
     AnimatedMaterial* animMat;
@@ -61,16 +61,16 @@ void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     animMat = this->unk_164;
     if (animMat != NULL) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(this->unk_164));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(this->unk_164));
     }
 
     dl1 = this->unk_15C;
     if (dl1 != NULL) {
-        Gfx_DrawDListOpa(globalCtx, this->unk_15C);
+        Gfx_DrawDListOpa(play, this->unk_15C);
     }
 
     dl2 = this->unk_160;
     if (dl2 != NULL) {
-        Gfx_DrawDListXlu(globalCtx, this->unk_160);
+        Gfx_DrawDListXlu(play, this->unk_160);
     }
 }

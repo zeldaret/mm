@@ -5,7 +5,7 @@
 
 struct EnGk;
 
-typedef void (*EnGkActionFunc)(struct EnGk*, GlobalContext*);
+typedef void (*EnGkActionFunc)(struct EnGk*, PlayState*);
 
 #define ENGK_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENGK_GET_F0(thisx) (((thisx)->params & 0xF0) >> 4)

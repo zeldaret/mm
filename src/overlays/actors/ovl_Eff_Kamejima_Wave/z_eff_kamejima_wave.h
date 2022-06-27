@@ -5,7 +5,7 @@
 
 struct EffKamejimaWave;
 
-typedef void (*EffKamejimaWaveActionFunc)(struct EffKamejimaWave*, GlobalContext*);
+typedef void (*EffKamejimaWaveActionFunc)(struct EffKamejimaWave*, PlayState*);
 
 typedef struct EffKamejimaWave {
     /* 0x0000 */ Actor actor;

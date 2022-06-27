@@ -10,7 +10,7 @@
 
 struct EnSyatekiDekunuts;
 
-typedef void (*EnSyatekiDekunutsActionFunc)(struct EnSyatekiDekunuts*, GlobalContext*);
+typedef void (*EnSyatekiDekunutsActionFunc)(struct EnSyatekiDekunuts*, PlayState*);
 
 typedef struct EnSyatekiDekunuts {
     /* 0x000 */ Actor actor;

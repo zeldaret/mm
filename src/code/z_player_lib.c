@@ -5,10 +5,10 @@
 
 #include "objects/object_mask_meoto/object_mask_meoto.h"
 
-void PlayerCall_Init(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Update(Actor* thisx, GlobalContext* globalCtx);
-void PlayerCall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void PlayerCall_Init(Actor* thisx, PlayState* play);
+void PlayerCall_Destroy(Actor* thisx, PlayState* play);
+void PlayerCall_Update(Actor* thisx, PlayState* play);
+void PlayerCall_Draw(Actor* thisx, PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -27,10 +27,10 @@ extern Vec3f D_801F59E8;
 
 void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
-s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
+s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_DOWN, 0xBFF);
-        if (globalCtx->sceneNum == SCENE_KAKUSIANA) {
+        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
+        if (play->sceneNum == SCENE_KAKUSIANA) {
             return 1;
         }
     }
@@ -39,16 +39,16 @@ s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     return arg1;
 }
 
-s32 func_80122744(GlobalContext* globalCtx, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
+s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
     arg1->unk_00 = arg2;
     arg1->unk_01 = 0;
     arg1->unk_04 = arg3;
     return 1;
 }
 
-s32 func_80122760(GlobalContext* globalCtx, struct_80122744_arg1* arg1, f32 arg2) {
+s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2) {
     if (arg1->unk_01 < arg1->unk_00) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
         Vec3f sp30;
         s32 pad;
         s16 yaw;
@@ -56,8 +56,8 @@ s32 func_80122760(GlobalContext* globalCtx, struct_80122744_arg1* arg1, f32 arg2
 
         Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
         yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
-        func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, arg2, yaw);
-        globalCtx->actorCtx.unk268 = 1;
+        func_800B6F20(play, &play->actorCtx.unk_26C, arg2, yaw);
+        play->actorCtx.unk268 = 1;
         distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
 
         if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
@@ -70,8 +70,8 @@ s32 func_80122760(GlobalContext* globalCtx, struct_80122744_arg1* arg1, f32 arg2
     return true;
 }
 
-void func_80122868(GlobalContext* globalCtx, Player* player) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void func_80122868(PlayState* play, Player* player) {
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (player->invincibilityTimer > 0) {
         s32 phi_v0 = 50 - player->invincibilityTimer;
@@ -87,17 +87,17 @@ void func_80122868(GlobalContext* globalCtx, Player* player) {
             Gfx_SetFog(POLY_OPA_DISP, 0, 0, 255, 0, 0, 4000 - (s32)(Math_CosS(player->unk_B5F << 8) * 2000.0f));
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229A0(GlobalContext* globalCtx, Player* player) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void func_801229A0(PlayState* play, Player* player) {
+    OPEN_DISPS(play->state.gfxCtx);
 
     if ((gSaveContext.jinxTimer != 0) || (player->invincibilityTimer > 0)) {
-        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
@@ -156,7 +156,7 @@ void func_801229FC(Player* player) {
     }
 }
 
-void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha) {
+void func_80122BA4(PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha) {
     if (arg2 == arg1->unk_00) {
         s32 index;
 
@@ -168,13 +168,13 @@ void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg
         index = arg1->unk_01;
         arg1->unk_04[index].unk_00 = arg1->unk_00;
         arg1->unk_04[index].alpha = alpha;
-        Matrix_CopyCurrentState(&arg1->unk_04[index].mf);
+        Matrix_Get(&arg1->unk_04[index].mf);
 
         arg1->unk_00 = 0;
     }
 }
 
-void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
     struct_80122D44_arg1_unk_04* temp_v1 = &arg1->unk_04[0];
     s32 phi_a1;
     s32 i;
@@ -206,30 +206,30 @@ struct_801BFDD0 D_801BFDD0[] = {
 };
 #endif
 
-void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
     struct_801BFDD0* temp_s3;
     struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
     s32 phi_s6 = false;
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
         if ((phi_s2->alpha != 0) && (phi_s2->alpha != 255)) {
             temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
-            Matrix_SetCurrentState(&phi_s2->mf);
+            Matrix_Put(&phi_s2->mf);
 
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!phi_s6 && phi_s2->unk_00 == 2) {
-                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
+                AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
                 phi_s6 = true;
             }
 
-            Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            Scene_SetRenderModeXlu(play, 1, 2);
             gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->alpha);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_XLU_DISP++, temp_s3->dList);
@@ -238,7 +238,7 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
         phi_s2++;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 extern u8 sMaskItemIds[PLAYER_MASK_MAX - 1];
@@ -275,8 +275,8 @@ u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
 }
 
-u8 Player_GetCurMaskItemId(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+u8 Player_GetCurMaskItemId(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
         return Player_MaskIdToItemId(player->currentMask - 1);
@@ -298,26 +298,26 @@ void func_80122F28(Player* player) {
     }
 }
 
-s32 func_80122F9C(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80122F9C(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) && player->unk_AE7 == 2;
 }
 
-s32 func_80122FCC(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80122FCC(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
 }
 
-void func_8012300C(GlobalContext* globalCtx, s32 arg1) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_8012300C(PlayState* play, s32 arg1) {
+    Player* player = GET_PLAYER(play);
 
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_8012301C(Player* player, PlayState* play2) {
+    PlayState* play = play2;
     s32 pad;
 
     player->unk_AE7++;
@@ -326,12 +326,12 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
         s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.save.playerForm)];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
+        func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
+        player->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
     } else if (player->unk_AE7 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
-        if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
+        if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
             player->actor.objBankIndex = objBankIndex;
             player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
             player->actor.init = PlayerCall_Init;
@@ -345,7 +345,7 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
 extern s16 D_801BFE14[][18];
 
 // OoT's Player_SetBootData
-void func_80123140(GlobalContext* globalCtx, Player* player) {
+void func_80123140(PlayState* play, Player* player) {
     s16* bootRegs;
     s32 currentBoots;
     f32 scale;
@@ -390,7 +390,7 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (globalCtx->roomCtx.currRoom.unk3 == 2) {
+    if (play->roomCtx.currRoom.unk3 == 2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -403,17 +403,17 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
     Actor_SetScale(&player->actor, scale);
 }
 
-s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player) {
+s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_200 | PLAYER_STATE1_80)) ||
-           player->csMode != 0 || globalCtx->sceneLoadFlag == 0x14 || globalCtx->unk_18B4A != 0 ||
+           player->csMode != 0 || play->sceneLoadFlag == 0x14 || play->unk_18B4A != 0 ||
            (player->stateFlags1 & PLAYER_STATE1_1) || (player->stateFlags3 & PLAYER_STATE3_80) ||
-           globalCtx->actorCtx.unk268 != 0;
+           play->actorCtx.unk268 != 0;
 }
 
-s32 Player_InCsMode(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 Player_InCsMode(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    return Player_InBlockingCsMode(globalCtx, player) || player->unk_AA5 == 5;
+    return Player_InBlockingCsMode(play, player) || player->unk_AA5 == 5;
 }
 
 s32 func_80123420(Player* player) {
@@ -425,8 +425,8 @@ s32 func_80123434(Player* player) {
 }
 
 // Unused
-s32 func_80123448(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80123448(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
            (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
@@ -438,8 +438,8 @@ s32 Player_IsGoronOrDeku(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
 }
 
-s32 func_801234D4(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_801234D4(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_8) || player->actor.speedXZ != 0.0f ||
            ((player->transformation != PLAYER_FORM_ZORA) && (player->stateFlags1 & PLAYER_STATE1_8000000)) ||
@@ -447,8 +447,8 @@ s32 func_801234D4(GlobalContext* globalCtx) {
             (!(player->actor.bgCheckFlags & 1) || (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
-s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80123590(PlayState* play, Actor* actor) {
+    Player* player = GET_PLAYER(play);
 
     if ((player->stateFlags1 & PLAYER_STATE1_800) && (player->heldActor == actor)) {
         player->interactRangeActor = NULL;
@@ -461,8 +461,8 @@ s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
     return false;
 }
 
-s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
+    Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_1000) {
         player->unk_B08[0] = arg1;
@@ -479,29 +479,29 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
     return false;
 }
 
-s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
+s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
 
     if (arg2 == 0) {
-        s32 item = Inventory_GetBtnBItem(globalCtx);
+        s32 item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x18)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoActionLabelIndex == 0x18)) {
             return ITEM_F0;
         }
 
         if ((player->currentMask == PLAYER_MASK_BREMEN) &&
-            (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
+            (play->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
             return ITEM_F1;
         }
 
         if ((player->currentMask == PLAYER_MASK_KAMARO) &&
-            (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
+            (play->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
             return ITEM_F2;
         }
 
@@ -653,7 +653,7 @@ void func_80123C58(Player* player) {
     player->unk_AA5 = 0;
 }
 
-void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
+void Player_SetEquipmentData(PlayState* play, Player* player) {
     if (player->csMode != 0x86) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
@@ -661,15 +661,15 @@ void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
         Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
-        func_80123140(globalCtx, player);
+        func_80123140(play, player);
         if (player->unk_B62 != 0) {
             player->unk_B62 = 1;
         }
     }
 }
 
-void func_80123D50(GlobalContext* globalCtx, Player* player, s32 itemId, s32 actionParam) {
-    func_80114FD0(globalCtx, itemId, player->heldItemButton);
+void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam) {
+    func_80114FD0(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
         player->heldItemId = itemId;
@@ -701,31 +701,31 @@ void func_80123DC0(Player* player) {
     func_80123DA4(player);
 }
 
-void func_80123E90(GlobalContext* globalCtx, Actor* actor) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80123E90(PlayState* play, Actor* actor) {
+    Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
     player->unk_730 = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
-    func_800DFD78(Play_GetCamera(globalCtx, CAM_ID_MAIN), 8, actor);
-    Camera_ChangeMode(Play_GetCamera(globalCtx, CAM_ID_MAIN), 9);
+    func_800DFD78(Play_GetCamera(play, CAM_ID_MAIN), 8, actor);
+    Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), 9);
 }
 
-s32 func_80123F14(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80123F14(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return player->stateFlags1 & PLAYER_STATE1_800000;
 }
 
-s32 func_80123F2C(GlobalContext* globalCtx, s32 ammo) {
-    globalCtx->unk_1887C = ammo + 1;
+s32 func_80123F2C(PlayState* play, s32 ammo) {
+    play->unk_1887C = ammo + 1;
 
     return 1;
 }
 
-s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRange, f32 yRange) {
-    Player* this = GET_PLAYER(globalCtx);
+s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
+    Player* this = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
 
@@ -741,27 +741,27 @@ u8 Player_GetStrength(void) {
     return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
 }
 
-u8 Player_GetMask(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+u8 Player_GetMask(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return player->currentMask;
 }
 
 // Unused
-void Player_RemoveMask(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void Player_RemoveMask(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-s32 Player_HasMirrorShieldEquipped(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 Player_HasMirrorShieldEquipped(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_HasMirrorShieldSetToDraw(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 Player_HasMirrorShieldSetToDraw(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == 8) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
@@ -859,12 +859,12 @@ s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
 }
 
-s32 func_801242DC(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_801242DC(PlayState* play) {
+    Player* player = GET_PLAYER(play);
     TextTriggerEntry* triggerEntry;
     s32 index;
 
-    if (globalCtx->roomCtx.currRoom.unk2 == 3) { // Room is hot
+    if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
         index = 0;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
         index = 3;
@@ -881,9 +881,9 @@ s32 func_801242DC(GlobalContext* globalCtx) {
 
     // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
     triggerEntry = &sEnvironmentTextTriggers[index];
-    if (!Player_InCsMode(globalCtx)) {
+    if (!Player_InCsMode(play)) {
         if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (index == 0)) {
-            Message_StartTextbox(globalCtx, triggerEntry->textId, NULL);
+            Message_StartTextbox(play, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
@@ -991,18 +991,18 @@ void func_80125318(Vec3f* arg0, Vec3s* arg1) {
 }
 
 void func_80125340(void) {
-    Matrix_StatePush();
+    Matrix_Push();
     D_801C0958 = true;
 }
 
 void func_8012536C(void) {
     if (D_801C0958) {
-        Matrix_StatePop();
+        Matrix_Pop();
         D_801C0958 = false;
     }
 }
 
-void Player_DrawZoraShield(GlobalContext* globalCtx, Player* player) {
+void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
     Gfx* dl;
@@ -1011,9 +1011,9 @@ void Player_DrawZoraShield(GlobalContext* globalCtx, Player* player) {
 
     scale = player->unk_B62 * (10.0f / 51.0f);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
+    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
     // clang-format off
@@ -1030,17 +1030,17 @@ void Player_DrawZoraShield(GlobalContext* globalCtx, Player* player) {
 
     dl = POLY_XLU_DISP;
 
-    gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&dl[1], object_link_zora_DL_011760);
 
     POLY_XLU_DISP = &dl[2];
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
-s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125CE0.s")
@@ -1050,10 +1050,10 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801262C8.s")
 
 // unused
-s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_801263FC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Player* player = (Player*)thisx;
 
-    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, thisx)) {
+    if (!func_80125580(play, limbIndex, dList, pos, rot, thisx)) {
         *dList = NULL;
     }
 
@@ -1071,7 +1071,7 @@ u8 D_801C096C[PLAYER_SHIELD_MAX] = {
 };
 #endif
 
-void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
+void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f sp4C;
         Vec3f sp40;
@@ -1079,19 +1079,19 @@ void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* colli
         Vec3f sp28;
 
         player->shieldQuad.base.colType = D_801C096C[player->currentShield];
-        Matrix_MultiplyVector3fByState(&arg3[0], &sp28);
-        Matrix_MultiplyVector3fByState(&arg3[1], &sp34);
-        Matrix_MultiplyVector3fByState(&arg3[2], &sp40);
-        Matrix_MultiplyVector3fByState(&arg3[3], &sp4C);
+        Matrix_MultVec3f(&arg3[0], &sp28);
+        Matrix_MultVec3f(&arg3[1], &sp34);
+        Matrix_MultVec3f(&arg3[2], &sp40);
+        Matrix_MultVec3f(&arg3[3], &sp4C);
         Collider_SetQuadVertices(collider, &sp28, &sp34, &sp40, &sp4C);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &collider->base);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &collider->base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &collider->base);
     }
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
-void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
+void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
     f32 sp34;
 
     if (player->stateFlags3 & PLAYER_STATE3_4000000) {
@@ -1100,23 +1100,23 @@ void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* ref
         sp34 = 14.0f;
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gSegments[6] = PHYSICAL_TO_VIRTUAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
 
-    Matrix_InsertTranslation((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34,
+    Matrix_Translate((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34,
                              (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
-    Matrix_InsertRotation(0, (globalCtx->gameplayFrames * 1000), 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(0, (play->gameplayFrames * 1000), 0, MTXMODE_APPLY);
     Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-    GetItem_Draw(globalCtx, drawIdPlusOne - 1);
+    GetItem_Draw(play, drawIdPlusOne - 1);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
+void Player_DrawGetItem(PlayState* play, Player* player) {
     if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0)) {
         Vec3f refPos;
         s32 drawIdPlusOne;
@@ -1142,7 +1142,7 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
         }
 
         drawIdPlusOne = ABS_ALT(player->unk_B2A);
-        Player_DrawGetItemImpl(globalCtx, player, &refPos, drawIdPlusOne);
+        Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
 
@@ -1155,13 +1155,13 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
 
 // Player_SetMaskSegment?
-s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 currentMask) {
+s32 func_80127438(PlayState* play, Player* player, s32 currentMask) {
     if ((player->maskObjectLoadState == 0) && (currentMask == (u8)player->maskId)) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x0A, player->maskObjectSegment);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
 
         return true;
     }
@@ -1169,21 +1169,21 @@ s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 currentMask) {
     return false;
 }
 
-void func_80127488(GlobalContext* globalCtx, Player* player, u8 alpha) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void func_80127488(PlayState* play, Player* player, u8 alpha) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, alpha);
     gSPDisplayList(POLY_XLU_DISP++, gLinkGoronGoronPunchEffectDL);
 
-    func_80122BA4(globalCtx, &player->unk_3D0, 3, alpha);
+    func_80122BA4(play, &player->unk_3D0, 3, alpha);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_8012754C(GlobalContext* globalCtx, Player* player) {
+void func_8012754C(PlayState* play, Player* player) {
     gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
-    AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
+    AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")

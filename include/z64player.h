@@ -231,7 +231,7 @@ typedef struct {
 } WeaponInfo; // size = 0x1C
 
 
-typedef void (*PlayerFuncD58)(struct GlobalContext*, struct Player*);
+typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
 
 typedef struct {
     /* 0x00 */ u8 unk_00;

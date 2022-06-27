@@ -303,7 +303,7 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     s32 ret;
     u32 eq;
     Vec3f originVec;
-    GlobalContext* globalCtx = camera->globalCtx;
+    PlayState* play = camera->play;
 
     originVec.x = 0.0f;
     originVec.y = 0.0f;
@@ -326,7 +326,7 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     for (idx = 0; idx < ARRAY_COUNT(sQuakeRequest); idx++) {
         req = &sQuakeRequest[idx];
         if (req->callbackIdx != 0) {
-            if (globalCtx->cameraPtrs[req->camId] == NULL) {
+            if (play->cameraPtrs[req->camId] == NULL) {
                 Quake_Remove(req);
             } else {
                 eq = (camera->camId != req->camera->camId);
@@ -382,9 +382,9 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     return ret;
 }
 
-void Distortion_Init(GlobalContext* globalCtx) {
-    sDistortionContext.globalCtx = globalCtx;
-    View_ClearDistortion(&globalCtx->view);
+void Distortion_Init(PlayState* play) {
+    sDistortionContext.play = play;
+    View_ClearDistortion(&play->view);
     sDistortionContext.type = 0;
     sDistortionContext.countdown = 0;
     sDistortionContext.state = DISTORTION_INACTIVE;
@@ -419,9 +419,9 @@ void Distortion_ClearType(s32 type) {
  * Checks that the bg surface is an underwater conveyor type and if so, returns the conveyor speed
  */
 s32 Distortion_GetUnderwaterCurrentSpeed(Player* player) {
-    if (SurfaceType_GetConveyorType(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
+    if (SurfaceType_GetConveyorType(&sDistortionContext.play->colCtx, player->actor.floorPoly,
                                     player->actor.floorBgId) == CONVEYOR_WATER) {
-        return SurfaceType_GetConveyorSpeed(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
+        return SurfaceType_GetConveyorSpeed(&sDistortionContext.play->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
     return 0;
@@ -446,9 +446,9 @@ void Distortion_Update(void) {
     f32 zScale;
     f32 speed;
     Player* player;
-    GlobalContext* globalCtx = sDistortionContext.globalCtx;
+    PlayState* play = sDistortionContext.play;
     PosRot playerPosRot;
-    Camera* camera = GET_ACTIVE_CAM(globalCtx);
+    Camera* camera = GET_ACTIVE_CAM(play);
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
     if (sDistortionContext.type != 0) {
@@ -636,7 +636,7 @@ void Distortion_Update(void) {
             screenPlanePhase = 0x156;
 
             sDistortionContext.countdown = 2;
-            player = GET_PLAYER(globalCtx);
+            player = GET_PLAYER(play);
 
             if (player != NULL) {
                 Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
@@ -688,7 +688,7 @@ void Distortion_Update(void) {
             screenPlanePhase = 0x156;
 
             sDistortionContext.countdown = 2;
-            player = GET_PLAYER(globalCtx);
+            player = GET_PLAYER(play);
 
             depthPhaseStep = 359.2f;
             screenPlanePhaseStep = -18.5f;
@@ -759,20 +759,20 @@ void Distortion_Update(void) {
         depthPhase += DEGF_TO_BINANG(depthPhaseStep);
         screenPlanePhase += DEGF_TO_BINANG(screenPlanePhaseStep);
 
-        View_SetDistortionDirRot(&sDistortionContext.globalCtx->view,
+        View_SetDistortionDirRot(&sDistortionContext.play->view,
                                  Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
                                  Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
                                  Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
-        View_SetDistortionScale(&sDistortionContext.globalCtx->view,
+        View_SetDistortionScale(&sDistortionContext.play->view,
                                 (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(depthPhase) * (zScale * zScaleFactor)) + 1.0f);
-        View_SetDistortionSpeed(&sDistortionContext.globalCtx->view, speed * speedScaleFactor);
+        View_SetDistortionSpeed(&sDistortionContext.play->view, speed * speedScaleFactor);
 
         sDistortionContext.state = DISTORTION_ACTIVE;
 
     } else if (sDistortionContext.state != DISTORTION_INACTIVE) {
-        View_ClearDistortion(&globalCtx->view);
+        View_ClearDistortion(&play->view);
 
         sDistortionContext.state = DISTORTION_INACTIVE;
         sDistortionContext.countdown = 0;
