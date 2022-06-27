@@ -35,7 +35,7 @@ typedef enum {
 
 struct ObjEtcetera;
 
-typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, GlobalContext*);
+typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, PlayState*);
 
 typedef struct ObjEtcetera {
     /* 0x000 */ DynaPolyActor dyna;

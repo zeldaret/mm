@@ -9,8 +9,8 @@
         <DList Name="object_ikana_obj_DL_000378" Offset="0x378" />
         <Collision Name="object_ikana_obj_Colheader_000488" Offset="0x488" />
         <DList Name="object_ikana_obj_DL_0008C0" Offset="0x8C0" />
-        <DList Name="object_ikana_obj_DL_0008C8" Offset="0x8C8" />
-        <Collision Name="object_ikana_obj_Colheader_000C50" Offset="0xC50" />
+        <DList Name="gStoneTowerTemplePunchablePillarDL" Offset="0x8C8" />
+        <Collision Name="gStoneTowerTemplePunchablePillarCol" Offset="0xC50" />
         <DList Name="object_ikana_obj_DL_000CE0" Offset="0xCE0" />
         <DList Name="object_ikana_obj_DL_000CE8" Offset="0xCE8" />
         <Collision Name="object_ikana_obj_Colheader_000F28" Offset="0xF28" />
@@ -38,7 +38,7 @@
         <Texture Name="object_ikana_obj_TLUT_008590" OutName="tlut_008590" Format="rgba16" Width="4" Height="4" Offset="0x8590" />
         <Texture Name="object_ikana_obj_Tex_0085B0" OutName="tex_0085B0" Format="rgba16" Width="16" Height="16" Offset="0x85B0" />
         <Texture Name="object_ikana_obj_Tex_0087B0" OutName="tex_0087B0" Format="ci4" Width="64" Height="64" Offset="0x87B0" />
-        <Texture Name="object_ikana_obj_Tex_008FB0" OutName="tex_008FB0" Format="rgba16" Width="32" Height="64" Offset="0x8FB0" />
+        <Texture Name="gStoneTowerTemplePunchablePillarTex" OutName="stone_tower_temple_punchable_pillar" Format="rgba16" Width="32" Height="64" Offset="0x8FB0" />
         <Texture Name="object_ikana_obj_Tex_009FB0" OutName="tex_009FB0" Format="rgba16" Width="16" Height="16" Offset="0x9FB0" />
         <Texture Name="object_ikana_obj_Tex_00A1B0" OutName="tex_00A1B0" Format="rgba16" Width="16" Height="16" Offset="0xA1B0" />
         <Texture Name="object_ikana_obj_Tex_00A3B0" OutName="tex_00A3B0" Format="rgba16" Width="32" Height="32" Offset="0xA3B0" />

@@ -6,7 +6,7 @@
 
 struct EnGuardNuts;
 
-typedef void (*EnGuardNutsActionFunc)(struct EnGuardNuts*, GlobalContext*);
+typedef void (*EnGuardNutsActionFunc)(struct EnGuardNuts*, PlayState*);
 
 typedef struct EnGuardNuts {
     /* 0x000 */ Actor actor;

@@ -5,8 +5,8 @@
 
 struct EnBigokuta;
 
-typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, GlobalContext*);
-typedef void (*EnBigokutaUnkFunc)(GlobalContext*, struct EnBigokuta*);
+typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, PlayState*);
+typedef void (*EnBigokutaUnkFunc)(PlayState*, struct EnBigokuta*);
 
 typedef enum {
     /* 00 */ BIGOKUTA_LIMB_NONE,

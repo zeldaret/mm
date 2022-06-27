@@ -5,7 +5,7 @@
 
 struct EnViewer;
 
-typedef void (*EnViewerActionFunc)(struct EnViewer*, GlobalContext*);
+typedef void (*EnViewerActionFunc)(struct EnViewer*, PlayState*);
 
 typedef struct EnViewer {
     /* 0x0000 */ Actor actor;

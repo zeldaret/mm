@@ -10,21 +10,21 @@
 
 #define THIS ((EnAz*)thisx)
 
-void EnAz_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnAz_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnAz_Init(Actor* thisx, PlayState* play);
+void EnAz_Destroy(Actor* thisx, PlayState* play);
+void EnAz_Update(Actor* thisx, PlayState* play);
+void EnAz_Draw(Actor* thisx, PlayState* play);
 
-void func_80A95CEC(EnAz* this, GlobalContext* globalCtx);
-void func_80A95E88(EnAz* this, GlobalContext* globalCtx);
-void func_80A95FE8(EnAz* this, GlobalContext* globalCtx);
-void func_80A979F4(EnAz* this, GlobalContext* globalCtx);
-void func_80A97A40(EnAz* this, GlobalContext* globalCtx);
-void func_80A97AB4(EnAz* this, GlobalContext* globalCtx);
-void func_80A97C24(EnAz* this, GlobalContext* globalCtx);
-void func_80A97C4C(EnAz* this, GlobalContext* globalCtx);
-void func_80A97E48(EnAz* this, GlobalContext* globalCtx);
-void func_80A97F9C(EnAz* this, GlobalContext* globalCtx);
+void func_80A95CEC(EnAz* this, PlayState* play);
+void func_80A95E88(EnAz* this, PlayState* play);
+void func_80A95FE8(EnAz* this, PlayState* play);
+void func_80A979F4(EnAz* this, PlayState* play);
+void func_80A97A40(EnAz* this, PlayState* play);
+void func_80A97AB4(EnAz* this, PlayState* play);
+void func_80A97C24(EnAz* this, PlayState* play);
+void func_80A97C4C(EnAz* this, PlayState* play);
+void func_80A97E48(EnAz* this, PlayState* play);
+void func_80A97F9C(EnAz* this, PlayState* play);
 
 #if 0
 const ActorInit En_Az_InitVars = {

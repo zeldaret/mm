@@ -5,7 +5,7 @@
 
 struct ObjTokeiTobira;
 
-typedef void (*ObjTokeiTobiraActionFunc)(struct ObjTokeiTobira*, GlobalContext*);
+typedef void (*ObjTokeiTobiraActionFunc)(struct ObjTokeiTobira*, PlayState*);
 
 typedef struct ObjTokeiTobira {
     /* 0x0000 */ Actor actor;
