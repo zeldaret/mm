@@ -4,7 +4,6 @@
  * Description: Ikana Graveyard - Circle of Stalchildren
  */
 
-#include "overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.h"
 #include "z_en_rail_skb.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
