@@ -38,13 +38,13 @@ static AnimationInfo sAnimations[] = {
     { &object_stk2_Anim_00A104, 1.0f, 0.0f, -1.0f, 2, 0.0f },
 };
 
-void DmChar02_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 idx) {
+void DmChar02_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 index) {
     f32 frameCount;
 
-    animInfo += idx;
+    animInfo += index;
 
     if (animInfo->frameCount < 0.0f) {
-        frameCount = (f32)Animation_GetLastFrame(animInfo->animation);
+        frameCount = Animation_GetLastFrame(animInfo->animation);
     } else {
         frameCount = animInfo->frameCount;
     }
@@ -74,7 +74,6 @@ void func_80AAAF2C(DmChar02* this, PlayState* play) {
 void DmChar02_Init(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
-    // items[0] is the ocarina
     if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         this->animIndex = 0;
         this->actor.targetArrowOffset = 3000.0f;
