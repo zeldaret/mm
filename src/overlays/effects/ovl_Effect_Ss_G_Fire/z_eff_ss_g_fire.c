@@ -9,16 +9,16 @@
 
 #define PARAMS ((EffectSsGFireInitParams*)initParamsx)
 
-u32 EffectSsGFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsGFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsGFire_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsGFire_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_G_Fire_InitVars = {
     EFFECT_SS_G_FIRE,
     EffectSsGFire_Init,
 };
 
-u32 EffectSsGFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsGFire_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsGFireInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->velocity, &gZeroVec3f);
@@ -44,16 +44,16 @@ u32 EffectSsGFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 1;
 }
 
-void EffectSsGFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     TexturePtr fireFootprintTextures[] = {
         gEffFireFootprint1Tex, gEffFireFootprint2Tex, gEffFireFootprint3Tex, gEffFireFootprint4Tex,
         gEffFireFootprint5Tex, gEffFireFootprint6Tex, gEffFireFootprint7Tex, gEffFireFootprint8Tex,
     };
     s16 texIndex = (this->rgTexIndex / 100) % 7;
 
-    EffectSs_DrawGEffect(globalCtx, this, fireFootprintTextures[texIndex]);
+    EffectSs_DrawGEffect(play, this, fireFootprintTextures[texIndex]);
 }
 
-void EffectSsGFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGFire_Update(PlayState* play, u32 index, EffectSs* this) {
     this->rgTexIndex += this->rgTexIndexStep;
 }

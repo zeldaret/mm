@@ -159,8 +159,8 @@ std::string ZSkeleton::GetBodySourceCode() const
 		return StringHelper::Sprintf("\n\t%s, %s\n", limbArrayName.c_str(), countStr.c_str());
 
 	case ZSkeletonType::Flex:
-		return StringHelper::Sprintf("\n\t{ %s, %s }, %i\n", limbArrayName.c_str(), countStr.c_str(),
-		                             dListCount);
+		return StringHelper::Sprintf("\n\t{ %s, %s }, %i\n", limbArrayName.c_str(),
+		                             countStr.c_str(), dListCount);
 	}
 
 	// TODO: Throw exception?

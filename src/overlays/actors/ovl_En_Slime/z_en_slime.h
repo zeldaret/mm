@@ -5,7 +5,7 @@
 
 struct EnSlime;
 
-typedef void (*EnSlimeActionFunc)(struct EnSlime*, GlobalContext*);
+typedef void (*EnSlimeActionFunc)(struct EnSlime*, PlayState*);
 
 typedef struct EnSlime {
     /* 0x0000 */ Actor actor;

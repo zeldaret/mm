@@ -5,7 +5,7 @@
 
 struct EnHeishi;
 
-typedef void (*EnHeishiActionFunc)(struct EnHeishi*, GlobalContext*);
+typedef void (*EnHeishiActionFunc)(struct EnHeishi*, PlayState*);
 
 typedef enum {
     /*  0 */ HEISHI_LIMB_NONE,
