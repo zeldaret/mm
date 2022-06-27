@@ -5,7 +5,7 @@
 
 struct EnPr2;
 
-typedef void (*EnPr2ActionFunc)(struct EnPr2*, GlobalContext*);
+typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 
 #define ENPR2_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENPR2_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)

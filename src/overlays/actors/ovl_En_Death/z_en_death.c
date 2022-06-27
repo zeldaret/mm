@@ -10,31 +10,31 @@
 
 #define THIS ((EnDeath*)thisx)
 
-void EnDeath_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDeath_Init(Actor* thisx, PlayState* play);
+void EnDeath_Destroy(Actor* thisx, PlayState* play);
+void EnDeath_Update(Actor* thisx, PlayState* play);
+void EnDeath_Draw(Actor* thisx, PlayState* play);
 
-void func_808C589C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5AB8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5CB4(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5E90(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6070(EnDeath* this, GlobalContext* globalCtx);
-void func_808C64DC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C66A8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C682C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C692C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6AB0(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6CDC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6F6C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C72AC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C74F8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7888(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7AAC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7B88(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7C88(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7D34(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7DCC(EnDeath* this, GlobalContext* globalCtx);
+void func_808C589C(EnDeath* this, PlayState* play);
+void func_808C5AB8(EnDeath* this, PlayState* play);
+void func_808C5CB4(EnDeath* this, PlayState* play);
+void func_808C5E90(EnDeath* this, PlayState* play);
+void func_808C6070(EnDeath* this, PlayState* play);
+void func_808C64DC(EnDeath* this, PlayState* play);
+void func_808C66A8(EnDeath* this, PlayState* play);
+void func_808C682C(EnDeath* this, PlayState* play);
+void func_808C692C(EnDeath* this, PlayState* play);
+void func_808C6AB0(EnDeath* this, PlayState* play);
+void func_808C6CDC(EnDeath* this, PlayState* play);
+void func_808C6F6C(EnDeath* this, PlayState* play);
+void func_808C72AC(EnDeath* this, PlayState* play);
+void func_808C74F8(EnDeath* this, PlayState* play);
+void func_808C7888(EnDeath* this, PlayState* play);
+void func_808C7AAC(EnDeath* this, PlayState* play);
+void func_808C7B88(EnDeath* this, PlayState* play);
+void func_808C7C88(EnDeath* this, PlayState* play);
+void func_808C7D34(EnDeath* this, PlayState* play);
+void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
 const ActorInit En_Death_InitVars = {

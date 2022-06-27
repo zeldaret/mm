@@ -5,7 +5,7 @@
 
 struct EnGb2;
 
-typedef void (*EnGb2ActionFunc)(struct EnGb2*, GlobalContext*);
+typedef void (*EnGb2ActionFunc)(struct EnGb2*, PlayState*);
 
 #define ENGB2_GET_7(thisx) ((thisx)->params & 7)
 #define ENGB2_GET_7F8(thisx) (((thisx)->params & 0x7F8) >> 3)

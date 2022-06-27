@@ -21,10 +21,10 @@
 
 #define PARAMS ((EffectSsGSpkInitParams*)initParamsx)
 
-u32 EffectSsGSpk_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsGSpk_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGSpk_UpdateNoAccel(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGSpk_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsGSpk_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsGSpk_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGSpk_UpdateNoAccel(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_G_Spk_InitVars = {
     EFFECT_SS_G_SPK,
@@ -38,13 +38,13 @@ static TexturePtr sSparkTextures[] = {
     gElectricSpark4Tex,
 };
 
-u32 EffectSsGSpk_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    EffectSsGSpkInitParams* initParams = (EffectSsGSpkInitParams*)initParamsx;
+u32 EffectSsGSpk_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
+    EffectSsGSpkInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->pos, &initParams->pos);
     Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
     Math_Vec3f_Copy(&this->accel, &initParams->accel);
-    this->gfx = gameplay_keep_DL_037850;
+    this->gfx = gEffSparkDL;
 
     if (initParams->updateMode == GSPK_UPDATEMODE_NORMAL) {
         this->life = 10;
@@ -74,12 +74,12 @@ u32 EffectSsGSpk_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void*
     return 1;
 }
 
-void EffectSsGSpk_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
-    MtxF mfTrans11DA0;
+    MtxF mfTransBillboard;
     Mtx* mtx;
     f32 scale;
     s32 pad;
@@ -89,8 +89,8 @@ void EffectSsGSpk_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     scale = this->rScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfScale, &mfResult);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
 
@@ -106,7 +106,7 @@ void EffectSsGSpk_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsGSpk_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGSpk_Update(PlayState* play, u32 index, EffectSs* this) {
 
     this->accel.x = (Rand_ZeroOne() - 0.5f) * 3.0f;
     this->accel.z = (Rand_ZeroOne() - 0.5f) * 3.0f;
@@ -132,7 +132,7 @@ void EffectSsGSpk_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 
 // this update mode is unused in the original game
 // with this update mode, the sparks dont move randomly in the xz plane, appearing to be on top of each other
-void EffectSsGSpk_UpdateNoAccel(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGSpk_UpdateNoAccel(PlayState* play, u32 index, EffectSs* this) {
     if (this->actor != NULL) {
         if ((this->actor->category == ACTORCAT_EXPLOSIVES) && (this->actor->update != NULL)) {
             this->pos.x += (Math_SinS(this->actor->world.rot.y) * this->actor->speedXZ);

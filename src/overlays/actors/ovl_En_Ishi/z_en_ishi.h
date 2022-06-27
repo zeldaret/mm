@@ -5,9 +5,9 @@
 
 struct EnIshi;
 
-typedef void (*EnIshiActionFunc)(struct EnIshi*, GlobalContext*);
-typedef void (*EnIshiUnkFunc)(struct EnIshi*, GlobalContext*);
-typedef void (*EnIshiUnkFunc2)(Actor*, GlobalContext*);
+typedef void (*EnIshiActionFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiUnkFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiUnkFunc2)(Actor*, PlayState*);
 
 #define ENISHI_GET_1(thisx) ((thisx)->params & 1)
 #define ENISHI_GET_2(thisx) (((thisx)->params >> 1) & 1)

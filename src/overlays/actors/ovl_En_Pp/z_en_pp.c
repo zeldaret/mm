@@ -10,10 +10,10 @@
 
 #define THIS ((EnPp*)thisx)
 
-void EnPp_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPp_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPp_Init(Actor* thisx, PlayState* play);
+void EnPp_Destroy(Actor* thisx, PlayState* play);
+void EnPp_Update(Actor* thisx, PlayState* play);
+void EnPp_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
