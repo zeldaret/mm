@@ -77,7 +77,7 @@ void EffFootmark_Update(PlayState* play) {
     for (footmark = play->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
             if ((footmark->flags & 1) == 1) {
-                if ((u32)footmark->age < UINT16_MAX) { // TODO replace with MAX_U16 or something
+                if ((u32)footmark->age < UINT16_MAX) {
                     footmark->age++;
                 }
 
