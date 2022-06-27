@@ -11,12 +11,12 @@
 
 #define THIS ((EnScRuppe*)thisx)
 
-void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnScRuppe_Init(Actor* thisx, PlayState* play);
+void EnScRuppe_Destroy(Actor* thisx, PlayState* play);
+void EnScRuppe_Update(Actor* thisx, PlayState* play);
+void EnScRuppe_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx);
+void func_80BD6B18(EnScRuppe* this, PlayState* play);
 
 typedef struct {
     /* 0x0 */ TexturePtr tex;
@@ -64,10 +64,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-void EnScRuppe_UpdateCollision(EnScRuppe* this, GlobalContext* globalCtx) {
+void EnScRuppe_UpdateCollision(EnScRuppe* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
 }
 
 s32 func_80BD697C(s16 ruppeIndex) {
@@ -112,7 +112,7 @@ s32 func_80BD697C(s16 ruppeIndex) {
     return false;
 }
 
-void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx) {
+void func_80BD6A8C(EnScRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
@@ -124,8 +124,8 @@ void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
 }
 
-void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80BD6B18(EnScRuppe* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->ruppeDisplayTime > 30) {
         if (func_80BD697C(this->ruppeIndex)) {
@@ -144,12 +144,12 @@ void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
 }
 
-void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnScRuppe_Init(Actor* thisx, PlayState* play) {
     EnScRuppe* this = THIS;
     ColliderCylinder* collider = &this->collider;
 
-    Collider_InitCylinder(globalCtx, collider);
-    Collider_InitAndSetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, collider);
+    Collider_InitAndSetCylinder(play, collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.03f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     this->ruppeIndex = SCRUPPE_GET_TYPE(thisx);
@@ -162,30 +162,30 @@ void EnScRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.yOffset = 700.0f;
 }
 
-void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnScRuppe_Destroy(Actor* thisx, PlayState* play) {
     EnScRuppe* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnScRuppe_Update(Actor* thisx, PlayState* play) {
     EnScRuppe* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    EnScRuppe_UpdateCollision(this, globalCtx);
+    this->actionFunc(this, play);
+    EnScRuppe_UpdateCollision(this, play);
 }
 
-void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnScRuppe_Draw(Actor* thisx, PlayState* play) {
     s32* pad;
     EnScRuppe* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_800B8050(&this->actor, globalCtx, 0);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    func_800B8050(&this->actor, play, 0);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->ruppeIndex].tex));
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

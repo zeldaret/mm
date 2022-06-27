@@ -226,7 +226,7 @@ void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
 /**
  * Used by Song of Time (when clicking "Yes") and (indirectly) by the "Dawn of the New Day" cutscene
  */
-void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
+void Sram_SaveEndOfCycle(PlayState* play) {
     s16 sceneNum;
     s32 j;
     s32 i;
@@ -243,14 +243,14 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         gSaveContext.save.playerData.deaths = 999;
     }
 
-    sceneNum = Play_GetOriginalSceneNumber(globalCtx->sceneNum);
-    Play_SaveCycleSceneFlags(&globalCtx->state);
+    sceneNum = Play_GetOriginalSceneNumber(play->sceneNum);
+    Play_SaveCycleSceneFlags(&play->state);
 
-    globalCtx->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
-    globalCtx->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
-    globalCtx->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
-    globalCtx->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
-    globalCtx->actorCtx.flags.clearedRoom = 0;
+    play->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
+    play->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];
+    play->actorCtx.flags.switches[1] &= D_801C5FC0[sceneNum][1];
+    play->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
+    play->actorCtx.flags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
@@ -346,7 +346,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
                 for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
-                        Interface_LoadItemIconImpl(globalCtx, j);
+                        Interface_LoadItemIconImpl(play, j);
                     }
                 }
                 gSaveContext.save.inventory.items[i] = ITEM_BOTTLE;
@@ -414,7 +414,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
         if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
-            Interface_LoadItemIconImpl(globalCtx, j);
+            Interface_LoadItemIconImpl(play, j);
         }
     }
 
@@ -445,7 +445,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     gSaveContext.jinxTimer = 0;
     gSaveContext.rupeeAccumulator = 0;
 
-    func_800F3B2C(globalCtx);
+    func_800F3B2C(play);
 }
 
 void Sram_IncrementDay(void) {
@@ -1518,9 +1518,9 @@ void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
 /**
  * Saves the game on the very first time Player enters South Clock Town from the Clock Tower
  */
-void Sram_SaveSpecialEnterClockTown(GlobalContext* globalCtx) {
+void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     s32 pad[2];
-    SramContext* sramCtx = &globalCtx->sramCtx;
+    SramContext* sramCtx = &play->sramCtx;
 
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
@@ -1531,7 +1531,7 @@ void Sram_SaveSpecialEnterClockTown(GlobalContext* globalCtx) {
 /**
  * Saves when beating the game, after showing the "Dawn of the New Day" message
  */
-void Sram_SaveSpecialNewDay(GlobalContext* globalCtx) {
+void Sram_SaveSpecialNewDay(PlayState* play) {
     s32 cutscene = gSaveContext.save.cutscene;
     s32 day;
     u16 time = gSaveContext.save.time;
@@ -1541,14 +1541,13 @@ void Sram_SaveSpecialNewDay(GlobalContext* globalCtx) {
     // Unconfirmed: "Obtained Fierce Deity Mask?"
     gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
 
-    Sram_SaveEndOfCycle(globalCtx);
-    func_8014546C(&globalCtx->sramCtx);
+    Sram_SaveEndOfCycle(play);
+    func_8014546C(&play->sramCtx);
 
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutscene = cutscene;
-    func_80185F64(globalCtx->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
-                  D_801C67F0[gSaveContext.fileNum * 2]);
+    func_80185F64(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
 }
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {

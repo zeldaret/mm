@@ -5,7 +5,7 @@
 
 struct EnFz;
 
-typedef void (*EnFzActionFunc)(struct EnFz*, GlobalContext*);
+typedef void (*EnFzActionFunc)(struct EnFz*, PlayState*);
 typedef void (*EnFzUnkFunc)(struct EnFz*);
 
 #define ENFZ_GET_F(thisx) ((thisx)->params & 0xF)

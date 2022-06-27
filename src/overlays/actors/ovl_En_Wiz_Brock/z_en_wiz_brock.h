@@ -5,7 +5,7 @@
 
 struct EnWizBrock;
 
-typedef void (*EnWizBrockActionFunc)(struct EnWizBrock*, GlobalContext*);
+typedef void (*EnWizBrockActionFunc)(struct EnWizBrock*, PlayState*);
 
 typedef struct EnWizBrock {
     /* 0x000 */ DynaPolyActor dyna;

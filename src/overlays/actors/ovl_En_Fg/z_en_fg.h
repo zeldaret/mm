@@ -5,7 +5,7 @@
 
 struct EnFg;
 
-typedef void (*EnFgActionFunc)(struct EnFg*, GlobalContext*);
+typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {

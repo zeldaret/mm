@@ -42,8 +42,8 @@ extern u8 D_801D0710[4];
 extern u8 D_801D0714[11][16];
 extern s16 D_801D07C4[11];
 
-void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_FindMessageNES(PlayState* play, u16 textId) {
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageEntryTableNes;
     const char* segment = msgEntry->segment;
@@ -70,12 +70,12 @@ void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
     font->messageEnd = nextSegment - foundSegment;
 }
 
-void Message_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadCharNES(PlayState* play, u8 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
 
-    Font_LoadCharNES(globalCtx, codePointIndex, temp1);
+    Font_LoadCharNES(play, codePointIndex, temp1);
     msgCtx->decodedBuffer.schar[decodedBufPos] = codePointIndex;
     temp1 += FONT_CHAR_TEX_SIZE;
     temp2 += (16.0f * msgCtx->unk12098);
@@ -83,35 +83,35 @@ void Message_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32* offse
     *arg3 = temp2;
 }
 
-void Message_LoadPluralRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
 
     msgCtx->decodedBuffer.schar[p] = 0x20;
     p++;
-    Font_LoadCharNES(globalCtx, 'R', o);
+    Font_LoadCharNES(play, 'R', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'R';
     p++;
-    Font_LoadCharNES(globalCtx, 'u', o);
+    Font_LoadCharNES(play, 'u', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'u';
     p++;
-    Font_LoadCharNES(globalCtx, 'p', o);
+    Font_LoadCharNES(play, 'p', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'p';
     p++;
-    Font_LoadCharNES(globalCtx, 'e', o);
+    Font_LoadCharNES(play, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 'e', o);
+    Font_LoadCharNES(play, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 's', o);
+    Font_LoadCharNES(play, 's', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 's';
 
@@ -121,8 +121,8 @@ void Message_LoadPluralRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s
     *arg3 = f;
 }
 
-void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
@@ -132,7 +132,7 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     p++;
 
     for (j = 0; j < D_801D0710[gSaveContext.options.language - 1]; j++) {
-        Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.options.language - 1][j], o);
+        Font_LoadCharNES(play, D_801D06F0[gSaveContext.options.language - 1][j], o);
         msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.options.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
@@ -145,37 +145,37 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     *arg3 = f;
 }
 
-void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3, s16 singular) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3, s16 singular) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
 
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
-    Font_LoadCharNES(globalCtx, 'R', o);
+    Font_LoadCharNES(play, 'R', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'R';
     p++;
-    Font_LoadCharNES(globalCtx, 'u', o);
+    Font_LoadCharNES(play, 'u', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'u';
     p++;
-    Font_LoadCharNES(globalCtx, 'p', o);
+    Font_LoadCharNES(play, 'p', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'p';
     p++;
-    Font_LoadCharNES(globalCtx, 'e', o);
+    Font_LoadCharNES(play, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 'e', o);
+    Font_LoadCharNES(play, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'e';
 
     if (singular != 1) {
         p++;
-        Font_LoadCharNES(globalCtx, 's', o);
+        Font_LoadCharNES(play, 's', o);
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.schar[p] = 's';
         f += 16.0f * msgCtx->unk12098 * 6.0f;
@@ -188,8 +188,8 @@ void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* of
     *arg3 = f;
 }
 
-void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
@@ -225,12 +225,12 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     }
 
     for (i = 0; i < 4; i++) {
-        Font_LoadCharNES(globalCtx, digits[i] + '0', o);
+        Font_LoadCharNES(play, digits[i] + '0', o);
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.schar[p] = digits[i] + '0';
         p++;
         if (i == 1) {
-            Font_LoadCharNES(globalCtx, ':', o);
+            Font_LoadCharNES(play, ':', o);
             o += FONT_CHAR_TEX_SIZE;
             msgCtx->decodedBuffer.schar[p] = ':';
             p++;
@@ -243,8 +243,8 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     *arg3 = f;
 }
 
-void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decodedBufPos) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadAreaTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg2;
@@ -253,10 +253,10 @@ void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s
     s16 currentArea;
     s16 stringLimit;
 
-    if ((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)) {
+    if ((func_8010A0A4(play) != 0) || (play->sceneNum == SCENE_SECOM)) {
         currentArea = 10;
     } else {
-        currentArea = globalCtx->pauseCtx.unk_238[4];
+        currentArea = play->pauseCtx.unk_238[4];
     }
     stringLimit = D_801D07C4[currentArea];
 
@@ -264,7 +264,7 @@ void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s
         msgCtx->decodedBuffer.schar[p] = D_801D0714[currentArea][i];
         currentChar = msgCtx->decodedBuffer.schar[p];
         if (currentChar != ' ') {
-            Font_LoadCharNES(globalCtx, D_801D0714[currentArea][i], o);
+            Font_LoadCharNES(play, D_801D0714[currentArea][i], o);
             o += FONT_CHAR_TEX_SIZE;
         }
         currentChar = msgCtx->decodedBuffer.schar[p];

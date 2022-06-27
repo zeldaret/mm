@@ -982,17 +982,17 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
 
-typedef struct GlobalContext GlobalContext;
+typedef struct PlayState PlayState;
 
-typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
-typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+typedef s32 (*ColChkResetFunc)(PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
+typedef void(*draw_func)(PlayState* play, s16 index);
 
-typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
+typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1013,7 +1013,7 @@ typedef struct Camera {
     /* 0x068 */ Vec3f up;
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
-    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x08C */ struct PlayState* play;
     /* 0x090 */ struct Player* player;
     /* 0x094 */ PosRot playerPosRot;
     /* 0x0A8 */ struct Actor* target;
@@ -1118,7 +1118,7 @@ typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
 #define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
 
 typedef struct {
-    /* 0x0 */ GlobalContext* globalCtx;
+    /* 0x0 */ PlayState* play;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state;
@@ -1259,7 +1259,7 @@ typedef struct {
     /* 0x00 */ u16 state;
 } GameOverContext; // size = 0x02
 
-struct GlobalContext {
+struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
     /* 0x000A6 */ u8 sceneConfig;
@@ -1291,19 +1291,19 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ DoorContext doorCtx;
-    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
-    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void (*unk_18770)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
-    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
-    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
-    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
-    /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
-    /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
+    /* 0x18768 */ void (*playerInit)(Player* player, struct PlayState* play, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct PlayState* play, Input* input);
+    /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
+    /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
+    /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, s32 mode);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
+    /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
+    /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
+    /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
+    /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;

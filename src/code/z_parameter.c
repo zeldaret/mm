@@ -303,8 +303,8 @@ s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 }; // Sticks, nuts, bombs
 s16 sArrowRefillCounts[] = { 10, 30, 40, 50 };
 s16 sBombchuRefillCounts[] = { 20, 10, 1, 5 };
 s16 sRupeeRefillCounts[] = { 1, 5, 10, 20, 50, 100, 200 };
-u8 Item_Give(GlobalContext* globalCtx, u8 item) {
-    Player* player = GET_PLAYER(globalCtx);
+u8 Item_Give(PlayState* play, u8 item) {
+    Player* player = GET_PLAYER(play);
     u8 i;
     u8 temp;
     u8 slot;
@@ -316,7 +316,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
 
     if (item == ITEM_SKULL_TOKEN) {
         SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_SKULL_TOKEN);
-        Inventory_IncrementSkullTokenCount(globalCtx->sceneNum);
+        Inventory_IncrementSkullTokenCount(play->sceneNum);
         return ITEM_NONE;
 
     } else if (item == ITEM_TINGLE_MAP) {
@@ -347,7 +347,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if ((item >= ITEM_SWORD_KOKIRI) && (item <= ITEM_SWORD_GILDED)) {
         SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, item - ITEM_SWORD_KOKIRI + EQUIP_VALUE_SWORD_KOKIRI);
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = item;
-        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_B);
+        Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
         if (item == ITEM_SWORD_RAZOR) {
             gSaveContext.save.playerData.swordHealth = 100;
         }
@@ -356,7 +356,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if ((item >= ITEM_SHIELD_HERO) && (item <= ITEM_SHIELD_MIRROR)) {
         if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != (u16)(item - ITEM_SHIELD_HERO + EQUIP_VALUE_SHIELD_HERO)) {
             SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, item - ITEM_SHIELD_HERO + EQUIP_VALUE_SHIELD_HERO);
-            Player_SetEquipmentData(globalCtx, player);
+            Player_SetEquipmentData(play, player);
             return ITEM_NONE;
         }
         return item;
@@ -593,11 +593,11 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return ITEM_NONE;
 
     } else if (item == ITEM_HEART) {
-        Health_ChangeBy(globalCtx, 0x10);
+        Health_ChangeBy(play, 0x10);
         return item;
 
     } else if (item == ITEM_MAGIC_SMALL) {
-        Parameter_AddMagic(globalCtx, 0x18);
+        Parameter_AddMagic(play, 0x18);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -605,7 +605,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return item;
 
     } else if (item == ITEM_MAGIC_LARGE) {
-        Parameter_AddMagic(globalCtx, 0x30);
+        Parameter_AddMagic(play, 0x30);
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
             gSaveContext.save.weekEventReg[12] |= 0x80;
             return ITEM_NONE;
@@ -681,15 +681,15 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
 
                     if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = item;
-                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_LEFT);
+                        Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
                         gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
                     } else if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = item;
-                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_DOWN);
+                        Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
                         gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
                     } else if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = item;
-                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_RIGHT);
+                        Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_RIGHT);
                         gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
                     }
 
@@ -713,7 +713,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
-                    Interface_LoadItemIconImpl(globalCtx, i);
+                    Interface_LoadItemIconImpl(play, i);
                     return ITEM_NONE;
                 }
             }
@@ -908,7 +908,7 @@ void Inventory_UnequipItem(s16 item) {
     }
 }
 
-s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem) {
+s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
     for (i = 0; i < 24; i++) {
@@ -918,7 +918,7 @@ s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (GET_CUR_FORM_BTN_ITEM(i) == oldItem) {
                     SET_CUR_FORM_BTN_ITEM(i, newItem);
-                    Interface_LoadItemIconImpl(globalCtx, i);
+                    Interface_LoadItemIconImpl(play, i);
                     break;
                 }
             }
@@ -928,8 +928,8 @@ s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem) {
     return false;
 }
 
-void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) {
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void Inventory_UpdateDeitySwordEquip(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
     u8 btn;
 
     if (CUR_FORM == PLAYER_FORM_FIERCE_DEITY) {
@@ -953,7 +953,7 @@ void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) {
 
     for (btn = EQUIP_SLOT_B; btn <= EQUIP_SLOT_B; btn++) {
         if ((GET_CUR_FORM_BTN_ITEM(btn) != ITEM_NONE) && (GET_CUR_FORM_BTN_ITEM(btn) != ITEM_UNK_FD)) {
-            Interface_LoadItemIconImpl(globalCtx, btn);
+            Interface_LoadItemIconImpl(play, btn);
         }
     }
 }
@@ -980,13 +980,13 @@ s32 Inventory_HasItemInBottle(u8 item) {
     return false;
 }
 
-void Inventory_UpdateBottleItem(GlobalContext* globalCtx, u8 item, u8 btn) {
+void Inventory_UpdateBottleItem(PlayState* play, u8 item, u8 btn) {
     gSaveContext.save.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
     SET_CUR_FORM_BTN_ITEM(btn, item);
 
-    Interface_LoadItemIconImpl(globalCtx, btn);
+    Interface_LoadItemIconImpl(play, btn);
 
-    globalCtx->pauseCtx.cursorItem[PAUSE_0] = item;
+    play->pauseCtx.cursorItem[PAUSE_0] = item;
     gSaveContext.buttonStatus[btn] = BTN_ENABLED;
 
     if (item == ITEM_HOT_SPRING_WATER) {
@@ -994,7 +994,7 @@ void Inventory_UpdateBottleItem(GlobalContext* globalCtx, u8 item, u8 btn) {
     }
 }
 
-s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
+s32 Inventory_ConsumeFairy(PlayState* play) {
     u8 bottleSlot = SLOT(ITEM_FAIRY);
     u8 btn;
     u8 i;
@@ -1004,7 +1004,7 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
             for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
                 if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
                     SET_CUR_FORM_BTN_ITEM(btn, ITEM_BOTTLE);
-                    Interface_LoadItemIconImpl(globalCtx, btn);
+                    Interface_LoadItemIconImpl(play, btn);
                     bottleSlot = GET_CUR_FORM_BTN_SLOT(btn);
                     i = 0;
                     break;
@@ -1021,7 +1021,7 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
 /**
  * Only used to equip Spring Water when Hot Spring Water timer runs out.
  */
-void Inventory_UpdateItem(GlobalContext* globalCtx, s16 slot, s16 item) {
+void Inventory_UpdateItem(PlayState* play, s16 slot, s16 item) {
     s16 btn;
 
     gSaveContext.save.inventory.items[slot] = item;
@@ -1029,7 +1029,7 @@ void Inventory_UpdateItem(GlobalContext* globalCtx, s16 slot, s16 item) {
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_SLOT(btn) == slot) {
             SET_CUR_FORM_BTN_ITEM(btn, item);
-            Interface_LoadItemIconImpl(globalCtx, btn);
+            Interface_LoadItemIconImpl(play, btn);
         }
     }
 }
@@ -1053,7 +1053,7 @@ TexturePtr sDoActionTextures[] = {
 /**
  * Returns true if player still has health left. Otherwise, return false.
  */
-s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
+s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
     if (healthChange > 0) {
         play_sound(NA_SE_SY_HP_RECOVER);
     } else if (gSaveContext.save.playerData.doubleDefense && (healthChange < 0)) {

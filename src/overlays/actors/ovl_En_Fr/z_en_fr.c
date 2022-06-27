@@ -10,9 +10,9 @@
 
 #define THIS ((EnFr*)thisx)
 
-void EnFr_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFr_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnFr_Init(Actor* thisx, PlayState* play);
+void EnFr_Destroy(Actor* thisx, PlayState* play);
+void EnFr_Update(Actor* thisx, PlayState* play);
 
 const ActorInit En_Fr_InitVars = {
     ACTOR_EN_FR,
@@ -26,23 +26,23 @@ const ActorInit En_Fr_InitVars = {
     (ActorFunc)NULL,
 };
 
-void EnFr_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnFr_Init(Actor* thisx, PlayState* play) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
     }
 }
 
-void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnFr_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnFr_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnFr_Update(Actor* thisx, PlayState* play) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
         this->actor.flags &= ~ACTOR_FLAG_40000000;

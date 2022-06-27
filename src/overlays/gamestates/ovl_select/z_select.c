@@ -59,7 +59,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
         GameState* gameState = &this->state;
         gameState->running = false;
     } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
 }
 
 // "Translation" ("Actual name")

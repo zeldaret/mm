@@ -5,7 +5,7 @@
 
 struct EnGo;
 
-typedef void (*EnGoActionFunc)(struct EnGo*, GlobalContext*);
+typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 
 #define ENGO_GET_F(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_70(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)

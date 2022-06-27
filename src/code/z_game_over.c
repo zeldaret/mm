@@ -1,27 +1,27 @@
 #include "global.h"
 
-void GameOver_Init(GlobalContext* globalCtx) {
-    globalCtx->gameOverCtx.state = GAMEOVER_INACTIVE;
+void GameOver_Init(PlayState* play) {
+    play->gameOverCtx.state = GAMEOVER_INACTIVE;
 }
 
-void GameOver_FadeLights(GlobalContext* globalCtx) {
-    GameOverContext* gameOverCtx = &globalCtx->gameOverCtx;
+void GameOver_FadeLights(PlayState* play) {
+    GameOverContext* gameOverCtx = &play->gameOverCtx;
 
     if ((gameOverCtx->state >= GAMEOVER_DEATH_WAIT_GROUND && gameOverCtx->state < GAMEOVER_REVIVE_START) ||
         (gameOverCtx->state >= GAMEOVER_REVIVE_RUMBLE && gameOverCtx->state < GAMEOVER_REVIVE_FADE_OUT)) {
-        Kankyo_FadeInGameOverLights(globalCtx);
+        Kankyo_FadeInGameOverLights(play);
     }
 }
 
 static s16 sGameOverTimer = 0;
 
-void GameOver_Update(GlobalContext* globalCtx) {
-    GameOverContext* gameOverCtx = &globalCtx->gameOverCtx;
+void GameOver_Update(PlayState* play) {
+    GameOverContext* gameOverCtx = &play->gameOverCtx;
     s16 i;
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
-            func_801477B4(globalCtx);
+            func_801477B4(play);
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
                 gSaveContext.unk_3DD0[i] = 0;
@@ -60,14 +60,14 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gSaveContext.unk_3F20 = 0;
             gSaveContext.unk_3F22 = 0;
             gSaveContext.unk_3F24 = 0;
-            Kankyo_InitGameOverLights(globalCtx);
+            Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
             func_8013ECE0(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
             if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
-                func_80169F78(&globalCtx->state);
+                func_80169F78(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
@@ -84,7 +84,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
         case GAMEOVER_REVIVE_START:
             gameOverCtx->state++;
             sGameOverTimer = 0;
-            Kankyo_InitGameOverLights(globalCtx);
+            Kankyo_InitGameOverLights(play);
             ShrinkWindow_SetLetterboxTarget(32);
             break;
         case GAMEOVER_REVIVE_RUMBLE:
@@ -107,7 +107,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             }
             break;
         case GAMEOVER_REVIVE_FADE_OUT:
-            Kankyo_FadeOutGameOverLights(globalCtx);
+            Kankyo_FadeOutGameOverLights(play);
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 gameOverCtx->state = GAMEOVER_INACTIVE;

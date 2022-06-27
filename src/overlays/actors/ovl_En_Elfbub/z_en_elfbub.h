@@ -7,7 +7,7 @@
 
 struct EnElfbub;
 
-typedef void (*EnElfbubActionFunc)(struct EnElfbub*, GlobalContext*);
+typedef void (*EnElfbubActionFunc)(struct EnElfbub*, PlayState*);
 
 typedef struct EnElfbub {
     /* 0x0000 */ Actor actor;

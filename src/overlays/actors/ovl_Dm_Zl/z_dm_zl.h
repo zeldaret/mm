@@ -6,7 +6,7 @@
 
 struct DmZl;
 
-typedef void (*DmZlActionFunc)(struct DmZl*, GlobalContext*);
+typedef void (*DmZlActionFunc)(struct DmZl*, PlayState*);
 
 typedef struct DmZl {
     /* 0x000 */ Actor actor;

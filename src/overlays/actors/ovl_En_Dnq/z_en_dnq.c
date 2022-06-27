@@ -11,12 +11,12 @@
 
 #define THIS ((EnDnq*)thisx)
 
-void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDnq_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDnq_Init(Actor* thisx, PlayState* play);
+void EnDnq_Destroy(Actor* thisx, PlayState* play);
+void EnDnq_Update(Actor* thisx, PlayState* play);
+void EnDnq_Draw(Actor* thisx, PlayState* play);
 
-void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx);
+void func_80A52FB8(EnDnq* this, PlayState* play);
 
 static s32 D_80A53400[] = {
     0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08, 0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200,
@@ -80,8 +80,8 @@ static AnimationInfoS D_80A5349C[] = {
     { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-void func_80A52530(GlobalContext* globalCtx, EnDnq* this) {
-    func_8013A530(globalCtx, &this->actor, 10, &this->actor.focus.pos, &this->actor.world.rot, 120.0f, 480.0f, 0x38E3);
+void func_80A52530(PlayState* play, EnDnq* this) {
+    func_8013A530(play, &this->actor, 10, &this->actor.focus.pos, &this->actor.world.rot, 120.0f, 480.0f, 0x38E3);
 }
 
 s32 func_80A5257C(EnDnq* this, s32 arg1) {
@@ -110,15 +110,15 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
     return ret;
 }
 
-void func_80A52604(EnDnq* this, GlobalContext* globalCtx) {
+void func_80A52604(EnDnq* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 func_80A52648(EnDnq* this, GlobalContext* globalCtx) {
+s32 func_80A52648(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if (globalCtx->csCtx.state != 0) {
+    if (play->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
@@ -222,7 +222,7 @@ s32 func_80A52944(EnDnq* this) {
     return 0;
 }
 
-s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
+s32 func_80A52A78(EnDnq* this, PlayState* play) {
     static s32 D_80A535DC[] = {
         17, 12, 14, 13, 16,
     };
@@ -230,7 +230,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
     if (this->unk_38A == 0) {
         this->unk_38C = 0;
         this->unk_38A = 1;
-        this->unk_388 = globalCtx->state.frames % 5;
+        this->unk_388 = play->state.frames % 5;
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -252,9 +252,9 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.currentTextId;
+s32 func_80A52B68(EnDnq* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    u16 temp = play->msgCtx.currentTextId;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
         switch (temp) {
@@ -292,8 +292,8 @@ s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80A52C6C(EnDnq* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 pad;
     Vec3f sp34 = { 0.0f, 0.0f, 110.0f };
     Vec3f sp28;
@@ -305,7 +305,7 @@ void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
     this->actor.xzDistToPlayer = Math_Vec3f_DistXZ(&sp28, &sp1C);
 }
 
-s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
+s32* func_80A52CF8(EnDnq* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[23] & 0x20) {
         return &D_80A53400[14];
     }
@@ -317,12 +317,12 @@ s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
     return &D_80A53400[0];
 }
 
-s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
+s32 func_80A52D44(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
-        this->unk_380 = func_80A52CF8(this, globalCtx);
+        this->unk_380 = func_80A52CF8(this, play);
         this->actionFunc = func_80A52FB8;
         ret = true;
     }
@@ -330,8 +330,8 @@ s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80A52DC8(EnDnq* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (yaw <= 0x3800) {
@@ -342,16 +342,16 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
     if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(globalCtx) &&
-            (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
+        if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
+            (Message_GetState(&play->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
-                Message_StartTextbox(globalCtx, 0x969, NULL);
+                Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }
         }
 
         this->unk_394 = this->actor.xzDistToPlayer;
-        func_80A52C6C(this, globalCtx);
+        func_80A52C6C(this, play);
         if (this->actor.xzDistToPlayer < this->unk_390) {
             player->unk_B2B = 0x1A;
         }
@@ -359,7 +359,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
         this->actor.xzDistToPlayer = this->unk_394;
 
         if (gSaveContext.save.weekEventReg[83] & 8) {
-            func_80A52A78(this, globalCtx);
+            func_80A52A78(this, play);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
             func_80A526F8(this);
@@ -372,10 +372,10 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx) {
+void func_80A52FB8(EnDnq* this, PlayState* play) {
     s16 sp2E = this->actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->actor, globalCtx, this->unk_380, NULL, &this->unk_1E0)) {
+    if (func_8010BF58(&this->actor, play, this->unk_380, NULL, &this->unk_1E0)) {
         SubS_UpdateFlags(&this->unk_37C, 3, 7);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
@@ -384,16 +384,16 @@ void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
+void func_80A53038(EnDnq* this, PlayState* play) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
     s32 temp_v0;
     u32 temp_v1;
 
-    if (Cutscene_CheckActorAction(globalCtx, 105)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 105);
-        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
+    if (Cutscene_CheckActorAction(play, 105)) {
+        temp_v0 = Cutscene_GetActorActionIndex(play, 105);
+        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1DC != (u8)temp_v1) {
             func_80A5257C(this, D_80A535FC[temp_v1]);
             this->unk_1DC = temp_v1;
@@ -408,19 +408,18 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
     }
 }
 
-void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable,
-                       33);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.02f);
     this->actor.targetMode = 1;
@@ -436,37 +435,37 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80A52DC8;
 }
 
-void EnDnq_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnq_Destroy(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnq_Update(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
-    if (!func_80A52D44(this, globalCtx) && func_80A52648(this, globalCtx)) {
-        func_80A53038(this, globalCtx);
+    if (!func_80A52D44(this, play) && func_80A52648(this, play)) {
+        func_80A53038(this, play);
         SkelAnime_Update(&this->skelAnime);
     } else {
-        this->actionFunc(this, globalCtx);
-        func_80A52B68(this, globalCtx);
+        this->actionFunc(this, play);
+        func_80A52B68(this, play);
         SkelAnime_Update(&this->skelAnime);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         this->unk_394 = this->actor.xzDistToPlayer;
-        func_80A52C6C(this, globalCtx);
-        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, EXCH_ITEM_NONE,
+        func_80A52C6C(this, play);
+        func_8013C964(&this->actor, play, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, EXCH_ITEM_NONE,
                       this->unk_37C & 7);
         this->actor.xzDistToPlayer = this->unk_394;
         Actor_SetFocus(&this->actor, 46.0f);
-        func_80A52604(this, globalCtx);
+        func_80A52604(this, play);
     }
 }
 
-void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnq_Draw(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }
