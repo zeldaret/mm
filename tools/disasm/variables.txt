@@ -930,7 +930,7 @@
     0x801BD8B6:("actorCutsceneCurrentCamera","s16","",0x2),
     0x801BD8B8:("actorCutsceneCurrentCutsceneActor","Actor*","",0x4),
     0x801BD8BC:("actorCutsceneStartMethod","UNK_TYPE4","",0x4),
-    0x801BD8C0:("actorCutscenesGlobalCtxt","GlobalContext*","",0x4),
+    0x801BD8C0:("actorCutscenesPlayState","PlayState*","",0x4),
     0x801BD8C4:("actorCutsceneReturnCamera","s16","",0x2),
     0x801BD8C6:("D_801BD8C6","s16","",0x2),
     0x801BD8D0:("sFireObjCollisionInit","ColliderCylinderInit","",0x2c),

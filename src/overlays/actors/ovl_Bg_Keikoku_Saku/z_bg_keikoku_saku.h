@@ -7,7 +7,7 @@
 
 struct BgKeikokuSaku;
 
-typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, GlobalContext*);
+typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, PlayState*);
 
 typedef struct BgKeikokuSaku {
     /* 0x000 */ DynaPolyActor dyna;

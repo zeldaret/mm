@@ -5,7 +5,7 @@
 
 struct BgLotus;
 
-typedef void (*BgLotusActionFunc)(struct BgLotus*, GlobalContext*);
+typedef void (*BgLotusActionFunc)(struct BgLotus*, PlayState*);
 
 typedef struct BgLotus {
     /* 0x000 */ DynaPolyActor dyna;

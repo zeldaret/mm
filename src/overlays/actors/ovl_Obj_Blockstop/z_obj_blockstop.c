@@ -11,11 +11,11 @@
 
 #define THIS ((ObjBlockstop*)thisx)
 
-void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjBlockstop_Init(Actor* thisx, PlayState* play);
+void ObjBlockstop_Update(Actor* thisx, PlayState* play);
 
-void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx);
-void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx);
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play);
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play);
 
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
@@ -29,17 +29,17 @@ const ActorInit Obj_Blockstop_InitVars = {
     (ActorFunc)NULL,
 };
 
-void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBlockstop_Init(Actor* thisx, PlayState* play) {
     ObjBlockstop* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+    if (Flags_GetSwitch(play, this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actionFunc = ObjBlockstop_CheckForBlock;
 }
 
-void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx) {
-    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play) {
+    Actor* prop = play->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
         if ((prop->id == ACTOR_OBJ_OSHIHIKI) && (fabsf(prop->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
@@ -56,9 +56,9 @@ void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx) {
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        Flags_SetSwitch(globalCtx, this->actor.params);
+        Flags_SetSwitch(play, this->actor.params);
         if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
@@ -68,8 +68,8 @@ void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx) 
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 }
 
-void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBlockstop_Update(Actor* thisx, PlayState* play) {
     ObjBlockstop* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

@@ -10,11 +10,11 @@
 
 #define THIS ((ObjDemo*)thisx)
 
-void ObjDemo_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjDemo_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjDemo_Init(Actor* thisx, PlayState* play);
+void ObjDemo_Update(Actor* thisx, PlayState* play);
 
-void func_80983678(ObjDemo* this, GlobalContext* globalCtx);
-void func_80983704(ObjDemo* this, GlobalContext* globalCtx);
+void func_80983678(ObjDemo* this, PlayState* play);
+void func_80983704(ObjDemo* this, PlayState* play);
 
 #if 0
 const ActorInit Obj_Demo_InitVars = {

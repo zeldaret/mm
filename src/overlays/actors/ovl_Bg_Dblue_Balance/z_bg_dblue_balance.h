@@ -5,7 +5,7 @@
 
 struct BgDblueBalance;
 
-typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance*, GlobalContext*);
+typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance*, PlayState*);
 
 #define BGDBLUEBALANCE_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define BGDBLUEBALANCE_GET_300(thisx) (((thisx)->params >> 8) & 3)

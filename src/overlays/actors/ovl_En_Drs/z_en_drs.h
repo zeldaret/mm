@@ -7,7 +7,7 @@
 
 struct EnDrs;
 
-typedef void (*EnDrsActionFunc)(struct EnDrs*, GlobalContext*);
+typedef void (*EnDrsActionFunc)(struct EnDrs*, PlayState*);
 
 typedef struct EnDrs {
     /* 0x000 */ Actor actor;

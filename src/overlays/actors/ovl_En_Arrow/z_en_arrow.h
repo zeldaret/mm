@@ -5,7 +5,7 @@
 
 struct EnArrow;
 
-typedef void (*EnArrowActionFunc)(struct EnArrow*, GlobalContext*);
+typedef void (*EnArrowActionFunc)(struct EnArrow*, PlayState*);
 
 enum {
     /* -8  */ ENARROW_MINUS8 = -8,

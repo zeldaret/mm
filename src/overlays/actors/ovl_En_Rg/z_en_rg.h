@@ -5,7 +5,7 @@
 
 struct EnRg;
 
-typedef void (*EnRgActionFunc)(struct EnRg*, GlobalContext*);
+typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
 
 #define ENRG_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 

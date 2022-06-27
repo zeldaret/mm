@@ -10,25 +10,25 @@
 
 #define THIS ((EnBigpamet*)thisx)
 
-void EnBigpamet_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBigpamet_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBigpamet_Init(Actor* thisx, PlayState* play);
+void EnBigpamet_Destroy(Actor* thisx, PlayState* play);
+void EnBigpamet_Update(Actor* thisx, PlayState* play);
+void EnBigpamet_Draw(Actor* thisx, PlayState* play);
 
-void func_80A281DC(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A282C8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A283A0(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2844C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2855C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A2866C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28708(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A287E8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A289C8(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28A98(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28D0C(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28DC0(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28E98(EnBigpamet* this, GlobalContext* globalCtx);
-void func_80A28EE8(EnBigpamet* this, GlobalContext* globalCtx);
+void func_80A281DC(EnBigpamet* this, PlayState* play);
+void func_80A282C8(EnBigpamet* this, PlayState* play);
+void func_80A283A0(EnBigpamet* this, PlayState* play);
+void func_80A2844C(EnBigpamet* this, PlayState* play);
+void func_80A2855C(EnBigpamet* this, PlayState* play);
+void func_80A2866C(EnBigpamet* this, PlayState* play);
+void func_80A28708(EnBigpamet* this, PlayState* play);
+void func_80A287E8(EnBigpamet* this, PlayState* play);
+void func_80A289C8(EnBigpamet* this, PlayState* play);
+void func_80A28A98(EnBigpamet* this, PlayState* play);
+void func_80A28D0C(EnBigpamet* this, PlayState* play);
+void func_80A28DC0(EnBigpamet* this, PlayState* play);
+void func_80A28E98(EnBigpamet* this, PlayState* play);
+void func_80A28EE8(EnBigpamet* this, PlayState* play);
 
 #if 0
 const ActorInit En_Bigpamet_InitVars = {

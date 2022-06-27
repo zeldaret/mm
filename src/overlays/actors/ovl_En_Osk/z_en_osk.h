@@ -5,7 +5,7 @@
 
 struct EnOsk;
 
-typedef void (*EnOskActionFunc)(struct EnOsk*, GlobalContext*);
+typedef void (*EnOskActionFunc)(struct EnOsk*, PlayState*);
 
 #define ENOSK_GET_F(thisx) ((thisx)->params & 0xF)
 
