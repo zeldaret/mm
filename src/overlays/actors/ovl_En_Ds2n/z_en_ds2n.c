@@ -18,7 +18,7 @@ void EnDs2n_Destroy(Actor* thisx, PlayState* play);
 void EnDs2n_Update(Actor* thisx, PlayState* play);
 void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
-void EnDs2n_Idle(EnDs2n* this, GlobalContext* globalCtx);
+void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
 const ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
@@ -47,8 +47,8 @@ void EnDs2n_SetupIdle(EnDs2n* this) {
     this->actionFunc = EnDs2n_Idle;
 }
 
-void EnDs2n_Idle(EnDs2n* this, GlobalContext* globalCtx) {
-    SubS_FillLimbRotTables(globalCtx, this->limbRotTableY, this->limbRotTableZ, DS2N_LIMB_MAX);
+void EnDs2n_Idle(EnDs2n* this, PlayState* play) {
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, DS2N_LIMB_MAX);
 }
 
 void EnDs2n_UpdateEyes(EnDs2n* this) {
@@ -66,32 +66,32 @@ void EnDs2n_UpdateEyes(EnDs2n* this) {
     }
 }
 
-void EnDs2n_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDs2n_Init(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDs2nSkeleton, &gDs2nIdleAnim, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkeleton, &gDs2nIdleAnim, NULL, NULL, 0);
     EnDs2n_SetupIdle(this);
 }
 
-void EnDs2n_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDs2n_Destroy(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
-    SkelAnime_Free(&this->skelAnime, globalCtx);
+    SkelAnime_Free(&this->skelAnime, play);
 }
 
-void EnDs2n_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDs2n_Update(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
-    Actor_TrackPlayer(globalCtx, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
     EnDs2n_UpdateEyes(this);
 }
 
-s32 EnDs2n_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                             Actor* thisx) {
     EnDs2n* this = THIS;
 
@@ -102,7 +102,7 @@ s32 EnDs2n_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     return false;
 }
 
-void EnDs2n_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDs2n* this = THIS;
     Vec3f focusOffset = sZeroVec;
 
@@ -116,18 +116,18 @@ void EnDs2n_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     }
 }
 
-void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDs2n_Draw(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
+    func_8012C5B0(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDs2n_OverrideLimbDraw, EnDs2n_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
