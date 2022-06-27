@@ -5,7 +5,7 @@
 
 struct ObjHsblock;
 
-typedef void (*ObjHsblockActionFunc)(struct ObjHsblock*, GlobalContext*);
+typedef void (*ObjHsblockActionFunc)(struct ObjHsblock*, PlayState*);
 
 typedef struct ObjHsblock {
     /* 0x0000 */ Actor actor;

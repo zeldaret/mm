@@ -5,7 +5,7 @@
 
 struct BgHakuginPost;
 
-typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost*, GlobalContext*);
+typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost*, PlayState*);
 typedef void (*BgHakuginPostFunc)(struct BgHakuginPost*);
 
 #define BGHAKUGINPOST_GET_7(thisx) ((thisx)->params & 7)

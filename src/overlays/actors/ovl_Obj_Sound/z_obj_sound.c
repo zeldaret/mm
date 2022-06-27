@@ -10,9 +10,9 @@
 
 #define THIS ((ObjSound*)thisx)
 
-void ObjSound_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSound_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSound_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjSound_Init(Actor* thisx, PlayState* play);
+void ObjSound_Destroy(Actor* thisx, PlayState* play);
+void ObjSound_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Sound_InitVars = {

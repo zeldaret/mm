@@ -5,16 +5,18 @@
 
 struct BossHakugin;
 
-typedef void (*BossHakuginActionFunc)(struct BossHakugin*, GlobalContext*);
+typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
-typedef struct BossHakuginParticle {
+typedef struct BossHakuginEffect {
     /* 0x00 */ Vec3f unk_0;
     /* 0x0C */ Vec3f unk_C;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
     /* 0x1C */ Vec3s unk_1C;
     /* 0x24 */ f32 unk_24;
-} BossHakuginParticle; // size = 0x28
+} BossHakuginEffect; // size = 0x28
+
+#define BOSS_HAKUGIN_EFFECT_COUNT 180
 
 typedef struct BossHakuginFhgFlashUnkStruct {
     /* 0x00 */ Vec3f unk_00;
@@ -28,7 +30,7 @@ typedef struct BossHakugin {
     /* 0x018C */ char unk_018C[0x5];
     /* 0x0191 */ u8 unk_191;
     /* 0x018C */ char unk_0192[0x866];
-    /* 0x09F8 */ BossHakuginParticle unk_9F8[180];
+    /* 0x09F8 */ BossHakuginEffect unk_9F8[BOSS_HAKUGIN_EFFECT_COUNT];
     /* 0x2618 */ char unk_2618[0x8E8];
     /* 0x2F00 */ BossHakuginFhgFlashUnkStruct unk_2F00[7][15];
     /* 0x3734 */ char unk_3734[0xDC];

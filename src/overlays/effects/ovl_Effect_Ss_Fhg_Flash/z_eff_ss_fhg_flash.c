@@ -6,6 +6,7 @@
 
 #include "z_eff_ss_fhg_flash.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
+#include "assets/overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.h"
 
 #define rAlpha regs[0]
 #define rXZRot regs[3]
@@ -14,20 +15,18 @@
 
 #define PARAMS ((EffectSsFhgFlashInitParams*)initParamsx)
 
-u32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsFhgFlash_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsFhgFlash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
     EFFECT_SS_FHG_FLASH,
     EffectSsFhgFlash_Init,
 };
 
-extern Gfx gFghFlashDL[];
-
-u32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsFhgFlashInitParams* initParams = PARAMS;
-    Vec3f sp20 = { 0.0f, -1000.0f, 0.0f };
+    Vec3f noActorPos = { 0.0f, -1000.0f, 0.0f };
 
     this->actor = initParams->actor;
     Math_Vec3f_Copy(&this->velocity, &gZeroVec3f);
@@ -40,7 +39,7 @@ u32 EffectSsFhgFlash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     this->rParams = initParams->params;
 
     if (initParams->params != FHGFLASH_SHOCK_NO_ACTOR) {
-        this->pos = sp20;
+        this->pos = noActorPos;
         this->gfx = gFghFlashDL;
     } else {
         this->pos = initParams->pos;
@@ -54,28 +53,28 @@ Vec3f D_8097CED4 = { 0.0f, 0.0f, 0.0f };
 
 #include "overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
 
-void EffectSsFhgFlash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale = this->rScale / 100.0f;
 
     OPEN_DISPS(gfxCtx);
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     if (this->rParams != 0) {
-        func_8012C448(globalCtx->state.gfxCtx);
-        Matrix_InsertXRotation_s(this->rXZRot, MTXMODE_APPLY);
+        func_8012C448(play->state.gfxCtx);
+        Matrix_RotateXS(this->rXZRot, MTXMODE_APPLY);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_DECAL2);
     } else {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     }
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->rAlpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 155, 0);
-    Matrix_InsertZRotation_s(this->rXZRot, MTXMODE_APPLY);
+    Matrix_RotateZS(this->rXZRot, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
@@ -83,13 +82,13 @@ void EffectSsFhgFlash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsFhgFlash_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
     s16 randBodyPart;
     s16 rand = Rand_ZeroOne() * 20000.0f;
 
     this->rXZRot = (this->rXZRot + rand) + 0x4000;
     if (this->rParams == FHGFLASH_SHOCK_PLAYER) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         randBodyPart = Rand_ZeroFloat(18 - 0.1f);
         this->pos.x = player->bodyPartsPos[randBodyPart].x + randPlusMinusPoint5Scaled(10.0f);

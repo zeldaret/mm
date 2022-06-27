@@ -10,13 +10,13 @@
 
 #define THIS ((DmAh*)thisx)
 
-void DmAh_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmAh_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmAh_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmAh_Init(Actor* thisx, PlayState* play);
+void DmAh_Destroy(Actor* thisx, PlayState* play);
+void DmAh_Update(Actor* thisx, PlayState* play);
+void DmAh_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1D7FC(DmAh* this, GlobalContext* globalCtx);
-void func_80C1D92C(DmAh* this, GlobalContext* globalCtx);
+void func_80C1D7FC(DmAh* this, PlayState* play);
+void func_80C1D92C(DmAh* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Ah_InitVars = {

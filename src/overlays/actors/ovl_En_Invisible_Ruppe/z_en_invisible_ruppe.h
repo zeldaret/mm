@@ -5,7 +5,7 @@
 
 struct EnInvisibleRuppe;
 
-typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, GlobalContext*);
+typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, PlayState*);
 
 #define INVISIBLERUPPE_GET_3(thisx) ((thisx)->actor.params & 3)
 #define INVISIBLERUPPE_GET_1FC(thisx) (((thisx)->actor.params & 0x1FC) >> 2)
