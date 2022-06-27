@@ -28,8 +28,8 @@ typedef struct EnSyatekiMan {
     /* 0x0194 */ s32 unk_194;
     /* 0x0198 */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
     /* 0x01F8 */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
-    /* 0x0258 */ Vec3s unk_258;
-    /* 0x025E */ Vec3s unk_25E;
+    /* 0x0258 */ Vec3s headRot;
+    /* 0x025E */ Vec3s torsoRot;
     /* 0x0264 */ s16 eyeIndex;
     /* 0x0266 */ s16 blinkTimer;
     /* 0x0268 */ UNK_TYPE1 unk268[0x2];
@@ -40,13 +40,13 @@ typedef struct EnSyatekiMan {
     /* 0x0272 */ s16 unk_272;
     /* 0x0274 */ s16 unk_274;
     /* 0x0276 */ s16 unk_276;
-    /* 0x0278 */ s16 unk_278;
-    /* 0x027A */ s16 unk_27A;
+    /* 0x0278 */ s16 dekuScrubHitCounter;
+    /* 0x027A */ s16 guayHitCounter;
     /* 0x027C */ s16 unk_27C;
     /* 0x027E */ s16 unk_27E;
-    /* 0x0280 */ s16 unk_280;
+    /* 0x0280 */ s16 score;
     /* 0x0282 */ s16 unk_282;
-    /* 0x0284 */ s16 unk_284;
+    /* 0x0284 */ s16 textId;
 } EnSyatekiMan; // size = 0x288
 
 extern const ActorInit En_Syateki_Man_InitVars;

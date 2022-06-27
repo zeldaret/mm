@@ -370,7 +370,7 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
         if (this->unk_2A6 == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.unk_25C++;
-            syatekiMan->unk_280++;
+            syatekiMan->score++;
             syatekiMan->unk_26E = 1;
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);

@@ -319,12 +319,12 @@ void func_80A2C4D0(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 2);
-        syatekiMan->unk_280 += 100;
+        syatekiMan->score += 100;
         syatekiMan->unk_26E++;
     } else {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 0);
-        syatekiMan->unk_280 += 30;
-        syatekiMan->unk_278++;
+        syatekiMan->score += 30;
+        syatekiMan->dekuScrubHitCounter++;
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);

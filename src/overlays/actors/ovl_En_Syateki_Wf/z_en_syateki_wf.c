@@ -375,7 +375,7 @@ void func_80A20858(EnSyatekiWf* this, PlayState* play) {
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
-    syatekiMan->unk_280 += 100;
+    syatekiMan->score += 100;
     this->actionFunc = func_80A208F8;
 }
 

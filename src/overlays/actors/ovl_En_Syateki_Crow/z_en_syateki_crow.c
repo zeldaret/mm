@@ -221,7 +221,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
 void func_809CAAF8(EnSyatekiCrow* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    syatekiMan->unk_280 += 60;
+    syatekiMan->score += 60;
     this->unk_1C2 = 0;
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
@@ -245,7 +245,7 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
 
     if (this->unk_1C4 > 20) {
         func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
-        syatekiMan->unk_27A++;
+        syatekiMan->guayHitCounter++;
         syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
         func_809CA5D4(this);
     }
