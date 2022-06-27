@@ -5,7 +5,7 @@
 
 struct EnDno;
 
-typedef void (*EnDnoActionFunc)(struct EnDno*, GlobalContext*);
+typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 
 #define ENDNO_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)
@@ -34,7 +34,7 @@ typedef struct EnDno {
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk_330[0x4];
     /* 0x334 */ Vec3f unk_334;
-    /* 0x340 */ struct_8013DF3C_arg1 unk_340;
+    /* 0x340 */ ActorPathing actorPath;
     /* 0x3AC */ s16 unk_3AC;
     /* 0x3AE */ s16 unk_3AE;
     /* 0x3B0 */ u16 unk_3B0;

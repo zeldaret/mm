@@ -5,7 +5,7 @@
 
 struct BgIknvObj;
 
-typedef void (*BgIknvObjActionFunc)(struct BgIknvObj*, GlobalContext*);
+typedef void (*BgIknvObjActionFunc)(struct BgIknvObj*, PlayState*);
 
 #define IKNV_OBJ_TYPE(x) (x->dyna.actor.params & 0xF)
 

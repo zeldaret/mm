@@ -10,12 +10,12 @@
 
 #define THIS ((EffZoraband*)thisx)
 
-void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EffZoraband_Init(Actor* thisx, PlayState* play);
+void EffZoraband_Destroy(Actor* thisx, PlayState* play);
+void EffZoraband_Update(Actor* thisx, PlayState* play);
+void EffZoraband_Draw(Actor* thisx, PlayState* play);
 
-void func_80C07790(EffZoraband* this, GlobalContext* globalCtx);
+void func_80C07790(EffZoraband* this, PlayState* play);
 
 #if 0
 const ActorInit Eff_Zoraband_InitVars = {

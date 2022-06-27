@@ -5,7 +5,7 @@
 
 struct BgCraceMovebg;
 
-typedef void (*BgCraceMovebgActionFunc)(struct BgCraceMovebg*, GlobalContext*);
+typedef void (*BgCraceMovebgActionFunc)(struct BgCraceMovebg*, PlayState*);
 
 typedef struct BgCraceMovebg {
     /* 0x0000 */ Actor actor;

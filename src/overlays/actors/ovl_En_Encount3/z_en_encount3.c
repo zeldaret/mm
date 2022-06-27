@@ -10,14 +10,14 @@
 
 #define THIS ((EnEncount3*)thisx)
 
-void EnEncount3_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount3_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEncount3_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEncount3_Init(Actor* thisx, PlayState* play);
+void EnEncount3_Destroy(Actor* thisx, PlayState* play);
+void EnEncount3_Update(Actor* thisx, PlayState* play);
+void EnEncount3_Draw(Actor* thisx, PlayState* play);
 
-void func_809AD084(EnEncount3* this, GlobalContext* globalCtx);
-void func_809AD194(EnEncount3* this, GlobalContext* globalCtx);
-void func_809AD1EC(EnEncount3* this, GlobalContext* globalCtx);
+void func_809AD084(EnEncount3* this, PlayState* play);
+void func_809AD194(EnEncount3* this, PlayState* play);
+void func_809AD1EC(EnEncount3* this, PlayState* play);
 
 #if 0
 const ActorInit En_Encount3_InitVars = {

@@ -5,7 +5,7 @@
 
 struct EnNnh;
 
-typedef void (*EnNnhActionFunc)(struct EnNnh*, GlobalContext*);
+typedef void (*EnNnhActionFunc)(struct EnNnh*, PlayState*);
 
 typedef struct EnNnh {
     /* 0x000 */ Actor actor;

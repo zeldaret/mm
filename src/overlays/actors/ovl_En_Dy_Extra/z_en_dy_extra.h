@@ -5,7 +5,7 @@
 
 struct EnDyExtra;
 
-typedef void (*EnDyExtraActionFunc)(struct EnDyExtra*, GlobalContext*);
+typedef void (*EnDyExtraActionFunc)(struct EnDyExtra*, PlayState*);
 
 typedef struct EnDyExtra {
     /* 0x000 */ Actor actor;

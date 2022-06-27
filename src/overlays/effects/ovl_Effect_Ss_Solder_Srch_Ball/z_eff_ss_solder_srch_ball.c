@@ -7,47 +7,47 @@
 #include "z_eff_ss_solder_srch_ball.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define rParams regs[0]
+#define rFlags regs[0]
 
 #define PARAMS ((EffectSsSolderSrchBallInitParams*)initParamsx)
 
-u32 EffectSsSolderSrchBall_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsSolderSrchBall_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsSolderSrchBall_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsSolderSrchBall_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
     EFFECT_SS_SOLDER_SRCH_BALL,
     EffectSsSolderSrchBall_Init,
 };
 
-u32 EffectSsSolderSrchBall_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsSolderSrchBallInitParams* initParams = PARAMS;
 
     this->pos = initParams->pos;
     this->velocity = initParams->velocity;
     this->accel = initParams->accel;
     this->update = EffectSsSolderSrchBall_Update;
-    if (!(initParams->params & SOLDERSRCHBALL_INVISIBLE)) {
+    if (!(initParams->flags & SOLDERSRCHBALL_INVISIBLE)) {
         this->draw = EffectSsSolderSrchBall_Draw;
     }
     this->life = 10;
     this->rgScale = initParams->scale;
-    this->rParams = initParams->params;
+    this->rFlags = initParams->flags;
     this->actor = (Actor*)initParams->playerDetected; // actor field was incorrectly used as a pointer to something else
     return 1;
 }
 
-void EffectSsSolderSrchBall_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale = this->rgScale / 100.0f;
 
     func_8012C28C(gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     
     OPEN_DISPS(gfxCtx);
     
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
@@ -55,32 +55,32 @@ void EffectSsSolderSrchBall_Draw(GlobalContext* globalCtx, u32 index, EffectSs* 
     gDPPipeSync(POLY_XLU_DISP++);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, 255);
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(DEGF_TO_RADF(20.0f * globalCtx->state.frames), MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+    Matrix_RotateZF(DEGF_TO_RADF(20.0f * play->state.frames), MTXMODE_APPLY);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsSolderSrchBall_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsSolderSrchBall_Update(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
-    f32 playerPosDiffX;
-    f32 playerPosDiffY;
-    f32 playerPosDiffZ;
+    f32 diffX;
+    f32 diffY;
+    f32 diffZ;
     s16* playerDetected = (s16*)this->actor;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
-    playerPosDiffX = player->actor.world.pos.x - this->pos.x;
-    playerPosDiffY = player->actor.world.pos.y - this->pos.y;
-    playerPosDiffZ = player->actor.world.pos.z - this->pos.z;
+    diffX = player->actor.world.pos.x - this->pos.x;
+    diffY = player->actor.world.pos.y - this->pos.y;
+    diffZ = player->actor.world.pos.z - this->pos.z;
 
-    if (this->rParams >= SOLDERSRCHBALL_SMALL_DETECT_RADIUS) {
-        if ((sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 10.0f) && (sqrtf(SQ(playerPosDiffY)) < 10.0f)) {
+    if (this->rFlags >= SOLDERSRCHBALL_SMALL_DETECT_RADIUS) {
+        if ((sqrtf(SQ(diffX) + SQ(diffZ)) < 10.0f) && (sqrtf(SQ(diffY)) < 10.0f)) {
             *playerDetected = true;
         }
-    } else if (!BgCheck_SphVsFirstWall(&globalCtx->colCtx, &this->pos, 30.0f)) {
-        if ((sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 40.0f) && (sqrtf(SQ(playerPosDiffY)) < 80.0f)) {
+    } else if (!BgCheck_SphVsFirstWall(&play->colCtx, &this->pos, 30.0f)) {
+        if ((sqrtf(SQ(diffX) + SQ(diffZ)) < 40.0f) && (sqrtf(SQ(diffY)) < 80.0f)) {
             *playerDetected = true;
         }
     } else if (this->life > 1) {
