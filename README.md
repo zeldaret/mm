@@ -17,15 +17,15 @@
 ```diff
 - WARNING! -
 
-The ROM this repository builds while has a matching checksum cannot be 'shifted' due
-to hardcoded pointers which have yet to be dumped. Thus this repository is currently
-in an experimental and research phase and cannot currently be used traditionally as a
-source code base for general changes.
+This repository is a work in progress, and while it can be used to make certain changes, it's 
+still constantly evolving. If you wish to use it for modding purposes in its current state,
+please be aware that the codebase could drastically change at any time. Also note that some
+parts of the ROM may not be 'shiftable' yet, so modifying them could currently be difficult.
 ```
 
-This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not producing a PC port.** For more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
+This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda64.dev/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
 
-The only build currently supported is N64 US, but other versions are planned to be supported.
+The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
 It currently builds the following ROM:
 * mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
@@ -50,7 +50,7 @@ We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
 ### MacOS
 
-Preparation is covered in a [separate document](docsBUILDING_MACOS.md).
+Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
 
 ### Linux (Native or under WSL / VM)
@@ -74,13 +74,7 @@ sudo apt update
 sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
 ```
 
-To install the Python dependencies simply run in a terminal:
-
-```bash
-python3 -m pip install -r requirements.txt
-```
-
-#### 2. Fork the repository
+#### 2. Clone the repository
 
 Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
 
@@ -88,11 +82,27 @@ Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then
 git clone https://github.com/<YOUR_USERNAME>/mm.git
 ```
 
-#### 3. Prepare a base ROM
+This will copy the GitHub repository contents into a new folder in the current directory called `mm`. Change into this directory before doing anything else:
+
+```bash
+cd mm
+```
+
+#### 3. Install python dependencies
+
+The build process has a few python packages required that are located in `requirements.txt`.
+
+To install them simply run in a terminal:
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+#### 4. Prepare a base ROM
 
 Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
 
-#### 4. Make and Build the ROM
+#### 5. Make and Build the ROM
 
 To start the extraction/build process, run the following command:
 
@@ -127,16 +137,10 @@ The disadvantage that the ordering of the terminal output is scrambled, so for d
 ## Contributing
 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.
-Some tasks also don't require much knowledge to get started.
+Some work also doesn't require much knowledge to get started.
 
 Please note that is is our strict policy that *Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.*
 
-Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
+Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project or ZeldaRET's other decompilation projects.
 
-For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md) and our [Code Review Guidelines](REVIEWING.md) to see what code quality guidelines we follow.
-
-
-## FAQ
-
-### Q: Why does MM use transient assembly?
-A: It is the view of the MM project leads that transient asm is safer than storing the disassembly in the repo. We feel like the C code is more transformative than a straight disassembly.
+For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md), [Style Guide](docs/STYLE.md) and our [Code Review Guidelines](docs/REVIEWING.md) to see what code quality guidelines we follow.

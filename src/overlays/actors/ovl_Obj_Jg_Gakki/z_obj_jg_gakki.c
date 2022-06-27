@@ -11,10 +11,10 @@
 
 #define THIS ((ObjJgGakki*)thisx)
 
-void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjJgGakki_Init(Actor* thisx, PlayState* play);
+void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
+void ObjJgGakki_Update(Actor* thisx, PlayState* play);
+void ObjJgGakki_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
@@ -28,18 +28,18 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Draw,
 };
 
-void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjJgGakki* this = THIS;
     f32 frameCount = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
+    SkelAnime_Init(play, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
 
-    if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&
-        (globalCtx->csCtx.currentCsIndex == 0)) {
+    if (((play->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&
+        (play->csCtx.currentCsIndex == 0)) {
         Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, 2, 0.0f);
-    } else if ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA)) {
+    } else if ((play->sceneNum == SCENE_17SETUGEN) || (play->sceneNum == SCENE_10YUKIYAMANOMURA)) {
         Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, 2, 0.0f);
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -47,20 +47,20 @@ void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_SetScale(&this->actor, 0.01f);
 }
 
-void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgGakki_Destroy(Actor* thisx, PlayState* play) {
     ObjJgGakki* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgGakki_Update(Actor* thisx, PlayState* play) {
     ObjJgGakki* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
 }
 
-void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjJgGakki_Draw(Actor* thisx, PlayState* play) {
     ObjJgGakki* this = THIS;
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

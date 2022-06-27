@@ -5,7 +5,7 @@
 
 struct EnHg;
 
-typedef void (*EnHgActionFunc)(struct EnHg*, GlobalContext*);
+typedef void (*EnHgActionFunc)(struct EnHg*, PlayState*);
 
 typedef enum {
     /* 00 */ HG_LIMB_NONE,

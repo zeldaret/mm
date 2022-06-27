@@ -23,17 +23,17 @@
 
 #define PARAMS ((EffectSsEnIceInitParams*)initParamsx)
 
-u32 EffectSsEnIce_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsEnIce_UpdateFlying(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsEnIce_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsEnIce_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsEnIce_UpdateFlying(PlayState* play, u32 index, EffectSs* this);
+void EffectSsEnIce_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_En_Ice_InitVars = {
     EFFECT_SS_EN_ICE,
     EffectSsEnIce_Init,
 };
 
-u32 EffectSsEnIce_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsEnIceInitParams* initParams = PARAMS;
 
     if (initParams->type == ENICE_TYPE_FLYING) {
@@ -88,15 +88,15 @@ u32 EffectSsEnIce_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 1;
 }
 
-void EffectSsEnIce_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
     f32 scale;
     u32 gameplayFrames;
     f32 alpha;
 
     scale = this->rScale * 0.01f;
-    gameplayFrames = globalCtx->gameplayFrames;
+    gameplayFrames = play->gameplayFrames;
 
     OPEN_DISPS(gfxCtx);
 
@@ -111,17 +111,17 @@ void EffectSsEnIce_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
         }
     }
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    Matrix_RotateY(this->rYaw, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->rPitch, MTXMODE_APPLY);
+    Matrix_RotateYS(this->rYaw, MTXMODE_APPLY);
+    Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    func_800BCC68(&this->pos, globalCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    func_800BCC68(&this->pos, play);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 0x20, 0x10, 1, 0,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 0x20, 0x10, 1, 0,
                                 (gameplayFrames * 2) & 0xFF, 0x40, 0x20));
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                     this->rPrimColorA);
@@ -133,7 +133,7 @@ void EffectSsEnIce_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsEnIce_UpdateFlying(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsEnIce_UpdateFlying(PlayState* play, u32 index, EffectSs* this) {
     s16 rand;
 
     if ((this->actor != NULL) && (this->actor->update != NULL)) {
@@ -159,6 +159,6 @@ void EffectSsEnIce_UpdateFlying(GlobalContext* globalCtx, u32 index, EffectSs* t
     }
 }
 
-void EffectSsEnIce_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsEnIce_Update(PlayState* play, u32 index, EffectSs* this) {
     this->rPitch += this->rRotSpeed; // rRotSpeed is not initialized so this does nothing
 }

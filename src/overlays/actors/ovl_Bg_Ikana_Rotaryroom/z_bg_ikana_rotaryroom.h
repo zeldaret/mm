@@ -5,9 +5,9 @@
 
 struct BgIkanaRotaryroom;
 
-typedef void (*BgIkanaRotaryroomActionFunc)(struct BgIkanaRotaryroom*, GlobalContext*);
-typedef void (*BgIkanaRotaryroomUnkFunc)(Actor*, GlobalContext*);
-typedef void (*BgIkanaRotaryroomUnkFunc2)(struct BgIkanaRotaryroom*, GlobalContext*);
+typedef void (*BgIkanaRotaryroomActionFunc)(struct BgIkanaRotaryroom*, PlayState*);
+typedef void (*BgIkanaRotaryroomUnkFunc)(Actor*, PlayState*);
+typedef void (*BgIkanaRotaryroomUnkFunc2)(struct BgIkanaRotaryroom*, PlayState*);
 
 #define BGIKANAROTARYROOM_GET_1(thisx) ((thisx)->params & 1)
 #define BGIKANAROTARYROOM_GET_FE(thisx) (((thisx)->params >> 1) & 0x7F)
