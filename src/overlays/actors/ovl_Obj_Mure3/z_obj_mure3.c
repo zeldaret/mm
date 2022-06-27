@@ -10,13 +10,13 @@
 
 #define THIS ((ObjMure3*)thisx)
 
-void ObjMure3_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMure3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMure3_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjMure3_Init(Actor* thisx, PlayState* play);
+void ObjMure3_Destroy(Actor* thisx, PlayState* play);
+void ObjMure3_Update(Actor* thisx, PlayState* play);
 
-void func_8098F5AC(ObjMure3* this, GlobalContext* globalCtx);
-void func_8098F5E4(ObjMure3* this, GlobalContext* globalCtx);
-void func_8098F680(ObjMure3* this, GlobalContext* globalCtx);
+void func_8098F5AC(ObjMure3* this, PlayState* play);
+void func_8098F5E4(ObjMure3* this, PlayState* play);
+void func_8098F680(ObjMure3* this, PlayState* play);
 
 #if 0
 const ActorInit Obj_Mure3_InitVars = {

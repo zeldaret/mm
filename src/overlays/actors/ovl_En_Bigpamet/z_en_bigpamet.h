@@ -5,7 +5,7 @@
 
 struct EnBigpamet;
 
-typedef void (*EnBigpametActionFunc)(struct EnBigpamet*, GlobalContext*);
+typedef void (*EnBigpametActionFunc)(struct EnBigpamet*, PlayState*);
 
 typedef struct EnBigpamet {
     /* 0x0000 */ Actor actor;

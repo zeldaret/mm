@@ -5,7 +5,7 @@
 
 struct EnJa;
 
-typedef void (*EnJaActionFunc)(struct EnJa*, GlobalContext*);
+typedef void (*EnJaActionFunc)(struct EnJa*, PlayState*);
 
 #define ENJA_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
 

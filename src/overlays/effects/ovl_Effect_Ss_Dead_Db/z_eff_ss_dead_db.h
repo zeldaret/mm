@@ -11,7 +11,7 @@ typedef struct {
     /* 0x26 */ s16 scaleStep;
     /* 0x28 */ Color_RGBA8 primColor;
     /* 0x2C */ Color_RGBA8 envColor;
-    /* 0x30 */ s32 unk_30;
+    /* 0x30 */ s32 life;
 } EffectSsDeadDbInitParams; // size = 0x30
 
 extern const EffectSsInit Effect_Ss_Dead_Db_InitVars;

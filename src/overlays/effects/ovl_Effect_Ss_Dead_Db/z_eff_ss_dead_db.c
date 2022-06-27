@@ -17,13 +17,13 @@
 #define rEnvColorG regs[7]
 #define rEnvColorB regs[8]
 #define rScaleStep regs[9]
-#define rReg11 regs[11]
+#define rTotalLife regs[11]
 
 #define PARAMS ((EffectSsDeadDbInitParams*)initParamsx)
 
-u32 EffectSsDeadDb_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDeadDb_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDeadDb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDeadDb_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsDeadDb_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDeadDb_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Dead_Db_InitVars = {
     EFFECT_SS_DEAD_DB,
@@ -36,17 +36,17 @@ static TexturePtr sTextures[] = {
     gEffEnemyDeathFlame9Tex, gEffEnemyDeathFlame10Tex,
 };
 
-u32 EffectSsDeadDb_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsDeadDb_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsDeadDbInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->pos, &initParams->pos);
     Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
     Math_Vec3f_Copy(&this->accel, &initParams->accel);
     this->gfx = gEffEnemyDeathFlameDL;
-    this->life = initParams->unk_30;
+    this->life = initParams->life;
     this->flags = 4;
     this->rScaleStep = initParams->scaleStep;
-    this->rReg11 = initParams->unk_30;
+    this->rTotalLife = initParams->life;
     this->draw = EffectSsDeadDb_Draw;
     this->update = EffectSsDeadDb_Update;
     this->rScale = initParams->scale;
@@ -62,8 +62,8 @@ u32 EffectSsDeadDb_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     return 1;
 }
 
-void EffectSsDeadDb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsDeadDb_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
@@ -93,8 +93,8 @@ void EffectSsDeadDb_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsDeadDb_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    this->rTexIndex = (f32)((this->rReg11 - this->life) * 9) / this->rReg11;
+void EffectSsDeadDb_Update(PlayState* play, u32 index, EffectSs* this) {
+    this->rTexIndex = (f32)((this->rTotalLife - this->life) * 9) / this->rTotalLife;
     this->rScale += this->rScaleStep;
 
     this->rPrimColorR -= 10;

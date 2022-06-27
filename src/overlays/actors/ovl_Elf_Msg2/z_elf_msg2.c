@@ -10,11 +10,11 @@
 
 #define THIS ((ElfMsg2*)thisx)
 
-void ElfMsg2_Init(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg2_Update(Actor* thisx, GlobalContext* globalCtx);
+void ElfMsg2_Init(Actor* thisx, PlayState* play);
+void ElfMsg2_Destroy(Actor* thisx, PlayState* play);
+void ElfMsg2_Update(Actor* thisx, PlayState* play);
 
-void func_8096EFD0(ElfMsg2* this, GlobalContext* globalCtx);
+void func_8096EFD0(ElfMsg2* this, PlayState* play);
 
 void ElfMsg2_SetupAction(ElfMsg2* this, ElfMsg2ActionFunc actionFunc);
 

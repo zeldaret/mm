@@ -6,7 +6,7 @@
 
 struct EnMa4;
 
-typedef void (*EnMa4ActionFunc)(struct EnMa4*, GlobalContext*);
+typedef void (*EnMa4ActionFunc)(struct EnMa4*, PlayState*);
 
 typedef struct EnMa4 {
     /* 0x000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnIn;
 
-typedef void (*EnInActionFunc)(struct EnIn*, GlobalContext*);
+typedef void (*EnInActionFunc)(struct EnIn*, PlayState*);
 
 typedef enum {
     /* 0 */ ENIN_UNK_TYPE,
@@ -36,9 +36,9 @@ typedef struct EnIn {
     /* 0x261 */ u8 unk261;
     /* 0x262 */ Vec3s jointTable[20];
     /* 0x2DA */ Vec3s morphTable[20];
-    /* 0x352 */ Vec3s unk352;
-    /* 0x358 */ Vec3s unk358;
-    /* 0x35E */ Vec3s unk35E;
+    /* 0x352 */ Vec3s trackTarget;
+    /* 0x358 */ Vec3s headRot;
+    /* 0x35E */ Vec3s torsoRot;
     /* 0x364 */ char unk364[0x12];
     /* 0x376 */ s16 unk376[20];
     /* 0x39E */ s16 unk39E[20];
