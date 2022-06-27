@@ -16,11 +16,11 @@ void BgIcefloe_Destroy(Actor* thisx, PlayState* play);
 void BgIcefloe_Update(Actor* thisx, PlayState* play);
 void BgIcefloe_Draw(Actor* thisx, PlayState* play);
 
-void func_80AC4A80(BgIcefloe* this, GlobalContext* globalCtx);
-void func_80AC4AE8(BgIcefloe* this, GlobalContext* globalCtx);
+void func_80AC4A80(BgIcefloe* this, PlayState* play);
+void BgIcefloe_Grow(BgIcefloe* this, PlayState* play);
 void func_80AC4C18(BgIcefloe* this);
-void func_80AC4D2C(BgIcefloe* this, GlobalContext* globalCtx);
-void func_80AC4C34(BgIcefloe* this, GlobalContext* globalCtx);
+void func_80AC4D2C(BgIcefloe* this, PlayState* play);
+void func_80AC4C34(BgIcefloe* this, PlayState* play);
 void func_80AC4CF0(BgIcefloe* this);
 
 const ActorInit Bg_Icefloe_InitVars = {
@@ -42,37 +42,36 @@ static InitChainEntry sInitChain[] = {
 
 static s32 numberSpawned;
 
-void BgIcefloe_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void BgIcefloe_Init(Actor* thisx, PlayState* play) {
     BgIcefloe* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gIcefloePlatformCol);
-    if (numberSpawned >= 3) {
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIcefloePlatformCol);
+    if (numberSpawned >= ARRAY_COUNT(sSpawnedInstances)) {
         s32 i;
 
         if ((sSpawnedInstances[0] != NULL) && (sSpawnedInstances[0]->dyna.actor.update != NULL) &&
             (sSpawnedInstances[0]->actionFunc != func_80AC4D2C)) {
             func_80AC4CF0(sSpawnedInstances[0]);
         }
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(sSpawnedInstances) - 1; i++) {
             sSpawnedInstances[i] = sSpawnedInstances[i + 1];
         }
-        sSpawnedInstances[2] = this;
+        sSpawnedInstances[ARRAY_COUNT(sSpawnedInstances) - 1] = this;
     } else {
         sSpawnedInstances[numberSpawned] = this;
     }
     numberSpawned++;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-    func_80AC4A80(this, globalCtx);
+    func_80AC4A80(this, play);
 }
 
-void BgIcefloe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcefloe_Destroy(Actor* thisx, PlayState* play) {
     BgIcefloe* this = THIS;
     s32 i;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     numberSpawned--;
 
     for (i = 0; i < 3; i++) {
@@ -83,17 +82,17 @@ void BgIcefloe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AC4A80(BgIcefloe* this, GlobalContext* globalCtx) {
+void func_80AC4A80(BgIcefloe* this, PlayState* play) {
     this->timer = 20;
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &this->dyna.actor.world.pos,
-                                 &this->dyna.actor.projectedPos, &this->dyna.actor.projectedW);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->dyna.actor.world.pos, &this->dyna.actor.projectedPos,
+                                 &this->dyna.actor.projectedW);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
-    this->actionFunc = func_80AC4AE8;
+    this->actionFunc = BgIcefloe_Grow;
 }
 
 static Vec3f sIceBlockAccel = { 0.0f, -0.5f, 0.0f };
 
-void func_80AC4AE8(BgIcefloe* this, GlobalContext* globalCtx) {
+void BgIcefloe_Grow(BgIcefloe* this, PlayState* play) {
     Vec3f velocity;
     Vec3f position;
 
@@ -106,7 +105,7 @@ void func_80AC4AE8(BgIcefloe* this, GlobalContext* globalCtx) {
     position.x = this->dyna.actor.world.pos.x + (velocity.x * this->dyna.actor.scale.x * 75.0f);
     position.z = this->dyna.actor.world.pos.z + (velocity.z * this->dyna.actor.scale.z * 75.0f);
     position.y = this->dyna.actor.world.pos.y + (300.0f * this->dyna.actor.scale.y);
-    EffectSsIceBlock_Spawn(globalCtx, &position, &velocity, &sIceBlockAccel, Rand_S16Offset(10, 10));
+    EffectSsIceBlock_Spawn(play, &position, &velocity, &sIceBlockAccel, Rand_S16Offset(10, 10));
     this->timer--;
     if (this->timer == 0) {
         func_80AC4C18(this);
@@ -118,13 +117,13 @@ void func_80AC4C18(BgIcefloe* this) {
     this->actionFunc = func_80AC4C34;
 }
 
-void func_80AC4C34(BgIcefloe* this, GlobalContext* globalCtx) {
+void func_80AC4C34(BgIcefloe* this, PlayState* play) {
     WaterBox* water;
 
     this->timer--;
     if (this->timer == 0 ||
-        !WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
-                                this->dyna.actor.world.pos.z, &this->dyna.actor.home.pos.y, &water)) {
+        !WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                                &this->dyna.actor.home.pos.y, &water)) {
         func_80AC4CF0(this);
     } else {
         this->dyna.actor.world.pos.y =
@@ -138,7 +137,7 @@ void func_80AC4CF0(BgIcefloe* this) {
     this->actionFunc = func_80AC4D2C;
 }
 
-void func_80AC4D2C(BgIcefloe* this, GlobalContext* globalCtx) {
+void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
     this->timer--;
     if ((this->timer >= 38) && !(this->timer % 2)) {
         Vec3f velocity;
@@ -151,7 +150,7 @@ void func_80AC4D2C(BgIcefloe* this, GlobalContext* globalCtx) {
         position.x = this->dyna.actor.world.pos.x + (2.0f * velocity.x);
         position.z = this->dyna.actor.world.pos.z + (2.0f * velocity.z);
         position.y = this->dyna.actor.world.pos.y + 3.0f;
-        EffectSsIceSmoke_Spawn(globalCtx, &position, &velocity, &gZeroVec3f, 200);
+        EffectSsIceSmoke_Spawn(play, &position, &velocity, &gZeroVec3f, 200);
     }
     if (this->timer < 25) {
         this->dyna.actor.scale.x -= 0.0052f;
@@ -163,16 +162,16 @@ void func_80AC4D2C(BgIcefloe* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcefloe_Update(Actor* thisx, PlayState* play) {
     BgIcefloe* this = THIS;
 
-    if (!Play_InCsMode(globalCtx)) {
-        this->actionFunc(this, globalCtx);
+    if (!Play_InCsMode(play)) {
+        this->actionFunc(this, play);
     }
 }
 
-void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgIcefloe_Draw(Actor* thisx, PlayState* play) {
     BgIcefloe* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, gIcefloeIcePlatformDL);
+    Gfx_DrawDListOpa(play, gIcefloeIcePlatformDL);
 }
