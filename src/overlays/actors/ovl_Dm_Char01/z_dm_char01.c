@@ -129,7 +129,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0,
-                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB));
+                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
             DynaPolyActor_Init(&this->dyna, 0);
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_mtoride_Colheader_00FE5C);
 
@@ -334,7 +334,7 @@ void func_80AA8F2C(DmChar01* this, PlayState* play) {
         if ((s32)this->dyna.actor.world.pos.y >= 0) {
             D_80AAAE26 = 2;
             Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0,
-                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB));
+                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
             this->actionFunc = func_80AA90F4;
         }
     }
