@@ -5,7 +5,7 @@
 
 struct EnHgo;
 
-typedef void (*EnHgoActionFunc)(struct EnHgo*, GlobalContext*);
+typedef void (*EnHgoActionFunc)(struct EnHgo*, PlayState*);
 
 // Shares the same setup as en_hg
 typedef enum {

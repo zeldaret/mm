@@ -5,7 +5,7 @@
 
 struct EnGs;
 
-typedef void (*EnGsActionFunc)(struct EnGs*, GlobalContext*);
+typedef void (*EnGsActionFunc)(struct EnGs*, PlayState*);
 
 #define ENGS_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENGS_GET_FE0(thisx) (((thisx)->params >> 5) & 0x7F)

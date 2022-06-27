@@ -5,7 +5,7 @@
 
 struct EnHonotrap;
 
-typedef void (*EnHonotrapActionFunc)(struct EnHonotrap*, GlobalContext*);
+typedef void (*EnHonotrapActionFunc)(struct EnHonotrap*, PlayState*);
 
 typedef struct EnHonotrap {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct ObjSnowball2;
 
-typedef void (*ObjSnowball2ActionFunc)(struct ObjSnowball2*, GlobalContext*);
+typedef void (*ObjSnowball2ActionFunc)(struct ObjSnowball2*, PlayState*);
 
 #define ENOBJSNOWBALL2_GET_3F(thisx) ((thisx)->params & 0x3F)
 #define ENOBJSNOWBALL2_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)

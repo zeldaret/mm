@@ -11,18 +11,18 @@
 
 #define THIS ((BgSpdweb*)thisx)
 
-void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgSpdweb_Init(Actor* thisx, PlayState* play);
+void BgSpdweb_Destroy(Actor* thisx, PlayState* play);
+void BgSpdweb_Update(Actor* thisx, PlayState* play);
+void BgSpdweb_Draw(Actor* thisx, PlayState* play);
 
 void func_809CE068(BgSpdweb* this);
-void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CE234(BgSpdweb* this, PlayState* play);
+void func_809CE4C8(BgSpdweb* this, PlayState* play);
+void func_809CE830(BgSpdweb* this, PlayState* play);
+void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
-void func_809CEEAC(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
 const ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
@@ -143,7 +143,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -153,32 +153,32 @@ void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
-        Collider_InitAndSetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);
+        Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);
         func_809CE068(this);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spdweb_Colheader_002678);
-        this->unk_2F8 = globalCtx->colCtx.dyna.bgActors[this->dyna.bgId].colHeader->vtxList;
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_spdweb_Colheader_002678);
+        this->unk_2F8 = play->colCtx.dyna.bgActors[this->dyna.bgId].colHeader->vtxList;
         this->unk_164 = 0.0f;
         this->actionFunc = func_809CE4C8;
     } else {
-        Collider_InitAndSetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit2, this->colliderElements);
+        Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit2, this->colliderElements);
         func_809CE068(this);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spdweb_Colheader_0011C0);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_spdweb_Colheader_0011C0);
         this->actionFunc = func_809CEBC0;
         Actor_SetFocus(&this->dyna.actor, 30.0f);
     }
 
     this->unk_162 = 0;
 
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
 
-void BgSpdweb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Destroy(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(play, &this->collider);
 }
 
 void func_809CE068(BgSpdweb* this) {
@@ -203,9 +203,9 @@ void func_809CE15C(BgSpdweb* this) {
             (this->dyna.actor.home.pos.y - this->dyna.actor.world.pos.y) * 10.0f;
 }
 
-void func_809CE1D0(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE1D0(BgSpdweb* this, PlayState* play) {
     this->unk_162 = 30;
-    Flags_SetSwitch(globalCtx, this->switchFlag);
+    Flags_SetSwitch(play, this->switchFlag);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
         this->actionFunc = func_809CE234;
@@ -214,7 +214,7 @@ void func_809CE1D0(BgSpdweb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE234(BgSpdweb* this, PlayState* play) {
     Vec3f spB4;
     Vec3f spA8;
     f32 temp_f20;
@@ -258,17 +258,17 @@ void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
             spB4.y = 0.0f;
             spB4.z = 7.0f * temp_f22 * temp_f20;
 
-            EffectSsDeadDb_Spawn(globalCtx, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x32, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x32,
+                                 8, 0xE);
             phi_s2 += 0x2AAA;
         }
 
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
     }
 }
 
-void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809CE4C8(BgSpdweb* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f sp40;
     ColliderTrisElement* element;
     s16 sp3A;
@@ -280,7 +280,7 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
     sp40.z = this->dyna.actor.world.pos.z;
     sp3A = player->unk_B6A;
 
-    if (func_80123F48(globalCtx, &sp40, 70.0f, 50.0f)) {
+    if (func_80123F48(play, &sp40, 70.0f, 50.0f)) {
         this->dyna.actor.home.pos.x = player->swordInfo[0].tip.x;
         this->dyna.actor.home.pos.z = player->swordInfo[0].tip.z;
         func_809CEE74(this);
@@ -347,11 +347,11 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
     }
 
     func_809CE15C(this);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
 #ifdef NON_MATCHING
-void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE830(BgSpdweb* this, PlayState* play) {
     Vec3f spDC;
     Vec3f spD0;
     Vec3f spC4;
@@ -415,20 +415,20 @@ void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx) {
             spDC.y = temp_f22 * ((6.5f * temp_f28) * spB0);
             spDC.z = (6.5f * temp_f28) * ((temp_f22 * sp90) - (spA4 * temp_f20));
 
-            EffectSsDeadDb_Spawn(globalCtx, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x3C, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x3C,
+                                 8, 0xE);
             temp_s3 += 0x2AAA;
         }
 
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
     }
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE830.s")
 #endif
 
-void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809CEBC0(BgSpdweb* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 sp58;
     f32 temp_f10;
     f32 temp_f18;
@@ -477,7 +477,7 @@ void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx) {
         }
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
 void func_809CEE74(BgSpdweb* this) {
@@ -485,42 +485,42 @@ void func_809CEE74(BgSpdweb* this) {
     this->actionFunc = func_809CEEAC;
 }
 
-void func_809CEEAC(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CEEAC(BgSpdweb* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        func_809CE1D0(this, globalCtx);
+        func_809CE1D0(this, play);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void BgSpdweb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Update(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
 
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
 
     if (thisx->params == BGSPDWEB_FF_1) {
-        gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], object_spdweb_DL_000060);
     } else {
         Matrix_Translate(0.0f, (thisx->home.pos.y - thisx->world.pos.y) * 10.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ((thisx->home.pos.y - thisx->world.pos.y) + 10.0f) * 0.1f, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], object_spdweb_DL_0012F0);
     }
 
     POLY_XLU_DISP = &gfx[3];
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

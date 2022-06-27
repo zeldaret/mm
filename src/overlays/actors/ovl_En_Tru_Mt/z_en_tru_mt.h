@@ -6,7 +6,7 @@
 
 struct EnTruMt;
 
-typedef void (*EnTruMtActionFunc)(struct EnTruMt*, GlobalContext*);
+typedef void (*EnTruMtActionFunc)(struct EnTruMt*, PlayState*);
 
 #define ENTRUMT_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENTRUMT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)

@@ -5,7 +5,7 @@
 
 struct ObjectKankyo;
 
-typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo*, GlobalContext*);
+typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo*, PlayState*);
 
 typedef struct {
     /* 0x00 */ f32 unk_00;

@@ -5,7 +5,7 @@
 
 struct EnSkb;
 
-typedef void (*EnSkbActionFunc)(struct EnSkb*, GlobalContext*);
+typedef void (*EnSkbActionFunc)(struct EnSkb*, PlayState*);
 
 #define ENSKB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 

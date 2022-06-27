@@ -5,7 +5,7 @@
 
 struct EnOt;
 
-typedef void (*EnOtActionFunc)(struct EnOt*, GlobalContext*);
+typedef void (*EnOtActionFunc)(struct EnOt*, PlayState*);
 
 #define ENOT_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define ENOT_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)

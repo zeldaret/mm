@@ -1,6 +1,6 @@
 #include "global.h"
 
-u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx) {
+u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
     if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
         return 0;
     }
@@ -20,7 +20,7 @@ u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx) {
         if (gSaveContext.save.weekEventReg[9] & 1) {
             return 0x21E;
         }
-        if (globalCtx->sceneNum == SCENE_YOUSEI_IZUMI) {
+        if (play->sceneNum == SCENE_YOUSEI_IZUMI) {
             return 0;
         }
         return 0x21D;
@@ -29,7 +29,7 @@ u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx) {
         return 0x21F;
     }
     if (INV_CONTENT(ITEM_DEED_LAND) == ITEM_DEED_LAND) {
-        if (globalCtx->sceneNum != SCENE_OKUJOU) {
+        if (play->sceneNum != SCENE_OKUJOU) {
             return 0x244;
         }
         return 0;

@@ -6,7 +6,7 @@
 
 struct BgSinkaiKabe;
 
-typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, GlobalContext*);
+typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, PlayState*);
 
 typedef struct BgSinkaiKabe {
     /* 0x000 */ DynaPolyActor dyna;
