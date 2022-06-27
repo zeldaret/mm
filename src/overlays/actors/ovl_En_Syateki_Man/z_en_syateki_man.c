@@ -123,18 +123,18 @@ static s32 sSwampTargetActorListLengths[] = {
     ARRAY_COUNT(sUnusedSwampTargetActorList),
 };
 
-static Vec3f D_809C9474 = { 0.0f, 10.0f, 140.0f };
-static Vec3f D_809C9480 = { -20.0f, 20.0f, 198.0f };
-static Vec3f D_809C948C = { -20.0f, 40.0f, 175.0f };
+static Vec3f sSwampPlayerPos = { 0.0f, 10.0f, 140.0f };
+static Vec3f sTownFierceDietyPlayerPos = { -20.0f, 20.0f, 198.0f };
+static Vec3f sTownPlayerPos = { -20.0f, 40.0f, 175.0f };
 
-void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, SwampTargetActorEntry arg2[],
-                                          s32 numTargetActors) {
+void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, SwampTargetActorEntry actorList[],
+                                          s32 actorListLength) {
     PlayState* play = play2;
     s32 i;
 
-    for (i = 0; i < numTargetActors; i++) {
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, arg2[i].actorId, arg2[i].pos.x, arg2[i].pos.y,
-                           arg2[i].pos.z, 0, 0, 0, arg2[i].params);
+    for (i = 0; i < actorListLength; i++) {
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorList[i].actorId, actorList[i].pos.x,
+                           actorList[i].pos.y, actorList[i].pos.z, 0, 0, 0, actorList[i].params);
     }
 }
 
@@ -142,7 +142,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
     Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
-    s32 numTargetActors = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
+    s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -175,7 +175,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     if (play->sceneNum == SCENE_SYATEKI_MORI) {
         this->path = path;
         EnSyatekiMan_Swamp_SpawnTargetActors(this, play, sSwampTargetActorLists[this->swampTargetActorListIndex],
-                                             numTargetActors);
+                                             actorListLength);
     }
 }
 
@@ -925,7 +925,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (EnSyatekiMan_MovePlayerToTarget(play, D_809C9474)) {
+    if (EnSyatekiMan_MovePlayerToTarget(play, sSwampPlayerPos)) {
         player->stateFlags1 |= 0x20;
         this->unk_26A = 2;
         if (this->unk_282 != 2) {
@@ -947,7 +947,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (D_809C9498 > 0) {
-        player->actor.world.pos = D_809C9474;
+        player->actor.world.pos = sSwampPlayerPos;
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
         play->unk_18790(play, -0x8000, &this->actor);
@@ -1111,15 +1111,15 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Town_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState* play) {
-    Vec3f sp24;
+    Vec3f targetPlayerPos;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
-        sp24 = D_809C9480;
+        targetPlayerPos = sTownFierceDietyPlayerPos;
     } else {
-        sp24 = D_809C948C;
+        targetPlayerPos = sTownPlayerPos;
     }
 
-    if (EnSyatekiMan_MovePlayerToTarget(play, sp24)) {
+    if (EnSyatekiMan_MovePlayerToTarget(play, targetPlayerPos)) {
         if (this->textId == 0x3FD) {
             // Our highest score is [score]. If you break the record, you'll win a prize!
             Message_StartTextbox(play, 0x3FE, &this->actor);
@@ -1140,9 +1140,9 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
 
     if (D_809C94A4 == 30) {
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            player->actor.world.pos = D_809C9480;
+            player->actor.world.pos = sTownFierceDietyPlayerPos;
         } else {
-            player->actor.world.pos = D_809C948C;
+            player->actor.world.pos = sTownPlayerPos;
         }
         player->actor.prevPos = player->actor.world.pos;
         player->actor.shape.rot.y = -0x8000;
