@@ -1,11 +1,16 @@
+/*
+ * File: sys_rumble.c
+ * Description: Internal scheduller system for rumble requests
+ */
+
 #include "global.h"
 #include "z64rumble.h"
 
-// sRumbleWasEnabledOnLastTick? Probably name it after updateEnabled
+// sRumbleWasEnabledOnLastTick/sWillDisableRumble? Probably name it after updateEnabled
 u8 D_801D1E70 = true;
 
 void RumbleManager_Update(RumbleManager* rumbleMgr) {
-    s32 index = -1;
+    s32 strongestIndex = -1;
     s32 i;
     s32 temp;
 
@@ -24,7 +29,6 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         }
 
         D_801D1E70 = rumbleMgr->updateEnabled;
-
         func_80175434();
 
         return;
@@ -34,24 +38,24 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
     // Start up the manager by wiping old requests
     if (rumbleMgr->state == RUMBLEMANAGER_STATE_INITIAL) {
-        for (i = 0; i < MAXCONTROLLERS; ++i) {
+        for (i = 0; i < MAXCONTROLLERS; i++) {
             func_8017544C(i, false);
         }
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
-            rumbleMgr->unk_04[i] = 0;
-            rumbleMgr->timer[i] = 0;
-            rumbleMgr->decreaseStep[i] = 0;
-            rumbleMgr->unk_C4[i] = 0;
+            rumbleMgr->requestIntensities[i] = 0;
+            rumbleMgr->requestDecayTimers[i] = 0;
+            rumbleMgr->requestDecaySteps[i] = 0;
+            rumbleMgr->requestAccumulators[i] = 0;
         }
 
-        rumbleMgr->rumblingTimer = 0;
-        rumbleMgr->unk_108 = 0;
+        rumbleMgr->rumblingDuration = 0;
+        rumbleMgr->downTime = 0;
 
-        rumbleMgr->unk_10A = 0;
-        rumbleMgr->overrideTimer = 0;
-        rumbleMgr->overrideDecreaseStep = 0;
-        rumbleMgr->unk_10D = 0;
+        rumbleMgr->overrideIntensity = 0;
+        rumbleMgr->overrideDecayTimer = 0;
+        rumbleMgr->overrideDecayStep = 0;
+        rumbleMgr->overrideAccumulator = 0;
 
         rumbleMgr->state = RUMBLEMANAGER_STATE_RUNNING;
 
@@ -61,86 +65,86 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
     if (rumbleMgr->state != RUMBLEMANAGER_STATE_WIPE) {
         // Process arrays of rumble requests
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
-            if (rumbleMgr->unk_04[i] != 0) { // This entry has a non-empty rumble request
-                if (rumbleMgr->timer[i] > 0) {
-                    rumbleMgr->timer[i]--;
+            if (rumbleMgr->requestIntensities[i] != 0) { // This entry has a non-empty rumble request
+                if (rumbleMgr->requestDecayTimers[i] > 0) {
+                    rumbleMgr->requestDecayTimers[i]--;
                 } else {
-                    temp = rumbleMgr->unk_04[i] - rumbleMgr->decreaseStep[i];
+                    temp = rumbleMgr->requestIntensities[i] - rumbleMgr->requestDecaySteps[i];
                     if (temp > 0) {
-                        rumbleMgr->unk_04[i] = temp;
+                        rumbleMgr->requestIntensities[i] = temp;
                     } else {
-                        rumbleMgr->unk_04[i] = 0;
+                        rumbleMgr->requestIntensities[i] = 0;
                     }
                 }
 
-                temp = rumbleMgr->unk_C4[i] + rumbleMgr->unk_04[i];
-                rumbleMgr->unk_C4[i] = temp; // overflows
-                if (index == -1) {
-                    index = i;
+                temp = rumbleMgr->requestAccumulators[i] + rumbleMgr->requestIntensities[i];
+                rumbleMgr->requestAccumulators[i] = temp; // overflows
+                if (strongestIndex == -1) {
+                    strongestIndex = i;
                     rumbleMgr->rumbleEnabled[0] = (temp >= 0x100);
-                } else if (rumbleMgr->unk_04[index] < rumbleMgr->unk_04[i]) {
-                    index = i;
+                } else if (rumbleMgr->requestIntensities[strongestIndex] < rumbleMgr->requestIntensities[i]) {
+                    strongestIndex = i;
                     rumbleMgr->rumbleEnabled[0] = (temp >= 0x100);
                 }
             }
         }
 
         // Process Override request. Note it takes priority over the values set by the request arrays
-        if (rumbleMgr->unk_10A != 0) {
-            if (rumbleMgr->overrideTimer > 0) {
-                rumbleMgr->overrideTimer--;
+        if (rumbleMgr->overrideIntensity != 0) {
+            if (rumbleMgr->overrideDecayTimer > 0) {
+                rumbleMgr->overrideDecayTimer--;
             } else {
-                temp = rumbleMgr->unk_10A - rumbleMgr->overrideDecreaseStep;
+                temp = rumbleMgr->overrideIntensity - rumbleMgr->overrideDecayStep;
                 if (temp > 0) {
-                    rumbleMgr->unk_10A = temp;
+                    rumbleMgr->overrideIntensity = temp;
                 } else {
-                    rumbleMgr->unk_10A = 0;
+                    rumbleMgr->overrideIntensity = 0;
                 }
             }
 
-            temp = rumbleMgr->unk_10D + rumbleMgr->unk_10A;
-            rumbleMgr->unk_10D = temp; // overflows
+            temp = rumbleMgr->overrideAccumulator + rumbleMgr->overrideIntensity;
+            rumbleMgr->overrideAccumulator = temp; // overflows
             rumbleMgr->rumbleEnabled[0] = (temp >= 0x100);
         }
 
-        if (rumbleMgr->unk_10A != 0) {
-            temp = rumbleMgr->unk_10A;
-        } else if (index == -1) {
+        if (rumbleMgr->overrideIntensity != 0) {
+            temp = rumbleMgr->overrideIntensity;
+        } else if (strongestIndex == -1) {
             temp = 0;
         } else {
-            temp = rumbleMgr->unk_04[index];
+            temp = rumbleMgr->requestIntensities[strongestIndex];
         }
 
-        // Keep track of how long rumbling has been (almost) nonstop enabled
+        // Keep track of how long this have been rumbling (almost) nonstop
         if (temp == 0) {
-            rumbleMgr->unk_108++;
-            if (rumbleMgr->unk_108 > 5) {
-                rumbleMgr->rumblingTimer = 0;
-                rumbleMgr->unk_108 = 5;
+            rumbleMgr->downTime++;
+            if (rumbleMgr->downTime > 5) {
+                rumbleMgr->rumblingDuration = 0;
+                rumbleMgr->downTime = 5;
             }
         } else {
-            rumbleMgr->unk_108 = 0;
-            rumbleMgr->rumblingTimer++;
-            if (rumbleMgr->rumblingTimer > 2 * 60 * 60) { // 2 minutes
-                // Rumbling has lasted too long
+            rumbleMgr->downTime = 0;
+            rumbleMgr->rumblingDuration++;
+            if (rumbleMgr->rumblingDuration > 2 * 60 * 60) { // 2 minutes
+                // Rumbling has lasted too long, clear system
                 rumbleMgr->state = RUMBLEMANAGER_STATE_WIPE;
             }
         }
     } else { // RUMBLEMANAGER_STATE_WIPE
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
-            rumbleMgr->unk_04[i] = 0;
-            rumbleMgr->timer[i] = 0;
-            rumbleMgr->decreaseStep[i] = 0;
-            rumbleMgr->unk_C4[i] = 0;
+            rumbleMgr->requestIntensities[i] = 0;
+            rumbleMgr->requestDecayTimers[i] = 0;
+            rumbleMgr->requestDecaySteps[i] = 0;
+            rumbleMgr->requestAccumulators[i] = 0;
         }
 
-        rumbleMgr->rumblingTimer = 0;
-        rumbleMgr->unk_108 = 0;
+        rumbleMgr->rumblingDuration = 0;
+        rumbleMgr->downTime = 0;
 
-        rumbleMgr->unk_10A = 0;
-        rumbleMgr->overrideTimer = 0;
-        rumbleMgr->overrideDecreaseStep = 0;
-        rumbleMgr->unk_10D = 0;
+        rumbleMgr->overrideIntensity = 0;
+        rumbleMgr->overrideDecayTimer = 0;
+        rumbleMgr->overrideDecayStep = 0;
+        rumbleMgr->overrideAccumulator = 0;
 
         func_80175434();
     }

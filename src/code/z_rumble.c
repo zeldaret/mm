@@ -1,3 +1,12 @@
+/*
+ * File: z_rumble.c
+ * Description: Rumble request system
+ *
+ * Provides a simple interface to allow schedulling up to RUMBLE_REQUEST_BUFFER_SIZE rumble requests to the RumblePak.
+ * There's an aditional Override type of rumble request for requests which should take priorities over any other
+ * schedulled request.
+ */
+
 #include "global.h"
 #include "z64rumble.h"
 
@@ -23,9 +32,9 @@ void Rumble_Override(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep) {
         temp = arg1 - (distance * 255) / 1000;
 
         if (temp > 0) {
-            gRumbleMgr.unk_10A = temp;
-            gRumbleMgr.overrideTimer = ticksTimer;
-            gRumbleMgr.overrideDecreaseStep = decreaseStep;
+            gRumbleMgr.overrideIntensity = temp;
+            gRumbleMgr.overrideDecayTimer = ticksTimer;
+            gRumbleMgr.overrideDecayStep = decreaseStep;
         }
     }
 }
@@ -45,11 +54,11 @@ void Rumble_Request(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep) {
         temp = arg1 - (distance * 255) / 1000;
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
-            if (gRumbleMgr.unk_04[i] == 0) {
+            if (gRumbleMgr.requestIntensities[i] == 0) {
                 if (temp > 0) {
-                    gRumbleMgr.unk_04[i] = temp;
-                    gRumbleMgr.timer[i] = ticksTimer;
-                    gRumbleMgr.decreaseStep[i] = decreaseStep;
+                    gRumbleMgr.requestIntensities[i] = temp;
+                    gRumbleMgr.requestDecayTimers[i] = ticksTimer;
+                    gRumbleMgr.requestDecaySteps[i] = decreaseStep;
                 }
                 break;
             }
@@ -81,7 +90,7 @@ void Rumble_StateReset(void) {
 /**
  * Changes the state of the manager to WIPE
  *
- * On this state, every request is deleted
+ * In this state, every request is deleted
  */
 void Rumble_StateWipeRequests(void) {
     gRumbleMgr.state = RUMBLEMANAGER_STATE_WIPE;
