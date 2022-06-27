@@ -3632,8 +3632,7 @@ beginseg
     name "ovl_En_Gamelupy"
     compress
     include "build/src/overlays/actors/ovl_En_Gamelupy/z_en_gamelupy.o"
-    include "build/data/ovl_En_Gamelupy/ovl_En_Gamelupy.data.o"
-    include "build/data/ovl_En_Gamelupy/ovl_En_Gamelupy.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Gamelupy/ovl_En_Gamelupy_reloc.o"
 endseg
 
 beginseg
