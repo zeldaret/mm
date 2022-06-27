@@ -693,8 +693,8 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
                 this->unk_4C0[i].x *= temp_f20;
                 this->unk_4C0[i].y *= temp_f20;
                 this->unk_4C0[i].z *= temp_f20;
-                EffectSsHahen_Spawn(play, &this->unk_4B4, &this->unk_4C0[i], &sp74, HAHEN_SMALL, sp68, GAMEPLAY_KEEP, 15,
-                                    gameplay_keep_DL_06AB30);
+                EffectSsHahen_Spawn(play, &this->unk_4B4, &this->unk_4C0[i], &sp74, HAHEN_SMALL, sp68, GAMEPLAY_KEEP,
+                                    15, gameplay_keep_DL_06AB30);
             }
         }
         this->unk_4E0--;

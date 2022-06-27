@@ -261,7 +261,8 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
     D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
 
-    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4, HAHEN_OBJECT_DEFAULT, 10, NULL);
+    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4,
+                        HAHEN_OBJECT_DEFAULT, 10, NULL);
 }
 
 void func_80897390(EnPeehat* this, PlayState* play) {

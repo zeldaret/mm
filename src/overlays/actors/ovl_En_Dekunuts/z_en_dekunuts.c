@@ -540,7 +540,8 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xE0);
         Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, OBJECT_DEKUNUTS, 10, gDekuScrubFlowerFragmentDL);
+        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, OBJECT_DEKUNUTS, 10,
+                                 gDekuScrubFlowerFragmentDL);
         Actor_MarkForDeath(&this->actor);
     }
 }

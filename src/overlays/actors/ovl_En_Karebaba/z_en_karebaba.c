@@ -143,8 +143,8 @@ void EnKarebaba_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8,
-                   this->jointTable, this->morphTable, 8);
+    SkelAnime_Init(play, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8, this->jointTable,
+                   this->morphTable, 8);
 
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit1);
     Collider_UpdateCylinder(&this->actor, &this->collider2);
@@ -408,8 +408,7 @@ void func_808F1C84(EnKarebaba* this, PlayState* play) {
 
         if (this->unk_1EE == 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
-            EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10,
-                                     NULL);
+            EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if ((this->actor.scale.x > 0.005f) && ((this->actor.bgCheckFlags & 2) || (this->actor.bgCheckFlags & 8))) {
                 this->actor.scale.z = 0.0f;
@@ -417,8 +416,8 @@ void func_808F1C84(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.x = 0.0f;
                 this->actor.speedXZ = 0.0f;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-                EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT,
-                                         10, NULL);
+                EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
+                                         NULL);
             }
 
             if (this->actor.bgCheckFlags & 2) {
@@ -466,8 +465,7 @@ void func_808F200C(EnKarebaba* this, PlayState* play) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
             func_808F238C(this);
         } else {
-            EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10,
-                                     NULL);
+            EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
             Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 1.0f);
         }
         this->actor.scale.y = this->actor.scale.x;
@@ -662,15 +660,13 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         if ((this->unk_1EE > 40) || (this->unk_1EE & 1)) {
             Matrix_Translate(0.0f, 0.0f, 200.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_003070);
         }
     } else if (this->actionFunc != func_808F254C) {
         func_800AE2A0(play, &D_808F2E28, 1, 2);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
 
         if ((this->actionFunc == func_808F241C) || (this->actionFunc == func_808F200C) ||
             (this->actionFunc == func_808F15B0)) {
@@ -691,8 +687,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < sp94; i++) {
             Matrix_Translate(0.0f, 0.0f, -2000.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
             Matrix_MultZero(&this->limbPos[1 + i]);
