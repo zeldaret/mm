@@ -91,8 +91,7 @@ void EnDs2n_Update(Actor* thisx, PlayState* play) {
     EnDs2n_UpdateEyes(this);
 }
 
-s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDs2n* this = THIS;
 
     if (limbIndex == DS2N_LIMB_HEAD) {
