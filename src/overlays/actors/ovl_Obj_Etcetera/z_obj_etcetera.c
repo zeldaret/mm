@@ -5,7 +5,6 @@
  */
 
 #include "z_obj_etcetera.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -261,14 +260,14 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
             case DEKU_FLOWER_TYPE_PINK:
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(play, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim, this->jointTable,
-                               this->morphTable, DEKU_FLOWER_LIMB_MAX);
+                               this->morphTable, PINK_DEKU_FLOWER_LIMB_MAX);
                 this->dList = gPinkDekuFlowerIdleDL;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
                 this->dList = gGoldDekuFlowerIdleDL;
                 SkelAnime_Init(play, &this->skelAnime, &gGoldDekuFlowerSkel.sh, &gDekuFlowerBounceAnim,
-                               this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
+                               this->jointTable, this->morphTable, GOLD_DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
                 break;
         }
