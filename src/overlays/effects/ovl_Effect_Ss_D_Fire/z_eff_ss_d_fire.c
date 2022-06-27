@@ -78,9 +78,9 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         scale = this->rScale / 100.0f;
 
-        Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, 0);
-        Matrix_Scale(scale, scale, scale, 1);
-        Matrix_Mult(&play->billboardMtxF, 1);
+        Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+        Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C974(gfxCtx);
