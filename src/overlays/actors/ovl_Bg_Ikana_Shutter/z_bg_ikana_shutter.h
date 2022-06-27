@@ -5,7 +5,7 @@
 
 struct BgIkanaShutter;
 
-typedef void (*BgIkanaShutterActionFunc)(struct BgIkanaShutter*, GlobalContext*);
+typedef void (*BgIkanaShutterActionFunc)(struct BgIkanaShutter*, PlayState*);
 
 typedef struct BgIkanaShutter {
     /* 0x000 */ DynaPolyActor dyna;

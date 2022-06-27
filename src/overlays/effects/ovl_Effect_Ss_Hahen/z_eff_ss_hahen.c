@@ -8,9 +8,9 @@
 
 #define PARAMS ((EffectSsHahenInitParams*)initParamsx)
 
-s32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsHahen_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Hahen_InitVars = {

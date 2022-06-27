@@ -2,10 +2,11 @@
 #define Z_EN_FLOORMAS_H
 
 #include "global.h"
+#include "objects/object_wallmaster/object_wallmaster.h"
 
 struct EnFloormas;
 
-typedef void (*EnFloormasActionFunc)(struct EnFloormas*, GlobalContext*);
+typedef void (*EnFloormasActionFunc)(struct EnFloormas*, PlayState*);
 
 #define ENFLOORMAS_GET_7FFF(thisx) ((thisx)->params & 0x7FFF)
 #define ENFLOORMAS_GET_8000(thisx) ((thisx)->params & 0x8000)
@@ -26,8 +27,8 @@ typedef struct EnFloormas {
     /* 0x0190 */ s16 unk_190;
     /* 0x0192 */ s16 unk_192;
     /* 0x0194 */ s16 unk_194;
-    /* 0x0196 */ Vec3s jointTable[25];
-    /* 0x022C */ Vec3s morphTable[25];
+    /* 0x0196 */ Vec3s jointTable[WALLMASTER_LIMB_MAX];
+    /* 0x022C */ Vec3s morphTable[WALLMASTER_LIMB_MAX];
     /* 0x02C4 */ f32 drawDmgEffAlpha;
     /* 0x02C8 */ f32 drawDmgEffScale;
     /* 0x02CC */ f32 drawDmgEffFrozenSteamScale;

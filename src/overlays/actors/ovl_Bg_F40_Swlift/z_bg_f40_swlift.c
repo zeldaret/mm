@@ -10,10 +10,10 @@
 
 #define THIS ((BgF40Swlift*)thisx)
 
-void BgF40Swlift_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgF40Swlift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgF40Swlift_Init(Actor* thisx, PlayState* play);
+void BgF40Swlift_Destroy(Actor* thisx, PlayState* play);
+void BgF40Swlift_Update(Actor* thisx, PlayState* play);
+void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_F40_Swlift_InitVars = {

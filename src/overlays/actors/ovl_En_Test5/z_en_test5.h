@@ -7,7 +7,7 @@
 
 struct EnTest5; // SpringWaterModifier
 
-typedef void (*EnTest5ActionFunc)(struct EnTest5*, GlobalContext*);
+typedef void (*EnTest5ActionFunc)(struct EnTest5*, PlayState*);
 
 typedef struct EnTest5 {
     /* 0x0000 */ Actor actor;

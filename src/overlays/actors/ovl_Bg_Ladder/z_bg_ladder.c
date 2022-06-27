@@ -11,14 +11,14 @@
 
 #define THIS ((BgLadder*)thisx)
 
-void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgLadder_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgLadder_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgLadder_Draw(Actor* thisx, GlobalContext* globalCtx);
-void BgLadder_ActionWait(BgLadder* this, GlobalContext* globalCtx);
-void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx);
-void BgLadder_ActionFadeIn(BgLadder* this, GlobalContext* globalCtx);
-void BgLadder_ActionIdle(BgLadder* this, GlobalContext* globalCtx);
+void BgLadder_Init(Actor* thisx, PlayState* play);
+void BgLadder_Destroy(Actor* thisx, PlayState* play);
+void BgLadder_Update(Actor* thisx, PlayState* play);
+void BgLadder_Draw(Actor* thisx, PlayState* play);
+void BgLadder_ActionWait(BgLadder* this, PlayState* play);
+void BgLadder_ActionStartCutscene(BgLadder* this, PlayState* play);
+void BgLadder_ActionFadeIn(BgLadder* this, PlayState* play);
+void BgLadder_ActionIdle(BgLadder* this, PlayState* play);
 
 const ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
@@ -43,7 +43,7 @@ static Gfx* sLadderDLists[] = {
     object_ladder_DL_000730, // 24 Rung
 };
 
-void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgLadder_Init(Actor* thisx, PlayState* play) {
     BgLadder* this = THIS;
     BgLadderSize size;
 
@@ -56,19 +56,19 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_0001D8);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_0001D8);
     } else if (size == LADDER_SIZE_16RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000408);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000408);
     } else if (size == LADDER_SIZE_20RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000638);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000638);
     } else if (size == LADDER_SIZE_24RUNG) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ladder_Colheader_000868);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000868);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
 
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         // If the flag is set, then the ladder draws immediately
         this->alpha = 255;
         this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
@@ -76,27 +76,27 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         // Otherwise, the ladder doesn't draw; wait for the flag to be set
         this->alpha = 5;
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->action = BgLadder_ActionWait;
     }
 }
 
-void BgLadder_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgLadder_Destroy(Actor* thisx, PlayState* play) {
     BgLadder* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgLadder_ActionWait(BgLadder* this, GlobalContext* globalCtx) {
+void BgLadder_ActionWait(BgLadder* this, PlayState* play) {
     // Wait for the flag to be set, then trigger the cutscene
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         this->action = BgLadder_ActionStartCutscene;
     }
 }
 
-void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
+void BgLadder_ActionStartCutscene(BgLadder* this, PlayState* play) {
     // Trigger the cutscene, then make the ladder fade in
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -108,45 +108,45 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgLadder_ActionFadeIn(BgLadder* this, GlobalContext* globalCtx) {
+void BgLadder_ActionFadeIn(BgLadder* this, PlayState* play) {
     // Fade in the ladder, then stop the cutscene & go idle
     this->alpha += 5;
     if (this->alpha >= 255) {
         this->alpha = 255;
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
         this->action = BgLadder_ActionIdle;
     }
 }
 
-void BgLadder_ActionIdle(BgLadder* this, GlobalContext* globalCtx) {
+void BgLadder_ActionIdle(BgLadder* this, PlayState* play) {
 }
 
-void BgLadder_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgLadder_Update(Actor* thisx, PlayState* play) {
     BgLadder* this = THIS;
 
-    this->action(this, globalCtx);
+    this->action(this, play);
 }
 
-void BgLadder_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgLadder_Draw(Actor* thisx, PlayState* play) {
     BgLadder* this = THIS;
     s32 pad;
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (this->alpha == 255) {
-        Scene_SetRenderModeXlu(globalCtx, 0, 0x01);
+        Scene_SetRenderModeXlu(play, 0, 0x01);
         gfx = POLY_OPA_DISP;
     } else {
-        Scene_SetRenderModeXlu(globalCtx, 1, 0x02);
+        Scene_SetRenderModeXlu(play, 1, 0x02);
         gfx = POLY_XLU_DISP;
     }
 
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 0x19]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
-    gSPMatrix(&gfx[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+    gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&gfx[3], sLadderDLists[this->dyna.actor.params]);
 
     if (this->alpha == 255) {
@@ -155,5 +155,5 @@ void BgLadder_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_XLU_DISP = gfx + 4;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -6,7 +6,7 @@
 
 struct ObjHunsui;
 
-typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, GlobalContext*);
+typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, PlayState*);
 
 #define OBJHUNSUI_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJHUNSUI_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)

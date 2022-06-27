@@ -5,7 +5,7 @@
 
 struct EnBigpo;
 
-typedef void (*EnBigPoActionFunc)(struct EnBigpo*, GlobalContext*);
+typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
 
 typedef struct EnBigpoFireEffect {
     /* 0x00 */ Vec3f pos;

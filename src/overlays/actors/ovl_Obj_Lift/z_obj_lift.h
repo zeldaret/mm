@@ -5,7 +5,7 @@
 
 struct ObjLift;
 
-typedef void (*ObjLiftActionFunc)(struct ObjLift*, GlobalContext*);
+typedef void (*ObjLiftActionFunc)(struct ObjLift*, PlayState*);
 
 typedef struct ObjLift {
     /* 0x0000 */ Actor actor;
