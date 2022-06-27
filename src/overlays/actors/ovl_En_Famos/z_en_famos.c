@@ -549,7 +549,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            func_800DFD04(play->cameraPtrs[globalCtx->activeCamera], 2, 15, 10); // camera shake?
+            func_800DFD04(play->cameraPtrs[play->activeCamera], 2, 15, 10); // camera shake?
             Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
