@@ -35,7 +35,7 @@ const ActorInit Obj_Hsblock_InitVars = {
     (ActorFunc)ObjHsblock_Draw,
 };
 
-static f32 focusPoss[] = { 85.0f, 85.0f, 0.0f };
+static f32 sFocusPoss[] = { 85.0f, 85.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -131,7 +131,7 @@ void ObjHsblock_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc != NULL) {
         this->actionFunc(this, play);
     }
-    Actor_SetFocus(&this->dyna.actor, focusPoss[OBJHSBLOCK_GET_3(thisx)]);
+    Actor_SetFocus(&this->dyna.actor, sFocusPoss[OBJHSBLOCK_GET_3(thisx)]);
 }
 
 void ObjHsblock_Draw(Actor* thisx, PlayState* play) {
