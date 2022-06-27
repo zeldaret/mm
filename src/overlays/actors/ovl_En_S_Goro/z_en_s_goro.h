@@ -7,7 +7,7 @@
 
 struct EnSGoro;
 
-typedef void (*EnSGoroActionFunc)(struct EnSGoro*, GlobalContext*);
+typedef void (*EnSGoroActionFunc)(struct EnSGoro*, PlayState*);
 
 typedef struct EnSGoro {
     /* 0x0000 */ Actor actor;

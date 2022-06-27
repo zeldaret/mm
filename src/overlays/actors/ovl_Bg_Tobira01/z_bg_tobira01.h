@@ -5,7 +5,7 @@
 
 struct BgTobira01;
 
-typedef void (*BgTobira01ActionFunc)(struct BgTobira01*, struct GlobalContext*);
+typedef void (*BgTobira01ActionFunc)(struct BgTobira01*, struct PlayState*);
 
 typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;

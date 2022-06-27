@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64load.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_overlay/func_801651B0.s")
 

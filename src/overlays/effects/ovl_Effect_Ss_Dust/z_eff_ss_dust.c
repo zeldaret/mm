@@ -21,10 +21,12 @@
 #define rDrawFlags regs[11]
 #define rLifespan regs[12]
 
-u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+#define PARAMS ((EffectSsDustInitParams*)initParamsx)
+
+u32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsBlast_UpdateFire(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Dust_InitVars = {
     EFFECT_SS_DUST,
@@ -40,8 +42,8 @@ static TexturePtr dustTextures[] = {
     gDust1Tex, gDust2Tex, gDust3Tex, gDust4Tex, gDust5Tex, gDust6Tex, gDust7Tex, gDust8Tex,
 };
 
-u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    EffectSsDustInitParams* initParams = (EffectSsDustInitParams*)initParamsx;
+u32 EffectSsDust_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
+    EffectSsDustInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->pos, &initParams->pos);
     Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
@@ -80,12 +82,12 @@ u32 EffectSsDust_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void*
     return 1;
 }
 
-void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
-    MtxF mfTrans11DA0;
+    MtxF mfTransBillboard;
     s32 pad;
     Mtx* mtx;
     f32 scale;
@@ -95,8 +97,8 @@ void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     scale = this->rScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfScale, &mfResult);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
@@ -129,7 +131,7 @@ void EffectSsDust_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this) {
     this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
     this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
 
@@ -147,7 +149,7 @@ void EffectSsDust_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
 }
 
 // this update mode is unused in the original game
-void EffectSsBlast_UpdateFire(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsBlast_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
     this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
     this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
 

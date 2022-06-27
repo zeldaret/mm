@@ -6,7 +6,7 @@
 
 struct EnAni;
 
-typedef void (*EnAniActionFunc)(struct EnAni*, GlobalContext*);
+typedef void (*EnAniActionFunc)(struct EnAni*, PlayState*);
 typedef void (*EnAniBlinkFunc)(struct EnAni*);
 
 

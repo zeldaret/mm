@@ -6,7 +6,7 @@
 
 struct DoorWarp1;
 
-typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1*, GlobalContext*);
+typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1*, PlayState*);
 
 #define DOORWARP1_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define DOORWARP1_GET_FF00_1(thisx) (((thisx)->params >> 8) & 0xFF)

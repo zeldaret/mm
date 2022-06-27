@@ -5,7 +5,7 @@
 
 struct EnPp;
 
-typedef void (*EnPpActionFunc)(struct EnPp*, GlobalContext*);
+typedef void (*EnPpActionFunc)(struct EnPp*, PlayState*);
 
 typedef struct EnPp {
     /* 0x0000 */ Actor actor;
