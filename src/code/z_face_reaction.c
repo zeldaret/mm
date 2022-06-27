@@ -178,9 +178,9 @@ static u16 sReactionTextIds[][PLAYER_MASK_GIANT - 1] = {
 };
 // clang-format on
 
-u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet) {
-    if ((Player_GetMask(globalCtx) > PLAYER_MASK_NONE) && (Player_GetMask(globalCtx) < PLAYER_MASK_GIANT)) {
-        return sReactionTextIds[reactionSet][Player_GetMask(globalCtx) - 1];
+u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet) {
+    if ((Player_GetMask(play) > PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
+        return sReactionTextIds[reactionSet][Player_GetMask(play) - 1];
     }
     return 0;
 }

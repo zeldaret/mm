@@ -5,7 +5,7 @@
 
 struct EnZot;
 
-typedef void (*EnZotActionFunc)(struct EnZot*, GlobalContext*);
+typedef void (*EnZotActionFunc)(struct EnZot*, PlayState*);
 
 #define ENZOT_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENZOT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)

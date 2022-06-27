@@ -10,26 +10,26 @@
 
 #define THIS ((ObjUm*)thisx)
 
-void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjUm_Init(Actor* thisx, PlayState* play);
+void ObjUm_Destroy(Actor* thisx, PlayState* play);
+void ObjUm_Update(Actor* thisx, PlayState* play);
+void ObjUm_Draw(Actor* thisx, PlayState* play);
 
-void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
-void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A394(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A400(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A494(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AC94(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
+void func_80B79A50(ObjUm* this, PlayState* play);
+void func_80B79F10(ObjUm* this, PlayState* play);
+void func_80B7A070(ObjUm* this, PlayState* play);
+void func_80B7A0E0(ObjUm* this, PlayState* play);
+void func_80B7A144(ObjUm* this, PlayState* play);
+void func_80B7A2AC(ObjUm* this, PlayState* play);
+void func_80B7A394(ObjUm* this, PlayState* play);
+void func_80B7A400(ObjUm* this, PlayState* play);
+void func_80B7A494(ObjUm* this, PlayState* play);
+void func_80B7A614(ObjUm* this, PlayState* play);
+void func_80B7A7AC(ObjUm* this, PlayState* play);
+void func_80B7ABE4(ObjUm* this, PlayState* play);
+void func_80B7AC94(ObjUm* this, PlayState* play);
+void func_80B7AD34(ObjUm* this, PlayState* play);
+void func_80B7AE58(ObjUm* this, PlayState* play);
 
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 

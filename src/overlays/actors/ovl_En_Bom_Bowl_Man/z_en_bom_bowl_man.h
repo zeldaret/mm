@@ -5,7 +5,7 @@
 
 struct EnBomBowlMan;
 
-typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, GlobalContext*);
+typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, PlayState*);
 
 #define ENBOMBOWLMAN_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMBOWLMAN_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)

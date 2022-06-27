@@ -7,7 +7,7 @@
 
 struct ObjKzsaku;
 
-typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku*, GlobalContext*);
+typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku*, PlayState*);
 
 typedef struct ObjKzsaku {
     /* 0x0000 */ DynaPolyActor dyna;

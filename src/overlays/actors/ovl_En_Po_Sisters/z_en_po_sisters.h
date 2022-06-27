@@ -5,7 +5,7 @@
 
 struct EnPoSisters;
 
-typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, GlobalContext*);
+typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 
 #define ENPOSISTERS_GET_300(thisx) (((thisx)->params >> 8) & 3)
 #define ENPOSISTERS_GET_C00(thisx) (((thisx)->params >> 0xA) & 3)
