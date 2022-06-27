@@ -11,14 +11,14 @@
 
 #define THIS ((EnTruMt*)thisx)
 
-void EnTruMt_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTruMt_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTruMt_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTruMt_Init(Actor* thisx, PlayState* play);
+void EnTruMt_Destroy(Actor* thisx, PlayState* play);
+void EnTruMt_Update(Actor* thisx, PlayState* play);
+void EnTruMt_Draw(Actor* thisx, PlayState* play);
 
-void func_80B76A64(EnTruMt* this, GlobalContext* globalCtx);
-void func_80B76BB8(EnTruMt* this, GlobalContext* globalCtx);
-void func_80B76C38(EnTruMt* this, GlobalContext* globalCtx);
+void func_80B76A64(EnTruMt* this, PlayState* play);
+void func_80B76BB8(EnTruMt* this, PlayState* play);
+void func_80B76C38(EnTruMt* this, PlayState* play);
 
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
@@ -149,7 +149,7 @@ void func_80B76188(EnTruMt* this) {
     Math_SmoothStepToS(&this->unk_38C, 0, 4, 0x3E8, 1);
 }
 
-s32 func_80B761FC(EnTruMt* this, GlobalContext* globalCtx) {
+s32 func_80B761FC(EnTruMt* this, PlayState* play) {
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 16.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
@@ -165,7 +165,7 @@ s32 func_80B761FC(EnTruMt* this, GlobalContext* globalCtx) {
                 this->unk_3A4 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
-            globalCtx->interfaceCtx.unk_25E = 1;
+            play->interfaceCtx.unk_25E = 1;
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
             return true;
         }
@@ -177,13 +177,13 @@ s32 func_80B761FC(EnTruMt* this, GlobalContext* globalCtx) {
         this->unk_38E.x = 0;
     }
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     return false;
 }
 
-s32 func_80B76368(EnTruMt* this, GlobalContext* globalCtx) {
-    Actor* bgActor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
+s32 func_80B76368(EnTruMt* this, PlayState* play) {
+    Actor* bgActor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (bgActor != NULL) {
         if (bgActor->id == ACTOR_BG_INGATE) {
@@ -197,12 +197,12 @@ s32 func_80B76368(EnTruMt* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80B763C4(EnTruMt* this, GlobalContext* globalCtx) {
+s32 func_80B763C4(EnTruMt* this, PlayState* play) {
     Actor* foundActor;
     Actor* actor = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
+        foundActor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
 
         if (foundActor == NULL) {
             break;
@@ -222,8 +222,8 @@ s32 func_80B763C4(EnTruMt* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80B76440(EnTruMt* this, GlobalContext* globalCtx) {
-    if (func_80B76368(this, globalCtx)) {
+void func_80B76440(EnTruMt* this, PlayState* play) {
+    if (func_80B76368(this, play)) {
         s16 temp_v1 = this->unk_394 - Math_Vec3f_Yaw(&this->unk_398, &this->actor.world.pos);
 
         if ((temp_v1 <= -0x2000) || (temp_v1 >= 0x2000)) {
@@ -289,8 +289,8 @@ s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
     return sp50;
 }
 
-void func_80B7679C(EnTruMt* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B7679C(EnTruMt* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f sp40;
     Vec3f sp34;
 
@@ -307,9 +307,9 @@ void func_80B7679C(EnTruMt* this, GlobalContext* globalCtx) {
     this->unk_348 = CLAMP(this->unk_348, -0x1C70, 0x1C70);
 }
 
-s32 func_80B768F0(EnTruMt* this, GlobalContext* globalCtx) {
+s32 func_80B768F0(EnTruMt* this, PlayState* play) {
     if (this->unk_328 & 0x10) {
-        func_80B7679C(this, globalCtx);
+        func_80B7679C(this, play);
     }
     return true;
 }
@@ -319,11 +319,11 @@ void func_80B76924(EnTruMt* this) {
     this->unk_388 += 0x400;
 }
 
-void func_80B76980(EnTruMt* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B76980(EnTruMt* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (gSaveContext.unk_3F3C >= 10) {
-        Message_StartTextbox(globalCtx, 0x87F, &this->actor);
+        Message_StartTextbox(play, 0x87F, &this->actor);
         gSaveContext.eventInf[3] |= 0x40;
         gSaveContext.eventInf[4] |= 1;
         player->stateFlags3 &= ~0x400;
@@ -340,12 +340,12 @@ void func_80B76980(EnTruMt* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B76A64(EnTruMt* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B76A64(EnTruMt* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3s sp34;
 
     func_80B76924(this);
-    func_80B76980(this, globalCtx);
+    func_80B76980(this, play);
     player->stateFlags3 |= 0x400;
 
     if (this->path != NULL) {
@@ -366,30 +366,30 @@ void func_80B76A64(EnTruMt* this, GlobalContext* globalCtx) {
             }
             this->unk_36C++;
         }
-        func_80B76440(this, globalCtx);
+        func_80B76440(this, play);
     }
 }
 
-void func_80B76BB8(EnTruMt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (Message_ShouldAdvance(globalCtx)) {
-            globalCtx->nextEntranceIndex = 0xA810;
-            globalCtx->unk_1887F = 3;
+void func_80B76BB8(EnTruMt* this, PlayState* play) {
+    if (Message_GetState(&play->msgCtx) == 5) {
+        if (Message_ShouldAdvance(play)) {
+            play->nextEntranceIndex = 0xA810;
+            play->unk_1887F = 3;
             gSaveContext.nextTransition = 3;
-            globalCtx->sceneLoadFlag = 0x14;
+            play->sceneLoadFlag = 0x14;
         }
     }
 }
 
-void func_80B76C38(EnTruMt* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B76C38(EnTruMt* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     func_80B76924(this);
-    func_80B76980(this, globalCtx);
+    func_80B76980(this, play);
     player->stateFlags3 |= 0x400;
 }
 
-void EnTruMt_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTruMt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTruMt* this = THIS;
 
@@ -398,52 +398,52 @@ void EnTruMt_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (func_80B763C4(this, globalCtx)) {
+    if (func_80B763C4(this, play)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
                        OBJECT_TRU_LIMB_MAX);
 
-    Collider_InitSphere(globalCtx, &this->collider);
-    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+    Collider_InitSphere(play, &this->collider);
+    Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
 
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->path = SubS_GetPathByIndex(globalCtx, ENTRUMT_GET_FF(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), 0x3F);
     this->actor.targetMode = 0;
 
     Actor_SetScale(&this->actor, 0.008f);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     this->unk_328 = 0;
     this->actor.room = -1;
-    this->path = SubS_GetPathByIndex(globalCtx, ENTRUMT_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), 0x3F);
     func_80B76030(&this->skelAnime, 14);
     this->actionFunc = func_80B76A64;
 }
 
-void EnTruMt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTruMt_Destroy(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
 
-    Collider_DestroySphere(globalCtx, &this->collider);
+    Collider_DestroySphere(play, &this->collider);
 }
 
-void EnTruMt_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTruMt_Update(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
 
-    func_80B768F0(this, globalCtx);
+    func_80B768F0(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     func_80B76110(this);
     Actor_SetFocus(&this->actor, 34.0f);
 
     if (!(gSaveContext.eventInf[4] & 1)) {
-        func_80B761FC(this, globalCtx);
+        func_80B761FC(this, play);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -474,8 +474,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     }
 }
 
-s32 EnTruMt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
@@ -488,7 +487,7 @@ s32 EnTruMt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnTruMt* this = THIS;
     MtxF* sp54;
@@ -509,26 +508,26 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == OBJECT_TRU_LIMB_0E) {
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_MultVec3f(&D_80B77668, &this->unk_370);
         Matrix_Translate(this->unk_370.x, this->unk_370.y, this->unk_370.z, MTXMODE_NEW);
-        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_38E.z, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_38E.x, MTXMODE_APPLY);
         Matrix_Scale(0.008f, 0.008f, 0.008f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_0004C8);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
 
         sp54 = Matrix_GetCurrent();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw,
-                               sp54->zw, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw, sp54->zw,
+                               this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))),
                                this->unk_38E.z, -1);
         } else if (!((EnJcMato*)this->actor.child)->hitFlag) {
             this->actor.child->world.pos.x = sp54->xw;
@@ -536,14 +535,14 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             this->actor.child->world.pos.z = sp54->zw;
 
             this->actor.child->world.rot = this->unk_38E;
-            this->actor.child->world.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
+            this->actor.child->world.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
 
             this->actor.child->shape.rot = this->actor.child->world.rot;
         }
     }
 }
 
-void EnTruMt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
@@ -555,7 +554,7 @@ void EnTruMt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* t
     }
 }
 
-void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTruMt_Draw(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
     TexturePtr sp48[] = {
         object_tru_Tex_018FA0,
@@ -563,16 +562,16 @@ void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx) {
         object_tru_Tex_019FA0,
     };
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp48[this->unk_34C]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sp48[this->unk_34C]));
 
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTruMt_OverrideLimbDraw, EnTruMt_PostLimbDraw,
                                    EnTruMt_TransformLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

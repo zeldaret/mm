@@ -139,18 +139,18 @@ All compound flag lists (e.g. `ACTOR_FLAG_4 | ACTOR_FLAG_8`) should be listed in
 - Use `sizeof` or `ARRAY_COUNT`/`ARRAY_COUNTU` where it makes sense, e.g. in loops that are using an array.
 - clang-format sometimes does weird things to array formatting. Experiment with and without a comma after the last element and see which looks better.
 
-## GlobalCtx2
+## Play2
 
-In some particular instances, IDO requires the function argument `globalCtx` to be cast to a second variable of the same type to match. In these particular instances, the function argument should be renamed to `globalCtx2` and than this `globalCtx2` just assigned to a stack variable called `globalCtx`. This cast should occur before the actor `THIS` cast is made. For example in `z_en_firefly.c`
+In some particular instances, IDO requires the function argument `play` to be cast to a second variable of the same type to match. In these particular instances, the function argument should be renamed to `play2` and than this `play2` just assigned to a stack variable called `play`. This cast should occur before the actor `THIS` cast is made. For example in `z_en_firefly.c`
 ```c
-void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnFirefly_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnFirefly* this = THIS;
 ```
 
 In other places the cast is actually not explictly needed, but a stack `pad` variable is still needed. For this there should just be a stack variable called `pad` of type `s32` before the actor `THIS` cast. For example in `z_bg_goron_oyu`
 ```c
-void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgGoronOyu* this = THIS;
     CollisionHeader* colHeader = NULL;

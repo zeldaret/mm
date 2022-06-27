@@ -10,12 +10,12 @@
 
 #define THIS ((DmZl*)thisx)
 
-void DmZl_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmZl_Init(Actor* thisx, PlayState* play);
+void DmZl_Destroy(Actor* thisx, PlayState* play);
+void DmZl_Update(Actor* thisx, PlayState* play);
+void DmZl_Draw(Actor* thisx, PlayState* play);
 
-void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx);
+void DmZl_DoNothing(DmZl* this, PlayState* play);
 
 const ActorInit Dm_Zl_InitVars = {
     ACTOR_DM_ZL,
@@ -108,7 +108,7 @@ void DmZl_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo animation[], u16 u
                      animation->mode, animation->morphFrames);
 }
 
-void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmZl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmZl* this = THIS;
 
@@ -117,27 +117,27 @@ void DmZl_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
     DmZl_ChangeAnimation(&this->skelAnime, &sAnimations[this->animationIndex], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmZl_DoNothing;
 }
 
-void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmZl_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmZl_DoNothing(DmZl* this, GlobalContext* globalCtx) {
+void DmZl_DoNothing(DmZl* this, PlayState* play) {
 }
 
-void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
+void DmZl_UpdateCutscene(DmZl* this, PlayState* play) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x66)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x66);
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
+    if (Cutscene_CheckActorAction(play, 0x66)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 0x66);
+        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
             s16 nextAnimationIndex = ZELDA_ANIM_FACING_AWAY;
 
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 default:
                 case 1:
                     break;
@@ -158,7 +158,7 @@ void DmZl_UpdateCutscene(DmZl* this, GlobalContext* globalCtx) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -250,38 +250,38 @@ void DmZl_UpdateFace(DmZl* this) {
     }
 }
 
-void DmZl_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmZl_Update(Actor* thisx, PlayState* play) {
     DmZl* this = THIS;
 
     DmZl_UpdateFace(this);
     SkelAnime_Update(&this->skelAnime);
-    DmZl_UpdateCutscene(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    DmZl_UpdateCutscene(this, play);
+    this->actionFunc(this, play);
 }
 
-s32 DmZl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 DmZl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
-void DmZl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmZl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     DmZl* this = THIS;
 
     if (limbIndex == ZL4_LIMB_RIGHT_HAND) {
         if ((this->animationIndex >= ZELDA_ANIM_GIVING_OCARINA_START) &&
             (this->animationIndex <= ZELDA_ANIM_PLAYING_OCARINA)) {
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(play->state.gfxCtx);
 
             gSPDisplayList(POLY_OPA_DISP++, gDmZl4OcarinaDL);
 
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+            CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }
 
-void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DmZl_Draw(Actor* thisx, PlayState* play) {
     DmZl* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIndexRight]));
 
@@ -289,9 +289,9 @@ void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTextureIndex]));
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           DmZl_OverrideLimbDraw, DmZl_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -5,7 +5,7 @@
 
 struct EnZoraegg;
 
-typedef void (*EnZoraeggActionFunc)(struct EnZoraegg*, GlobalContext*);
+typedef void (*EnZoraeggActionFunc)(struct EnZoraegg*, PlayState*);
 
 #define ENZORAEGG_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENZORAEGG_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)

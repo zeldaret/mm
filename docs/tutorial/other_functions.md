@@ -26,7 +26,7 @@ void EnRecepgirl_Destroy(s32 arg0, ? arg1) {
 ```
 so it really does do nothing. It is worth staying on this briefly to understand what is is doing, though. Even with no context, mips2c knows it takes two arguments because it does two saves onto the stack: the calling convention the N64 uses requires the first four arguments be saved from the registers onto the stack, since the registers are expected to be cleared when a function call happens. It's done a bad job of guessing what they are, but that's to be expected: the assembly only tells us they're words. Thankfully we already know in this case, so we can just replace the `GLOBAL_ASM` by
 ```C
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play) {
 
 }
 ```
@@ -54,11 +54,11 @@ void func_80C10148(EnRecepgirl *this) {
 
 This gives us some information immediately: `D_0600AD98` is an `AnimationHeader`, and `func_80C1019C` is set as the action function. This means that we know its type, even though mips2c does not: looking in the header, we see the typedef is
 ```C
-typedef void (*EnRecepgirlActionFunc)(struct EnRecepgirl*, GlobalContext*);
+typedef void (*EnRecepgirlActionFunc)(struct EnRecepgirl*, PlayState*);
 ```
 and so we prototype `func_80C1019C` as
 ```C
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx);
+void func_80C1019C(EnRecepgirl* this, PlayState* play);
 ```
 at the top (were it above the function we're currently working on, the prototype could eventually be replaced by the function definition itself, but since it isn't, it goes at the top with the others).
 
@@ -73,7 +73,7 @@ If we tackle these, we end up with
 ```C
 
 void func_80C10148(EnRecepgirl* this);
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx);
+void func_80C1019C(EnRecepgirl* this, PlayState* play);
 
 [...]
 
@@ -103,7 +103,7 @@ Remake the context and run mips2c on this function's assembly file. We get
 ```C
 ? func_80C10290(EnRecepgirl *); // extern
 
-void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
+void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     SkelAnime *sp24;
     SkelAnime *temp_a0;
 
@@ -116,17 +116,17 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_ChangeTransitionRepeat(temp_a0, &D_06009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest((Actor *) this, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest((Actor *) this, play) != 0) {
         func_80C10290(this);
         return;
     }
     if (Actor_IsFacingPlayer((Actor *) this, 0x2000) != 0) {
-        func_800B8614((Actor *) this, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == 2) {
+        func_800B8614((Actor *) this, play, 60.0f);
+        if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
             return;
         }
-        if (Flags_GetSwitch(globalCtx, (s32) this->actor.params) != 0) {
+        if (Flags_GetSwitch(play, (s32) this->actor.params) != 0) {
             this->actor.textId = 0x2ADC;
             return;
         }
@@ -147,7 +147,7 @@ This is a bit juicier! We can do some preliminary cleanup, then worry about the 
 Changing all these, we end up with
 ```C
 void func_80C10148(EnRecepgirl* this);
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx);
+void func_80C1019C(EnRecepgirl* this, PlayState* play);
 void func_80C10290(EnRecepgirl* this);
 
 [...]
@@ -160,7 +160,7 @@ extern FlexSkeletonHeader D_06011B60;
 
 [...]
 
-void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
+void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (&D_0600A280 == this->skelAnime.animation) {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
@@ -168,17 +168,17 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
         return;
     }
     if (Actor_IsFacingPlayer(&this->actor, 0x2000) != 0) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == 2) {
+        func_800B8614(&this->actor, play, 60.0f);
+        if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
             return;
         }
-        if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        if (Flags_GetSwitch(play, this->actor.params)) {
             this->actor.textId = 0x2ADC;
             return;
         }
@@ -194,7 +194,7 @@ If we look with diff.py, we find this matches. But we can replace some of the `r
 
 Here, it's debatable whether to keep the first, since `func_80C10290` is likely a setup function. The latter two should be changed to elses, though. For now, let's replace all of them. This leaves us with
 ```C
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
+void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->skelAnime.animation == &D_0600A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
@@ -203,13 +203,13 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == 2) {
+        func_800B8614(&this->actor, play, 60.0f);
+        if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
-        } else if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        } else if (Flags_GetSwitch(play, this->actor.params)) {
             this->actor.textId = 0x2ADC;
         } else {
             this->actor.textId = 0x2AD9;
@@ -227,7 +227,7 @@ typedef enum {
     /* 0x19 */  PLAYER_MASK_MAX
 } PlayerMask;
 ```
-and so we can write the last if as `Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK`.
+and so we can write the last if as `Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK`.
 
 Again, we have no choice in what to do next.
 
@@ -236,7 +236,7 @@ Again, we have no choice in what to do next.
 
 Remaking the context and running mips2c gives
 ```C
-void func_80C102D4(EnRecepgirl *, GlobalContext *); // extern
+void func_80C102D4(EnRecepgirl*, PlayState*); // extern
 
 void func_80C10290(EnRecepgirl *this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
@@ -256,7 +256,7 @@ Large code block, click to show
 ```C
 extern AnimationHeader D_06000968;
 
-void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
+void func_80C102D4(EnRecepgirl* this, PlayState* play) {
     SkelAnime *sp20;
     AnimationHeader *temp_v0;
     SkelAnime *temp_a0;
@@ -282,16 +282,16 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_MorphToPlayOnce(sp20, &D_0600A280, -4.0f);
         }
     }
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&play->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
         return;
     }
-    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(play) != 0)) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
-            Flags_SetSwitch(globalCtx, (s32) this->actor.params);
+            Flags_SetSwitch(play, (s32) this->actor.params);
             Animation_MorphToPlayOnce(sp20, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
@@ -312,7 +312,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 ```
@@ -321,7 +321,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
 
 Well, this is a big one! We get one more extern, for `D_06000968`. A lot of the temps used in the conditionals look fake, with the exception of `temp_v0_2`: because the function is only called once but the temp is used twice, the temp must be real. Removing the others and switching the `animation` conditionals,
 ```C
-void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
+void func_80C102D4(EnRecepgirl* this, PlayState* play) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime) != 0) {
@@ -340,16 +340,16 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         }
     }
 
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&play->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(play) != 0)) {
         if (this->actor.textId == 0x2AD9) {
-            Flags_SetSwitch(globalCtx, this->actor.params);
+            Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
@@ -369,7 +369,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 ```
@@ -390,14 +390,14 @@ The yellow shows registers that don't match, the different colours on the regist
 ```
 somehow we skipped over `t0`. Where is this in the code? The `153` in the middle is the line number in the C file (the `3f0`s are the offsets into the assembly file), we have `--source` if you want to see the code explicitly, or you can do it the old-fashioned way, and work it out from nearby function calls. In this case, `func_80C10148` is run straight after, and the only place that is called is
 ```C
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&play->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(play) != 0)) {
 ```
 
 If you look at the conditionals and the declaration of `temp_v0_2`, you may notice something odd: `temp_v0_2` is a `u8`. Therefore the `& 0xFF` does nothing! It's surprisingly common for this to happen, be it leaving out a `& 0xFF` or adding an extraneous one. If we remove it, we get a match:
@@ -417,12 +417,12 @@ Remake the context and run mips2c:
 ```C
 ? func_80C100DC(EnRecepgirl *); // extern
 
-void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = (EnRecepgirl *) thisx;
     ? sp30;
 
-    this->actionFunc(this, globalCtx);
-    Actor_TrackPlayer(globalCtx, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, (Actor *) this, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
@@ -435,18 +435,18 @@ void func_80C100DC(EnRecepgirl *);
 
 [...]
 
-void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
     ? sp30;
 
-    this->actionFunc(this, globalCtx);
-    Actor_TrackPlayer(globalCtx, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, this + 0x2AE, (Vec3s *) &sp30, (bitwise Vec3f) this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z);
     func_80C100DC(this);
 }
 ```
 Now, our problem is `Actor_TrackPlayer`. The arguments all look terrible! Indeed, if we look at the actual function in `src/code/code_800E8EA0.c` (found by searching), we find that it should be
 ```C
-s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos)
+s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos)
 ```
 So mips2c has made a bit of a mess here:
 - the third argument should be a `Vec3s`. Hence `this + 0x2AE` is a `Vec3s*`, and so `this->unk_2AE` is a `Vec3s`
@@ -455,12 +455,12 @@ So mips2c has made a bit of a mess here:
 
 Fixing all of this, we end up with
 ```C
-void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(EnRecepgirl* this, PlayState* play) {
     EnRecepgirl* this = THIS;
     Vec3s sp30;
 
-    this->actionFunc(this, globalCtx);
-    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```
@@ -482,21 +482,21 @@ It's entirely possible that `unk_2AD` is not real, and is just padding: see [Typ
 
 ![EnRecepgirl_Update's stack difference](images/EnRecepgirl_stack_diff.png)
 
-So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `GlobalContext`: they really take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
+So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `PlayState`: they really take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
 ```C
-void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRecepgirl* this = THIS;
     Vec3s sp30;
 
-    this->actionFunc(this, globalCtx);
-    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 ```
 and this now matches.
 
-**N.B.** sometimes using an actual `GlobalContext* globalCtx` temp is required for matching: add it to your bag o' matching memes.
+**N.B.** sometimes using an actual `PlayState* play` temp is required for matching: add it to your bag o' matching memes.
 
 ### *Some remarks about the function stack
 

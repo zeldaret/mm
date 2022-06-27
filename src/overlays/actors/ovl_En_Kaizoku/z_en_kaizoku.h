@@ -5,7 +5,7 @@
 
 struct EnKaizoku;
 
-typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, GlobalContext*);
+typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 
 typedef struct EnKaizoku {
     /* 0x0000 */ Actor actor;

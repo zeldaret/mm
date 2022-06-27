@@ -5,7 +5,7 @@
 
 struct EnGuruguru;
 
-typedef void (*EnGuruguruActionFunc)(struct EnGuruguru*, GlobalContext*);
+typedef void (*EnGuruguruActionFunc)(struct EnGuruguru*, PlayState*);
 
 typedef struct EnGuruguru {
     /* 0x000 */ Actor actor;

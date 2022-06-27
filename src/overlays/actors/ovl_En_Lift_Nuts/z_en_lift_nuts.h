@@ -5,7 +5,7 @@
 
 struct EnLiftNuts;
 
-typedef void (*EnLiftNutsActionFunc)(struct EnLiftNuts*, GlobalContext*);
+typedef void (*EnLiftNutsActionFunc)(struct EnLiftNuts*, PlayState*);
 
 typedef struct EnLiftNuts {
     /* 0x0000 */ Actor actor;
