@@ -39,14 +39,14 @@ const ActorInit Obj_Rotlift_InitVars = {
 
 struct ModelInfo sModelInfo[] = {
     {
-        object_rotlift_DL_000400,
-        object_rotlift_Matanimheader_001F98,
-        &object_rotlift_Colheader_002190,
+        gDekuMoonDungeonRotatingPlatformsDL,
+        gDekuMoonDungeonRotatingPlatformsUnusedTexAnim,
+        &gDekuMoonDungeonRotatingPlatformsCol,
     },
     {
-        object_rotlift_DL_002CE0,
-        object_rotlift_Matanimheader_004A08,
-        &object_rotlift_Colheader_004DF0,
+        gDekuMoonDungeonRotatingSpikesDL,
+        gDekuMoonDungeonRotatingSpikesUnusedTexAnim,
+        &gDekuMoonDungeonRotatingSpikesCol,
     },
 };
 
@@ -138,6 +138,7 @@ void ObjRotlift_Draw(Actor* thisx, PlayState* play) {
     ObjRotlift* this = THIS;
     ModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
+    // Neither of the displaylists reference other segments, so this call is ultimately pointless.
     AnimatedMat_Draw(play, modelInfo->animMat);
     Gfx_DrawDListOpa(play, modelInfo->dList);
 }
