@@ -5,7 +5,7 @@
 
 struct ObjGhaka;
 
-typedef void (*ObjGhakaActionFunc)(struct ObjGhaka*, GlobalContext*);
+typedef void (*ObjGhakaActionFunc)(struct ObjGhaka*, PlayState*);
 
 typedef struct ObjGhaka {
     /* 0x000 */ DynaPolyActor dyna;

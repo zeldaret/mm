@@ -10,9 +10,9 @@
 
 #define THIS ((EnDoorEtc*)thisx)
 
-void EnDoorEtc_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDoorEtc_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDoorEtc_Init(Actor* thisx, PlayState* play);
+void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
+void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Door_Etc_InitVars = {

@@ -10,12 +10,12 @@
 
 #define THIS ((DmChar06*)thisx)
 
-void DmChar06_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar06_Init(Actor* thisx, PlayState* play);
+void DmChar06_Destroy(Actor* thisx, PlayState* play);
+void DmChar06_Update(Actor* thisx, PlayState* play);
+void DmChar06_Draw(Actor* thisx, PlayState* play);
 
-void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
+void func_80AAE6F0(DmChar06* this, PlayState* play);
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
 

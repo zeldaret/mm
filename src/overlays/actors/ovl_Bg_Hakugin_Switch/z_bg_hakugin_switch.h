@@ -5,8 +5,8 @@
 
 struct BgHakuginSwitch;
 
-typedef void (*BgHakuginSwitchActionFunc)(struct BgHakuginSwitch*, GlobalContext*);
-typedef void (*BgHakuginSwitchUnkFunc)(struct BgHakuginSwitch*, GlobalContext*);
+typedef void (*BgHakuginSwitchActionFunc)(struct BgHakuginSwitch*, PlayState*);
+typedef void (*BgHakuginSwitchUnkFunc)(struct BgHakuginSwitch*, PlayState*);
 
 #define BGHAKUGINSWITCH_GET_7(thisx) ((thisx)->params & 7)
 #define BGHAKUGINSWITCH_GET_10(thisx) (((thisx)->params >> 4) & 1)

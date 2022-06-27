@@ -5,7 +5,7 @@
 
 struct EnSt;
 
-typedef void (*EnStActionFunc)(struct EnSt*, GlobalContext*);
+typedef void (*EnStActionFunc)(struct EnSt*, PlayState*);
 
 #define ENST_GET_3F(thisx) (((thisx)->params & 0x3F) & 0xFF)
 #define ENST_GET_1C0(thisx) ((((thisx)->params & 0x1C0) >> 6) & 0xFF)

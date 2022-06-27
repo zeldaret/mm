@@ -5,7 +5,7 @@
 
 struct EnTakaraya;
 
-typedef void (*EnTakarayaActionFunc)(struct EnTakaraya*, GlobalContext*);
+typedef void (*EnTakarayaActionFunc)(struct EnTakaraya*, PlayState*);
 
 typedef struct EnTakaraya {
     /* 0x0000 */ Actor actor;

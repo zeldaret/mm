@@ -5,7 +5,7 @@
 
 struct ObjMine;
 
-typedef void (*ObjMineActionFunc)(struct ObjMine*, GlobalContext*);
+typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 
 typedef struct ObjMine {
     /* 0x0000 */ Actor actor;
