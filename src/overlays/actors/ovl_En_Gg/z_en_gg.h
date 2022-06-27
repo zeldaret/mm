@@ -6,8 +6,8 @@
 struct EnGg;
 struct EnGgStruct;
 
-typedef void (*EnGgActionFunc)(struct EnGg*, GlobalContext*);
-typedef void (*EnGgUnkFunc)(struct EnGgStruct*, GlobalContext*);
+typedef void (*EnGgActionFunc)(struct EnGg*, PlayState*);
+typedef void (*EnGgUnkFunc)(struct EnGgStruct*, PlayState*);
 
 typedef struct EnGgStruct {
     /* 0x00 */ Vec3f unk_00;

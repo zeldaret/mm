@@ -7,7 +7,7 @@
 
 struct EnBigslime;
 
-typedef void (*EnBigslimeActionFunc)(struct EnBigslime*, GlobalContext*);
+typedef void (*EnBigslimeActionFunc)(struct EnBigslime*, PlayState*);
 
 #define BIGSLIME_NUM_VTX 162 // Number of vertices
 #define BIGSLIME_NUM_FACES 320 // Number of triangles

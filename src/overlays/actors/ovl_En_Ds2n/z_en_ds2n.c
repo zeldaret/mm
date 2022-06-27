@@ -13,10 +13,10 @@
 
 #define THIS ((EnDs2n*)thisx)
 
-void EnDs2n_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDs2n_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDs2n_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDs2n_Init(Actor* thisx, PlayState* play);
+void EnDs2n_Destroy(Actor* thisx, PlayState* play);
+void EnDs2n_Update(Actor* thisx, PlayState* play);
+void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
 void EnDs2n_Idle(EnDs2n* this, GlobalContext* globalCtx);
 

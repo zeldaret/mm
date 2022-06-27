@@ -6,7 +6,7 @@
 
 struct ObjArmos;
 
-typedef void (*ObjArmosActionFunc)(struct ObjArmos*, GlobalContext*);
+typedef void (*ObjArmosActionFunc)(struct ObjArmos*, PlayState*);
 
 #define OBJARMOS_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJARMOS_GET_ROTZ_7(thisx) ((thisx)->home.rot.z & 7)

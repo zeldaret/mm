@@ -5,9 +5,9 @@
 
 struct BgBreakwall;
 
-typedef void (*BgBreakwallActionFunc)(struct BgBreakwall*, GlobalContext*);
-typedef s32 (*BgBreakwallUnkFunc)(struct BgBreakwall*, GlobalContext*);
-typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, GlobalContext*);
+typedef void (*BgBreakwallActionFunc)(struct BgBreakwall*, PlayState*);
+typedef s32 (*BgBreakwallUnkFunc)(struct BgBreakwall*, PlayState*);
+typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, PlayState*);
 
 #define BGBREAKWALL_GET_F(thisx) ((thisx)-> params & 0xF)
 #define BGBREAKWALL_SWITCHFLAG(thisx) (((thisx)-> params & 0xFE00) >> 9)

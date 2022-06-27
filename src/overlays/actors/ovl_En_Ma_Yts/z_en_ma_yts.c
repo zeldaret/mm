@@ -11,24 +11,24 @@
 
 #define THIS ((EnMaYts*)thisx)
 
-void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMaYts_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMaYts_Init(Actor* thisx, PlayState* play);
+void EnMaYts_Destroy(Actor* thisx, PlayState* play);
+void EnMaYts_Update(Actor* thisx, PlayState* play);
+void EnMaYts_Draw(Actor* thisx, PlayState* play);
 
 void EnMaYts_SetupDoNothing(EnMaYts* this);
-void EnMaYts_DoNothing(EnMaYts* this, GlobalContext* globalCtx);
+void EnMaYts_DoNothing(EnMaYts* this, PlayState* play);
 void EnMaYts_SetupStartDialogue(EnMaYts* this);
-void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx);
+void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play);
 void EnMaYts_SetupDialogueHandler(EnMaYts* this);
-void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx);
+void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play);
 void EnMaYts_SetupEndCreditsHandler(EnMaYts* this);
-void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx);
-void EnMaYts_ChooseNextDialogue(EnMaYts* this, GlobalContext* globalCtx);
+void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play);
+void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play);
 
 void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
 
-void EnMaYts_DrawSleeping(Actor* thisx, GlobalContext* globalCtx);
+void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
 const ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
@@ -120,8 +120,8 @@ void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
                      sAnimationInfo[index].morphFrames);
 }
 
-void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B8D12C(EnMaYts* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 flag = this->unk_32C == 2 ? true : false;
 
     if (this->unk_32C == 0 || this->actor.parent == NULL) {
@@ -135,7 +135,7 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
     func_800BD888(&this->actor, &this->unk_1D8, 0, flag);
 }
 
-void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
+void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
             this->actor.targetMode = 0;
@@ -169,7 +169,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
+s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_SITTING:
             switch (CURRENT_DAY) {
@@ -215,29 +215,29 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
     return true;
 }
 
-void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMaYts_Init(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     s32 pad;
 
     this->type = EN_MA_YTS_PARSE_TYPE(thisx);
-    if (!EnMaYts_CheckValidSpawn(this, globalCtx)) {
+    if (!EnMaYts_CheckValidSpawn(this, play)) {
         Actor_MarkForDeath(&this->actor);
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, NULL, this->jointTable, this->morphTable,
                        MA1_LIMB_MAX);
-    EnMaYts_InitAnimation(this, globalCtx);
+    EnMaYts_InitAnimation(this, play);
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit2);
 
     if (this->type == MA_YTS_TYPE_SLEEPING) {
         this->collider.dim.radius = 40;
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_1D8.unk_00 = 0;
@@ -275,17 +275,17 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnMaYts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMaYts_Destroy(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnMaYts_SetupDoNothing(EnMaYts* this) {
     this->actionFunc = EnMaYts_DoNothing;
 }
 
-void EnMaYts_DoNothing(EnMaYts* this, GlobalContext* globalCtx) {
+void EnMaYts_DoNothing(EnMaYts* this, PlayState* play) {
 }
 
 void EnMaYts_SetupStartDialogue(EnMaYts* this) {
@@ -293,58 +293,58 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
     this->actionFunc = EnMaYts_StartDialogue;
 }
 
-void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
+void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.save.weekEventReg[65] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 gSaveContext.save.weekEventReg[65] |= 0x80;
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                Message_StartTextbox(globalCtx, 0x335F, &this->actor);
+                Message_StartTextbox(play, 0x335F, &this->actor);
                 this->textId = 0x335F;
             } else {
                 // Saying to non-human Link: "Pretend you did not hear that."
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                Message_StartTextbox(globalCtx, 0x3362, &this->actor);
+                Message_StartTextbox(play, 0x3362, &this->actor);
                 this->textId = 0x3362;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
             }
-        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE) {
+        } else if (Player_GetMask(play) != PLAYER_MASK_NONE) {
             if (!(gSaveContext.save.weekEventReg[65] & 0x40)) {
                 gSaveContext.save.weekEventReg[65] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                Message_StartTextbox(globalCtx, 0x3363, &this->actor);
+                Message_StartTextbox(play, 0x3363, &this->actor);
                 this->textId = 0x3363;
             } else {
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                Message_StartTextbox(globalCtx, 0x3366, &this->actor);
+                Message_StartTextbox(play, 0x3366, &this->actor);
                 this->textId = 0x3366;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
             }
         } else if (!(gSaveContext.save.weekEventReg[21] & 0x20)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
-            Message_StartTextbox(globalCtx, 0x3367, &this->actor);
+            Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;
         } else {
             if (!(gSaveContext.save.weekEventReg[65] & 0x20)) {
                 // Saying to Grasshopper: "Cremia went to town."
                 gSaveContext.save.weekEventReg[65] |= 0x20;
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                Message_StartTextbox(globalCtx, 0x3369, &this->actor);
+                Message_StartTextbox(play, 0x3369, &this->actor);
                 this->textId = 0x3369;
             } else {
                 // Saying to Grasshopper: "You're our bodyguard."
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                Message_StartTextbox(globalCtx, 0x336C, &this->actor);
+                Message_StartTextbox(play, 0x336C, &this->actor);
                 this->textId = 0x336C;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
             }
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, globalCtx, 120.0f);
+        func_800B8614(&this->actor, play, 120.0f);
     }
 }
 
@@ -352,14 +352,14 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
     this->actionFunc = EnMaYts_DialogueHandler;
 }
 
-void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
+void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
         case 5: // End message block
-            EnMaYts_ChooseNextDialogue(this, globalCtx);
+            EnMaYts_ChooseNextDialogue(this, play);
             break;
 
         case 6: // End conversation
-            if (Message_ShouldAdvance(globalCtx)) {
+            if (Message_ShouldAdvance(play)) {
                 EnMaYts_SetupStartDialogue(this);
             }
             break;
@@ -380,15 +380,15 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 }
 
 static u16 D_80B8E32C = 99;
-void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 120)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 120);
+void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, 120)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(play, 120);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.actorActions[actionIndex]->action != D_80B8E32C) {
-                D_80B8E32C = globalCtx->csCtx.actorActions[actionIndex]->action;
+        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
+            if (play->csCtx.actorActions[actionIndex]->action != D_80B8E32C) {
+                D_80B8E32C = play->csCtx.actorActions[actionIndex]->action;
                 this->endCreditsFlag = 0;
-                switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+                switch (play->csCtx.actorActions[actionIndex]->action) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);
@@ -412,7 +412,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->endCreditsFlag++;
@@ -425,53 +425,53 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
 }
 
 // Select the following dialogue based on the current one, and an appropiate face expression
-void EnMaYts_ChooseNextDialogue(EnMaYts* this, GlobalContext* globalCtx) {
-    if (Message_ShouldAdvance(globalCtx)) {
+void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
+    if (Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x335F:
                 EnMaYts_SetFaceExpression(this, 0, 2);
-                Message_StartTextbox(globalCtx, 0x3360, &this->actor);
+                Message_StartTextbox(play, 0x3360, &this->actor);
                 this->textId = 0x3360;
                 break;
 
             case 0x3360:
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                Message_StartTextbox(globalCtx, 0x3361, &this->actor);
+                Message_StartTextbox(play, 0x3361, &this->actor);
                 this->textId = 0x3361;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
                 break;
 
             case 0x3363:
                 EnMaYts_SetFaceExpression(this, 1, 1);
-                Message_StartTextbox(globalCtx, 0x3364, &this->actor);
+                Message_StartTextbox(play, 0x3364, &this->actor);
                 this->textId = 0x3364;
                 break;
 
             case 0x3364:
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                Message_StartTextbox(globalCtx, 0x3365, &this->actor);
+                Message_StartTextbox(play, 0x3365, &this->actor);
                 this->textId = 0x3365;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
                 break;
 
             case 0x3367:
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                Message_StartTextbox(globalCtx, 0x3368, &this->actor);
+                Message_StartTextbox(play, 0x3368, &this->actor);
                 this->textId = 0x3368;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
                 break;
 
             case 0x3369:
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                Message_StartTextbox(globalCtx, 0x336A, &this->actor);
+                Message_StartTextbox(play, 0x336A, &this->actor);
                 this->textId = 0x336A;
                 break;
 
             case 0x336A:
                 EnMaYts_SetFaceExpression(this, 3, 3);
-                Message_StartTextbox(globalCtx, 0x336B, &this->actor);
+                Message_StartTextbox(play, 0x336B, &this->actor);
                 this->textId = 0x336B;
-                func_80151BB4(globalCtx, 5);
+                func_80151BB4(play, 5);
                 break;
 
             default:
@@ -488,21 +488,20 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
     }
 }
 
-void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMaYts_Update(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     ColliderCylinder* collider;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     collider = &this->collider;
     Collider_UpdateCylinder(&this->actor, collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &collider->base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &collider->base);
     SkelAnime_Update(&this->skelAnime);
     EnMaYts_UpdateEyes(this);
-    func_80B8D12C(this, globalCtx);
+    func_80B8D12C(this, play);
 }
 
-s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
     Vec3s sp4;
 
@@ -522,42 +521,42 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
 
     if (limbIndex == MA1_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+            CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }
 
-void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMaYts_Draw(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 // Alternative draw function
-void EnMaYts_DrawSleeping(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0043A0);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

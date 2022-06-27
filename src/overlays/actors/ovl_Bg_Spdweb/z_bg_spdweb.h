@@ -5,7 +5,7 @@
 
 struct BgSpdweb;
 
-typedef void (*BgSpdwebActionFunc)(struct BgSpdweb*, GlobalContext*);
+typedef void (*BgSpdwebActionFunc)(struct BgSpdweb*, PlayState*);
 
 #define BGSPDWEB_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 

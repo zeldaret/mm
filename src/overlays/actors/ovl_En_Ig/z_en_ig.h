@@ -5,9 +5,9 @@
 
 struct EnIg;
 
-typedef void (*EnIgActionFunc)(struct EnIg*, GlobalContext*);
-typedef s32 (*EnIgUnkFunc)(struct EnIg*, GlobalContext*);
-typedef void (*EnIgUnkFunc2)(struct EnIg*, GlobalContext*);
+typedef void (*EnIgActionFunc)(struct EnIg*, PlayState*);
+typedef s32 (*EnIgUnkFunc)(struct EnIg*, PlayState*);
+typedef void (*EnIgUnkFunc2)(struct EnIg*, PlayState*);
 
 #define ENIG_GET_FF(thisx) ((thisx)->params & 0xFF)
 

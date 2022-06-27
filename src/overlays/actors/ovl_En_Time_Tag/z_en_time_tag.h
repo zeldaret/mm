@@ -5,7 +5,7 @@
 
 struct EnTimeTag;
 
-typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, GlobalContext*);
+typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, PlayState*);
 
 #define ENTIMETAG_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENTIMETAG_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
