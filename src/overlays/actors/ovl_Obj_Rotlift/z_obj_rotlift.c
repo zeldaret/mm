@@ -6,6 +6,7 @@
 
 #include "z_obj_rotlift.h"
 #include "objects/object_rotlift/object_rotlift.h"
+#include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS 0x00000000
 
@@ -82,7 +83,7 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjRotlift* this = THIS;
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
-    s32 dekuFlowerType;
+    s32 dekuFlowerParams;
     s32 i;
     ModelInfo* modelInfo;
     ObjEtcetera** dekuFlowers;
@@ -91,14 +92,14 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
     if (type == 0) {
         for (dekuFlowers = this->dekuFlowers, i = 0; i < ARRAY_COUNT(this->dekuFlowers); i++, dekuFlowers++) {
             if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
-                dekuFlowerType = 0;
+                dekuFlowerParams = DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK);
             } else {
-                dekuFlowerType = 0x100;
+                dekuFlowerParams = DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_GOLD);
             }
             *dekuFlowers = (ObjEtcetera*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerType);
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerParams);
         }
         ObjRotlift_MoveDekuFlowers(this);
     }
