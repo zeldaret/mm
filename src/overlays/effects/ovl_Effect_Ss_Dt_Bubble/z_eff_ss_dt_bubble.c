@@ -21,9 +21,9 @@
 
 #define PARAMS ((EffectSsDtBubbleInitParams*)initParamsx)
 
-u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsDtBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsDtBubble_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsDtBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static Color_RGBA8 sPrimColors[] = {
     { 255, 255, 100, 255 },
@@ -44,11 +44,11 @@ const EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
     EffectSsDtBubble_Init,
 };
 
-u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    EffectSsDtBubbleInitParams* initParams = (EffectSsDtBubbleInitParams*)initParamsx;
+u32 EffectSsDtBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
+    EffectSsDtBubbleInitParams* initParams = PARAMS;
 
     {
-        TexturePtr tex = (Rand_ZeroOne() < 0.5f) ? gameplay_keep_Tex_091BE0 : gameplay_keep_Tex_091CE0;
+        TexturePtr tex = (Rand_ZeroOne() < 0.5f) ? gEffBubble1Tex : gEffBubble2Tex;
 
         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
     }
@@ -87,14 +87,14 @@ u32 EffectSsDtBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     return 1;
 }
 
-void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsDtBubble_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale;
 
     OPEN_DISPS(gfxCtx);
 
     scale = this->rScale * 0.004f;
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(gfxCtx);
@@ -103,12 +103,12 @@ void EffectSsDtBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     gDPSetEnvColor(POLY_OPA_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB,
                    (this->rEnvColorA * this->life) / this->rLifespan);
     gSPSegment(POLY_OPA_DISP++, 0x08, this->gfx);
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
+    gSPDisplayList(POLY_OPA_DISP++, gEffBubbleDL);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsDtBubble_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsDtBubble_Update(PlayState* play, u32 index, EffectSs* this) {
     f32 rand;
 
     if (this->rRandXZ == 1) {

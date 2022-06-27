@@ -5,9 +5,9 @@
 
 struct EnInvadepoh;
 
-typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, GlobalContext*);
-typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, GlobalContext*);
-typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, GlobalContext*);
+typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, PlayState*);
+typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, PlayState*);
+typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, PlayState*);
 
 #define INVADEPOH_TYPE(x) (x->actor.params >> 4 & 0xF)
 

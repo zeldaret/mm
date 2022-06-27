@@ -10,13 +10,13 @@
 
 #define THIS ((EnOkarinaEffect*)thisx)
 
-void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnOkarinaEffect_Init(Actor* thisx, PlayState* play);
+void EnOkarinaEffect_Destroy(Actor* thisx, PlayState* play);
+void EnOkarinaEffect_Update(Actor* thisx, PlayState* play);
 
-void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx);
-void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx);
-void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx);
+void func_8096B104(EnOkarinaEffect* this, PlayState* play);
+void func_8096B174(EnOkarinaEffect* this, PlayState* play);
+void func_8096B1FC(EnOkarinaEffect* this, PlayState* play);
 
 const ActorInit En_Okarina_Effect_InitVars = {
     ACTOR_EN_OKARINA_EFFECT,
@@ -34,41 +34,41 @@ void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFun
     this->actionFunc = actionFunc;
 }
 
-void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnOkarinaEffect_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
-    if (globalCtx->envCtx.unk_F2[1]) {
+    if (play->envCtx.unk_F2[1]) {
         Actor_MarkForDeath(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
 }
 
-void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
     this->unk144 = 0x50;
-    globalCtx->envCtx.unk_F2[4] = 0x3C;
+    play->envCtx.unk_F2[4] = 0x3C;
     D_801F4E70 = 501.0f;
-    globalCtx->envCtx.unk_E3 = 2;
-    func_800FD78C(globalCtx);
+    play->envCtx.unk_E3 = 2;
+    func_800FD78C(play);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
 
-void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
+void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
     DECR(this->unk144);
-    if (!globalCtx->pauseCtx.state && !globalCtx->gameOverCtx.state && !globalCtx->msgCtx.unk11F10 &&
-        !FrameAdvance_IsEnabled(&globalCtx->state) && this->unk144 == 0) {
+    if (!play->pauseCtx.state && !play->gameOverCtx.state && !play->msgCtx.unk11F10 &&
+        !FrameAdvance_IsEnabled(&play->state) && this->unk144 == 0) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }
 
-void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx) {
-    if (globalCtx->envCtx.unk_F2[4]) {
-        if ((globalCtx->state.frames & 3) == 0) {
-            --globalCtx->envCtx.unk_F2[4];
-            if (globalCtx->envCtx.unk_F2[4] == 8) {
-                func_800FD858(globalCtx);
+void func_8096B1FC(EnOkarinaEffect* this, PlayState* play) {
+    if (play->envCtx.unk_F2[4]) {
+        if ((play->state.frames & 3) == 0) {
+            --play->envCtx.unk_F2[4];
+            if (play->envCtx.unk_F2[4] == 8) {
+                func_800FD858(play);
             }
         }
     } else {
@@ -76,8 +76,8 @@ void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnOkarinaEffect_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnOkarinaEffect_Update(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

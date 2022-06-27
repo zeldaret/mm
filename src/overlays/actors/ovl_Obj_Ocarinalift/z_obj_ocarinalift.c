@@ -10,10 +10,10 @@
 
 #define THIS ((ObjOcarinalift*)thisx)
 
-void ObjOcarinalift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjOcarinalift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjOcarinalift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjOcarinalift_Init(Actor* thisx, PlayState* play);
+void ObjOcarinalift_Destroy(Actor* thisx, PlayState* play);
+void ObjOcarinalift_Update(Actor* thisx, PlayState* play);
+void ObjOcarinalift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Ocarinalift_InitVars = {

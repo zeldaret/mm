@@ -33,7 +33,7 @@ Useful data for guessing types:
 
 Another useful thing to put here: the typedef for an action function is
 ```C
-typedef void (*ActorNameActionFunc)(struct ActorName*, GlobalContext*);
+typedef void (*ActorNameActionFunc)(struct ActorName*, PlayState*);
 ```
 where you replace `ActorName` by the actual actor name as used elsewhere in the actor, e.g. `EnRecepgirl`. In MM these typedefs have been automatically generated, so you don't need to constantly copy from here or another actor any more.
 
