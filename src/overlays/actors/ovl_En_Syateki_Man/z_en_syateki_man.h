@@ -36,7 +36,7 @@ typedef struct EnSyatekiMan {
     /* 0x027C */ s16 unk_27C;
     /* 0x027E */ s16 unk_27E;
     /* 0x0280 */ s16 score;
-    /* 0x0282 */ s16 unk_282;
+    /* 0x0282 */ s16 talkFlags;
     /* 0x0284 */ s16 textId;
 } EnSyatekiMan; // size = 0x288
 

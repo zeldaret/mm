@@ -37,6 +37,15 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play);
 void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play);
 void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 
+#define TALK_FLAG_NONE 0
+#define TALK_FLAG_TOWN_HAS_SPOKEN_WITH_HUMAN (1 << 0)
+#define TALK_FLAG_TOWN_HAS_SPOKEN_WITH_DEKU (1 << 1)
+#define TALK_FLAG_TOWN_HAS_SPOKEN_WITH_GORON (1 << 2)
+#define TALK_FLAG_TOWN_HAS_SPOKEN_WITH_ZORA (1 << 3)
+#define TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES (1 << 4)
+#define TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN (1 << 0)
+#define TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES (1 << 1)
+
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -168,7 +177,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->guayHitCounter = 0;
     this->textId = 0;
     this->swampTargetActorListIndex = 0;
-    this->unk_282 = 0;
+    this->talkFlags = TALK_FLAG_NONE;
     this->eyeIndex = 0;
     this->blinkTimer = 0;
 
@@ -229,8 +238,8 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
             Message_StartTextbox(play, sp22, &this->actor);
             this->textId = sp22;
         } else if (player->transformation == PLAYER_FORM_HUMAN) {
-            if (this->unk_282 == 0) {
-                this->unk_282 = 1;
+            if (this->talkFlags == TALK_FLAG_NONE) {
+                this->talkFlags = TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN;
                 // How are you? Wanna play?
                 Message_StartTextbox(play, 0xA28, &this->actor);
                 this->textId = 0xA28;
@@ -451,8 +460,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
         case PLAYER_FORM_HUMAN:
             Flags_SetAllTreasure(play, Flags_GetAllTreasure(play) + 1);
             if (CURRENT_DAY != 3) {
-                if (!(this->unk_282 & 1)) {
-                    this->unk_282 |= 1;
+                if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_HUMAN)) {
+                    this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_HUMAN;
                     // Why don't you give it a try?
                     Message_StartTextbox(play, 0x3E8, &this->actor);
                     this->textId = 0x3E8;
@@ -461,8 +470,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3E9, &this->actor);
                     this->textId = 0x3E9;
                 }
-            } else if (!(this->unk_282 & 1)) {
-                this->unk_282 |= 1;
+            } else if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_HUMAN)) {
+                this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_HUMAN;
                 // If you still have time, why don't you try it?
                 Message_StartTextbox(play, 0x3EA, &this->actor);
                 this->textId = 0x3EA;
@@ -475,8 +484,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 
         case PLAYER_FORM_DEKU:
             if (CURRENT_DAY != 3) {
-                if (!(this->unk_282 & 2)) {
-                    this->unk_282 |= 2;
+                if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_DEKU)) {
+                    this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_DEKU;
                     // When I saw your fairy, I thought you were that masked troublemaker.
                     Message_StartTextbox(play, 0x3EC, &this->actor);
                     this->textId = 0x3EC;
@@ -485,8 +494,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3ED, &this->actor);
                     this->textId = 0x3ED;
                 }
-            } else if (!(this->unk_282 & 2)) {
-                this->unk_282 |= 2;
+            } else if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_DEKU)) {
+                this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_DEKU;
                 // I thought you were a customer, but I guess I can't expect any...
                 Message_StartTextbox(play, 0x3EE, &this->actor);
                 this->textId = 0x3EE;
@@ -499,8 +508,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 
         case PLAYER_FORM_ZORA:
             if (CURRENT_DAY != 3) {
-                if (!(this->unk_282 & 8)) {
-                    this->unk_282 |= 8;
+                if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_ZORA)) {
+                    this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_ZORA;
                     // I swear I've seen you before...
                     Message_StartTextbox(play, 0x3F0, &this->actor);
                     this->textId = 0x3F0;
@@ -509,8 +518,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3F1, &this->actor);
                     this->textId = 0x3F1;
                 }
-            } else if (!(this->unk_282 & 8)) {
-                this->unk_282 |= 8;
+            } else if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_ZORA)) {
+                this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_ZORA;
                 // Huh? You're still here?
                 Message_StartTextbox(play, 0x3F4, &this->actor);
                 this->textId = 0x3F4;
@@ -523,8 +532,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 
         case PLAYER_FORM_GORON:
             if (CURRENT_DAY != 3) {
-                if (!(this->unk_282 & 4)) {
-                    this->unk_282 |= 4;
+                if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_GORON)) {
+                    this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_GORON;
                     // You have quite the build!
                     Message_StartTextbox(play, 0x3F2, &this->actor);
                     this->textId = 0x3F2;
@@ -533,8 +542,8 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3F3, &this->actor);
                     this->textId = 0x3F3;
                 }
-            } else if (!(this->unk_282 & 4)) {
-                this->unk_282 |= 4;
+            } else if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_SPOKEN_WITH_GORON)) {
+                this->talkFlags |= TALK_FLAG_TOWN_HAS_SPOKEN_WITH_GORON;
                 // Huh? You're still here?
                 Message_StartTextbox(play, 0x3F4, &this->actor);
                 this->textId = 0x3F4;
@@ -600,8 +609,8 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 func_8019F208();
                 func_801159EC(-20);
                 this->unk_26A = 2;
-                if (!(this->unk_282 & 0x10)) {
-                    this->unk_282 |= 0x10;
+                if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES)) {
+                    this->talkFlags |= TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES;
                     // The rules are simple.
                     Message_StartTextbox(play, 0x3FD, &this->actor);
                     this->textId = 0x3FD;
@@ -928,8 +937,8 @@ void EnSyatekiMan_Swamp_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState*
     if (EnSyatekiMan_MovePlayerToTarget(play, sSwampPlayerPos)) {
         player->stateFlags1 |= 0x20;
         this->unk_26A = 2;
-        if (this->unk_282 != 2) {
-            this->unk_282 = 2;
+        if (this->talkFlags != TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES) {
+            this->talkFlags = TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES;
             // The rules of the game are a piece of cake!
             Message_StartTextbox(play, 0xA2B, &this->actor);
             this->textId = 0xA2B;
