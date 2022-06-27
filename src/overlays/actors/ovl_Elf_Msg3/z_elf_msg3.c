@@ -100,8 +100,9 @@ void ElfMsg3_Destroy(Actor* thisx, PlayState* play) {
 s32 func_80A2CF50(ElfMsg3* this) {
     if (ELFMSG3_GET_8000(&this->actor) != 0) {
         return (ELFMSG3_GET_FF(&this->actor)) + 0x200;
+    } else {
+        return -0x200 - (ELFMSG3_GET_FF(&this->actor));
     }
-    return -0x200 - (ELFMSG3_GET_FF(&this->actor));
 }
 
 void func_80A2CF7C(ElfMsg3* this, PlayState* play) {
