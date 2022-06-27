@@ -11,17 +11,17 @@
 
 #define THIS ((ObjSpidertent*)thisx)
 
-void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSpidertent_Init(Actor* thisx, PlayState* play);
+void ObjSpidertent_Destroy(Actor* thisx, PlayState* play);
+void ObjSpidertent_Update(Actor* thisx, PlayState* play);
+void ObjSpidertent_Draw(Actor* thisx, PlayState* play);
 
 void func_80B307E0(ObjSpidertent* this);
-void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30808(ObjSpidertent* this, PlayState* play);
 void func_80B30A2C(ObjSpidertent* this);
-void func_80B30A4C(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30A4C(ObjSpidertent* this, PlayState* play);
 void func_80B30AD4(ObjSpidertent* this);
-void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
@@ -446,7 +446,7 @@ s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
     }
 }
 
-void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
+void func_80B300F4(ObjSpidertent* thisx, PlayState* play, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
     ObjSpidertent* this = THIS;
     ObjSpidertentStruct* spE0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     f32 temp_f24;
@@ -499,8 +499,8 @@ void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triN
                 spB8.y = sp80->unk_08 * sp94.y;
                 spB8.z = sp80->unk_08 * sp94.z;
 
-                EffectSsDeadDb_Spawn(globalCtx, &spC4, &spB8, &gZeroVec3f, &sp80->unk_10, &sp80->unk_14, sp80->unk_0C,
-                                     0, sp80->unk_0E);
+                EffectSsDeadDb_Spawn(play, &spC4, &spB8, &gZeroVec3f, &sp80->unk_10, &sp80->unk_14, sp80->unk_0C, 0,
+                                     sp80->unk_0E);
             }
 
             phi_f22 += temp_f24;
@@ -522,8 +522,8 @@ void func_80B30410(ObjSpidertent* this, Vec3f* arg1) {
     this->unk_3C0 = 0;
 }
 
-s32 func_80B30480(ObjSpidertent* this, GlobalContext* globalCtx, Vec3f* arg2) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
+    Player* player = GET_PLAYER(play);
     TriNorm* triNorm;
     s32 i;
     Vec3f sp58;
@@ -549,7 +549,7 @@ s32 func_80B30480(ObjSpidertent* this, GlobalContext* globalCtx, Vec3f* arg2) {
     return false;
 }
 
-void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjSpidertent* this = THIS;
     s32 temp_s1 = OBJSPIDERTENT_GET_1(&this->dyna.actor);
@@ -562,15 +562,15 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    Collider_InitTris(globalCtx, &this->collider);
+    Collider_InitTris(play, &this->collider);
 
-    if (Flags_GetSwitch(globalCtx, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
 
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, ptr->unk_04);
-    Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, D_80B31350[temp_s1].unk_08, this->colliderElements);
+    DynaPolyActor_LoadMesh(play, &this->dyna, ptr->unk_04);
+    Collider_SetTris(play, &this->collider, &this->dyna.actor, D_80B31350[temp_s1].unk_08, this->colliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
@@ -596,11 +596,11 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B307E0(this);
 }
 
-void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpidertent_Destroy(Actor* thisx, PlayState* play) {
     ObjSpidertent* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(play, &this->collider);
 }
 
 void func_80B307E0(ObjSpidertent* this) {
@@ -611,7 +611,7 @@ void func_80B307E0(ObjSpidertent* this) {
     this->actionFunc = func_80B30808;
 }
 
-void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
+void func_80B30808(ObjSpidertent* this, PlayState* play) {
     s32 phi_s4;
     s32 i;
     ObjSpidertentStruct* ptr2 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
@@ -625,7 +625,7 @@ void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
     s32 phi_s0 = false;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         this->collider.base.acFlags &= ~AC_HIT;
         phi_s1 = 0;
@@ -658,7 +658,7 @@ void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&sp70, &this->dyna.actor.world.pos);
         }
         phi_s0 = true;
-    } else if ((this->dyna.actor.xzDistToPlayer < ptr2->unk_24) && func_80B30480(this, globalCtx, &sp70)) {
+    } else if ((this->dyna.actor.xzDistToPlayer < ptr2->unk_24) && func_80B30480(this, play, &sp70)) {
         phi_s0 = true;
     }
 
@@ -666,7 +666,7 @@ void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
         func_80B30410(this, &sp70);
         func_80B30A2C(this);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -675,13 +675,13 @@ void func_80B30A2C(ObjSpidertent* this) {
     this->actionFunc = func_80B30A4C;
 }
 
-void func_80B30A4C(ObjSpidertent* this, GlobalContext* globalCtx) {
+void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(globalCtx, &this->dyna.actor, 1);
+            func_800B7298(play, &this->dyna.actor, 1);
         }
-        Flags_SetSwitch(globalCtx, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
+        Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -696,7 +696,7 @@ void func_80B30AD4(ObjSpidertent* this) {
 }
 
 #ifdef NON_MATCHING
-void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
+void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
     ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     TriNorm* triNorm;
     s32 i;
@@ -759,7 +759,7 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
 
     this->unk_3C1--;
     if (this->unk_3C1 == 40) {
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
     if (this->unk_3C1 >= 0x20) {
@@ -769,7 +769,7 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 4);
         }
 
@@ -786,7 +786,7 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
             for (j = 0; j < ARRAY_COUNT(this->unk_3B0); j++) {
                 if (!(this->unk_3B0[j] < 5.0f) && !(this->unk_3C0 & (1 << j)) &&
                     func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
-                    func_80B300F4(this, globalCtx, triNorm, &sp60, sp5C, j);
+                    func_80B300F4(this, play, triNorm, &sp60, sp5C, j);
                 }
             }
         }
@@ -799,27 +799,27 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
 #endif
 
-void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpidertent_Update(Actor* thisx, PlayState* play) {
     ObjSpidertent* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpidertent_Draw(Actor* thisx, PlayState* play) {
     ObjSpidertent* this = THIS;
     s32 params = OBJSPIDERTENT_GET_1(&this->dyna.actor);
     s32 temp_f18 = this->unk_3C5 * (29.0f / 51);
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
-    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(gfx++, 0, 0xFF, this->unk_3C2, this->unk_3C3, this->unk_3C4, temp_f18);
     gSPDisplayList(gfx++, D_80B31350[params].unk_00);
 
     POLY_XLU_DISP = gfx;
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

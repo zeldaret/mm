@@ -5,7 +5,7 @@
 
 struct BgIkanaRay;
 
-typedef void (*BgIkanaRayActionFunc)(struct BgIkanaRay*, GlobalContext*);
+typedef void (*BgIkanaRayActionFunc)(struct BgIkanaRay*, PlayState*);
 
 #define BGIKANARAY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 

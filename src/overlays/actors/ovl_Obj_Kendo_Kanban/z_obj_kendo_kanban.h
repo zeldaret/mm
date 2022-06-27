@@ -5,7 +5,7 @@
 
 struct ObjKendoKanban;
 
-typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban*, GlobalContext*);
+typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban*, PlayState*);
 
 #define OBJKENDOKANBAN_GET_F(thisx) ((thisx)->params & 0xF)
 

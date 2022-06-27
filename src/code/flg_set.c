@@ -134,8 +134,8 @@ static u32 sCurrentBit = 0;
 static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-    Input* input = CONTROLLER1(&globalCtx->state);
+    PlayState* play = (PlayState*)gameState;
+    Input* input = CONTROLLER1(&play->state);
 
     /* Intra-byte navigation */
 
@@ -255,7 +255,7 @@ void FlagSet_Update(GameState* gameState) {
 
         // Pressing B will exit
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        globalCtx->pauseCtx.debugState = 0;
+        play->pauseCtx.debugState = 0;
     }
 }
 

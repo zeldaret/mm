@@ -5,7 +5,7 @@
 
 struct EnAz;
 
-typedef void (*EnAzActionFunc)(struct EnAz*, GlobalContext*);
+typedef void (*EnAzActionFunc)(struct EnAz*, PlayState*);
 
 typedef struct EnAz {
     /* 0x0000 */ Actor actor;

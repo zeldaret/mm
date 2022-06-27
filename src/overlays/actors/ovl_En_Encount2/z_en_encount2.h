@@ -5,7 +5,7 @@
 
 struct EnEncount2;
 
-typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, GlobalContext*);
+typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, PlayState*);
 
 typedef struct EnEncount2Effect{
    /* 0x00 */ u8 isEnabled;

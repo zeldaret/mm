@@ -6,7 +6,7 @@
 
 struct EnWf;
 
-typedef void (*EnWfActionFunc)(struct EnWf*, GlobalContext*);
+typedef void (*EnWfActionFunc)(struct EnWf*, PlayState*);
 
 #define ENWF_GET_80(thisx) ((thisx)->params & 0x80)
 

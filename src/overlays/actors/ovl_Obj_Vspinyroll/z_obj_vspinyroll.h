@@ -5,7 +5,7 @@
 
 struct ObjVspinyroll;
 
-typedef void (*ObjVspinyrollActionFunc)(struct ObjVspinyroll*, GlobalContext*);
+typedef void (*ObjVspinyrollActionFunc)(struct ObjVspinyroll*, PlayState*);
 
 #define OBJVSPINYROLL_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJVSPINYROLL_GET_380(thisx) (((thisx)->params >> 7) & 7)

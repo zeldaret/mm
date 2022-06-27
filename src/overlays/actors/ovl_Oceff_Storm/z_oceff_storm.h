@@ -5,7 +5,7 @@
 
 struct OceffStorm;
 
-typedef void (*OceffStormActionFunc)(struct OceffStorm*, GlobalContext*);
+typedef void (*OceffStormActionFunc)(struct OceffStorm*, PlayState*);
 
 typedef struct OceffStorm {
     /* 0x0000 */ Actor actor;

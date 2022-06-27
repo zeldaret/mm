@@ -5,7 +5,7 @@
 
 struct EnGinkoMan;
 
- typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, GlobalContext*);
+ typedef void (*EnGinkoManActionFunc)(struct EnGinkoMan*, PlayState*);
 
 typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
