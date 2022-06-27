@@ -13,7 +13,7 @@ typedef struct {
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f accel;
     /* 0x24 */ Gfx* dList;
-    /* 0x28 */ s16 params;
+    /* 0x28 */ s16 flags;
     /* 0x2A */ s16 scale;
     /* 0x2C */ s16 objId;
     /* 0x2C */ s16 life;

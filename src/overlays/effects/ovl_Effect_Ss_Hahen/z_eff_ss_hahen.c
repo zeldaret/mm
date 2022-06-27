@@ -9,7 +9,7 @@
 
 #define rPitch regs[0]
 #define rYaw regs[1]
-#define rParams regs[2]
+#define rFlags regs[2]
 #define rScale regs[3]
 #define rObjId regs[4]
 #define rObjBankIndex regs[5]
@@ -17,24 +17,24 @@
 
 #define PARAMS ((EffectSsHahenInitParams*)initParamsx)
 
-u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsHahen_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Hahen_InitVars = {
     EFFECT_SS_HAHEN,
     EffectSsHahen_Init,
 };
 
-void EffectSsHahen_CheckForObject(EffectSs* this, GlobalContext* globalCtx) {
-    if (((this->rObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, this->rObjId)) < 0) ||
-        !Object_IsLoaded(&globalCtx->objectCtx, this->rObjBankIndex)) {
+void EffectSsHahen_CheckForObject(EffectSs* this, PlayState* play) {
+    if (((this->rObjBankIndex = Object_GetIndex(&play->objectCtx, this->rObjId)) < 0) ||
+        !Object_IsLoaded(&play->objectCtx, this->rObjBankIndex)) {
         this->life = -1;
         this->draw = NULL;
     }
 }
 
-u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsHahenInitParams* initParams = PARAMS;
 
     this->pos = initParams->pos;
@@ -45,15 +45,15 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     if (initParams->dList != NULL) {
         this->gfx = initParams->dList;
         this->rObjId = initParams->objId;
-        EffectSsHahen_CheckForObject(this, globalCtx);
+        EffectSsHahen_CheckForObject(this, play);
     } else {
         this->gfx = gEffFragmentsDL;
-        this->rObjId = -1;
+        this->rObjId = HAHEN_OBJECT_DEFAULT;
     }
 
     this->draw = EffectSsHahen_Draw;
     this->update = EffectSsHahen_Update;
-    this->rParams = initParams->params;
+    this->rFlags = initParams->flags;
     this->rScale = initParams->scale;
     this->rPitch = Rand_ZeroOne() * 314.0f;
     this->rYaw = Rand_ZeroOne() * 314.0f;
@@ -62,61 +62,61 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 1;
 }
 
-void EffectSsHahen_DrawOpa(GlobalContext* globalCtx, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsHahen_DrawOpa(PlayState* play, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
 
     OPEN_DISPS(gfxCtx);
 
-    if (this->rObjId != -1) {
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIndex].segment);
+    if (this->rObjId != HAHEN_OBJECT_DEFAULT) {
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->gfx);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsHahen_DrawXlu(GlobalContext* globalCtx, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsHahen_DrawXlu(PlayState* play, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
 
     OPEN_DISPS(gfxCtx);
 
     if (this->rObjId != -1) {
-        gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIndex].segment);
+        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
     }
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this) {
     f32 scale;
 
-    if (this->rParams & HAHEN_SMALL) {
+    if (this->rFlags & HAHEN_SMALL) {
         scale = this->rScale * (0.001f * 0.1f);
     } else {
         scale = this->rScale * 0.001f;
     }
 
-    Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_InsertYRotation_f(this->rYaw * 0.01f, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(this->rPitch * 0.01f);
+    Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+    Matrix_RotateYF(this->rYaw * 0.01f, MTXMODE_APPLY);
+    Matrix_RotateXFApply(this->rPitch * 0.01f);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-    if (this->rParams & HAHEN_XLU) {
-        EffectSsHahen_DrawXlu(globalCtx, this);
+    if (this->rFlags & HAHEN_XLU) {
+        EffectSsHahen_DrawXlu(play, this);
     } else {
-        EffectSsHahen_DrawOpa(globalCtx, this);
+        EffectSsHahen_DrawOpa(play, this);
     }
 }
 
-void EffectSsHahen_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    Player* player = GET_PLAYER(globalCtx);
+void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this) {
+    Player* player = GET_PLAYER(play);
 
     this->rPitch += 55;
     this->rYaw += 10;
@@ -125,7 +125,7 @@ void EffectSsHahen_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
         this->life = 0;
     }
 
-    if (this->rObjId != -1) {
-        EffectSsHahen_CheckForObject(this, globalCtx);
+    if (this->rObjId != HAHEN_OBJECT_DEFAULT) {
+        EffectSsHahen_CheckForObject(this, play);
     }
 }

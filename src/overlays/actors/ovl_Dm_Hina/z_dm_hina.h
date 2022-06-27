@@ -5,7 +5,7 @@
 
 struct DmHina;
 
-typedef void (*DmHinaActionFunc)(struct DmHina*, GlobalContext*);
+typedef void (*DmHinaActionFunc)(struct DmHina*, PlayState*);
 
 typedef struct DmHina {
     /* 0x0000 */ Actor actor;
