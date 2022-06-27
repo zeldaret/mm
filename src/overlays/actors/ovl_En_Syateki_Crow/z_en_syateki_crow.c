@@ -12,17 +12,17 @@
 
 #define THIS ((EnSyatekiCrow*)thisx)
 
-void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSyatekiCrow_Init(Actor* thisx, PlayState* play);
+void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play);
+void EnSyatekiCrow_Update(Actor* thisx, PlayState* play);
+void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play);
 
 void func_809CA5D4(EnSyatekiCrow* this);
-void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CA67C(EnSyatekiCrow* this, PlayState* play);
 void func_809CA71C(EnSyatekiCrow* this);
-void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
-void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx);
-void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CA840(EnSyatekiCrow* this, PlayState* play);
+void func_809CA8E4(EnSyatekiCrow* this, PlayState* play);
+void func_809CABC0(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f D_809CB050 = { 0.0f, 0.0f, 0.0f };
 
@@ -78,8 +78,8 @@ static Vec3f D_809CB0CC = { 0.0f, 0.0f, 0.0f };
 
 static Vec3f D_809CB0D8 = { 2500.0f, 0.0f, 0.0f };
 
-void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnSyatekiCrow* this = THIS;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
@@ -87,18 +87,18 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     path = syatekiMan->path;
     while (path->unk2 != 0) {
-        path = &globalCtx->setupPathList[path->unk1];
+        path = &play->setupPathList[path->unk1];
     }
 
     for (i = 0; i < EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor); i++) {
-        path = &globalCtx->setupPathList[path->unk1];
+        path = &play->setupPathList[path->unk1];
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                        OBJECT_CROW_LIMB_MAX);
-    Collider_InitJntSph(globalCtx, &this->unk_23C);
-    Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &sJntSphInit, &this->unk_25C);
+    Collider_InitJntSph(play, &this->unk_23C);
+    Collider_SetJntSph(play, &this->unk_23C, &this->actor, &sJntSphInit, &this->unk_25C);
     this->unk_23C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
@@ -115,10 +115,10 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_809CA5D4(this);
 }
 
-void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play) {
     EnSyatekiCrow* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->unk_23C);
+    Collider_DestroyJntSph(play, &this->unk_23C);
 }
 
 void func_809CA5D4(EnSyatekiCrow* this) {
@@ -133,7 +133,7 @@ void func_809CA5D4(EnSyatekiCrow* this) {
     this->actionFunc = func_809CA67C;
 }
 
-void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+void func_809CA67C(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->unk_26A == 1) && (this->unk_1C2 == 1) &&
@@ -168,7 +168,7 @@ void func_809CA71C(EnSyatekiCrow* this) {
     this->actionFunc = func_809CA840;
 }
 
-void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+void func_809CA840(EnSyatekiCrow* this, PlayState* play) {
     if (((EN_SYATEKI_CROW_GET_PARAM_F(&this->actor) * 20) + 20) < this->unk_1BC) {
         Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_KAICHO_CRY);
         this->unk_1BC = 0;
@@ -180,7 +180,7 @@ void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
     Vec3f sp34;
     f32 sp30;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
@@ -232,7 +232,7 @@ void func_809CAAF8(EnSyatekiCrow* this) {
     this->actionFunc = func_809CABC0;
 }
 
-void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
@@ -244,8 +244,7 @@ void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1C4 > 20) {
-        func_800B3030(globalCtx, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0,
-                      0);
+        func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->unk_27A++;
         syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
         func_809CA5D4(this);
@@ -254,28 +253,28 @@ void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     this->unk_1C4++;
 }
 
-void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+void func_809CACD0(EnSyatekiCrow* this, PlayState* play) {
     if (this->actionFunc == func_809CA8E4) {
         if (this->unk_23C.base.acFlags & AC_HIT) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             this->unk_1C4 = 0;
             this->unk_23C.base.acFlags &= ~AC_HIT;
-            EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_809CB0C0, &D_809CB0CC, 5, 1);
+            EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_809CB0C0, &D_809CB0CC, 5, 1);
             func_809CAAF8(this);
         } else {
             this->unk_23C.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
             this->unk_23C.elements->dim.worldSphere.center.y =
                 sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
             this->unk_23C.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_23C.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_23C.base);
         }
     }
 }
 
-void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiCrow_Update(Actor* thisx, PlayState* play) {
     EnSyatekiCrow* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actionFunc != func_809CABC0) {
         Actor_MoveWithoutGravity(&this->actor);
@@ -283,11 +282,10 @@ void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    func_809CACD0(this, globalCtx);
+    func_809CACD0(this, play);
 }
 
-s32 EnSyatekiCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                   Actor* thisx) {
+s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
@@ -299,7 +297,7 @@ s32 EnSyatekiCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx*
     return false;
 }
 
-void EnSyatekiCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSyatekiCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSyatekiCrow* this = THIS;
     Vec3f* sp1C;
 
@@ -314,10 +312,10 @@ void EnSyatekiCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     }
 }
 
-void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play) {
     EnSyatekiCrow* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnSyatekiCrow_OverrideLimbDraw, EnSyatekiCrow_PostLimbDraw, &this->actor);
 }

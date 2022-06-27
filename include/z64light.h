@@ -88,6 +88,6 @@ typedef enum LightType {
 } LightType;
 
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 #endif

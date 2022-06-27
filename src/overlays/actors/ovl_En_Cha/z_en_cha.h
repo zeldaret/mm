@@ -5,7 +5,7 @@
 
 struct EnCha;
 
-typedef void (*EnChaActionFunc)(struct EnCha*, struct GlobalContext*);
+typedef void (*EnChaActionFunc)(struct EnCha*, struct PlayState*);
 
 typedef struct EnCha {
     /* 0x000 */ Actor actor;

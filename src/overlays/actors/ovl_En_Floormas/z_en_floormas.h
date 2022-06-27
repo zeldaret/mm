@@ -6,7 +6,7 @@
 
 struct EnFloormas;
 
-typedef void (*EnFloormasActionFunc)(struct EnFloormas*, GlobalContext*);
+typedef void (*EnFloormasActionFunc)(struct EnFloormas*, PlayState*);
 
 #define ENFLOORMAS_GET_7FFF(thisx) ((thisx)->params & 0x7FFF)
 #define ENFLOORMAS_GET_8000(thisx) ((thisx)->params & 0x8000)

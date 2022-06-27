@@ -10,11 +10,11 @@
 
 #define THIS ((ElfMsg5*)thisx)
 
-void ElfMsg5_Init(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg5_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ElfMsg5_Update(Actor* thisx, GlobalContext* globalCtx);
+void ElfMsg5_Init(Actor* thisx, PlayState* play);
+void ElfMsg5_Destroy(Actor* thisx, PlayState* play);
+void ElfMsg5_Update(Actor* thisx, PlayState* play);
 
-void func_80AFDB38(ElfMsg5* this, GlobalContext* globalCtx);
+void func_80AFDB38(ElfMsg5* this, PlayState* play);
 
 #if 0
 const ActorInit Elf_Msg5_InitVars = {

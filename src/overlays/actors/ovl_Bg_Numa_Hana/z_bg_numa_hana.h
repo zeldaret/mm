@@ -13,7 +13,7 @@ typedef enum {
 
 struct BgNumaHana;
 
-typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, GlobalContext*);
+typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;

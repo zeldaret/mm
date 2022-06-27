@@ -7,7 +7,7 @@ struct BgF40Switch;
 
 #define BGF40SWITCH_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
-typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch*, GlobalContext*);
+typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch*, PlayState*);
 
 typedef struct BgF40Switch {
     /* 0x0000 */ DynaPolyActor dyna;

@@ -19,9 +19,9 @@
 
 #define PARAMS ((EffectSsHitmarkInitParams*)initParamsx)
 
-u32 EffectSsHitmark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsHitmark_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsHitmark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsHitmark_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsHitmark_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsHitmark_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static Color_RGB8 sColors[] = {
     { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 255 }, { 255, 0, 0 },   { 255, 200, 100 }, { 200, 150, 0 },
@@ -43,7 +43,7 @@ const EffectSsInit Effect_Ss_Hitmark_InitVars = {
     EffectSsHitmark_Init,
 };
 
-u32 EffectSsHitmark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsHitmark_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsHitmarkInitParams* initParams = PARAMS;
     s32 colorIndex;
 
@@ -73,8 +73,8 @@ u32 EffectSsHitmark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
     return 1;
 }
 
-void EffectSsHitmark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsHitmark_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
@@ -89,7 +89,7 @@ void EffectSsHitmark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     scale = this->rScale / 100.0f;
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTransBillboard);
     SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfScale, &mfResult);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -107,7 +107,7 @@ void EffectSsHitmark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsHitmark_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsHitmark_Update(PlayState* play, u32 index, EffectSs* this) {
     s32 colorIndex;
 
     if (this->rType == EFFECT_HITMARK_DUST) {
