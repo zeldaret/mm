@@ -11,8 +11,8 @@
 
 #define THIS ((BgMarketStep*)thisx)
 
-void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgMarketStep_Init(Actor* thisx, PlayState* play);
+void BgMarketStep_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Bg_Market_Step_InitVars = {
     ACTOR_BG_MARKET_STEP,  ACTORCAT_BG,           FLAGS,
@@ -30,14 +30,14 @@ static InitChainEntry sInitChain[] = {
 Gfx* D_80AF0120[] = { object_market_obj_DL_01F050, object_market_obj_DL_018DA0 };
 Gfx* D_80AF0128[] = { object_market_obj_DL_01EF10, object_market_obj_DL_018C60 };
 
-void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgMarketStep_Init(Actor* thisx, PlayState* play) {
     BgMarketStep* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }
-void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgMarketStep_Draw(Actor* thisx, PlayState* play) {
     s32 index = thisx->params & 1;
 
-    Gfx_DrawDListOpa(globalCtx, D_80AF0120[index]);
-    Gfx_DrawDListOpa(globalCtx, D_80AF0128[index]);
+    Gfx_DrawDListOpa(play, D_80AF0120[index]);
+    Gfx_DrawDListOpa(play, D_80AF0128[index]);
 }

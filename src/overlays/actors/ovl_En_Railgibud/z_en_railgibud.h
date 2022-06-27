@@ -6,7 +6,7 @@
 
 struct EnRailgibud;
 
-typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, GlobalContext*);
+typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, PlayState*);
 
 #define ENRAILGIBUD_GET_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x7F)
 #define ENRAILGIBUD_IS_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x80)

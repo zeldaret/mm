@@ -10,14 +10,14 @@
 
 #define THIS ((DmChar09*)thisx)
 
-void DmChar09_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar09_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar09_Init(Actor* thisx, PlayState* play);
+void DmChar09_Destroy(Actor* thisx, PlayState* play);
+void DmChar09_Update(Actor* thisx, PlayState* play);
+void DmChar09_Draw(Actor* thisx, PlayState* play);
 
-void func_80AB1FDC(DmChar09* this, GlobalContext* globalCtx);
-void func_80AB2258(DmChar09* this, GlobalContext* globalCtx);
-void func_80AB2268(DmChar09* this, GlobalContext* globalCtx);
+void func_80AB1FDC(DmChar09* this, PlayState* play);
+void func_80AB2258(DmChar09* this, PlayState* play);
+void func_80AB2268(DmChar09* this, PlayState* play);
 
 #if 0
 const ActorInit Dm_Char09_InitVars = {

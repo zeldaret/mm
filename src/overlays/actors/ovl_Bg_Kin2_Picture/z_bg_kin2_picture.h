@@ -5,7 +5,7 @@
 
 struct BgKin2Picture;
 
-typedef void (*BgKin2PictureActionFunc)(struct BgKin2Picture*, GlobalContext*);
+typedef void (*BgKin2PictureActionFunc)(struct BgKin2Picture*, PlayState*);
 
 typedef struct BgKin2Picture {
     /* 0x0000 */ Actor actor;

@@ -13,12 +13,12 @@ void guPositionF(f32 mf[4][4], f32 rot, f32 pitch, f32 yaw, f32 scale, f32 x, f3
     pitch *= D_80134D00;
     yaw *= D_80134D00;
 
-    sinr = __sinf(rot);
-    cosr = __cosf(rot);
-    sinp = __sinf(pitch);
-    cosp = __cosf(pitch);
-    sinh = __sinf(yaw);
-    cosh = __cosf(yaw);
+    sinr = sinf(rot);
+    cosr = cosf(rot);
+    sinp = sinf(pitch);
+    cosp = cosf(pitch);
+    sinh = sinf(yaw);
+    cosh = cosf(yaw);
 
     mf[0][0] = (cosp * cosh) * scale;
     mf[0][1] = (cosp * sinh) * scale;
