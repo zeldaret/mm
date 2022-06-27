@@ -4,20 +4,11 @@
 #include "global.h"
 #include "objects/object_shn/object_shn.h"
 
-
 struct EnSyatekiMan;
 
 typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
-#define ENSYATEKIMAN_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
-
-typedef struct {
-    /* 0x00 */ s16 index;
-    /* 0x04 */ f32 x;
-    /* 0x08 */ f32 y;
-    /* 0x0C */ f32 z;
-    /* 0x10 */ s32 variable;
-} EnSyatekiManUnkStruct;
+#define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef struct EnSyatekiMan {
     /* 0x0000 */ Actor actor;
@@ -25,7 +16,7 @@ typedef struct EnSyatekiMan {
     /* 0x0188 */ EnSyatekiManActionFunc actionFunc;
     /* 0x018C */ Path* path;
     /* 0x0190 */ s32 unk_190;
-    /* 0x0194 */ s32 unk_194;
+    /* 0x0194 */ s32 swampTargetActorListIndex;
     /* 0x0198 */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
     /* 0x01F8 */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
     /* 0x0258 */ Vec3s headRot;

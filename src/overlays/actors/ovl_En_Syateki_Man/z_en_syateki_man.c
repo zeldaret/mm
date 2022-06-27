@@ -5,6 +5,9 @@
  */
 
 #include "z_en_syateki_man.h"
+#include "overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.h"
+#include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
+#include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
@@ -59,75 +62,81 @@ static s16 D_809C91C8[] = {
     0x0026,
 };
 
-static EnSyatekiManUnkStruct D_809C91D0[] = {
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x130 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x20 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x0 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x10 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x20 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x30 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x40 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x1 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x11 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x0 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x100 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x200 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x300 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x420 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x520 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x601 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x702 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x801 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x902 },
+typedef struct {
+    /* 0x00 */ s16 actorId;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ s32 params;
+} SwampTargetActorEntry;
+
+static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 0) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 2, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 3, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 4, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 1) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(5, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(6, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(7, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(8, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(9, 0, 2) },
 };
 
-static EnSyatekiManUnkStruct D_809C934C[] = {
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x0 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x100 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x1 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x11 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x202 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x302 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x3 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x103 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x423 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x204 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x304 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x424 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x25 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x136 },
+static SwampTargetActorEntry sUnusedSwampTargetActorList[] = {
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, 1) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 4) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 5) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 6) },
 };
 
-static EnSyatekiManUnkStruct* D_809C9464[] = {
-    D_809C91D0,
-    D_809C934C,
+static SwampTargetActorEntry* sSwampTargetActorLists[] = {
+    sNormalSwampTargetActorList,
+    sUnusedSwampTargetActorList,
 };
 
-static s32 D_809C946C[] = {
-    ARRAY_COUNT(D_809C91D0),
-    ARRAY_COUNT(D_809C934C),
+static s32 sSwampTargetActorListLengths[] = {
+    ARRAY_COUNT(sNormalSwampTargetActorList),
+    ARRAY_COUNT(sUnusedSwampTargetActorList),
 };
 
 static Vec3f D_809C9474 = { 0.0f, 10.0f, 140.0f };
 static Vec3f D_809C9480 = { -20.0f, 20.0f, 198.0f };
 static Vec3f D_809C948C = { -20.0f, 40.0f, 175.0f };
 
-void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, EnSyatekiManUnkStruct arg2[],
-                                          s32 arg3) {
+void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, SwampTargetActorEntry arg2[],
+                                          s32 numTargetActors) {
     PlayState* play = play2;
     s32 i;
 
-    for (i = 0; i < arg3; i++) {
-        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, arg2[i].index, arg2[i].x, arg2[i].y, arg2[i].z, 0, 0, 0,
-                           arg2[i].variable);
+    for (i = 0; i < numTargetActors; i++) {
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, arg2[i].actorId, arg2[i].pos.x, arg2[i].pos.y,
+                           arg2[i].pos.z, 0, 0, 0, arg2[i].params);
     }
 }
 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* sp34 = &play->setupPathList[ENSYATEKIMAN_GET_FF00(&this->actor)];
-    s32 sp30 = D_809C946C[this->unk_194];
+    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
+    s32 numTargetActors = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -152,14 +161,15 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->dekuScrubHitCounter = 0;
     this->guayHitCounter = 0;
     this->textId = 0;
-    this->unk_194 = 0;
+    this->swampTargetActorListIndex = 0;
     this->unk_282 = 0;
     this->eyeIndex = 0;
     this->blinkTimer = 0;
 
     if (play->sceneNum == SCENE_SYATEKI_MORI) {
-        this->path = sp34;
-        EnSyatekiMan_Swamp_SpawnTargetActors(this, play, D_809C9464[this->unk_194], sp30);
+        this->path = path;
+        EnSyatekiMan_Swamp_SpawnTargetActors(this, play, sSwampTargetActorLists[this->swampTargetActorListIndex],
+                                             numTargetActors);
     }
 }
 
