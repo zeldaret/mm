@@ -119,9 +119,9 @@ s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
  * Notes:
  *
  * player->maskObjectLoadState seems to be able to take 3 possible values
- * - 0: The mask object is loaded.
- * - 1: The mask object must be changed (and the DMA request has not been sent yet)
- * - 2: Waiting for the DMA request to complete.
+ *    0: The mask object is loaded.
+ *    1: The mask object must be changed (and the DMA request has not been sent yet)
+ *    2: Waiting for the DMA request to complete.
  */
 void func_801229FC(Player* player) {
     if (player->maskObjectLoadState == 1) {
@@ -350,12 +350,12 @@ void func_80123140(PlayState* play, Player* player) {
     f32 scale;
 
     if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
-        REG(27) = 0x4B0;
+        REG(27) = 1200;
     } else {
-        REG(27) = 0x7D0;
+        REG(27) = 2000;
     }
 
-    REG(48) = 0x172;
+    REG(48) = 370;
 
     currentBoots = player->currentBoots;
     if (currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
@@ -363,10 +363,10 @@ void func_80123140(PlayState* play, Player* player) {
             currentBoots++;
         }
         if (player->transformation == PLAYER_FORM_GORON) {
-            REG(48) = 0xC8;
+            REG(48) = 200;
         }
     } else if (currentBoots == PLAYER_BOOTS_GIANT) {
-        REG(48) = 0xAA;
+        REG(48) = 170;
     }
 
     bootRegs = D_801BFE14[currentBoots];
@@ -490,15 +490,15 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoActionLabelIndex == 0x18)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == 0x18)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == 0x1A)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == 0x19)) {
             return ITEM_F2;
         }
 
@@ -580,7 +580,7 @@ extern Gfx** sPlayerDListGroups[];
 void func_801239AC(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
-            if (!Player_HoldsTwoHandedWeapon(player)) {
+            if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
                     player->rightHandType = 8;
@@ -757,19 +757,19 @@ s32 Player_HasMirrorShieldEquipped(PlayState* play) {
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_HasMirrorShieldSetToDraw(PlayState* play) {
+s32 Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == 8) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_HoldsHookshot(Player* player) {
+s32 Player_IsHoldingHookshot(Player* player) {
     return player->itemActionParam == PLAYER_AP_HOOKSHOT;
 }
 
 s32 func_801240DC(Player* player) {
-    return Player_HoldsHookshot(player) && (player->heldActor == NULL);
+    return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
@@ -802,7 +802,7 @@ s32 Player_GetMeleeWeaponHeld(Player* player) {
     return Player_ActionToMeleeWeapon(player->itemActionParam);
 }
 
-s32 Player_HoldsTwoHandedWeapon(Player* player) {
+s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on two-handed weapons to be contiguous
     if ((player->itemActionParam >= PLAYER_AP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_AP_STICK)) {
         return true;
@@ -844,7 +844,7 @@ s32 Player_GetExplosiveHeld(Player* player) {
 s32 func_80124278(Actor* actor, s32 arg1) {
     s32 phi_v1 = 0;
 
-    // Fake match?
+    //! FAKE:
     if ((arg1 == 1) || ((phi_v1 = arg1 - 3, (phi_v1 >= 0)) && (phi_v1 < 4))) {
         return phi_v1;
     }
@@ -859,33 +859,33 @@ s32 func_801242B4(Player* player) {
 s32 func_801242DC(PlayState* play) {
     Player* player = GET_PLAYER(play);
     TextTriggerEntry* triggerEntry;
-    s32 index;
+    s32 envIndex;
 
     if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
-        index = 0;
+        envIndex = 0;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
-        index = 3;
+        envIndex = 3;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            index = 1;
+            envIndex = 1;
         } else {
-            index = 2;
+            envIndex = 2;
         }
     } else {
         return 0;
     }
 
     // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[index];
+    triggerEntry = &sEnvironmentTextTriggers[envIndex];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (index == 0)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (envIndex == 0)) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return index + 1;
+    return envIndex + 1;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
@@ -970,7 +970,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
 
     temp_v0 = Math_FAtan2F(sp44.y, sp40);
     temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
-    // fake match?
+    //! FAKE:
     if (sp3C) {}
 
     func_80124F18(arg6, arg7, temp_v0, 20.0f, 2000.0f);
@@ -1002,7 +1002,7 @@ void func_8012536C(void) {
 void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
-    Gfx* dl;
+    Gfx* dList;
     f32 scale;
     s32 i;
 
@@ -1025,12 +1025,12 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
         phi_a0++;
     }
 
-    dl = POLY_XLU_DISP;
+    dList = POLY_XLU_DISP;
 
-    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[1], object_link_zora_DL_011760);
+    gSPMatrix(&dList[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&dList[1], object_link_zora_DL_011760);
 
-    POLY_XLU_DISP = &dl[2];
+    POLY_XLU_DISP = &dList[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

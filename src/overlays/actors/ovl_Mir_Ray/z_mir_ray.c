@@ -602,7 +602,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
 
     this->reflectIntensity = 0.0f;
 
-    if (!D_808E3BF0 && !this->unLit && Player_HasMirrorShieldSetToDraw(play)) {
+    if (!D_808E3BF0 && !this->unLit && Player_IsHoldingMirrorShield(play)) {
         Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         MirRay_SetIntensity(this, play);
 

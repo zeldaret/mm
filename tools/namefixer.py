@@ -104,7 +104,7 @@ wordReplace = {
     "func_80123BD4": "Player_SetModelGroup",
     "func_80123F48": "Player_IsBurningStickInRange",
     "func_8012405C": "Player_HasMirrorShieldEquipped",
-    "func_80124088": "Player_HasMirrorShieldSetToDraw",
+    "func_80124088": "Player_IsHoldingMirrorShield",
     "func_8012697C": "Player_DrawGetItem",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
@@ -632,7 +632,7 @@ wordReplace = {
     "globalCtx->envCtx.unk_E6": "play->envCtx.screenFillColor",
     "globalCtx->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
-    "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoActionLabelIndex",
+    "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
 
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
