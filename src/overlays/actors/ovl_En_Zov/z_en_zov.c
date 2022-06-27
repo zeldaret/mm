@@ -150,7 +150,7 @@ void func_80BD1440(EnZov* this, s16 arg1) {
 void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
     f32 frame;
 
-    if (((index != this->unk_322) || mode) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
+    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
         switch (index) {
             case 6:
                 frame = 30.0f;
