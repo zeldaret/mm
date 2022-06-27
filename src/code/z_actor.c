@@ -3794,6 +3794,7 @@ void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
+// Actor_RequestRumble?
 void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);

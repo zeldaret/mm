@@ -30,8 +30,8 @@ typedef struct RumbleManager {
 
 extern RumbleManager gRumbleMgr;
 
-void Rumble_Override(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep);
-void Rumble_Request(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep);
+void Rumble_Override(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep);
+void Rumble_Request(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep);
 void Rumble_Init(void);
 void Rumble_Destroy(void);
 s32 Rumble_ControllerOneHasRumblePak(void);
