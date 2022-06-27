@@ -55,7 +55,7 @@ s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
 
 #include "z_camera_data.c"
 
-GlobalContext* D_801EDC28;
+PlayState* D_801EDC28;
 SwingAnimation D_801EDC30[4];
 Vec3f D_801EDDD0;
 Vec3f D_801EDDE0;
@@ -264,7 +264,7 @@ f32 Camera_GetTrackedActorHeight(Camera* camera) {
     Actor* trackActor = camera->trackActor;
     f32 trackHeight;
 
-    if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (trackActor == &GET_PLAYER(camera->play)->actor) {
         trackHeight = Player_GetHeight((Player*)trackActor);
     } else {
         Actor_GetFocus(&actorFocus, trackActor);
@@ -280,7 +280,7 @@ f32 Camera_GetRunSpeedLimit(Camera* camera) {
     Actor* trackActor = camera->trackActor;
     f32 runSpeedLimit;
 
-    if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (trackActor == &GET_PLAYER(camera->play)->actor) {
         runSpeedLimit = Player_GetRunSpeedLimit((Player*)trackActor);
     } else {
         runSpeedLimit = 10.0f;
@@ -293,7 +293,7 @@ s32 func_800CB7CC(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
     // stateFlags3 & 0x10: Turned off in the first line of Player_Update (func_808460B8)
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags3 & 0x10;
     } else {
         return 0;
@@ -303,7 +303,7 @@ s32 func_800CB7CC(Camera* camera) {
 s32 Camera_IsMountedOnHorse(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags1 & 0x800000;
     } else {
         return 0;
@@ -313,7 +313,7 @@ s32 Camera_IsMountedOnHorse(Camera* camera) {
 s32 Camera_IsDekuHovering(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags3 & 0x2000;
     } else {
         return 0;
@@ -326,7 +326,7 @@ s32 Camera_IsDekuHovering(Camera* camera) {
 s32 func_800CB854(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags1 & 0x20;
     } else {
         return 0;
@@ -337,7 +337,7 @@ s32 func_800CB854(Camera* camera) {
 s32 Camera_IsSwimming(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (trackActor == &GET_PLAYER(camera->play)->actor) {
         if (((Player*)trackActor)->stateFlags3 & 0x8000) {
             // Swimming as Zora
             return 999;
@@ -353,7 +353,7 @@ s32 Camera_IsSwimming(Camera* camera) {
 s32 Camera_IsDiving(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags2 & 0x800;
     } else {
         return 0;
@@ -363,7 +363,7 @@ s32 Camera_IsDiving(Camera* camera) {
 s32 Camera_IsPlayerFormZora(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->transformation == PLAYER_FORM_ZORA;
     } else {
         return false;
@@ -373,7 +373,7 @@ s32 Camera_IsPlayerFormZora(Camera* camera) {
 s32 func_800CB924(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags3 & 0x1000;
     } else {
         return 0;
@@ -386,7 +386,7 @@ s32 func_800CB950(Camera* camera) {
     s32 ret;
     f32 new_var;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         new_var = Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight);
 
         phi_v0 = false;
@@ -420,7 +420,7 @@ s32 func_800CB950(Camera* camera) {
 s32 Camera_IsClimbingLedge(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags1 & 4;
     } else {
         return 0;
@@ -431,7 +431,7 @@ s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
     Actor* trackActor = camera->trackActor;
     s32 ret;
 
-    if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (trackActor == &GET_PLAYER(camera->play)->actor) {
         // Charging Sword
         ret = !!(((Player*)trackActor)->stateFlags1 & 0x1000);
         if (!ret) {
@@ -447,7 +447,7 @@ s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
 s32 func_800CBA7C(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags2 & 0x800000;
     } else {
         return 0;
@@ -457,7 +457,7 @@ s32 func_800CBA7C(Camera* camera) {
 s32 func_800CBAAC(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->swordState;
     } else {
         return 0;
@@ -468,7 +468,7 @@ s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
     PosRot sp24;
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         *dst = ((Player*)trackActor)->bodyPartsPos[0];
         return dst;
     } else {
@@ -481,7 +481,7 @@ s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
 s32 Camera_IsUnderwaterAsZora(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER;
     } else {
         return 0;
@@ -494,7 +494,7 @@ s32 Camera_IsUnderwaterAsZora(Camera* camera) {
 s32 func_800CBB88(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         // unknown sword animation
         if ((((Player*)trackActor)->swordState != 0) && (((Player*)trackActor)->swordAnimation == 26)) {
             return 3;
@@ -513,7 +513,7 @@ s32 func_800CBB88(Camera* camera) {
 s32 Camera_IsUsingZoraFins(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)trackActor)->stateFlags1 & 0x200000;
     } else {
         return 0;
@@ -530,7 +530,7 @@ s32 func_800CBC30(Camera* camera, f32 arg1, f32 arg2) {
 
 // OoT func_80043F94
 s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
-    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionContext* colCtx = &camera->play->colCtx;
     Vec3f toNewPos;
     Vec3f toPoint;
     Vec3f fromToNorm;
@@ -607,8 +607,7 @@ s32 Camera_BgCheckInfo(Camera* camera, Vec3f* from, CamColChk* to) {
     Vec3f toNewPos;
     Vec3f fromToNorm;
 
-    if (BgCheck_CameraLineTest1(&camera->globalCtx->colCtx, from, &to->pos, &toNewPos, &to->poly, 1, 1, 1, -1,
-                                &to->bgId)) {
+    if (BgCheck_CameraLineTest1(&camera->play->colCtx, from, &to->pos, &toNewPos, &to->poly, 1, 1, 1, -1, &to->bgId)) {
         floorPoly = to->poly;
         to->norm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         to->norm.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
@@ -630,7 +629,7 @@ s32 Camera_BgCheckInfo(Camera* camera, Vec3f* from, CamColChk* to) {
  * Detects if there is collision between `from` and `to`
  */
 s32 Camera_BgCheck(Camera* camera, Vec3f* from, Vec3f* to) {
-    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionContext* colCtx = &camera->play->colCtx;
     Vec3f intersect;
     s32 bgId;
     CollisionPoly* poly = NULL;
@@ -649,7 +648,7 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
     s32 pad2;
     s32 bgId;
     CollisionPoly* poly;
-    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionContext* colCtx = &camera->play->colCtx;
 
     poly = NULL;
     if ((BgCheck_CameraLineTest1(colCtx, from, to, &intersect, &poly, 1, 1, 1, 0, &bgId)) &&
@@ -668,7 +667,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
     f32 rand;
     PosRot playerHead;
     Vec3f sp64;
-    Player* player = GET_PLAYER(camera->globalCtx);
+    Player* player = GET_PLAYER(camera->play);
     s32 i;
 
     sp64 = *arg2;
@@ -682,8 +681,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
         if (1) {};
 
         if (Camera_CheckOOB(camera, arg1, &sp64) || func_800CBC30(camera, arg2->y, arg1->y) ||
-            CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, arg2, arg1, exclusions,
-                                       numExclusions)) {
+            CollisionCheck_LineOCCheck(camera->play, &camera->play->colChkCtx, arg2, arg1, exclusions, numExclusions)) {
             sp90.yaw = D_801B9E18[i] + arg3->yaw;
             rand = Rand_ZeroOne();
             sp90.pitch = D_801B9E34[i] + ((s16)(arg3->pitch * rand));
@@ -716,7 +714,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
  * and bgId to `bgId`.  If no floor is found, then the normal is a flat surface pointing upwards.
  */
 f32 Camera_GetFloorYNorm(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId) {
-    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionContext* colCtx = &camera->play->colCtx;
     CollisionPoly* floorPoly;
     f32 floorY = BgCheck_EntityRaycastFloor3(colCtx, &floorPoly, bgId, chkPos);
 
@@ -754,11 +752,11 @@ f32 Camera_GetFloorY(Camera* camera, Vec3f* pos) {
  */
 f32 Camera_GetFloorYLayer(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
     CollisionPoly* floorPoly;
-    CollisionContext* colCtx = &camera->globalCtx->colCtx;
+    CollisionContext* colCtx = &camera->play->colCtx;
     f32 floorY;
 
     if (camera->trackActor != NULL) {
-        floorY = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &floorPoly, bgId,
+        floorY = BgCheck_EntityRaycastFloor5_3(camera->play, &camera->play->colCtx, &floorPoly, bgId,
                                                camera->trackActor, pos);
     } else {
         floorY = BgCheck_CameraRaycastFloor2(colCtx, &floorPoly, bgId, pos);
@@ -786,10 +784,10 @@ f32 Camera_GetFloorYLayer(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
  */
 s16 Camera_GetCamDataSetting(Camera* camera, u32 camDataId) {
     if (camDataId & 0x1000) {
-        return BgCheck_GetBgCamDataSetting(&camera->globalCtx->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
+        return BgCheck_GetBgCamDataSetting(&camera->play->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
     } else {
-        // Gets setting from globalCtx->csCamData[bgCamDataId]->setting which gets scene cmd->csCameraList.segment
-        return Play_GetCsCamDataSetting(camera->globalCtx, camDataId);
+        // Gets setting from play->csCamData[bgCamDataId]->setting which gets scene cmd->csCameraList.segment
+        return Play_GetCsCamDataSetting(camera->play, camDataId);
     }
 }
 
@@ -799,10 +797,10 @@ s16 Camera_GetCamDataSetting(Camera* camera, u32 camDataId) {
 Vec3s* Camera_GetCamDataVec3s(Camera* camera, u32 camDataId) {
     if (camDataId & 0x1000) {
         // Returns scene data
-        return BgCheck_GetBgCamDataVec3s(&camera->globalCtx->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
+        return BgCheck_GetBgCamDataVec3s(&camera->play->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
     } else {
-        // Gets actor scene data from globalCtx->csCamData[camDataId]->data
-        return Play_GetCsCamDataVec3s(camera->globalCtx, camDataId);
+        // Gets actor scene data from play->csCamData[camDataId]->data
+        return Play_GetCsCamDataVec3s(camera->play, camDataId);
     }
 }
 
@@ -811,10 +809,10 @@ Vec3s* Camera_GetCamDataVec3s(Camera* camera, u32 camDataId) {
  * there is no camera data for that poly.
  */
 s32 Camera_GetBgCamDataId(Camera* camera, s32* bgId, CollisionPoly* poly) {
-    s32 bgCamDataId = SurfaceType_GetCamDataIndex(&camera->globalCtx->colCtx, poly, *bgId);
+    s32 bgCamDataId = SurfaceType_GetCamDataIndex(&camera->play->colCtx, poly, *bgId);
     s32 ret;
 
-    if (BgCheck_GetBgCamDataSetting(&camera->globalCtx->colCtx, bgCamDataId, *bgId) == CAM_SET_NONE) {
+    if (BgCheck_GetBgCamDataSetting(&camera->play->colCtx, bgCamDataId, *bgId) == CAM_SET_NONE) {
         ret = -1;
     } else {
         ret = bgCamDataId;
@@ -838,8 +836,8 @@ s32 Camera_GetWaterBoxCamSetting(Camera* camera, f32* waterY) {
     Actor_GetWorldPosShapeRot(&playerPosShape, camera->trackActor);
     *waterY = playerPosShape.pos.y;
 
-    if (!WaterBox_GetSurfaceImpl(camera->globalCtx, &camera->globalCtx->colCtx, playerPosShape.pos.x,
-                                 playerPosShape.pos.z, waterY, &waterBox, &sp30)) {
+    if (!WaterBox_GetSurfaceImpl(camera->play, &camera->play->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
+                                 waterY, &waterBox, &sp30)) {
         // player's position is not in a waterbox
         *waterY = playerPosShape.pos.y;
         return -1;
@@ -849,7 +847,7 @@ s32 Camera_GetWaterBoxCamSetting(Camera* camera, f32* waterY) {
         return -1;
     }
 
-    camSetting = WaterBox_GetCameraSetting(&camera->globalCtx->colCtx, waterBox, sp30);
+    camSetting = WaterBox_GetCameraSetting(&camera->play->colCtx, waterBox, sp30);
 
     // -2: no camera data idx
     return (camSetting == CAM_SET_NONE) ? -2 : camSetting;
@@ -901,7 +899,7 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
     rotatedPos.y = playerPos.y;
     rotatedPos.z = (trackHeight * cosYaw) + playerPos.z;
 
-    if (arg2 || ((camera->globalCtx->state.frames % 2) == 0)) {
+    if (arg2 || ((camera->play->state.frames % 2) == 0)) {
         D_801EDC00.pos.x = playerPos.x + (sp2C * sinYaw);
         D_801EDC00.pos.y = playerPos.y;
         D_801EDC00.pos.z =
@@ -972,7 +970,7 @@ f32 func_800CCCEC(Camera* camera, s16 arg1) {
     sp34.pos.y = sp7C.y;
     sp34.pos.z = sp5C.pos.z + (12.0f * temp_f0);
 
-    if ((camera->globalCtx->state.frames & 1) != 0) {
+    if ((camera->play->state.frames & 1) != 0) {
         sp22 = sp5C.rot.y + 0x2EE0;
         sp70.x = (Math_SinS(sp22) * 50.0f) + sp7C.x;
         sp70.y = sp7C.y;
@@ -1294,7 +1292,7 @@ s32 func_800CD834(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* arg3, f32 
     posOffsetTarget.x = 0.0f;
     posOffsetTarget.z = 0.0f;
 
-    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &phi_v1, &temp_v0);
+    Actor_GetScreenPos(camera->play, camera->trackActor, &phi_v1, &temp_v0);
     temp_v0 -= 120;
 
     phi_v1 = ABS(temp_v0);
@@ -2137,7 +2135,7 @@ s32 Camera_Normal1(Camera* camera) {
     phi_f16_2 = spD0;
     OLib_Vec3fDiffToVecSphGeo(&spB4, &camera->at, &camera->eyeNext);
     if ((roData->interfaceFlags & NORMAL1_FLAG_7) && (rwData->unk_0A < 0)) {
-        if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+        if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
             switch (((Player*)camera->trackActor)->transformation) {
                 case PLAYER_FORM_HUMAN:
                     phi_f16_2 = 66.0f;
@@ -2251,7 +2249,7 @@ s32 Camera_Normal1(Camera* camera) {
         if (func_800CBA7C(camera) == 0) {
             func_800CED90(camera, &spB4, &sp9C, roData->unk_04, roData->unk_0C, &D_801EDC30[camera->camId],
                           &rwData->unk_0C);
-            sp58 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp60, &sp5C, sp4C);
+            sp58 = BgCheck_CameraRaycastFloor2(&camera->play->colCtx, &sp60, &sp5C, sp4C);
             if ((roData->interfaceFlags & NORMAL1_FLAG_3) && func_800CB924(camera)) {
                 phi_f16_2 = 25.0f;
             } else {
@@ -2274,7 +2272,7 @@ s32 Camera_Normal1(Camera* camera) {
         camera->inputDir.y = spAC.yaw;
         camera->inputDir.z = 0;
         if (gSaveContext.save.playerData.health < 17) {
-            phi_v1_2 = (camera->globalCtx->state.frames << 0x18);
+            phi_v1_2 = (camera->play->state.frames << 0x18);
             phi_v1_2 = (s16)((phi_v1_2 >> 0x15) & 0xFD68);
             camera->inputDir.y += phi_v1_2;
         }
@@ -2686,7 +2684,7 @@ s32 Camera_Normal0(Camera* camera) {
     *eye = *eyeNext;
 
     if (camera->status == CAM_STATUS_ACTIVE) {
-        if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & NORMAL0_FLAG_4)) {
+        if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & NORMAL0_FLAG_4)) {
             Camera_BgCheck(camera, at, eye);
         } else {
             func_800CBFA4(camera, at, eye, 3);
@@ -2792,7 +2790,7 @@ s32 Camera_Parallel1(Camera* camera) {
                 rwData->unk_22 = 6;
             }
 
-            if ((camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) && (camera->mode == CAM_MODE_CHARGE)) {
+            if ((camera->trackActor == &GET_PLAYER(camera->play)->actor) && (camera->mode == CAM_MODE_CHARGE)) {
                 rwData->unk_22 = 0x1E;
                 if (((Player*)camera->trackActor)->transformation == PLAYER_FORM_DEKU) {
                     roData->unk_24 = -1;
@@ -3014,7 +3012,7 @@ s32 Camera_Parallel1(Camera* camera) {
     OLib_VecSphAddToVec3f(eyeNext, at, &sp90);
 
     if (camera->status == CAM_STATUS_ACTIVE) {
-        if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & PARALLEL1_FLAG_4)) {
+        if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & PARALLEL1_FLAG_4)) {
             spB0 = *at;
             // (stateFlags1 & 0x4) Climbing ledge
             if ((((Player*)camera->trackActor)->stateFlags1 & 0x4000) ||
@@ -3821,7 +3819,7 @@ s32 Camera_Battle1(Camera* camera) {
         spC4 = *sp48;
         if (camera->status == CAM_STATUS_ACTIVE) {
             if (!(roData->interfaceFlags & BATTLE1_FLAG_4)) {
-                if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
+                if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
                     if (func_800CBC84(camera, sp4C, &spC4, 0) != 0) {
                         rwData->unk_1A |= 0x1000;
                     } else {
@@ -3838,14 +3836,14 @@ s32 Camera_Battle1(Camera* camera) {
                 *sp50 = spC4;
                 ;
                 rwData->unk_1A &= ~0x10;
-            } else if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
+            } else if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
                 if (func_800CBC84(camera, sp4C, &spC4, 0) != 0) {
                     rwData->unk_1A |= 0x1000;
                     spF8 = OLib_Vec3fDist(sp4C, sp8C);
                     spF4 = OLib_Vec3fDist(sp4C, &spC4);
                     phi_f0_3 = (rwData->unk_1A & 0x10) ? 40.0f : 0.0f;
                     spF8 = spF8 + phi_f0_3;
-                    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &sp5E, &sp5C);
+                    Actor_GetScreenPos(camera->play, camera->trackActor, &sp5E, &sp5C);
                     if ((spF4 < spF8) || ((sp5E >= 0) && (sp5E < 0x141) && (sp5C >= 0) && (sp5C < 0xF1))) {
                         rwData->unk_1A |= 0x10;
                         spB4.yaw = spA4.yaw + 0x8000;
@@ -3910,8 +3908,7 @@ s32 Camera_Battle1(Camera* camera) {
 
     camera->roll = Camera_LERPCeilS(sp88, camera->roll, 0.06f, 5);
     if (func_800CBAAC(camera) != 0) {
-        phi_f12 =
-            ((camera->globalCtx->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
+        phi_f12 = ((camera->play->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
     } else {
         phi_f12 = ((gSaveContext.save.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
     }
@@ -4192,7 +4189,7 @@ s32 Camera_KeepOn1(Camera* camera) {
         sp7C.pos = *sp40;
         if (camera->status == CAM_STATUS_ACTIVE) {
             if (!(roData->interfaceFlags & KEEPON1_FLAG_4)) {
-                if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & KEEPON1_FLAG_0)) {
+                if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & KEEPON1_FLAG_0)) {
                     if (func_800CBC84(camera, sp44, &sp7C, 0) != 0) {
                         rwData->unk_18 |= 0x1000;
                     } else {
@@ -4208,13 +4205,13 @@ s32 Camera_KeepOn1(Camera* camera) {
                 }
                 *sp48 = sp7C.pos;
                 rwData->unk_18 &= ~0x10;
-            } else if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & KEEPON1_FLAG_0)) {
+            } else if ((camera->play->envCtx.skyboxDisabled == 0) || (roData->interfaceFlags & KEEPON1_FLAG_0)) {
                 if (func_800CBC84(camera, sp44, &sp7C, 0) != 0) {
                     rwData->unk_18 |= 0x1000;
                     spF8 = OLib_Vec3fDist(sp44, spA4);
                     spF4 = OLib_Vec3fDist(sp44, &sp7C.pos);
                     spF8 += (rwData->unk_18 & 0x10) ? 40 : 0.0f; // TODO: 40.0f?
-                    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &sp56, &sp54);
+                    Actor_GetScreenPos(camera->play, camera->trackActor, &sp56, &sp54);
                     if ((spF4 < spF8) || ((sp56 >= 0) && (sp56 <= 320) && (sp54 >= 0) && (sp54 <= 240))) {
                         rwData->unk_18 |= 0x10;
                         spE0.yaw = (s16)(spD0.yaw + 0x8000);
@@ -4333,9 +4330,9 @@ s32 Camera_KeepOn3(Camera* camera) {
     }
 
     if (RELOAD_PARAMS(camera)) {
-        if (camera->globalCtx->view.unk164 == 0) {
+        if (camera->play->view.unk164 == 0) {
             Camera_SetStateFlag(camera, CAM_STATE_5);
-            camera->globalCtx->view.unk164 = camera->camId | 0x50;
+            camera->play->view.unk164 = camera->camId | 0x50;
             return 1;
         }
         Camera_UnsetStateFlag(camera, CAM_STATE_5);
@@ -4455,15 +4452,15 @@ s32 Camera_KeepOn3(Camera* camera) {
             sp78 = 14;
             OLib_VecSphAddToVec3f(&spCC, &rwData->unk_10, &sp98);
             if (!(roData->interfaceFlags & KEEPON3_FLAG_7)) {
-                if (CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &rwData->unk_10, &spCC,
-                                               spA8, 2) ||
+                if (CollisionCheck_LineOCCheck(camera->play, &camera->play->colChkCtx, &rwData->unk_10, &spCC, spA8,
+                                               2) ||
                     Camera_BgCheck(camera, &rwData->unk_10, &spCC)) {
                     sp98.yaw = sp6A;
                     OLib_VecSphAddToVec3f(&spCC, &rwData->unk_10, &sp98);
                 }
                 while (i < sp78) {
-                    if (!CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &rwData->unk_10,
-                                                    &spCC, spA8, 2) &&
+                    if (!CollisionCheck_LineOCCheck(camera->play, &camera->play->colChkCtx, &rwData->unk_10, &spCC,
+                                                    spA8, 2) &&
                         !Camera_BgCheck(camera, &rwData->unk_10, &spCC)) {
                         break;
                     }
@@ -4512,15 +4509,15 @@ s32 Camera_KeepOn3(Camera* camera) {
         Camera_SetUpdateRatesSlow(camera);
         camera->atLERPStepScale = 0.0f;
 
-        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R)) {
+        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R)) {
             Camera_SetStateFlag(camera, CAM_STATE_2);
             Camera_UnsetStateFlag(camera, CAM_STATE_3);
         }
@@ -4568,17 +4565,17 @@ s32 Camera_KeepOn4(Camera* camera) {
     PosRot sp4C;
 
     if (RELOAD_PARAMS(camera)) {
-        if (camera->globalCtx->view.unk164 == 0) {
+        if (camera->play->view.unk164 == 0) {
             Camera_SetStateFlag(camera, CAM_STATE_5);
             Camera_UnsetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
-            camera->globalCtx->view.unk164 = camera->camId | 0x50;
+            camera->play->view.unk164 = camera->camId | 0x50;
             return true;
         }
         rwData->unk_18 = *sp44;
         Camera_UnsetStateFlag(camera, CAM_STATE_5);
     }
 
-    if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
         player = (Player*)camera->trackActor;
         switch (((Player*)camera->trackActor)->transformation) {
             case PLAYER_FORM_DEKU:
@@ -4612,7 +4609,7 @@ s32 Camera_KeepOn4(Camera* camera) {
         camera->animState = 20;
         Camera_SetStateFlag(camera, CAM_STATE_5);
         Camera_UnsetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
-        camera->globalCtx->view.unk164 = camera->camId | 0x50;
+        camera->play->view.unk164 = camera->camId | 0x50;
         return true;
     }
 
@@ -4641,7 +4638,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&spA8, at, eyeNext);
     D_801EDDD0 = sp38->pos;
     D_801EDDD0.y = data->y + trackHeight;
-    temp_f0_2 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &spC0, &bgId, &D_801EDDD0);
+    temp_f0_2 = BgCheck_CameraRaycastFloor2(&camera->play->colCtx, &spC0, &bgId, &D_801EDDD0);
     if ((roData->unk_00 + data->y) < temp_f0_2) {
         D_801EDDD0.y = temp_f0_2 + 10.0f;
     } else {
@@ -4937,8 +4934,8 @@ s32 Camera_Fixed2(Camera* camera) {
             if (!(roData->interfaceFlags & FIXED2_FLAG_1)) {
                 Camera_Vec3sToVec3f(&rwData->unk_00, &bgCamData->pos);
             } else {
-                if (camera->trackActor != &GET_PLAYER(camera->globalCtx)->actor) {
-                    player = GET_PLAYER(camera->globalCtx);
+                if (camera->trackActor != &GET_PLAYER(camera->play)->actor) {
+                    player = GET_PLAYER(camera->play);
                     OLib_Vec3fDiffToVecSphGeo(&sp70, &player->actor.focus.pos, eye);
                     if (sp70.r < roData->unk_04) {
                         sp70.r = roData->unk_04;
@@ -5192,8 +5189,8 @@ s32 Camera_Subject1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp74, &camera->at, eye);
     sCameraInterfaceFlags = roData->interfaceFlags;
 
-    if (camera->globalCtx->view.unk164 == 0) {
-        camera->globalCtx->view.unk164 = camera->camId | 0x50;
+    if (camera->play->view.unk164 == 0) {
+        camera->play->view.unk164 = camera->camId | 0x50;
         return true;
     }
 
@@ -5263,7 +5260,7 @@ s32 Camera_Subject1(Camera* camera) {
     }
 
     // TODO: is skyboxDisabled accurate here?
-    if (camera->globalCtx->envCtx.skyboxDisabled == 0) {
+    if (camera->play->envCtx.skyboxDisabled == 0) {
         Camera_BgCheck(camera, at, eye);
     } else {
         func_800CBFA4(camera, at, eye, 3);
@@ -5412,7 +5409,7 @@ s32 Camera_Unique2(Camera* camera) {
 s32 Camera_Unique3(Camera* camera) {
     s32 ret = Camera_Normal1(camera);
 
-    if ((camera->globalCtx->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -5424,7 +5421,7 @@ s32 Camera_Unique3(Camera* camera) {
 s32 Camera_Unique4(Camera* camera) {
     s32 ret = Camera_Parallel1(camera);
 
-    if ((camera->globalCtx->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -5436,7 +5433,7 @@ s32 Camera_Unique4(Camera* camera) {
 s32 Camera_Unique5(Camera* camera) {
     s32 ret = Camera_Battle1(camera);
 
-    if ((camera->globalCtx->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -5558,15 +5555,15 @@ s32 Camera_Unique0(Camera* camera) {
                     // Time is stopped but Link & NPC animations continue
                 } else if (!(player->stateFlags1 & 0x20000000) &&
                            ((OLib_Vec3fDistXZ(&sp40->pos, &rwData->unk_00) >= 10.0f) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
                             (roData->interfaceFlags & UNIQUE0_FLAG_1))) {
                     rwData->unk_3E = 1;
                 }
@@ -5583,15 +5580,15 @@ s32 Camera_Unique0(Camera* camera) {
                 // Time is stopped but Link & NPC animations continue
                 if (!(player->stateFlags1 & 0x20000000)) { // TODO: Merge into 1 if-statement
                     if ((rwData->unk_3A != camera->trackActor->world.rot.y) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
                         (roData->interfaceFlags & UNIQUE0_FLAG_1)) {
                         rwData->unk_3E = 1;
                     }
@@ -5730,7 +5727,7 @@ s32 Camera_Demo1(Camera* camera) {
         camera->animState++;
     }
 
-    Actor_GetScreenPos(camera->globalCtx, camera->target, &sp96, &sp94);
+    Actor_GetScreenPos(camera->play, camera->target, &sp96, &sp94);
 
     temp_f0 = rwData->unk_0C.r;
     if ((sp96 > 20) && (sp96 < 300) && (sp94 > 40) && (sp94 < 200)) {
@@ -5914,7 +5911,7 @@ s32 Camera_Demo2(Camera* camera) {
     Demo2ReadOnlyData* roData = &camera->paramData.demo2.roData;
     Demo2ReadWriteData* rwData = &camera->paramData.demo2.rwData;
 
-    if (((trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
+    if (((trackActor == &GET_PLAYER(camera->play)->actor) &&
          (((Player*)trackActor)->transformation == PLAYER_FORM_GORON))) {
         sp4C = D_801B9EB4;
         sp48 = D_801B9ED4;
@@ -5947,7 +5944,7 @@ s32 Camera_Demo2(Camera* camera) {
             sp70.x = rwData->initialAt.x + (Math_SinS(angle) * 40.0f);
             sp70.y = rwData->initialAt.y + 40.0f;
             sp70.z = rwData->initialAt.z + (Math_CosS(angle) * 40.0f);
-            if (camera->globalCtx->state.frames & 2) {
+            if (camera->play->state.frames & 2) {
                 angle -= 0x4000;
                 rwData->yawDir = 1;
             } else {
@@ -6059,15 +6056,15 @@ s32 Camera_Demo2(Camera* camera) {
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_4, 0);
 
             if (!(((rwData->animFrame < 0) || (camera->xzSpeed > 0.001f) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R)) &&
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R)) &&
                   (camera->stateFlags & CAM_STATE_3))) {
                 goto skipeyeUpdate;
             }
@@ -6483,7 +6480,7 @@ s32 Camera_Demo0(Camera* camera) {
     s32 pad;
     f32 timer;
     s16 phi_v1;
-    Camera* subCam = &camera->globalCtx->subCameras[2];
+    Camera* subCam = &camera->play->subCameras[2];
     Vec3f* eye = &camera->eye;
     Vec3f* subEye = &subCam->eye;
     Vec3f* at = &camera->at;
@@ -6783,15 +6780,15 @@ s32 Camera_Special8(Camera* camera) {
         sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
 
         // Wait for user input to move to the next camera action function
-        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R) ||
+        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
             (roData->interfaceFlags & SPECIAL8_FLAG_3)) {
             func_800CC938(camera);
             Camera_SetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
@@ -6890,7 +6887,7 @@ s32 Camera_Special9(Camera* camera) {
 
                 // The camera will either position itself either to the left or to the right
                 // of the door when it jumps behind it. It's effectively 50/50 percent chance
-                camEyeSide = (s16)(randFloat * ((camera->globalCtx->state.frames % 2) ? 1 : -1));
+                camEyeSide = (s16)(randFloat * ((camera->play->state.frames % 2) ? 1 : -1));
 
                 spB0.yaw = rwData->unk_00 + camEyeSide;
                 spB0.r = 200.0f * sp34;
@@ -6950,16 +6947,15 @@ s32 Camera_Special9(Camera* camera) {
             Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_NONE, CAM_HUD_ALPHA_50, 0);
 
-            if ((camera->xzSpeed > 0.001f) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_A) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_B) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CUP) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CDOWN) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CLEFT) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_CRIGHT) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_Z) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_L) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->globalCtx->state)->press.button, BTN_R) ||
+            if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
                 (roData->interfaceFlags & SPECIAL9_FLAG_3)) {
 
                 func_800CC938(camera);
@@ -6981,11 +6977,11 @@ s32 Camera_Special9(Camera* camera) {
 /*                    Camera Public Functions                    */
 /*===============================================================*/
 
-Camera* Camera_Create(View* view, CollisionContext* colCtx, GlobalContext* globalCtx) {
+Camera* Camera_Create(View* view, CollisionContext* colCtx, PlayState* play) {
     Camera* newCamera = ZeldaArena_Malloc(sizeof(Camera));
 
     if (newCamera != NULL) {
-        Camera_Init(newCamera, view, colCtx, globalCtx);
+        Camera_Init(newCamera, view, colCtx, play);
     }
     return newCamera;
 }
@@ -6996,7 +6992,7 @@ void Camera_Destroy(Camera* camera) {
     }
 }
 
-void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalContext* globalCtx) {
+void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState* play) {
     Camera* cameraPtr;
     s32 i;
     s16 curUID;
@@ -7004,7 +7000,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
 
     __osMemset(camera, 0, sizeof(Camera));
 
-    camera->globalCtx = D_801EDC28 = globalCtx;
+    camera->play = D_801EDC28 = play;
     curUID = sNextUID;
     sNextUID++;
     while (curUID != 0) {
@@ -7013,7 +7009,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
         }
 
         for (j = 0; j < NUM_CAMS; j++) {
-            cameraPtr = camera->globalCtx->cameraPtrs[j];
+            cameraPtr = camera->play->cameraPtrs[j];
             if ((cameraPtr != NULL) && (curUID == cameraPtr->uid)) {
                 break;
             }
@@ -7065,11 +7061,11 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
  * OoT: func_80057FC4
  */
 void func_800DDFE0(Camera* camera) {
-    if (camera != &camera->globalCtx->mainCamera) {
+    if (camera != &camera->play->mainCamera) {
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
         Camera_UnsetStateFlag(camera, CAM_STATE_2);
     } else {
-        switch (camera->globalCtx->roomCtx.currRoom.unk3) {
+        switch (camera->play->roomCtx.currRoom.unk3) {
             case 1:
                 camera->prevSetting = CAM_SET_DUNGEON0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_DUNGEON0, CAM_CHANGE_SETTING_1);
@@ -7166,7 +7162,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     camera->atLERPStepScale = 1;
     Camera_ResetActionFuncState(camera, camera->mode);
 
-    if (camera == &camera->globalCtx->mainCamera) {
+    if (camera == &camera->play->mainCamera) {
         sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE | CAM_SHRINKWIN_INSTANT, CAM_HUD_ALPHA_2, 0);
         func_800F15D8(camera);
     } else {
@@ -7296,7 +7292,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
 
         // Small earthquake created
         // Around CLOCK_TIME(17, 33) || Around CLOCK_TIME(20, 33) || Every 1024 frames (around every 51s)
-        if (((((dayTime + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->globalCtx->state.frames % 1024) == 0)) &&
+        if (((((dayTime + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->play->state.frames % 1024) == 0)) &&
             (Quake_NumActiveQuakes() < 2)) {
             quake = Quake_Add(camera, 3);
             if (quake != 0) {
@@ -7320,7 +7316,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
  */
 s32 Camera_UpdateHotRoom(Camera* camera) {
     Distortion_ClearType(1);
-    if (camera->globalCtx->roomCtx.currRoom.unk2 == 3) {
+    if (camera->play->roomCtx.currRoom.unk2 == 3) {
         Distortion_SetType(1);
     }
     return true;
@@ -7355,9 +7351,9 @@ s32 Camera_SetSwordDistortion(Camera* camera) {
 }
 
 s32 Camera_RequestGiantsMaskSetting(Camera* camera) {
-    Player* player = GET_PLAYER(camera->globalCtx);
+    Player* player = GET_PLAYER(camera->play);
 
-    if ((camera->camId == CAM_ID_MAIN) && (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
+    if ((camera->camId == CAM_ID_MAIN) && (camera->trackActor == &GET_PLAYER(camera->play)->actor) &&
         (player->currentMask == PLAYER_MASK_GIANT)) {
         Camera_ChangeSettingFlags(camera, CAM_SET_GIANT, CAM_CHANGE_SETTING_1);
         return true;
@@ -7396,11 +7392,11 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     sUpdateCameraDirection = false;
     sIsFalse = false;
 
-    if (camera->globalCtx->view.unk164 == 0) {
+    if (camera->play->view.unk164 == 0) {
         if (camera->trackActor != NULL) {
             // Updates camera info on the actor it's tracking
 
-            if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+            if (camera->trackActor == &GET_PLAYER(camera->play)->actor) {
                 Actor_GetWorldPosShapeRot(&trackActorPosRot, camera->trackActor);
             } else {
                 Actor_GetWorld(&trackActorPosRot, camera->trackActor);
@@ -7428,8 +7424,8 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             } else {
                 spA0 = trackActorPosRot.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerFloorHeight = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &sp90,
-                                                                  &bgId, camera->trackActor, &spA0);
+                playerFloorHeight = BgCheck_EntityRaycastFloor5_3(camera->play, &camera->play->colCtx, &sp90, &bgId,
+                                                                  camera->trackActor, &spA0);
                 if (playerFloorHeight != BGCHECK_Y_MIN) {
                     camera->bgId = bgId;
                     camera->playerFloorHeight = playerFloorHeight;
@@ -7438,7 +7434,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             }
 
             if ((sp98 != 0) && (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f)) {
-                meshActor = DynaPoly_GetActor(&camera->globalCtx->colCtx, camera->bgId);
+                meshActor = DynaPoly_GetActor(&camera->play->colCtx, camera->bgId);
                 if (meshActor != NULL) {
                     camera->floorNorm.x = COLPOLY_GET_NORMAL(sp90->normal.x);
                     camera->floorNorm.y = COLPOLY_GET_NORMAL(sp90->normal.y);
@@ -7494,7 +7490,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 }
                 spA0 = trackActorPosRot.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerFloorHeight = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp8C, &bgId, &spA0);
+                playerFloorHeight = BgCheck_CameraRaycastFloor2(&camera->play->colCtx, &sp8C, &bgId, &spA0);
                 if ((playerFloorHeight != BGCHECK_Y_MIN) && (sp8C != sp90) && (bgId == BGCHECK_SCENE) &&
                     ((camera->playerFloorHeight - 2.0f) < playerFloorHeight)) {
                     bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp8C);
@@ -7552,7 +7548,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             // Surpresses the interface for the first few frames of a scene
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_LARGE, CAM_HUD_ALPHA_2, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
-        } else if ((camera->globalCtx->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
+        } else if ((camera->play->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_SHRINKWINVAL_IGNORE, CAM_HUD_ALPHA_IGNORE, 0);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else {
@@ -7607,9 +7603,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     }
 
     camera->quakeOffset = quake.eyeOffset;
-    View_SetScale(&camera->globalCtx->view, (OREG(67) * 0.01f) + 1.0f);
-    camera->globalCtx->view.fovy = viewFov;
-    View_SetViewOrientation(&camera->globalCtx->view, &viewEye, &viewAt, &viewUp);
+    View_SetScale(&camera->play->view, (OREG(67) * 0.01f) + 1.0f);
+    camera->play->view.fovy = viewFov;
+    View_SetViewOrientation(&camera->play->view, &viewEye, &viewAt, &viewUp);
     camera->camDir.x = sp3C.pitch;
     camera->camDir.y = sp3C.yaw;
     camera->camDir.z = 0;
@@ -7762,7 +7758,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
                     break;
 
                 case CAM_CHANGE_MODE_1:
-                    if (camera->globalCtx->roomCtx.currRoom.unk3 == 1) {
+                    if (camera->play->roomCtx.currRoom.unk3 == 1) {
                         play_sound(NA_SE_SY_ATTENTION_URGENCY);
                     } else {
 
@@ -8079,7 +8075,7 @@ s32 Camera_Copy(Camera* dstCam, Camera* srcCam) {
     Camera_SetUpdateRatesSlow(dstCam);
 
     if (dstCam->trackActor != NULL) {
-        if (dstCam->trackActor == &GET_PLAYER(dstCam->globalCtx)->actor) {
+        if (dstCam->trackActor == &GET_PLAYER(dstCam->play)->actor) {
             Actor_GetWorldPosShapeRot(&dstCam->trackActorPosRot, dstCam->trackActor);
         } else {
             Actor_GetWorld(&dstCam->trackActorPosRot, dstCam->trackActor);
@@ -8125,9 +8121,9 @@ s32 Camera_GetNegOne(void) {
 
 s16 func_800E0238(Camera* camera) {
     Camera_SetStateFlag(camera, CAM_STATE_3);
-    if ((camera->camId == CAM_ID_MAIN) && (camera->globalCtx->activeCamId != CAM_ID_MAIN)) {
-        Camera_SetStateFlag(GET_ACTIVE_CAM(camera->globalCtx), CAM_STATE_3);
-        return camera->globalCtx->activeCamId;
+    if ((camera->camId == CAM_ID_MAIN) && (camera->play->activeCamId != CAM_ID_MAIN)) {
+        Camera_SetStateFlag(GET_ACTIVE_CAM(camera->play), CAM_STATE_3);
+        return camera->play->activeCamId;
     } else {
         return camera->camId;
     }
@@ -8135,7 +8131,7 @@ s16 func_800E0238(Camera* camera) {
 
 void Camera_SetToTrackActor(Camera* camera, Actor* actor) {
     camera->trackActor = actor;
-    if (actor == &GET_PLAYER(camera->globalCtx)->actor) {
+    if (actor == &GET_PLAYER(camera->play)->actor) {
         Actor_GetWorldPosShapeRot(&camera->trackActorPosRot, actor);
     } else {
         Actor_GetWorld(&camera->trackActorPosRot, camera->trackActor);

@@ -9,9 +9,9 @@
 
 struct EnHorse;
 
-typedef void (*EnHorseActionFunc)(struct EnHorse*, GlobalContext*);
-typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, GlobalContext*);
-typedef void (*EnHorseCsFunc)(struct EnHorse*, GlobalContext*, CsCmdActorAction*);
+typedef void (*EnHorseActionFunc)(struct EnHorse*, PlayState*);
+typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, PlayState*);
+typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorAction*);
 
 #define ENHORSE_BOOST (1 << 0)                 /*         0x1 */
 #define ENHORSE_BOOST_DECEL (1 << 1)           /*         0x2 */

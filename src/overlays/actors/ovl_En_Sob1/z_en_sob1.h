@@ -11,7 +11,7 @@
 
 struct EnSob1;
 
-typedef void (*EnSob1ActionFunc)(struct EnSob1*, GlobalContext*);
+typedef void (*EnSob1ActionFunc)(struct EnSob1*, PlayState*);
 typedef void (*EnSob1BlinkFunc)(struct EnSob1*);
 
 #define ENSOB1_GET_SHOPTYPE(thisx) ((thisx)->params & 0x1F)

@@ -5,7 +5,7 @@
 
 struct BgIknvDoukutu;
 
-typedef void (*BgIknvDoukutuActionFunc)(struct BgIknvDoukutu*, GlobalContext*);
+typedef void (*BgIknvDoukutuActionFunc)(struct BgIknvDoukutu*, PlayState*);
 
 typedef struct BgIknvDoukutu {
     /* 0x0000 */ Actor actor;

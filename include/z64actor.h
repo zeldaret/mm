@@ -13,13 +13,13 @@
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
 struct Actor;
-struct GlobalContext;
+struct PlayState;
 struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
 
-typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
+typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -110,7 +110,7 @@ typedef struct {
     /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
+typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -254,7 +254,7 @@ typedef enum {
 
 struct EnItem00;
 
-typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
+typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct PlayState*);
 
 #define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
 #define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
@@ -275,7 +275,7 @@ typedef struct EnItem00 {
 
 struct EnAObj;
 
-typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct PlayState*);
 
 typedef struct EnAObj {
     /* 0x000 */ Actor actor;

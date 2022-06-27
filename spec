@@ -1367,8 +1367,7 @@ beginseg
     name "ovl_Obj_Tsubo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.data.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tsubo/ovl_Obj_Tsubo_reloc.o"
 endseg
 
 beginseg
@@ -4058,8 +4057,7 @@ beginseg
     name "ovl_Bg_Kin2_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Bombwall/z_bg_kin2_bombwall.o"
-    include "build/data/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall.data.o"
-    include "build/data/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Kin2_Bombwall/ovl_Bg_Kin2_Bombwall_reloc.o"
 endseg
 
 beginseg
@@ -4261,8 +4259,7 @@ beginseg
     name "ovl_Obj_Y2lift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Y2lift/z_obj_y2lift.o"
-    include "build/data/ovl_Obj_Y2lift/ovl_Obj_Y2lift.data.o"
-    include "build/data/ovl_Obj_Y2lift/ovl_Obj_Y2lift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Y2lift/ovl_Obj_Y2lift_reloc.o"
 endseg
 
 beginseg

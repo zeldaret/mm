@@ -1,8 +1,8 @@
 #include "global.h"
 #include "message_data_static.h"
 
-void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_FindCreditsMessage(PlayState* play, u16 textId) {
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
     const char* segment = msgEntry->segment;

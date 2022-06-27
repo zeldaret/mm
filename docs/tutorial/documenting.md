@@ -40,15 +40,15 @@ Large code block, click to show
 
 #define THIS ((EnRecepgirl*)thisx)
 
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRecepgirl_Init(Actor* thisx, PlayState* play);
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
+void EnRecepgirl_Update(Actor* thisx, PlayState* play);
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 void func_80C10148(EnRecepgirl* this);
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx);
+void func_80C1019C(EnRecepgirl* this, PlayState* play);
 void func_80C10290(EnRecepgirl* this);
-void func_80C102D4(EnRecepgirl * this, GlobalContext * globalCtx);
+void func_80C102D4(EnRecepgirl* this, PlayState* play);
 
 const ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
@@ -73,13 +73,13 @@ static InitChainEntry D_80C106C0[] = {
 static s32 D_80C106C8 = 0;
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Init.s")
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable, this->morphTable, 24);
 
     if (D_80C106C8 == 0) {
     for (i = 0; i < 4; i++) {
@@ -90,7 +90,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_2AC = 2;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+    if (Flags_GetSwitch(play, this->actor.params)) {
         this->actor.textId = 0x2ADC;
     } else {
         this->actor.textId = 0x2AD9;
@@ -100,7 +100,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Destroy.s")
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C100DC.s")
@@ -127,7 +127,7 @@ void func_80C10148(EnRecepgirl *this) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C1019C.s")
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
+void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -136,13 +136,13 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == 2) {
+        func_800B8614(&this->actor, play, 60.0f);
+        if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
-        } else if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        } else if (Flags_GetSwitch(play, this->actor.params)) {
             this->actor.textId = 0x2ADC;
         } else {
             this->actor.textId = 0x2AD9;
@@ -157,7 +157,7 @@ void func_80C10290(EnRecepgirl *this) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C102D4.s")
-void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
+void func_80C102D4(EnRecepgirl* this, PlayState* play) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime) != 0) {
@@ -176,16 +176,16 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         }
     }
 
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&play->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
         return;
     }
 
-    if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    if ((temp_v0_2 == 5) && (Message_ShouldAdvance(play) != 0)) {
         if (this->actor.textId == 0x2AD9) {
-            Flags_SetSwitch(globalCtx, this->actor.params);
+            Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             if ((gSaveContext.save.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
@@ -205,23 +205,23 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Update.s")
-void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRecepgirl* this = THIS;
     Vec3s sp30;
 
-    this->actionFunc(this, globalCtx);
-    Actor_TrackPlayer(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
     func_80C100DC(this);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s")
-s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -231,7 +231,7 @@ s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10590.s")
-void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
+void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -241,18 +241,18 @@ void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Draw.s")
-void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 ```
@@ -412,7 +412,7 @@ Finally, clearly `4` is linked to the data over which we're iterating: namely it
 
 We've got one struct variable left. To find out what it does, we can look at a function that uses it, for example
 ```C
-s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
     EnRecepgirl* this = THIS;
 
@@ -422,7 +422,7 @@ s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnRecepgirl_UnkLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -449,7 +449,7 @@ void func_80C10148(EnRecepgirl* this) {
     this->actionFunc = func_80C1019C;
 }
 
-void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
+void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -458,13 +458,13 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+        func_800B8614(&this->actor, play, 60.0f);
+        if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
-        } else if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        } else if (Flags_GetSwitch(play, this->actor.params)) {
             this->actor.textId = 0x2ADC; // hear directions again?
         } else {
             this->actor.textId = 0x2AD9; // "Welcome..."
@@ -477,7 +477,7 @@ void func_80C10290(EnRecepgirl* this) {
     this->actionFunc = func_80C102D4;
 }
 
-void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
+void func_80C102D4(EnRecepgirl* this, PlayState* play) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -496,13 +496,13 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&play->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         func_80C10148(this);
-    } else if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    } else if ((temp_v0_2 == 5) && (Message_ShouldAdvance(play) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Flags_SetSwitch(globalCtx, this->actor.params);
+            Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
@@ -524,11 +524,11 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 ```
-All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `Message_GetState(&globalCtx->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
+All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `Actor_ProcessTalkRequest(&this->actor, &play->state) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `Message_GetState(&play->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
 
 For more complex actors, we have a tool called `graphovl.py` that can produce function flow graphs for actors: running 
 ```
@@ -551,7 +551,7 @@ We like to make macros for reading an actor's `params` (indeed, this is required
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
         CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 ```
 
@@ -571,7 +571,7 @@ Notice that we use `thisx`: this makes the form of every one of these macros the
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
         CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 ```
 

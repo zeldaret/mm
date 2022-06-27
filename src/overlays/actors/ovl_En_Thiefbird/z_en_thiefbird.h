@@ -5,7 +5,7 @@
 
 struct EnThiefbird;
 
-typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird*, GlobalContext*);
+typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird*, PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;

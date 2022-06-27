@@ -5,7 +5,7 @@
 
 struct EnFishing;
 
-typedef void (*EnFishingActionFunc)(struct EnFishing*, GlobalContext*);
+typedef void (*EnFishingActionFunc)(struct EnFishing*, PlayState*);
 
 typedef struct EnFishing {
     /* 0x000 */ Actor actor;

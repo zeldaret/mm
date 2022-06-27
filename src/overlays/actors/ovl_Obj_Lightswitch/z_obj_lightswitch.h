@@ -5,7 +5,7 @@
 
 struct ObjLightswitch;
 
-typedef void (*ObjLightswitchActionFunc)(struct ObjLightswitch*, GlobalContext*);
+typedef void (*ObjLightswitchActionFunc)(struct ObjLightswitch*, PlayState*);
 typedef void (*ObjLightswitchSetupFunc)(struct ObjLightswitch*);
 
 typedef struct ObjLightswitch {
