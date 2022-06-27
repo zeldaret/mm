@@ -631,9 +631,9 @@ void EffectSsStone1_Spawn(PlayState* play, Vec3f* pos, s32 reg0) {
     EffectSs_Spawn(play, EFFECT_SS_STONE1, 128, &initParams);
 }
 
-// EffectSsHitMark Spawn Functions
+// EffectSsHitmark Spawn Functions
 
-void EffectSsHitMark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
+void EffectSsHitmark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
     EffectSsHitmarkInitParams initParams;
 
     initParams.type = type;
@@ -643,12 +643,12 @@ void EffectSsHitMark_Spawn(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
     EffectSs_Spawn(play, EFFECT_SS_HITMARK, 128, &initParams);
 }
 
-void EffectSsHitMark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos) {
-    EffectSsHitMark_Spawn(play, type, 300, pos);
+void EffectSsHitmark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos) {
+    EffectSsHitmark_Spawn(play, type, 300, pos);
 }
 
-void EffectSsHitMark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
-    EffectSsHitMark_Spawn(play, type, scale, pos);
+void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos) {
+    EffectSsHitmark_Spawn(play, type, scale, pos);
 }
 
 // EffectSsFhgFlash Spawn Functions
