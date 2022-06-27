@@ -40,7 +40,7 @@ typedef enum {
 
 struct EnGiant;
 
-typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
+typedef void (*EnGiantActionFunc)(struct EnGiant*, PlayState*);
 
 typedef struct EnGiant {
     /* 0x000 */ Actor actor;

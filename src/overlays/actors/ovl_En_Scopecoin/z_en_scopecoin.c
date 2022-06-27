@@ -11,13 +11,13 @@
 
 #define THIS ((EnScopecoin*)thisx)
 
-void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecoin_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnScopecoin_Init(Actor* thisx, PlayState* play);
+void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
+void EnScopecoin_Update(Actor* thisx, PlayState* play);
+void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx);
-void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx);
+void func_80BFCFA0(EnScopecoin* this, PlayState* play);
+void func_80BFCFB8(EnScopecoin* this, PlayState* play);
 
 const ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
@@ -31,18 +31,18 @@ const ActorInit En_Scopecoin_InitVars = {
     (ActorFunc)EnScopecoin_Draw,
 };
 
-void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
+void func_80BFCFA0(EnScopecoin* this, PlayState* play) {
     this->actor.shape.rot.y += 500;
 }
 
-void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
-    if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_RED);
+void func_80BFCFB8(EnScopecoin* this, PlayState* play) {
+    if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
+        Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_RED);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
-void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnScopecoin_Init(Actor* thisx, PlayState* play) {
     EnScopecoin* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -52,9 +52,9 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk148 = 0;
     }
 
-    if (globalCtx->actorCtx.unk5 & 2) {
+    if (play->actorCtx.unk5 & 2) {
         if (this->unk148 == 2 || this->unk148 == 6) {
-            if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+            if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -64,7 +64,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (this->unk148 == 2 || this->unk148 == 6) {
-        if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+        if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->actor.draw = NULL;
@@ -75,13 +75,13 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnScopecoin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnScopecoin_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnScopecoin_Update(Actor* thisx, PlayState* play) {
     EnScopecoin* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
 static TexturePtr D_80BFD280[] = {
@@ -89,15 +89,15 @@ static TexturePtr D_80BFD280[] = {
     gameplay_keep_Tex_062020, gameplay_keep_Tex_062060, gameplay_keep_Tex_062000,
 };
 
-void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
     EnScopecoin* this = THIS;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_800B8050(&this->actor, globalCtx, 0);
+    func_8012C28C(play->state.gfxCtx);
+    func_800B8050(&this->actor, play, 0);
     OPEN_DISPS(gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BFD280[this->unk148]));
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
 

@@ -5,7 +5,7 @@
 
 struct EnOsn;
 
-typedef void (*EnOsnActionFunc)(struct EnOsn*, GlobalContext*);
+typedef void (*EnOsnActionFunc)(struct EnOsn*, PlayState*);
 
 typedef struct EnOsn {
     /* 0x0000 */ Actor actor;

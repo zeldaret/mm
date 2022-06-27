@@ -578,7 +578,7 @@ void Math_ApproachZeroF(f32* pValue, f32 scale, f32 maxStep) {
     *pValue = *pValue - f0;
 }
 
-s32 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
+s16 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
     s16 stepSize = 0;
     s16 diff = target - *pValue;
 

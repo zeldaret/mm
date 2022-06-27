@@ -13,9 +13,9 @@
 
 #define PARAMS ((EffectSsGSplashInitParams*)initParamsx)
 
-u32 EffectSsGSplash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsGSplash_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGSplash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsGSplash_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_G_Splash_InitVars = {
     EFFECT_SS_G_SPLASH,
@@ -23,12 +23,12 @@ const EffectSsInit Effect_Ss_G_Splash_InitVars = {
 };
 
 static TexturePtr waterSplashTextures[] = {
-    gExplosionSplash1Tex, gExplosionSplash2Tex, gExplosionSplash3Tex, gExplosionSplash4Tex,
-    gExplosionSplash5Tex, gExplosionSplash6Tex, gExplosionSplash7Tex, gExplosionSplash8Tex,
+    gEffWaterSplash1Tex, gEffWaterSplash2Tex, gEffWaterSplash3Tex, gEffWaterSplash4Tex,
+    gEffWaterSplash5Tex, gEffWaterSplash6Tex, gEffWaterSplash7Tex, gEffWaterSplash8Tex,
 };
 
-u32 EffectSsGSplash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
-    EffectSsGSplashInitParams* initParams = (EffectSsGSplashInitParams*)initParamsx;
+u32 EffectSsGSplash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
+    EffectSsGSplashInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->velocity, &gZeroVec3f);
     Math_Vec3f_Copy(&this->accel, &gZeroVec3f);
@@ -40,7 +40,7 @@ u32 EffectSsGSplash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
         initParams->scale = 600;
     }
 
-    this->gfx = gExplosionSplashDL;
+    this->gfx = gEffWaterSplashDL;
     this->life = 8;
     this->rgScale = initParams->scale;
     this->rgTexIndex = 0;
@@ -96,7 +96,7 @@ u32 EffectSsGSplash_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
     return 1;
 }
 
-void EffectSsGSplash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGSplash_Draw(PlayState* play, u32 index, EffectSs* this) {
     s16 texIndex;
 
     switch (this->rType) {
@@ -105,7 +105,7 @@ void EffectSsGSplash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             if (texIndex > 7) {
                 texIndex = 7;
             }
-            EffectSs_DrawGEffect(globalCtx, this, waterSplashTextures[texIndex]);
+            EffectSs_DrawGEffect(play, this, waterSplashTextures[texIndex]);
             break;
 
         case 1:
@@ -113,7 +113,7 @@ void EffectSsGSplash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             if (texIndex > 7) {
                 texIndex = 7;
             }
-            EffectSs_DrawGEffect(globalCtx, this, waterSplashTextures[texIndex]);
+            EffectSs_DrawGEffect(play, this, waterSplashTextures[texIndex]);
             break;
 
         case 2:
@@ -121,18 +121,18 @@ void EffectSsGSplash_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             if (texIndex > 7) {
                 texIndex = 7;
             }
-            EffectSs_DrawGEffect(globalCtx, this, waterSplashTextures[texIndex]);
+            EffectSs_DrawGEffect(play, this, waterSplashTextures[texIndex]);
             break;
     }
 }
 
-void EffectSsGSplash_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsGSplash_Update(PlayState* play, u32 index, EffectSs* this) {
     Vec3f newSplashPos;
 
     if ((this->rType == 1) && (this->life == 5)) {
         newSplashPos = this->pos;
         newSplashPos.y += ((this->rgScale * 20) * 0.002f);
-        EffectSsGSplash_Spawn(globalCtx, &newSplashPos, 0, 0, 2, this->rgScale / 2);
+        EffectSsGSplash_Spawn(play, &newSplashPos, 0, 0, 2, this->rgScale / 2);
     }
 
     this->rgTexIndex += this->rgTexIndexStep;

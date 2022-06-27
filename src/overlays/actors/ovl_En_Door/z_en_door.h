@@ -5,7 +5,7 @@
 
 struct EnDoor;
 
-typedef void (*EnDoorActionFunc)(struct EnDoor*, GlobalContext*);
+typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
 
 #define ENDOOR_GET_PARAMS_7(thisx) (((thisx)->params >> 7) & 7)
 #define ENDOOR_GET_PARAMS_7F(thisx) (((thisx)->params) & 0x7F)

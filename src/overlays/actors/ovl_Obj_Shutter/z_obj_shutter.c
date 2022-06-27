@@ -10,10 +10,10 @@
 
 #define THIS ((ObjShutter*)thisx)
 
-void ObjShutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjShutter_Init(Actor* thisx, PlayState* play);
+void ObjShutter_Destroy(Actor* thisx, PlayState* play);
+void ObjShutter_Update(Actor* thisx, PlayState* play);
+void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Shutter_InitVars = {

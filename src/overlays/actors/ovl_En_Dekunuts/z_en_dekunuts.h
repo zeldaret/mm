@@ -2,10 +2,11 @@
 #define Z_EN_DEKUNUTS_H
 
 #include "global.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 struct EnDekunuts;
 
-typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, GlobalContext*);
+typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, PlayState*);
 
 #define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
 
@@ -26,8 +27,8 @@ typedef struct EnDekunuts {
     /* 0x190 */ s16 unk_190;
     /* 0x192 */ s16 unk_192;
     /* 0x194 */ s16 unk_194;
-    /* 0x196 */ Vec3s jointTable[10];
-    /* 0x1D2 */ Vec3s morphTable[10];
+    /* 0x196 */ Vec3s jointTable[DEKU_SCRUB_LIMB_MAX];
+    /* 0x1D2 */ Vec3s morphTable[DEKU_SCRUB_LIMB_MAX];
     /* 0x210 */ f32 drawDmgEffAlpha;
     /* 0x214 */ f32 drawDmgEffScale;
     /* 0x218 */ f32 drawDmgEffFrozenSteamScale;
