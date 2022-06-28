@@ -18,7 +18,7 @@ void Rumble_Update(void* arg0) {
 }
 
 // Used by some bosses (and fishing)
-void Rumble_Override(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep) {
+void Rumble_Override(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
     s32 temp;
     s32 distance;
 
@@ -28,18 +28,18 @@ void Rumble_Override(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (intensity != 0) && (decreaseStep != 0)) {
+    if ((distance < 1000) && (intensity != 0) && (decayStep != 0)) {
         temp = intensity - (distance * 255) / 1000;
 
         if (temp > 0) {
             gRumbleMgr.overrideIntensity = temp;
-            gRumbleMgr.overrideDecayTimer = ticksTimer;
-            gRumbleMgr.overrideDecayStep = decreaseStep;
+            gRumbleMgr.overrideDecayTimer = decayTimer;
+            gRumbleMgr.overrideDecayStep = decayStep;
         }
     }
 }
 
-void Rumble_Request(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep) {
+void Rumble_Request(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
     s32 temp;
     s32 distance;
     s32 i;
@@ -50,15 +50,15 @@ void Rumble_Request(f32 distSq, u8 intensity, u8 ticksTimer, u8 decreaseStep) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (intensity != 0) && (decreaseStep != 0)) {
+    if ((distance < 1000) && (intensity != 0) && (decayStep != 0)) {
         temp = intensity - (distance * 255) / 1000;
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             if (gRumbleMgr.requestIntensities[i] == 0) {
                 if (temp > 0) {
                     gRumbleMgr.requestIntensities[i] = temp;
-                    gRumbleMgr.requestDecayTimers[i] = ticksTimer;
-                    gRumbleMgr.requestDecaySteps[i] = decreaseStep;
+                    gRumbleMgr.requestDecayTimers[i] = decayTimer;
+                    gRumbleMgr.requestDecaySteps[i] = decayStep;
                 }
                 break;
             }

@@ -506,14 +506,14 @@ void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumbl
     switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
-                Rumble_Request(0.0f, cmd->intensity, cmd->ticks, cmd->decreaseStep);
+                Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
             }
             break;
 
         case 2:
             if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
                 if ((csCtx->frames == cmd->startFrame) || (play->state.frames % 64 == 0)) {
-                    Rumble_Request(0.0f, cmd->intensity, cmd->ticks, cmd->decreaseStep);
+                    Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
                 }
             }
             break;

@@ -100,8 +100,8 @@ typedef struct {
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u8 intensity;
-    /* 0x7 */ u8 ticks;
-    /* 0x8 */ u8 decreaseStep;
+    /* 0x7 */ u8 decayTimer;
+    /* 0x8 */ u8 decayStep;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdRumble; // size = 0xC
 
