@@ -87,7 +87,7 @@ void ObjShutter_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_f53_obj_DL_0011E0);
+    gSPDisplayList(POLY_OPA_DISP++, gBankShutterDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
