@@ -9,6 +9,7 @@ struct ObjJgameLight;
 #define OBJLUPYGAMELIFT_HEALTH_1(thisx) ((thisx)->colChkInfo.health & 1)
 #define OBJLUPYGAMELIFT_HEALTH_2(thisx) ((thisx)->colChkInfo.health & 2)
 #define OBJLUPYGAMELIFT_HEALTH_4(thisx) ((thisx)->colChkInfo.health & 4)
+#define OBJLUPYGAMELIFT_HEALTH_8(thisx) ((thisx)->colChkInfo.health & 8)
 
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;

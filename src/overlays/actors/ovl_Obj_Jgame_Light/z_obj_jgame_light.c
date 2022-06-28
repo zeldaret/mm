@@ -93,7 +93,7 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if (((this->actor.colChkInfo.health & 1) != 0) && (this->unk_1B6 == 0)) {
+    if (this->actor.colChkInfo.health & 1 && (this->unk_1B6 == 0)) {
         if (this->unk_1AC < 0xA0) {
             this->unk_1AC += 0x28;
         } else {
@@ -105,8 +105,8 @@ void func_80C15474(ObjJgameLight* this, PlayState* play) {
         } else {
             this->unk_1A8 = 1.0f;
         }
-    } else if ((this->actor.colChkInfo.health & 8) != 0) {
-        if (this->unk_1AC >= 0x29) {
+    } else if (OBJLUPYGAMELIFT_HEALTH_8(&this->actor)) {
+        if (this->unk_1AC > 0x28) {
             this->unk_1AC -= 0x28;
         } else {
             this->unk_1AC = -1;
@@ -125,7 +125,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play) {
     if (this->unk_1A8 > 0.1f) {
         func_800B9010(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
-    temp_a1 = (((s32)(Rand_ZeroOne() * 127.0f) + 128));
+    temp_a1 = (s32)(Rand_ZeroOne() * 127.0f) + 128;
     Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, temp_a1 * 0.7f, 0, this->unk_1AC);
 }
 
@@ -136,21 +136,21 @@ void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play) {
 }
 
 void func_80C15718(ObjJgameLight* this, PlayState* play) {
-    if (OBJLUPYGAMELIFT_HEALTH_1(&this->actor) && (((this->unk_1B8) & 1) == 0)) {
+    if (OBJLUPYGAMELIFT_HEALTH_1(&this->actor) && !(this->unk_1B8 & 1)) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
         this->unk_1B8 = this->actor.colChkInfo.health;
     }
     if (OBJLUPYGAMELIFT_HEALTH_2(&this->actor)) {
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~2;
+        this->actor.colChkInfo.health &= ~2;
         this->alpha = 0x12C;
         this->signal = OBJJGAMELIGHT_CORRECT;
     } else if (OBJLUPYGAMELIFT_HEALTH_4(&this->actor)) {
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~4;
+        this->actor.colChkInfo.health &= ~4;
         this->alpha = 0x12C;
         this->signal = OBJJGAMELIGHT_INCORRECT;
     }
-    if (this->alpha >= 0x10) {
-        this->alpha -= 0xF;
+    if (this->alpha > 15) {
+        this->alpha -= 15;
     } else {
         this->alpha = 0;
     }
