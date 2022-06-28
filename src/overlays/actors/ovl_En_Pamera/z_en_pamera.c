@@ -683,9 +683,9 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
 
 void func_80BD9C70(EnPamera* this, PlayState* play) {
     play->nextEntranceIndex = 0x2020;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x46;
-    gSaveContext.nextTransition = 2;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_70;
+    gSaveContext.nextTransitionType = TRANS_TYPE_02;
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {

@@ -1997,9 +1997,9 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer <= 0) {
         play->nextEntranceIndex = 0x6460;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x49;
-        gSaveContext.nextTransition = 0x48;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_73;
+        gSaveContext.nextTransitionType = TRANS_TYPE_72;
         D_801BDAA0 = 1;
         D_801BDA9C = 0;
         func_80B47248(this);
@@ -2015,9 +2015,9 @@ void func_80B471E0(EnInvadepoh* this, PlayState* play) {
     if (D_80B4E998) {
         play->nextEntranceIndex = 0x6470;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x48;
-        gSaveContext.nextTransition = 0x48;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_72;
+        gSaveContext.nextTransitionType = TRANS_TYPE_72;
         func_80B47248(this);
     }
 }
@@ -2038,9 +2038,9 @@ void func_80B47278(EnInvadepoh* this) {
 void func_80B47298(EnInvadepoh* this, PlayState* play) {
     play->nextEntranceIndex = 0x6400;
     gSaveContext.nextCutsceneIndex = 0xFFF3;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x48;
-    gSaveContext.nextTransition = 0x48;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_72;
+    gSaveContext.nextTransitionType = TRANS_TYPE_72;
     gSaveContext.save.weekEventReg[89] |= 0x10;
     func_80B47304(this);
 }

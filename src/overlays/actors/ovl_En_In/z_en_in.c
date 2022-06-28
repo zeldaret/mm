@@ -822,8 +822,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -1069,8 +1069,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntranceIndex = 0xCE50;
-                    play->unk_1887F = 5;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:

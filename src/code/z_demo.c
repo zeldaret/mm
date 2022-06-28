@@ -81,7 +81,7 @@ CutsceneStateHandler sCsStateHandlers2[] = {
 };
 
 void Cutscene_Update2(PlayState* play, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (play->sceneLoadFlag == 0x14)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (play->transitionTrigger == TRANS_TRIGGER_START)) {
         gSaveContext.cutsceneTrigger = 0;
     }
 
@@ -292,8 +292,8 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             if (isStartFrame) {
                 play->nextEntranceIndex = 0x1C00;
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
-                play->sceneLoadFlag = 0x14;
-                play->unk_1887F = 3;
+                play->transitionTrigger = TRANS_TRIGGER_START;
+                play->transitionType = TRANS_TYPE_03;
             }
             break;
         case 0x1C:
@@ -561,7 +561,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     csCtx->state = CS_STATE_4;
     func_80165690();
     Audio_SetCutsceneFlag(false);
-    gSaveContext.unk_3F48 = 1;
+    gSaveContext.cutsceneTransitionControl = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
         gSaveContext.unk_3F1E = 1;
@@ -571,7 +571,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     if (cmd->base == 1) {
         play->nextEntranceIndex = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntranceIndex;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (gSaveContext.gameMode != 1) {
             Scene_SetExitFade(play);
         } else {
@@ -579,7 +579,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
             if (D_801BB12C >= 2) {
                 D_801BB12C = 0;
             }
-            play->unk_1887F = 4;
+            play->transitionType = TRANS_TYPE_04;
         }
 
         if ((play->nextEntranceIndex & 0xF) > 0) {
@@ -604,26 +604,26 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                 case 0x1F:
                     if (gSaveContext.save.weekEventReg[20] & 2) {
                         play->nextEntranceIndex = 0x3010;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
                         play->nextEntranceIndex = 0x8600;
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
                 case 0x44:
                     if (gSaveContext.save.weekEventReg[33] & 0x80) {
                         play->nextEntranceIndex = 0xAE70;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
                         play->nextEntranceIndex = 0xAE00;
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        play->sceneLoadFlag = 0x14;
-                        play->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
@@ -631,16 +631,16 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     gSaveContext.save.weekEventReg[55] |= 0x80;
                     play->nextEntranceIndex = 0x6A80;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
 
                 case 0x36:
                     gSaveContext.save.weekEventReg[52] |= 0x20;
                     play->nextEntranceIndex = 0x2000;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
             }
         }
@@ -666,7 +666,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C00;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 3:
@@ -679,7 +679,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C10;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 4:
@@ -692,7 +692,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C20;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 5:
@@ -705,7 +705,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C30;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 6:
@@ -718,7 +718,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C50;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 7:
@@ -731,14 +731,14 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C60;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 8:
                 // Ikana canyon
                 play->nextEntranceIndex = 0x2000;
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 9:
@@ -751,7 +751,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C70;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 10:
@@ -764,7 +764,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C40;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 11:
@@ -777,7 +777,7 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
                     play->nextEntranceIndex = 0x1C80;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
         }
     }
@@ -879,7 +879,7 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 break;
 
             case 9:
-                gSaveContext.unk_3F48 = 1;
+                gSaveContext.cutsceneTransitionControl = 1;
                 break;
 
             case 10:
@@ -1175,7 +1175,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
     bcopy(cutscenePtr, &cutsceneEndFrame, sizeof(s32));
     cutscenePtr += sizeof(s32);
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_4)) {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
+        (csCtx->state != CS_STATE_4)) {
         csCtx->state = CS_STATE_3;
         return;
     }

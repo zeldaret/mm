@@ -224,9 +224,9 @@ Actor* EnSuttari_GetActorById(PlayState* play, s16 actorId) {
 
 void EnSuttari_SetNextEntrance(PlayState* play, u16 nextEntranceIndex) {
     play->nextEntranceIndex = nextEntranceIndex;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void EnSuttari_UpdateTime(void) {

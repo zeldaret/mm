@@ -157,15 +157,15 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     }
 
     if (GET_RACE_FLAGS == RACE_FLAG_3) {
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     } else if (GET_RACE_FLAGS == RACE_FLAG_2) {
-        play->unk_1887F = 0x50;
-        gSaveContext.nextTransition = 3;
+        play->transitionType = TRANS_TYPE_80;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (GET_RACE_FLAGS == RACE_FLAG_4) {
         SET_RACE_FLAGS(RACE_FLAG_3);
-        play->unk_1887F = 2;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     }
 
     D_801BDA9C = 0;
@@ -173,7 +173,7 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
         D_801BDAA0 = 1;
     }
     play->nextEntranceIndex = 0xCE20;
-    play->sceneLoadFlag = 0x14;
+    play->transitionTrigger = TRANS_TRIGGER_START;
     return false;
 }
 

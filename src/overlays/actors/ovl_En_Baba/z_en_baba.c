@@ -258,9 +258,9 @@ void func_80BA886C(EnBaba* this, PlayState* play) {
 
 void func_80BA8C4C(PlayState* play, u16 nextEntrance) {
     play->nextEntranceIndex = nextEntrance;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80BA8C90(EnBaba* this, PlayState* play) {

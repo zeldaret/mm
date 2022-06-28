@@ -333,9 +333,9 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
         if (player->transformation == PLAYER_FORM_HUMAN) {
             gSaveContext.save.weekEventReg[84] |= 0x80;

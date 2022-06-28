@@ -109,15 +109,15 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
     player->actor.world.pos.y = this->actor.world.pos.y + this->unk_14A * 4.0f;
     Play_CameraSetAtEyeUp(play, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
     if (this->unk_14A == 1) {
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 3;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
         if (play->sceneNum == 0x58) {
             play->nextEntranceIndex = 0xAC00;
         } else {
             play->nextEntranceIndex = 0xAA10;
         }
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 

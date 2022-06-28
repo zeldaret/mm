@@ -789,13 +789,13 @@ void func_80C02CA4(EnBomjimb* this, PlayState* play) {
         play->nextEntranceIndex = play->setupExitList[this->unk_2B2];
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     } else {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(5);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     }
     gSaveContext.save.weekEventReg[75] |= 0x40;
     gSaveContext.save.weekEventReg[83] |= 4;
