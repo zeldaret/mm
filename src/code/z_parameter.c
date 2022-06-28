@@ -257,9 +257,11 @@ s16 D_801BFA64[] = {
 s16 D_801BFA74[] = {
     1, -70, -99, -70, 71, 101, 72, 1,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010E028.s")
 
 s32 D_801BFA84 = 0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010E968.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010E9F0.s")
@@ -303,6 +305,7 @@ s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 }; // Sticks, nuts, bombs
 s16 sArrowRefillCounts[] = { 10, 30, 40, 50 };
 s16 sBombchuRefillCounts[] = { 20, 10, 1, 5 };
 s16 sRupeeRefillCounts[] = { 1, 5, 10, 20, 50, 100, 200 };
+
 u8 Item_Give(PlayState* play, u8 item) {
     Player* player = GET_PLAYER(play);
     u8 i;
@@ -1040,6 +1043,7 @@ TexturePtr sDoActionTextures[] = {
     gDoActionAttackENGTex,
     gDoActionCheckENGTex,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115428.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011552C.s")
@@ -1051,7 +1055,7 @@ TexturePtr sDoActionTextures[] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115844.s")
 
 /**
- * Returns true if player still has health left. Otherwise, return false.
+ * @return false if player is out of health
  */
 s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
     if (healthChange > 0) {
@@ -1155,6 +1159,7 @@ s16 magicBorderColors[][3] = {
 };
 s16 magicBorderIndices[] = { 0, 1, 1, 0 };
 s16 magicBorderColorTimerIndex[] = { 2, 1, 2, 1 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116114.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80116348.s")
@@ -1174,13 +1179,16 @@ s16 startButtonLeftPos[] = {
 };
 s16 D_801BFAF4[] = { 0x1D, 0x1B };
 s16 D_801BFAF8[] = { 0x1B, 0x1B };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117100.s")
 
 s16 D_801BFAFC[] = { 30, 24, 24, 24 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117A20.s")
 
 s16 D_801BFB04[] = { 0xA2, 0xE4, 0xFA, 0x110 };
 s16 D_801BFB0C[] = { 0x23, 0x23, 0x33, 0x23 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80117BD0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80118084.s")
@@ -1193,6 +1201,7 @@ extern TexturePtr D_08095AC0;            // gMagicArrowEquipEffectTex
 s16 D_801BFB14[] = { 255, 100, 255, 0 }; // magicArrowEffectsR
 s16 D_801BFB1C[] = { 0, 100, 255, 0 };   // magicArrowEffectsG
 s16 D_801BFB24[] = { 0, 255, 100, 0 };   // magicArrowEffectsB
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119030.s")
 
 s16 D_801BFB2C = 255;
@@ -1239,6 +1248,7 @@ TexturePtr D_801BFC14[] = {
 s16 D_801BFC40[] = {
     127, 136, 144, 151, 160, 168, 175, 184,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119610.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011B4E0.s")
@@ -1249,6 +1259,7 @@ u16 D_801BFC50[] = {
 s16 D_801BFC60[][3] = {
     255, 255, 255, 255, 165, 55,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011B5C0.s")
 
 s16 D_801BFC6C[] = {
@@ -1261,6 +1272,7 @@ s16 D_801BFC8C[2][3] = {
     { 255, 255, 255 },
     { 255, 165, 55 },
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011B9E0.s")
 
 s16 D_801BFC98[] = {
@@ -1273,12 +1285,14 @@ s16 D_801BFCB8[2][3] = {
     { 255, 255, 255 },
     { 255, 165, 55 },
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011BF70.s")
 
 TexturePtr D_801BFCC4[] = {
     gMinigameLetterPTex, gMinigameLetterETex, gMinigameLetterRTex, gMinigameLetterFTex,
     gMinigameLetterETex, gMinigameLetterCTex, gMinigameLetterTTex, gMinigameExclamationTex,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011C4C4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011C808.s")
@@ -1296,6 +1310,7 @@ s16 D_801BFD0C[] = {
     // digit width
     9, 9, 8, 9, 9, 8, 9, 9,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011CA64.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011E3B4.s")
@@ -1344,6 +1359,7 @@ TexturePtr D_801BFD8C[] = {
     gStoryMaskFestivalTLUT,
     gStoryGiantsLeavingTLUT,
 };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011F0E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80120F90.s")
@@ -1353,6 +1369,7 @@ TexturePtr D_801BFD8C[] = {
 u8 D_801BFD94 = 0;
 s16 D_801BFD98 = 0;
 s16 D_801BFD9C = 0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801210E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80121F94.s")

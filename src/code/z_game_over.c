@@ -72,7 +72,7 @@ void GameOver_Update(PlayState* play) {
                     gSaveContext.respawnFlag = -6;
                 }
                 gSaveContext.nextTransition = 2;
-                gSaveContext.save.playerData.health = 48;
+                gSaveContext.save.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
