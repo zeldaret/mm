@@ -11,12 +11,12 @@
 
 #define THIS ((BgBotihasira*)thisx)
 
-void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx2);
-void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgBotihasira_Init(Actor* thisx, PlayState* play);
+void BgBotihasira_Destroy(Actor* thisx, PlayState* play);
+void BgBotihasira_Update(Actor* thisx, PlayState* play2);
+void BgBotihasira_Draw(Actor* thisx, PlayState* play);
 
-void BgBotihasira_DoNothing(BgBotihasira* this, GlobalContext* globalCtx);
+void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play);
 
 const ActorInit Bg_Botihasira_InitVars = {
     ACTOR_BG_BOTIHASIRA,
@@ -50,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 27, 80, 0, { 0, 0, 0 } },
 };
 
-void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgBotihasira_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgBotihasira* this = THIS;
     CollisionHeader* colHeader = NULL;
@@ -58,46 +58,46 @@ void BgBotihasira_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.params == 0) {
         DynaPolyActor_Init(&this->dyna, 0);
         CollisionHeader_GetVirtual(&object_botihasira_Colheader_001BD8, &colHeader);
-        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     } else {
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     }
     this->actionFunc = BgBotihasira_DoNothing;
     this->dyna.actor.scale.z = this->dyna.actor.scale.y = this->dyna.actor.scale.x = 0.1f;
 }
 
-void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgBotihasira_Destroy(Actor* thisx, PlayState* play) {
     BgBotihasira* this = THIS;
 
     if (this->dyna.actor.params == 0) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
-void BgBotihasira_DoNothing(BgBotihasira* this, GlobalContext* globalCtx) {
+void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play) {
 }
 
-void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void BgBotihasira_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     BgBotihasira* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     if (this->dyna.actor.params != 0) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * -27.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 7.0f);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
     }
 }
 
-void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void BgBotihasira_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_botihasira_DL_000638);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
