@@ -229,7 +229,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 
 /**
  * Exits the race and returns the player back to "normal" gameplay.
- * Whether the player won or lost the race is determined by arg1 and nextTransitionType.
+ * Whether the player won or lost the race is determined by transitionType and nextTransitionType.
  */
 s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
