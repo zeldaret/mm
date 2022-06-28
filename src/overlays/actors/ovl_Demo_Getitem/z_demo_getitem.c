@@ -30,14 +30,11 @@ const ActorInit Demo_Getitem_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 bankIndex[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
+static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
 
-static s16 csDrawIndex[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
+static s16 sGetItemDraws[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
 
-static u16 csActionIndex[] = {
-    0x6E,
-    0x236,
-};
+static u16 csActionIndex[] = { 0x6E, 0x236 };
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -51,9 +48,9 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     }
     Actor_SetScale(&this->actor, 0.25f);
     this->actionFunc = func_80A4FB10;
-    this->item = csDrawIndex[itemIndex];
-    this->action = csActionIndex[itemIndex];
-    objIndex = Object_GetIndex(&play->objectCtx, bankIndex[itemIndex]);
+    this->item = sGetItemDraws[itemIndex];
+    this->csAction = csActionIndex[itemIndex];
+    objIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -65,7 +62,7 @@ void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80A4FB10(DemoGetitem* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->object) != 0) {
+    if (Object_IsLoaded(&play->objectCtx, this->object)) {
         this->actor.draw = NULL;
         this->actor.objBankIndex = this->object;
         this->actionFunc = func_80A4FB68;
@@ -76,14 +73,14 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
     PlayState* play = play2;
     u16 sp22 = (play->gameplayFrames * 1000) & 0xFFFF;
 
-    if (Cutscene_CheckActorAction(play, this->action)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->action)]->action != 4) {
+    if (Cutscene_CheckActorAction(play, this->csAction)) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action != 4) {
             this->actor.shape.yOffset = 0.0f;
         }
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->action)]->action) {
+        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action) {
             case 2:
                 this->actor.draw = func_80A4FCF0;
-                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->action));
+                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
                 this->actor.shape.rot.y += 1000;
                 return;
             case 3:
@@ -91,7 +88,7 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
                 return;
             case 4:
                 this->actor.draw = func_80A4FCF0;
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->action));
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
                 this->actor.shape.yOffset = Math_SinS(sp22) * 15.0f;
                 return;
         }
