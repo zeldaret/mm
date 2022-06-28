@@ -330,13 +330,9 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
     this->actionFunc = BgIkanaMirror_EmitLight;
 }
 
-/*
- * BgIkanaMirror_Wait is used to deplete the mirror's light and release it, increment the alpha value for the light
- * emission textures and decrement the alpha value for the light absorption textures.
- *
- * By not directly setting the alpha values to 0 or 255, the transition from absorbing light to
- * releasing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
- * of by BgIkanaMirror_Draw.
+/**
+ * Depletes the mirror's light and release it, increase alpha value for the light
+ * emission textures and decrease the alpha value for the light absorption textures.
  */
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
     s32 i;
