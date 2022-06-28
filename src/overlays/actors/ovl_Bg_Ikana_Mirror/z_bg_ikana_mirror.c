@@ -38,7 +38,7 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
     (ActorFunc)BgIkanaMirror_Draw,
 };
 
-static ColliderTrisElementInit sTrisElementsInit[9] = {
+static ColliderTrisElementInit sMirrorColliderElementsInit[9] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -140,7 +140,7 @@ static ColliderTrisElementInit sTrisElementsInit[9] = {
     },
 };
 
-static ColliderTrisInit sTrisInit = {
+static ColliderTrisInit sMirrorColliderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -149,11 +149,11 @@ static ColliderTrisInit sTrisInit = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    ARRAY_COUNT(sTrisElementsInit),
-    sTrisElementsInit,
+    ARRAY_COUNT(sMirrorColliderElementsInit),
+    sMirrorColliderElementsInit,
 };
 
-static ColliderQuadInit sQuadInit[2] = {
+static ColliderQuadInit sLightRaysCollidersInit[2] = {
     {
         {
             COLTYPE_NONE,
@@ -203,7 +203,7 @@ static InitChainEntry sInitChain[] = {
 
 void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     ColliderQuadDimInit* dim;
-    ColliderQuad* collider;
+    ColliderQuad* lightRaysCollider;
     Vec3f v0;
     Vec3f v1;
     Vec3f v2;
@@ -214,13 +214,13 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
-        dim = &sQuadInit[i].dim;
+        dim = &sLightRaysCollidersInit[i].dim;
         Matrix_MultVec3f(&dim->quad[0], &v0);
         Matrix_MultVec3f(&dim->quad[1], &v1);
         Matrix_MultVec3f(&dim->quad[2], &v2);
         Matrix_MultVec3f(&dim->quad[3], &v3);
-        collider = &this->lightRaysColliders[i];
-        Collider_SetQuadVertices(collider, &v0, &v1, &v2, &v3);
+        lightRaysCollider = &this->lightRaysColliders[i];
+        Collider_SetQuadVertices(lightRaysCollider, &v0, &v1, &v2, &v3);
     }
 
     Matrix_Pop();
@@ -238,12 +238,13 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerTempleMirrorCol);
     Collider_InitTris(play, &this->mirrorCollider);
-    Collider_SetTris(play, &this->mirrorCollider, &this->dyna.actor, &sTrisInit, this->mirrorColliderElements);
+    Collider_SetTris(play, &this->mirrorCollider, &this->dyna.actor, &sMirrorColliderInit,
+                     this->mirrorColliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    for (i = 0; i < ARRAY_COUNT(sTrisElementsInit); i++) {
-        vtx = &sTrisInit.elements[i].dim.vtx[0];
+    for (i = 0; i < ARRAY_COUNT(sMirrorColliderElementsInit); i++) {
+        vtx = &sMirrorColliderInit.elements[i].dim.vtx[0];
         for (j = 0; j < 3; j++) {
             Matrix_MultVec3f(&vtx[j], &vertices[j]);
         }
@@ -252,7 +253,7 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
 
     for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
         Collider_InitQuad(play, &this->lightRaysColliders[i]);
-        Collider_SetQuad(play, &this->lightRaysColliders[i], &this->dyna.actor, &sQuadInit[i]);
+        Collider_SetQuad(play, &this->lightRaysColliders[i], &this->dyna.actor, &sLightRaysCollidersInit[i]);
     }
 
     BgIkanaMirror_SetQuadVertices(this);
