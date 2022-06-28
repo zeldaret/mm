@@ -35,11 +35,9 @@ static InitChainEntry sInitChainsInitChain[] = {
 };
 
 s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
-    (void)"共倒れ";   // Collapse together
-    (void)"共倒れ２"; // Collapse 2
-    (void)"共倒れ";
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+        (void)"共倒れ"; // Collapse together
         if (ELFMSG5_GET_8(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG5_GET_8(&this->actor));
         }
@@ -48,6 +46,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
+            (void)"共倒れ２"; // Collapse 2
             if (ELFMSG5_GET_8(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG5_GET_8(&this->actor));
             }
@@ -59,6 +58,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
         return false;
     }
     if (Flags_GetSwitch(play, ELFMSG5_GET_8(&this->actor))) {
+        (void)"共倒れ"; // Collapse together
         Actor_MarkForDeath(&this->actor);
         return true;
     }
@@ -68,7 +68,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
 void ElfMsg5_Init(Actor* thisx, PlayState* play) {
     ElfMsg5* this = THIS;
 
-    if (func_80AFD990(this, play) == 0) {
+    if (!func_80AFD990(this, play)) {
         Actor_ProcessInitChain(&this->actor, sInitChainsInitChain);
         this->actor.shape.rot.z = 0;
         this->actionFunc = func_80AFDB38;
