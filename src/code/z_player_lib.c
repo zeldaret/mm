@@ -610,7 +610,7 @@ void Player_SetModels(Player* player, s32 modelGroup) {
     player->sheathType = gPlayerModelTypes[modelGroup][3];
 
     if (player->sheathType == 14) {
-        if (gSaveContext.save.equips.buttonItems[CUR_FORM][EQUIP_SLOT_B] == ITEM_NONE) {
+        if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
             player->sheathType = 15;
         }
     }
