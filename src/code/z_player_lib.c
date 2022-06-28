@@ -322,7 +322,7 @@ void func_8012301C(Player* player, PlayState* play2) {
     player->unk_AE7++;
 
     if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.save.playerForm)];
+        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
@@ -565,7 +565,8 @@ typedef struct {
 } TextTriggerEntry; // size = 0x04
 
 extern TextTriggerEntry sEnvironmentTextTriggers[];
-// These textIds are OoT remnants and are not present in this game anymore, and don't point to anything relevant
+// These textIds are OoT remnants. The corresponding text entries are not present in this game, and so these don't point
+// to anything relevant.
 #if 0
 TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 1, 0x26FC },
@@ -773,11 +774,11 @@ s32 func_801240DC(Player* player) {
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
-    s32 temp_v0 = actionParam - PLAYER_AP_UNK_2;
+    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_POLE;
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if (((actionParam - PLAYER_AP_UNK_2) > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) &&
-            ((actionParam - PLAYER_AP_UNK_2) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_UNK_2))) {
+        if (((actionParam - PLAYER_AP_FISHING_POLE) > (PLAYER_AP_FISHING_POLE - PLAYER_AP_FISHING_POLE)) &&
+            ((actionParam - PLAYER_AP_FISHING_POLE) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_POLE))) {
             return temp_v0;
         }
     }
@@ -790,9 +791,10 @@ s32 func_80124148(Player* player) {
 }
 
 s32 Player_ActionToMeleeWeapon(s32 actionParam) {
-    s32 weapon = actionParam - PLAYER_AP_UNK_2;
+    s32 weapon = actionParam - PLAYER_AP_FISHING_POLE;
 
-    if ((weapon > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (weapon <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
+    if ((weapon > (PLAYER_AP_FISHING_POLE - PLAYER_AP_FISHING_POLE)) &&
+        (weapon <= (PLAYER_AP_ZORA_FINS - PLAYER_AP_FISHING_POLE))) {
         return weapon;
     }
     return 0;
@@ -803,7 +805,7 @@ s32 Player_GetMeleeWeaponHeld(Player* player) {
 }
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
-    // Relies on two-handed weapons to be contiguous
+    // Relies on the actionParams for two-handed weapons being contiguous.
     if ((player->itemActionParam >= PLAYER_AP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_AP_STICK)) {
         return true;
     }
@@ -841,12 +843,14 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-s32 func_80124278(Actor* actor, s32 arg1) {
-    s32 phi_v1 = 0;
+s32 func_80124278(Actor* actor, s32 actionParam) {
+    s32 sword = 0;
 
     //! FAKE:
-    if ((arg1 == 1) || ((phi_v1 = arg1 - 3, (phi_v1 >= 0)) && (phi_v1 < 4))) {
-        return phi_v1;
+    if ((actionParam == PLAYER_AP_LAST_USED) ||
+        ((sword = actionParam - PLAYER_AP_SWORD_KOKIRI, (sword >= PLAYER_AP_SWORD_KOKIRI - PLAYER_AP_SWORD_KOKIRI)) &&
+         (sword <= PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_SWORD_KOKIRI))) {
+        return sword;
     }
 
     return -1;

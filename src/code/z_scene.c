@@ -159,7 +159,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     nextObject = play->objectCtx.status[play->objectCtx.num].segment;
     play->objectCtx.num = loadedCount;
     play->objectCtx.spawnedObjectCount = loadedCount;
-    playerObjectId = gPlayerFormObjectIndexes[(void)0, gSaveContext.save.playerForm];
+    playerObjectId = gPlayerFormObjectIndices[(void)0, gSaveContext.save.playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&play->objectCtx, playerObjectId);
 

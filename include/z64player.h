@@ -72,14 +72,14 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ PLAYER_AP_NONE,
-    /* 0x01 */ PLAYER_AP_UNK_1,
-    /* 0x02 */ PLAYER_AP_UNK_2,
+    /* 0x01 */ PLAYER_AP_LAST_USED,
+    /* 0x02 */ PLAYER_AP_FISHING_POLE,
     /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
     /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
     /* 0x05 */ PLAYER_AP_SWORD_GILDED,
     /* 0x06 */ PLAYER_AP_SWORD_GREAT_FAIRY,
     /* 0x07 */ PLAYER_AP_STICK,
-    /* 0x08 */ PLAYER_AP_UNK_8,
+    /* 0x08 */ PLAYER_AP_ZORA_FINS,
     /* 0x09 */ PLAYER_AP_BOW,
     /* 0x0A */ PLAYER_AP_BOW_FIRE,
     /* 0x0B */ PLAYER_AP_BOW_ICE,
