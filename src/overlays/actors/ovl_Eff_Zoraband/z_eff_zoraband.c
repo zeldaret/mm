@@ -11,12 +11,12 @@
 
 #define THIS ((EffZoraband*)thisx)
 
-void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
-void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2);
+void EffZoraband_Init(Actor* thisx, PlayState* play);
+void EffZoraband_Destroy(Actor* thisx, PlayState* play);
+void EffZoraband_Update(Actor* thisx, PlayState* play);
+void EffZoraband_Draw(Actor* thisx, PlayState* play2);
 
-void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx);
+void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play);
 
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
@@ -30,7 +30,7 @@ const ActorInit Eff_Zoraband_InitVars = {
     (ActorFunc)EffZoraband_Draw,
 };
 
-void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EffZoraband_Init(Actor* thisx, PlayState* play) {
     EffZoraband* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
@@ -39,16 +39,16 @@ void EffZoraband_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.z = 0;
 }
 
-void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EffZoraband_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x20F)) {
+void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, 0x20F)) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
-            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action) {
+            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action) {
             this->stateFlags |= 2;
         }
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20F)]->action == 7) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action == 7) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EffZoraband_Draw;
@@ -66,23 +66,23 @@ void EffZoraband_MikauFadeOut(EffZoraband* this, GlobalContext* globalCtx) {
     }
 }
 
-void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EffZoraband_Update(Actor* thisx, PlayState* play) {
     EffZoraband* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EffZoraband_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EffZoraband* this = THIS;
 
     if (this->alpha != 0) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_RotateYS((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), MTXMODE_APPLY);
-        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_RotateYS((Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) + 0x8000), MTXMODE_APPLY);
+        AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->actor.home.rot.z != 0) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 100, this->alpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 200, 0, 255);
@@ -95,6 +95,6 @@ void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, 255);
         gSPDisplayList(POLY_XLU_DISP++, object_zoraband_DL_0002A8);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
