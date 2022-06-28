@@ -5,8 +5,8 @@
 
 struct EnZov;
 
-typedef void (*EnZovActionFunc)(struct EnZov*, GlobalContext*);
-typedef s32 (*EnZovUnkFunc)(GlobalContext*, struct EnZov*);
+typedef void (*EnZovActionFunc)(struct EnZov*, PlayState*);
+typedef s32 (*EnZovUnkFunc)(PlayState*, struct EnZov*);
 
 #define ENZOV_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENZOV_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)

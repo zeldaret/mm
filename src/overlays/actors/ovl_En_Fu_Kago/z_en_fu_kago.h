@@ -5,7 +5,7 @@
 
 struct EnFuKago;
 
-typedef void (*EnFuKagoActionFunc)(struct EnFuKago*, GlobalContext*);
+typedef void (*EnFuKagoActionFunc)(struct EnFuKago*, PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;

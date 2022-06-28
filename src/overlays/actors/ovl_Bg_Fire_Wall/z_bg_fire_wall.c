@@ -10,14 +10,14 @@
 
 #define THIS ((BgFireWall*)thisx)
 
-void BgFireWall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgFireWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgFireWall_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgFireWall_Init(Actor* thisx, PlayState* play);
+void BgFireWall_Destroy(Actor* thisx, PlayState* play);
+void BgFireWall_Update(Actor* thisx, PlayState* play);
 
-void func_809AC638(BgFireWall* this, GlobalContext* globalCtx);
-void func_809AC68C(BgFireWall* this, GlobalContext* globalCtx);
-void func_809AC6C0(BgFireWall* this, GlobalContext* globalCtx);
-void func_809AC970(BgFireWall* this, GlobalContext* globalCtx);
+void func_809AC638(BgFireWall* this, PlayState* play);
+void func_809AC68C(BgFireWall* this, PlayState* play);
+void func_809AC6C0(BgFireWall* this, PlayState* play);
+void func_809AC970(BgFireWall* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Fire_Wall_InitVars = {

@@ -7,8 +7,8 @@
 struct EnBox;
 struct func_80867BDC_a0;
 
-typedef void (*EnBoxActionFunc)(struct EnBox*, GlobalContext*);
-typedef void (*EnBoxUnkFunc)(struct func_80867BDC_a0* arg0, GlobalContext* globalCtx);
+typedef void (*EnBoxActionFunc)(struct EnBox*, PlayState*);
+typedef void (*EnBoxUnkFunc)(struct func_80867BDC_a0* arg0, PlayState* play);
 
 typedef struct func_80867BDC_a0 {
     /* 0x00 */ Vec3f pos;
@@ -36,6 +36,13 @@ typedef enum {
     /* 12 */ ENBOX_TYPE_SMALL_SWITCH_FLAG       // small, appear on switch flag set
 } EnBoxType;
 
+#define ENBOX_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
+#define ENBOX_GET_ITEM(thisx) (((thisx)->params >> 5) & 0x7F)
+#define ENBOX_GET_CHEST_FLAG(thisx) ((thisx)->params & 0x1F)
+#define ENBOX_GET_SWITCH_FLAG(thisx) ((thisx)->world.rot.z)
+// Codegen in EnTorch_Init() requires leaving out the & 0x7F for `item`
+#define ENBOX_PARAMS(type, item, chestFlag) ((((type) & 0xF) << 12) | ((item) << 5) | ((chestFlag) & 0x1F))
+
 typedef struct EnBox {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ SkelAnime skelAnime;
@@ -61,9 +68,5 @@ typedef struct EnBox {
 
 extern const ActorInit En_Box_InitVars;
 
-#define ENBOX_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
-#define ENBOX_GET_ITEM(thisx) (((thisx)->params >> 5) & 0x7F)
-#define ENBOX_GET_CHEST_FLAG(thisx) ((thisx)->params & 0x1F)
-#define ENBOX_GET_SWITCH_FLAG(thisx) ((thisx)->world.rot.z)
 
 #endif // Z_EN_BOX_H

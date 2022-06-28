@@ -2,10 +2,10 @@
 
 typedef struct {
     Actor actor;
-    s32 (*pictoFunc)(GlobalContext* globalCtx, Actor* actor);
+    s32 (*pictoFunc)(PlayState* play, Actor* actor);
 } PictoActor;
 
-s32 func_8013A240(GlobalContext* globalCtx) {
+s32 func_8013A240(PlayState* play) {
     PictoActor* pictoActor;
     Actor* actor;
     s32 type = 0;
@@ -15,15 +15,15 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     gSaveContext.save.pictoFlags0 = 0;
     gSaveContext.save.pictoFlags1 = 0;
 
-    if (globalCtx->sceneNum == SCENE_20SICHITAI) {
+    if (play->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
     }
 
     for (; type < 12; type++) {
-        for (actor = globalCtx->actorCtx.actorLists[type].first; actor != NULL; actor = actor->next) {
+        for (actor = play->actorCtx.actorLists[type].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
-            switch (globalCtx->sceneNum) {
+            switch (play->sceneNum) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
                         seen = 1;
@@ -63,7 +63,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
             if (seen != 0) {
                 pictoActor = (PictoActor*)actor;
                 if (pictoActor->pictoFunc != NULL) {
-                    if ((pictoActor->pictoFunc)(globalCtx, actor) == 0) {
+                    if ((pictoActor->pictoFunc)(play, actor) == 0) {
                         count++;
                     }
                 }
@@ -107,14 +107,14 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
-                  f32 distanceMax, s16 angleError) {
+s32 func_8013A530(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax,
+                  s16 angleError) {
     Vec3f screenSpace;
     s16 x;
     s16 y;
     f32 distance;
     CollisionPoly* poly;
-    Camera* camera = GET_ACTIVE_CAM(globalCtx);
+    Camera* camera = GET_ACTIVE_CAM(play);
     Actor* actors[2];
     s32 ret = 0;
     s32 bgId;
@@ -132,7 +132,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3E;
     }
 
-    Actor_GetProjectedPos(globalCtx, pos, &screenSpace, &distance);
+    Actor_GetProjectedPos(play, pos, &screenSpace, &distance);
     x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
     if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {
@@ -140,15 +140,15 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3D;
     }
 
-    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
+    if (BgCheck_ProjectileLineTest(&play->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
                                    &bgId)) {
         func_8013A41C(0x3C);
         ret |= 0x3C;
     }
 
     actors[0] = actor;
-    actors[1] = &GET_PLAYER(globalCtx)->actor;
-    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, pos, &camera->eye, actors, 2)) {
+    actors[1] = &GET_PLAYER(play)->actor;
+    if (CollisionCheck_LineOCCheck(play, &play->colChkCtx, pos, &camera->eye, actors, 2)) {
         func_8013A41C(0x3B);
         ret |= 0x3B;
     }

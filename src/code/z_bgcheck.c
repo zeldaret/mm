@@ -124,13 +124,13 @@ void DynaSSNodeList_SetSSListHead(DynaSSNodeList* list, SSList* ssList, s16* pol
     ssList->head = index;
 }
 
-void DynaSSNodeList_Init(GlobalContext* globalCtx, DynaSSNodeList* list) {
+void DynaSSNodeList_Init(PlayState* play, DynaSSNodeList* list) {
     list->tbl = NULL;
     list->count = 0;
 }
 
-void DynaSSNodeList_Alloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes) {
-    list->tbl = (SSNode*)THA_AllocEndAlign(&globalCtx->state.heap, numNodes * sizeof(SSNode), -2);
+void DynaSSNodeList_Alloc(PlayState* play, DynaSSNodeList* list, u32 numNodes) {
+    list->tbl = (SSNode*)THA_AllocEndAlign(&play->state.heap, numNodes * sizeof(SSNode), -2);
     list->maxNodes = numNodes;
     list->count = 0;
 }
@@ -1376,7 +1376,7 @@ s32 BgCheck_PolyIntersectsSubdivision(Vec3f* min, Vec3f* max, CollisionPoly* pol
  * Initialize StaticLookup Table
  * returns size of table, in bytes
  */
-u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, GlobalContext* globalCtx, StaticLookup* lookupTbl) {
+u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, PlayState* play, StaticLookup* lookupTbl) {
     Vec3s* vtxList;
     CollisionPoly* polyList;
     s32 polyMax;
@@ -1460,11 +1460,11 @@ u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, GlobalContext* globalCtx,
 /**
  * Returns whether the current scene should reserve less memory for it's collision lookup
  */
-s32 BgCheck_IsSmallMemScene(GlobalContext* globalCtx) {
+s32 BgCheck_IsSmallMemScene(PlayState* play) {
     s16* i;
 
     for (i = sSmallMemScenes; i < sSmallMemScenes + ARRAY_COUNT(sSmallMemScenes); i++) {
-        if (globalCtx->sceneNum == *i) {
+        if (play->sceneNum == *i) {
             return true;
         }
     }
@@ -1499,11 +1499,11 @@ void BgCheck_SetSubdivisionDimension(f32 min, s32 subdivAmount, f32* max, f32* s
     *max = *subdivLength * subdivAmount + min;
 }
 
-s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, s32* maxNodes, s32* maxPolygons, s32* maxVertices) {
+s32 BgCheck_GetSpecialSceneMaxObjects(PlayState* play, s32* maxNodes, s32* maxPolygons, s32* maxVertices) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sCustomDynapolyMem); i++) {
-        if (globalCtx->sceneNum == sCustomDynapolyMem[i].sceneId) {
+        if (play->sceneNum == sCustomDynapolyMem[i].sceneId) {
             *maxNodes = sCustomDynapolyMem[i].maxNodes;
             *maxPolygons = sCustomDynapolyMem[i].maxPolygons;
             *maxVertices = sCustomDynapolyMem[i].maxVertices;
@@ -1516,7 +1516,7 @@ s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, s32* maxNodes, s
 /**
  * Allocate CollisionContext
  */
-void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader) {
+void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader* colHeader) {
     u32 tblMax;
     u32 memSize;
     u32 lookupTblMemSize;
@@ -1527,7 +1527,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
     colCtx->colHeader = colHeader;
     colCtx->flags = 0;
 
-    if (BgCheck_IsSmallMemScene(globalCtx)) {
+    if (BgCheck_IsSmallMemScene(play)) {
         colCtx->memSize = 0xF000;
         colCtx->dyna.polyNodesMax = 1000;
         colCtx->dyna.polyListMax = 512;
@@ -1540,7 +1540,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         s32 useCustomSubdivisions;
         s32 i;
 
-        if (BgCheck_TryGetCustomMemsize(globalCtx->sceneNum, &customMemSize)) {
+        if (BgCheck_TryGetCustomMemsize(play->sceneNum, &customMemSize)) {
             colCtx->memSize = customMemSize;
         } else {
             colCtx->memSize = 0x23000;
@@ -1548,12 +1548,12 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         colCtx->dyna.polyNodesMax = 1000;
         colCtx->dyna.polyListMax = 544;
         colCtx->dyna.vtxListMax = 512;
-        BgCheck_GetSpecialSceneMaxObjects(globalCtx, &colCtx->dyna.polyNodesMax, &colCtx->dyna.polyListMax,
+        BgCheck_GetSpecialSceneMaxObjects(play, &colCtx->dyna.polyNodesMax, &colCtx->dyna.polyListMax,
                                           &colCtx->dyna.vtxListMax);
         useCustomSubdivisions = false;
 
         for (i = 0; i < ARRAY_COUNT(sSceneSubdivisionList); i++) {
-            if (globalCtx->sceneNum == sSceneSubdivisionList[i].sceneId) {
+            if (play->sceneNum == sSceneSubdivisionList[i].sceneId) {
                 colCtx->subdivAmount.x = sSceneSubdivisionList[i].subdivAmount.x;
                 colCtx->subdivAmount.y = sSceneSubdivisionList[i].subdivAmount.y;
                 colCtx->subdivAmount.z = sSceneSubdivisionList[i].subdivAmount.z;
@@ -1568,7 +1568,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         }
     }
     colCtx->lookupTbl = THA_AllocEndAlign(
-        &globalCtx->state.heap,
+        &play->state.heap,
         colCtx->subdivAmount.x * sizeof(StaticLookup) * colCtx->subdivAmount.y * colCtx->subdivAmount.z, ~1);
     if (colCtx->lookupTbl == NULL) {
         Fault_AddHungupAndCrash("../z_bgcheck.c", 3955);
@@ -1601,12 +1601,12 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
     }
 
     SSNodeList_Init(&colCtx->polyNodes);
-    SSNodeList_Alloc(globalCtx, &colCtx->polyNodes, tblMax, colCtx->colHeader->numPolygons);
+    SSNodeList_Alloc(play, &colCtx->polyNodes, tblMax, colCtx->colHeader->numPolygons);
 
-    lookupTblMemSize = BgCheck_InitStaticLookup(colCtx, globalCtx, colCtx->lookupTbl);
+    lookupTblMemSize = BgCheck_InitStaticLookup(colCtx, play, colCtx->lookupTbl);
 
-    DynaPoly_Init(globalCtx, &colCtx->dyna);
-    DynaPoly_Alloc(globalCtx, &colCtx->dyna);
+    DynaPoly_Init(play, &colCtx->dyna);
+    DynaPoly_Alloc(play, &colCtx->dyna);
 }
 
 /**
@@ -1661,7 +1661,7 @@ s32 BgCheck_PosInStaticBoundingBox(CollisionContext* colCtx, Vec3f* pos) {
  * returns the yIntersect of the nearest poly found directly below `pos`, or BGCHECK_Y_MIN if no floor detected
  * returns the poly found in `outPoly`, and the bgId of the entity in `outBgId`
  */
-f32 BgCheck_RaycastFloorImpl(GlobalContext* globalCtx, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly,
+f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly,
                              s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 checkDist, s32 arg9) {
     f32 yIntersectDyna;
     f32 yIntersect;
@@ -1693,7 +1693,7 @@ f32 BgCheck_RaycastFloorImpl(GlobalContext* globalCtx, CollisionContext* colCtx,
         checkPos.y -= colCtx->subdivLength.y;
     }
     if (!(arg9 & 1)) {
-        dynaRaycast.globalCtx = globalCtx;
+        dynaRaycast.play = play;
         dynaRaycast.colCtx = colCtx;
         dynaRaycast.xpFlags = xpFlags;
         dynaRaycast.resultPoly = outPoly;
@@ -1741,22 +1741,20 @@ f32 BgCheck_EntityRaycastFloor1(CollisionContext* colCtx, CollisionPoly** outPol
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor2(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-                                Vec3f* pos) {
+f32 BgCheck_EntityRaycastFloor2(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos) {
     s32 bgId;
 
-    return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 0);
+    return BgCheck_RaycastFloorImpl(play, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 0);
 }
 
 /**
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor2_1(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-                                  Vec3f* pos) {
+f32 BgCheck_EntityRaycastFloor2_1(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos) {
     s32 bgId;
 
-    return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 1);
+    return BgCheck_RaycastFloorImpl(play, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 1);
 }
 
 /**
@@ -1780,18 +1778,18 @@ f32 BgCheck_EntityRaycastFloor5(CollisionContext* colCtx, CollisionPoly** outPol
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor5_2(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-                                  s32* bgId, Actor* actor, Vec3f* pos) {
-    return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x1C, 1.0f, 0);
+f32 BgCheck_EntityRaycastFloor5_2(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
+                                  Actor* actor, Vec3f* pos) {
+    return BgCheck_RaycastFloorImpl(play, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x1C, 1.0f, 0);
 }
 
 /**
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor5_3(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-                                  s32* bgId, Actor* actor, Vec3f* pos) {
-    return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x3C, 1.0f, 0);
+f32 BgCheck_EntityRaycastFloor5_3(PlayState* play, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
+                                  Actor* actor, Vec3f* pos) {
+    return BgCheck_RaycastFloorImpl(play, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x3C, 1.0f, 0);
 }
 
 /**
@@ -2453,11 +2451,11 @@ void SSNodeList_Init(SSNodeList* this) {
  * tblMax is the number of SSNode records to allocate
  * numPolys is the number of polygons defined within the CollisionHeader
  */
-void SSNodeList_Alloc(GlobalContext* globalCtx, SSNodeList* this, s32 tblMax, s32 numPolys) {
+void SSNodeList_Alloc(PlayState* play, SSNodeList* this, s32 tblMax, s32 numPolys) {
     this->max = tblMax;
     this->count = 0;
-    this->tbl = THA_AllocEndAlign(&globalCtx->state.heap, tblMax * sizeof(SSNode), -2);
-    this->polyCheckTbl = THA_AllocEndAlign16(&globalCtx->state.heap, numPolys * sizeof(u8));
+    this->tbl = THA_AllocEndAlign(&play->state.heap, tblMax * sizeof(SSNode), -2);
+    this->polyCheckTbl = THA_AllocEndAlign16(&play->state.heap, numPolys * sizeof(u8));
 
     if (this->polyCheckTbl == NULL) {
         sprintf(D_801ED950, "this->polygon_check == NULL(game_alloc() MemoryAllocationError.)\n");
@@ -2554,7 +2552,7 @@ void DynaLookup_ResetWaterBoxStartIndex(u16* waterBoxStartIndex) {
 /**
  * Initialize BgActor
  */
-void BgActor_Init(GlobalContext* globalCtx, BgActor* bgActor) {
+void BgActor_Init(PlayState* play, BgActor* bgActor) {
     bgActor->actor = NULL;
     bgActor->colHeader = NULL;
     ScaleRotPos_Init(&bgActor->prevTransform);
@@ -2598,8 +2596,8 @@ void DynaPoly_NullPolyList(CollisionPoly** polyList) {
 /**
  * Allocate dyna.polyList
  */
-void DynaPoly_AllocPolyList(GlobalContext* globalCtx, CollisionPoly** polyList, s32 numPolys) {
-    *polyList = THA_AllocEndAlign(&globalCtx->state.heap, numPolys * sizeof(CollisionPoly), -2);
+void DynaPoly_AllocPolyList(PlayState* play, CollisionPoly** polyList, s32 numPolys) {
+    *polyList = THA_AllocEndAlign(&play->state.heap, numPolys * sizeof(CollisionPoly), -2);
 }
 
 /**
@@ -2612,8 +2610,8 @@ void DynaPoly_NullVtxList(Vec3s** vtxList) {
 /**
  * Allocate dyna.vtxList
  */
-void DynaPoly_AllocVtxList(GlobalContext* globalCtx, Vec3s** vtxList, s32 numVtx) {
-    *vtxList = THA_AllocEndAlign(&globalCtx->state.heap, numVtx * sizeof(Vec3s), -2);
+void DynaPoly_AllocVtxList(PlayState* play, Vec3s** vtxList, s32 numVtx) {
+    *vtxList = THA_AllocEndAlign(&play->state.heap, numVtx * sizeof(Vec3s), -2);
 }
 
 /**
@@ -2627,14 +2625,14 @@ void DynaPoly_InitWaterBoxList(DynaWaterBoxList* waterBoxList) {
 /**
  * Allocate dyna.waterBoxList
  */
-void DynaPoly_AllocWaterBoxList(GlobalContext* globalCtx, DynaWaterBoxList* waterBoxList, s32 numWaterBoxes) {
-    waterBoxList->boxes = THA_AllocEndAlign(&globalCtx->state.heap, numWaterBoxes * sizeof(WaterBox), -2);
+void DynaPoly_AllocWaterBoxList(PlayState* play, DynaWaterBoxList* waterBoxList, s32 numWaterBoxes) {
+    waterBoxList->boxes = THA_AllocEndAlign(&play->state.heap, numWaterBoxes * sizeof(WaterBox), -2);
 }
 
 /**
  * Update BgActor's prevTransform
  */
-void DynaPoly_SetBgActorPrevTransform(GlobalContext* globalCtx, BgActor* bgActor) {
+void DynaPoly_SetBgActorPrevTransform(PlayState* play, BgActor* bgActor) {
     bgActor->prevTransform = bgActor->curTransform;
 }
 
@@ -2651,43 +2649,42 @@ s32 DynaPoly_IsBgIdBgActor(s32 bgId) {
 /**
  * Init DynaCollisionContext
  */
-void DynaPoly_Init(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
+void DynaPoly_Init(PlayState* play, DynaCollisionContext* dyna) {
     dyna->bitFlag = DYNAPOLY_INVALIDATE_LOOKUP;
     DynaPoly_NullPolyList(&dyna->polyList);
     DynaPoly_NullVtxList(&dyna->vtxList);
     DynaPoly_InitWaterBoxList(&dyna->waterBoxList);
-    DynaSSNodeList_Init(globalCtx, &dyna->polyNodes);
+    DynaSSNodeList_Init(play, &dyna->polyNodes);
 }
 
 /**
  * Set DynaCollisionContext
  */
-void DynaPoly_Alloc(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
+void DynaPoly_Alloc(PlayState* play, DynaCollisionContext* dyna) {
     s32 i;
 
     for (i = 0; i < BG_ACTOR_MAX; i++) {
-        BgActor_Init(globalCtx, &dyna->bgActors[i]);
+        BgActor_Init(play, &dyna->bgActors[i]);
         dyna->bgActorFlags[i] = 0;
     }
     DynaPoly_NullPolyList(&dyna->polyList);
-    DynaPoly_AllocPolyList(globalCtx, &dyna->polyList, dyna->polyListMax);
+    DynaPoly_AllocPolyList(play, &dyna->polyList, dyna->polyListMax);
 
     DynaPoly_NullVtxList(&dyna->vtxList);
-    DynaPoly_AllocVtxList(globalCtx, &dyna->vtxList, dyna->vtxListMax);
+    DynaPoly_AllocVtxList(play, &dyna->vtxList, dyna->vtxListMax);
 
     DynaPoly_InitWaterBoxList(&dyna->waterBoxList);
-    DynaPoly_AllocWaterBoxList(globalCtx, &dyna->waterBoxList, DYNA_WATERBOX_MAX);
+    DynaPoly_AllocWaterBoxList(play, &dyna->waterBoxList, DYNA_WATERBOX_MAX);
 
-    DynaSSNodeList_Init(globalCtx, &dyna->polyNodes);
-    DynaSSNodeList_Alloc(globalCtx, &dyna->polyNodes, dyna->polyNodesMax);
+    DynaSSNodeList_Init(play, &dyna->polyNodes);
+    DynaSSNodeList_Alloc(play, &dyna->polyNodes, dyna->polyNodesMax);
 }
 
 /**
  * Set BgActor
  * original name: DynaPolyInfo_setActor
  */
-s32 DynaPoly_SetBgActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor,
-                        CollisionHeader* colHeader) {
+s32 DynaPoly_SetBgActor(PlayState* play, DynaCollisionContext* dyna, Actor* actor, CollisionHeader* colHeader) {
     s32 bgId;
     s32 foundSlot = false;
 
@@ -2721,42 +2718,42 @@ DynaPolyActor* DynaPoly_GetActor(CollisionContext* colCtx, s32 bgId) {
     return (DynaPolyActor*)colCtx->dyna.bgActors[bgId].actor;
 }
 
-void func_800C62BC(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C62BC(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] |= 4;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
     }
 }
 
-void func_800C6314(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C6314(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] &= ~4;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
     }
 }
 
-void func_800C636C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C636C(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] |= 8;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
     }
 }
 
-void func_800C63C4(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C63C4(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] &= ~8;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
     }
 }
 
-void func_800C641C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C641C(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] |= 0x20;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
     }
 }
 
-void func_800C6474(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void func_800C6474(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] &= ~0x20;
         dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
@@ -2766,13 +2763,13 @@ void func_800C6474(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgI
 /**
  * original name: DynaPolyInfo_delReserve
  */
-void DynaPoly_DeleteBgActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
+void DynaPoly_DeleteBgActor(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     DynaPolyActor* actor;
 
     if (DynaPoly_IsBgIdBgActor(bgId) == false) {
         return;
     }
-    actor = DynaPoly_GetActor(&globalCtx->colCtx, bgId);
+    actor = DynaPoly_GetActor(&play->colCtx, bgId);
     if (actor != NULL) {
 
         actor->bgId = BGACTOR_NEG_ONE;
@@ -2781,7 +2778,7 @@ void DynaPoly_DeleteBgActor(GlobalContext* globalCtx, DynaCollisionContext* dyna
     }
 }
 
-void func_800C6554(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
+void func_800C6554(PlayState* play, DynaCollisionContext* dyna) {
     dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
 }
 
@@ -2839,8 +2836,8 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
 /**
  * original name: DynaPolyInfo_expandSRT
  */
-void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex,
-                        s32* polyStartIndex, s32* waterBoxStartIndex) {
+void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex,
+                        s32* waterBoxStartIndex) {
     Actor* actor;
     s32 pad;
     s32 pad2;
@@ -3064,13 +3061,13 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/DynaPoly_ExpandSRT.s")
 #endif
 
-void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor) {
+void BgCheck_ResetFlagsIfLoadedActor(PlayState* play, DynaCollisionContext* dyna, Actor* actor) {
     DynaPolyActor* dynaActor;
     s32 i;
 
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         if ((dyna->bgActorFlags[i] & 1)) {
-            dynaActor = DynaPoly_GetActor(&globalCtx->colCtx, i);
+            dynaActor = DynaPoly_GetActor(&play->colCtx, i);
             if (dynaActor != NULL && &dynaActor->actor == actor) {
                 DynaPolyActor_ResetState((DynaPolyActor*)actor);
                 return;
@@ -3082,7 +3079,7 @@ void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionCont
 /**
  * original name: DynaPolyInfo_setup
  */
-void DynaPoly_Setup(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
+void DynaPoly_Setup(PlayState* play, DynaCollisionContext* dyna) {
     DynaPolyActor* actor;
     s32 vtxStartIndex;
     s32 polyStartIndex;
@@ -3099,19 +3096,19 @@ void DynaPoly_Setup(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
         if (dyna->bgActorFlags[i] & 2) {
             // Initialize BgActor
             dyna->bgActorFlags[i] = 0;
-            BgActor_Init(globalCtx, &dyna->bgActors[i]);
+            BgActor_Init(play, &dyna->bgActors[i]);
             dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
         }
         if (dyna->bgActors[i].actor != NULL && dyna->bgActors[i].actor->update == NULL) {
             // Delete BgActor
-            actor = DynaPoly_GetActor(&globalCtx->colCtx, i);
+            actor = DynaPoly_GetActor(&play->colCtx, i);
             if (actor == NULL) {
                 return;
             }
             actor->bgId = BGACTOR_NEG_ONE;
             dyna->bgActorFlags[i] = 0;
 
-            BgActor_Init(globalCtx, &dyna->bgActors[i]);
+            BgActor_Init(play, &dyna->bgActors[i]);
             dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
         }
     }
@@ -3120,7 +3117,7 @@ void DynaPoly_Setup(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
     waterBoxStartIndex = 0;
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         if ((dyna->bgActorFlags[i] & 1) && !(dyna->bgActorFlags[i] & 2)) {
-            DynaPoly_ExpandSRT(globalCtx, dyna, i, &vtxStartIndex, &polyStartIndex, &waterBoxStartIndex);
+            DynaPoly_ExpandSRT(play, dyna, i, &vtxStartIndex, &polyStartIndex, &waterBoxStartIndex);
         }
     }
     dyna->bitFlag &= ~DYNAPOLY_INVALIDATE_LOOKUP;
@@ -3150,12 +3147,12 @@ void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertice
 /**
  * Update all BgActor's previous ScaleRotPos
  */
-void DynaPoly_UpdateBgActorTransforms(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
+void DynaPoly_UpdateBgActorTransforms(PlayState* play, DynaCollisionContext* dyna) {
     s32 i;
 
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         if (dyna->bgActorFlags[i] & 1) {
-            DynaPoly_SetBgActorPrevTransform(globalCtx, &dyna->bgActors[i]);
+            DynaPoly_SetBgActorPrevTransform(play, &dyna->bgActors[i]);
         }
     }
 }
@@ -3295,10 +3292,10 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
     }
 
     dynaActor = DynaPoly_GetActor(dynaRaycast->colCtx, *dynaRaycast->bgId);
-    if ((result != BGCHECK_Y_MIN) && (dynaActor != NULL) && (dynaRaycast->globalCtx != NULL)) {
-        pauseState = dynaRaycast->globalCtx->pauseCtx.state != 0;
+    if ((result != BGCHECK_Y_MIN) && (dynaActor != NULL) && (dynaRaycast->play != NULL)) {
+        pauseState = dynaRaycast->play->pauseCtx.state != 0;
         if (!pauseState) {
-            pauseState = dynaRaycast->globalCtx->pauseCtx.debugState != 0;
+            pauseState = dynaRaycast->play->pauseCtx.debugState != 0;
         }
         if (!pauseState && (dynaRaycast->colCtx->dyna.bgActorFlags[*dynaRaycast->bgId] & 2)) {
             curTransform = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].curTransform;
@@ -3983,7 +3980,7 @@ void CollisionHeader_GetVirtual(CollisionHeader* colHeader, CollisionHeader** de
 /**
  * SEGMENT_TO_VIRTUAL all active BgActor CollisionHeaders
  */
-void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, GlobalContext* globalCtx) {
+void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, PlayState* play) {
     DynaCollisionContext* dyna = &colCtx->dyna;
     s32 i;
     u16 flag;
@@ -3991,7 +3988,7 @@ void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, GlobalContext* globa
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         flag = dyna->bgActorFlags[i];
         if ((flag & 1) && !(flag & 2)) {
-            Actor_SetObjectDependency(globalCtx, dyna->bgActors[i].actor);
+            Actor_SetObjectDependency(play, dyna->bgActors[i].actor);
             CollisionHeader_SegmentedToVirtual(dyna->bgActors[i].colHeader);
         }
     }
@@ -4378,7 +4375,7 @@ u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 
  * returns true if point is within the xz boundaries of an active water box, else false
  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
  */
-s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                             WaterBox** outWaterBox, s32* bgId) {
     CollisionHeader* colHeader;
     u32 room;
@@ -4392,7 +4389,7 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
             room = 0x3F & (curWaterBox->properties >> 13);
-            if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
+            if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
                 if (curWaterBox->properties & 0x80000) {
                     continue;
                 }
@@ -4438,16 +4435,16 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
 }
 
 // boolean
-s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+s32 WaterBox_GetSurface1(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                          WaterBox** outWaterBox) {
-    return WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
+    return WaterBox_GetSurface1_2(play, colCtx, x, z, ySurface, outWaterBox);
 }
 
 // boolean
-s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+s32 WaterBox_GetSurface1_2(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                            WaterBox** outWaterBox) {
     s32 bgId;
-    return WaterBox_GetSurfaceImpl(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
+    return WaterBox_GetSurfaceImpl(play, colCtx, x, z, ySurface, outWaterBox, &bgId);
 }
 
 #ifdef NON_MATCHING
@@ -4457,7 +4454,7 @@ s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f
  * returns the index of the waterbox found, or -1 if no waterbox is found
  * `outWaterBox` returns the pointer to the waterbox found, or NULL if none is found
  */
-s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3f* pos, f32 surfaceCheckDist,
+s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, f32 surfaceCheckDist,
                          WaterBox** outWaterBox, s32* bgId) {
     CollisionHeader* colHeader;
     s32 room;
@@ -4477,7 +4474,7 @@ s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec
         waterBox = &colHeader->waterBoxes[i];
 
         room = WATERBOX_ROOM(waterBox->properties);
-        if (!(room == globalCtx->roomCtx.currRoom.num || room == 0x3F)) {
+        if (!(room == play->roomCtx.currRoom.num || room == 0x3F)) {
             continue;
         }
         if ((waterBox->properties & 0x80000)) {
@@ -4596,8 +4593,8 @@ u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox) 
  * returns true if point is within the xz boundaries of an active water box, else false
  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
  */
-s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
-                  WaterBox** outWaterBox, s32* bgId) {
+s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox,
+                  s32* bgId) {
     CollisionHeader* colHeader;
     u32 room;
     WaterBox* curWaterBox;
@@ -4614,7 +4611,7 @@ s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
          curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
-        if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
+        if (room == (u32)play->roomCtx.currRoom.num || room == 0x3F) {
             if ((curWaterBox->properties & 0x80000) != 0) {
                 if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                     if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
@@ -4656,11 +4653,10 @@ s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6F0.s")
 #endif
 
-s32 func_800CA9D0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
-                  WaterBox** outWaterBox) {
+s32 func_800CA9D0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
     s32 bgId;
 
-    return func_800CA6F0(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
+    return func_800CA6F0(play, colCtx, x, z, ySurface, outWaterBox, &bgId);
 }
 
 /**

@@ -11,10 +11,10 @@
 
 #define THIS ((ObjMilkBin*)thisx)
 
-void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjMilkBin_Init(Actor* thisx, PlayState* play);
+void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
+void ObjMilkBin_Update(Actor* thisx, PlayState* play);
+void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
@@ -48,10 +48,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 12, 30, 0, { 0, 0, 0 } },
 };
 
-void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
     ObjMilkBin* this = THIS;
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
     this->actor.shape.yOffset = 1100.0f;
@@ -63,14 +63,14 @@ void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMilkBin_Destroy(Actor* thisx, PlayState* play) {
     ObjMilkBin* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjMilkBin* this = THIS;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
@@ -89,15 +89,15 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (!(this->disableDraw & 1)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjMilkBin_Draw(Actor* thisx, PlayState* play) {
     ObjMilkBin* this = THIS;
 
     if (!(this->disableDraw & 1)) {
-        Gfx_DrawDListOpa(globalCtx, gMilkBinMilkJarDL);
+        Gfx_DrawDListOpa(play, gMilkBinMilkJarDL);
     }
 }

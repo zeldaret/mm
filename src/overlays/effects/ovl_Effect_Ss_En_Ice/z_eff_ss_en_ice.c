@@ -8,10 +8,10 @@
 
 #define PARAMS ((EffectSsEnIceInitParams*)initParamsx)
 
-s32 EffectSsEnIce_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void func_8097F62C(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_8097F7EC(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsEnIce_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void func_8097F62C(PlayState* play, u32 index, EffectSs* this);
+void func_8097F7EC(PlayState* play, u32 index, EffectSs* this);
+void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_En_Ice_InitVars = {
