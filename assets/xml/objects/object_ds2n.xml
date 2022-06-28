@@ -26,8 +26,9 @@
         <Texture Name="gDs2nPantsAndShirtBottomTex" OutName="pants_and_shirt_bottom" Format="rgba16" Width="16" Height="16" Offset="0x42D8" />
         <Texture Name="gDs2nShoesTex" OutName="shoes" Format="rgba16" Width="16" Height="32" Offset="0x44D8" />
 
-        <!-- from 48D8 -> 4CD8 is unacounted for, it is a dark green mix of pixels -->
-            <!-- <Blob Name="gDs2n_Blob_0048D8" Size="0xC00" Offset="0x48D8" /> -->
+        <!-- Unused Belt/Tie Texture, kinda looks like a Karate belt. -->
+        <Texture Name="gDs2nBeltTieTex" OutName="belt_tie" Format="ci8" Width="32" Height="32" Offset="0x48D8" TlutOffset="0x3CD8"/>
+
         <!-- These two eye textures are corrupted, they extract and draw broken in-game.
             The half tex: the blue iris is olive greenish and whites of the eyes are blended blue, with scatter of random pixels.
             The closed has an extra dot of black in the center of the eye lid. -->
