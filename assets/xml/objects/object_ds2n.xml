@@ -1,6 +1,6 @@
 ﻿<Root>
+    <!-- Unused Potion Shop Seller from OoT, in that game (Ossan -> object_ds2) -->
     <File Name="object_ds2n" Segment="6">
-        <!-- Unused Potion Shop Seller from OoT, in that game (Ossan -> object_ds2) -->
         <!-- [object_ds2] still exists as a copy from OoT in MM, but unused, this has a different skeleton with legs -->
         <!-- Difficult to document, might have made mistakes, esp that second animation -->
 
