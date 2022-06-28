@@ -2,7 +2,7 @@
     <!-- Unused Potion Shop Seller from OoT, in that game (Ossan -> object_ds2) -->
     <File Name="object_ds2n" Segment="6">
         <!-- [object_ds2] still exists as a copy from OoT in MM, but unused, this has a different skeleton with legs -->
-        <!-- Difficult to document, might have made mistakes, esp that second animation -->
+        <!-- Difficult to document, might have made mistakes -->
 
         <DList Name="gDs2nTorsoDL" Offset="0x2420" />
         <DList Name="gDs2nHeadDL" Offset="0x2740" />
@@ -45,13 +45,25 @@
 
         <Texture Name="gDs2nMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="16" Offset="0x6218" TlutOffset="0x3CD8" />
 
-        <!-- This blob is not fully mapped  <Blob Name="gDs2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
+        <!-- 6418 -> 6450: unknown small data -->
 
-        <!-- Unused and referenced. Exact copies of the above used textures. -->
-        <Texture Name="gDs2nFingers2Tex" OutName="fingers2" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x3ED8" />
-        <Texture Name="gDs2nEyeOpen2Tex" OutName="eye_open2" Format="ci8" Width="32" Height="32" Offset="0x7990" TlutOffset="0x40D8" />
-        <Texture Name="gDs2nMouthOpen2Tex" OutName="mouth_open2" Format="ci8" Width="32" Height="16" Offset="0x7D90" TlutOffset="0x3CD8" />
+        <!-- Unused and unreferenced. Exact copies of the above used textures. -->
+        <Texture Name="gDs2nMain2Tlut" OutName="tlut_main2" Format="rgba16" Width="16" Height="16" Offset="0x6450" />
+        <Texture Name="gDs2nFingers2Tlut" OutName="tlut_fingers2" Format="rgba16" Width="16" Height="16" Offset="0x6650" />
+        <Texture Name="gDs2nEyes2Tlut" OutName="tlut_eyes2" Format="rgba16" Width="16" Height="16" Offset="0x6850" />
+        <Texture Name="gDs2nPantsAndShirtBottom2Tex" OutName="pants_and_shirt_bottom2" Format="rgba16" Width="16" Height="16" Offset="0x6A50" />
+        <Texture Name="gDs2nShoes2Tex" OutName="shoes2" Format="rgba16" Width="16" Height="32" Offset="0x6C50" />
+        <Texture Name="gDs2nFingers2Tex" OutName="fingers2" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x6650" />
+        <Texture Name="gDs2nSkinGradient2Tex" OutName="skin_gradient2" Format="ci8" Width="8" Height="8" Offset="0x7150" TlutOffset="0x6450"/>
+        <Texture Name="gDs2nHair2Tex" OutName="hair2" Format="rgba16" Width="16" Height="16" Offset="0x7190" />
+        <Texture Name="gDs2nHairline2Tex" OutName="hairline2" Format="ci8" Width="16" Height="16" Offset="0x7390" TlutOffset="0x6450"/>
+        <Texture Name="gDs2nShirtButtons2Tex" OutName="shirt_buttons2" Format="ci8" Width="16" Height="32" Offset="0x7490" TlutOffset="0x6450"/>
+        <Texture Name="gDs2nVest2Tex" OutName="vest2" Format="rgba16" Width="16" Height="16" Offset="0x7690" />
+        <Texture Name="gDs2nShirt2Tex" OutName="shirt2" Format="ci8" Width="16" Height="16" Offset="0x7890" TlutOffset="0x6450" />
 
+        <Texture Name="gDs2nEyeOpen2Tex" OutName="eye_open2" Format="ci8" Width="32" Height="32" Offset="0x7990" TlutOffset="0x6850" />
+        <Texture Name="gDs2nMouthOpen2Tex" OutName="mouth_open2" Format="ci8" Width="32" Height="16" Offset="0x7D90" TlutOffset="0x6450" />
+        
         <Animation Name="gDs2nIdleAnim" Offset="0x8038" />
 
         <!-- z64Utils cannot render this skeleton, no idea what the three limbs with no DL are for, our actor doesnt use them -->
@@ -74,6 +86,7 @@
         <Limb Name="gDs2nRightHandLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_HAND" Offset="0x8110" />
         <Limb Name="gDs2nHeadLimb" Type="Standard" EnumName="DS2N_LIMB_HEAD" Offset="0x811C" />
         <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimbs" Offset="0x8170" />
+
         <!-- 8 bytes: 0x11 followed by zeros  <Blob Name="gDs2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>
 </Root>
