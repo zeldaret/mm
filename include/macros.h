@@ -20,7 +20,7 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-#define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
+#define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamera])
 #define CAM_ID_MAIN 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
@@ -38,9 +38,9 @@
     }                                      \
     (void)0
 
-#define GET_PLAYER(globalCtx) ((Player*)(globalCtx)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
+#define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
-#define GET_FIRST_ENEMY(globalCtx) ((Actor*)(globalCtx)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
+#define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
@@ -51,6 +51,7 @@
 
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
+#define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
@@ -110,10 +111,10 @@
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
-#define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
-#define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])
-#define CONTROLLER3(globalCtx) (&(globalCtx)->state.input[2])
-#define CONTROLLER4(globalCtx) (&(globalCtx)->state.input[3])
+#define CONTROLLER1(gameState) (&(gameState)->input[0])
+#define CONTROLLER2(gameState) (&(gameState)->input[1])
+#define CONTROLLER3(gameState) (&(gameState)->input[2])
+#define CONTROLLER4(gameState) (&(gameState)->input[3])
 
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)

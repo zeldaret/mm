@@ -10,10 +10,10 @@
 
 #define THIS ((EnRat*)thisx)
 
-void EnRat_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRat_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRat_Init(Actor* thisx, PlayState* play);
+void EnRat_Destroy(Actor* thisx, PlayState* play);
+void EnRat_Update(Actor* thisx, PlayState* play);
+void EnRat_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Rat_InitVars = {

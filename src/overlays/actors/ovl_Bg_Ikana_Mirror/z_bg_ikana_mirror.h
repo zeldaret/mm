@@ -5,7 +5,7 @@
 
 struct BgIkanaMirror;
 
-typedef void (*BgIkanaMirrorActionFunc)(struct BgIkanaMirror*, GlobalContext*);
+typedef void (*BgIkanaMirrorActionFunc)(struct BgIkanaMirror*, PlayState*);
 
 typedef struct BgIkanaMirror {
     /* 0x0000 */ Actor actor;

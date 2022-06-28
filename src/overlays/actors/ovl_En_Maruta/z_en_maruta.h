@@ -5,7 +5,7 @@
 
 struct EnMaruta;
 
-typedef void (*EnMarutaActionFunc)(struct EnMaruta*, GlobalContext*);
+typedef void (*EnMarutaActionFunc)(struct EnMaruta*, PlayState*);
 
 #define ENMARUTA_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENMARUTA_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)

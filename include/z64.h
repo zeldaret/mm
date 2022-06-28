@@ -23,11 +23,14 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "gfxprint.h"
+#include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
+#include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"
@@ -39,6 +42,7 @@
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"
+#include "z64schedule.h"
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
@@ -288,25 +292,11 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x00 */ u32 textSize;
-    /* 0x04 */ u32 dataSize;
-    /* 0x08 */ u32 rodataSize;
-    /* 0x0C */ u32 bssSize;
-    /* 0x10 */ u32 nRelocations;
-    /* 0x14 */ u32 relocations[1];
-} OverlayRelocationSection; // size >= 0x18
-
-typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;
     /* 0x08 */ OSTime duration;
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
-
-typedef struct {
-    /* 0x00 */ s16 intPart[16];
-    /* 0x20 */ u16 fracPart[16];
-} RSPMatrix; // size = 0x40
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
@@ -382,13 +372,6 @@ typedef struct {
     /* 0x1A */ s16 unk1A;
 } s80874650; // size = 0x1C
 
-typedef struct {
-    /* 0x00 */ f32 x[4];
-    /* 0x10 */ f32 y[4];
-    /* 0x20 */ f32 z[4];
-    /* 0x30 */ f32 w[4];
-} z_Matrix; // size = 0x40
-
 typedef union {
     F3DVertexColor color;
     F3DVertexNormal normal;
@@ -425,27 +408,6 @@ typedef struct {
     /* 0x35 */ u8 osSyncPrintfEnabled;
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
-
-typedef struct GfxPrint {
-    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
-    /* 0x04 */ Gfx* dlist;
-    /* 0x08 */ u16 posX;
-    /* 0x0A */ u16 posY;
-    /* 0x0C */ u16 baseX;
-    /* 0x0E */ u8 baseY;
-    /* 0x0F */ u8 flag;
-    /* 0x10 */ Color_RGBA8_u32 color;
-    /* 0x14 */ char unk_14[0x1C]; // unused
-} GfxPrint; // size = 0x30
-
-typedef enum {
-    GFXPRINT_FLAG1 = 1,
-    GFXPRINT_USE_RGBA16 = 2,
-    GFXPRINT_FLAG4 = 4,
-    GFXPRINT_UPDATE_MODE = 8,
-    GFXPRINT_FLAG64 = 0x40,
-    GFXPRINT_OPEN = 0x80
-} GfxPrintFlag;
 
 typedef struct {
     /* 0x00 */ u8 countdown;
@@ -743,7 +705,7 @@ typedef struct {
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo particle count
+    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
@@ -825,11 +787,17 @@ typedef struct {
 } PreRenderParams; // size = 0x28
 
 typedef struct {
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 unk01;
+} MsgCtx11F00;
+
+typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
     /* 0x11EF4 */ char unk_11EF4[0x4];
     /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
+    /* 0x11F00 */ MsgCtx11F00* unk11F00;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
@@ -883,7 +851,7 @@ typedef struct {
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees; 
+    /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ MessageTableEntry* messageEntryTable;
     /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
@@ -1011,17 +979,17 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
 
-typedef struct GlobalContext GlobalContext;
+typedef struct PlayState PlayState;
 
-typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
-typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+typedef s32 (*ColChkResetFunc)(PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
+typedef void(*draw_func)(PlayState* play, s16 index);
 
-typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
+typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1042,7 +1010,7 @@ typedef struct Camera {
     /* 0x068 */ Vec3f up;
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
-    /* 0x08C */ struct GlobalContext* globalCtx;
+    /* 0x08C */ struct PlayState* play;
     /* 0x090 */ struct Player* player;
     /* 0x094 */ PosRot playerPosRot;
     /* 0x0A8 */ struct Actor* target;
@@ -1147,7 +1115,7 @@ typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
 #define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
 
 typedef struct {
-    /* 0x0 */ GlobalContext* globalCtx;
+    /* 0x0 */ PlayState* play;
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state;
@@ -1223,7 +1191,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
- 
+
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1288,7 +1256,7 @@ typedef struct {
     /* 0x00 */ u16 state;
 } GameOverContext; // size = 0x02
 
-struct GlobalContext {
+struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
     /* 0x000A6 */ u8 sceneConfig;
@@ -1320,19 +1288,19 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ DoorContext doorCtx;
-    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
-    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void (*unk_18770)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
-    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
-    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
-    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
-    /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
-    /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
+    /* 0x18768 */ void (*playerInit)(Player* player, struct PlayState* play, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct PlayState* play, Input* input);
+    /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
+    /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
+    /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, s32 mode);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
+    /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
+    /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
+    /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
+    /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
@@ -1398,12 +1366,6 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
-
-typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ Color_RGBA8 color;
@@ -1420,21 +1382,11 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u32 unk_00;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x08 */ Color_RGBA8_u32 primColor;
+    /* 0x0C */ Color_RGBA8_u32 envColor;
     /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* monoDl;
+    /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef enum {
-    MTXMODE_NEW,  // generates a new matrix
-    MTXMODE_APPLY // applies transformation to the current matrix
-} MatrixMode;
-
-typedef struct {
-    /* 0x00 */ u16 intPart[4][4];
-    /* 0x20 */ u16 fracPart[4][4];
-} MatrixInternal; // size = 0x40
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;

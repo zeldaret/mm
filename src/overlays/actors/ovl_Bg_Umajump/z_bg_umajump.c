@@ -10,9 +10,9 @@
 
 #define THIS ((BgUmajump*)thisx)
 
-void BgUmajump_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgUmajump_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgUmajump_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgUmajump_Init(Actor* thisx, PlayState* play);
+void BgUmajump_Destroy(Actor* thisx, PlayState* play);
+void BgUmajump_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Umajump_InitVars = {

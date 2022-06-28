@@ -5,7 +5,7 @@
 
 struct EnZos;
 
-typedef void (*EnZosActionFunc)(struct EnZos*, GlobalContext*);
+typedef void (*EnZosActionFunc)(struct EnZos*, PlayState*);
 
 #define ENZOS_GET_F(thisx) ((thisx)->params & 0xF)
 

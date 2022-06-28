@@ -5,8 +5,8 @@
 
 struct ObjIceblock;
 
-typedef void (*ObjIceblockActionFunc)(struct ObjIceblock*, GlobalContext*);
-typedef void (*ObjIceblockExtendedDrawFunc)(struct ObjIceblock*, GlobalContext*);
+typedef void (*ObjIceblockActionFunc)(struct ObjIceblock*, PlayState*);
+typedef void (*ObjIceblockExtendedDrawFunc)(struct ObjIceblock*, PlayState*);
 
 #define GET_ICEBLOCK_SNAP_ROT(thisx) (((thisx)->params >> 1) & 1)
 #define GET_ICEBLOCK_ICEBERG(thisx) ((thisx)->params & 1)

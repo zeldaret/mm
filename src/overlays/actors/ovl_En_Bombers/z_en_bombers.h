@@ -5,7 +5,7 @@
 
 struct EnBombers;
 
-typedef void (*EnBombersActionFunc)(struct EnBombers*, GlobalContext*);
+typedef void (*EnBombersActionFunc)(struct EnBombers*, PlayState*);
 
 #define ENBOMBERS_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMBERS_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
