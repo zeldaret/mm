@@ -72,7 +72,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
         this->pointIndex = 0;
     }
     this->points = Lib_SegmentedToVirtual(path->points);
-    Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x183, this->dyna.actor.world.pos.x,
+    Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
     if (OBJLUPYGAMELIFT_GET_C(thisx) != 0) {
@@ -138,9 +138,9 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
     f32 step;
     Vec3f target;
 
-    target.x = (this->points[this->pointIndex].x);
-    target.y = (this->points[this->pointIndex].y);
-    target.z = (this->points[this->pointIndex].z);
+    target.x = this->points[this->pointIndex].x;
+    target.y = this->points[this->pointIndex].y;
+    target.z = this->points[this->pointIndex].z;
     step = Math_Vec3f_StepTo(&this->dyna.actor.world.pos, &target, this->dyna.actor.speedXZ);
     if (step > 30.0f) {
         Math_SmoothStepToF(&this->dyna.actor.speedXZ, this->targetSpeedXZ, 0.5f, 5.0f, 0.1f);
