@@ -5,7 +5,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define DEKU_FLOWER_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
-#define DEKU_FLOWER_PARAMS(type) ((type << 7) & 0xFF80)
+#define DEKU_FLOWER_PARAMS(type) (((type) << 7) & 0xFF80)
 
 typedef enum {
     /* 0 */ DEKU_FLOWER_TYPE_PINK,
