@@ -13,10 +13,10 @@
 #define THIS ((ObjJgameLight*)thisx)
 
 typedef enum {
-    /* 0x0 */ NONE,
-    /* 0x1 */ CORRECT,
-    /* 0x2 */ INCORRECT,
-} SIGNAL;
+    /* 0x0 */ OBJJGAMELIGHT_NONE,
+    /* 0x1 */ OBJJGAMELIGHT_CORRECT,
+    /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
+} ObjJgameLightSignal;
 
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
@@ -79,7 +79,7 @@ void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
     this->unk_1B6 = 0;
     this->unk_1AC = 0;
     this->alpha = 0;
-    this->signal = NONE;
+    this->signal = OBJJGAMELIGHT_NONE;
     this->unk_1A8 = 0.0f;
 }
 
@@ -143,11 +143,11 @@ void func_80C15718(ObjJgameLight* this, PlayState* play) {
     if (OBJLUPYGAMELIFT_HEALTH_2(&this->actor)) {
         this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~2;
         this->alpha = 0x12C;
-        this->signal = CORRECT;
+        this->signal = OBJJGAMELIGHT_CORRECT;
     } else if (OBJLUPYGAMELIFT_HEALTH_4(&this->actor)) {
         this->actor.colChkInfo.health = this->actor.colChkInfo.health & ~4;
         this->alpha = 0x12C;
-        this->signal = INCORRECT;
+        this->signal = OBJJGAMELIGHT_INCORRECT;
     }
     if (this->alpha >= 0x10) {
         this->alpha -= 0xF;
@@ -182,9 +182,9 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->alpha);
         }
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        if (this->signal == CORRECT) {
+        if (this->signal == OBJJGAMELIGHT_CORRECT) {
             gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightCorrectDL);
-        } else if (this->signal == INCORRECT) {
+        } else if (this->signal == OBJJGAMELIGHT_INCORRECT) {
             gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightIncorrectDL);
         }
     }
