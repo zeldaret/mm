@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define OBJDEMO_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define OBJDEMO_FF_FF 0xFF
 struct ObjDemo;
 
 typedef void (*ObjDemoActionFunc)(struct ObjDemo*, PlayState*);

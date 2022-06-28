@@ -32,8 +32,8 @@ const ActorInit Obj_Demo_InitVars = {
 void ObjDemo_Init(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
-    thisx->params &= 0xFF;
-    if ((thisx->params != 0xFF) && (Flags_GetSwitch(play, thisx->params))) {
+    thisx->params = OBJDEMO_GET_FF(thisx);
+    if ((thisx->params != OBJDEMO_FF_FF) && (Flags_GetSwitch(play, thisx->params))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
