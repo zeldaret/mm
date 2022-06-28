@@ -50,7 +50,7 @@ static CollisionHeader* sColHeaders[] = {
     &object_d_hsblock_Colheader_000578,
 };
 
-static u32 sDisplayLists[] = { object_d_hsblock_DL_000210, object_d_hsblock_DL_000210, object_d_hsblock_DL_000470 };
+static Gfx* sDisplayLists[] = { object_d_hsblock_DL_000210, object_d_hsblock_DL_000210, object_d_hsblock_DL_000470 };
 
 void ObjHsblock_SetupAction(ObjHsblock* this, ObjHsblockActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -141,13 +141,13 @@ void ObjHsblock_Draw(Actor* thisx, PlayState* play) {
         { 100, 150, 120 },
         { 255, 255, 255 },
     };
-    Color_RGB8* envColors = &sEnvColors[OBJHSBLOCK_GET_6(thisx)];
+    Color_RGB8* envColor = &sEnvColors[OBJHSBLOCK_GET_6(thisx)];
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetEnvColor(POLY_OPA_DISP++, envColors->r, envColors->g, envColors->b, 255);
+    gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, sDisplayLists[OBJHSBLOCK_GET_3(thisx)]);
 
     CLOSE_DISPS(play->state.gfxCtx);
