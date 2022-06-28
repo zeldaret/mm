@@ -5,7 +5,7 @@
 
 struct ArrowFire;
 
-typedef void (*ArrowFireActionFunc)(struct ArrowFire*, GlobalContext*);
+typedef void (*ArrowFireActionFunc)(struct ArrowFire*, PlayState*);
 
 typedef struct ArrowFire {
     /* 0x000 */ Actor actor;

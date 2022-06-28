@@ -74,11 +74,11 @@ If you make significant progress on decompiling a function, but can't get it to 
 
 ```c
 #ifdef NON_MATCHING
-void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
+void CollisionCheck_SpawnWaterDroplets(PlayState* play, Vec3f* v) {
     // ... 
 }
 #else
-void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v);
+void CollisionCheck_SpawnWaterDroplets(PlayState* play, Vec3f* v);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
 #endif
 ```

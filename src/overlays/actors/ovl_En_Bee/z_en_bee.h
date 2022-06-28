@@ -5,7 +5,7 @@
 
 struct EnBee;
 
-typedef void (*EnBeeActionFunc)(struct EnBee*, GlobalContext*);
+typedef void (*EnBeeActionFunc)(struct EnBee*, PlayState*);
 
 typedef struct EnBee {
     /* 0x0000 */ Actor actor;

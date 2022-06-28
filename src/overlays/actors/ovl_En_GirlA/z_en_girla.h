@@ -5,10 +5,10 @@
 
 struct EnGirlA;
 
-typedef void (*EnGirlAActionFunc)(struct EnGirlA*, GlobalContext*);
-typedef void (*EnGirlADrawFunc)(struct Actor*, GlobalContext*, s32);
-typedef s32 (*EnGirlACanBuyFunc)(GlobalContext*, struct EnGirlA*);
-typedef void (*EnGirlAShopActionFunc)(GlobalContext*, struct EnGirlA*); // Buying/Restocking
+typedef void (*EnGirlAActionFunc)(struct EnGirlA*, PlayState*);
+typedef void (*EnGirlADrawFunc)(struct Actor*, PlayState*, s32);
+typedef s32 (*EnGirlACanBuyFunc)(PlayState*, struct EnGirlA*);
+typedef void (*EnGirlAShopActionFunc)(PlayState*, struct EnGirlA*); // Buying/Restocking
 
 typedef struct ShopItemEntry {
     /* 0x00 */ s16 objectId;

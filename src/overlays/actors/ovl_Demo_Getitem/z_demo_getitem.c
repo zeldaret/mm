@@ -10,9 +10,9 @@
 
 #define THIS ((DemoGetitem*)thisx)
 
-void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoGetitem_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx);
+void DemoGetitem_Init(Actor* thisx, PlayState* play);
+void DemoGetitem_Destroy(Actor* thisx, PlayState* play);
+void DemoGetitem_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Demo_Getitem_InitVars = {

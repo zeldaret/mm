@@ -5,7 +5,7 @@
 
 struct ObjPzlblock;
 
-typedef void (*ObjPzlblockActionFunc)(struct ObjPzlblock*, GlobalContext*);
+typedef void (*ObjPzlblockActionFunc)(struct ObjPzlblock*, PlayState*);
 
 #define OBJPZLBLOCK_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJPZLBLOCK_GET_700(thisx) (((thisx)->params >> 8) & 7)

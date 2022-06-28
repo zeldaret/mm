@@ -16,7 +16,7 @@ typedef enum {
 
 struct EnRaf;
 
-typedef void (*EnRafActionFunc)(struct EnRaf*, GlobalContext*);
+typedef void (*EnRafActionFunc)(struct EnRaf*, PlayState*);
 
 typedef struct {
     /* 0x00 */ u8 isEnabled;

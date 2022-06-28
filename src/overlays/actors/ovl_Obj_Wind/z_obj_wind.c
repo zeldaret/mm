@@ -10,10 +10,10 @@
 
 #define THIS ((ObjWind*)thisx)
 
-void ObjWind_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjWind_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjWind_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjWind_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjWind_Init(Actor* thisx, PlayState* play);
+void ObjWind_Destroy(Actor* thisx, PlayState* play);
+void ObjWind_Update(Actor* thisx, PlayState* play);
+void ObjWind_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Wind_InitVars = {

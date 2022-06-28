@@ -5,7 +5,7 @@
 
 struct EnRsn;
 
-typedef void (*EnRsnActionFunc)(struct EnRsn*, GlobalContext*);
+typedef void (*EnRsnActionFunc)(struct EnRsn*, PlayState*);
 
 typedef struct EnRsn {
     /* 0x000 */ Actor actor;
