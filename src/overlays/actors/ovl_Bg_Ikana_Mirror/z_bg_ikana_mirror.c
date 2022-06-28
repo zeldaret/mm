@@ -213,13 +213,13 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
         dim = &sQuadInit[i].dim;
         Matrix_MultVec3f(&dim->quad[0], &v0);
         Matrix_MultVec3f(&dim->quad[1], &v1);
         Matrix_MultVec3f(&dim->quad[2], &v2);
         Matrix_MultVec3f(&dim->quad[3], &v3);
-        collider = &this->colliderQuad[i];
+        collider = &this->lightRaysColliders[i];
         Collider_SetQuadVertices(collider, &v0, &v1, &v2, &v3);
     }
 
@@ -237,8 +237,8 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerTempleMirrorCol);
-    Collider_InitTris(play, &this->colliderTris);
-    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElements);
+    Collider_InitTris(play, &this->mirrorCollider);
+    Collider_SetTris(play, &this->mirrorCollider, &this->dyna.actor, &sTrisInit, this->mirrorColliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
@@ -247,12 +247,12 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
         for (j = 0; j < 3; j++) {
             Matrix_MultVec3f(&vtx[j], &vertices[j]);
         }
-        Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
+        Collider_SetTrisVertices(&this->mirrorCollider, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
-        Collider_InitQuad(play, &this->colliderQuad[i]);
-        Collider_SetQuad(play, &this->colliderQuad[i], &this->dyna.actor, &sQuadInit[i]);
+    for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
+        Collider_InitQuad(play, &this->lightRaysColliders[i]);
+        Collider_SetQuad(play, &this->lightRaysColliders[i], &this->dyna.actor, &sQuadInit[i]);
     }
 
     BgIkanaMirror_SetQuadVertices(this);
@@ -266,10 +266,10 @@ void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play) {
     s32 i;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(play, &this->colliderTris);
+    Collider_DestroyTris(play, &this->mirrorCollider);
 
-    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
-        Collider_DestroyQuad(play, &this->colliderQuad[i]);
+    for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
+        Collider_DestroyQuad(play, &this->lightRaysColliders[i]);
     }
 }
 
@@ -282,11 +282,10 @@ void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
  * BgIkanaMirror_Wait is used to charge the mirror with light, increment the alpha value for the light absorption
  * textures and decrement the alpha value for the light emission textures.
  *
- * By not directly setting the alpha values to 255 or 0, the transition from absorbing light to
- * releasing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
+ * By not directly setting the alpha values to 255 or 0, the transition from emitting light to
+ * absorbing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
  * of by BgIkanaMirror_Draw.
  */
-
 void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     s8 isEmittingLight;
     s32 startEmittingLight = false;
@@ -299,19 +298,23 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     }
 
     // This checks if light is touching the mirror.
-    if (this->colliderTris.base.acFlags & AC_HIT) {
-        this->colliderTris.base.acFlags &= ~AC_HIT;
+    if (this->mirrorCollider.base.acFlags & AC_HIT) {
+        this->mirrorCollider.base.acFlags &= ~AC_HIT;
         this->isEmittingLight = 0;
+
         if (this->lightRayCharge < 400) {
             this->lightRayCharge++;
         }
+
         if (this->lightAbsorptionAlpha < 195) {
             this->lightAbsorptionAlpha += 60;
         } else {
             this->lightAbsorptionAlpha = 255;
         }
+
     } else {
         isEmittingLight = this->isEmittingLight;
+
         if (isEmittingLight > 0) {
             startEmittingLight = true;
         } else if (this->lightRayCharge > 0) {
@@ -322,7 +325,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     if (startEmittingLight) {
         BgIkanaMirror_SetupEmitLight(this);
     } else {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->mirrorCollider.base);
     }
 }
 
@@ -339,13 +342,12 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
  * releasing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
  * of by BgIkanaMirror_Draw.
  */
-
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
-        if ((this->colliderQuad[i].base.atFlags & AT_HIT)) {
-            this->colliderQuad[i].base.atFlags &= ~AT_HIT;
+    for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
+        if (this->lightRaysColliders[i].base.atFlags & AT_HIT) {
+            this->lightRaysColliders[i].base.atFlags &= ~AT_HIT;
         }
     }
 
@@ -364,8 +366,8 @@ void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
     if (this->lightRayCharge > 0) {
         this->lightRayCharge--;
 
-        for (i = 0; i < ARRAY_COUNT(this->colliderQuad); i++) {
-            CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderQuad[i].base);
+        for (i = 0; i < ARRAY_COUNT(this->lightRaysColliders); i++) {
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->lightRaysColliders[i].base);
         }
 
     } else {
@@ -394,7 +396,7 @@ void BgIkanaMirror_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, this->lightAbsorptionTexScroll);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->lightAbsorptionAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightEmissionDL);
+        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightAbsorptionDL);
     }
 
     if (this->lightEmissionAlpha > 0) {
@@ -406,7 +408,7 @@ void BgIkanaMirror_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, primColorAlpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 215, 215, 255, envColorAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightAbsorptionDL);
+        gSPDisplayList(POLY_XLU_DISP++, gStoneTowerTempleMirrorLightEmissionDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
