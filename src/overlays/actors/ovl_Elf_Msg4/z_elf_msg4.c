@@ -109,7 +109,7 @@ s32 func_80AFD5E0(ElfMsg4* this) {
 }
 
 void func_80AFD668(ElfMsg4* this, PlayState* play) {
-    Player* player = (Player*)play->actorCtx.actorLists[ACTORCAT_PLAYER].first;
+    Player* player = GET_PLAYER(play);
     EnElf* tatl = (EnElf*)player->tatlActor;
 
     if ((player->tatlActor != NULL) && func_80AFD5E0(this)) {
