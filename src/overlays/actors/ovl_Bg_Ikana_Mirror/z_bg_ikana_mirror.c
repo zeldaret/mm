@@ -280,7 +280,8 @@ void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
 }
 
 /**
- * Charges the mirror with light, increment the alpha value for the light absorption textures and decrement the alpha value for the light emission textures.
+ * Charges the mirror with light, increment the alpha value for the light absorption textures and decrement the alpha
+ * value for the light emission textures.
  */
 void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     s8 isEmittingLight;
