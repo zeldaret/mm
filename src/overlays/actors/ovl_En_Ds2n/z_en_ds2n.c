@@ -38,7 +38,7 @@ static AnimationInfo sAnimations[] = {
 
 static Vec3f sZeroVec = { 0, 0, 0 };
 
-static TexturePtr sEyeTextures[] = { &gDs2nEyeOpenTex, &gDs2nEyeHalfTex, &gDs2nEyeClosedTex };
+static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
