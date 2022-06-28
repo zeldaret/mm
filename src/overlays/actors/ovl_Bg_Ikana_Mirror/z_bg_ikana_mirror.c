@@ -279,13 +279,8 @@ void BgIkanaMirror_SetupWait(BgIkanaMirror* this) {
     this->actionFunc = BgIkanaMirror_Wait;
 }
 
-/*
- * BgIkanaMirror_Wait is used to charge the mirror with light, increment the alpha value for the light absorption
- * textures and decrement the alpha value for the light emission textures.
- *
- * By not directly setting the alpha values to 255 or 0, the transition from emitting light to
- * absorbing it is visually smoother. Loading the proper display lists for absorption or emission of light is taken care
- * of by BgIkanaMirror_Draw.
+/**
+ * Charges the mirror with light, increment the alpha value for the light absorption textures and decrement the alpha value for the light emission textures.
  */
 void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     s8 isEmittingLight;
