@@ -14,13 +14,13 @@ typedef void (*EnSshActionFunc)(struct EnSsh*, PlayState*);
 #define SSH_STATE_FATHER (1 << 5)
 
 typedef enum {
-    /* 0 */ SSH_ANIM_UNK0, // Unused animation. Possibly being knocked back?
-    /* 1 */ SSH_ANIM_UP,
-    /* 2 */ SSH_ANIM_WAIT,
-    /* 3 */ SSH_ANIM_LAND,
-    /* 4 */ SSH_ANIM_DROP,
-    /* 5 */ SSH_ANIM_UNK5, // Slower version of ANIM_DROP
-    /* 6 */ SSH_ANIM_UNK6  // Faster repeating version of ANIM_UNK0
+    /* 0x0 */ SSH_ANIM_UNK0, // Unused animation. Possibly being knocked back?
+    /* 0x1 */ SSH_ANIM_UP,
+    /* 0x2 */ SSH_ANIM_WAIT,
+    /* 0x3 */ SSH_ANIM_LAND,
+    /* 0x4 */ SSH_ANIM_DROP,
+    /* 0x5 */ SSH_ANIM_UNK5, // Slower version of ANIM_DROP
+    /* 0x6 */ SSH_ANIM_UNK6  // Faster repeating version of ANIM_UNK0
 } EnSshAnimation;
 
 #define ENSSH_IS_CHILD(thisx) ((thisx)->params & 0xF)
