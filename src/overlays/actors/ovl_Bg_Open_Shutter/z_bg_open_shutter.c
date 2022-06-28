@@ -21,9 +21,9 @@ void func_80ACAE5C(BgOpenShutter* this, PlayState* play);
 void func_80ACAEF0(BgOpenShutter* this, PlayState* play);
 
 typedef enum {
-    /* 0x1 */ DOOR_OPEN = 1,
-    /* 0x2 */ DOOR_CLOSED = 2,
-} DoorState;
+    /* 0x1 */ BGOPENSHUTTER_DOOR_OPEN = 1,
+    /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED = 2,
+} BGOpenShutterDoorState;
 
 const ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
@@ -45,13 +45,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 f32 func_80ACAB10(PlayState* play, Actor* actor, f32 arg2, f32 arg3, f32 arg4) {
-    Player* actorPos = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     Vec3f point;
     Vec3f offset;
 
-    point.x = actorPos->actor.world.pos.x;
-    point.y = actorPos->actor.world.pos.y + arg2;
-    point.z = actorPos->actor.world.pos.z;
+    point.x = player->actor.world.pos.x;
+    point.y = player->actor.world.pos.y + arg2;
+    point.z = player->actor.world.pos.z;
 
     Actor_OffsetOfPointInActorCoords(actor, &offset, &point);
     if ((arg3 < fabsf(offset.x)) || (arg4 < fabsf(offset.y))) {
@@ -96,7 +96,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
-    s32 params = (u16)BGOPENSHUTTER_GET_A(thisx);
+    s32 params = BGOPENSHUTTER_GET_A(thisx);
     BgOpenShutter* this = THIS;
 
     play->doorCtx.transitionActorList[params].id = -play->doorCtx.transitionActorList[params].id;
@@ -108,6 +108,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
 
     if (this->unk_15C != 0) {
         Player* player = GET_PLAYER(play);
+
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
         func_800DFFAC(play->cameraPtrs[0], &this->dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
         this->unk_164 = 0;
@@ -115,6 +116,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
         this->dyna.actor.velocity.y = 0.0f;
     } else {
         Player* player = GET_PLAYER(play);
+
         quake = func_80ACABA8(this, play);
         if (quake > 0) {
             player->doorType = 2;
@@ -163,14 +165,14 @@ void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
 
     if (Cutscene_CheckActorAction(play, 0x7C)) {
         index = Cutscene_GetActorActionIndex(play, 0x7C);
-        if (play->csCtx.actorActions[index]->action == DOOR_OPEN) {
+        if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_OPEN) {
             if (this->actionFunc == func_80ACAD88) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
                 this->actionFunc = func_80ACAE5C;
                 this->dyna.actor.velocity.y = 0.0f;
             }
             this->unk_164 = 0;
-        } else if (play->csCtx.actorActions[index]->action == DOOR_CLOSED) {
+        } else if (play->csCtx.actorActions[index]->action == BGOPENSHUTTER_DOOR_CLOSED) {
             if (this->actionFunc == func_80ACAE5C) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_CLOSE);
                 this->actionFunc = func_80ACAEF0;

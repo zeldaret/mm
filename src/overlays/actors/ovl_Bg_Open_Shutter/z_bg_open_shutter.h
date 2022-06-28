@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define BGOPENSHUTTER_GET_A(thisx) ((thisx)->params) >> 0xA
+#define BGOPENSHUTTER_GET_A(thisx) ((u16)((thisx)->params) >> 0xA)
 
 struct BgOpenShutter;
 
