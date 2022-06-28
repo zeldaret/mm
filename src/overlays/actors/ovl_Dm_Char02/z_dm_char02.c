@@ -32,10 +32,10 @@ const ActorInit Dm_Char02_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_stk2_Anim_00A2BC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_00A4C4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_00A6D4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00A104, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk2_Anim_00A2BC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00A4C4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00A6D4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00A104, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 void DmChar02_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 index) {
@@ -54,12 +54,12 @@ void DmChar02_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInf
 
 void func_80AAAECC(Actor* actor, PlayState* play) {
     switch (play->csCtx.frames) {
-        case 0x5F:
+        case 95:
             Actor_PlaySfxAtPos(actor, NA_SE_EV_OCARINA_BOUND_0);
             return;
-        case 0x65:
-        case 0x69:
-        case 0x70:
+        case 101:
+        case 105:
+        case 112:
             Actor_PlaySfxAtPos(actor, NA_SE_EV_OCARINA_BOUND_1);
             return;
     }
@@ -82,7 +82,6 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         DmChar02_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = func_80AAB04C;
-        return;
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -92,10 +91,9 @@ void DmChar02_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAB04C(DmChar02* this, PlayState* play) {
-    u8 sp2F;
+    u8 sp2F = true;
     s32 actionIndex;
 
-    sp2F = true;
     if (Cutscene_CheckActorAction(play, 0x83)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 0x83);
         if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
