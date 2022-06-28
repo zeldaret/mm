@@ -93,7 +93,7 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if (this->actor.colChkInfo.health & 1 && (this->unk_1B6 == 0)) {
+    if (OBJLUPYGAMELIFT_HEALTH_1(&this->actor) && (this->unk_1B6 == 0)) {
         if (this->unk_1AC < 0xA0) {
             this->unk_1AC += 0x28;
         } else {
