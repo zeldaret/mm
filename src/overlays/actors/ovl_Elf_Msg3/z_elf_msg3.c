@@ -35,14 +35,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ElfMsg3_SetupAction(ElfMsg3* this, ElfMsg3ActionFunc actionFunc) {
-    (void)"共倒れ"; // "Collapse together"
-    (void)"共倒れ";
     this->actionFunc = actionFunc;
 }
 
 s32 func_80A2CD1C(ElfMsg3* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+        (void)"共倒れ"; // "Collapse together"
         if (ELFMSG3_GET_SWITCH(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor));
         }
@@ -62,6 +61,7 @@ s32 func_80A2CD1C(ElfMsg3* this, PlayState* play) {
         return false;
     }
     if (Flags_GetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor))) {
+        (void)"共倒れ"; // "Collapse together"
         Actor_MarkForDeath(&this->actor);
         return true;
     }
@@ -70,17 +70,14 @@ s32 func_80A2CD1C(ElfMsg3* this, PlayState* play) {
 
 void ElfMsg3_Init(Actor* thisx, PlayState* play) {
     ElfMsg3* this = THIS;
-    s32 baseRange;
 
-    if (func_80A2CD1C(this, play) == 0) {
+    if (!func_80A2CD1C(this, play)) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
         if (ABS_ALT(this->actor.home.rot.x) == 0) {
             this->actor.scale.z = 0.4f;
             this->actor.scale.x = 0.4f;
         } else {
-            baseRange = ABS_ALT(this->actor.home.rot.x);
-            this->actor.scale.z = baseRange * 0.04f;
-            this->actor.scale.x = baseRange * 0.04f;
+            this->actor.scale.x = this->actor.scale.z = ABS_ALT(this->actor.home.rot.x) * 0.04f;
         }
         if (this->actor.home.rot.z == 0) {
             this->actor.scale.y = 0.4f;
@@ -97,9 +94,9 @@ void ElfMsg3_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_80A2CF50(ElfMsg3* this) {
     if (ELFMSG3_GET_8000(&this->actor) != 0) {
-        return (ELFMSG3_GET_FF(&this->actor)) + 0x200;
+        return ELFMSG3_GET_FF(&this->actor) + 0x200;
     } else {
-        return -0x200 - (ELFMSG3_GET_FF(&this->actor));
+        return -0x200 - ELFMSG3_GET_FF(&this->actor);
     }
 }
 
@@ -135,7 +132,7 @@ void func_80A2CF7C(ElfMsg3* this, PlayState* play) {
 void ElfMsg3_Update(Actor* thisx, PlayState* play) {
     ElfMsg3* this = THIS;
 
-    if (func_80A2CD1C(this, play) == 0) {
+    if (!func_80A2CD1C(this, play)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             if (ELFMSG3_GET_SWITCH(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(thisx));
