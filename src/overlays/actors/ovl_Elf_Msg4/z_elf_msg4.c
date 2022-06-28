@@ -134,17 +134,16 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
 }
 
 void func_80AFD770(ElfMsg4* this, PlayState* play) {
-    ElfMsg4* actorPtr = (ElfMsg4*)play->actorCtx.actorLists[ACTORCAT_BG].first;
+    Actor* actorPtr = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (actorPtr != NULL) {
-        if ((actorPtr->actor.id != ACTOR_ELF_MSG5) ||
-            (ELFMSG4_GET_FF(&this->actor) != (actorPtr->actor.params & 0xFF)) ||
-            (this->actor.cutscene != actorPtr->actor.cutscene)) {
-            actorPtr = (ElfMsg4*)actorPtr->actor.next;
+        if ((actorPtr->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != (actorPtr->params & 0xFF)) ||
+            (this->actor.cutscene != actorPtr->cutscene)) {
+            actorPtr = actorPtr->next;
         } else {
-            this->unk_144 = (Actor*)actorPtr;
+            this->unk_144 = actorPtr;
             this->actionFunc = func_80AFD668;
-            actorPtr = (ElfMsg4*)actorPtr->actor.next;
+            actorPtr = actorPtr->next;
         }
     }
 }
