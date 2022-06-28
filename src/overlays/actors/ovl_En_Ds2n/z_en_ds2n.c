@@ -105,7 +105,7 @@ void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     EnDs2n* this = THIS;
     Vec3f focusOffset = sZeroVec;
 
-    if ((limbIndex == DS2N_LIMB_01) || (limbIndex == DS2N_LIMB_0C) || (limbIndex == DS2N_LIMB_0F)) {
+    if ((limbIndex == DS2N_LIMB_HIPS) || (limbIndex == DS2N_LIMB_LEFT_UPPER_ARM) || (limbIndex == DS2N_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 0xC8;
         rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 0xC8;
     }
