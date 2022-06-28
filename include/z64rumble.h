@@ -21,7 +21,7 @@ typedef struct RumbleManager {
     /* 0x104 */ u8 state;
     /* 0x105 */ u8 updateEnabled; // boolean value which controls if the Update function should be run. Unlike RUMBLEMANAGER_STATE_WIPE, disabling this does not wipe the state of the requests
     /* 0x106 */ u16 rumblingDuration; // amount of "ticks" updates the Rumble Pak has been rumbling without pause. It is restarted after 5 ticks of not rumbling
-    /* 0x108 */ u16 downTime; // small counter/timer used to restart rumblingDuration?
+    /* 0x108 */ u16 downTime; // small counter/timer used to restart rumblingDuration
     /* 0x10A */ u8 overrideIntensity; // "override" counterpart for requestIntensities
     /* 0x10B */ u8 overrideDecayTimer;
     /* 0x10C */ u8 overrideDecayStep;
