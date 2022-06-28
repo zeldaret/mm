@@ -12,7 +12,7 @@ typedef void (*EnMushi2ActionFunc)(struct EnMushi2*, PlayState*);
 typedef struct {
     /* 0x0 */ s16 unk_00;
     /* 0x2 */ s16 unk_02;
-} EnMushi2Struct;
+} EnMushi2Struct; // size = 0x4
 
 typedef struct EnMushi2 {
     /* 0x000 */ Actor actor;
