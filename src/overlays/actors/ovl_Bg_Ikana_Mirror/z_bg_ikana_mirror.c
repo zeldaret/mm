@@ -286,7 +286,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
     s8 isEmittingLight;
     s32 startEmittingLight = false;
 
-    // The light emission texture should gradually disappear from sight.
+    // The light emission texture gradually fades.
     if (this->lightEmissionAlpha > 100) {
         this->lightEmissionAlpha -= 100;
     } else {
