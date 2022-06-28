@@ -1,6 +1,7 @@
 ﻿<Root>
+    <!-- Trees and the ground of the Lost woods (DmOpstage actor) -->
+    <!-- (DmRavine) uses it as an object, but does not draw or use any of its assets as far as I can tell -->
     <File Name="object_keikoku_demo" Segment="6">
-        <!-- Trees and the ground of the Lost woods (DmOpstage actor) -->
         <!-- the following textures have duplicates in Z2_LOSTWOODS scene:  -->
         <!--   gKeikokuDemoYellowFlowersOnGrassTex, gKeikokuDemoFallLeavesOnGrassTex, unused: gKeikokuDemoWrinkledBarkTex -->
 
