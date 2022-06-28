@@ -5,7 +5,7 @@
 
 struct EnTsn;
 
-typedef void (*EnTsnActionFunc)(struct EnTsn*, GlobalContext*);
+typedef void (*EnTsnActionFunc)(struct EnTsn*, PlayState*);
 
 #define ENTSN_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENTSN_GET_100(thisx) ((thisx)->params & 0x100)

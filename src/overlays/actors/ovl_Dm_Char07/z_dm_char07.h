@@ -5,7 +5,7 @@
 
 struct DmChar07;
 
-typedef void (*DmChar07ActionFunc)(struct DmChar07*, GlobalContext*);
+typedef void (*DmChar07ActionFunc)(struct DmChar07*, PlayState*);
 
 #define DMCHAR07_GET_SPOTLIGHTFLAGS(thisx) (((thisx)->params >> 8) & 0x1F)
 #define DMCHAR07_GET_TYPE(thisx) ((thisx)->params & 0xFF)

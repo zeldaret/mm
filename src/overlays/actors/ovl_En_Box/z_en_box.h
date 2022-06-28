@@ -7,8 +7,8 @@
 struct EnBox;
 struct func_80867BDC_a0;
 
-typedef void (*EnBoxActionFunc)(struct EnBox*, GlobalContext*);
-typedef void (*EnBoxUnkFunc)(struct func_80867BDC_a0* arg0, GlobalContext* globalCtx);
+typedef void (*EnBoxActionFunc)(struct EnBox*, PlayState*);
+typedef void (*EnBoxUnkFunc)(struct func_80867BDC_a0* arg0, PlayState* play);
 
 typedef struct func_80867BDC_a0 {
     /* 0x00 */ Vec3f pos;

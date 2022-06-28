@@ -6,7 +6,7 @@
 
 struct EnDekunuts;
 
-typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, GlobalContext*);
+typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, PlayState*);
 
 #define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
 

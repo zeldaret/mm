@@ -5,7 +5,7 @@
 
 struct DoorShutter;
 
-typedef void (*DoorShutterActionFunc)(struct DoorShutter*, GlobalContext*);
+typedef void (*DoorShutterActionFunc)(struct DoorShutter*, PlayState*);
 
 #define DOORSHUTTER_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define DOORSHUTTER_GET_7F(thisx) ((thisx)->params & 0x7F)

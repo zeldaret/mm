@@ -6,7 +6,7 @@
 struct EnKusa2;
 struct EnKusa2UnkBssSubStruct;
 
-typedef void (*EnKusa2ActionFunc)(struct EnKusa2*, GlobalContext*);
+typedef void (*EnKusa2ActionFunc)(struct EnKusa2*, PlayState*);
 typedef void (*EnKusa2BssFunc)(struct EnKusa2UnkBssSubStruct*);
 
 #define ENKUSA2_GET_1(thisx) (((thisx)->params) & 1)

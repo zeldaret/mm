@@ -5,7 +5,7 @@
 
 struct EnSnowwd;
 
-typedef void (*EnSnowwdActionFunc)(struct EnSnowwd*, GlobalContext*);
+typedef void (*EnSnowwdActionFunc)(struct EnSnowwd*, PlayState*);
 
 typedef struct EnSnowwd {
     /* 0x0000 */ Actor actor;

@@ -36,7 +36,7 @@ struct ObjChan;
 
 
 
-typedef void (*ObjChanActionFunc)(struct ObjChan*, GlobalContext*);
+typedef void (*ObjChanActionFunc)(struct ObjChan*, PlayState*);
 
 typedef struct ObjChan {
     /* 0x0000 */ Actor actor;

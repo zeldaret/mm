@@ -10,13 +10,13 @@
 
 #define THIS ((EnBjt*)thisx)
 
-void EnBjt_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBjt_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBjt_Init(Actor* thisx, PlayState* play);
+void EnBjt_Destroy(Actor* thisx, PlayState* play);
+void EnBjt_Update(Actor* thisx, PlayState* play);
+void EnBjt_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx);
-void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx);
+void func_80BFDA48(EnBjt* this, PlayState* play);
+void func_80BFDAE8(EnBjt* this, PlayState* play);
 
 #if 0
 const ActorInit En_Bjt_InitVars = {

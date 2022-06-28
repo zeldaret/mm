@@ -5,7 +5,7 @@
 
 struct ObjRaillift;
 
-typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, GlobalContext*);
+typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, PlayState*);
 
 #define OBJRAILLIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
 #define OBJRAILLIFT_HAS_FLAG(thisx) (((thisx)->params >> 0xD) & 1)

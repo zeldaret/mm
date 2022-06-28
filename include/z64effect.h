@@ -8,7 +8,7 @@
 #include "unk.h"
 
 struct GraphicsContext;
-struct GlobalContext;
+struct PlayState;
 
 #define SPARK_COUNT 3
 #define BLURE_COUNT 25
@@ -199,7 +199,7 @@ typedef struct {
 } EffectTireMark; // size = 0x60C
 
 typedef struct {
-    /* 0x0000 */ struct GlobalContext* globalCtx;
+    /* 0x0000 */ struct PlayState* play;
     struct {
         EffectStatus status;
         EffectSpark effect;
@@ -238,9 +238,9 @@ typedef enum {
 
 struct EffectSs;
 
-typedef u32 (*EffectSsInitFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* effectSs, void* initParams);
-typedef void(*EffectSsUpdateFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
-typedef void(*EffectSsDrawFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
+typedef u32 (*EffectSsInitFunc)(struct PlayState* play, u32 index, struct EffectSs* effectSs, void* initParams);
+typedef void(*EffectSsUpdateFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
+typedef void(*EffectSsDrawFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 
 typedef struct {
     /* 0x00 */ u32 type;
