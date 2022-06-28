@@ -46,8 +46,6 @@
         <Texture Name="gDs2nMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="16" Offset="0x6218" TlutOffset="0x3CD8" />
 
         <!-- This blob is not fully mapped  <Blob Name="gDs2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
-        <!-- z64Utils thinks this might be an animation, but crashes on viewing. Unused. -->
-        <!-- <Animation Name="gDs2nBrokenAnim" Offset="0x6434" /> -->
 
         <!-- Unused and referenced. Exact copies of the above used textures. -->
         <Texture Name="gDs2nFingers2Tex" OutName="fingers2" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x3ED8" />
