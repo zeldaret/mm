@@ -13,7 +13,7 @@ typedef void (*ElfMsg4ActionFunc)(struct ElfMsg4*, PlayState*);
 
 typedef struct ElfMsg4 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s32 unk_144;
+    /* 0x144 */ Actor* unk_144;
     /* 0x148 */ ElfMsg4ActionFunc actionFunc;
 } ElfMsg4; // size = 0x14C
 

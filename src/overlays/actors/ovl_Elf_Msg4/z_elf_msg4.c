@@ -39,10 +39,9 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
-    (void)"共倒れ";
-    (void)"共倒れ";
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+        (void)"共倒れ"; // "Collapse together"
         if (ELFMSG4_GET_7F00(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG4_GET_7F00(&this->actor));
         }
@@ -62,6 +61,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
         return false;
     }
     if (Flags_GetSwitch(play, ELFMSG4_GET_7F00(&this->actor)) != 0) {
+        (void)"共倒れ"; // "Collapse together"
         Actor_MarkForDeath(&this->actor);
         return true;
     }
@@ -71,7 +71,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
 void ElfMsg4_Init(Actor* thisx, PlayState* play) {
     ElfMsg4* this = THIS;
 
-    if (func_80AFD380(this, play) == 0) {
+    if (!func_80AFD380(this, play)) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
 
         if (ABS_ALT(this->actor.home.rot.x) == 0) {
@@ -87,7 +87,7 @@ void ElfMsg4_Init(Actor* thisx, PlayState* play) {
         }
         this->actor.shape.rot.z = 0;
         this->actionFunc = func_80AFD770;
-        this->unk_144 = 0;
+        this->unk_144 = NULL;
         this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z;
     }
 }
@@ -112,7 +112,7 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
     Player* player = (Player*)play->actorCtx.actorLists[ACTORCAT_PLAYER].first;
     EnElf* tatl = (EnElf*)player->tatlActor;
 
-    if ((player->tatlActor != NULL) && (func_80AFD5E0(this))) {
+    if ((player->tatlActor != NULL) && func_80AFD5E0(this)) {
         player->tatlTextId = func_80AFD5B4(this);
         ActorCutscene_SetIntentToPlay(0x7C);
         tatl->elfMsg = this->unk_144;
@@ -134,16 +134,17 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
 }
 
 void func_80AFD770(ElfMsg4* this, PlayState* play) {
-    Actor* actorPtr = play->actorCtx.actorLists[ACTORCAT_BG].first;
+    ElfMsg4* actorPtr = (ElfMsg4*)play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (actorPtr != NULL) {
-        if ((actorPtr->id != 0x1D8) || (ELFMSG4_GET_FF(&this->actor) != (actorPtr->params & 0xFF)) ||
-            (this->actor.cutscene != actorPtr->cutscene)) {
-            actorPtr = actorPtr->next;
+        if ((actorPtr->actor.id != ACTOR_ELF_MSG5) ||
+            (ELFMSG4_GET_FF(&this->actor) != (actorPtr->actor.params & 0xFF)) ||
+            (this->actor.cutscene != actorPtr->actor.cutscene)) {
+            actorPtr = (ElfMsg4*)actorPtr->actor.next;
         } else {
-            this->unk_144 = actorPtr;
+            this->unk_144 = (Actor*)actorPtr;
             this->actionFunc = func_80AFD668;
-            actorPtr = actorPtr->next;
+            actorPtr = (ElfMsg4*)actorPtr->actor.next;
         }
     }
 }
@@ -152,11 +153,11 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
     Actor* actorPtr;
     ElfMsg4* this = THIS;
 
-    if (func_80AFD380(this, play) == 0) {
+    if (!func_80AFD380(this, play)) {
         actorPtr = this->unk_144;
-        if ((actorPtr != 0) && (actorPtr->update == 0)) {
+        if ((actorPtr != NULL) && (actorPtr->update == NULL)) {
             Actor_MarkForDeath(&this->actor);
-        } else if ((actorPtr != 0) && (Actor_ProcessTalkRequest(actorPtr, &play->state))) {
+        } else if ((actorPtr != NULL) && (Actor_ProcessTalkRequest(actorPtr, &play->state))) {
             if (ELFMSG4_GET_7F00(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG4_GET_7F00(thisx));
             }
