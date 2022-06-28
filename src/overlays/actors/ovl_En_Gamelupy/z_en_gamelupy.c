@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-static void* sRupeeTex[] = {
+static TexturePtr sRupeeTex[] = {
     gameplay_keep_Tex_061FC0, gameplay_keep_Tex_061FE0, gameplay_keep_Tex_062000,
     gameplay_keep_Tex_062040, gameplay_keep_Tex_062020,
 };
