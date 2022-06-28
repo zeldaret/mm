@@ -9,7 +9,7 @@ struct EnDs2n;
 typedef void (*EnDs2nActionFunc)(struct EnDs2n*, PlayState*);
 
 typedef struct EnDs2n {
-    /* 0x0000 */ Actor actor;
+    /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider; // unused
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnDs2nActionFunc actionFunc;
