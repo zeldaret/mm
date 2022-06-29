@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bom.h"
+#include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -338,7 +339,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     if (this->collider2.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];

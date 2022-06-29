@@ -6,8 +6,8 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
+#include "z64rumble.h"
 #include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -519,7 +519,7 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
+                Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
                 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
@@ -540,9 +540,9 @@ void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
     s16 quake;
 
-    func_8013ECE0(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
-                                           this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
-                  255, 20, 150);
+    Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
+                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
+                   255, 20, 150);
     quake = Quake_Add(activeCam, 3);
     Quake_SetSpeed(quake, 17232);
     Quake_SetQuakeValues(quake, 6, 0, 0, 0);
