@@ -110,7 +110,7 @@ typedef enum {
     /* 0x24 */ CAM_SET_CIRCLE2, // Looking at far-away NPCs eg. Garo in Road to Ikana, Hungry Goron, Tingle
     /* 0x25 */ CAM_SET_CIRCLE3, // Used in curiosity shop, goron racetrack, final room in Sakon's hideout, other places
     /* 0x26 */ CAM_SET_CIRCLE4, // Used during the races on the doggy racetrack
-    /* 0x27 */ CAM_SET_FIXED3, // Used in Stock Pot Inn Toilet (???) and Tatl cutscene after woodfall "FIXED3"
+    /* 0x27 */ CAM_SET_FIXED3, // Used in Stock Pot Inn Toilet and Tatl cutscene after woodfall "FIXED3"
     /* 0x28 */ CAM_SET_TOWER_ASCENT, // Various climbing structures (Snowhead climb to the temple entrance) "TOWER0"
     /* 0x29 */ CAM_SET_PARALLEL0, // Unknown
     /* 0x2A */ CAM_SET_NORMALD, // Unknown, set with camDataId = -20
@@ -127,7 +127,7 @@ typedef enum {
     /* 0x35 */ CAM_SET_CIRCLE6, // Used in select regions from Ikana
     /* 0x36 */ CAM_SET_CIRCLE7, // Unknown
     /* 0x37 */ CAM_SET_MINI_BOSS, // Used during the various minibosses of the "CHUBOSS"
-    /* 0x38 */ CAM_SET_RFIXED1, // Talking to Koume stuck on the floor in woods of mystery
+    /* 0x38 */ CAM_SET_RFIXED1, // Various cutscenes, zooms into npcs face
     /* 0x39 */ CAM_SET_TREASURE_CHEST_MINIGAME, // Treasure Chest Shop in East Clock Town, minigame location "TRESURE1"
     /* 0x3A */ CAM_SET_HONEY_AND_DARLING_1, // Honey and Darling Minigames "BOMBBASKET"
     /* 0x3B */ CAM_SET_CIRCLE8, // Used by Stone Tower moving platforms, Falling eggs in Marine Lab, Bugs into soilpatch cutscene
@@ -150,7 +150,7 @@ typedef enum {
     /* 0x4C */ CAM_SET_CIRCLEA, // Unknown, Circle 10
     /* 0x4D */ CAM_SET_WHIRLPOOL, // Great Bay Temple Central Room Whirlpool
     /* 0x4E */ CAM_SET_CUCCO_SHACK, // "KOKKOGAME"
-    /* 0x4F */ CAM_SET_GIANT, // "Giants Mask in Twinmold's Lair"
+    /* 0x4F */ CAM_SET_GIANT, // Giants Mask in Twinmold's Lair
     /* 0x50 */ CAM_SET_SCENE0, // Entering doors to a new scene
     /* 0x51 */ CAM_SET_ROOM1, // Certain rooms eg. some rooms in Stock Pot Inn
     /* 0x52 */ CAM_SET_WATER2, // Swimming as Zora in Great Bay Temple
