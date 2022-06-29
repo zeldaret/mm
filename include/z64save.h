@@ -257,7 +257,7 @@ typedef struct SaveContext {
     /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 unk_48C8;                          // "scene_id_mix"
+    /* 0x48C8 */ u16 dungeonIndex;                          // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[27];                    // "mask_mask_bit", masks given away on the Moon
 } SaveContext; // size = 0x48C8
 
@@ -272,6 +272,13 @@ typedef enum SunsSongState {
     /* 2 */ SUNSSONG_SPEED_TIME, // suns was played where time passes, speed up the advancement of time
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
+
+typedef enum DungeonIndex {
+    /* 0 */ DUNGEON_INDEX_WOODFALL,
+    /* 1 */ DUNGEON_INDEX_SNOWHEAD,
+    /* 2 */ DUNGEON_INDEX_GREAT_BAY,
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER,
+} DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);

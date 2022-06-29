@@ -617,6 +617,7 @@ wordReplace = {
     "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",

@@ -106,10 +106,10 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
     }
 
     if (Map_IsInDungeonOrBossArea(play)) {
-        this->area = gSaveContext.unk_48C8 + 1;
+        this->area = gSaveContext.dungeonIndex + STRAY_FAIRY_AREA_WOODFALL;
     } else {
         // Needs to be thisx in order to match
-        this->area = STRAY_FAIRY_GET_PARAM_1C0(thisx) >> 6;
+        this->area = STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx);
     }
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
@@ -463,9 +463,9 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
             }
 
             if (Map_IsInDungeonOrBossArea(play)) {
-                gSaveContext.save.inventory.strayFairies[gSaveContext.unk_48C8]++;
+                gSaveContext.save.inventory.strayFairies[gSaveContext.dungeonIndex]++;
                 Message_StartTextbox(play, 0x11, NULL);
-                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
+                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= 15) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }

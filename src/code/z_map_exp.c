@@ -1,33 +1,18 @@
 #include "global.h"
 
-static s16 sPlayerInitialPosX = 0;
-static s16 sPlayerInitialPosZ = 0;
-static s16 sPlayerInitialDirection = 0;
+s16 sPlayerInitialPosX = 0;
+s16 sPlayerInitialPosZ = 0;
+s16 sPlayerInitialDirection = 0;
 
-static s32 sDungeonAndBossScenes[] = {
+s32 sDungeonAndBossScenes[] = {
     SCENE_MITURIN,    SCENE_HAKUGIN,    SCENE_SEA,    SCENE_INISIE_N,  SCENE_INISIE_R,
     SCENE_MITURIN_BS, SCENE_HAKUGIN_BS, SCENE_SEA_BS, SCENE_INISIE_BS,
 };
 
-static s32 sDungeonScenes[] = {
-    SCENE_MITURIN, SCENE_HAKUGIN, SCENE_SEA, SCENE_INISIE_N, SCENE_INISIE_R,
-};
-
-static s32 sBossScenes[] = {
-    SCENE_MITURIN_BS,
-    SCENE_HAKUGIN_BS,
-    SCENE_SEA_BS,
-    SCENE_INISIE_BS,
-};
-
-static s32 D_801BF5A4[] = {
-    SCENE_22DEKUCITY,
-    SCENE_KOEPONARACE,
-    SCENE_F01,
-};
-
-static s16 sLastRoomNum = 99;
-
+/**
+ * If the current scene is a dungeon or boss scene, this function returns an index
+ * indicating which one it is. Otherwise, it returns -1.
+ */
 s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     s32 i;
 
@@ -40,6 +25,9 @@ s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     return -1;
 }
 
+/**
+ * Returns true if the current scene is a dungeon or boss scene, false otherwise.
+ */
 s32 Map_IsInDungeonOrBossArea(PlayState* play) {
     if (Map_GetDungeonOrBossAreaIndex(play) == -1) {
         return false;
@@ -56,6 +44,14 @@ s32 func_8010A0A4(PlayState* play) {
     return true;
 }
 
+s32 sDungeonScenes[] = {
+    SCENE_MITURIN, SCENE_HAKUGIN, SCENE_SEA, SCENE_INISIE_N, SCENE_INISIE_R,
+};
+
+/**
+ * If the current scene is a dungeon scene, this function returns an index
+ * indicating which one it is. Otherwise, it returns -1.
+ */
 s32 Map_GetDungeonAreaIndex(PlayState* play) {
     s32 i;
 
@@ -68,6 +64,9 @@ s32 Map_GetDungeonAreaIndex(PlayState* play) {
     return -1;
 }
 
+/**
+ * Returns true if the current scene is a dungeon scene, false otherwise.
+ */
 s32 Map_IsInDungeonArea(PlayState* play) {
     if (Map_GetDungeonAreaIndex(play) == -1) {
         return false;
@@ -76,6 +75,17 @@ s32 Map_IsInDungeonArea(PlayState* play) {
     return true;
 }
 
+s32 sBossScenes[] = {
+    SCENE_MITURIN_BS,
+    SCENE_HAKUGIN_BS,
+    SCENE_SEA_BS,
+    SCENE_INISIE_BS,
+};
+
+/**
+ * If the current scene is a boss scene, this function returns an index
+ * indicating which one it is. Otherwise, it returns -1.
+ */
 s32 Map_GetBossAreaIndex(PlayState* play) {
     s32 i;
 
@@ -88,6 +98,9 @@ s32 Map_GetBossAreaIndex(PlayState* play) {
     return -1;
 }
 
+/**
+ * Returns true if the current scene is a boss scene, false otherwise.
+ */
 s32 Map_IsInBossArea(PlayState* play) {
     if (Map_GetBossAreaIndex(play) == -1) {
         return false;
@@ -95,6 +108,12 @@ s32 Map_IsInBossArea(PlayState* play) {
 
     return true;
 }
+
+s32 D_801BF5A4[] = {
+    SCENE_22DEKUCITY,
+    SCENE_KOEPONARACE,
+    SCENE_F01,
+};
 
 s32 func_8010A238(PlayState* play) {
     s32 i;
@@ -121,7 +140,7 @@ void Map_SavePlayerInitialInfo(PlayState* play) {
 
     sPlayerInitialPosX = player->actor.world.pos.x;
     sPlayerInitialPosZ = player->actor.world.pos.z;
-    sPlayerInitialDirection = ((0x7FFF - player->actor.shape.rot.y) / 0x400);
+    sPlayerInitialDirection = (0x7FFF - player->actor.shape.rot.y) / 0x400;
 }
 
 void Map_InitRoomData(PlayState* play, s16 room) {
@@ -169,20 +188,20 @@ void Map_Init(PlayState* play) {
         gSaveContext.mapIndex = dungeonIndex;
         switch (play->sceneNum) {
             case SCENE_MITURIN_BS:
-                dungeonIndex = 0;
+                dungeonIndex = DUNGEON_INDEX_WOODFALL;
                 break;
             case SCENE_HAKUGIN_BS:
-                dungeonIndex = 1;
+                dungeonIndex = DUNGEON_INDEX_SNOWHEAD;
                 break;
             case SCENE_SEA_BS:
-                dungeonIndex = 2;
+                dungeonIndex = DUNGEON_INDEX_GREAT_BAY;
                 break;
             case SCENE_INISIE_BS:
-                dungeonIndex = 3;
+                dungeonIndex = DUNGEON_INDEX_STONE_TOWER;
                 break;
         }
 
-        gSaveContext.unk_48C8 = dungeonIndex;
+        gSaveContext.dungeonIndex = dungeonIndex;
         Map_InitRoomData(play, play->roomCtx.currRoom.num);
     }
 }
@@ -190,6 +209,8 @@ void Map_Init(PlayState* play) {
 void Minimap_Draw(PlayState* play) {
     func_80106644(play, sPlayerInitialPosX, sPlayerInitialPosZ, sPlayerInitialDirection);
 }
+
+s16 sLastRoomNum = 99;
 
 void Map_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
