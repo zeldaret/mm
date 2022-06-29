@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -1226,7 +1227,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
     Quake_SetCountdown(this->quake, 15);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     this->timer = 40;
     this->actionFunc = EnPametfrog_SnapperSpawn;
 }
@@ -1236,7 +1237,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
     EnPametfrog_ShakeCamera(this, play, (f32)(this->timer * 7.5f) + 200.0f,
                             ((f32)(this->timer * 2) * (15.0f / 16.0f)) + -20.0f);
     if (this->timer != 0) {
-        func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     } else {
         EnPametfrog_SetupTransitionGekkoSnapper(this, play);
     }
@@ -1249,7 +1250,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play)
     Quake_SetSpeed(this->quake, 20000);
     Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
 }
 

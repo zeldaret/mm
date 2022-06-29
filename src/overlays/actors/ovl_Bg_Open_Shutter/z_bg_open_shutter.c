@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_open_shutter.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
