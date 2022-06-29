@@ -243,30 +243,30 @@ void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
 extern u8 sMaskItemIds[PLAYER_MASK_MAX - 1];
 #if 0
 u8 sMaskItemIds[PLAYER_MASK_MAX - 1] = {
-    ITEM_MASK_TRUTH,
-    ITEM_MASK_KAFEIS_MASK,
-    ITEM_MASK_ALL_NIGHT,
-    ITEM_MASK_BUNNY,
-    ITEM_MASK_KEATON,
-    ITEM_MASK_GARO,
-    ITEM_MASK_ROMANI,
-    ITEM_MASK_CIRCUS_LEADER,
-    ITEM_MASK_POSTMAN,
-    ITEM_MASK_COUPLE,
-    ITEM_MASK_GREAT_FAIRY,
-    ITEM_MASK_GIBDO,
-    ITEM_MASK_DON_GERO,
-    ITEM_MASK_KAMARO,
-    ITEM_MASK_CAPTAIN,
-    ITEM_MASK_STONE,
-    ITEM_MASK_BREMEN,
-    ITEM_MASK_BLAST,
-    ITEM_MASK_SCENTS,
-    ITEM_MASK_GIANT,
-    ITEM_MASK_FIERCE_DEITY,
-    ITEM_MASK_GORON,
-    ITEM_MASK_ZORA,
-    ITEM_MASK_DEKU,
+    ITEM_MASK_TRUTH,         // PLAYER_MASK_TRUTH
+    ITEM_MASK_KAFEIS_MASK,   // PLAYER_MASK_KAFEIS_MASK
+    ITEM_MASK_ALL_NIGHT,     // PLAYER_MASK_ALL_NIGHT
+    ITEM_MASK_BUNNY,         // PLAYER_MASK_BUNNY
+    ITEM_MASK_KEATON,        // PLAYER_MASK_KEATON
+    ITEM_MASK_GARO,          // PLAYER_MASK_GARO
+    ITEM_MASK_ROMANI,        // PLAYER_MASK_ROMANI
+    ITEM_MASK_CIRCUS_LEADER, // PLAYER_MASK_CIRCUS_LEADER
+    ITEM_MASK_POSTMAN,       // PLAYER_MASK_POSTMAN
+    ITEM_MASK_COUPLE,        // PLAYER_MASK_COUPLE
+    ITEM_MASK_GREAT_FAIRY,   // PLAYER_MASK_GREAT_FAIRY
+    ITEM_MASK_GIBDO,         // PLAYER_MASK_GIBDO
+    ITEM_MASK_DON_GERO,      // PLAYER_MASK_DON_GERO
+    ITEM_MASK_KAMARO,        // PLAYER_MASK_KAMARO
+    ITEM_MASK_CAPTAIN,       // PLAYER_MASK_CAPTAIN
+    ITEM_MASK_STONE,         // PLAYER_MASK_STONE
+    ITEM_MASK_BREMEN,        // PLAYER_MASK_BREMEN
+    ITEM_MASK_BLAST,         // PLAYER_MASK_BLAST
+    ITEM_MASK_SCENTS,        // PLAYER_MASK_SCENTS
+    ITEM_MASK_GIANT,         // PLAYER_MASK_GIANT
+    ITEM_MASK_FIERCE_DEITY,  // PLAYER_MASK_FIERCE_DEITY
+    ITEM_MASK_GORON,         // PLAYER_MASK_GORON
+    ITEM_MASK_ZORA,          // PLAYER_MASK_ZORA
+    ITEM_MASK_DEKU,          // PLAYER_MASK_DEKU
 };
 #endif
 
@@ -791,10 +791,10 @@ s32 func_80124148(Player* player) {
 }
 
 s32 Player_ActionToMeleeWeapon(s32 actionParam) {
-    s32 weapon = actionParam - PLAYER_AP_FISHING_POLE;
+    s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI-1);
 
-    if ((weapon > (PLAYER_AP_FISHING_POLE - PLAYER_AP_FISHING_POLE)) &&
-        (weapon <= (PLAYER_AP_ZORA_FINS - PLAYER_AP_FISHING_POLE))) {
+    if ((weapon > 0) &&
+        (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI-1)))) {
         return weapon;
     }
     return 0;
@@ -843,6 +843,7 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
+// Convert actionParam to sword
 s32 func_80124278(Actor* actor, s32 actionParam) {
     s32 sword = 0;
 
@@ -1182,7 +1183,7 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_8012754C(PlayState* play, Player* player) {
+void Player_DrawCouplesMask(PlayState* play, Player* player) {
     gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }

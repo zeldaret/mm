@@ -158,14 +158,14 @@ typedef enum {
     /*  5 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
     /*  6 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
     /*  7 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
-    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targetted one-handed rightwalk slash
-    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targetted two-handed rightwalk slash
-    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targetted one-handed rightwalk slash
-    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targetted two-handed rightwalk slash
-    /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targetted one-handed stab
-    /* 13 */ PLAYER_MWA_STAB_2H,               // Targetted two-handed stab
-    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,         // Third targetted one-handed stab
-    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,         // Third targetted two-handed stab
+    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targeted one-handed rightwalk slash
+    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targeted two-handed rightwalk slash
+    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targeted one-handed rightwalk slash
+    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targeted two-handed rightwalk slash
+    /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targeted one-handed stab
+    /* 13 */ PLAYER_MWA_STAB_2H,               // Targeted two-handed stab
+    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,         // Third targeted one-handed stab
+    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,         // Third targeted two-handed stab
     /* 16 */ PLAYER_MWA_FLIPSLASH_START,       //
     /* 17 */ PLAYER_MWA_JUMPSLASH_START,       // Start of jumpslash
     /* 18 */ PLAYER_MWA_ZORA_JUMPKICK_START,   // Start of Zora jump attack
