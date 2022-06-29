@@ -22,7 +22,7 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play);
 
 typedef enum {
     /* 0x1 */ BGOPENSHUTTER_DOOR_OPEN = 1,
-    /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED = 2,
+    /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED,
 } BGOpenShutterDoorState;
 
 const ActorInit Bg_Open_Shutter_InitVars = {
@@ -96,8 +96,8 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
-    s32 params = BGOPENSHUTTER_GET_A(thisx);
     BgOpenShutter* this = THIS;
+    s32 params = BGOPENSHUTTER_GET_A(thisx);
 
     play->doorCtx.transitionActorList[params].id = -play->doorCtx.transitionActorList[params].id;
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
