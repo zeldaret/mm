@@ -366,7 +366,7 @@ void AnimatedMat_DrawTexCycle(PlayState* play, s32 segment, void* params) {
     TexturePtr* texList = Lib_SegmentedToVirtual(texAnimParams->textureList);
     u8* texId = Lib_SegmentedToVirtual(texAnimParams->textureIndexList);
     s32 curFrame = sMatAnimStep % texAnimParams->keyFrameLength;
-    TexturePtr* tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
+    TexturePtr tex = Lib_SegmentedToVirtual(texList[texId[curFrame]]);
 
     OPEN_DISPS(play->state.gfxCtx);
 
