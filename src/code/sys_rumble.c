@@ -1,6 +1,6 @@
 /*
  * File: sys_rumble.c
- * Description: Internal scheduller system for rumble requests
+ * Description: Internal scheduler system for rumble requests
  */
 
 #include "global.h"
