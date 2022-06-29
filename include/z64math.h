@@ -120,6 +120,7 @@ typedef struct {
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
 #define BINANG_SUB(a, b) ((s16)(a - b))
 #define BINANG_ADD(a, b) ((s16)(a + b))
+
 // Vector macros
 #define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))
 #define DOTXZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.z) * (vec2.z))
