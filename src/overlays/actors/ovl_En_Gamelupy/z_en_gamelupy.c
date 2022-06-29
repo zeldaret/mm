@@ -60,9 +60,9 @@ static TexturePtr sRupeeTex[] = {
     gameplay_keep_Tex_062040, gameplay_keep_Tex_062020,
 };
 
-static Color_RGBA8 primColor = { 255, 255, 255, 255 };
+static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
 
-static Color_RGBA8 envColor = { 100, 200, 0, 255 };
+static Color_RGBA8 sEnvColor = { 100, 200, 0, 255 };
 
 void EnGamelupy_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -104,7 +104,7 @@ void func_80AF6854(EnGamelupy* this, PlayState* play) {
     sp40.x = -0.05f * sp30.x;
     sp40.y = -0.4f;
     sp40.z = -0.05f * sp30.z;
-    EffectSsKirakira_SpawnDispersed(play, &sp4C, &sp30, &sp40, &primColor, &envColor, 3000, 40);
+    EffectSsKirakira_SpawnDispersed(play, &sp4C, &sp30, &sp40, &sPrimColor, &sEnvColor, 3000, 40);
     this->unk_19E += this->unk_1A0;
 }
 
@@ -138,7 +138,7 @@ void func_80AF69A8(EnGamelupy* this, PlayState* play) {
         }
         func_80AF6A38(this);
     }
-    this->actor.shape.rot.y += 500;
+    this->actor.shape.rot.y += 0x1F4;
 }
 
 void func_80AF6A38(EnGamelupy* this) {
@@ -175,7 +175,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 12);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0x0C);
     func_80AF6B40(this, play);
 }
 
