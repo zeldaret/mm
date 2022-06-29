@@ -18,8 +18,8 @@ void Rumble_Update(void* arg0) {
 }
 
 // Used by some bosses (and fishing)
-void Rumble_Override(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
-    s32 temp;
+void Rumble_Override(f32 distSq, u8 sourceIntensity, u8 decayTimer, u8 decayStep) {
+    s32 intensity;
     s32 distance;
 
     if (SQ(1000.0f) < distSq) {
@@ -28,19 +28,19 @@ void Rumble_Override(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (intensity != 0) && (decayStep != 0)) {
-        temp = intensity - (distance * 255) / 1000;
+    if ((distance < 1000) && (sourceIntensity != 0) && (decayStep != 0)) {
+        intensity = sourceIntensity - (distance * 255) / 1000;
 
-        if (temp > 0) {
-            gRumbleMgr.overrideIntensity = temp;
+        if (intensity > 0) {
+            gRumbleMgr.overrideIntensity = intensity;
             gRumbleMgr.overrideDecayTimer = decayTimer;
             gRumbleMgr.overrideDecayStep = decayStep;
         }
     }
 }
 
-void Rumble_Request(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
-    s32 temp;
+void Rumble_Request(f32 distSq, u8 sourceIntensity, u8 decayTimer, u8 decayStep) {
+    s32 intensity;
     s32 distance;
     s32 i;
 
@@ -50,13 +50,13 @@ void Rumble_Request(f32 distSq, u8 intensity, u8 decayTimer, u8 decayStep) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (intensity != 0) && (decayStep != 0)) {
-        temp = intensity - (distance * 255) / 1000;
+    if ((distance < 1000) && (sourceIntensity != 0) && (decayStep != 0)) {
+        intensity = sourceIntensity - (distance * 255) / 1000;
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             if (gRumbleMgr.requestIntensities[i] == 0) {
-                if (temp > 0) {
-                    gRumbleMgr.requestIntensities[i] = temp;
+                if (intensity > 0) {
+                    gRumbleMgr.requestIntensities[i] = intensity;
                     gRumbleMgr.requestDecayTimers[i] = decayTimer;
                     gRumbleMgr.requestDecaySteps[i] = decayStep;
                 }
