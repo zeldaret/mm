@@ -474,6 +474,8 @@ wordReplace = {
     "func_801159c0": "Health_GiveHearts",
     "func_801159EC": "Rupees_ChangeBy",
     "func_80115A14": "Inventory_ChangeAmmo",
+    "func_8013EC44": "Rumble_Override",
+    "func_8013ECE0": "Rumble_Request",
     "func_8017D2FC": "Math3D_LineSegVsPlane",
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
