@@ -791,10 +791,9 @@ s32 func_80124148(Player* player) {
 }
 
 s32 Player_ActionToMeleeWeapon(s32 actionParam) {
-    s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI-1);
+    s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
 
-    if ((weapon > 0) &&
-        (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI-1)))) {
+    if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
         return weapon;
     }
     return 0;
