@@ -2,9 +2,9 @@
  * File: z_rumble.c
  * Description: Rumble request system
  *
- * Provides a simple interface to allow schedulling up to RUMBLE_REQUEST_BUFFER_SIZE rumble requests to the RumblePak.
- * There's an aditional Override type of rumble request for requests which should take priorities over any other
- * schedulled request.
+ * Provides a simple interface to allow scheduling up to RUMBLE_REQUEST_BUFFER_SIZE rumble requests to the RumblePak.
+ * There's an additional Override type of rumble request for requests which should take priorities over any other
+ * scheduled request.
  */
 
 #include "global.h"
