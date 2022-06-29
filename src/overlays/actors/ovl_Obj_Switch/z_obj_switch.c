@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_switch.h"
+#include "z64rumble.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -563,7 +564,7 @@ void ObjSwitch_FloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= this->floorSwitchDownScale) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_FloorSwitchDownInit(this);
     }
@@ -864,7 +865,7 @@ void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.074250005f;
     if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_LargeFloorSwitchDownInit(this);
     }
