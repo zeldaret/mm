@@ -150,16 +150,16 @@ typedef enum {
 } PlayerActionParam;
 
 typedef enum {
-    /* 00 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
-    /* 01 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
-    /* 02 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
-    /* 03 */ PLAYER_MWA_FORWARD_COMBO_2H,      // Third vertical two-handed slash
-    /* 04 */ PLAYER_MWA_RIGHT_SLASH_1H,        // Horizontal one-handed slash
-    /* 05 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
-    /* 06 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
-    /* 07 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
-    /* 08 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targetted one-handed rightwalk slash
-    /* 09 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targetted two-handed rightwalk slash
+    /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
+    /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
+    /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
+    /*  3 */ PLAYER_MWA_FORWARD_COMBO_2H,      // Third vertical two-handed slash
+    /*  4 */ PLAYER_MWA_RIGHT_SLASH_1H,        // Horizontal one-handed slash
+    /*  5 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
+    /*  6 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
+    /*  7 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
+    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targetted one-handed rightwalk slash
+    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targetted two-handed rightwalk slash
     /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targetted one-handed rightwalk slash
     /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targetted two-handed rightwalk slash
     /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targetted one-handed stab
