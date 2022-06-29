@@ -24,18 +24,53 @@ void EffectSsHitmark_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsHitmark_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static Color_RGB8 sColors[] = {
-    { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 255 }, { 255, 0, 0 },   { 255, 200, 100 }, { 200, 150, 0 },
-    { 150, 100, 0 },   { 100, 50, 0 },  { 255, 255, 255 }, { 255, 0, 0 },   { 255, 255, 0 },   { 255, 0, 0 },
-    { 255, 255, 255 }, { 0, 255, 200 }, { 255, 255, 255 }, { 150, 0, 255 },
+    { 255, 255, 255 }, { 255, 255, 0 }, // EFFECT_HITMARK_WHITE Init
+    { 255, 255, 255 }, { 255, 0, 0 },   // EFFECT_HITMARK_WHITE Update
+    { 255, 200, 100 }, { 200, 150, 0 }, // EFFECT_HITMARK_DUST Init
+    { 150, 100, 0 },   { 100, 50, 0 },  // EFFECT_HITMARK_DUST Update
+    { 255, 255, 255 }, { 255, 0, 0 },   // EFFECT_HITMARK_RED Init
+    { 255, 255, 0 },   { 255, 0, 0 },   // EFFECT_HITMARK_RED Update
+    { 255, 255, 255 }, { 0, 255, 200 }, // EFFECT_HITMARK_METAL Init
+    { 255, 255, 255 }, { 150, 0, 255 }, // EFFECT_HITMARK_METAL Update
 };
 
 static TexturePtr sTextures[] = {
-    gEffHitmark1Tex,  gEffHitmark2Tex,  gEffHitmark3Tex,  gEffHitmark4Tex,  gEffHitmark5Tex,  gEffHitmark6Tex,
-    gEffHitmark7Tex,  gEffHitmark8Tex,  gEffHitmark9Tex,  gEffHitmark10Tex, gEffHitmark11Tex, gEffHitmark12Tex,
-    gEffHitmark13Tex, gEffHitmark14Tex, gEffHitmark15Tex, gEffHitmark16Tex, gEffHitmark17Tex, gEffHitmark18Tex,
-    gEffHitmark19Tex, gEffHitmark20Tex, gEffHitmark21Tex, gEffHitmark22Tex, gEffHitmark23Tex, gEffHitmark24Tex,
-    gEffHitmark1Tex,  gEffHitmark2Tex,  gEffHitmark3Tex,  gEffHitmark4Tex,  gEffHitmark5Tex,  gEffHitmark6Tex,
-    gEffHitmark7Tex,  gEffHitmark8Tex,
+    // EFFECT_HITMARK_WHITE
+    gEffHitmarkWhiteMetal1Tex,
+    gEffHitmarkWhiteMetal2Tex,
+    gEffHitmarkWhiteMetal3Tex,
+    gEffHitmarkWhiteMetal4Tex,
+    gEffHitmarkWhiteMetal5Tex,
+    gEffHitmarkWhiteMetal6Tex,
+    gEffHitmarkWhiteMetal7Tex,
+    gEffHitmarkWhiteMetal8Tex,
+    // EFFECT_HITMARK_DUST
+    gEffHitmarkDust1Tex,
+    gEffHitmarkDust2Tex,
+    gEffHitmarkDust3Tex,
+    gEffHitmarkDust4Tex,
+    gEffHitmarkDust5Tex,
+    gEffHitmarkDust6Tex,
+    gEffHitmarkDust7Tex,
+    gEffHitmarkDust8Tex,
+    // EFFECT_HITMARK_RED
+    gEffHitmarkRed1Tex,
+    gEffHitmarkRed2Tex,
+    gEffHitmarkRed3Tex,
+    gEffHitmarkRed4Tex,
+    gEffHitmarkRed5Tex,
+    gEffHitmarkRed6Tex,
+    gEffHitmarkRed7Tex,
+    gEffHitmarkRed8Tex,
+    // EFFECT_HITMARK_METAL
+    gEffHitmarkWhiteMetal1Tex,
+    gEffHitmarkWhiteMetal2Tex,
+    gEffHitmarkWhiteMetal3Tex,
+    gEffHitmarkWhiteMetal4Tex,
+    gEffHitmarkWhiteMetal5Tex,
+    gEffHitmarkWhiteMetal6Tex,
+    gEffHitmarkWhiteMetal7Tex,
+    gEffHitmarkWhiteMetal8Tex,
 };
 
 const EffectSsInit Effect_Ss_Hitmark_InitVars = {
