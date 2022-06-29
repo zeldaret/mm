@@ -10,7 +10,7 @@ typedef void (*BgF40FliftActionFunc)(struct BgF40Flift*, PlayState*);
 typedef struct BgF40Flift {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgF40FliftActionFunc actionFunc;
-    /* 0x160 */ s32 unk_160;
+    /* 0x160 */ s32 timer;
 } BgF40Flift; // size = 0x164
 
 extern const ActorInit Bg_F40_Flift_InitVars;

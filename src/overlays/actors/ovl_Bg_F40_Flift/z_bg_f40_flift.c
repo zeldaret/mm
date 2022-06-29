@@ -56,27 +56,27 @@ void BgF40Flift_Destroy(Actor* thisx, PlayState* play) {
 void func_808D75F0(BgF40Flift* this, PlayState* play) {
     if (((this->dyna.actor.params == 1) && (DynaPolyActor_IsInRidingMovingState(&this->dyna))) ||
         ((this->dyna.actor.params == -1) && (!DynaPolyActor_IsInRidingMovingState(&this->dyna)))) {
-        this->unk_160 = 0x60;
+        this->timer = 0x60;
         this->actionFunc = func_808D7714;
     } else {
-        if (this->unk_160 == 0) {
-            this->unk_160 = 0x30;
+        if (this->timer == 0) {
+            this->timer = 0x30;
         }
-        this->unk_160--;
+        this->timer--;
         if (this->dyna.actor.params == 1) {
-            this->dyna.actor.world.pos.y = (sin_rad(this->unk_160 * 0.1308997f) * 5.0f) + this->dyna.actor.home.pos.y;
+            this->dyna.actor.world.pos.y = (sin_rad(this->timer * 0.1308997f) * 5.0f) + this->dyna.actor.home.pos.y;
         } else {
             this->dyna.actor.world.pos.y =
-                (sin_rad(this->unk_160 * 0.1308997f) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
+                (sin_rad(this->timer * (M_PI / 24.0f)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
         }
     }
 }
 
 void func_808D7714(BgF40Flift* this, PlayState* play) {
-    if (this->unk_160 != 0) {
-        this->unk_160--;
+    if (this->timer != 0) {
+        this->timer--;
         this->dyna.actor.world.pos.y =
-            (((cos_rad(this->unk_160 * 0.032724924f) * this->dyna.actor.params) + 1.0f) * 463.4f) +
+            (((cos_rad(this->timer * (M_PI / 96.0f)) * this->dyna.actor.params) + 1.0f) * 463.4f) +
             this->dyna.actor.home.pos.y;
     } else {
         this->dyna.actor.params = -this->dyna.actor.params;
@@ -91,7 +91,5 @@ void BgF40Flift_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Flift_Draw(Actor* thisx, PlayState* play) {
-    BgF40Flift* this = THIS;
-
     Gfx_DrawDListOpa(play, object_f40_obj_DL_004038);
 }
