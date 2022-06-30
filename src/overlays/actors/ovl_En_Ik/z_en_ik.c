@@ -51,7 +51,7 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play);
 typedef struct {
     /* 0x0 */ Gfx* unk00;
     /* 0x4 */ s16 unk04;
-} EnIkUnkStruct; // size = 0x6
+} EnIkUnkStruct; // size = 0x8
 
 EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
     { gIronKnuckleHelmetMarkingDL, 0x0000 },
@@ -481,7 +481,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
             particlePos.y = this->actor.world.pos.y;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
             func_800DFD04(GET_ACTIVE_CAM(play), 2, 25, 5);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             CollisionCheck_SpawnShieldParticles(play, &particlePos);
         }
 
