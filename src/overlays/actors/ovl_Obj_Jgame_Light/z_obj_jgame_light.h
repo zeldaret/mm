@@ -6,10 +6,10 @@
 struct ObjJgameLight;
 
 #define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define OBJLUPYGAMELIFT_HEALTH_1(thisx) ((thisx)->colChkInfo.health & 1)
-#define OBJLUPYGAMELIFT_HEALTH_2(thisx) ((thisx)->colChkInfo.health & 2)
-#define OBJLUPYGAMELIFT_HEALTH_4(thisx) ((thisx)->colChkInfo.health & 4)
-#define OBJLUPYGAMELIFT_HEALTH_8(thisx) ((thisx)->colChkInfo.health & 8)
+#define OBJLUPYGAMELIFT_IGNITEFIRE (1 << 0)
+#define OBJLUPYGAMELIFT_DISPLAYCORRECT (2 << 0)
+#define OBJLUPYGAMELIFT_DISPLAYINCORRECT (4 << 0)
+#define OBJLUPYGAMELIFT_SNUFF_FIRE (8 << 0)
 
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;
@@ -18,7 +18,7 @@ typedef struct ObjJgameLight {
     /* 0x194 */ LightNode* lightNode;
     /* 0x198 */ LightInfo lightInfo;
     /* 0x1A8 */ f32 unk_1A8;
-    /* 0x1AC */ s16 unk_1AC;
+    /* 0x1AC */ s16 lightRadius;
     /* 0x1AE */ s16 unk_1AE;
     /* 0x1B0 */ UNK_TYPE1 pad_1B0[2];
     /* 0x1B2 */ s16 alpha;
