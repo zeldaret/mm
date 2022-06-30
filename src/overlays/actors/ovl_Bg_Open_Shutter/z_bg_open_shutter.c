@@ -153,7 +153,7 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
         Quake_SetSpeed(quake, -0x7F18);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
         this->unk_15C = 0;
         this->actionFunc = func_80ACAD88;
     }
