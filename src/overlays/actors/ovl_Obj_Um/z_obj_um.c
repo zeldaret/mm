@@ -133,8 +133,8 @@ void func_80B7AB78(ObjUm* this, PlayState* play);
 void func_80B7ABE4(ObjUm* this, PlayState* play);
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play);
 
-// This function may be wrongly named...
-void ObjUm_UpdateBanditsPositions(ObjUm* this, PlayState* play) {
+// Maybe it is updating the bandits positions?
+void func_80B77770(ObjUm* this, PlayState* play) {
     s16 rotY = this->dyna.actor.shape.rot.y;
     Vec3f sp108;
     Vec3f spFC;
@@ -298,7 +298,7 @@ struct_80B7C254 D_80B7C164[] = {
 };
 
 // BanditAttack?
-s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, PlayState* play) {
+s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* play) {
     s32 temp_v0;
     s32 phi_s3 = -1;
     s32 phi_s4 = 0;
@@ -308,8 +308,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, PlayState* play) {
     s32 mask;
 
     for (i = 0; i < ARRAY_COUNT(D_80B7C164); i++) {
-        if (arg2->unk_550 == D_80B7C164[i].unk_00) {
-            if (arg3->unk_550 != D_80B7C164[i].unk_04) {
+        if (bandit1->unk_550 == D_80B7C164[i].unk_00) {
+            if (bandit2->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
                     if (D_80B7C164[i].unk_04 != 3 ||
                         ((mask = Player_GetMask(play)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
@@ -318,8 +318,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, PlayState* play) {
                         phi_f20 = D_80B7C164[i].unk_0C;
                         phi_s2 = D_80B7C164[i].unk_10;
                     }
-                } else if (((arg2->unk_54C != 5) || (D_80B7C164[i].unk_04 != 2)) &&
-                           ((arg2->unk_54C != 7) || (D_80B7C164[i].unk_04 != 4))) {
+                } else if (((bandit1->unk_54C != 5) || (D_80B7C164[i].unk_04 != 2)) &&
+                           ((bandit1->unk_54C != 7) || (D_80B7C164[i].unk_04 != 4))) {
                     phi_s3 = D_80B7C164[i].unk_04;
                     phi_s4 = D_80B7C164[i].unk_08;
                     phi_f20 = D_80B7C164[i].unk_0C;
@@ -338,19 +338,19 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, PlayState* play) {
         return 0;
     }
 
-    arg2->unk_540 = arg2->actor.world.pos;
-    arg2->unk_54C = arg2->unk_550;
-    arg2->unk_550 = phi_s3;
-    arg2->unk_55C = phi_s2;
-    arg2->unk_560 = phi_s2;
-    arg2->unk_564 = phi_s4;
-    arg2->unk_568 = phi_f20;
+    bandit1->unk_540 = bandit1->actor.world.pos;
+    bandit1->unk_54C = bandit1->unk_550;
+    bandit1->unk_550 = phi_s3;
+    bandit1->unk_55C = phi_s2;
+    bandit1->unk_560 = phi_s2;
+    bandit1->unk_564 = phi_s4;
+    bandit1->unk_568 = phi_f20;
 
     if (phi_s3 == 3) {
-        arg2->unk_558 = (s32)(Rand_ZeroOne() * 3.0f);
+        bandit1->unk_558 = (s32)(Rand_ZeroOne() * 3.0f);
     dummy_label_437827:;
     } else {
-        arg2->unk_558 = 0;
+        bandit1->unk_558 = 0;
     }
 
     return 0;
@@ -517,7 +517,7 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
     return 0;
 }
 
-// ObjUm_UpdateBandits...
+// ObjUm_UpdateBandits...something
 s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
     if (this->banditsCollisions[arg2].base.acFlags & AC_HIT) {
         if (arg3->unk_550 == 3) {
@@ -542,14 +542,12 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                // TODO: remove cast?
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16)0x28);
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                // TODO: remove cast?
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16)0x28);
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, 40);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
@@ -900,7 +898,6 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 
     switch (Message_GetState(msgCtx)) {
         case 2:
-            // TODO: test
             func_80B79560(play, this, arg2, this->dyna.actor.textId);
             return true;
 
@@ -996,7 +993,6 @@ s32 func_80B79A24(s32 arg0) {
     return false;
 }
 
-// 0x80b79a30
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -1568,8 +1564,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
         play->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
         play->sceneLoadFlag = 0x14;
-        // A bit more than an hour
-        gSaveContext.save.time += 0xAAC;
+        gSaveContext.save.time += CLOCK_TIME(1, 0) + 2;
     }
     Actor_MoveWithGravity(&this->dyna.actor);
 }
@@ -2028,5 +2023,5 @@ void ObjUm_Draw(Actor* thisx, PlayState* play) {
     sp34.y = 0.0f;
     sp34.z = 0.7f;
     func_80B7BEA4(&this->cartBedPos, this->dyna.actor.shape.rot.y, &sp34, 180, play);
-    ObjUm_UpdateBanditsPositions(this, play);
+    func_80B77770(this, play);
 }

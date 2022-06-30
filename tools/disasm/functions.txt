@@ -14461,7 +14461,7 @@
     0x80B77078:("EnTruMt_PostLimbDraw",),
     0x80B77354:("EnTruMt_TransformLimbDraw",),
     0x80B773D0:("EnTruMt_Draw",),
-    0x80B77770:("ObjUm_UpdateBanditsPositions",),
+    0x80B77770:("func_80B77770",),
     0x80B77FA4:("ObjUm_InitBandits",),
     0x80B781DC:("func_80B781DC",),
     0x80B783E0:("func_80B783E0",),
