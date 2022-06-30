@@ -190,12 +190,15 @@ void Map_Init(PlayState* play) {
             case SCENE_MITURIN_BS:
                 dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                 break;
+
             case SCENE_HAKUGIN_BS:
                 dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
                 break;
+
             case SCENE_SEA_BS:
                 dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
                 break;
+
             case SCENE_INISIE_BS:
                 dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
                 break;
