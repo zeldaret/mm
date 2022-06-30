@@ -459,8 +459,9 @@ s32 func_80B37B78(EnMaruta* this, PlayState* play) {
 
     temp_v1 = BINANG_SUB(temp_v1, player->actor.shape.rot.y);
     if ((ABS_ALT(temp_v1) < 0x1555) ||
-        ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 6) ||
-                                       (player->meleeWeaponAnimation == 0x1E) || (player->meleeWeaponAnimation == 0x20)))) {
+        ((player->meleeWeaponState != 0) &&
+         ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 6) ||
+          (player->meleeWeaponAnimation == 0x1E) || (player->meleeWeaponAnimation == 0x20)))) {
         return true;
     }
     return false;

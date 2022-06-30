@@ -262,8 +262,7 @@ void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
             Scene_SetRenderModeXlu(play, 1, 2);
             gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->unk_01);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_XLU_DISP++, temp_s3->dlist);
         }
@@ -1415,9 +1414,8 @@ u8 D_801C08A0[][2] = {
 };
 
 // OoT's func_8008F470
-void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic,
-                   s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw,
-                   Actor* actor) {
+void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
+                   s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;          // eyeIndex
     s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
     Gfx* dl;
@@ -1465,8 +1463,8 @@ f32 D_801C0910[PLAYER_FORM_MAX] = { 170.0416f, 133.63359f, 197.68358f, 16.646399
 f32 D_801C0924[PLAYER_FORM_MAX] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
 f32 D_801C0938[PLAYER_FORM_MAX] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
 
-void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5,
-                   s32 arg6, s32 arg7) {
+void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6,
+                   s32 arg7) {
     CollisionPoly* spA4;
     s32 spA0;
     f32 sp9C;
@@ -1590,8 +1588,7 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
             Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
             Matrix_Scale(sp50, sp50, sp50, MTXMODE_APPLY);
 
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
             gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_04F250);
@@ -2240,15 +2237,33 @@ u8 D_801C0B1C[] = {
 };
 
 Gfx* D_801C0B20[] = {
-    object_mask_truth_DL_0001A0,   object_mask_kerfay_DL_000D40, object_mask_yofukasi_DL_000490,
-    object_mask_rabit_DL_000610,   object_mask_ki_tan_DL_0004A0, object_mask_json_DL_0004C0,
-    object_mask_romerny_DL_0007A0, object_mask_zacho_DL_000700,  object_mask_posthat_DL_000290,
-    object_mask_meoto_DL_0005A0,   object_mask_bigelf_DL_0016F0, object_mask_gibudo_DL_000250,
-    gDonGeroMaskDL,                object_mask_dancer_DL_000EF0, object_mask_skj_DL_0009F0,
-    object_mask_stone_DL_000820,   object_mask_bree_DL_0003C0,   object_mask_bakuretu_DL_0005C0,
-    object_mask_bu_san_DL_000710,  object_mask_kyojin_DL_000380, gameplay_keep_DL_00B260,
-    gameplay_keep_DL_005A10,       gameplay_keep_DL_005360,      gameplay_keep_DL_0056C0,
-    object_mask_boy_DL_000900,     object_mask_goron_DL_0014A0,  object_mask_zora_DL_000DB0,
+    object_mask_truth_DL_0001A0,
+    object_mask_kerfay_DL_000D40,
+    object_mask_yofukasi_DL_000490,
+    object_mask_rabit_DL_000610,
+    object_mask_ki_tan_DL_0004A0,
+    object_mask_json_DL_0004C0,
+    object_mask_romerny_DL_0007A0,
+    object_mask_zacho_DL_000700,
+    object_mask_posthat_DL_000290,
+    object_mask_meoto_DL_0005A0,
+    object_mask_bigelf_DL_0016F0,
+    object_mask_gibudo_DL_000250,
+    gDonGeroMaskDL,
+    object_mask_dancer_DL_000EF0,
+    object_mask_skj_DL_0009F0,
+    object_mask_stone_DL_000820,
+    object_mask_bree_DL_0003C0,
+    object_mask_bakuretu_DL_0005C0,
+    object_mask_bu_san_DL_000710,
+    object_mask_kyojin_DL_000380,
+    gameplay_keep_DL_00B260,
+    gameplay_keep_DL_005A10,
+    gameplay_keep_DL_005360,
+    gameplay_keep_DL_0056C0,
+    object_mask_boy_DL_000900,
+    object_mask_goron_DL_0014A0,
+    object_mask_zora_DL_000DB0,
     object_mask_nuts_DL_001D90,
 };
 
@@ -2299,7 +2314,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
 
     Matrix_Translate((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34,
-                             (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
+                     (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
     Matrix_RotateZYX(0, (play->gameplayFrames * 1000), 0, MTXMODE_APPLY);
     Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
     GetItem_Draw(play, drawIdPlusOne - 1);
@@ -2450,8 +2465,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
             Matrix_Push();
             Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_801C0ABC[arg2]);
 
             Matrix_MultVec3f(&D_801C0AC4[arg2], &sp58);
@@ -2492,8 +2506,7 @@ s32 func_801271B0(PlayState* play, Player* player, s32 arg2) {
             func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
             Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
 
@@ -2502,8 +2515,7 @@ s32 func_801271B0(PlayState* play, Player* player, s32 arg2) {
             func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
             Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             // Close flower / Open flower
             gSPDisplayList(POLY_OPA_DISP++,
@@ -2583,8 +2595,7 @@ void func_80127594(PlayState* play, Actor* actor) {
             Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08,
-                       gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
+            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
@@ -3028,8 +3039,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Matrix_Translate(-323.67f, 412.15f, -969.96f, MTXMODE_APPLY);
             Matrix_RotateZYX(-0x32BE, -0x50DE, -0x7717, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0B20[sp6C - 1]);
 
@@ -3437,8 +3447,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 Matrix_Scale(0.7f, 0.7f, 0.7f, 1);
             }
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->unk_AE8);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 

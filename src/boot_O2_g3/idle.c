@@ -1,7 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 
-
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
 u8 gViConfigAdditionalScanLines = 0;
