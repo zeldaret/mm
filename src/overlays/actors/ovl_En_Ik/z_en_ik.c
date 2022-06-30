@@ -48,9 +48,9 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play);
 void EnIk_UpdateArmor(EnIk* this, PlayState* play);
 
 typedef struct {
-    Gfx* unk00;
-    s16 unk04;
-} EnIkUnkStruct;
+    /* 0x0 */ Gfx* unk00;
+    /* 0x4 */ s16 unk04;
+} EnIkUnkStruct; // size = 0x6
 
 EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
     { gIronKnuckleHelmetMarkingDL, 0x0000 },
@@ -139,7 +139,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_TYPE_2,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -646,8 +646,7 @@ void EnIk_SetupReactToAttack(EnIk* this, s32 arg1) {
 void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
     if (this->subCamId != CAM_ID_MAIN) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos,
-                            &Play_GetCamera(play, this->subCamId)->eye);
+        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(play, this->subCamId)->eye);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->subCamId != CAM_ID_MAIN) {
@@ -1040,13 +1039,11 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
                 Matrix_SetTranslateRotateYXZ(ikEffect->pos.x, ikEffect->pos.y, ikEffect->pos.z, &ikEffect->rot);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
 
-                gSPMatrix(gfxOpa++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(gfxOpa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(gfxOpa++, ikEffect->dList);
 
                 if (sIronKnuckleArmorMarkings[i].unk00 != NULL) {
-                    gSPMatrix(gfxXlu++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfxXlu++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(gfxXlu++, sIronKnuckleArmorMarkings[i].unk00);
                 }
             } else {
