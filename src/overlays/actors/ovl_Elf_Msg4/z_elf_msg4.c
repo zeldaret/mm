@@ -42,25 +42,25 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // "Collapse together"
-        if (ELFMSG4_GET_SWITCH(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor));
+        if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
         }
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
-            if (ELFMSG4_GET_SWITCH(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor));
+            if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
             }
             Actor_MarkForDeath(&this->actor);
             return true;
         }
     }
-    if (ELFMSG4_GET_SWITCH(&this->actor) == 0x7F) {
+    if (ELFMSG4_GET_SWITCHFLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_MarkForDeath(&this->actor);
         return true;
@@ -157,8 +157,8 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
         if ((bgActor != NULL) && (bgActor->update == NULL)) {
             Actor_MarkForDeath(&this->actor);
         } else if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
-            if (ELFMSG4_GET_SWITCH(thisx) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(thisx));
+            if (ELFMSG4_GET_SWITCHFLAG(thisx) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(thisx));
             }
             Actor_MarkForDeath(&this->actor);
         } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
