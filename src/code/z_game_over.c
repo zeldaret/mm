@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 
 void GameOver_Init(PlayState* play) {
     play->gameOverCtx.state = GAMEOVER_INACTIVE;
@@ -62,7 +63,7 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.unk_3F24 = 0;
             Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
@@ -78,7 +79,7 @@ void GameOver_Update(PlayState* play) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
                     gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
                 }
-                func_8013EE24();
+                Rumble_StateReset();
             }
             break;
         case GAMEOVER_REVIVE_START:
@@ -90,7 +91,7 @@ void GameOver_Update(PlayState* play) {
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
             gameOverCtx->state++;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             break;
         case GAMEOVER_REVIVE_WAIT_GROUND:
             sGameOverTimer--;
