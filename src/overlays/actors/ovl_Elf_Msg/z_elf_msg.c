@@ -43,25 +43,25 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // "Collapse together"
-        if (ENELF_GET_7F00(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ENELF_GET_7F00(&this->actor));
+        if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
         }
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
-            if (ENELF_GET_7F00(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ENELF_GET_7F00(&this->actor));
+            if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
             }
             Actor_MarkForDeath(&this->actor);
             return true;
         }
     }
-    if (ENELF_GET_7F00(&this->actor) == 0x7F) {
+    if (ELFMSG_GET_SWITCHFLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ENELF_GET_7F00(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_MarkForDeath(&this->actor);
         return true;
@@ -93,10 +93,10 @@ void ElfMsg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_8092E1D0(ElfMsg* this) {
-    if (ENELF_GET_8000(&this->actor) != 0) {
-        return ENELF_GET_FF(&this->actor) + 0x200;
+    if (ELFMSG_GET_8000(&this->actor) != 0) {
+        return ELFMSG_GET_FF(&this->actor) + 0x200;
     } else {
-        return -0x200 - ENELF_GET_FF(&this->actor);
+        return -0x200 - ELFMSG_GET_FF(&this->actor);
     }
 }
 
@@ -136,8 +136,8 @@ void ElfMsg_Update(Actor* thisx, PlayState* play) {
 
     if (func_8092DF9C(this, play) == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            if (ENELF_GET_7F00(thisx) != 0x7F) {
-                Flags_SetSwitch(play, ENELF_GET_7F00(thisx));
+            if (ELFMSG_GET_SWITCHFLAG(thisx) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(thisx));
             }
             Actor_MarkForDeath(&this->actor);
         } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
