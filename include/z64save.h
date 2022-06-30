@@ -274,10 +274,10 @@ typedef enum SunsSongState {
 } SunsSongState;
 
 typedef enum DungeonIndex {
-    /* 0 */ DUNGEON_INDEX_WOODFALL,
-    /* 1 */ DUNGEON_INDEX_SNOWHEAD,
-    /* 2 */ DUNGEON_INDEX_GREAT_BAY,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER, // Also applies to Inverted Stone Tower Temple
+    /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
+    /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
+    /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE, // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);

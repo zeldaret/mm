@@ -75,14 +75,11 @@ s32 Map_IsInDungeonArea(PlayState* play) {
     return true;
 }
 
-/**
- * The values in this array get directly mapped onto the DungeonIndex enum.
- */
 s32 sBossScenes[] = {
-    SCENE_MITURIN_BS,
-    SCENE_HAKUGIN_BS,
-    SCENE_SEA_BS,
-    SCENE_INISIE_BS,
+    SCENE_MITURIN_BS, // DUNGEON_INDEX_WOODFALL_TEMPLE
+    SCENE_HAKUGIN_BS, // DUNGEON_INDEX_SNOWHEAD_TEMPLE
+    SCENE_SEA_BS,     // DUNGEON_INDEX_GREAT_BAY_TEMPLE
+    SCENE_INISIE_BS,  // DUNGEON_INDEX_STONE_TOWER_TEMPLE
 };
 
 /**
@@ -191,16 +188,16 @@ void Map_Init(PlayState* play) {
         gSaveContext.mapIndex = dungeonIndex;
         switch (play->sceneNum) {
             case SCENE_MITURIN_BS:
-                dungeonIndex = DUNGEON_INDEX_WOODFALL;
+                dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                 break;
             case SCENE_HAKUGIN_BS:
-                dungeonIndex = DUNGEON_INDEX_SNOWHEAD;
+                dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
                 break;
             case SCENE_SEA_BS:
-                dungeonIndex = DUNGEON_INDEX_GREAT_BAY;
+                dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
                 break;
             case SCENE_INISIE_BS:
-                dungeonIndex = DUNGEON_INDEX_STONE_TOWER;
+                dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
                 break;
         }
 
