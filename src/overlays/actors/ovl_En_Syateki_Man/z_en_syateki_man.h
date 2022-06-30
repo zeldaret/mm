@@ -33,8 +33,8 @@ typedef struct EnSyatekiMan {
     /* 0x0276 */ s16 unk_276;
     /* 0x0278 */ s16 dekuScrubHitCounter;
     /* 0x027A */ s16 guayHitCounter;
-    /* 0x027C */ s16 unk_27C;
-    /* 0x027E */ s16 unk_27E;
+    /* 0x027C */ s16 currentWave;
+    /* 0x027E */ s16 spawnPatternIndex; // Used for Octoroks in Town and Guays in Swamp
     /* 0x0280 */ s16 score;
     /* 0x0282 */ s16 talkFlags;
     /* 0x0284 */ s16 textId;

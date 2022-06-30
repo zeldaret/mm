@@ -167,7 +167,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnSyatekiMan_SetupIdle;
     this->unk_26A = 0;
     this->unk_270 = 15;
-    this->unk_27E = 0;
+    this->spawnPatternIndex = 0;
     this->unk_26E = 0;
     this->unk_190 = 0;
     this->unk_272 = 0;
@@ -716,7 +716,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
-                this->unk_27E = 0;
+                this->spawnPatternIndex = 0;
                 func_80112AFC(play);
                 func_80123F2C(play, 0x63);
                 this->unk_26A = 1;
@@ -963,7 +963,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         D_809C9498--;
     } else {
         D_809C9498 = 30;
-        this->unk_27E = 0;
+        this->spawnPatternIndex = 0;
         this->score = 0;
         player->stateFlags1 &= ~0x20;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
@@ -973,7 +973,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->unk_26C = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
-        this->unk_27C = 0;
+        this->currentWave = 0;
         this->unk_26E = 0;
         func_8010E9F0(1, 100);
         this->actor.draw = NULL;
@@ -985,24 +985,24 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s16 D_809C949C = 0;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->unk_27C < 4)) {
+    if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->currentWave < 4)) {
         D_809C949C = 1;
         this->unk_26C = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
-        this->unk_274 = D_809C91C8[this->unk_27E];
-        if (this->unk_27E == 3) {
-            this->unk_27E = 0;
+        this->unk_274 = D_809C91C8[this->spawnPatternIndex];
+        if (this->spawnPatternIndex == 3) {
+            this->spawnPatternIndex = 0;
         } else {
-            this->unk_27E++;
+            this->spawnPatternIndex++;
         }
-    } else if ((this->unk_274 == 0) && (this->unk_272 == 0) && (D_809C949C == 1) && (this->unk_27C < 4)) {
+    } else if ((this->unk_274 == 0) && (this->unk_272 == 0) && (D_809C949C == 1) && (this->currentWave < 4)) {
         if (this->guayHitCounter < 3) {
             this->guayHitCounter = 0;
         }
         this->unk_26C = 0;
         D_809C949C = 0;
-        this->unk_27C++;
-        if (this->unk_27C < 4) {
+        this->currentWave++;
+        if (this->currentWave < 4) {
             this->unk_272 = 31;
         }
     }
@@ -1022,16 +1022,16 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         gSaveContext.unk_3DE0[1] = 0;
         gSaveContext.unk_3DD0[1] = 5;
         this->actor.draw = EnSyatekiMan_Draw;
-        this->unk_27E = 0;
-        this->unk_27C = 0;
+        this->spawnPatternIndex = 0;
+        this->currentWave = 0;
         player->stateFlags1 |= 0x20;
         D_809C949C = 0;
         func_801A2C20();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->unk_27C == 4) && (this->unk_276 == 0) && (this->unk_26E == 2)) {
+    } else if ((this->currentWave == 4) && (this->unk_276 == 0) && (this->unk_26E == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
-        this->unk_27E = 0;
-        this->unk_27C = 0;
+        this->spawnPatternIndex = 0;
+        this->currentWave = 0;
         player->stateFlags1 |= 0x20;
         D_809C949C = 0;
         func_801A2C20();
@@ -1103,8 +1103,8 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
         if (gSaveContext.unk_3DE0[1] == 0) {
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
-            this->unk_27E = 0;
-            this->unk_27C = 0;
+            this->spawnPatternIndex = 0;
+            this->currentWave = 0;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
             D_809C94A0 = 0;
         } else if (D_809C94A0 > 10) {
@@ -1166,7 +1166,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
     } else if (D_809C94A4 == 0) {
         player->stateFlags1 &= ~0x20;
         this->score = 0;
-        this->unk_27E = 0;
+        this->spawnPatternIndex = 0;
         this->unk_26C = 70;
         this->unk_26E = 0;
         D_809C94A4 = 30;
@@ -1211,15 +1211,15 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         }
 
         if ((D_809C94A8 == (sp30 % 50)) && (this->unk_26C >= 70)) {
-            if (this->unk_27E < 15) {
-                this->unk_190 = D_809C94D0[this->unk_27E++];
+            if (this->spawnPatternIndex < 15) {
+                this->unk_190 = D_809C94D0[this->spawnPatternIndex++];
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
                 this->unk_26C = 0;
             }
         }
 
         if (gSaveContext.unk_3DE0[1] == 0) {
-            this->unk_27E = 0;
+            this->spawnPatternIndex = 0;
             this->unk_26C = 80;
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;

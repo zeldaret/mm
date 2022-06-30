@@ -189,9 +189,9 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actor.world.pos = this->actor.prevPos = sp14;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
-    this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
+    this->unk_1EE = 140 - (syatekiMan->currentWave * 20);
 
-    if ((syatekiMan->unk_27C & 1) != 0) {
+    if ((syatekiMan->currentWave & 1) != 0) {
         this->unk_1F0 = 1;
         this->unk_1F2 = 0;
     } else {
