@@ -8,7 +8,7 @@
 
 struct EnNwc;
 
-typedef void (*EnNwcActionFunc)(struct EnNwc*, GlobalContext*);
+typedef void (*EnNwcActionFunc)(struct EnNwc*, PlayState*);
 
 typedef struct EnNwc {
     /* 0x000 */ Actor actor;

@@ -40,13 +40,13 @@ glabel func_809529AC
 and turn it into compilable C code:
 
 ```C
-void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_809529AC(EnMs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 ```

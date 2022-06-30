@@ -10,12 +10,12 @@
 
 #define THIS ((EnRu*)thisx)
 
-void EnRu_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRu_Init(Actor* thisx, PlayState* play);
+void EnRu_Destroy(Actor* thisx, PlayState* play);
+void EnRu_Update(Actor* thisx, PlayState* play);
+void EnRu_Draw(Actor* thisx, PlayState* play);
 
-void func_80A38DF4(EnRu* this, GlobalContext* globalCtx);
+void func_80A38DF4(EnRu* this, PlayState* play);
 
 #if 0
 const ActorInit En_Ru_InitVars = {

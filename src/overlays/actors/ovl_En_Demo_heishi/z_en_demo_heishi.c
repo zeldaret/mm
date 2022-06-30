@@ -11,18 +11,17 @@
 
 #define THIS ((EnDemoheishi*)thisx)
 
-void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDemoheishi_Init(Actor* thisx, PlayState* play);
+void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
+void EnDemoheishi_Update(Actor* thisx, PlayState* play);
+void EnDemoheishi_Draw(Actor* thisx, PlayState* play);
 
 void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex);
 void EnDemoheishi_SetupIdle(EnDemoheishi* this);
-void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx);
+void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
-void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx);
-s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  Actor* thisx);
+void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
+s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 typedef enum {
     /*  0 */ DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP,
@@ -66,23 +65,23 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x1473 }; // Shiro initial intro text
 
-void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
-                       this->morphTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable, this->morphTable,
+                       17);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     EnDemoheishi_SetupIdle(this);
 }
 
-void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDemoheishi_Destroy(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+    Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
 void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
@@ -123,7 +122,7 @@ void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
     this->actionFunc = EnDemoheishi_Idle;
 }
 
-void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
+void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     s32 absYawDiff;
     s16 yawDiff;
 
@@ -131,10 +130,10 @@ void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnDemoheishi_SetupTalk(this);
     } else if (absYawDiff <= 0x4BB8) {
-        func_800B8614(&this->actor, globalCtx, 70.0f);
+        func_800B8614(&this->actor, play, 70.0f);
     }
 }
 
@@ -143,14 +142,14 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
     this->actionFunc = EnDemoheishi_Talk;
 }
 
-void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        func_801477B4(globalCtx);
+void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        func_801477B4(play);
         EnDemoheishi_SetupIdle(this);
     }
 }
 
-void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnDemoheishi* this = THIS;
 
@@ -160,9 +159,9 @@ void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
     EnDemoheishi_SetHeadRotation(this);
 
@@ -170,11 +169,10 @@ void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }
 
-s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  Actor* thisx) {
+s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDemoheishi* this = THIS;
 
     if (limbIndex == DEMOHEISHI_LIMB_HEAD) {
@@ -186,10 +184,10 @@ s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx**
     return false;
 }
 
-void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDemoheishi_Draw(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
 }

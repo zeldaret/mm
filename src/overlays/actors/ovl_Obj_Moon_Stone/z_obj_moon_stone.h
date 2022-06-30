@@ -5,7 +5,7 @@
 
 struct ObjMoonStone;
 
-typedef void (*ObjMoonStoneActionFunc)(struct ObjMoonStone*, GlobalContext*);
+typedef void (*ObjMoonStoneActionFunc)(struct ObjMoonStone*, PlayState*);
 
 typedef struct ObjMoonStone {
     /* 0x000 */ Actor actor;

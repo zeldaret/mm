@@ -5,7 +5,7 @@
 
 struct ObjFlowerpot;
 
-typedef void (*ObjFlowerpotActionFunc)(struct ObjFlowerpot*, GlobalContext*);
+typedef void (*ObjFlowerpotActionFunc)(struct ObjFlowerpot*, PlayState*);
 
 #define ENOBJFLOWERPOT_GET_3F(thisx) ((thisx)->params & 0x3F)
 #define ENOBJFLOWERPOT_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)

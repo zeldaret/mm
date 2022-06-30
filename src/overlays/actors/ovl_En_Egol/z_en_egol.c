@@ -10,10 +10,10 @@
 
 #define THIS ((EnEgol*)thisx)
 
-void EnEgol_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEgol_Init(Actor* thisx, PlayState* play);
+void EnEgol_Destroy(Actor* thisx, PlayState* play);
+void EnEgol_Update(Actor* thisx, PlayState* play);
+void EnEgol_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[6] = {

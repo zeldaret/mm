@@ -5,7 +5,7 @@
 
 struct ObjSpidertent;
 
-typedef void (*ObjSpidertentActionFunc)(struct ObjSpidertent*, GlobalContext*);
+typedef void (*ObjSpidertentActionFunc)(struct ObjSpidertent*, PlayState*);
 
 #define OBJSPIDERTENT_GET_1(thisx) ((thisx)->params & 1)
 #define OBJSPIDERTENT_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)

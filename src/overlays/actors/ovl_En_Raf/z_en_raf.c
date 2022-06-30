@@ -10,29 +10,29 @@
 
 #define THIS ((EnRaf*)thisx)
 
-void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRaf_Init(Actor* thisx, PlayState* play);
+void EnRaf_Destroy(Actor* thisx, PlayState* play);
+void EnRaf_Update(Actor* thisx, PlayState* play);
+void EnRaf_Draw(Actor* thisx, PlayState* play);
 
 void EnRaf_SetupIdle(EnRaf* this);
-void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Idle(EnRaf* this, PlayState* play);
 void EnRaf_SetupGrab(EnRaf* this);
-void EnRaf_Grab(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Grab(EnRaf* this, PlayState* play);
 void EnRaf_SetupChew(EnRaf* this);
-void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Chew(EnRaf* this, PlayState* play);
+void EnRaf_SetupThrow(EnRaf* this, PlayState* play);
+void EnRaf_Throw(EnRaf* this, PlayState* play);
+void EnRaf_Explode(EnRaf* this, PlayState* play);
+void EnRaf_PostDetonation(EnRaf* this, PlayState* play);
+void EnRaf_Convulse(EnRaf* this, PlayState* play);
 void EnRaf_SetupDissolve(EnRaf* this);
-void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Dissolve(EnRaf* this, PlayState* play);
 void EnRaf_SetupDormant(EnRaf* this);
-void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Dormant(EnRaf* this, PlayState* play);
 void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale, s16 timer);
-void EnRaf_UpdateEffects(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_DrawEffects(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_UpdateEffects(EnRaf* this, PlayState* play);
+void EnRaf_DrawEffects(EnRaf* this, PlayState* play);
 
 typedef enum {
     /* 0 */ EN_RAF_ANIMATION_IDLE,
@@ -198,7 +198,7 @@ void EnRaf_ClearPixelPetal(u16* texture, u8* clearPixelTable, s32 index) {
     }
 }
 
-void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnRaf_Init(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
     Vec3f limbScale = { 1.0f, 1.0f, 1.0f };
     s32 pad;
@@ -207,12 +207,12 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.targetMode = 3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim,
-                       this->jointTable, this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
+                       this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
 
     for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &limbScale);
@@ -236,7 +236,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
          (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+        ((Flags_GetSwitch(play, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -253,11 +253,11 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnRaf_Destroy(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
@@ -300,8 +300,8 @@ void EnRaf_SetupIdle(EnRaf* this) {
 /**
  * Sits around waiting for the player or an explosive to get near in order to grab them.
  */
-void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnRaf_Idle(EnRaf* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Actor* explosive;
     f32 xDiff;
     f32 yDiff;
@@ -311,7 +311,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
              DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
-             globalCtx->grabPlayer(globalCtx, player))) {
+             play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
 
@@ -326,11 +326,11 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
             return;
         }
 
-        if ((globalCtx->gameplayFrames % 2) == 0) {
+        if ((play->gameplayFrames % 2) == 0) {
             return;
         }
 
-        explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+        explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
         while (explosive != NULL) {
             // This check is pointless, since EnRaf is never in the explosive category.
             if ((EnRaf*)explosive == this) {
@@ -368,8 +368,8 @@ void EnRaf_SetupGrab(EnRaf* this) {
 /**
  * Grabs the player or explosive that entered its range.
  */
-void EnRaf_Grab(EnRaf* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnRaf_Grab(EnRaf* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
@@ -405,10 +405,10 @@ void EnRaf_SetupChew(EnRaf* this) {
  * damage to them and eventually throw them. If it grabbed a Goron player or explosive, it will
  * instead explode after chewing them a bit.
  */
-void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Chew(EnRaf* this, PlayState* play) {
     f32 targetChewScale;
     f32 curFrame;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     curFrame = this->skelAnime.curFrame;
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
@@ -429,12 +429,12 @@ void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
         switch (this->grabTarget) {
             case EN_RAF_GRAB_TARGET_PLAYER:
-                globalCtx->damagePlayer(globalCtx, -2);
+                play->damagePlayer(play, -2);
                 func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
-                CollisionCheck_GreenBlood(globalCtx, NULL, &player->actor.world.pos);
+                CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
                 if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
                     player->actor.freezeTimer = 10;
-                    EnRaf_SetupThrow(this, globalCtx);
+                    EnRaf_SetupThrow(this, play);
                     return;
                 }
                 break;
@@ -442,7 +442,7 @@ void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
             case EN_RAF_GRAB_TARGET_EXPLOSIVE:
                 Actor_ApplyDamage(&this->dyna.actor);
                 if (this->chewCount > (BREG(54) + 4)) {
-                    EnRaf_Explode(this, globalCtx);
+                    EnRaf_Explode(this, play);
                     return;
                 }
                 break;
@@ -451,15 +451,15 @@ void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
                     player->unk_AE8 = 1000;
-                    EnRaf_Explode(this, globalCtx);
+                    EnRaf_Explode(this, play);
                 }
                 break;
         }
     }
 }
 
-void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnRaf_SetupThrow(EnRaf* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
     player->actor.freezeTimer = 10;
@@ -471,16 +471,16 @@ void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx) {
 /**
  * Spits out the grabbed player.
  */
-void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnRaf_Throw(EnRaf* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
-        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000,
-                      BREG(56) + 10.0f, 0);
+        func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000, BREG(56) + 10.0f,
+                      0);
     } else if (curFrame < 10.0f) {
         player->actor.freezeTimer = 10;
     }
@@ -496,7 +496,7 @@ void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
 /**
  * Creates an explosion effect/sound and spawns effects.
  */
-void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Explode(EnRaf* this, PlayState* play) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f accel = { 0.0f, 0.0f, 0.0f };
     Vec3f explosionPos;
@@ -506,12 +506,12 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
     this->action = EN_RAF_ACTION_EXPLODE;
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0,
-                0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
+                CLEAR_TAG_SMALL_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
-        Flags_SetSwitch(globalCtx, this->switchFlag);
+        Flags_SetSwitch(play, this->switchFlag);
     }
 
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
@@ -532,7 +532,7 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
 
     this->timer = 5;
     if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
-        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 5);
+        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 5);
         this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
     }
 
@@ -542,17 +542,17 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
 /**
  * Switches the lily pad to the "dead" state once the timer reaches 0.
  */
-void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
-        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 6);
+        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 6);
         this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
         this->collider.dim.height = 50;
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -568,14 +568,14 @@ void EnRaf_SetupConvulse(EnRaf* this) {
  * ever coming back to life. When the water in Woodfall Temple is purified, this function
  * and EnRaf_Dissolve are jointly responsible for controlling the lily pad's death.
  */
-void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Convulse(EnRaf* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->endFrame <= curFrame) {
         this->chewCount++;
         if (this->chewCount > (BREG(2) + 2)) {
             if (this->switchFlag >= 0) {
-                Flags_SetSwitch(globalCtx, this->switchFlag);
+                Flags_SetSwitch(play, this->switchFlag);
             }
 
             EnRaf_SetupDissolve(this);
@@ -595,7 +595,7 @@ void EnRaf_SetupDissolve(EnRaf* this) {
  * When the water in Woodfall Temple is purified, this function and EnRaf_Convulse are jointly
  * responsible for controlling the lily pad's death.
  */
-void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Dissolve(EnRaf* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
 
@@ -659,7 +659,7 @@ void EnRaf_SetupDormant(EnRaf* this) {
  * Simply sits around doing nothing. If the revive timer is non-zero, then this function
  * will decrement the revive timer and revive the trap petals once it reaches 0.
  */
-void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Dormant(EnRaf* this, PlayState* play) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
@@ -687,7 +687,7 @@ void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnRaf_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRaf* this = THIS;
     WaterBox* waterBox;
@@ -698,7 +698,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     DECR(this->rippleTimer);
     DECR(this->timer);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
         this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
@@ -720,8 +720,8 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->bobOffset = 2.0f * Math_SinS(this->bobPhase);
     if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
-        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
-                                 this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                                 &ySurface, &waterBox)) {
             ySurface -= this->bobOffset + BREG(59);
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {
@@ -732,7 +732,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                 Math_Vec3f_Copy(&ripplePos, &this->dyna.actor.world.pos);
                 ripplePos.y = ySurface;
-                EffectSsGRipple_Spawn(globalCtx, &ripplePos, 650, 3150, 0);
+                EffectSsGRipple_Spawn(play, &ripplePos, 650, 3150, 0);
             }
         }
     } else {
@@ -742,7 +742,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Math_ApproachZeroF(&this->heightDiffFromPlayer, 0.3f, 2.0f);
     if (this->action == EN_RAF_ACTION_EXPLODE) {
-        EnRaf_UpdateEffects(this, globalCtx);
+        EnRaf_UpdateEffects(this, play);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
@@ -759,7 +759,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     if (this->action < EN_RAF_ACTION_EXPLODE) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -787,8 +787,8 @@ static Vec3f sUpperSegmentTargetScaleDuringSpit[] = {
     { 1.5f, 1.5f, 1.7f }, { 1.5f, 1.5f, 1.3f }, { 3.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
 };
 
-void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
+    PlayState* play = play2;
     EnRaf* this = THIS;
     s32 i;
 
@@ -829,13 +829,13 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             // These matrix operations make the trap petals look a bit more "wobbly" as it chews
             // by stretching the limbs in various random directions.
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
-                Matrix_RotateYS((this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateXS((this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateZS((this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateYS((this->chewLimbRot[limbIndex].y * play->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateXS((this->chewLimbRot[limbIndex].x * play->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateZS((this->chewLimbRot[limbIndex].z * play->gameplayFrames), MTXMODE_APPLY);
                 Matrix_Scale(this->chewScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                Matrix_RotateZS(-(this->chewLimbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateXS(-(this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateYS(-(this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateZS(-(this->chewLimbRot[limbIndex].z * play->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateXS(-(this->chewLimbRot[limbIndex].x * play->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateYS(-(this->chewLimbRot[limbIndex].y * play->gameplayFrames), MTXMODE_APPLY);
             }
             break;
 
@@ -866,16 +866,16 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                  MTXMODE_APPLY);
 }
 
-void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnRaf_Draw(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
     if (this->action == EN_RAF_ACTION_EXPLODE) {
-        EnRaf_DrawEffects(this, globalCtx);
+        EnRaf_DrawEffects(this, play);
     }
 }
 
@@ -899,7 +899,7 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
     }
 }
 
-void EnRaf_UpdateEffects(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
     s32 i;
     EnRafEffect* effect = this->effects;
 
@@ -917,8 +917,8 @@ void EnRaf_UpdateEffects(EnRaf* this, GlobalContext* globalCtx) {
 
             if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
                 if (effect->pos.y < (this->dyna.actor.world.pos.y - 10.0f)) {
-                    EffectSsGSplash_Spawn(globalCtx, &effect->pos, NULL, NULL, 0, effect->scale * 200000.0f);
-                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &effect->pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+                    EffectSsGSplash_Spawn(play, &effect->pos, NULL, NULL, 0, effect->scale * 200000.0f);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &effect->pos, 50, NA_SE_EV_BOMB_DROP_WATER);
                     effect->isEnabled = false;
                 }
             } else if (effect->pos.y < (this->dyna.actor.world.pos.y - 10.0f)) {
@@ -937,14 +937,14 @@ void EnRaf_UpdateEffects(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnRaf_DrawEffects(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
     s16 i;
     EnRafEffect* effect = this->effects;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

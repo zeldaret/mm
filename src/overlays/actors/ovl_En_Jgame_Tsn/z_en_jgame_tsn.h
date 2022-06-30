@@ -6,7 +6,7 @@
 
 struct EnJgameTsn;
 
-typedef void (*EnJgameTsnActionFunc)(struct EnJgameTsn*, GlobalContext*);
+typedef void (*EnJgameTsnActionFunc)(struct EnJgameTsn*, PlayState*);
 
 #define ENJGAMETSN_GET_FF(thisx) ((thisx)->params & 0xFF)
 
