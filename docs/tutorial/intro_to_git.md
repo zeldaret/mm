@@ -23,7 +23,7 @@ Local
                  A
 ```
 
-Each `o` is a commit. The lines show the commit that each commit mas based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `master` and `A`, and they currently both point to the commits furthest along their respective chains.
+Each `o` is a commit. The lines show the commit that each commit was based on: we can see in the local there is one commit with two commits based on it. The local has two branches, `master` and `A`, and they currently both point to the commits furthest along their respective chains.
 
 Throughout this guide, stuff in `SCREAMING_SNAKE_CASE` represents fields for you to fill in with the appropriate text, e.g. FILE should be replaced with a particular filename.
 

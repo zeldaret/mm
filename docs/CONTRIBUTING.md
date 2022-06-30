@@ -81,7 +81,7 @@ void CollisionCheck_SpawnWaterDroplets(PlayState* play, Vec3f* v);
 
 Before PRing with a `NON_MATCHING`, you can try
 
-- using the [decomp-permuter](../tools/decomp-permuter) to find a closer match,
+- using the [decomp-permuter](https://github.com/simonlindholm/decomp-permuter) to find a closer match,
 - Asking in `#mm-decomp-help` in Discord; the easiest way to allow other people to play around with the function you are stuck on is to make a scratch on [decomp.me](http://decomp.me).
 
 `NON_EQUIVALENT` can be used with the same syntax as `NON_MATCHING`, but it is used to mark sections of code which do not match *and* do not have the same behavior as the original code.
