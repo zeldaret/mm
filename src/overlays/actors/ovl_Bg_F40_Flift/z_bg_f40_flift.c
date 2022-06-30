@@ -56,15 +56,15 @@ void BgF40Flift_Destroy(Actor* thisx, PlayState* play) {
 void func_808D75F0(BgF40Flift* this, PlayState* play) {
     if (((this->dyna.actor.params == 1) && (DynaPolyActor_IsInRidingMovingState(&this->dyna))) ||
         ((this->dyna.actor.params == -1) && (!DynaPolyActor_IsInRidingMovingState(&this->dyna)))) {
-        this->timer = 0x60;
+        this->timer = 96;
         this->actionFunc = func_808D7714;
     } else {
         if (this->timer == 0) {
-            this->timer = 0x30;
+            this->timer = 48;
         }
         this->timer--;
         if (this->dyna.actor.params == 1) {
-            this->dyna.actor.world.pos.y = (sin_rad(this->timer * 0.1308997f) * 5.0f) + this->dyna.actor.home.pos.y;
+            this->dyna.actor.world.pos.y = (sin_rad(this->timer * (M_PI / 24.0f)) * 5.0f) + this->dyna.actor.home.pos.y;
         } else {
             this->dyna.actor.world.pos.y =
                 (sin_rad(this->timer * (M_PI / 24.0f)) * 5.0f) + (926.8f + this->dyna.actor.home.pos.y);
