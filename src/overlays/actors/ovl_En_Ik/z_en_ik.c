@@ -5,15 +5,16 @@
  */
 
 #include "z_en_ik.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnIk*)thisx)
 
-void EnIk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnIk_Init(Actor* thisx, PlayState* play);
+void EnIk_Destroy(Actor* thisx, PlayState* play);
+void EnIk_Update(Actor* thisx, PlayState* play);
+void EnIk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Ik_InitVars = {

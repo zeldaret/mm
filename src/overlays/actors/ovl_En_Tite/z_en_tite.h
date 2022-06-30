@@ -5,7 +5,7 @@
 
 struct EnTite;
 
-typedef void (*EnTiteActionFunc)(struct EnTite*, GlobalContext*);
+typedef void (*EnTiteActionFunc)(struct EnTite*, PlayState*);
 
 enum {
     /* -4 */ ENTITE_MINUS_4 = -4,

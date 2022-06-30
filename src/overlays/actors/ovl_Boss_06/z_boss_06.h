@@ -5,7 +5,7 @@
 
 struct Boss06;
 
-typedef void (*Boss06ActionFunc)(struct Boss06*, GlobalContext*);
+typedef void (*Boss06ActionFunc)(struct Boss06*, PlayState*);
 
 #define ENBOSS06_GET_PARAMS(thisx) ((thisx)->params)
 

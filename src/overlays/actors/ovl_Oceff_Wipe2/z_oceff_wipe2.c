@@ -10,10 +10,10 @@
 
 #define THIS ((OceffWipe2*)thisx)
 
-void OceffWipe2_Init(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe2_Update(Actor* thisx, GlobalContext* globalCtx);
-void OceffWipe2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void OceffWipe2_Init(Actor* thisx, PlayState* play);
+void OceffWipe2_Destroy(Actor* thisx, PlayState* play);
+void OceffWipe2_Update(Actor* thisx, PlayState* play);
+void OceffWipe2_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Oceff_Wipe2_InitVars = {

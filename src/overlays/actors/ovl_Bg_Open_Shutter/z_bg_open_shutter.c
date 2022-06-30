@@ -5,19 +5,20 @@
  */
 
 #include "z_bg_open_shutter.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgOpenShutter*)thisx)
 
-void BgOpenShutter_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgOpenShutter_Init(Actor* thisx, PlayState* play);
+void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
+void BgOpenShutter_Update(Actor* thisx, PlayState* play);
+void BgOpenShutter_Draw(Actor* thisx, PlayState* play);
 
-void func_80ACAD88(BgOpenShutter* this, GlobalContext* globalCtx);
-void func_80ACAE5C(BgOpenShutter* this, GlobalContext* globalCtx);
-void func_80ACAEF0(BgOpenShutter* this, GlobalContext* globalCtx);
+void func_80ACAD88(BgOpenShutter* this, PlayState* play);
+void func_80ACAE5C(BgOpenShutter* this, PlayState* play);
+void func_80ACAEF0(BgOpenShutter* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Open_Shutter_InitVars = {

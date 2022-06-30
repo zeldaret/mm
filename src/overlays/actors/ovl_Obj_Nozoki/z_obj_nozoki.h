@@ -5,7 +5,7 @@
 
 struct ObjNozoki;
 
-typedef void (*ObjNozokiActionFunc)(struct ObjNozoki*, GlobalContext*);
+typedef void (*ObjNozokiActionFunc)(struct ObjNozoki*, PlayState*);
 
 #define OBJNOZOKI_GET_SWITCHFLAG1(thisx) ((thisx)->params & 0x7F)
 #define OBJNOZOKI_GET_180(thisx) (((thisx)->params >> 7) & 3)

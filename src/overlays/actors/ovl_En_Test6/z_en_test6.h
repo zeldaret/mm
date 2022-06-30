@@ -5,7 +5,7 @@
 
 struct EnTest6;
 
-typedef void (*EnTest6ActionFunc)(struct EnTest6*, GlobalContext*);
+typedef void (*EnTest6ActionFunc)(struct EnTest6*, PlayState*);
 
 #define ENTEST6_GET(thisx) ((thisx)->params)
 

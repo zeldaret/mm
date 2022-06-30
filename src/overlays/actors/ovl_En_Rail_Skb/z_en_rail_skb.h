@@ -5,7 +5,7 @@
 
 struct EnRailSkb;
 
-typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, GlobalContext*);
+typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, PlayState*);
 typedef void (*EnRailSkbUnkFunc)(struct EnRailSkb*);
 
 #define ENRAILSKB_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
