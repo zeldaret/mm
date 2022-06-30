@@ -12,7 +12,7 @@
 #include "objects/object_os_anime/object_os_anime.h"
 
 static AnimationInfoS sAnimations[] = {
-    { &object_aob_Anim_00007C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -37,9 +37,9 @@ static AnimationInfoS sAnimations[] = {
 
 s8 gEnHyBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2 };
 
-s8 gEnHyBodyPartsIndex[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
+s8 gEnHyParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
 
-u8 gEnHyShadowSize[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+u8 gEnHyShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
@@ -58,24 +58,24 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     return isChanged;
 }
 
-EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
+EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     EnDoor* nearestDoor = NULL;
     Actor* doorIter = NULL;
-    EnDoor* door;
     f32 dist;
+    EnDoor* door;
     s32 isSetup = false;
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->actor);
+        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
             isSetup = true;
         }
-        doorIter = door->actor.next;
+        doorIter = door->dyna.actor.next;
     } while (doorIter != NULL);
 
     if (1) {}
@@ -83,16 +83,16 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
-void EnHy_ChangeObjectAndAnim(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->animObjIndex].segment);
+void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[enHy->animObjIndex].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, GlobalContext* globalCtx) {
+s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->animObjIndex].segment);
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[enHy->animObjIndex].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -109,55 +109,55 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
     }
 }
 
-s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
+s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((SubS_IsObjectLoaded(enHy->animObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->headObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, globalCtx) == true)) {
+    if ((SubS_IsObjectLoaded(enHy->animObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, play) == true)) {
         enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
-        SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[enHy->actor.objBankIndex].segment);
+        SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
-        EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+        EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     }
 
     return isInitialized;
 }
 
-void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4) {
+void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4) {
     s32 pad;
-    s8 sp3B;
+    s8 animIndex;
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_OffsetOfPointInActorCoords(&door->actor, &offset, &enHy->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
-    sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, (sp3B == 0) ? arg3 : arg4);
+    animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
+    EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
-    AnimationContext_SetMoveActor(globalCtx, &enHy->actor, &enHy->skelAnime, 1.0f);
+    AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->unk_1A1 = 1;
-    door->unk_1A0 = sp3B;
+    door->animIndex = animIndex;
 }
 
-s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
+s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
     s32 ret = false;
     s16 yaw;
     EnDoor* door;
     s32 pad;
 
-    if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
-        door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
+        door = EnHy_FindNearestDoor(&enHy->actor, play);
         if (door != NULL) {
             ret = true;
-            func_800F0BB4(enHy, globalCtx, door, arg3, arg4);
-            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
+            func_800F0BB4(enHy, play, door, arg3, arg4);
+            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.pos.x += arg5 * Math_SinS(yaw);
             enHy->actor.world.pos.z += arg5 * Math_CosS(yaw);
             enHy->actor.world.rot.y = -yaw;
@@ -168,18 +168,18 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
     return ret;
 }
 
-s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
+s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
     s32 ret = false;
     s32 pad;
     EnDoor* door;
 
     enHy->curPoint = 0;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
-        door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
+        door = EnHy_FindNearestDoor(&enHy->actor, play);
         if (door != NULL) {
             ret = true;
-            func_800F0BB4(enHy, globalCtx, door, arg2, arg3);
-            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
+            func_800F0BB4(enHy, play, door, arg2, arg3);
+            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
             enHy->actor.flags &= ~ACTOR_FLAG_1;
@@ -188,16 +188,16 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     return ret;
 }
 
-s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
+s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
     enHy->actor.flags |= ACTOR_FLAG_1;
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+    EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint++;
     return false;
 }
 
-s32 EnHy_SetPointBackwards(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex) {
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+s32 EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex) {
+    EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint--;
     return false;
 }
@@ -209,7 +209,8 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
 
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
+        SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint++;
         if (enHy->curPoint >= enHy->path->count) {
             reachedEnd = true;
@@ -226,7 +227,8 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
 
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
+        SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint--;
         if (enHy->curPoint < 0) {
             reachedEnd = true;
@@ -236,16 +238,16 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
     return reachedEnd;
 }
 
-void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx) {
+void EnHy_UpdateCollider(EnHy* enHy, PlayState* play) {
     enHy->collider.dim.pos.x = enHy->actor.world.pos.x;
     enHy->collider.dim.pos.y = enHy->actor.world.pos.y;
     enHy->collider.dim.pos.z = enHy->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &enHy->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &enHy->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &enHy->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &enHy->collider.base);
 }
 
-s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThreshold) {
+s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
     u8 wasLeftFootOnGround = enHy->isLeftFootOnGround;
     u8 wasRightFootOnGround = enHy->isRightFootOnGround;
     s32 waterSfxId;
@@ -260,15 +262,15 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
         }
         sfxId = waterSfxId + SFX_FLAG;
     } else {
-        sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfx(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
 
-    enHy->isLeftFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
+    enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
 
-    enHy->isRightFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->rightFootPos, distAboveThreshold);
+    enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }

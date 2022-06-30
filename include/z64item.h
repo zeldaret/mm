@@ -31,7 +31,7 @@ typedef enum {
     /* 0x05 */ QUEST_SWORD,
     /* 0x06 */ QUEST_SONG_SONATA,
     /* 0x07 */ QUEST_SONG_LULLABY,
-    /* 0x08 */ QUEST_SONG_NOVA,
+    /* 0x08 */ QUEST_SONG_BOSSA_NOVA,
     /* 0x09 */ QUEST_SONG_ELEGY,
     /* 0x0A */ QUEST_SONG_OATH,
     /* 0x0B */ QUEST_SONG_SARIA,
@@ -43,7 +43,7 @@ typedef enum {
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_UNK_19, // Related to PictoBox
+    /* 0x19 */ QUEST_UNK_19 // Related to PictoBox
 } QuestItem;
 
 typedef enum {
@@ -261,6 +261,7 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEA_HORSE_CAUGHT,
+    /* 0xFD */ ITEM_UNK_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 
@@ -278,7 +279,10 @@ typedef enum {
     /* 0x0A */ GI_RECOVERY_HEART,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
-    /* 0x16 */ GI_BOMBS_10 = 0x16,
+    /* 0x11 */ GI_STRAY_FAIRY = 0x11,
+    /* 0x14 */ GI_BOMBS_1 = 0x14,
+    /* 0x15 */ GI_BOMBS_5,
+    /* 0x16 */ GI_BOMBS_10,
     /* 0x19 */ GI_STICKS_1 = 0x19,
     /* 0x1A */ GI_BOMBCHUS_10,
     /* 0x1B */ GI_BOMB_BAG_20,
@@ -291,28 +295,34 @@ typedef enum {
     /* 0x22 */ GI_QUIVER_30,
     /* 0x23 */ GI_QUIVER_40,
     /* 0x24 */ GI_QUIVER_50,
+    /* 0x25 */ GI_25 = 0x25,
     /* 0x28 */ GI_NUTS_1 = 0x28,
     /* 0x2A */ GI_NUTS_10 = 0x2A,
     /* 0x32 */ GI_SHIELD_HERO = 0x32,
     /* 0x33 */ GI_SHIELD_MIRROR,
     /* 0x35 */ GI_MAGIC_BEANS = 0x35,
+    /* 0x36 */ GI_BOMBCHUS_1,
+    /* 0x3A */ GI_BOMBCHUS_5 = 0x3A,
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
-    /* 0x3E */ GI_MAP = 0x3E,
+    /* 0x3D */ GI_KEY_BOSS,
+    /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
     /* 0x50 */ GI_50 = 0x50,
     /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
-    /* 0x5B */ GI_POTION_RED = 0x5B,
+    /* 0x5A */ GI_BOTTLE,
+    /* 0x5B */ GI_POTION_RED,
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,
     /* 0x5E */ GI_FAIRY,
     /* 0x60 */ GI_MILK_BOTTLE = 0x60,
+    /* 0x76 */ GI_ICE_TRAP = 0x76,
     /* 0x78 */ GI_MASK_DEKU = 0x78,
     /* 0x79 */ GI_MASK_GORON,
     /* 0x7A */ GI_MASK_ZORA,
     /* 0x7B */ GI_MASK_FIERCE_DEITY,
-    /* 0x7C */ GI_MASK_TRUTH,
-    /* 0x7D */ GI_MASK_KAFEIS_MASK,
+    /* 0x7C */ GI_MASK_CAPTAIN,
+    /* 0x7D */ GI_MASK_GIANT,
     /* 0x7E */ GI_MASK_ALL_NIGHT,
     /* 0x7F */ GI_MASK_BUNNY,
     /* 0x80 */ GI_MASK_KEATON,
@@ -325,38 +335,45 @@ typedef enum {
     /* 0x87 */ GI_MASK_GIBDO,
     /* 0x88 */ GI_MASK_DON_GERO,
     /* 0x89 */ GI_MASK_KAMARO,
-    /* 0x8A */ GI_MASK_CAPTAIN,
+    /* 0x8A */ GI_MASK_TRUTH,
     /* 0x8B */ GI_MASK_STONE,
     /* 0x8C */ GI_MASK_BREMEN,
     /* 0x8D */ GI_MASK_BLAST,
     /* 0x8E */ GI_MASK_SCENTS,
-    /* 0x8F */ GI_MASK_GIANT,
-    /* 0x92 */ GI_MILK = 0x92,
-    /* 0x96 */ GI_MOON_TEAR = 0x96,
+    /* 0x8F */ GI_MASK_KAFEIS_MASK,
+    /* 0x91 */ GI_CHATEAU = 0x91,
+    /* 0x92 */ GI_MILK,
+    /* 0x93 */ GI_GOLD_DUST,
+    /* 0x94 */ GI_EEL, // Unused bottled eel
+    /* 0x95 */ GI_SEAHORSE, 
+    /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
     /* 0x98 */ GI_DEED_SWAMP,
     /* 0x99 */ GI_DEED_MOUNTAIN,
     /* 0x9A */ GI_DEED_OCEAN,
-    /* 0x9B */ GI_SWORD_GREAT_FAIRY = 0x9B,
+    /* 0x9B */ GI_SWORD_GREAT_FAIRY,
     /* 0x9C */ GI_SWORD_KOKIRI,
     /* 0x9D */ GI_SWORD_RAZOR,
     /* 0x9E */ GI_SWORD_GILDED,
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
-    /* 0xA9 */ GI_BOTTLE = 0xA9,
-    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
+    /* 0xA9 */ GI_BOTTLE_STOLEN = 0xA9, // buy back stolen bottle
+    /* 0xAA */ GI_LETTER_TO_KAFEI,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES,
     /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
-    /* 0x02 */ GID_02 = 0x02,
+    /* 0x01 */ GID_01,
+    /* 0x02 */ GID_02,
     /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
     /* 0x0E */ GID_0E = 0x0E,
     /* 0x0F */ GID_0F,
     /* 0x10 */ GID_MASK_ALL_NIGHT = 0x10,
     /* 0x11 */ GID_NUTS,
+    /* 0x13 */ GID_13 = 0x13,
     /* 0x17 */ GID_BOMB_BAG_20 = 0x17,
     /* 0x18 */ GID_BOMB_BAG_30,
     /* 0x19 */ GID_BOMB_BAG_40,
@@ -372,11 +389,17 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x39 */ GID_39 = 0x39,
+    /* 0x3A */ GID_3A,
     /* 0x3B */ GID_FAIRY,
     /* 0x3E */ GID_3E = 0x3E,
     /* 0x44 */ GID_44 = 0x44,
     /* 0x45 */ GID_45,
+    /* 0x47 */ GID_47 = 0x47,
+    /* 0x4F */ GID_4F = 0x4F,
+    /* 0x50 */ GID_50,
+    /* 0x51 */ GID_51,
+    /* 0x53 */ GID_53 = 0x53,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
@@ -384,13 +407,14 @@ typedef enum {
     /* 0x6A */ GID_6A = 0x6A,
     /* 0x6B */ GID_6B,
     /* 0x70 */ GID_70 = 0x70,
-    /* 0x71 */ GID_71,
+    /* 0x71 */ GID_71
 } GetItemDrawID;
 
 // TODO: fill
 typedef enum {
     /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
     /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x13 */ EXCH_ITEM_13 = 0x13,
     /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
     /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
     /* 0x2E */ EXCH_ITEM_2E = 0x2E

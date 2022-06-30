@@ -39,33 +39,33 @@
         <Texture Name="object_al_Tex_008D38" OutName="tex_008D38" Format="ci8" Width="16" Height="16" Offset="0x8D38" />
         <Texture Name="object_al_Tex_008E38" OutName="tex_008E38" Format="rgba16" Width="32" Height="64" Offset="0x8E38" />
         <Texture Name="object_al_Tex_009E38" OutName="tex_009E38" Format="rgba16" Width="8" Height="16" Offset="0x9E38" />
-        <Limb Name="object_al_Standardlimb_009F38" Type="Standard" Offset="0x9F38" />
-        <Limb Name="object_al_Standardlimb_009F44" Type="Standard" Offset="0x9F44" />
-        <Limb Name="object_al_Standardlimb_009F50" Type="Standard" Offset="0x9F50" />
-        <Limb Name="object_al_Standardlimb_009F5C" Type="Standard" Offset="0x9F5C" />
-        <Limb Name="object_al_Standardlimb_009F68" Type="Standard" Offset="0x9F68" />
-        <Limb Name="object_al_Standardlimb_009F74" Type="Standard" Offset="0x9F74" />
-        <Limb Name="object_al_Standardlimb_009F80" Type="Standard" Offset="0x9F80" />
-        <Limb Name="object_al_Standardlimb_009F8C" Type="Standard" Offset="0x9F8C" />
-        <Limb Name="object_al_Standardlimb_009F98" Type="Standard" Offset="0x9F98" />
-        <Limb Name="object_al_Standardlimb_009FA4" Type="Standard" Offset="0x9FA4" />
-        <Limb Name="object_al_Standardlimb_009FB0" Type="Standard" Offset="0x9FB0" />
-        <Limb Name="object_al_Standardlimb_009FBC" Type="Standard" Offset="0x9FBC" />
-        <Limb Name="object_al_Standardlimb_009FC8" Type="Standard" Offset="0x9FC8" />
-        <Limb Name="object_al_Standardlimb_009FD4" Type="Standard" Offset="0x9FD4" />
-        <Limb Name="object_al_Standardlimb_009FE0" Type="Standard" Offset="0x9FE0" />
-        <Limb Name="object_al_Standardlimb_009FEC" Type="Standard" Offset="0x9FEC" />
-        <Limb Name="object_al_Standardlimb_009FF8" Type="Standard" Offset="0x9FF8" />
-        <Limb Name="object_al_Standardlimb_00A004" Type="Standard" Offset="0xA004" />
-        <Limb Name="object_al_Standardlimb_00A010" Type="Standard" Offset="0xA010" />
-        <Limb Name="object_al_Standardlimb_00A01C" Type="Standard" Offset="0xA01C" />
-        <Limb Name="object_al_Standardlimb_00A028" Type="Standard" Offset="0xA028" />
-        <Limb Name="object_al_Standardlimb_00A034" Type="Standard" Offset="0xA034" />
-        <Limb Name="object_al_Standardlimb_00A040" Type="Standard" Offset="0xA040" />
-        <Limb Name="object_al_Standardlimb_00A04C" Type="Standard" Offset="0xA04C" />
-        <Limb Name="object_al_Standardlimb_00A058" Type="Standard" Offset="0xA058" />
-        <Limb Name="object_al_Standardlimb_00A064" Type="Standard" Offset="0xA064" />
-        <Skeleton Name="object_al_Skel_00A0D8" Type="Flex" LimbType="Standard" Offset="0xA0D8" />
+        <Limb Name="object_al_Standardlimb_009F38" Type="Standard" EnumName="OBJECT_AL_LIMB_01" Offset="0x9F38" />
+        <Limb Name="object_al_Standardlimb_009F44" Type="Standard" EnumName="OBJECT_AL_LIMB_02" Offset="0x9F44" />
+        <Limb Name="object_al_Standardlimb_009F50" Type="Standard" EnumName="OBJECT_AL_LIMB_03" Offset="0x9F50" />
+        <Limb Name="object_al_Standardlimb_009F5C" Type="Standard" EnumName="OBJECT_AL_LIMB_04" Offset="0x9F5C" />
+        <Limb Name="object_al_Standardlimb_009F68" Type="Standard" EnumName="OBJECT_AL_LIMB_05" Offset="0x9F68" />
+        <Limb Name="object_al_Standardlimb_009F74" Type="Standard" EnumName="OBJECT_AL_LIMB_06" Offset="0x9F74" />
+        <Limb Name="object_al_Standardlimb_009F80" Type="Standard" EnumName="OBJECT_AL_LIMB_07" Offset="0x9F80" />
+        <Limb Name="object_al_Standardlimb_009F8C" Type="Standard" EnumName="OBJECT_AL_LIMB_08" Offset="0x9F8C" />
+        <Limb Name="object_al_Standardlimb_009F98" Type="Standard" EnumName="OBJECT_AL_LIMB_09" Offset="0x9F98" />
+        <Limb Name="object_al_Standardlimb_009FA4" Type="Standard" EnumName="OBJECT_AL_LIMB_0A" Offset="0x9FA4" />
+        <Limb Name="object_al_Standardlimb_009FB0" Type="Standard" EnumName="OBJECT_AL_LIMB_0B" Offset="0x9FB0" />
+        <Limb Name="object_al_Standardlimb_009FBC" Type="Standard" EnumName="OBJECT_AL_LIMB_0C" Offset="0x9FBC" />
+        <Limb Name="object_al_Standardlimb_009FC8" Type="Standard" EnumName="OBJECT_AL_LIMB_0D" Offset="0x9FC8" />
+        <Limb Name="object_al_Standardlimb_009FD4" Type="Standard" EnumName="OBJECT_AL_LIMB_0E" Offset="0x9FD4" />
+        <Limb Name="object_al_Standardlimb_009FE0" Type="Standard" EnumName="OBJECT_AL_LIMB_0F" Offset="0x9FE0" />
+        <Limb Name="object_al_Standardlimb_009FEC" Type="Standard" EnumName="OBJECT_AL_LIMB_10" Offset="0x9FEC" />
+        <Limb Name="object_al_Standardlimb_009FF8" Type="Standard" EnumName="OBJECT_AL_LIMB_11" Offset="0x9FF8" />
+        <Limb Name="object_al_Standardlimb_00A004" Type="Standard" EnumName="OBJECT_AL_LIMB_12" Offset="0xA004" />
+        <Limb Name="object_al_Standardlimb_00A010" Type="Standard" EnumName="OBJECT_AL_LIMB_13" Offset="0xA010" />
+        <Limb Name="object_al_Standardlimb_00A01C" Type="Standard" EnumName="OBJECT_AL_LIMB_14" Offset="0xA01C" />
+        <Limb Name="object_al_Standardlimb_00A028" Type="Standard" EnumName="OBJECT_AL_LIMB_15" Offset="0xA028" />
+        <Limb Name="object_al_Standardlimb_00A034" Type="Standard" EnumName="OBJECT_AL_LIMB_16" Offset="0xA034" />
+        <Limb Name="object_al_Standardlimb_00A040" Type="Standard" EnumName="OBJECT_AL_LIMB_17" Offset="0xA040" />
+        <Limb Name="object_al_Standardlimb_00A04C" Type="Standard" EnumName="OBJECT_AL_LIMB_18" Offset="0xA04C" />
+        <Limb Name="object_al_Standardlimb_00A058" Type="Standard" EnumName="OBJECT_AL_LIMB_19" Offset="0xA058" />
+        <Limb Name="object_al_Standardlimb_00A064" Type="Standard" EnumName="OBJECT_AL_LIMB_1A" Offset="0xA064" />
+        <Skeleton Name="object_al_Skel_00A0D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AL_LIMB_NONE" LimbMax="OBJECT_AL_LIMB_MAX" EnumName="object_al_Limbs" Offset="0xA0D8" />
         <Animation Name="object_al_Anim_00A764" Offset="0xA764" />
         <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" />
         <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" />

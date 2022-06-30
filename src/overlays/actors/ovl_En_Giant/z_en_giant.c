@@ -10,14 +10,14 @@
 
 #define THIS ((EnGiant*)thisx)
 
-void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGiant_Init(Actor* thisx, PlayState* play);
+void EnGiant_Destroy(Actor* thisx, PlayState* play);
+void EnGiant_Update(Actor* thisx, PlayState* play);
+void EnGiant_Draw(Actor* thisx, PlayState* play);
 
-void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
-void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
-void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play);
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, PlayState* play);
+void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play);
 
 #define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
 #define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
@@ -143,7 +143,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
     return false;
 }
 
-void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Init(Actor* thisx, PlayState* play) {
     EnGiant* this = THIS;
     s32 type = GIANT_TYPE(thisx);
 
@@ -151,8 +151,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable,
-                       this->morphTable, GIANT_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable, this->morphTable,
+                       GIANT_LIMB_MAX);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -165,28 +165,29 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C6;
+            this->actorActionCommand = 454;
             break;
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C7;
+            this->actorActionCommand = 455;
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C8;
+            this->actorActionCommand = 456;
             break;
         default:
-            this->actorActionCommand = 0x1C5;
+            this->actorActionCommand = 453;
             break;
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.weekEventReg[25] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
+
         this->actorActionCommand = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
@@ -236,7 +237,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
@@ -387,21 +388,23 @@ void EnGiant_PlaySound(EnGiant* this) {
     }
 }
 
-void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 startPosY = actorAction->unk0C.y;
+void EnGiant_UpdatePosition(EnGiant* this, PlayState* play, u32 actionIndex) {
+    CsCmdActorAction* actorAction = play->csCtx.actorActions[actionIndex];
+    f32 startPosY = actorAction->startPos.y;
     s32 pad[2];
-    f32 endPosY = actorAction->unk18.y;
-    f32 scale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    f32 endPosY = actorAction->endPos.y;
+    f32 scale = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, play->csCtx.frames);
 
     this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
-void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
+        EnGiant_UpdatePosition(this, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
+        if (this->csAction !=
+            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
+            this->csAction =
+                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -414,17 +417,19 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
     EnGiant_PlayAndUpdateAnimation(this);
 }
 
-void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
+    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
+        if (this->csAction !=
+            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
+            this->csAction =
+                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -438,13 +443,13 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     EnGiant_PlayAndUpdateAnimation(this);
 }
 
-void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Update(Actor* thisx, PlayState* play) {
     EnGiant* this = THIS;
     s32 blinkTimerTemp;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->blinkTimer == 0) {
         blinkTimerTemp = 0;
@@ -462,59 +467,57 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnGiant_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == GIANT_LIMB_HEAD) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gSPDisplayList(POLY_OPA_DISP++, gGiantBeardDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
-                             Gfx** gfx) {
+void EnGiant_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGiant* this = THIS;
 
     if (limbIndex == GIANT_LIMB_HEAD) {
-        Matrix_CopyCurrentState(&this->headDrawMtxF);
+        Matrix_Get(&this->headDrawMtxF);
     }
 }
 
-void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGiant_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGiant* this = THIS;
     static TexturePtr sFaceTextures[] = { gGiantFaceEyeOpenTex, gGiantFaceEyeHalfTex, gGiantFaceEyeClosedTex };
 
     if (this->alpha > 0) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha >= 255) {
-            func_8012C28C(globalCtx->state.gfxCtx);
+            func_8012C28C(play->state.gfxCtx);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-            Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+            Scene_SetRenderModeXlu(play, 0, 1);
+            SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
                 func_8012C2B4(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 2, 2);
+                Scene_SetRenderModeXlu(play, 2, 2);
             } else {
                 func_8012C304(POLY_XLU_DISP++);
-                Scene_SetRenderModeXlu(globalCtx, 1, 2);
+                Scene_SetRenderModeXlu(play, 1, 2);
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
             POLY_XLU_DISP =
-                SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
-            Matrix_InsertMatrix(&this->headDrawMtxF, MTXMODE_NEW);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            Matrix_Mult(&this->headDrawMtxF, MTXMODE_NEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

@@ -43,23 +43,23 @@
         <DList Name="object_tk_DL_00B260" Offset="0xB260" />
         <DList Name="object_tk_DL_00B3C8" Offset="0xB3C8" />
         <DList Name="object_tk_DL_00B530" Offset="0xB530" />
-        <Limb Name="object_tk_Standardlimb_00B8D8" Type="Standard" Offset="0xB8D8" />
-        <Limb Name="object_tk_Standardlimb_00B8E4" Type="Standard" Offset="0xB8E4" />
-        <Limb Name="object_tk_Standardlimb_00B8F0" Type="Standard" Offset="0xB8F0" />
-        <Limb Name="object_tk_Standardlimb_00B8FC" Type="Standard" Offset="0xB8FC" />
-        <Limb Name="object_tk_Standardlimb_00B908" Type="Standard" Offset="0xB908" />
-        <Limb Name="object_tk_Standardlimb_00B914" Type="Standard" Offset="0xB914" />
-        <Limb Name="object_tk_Standardlimb_00B920" Type="Standard" Offset="0xB920" />
-        <Limb Name="object_tk_Standardlimb_00B92C" Type="Standard" Offset="0xB92C" />
-        <Limb Name="object_tk_Standardlimb_00B938" Type="Standard" Offset="0xB938" />
-        <Limb Name="object_tk_Standardlimb_00B944" Type="Standard" Offset="0xB944" />
-        <Limb Name="object_tk_Standardlimb_00B950" Type="Standard" Offset="0xB950" />
-        <Limb Name="object_tk_Standardlimb_00B95C" Type="Standard" Offset="0xB95C" />
-        <Limb Name="object_tk_Standardlimb_00B968" Type="Standard" Offset="0xB968" />
-        <Limb Name="object_tk_Standardlimb_00B974" Type="Standard" Offset="0xB974" />
-        <Limb Name="object_tk_Standardlimb_00B980" Type="Standard" Offset="0xB980" />
-        <Limb Name="object_tk_Standardlimb_00B98C" Type="Standard" Offset="0xB98C" />
-        <Limb Name="object_tk_Standardlimb_00B998" Type="Standard" Offset="0xB998" />
-        <Skeleton Name="object_tk_Skel_00B9E8" Type="Flex" LimbType="Standard" Offset="0xB9E8" />
+        <Limb Name="object_tk_Standardlimb_00B8D8" Type="Standard" EnumName="OBJECT_TK_LIMB_01" Offset="0xB8D8" />
+        <Limb Name="object_tk_Standardlimb_00B8E4" Type="Standard" EnumName="OBJECT_TK_LIMB_02" Offset="0xB8E4" />
+        <Limb Name="object_tk_Standardlimb_00B8F0" Type="Standard" EnumName="OBJECT_TK_LIMB_03" Offset="0xB8F0" />
+        <Limb Name="object_tk_Standardlimb_00B8FC" Type="Standard" EnumName="OBJECT_TK_LIMB_04" Offset="0xB8FC" />
+        <Limb Name="object_tk_Standardlimb_00B908" Type="Standard" EnumName="OBJECT_TK_LIMB_05" Offset="0xB908" />
+        <Limb Name="object_tk_Standardlimb_00B914" Type="Standard" EnumName="OBJECT_TK_LIMB_06" Offset="0xB914" />
+        <Limb Name="object_tk_Standardlimb_00B920" Type="Standard" EnumName="OBJECT_TK_LIMB_07" Offset="0xB920" />
+        <Limb Name="object_tk_Standardlimb_00B92C" Type="Standard" EnumName="OBJECT_TK_LIMB_08" Offset="0xB92C" />
+        <Limb Name="object_tk_Standardlimb_00B938" Type="Standard" EnumName="OBJECT_TK_LIMB_09" Offset="0xB938" />
+        <Limb Name="object_tk_Standardlimb_00B944" Type="Standard" EnumName="OBJECT_TK_LIMB_0A" Offset="0xB944" />
+        <Limb Name="object_tk_Standardlimb_00B950" Type="Standard" EnumName="OBJECT_TK_LIMB_0B" Offset="0xB950" />
+        <Limb Name="object_tk_Standardlimb_00B95C" Type="Standard" EnumName="OBJECT_TK_LIMB_0C" Offset="0xB95C" />
+        <Limb Name="object_tk_Standardlimb_00B968" Type="Standard" EnumName="OBJECT_TK_LIMB_0D" Offset="0xB968" />
+        <Limb Name="object_tk_Standardlimb_00B974" Type="Standard" EnumName="OBJECT_TK_LIMB_0E" Offset="0xB974" />
+        <Limb Name="object_tk_Standardlimb_00B980" Type="Standard" EnumName="OBJECT_TK_LIMB_0F" Offset="0xB980" />
+        <Limb Name="object_tk_Standardlimb_00B98C" Type="Standard" EnumName="OBJECT_TK_LIMB_10" Offset="0xB98C" />
+        <Limb Name="object_tk_Standardlimb_00B998" Type="Standard" EnumName="OBJECT_TK_LIMB_11" Offset="0xB998" />
+        <Skeleton Name="object_tk_Skel_00B9E8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TK_LIMB_NONE" LimbMax="OBJECT_TK_LIMB_MAX" EnumName="object_tk_Limbs" Offset="0xB9E8" />
     </File>
 </Root>

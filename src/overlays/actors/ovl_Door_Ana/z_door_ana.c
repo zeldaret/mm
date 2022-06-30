@@ -11,14 +11,14 @@
 
 #define THIS ((DoorAna*)thisx)
 
-void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DoorAna_Init(Actor* thisx, PlayState* play);
+void DoorAna_Destroy(Actor* thisx, PlayState* play);
+void DoorAna_Update(Actor* thisx, PlayState* play);
+void DoorAna_Draw(Actor* thisx, PlayState* play);
 
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx);
+void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
+void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
+void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
 const ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
@@ -52,8 +52,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 10, 0, { 0, 0, 0 } },
 };
 
-// entrances grottos can link to statically, type DOORANA_TYPE_ADJACENT uses scene exit addresses instead
-static u16 entrances[] = {
+static u16 sEntranceIndexes[] = {
     0x1A00, 0x1400, 0x1410, 0x1420, 0x1430, 0x1440, 0x1450, 0x1460,
     0x1470, 0x1480, 0x1490, 0x14A0, 0x14B0, 0x14C0, 0x14D0,
 };
@@ -62,14 +61,15 @@ void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
     this->actionFunc = actionFunction;
 }
 
-void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Init(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
-    s32 grottoType = GET_DOORANA_TYPE(this);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
+
     this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
 
-    if ((grottoType == DOORANA_TYPE_UNK) || (grottoType == DOORANA_TYPE_HIDDEN)) {
-        if (grottoType == DOORANA_TYPE_HIDDEN) {
-            Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
+    if (grottoType == DOORANA_TYPE_HIDDEN_STORMS || grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
+        if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
+            Collider_InitAndSetCylinder(play, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
             this->actor.flags |= ACTOR_FLAG_10; // always update
         }
@@ -84,105 +84,93 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
 }
 
-void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Destroy(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
-    s32 grottoType = GET_DOORANA_TYPE(this);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
-    if (grottoType == DOORANA_TYPE_HIDDEN) {
-        Collider_DestroyCylinder(globalCtx, &this->bombCollider);
+    if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
+        Collider_DestroyCylinder(play, &this->bombCollider);
     }
 }
 
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
-    s32 grottoIsOpen = 0;
-    u32 grottoType = GET_DOORANA_TYPE(this);
+void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
+    s32 grottoIsOpen = false;
+    u32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
-    if (grottoType == DOORANA_TYPE_UNK) {
-        // in OOT decomp its marked as open with storms, but does not seem to open with storms in MM
-        if ((this->actor.xyzDistToPlayerSq < SQ(200.0f)) && (EnvFlags_Get(globalCtx, 5))) {
-            grottoIsOpen = 1;
+    if (grottoType == DOORANA_TYPE_HIDDEN_STORMS) {
+        //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
+        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(play, 5)) {
+            grottoIsOpen = true;
             this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
 
     } else {
         if (this->bombCollider.base.acFlags & AC_HIT) { // bomb collision
-            grottoIsOpen = 1;
-            Collider_DestroyCylinder(globalCtx, &this->bombCollider);
+            grottoIsOpen = true;
+            Collider_DestroyCylinder(play, &this->bombCollider);
 
         } else {
             Collider_UpdateCylinder(&this->actor, &this->bombCollider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->bombCollider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->bombCollider.base);
         }
     }
 
     if (grottoIsOpen) {
-        this->actor.params &= ~DOORANA_TYPE_BITRANGE;
+        DOORANA_SET_TYPE(&this->actor, DOORANA_TYPE_VISIBLE);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
         play_sound(NA_SE_SY_CORRECT_CHIME);
     }
 
-    func_800B8C50(&this->actor, globalCtx);
+    func_800B8C50(&this->actor, play);
 }
 
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    s32 dooranaType = GET_DOORANA_TYPE(this);
-    s8 pad[4];
-    s32 entranceIndex;
-    f32 playerHeightRel;
+void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
-    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f) != 0) {
-        if ((this->actor.targetMode != 0) && (globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) &&
-            (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
+        if (this->actor.targetMode != 0 && play->sceneLoadFlag == 0 && play->unk_18B4A == 0 &&
+            (player->stateFlags1 & 0x80000000) && player->unk_AE7 == 0) {
 
-            if (dooranaType == DOORANA_TYPE_ADJACENT) {
-                s32 requiredScopeTemp;
+            if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
+                s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
 
-                // 300 uses scene exit addresses, not static DoorAna entrance addresses,
-                // eg. deku playground gets address in the NCT scene exit table
-
-                entranceIndex = GET_DOORANA_ADJACENT_ENTRANCE(this);
-                globalCtx->nextEntranceIndex = globalCtx->setupExitList[entranceIndex];
+                play->nextEntranceIndex = play->setupExitList[exitIndex];
             } else {
-                // unused in vanilla, the highest params bits can directly index an address
-                entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);
+                s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                func_80169E6C(globalCtx, 3, 0x4FF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, 0x4FF);
 
-                gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
-                gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
 
-                // save the params lower byte for En_Torch to decide what item to use in the grotto chest
-                gSaveContext.respawn[3].data = GET_DOORANA_ITEMFLAGS(this);
+                // Stores item and chest flag that ACTOR_EN_TORCH uses for spawning the grotto chest
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].data = DOORANA_GET_ITEMFLAGS(&this->actor);
 
-                // most grottos in the game use their zrotation as their entrance index, not params
-                if (DOORANA_TYPE_ROTATION_ENTRANCE(entranceIndex)) {
-                    entranceIndex = GET_DOORANA_ROTATION_ENTRANCE(this);
+                if (destinationIdx < 0) {
+                    destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);
                 }
 
-                globalCtx->nextEntranceIndex = entrances[entranceIndex];
+                play->nextEntranceIndex = sEntranceIndexes[destinationIdx];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else {
-            if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) &&
-                (this->actor.xzDistToPlayer <= 20.0f) &&
-                (playerHeightRel = this->actor.playerHeightRel, (playerHeightRel >= -50.0f)) &&
-                (playerHeightRel <= 15.0f)) {
-                player->stateFlags1 |= 0x80000000;
-                this->actor.targetMode = 1;
+        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & 0x08800000) &&
+                   (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
+                   (this->actor.playerHeightRel <= 15.0f)) {
+            player->stateFlags1 |= 0x80000000;
+            this->actor.targetMode = 1;
 
-            } else {
-                this->actor.targetMode = 0;
-            }
+        } else {
+            this->actor.targetMode = 0;
         }
     }
 
     Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
-void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
     Player* player;
     s8 pad[2];
 
@@ -194,20 +182,20 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.playerHeightRel <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
-        player = GET_PLAYER(globalCtx);
-        player->actor.world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
-        player->actor.world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
+    if (this->actor.playerHeightRel <= 0.0f && this->actor.xzDistToPlayer > 20.0f) {
+        player = GET_PLAYER(play);
+        player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.x;
+        player->actor.world.pos.z = Math_CosS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.z;
     }
 }
 
-void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Update(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
+    this->actionFunc(this, play);
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
 }
 
-void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
+void DoorAna_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListXlu(play, gameplay_field_keep_DL_000C40);
 }

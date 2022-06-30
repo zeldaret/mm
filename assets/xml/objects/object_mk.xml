@@ -28,18 +28,18 @@
         <Texture Name="object_mk_Tex_006A60" OutName="tex_006A60" Format="ci8" Width="8" Height="8" Offset="0x6A60" />
         <Texture Name="object_mk_Tex_006AA0" OutName="tex_006AA0" Format="ci8" Width="8" Height="8" Offset="0x6AA0" />
         <Texture Name="object_mk_Tex_006AE0" OutName="tex_006AE0" Format="ci8" Width="16" Height="16" Offset="0x6AE0" />
-        <Limb Name="object_mk_Standardlimb_006BE0" Type="Standard" Offset="0x6BE0" />
-        <Limb Name="object_mk_Standardlimb_006BEC" Type="Standard" Offset="0x6BEC" />
-        <Limb Name="object_mk_Standardlimb_006BF8" Type="Standard" Offset="0x6BF8" />
-        <Limb Name="object_mk_Standardlimb_006C04" Type="Standard" Offset="0x6C04" />
-        <Limb Name="object_mk_Standardlimb_006C10" Type="Standard" Offset="0x6C10" />
-        <Limb Name="object_mk_Standardlimb_006C1C" Type="Standard" Offset="0x6C1C" />
-        <Limb Name="object_mk_Standardlimb_006C28" Type="Standard" Offset="0x6C28" />
-        <Limb Name="object_mk_Standardlimb_006C34" Type="Standard" Offset="0x6C34" />
-        <Limb Name="object_mk_Standardlimb_006C40" Type="Standard" Offset="0x6C40" />
-        <Limb Name="object_mk_Standardlimb_006C4C" Type="Standard" Offset="0x6C4C" />
-        <Limb Name="object_mk_Standardlimb_006C58" Type="Standard" Offset="0x6C58" />
-        <Limb Name="object_mk_Standardlimb_006C64" Type="Standard" Offset="0x6C64" />
-        <Skeleton Name="object_mk_Skel_006CA0" Type="Flex" LimbType="Standard" Offset="0x6CA0" />
+        <Limb Name="object_mk_Standardlimb_006BE0" Type="Standard" EnumName="OBJECT_MK_LIMB_01" Offset="0x6BE0" />
+        <Limb Name="object_mk_Standardlimb_006BEC" Type="Standard" EnumName="OBJECT_MK_LIMB_02" Offset="0x6BEC" />
+        <Limb Name="object_mk_Standardlimb_006BF8" Type="Standard" EnumName="OBJECT_MK_LIMB_03" Offset="0x6BF8" />
+        <Limb Name="object_mk_Standardlimb_006C04" Type="Standard" EnumName="OBJECT_MK_LIMB_04" Offset="0x6C04" />
+        <Limb Name="object_mk_Standardlimb_006C10" Type="Standard" EnumName="OBJECT_MK_LIMB_05" Offset="0x6C10" />
+        <Limb Name="object_mk_Standardlimb_006C1C" Type="Standard" EnumName="OBJECT_MK_LIMB_06" Offset="0x6C1C" />
+        <Limb Name="object_mk_Standardlimb_006C28" Type="Standard" EnumName="OBJECT_MK_LIMB_07" Offset="0x6C28" />
+        <Limb Name="object_mk_Standardlimb_006C34" Type="Standard" EnumName="OBJECT_MK_LIMB_08" Offset="0x6C34" />
+        <Limb Name="object_mk_Standardlimb_006C40" Type="Standard" EnumName="OBJECT_MK_LIMB_09" Offset="0x6C40" />
+        <Limb Name="object_mk_Standardlimb_006C4C" Type="Standard" EnumName="OBJECT_MK_LIMB_0A" Offset="0x6C4C" />
+        <Limb Name="object_mk_Standardlimb_006C58" Type="Standard" EnumName="OBJECT_MK_LIMB_0B" Offset="0x6C58" />
+        <Limb Name="object_mk_Standardlimb_006C64" Type="Standard" EnumName="OBJECT_MK_LIMB_0C" Offset="0x6C64" />
+        <Skeleton Name="object_mk_Skel_006CA0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MK_LIMB_NONE" LimbMax="OBJECT_MK_LIMB_MAX" EnumName="object_mk_Limbs" Offset="0x6CA0" />
     </File>
 </Root>

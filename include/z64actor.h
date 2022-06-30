@@ -13,13 +13,13 @@
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
 struct Actor;
-struct GlobalContext;
+struct PlayState;
 struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
 
-typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
+typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -115,7 +115,7 @@ typedef struct {
     /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
+typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -259,7 +259,10 @@ typedef enum {
 
 struct EnItem00;
 
-typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct GlobalContext*);
+typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct PlayState*);
+
+#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
 
 typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
@@ -277,7 +280,7 @@ typedef struct EnItem00 {
 
 struct EnAObj;
 
-typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct PlayState*);
 
 typedef struct EnAObj {
     /* 0x000 */ Actor actor;
@@ -391,6 +394,18 @@ typedef struct ActorContext {
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;
 } ActorContext; // size = 0x284
+
+typedef enum {
+    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
+    /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
+    /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
+    /* 21 */ ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS,
+    /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL = 30,
+    /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
+    /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
+} ActorDrawDamageEffectType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
@@ -1165,7 +1180,7 @@ typedef enum {
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif

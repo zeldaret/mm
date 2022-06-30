@@ -42,32 +42,32 @@
         <Texture Name="object_and_Tex_00A1F0" OutName="tex_00A1F0" Format="rgba16" Width="32" Height="16" Offset="0xA1F0" />
         <Texture Name="object_and_Tex_00A5F0" OutName="tex_00A5F0" Format="i8" Width="32" Height="64" Offset="0xA5F0" />
         <Texture Name="object_and_Tex_00ADF0" OutName="tex_00ADF0" Format="i8" Width="32" Height="32" Offset="0xADF0" />
-        <Limb Name="object_and_Standardlimb_00B1F0" Type="Standard" Offset="0xB1F0" />
-        <Limb Name="object_and_Standardlimb_00B1FC" Type="Standard" Offset="0xB1FC" />
-        <Limb Name="object_and_Standardlimb_00B208" Type="Standard" Offset="0xB208" />
-        <Limb Name="object_and_Standardlimb_00B214" Type="Standard" Offset="0xB214" />
-        <Limb Name="object_and_Standardlimb_00B220" Type="Standard" Offset="0xB220" />
-        <Limb Name="object_and_Standardlimb_00B22C" Type="Standard" Offset="0xB22C" />
-        <Limb Name="object_and_Standardlimb_00B238" Type="Standard" Offset="0xB238" />
-        <Limb Name="object_and_Standardlimb_00B244" Type="Standard" Offset="0xB244" />
-        <Limb Name="object_and_Standardlimb_00B250" Type="Standard" Offset="0xB250" />
-        <Limb Name="object_and_Standardlimb_00B25C" Type="Standard" Offset="0xB25C" />
-        <Limb Name="object_and_Standardlimb_00B268" Type="Standard" Offset="0xB268" />
-        <Limb Name="object_and_Standardlimb_00B274" Type="Standard" Offset="0xB274" />
-        <Limb Name="object_and_Standardlimb_00B280" Type="Standard" Offset="0xB280" />
-        <Limb Name="object_and_Standardlimb_00B28C" Type="Standard" Offset="0xB28C" />
-        <Limb Name="object_and_Standardlimb_00B298" Type="Standard" Offset="0xB298" />
-        <Limb Name="object_and_Standardlimb_00B2A4" Type="Standard" Offset="0xB2A4" />
-        <Limb Name="object_and_Standardlimb_00B2B0" Type="Standard" Offset="0xB2B0" />
-        <Limb Name="object_and_Standardlimb_00B2BC" Type="Standard" Offset="0xB2BC" />
-        <Limb Name="object_and_Standardlimb_00B2C8" Type="Standard" Offset="0xB2C8" />
-        <Limb Name="object_and_Standardlimb_00B2D4" Type="Standard" Offset="0xB2D4" />
-        <Limb Name="object_and_Standardlimb_00B2E0" Type="Standard" Offset="0xB2E0" />
-        <Limb Name="object_and_Standardlimb_00B2EC" Type="Standard" Offset="0xB2EC" />
-        <Limb Name="object_and_Standardlimb_00B2F8" Type="Standard" Offset="0xB2F8" />
-        <Limb Name="object_and_Standardlimb_00B304" Type="Standard" Offset="0xB304" />
-        <Limb Name="object_and_Standardlimb_00B310" Type="Standard" Offset="0xB310" />
-        <Skeleton Name="object_and_Skel_00B380" Type="Flex" LimbType="Standard" Offset="0xB380" />
+        <Limb Name="object_and_Standardlimb_00B1F0" Type="Standard" EnumName="OBJECT_AND_LIMB_01" Offset="0xB1F0" />
+        <Limb Name="object_and_Standardlimb_00B1FC" Type="Standard" EnumName="OBJECT_AND_LIMB_02" Offset="0xB1FC" />
+        <Limb Name="object_and_Standardlimb_00B208" Type="Standard" EnumName="OBJECT_AND_LIMB_03" Offset="0xB208" />
+        <Limb Name="object_and_Standardlimb_00B214" Type="Standard" EnumName="OBJECT_AND_LIMB_04" Offset="0xB214" />
+        <Limb Name="object_and_Standardlimb_00B220" Type="Standard" EnumName="OBJECT_AND_LIMB_05" Offset="0xB220" />
+        <Limb Name="object_and_Standardlimb_00B22C" Type="Standard" EnumName="OBJECT_AND_LIMB_06" Offset="0xB22C" />
+        <Limb Name="object_and_Standardlimb_00B238" Type="Standard" EnumName="OBJECT_AND_LIMB_07" Offset="0xB238" />
+        <Limb Name="object_and_Standardlimb_00B244" Type="Standard" EnumName="OBJECT_AND_LIMB_08" Offset="0xB244" />
+        <Limb Name="object_and_Standardlimb_00B250" Type="Standard" EnumName="OBJECT_AND_LIMB_09" Offset="0xB250" />
+        <Limb Name="object_and_Standardlimb_00B25C" Type="Standard" EnumName="OBJECT_AND_LIMB_0A" Offset="0xB25C" />
+        <Limb Name="object_and_Standardlimb_00B268" Type="Standard" EnumName="OBJECT_AND_LIMB_0B" Offset="0xB268" />
+        <Limb Name="object_and_Standardlimb_00B274" Type="Standard" EnumName="OBJECT_AND_LIMB_0C" Offset="0xB274" />
+        <Limb Name="object_and_Standardlimb_00B280" Type="Standard" EnumName="OBJECT_AND_LIMB_0D" Offset="0xB280" />
+        <Limb Name="object_and_Standardlimb_00B28C" Type="Standard" EnumName="OBJECT_AND_LIMB_0E" Offset="0xB28C" />
+        <Limb Name="object_and_Standardlimb_00B298" Type="Standard" EnumName="OBJECT_AND_LIMB_0F" Offset="0xB298" />
+        <Limb Name="object_and_Standardlimb_00B2A4" Type="Standard" EnumName="OBJECT_AND_LIMB_10" Offset="0xB2A4" />
+        <Limb Name="object_and_Standardlimb_00B2B0" Type="Standard" EnumName="OBJECT_AND_LIMB_11" Offset="0xB2B0" />
+        <Limb Name="object_and_Standardlimb_00B2BC" Type="Standard" EnumName="OBJECT_AND_LIMB_12" Offset="0xB2BC" />
+        <Limb Name="object_and_Standardlimb_00B2C8" Type="Standard" EnumName="OBJECT_AND_LIMB_13" Offset="0xB2C8" />
+        <Limb Name="object_and_Standardlimb_00B2D4" Type="Standard" EnumName="OBJECT_AND_LIMB_14" Offset="0xB2D4" />
+        <Limb Name="object_and_Standardlimb_00B2E0" Type="Standard" EnumName="OBJECT_AND_LIMB_15" Offset="0xB2E0" />
+        <Limb Name="object_and_Standardlimb_00B2EC" Type="Standard" EnumName="OBJECT_AND_LIMB_16" Offset="0xB2EC" />
+        <Limb Name="object_and_Standardlimb_00B2F8" Type="Standard" EnumName="OBJECT_AND_LIMB_17" Offset="0xB2F8" />
+        <Limb Name="object_and_Standardlimb_00B304" Type="Standard" EnumName="OBJECT_AND_LIMB_18" Offset="0xB304" />
+        <Limb Name="object_and_Standardlimb_00B310" Type="Standard" EnumName="OBJECT_AND_LIMB_19" Offset="0xB310" />
+        <Skeleton Name="object_and_Skel_00B380" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AND_LIMB_NONE" LimbMax="OBJECT_AND_LIMB_MAX" EnumName="object_and_Limbs" Offset="0xB380" />
         <Animation Name="object_and_Anim_00DA58" Offset="0xDA58" />
         <Animation Name="object_and_Anim_00EE00" Offset="0xEE00" />
         <Animation Name="object_and_Anim_00F6C4" Offset="0xF6C4" />

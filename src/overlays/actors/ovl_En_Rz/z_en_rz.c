@@ -10,24 +10,24 @@
 
 #define THIS ((EnRz*)thisx)
 
-void EnRz_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRz_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRz_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRz_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRz_Init(Actor* thisx, PlayState* play);
+void EnRz_Destroy(Actor* thisx, PlayState* play);
+void EnRz_Update(Actor* thisx, PlayState* play);
+void EnRz_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFC058(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC078(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC19C(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC214(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC270(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC2F4(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC36C(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC3F8(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC608(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC674(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC728(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC7E0(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC8F8(EnRz* this, GlobalContext* globalCtx);
+void func_80BFC058(EnRz* this, PlayState* play);
+void func_80BFC078(EnRz* this, PlayState* play);
+void func_80BFC19C(EnRz* this, PlayState* play);
+void func_80BFC214(EnRz* this, PlayState* play);
+void func_80BFC270(EnRz* this, PlayState* play);
+void func_80BFC2F4(EnRz* this, PlayState* play);
+void func_80BFC36C(EnRz* this, PlayState* play);
+void func_80BFC3F8(EnRz* this, PlayState* play);
+void func_80BFC608(EnRz* this, PlayState* play);
+void func_80BFC674(EnRz* this, PlayState* play);
+void func_80BFC728(EnRz* this, PlayState* play);
+void func_80BFC7E0(EnRz* this, PlayState* play);
+void func_80BFC8F8(EnRz* this, PlayState* play);
 
 #if 0
 const ActorInit En_Rz_InitVars = {

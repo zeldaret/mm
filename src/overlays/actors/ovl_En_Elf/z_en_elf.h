@@ -5,8 +5,8 @@
 
 struct EnElf;
 
-typedef void (*EnElfActionFunc)(struct EnElf*, GlobalContext*);
-typedef void (*EnElfUnkFunc)(struct EnElf*, GlobalContext*);
+typedef void (*EnElfActionFunc)(struct EnElf*, PlayState*);
+typedef void (*EnElfUnkFunc)(struct EnElf*, PlayState*);
 
 #define ENELF_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENELF_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)

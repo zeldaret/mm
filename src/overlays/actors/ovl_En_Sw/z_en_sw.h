@@ -5,10 +5,12 @@
 
 struct EnSw;
 
-typedef void (*EnSwActionFunc)(struct EnSw*, GlobalContext*);
+typedef void (*EnSwActionFunc)(struct EnSw*, PlayState*);
 
-#define ENSW_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
-#define ENSW_GET_3FC(thisx) (((thisx)->params & 0x3FC) >> 2)
+#define ENSW_GETS_3(params) ((params & 3) & 0xFF)
+#define ENSW_GET_3(thisx) (ENSW_GETS_3((thisx)->params))
+#define ENSW_GETS_3FC(params) (((params & 0x3FC) >> 2) & 0xFF)
+#define ENSW_GET_3FC(thisx) (ENSW_GETS_3FC((thisx)->params))
 #define ENSW_GET_FF00(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
 
 typedef struct EnSw {
@@ -25,9 +27,9 @@ typedef struct EnSw {
     /* 0x0374 */ Vec3f unk_374;
     /* 0x0380 */ Vec3f unk_380[12];
     /* 0x0410 */ u16 unk_410;
-    /* 0x0412 */ u8 unk_412;
+    /* 0x0412 */ u8 drawDmgEffType;
     /* 0x0414 */ f32 unk_414;
-    /* 0x0418 */ f32 unk_418[12];
+    /* 0x0418 */ f32 drawDmgEffFrozenSteamScales[12];
     /* 0x0448 */ f32 unk_448;
     /* 0x044C */ f32 unk_44C;
     /* 0x0450 */ f32 unk_450;

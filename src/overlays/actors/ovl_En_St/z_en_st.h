@@ -5,7 +5,7 @@
 
 struct EnSt;
 
-typedef void (*EnStActionFunc)(struct EnSt*, GlobalContext*);
+typedef void (*EnStActionFunc)(struct EnSt*, PlayState*);
 
 #define ENST_GET_3F(thisx) (((thisx)->params & 0x3F) & 0xFF)
 #define ENST_GET_1C0(thisx) ((((thisx)->params & 0x1C0) >> 6) & 0xFF)
@@ -18,7 +18,7 @@ typedef struct EnSt {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnStActionFunc actionFunc;
     /* 0x18C */ u16 unk_18C;
-    /* 0x18E */ u8 unk_18E;
+    /* 0x18E */ u8 drawDmgEffType;
     /* 0x190 */ ColliderCylinder collider1;
     /* 0x1DC */ ColliderCylinder collider2;
     /* 0x228 */ ColliderCylinder collider3;
@@ -30,7 +30,7 @@ typedef struct EnSt {
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
     /* 0x2D8 */ f32 unk_2D8;
-    /* 0x2DC */ f32 unk_2DC[12];
+    /* 0x2DC */ f32 drawDmgEffFrozenSteamScales[12];
     /* 0x30C */ s16 unk_30C;
     /* 0x30E */ s16 unk_30E;
     /* 0x310 */ s16 unk_310;

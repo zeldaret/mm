@@ -5,7 +5,7 @@
 
 struct EnPoSisters;
 
-typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, GlobalContext*);
+typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 
 #define ENPOSISTERS_GET_300(thisx) (((thisx)->params >> 8) & 3)
 #define ENPOSISTERS_GET_C00(thisx) (((thisx)->params >> 0xA) & 3)
@@ -30,10 +30,10 @@ typedef struct EnPoSisters {
     /* 0x0228 */ u8 unk_228;
     /* 0x0229 */ u8 unk_229;
     /* 0x022C */ Vec3f unk_22C[8];
-    /* 0x028C */ Vec3f unk_28C[8];
+    /* 0x028C */ Vec3f limbPos[8];
     /* 0x02EC */ f32 unk_2EC;
-    /* 0x02F0 */ f32 unk_2F0;
-    /* 0x02F4 */ f32 unk_2F4;
+    /* 0x02F0 */ f32 drawDmgEffAlpha;
+    /* 0x02F4 */ f32 drawDmgEffScale;
     /* 0x02F8 */ LightNode* lightNode;
     /* 0x02FC */ LightInfo lightInfo;
     /* 0x030C */ ColliderCylinder collider;
