@@ -54,19 +54,19 @@
  *     Turned off if Player wins the Milk Run
  */
 
-void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjUm_Init(Actor* thisx, PlayState* play);
+void ObjUm_Destroy(Actor* thisx, PlayState* play);
+void ObjUm_Update(Actor* thisx, PlayState* play);
+void ObjUm_Draw(Actor* thisx, PlayState* play);
 
-void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A070(ObjUm* this, PlayState* play);
+void func_80B7A0E0(ObjUm* this, PlayState* play);
+void func_80B7A614(ObjUm* this, PlayState* play);
+void func_80B7A7AC(ObjUm* this, PlayState* play);
+void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play);
 
-void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32);
+void ObjUm_StopAnim(ObjUm* this, PlayState* play);
+void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32);
 
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
@@ -119,27 +119,27 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 // actionfuncs
-void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A240(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A394(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A144(ObjUm* this, PlayState* play);
+void ObjUm_RanchWait(ObjUm* this, PlayState* play);
+void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play);
+void ObjUm_StartCs(ObjUm* this, PlayState* play);
+void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play);
+void ObjUm_TerminaFieldIdle(ObjUm* this, PlayState* play);
+void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play);
+void func_80B7A0E0(ObjUm* this, PlayState* play);
+void func_80B7A070(ObjUm* this, PlayState* play);
+void ObjUm_RanchStartCs(ObjUm* this, PlayState* play);
+void func_80B7A2AC(ObjUm* this, PlayState* play);
+void func_80B7A240(ObjUm* this, PlayState* play);
+void func_80B7A394(ObjUm* this, PlayState* play);
+void ObjUm_RunMinigame(ObjUm* this, PlayState* play);
+void func_80B7A614(ObjUm* this, PlayState* play);
+void func_80B7AB78(ObjUm* this, PlayState* play);
+void func_80B7ABE4(ObjUm* this, PlayState* play);
+void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play);
 
 // This function may be wrongly named...
-void ObjUm_UpdateBanditsPositions(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_UpdateBanditsPositions(ObjUm* this, PlayState* play) {
     s16 rotY = this->dyna.actor.shape.rot.y;
     Vec3f sp108;
     Vec3f spFC;
@@ -227,8 +227,8 @@ void ObjUm_UpdateBanditsPositions(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_360[14] = this->unk_360[4];
 }
 
-s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
-    Path* path = &globalCtx->setupPathList[this->pathIdx];
+s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
+    Path* path = &play->setupPathList[this->pathIdx];
     s16 pad;
     Vec3s* spawnPoints;
     EnHorse* bandit1;
@@ -237,7 +237,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     spawnPoints = Lib_SegmentedToVirtual(path->points);
     Audio_QueueSeqCmd(0x8003);
 
-    bandit1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
+    bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_19));
     this->bandit1 = bandit1;
 
@@ -259,7 +259,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
     bandit1->curRaceWaypoint = 1;
 
-    bandit2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
+    bandit2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
                                     spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_20));
     this->bandit2 = bandit2;
 
@@ -301,7 +301,7 @@ struct_80B7C254 D_80B7C164[] = {
 };
 
 // BanditAttack?
-s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
+s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, PlayState* play) {
     s32 temp_v0;
     s32 phi_s3 = -1;
     s32 phi_s4 = 0;
@@ -315,7 +315,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
             if (arg3->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
                     if (D_80B7C164[i].unk_04 != 3 ||
-                        ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
+                        ((mask = Player_GetMask(play)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
                         phi_f20 = D_80B7C164[i].unk_0C;
@@ -360,8 +360,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
 }
 
 // ObjUm_Bandit_UpdatePosition?
-s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 banditIndex, EnHorse* bandit) {
-    Path* sp6C = &globalCtx->setupPathList[this->pathIdx];
+s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit) {
+    Path* sp6C = &play->setupPathList[this->pathIdx];
     s32 sp68;
     Vec3s* sp64;
     f32 phi_f12;
@@ -444,7 +444,7 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 banditIndex, EnHors
 }
 
 // ObjUm_Bandit_GetCloserAndAttack
-s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* bandit1, EnHorse* bandit2) {
+s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandit2) {
     s32 pad;
     Vec3f sp30;
     s16 phi_v1_5;
@@ -487,7 +487,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* bandit1, EnHor
             }
         }
 
-        func_80B781DC(this, bandit1, bandit2, globalCtx);
+        func_80B781DC(this, bandit1, bandit2, play);
     }
 
     Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
@@ -517,7 +517,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* bandit1, EnHor
 }
 
 // ObjUm_UpdateBandits...
-s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
+s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
     if (this->banditsCollisions[arg2].base.acFlags & AC_HIT) {
         if (arg3->unk_550 == 3) {
             s16 sp36 =
@@ -558,28 +558,28 @@ s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
 }
 
 // ObjUm_UpdateBanditLogic?
-s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
+s32 func_80B78C18(ObjUm* this, PlayState* play) {
     EnHorse* bandit1 = this->bandit1;
     EnHorse* bandit2 = this->bandit2;
 
     if (!(this->flags & OBJ_UM_FLAG_0200)) {
-        func_80B783E0(this, globalCtx, 0, bandit1);
+        func_80B783E0(this, play, 0, bandit1);
     } else {
-        func_80B78764(this, globalCtx, bandit1, bandit2);
+        func_80B78764(this, play, bandit1, bandit2);
     }
 
     if (!(this->flags & OBJ_UM_FLAG_0400)) {
-        func_80B783E0(this, globalCtx, 1, bandit2);
+        func_80B783E0(this, play, 1, bandit2);
     } else {
-        func_80B78764(this, globalCtx, bandit2, bandit1);
+        func_80B78764(this, play, bandit2, bandit1);
     }
 
-    func_80B78A54(this, globalCtx, 0, bandit1, bandit2);
-    func_80B78A54(this, globalCtx, 1, bandit2, bandit1);
+    func_80B78A54(this, play, 0, bandit1, bandit2);
+    func_80B78A54(this, play, 1, bandit2, bandit1);
     return 0;
 }
 
-s32 ObjUm_UpdateBanditsCollisions(ObjUm* this, GlobalContext* globalCtx) {
+s32 ObjUm_UpdateBanditsCollisions(ObjUm* this, PlayState* play) {
     s32 pad[3];
 
     this->banditsCollisions[0].dim.pos.x = this->bandit1->actor.world.pos.x;
@@ -590,15 +590,15 @@ s32 ObjUm_UpdateBanditsCollisions(ObjUm* this, GlobalContext* globalCtx) {
     this->banditsCollisions[1].dim.pos.y = this->bandit2->actor.world.pos.y + 70.0f;
     this->banditsCollisions[1].dim.pos.z = this->bandit2->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->banditsCollisions[0].base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->banditsCollisions[1].base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->banditsCollisions[0].base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->banditsCollisions[1].base);
     return 0;
 }
 
 // ObjUm_UpdateBandits?
-s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
-    func_80B78C18(this, globalCtx);
-    ObjUm_UpdateBanditsCollisions(this, globalCtx);
+s32 func_80B78DF0(ObjUm* this, PlayState* play) {
+    func_80B78C18(this, play);
+    ObjUm_UpdateBanditsCollisions(this, play);
     return 0;
 }
 
@@ -606,8 +606,8 @@ void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void ObjUm_SetPlayerPosition(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_SetPlayerPosition(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->flags & OBJ_UM_FLAG_DRAWN_FLOOR) {
         player->actor.world.pos = this->unk_308;
@@ -615,14 +615,14 @@ void ObjUm_SetPlayerPosition(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_RotatePlayer(ObjUm* this, GlobalContext* globalCtx, s16 angle) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_RotatePlayer(ObjUm* this, PlayState* play, s16 angle) {
+    Player* player = GET_PLAYER(play);
 
     player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + angle;
 }
 
-void func_80B78EBC(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B78EBC(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->actor.focus.rot.x = 0;
     player->actor.focus.rot.z = 0;
@@ -639,8 +639,8 @@ void func_80B78EBC(ObjUm* this, GlobalContext* globalCtx) {
     player->currentYaw = player->actor.focus.rot.y;
 }
 
-void ObjUm_RotatePlayerView(ObjUm* this, GlobalContext* globalCtx, s16 angle) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_RotatePlayerView(ObjUm* this, PlayState* play, s16 angle) {
+    Player* player = GET_PLAYER(play);
 
     player->actor.focus.rot.y += angle;
 }
@@ -650,7 +650,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
-void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjUm* this = THIS;
     s32 sp54 = true;
@@ -681,11 +681,11 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_um_Anim_012CC0);
 
     this->wheelRot = 0;
-    ObjUm_StopAnim(this, globalCtx);
+    ObjUm_StopAnim(this, play);
 
     this->type = OBJ_UM_PARSE_TYPE(thisx->params);
     this->initialPathIdx = OBJ_UM_PARSE_PATH_IDX(thisx->params);
@@ -733,7 +733,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_800FE484();
             ObjUm_SetupAction(this, ObjUm_PreMilkRunStartCs);
             this->unk_354 = 0;
-            ObjUm_RotatePlayer(this, globalCtx, 0);
+            ObjUm_RotatePlayer(this, play, 0);
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
         if (!(gSaveContext.save.weekEventReg[31] & 0x80)) {
@@ -746,7 +746,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_800FE484();
         ObjUm_SetupAction(this, ObjUm_StartCs);
         this->unk_354 = 0;
-        ObjUm_RotatePlayer(this, globalCtx, 0);
+        ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
         if (!(gSaveContext.save.weekEventReg[52] & 1) || (gSaveContext.save.weekEventReg[59] & 2)) {
             Actor_MarkForDeath(&this->dyna.actor);
@@ -758,7 +758,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_800FE484();
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
-        ObjUm_RotatePlayer(this, globalCtx, 0);
+        ObjUm_RotatePlayer(this, play, 0);
         func_801A3098(0x19);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
@@ -769,10 +769,10 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp54) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_um_Colheader_007E20);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007E20);
     } else {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_um_Colheader_007F50);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007F50);
     }
 
     if (this->dyna.bgId == 0x32) {
@@ -780,9 +780,9 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800C636C(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
 
-    this->donkey = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
+    this->donkey = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
                                          this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
                                          this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_8000, ENHORSE_18));
 
@@ -791,24 +791,24 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    Collider_InitAndSetCylinder(globalCtx, &this->banditsCollisions[0], &this->dyna.actor, &sCylinderInit);
-    Collider_InitAndSetCylinder(globalCtx, &this->banditsCollisions[1], &this->dyna.actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->banditsCollisions[0], &this->dyna.actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->banditsCollisions[1], &this->dyna.actor, &sCylinderInit);
 
     return;
 }
 
-void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     ObjUm* this = THIS;
     s32 i;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 
     for (i = 0; i < ARRAY_COUNT(this->potPos); i++) {
         Audio_StopSfxByPos(&this->potPos[i]);
     }
 
-    Collider_DestroyCylinder(globalCtx, &this->banditsCollisions[0]);
-    Collider_DestroyCylinder(globalCtx, &this->banditsCollisions[1]);
+    Collider_DestroyCylinder(play, &this->banditsCollisions[0]);
+    Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
 // ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
@@ -819,14 +819,14 @@ void func_80B79524(ObjUm* this) {
     }
 }
 
-void func_80B79560(GlobalContext* globalCtx, ObjUm* this, s32 arg2, u16 textId) {
+void func_80B79560(PlayState* play, ObjUm* this, s32 arg2, u16 textId) {
     // "Thanks, I rely on you"
     if (textId == 0x33BF) {
         ObjUm_SetupAction(this, ObjUm_StartCs);
     }
 }
 
-s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
+s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
     s32 pad[2];
     s32 phi_v1 = true;
     u16 textId = this->dyna.actor.textId;
@@ -838,45 +838,45 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
         // "Want a ride?"
         case 0x33CF:
             gSaveContext.save.weekEventReg[31] |= 0x40;
-            if (globalCtx->msgCtx.choiceIndex == 0) {
-                player = GET_PLAYER(globalCtx);
+            if (play->msgCtx.choiceIndex == 0) {
+                player = GET_PLAYER(play);
                 func_8019F208();
                 gSaveContext.save.weekEventReg[31] |= 0x80;
-                globalCtx->nextEntranceIndex = 0x64B0;
+                play->nextEntranceIndex = 0x64B0;
                 if (player->stateFlags1 & 0x800000) {
                     D_801BDAA0 = 1;
                 }
-                globalCtx->unk_1887F = 0x40;
+                play->unk_1887F = 0x40;
                 gSaveContext.nextTransition = 3;
-                globalCtx->sceneLoadFlag = 0x14;
+                play->sceneLoadFlag = 0x14;
                 phi_v1 = true;
             } else {
-                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33B5);
+                Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
                 func_8019F230();
-                func_80151BB4(globalCtx, 6U);
+                func_80151BB4(play, 6);
                 phi_v1 = false;
             }
             break;
 
         // "I'll go as fast as I can!"
         case 0x33BB:
-            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BC);
+            Actor_ContinueText(play, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
             break;
 
         // "Chase pursuers with your arrows."
         case 0x33BC:
-            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BD);
+            Actor_ContinueText(play, &this->dyna.actor, 0x33BD);
             phi_v1 = false;
             break;
 
         // "Understand?"
         case 0x33BD:
-            if (globalCtx->msgCtx.choiceIndex == 0) {
-                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BE);
+            if (play->msgCtx.choiceIndex == 0) {
+                Actor_ContinueText(play, &this->dyna.actor, 0x33BE);
                 func_8019F230();
             } else {
-                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BF);
+                Actor_ContinueText(play, &this->dyna.actor, 0x33BF);
                 func_8019F208();
             }
             phi_v1 = false;
@@ -884,7 +884,7 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
 
         // "I'll tell you again!"
         case 0x33BE:
-            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BC);
+            Actor_ContinueText(play, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
             break;
     }
@@ -892,19 +892,19 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     return phi_v1;
 }
 
-s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
+    MessageContext* msgCtx = &play->msgCtx;
     s32 ret = false;
 
     switch (Message_GetState(msgCtx)) {
         case 2:
             // TODO: test
-            func_80B79560(globalCtx, this, arg2, this->dyna.actor.textId);
+            func_80B79560(play, this, arg2, this->dyna.actor.textId);
             return true;
 
         case 4:
         case 5:
-            if (Message_ShouldAdvance(globalCtx) && func_80B795A0(globalCtx, this, arg2)) {
+            if (Message_ShouldAdvance(play) && func_80B795A0(play, this, arg2)) {
                 msgCtx->msgMode = 0x43;
                 ret = true;
             }
@@ -913,7 +913,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     return ret;
 }
 
-u16 ObjUm_RanchGetDialogue(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
+u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
@@ -934,7 +934,7 @@ u16 ObjUm_RanchGetDialogue(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     return textId;
 }
 
-s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
+s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
     s16 temp_v0_2;
     s16 phi_v1;
 
@@ -942,23 +942,23 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 2) {
-        Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+        Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
         *arg3 = 1;
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(globalCtx, this->dyna.actor.textId);
+        func_80151938(play, this->dyna.actor.textId);
         *arg3 = 1;
         return 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         *arg3 = 1;
         return 1;
     }
 
     if (*arg3 == 1) {
-        if (func_80B79734(globalCtx, this, arg2)) {
+        if (func_80B79734(play, this, arg2)) {
             *arg3 = 0;
         }
         return 0;
@@ -976,11 +976,11 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, globalCtx, 50.0f)) {
-            this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
+        if (func_800B8614(&this->dyna.actor, play, 50.0f)) {
+            this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, globalCtx)) {
-        this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
+    } else if (func_800B863C(&this->dyna.actor, play)) {
+        this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 
     return 0;
@@ -995,23 +995,23 @@ s32 func_80B79A24(s32 arg0) {
 }
 
 // 0x80b79a30
-void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->dyna.actor.flags |= ACTOR_FLAG_1;
     SkelAnime_Update(&this->skelAnime);
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+    ObjUm_UpdateAnim(this, play, 2);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if (gSaveContext.save.time > CLOCK_TIME(18, 0) && gSaveContext.save.time <= CLOCK_TIME(19, 0)) {
         if (!(player->stateFlags1 & 0x800000)) {
-            func_80B7984C(globalCtx, this, 0, &this->unk_2B4);
+            func_80B7984C(play, this, 0, &this->unk_2B4);
         }
     } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.save.time > CLOCK_TIME(19, 0)) {
         gSaveContext.save.weekEventReg[34] |= 0x80;
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
 
-    switch (globalCtx->msgCtx.currentTextId) {
+    switch (play->msgCtx.currentTextId) {
         default:
             this->unk_4CC = 0;
             this->mouthTexIndex = 0;
@@ -1041,8 +1041,8 @@ typedef enum {
     /* 4 */ OBJUM_PATH_STATE_4,
 } ObjUmPathState;
 
-ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
-    Path* path = &globalCtx->setupPathList[this->pathIdx];
+ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
+    Path* path = &play->setupPathList[this->pathIdx];
     s32 pathCount;
     Vec3s* pathPoints;
     f32 phi_f12;
@@ -1127,7 +1127,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
         }
 
         if (this->flags & (OBJ_UM_FLAG_0010 | OBJ_UM_FLAG_0004)) {
-            ObjUm_RotatePlayerView(this, globalCtx, phi_a2);
+            ObjUm_RotatePlayerView(this, play, phi_a2);
         }
     }
 
@@ -1140,20 +1140,20 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
     return sp3C;
 }
 
-void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
-    ObjUm_UpdateAnim(this, globalCtx, 0);
+    ObjUm_UpdateAnim(this, play, 0);
 
-    switch (ObjUm_UpdatePath(this, globalCtx)) {
+    switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             if (gSaveContext.save.weekEventReg[31] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
-                globalCtx->nextEntranceIndex = 0x3E50;
-                globalCtx->unk_1887F = 0x40;
+                play->nextEntranceIndex = 0x3E50;
+                play->unk_1887F = 0x40;
                 gSaveContext.nextTransition = 3;
-                globalCtx->sceneLoadFlag = 0x14;
+                play->sceneLoadFlag = 0x14;
             } else {
                 func_80B79524(this);
             }
@@ -1165,8 +1165,8 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
+    ObjUm_UpdateAnim(this, play, 2);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1177,11 +1177,11 @@ void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_RanchWaitPathFinished(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0);
+void func_80B7A070(ObjUm* this, PlayState* play) {
+    ObjUm_RanchWaitPathFinished(this, play);
+    ObjUm_RotatePlayer(this, play, 0);
 
-    switch (globalCtx->msgCtx.currentTextId) {
+    switch (play->msgCtx.currentTextId) {
         case 0x33B6:
             this->unk_4CC = 1;
             this->mouthTexIndex = 1;
@@ -1194,30 +1194,30 @@ void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+void func_80B7A0E0(ObjUm* this, PlayState* play) {
+    ObjUm_UpdateAnim(this, play, 2);
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, globalCtx, 0);
+        ObjUm_UpdateAnim(this, play, 0);
         ObjUm_SetupAction(this, func_80B7A070);
     }
 }
 
-void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B7A144(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    ObjUm_SetPlayerPosition(this, globalCtx);
+    ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0100;
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= 0x20;
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+    ObjUm_UpdateAnim(this, play, 2);
     ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
 
-void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_SetPlayerPosition(this, globalCtx);
+void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
+    ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    switch (globalCtx->msgCtx.currentTextId) {
+    switch (play->msgCtx.currentTextId) {
         case 0x33B8:
             this->unk_4CC = 0;
             this->mouthTexIndex = 3;
@@ -1236,27 +1236,27 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7A240(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+void func_80B7A240(ObjUm* this, PlayState* play) {
+    ObjUm_UpdateAnim(this, play, 2);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
     this->lastTime = gSaveContext.save.time;
-    ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
+    ObjUm_PreMilkRunDialogueHandler(this, play);
 }
 
-void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
+void func_80B7A2AC(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
-    ObjUm_UpdateAnim(this, globalCtx, 0);
+    ObjUm_UpdateAnim(this, play, 0);
 
-    switch (ObjUm_UpdatePath(this, globalCtx)) {
+    switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            globalCtx->nextEntranceIndex = 0xCE40;
-            globalCtx->unk_1887F = 0x40;
+            play->nextEntranceIndex = 0xCE40;
+            play->unk_1887F = 0x40;
             gSaveContext.nextTransition = 3;
-            globalCtx->sceneLoadFlag = 0x14;
+            play->sceneLoadFlag = 0x14;
             break;
 
         default:
@@ -1266,24 +1266,24 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
 
             this->lastTime = gSaveContext.save.time;
             Actor_MoveWithGravity(&this->dyna.actor);
-            ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
+            ObjUm_PreMilkRunDialogueHandler(this, play);
             break;
     }
 }
 
-void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_SetPlayerPosition(this, globalCtx);
+void func_80B7A394(ObjUm* this, PlayState* play) {
+    ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, globalCtx, 0);
+        ObjUm_UpdateAnim(this, play, 0);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 }
 
-void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    ObjUm_SetPlayerPosition(this, globalCtx);
+    ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= 0x20;
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
@@ -1295,14 +1295,14 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
+void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0x7FFF);
     this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
-    ObjUm_UpdateAnim(this, globalCtx, 1);
+    ObjUm_UpdateAnim(this, play, 1);
 
-    switch (ObjUm_UpdatePath(this, globalCtx)) {
+    switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             gSaveContext.seqIndex = 0xFF;
@@ -1311,17 +1311,17 @@ void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (this->arePotsBroken == false) {
-                    globalCtx->nextEntranceIndex = 0x3E60;
-                    globalCtx->unk_1887F = 0x40;
+                    play->nextEntranceIndex = 0x3E60;
+                    play->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
-                    globalCtx->sceneLoadFlag = 0x14;
+                    play->sceneLoadFlag = 0x14;
                     gSaveContext.save.weekEventReg[52] |= 1;
                     gSaveContext.save.weekEventReg[52] &= (u8)~2;
                 } else {
-                    globalCtx->nextEntranceIndex = 0x6480;
-                    globalCtx->unk_1887F = 0x40;
+                    play->nextEntranceIndex = 0x6480;
+                    play->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
-                    globalCtx->sceneLoadFlag = 0x14;
+                    play->sceneLoadFlag = 0x14;
                     gSaveContext.save.weekEventReg[52] |= 2;
                     gSaveContext.save.weekEventReg[52] &= (u8)~1;
                 }
@@ -1330,22 +1330,22 @@ void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
 
         default:
             Actor_MoveWithGravity(&this->dyna.actor);
-            func_80B78DF0(this, globalCtx);
+            func_80B78DF0(this, play);
             break;
     }
 }
 
-void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
+void func_80B7A614(ObjUm* this, PlayState* play) {
     s32 pad;
 
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0x7FFF);
     this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
-    ObjUm_UpdateAnim(this, globalCtx, 1);
+    ObjUm_UpdateAnim(this, play, 1);
 
-    if (ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
+    if (ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
         this->unk_4DC = 1;
     } else if (this->unk_4DC > 0) {
         if (this->unk_4DC == 1) {
@@ -1384,42 +1384,42 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithGravity(&this->dyna.actor);
-    func_80B78DF0(this, globalCtx);
+    func_80B78DF0(this, play);
 }
 
-void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B7A7AC(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     this->unk_4DC = 0;
     this->arePotsBroken = false;
     player->stateFlags1 &= ~0x20;
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
-    func_80B78EBC(this, globalCtx);
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0x7FFF);
+    func_80B78EBC(this, play);
     this->flags |= OBJ_UM_FLAG_0010;
-    func_80B78DF0(this, globalCtx);
+    func_80B78DF0(this, play);
     this->flags |= 4;
-    ObjUm_UpdateAnim(this, globalCtx, 1);
+    ObjUm_UpdateAnim(this, play, 1);
     ObjUm_SetupAction(this, func_80B7A614);
 }
 
-void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0);
+void func_80B7A860(ObjUm* this, PlayState* play) {
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    if (globalCtx->csCtx.frames == 449) {
-        ObjUm_InitBandits(this, globalCtx);
-    } else if (globalCtx->csCtx.frames >= 450) {
-        func_80B78DF0(this, globalCtx);
+    if (play->csCtx.frames == 449) {
+        ObjUm_InitBandits(this, play);
+    } else if (play->csCtx.frames >= 450) {
+        func_80B78DF0(this, play);
     }
 
-    if (globalCtx->csCtx.state == 0) {
+    if (play->csCtx.state == 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         ObjUm_SetupAction(this, func_80B7A7AC);
     }
 
-    switch (globalCtx->msgCtx.currentTextId) {
+    switch (play->msgCtx.currentTextId) {
         case 0x33BA:
             this->unk_4CC = 2;
             this->mouthTexIndex = 3;
@@ -1499,21 +1499,21 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+void func_80B7AB78(ObjUm* this, PlayState* play) {
+    ObjUm_UpdateAnim(this, play, 2);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
     this->lastTime = gSaveContext.save.time;
-    func_80B7A860(this, globalCtx);
+    func_80B7A860(this, play);
 }
 
-void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
+void func_80B7ABE4(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
 
-    ObjUm_UpdateAnim(this, globalCtx, 0);
-    switch (ObjUm_UpdatePath(this, globalCtx)) {
+    ObjUm_UpdateAnim(this, play, 0);
+    switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_FINISH:
             func_80B79524(this);
             break;
@@ -1525,17 +1525,17 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
 
             this->lastTime = gSaveContext.save.time;
             Actor_MoveWithGravity(&this->dyna.actor);
-            func_80B7A860(this, globalCtx);
+            func_80B7A860(this, play);
             break;
     }
 }
 
-void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_StartCs(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= 0x20;
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0);
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
@@ -1547,39 +1547,39 @@ void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= 0x20;
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0);
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
     this->wheelRot += 1000;
-    ObjUm_UpdateAnim(this, globalCtx, 0);
+    ObjUm_UpdateAnim(this, play, 0);
 
-    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(0);
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
-        globalCtx->nextEntranceIndex = 0x5400;
-        globalCtx->unk_1887F = 0x40;
+        play->nextEntranceIndex = 0x5400;
+        play->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
-        globalCtx->sceneLoadFlag = 0x14;
+        play->sceneLoadFlag = 0x14;
         // A bit more than an hour
         gSaveContext.save.time += 0xAAC;
     }
     Actor_MoveWithGravity(&this->dyna.actor);
 }
 
-void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= 0x20;
-    ObjUm_SetPlayerPosition(this, globalCtx);
-    ObjUm_RotatePlayer(this, globalCtx, 0);
+    ObjUm_SetPlayerPosition(this, play);
+    ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+    ObjUm_UpdateAnim(this, play, 2);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1589,12 +1589,12 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx) {
-    ObjUm_UpdateAnim(this, globalCtx, 2);
+void ObjUm_TerminaFieldIdle(ObjUm* this, PlayState* play) {
+    ObjUm_UpdateAnim(this, play, 2);
     SkelAnime_Update(&this->skelAnime);
 }
 
-void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
+void func_80B7AF30(ObjUm* this, PlayState* play) {
     if (!(this->flags & OBJ_UM_FLAG_0001)) {
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
@@ -1611,14 +1611,14 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         this->unk_2D0 = this->unk_2C4;
         this->unk_2E8 = this->unk_2DC;
 
-        this->unk_2D0.y = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp44, &this->unk_2C4);
+        this->unk_2D0.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp44, &this->unk_2C4);
         if (this->unk_2D0.y == BGCHECK_Y_MIN) {
             this->unk_2D0.y = this->dyna.actor.floorHeight;
         }
 
         if (1) {}
 
-        this->unk_2E8.y = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp44, &this->unk_2DC);
+        this->unk_2E8.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp44, &this->unk_2DC);
         if (this->unk_2E8.y == BGCHECK_Y_MIN) {
             this->unk_2E8.y = this->dyna.actor.floorHeight;
         }
@@ -1639,7 +1639,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_StopAnim(ObjUm* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &object_um_Anim_012CC0);
     this->unk_304 = 0;
 }
@@ -1653,7 +1653,7 @@ struct_80B7C25C D_80B7C25C[] = {
     { &object_um_Anim_012CC0, true }, { &object_um_Anim_01213C, true }, { &object_um_Anim_019E10, false }, { NULL, false }, { &object_um_Anim_0126C4, false }
 };
 
-void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
+void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
     s32 changeAnim;
     s32 temp;
     s32 indexTemp = index;
@@ -1718,12 +1718,12 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Update(Actor* thisx, PlayState* play) {
     ObjUm* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     this->unk_350 += 1;
-    Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 
     if (this->donkey != NULL) {
         this->donkey->actor.world.pos.x = this->dyna.actor.world.pos.x;
@@ -1732,20 +1732,20 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->flags & OBJ_UM_FLAG_0010) {
-        func_80123F2C(globalCtx, 0x63);
+        func_80123F2C(play, 0x63);
         this->flags &= ~OBJ_UM_FLAG_0010;
     } else if (this->flags & OBJ_UM_FLAG_0004) {
-        func_80123F2C(globalCtx, -3);
+        func_80123F2C(play, -3);
         this->flags &= ~OBJ_UM_FLAG_0004;
     }
 
     if (this->flags & OBJ_UM_FLAG_0100) {
         this->flags &= ~OBJ_UM_FLAG_0100;
-        ObjUm_RotatePlayer(this, globalCtx, 0);
-        func_80B78EBC(this, globalCtx);
+        ObjUm_RotatePlayer(this, play, 0);
+        func_80B78EBC(this, play);
     }
 
-    func_80B7AF30(this, globalCtx);
+    func_80B7AF30(this, play);
     switch (this->unk_4CC) {
         case 0:
             switch (this->eyeTexIndex) {
@@ -1795,9 +1795,9 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 pad;
     s16 temp_v0_3;
     Vec3f sp5C = { 4223.0f, -979.0f, 4098.0f };
@@ -1809,24 +1809,24 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTexIndex]));
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = -this->wheelRot;
         }
-        Matrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
+        Matrix_MultVec3f(&sp5C, &this->unk_2C4);
     } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = this->wheelRot;
         }
-        Matrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
+        Matrix_MultVec3f(&sp50, &this->unk_2DC);
     } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
         if ((SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) &&
             (this->dyna.actor.xzDistToPlayer < 500.0f)) {
@@ -1863,26 +1863,26 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
+void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
     Vec3f sp8C = { 0.0f, -1.0f, 0.0f };
     Gfx* potFragments[] = { object_um_DL_000040, object_um_DL_000910, object_um_DL_0011E0 };
     s32 i;
     Vec3f sp70;
 
-    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, potPos);
+    EffectSsHitMark_SpawnFixedScale(play, 0, potPos);
 
     for (i = 0; i < 20; i++) {
         sp70.x = (Rand_ZeroOne() * 20.0f) - 10.0f;
         sp70.y = -((Rand_ZeroOne() * 20.0f) - 10.0f);
         sp70.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
-        EffectSsHahen_Spawn(globalCtx, potPos, &sp70, &sp8C, 1, 100, OBJECT_UM, 10,
+        EffectSsHahen_Spawn(play, potPos, &sp70, &sp8C, 1, 100, OBJECT_UM, 10,
                             potFragments[(s32)(Rand_ZeroOne() * ARRAY_COUNT(potFragments))]);
     }
 }
 
-void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     Mtx* mtx_s3;
     Gfx* spFC[] = { NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0 };
     Gfx* spE4[] = { NULL, NULL, object_um_DL_004B60, object_um_DL_0043E0, NULL, NULL };
@@ -1896,14 +1896,14 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f spA4 = { 2000.0f, 1070.0f, 0.0f };
 
-        Matrix_MultiplyVector3fByState(&spA4, &this->unk_308);
+        Matrix_MultVec3f(&spA4, &this->unk_308);
         this->flags |= OBJ_UM_FLAG_DRAWN_FLOOR;
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f sp98 = { 2500.0f, 200.0f, 0.0f };
 
-        Matrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
+        Matrix_MultVec3f(&sp98, &this->cartBedPos);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
@@ -1930,25 +1930,25 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                 sp80.y = -0x4000;
             }
 
-            Matrix_StatePush();
-            Matrix_JointPosition(&sp88, &sp80);
+            Matrix_Push();
+            Matrix_TranslateRotateZYX(&sp88, &sp80);
             mtx_s3 = Matrix_NewMtx(gfxCtx);
             potPos = &this->potPos[i];
-            Matrix_MultiplyVector3fByState(&spC0, &calcPotPos);
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
+            Matrix_MultVec3f(&spC0, &calcPotPos);
+            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
 
             if (this->wasPotHit[i]) {
                 this->wasPotHit[i] = false;
                 if (this->potsLife[i] == 1) {
-                    ObjUm_SpawnFragments(globalCtx, &calcPotPos);
+                    ObjUm_SpawnFragments(play, &calcPotPos);
                 } else {
-                    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &calcPotPos);
+                    EffectSsHitMark_SpawnFixedScale(play, 0, &calcPotPos);
                 }
             }
-            Matrix_StatePop();
+            Matrix_Pop();
 
             if (mtx_s3 != NULL) {
-                if (globalCtx) {}
+                if (play) {}
                 gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (spFC[this->potsLife[i]] != NULL) {
@@ -1968,11 +1968,11 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         CLOSE_DISPS(gfxCtx);
     }
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
-        Matrix_GetStateTranslation(&this->dyna.actor.focus.pos);
+        Matrix_MultZero(&this->dyna.actor.focus.pos);
     }
 }
 
-void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* globalCtx) {
+void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, PlayState* play) {
     f32 temp;
     Vec3f sp108;
     CollisionPoly* sp104;
@@ -1985,7 +1985,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     sp108.y = cartBedPos->y + 1.0f;
     sp108.z = cartBedPos->z;
 
-    temp = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &sp104, &sp108);
+    temp = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &sp104, &sp108);
     if (sp104 != NULL) {
         func_800C0094(sp104, cartBedPos->x, temp, cartBedPos->z, &spC0);
     } else {
@@ -1996,9 +1996,9 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     SkinMatrix_SetScale(&sp80, arg2->x, 1.0f, arg2->z);
     SkinMatrix_MtxFMtxFMult(&spC0, &sp80, &sp40);
 
-    sp100 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, &sp40);
+    sp100 = SkinMatrix_MtxFToNewMtx(play->state.gfxCtx, &sp40);
     if (sp100 != NULL) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
@@ -2006,14 +2006,14 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gSquareShadowDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
 #ifndef NOT_DEBUG_PRINT
 #define BOOLSTR(x) ((x) ? "true" : "false")
 
-void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer) {
+void ObjUm_PrintStruct(ObjUm* this, PlayState* play, GfxPrint* printer) {
     s32 x = 31;
     s32 y = 3;
     s32 i;
@@ -2146,8 +2146,8 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_Printf(printer, "[59]&02:%i", gSaveContext.save.weekEventReg[59] & 2 ? 1 : 0);
 }
 
-void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void ObjUm_DrawStruct(ObjUm* this, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     GfxPrint printer;
     Gfx* gfxRef;
     Gfx* gfx;
@@ -2164,7 +2164,7 @@ void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
 
     GfxPrint_Open(&printer, gfx);
 
-    ObjUm_PrintStruct(this, globalCtx, &printer);
+    ObjUm_PrintStruct(this, play, &printer);
 
     gfx = GfxPrint_Close(&printer);
 
@@ -2178,21 +2178,21 @@ void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
 }
 #endif
 
-void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjUm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjUm* this = THIS;
     Vec3f sp34;
 
     this->flags |= OBJ_UM_FLAG_0001;
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
-    func_80B7BEA4(&this->cartBedPos, this->dyna.actor.shape.rot.y, &sp34, 180, globalCtx);
-    ObjUm_UpdateBanditsPositions(this, globalCtx);
+    func_80B7BEA4(&this->cartBedPos, this->dyna.actor.shape.rot.y, &sp34, 180, play);
+    ObjUm_UpdateBanditsPositions(this, play);
 
 #ifndef NOT_DEBUG_PRINT
-    ObjUm_DrawStruct(this, globalCtx);
+    ObjUm_DrawStruct(this, play);
 #endif
 }

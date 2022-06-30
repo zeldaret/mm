@@ -7,7 +7,7 @@
 
 struct ObjUm;
 
-typedef void (*ObjUmActionFunc)(struct ObjUm*, GlobalContext*);
+typedef void (*ObjUmActionFunc)(struct ObjUm*, PlayState*);
 
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;

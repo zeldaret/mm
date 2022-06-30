@@ -5,7 +5,7 @@
 
 struct EnKgy;
 
-typedef void (*EnKgyActionFunc)(struct EnKgy*, GlobalContext*);
+typedef void (*EnKgyActionFunc)(struct EnKgy*, PlayState*);
 
 #define ENKGY_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENKGY_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)

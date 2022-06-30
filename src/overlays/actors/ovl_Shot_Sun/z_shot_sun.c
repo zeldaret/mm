@@ -10,14 +10,14 @@
 
 #define THIS ((ShotSun*)thisx)
 
-void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
-void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
+void ShotSun_Init(Actor* thisx, PlayState* play);
+void ShotSun_Destroy(Actor* thisx, PlayState* play);
+void ShotSun_Update(Actor* thisx, PlayState* play);
 
-void func_80973740(ShotSun* this, GlobalContext* globalCtx);
-void func_80973804(ShotSun* this, GlobalContext* globalCtx);
-void func_809738D0(ShotSun* this, GlobalContext* globalCtx);
-void func_80973960(ShotSun* this, GlobalContext* globalCtx);
+void func_80973740(ShotSun* this, PlayState* play);
+void func_80973804(ShotSun* this, PlayState* play);
+void func_809738D0(ShotSun* this, PlayState* play);
+void func_80973960(ShotSun* this, PlayState* play);
 
 #if 0
 const ActorInit Shot_Sun_InitVars = {

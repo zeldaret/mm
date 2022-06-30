@@ -5,7 +5,7 @@
 
 struct EnKame;
 
-typedef void (*EnKameActionFunc)(struct EnKame*, GlobalContext*);
+typedef void (*EnKameActionFunc)(struct EnKame*, PlayState*);
 
 typedef struct EnKame {
     /* 0x0000 */ Actor actor;

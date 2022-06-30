@@ -10,9 +10,9 @@
 
 #define THIS ((ObjPurify*)thisx)
 
-void ObjPurify_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjPurify_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjPurify_Init(Actor* thisx, PlayState* play);
+void ObjPurify_Destroy(Actor* thisx, PlayState* play);
+void ObjPurify_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Obj_Purify_InitVars = {

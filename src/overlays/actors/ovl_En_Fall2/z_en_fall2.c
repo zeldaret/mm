@@ -10,10 +10,10 @@
 
 #define THIS ((EnFall2*)thisx)
 
-void EnFall2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnFall2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFall2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnFall2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFall2_Init(Actor* thisx, PlayState* play);
+void EnFall2_Destroy(Actor* thisx, PlayState* play);
+void EnFall2_Update(Actor* thisx, PlayState* play);
+void EnFall2_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Fall2_InitVars = {

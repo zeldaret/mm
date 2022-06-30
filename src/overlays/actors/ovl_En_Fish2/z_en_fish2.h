@@ -5,7 +5,7 @@
 
 struct EnFish2;
 
-typedef void (*EnFish2ActionFunc)(struct EnFish2*, GlobalContext*);
+typedef void (*EnFish2ActionFunc)(struct EnFish2*, PlayState*);
 
 typedef struct {
     /* 0x00 */ u8 unk_00;

@@ -5,7 +5,7 @@
 
 struct ObjIcePoly;
 
-typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly*, GlobalContext*);
+typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly*, PlayState*);
 
 #define OBJICEPOLY_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 

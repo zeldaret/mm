@@ -5,7 +5,7 @@
 
 struct DemoSyoten;
 
-typedef void (*DemoSyotenActionFunc)(struct DemoSyoten*, GlobalContext*);
+typedef void (*DemoSyotenActionFunc)(struct DemoSyoten*, PlayState*);
 
 #define DEMOSYOTEN_GET_F(thisx) ((thisx)->params & 0xF)
 #define DEMOSYOTEN_GET_7E00(thisx) (((thisx)->params & 0x7E00) >> 9)

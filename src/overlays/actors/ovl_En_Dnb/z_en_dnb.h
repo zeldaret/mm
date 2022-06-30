@@ -16,7 +16,7 @@ typedef struct {
     /* 0x2C */ f32 unk_2C;
     /* 0x30 */ f32 unk_30;
     /* 0x34 */ f32 unk_34;
-} EnDnbParticle; // size = 0x38
+} EnDnbEffect; // size = 0x38
 
 typedef struct {
     /* 0x00 */ u8 isEnabled;
@@ -29,10 +29,12 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
 } EnDnbUnkStruct; // size = 0x28
 
+#define EN_DNB_EFFECT_COUNT 54
+
 typedef struct EnDnb {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ UNK_TYPE1 unk_015C[0x4];
-    /* 0x0160 */ EnDnbParticle particles[54];
+    /* 0x0160 */ EnDnbEffect effects[EN_DNB_EFFECT_COUNT];
     /* 0x0D30 */ s16 unk_0D30;
     /* 0x0D32 */ s16 unk_0D32;
     /* 0x0D34 */ s16 unk_0D34;

@@ -5,7 +5,7 @@
 
 struct ArrowLight;
 
-typedef void (*ArrowLightActionFunc)(struct ArrowLight*, GlobalContext*);
+typedef void (*ArrowLightActionFunc)(struct ArrowLight*, PlayState*);
 
 typedef struct ArrowLight {
     /* 0x000 */ Actor actor;
