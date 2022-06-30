@@ -277,7 +277,7 @@ typedef enum DungeonIndex {
     /* 0 */ DUNGEON_INDEX_WOODFALL,
     /* 1 */ DUNGEON_INDEX_SNOWHEAD,
     /* 2 */ DUNGEON_INDEX_GREAT_BAY,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER,
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER, // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);

@@ -75,6 +75,9 @@ s32 Map_IsInDungeonArea(PlayState* play) {
     return true;
 }
 
+/**
+ * The values in this array get directly mapped onto the DungeonIndex enum.
+ */
 s32 sBossScenes[] = {
     SCENE_MITURIN_BS,
     SCENE_HAKUGIN_BS,
