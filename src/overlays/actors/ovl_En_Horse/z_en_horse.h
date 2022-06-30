@@ -97,22 +97,22 @@ typedef enum {
 } EnHorseAnimationIndex;
 
 typedef enum {
-    /* 0 */ HORSE_EPONA,
-    /* 1 */ HORSE_HNI,
-    /* 2 */ HORSE_2,
-    /* 3 */ HORSE_3, // bandits?
-    /* 4 */ HORSE_4 // Cremia's donkey
+    /* 0 */ HORSE_TYPE_EPONA,
+    /* 1 */ HORSE_TYPE_HNI,
+    /* 2 */ HORSE_TYPE_2,
+    /* 3 */ HORSE_TYPE_BANDIT,
+    /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
 } HorseType;
 
-#define ENHORSE_GET_2000(thisx) ((thisx)->params & 0x2000)
-#define ENHORSE_GET_4000(thisx) ((thisx)->params & 0x4000)
-#define ENHORSE_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENHORSE_2000 0x2000
+#define ENHORSE_4000 0x4000
+#define ENHORSE_8000 0x8000
+
+#define ENHORSE_GET_2000(thisx) ((thisx)->params & ENHORSE_2000)
+#define ENHORSE_GET_4000(thisx) ((thisx)->params & ENHORSE_4000)
+#define ENHORSE_GET_8000(thisx) ((thisx)->params & ENHORSE_8000)
 
 #define ENHORSE_PARAM(upper, low) ((upper) | (low))
-
-#define ENHORSE_8000 0x8000
-#define ENHORSE_4000 0x4000
-#define ENHORSE_2000 0x2000
 
 enum {
     /*  0 */ ENHORSE_0,
