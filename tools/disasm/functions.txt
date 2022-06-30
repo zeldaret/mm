@@ -10549,7 +10549,7 @@
     0x80A4FB10:("func_80A4FB10",),
     0x80A4FB68:("func_80A4FB68",),
     0x80A4FCCC:("DemoGetitem_Update",),
-    0x80A4FCF0:("func_80A4FCF0",),
+    0x80A4FCF0:("DemoGetitem_Draw",),
     0x80A4FDD0:("func_80A4FDD0",),
     0x80A4FEBC:("func_80A4FEBC",),
     0x80A4FFE8:("func_80A4FFE8",),
