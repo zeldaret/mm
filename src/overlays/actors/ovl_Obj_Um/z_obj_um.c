@@ -83,12 +83,7 @@ const ActorInit Obj_Um_InitVars = {
 };
 
 static TexturePtr sEyeTextures[] = {
-    gUmEyeOpenTex,
-    gUmEyeHalfTex,
-    gUmEyeClosedTex,
-    gUmEyePleasedTex,
-    gUmEyeAngryTex,
-    gUmEyeSadTex,
+    gUmEyeOpenTex, gUmEyeHalfTex, gUmEyeClosedTex, gUmEyePleasedTex, gUmEyeAngryTex, gUmEyeSadTex,
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -238,7 +233,8 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     Audio_QueueSeqCmd(0x8003);
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
-                                    spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_19));
+                                    spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
+                                    ENHORSE_PARAM(ENHORSE_2000, ENHORSE_19));
     this->bandit1 = bandit1;
 
     bandit1->unk_540 = bandit1->actor.world.pos;
@@ -260,7 +256,8 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     bandit1->curRaceWaypoint = 1;
 
     bandit2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
-                                    spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_20));
+                                    spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0,
+                                    ENHORSE_PARAM(ENHORSE_2000, ENHORSE_20));
     this->bandit2 = bandit2;
 
     bandit2->unk_540 = bandit2->actor.world.pos;
@@ -295,9 +292,9 @@ typedef struct {
 } struct_80B7C254; // size = 0x14
 
 struct_80B7C254 D_80B7C164[] = {
-    { 2, 0, 0, 1.0f, 40 },     { 4, 1, 0, 1.0f, 40 },   { 3, 2, 0, 1.0f, 40 },    { 3, 4, 0, 1.0f, 40 },
-    { 5, 3, 1, -1.0f, 30 },    { 7, 3, 1, 1.0f, 30 },   { 0, 13, 1, -1.0f, 60 }, { 1, 14, 1, 1.0f, 60 },
-    { 13, 10, 0, 1.0f, 40 }, { 14, 8, 0, 1.0f, 40 }, { 8, 5, 0, 1.0f, 30 },    { 10, 7, 0, 1.0f, 30 },
+    { 2, 0, 0, 1.0f, 40 },   { 4, 1, 0, 1.0f, 40 },  { 3, 2, 0, 1.0f, 40 },   { 3, 4, 0, 1.0f, 40 },
+    { 5, 3, 1, -1.0f, 30 },  { 7, 3, 1, 1.0f, 30 },  { 0, 13, 1, -1.0f, 60 }, { 1, 14, 1, 1.0f, 60 },
+    { 13, 10, 0, 1.0f, 40 }, { 14, 8, 0, 1.0f, 40 }, { 8, 5, 0, 1.0f, 30 },   { 10, 7, 0, 1.0f, 30 },
 };
 
 // BanditAttack?
@@ -427,9 +424,12 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
     bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
-    bandit->banditPosition.x = bandit->actor.world.pos.x + (bandit->actor.velocity.x * 0.5f) + bandit->actor.colChkInfo.displacement.x;
-    bandit->banditPosition.y = bandit->actor.world.pos.y + (bandit->actor.velocity.y * 0.5f) + bandit->actor.colChkInfo.displacement.y;
-    bandit->banditPosition.z = bandit->actor.world.pos.z + (bandit->actor.velocity.z * 0.5f) + bandit->actor.colChkInfo.displacement.z;
+    bandit->banditPosition.x =
+        bandit->actor.world.pos.x + (bandit->actor.velocity.x * 0.5f) + bandit->actor.colChkInfo.displacement.x;
+    bandit->banditPosition.y =
+        bandit->actor.world.pos.y + (bandit->actor.velocity.y * 0.5f) + bandit->actor.colChkInfo.displacement.y;
+    bandit->banditPosition.z =
+        bandit->actor.world.pos.z + (bandit->actor.velocity.z * 0.5f) + bandit->actor.colChkInfo.displacement.z;
 
     phi_v1_2 = BINANG_SUB(bandit->actor.world.rot.y, bandit->actor.shape.rot.y);
 
@@ -490,7 +490,8 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
         func_80B781DC(this, bandit1, bandit2, play);
     }
 
-    Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
+    Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560),
+                &sp30);
     bandit1->banditPosition = sp30;
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
 
@@ -542,13 +543,13 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
                 // TODO: remove cast?
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16) 0x28);
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16)0x28);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
                 // TODO: remove cast?
-                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16) 0x28);
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16)0x28);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
@@ -681,7 +682,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable,
+                       UM_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_um_Anim_012CC0);
 
     this->wheelRot = 0;
@@ -1649,9 +1651,11 @@ typedef struct {
     /* 0x04 */ s32 animMoves;
 } struct_80B7C25C; // size = 0x08
 
-struct_80B7C25C D_80B7C25C[] = {
-    { &object_um_Anim_012CC0, true }, { &object_um_Anim_01213C, true }, { &object_um_Anim_019E10, false }, { NULL, false }, { &object_um_Anim_0126C4, false }
-};
+struct_80B7C25C D_80B7C25C[] = { { &object_um_Anim_012CC0, true },
+                                 { &object_um_Anim_01213C, true },
+                                 { &object_um_Anim_019E10, false },
+                                 { NULL, false },
+                                 { &object_um_Anim_0126C4, false } };
 
 void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
     s32 changeAnim;
@@ -1884,7 +1888,9 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Mtx* mtx_s3;
-    Gfx* spFC[] = { NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0 };
+    Gfx* spFC[] = {
+        NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0
+    };
     Gfx* spE4[] = { NULL, NULL, object_um_DL_004B60, object_um_DL_0043E0, NULL, NULL };
     f32 spCC[] = { 0.0f, 1070.0f, 1070.0f, 1070.0f, 1070.0f, 2100.0f };
     Vec3f spC0 = gZeroVec3f;
