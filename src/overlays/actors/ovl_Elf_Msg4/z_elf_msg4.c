@@ -42,25 +42,25 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // "Collapse together"
-        if (ELFMSG4_GET_7F00(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG4_GET_7F00(&this->actor));
+        if (ELFMSG4_GET_SWITCH(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor));
         }
         Actor_MarkForDeath(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
-            if (ELFMSG4_GET_7F00(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_7F00(&this->actor));
+            if (ELFMSG4_GET_SWITCH(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor));
             }
             Actor_MarkForDeath(&this->actor);
             return true;
         }
     }
-    if (ELFMSG4_GET_7F00(&this->actor) == 0x7F) {
+    if (ELFMSG4_GET_SWITCH(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG4_GET_7F00(&this->actor)) != 0) {
+    if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCH(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_MarkForDeath(&this->actor);
         return true;
@@ -87,7 +87,7 @@ void ElfMsg4_Init(Actor* thisx, PlayState* play) {
         }
         this->actor.shape.rot.z = 0;
         this->actionFunc = func_80AFD770;
-        this->unk_144 = NULL;
+        this->elfMsg5 = NULL;
         this->actor.shape.rot.x = this->actor.shape.rot.y = this->actor.shape.rot.z;
     }
 }
@@ -115,7 +115,7 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
     if ((player->tatlActor != NULL) && func_80AFD5E0(this)) {
         player->tatlTextId = func_80AFD5B4(this);
         ActorCutscene_SetIntentToPlay(0x7C);
-        tatl->elfMsg = this->unk_144;
+        tatl->elfMsg = this->elfMsg5;
         if (this->actor.cutscene == -1) {
             this->actor.cutscene = 0x7C;
         }
@@ -134,31 +134,31 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
 }
 
 void func_80AFD770(ElfMsg4* this, PlayState* play) {
-    Actor* actorPtr = play->actorCtx.actorLists[ACTORCAT_BG].first;
+    Actor* bgActor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
-    while (actorPtr != NULL) {
-        if ((actorPtr->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != (actorPtr->params & 0xFF)) ||
-            (this->actor.cutscene != actorPtr->cutscene)) {
-            actorPtr = actorPtr->next;
+    while (bgActor != NULL) {
+        if ((bgActor->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != (bgActor->params & 0xFF)) ||
+            (this->actor.cutscene != bgActor->cutscene)) {
+            bgActor = bgActor->next;
         } else {
-            this->unk_144 = actorPtr;
+            this->elfMsg5 = bgActor;
             this->actionFunc = func_80AFD668;
-            actorPtr = actorPtr->next;
+            bgActor = bgActor->next;
         }
     }
 }
 
 void ElfMsg4_Update(Actor* thisx, PlayState* play) {
-    Actor* actorPtr;
+    Actor* bgActor;
     ElfMsg4* this = THIS;
 
     if (!func_80AFD380(this, play)) {
-        actorPtr = this->unk_144;
-        if ((actorPtr != NULL) && (actorPtr->update == NULL)) {
+        bgActor = this->elfMsg5;
+        if ((bgActor != NULL) && (bgActor->update == NULL)) {
             Actor_MarkForDeath(&this->actor);
-        } else if ((actorPtr != NULL) && (Actor_ProcessTalkRequest(actorPtr, &play->state))) {
-            if (ELFMSG4_GET_7F00(thisx) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_7F00(thisx));
+        } else if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
+            if (ELFMSG4_GET_SWITCH(thisx) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH(thisx));
             }
             Actor_MarkForDeath(&this->actor);
         } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
