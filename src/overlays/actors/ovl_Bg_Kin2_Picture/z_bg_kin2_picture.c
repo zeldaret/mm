@@ -4,7 +4,7 @@
  * Description: Ocean Spider House - Skullkid Painting
  */
 
-//credits for decompilation: Anon58, EllipticEllipsis
+// credits for decompilation: Anon58, EllipticEllipsis
 
 #include "z_bg_kin2_picture.h"
 
@@ -97,126 +97,101 @@ s32 func_80B6EFA0(PlayState* arg0, s32 arg1) {
     return (phi_a2 >= 0) && Flags_GetTreasure(arg0, phi_a2);
 }
 
-void func_80B6EFEC(BgKin2Picture *arg0, PlayState *arg1)
-{
-  BgKin2Picture *temp;
-  s32 temp_a1;
-  s32 new_var;
-  s16 temp_v0;
-  temp_v0 = arg0->dyna.actor.params;
-  if (!((new_var = temp_v0 >> 5) & 1))
-  {
-    new_var = 0;
-    temp_a1 = temp_v0 & 0x1F;
-    if (1)
-    {
-      temp_a1 = (temp_a1 * 4) | 0xFF03;
+void func_80B6EFEC(BgKin2Picture* arg0, PlayState* arg1) {
+    BgKin2Picture* temp;
+    s32 temp_a1;
+    s32 new_var;
+    s16 temp_v0;
+    temp_v0 = arg0->dyna.actor.params;
+    if (!((new_var = temp_v0 >> 5) & 1)) {
+        new_var = 0;
+        temp_a1 = temp_v0 & 0x1F;
+        if (1) {
+            temp_a1 = (temp_a1 * 4) | 0xFF03;
+        }
+        if ((func_80B6EFA0(arg1, temp_a1) == new_var) &&
+            Actor_Spawn(&arg1->actorCtx, arg1, 0x50, arg0->dyna.actor.home.pos.x, arg0->dyna.actor.home.pos.y + 23.0f,
+                        arg0->dyna.actor.home.pos.z, new_var, arg0->dyna.actor.home.rot.y, 0, temp_a1)) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+        }
     }
-    if ((func_80B6EFA0(arg1, temp_a1) == new_var) && Actor_Spawn(&arg1->actorCtx, arg1, 0x50, arg0->dyna.actor.home.pos.x, arg0->dyna.actor.home.pos.y + 23.0f, arg0->dyna.actor.home.pos.z, new_var, arg0->dyna.actor.home.rot.y, 0, temp_a1))
-    {
-      play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-    }
-  }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F098.s")
+void func_80B6F098(BgKin2Picture* arg0, PlayState* arg1) {
+    f32 temp_fs0;
+    Vec3f spB8;
+    Vec3f spAC;
+    Vec3f spA0;
+    Vec3f sp94;
+    s32 temp_s1;
+    s32 temp_s0;
+    s32 phi_s3;
+    s32 i;
 
-void func_80B6F098(BgKin2Picture *arg0, PlayState *arg1)
-{
-  f32 temp_fs0;
-  Vec3f spB8;
-  Vec3f spAC;
-  Vec3f spA0;
-  Vec3f sp94;
-  s32 temp_s1;
-  s32 temp_s0;
-  s32 phi_s3;
-  s32 i;
-    
-  Matrix_SetTranslateRotateYXZ(arg0->dyna.actor.world.pos.x, arg0->dyna.actor.world.pos.y + (arg0->dyna.actor.shape.yOffset * arg0->dyna.actor.scale.y), arg0->dyna.actor.world.pos.z, &arg0->dyna.actor.shape.rot);
-  Matrix_MultVec3f(&D_80B6FA18, &spB8);
-  spAC.y = spB8.y - 7.0f;
-  spA0.y = 0.0f;
-  sp94.y = 0.2f;
-  for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC)
-  {
-    temp_s0 = Rand_ZeroOne() * 3276.0f;
-    temp_s1 = temp_s0 + phi_s3;
-    temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
-    spAC.x = Math_SinS(temp_s1) * temp_fs0;
-    spAC.z = Math_CosS(temp_s1) * temp_fs0;
-    spA0.x = (Rand_ZeroOne() - 0.5f) + (spAC.x * (1.0f / 6.0f));
-    spA0.z =  (Rand_ZeroOne() - 0.5f) + (spAC.z * (1.0f / 6.0f));
-    spAC.x += spB8.x;
-    spAC.z += spB8.z;
-    sp94.x = spA0.x * (-0.09f);
-    sp94.z = spA0.z * (-0.09f);
-    temp_s0 = ((s32) (Rand_ZeroOne() * 10.0f)) + 0xA;
-    func_800B1210(arg1, &spAC, &spA0, &sp94, temp_s0, ((s32) (Rand_ZeroOne() * 10.0f)) + 0xF);
-  }
-
+    Matrix_SetTranslateRotateYXZ(arg0->dyna.actor.world.pos.x,
+                                 arg0->dyna.actor.world.pos.y +
+                                     (arg0->dyna.actor.shape.yOffset * arg0->dyna.actor.scale.y),
+                                 arg0->dyna.actor.world.pos.z, &arg0->dyna.actor.shape.rot);
+    Matrix_MultVec3f(&D_80B6FA18, &spB8);
+    spAC.y = spB8.y - 7.0f;
+    spA0.y = 0.0f;
+    sp94.y = 0.2f;
+    for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC) {
+        temp_s0 = Rand_ZeroOne() * 3276.0f;
+        temp_s1 = temp_s0 + phi_s3;
+        temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
+        spAC.x = Math_SinS(temp_s1) * temp_fs0;
+        spAC.z = Math_CosS(temp_s1) * temp_fs0;
+        spA0.x = (Rand_ZeroOne() - 0.5f) + (spAC.x * (1.0f / 6.0f));
+        spA0.z = (Rand_ZeroOne() - 0.5f) + (spAC.z * (1.0f / 6.0f));
+        spAC.x += spB8.x;
+        spAC.z += spB8.z;
+        sp94.x = spA0.x * (-0.09f);
+        sp94.z = spA0.z * (-0.09f);
+        temp_s0 = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xA;
+        func_800B1210(arg1, &spAC, &spA0, &sp94, temp_s0, ((s32)(Rand_ZeroOne() * 10.0f)) + 0xF);
+    }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Init.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Init.s")
 
-// s32 func_80B6EFA0(PlayState *, s32);                /* extern */
+s32 func_80B6EFA0(PlayState*, s32); /* extern */
 void func_80B6F4C0(BgKin2Picture*); /* extern */
 
-// void BgKin2Picture_Init(Actor *thisx, PlayState *play) {
-//     Vec3f* vtx;
-//     Vec3f sp68[3];
-//     // ColliderTris *sp4C;
-//     // ColliderTris *temp_a1;
-//     // Vec3f *temp_s0;
-//     ColliderTrisElementInit* colliderElement;
-//     s16 temp_v0;
-//     BgKin2Picture *this = THIS;
-//     s32 i;
-//     s32 j;
+void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    BgKin2Picture* this = (BgKin2Picture*)thisx;
+    s32 temp_a1;
+    Vec3f sp68[3];
+    s32 i;
+    s32 j;
 
-//     Actor_ProcessInitChain(&this->dyna.actor, D_80B6FA24);
-//     DynaPolyActor_Init(&this->dyna, 0);
-//     DynaPolyActor_LoadMesh(play, &this->dyna, &D_06000798);
-//     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
-//     // temp_a1 = &this->colliderTris;
-//     // sp4C = temp_a1;
-//     Collider_InitTris(play, &this->colliderTris);
-//     Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &D_80B6FA08, &this->unk17C);
-//     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-//     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-//     // phi_s2 = 0;
-//     // phi_s5 = 0;
-//     for(i = 0; i < ARRAY_COUNT(D_80B6F990); i++){
-//         colliderElement = &D_80B6FA08.elements[i];
-//         vtx = colliderElement->dim.vtx;
-//         for(j = 0; j < ARRAY_COUNT(sp68); j++){
-//             Matrix_MultVec3f(&vtx[j], &sp68[j]);
-//         }
-//         Collider_SetTrisVertices(&this->colliderTris, i, &sp68[0], &sp68[1], &sp68[2]);
-//     }
-// //     do {
-// //         phi_s1 = 0;
-// //         phi_s0 = &sp68;
-// // loop_2:
-// //         Matrix_MultVec3f(phi_s2 + D_80B6FA08.elements + phi_s1 + 0x18, phi_s0);
-// //         temp_s0 = phi_s0 + 0xC;
-// //         phi_s1 += 0xC;
-// //         phi_s0 = temp_s0;
-// //         if (temp_s0 != &sp8C) {
-// //             goto loop_2;
-// //         }
-// //         Collider_SetTrisVertices(sp4C, phi_s5, &sp68, &sp74, &sp80);
-// //         temp_s5 = phi_s5 + 1;
-// //         phi_s2 += 0x3C;
-// //         phi_s5 = temp_s5;
-// //     } while (temp_s5 != 2);
-//     Actor_SetFocus(&this->dyna.actor, 23.0f);
-//     temp_v0 = this->dyna.actor.params;
-//     if ((( temp_v0 >> 5) & 1) || func_80B6EFA0(play, ((temp_v0 & 0x1F) * 4) | 0xFF03) ) {
-//         this->unk242 = -1;
-//     }
-//     func_80B6F4C0(this);
-// }
+    Actor_ProcessInitChain(&this->dyna.actor, D_80B6FA24);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &D_06000798);
+    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_InitTris(play, &this->colliderTris);
+    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &D_80B6FA08, &this->unk17C);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+
+    for (i = 0; i < ARRAY_COUNT(D_80B6F990); i++) {
+        for (j = 0; j < ARRAY_COUNT(sp68); j++) {
+            ColliderTrisElementInit* element = &D_80B6FA08.elements[i];
+
+            Matrix_MultVec3f(&element->dim.vtx[j], &sp68[j]);
+        }
+        Collider_SetTrisVertices(&this->colliderTris, i, &sp68[0], &sp68[1], &sp68[2]);
+    }
+
+    Actor_SetFocus(&this->dyna.actor, 23.0f);
+    temp_a1 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF03;
+    if ((this->dyna.actor.params >> 5) & 1 || func_80B6EFA0(play, temp_a1)) {
+        this->unk242 = -1;
+    }
+
+    func_80B6F4C0(this);
+}
 
 void BgKin2Picture_Destroy(Actor* thisx, PlayState* play) {
     BgKin2Picture* this = THIS;
@@ -293,27 +268,25 @@ void func_80B6F61C(BgKin2Picture* arg0) {
 
 void func_80B6F708(BgKin2Picture*);
 
-void func_80B6F640(BgKin2Picture *this, PlayState *play)
-{
-  Vec3f *new_var;
-  Vec3f sp30;
-  Vec3f sp24; 
-  this->unk23A += -1;
-  if (this->unk23A <= 0)
-  {
-    Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
-    func_80B6F708(this);
-    return;
-  }
-  this->unk23C += 0x7BAC;
-  this->unk23E += 0x4E20;
-  sp30.x = Math_CosS(this->unk23C);
-  sp30.y = Math_CosS(this->unk23E) * 0.2f;
-  sp30.z = 0.0f;
-  Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
-  new_var = &sp30;
-  Matrix_MultVec3f(new_var, &sp24);
-  Math_Vec3f_Sum(&this->dyna.actor.home.pos, &sp24, &this->dyna.actor.world.pos);
+void func_80B6F640(BgKin2Picture* this, PlayState* play) {
+    Vec3f* new_var;
+    Vec3f sp30;
+    Vec3f sp24;
+    this->unk23A += -1;
+    if (this->unk23A <= 0) {
+        Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
+        func_80B6F708(this);
+        return;
+    }
+    this->unk23C += 0x7BAC;
+    this->unk23E += 0x4E20;
+    sp30.x = Math_CosS(this->unk23C);
+    sp30.y = Math_CosS(this->unk23E) * 0.2f;
+    sp30.z = 0.0f;
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
+    new_var = &sp30;
+    Matrix_MultVec3f(new_var, &sp24);
+    Math_Vec3f_Sum(&this->dyna.actor.home.pos, &sp24, &this->dyna.actor.world.pos);
 }
 
 void func_80B6F708(BgKin2Picture* this) {
