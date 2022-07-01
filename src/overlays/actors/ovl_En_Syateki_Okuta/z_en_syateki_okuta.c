@@ -341,8 +341,8 @@ void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s16 temp_v1_2;
 
-    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) && (syatekiMan->unk_26A == 1) &&
-        (syatekiMan->unk_26C == 0)) {
+    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
+        (syatekiMan->shootingGameState == 1) && (syatekiMan->unk_26C == 0)) {
         temp_v1_2 = (syatekiMan->unk_190 >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);

@@ -224,7 +224,7 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->unk_276 &= ~(1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor));
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
@@ -233,10 +233,10 @@ void func_80A20284(EnSyatekiWf* this, PlayState* play) {
 
     if (this->actor.parent != NULL) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
-        if ((syatekiMan->unk_26A == 1) && (this->unk_298 == 1)) {
+        if ((syatekiMan->shootingGameState == 1) && (this->unk_298 == 1)) {
             func_80A200E0(this);
             func_80A2030C(this);
-        } else if (syatekiMan->unk_276 & (1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor))) {
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor))) {
             this->unk_298 = 1;
         }
     }
@@ -270,7 +270,7 @@ void func_80A203DC(EnSyatekiWf* this, PlayState* play) {
     s16 temp_v0;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A != 1) {
+    if (syatekiMan->shootingGameState != 1) {
         func_80A201CC(this);
     }
 

@@ -166,13 +166,14 @@ void func_80A2BE54(EnSyatekiDekunuts* this) {
 void func_80A2BF18(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->unk_26A == 1) && (this->unk_1E2 == 1) && ((syatekiMan->unk_272 & (1 << this->unk_1E8)) != 0)) {
+    if ((syatekiMan->shootingGameState == 1) && (this->unk_1E2 == 1) &&
+        ((syatekiMan->dekuScrubFlags & (1 << this->unk_1E8)) != 0)) {
         func_80A2BFC4(this);
-    } else if (syatekiMan->unk_26A != 1) {
+    } else if (syatekiMan->shootingGameState != 1) {
         this->unk_1E2 = 1;
     }
 
-    if ((syatekiMan->unk_272 == 0) && (syatekiMan->unk_274 == 0) &&
+    if ((syatekiMan->dekuScrubFlags == 0) && (syatekiMan->guayFlags == 0) &&
         (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1)) {
         this->unk_1E2 = 1;
     }
@@ -260,7 +261,7 @@ void func_80A2C27C(EnSyatekiDekunuts* this) {
 void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->unk_26A != 1)) {
+    if ((this->unk_1EE < this->unk_1D8) || (syatekiMan->shootingGameState != 1)) {
         func_80A2C3AC(this);
     }
 
@@ -270,7 +271,7 @@ void func_80A2C2E0(EnSyatekiDekunuts* this, PlayState* play) {
 void func_80A2C33C(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->unk_26A != 1)) {
+    if ((gSaveContext.unk_3DE0[1] <= 0) || (syatekiMan->shootingGameState != 1)) {
         func_80A2C3AC(this);
     }
 
@@ -287,7 +288,7 @@ void func_80A2C3AC(EnSyatekiDekunuts* this) {
 void func_80A2C3F0(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A == 1) {
+    if (syatekiMan->shootingGameState == 1) {
         if (this->unk_1D8 > 160 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_1D8 = 0;
             func_80A2C150(this);
@@ -356,7 +357,7 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, PlayState* play) {
             EffectSsHahen_SpawnBurst(play, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
-                syatekiMan->unk_272 &= ~(1 << this->unk_1E8);
+                syatekiMan->dekuScrubFlags &= ~(1 << this->unk_1E8);
             }
 
             func_80A2BE54(this);

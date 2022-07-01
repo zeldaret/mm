@@ -71,10 +71,10 @@ static AnimationInfo sAnimations[] = {
 };
 
 static s16 D_809C91C8[] = {
-    0x00C1,
-    0x0302,
-    0x0019,
-    0x0026,
+    (1 << 7) | (1 << 6) | (1 << 0),
+    (1 << 9) | (1 << 8) | (1 << 1),
+    (1 << 4) | (1 << 3) | (1 << 0),
+    (1 << 5) | (1 << 2) | (1 << 1),
 };
 
 typedef struct {
@@ -165,13 +165,13 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.cylRadius = 100;
     this->actionFunc = EnSyatekiMan_SetupIdle;
-    this->unk_26A = 0;
-    this->unk_270 = 15;
+    this->shootingGameState = 0;
+    this->talkWaitTimer = 15;
     this->spawnPatternIndex = 0;
     this->unk_26E = 0;
     this->unk_190 = 0;
-    this->unk_272 = 0;
-    this->unk_274 = 0;
+    this->dekuScrubFlags = 0;
+    this->guayFlags = 0;
     this->score = 0;
     this->dekuScrubHitCounter = 0;
     this->guayHitCounter = 0;
@@ -296,10 +296,10 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 // You don't have enough rupees!
                 Message_StartTextbox(play, 0xA31, &this->actor);
                 this->textId = 0xA31;
-                if (this->unk_26A == 4) {
+                if (this->shootingGameState == 4) {
                     gSaveContext.minigameState = 3;
                 }
-                this->unk_26A = 3;
+                this->shootingGameState = 3;
             } else {
                 func_8019F208();
                 func_801159EC(-20);
@@ -307,7 +307,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
-                this->unk_26A = 7;
+                this->shootingGameState = 7;
                 player->stateFlags1 |= 0x20;
                 this->actionFunc = EnSyatekiMan_Swamp_MovePlayerAndExplainRules;
             }
@@ -334,11 +334,11 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     break;
             }
 
-            if (this->unk_26A == 4) {
+            if (this->shootingGameState == 4) {
                 gSaveContext.minigameState = 3;
             }
 
-            this->unk_26A = 3;
+            this->shootingGameState = 3;
         }
     }
 }
@@ -364,7 +364,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 func_80112AFC(play);
                 play->interfaceCtx.hbaAmmo = 80;
                 func_80123F2C(play, 80);
-                this->unk_26A = 1;
+                this->shootingGameState = 1;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 break;
@@ -377,7 +377,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     gSaveContext.minigameState = 3;
-                    this->unk_26A = 0;
+                    this->shootingGameState = 0;
                 } else {
                     // Wanna play again?
                     Message_StartTextbox(play, 0xA33, &this->actor);
@@ -389,7 +389,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 // It costs 20 rupees to play.
                 Message_StartTextbox(play, 0xA2A, &this->actor);
                 this->textId = 0xA2A;
-                this->unk_26A = 4;
+                this->shootingGameState = 4;
                 break;
 
             case 0xA34: // Perfect! Take this!
@@ -415,7 +415,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case 2:
             this->actionFunc = EnSyatekiMan_Swamp_Idle;
-            this->unk_26A = 0;
+            this->shootingGameState = 0;
             break;
 
         case 4:
@@ -434,7 +434,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 this->actionFunc = EnSyatekiMan_Swamp_Idle;
-                this->unk_26A = 0;
+                this->shootingGameState = 0;
             }
             break;
 
@@ -600,15 +600,15 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     this->textId = 0x3FC;
                 }
 
-                if (this->unk_26A == 4) {
+                if (this->shootingGameState == 4) {
                     player->stateFlags3 &= ~0x400;
                     gSaveContext.minigameState = 3;
                 }
-                this->unk_26A = 3;
+                this->shootingGameState = 3;
             } else {
                 func_8019F208();
                 func_801159EC(-20);
-                this->unk_26A = 2;
+                this->shootingGameState = 2;
                 if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES)) {
                     this->talkFlags |= TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES;
                     // The rules are simple.
@@ -634,11 +634,11 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 this->textId = 0x3F8;
             }
 
-            if (this->unk_26A == 4) {
+            if (this->shootingGameState == 4) {
                 player->stateFlags3 &= ~0x400;
                 gSaveContext.minigameState = 3;
             }
-            this->unk_26A = 3;
+            this->shootingGameState = 3;
         }
     }
 }
@@ -689,7 +689,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
 
             case 0x3FD: // The rules are simple.
             case 0x3FF: // Aim for the red ones.
-                if (this->unk_26A == 4) {
+                if (this->shootingGameState == 4) {
                     if (this->textId == 0x3FD) {
                         // Our highest score is [score]. If you break the record, you'll win a prize!
                         Message_StartTextbox(play, 0x3FE, &this->actor);
@@ -703,7 +703,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.unk12023 = 4;
                     player->actor.freezeTimer = 0;
-                    this->unk_26A = 7;
+                    this->shootingGameState = 7;
                     player->stateFlags1 |= 0x20;
                     gSaveContext.save.weekEventReg[63] |= 1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -719,7 +719,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 this->spawnPatternIndex = 0;
                 func_80112AFC(play);
                 func_80123F2C(play, 0x63);
-                this->unk_26A = 1;
+                this->shootingGameState = 1;
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
                 break;
@@ -729,7 +729,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     func_801477B4(play);
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
-                    this->unk_26A = 0;
+                    this->shootingGameState = 0;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
                     // You can't stop, can you? You can play as long as you have rupees.
@@ -743,7 +743,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     func_801477B4(play);
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
-                    this->unk_26A = 0;
+                    this->shootingGameState = 0;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
                     // Frustrating, right? Wanna try again?
@@ -757,7 +757,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 // One game is 20 rupees.
                 Message_StartTextbox(play, 0x3F6, &this->actor);
                 this->textId = 0x3F6;
-                this->unk_26A = 4;
+                this->shootingGameState = 4;
                 break;
 
             case 0x405: // No way! That was perfect!
@@ -784,7 +784,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case 2:
             this->actionFunc = EnSyatekiMan_Town_Idle;
-            this->unk_26A = 0;
+            this->shootingGameState = 0;
             break;
 
         case 4:
@@ -801,7 +801,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 player->stateFlags1 &= ~0x20;
                 this->actionFunc = EnSyatekiMan_Town_Idle;
-                this->unk_26A = 0;
+                this->shootingGameState = 0;
             }
             break;
 
@@ -861,7 +861,7 @@ void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
         player->stateFlags1 &= ~0x20;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->score = 0;
-        this->unk_26A = 0;
+        this->shootingGameState = 0;
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
     } else {
         func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
@@ -912,7 +912,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
             player->stateFlags1 &= ~0x20;
             this->score = 0;
-            this->unk_26A = 0;
+            this->shootingGameState = 0;
             gSaveContext.save.weekEventReg[63] &= (u8)~1;
             gSaveContext.save.weekEventReg[63] &= (u8)~2;
             this->actionFunc = EnSyatekiMan_SetupIdle;
@@ -924,7 +924,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         player->stateFlags1 &= ~0x20;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->score = 0;
-        this->unk_26A = 0;
+        this->shootingGameState = 0;
         this->actionFunc = EnSyatekiMan_Town_Talk;
     } else {
         func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
@@ -936,7 +936,7 @@ void EnSyatekiMan_Swamp_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState*
 
     if (EnSyatekiMan_MovePlayerToTarget(play, sSwampPlayerPos)) {
         player->stateFlags1 |= 0x20;
-        this->unk_26A = 2;
+        this->shootingGameState = 2;
         if (this->talkFlags != TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES) {
             this->talkFlags = TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES;
             // The rules of the game are a piece of cake!
@@ -967,14 +967,14 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->score = 0;
         player->stateFlags1 &= ~0x20;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
-        this->unk_272 = 0x1F;
-        this->unk_274 = 0;
-        this->unk_276 = 0;
-        this->unk_26C = 0;
+        this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
+        this->guayFlags = 0;
+        this->wolfosFlags = 0;
+        this->guaySpawnTimer = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
         this->currentWave = 0;
-        this->unk_26E = 0;
+        this->bonusDekuScrubHitCounter = 0;
         func_8010E9F0(1, 100);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_RunGame;
@@ -985,39 +985,39 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s16 D_809C949C = 0;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->currentWave < 4)) {
+    if (((this->dekuScrubFlags == 0) || (this->guaySpawnTimer > 140)) && (D_809C949C == 0) && (this->currentWave < 4)) {
         D_809C949C = 1;
-        this->unk_26C = 0;
+        this->guaySpawnTimer = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
-        this->unk_274 = D_809C91C8[this->spawnPatternIndex];
+        this->guayFlags = D_809C91C8[this->spawnPatternIndex];
         if (this->spawnPatternIndex == 3) {
             this->spawnPatternIndex = 0;
         } else {
             this->spawnPatternIndex++;
         }
-    } else if ((this->unk_274 == 0) && (this->unk_272 == 0) && (D_809C949C == 1) && (this->currentWave < 4)) {
+    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (D_809C949C == 1) && (this->currentWave < 4)) {
         if (this->guayHitCounter < 3) {
             this->guayHitCounter = 0;
         }
-        this->unk_26C = 0;
+        this->guaySpawnTimer = 0;
         D_809C949C = 0;
         this->currentWave++;
         if (this->currentWave < 4) {
-            this->unk_272 = 31;
+            this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         }
     }
 
     if (this->guayHitCounter == 3) {
         this->guayHitCounter = 0;
-        this->unk_276 |= 1;
+        this->wolfosFlags |= 1;
     }
 
     if (this->dekuScrubHitCounter == 10) {
         this->dekuScrubHitCounter = 0;
-        this->unk_276 |= 2;
+        this->wolfosFlags |= 2;
     }
 
-    this->unk_26C++;
+    this->guaySpawnTimer++;
     if (gSaveContext.unk_3DE0[1] == 0) {
         gSaveContext.unk_3DE0[1] = 0;
         gSaveContext.unk_3DD0[1] = 5;
@@ -1028,14 +1028,14 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         D_809C949C = 0;
         func_801A2C20();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->currentWave == 4) && (this->unk_276 == 0) && (this->unk_26E == 2)) {
+    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) && (this->bonusDekuScrubHitCounter == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->spawnPatternIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= 0x20;
         D_809C949C = 0;
         func_801A2C20();
-        this->unk_26A = 5;
+        this->shootingGameState = 5;
         if (this->score == 2120) {
             func_8011B4E0(play, 2);
             gSaveContext.unk_3DD0[1] = 6;
@@ -1048,26 +1048,26 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
-    if ((this->unk_26A == 1) || (this->unk_26A == 5)) {
+    if ((this->shootingGameState == 1) || (this->shootingGameState == 5)) {
         this->unk_190 = 0;
-        this->unk_272 = 0;
-        this->unk_274 = 0;
-        this->unk_276 = 0;
-        if (this->unk_270 <= 0) {
+        this->dekuScrubFlags = 0;
+        this->guayFlags = 0;
+        this->wolfosFlags = 0;
+        if (this->talkWaitTimer <= 0) {
             if ((s32)((gSaveContext.save.unk_EF4 & 0xFFFF0000) >> 0x10) < this->score) {
                 gSaveContext.save.unk_EF4 = ((gSaveContext.save.unk_EF4) & 0xFFFF) | ((u16)this->score << 0x10);
             }
-            this->unk_270 = 15;
+            this->talkWaitTimer = 15;
             if (this->score >= 2120) {
                 // Perfect! Take this!
                 Message_StartTextbox(play, 0xA34, &this->actor);
                 this->textId = 0xA34;
-                this->unk_26A = 6;
+                this->shootingGameState = 6;
             } else if (this->score >= 0x7D0) {
                 if (gSaveContext.save.weekEventReg[63] & 2) {
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
-                    this->unk_26A = 0;
+                    this->shootingGameState = 0;
                     gSaveContext.minigameState = 3;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     return;
@@ -1075,21 +1075,21 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 // You almost had it! Well...just this once...here you go!
                 Message_StartTextbox(play, 0xA35, &this->actor);
                 this->textId = 0xA35;
-                this->unk_26A = 4;
+                this->shootingGameState = 4;
                 this->score = 0;
             } else {
                 // You have to try harder!
                 Message_StartTextbox(play, 0xA32, &this->actor);
                 this->textId = 0xA32;
-                this->unk_26A = 6;
+                this->shootingGameState = 6;
             }
             this->actionFunc = EnSyatekiMan_Swamp_Talk;
         } else {
-            this->unk_270--;
+            this->talkWaitTimer--;
         }
     }
 
-    if (this->unk_270 < 5) {
+    if (this->talkWaitTimer < 5) {
         play->unk_1887C = -10;
     }
 }
@@ -1138,7 +1138,7 @@ void EnSyatekiMan_Town_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState* 
             Message_StartTextbox(play, 0x400, &this->actor);
             this->textId = 0x400;
         }
-        this->unk_26A = 2;
+        this->shootingGameState = 2;
         this->actionFunc = EnSyatekiMan_Town_Talk;
     }
 }
@@ -1237,11 +1237,11 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
-    if (this->unk_26A == 1) {
+    if (this->shootingGameState == 1) {
         this->unk_190 = 0;
-        if ((this->unk_270 <= 0) && (play->interfaceCtx.unk_286 == 0)) {
+        if ((this->talkWaitTimer <= 0) && (play->interfaceCtx.unk_286 == 0)) {
             Flags_SetAllTreasure(play, this->score);
-            this->unk_270 = 15;
+            this->talkWaitTimer = 15;
             if (((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->score) || (this->score == 50)) {
                 if ((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->score) {
                     if (!(gSaveContext.save.weekEventReg[59] & 0x20)) {
@@ -1263,7 +1263,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
                     this->textId = 0x406;
                 }
                 gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | (this->score & 0xFFFF);
-                this->unk_26A = 6;
+                this->shootingGameState = 6;
             } else {
                 if (CURRENT_DAY != 3) {
                     // You got [score]? Oh, that's too bad...
@@ -1274,15 +1274,15 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x403, &this->actor);
                     this->textId = 0x403;
                 }
-                this->unk_26A = 4;
+                this->shootingGameState = 4;
             }
             this->actionFunc = EnSyatekiMan_Town_Talk;
         } else {
-            this->unk_270--;
+            this->talkWaitTimer--;
         }
     }
 
-    if (this->unk_270 < 5) {
+    if (this->talkWaitTimer < 5) {
         play->unk_1887C = -10;
     }
 }
@@ -1315,7 +1315,7 @@ void EnSyatekiMan_Update(Actor* thisx, PlayState* play) {
     EnSyatekiMan_Blink(this);
     this->actor.focus.pos.y = 70.0f;
     Actor_SetFocus(&this->actor, 70.0f);
-    if (this->unk_26A != 1) {
+    if (this->shootingGameState != 1) {
         SkelAnime_Update(&this->skelAnime);
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     }

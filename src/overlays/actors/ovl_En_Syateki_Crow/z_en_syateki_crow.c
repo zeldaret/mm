@@ -136,14 +136,14 @@ void func_809CA5D4(EnSyatekiCrow* this) {
 void func_809CA67C(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->unk_26A == 1) && (this->unk_1C2 == 1) &&
-        (syatekiMan->unk_274 & (1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)))) {
+    if ((syatekiMan->shootingGameState == 1) && (this->unk_1C2 == 1) &&
+        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)))) {
         func_809CA71C(this);
-    } else if (syatekiMan->unk_26A != 1) {
+    } else if (syatekiMan->shootingGameState != 1) {
         this->unk_1C2 = 1;
     }
 
-    if ((syatekiMan->unk_274 == 0) && (syatekiMan->unk_274 == 0)) {
+    if ((syatekiMan->guayFlags == 0) && (syatekiMan->guayFlags == 0)) {
         this->unk_1C2 = 1;
     }
 }
@@ -185,7 +185,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
     f32 sp30;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26A != 1) {
+    if (syatekiMan->shootingGameState != 1) {
         func_809CA5D4(this);
         return;
     }
@@ -207,7 +207,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
         this->unk_1CC++;
     } else {
         this->unk_1C2 = 0;
-        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
         func_809CA5D4(this);
     }
 
@@ -246,7 +246,7 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
     if (this->unk_1C4 > 20) {
         func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->guayHitCounter++;
-        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
         func_809CA5D4(this);
     }
 
