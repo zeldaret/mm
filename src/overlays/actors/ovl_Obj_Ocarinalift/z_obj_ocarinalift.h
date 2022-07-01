@@ -5,7 +5,7 @@
 
 struct ObjOcarinalift;
 
-typedef void (*ObjOcarinaliftActionFunc)(struct ObjOcarinalift*, GlobalContext*);
+typedef void (*ObjOcarinaliftActionFunc)(struct ObjOcarinalift*, PlayState*);
 
 typedef struct ObjOcarinalift {
     /* 0x0000 */ Actor actor;

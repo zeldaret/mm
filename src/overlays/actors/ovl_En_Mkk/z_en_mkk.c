@@ -10,18 +10,18 @@
 
 #define THIS ((EnMkk*)thisx)
 
-void EnMkk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMkk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMkk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMkk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMkk_Init(Actor* thisx, PlayState* play);
+void EnMkk_Destroy(Actor* thisx, PlayState* play);
+void EnMkk_Update(Actor* thisx, PlayState* play);
+void EnMkk_Draw(Actor* thisx, PlayState* play);
 
-void func_80A4E100(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4E1F0(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4E2E8(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4E60C(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4E72C(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4EE48(EnMkk* this, GlobalContext* globalCtx);
-void func_80A4EF74(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4E100(EnMkk* this, PlayState* play);
+void func_80A4E1F0(EnMkk* this, PlayState* play);
+void func_80A4E2E8(EnMkk* this, PlayState* play);
+void func_80A4E60C(EnMkk* this, PlayState* play);
+void func_80A4E72C(EnMkk* this, PlayState* play);
+void func_80A4EE48(EnMkk* this, PlayState* play);
+void func_80A4EF74(EnMkk* this, PlayState* play);
 
 #if 0
 const ActorInit En_Mkk_InitVars = {

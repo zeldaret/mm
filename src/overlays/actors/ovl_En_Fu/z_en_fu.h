@@ -6,7 +6,7 @@
 
 struct EnFu;
 
-typedef void (*EnFuActionFunc)(struct EnFu*, GlobalContext*);
+typedef void (*EnFuActionFunc)(struct EnFu*, PlayState*);
 
 #define ENFU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 

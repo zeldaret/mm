@@ -10,10 +10,10 @@
 
 #define THIS ((BgFuMizu*)thisx)
 
-void BgFuMizu_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgFuMizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgFuMizu_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgFuMizu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgFuMizu_Init(Actor* thisx, PlayState* play);
+void BgFuMizu_Destroy(Actor* thisx, PlayState* play);
+void BgFuMizu_Update(Actor* thisx, PlayState* play);
+void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Bg_Fu_Mizu_InitVars = {

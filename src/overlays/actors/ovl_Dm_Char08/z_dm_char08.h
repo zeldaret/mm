@@ -5,7 +5,7 @@
 
 struct DmChar08;
 
-typedef void (*DmChar08ActionFunc)(struct DmChar08*, GlobalContext*);
+typedef void (*DmChar08ActionFunc)(struct DmChar08*, PlayState*);
 
 typedef struct DmChar08 {
     /* 0x000 */ DynaPolyActor dyna;

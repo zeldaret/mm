@@ -59,7 +59,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
         GameState* gameState = &this->state;
         gameState->running = false;
     } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
 }
 
 // "Translation" ("Actual name")
@@ -357,7 +357,7 @@ static SceneSelectEntry sScenes[] = {
 
 void Select_UpdateMenu(SelectContext* this) {
     s32 playerForm;
-    Input* controller1 = CONTROLLER1(this);
+    Input* controller1 = CONTROLLER1(&this->state);
     s32 stickY;
     s32 pad[2];
     s16 i;

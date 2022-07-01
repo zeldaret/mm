@@ -5,7 +5,7 @@
 
 struct EnTwig;
 
-typedef void (*EnTwigActionFunc)(struct EnTwig*, GlobalContext*);
+typedef void (*EnTwigActionFunc)(struct EnTwig*, PlayState*);
 
 typedef struct EnTwig {
     /* 0x0000 */ Actor actor;

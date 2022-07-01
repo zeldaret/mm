@@ -21,7 +21,7 @@ typedef enum {
 
 struct ObjTokeidai;
 
-typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, GlobalContext*);
+typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, PlayState*);
 
 typedef struct ObjTokeidai {
     /* 0x000 */ Actor actor;
