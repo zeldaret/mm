@@ -1064,8 +1064,8 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
         this->guayFlags = 0;
         this->wolfosFlags = 0;
         if (this->talkWaitTimer <= 0) {
-            if ((s32)((gSaveContext.save.unk_EF4 & 0xFFFF0000) >> 0x10) < this->score) {
-                gSaveContext.save.unk_EF4 = ((gSaveContext.save.unk_EF4) & 0xFFFF) | ((u16)this->score << 0x10);
+            if (GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
+                SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
             }
             this->talkWaitTimer = 15;
             if (this->score >= 2120) {
@@ -1306,8 +1306,8 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
         if ((this->talkWaitTimer <= 0) && (play->interfaceCtx.unk_286 == 0)) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;
-            if (((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->score) || (this->score == 50)) {
-                if ((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->score) {
+            if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
+                if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
                     if (!(gSaveContext.save.weekEventReg[59] & 0x20)) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
@@ -1326,7 +1326,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x406, &this->actor);
                     this->textId = 0x406;
                 }
-                gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | (this->score & 0xFFFF);
+                SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(this->score);
                 this->shootingGameState = 6;
             } else {
                 if (CURRENT_DAY != 3) {

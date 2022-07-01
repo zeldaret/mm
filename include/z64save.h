@@ -160,7 +160,7 @@ typedef struct Save {
     /* 0x0EE8 */ u32 unk_EE8;
     /* 0x0EEC */ u32 horseBackBalloonHighScore;
     /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0x0EF4 */ u32 unk_EF4;                           // Shooting Gallery Man Flags
+    /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;                       // "area_arrival"
     /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
@@ -272,6 +272,12 @@ typedef enum SunsSongState {
     /* 2 */ SUNSSONG_SPEED_TIME, // suns was played where time passes, speed up the advancement of time
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
+
+
+#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.shootingGalleryHighScores & 0xFFFF))
+#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
+#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = (gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
+#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
