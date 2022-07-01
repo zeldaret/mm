@@ -428,7 +428,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
                 play->sceneLoadFlag = 0x14;
                 gSaveContext.save.weekEventReg[78] |= 1;
                 this->actionFunc = func_80BD1D94;
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 Audio_QueueSeqCmd(0x101400FF);
                 break;
 

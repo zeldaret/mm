@@ -187,7 +187,7 @@ typedef enum {
     /*  3 */ TEXT_STATE_3,
     /*  4 */ TEXT_STATE_4,
     /*  5 */ TEXT_STATE_5,
-    /*  6 */ TEXT_STATE_6,
+    /*  6 */ TEXT_STATE_DONE,
     /*  7 */ TEXT_STATE_7,
     /*  8 */ TEXT_STATE_8,
     /*  9 */ TEXT_STATE_9,
@@ -841,7 +841,7 @@ typedef struct {
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
-    /* 0x11F10 */ s32 unk11F10;
+    /* 0x11F10 */ s32 msgLength;
     /* 0x11F14 */ u16 unk11F14;
     /* 0x11F16 */ u16 unk11F16;
     /* 0x11F18 */ s8 unk11F18;

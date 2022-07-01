@@ -1005,7 +1005,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, play);
     } else if (func_800B8718(&this->actor, &play->state)) {

@@ -502,7 +502,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                     case 0: // Yes
                         func_8019F208();
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         break;
                     case 1: // No
                         func_8019F230();
@@ -530,7 +530,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
                     case 0xD77: // "Let us begin our chorus"
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
                         if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece

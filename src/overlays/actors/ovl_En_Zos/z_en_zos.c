@@ -305,7 +305,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
                     func_80151938(play, 0x124C);
@@ -313,7 +313,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
                 break;
 
             case 0x124C:
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80BBB4CC;
                 func_80BBAE84(this, 10, 0);
                 break;

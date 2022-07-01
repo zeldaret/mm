@@ -277,7 +277,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                     this->unk_2CE = 5;
                     break;
                 case 6:
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     func_80C050B8(this, play);
                     break;
             }

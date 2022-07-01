@@ -273,7 +273,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                     sp28 = true;
                 } else {
                     this->unk_2C0 = 3;
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     func_809C493C(this, 1, 1.0f);
                     D_809C6100 = 1;
                     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -301,7 +301,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 if (this->unk_2B8 != 2) {
                     ActorCutscene_Stop(this->unk_2D0);
                 }
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 func_809C493C(this, 1, 1.0f);
                 D_809C6100 = 1;
                 this->actionFunc = func_809C5B1C;

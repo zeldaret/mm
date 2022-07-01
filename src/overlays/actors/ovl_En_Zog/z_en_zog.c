@@ -668,7 +668,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B946B4;
                         func_80B93BA8(this, 1);
                         break;

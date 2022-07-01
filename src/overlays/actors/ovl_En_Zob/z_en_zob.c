@@ -316,11 +316,11 @@ void func_80B9FE1C(EnZob* this, PlayState* play) {
 void func_80B9FE5C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (play->msgCtx.ocarinaMode == 3) {
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
     } else if (Message_GetState(&play->msgCtx) == 11) {
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, 2);
@@ -346,7 +346,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         func_80152434(play, 0x3E);
         func_80B9FC70(this, 1);
     } else if (Message_GetState(&play->msgCtx) == 11) {
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, 2);
@@ -395,7 +395,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x120C:
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B9FD24;
                         func_80B9F7E4(this, 8, 0);
                         func_80B9FC70(this, 3);

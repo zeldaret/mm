@@ -322,7 +322,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
         func_800B8614(&this->actor, play, 60.0f);

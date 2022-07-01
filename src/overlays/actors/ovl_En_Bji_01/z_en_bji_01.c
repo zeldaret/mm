@@ -99,7 +99,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {
         if (this->moonsTear != NULL) {

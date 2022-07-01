@@ -291,7 +291,7 @@ void func_80AECA3C(EnTk* this, PlayState* play) {
 void func_80AECA90(EnTk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, play, 100.0f);
@@ -318,7 +318,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AED4F8(this, play);
         return;
     }
@@ -691,7 +691,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {

@@ -196,7 +196,7 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             case 0x33F5: // He heard from his gramps (?) the moon is going to fall
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80952FE0;
                 this->stateTimer = 0;
                 this->headRot.z = 0;

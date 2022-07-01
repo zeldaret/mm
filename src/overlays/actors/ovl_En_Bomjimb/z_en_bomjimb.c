@@ -210,7 +210,7 @@ s32 func_80C012FC(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!Play_InCsMode(play) && (this->actor.xzDistToPlayer < 40.0f) &&
-        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.unk11F10 == 0)) {
+        (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (play->msgCtx.msgLength == 0)) {
         this->actor.speedXZ = 0.0f;
         func_80C02740(this, play);
         return true;

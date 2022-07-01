@@ -174,7 +174,7 @@ void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
     if ((play->msgCtx.unk11F00->unk01 == 0) && (play->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         play->msgCtx.msgMode = 0;
     }
 }

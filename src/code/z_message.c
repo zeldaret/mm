@@ -99,7 +99,7 @@ s32 Message_ShouldAdvanceSilent(PlayState* play) {
 void func_801477B4(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (play->msgCtx.unk11F10 != 0) {
+    if (play->msgCtx.msgLength != 0) {
         msgCtx->unk12023 = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
@@ -334,7 +334,7 @@ void func_80151938(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     msgCtx->msgMode = 5;
@@ -361,7 +361,7 @@ void func_80151938(PlayState* play, u16 textId) {
 void func_80151A68(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     func_8015B198(play);
@@ -440,55 +440,55 @@ void func_80152464(PlayState* play, u16 arg1) {
 }
 
 u8 Message_GetState(MessageContext* msgCtx) {
-    if (msgCtx->unk11F10 == 0) {
+    if (msgCtx->msgLength == 0) {
         return TEXT_STATE_NONE;
     }
 
     if (msgCtx->msgMode == 0x42) {
         if (msgCtx->unk11F14 != 0xFFFF) {
-            return 1;
+            return TEXT_STATE_1;
         }
         if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
-            return 4;
+            return TEXT_STATE_4;
         }
         if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
-            return 5;
+            return TEXT_STATE_5;
         }
         if (msgCtx->unk12020 == 0x41) {
-            return 0x10;
+            return TEXT_STATE_16;
         }
         if (((s32)msgCtx->unk12020 >= 0x50) && ((s32)msgCtx->unk12020 < 0x58)) {
-            return 3;
+            return TEXT_STATE_3;
         }
         if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
-            return 0xE;
+            return TEXT_STATE_14;
         }
         if (msgCtx->unk12020 == 0x62) {
-            return 0xF;
+            return TEXT_STATE_15;
         }
         if (msgCtx->unk12020 == 0x63) {
-            return 0x11;
+            return TEXT_STATE_17;
         }
         if (msgCtx->unk12020 == 0x12) {
-            return 0x12;
+            return TEXT_STATE_18;
         }
-        return 6;
+        return TEXT_STATE_DONE;
     } else if (msgCtx->msgMode == 0x41) {
-        return 0xA;
+        return TEXT_STATE_10;
     } else if (msgCtx->msgMode == 0x1B) {
-        return 7;
+        return TEXT_STATE_7;
     } else if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
-        return 8;
+        return TEXT_STATE_8;
     } else if (msgCtx->msgMode == 0x20) {
-        return 9;
+        return TEXT_STATE_9;
     } else if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
-        return 0xB;
+        return TEXT_STATE_11;
     } else if (msgCtx->msgMode == 0x3D) {
-        return 0xC;
+        return TEXT_STATE_12;
     } else if (msgCtx->msgMode == 0x40) {
-        return 0xD;
+        return TEXT_STATE_13;
     } else if ((msgCtx->msgMode == 0x43) && (msgCtx->unk12023 == 1) && (msgCtx->unk120B1 == 0)) {
-        return 2;
+        return TEXT_STATE_2;
     }
 
     return 3;
@@ -576,7 +576,7 @@ void Message_Init(PlayState* play) {
     func_801586A4(play);
     play->msgCtx.ocarinaMode = 0;
     messageCtx->msgMode = 0;
-    messageCtx->unk11F10 = 0;
+    messageCtx->msgLength = 0;
     messageCtx->currentTextId = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
