@@ -54,7 +54,7 @@
         <Texture Name="object_ikana_obj_Tex_00E9B0" OutName="tex_00E9B0" Format="ia16" Width="16" Height="64" Offset="0xE9B0" />
         <Texture Name="object_ikana_obj_Tex_00F1B0" OutName="tex_00F1B0" Format="rgba16" Width="32" Height="32" Offset="0xF1B0" />
         <Texture Name="gStoneTowerTempleMirrorEmissionLightRaysTex" OutName="stone_tower_temple_mirror_emission_light_rays" Format="ia16" Width="16" Height="64" Offset="0xF9B0" />
-        <Texture Name="object_ikana_obj_Tex_0101B0" OutName="tex_0101B0" Format="rgba16" Width="32" Height="32" Offset="0x101B0" />
+        <Texture Name="gStoneTowerTempleMirrorSurfaceTex" OutName="stone_tower_temple_mirror_surface" Format="rgba16" Width="32" Height="32" Offset="0x101B0" />
         <Texture Name="object_ikana_obj_Tex_0109B0" OutName="tex_0109B0" Format="ia8" Width="32" Height="64" Offset="0x109B0" />
         <Texture Name="object_ikana_obj_Tex_0111B0" OutName="tex_0111B0" Format="rgba16" Width="32" Height="32" Offset="0x111B0" />
         <Texture Name="object_ikana_obj_Tex_0119B0" OutName="tex_0119B0" Format="rgba16" Width="32" Height="32" Offset="0x119B0" />
