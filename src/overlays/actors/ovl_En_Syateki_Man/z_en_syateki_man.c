@@ -1063,7 +1063,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 Message_StartTextbox(play, 0xA34, &this->actor);
                 this->textId = 0xA34;
                 this->shootingGameState = 6;
-            } else if (this->score >= 0x7D0) {
+            } else if (this->score >= 2000) {
                 if (gSaveContext.save.weekEventReg[63] & 2) {
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
