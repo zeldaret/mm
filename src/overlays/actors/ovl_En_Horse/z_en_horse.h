@@ -104,17 +104,15 @@ typedef enum {
     /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
 } HorseType;
 
-#define ENHORSE_2000 0x2000
-#define ENHORSE_4000 0x4000
-#define ENHORSE_8000 0x8000
+#define ENHORSE_PARAMTYPE_BANDIT 0x2000
+#define ENHORSE_PARAMTYPE_4000 0x4000
+#define ENHORSE_PARAMTYPE_DONKEY 0x8000
 
-#define ENHORSE_GET_2000(thisx) ((thisx)->params & ENHORSE_2000)
-#define ENHORSE_GET_4000(thisx) ((thisx)->params & ENHORSE_4000)
-#define ENHORSE_GET_8000(thisx) ((thisx)->params & ENHORSE_8000)
+#define ENHORSE_PARAMTYPE_ISBANDIT(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_BANDIT)
+#define ENHORSE_PARAMTYPE_IS4000(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_4000)
+#define ENHORSE_PARAMTYPE_ISDONKEY(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_DONKEY)
 
-#define ENHORSE_PARAM(upper, low) ((upper) | (low))
-
-enum {
+typedef enum {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -136,7 +134,13 @@ enum {
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
     /* 20 */ ENHORSE_20,
-};
+} EnHorseParam;
+
+/**
+ * `paramtype` should be `ENHORSE_PARAMTYPE_BANDIT`, `ENHORSE_PARAMTYPE_4000` or `ENHORSE_PARAMTYPE_DONKEY`
+ * `lower` should be a value of the enum `EnHorseParam`
+ */
+#define ENHORSE_PARAM(paramtype, lower) ((paramtype) | (lower))
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;

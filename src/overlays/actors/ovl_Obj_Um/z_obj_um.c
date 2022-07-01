@@ -234,7 +234,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
-                                    ENHORSE_PARAM(ENHORSE_2000, ENHORSE_19));
+                                    ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_19));
     this->bandit1 = bandit1;
 
     bandit1->unk_540 = bandit1->actor.world.pos;
@@ -257,7 +257,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
 
     bandit2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
                                     spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0,
-                                    ENHORSE_PARAM(ENHORSE_2000, ENHORSE_20));
+                                    ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_20));
     this->bandit2 = bandit2;
 
     bandit2->unk_540 = bandit2->actor.world.pos;
@@ -782,9 +782,10 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     func_800C636C(play, &play->colCtx.dyna, this->dyna.bgId);
 
-    this->donkey = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
-                                         this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
-                                         this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_8000, ENHORSE_18));
+    this->donkey =
+        (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
+                              this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
+                              this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_PARAMTYPE_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
