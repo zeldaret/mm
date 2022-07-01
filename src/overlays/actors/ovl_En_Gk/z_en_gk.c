@@ -873,7 +873,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 }
 
 void func_80B5216C(EnGk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         this->actionFunc = func_80B51698;
@@ -928,7 +928,7 @@ void func_80B52340(EnGk* this, PlayState* play) {
 }
 
 void func_80B52430(EnGk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         switch (this->unk_31C) {
             case 0xE93:
                 this->unk_31C = 0xE89;

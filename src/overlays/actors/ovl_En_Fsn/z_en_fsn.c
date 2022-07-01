@@ -209,7 +209,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play) &&
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
         func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
@@ -919,7 +919,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
     s32 itemActionParam;
     u8 buttonItem;
 
-    if (Message_GetState(&play->msgCtx) == 16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
             if (player->heldItemButton == 0) {
@@ -1225,7 +1225,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1350,7 +1350,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_SetupEndInteractionImmediately(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         EnFsn_EndInteraction(this, play);
     }
 }
@@ -1366,7 +1366,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
             play->msgCtx.msgMode = 0x43;

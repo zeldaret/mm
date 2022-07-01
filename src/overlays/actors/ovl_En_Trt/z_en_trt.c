@@ -370,7 +370,7 @@ void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x886:
                 this->textId = 0x887;
@@ -385,7 +385,7 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if (this->textId == 0x88F) {
             if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -450,7 +450,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
     //! @bug: player is set to NULL not PLAYER
     Player* player = NULL;
 
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
@@ -948,7 +948,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if (this->textId == 0x83C) {
             if (Interface_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -1015,7 +1015,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_SetupEndInteraction(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         EnTrt_EndInteraction(play, this);
     }
 }
@@ -1045,7 +1045,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_CannotBuy(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(play, EnTrt_GetItemTextId(this));
     }
@@ -1054,7 +1054,7 @@ void EnTrt_CannotBuy(EnTrt* this, PlayState* play) {
 void EnTrt_CanBuy(EnTrt* this, PlayState* play) {
     EnGirlA* item;
 
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->shopItemSelectedTween = 0.0f;
         EnTrt_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1074,7 +1074,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
         this->actionFunc = EnTrt_ItemGiven;
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {

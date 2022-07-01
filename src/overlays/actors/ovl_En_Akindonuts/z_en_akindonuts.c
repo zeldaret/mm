@@ -1285,7 +1285,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         this->unk_33C = 0;
@@ -1341,7 +1341,7 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF450(EnAkindonuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         func_800B85E0(&this->actor, play, 400.0f, -1);
         this->actionFunc = func_80BEF4B8;
     }

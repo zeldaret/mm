@@ -547,7 +547,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
 
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
             if (!(gSaveContext.save.weekEventReg[59] & 8)) {
                 gSaveContext.save.weekEventReg[59] |= 8;
             }

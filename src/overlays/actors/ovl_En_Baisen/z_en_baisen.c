@@ -222,7 +222,7 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {

@@ -181,7 +181,7 @@ void func_80997D14(EnGs* this, PlayState* play) {
 void func_80997D38(EnGs* this, PlayState* play) {
     static f32 D_8099A408[] = { 40.0f, 60.0f, 40.0f, 40.0f };
 
-    if (Message_GetState(&play->msgCtx) == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
             func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
                           EXCH_ITEM_NONE, 0x2000, 0x2000);
@@ -533,7 +533,7 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7, 0) ==
             0.0f) {
-            if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) && (Message_GetState(&play->msgCtx) == 0)) {
+            if ((this->actor.params != ENGS_0) && !Play_InCsMode(play) && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(play, 0x20D2, NULL);

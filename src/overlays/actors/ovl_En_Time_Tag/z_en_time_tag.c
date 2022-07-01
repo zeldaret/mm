@@ -134,7 +134,7 @@ void func_80ACA184(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA208(EnTimeTag* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80ACA268;
     }
@@ -262,7 +262,7 @@ void func_80ACA714(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA724(EnTimeTag* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         play->nextEntranceIndex = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
         play->sceneLoadFlag = 0x14;
         if (!ENTIMETAG_GET_E000(&this->actor)) {

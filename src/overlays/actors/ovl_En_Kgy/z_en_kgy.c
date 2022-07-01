@@ -457,7 +457,7 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
 
 void func_80B417B8(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80B413C8(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
@@ -481,7 +481,7 @@ void func_80B41858(EnKgy* this, PlayState* play) {
 void func_80B418C4(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play) &&
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play) &&
         ((play->msgCtx.currentTextId == 0xC4E) || (play->msgCtx.currentTextId == 0xC4F))) {
         func_801477B4(play);
         this->actor.textId = 0xC4F;
@@ -524,7 +524,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam != PLAYER_AP_NONE) {
             this->actionFunc = func_80B41E18;
@@ -856,7 +856,7 @@ void func_80B425A0(EnKgy* this, PlayState* play) {
 void func_80B42660(EnKgy* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80B413C8(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
@@ -897,7 +897,7 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         temp_a2 = play->msgCtx.currentTextId;
 
         switch (temp_a2) {
@@ -969,7 +969,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         temp_a2 = play->msgCtx.currentTextId;
         switch (temp_a2) {
             case 0xC1D:

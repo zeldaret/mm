@@ -1189,7 +1189,7 @@ void func_80AEED38(EnTk* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(play, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;

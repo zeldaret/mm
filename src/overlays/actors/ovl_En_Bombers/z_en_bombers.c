@@ -446,7 +446,7 @@ void func_80C04354(EnBombers* this, PlayState* play) {
 
 void func_80C043C8(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80C042F8(this);
     }

@@ -237,7 +237,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Player* player = GET_PLAYER(play);
         s32 pad;
         s32 sp28 = false;
@@ -330,7 +330,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+    if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->sceneLoadFlag = 0x14;
@@ -409,7 +409,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
@@ -447,7 +447,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+        if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {

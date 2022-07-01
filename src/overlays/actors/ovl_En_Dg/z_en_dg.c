@@ -1110,7 +1110,7 @@ void func_8098BBEC(EnDg* this, PlayState* play) {
 }
 
 void func_8098BC54(EnDg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_2) {
         func_80989140(&this->skelAnime, sAnimations, 0);
         this->actionFunc = func_8098BA64;
     }

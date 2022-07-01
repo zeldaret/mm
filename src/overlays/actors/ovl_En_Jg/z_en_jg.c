@@ -358,7 +358,7 @@ void EnJg_GoronShrineIdle(EnJg* this, PlayState* play) {
 }
 
 void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
             play->msgCtx.msgMode = 0x43;
@@ -600,7 +600,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
 }
 
 void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         this->actionFunc = EnJg_FrozenIdle;

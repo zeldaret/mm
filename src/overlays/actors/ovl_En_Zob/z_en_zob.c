@@ -319,7 +319,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
         play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
-    } else if (Message_GetState(&play->msgCtx) == 11) {
+    } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
@@ -330,7 +330,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == 7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
         func_80152434(play, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
@@ -345,7 +345,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         func_80B9F7E4(this, 1, 0);
         func_80152434(play, 0x3E);
         func_80B9FC70(this, 1);
-    } else if (Message_GetState(&play->msgCtx) == 11) {
+    } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
@@ -356,7 +356,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == 7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
         func_80152434(play, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);

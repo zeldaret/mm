@@ -504,7 +504,7 @@ void func_80B2714C(EnKendoJs* this) {
 void func_80B27188(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_288 == 0x2729) {
             func_80B26F14(this, play);
         } else if (!func_80B26F6C(this, play)) {

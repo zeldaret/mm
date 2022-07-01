@@ -1063,14 +1063,14 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 || Message_GetState(&play->msgCtx) == 5) {
-        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
             func_800B7298(play, &this->actor, 7);
             func_801477B4(play);
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && play->msgCtx.unk120B1 == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.unk120B1 == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }

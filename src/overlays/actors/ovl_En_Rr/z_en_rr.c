@@ -313,7 +313,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
             sp34 = false;
         }
 
-        if (sp34 && (Message_GetState(&play->msgCtx) == 0)) {
+        if (sp34 && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
             Message_StartTextbox(play, 0xF6, NULL);
         }
 

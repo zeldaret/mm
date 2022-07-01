@@ -560,7 +560,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80152434(play, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -1101,7 +1101,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
 void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         EnKakasi_SetupIdleRisen(this);
     }

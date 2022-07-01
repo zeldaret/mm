@@ -746,7 +746,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10E98(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             play->msgCtx.msgMode = 0x43;
@@ -790,7 +790,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 }
 
 void func_80B110F8(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.unk12023 = 4;

@@ -301,7 +301,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
@@ -339,7 +339,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         sp24 = func_80123810(play);
         if (sp24 > 0) {
             func_801477B4(play);
@@ -386,7 +386,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1237:
                 player->exchangeItemId = 0;

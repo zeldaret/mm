@@ -579,7 +579,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             }
 
             player->actor.speedXZ = 0.0f;
-            if (Message_GetState(&play->msgCtx) == 0) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;

@@ -665,7 +665,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
 void EnOssan_TalkToShopkeeper(EnOssan* this, PlayState* play) {
     AnimationInfoS* animations = sAnimations[this->actor.params];
 
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if ((this->animationIndex == ANI_ANIMATION_APOLOGY_LOOP) && (this->actor.params == ENOSSAN_PART_TIME_WORKER)) {
             this->animationIndex = ANI_ANIMATION_STANDING_NORMAL_LOOP_2;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
@@ -1069,7 +1069,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_CannotBuy(EnOssan* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1078,7 +1078,7 @@ void EnOssan_CannotBuy(EnOssan* this, PlayState* play) {
 void EnOssan_CanBuy(EnOssan* this, PlayState* play) {
     EnGirlA* item;
 
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->shopItemSelectedTween = 0.0f;
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1098,7 +1098,7 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_SetupItemPurchased(EnOssan* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);

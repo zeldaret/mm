@@ -542,7 +542,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB26EC(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (this->unk_496) {
             case 0xD5E:
                 this->unk_49A = this->unk_49C[1];
@@ -564,7 +564,7 @@ void func_80BB26EC(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB27D4(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (this->unk_496) {
             case 0xD63:
                 play->msgCtx.msgMode = 0x43;
@@ -629,7 +629,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB2A54(EnGeg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD65) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;

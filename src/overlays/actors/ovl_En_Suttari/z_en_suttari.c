@@ -1178,7 +1178,7 @@ void func_80BAD230(EnSuttari* this, PlayState* play) {
 }
 
 void func_80BAD2B4(EnSuttari* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if (this->textId == 0x2A30) {
             ActorCutscene_Stop(this->cutscenes[0]);
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);

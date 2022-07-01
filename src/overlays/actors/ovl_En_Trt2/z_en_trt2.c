@@ -359,7 +359,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (Interface_HasEmptyBottle()) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.unk12023 = 4;
@@ -411,7 +411,7 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         func_800B85E0(&this->actor, play, 400.0f, -1);
         this->unk_3B2 = 13;
     }
@@ -428,7 +428,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD417C(EnTrt2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, play);

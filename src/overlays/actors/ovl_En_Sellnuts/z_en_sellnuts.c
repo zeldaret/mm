@@ -497,7 +497,7 @@ void func_80ADBC60(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
@@ -556,7 +556,7 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
@@ -719,7 +719,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
 void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
