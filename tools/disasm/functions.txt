@@ -11642,7 +11642,7 @@
     0x80AAFAE4:("func_80AAFAE4",),
     0x80AAFB04:("func_80AAFB04",),
     0x80AAFB94:("func_80AAFB94",),
-    0x80AAFBA4:("func_80AAFBA4",),
+    0x80AAFBA4:("DmChar08_SpawnBubbles",),
     0x80AAFCCC:("func_80AAFCCC",),
     0x80AAFE78:("func_80AAFE78",),
     0x80AAFE88:("func_80AAFE88",),

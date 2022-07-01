@@ -11,8 +11,8 @@ typedef struct DmChar08 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;
     /* 0x1A0 */ DmChar08ActionFunc actionFunc;
-    /* 0x1A4 */ Actor* tree1;
-    /* 0x1A8 */ Actor* tree2;
+    /* 0x1A4 */ Actor* palmTree1;
+    /* 0x1A8 */ Actor* palmTree2;
     /* 0x1AC */ Vec3f tree1Pos;
     /* 0x1B8 */ Vec3f tree2Pos;
     /* 0x1C4 */ Vec3f bubblePos;
