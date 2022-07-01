@@ -15,7 +15,7 @@ typedef struct EnSyatekiMan {
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnSyatekiManActionFunc actionFunc;
     /* 0x018C */ Path* path;
-    /* 0x0190 */ s32 unk_190;
+    /* 0x0190 */ s32 octorokFlags; // turn this on to spawn them, turns off when they die
     /* 0x0194 */ s32 swampTargetActorListIndex;
     /* 0x0198 */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
     /* 0x01F8 */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];

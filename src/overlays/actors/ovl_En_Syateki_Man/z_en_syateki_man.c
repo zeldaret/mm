@@ -46,6 +46,25 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN (1 << 0)
 #define TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES (1 << 1)
 
+#define OCTOROK_FLAG_RED_LEFT_BACK (1 << 0)
+#define OCTOROK_FLAG_BLUE_LEFT_BACK (1 << 1)
+#define OCTOROK_FLAG_RED_MIDDLE_BACK (1 << 2)
+#define OCTOROK_FLAG_BLUE_MIDDLE_BACK (1 << 3)
+#define OCTOROK_FLAG_RED_RIGHT_BACK (1 << 4)
+#define OCTOROK_FLAG_BLUE_RIGHT_BACK (1 << 5)
+#define OCTOROK_FLAG_RED_LEFT_CENTER (1 << 6)
+#define OCTOROK_FLAG_BLUE_LEFT_CENTER (1 << 7)
+#define OCTOROK_FLAG_RED_MIDDLE_CENTER (1 << 8)
+#define OCTOROK_FLAG_BLUE_MIDDLE_CENTER (1 << 9)
+#define OCTOROK_FLAG_RED_RIGHT_CENTER (1 << 10)
+#define OCTOROK_FLAG_BLUE_RIGHT_CENTER (1 << 11)
+#define OCTOROK_FLAG_RED_LEFT_FRONT (1 << 12)
+#define OCTOROK_FLAG_BLUE_LEFT_FRONT (1 << 13)
+#define OCTOROK_FLAG_RED_MIDDLE_FRONT (1 << 14)
+#define OCTOROK_FLAG_BLUE_MIDDLE_FRONT (1 << 15)
+#define OCTOROK_FLAG_RED_RIGHT_FRONT (1 << 16)
+#define OCTOROK_FLAG_BLUE_RIGHT_FRONT (1 << 17)
+
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -169,7 +188,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->talkWaitTimer = 15;
     this->spawnPatternIndex = 0;
     this->octorokHitState = 0;
-    this->unk_190 = 0;
+    this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
     this->score = 0;
@@ -1049,7 +1068,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
 
 void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
     if ((this->shootingGameState == 1) || (this->shootingGameState == 5)) {
-        this->unk_190 = 0;
+        this->octorokFlags = 0;
         this->dekuScrubFlags = 0;
         this->guayFlags = 0;
         this->wolfosFlags = 0;
@@ -1178,8 +1197,52 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
 
 void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
     static const s32 D_809C94D0[] = {
-        0x00000111, 0x00000650, 0x00010025, 0x00011011, 0x00000984, 0x00004050, 0x00010211, 0x00022015,
-        0x00026984, 0x00012852, 0x00011999, 0x00022895, 0x0000056A, 0x0002A451, 0x00004115,
+        OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK | OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_CENTER | OCTOROK_FLAG_BLUE_MIDDLE_CENTER | OCTOROK_FLAG_RED_LEFT_CENTER |
+            OCTOROK_FLAG_RED_RIGHT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_FRONT | OCTOROK_FLAG_BLUE_RIGHT_BACK | OCTOROK_FLAG_RED_MIDDLE_BACK |
+            OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_FRONT | OCTOROK_FLAG_RED_LEFT_FRONT | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_BLUE_RIGHT_CENTER | OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_BLUE_LEFT_CENTER |
+            OCTOROK_FLAG_RED_MIDDLE_BACK,
+
+        OCTOROK_FLAG_RED_MIDDLE_FRONT | OCTOROK_FLAG_RED_LEFT_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_FRONT | OCTOROK_FLAG_BLUE_MIDDLE_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_BLUE_RIGHT_FRONT | OCTOROK_FLAG_BLUE_LEFT_FRONT | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_RED_MIDDLE_BACK | OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_BLUE_RIGHT_FRONT | OCTOROK_FLAG_RED_MIDDLE_FRONT | OCTOROK_FLAG_BLUE_LEFT_FRONT |
+            OCTOROK_FLAG_BLUE_RIGHT_CENTER | OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_BLUE_LEFT_CENTER |
+            OCTOROK_FLAG_RED_MIDDLE_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_FRONT | OCTOROK_FLAG_BLUE_LEFT_FRONT | OCTOROK_FLAG_BLUE_RIGHT_CENTER |
+            OCTOROK_FLAG_RED_LEFT_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK | OCTOROK_FLAG_BLUE_LEFT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_FRONT | OCTOROK_FLAG_RED_LEFT_FRONT | OCTOROK_FLAG_BLUE_RIGHT_CENTER |
+            OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_BLUE_LEFT_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_BLUE_MIDDLE_BACK | OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_BLUE_RIGHT_FRONT | OCTOROK_FLAG_BLUE_LEFT_FRONT | OCTOROK_FLAG_BLUE_RIGHT_CENTER |
+            OCTOROK_FLAG_BLUE_LEFT_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK | OCTOROK_FLAG_RED_MIDDLE_BACK |
+            OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_RED_RIGHT_CENTER | OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_RED_LEFT_CENTER |
+            OCTOROK_FLAG_BLUE_RIGHT_BACK | OCTOROK_FLAG_BLUE_MIDDLE_BACK | OCTOROK_FLAG_BLUE_LEFT_BACK,
+
+        OCTOROK_FLAG_BLUE_RIGHT_FRONT | OCTOROK_FLAG_BLUE_MIDDLE_FRONT | OCTOROK_FLAG_BLUE_LEFT_FRONT |
+            OCTOROK_FLAG_RED_RIGHT_CENTER | OCTOROK_FLAG_RED_LEFT_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_RED_LEFT_BACK,
+
+        OCTOROK_FLAG_RED_MIDDLE_FRONT | OCTOROK_FLAG_RED_MIDDLE_CENTER | OCTOROK_FLAG_RED_RIGHT_BACK |
+            OCTOROK_FLAG_RED_MIDDLE_BACK | OCTOROK_FLAG_RED_LEFT_BACK,
     };
     static s32 D_809C94A8 = 0;
     Player* player = GET_PLAYER(play);
@@ -1212,7 +1275,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 
         if ((D_809C94A8 == (sp30 % 50)) && (this->unk_26C >= 70)) {
             if (this->spawnPatternIndex < 15) {
-                this->unk_190 = D_809C94D0[this->spawnPatternIndex++];
+                this->octorokFlags = D_809C94D0[this->spawnPatternIndex++];
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
                 this->unk_26C = 0;
             }
@@ -1238,7 +1301,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 
 void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
     if (this->shootingGameState == 1) {
-        this->unk_190 = 0;
+        this->octorokFlags = 0;
         if ((this->talkWaitTimer <= 0) && (play->interfaceCtx.unk_286 == 0)) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;

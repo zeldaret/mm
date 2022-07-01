@@ -137,7 +137,7 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
 
     temp_v1 = EN_SYATEKI_OKUTA_GET_F(&this->actor);
     if ((temp_v1 == 1) || (temp_v1 == 4)) {
-        temp_a0 = syatekiMan->unk_190;
+        temp_a0 = syatekiMan->octorokFlags;
         temp_a1 = (temp_v1 * 2) + 6;
 
         if ((temp_a0 >> temp_a1) & 3) {
@@ -343,7 +343,7 @@ void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
 
     if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
         (syatekiMan->shootingGameState == 1) && (syatekiMan->unk_26C == 0)) {
-        temp_v1_2 = (syatekiMan->unk_190 >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
+        temp_v1_2 = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);
             this->unk_2A6 = temp_v1_2;
