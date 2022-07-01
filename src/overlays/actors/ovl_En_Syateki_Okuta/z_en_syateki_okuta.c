@@ -212,7 +212,7 @@ void func_80A36444(EnSyatekiOkuta* this) {
 void func_80A36488(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26C >= 0x46) {
+    if (syatekiMan->unk_26C >= 70) {
         func_80A364C0(this);
     }
 }
@@ -371,10 +371,10 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.unk_25C++;
             syatekiMan->score++;
-            syatekiMan->unk_26E = 1;
+            syatekiMan->octorokHitState = 1;
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->unk_26E = 2;
+            syatekiMan->octorokHitState = 2;
         }
 
         func_80A3657C(this);

@@ -168,7 +168,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = 0;
     this->talkWaitTimer = 15;
     this->spawnPatternIndex = 0;
-    this->unk_26E = 0;
+    this->octorokHitState = 0;
     this->unk_190 = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -1168,7 +1168,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->score = 0;
         this->spawnPatternIndex = 0;
         this->unk_26C = 70;
-        this->unk_26E = 0;
+        this->octorokHitState = 0;
         D_809C94A4 = 30;
         func_8010E9F0(1, 75);
         this->actor.draw = NULL;
@@ -1198,12 +1198,12 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->unk_26C = 80;
         }
 
-        if (this->unk_26E != 0) {
-            if (this->unk_26E == 2) {
+        if (this->octorokHitState != 0) {
+            if (this->octorokHitState == 2) {
                 gSaveContext.unk_3E18[1] -= 250;
                 D_809C94A8 = (D_809C94A8 + 25) % 50;
             }
-            this->unk_26E = 0;
+            this->octorokHitState = 0;
         }
 
         if (this->unk_26C == 0) {
