@@ -163,6 +163,45 @@ typedef struct FireObjLightParams {
     /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
 
+#if 0
+// OoT
+typedef enum {
+    /*  0 */ TEXT_STATE_NONE,
+    /*  1 */ TEXT_STATE_DONE_HAS_NEXT,
+    /*  2 */ TEXT_STATE_CLOSING,
+    /*  3 */ TEXT_STATE_DONE_FADING,
+    /*  4 */ TEXT_STATE_CHOICE,
+    /*  5 */ TEXT_STATE_EVENT,
+    /*  6 */ TEXT_STATE_DONE,
+    /*  7 */ TEXT_STATE_SONG_DEMO_DONE,
+    /*  8 */ TEXT_STATE_8,
+    /*  9 */ TEXT_STATE_9,
+    /* 10 */ TEXT_STATE_AWAITING_NEXT
+} TextState;
+#endif
+
+typedef enum {
+    /*  0 */ TEXT_STATE_NONE,
+    /*  1 */ TEXT_STATE_1,
+    /*  2 */ TEXT_STATE_2,
+    /*  3 */ TEXT_STATE_3,
+    /*  4 */ TEXT_STATE_4,
+    /*  5 */ TEXT_STATE_5,
+    /*  6 */ TEXT_STATE_6,
+    /*  7 */ TEXT_STATE_7,
+    /*  8 */ TEXT_STATE_8,
+    /*  9 */ TEXT_STATE_9,
+    /* 10 */ TEXT_STATE_10,
+    /* 11 */ TEXT_STATE_11,
+    /* 12 */ TEXT_STATE_12,
+    /* 13 */ TEXT_STATE_13,
+    /* 14 */ TEXT_STATE_14,
+    /* 15 */ TEXT_STATE_15,
+    /* 16 */ TEXT_STATE_16,
+    /* 17 */ TEXT_STATE_17,
+    /* 18 */ TEXT_STATE_18
+} TextState;
+
 #define FONT_CHAR_TEX_WIDTH  16
 #define FONT_CHAR_TEX_HEIGHT 16
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
@@ -803,7 +842,10 @@ typedef struct {
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
+    /* 0x11F14 */ u16 unk11F14;
+    /* 0x11F16 */ u16 unk11F16;
+    /* 0x11F18 */ s8 unk11F18;
+    /* 0x11F19 */ UNK_TYPE1 unk11F19[0x1];
     /* 0x11F1A */ s16 unk11F1A[3];
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
