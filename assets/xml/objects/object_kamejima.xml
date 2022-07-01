@@ -34,8 +34,8 @@
         <Texture Name="object_kamejima_TLUT_00ACD8" OutName="tlut_00ACD8" Format="rgba16" Width="16" Height="16" Offset="0xACD8" />
         <Texture Name="object_kamejima_Tex_00AED8" OutName="tex_00AED8" Format="ci8" Width="32" Height="32" Offset="0xAED8" />
         <Texture Name="object_kamejima_Tex_00B2D8" OutName="tex_00B2D8" Format="ci8" Width="16" Height="16" Offset="0xB2D8" />
-        <Texture Name="object_kamejima_Tex_00B3D8" OutName="tex_00B3D8" Format="ci8" Width="16" Height="32" Offset="0xB3D8" />
-        <Texture Name="object_kamejima_Tex_00B5D8" OutName="tex_00B5D8" Format="ci8" Width="64" Height="32" Offset="0xB5D8" />
+        <Texture Name="gTurtleInsideMouthTex" OutName="inside_mouth" Format="ci8" Width="16" Height="32" Offset="0xB3D8" TlutOffset="0xACD8"/>
+        <Texture Name="gTurtleFlipperTex" OutName="flipper" Format="ci8" Width="64" Height="32" Offset="0xB5D8" TlutOffset="0xAAD8"/>
         <Texture Name="object_kamejima_Tex_00BDD8" OutName="tex_00BDD8" Format="ci8" Width="16" Height="16" Offset="0xBDD8" />
         <Texture Name="gTurtleEyeOpenStraightTex" OutName="eye_open_straight" Format="ci8" Width="32" Height="32" Offset="0xBED8" TlutOffset="0xAAD8"/>
         <Texture Name="gTurtleEyeHalfStraightTex" OutName="eye_half_straight" Format="ci8" Width="32" Height="32" Offset="0xC2D8" TlutOffset="0xAAD8"/>
@@ -44,10 +44,10 @@
         <Texture Name="gTurtleEyeHalfRightTex" OutName="eye_half_right" Format="ci8" Width="32" Height="32" Offset="0xCED8" TlutOffset="0xAAD8"/>
         <Texture Name="gTurtleEyeHalfLeft2Tex" OutName="eye_half_left_2" Format="ci8" Width="32" Height="32" Offset="0xD2D8" TlutOffset="0xAAD8"/>
 
-        <Texture Name="object_kamejima_Tex_00D6D8" OutName="tex_00D6D8" Format="ci8" Width="16" Height="16" Offset="0xD6D8" />
+        <Texture Name="gTurtleHeadTex" OutName="head" Format="ci8" Width="16" Height="16" Offset="0xD6D8" TlutOffset="0xD6D8"/>
         <Texture Name="object_kamejima_Tex_00D7D8" OutName="tex_00D7D8" Format="ci8" Width="32" Height="64" Offset="0xD7D8" />
-        <Texture Name="object_kamejima_Tex_00DFD8" OutName="tex_00DFD8" Format="ci8" Width="32" Height="32" Offset="0xDFD8" />
-        <Texture Name="object_kamejima_Tex_00E3D8" OutName="tex_00E3D8" Format="ci8" Width="16" Height="32" Offset="0xE3D8" />
+        <Texture Name="gTurtleShellScalesTex" OutName="shell_scales" Format="ci8" Width="32" Height="32" Offset="0xDFD8" TlutOffset="0xACD8"/>
+        <Texture Name="gTurtleShellBottomTex" OutName="shell_bottom" Format="ci8" Width="16" Height="32" Offset="0xE3D8" TlutOffset="0xAAD8"/>
         <Limb Name="gTurtleRootLimb" Type="Standard" EnumName="TURTLE_LIMB_ROOT" Offset="0xE5D8" />
         <Limb Name="gTurtleShellLimb" Type="Standard" EnumName="TURTLE_LIMB_SHELL" Offset="0xE5E4" />
         <Limb Name="object_kamejima_Standardlimb_00E5F0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_03" Offset="0xE5F0" />

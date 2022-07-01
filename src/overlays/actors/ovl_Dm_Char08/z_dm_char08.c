@@ -17,12 +17,12 @@ void DmChar08_Update(Actor* thisx, PlayState* play);
 void DmChar08_Draw(Actor* thisx, PlayState* play);
 
 void func_80AAFAC4(DmChar08* this, PlayState* play);
-void func_80AAF610(DmChar08* this, PlayState* play);
+void DmChar08_WaitForSong(DmChar08* this, PlayState* play);
 void func_80AAF8F4(DmChar08* this, PlayState* play);
 void func_80AAFAE4(DmChar08* this, PlayState* play);
 void func_80AAFE78(DmChar08* this, PlayState* play);
 void func_80AAFA18(DmChar08* this, PlayState* play);
-void func_80AAF79C(DmChar08* this, PlayState* play);
+void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play);
 void func_80AAF884(DmChar08* this, PlayState* play);
 void func_80AAFB04(DmChar08* this, PlayState* play);
 void func_80AAFB94(DmChar08* this, PlayState* play);
@@ -40,6 +40,16 @@ typedef enum {
     EYEMODE_4,
     EYEMODE_5,
 } EyeMode;
+
+typedef enum {
+    ANIM_0,
+    ANIM_1,
+    ANIM_2,
+    ANIM_3,
+    ANIM_4,
+    ANIM_5,
+    ANIM_6,
+} ANIM_MODE;
 
 const ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
@@ -143,7 +153,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->bubbleCount = 0;
     this->unk_1FF = 0;
     this->alpha = 0;
-    this->animIndex = 0;
+    this->animIndex = ANIM_0;
     this->unk_1FC = 0xFFFF;
     this->dynapolyInitialized = false;
     this->targetYPos = this->dyna.actor.world.pos.y;
@@ -165,7 +175,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->palmTree1 = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, this->dyna.actor.world.pos.x + -80.0f,
-                              this->dyna.actor.world.pos.y + 390.0f, this->dyna.actor.world.pos.z, 0, 0, 0, 1);
+                                  this->dyna.actor.world.pos.y + 390.0f, this->dyna.actor.world.pos.z, 0, 0, 0, 1);
     this->palmTree2 =
         Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_YASI, this->dyna.actor.world.pos.x + 68.0f,
                     this->dyna.actor.world.pos.y + 368.0f, this->dyna.actor.world.pos.z - 174.0f, 0, 0x7530, 0, 1);
@@ -183,7 +193,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->dyna.actor.shape.rot.z = 0;
                 this->unk_1F0 = 1.0f;
                 this->unk_1FF = 2;
-                this->animIndex = 2;
+                this->animIndex = ANIM_2;
                 this->unk_203 = 0x63;
                 this->eyeMode = EYEMODE_1;
                 this->unk_207 = 0;
@@ -196,12 +206,12 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                     this->actionFunc = func_80AAF8F4;
                 }
             } else {
-                this->actionFunc = func_80AAF610;
+                this->actionFunc = DmChar08_WaitForSong;
             }
             break;
         case SCENE_SEA:
             this->unk_1FF = 2;
-            this->animIndex = 2;
+            this->animIndex = ANIM_2;
             this->unk_203 = 0x63;
             this->eyeMode = EYEMODE_0;
             this->unk_207 = 0;
@@ -212,7 +222,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             break;
         case SCENE_KONPEKI_ENT:
             this->unk_1FF = 2;
-            this->animIndex = 2;
+            this->animIndex = ANIM_2;
             this->unk_203 = 0x63;
             this->eyeMode = EYEMODE_0;
             this->unk_207 = 0;
@@ -234,7 +244,7 @@ void DmChar08_Destroy(Actor* thisx, PlayState* play) {
 
 s16 sBigTurtleOcarinaSoundLatch = false;
 
-void func_80AAF610(DmChar08* this, PlayState* play) {
+void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
@@ -252,13 +262,13 @@ void func_80AAF610(DmChar08* this, PlayState* play) {
         (play->msgCtx.unk1202E == 2)) {
         if ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f)) {
             if ((player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f)) {
-                this->actionFunc = func_80AAF79C;
+                this->actionFunc = DmChar08_SetupAppearCs;
             }
         }
     }
 }
 
-void func_80AAF79C(DmChar08* this, PlayState* play) {
+void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
     s16 cs1 = this->dyna.actor.cutscene;
     s16 cs = ActorCutscene_GetAdditionalCutscene(
         ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
@@ -439,16 +449,16 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
             this->unk_1F6 = play->csCtx.actorActions[actorActionIndex]->action;
             switch (play->csCtx.actorActions[actorActionIndex]->action) {
                 case 1:
-                    this->animIndex = 0;
+                    this->animIndex = ANIM_0;
                     break;
                 case 3:
                     this->bubbleCount = 2;
                     break;
                 case 4:
-                    this->animIndex = 2;
+                    this->animIndex = ANIM_2;
                     break;
                 case 5:
-                    this->animIndex = 1;
+                    this->animIndex = ANIM_1;
                     break;
                 case 6:
                     this->eyeMode = EYEMODE_0;
@@ -457,23 +467,23 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     this->eyeMode = EYEMODE_2;
                     break;
                 case 8:
-                    this->animIndex = 6;
+                    this->animIndex = ANIM_6;
                     break;
                 case 9:
-                    this->animIndex = 2;
+                    this->animIndex = ANIM_2;
                     break;
                 case 10:
-                    this->animIndex = 4;
+                    this->animIndex = ANIM_4;
                     break;
                 case 12:
-                    this->animIndex = 5;
+                    this->animIndex = ANIM_5;
                     break;
                 case 13:
                     this->bubbleCount = 0;
                     break;
                 case 14:
                     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_ROLL);
-                    this->animIndex = 2;
+                    this->animIndex = ANIM_2;
                     break;
             }
         }
@@ -499,8 +509,8 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                 break;
             case 14:
                 Cutscene_ActorTranslate(&this->dyna.actor, play, actorActionIndex);
-                Math_SmoothStepToS(&this->dyna.actor.world.rot.y,
-                                   play->csCtx.actorActions[actorActionIndex]->rot.y, 0xA, 0xDC, 1);
+                Math_SmoothStepToS(&this->dyna.actor.world.rot.y, play->csCtx.actorActions[actorActionIndex]->rot.y,
+                                   0xA, 0xDC, 1);
                 this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
                 break;
             default:
@@ -576,13 +586,13 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 1:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 6;
+                    this->animIndex = ANIM_6;
                     this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -593,20 +603,20 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 2:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 4;
+                    this->animIndex = ANIM_4;
                     this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 3;
+                        this->animIndex = ANIM_3;
                         this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -619,7 +629,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 8:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 3;
+                    this->animIndex = ANIM_3;
                     if (this->unk_207 >= 5) {
                         this->eyeMode = EYEMODE_2;
                     } else {
@@ -629,7 +639,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 5;
+                        this->animIndex = ANIM_5;
                         this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
@@ -637,13 +647,13 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (this->unk_207 != 4) {
-                            this->animIndex = 2;
+                            this->animIndex = ANIM_2;
                             this->eyeMode = EYEMODE_0;
                             this->unk_207 = 0;
                             this->unk_208 = 0;
                             break;
                         }
-                        this->animIndex = 3;
+                        this->animIndex = ANIM_3;
                         this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
@@ -656,7 +666,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 6:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -667,7 +677,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 5:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 3;
+                    this->animIndex = ANIM_3;
                     this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     break;
@@ -679,14 +689,14 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 5;
+                        this->animIndex = ANIM_5;
                         this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 5:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -697,7 +707,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 6:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 3;
+                    this->animIndex = ANIM_3;
                     this->eyeMode = EYEMODE_5;
                     this->unk_208++;
                     return;
@@ -708,7 +718,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -719,20 +729,20 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 7:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 5;
+                    this->animIndex = ANIM_5;
                     this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     return;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 3;
+                        this->animIndex = ANIM_3;
                         this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -743,7 +753,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 9:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 3;
+                    this->animIndex = ANIM_3;
                     this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     return;
@@ -757,7 +767,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
@@ -767,14 +777,14 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     break;
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 4;
+                        this->animIndex = ANIM_4;
                         this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -785,27 +795,27 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
         case 10:
             switch (this->unk_208) {
                 case 0:
-                    this->animIndex = 3;
+                    this->animIndex = ANIM_3;
                     this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 5;
+                        this->animIndex = ANIM_5;
                         this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 3;
+                        this->animIndex = ANIM_3;
                         this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     break;
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                        this->animIndex = 2;
+                        this->animIndex = ANIM_2;
                         this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
@@ -817,8 +827,8 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_31MISAKI) &&
-        (gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_31MISAKI) && (gSaveContext.sceneSetupIndex == 0) &&
+        (play->csCtx.currentCsIndex == 0)) {
         if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
@@ -925,8 +935,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     DmChar08_UpdateCollision(this, play);
 }
 
-s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if ((play->csCtx.state == 0) && (play->sceneNum == SCENE_31MISAKI) &&
         (limbIndex == TURTLE_LIMB_FRONT_RIGHT_FLIPPER_CONTROL)) {
         rot->z = -0x5E24;
