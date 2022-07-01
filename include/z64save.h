@@ -6,7 +6,7 @@
 #include "os.h"
 
 struct GameState;
-struct GlobalContext;
+struct PlayState;
 struct FileChooseContext;
 
 // TODO: properly name DOWN, RETURN and TOP
@@ -129,9 +129,9 @@ typedef struct Save {
     /* 0x000C */ u16 time;                              // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ u32 daySpeed;                          // "change_zelda_time"
+    /* 0x0014 */ s32 daySpeed;                          // "change_zelda_time"
     /* 0x0018 */ s32 day;                               // "totalday"
-    /* 0x001C */ u32 daysElapsed;                       // "eventday"
+    /* 0x001C */ s32 daysElapsed;                       // "eventday"
     /* 0x0020 */ u8 playerForm;                         // "player_character"
     /* 0x0021 */ u8 snowheadCleared;                    // "spring_flag"
     /* 0x0022 */ u8 hasTatl;                            // "bell_flag"
@@ -275,7 +275,7 @@ typedef enum SunsSongState {
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
-void Sram_SaveEndOfCycle(struct GlobalContext* globalCtx);
+void Sram_SaveEndOfCycle(struct PlayState* play);
 void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
@@ -290,8 +290,8 @@ void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
-void Sram_SaveSpecialEnterClockTown(struct GlobalContext* globalCtx);
-void Sram_SaveSpecialNewDay(struct GlobalContext* globalCtx);
+void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
+void Sram_SaveSpecialNewDay(struct PlayState* play);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
 void func_80147020(SramContext* sramCtx);
 void func_80147068(SramContext* sramCtx);

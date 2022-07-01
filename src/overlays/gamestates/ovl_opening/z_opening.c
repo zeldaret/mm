@@ -26,7 +26,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
         GameState* thisx = &this->gameState;
         thisx->running = false;
     }
-    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, PlayState);
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
 }
 
@@ -50,7 +50,7 @@ void Opening_Init(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
 
     Game_SetFramerateDivisor(&this->gameState, 1);
-    Matrix_StateAlloc(&this->gameState);
+    Matrix_Init(&this->gameState);
     ShrinkWindow_Init();
     View_Init(&this->view, this->gameState.gfxCtx);
     this->gameState.main = Opening_Main;

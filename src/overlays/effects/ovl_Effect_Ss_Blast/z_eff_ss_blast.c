@@ -8,9 +8,9 @@
 
 #define PARAMS ((EffectSsBlastInitParams*)initParamsx)
 
-s32 EffectSsBlast_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBlast_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsBlast_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsBlast_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsBlast_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_Blast_InitVars = {

@@ -1,11 +1,11 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 
-void (*sKaleidoScopeUpdateFunc)(GlobalContext* globalCtx);
-void (*sKaleidoScopeDrawFunc)(GlobalContext* globalCtx);
+void (*sKaleidoScopeUpdateFunc)(PlayState* play);
+void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
-extern void KaleidoScope_Update(GlobalContext* globalCtx);
-extern void KaleidoScope_Draw(GlobalContext* globalCtx);
+extern void KaleidoScope_Update(PlayState* play);
+extern void KaleidoScope_Draw(PlayState* play);
 
 void KaleidoScopeCall_LoadPlayer() {
     KaleidoMgrOverlay* playerActorOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_PLAYER_ACTOR];
@@ -19,21 +19,21 @@ void KaleidoScopeCall_LoadPlayer() {
     }
 }
 
-void KaleidoScopeCall_Init(GlobalContext* globalCtx) {
+void KaleidoScopeCall_Init(PlayState* play) {
     sKaleidoScopeUpdateFunc = KaleidoManager_GetRamAddr(KaleidoScope_Update);
     sKaleidoScopeDrawFunc = KaleidoManager_GetRamAddr(KaleidoScope_Draw);
-    KaleidoSetup_Init(globalCtx);
+    KaleidoSetup_Init(play);
 }
 
-void KaleidoScopeCall_Destroy(GlobalContext* globalCtx) {
-    KaleidoSetup_Destroy(globalCtx);
+void KaleidoScopeCall_Destroy(PlayState* play) {
+    KaleidoSetup_Destroy(play);
 }
 
-void KaleidoScopeCall_Update(GlobalContext* globalCtx) {
-    PauseContext* pauseCtx = &globalCtx->pauseCtx;
+void KaleidoScopeCall_Update(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
 
-    if ((globalCtx->pauseCtx.state != 0) || (globalCtx->pauseCtx.debugState != 0)) {
+    if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugState != 0)) {
         if (pauseCtx->state == 1 || pauseCtx->state == 19) {
             if (ShrinkWindow_GetLetterboxMagnitude() == 0) {
                 R_PAUSE_MENU_MODE = 1;
@@ -60,9 +60,9 @@ void KaleidoScopeCall_Update(GlobalContext* globalCtx) {
             }
 
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
-                sKaleidoScopeUpdateFunc(globalCtx);
+                sKaleidoScopeUpdateFunc(play);
 
-                if ((globalCtx->pauseCtx.state == 0) && (globalCtx->pauseCtx.debugState == 0)) {
+                if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0)) {
                     KaleidoManager_ClearOvl(kaleidoScopeOvl);
                     KaleidoScopeCall_LoadPlayer();
                 }
@@ -71,14 +71,14 @@ void KaleidoScopeCall_Update(GlobalContext* globalCtx) {
     }
 }
 
-void KaleidoScopeCall_Draw(GlobalContext* globalCtx) {
+void KaleidoScopeCall_Draw(PlayState* play) {
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
 
     if (R_PAUSE_MENU_MODE == 3) {
-        if (((globalCtx->pauseCtx.state >= 4) && (globalCtx->pauseCtx.state <= 7)) ||
-            ((globalCtx->pauseCtx.state >= 11) && (globalCtx->pauseCtx.state <= 26))) {
+        if (((play->pauseCtx.state >= 4) && (play->pauseCtx.state <= 7)) ||
+            ((play->pauseCtx.state >= 11) && (play->pauseCtx.state <= 26))) {
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
-                sKaleidoScopeDrawFunc(globalCtx);
+                sKaleidoScopeDrawFunc(play);
             }
         }
     }
