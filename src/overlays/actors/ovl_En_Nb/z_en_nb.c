@@ -152,7 +152,6 @@ void func_80BBFE60(EnNb* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-// EnNb_ChangeAnim
 s32 EnNb_ChangeAnim(EnNb* this, s32 arg1) {
     s32 phi_v1 = false;
     s32 phi_t0 = 0;
@@ -186,30 +185,30 @@ void func_80BBFF24(EnNb* this, PlayState* play) {
 }
 
 Actor* func_80BBFF90(EnNb* this, PlayState* play) {
-    Actor* phi_v1;
+    Actor* actor;
 
     if (this->unk_1DC == 2) {
-        phi_v1 = func_80BBFDB0(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+        actor = func_80BBFDB0(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
-        phi_v1 = &GET_PLAYER(play)->actor;
+        actor = &GET_PLAYER(play)->actor;
     }
-    return phi_v1;
+    return actor;
 }
 
 s32 func_80BBFFD4(EnNb* this, s16 arg1) {
-    s32 sp1C = false;
+    s32 ret = false;
 
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
         ActorCutscene_SetIntentToPlay(arg1);
     } else if (ActorCutscene_GetCanPlayNext(arg1)) {
         ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
-        sp1C = true;
+        ret = true;
     } else {
         ActorCutscene_SetIntentToPlay(arg1);
     }
 
-    return sp1C;
+    return ret;
 }
 
 s16 func_80BC0050(EnNb* this, s32 arg1) {
@@ -280,7 +279,7 @@ s32 func_80BC01DC(EnNb* this, PlayState* play) {
         case 0x1:
             func_8016A268(&play->state, 1, 0, 0, 0, 0);
             this->unk_286 = 40;
-            this->unk_288 = (u16)((s16)this->unk_288 + 1);
+            this->unk_288 = (u16)(this->unk_288 + 1);
             break;
 
         case 0x2:
@@ -373,11 +372,11 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
 
 void func_80BC05A8(EnNb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp28 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
     u16 temp_a0 = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((temp_a0 < 0xFF) || (temp_a0 > 0x200)) && (sp28 == 3) &&
-        (this->unk_298 == 3)) {
+    if ((&this->actor == player->targetActor) && ((temp_a0 < 0xFF) || (temp_a0 > 0x200)) && (talkState == 3) &&
+        (this->lastTalkState == 3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
                 this->unk_26C = 0.0f;
@@ -391,7 +390,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->unk_270, this->unk_26C, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_270, 0.0f, 0.0f, 1);
-    this->unk_298 = sp28;
+    this->lastTalkState = talkState;
 }
 
 void func_80BC06C4(EnNb* this) {
@@ -551,7 +550,7 @@ s32 func_80BC0C0C(EnNb* this, PlayState* play, UNK_TYPE arg2) {
 s32 func_80BC0C80(EnNb* this, PlayState* play, u8* arg2) {
     s32 phi_v0;
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
     this->unk_262 = 0;
     this->unk_274 = 40.0f;
@@ -594,15 +593,15 @@ void EnNb_Wait(EnNb* this, PlayState* play) {
         scheduleResult.result = 1;
         func_80BC0C80(this, play, &scheduleResult.result);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     } else if ((!Schedule_RunScript(play, sScheduleScript, &scheduleResult)) ||
                ((this->unk_1DC != scheduleResult.result) && (func_80BC0C80(this, play, &scheduleResult.result) == 0))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         scheduleResult.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 
     this->unk_1DC = scheduleResult.result;
@@ -818,7 +817,7 @@ void EnNb_PrintStructMembers(EnNb* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_SetPos(printer, x, y++);
     GfxPrint_Printf(printer, "unk_290:    %X", this->unk_290);
     GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "unk_298:    %X", this->unk_298);
+    GfxPrint_Printf(printer, "lastTalkState:    %X", this->lastTalkState);
 }
 
 void EnNb_PrintEventInf(EnNb* this, PlayState* play, GfxPrint* printer) {
