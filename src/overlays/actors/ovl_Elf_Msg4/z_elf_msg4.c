@@ -6,6 +6,7 @@
 
 #include "z_elf_msg4.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "overlays/actors/ovl_Elf_Msg5/z_elf_msg5.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -137,7 +138,7 @@ void func_80AFD770(ElfMsg4* this, PlayState* play) {
     Actor* bgActor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (bgActor != NULL) {
-        if ((bgActor->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != (bgActor->params & 0xFF)) ||
+        if ((bgActor->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != (ELFMSG5_GET_FF(bgActor))) ||
             (this->actor.cutscene != bgActor->cutscene)) {
             bgActor = bgActor->next;
         } else {
