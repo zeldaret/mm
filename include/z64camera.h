@@ -76,7 +76,7 @@ typedef enum {
     /* 0x02 */ CAM_SET_NORMAL3, // Generic camera 3, used in various places
     /* 0x03 */ CAM_SET_PIVOT_DIVING, // Player diving from the surface of the water to underwater not as zora "CIRCLE5"
     /* 0x04 */ CAM_SET_HORSE, // Reiding a horse "HORSE0"
-    /* 0x05 */ CAM_SET_ZORA_DIVING, // Parallel's Pivot Diving, but as Zora. However, Zora does not dive like a human. So this setting appears to not be set "ZORA0"
+    /* 0x05 */ CAM_SET_ZORA_DIVING, // Parallel's Pivot Diving, but as Zora. However, Zora does not dive like a human. So this setting appears to not be used "ZORA0"
     /* 0x06 */ CAM_SET_PREREND_FIXED, // Unused remnant of OoT: camera is fixed in position and rotation "PREREND0"
     /* 0x07 */ CAM_SET_PREREND_PIVOT, // Unused remnant of OoT: Camera is fixed in position with fixed pitch, but is free to rotate in the yaw direction 360 degrees "PREREND1"
     /* 0x08 */ CAM_SET_DOORC, // Generic room door transitions, camera moves and follows player as the door is open and closed
@@ -91,7 +91,7 @@ typedef enum {
     /* 0x11 */ CAM_SET_DUNGEON0, // Generic dungeon camera 0, used in various places
     /* 0x12 */ CAM_SET_ITEM0, // Getting an item and holding it above Player's head (from small chest, freestanding, npc, ...)
     /* 0x13 */ CAM_SET_ITEM1, // Looking at player while playing the ocarina
-    /* 0x14 */ CAM_SET_ITEM2, // Bottles: chugging, releasing fairy, dropping fish
+    /* 0x14 */ CAM_SET_ITEM2, // Bottles: drinking, releasing fairy, dropping fish
     /* 0x15 */ CAM_SET_ITEM3, // Bottles: catching fish or bugs, showing an item
     /* 0x16 */ CAM_SET_NAVI, // Song of Soaring, variations of playing Song of Time "NAVI"
     /* 0x17 */ CAM_SET_WARP_PAD_MOON, // Warp circles from Goron Trial on the moon "WARP0"
@@ -127,11 +127,11 @@ typedef enum {
     /* 0x35 */ CAM_SET_CIRCLE6, // Used in select regions from Ikana
     /* 0x36 */ CAM_SET_CIRCLE7, // Unknown
     /* 0x37 */ CAM_SET_MINI_BOSS, // Used during the various minibosses of the "CHUBOSS"
-    /* 0x38 */ CAM_SET_RFIXED1, // Various cutscenes, zooms into npcs face
+    /* 0x38 */ CAM_SET_RFIXED1, // Talking to Koume stuck on the floor in woods of mystery
     /* 0x39 */ CAM_SET_TREASURE_CHEST_MINIGAME, // Treasure Chest Shop in East Clock Town, minigame location "TRESURE1"
     /* 0x3A */ CAM_SET_HONEY_AND_DARLING_1, // Honey and Darling Minigames "BOMBBASKET"
     /* 0x3B */ CAM_SET_CIRCLE8, // Used by Stone Tower moving platforms, Falling eggs in Marine Lab, Bugs into soilpatch cutscene
-    /* 0x3C */ CAM_SET_BIRDS_EYE_VIEW_1, // Camera is a top-down view. Used in Fishermans minigame and Deku Palace "FUKAN1"
+    /* 0x3C */ CAM_SET_BIRDS_EYE_VIEW_1, // Camera is a top-down view. Used in Fisherman's minigame and Deku Palace "FUKAN1"
     /* 0x3D */ CAM_SET_DUNGEON3, // Generic dungeon camera 3, used in various places
     /* 0x3E */ CAM_SET_TELESCOPE, // Observatory telescope and Curiosity Shop Peep-Hole "TELESCOPE"
     /* 0x3F */ CAM_SET_ROOM0, // Certain rooms eg. inside the clock tower
@@ -144,7 +144,7 @@ typedef enum {
     /* 0x46 */ CAM_SET_BOSS_GOHT, // Goht's Lair: "BOSS_HAK" 
     /* 0x47 */ CAM_SET_BOSS_GYORG, // Gyorg's Lair: "BOSS_KON"
     /* 0x48 */ CAM_SET_CONNECT0, // Smoothly and gradually return camera to Player after a cutscene
-    /* 0x49 */ CAM_SET_PINNACLE_ROCK, // Pinnacle Rock trench "MORAY"
+    /* 0x49 */ CAM_SET_PINNACLE_ROCK, // Pinnacle Rock pit "MORAY"
     /* 0x4A */ CAM_SET_NORMAL2, // Generic camera 2, used in various places
     /* 0x4B */ CAM_SET_HONEY_AND_DARLING_2, // "BOMBBOWL"
     /* 0x4C */ CAM_SET_CIRCLEA, // Unknown, Circle 10
@@ -346,7 +346,7 @@ typedef struct Camera {
     /* 0x0E4 */ Vec3f atActorOffset;
     /* 0x0F0 */ Vec3f trackActorOffset;
     /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 atLERPStepScale;
+    /* 0x100 */ f32 atLerpStepScale;
     /* 0x104 */ f32 playerFloorHeight;
     /* 0x108 */ Vec3f floorNorm;
     /* 0x114 */ f32 waterYPos;
@@ -359,7 +359,7 @@ typedef struct Camera {
     /* 0x12C */ s16 data2;
     /* 0x12E */ s16 data3;
     /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132;
+    /* 0x132 */ UNK_TYPE1 unk_132[2];
     /* 0x134 */ Vec3s inputDir;
     /* 0x13A */ Vec3s camDir;
     /* 0x140 */ s16 status;

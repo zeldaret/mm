@@ -507,7 +507,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (absYawDiff > CAM_DEG_TO_BINANG(120.0f)) {
+                    if (absYawDiff > (0x10000 / 3)) {
                         Actor_PickUp(&this->actor, play, 0, 36.0f, 30.0f);
                     }
                 }
