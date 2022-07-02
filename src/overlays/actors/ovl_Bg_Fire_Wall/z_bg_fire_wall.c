@@ -6,6 +6,7 @@
 
 #include "z_bg_fire_wall.h"
 #include "objects/object_fwall/object_fwall.h"
+#include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 
 #define FLAGS 0x00000000
 
@@ -19,12 +20,6 @@ void BgFireWall_Draw(Actor* thisx, PlayState* play);
 void func_809AC638(BgFireWall* this, PlayState* play);
 void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
-
-typedef struct UnkParent {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0xC];
-    /* 0x150 */ s16 step;
-} UnkParent;
 
 const ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
@@ -90,7 +85,7 @@ void BgFireWall_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     BgFireWall* this = THIS;
-    Actor* player = GET_PLAYER(play);
+    Actor* player = &GET_PLAYER(play)->actor;
     Vec3f sp1C;
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->world.pos);
@@ -195,8 +190,8 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
     this->texIndex = (this->texIndex + 1) % 8;
     if (this->actionFunc != func_809AC970) {
         if (this->actor.parent != NULL) {
-            UnkParent* parent = (UnkParent*)this->actor.parent;
-            if ((parent->actor.update != NULL) && (parent->step != 0)) {
+            EnEncount4* parent = (EnEncount4*)this->actor.parent;
+            if ((parent->actor.update != NULL) && (parent->unk_150 != 0)) {
                 this->actionFunc = func_809AC970;
             }
         }
