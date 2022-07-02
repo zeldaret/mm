@@ -367,7 +367,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_4:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1212)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
@@ -385,7 +385,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1208:
@@ -452,7 +452,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_4:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1205)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -469,7 +469,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:

@@ -1359,7 +1359,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
     func_8088FA38(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_4:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0x202) {
                     switch (play->msgCtx.choiceIndex) {
@@ -1385,7 +1385,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 576:
@@ -1434,7 +1434,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_8088FDCC(this);
             break;
     }

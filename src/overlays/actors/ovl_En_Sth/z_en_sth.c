@@ -312,7 +312,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134:
@@ -382,7 +382,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80B677BC;
             this->unk_29C |= 2;
             break;

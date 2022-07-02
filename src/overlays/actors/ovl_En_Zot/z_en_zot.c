@@ -978,7 +978,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
     func_80B98348(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_4:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1293)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -994,7 +994,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1291:

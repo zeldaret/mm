@@ -181,7 +181,7 @@ void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
 
 void func_80ACA418(EnTimeTag* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x101C:
@@ -216,7 +216,7 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80ACA5F8;
             break;
     }

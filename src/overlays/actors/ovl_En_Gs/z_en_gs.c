@@ -205,18 +205,18 @@ void func_80997DEC(EnGs* this, PlayState* play) {
 
 void func_80997E4C(EnGs* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             Message_StartTextbox(play, this->unk_210, &this->actor);
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_4:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x20D0:

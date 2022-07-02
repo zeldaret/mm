@@ -581,7 +581,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 func_80BBAE84(this, 2, 0);
                 func_801477B4(play);
@@ -590,7 +590,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_80BBAE84(this, 2, 0);
             this->actionFunc = func_80BBC14C;
             this->unk_2B6 |= 1;

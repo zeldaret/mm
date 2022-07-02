@@ -1183,12 +1183,12 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
     s32 ret = false;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_808F4054(play, this, arg2, this->actor.textId);
             ret = true;
             break;
-        case 4:
-        case 5:
+        case TEXT_STATE_4:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
                 func_801477B4(play);
                 ret = true;

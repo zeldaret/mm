@@ -554,7 +554,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x1555, 0x71C)) {
                 if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 4, &this->unk_2D4);
@@ -571,14 +571,14 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 break;
             }
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_4:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x13FD:
@@ -794,7 +794,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             switch (this->unk_2E6) {
                 case 0x1404:
                 case 0x1405:
@@ -820,14 +820,14 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_4:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1404:

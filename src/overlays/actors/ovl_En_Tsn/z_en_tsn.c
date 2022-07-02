@@ -381,10 +381,10 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
@@ -501,6 +501,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 
     if (this->unk_220 & 2) {
