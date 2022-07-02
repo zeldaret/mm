@@ -806,13 +806,13 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 s32 func_80A8777C(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
     s32 ret = 0;
-    s32 temp_v0 = Message_GetState(&play->msgCtx);
+    s32 temp_v0;
 
-    switch (temp_v0) {
+    switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_4:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                case 16:
+                case TEXT_STATE_16:
                     temp_v0 = func_80123810(play);
                     if ((temp_v0 == 35) || (temp_v0 == 36)) {
                         this->unk_34E |= 8;
@@ -831,6 +831,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                     }
                     break;
             }
+        break;
     }
 
     return ret;

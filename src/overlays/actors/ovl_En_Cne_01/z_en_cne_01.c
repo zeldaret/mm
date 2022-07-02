@@ -186,6 +186,7 @@ void EnCne01_Talk(EnHy* this, PlayState* play) {
                 Message_StartTextbox(play, this->textId, NULL);
             }
             break;
+
         case TEXT_STATE_CLOSING:
             this->actor.textId = 0;
             this->trackTarget = this->tmptrackTarget;

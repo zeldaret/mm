@@ -623,24 +623,25 @@ void func_80BA09E0(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0A04(EnZob* this, PlayState* play) {
-    u8 temp_v0;
-
     func_80B9F86C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    temp_v0 = Message_GetState(&play->msgCtx);
-    if (temp_v0 != TEXT_STATE_CLOSING) {
-        if ((temp_v0 == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                func_801477B4(play);
+                this->actionFunc = func_80BA0AD8;
+                this->unk_304 = 0;
+                func_80B9F7E4(this, 6, 2);
+            }
+            break;
+
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80BA0AD8;
             this->unk_304 = 0;
             func_80B9F7E4(this, 6, 2);
-        }
-    } else {
-        this->actionFunc = func_80BA0AD8;
-        this->unk_304 = 0;
-        func_80B9F7E4(this, 6, 2);
+            break;
     }
 }
 

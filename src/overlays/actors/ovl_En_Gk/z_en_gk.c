@@ -456,9 +456,6 @@ s32 func_80B5100C(EnGk* this, PlayState* play) {
 }
 
 s32 func_80B5123C(EnGk* this, PlayState* play) {
-    s16 temp_v0;
-    s16 phi_v1;
-
     if (DECR(this->unk_34E) != 0) {
         this->unk_31E = 0;
         this->unk_320 = 0;
