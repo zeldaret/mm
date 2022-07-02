@@ -21,9 +21,9 @@ void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
 typedef struct UnkParent {
-    Actor actor;
-    char pad[0xC];
-    s16 step;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ UNK_TYPE1 unk_144[0xC];
+    /* 0x150 */ s16 step;
 } UnkParent;
 
 const ActorInit Bg_Fire_Wall_InitVars = {
@@ -96,13 +96,12 @@ s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->world.pos);
     if ((fabsf(sp1C.x) < this->unk_160) && (fabsf(sp1C.z) < (this->unk_160 + 20.0f))) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void func_809AC638(BgFireWall* this, PlayState* play) {
-    if ((this->unk_14C != 0) || (func_809AC5C0(this, play) != 0)) {
+    if ((this->unk_14C != 0) || (func_809AC5C0(this, play))) {
         this->actor.draw = BgFireWall_Draw;
         this->timer = 5;
         this->actionFunc = func_809AC68C;
@@ -110,7 +109,6 @@ void func_809AC638(BgFireWall* this, PlayState* play) {
 }
 
 void func_809AC68C(BgFireWall* this, PlayState* play) {
-
     if (this->timer != 0) {
         this->timer--;
     }
@@ -133,16 +131,16 @@ void func_809AC6C0(BgFireWall* this, PlayState* play) {
 void func_809AC760(BgFireWall* this, PlayState* play) {
     s16 phi_a3;
 
-    if (Actor_IsFacingPlayer(&this->actor, 0x4000) != 0) {
+    if (Actor_IsFacingPlayer(&this->actor, 0x4000)) {
         phi_a3 = this->actor.shape.rot.y;
     } else {
         phi_a3 = (this->actor.shape.rot.y + 0x8000);
     }
-    func_800B8D98(play, &this->actor, gGameInfo->data[0x990] + 10.0f, phi_a3, gGameInfo->data[0x991] + 5.0f);
+    func_800B8D98(play, &this->actor, BREG(48) + 10.0f, phi_a3, BREG(49) + 5.0f);
 }
 
 void func_809AC7F8(BgFireWall* this, PlayState* play) {
-    Actor* player = (Actor*)play->actorCtx.actorLists[2].first;
+    Actor* player = &GET_PLAYER(play)->actor;
     Vec3f sp38;
     f32 val = 25.0f;
     f32 sin;
@@ -177,11 +175,11 @@ void func_809AC970(BgFireWall* this, PlayState* play) {
 
 void BgFireWall_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgFireWall* this = (BgFireWall*)thisx;
+    BgFireWall* this = THIS;
 
     this->actionFunc(this, play);
     if ((this->unk_14C == 0) || ((this->unk_14C != 0) && (this->actor.xzDistToPlayer < 240.0f))) {
-        if (((this->collider.base.atFlags) & 2)) {
+        if (this->collider.base.atFlags & 2) {
             this->collider.base.atFlags &= ~AT_HIT;
             func_809AC760(this, play);
         }
@@ -194,7 +192,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     }
-    this->texIndex = ((this->texIndex + 1) % 8);
+    this->texIndex = (this->texIndex + 1) % 8;
     if (this->actionFunc != func_809AC970) {
         if (this->actor.parent != NULL) {
             UnkParent* parent = (UnkParent*)this->actor.parent;
@@ -210,7 +208,7 @@ void BgFireWall_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14U);
+    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFlameTextures[this->texIndex]));
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x01, 255, 255, 0, 150);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 255);
