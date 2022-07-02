@@ -659,7 +659,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else {
-        if (talkState == TEXT_STATE_4) {
+        if (talkState == TEXT_STATE_CHOICE) {
             func_8011552C(play, 6);
             if (!EnSob1_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 if (!Message_ShouldAdvance(play) || !EnSob1_FacingShopkeeperDialogResult(this, play)) {
@@ -1019,7 +1019,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
 void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnSob1_TakeItemOffShelf(this) && talkState == TEXT_STATE_4) {
+    if (EnSob1_TakeItemOffShelf(this) && talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnSob1_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {

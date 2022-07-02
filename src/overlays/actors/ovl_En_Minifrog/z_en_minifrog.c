@@ -496,7 +496,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // Yes

@@ -987,7 +987,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
             case TEXT_STATE_1:
             case TEXT_STATE_CLOSING:
             case TEXT_STATE_3:
-            case TEXT_STATE_4:
+            case TEXT_STATE_CHOICE:
                 break;
         }
     }

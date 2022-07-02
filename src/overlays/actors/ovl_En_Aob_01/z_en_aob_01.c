@@ -428,7 +428,7 @@ void func_809C1C9C(EnAob01* this, PlayState* play) {
 void func_809C1D64(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -561,7 +561,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
             }
             this->unk_2D2 &= ~8;
         }
-    } else if (talkState == TEXT_STATE_4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             this->unk_2D2 &= ~0x40;
             switch (play->msgCtx.choiceIndex) {

@@ -367,7 +367,7 @@ void func_80995190(EnSkb* this, PlayState* play) {
         case TEXT_STATE_1:
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             break;
 
         case TEXT_STATE_5:

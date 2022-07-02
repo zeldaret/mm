@@ -205,7 +205,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 Message_StartTextbox(play, this->textId, &this->actor);
             }
             break;
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;

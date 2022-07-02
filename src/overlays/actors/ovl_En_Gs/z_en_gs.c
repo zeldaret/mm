@@ -214,7 +214,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
         case TEXT_STATE_3:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {

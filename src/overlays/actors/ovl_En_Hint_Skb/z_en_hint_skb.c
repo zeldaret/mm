@@ -429,7 +429,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80C20B88(this, play);
             break;
 

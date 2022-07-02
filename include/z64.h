@@ -185,7 +185,7 @@ typedef enum {
     /*  1 */ TEXT_STATE_1,
     /*  2 */ TEXT_STATE_CLOSING,
     /*  3 */ TEXT_STATE_3,
-    /*  4 */ TEXT_STATE_4,
+    /*  4 */ TEXT_STATE_CHOICE,
     /*  5 */ TEXT_STATE_5,
     /*  6 */ TEXT_STATE_DONE,
     /*  7 */ TEXT_STATE_7,

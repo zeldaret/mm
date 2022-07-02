@@ -179,7 +179,7 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
         case TEXT_STATE_1:
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             break;
         case TEXT_STATE_5:
             func_80BD06FC(this, play);

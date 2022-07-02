@@ -409,7 +409,7 @@ void EnMaYto_SetupDefaultDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DefaultHandlePlayerChoice(this, play);
             break;
 
@@ -541,7 +541,7 @@ void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DinnerDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DinnerHandlePlayerChoice(this, play);
             break;
 
@@ -746,7 +746,7 @@ void EnMaYto_BarnDialogueHandler(EnMaYto* this, PlayState* play) {
         case TEXT_STATE_1:
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             break;
     }
 }
@@ -915,7 +915,7 @@ void EnMaYto_AfterMilkRunDialogueHandler(EnMaYto* this, PlayState* play) {
         case TEXT_STATE_1:
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_DONE:
             break;
 

@@ -3856,7 +3856,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             if (this->unk_172[0] <= 50) {
                 switch (this->unk_1CD) {
                     case 0:
-                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex == 0) {
@@ -3887,7 +3887,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         }
                         break;
                     case 1:
-                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex != 0) {
@@ -4708,7 +4708,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 1:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -4754,7 +4754,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 4:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -4788,7 +4788,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
 
         case 10:
             if (D_8090CD0C != 0) {
-                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     func_801477B4(play);
 
                     switch (play->msgCtx.choiceIndex) {
@@ -4804,7 +4804,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     }
                 }
             } else {
-                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     func_801477B4(play);
 
                     switch (play->msgCtx.choiceIndex) {
@@ -4959,7 +4959,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 21:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
 
                 switch (play->msgCtx.choiceIndex) {
@@ -5394,7 +5394,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             }
 
             if (D_8090CD50 == 0) {
-                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                     if (Message_ShouldAdvance(play)) {
                         Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
 

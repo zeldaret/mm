@@ -586,7 +586,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
         case TEXT_STATE_3:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 

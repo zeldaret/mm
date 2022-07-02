@@ -518,7 +518,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
         this->cutscene = this->lookForwardCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
-    } else if (talkState == TEXT_STATE_4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             if ((!Message_ShouldAdvance(play) || !EnTrt_FacingShopkeeperDialogResult(this, play)) &&
@@ -705,7 +705,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnTrt_TakeItemOffShelf(this)) {
-        if (talkState == TEXT_STATE_4) {
+        if (talkState == TEXT_STATE_CHOICE) {
             func_8011552C(play, 6);
             if (!EnTrt_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
@@ -1092,7 +1092,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnGirlA* item;
 
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (Message_ShouldAdvance(play)) {
             EnTrt_ResetItemPosition(this);

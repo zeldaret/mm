@@ -450,7 +450,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
         }
 
         if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
-            return TEXT_STATE_4;
+            return TEXT_STATE_CHOICE;
         }
         if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
             return TEXT_STATE_5;

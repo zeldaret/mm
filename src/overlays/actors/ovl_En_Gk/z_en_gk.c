@@ -738,7 +738,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         }
-    } else if ((talkState == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();

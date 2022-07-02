@@ -629,7 +629,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_WAITING;
     } else {
-        if (talkState == TEXT_STATE_4) {
+        if (talkState == TEXT_STATE_CHOICE) {
             func_8011552C(play, 6);
             if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
                 (!Message_ShouldAdvance(play) || !EnOssan_FacingShopkeeperDialogResult(this, play))) {
@@ -1051,7 +1051,7 @@ void EnOssan_HandleCanBuyItem(PlayState* play, EnOssan* this) {
 void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnOssan_TakeItemOffShelf(this) && talkState == TEXT_STATE_4) {
+    if (EnOssan_TakeItemOffShelf(this) && talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1118,7 +1118,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnGirlA* item;
 
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (Message_ShouldAdvance(play)) {
             EnOssan_ResetItemPosition(this);

@@ -377,7 +377,7 @@ void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
             this->unk_26A = 0;
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_809C6A04(this, play);
             break;
 
@@ -711,7 +711,7 @@ void func_809C7990(EnSyatekiMan* this, PlayState* play) {
             this->unk_26A = 0;
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_809C7380(this, play);
             break;
 

@@ -323,7 +323,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
             this->unk_2B0 |= 2;
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80A6F3B4(this, play);
             break;
 

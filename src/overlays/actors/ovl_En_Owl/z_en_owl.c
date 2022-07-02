@@ -324,7 +324,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(play, 0x7D1);
@@ -606,7 +606,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEC:

@@ -524,7 +524,7 @@ void func_80B717E0(EnRailSkb* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80B72100(this, play);
             break;
 

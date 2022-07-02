@@ -660,7 +660,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
         case TEXT_STATE_3:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
@@ -783,7 +783,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
         case TEXT_STATE_3:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {

@@ -1362,7 +1362,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
             }
             func_80BAAB78(this, play);
         }
-    } else if ((talkstate == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+    } else if ((talkstate == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();

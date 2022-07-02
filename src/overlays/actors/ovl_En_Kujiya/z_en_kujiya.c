@@ -186,7 +186,7 @@ void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
         case TEXT_STATE_NONE:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             EnKujiya_HandlePlayerChoice(this, play);
             break;
 

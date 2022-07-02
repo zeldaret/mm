@@ -809,7 +809,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
     s32 temp_v0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 case TEXT_STATE_16:

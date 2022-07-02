@@ -257,7 +257,7 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
         case TEXT_STATE_3:
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80C14684(this, play);
             break;
 

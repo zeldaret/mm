@@ -615,7 +615,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && func_80B40E54(this) == 0) {
         switch (Message_GetState(&play->msgCtx)) {
-            case TEXT_STATE_4:
+            case TEXT_STATE_CHOICE:
                 if (Message_ShouldAdvance(play)) {
                     temp = play->msgCtx.currentTextId;
 

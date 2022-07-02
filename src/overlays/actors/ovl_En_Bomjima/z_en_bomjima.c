@@ -581,7 +581,7 @@ void func_80BFF4F4(EnBomjima* this) {
 }
 
 void func_80BFF52C(EnBomjima* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if (play->msgCtx.choiceIndex == 0) {
             Player* player = GET_PLAYER(play);

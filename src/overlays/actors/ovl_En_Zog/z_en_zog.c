@@ -663,7 +663,7 @@ void func_80B946B4(EnZog* this, PlayState* play) {
 
 void func_80B946FC(EnZog* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:

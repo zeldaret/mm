@@ -113,7 +113,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // yes

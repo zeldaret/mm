@@ -330,7 +330,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_33C, &this->actor);
             }
         }
-    } else if (talkState == TEXT_STATE_4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:

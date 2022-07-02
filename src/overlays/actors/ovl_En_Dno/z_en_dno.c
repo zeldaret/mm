@@ -402,7 +402,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
@@ -593,7 +593,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {

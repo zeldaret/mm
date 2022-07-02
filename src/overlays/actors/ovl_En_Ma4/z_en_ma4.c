@@ -634,7 +634,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
         default:
             break;
 
-        case TEXT_STATE_4: // Player answered a question
+        case TEXT_STATE_CHOICE: // Player answered a question
             EnMa4_HandlePlayerChoice(this, play);
             break;
 

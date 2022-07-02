@@ -880,7 +880,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == TEXT_STATE_4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -955,7 +955,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if (talkState == TEXT_STATE_4 && Message_ShouldAdvance(play)) {
+    if (talkState == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -1208,7 +1208,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnFsn_TakeItemOffShelf(this) && talkState == TEXT_STATE_4) {
+    if (EnFsn_TakeItemOffShelf(this) && talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1246,7 +1246,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1292,7 +1292,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1328,7 +1328,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     u8 cursorIdx;
 
-    if (talkState == TEXT_STATE_4) {
+    if (talkState == TEXT_STATE_CHOICE) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&

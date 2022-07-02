@@ -1359,7 +1359,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
     func_8088FA38(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0x202) {
                     switch (play->msgCtx.choiceIndex) {

@@ -317,7 +317,7 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             func_80B26758(this, play);
             break;
 

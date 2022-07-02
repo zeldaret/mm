@@ -475,7 +475,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             EnGinkoMan_SetupIdle(this);
             break;
-        case TEXT_STATE_4:
+        case TEXT_STATE_CHOICE:
             EnGinkoMan_WaitForDialogueInput(this, play);
             break;
         case TEXT_STATE_5:

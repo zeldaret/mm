@@ -1264,7 +1264,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->unk_2DC(this, play);
             }
         }
-    } else if (talkState == TEXT_STATE_4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
