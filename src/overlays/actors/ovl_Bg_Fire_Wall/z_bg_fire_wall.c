@@ -90,7 +90,7 @@ void BgFireWall_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     BgFireWall* this = THIS;
-    Actor* player = play->actorCtx.actorLists[2].first;
+    Actor* player = GET_PLAYER(play);
     Vec3f sp1C;
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->world.pos);
