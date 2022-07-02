@@ -448,6 +448,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
         if (msgCtx->unk11F14 != 0xFFFF) {
             return TEXT_STATE_1;
         }
+
         if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
             return TEXT_STATE_4;
         }
@@ -473,21 +474,30 @@ u8 Message_GetState(MessageContext* msgCtx) {
             return TEXT_STATE_18;
         }
         return TEXT_STATE_DONE;
-    } else if (msgCtx->msgMode == 0x41) {
+    }
+
+    if (msgCtx->msgMode == 0x41) {
         return TEXT_STATE_10;
-    } else if (msgCtx->msgMode == 0x1B) {
+    }
+    if (msgCtx->msgMode == 0x1B) {
         return TEXT_STATE_7;
-    } else if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
+    }
+    if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
         return TEXT_STATE_8;
-    } else if (msgCtx->msgMode == 0x20) {
+    }
+    if (msgCtx->msgMode == 0x20) {
         return TEXT_STATE_9;
-    } else if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
+    }
+    if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
         return TEXT_STATE_11;
-    } else if (msgCtx->msgMode == 0x3D) {
+    }
+    if (msgCtx->msgMode == 0x3D) {
         return TEXT_STATE_12;
-    } else if (msgCtx->msgMode == 0x40) {
+    }
+    if (msgCtx->msgMode == 0x40) {
         return TEXT_STATE_13;
-    } else if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+    }
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
         return TEXT_STATE_CLOSING;
     }
 

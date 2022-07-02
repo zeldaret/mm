@@ -863,7 +863,7 @@ typedef struct {
     /* 0x12006 */ s16 unk12006;
     /* 0x12008 */ u8 unk12008[0x16];
     /* 0x1201E */ s16 unk1201E;
-    /* 0x12020 */ u8 unk12020;
+    /* 0x12020 */ u8 unk12020; // probably textboxEndType
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 stateTimer;
