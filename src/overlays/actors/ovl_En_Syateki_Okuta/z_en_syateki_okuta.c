@@ -212,7 +212,7 @@ void func_80A36444(EnSyatekiOkuta* this) {
 void func_80A36488(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26C >= 70) {
+    if (syatekiMan->octorokState >= SG_OCTO_STATE_INITIAL) {
         func_80A364C0(this);
     }
 }
@@ -342,7 +342,7 @@ void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
     s16 temp_v1_2;
 
     if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
-        (syatekiMan->shootingGameState == 1) && (syatekiMan->unk_26C == 0)) {
+        (syatekiMan->shootingGameState == 1) && (syatekiMan->octorokState == SG_OCTO_STATE_SPAWNING)) {
         temp_v1_2 = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);
@@ -371,10 +371,10 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.unk_25C++;
             syatekiMan->score++;
-            syatekiMan->octorokHitState = 1;
+            syatekiMan->octorokHitState = SG_OCTO_HIT_STATE_RED;
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->octorokHitState = 2;
+            syatekiMan->octorokHitState = SG_OCTO_HIT_STATE_BLUE;
         }
 
         func_80A3657C(this);

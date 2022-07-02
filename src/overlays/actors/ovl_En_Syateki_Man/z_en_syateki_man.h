@@ -10,6 +10,19 @@ typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
 #define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
 
+typedef enum {
+    SG_OCTO_STATE_SPAWNING,
+    SG_OCTO_STATE_SPAWNED,
+    SG_OCTO_STATE_INITIAL = 70,
+    SG_OCTO_STATE_HIDING = 80,
+} ShootingGalleryOctorokState;
+
+typedef enum {
+    SG_OCTO_HIT_STATE_NONE,
+    SG_OCTO_HIT_STATE_RED,
+    SG_OCTO_HIT_STATE_BLUE,
+} ShootingGalleryOctorokHitState;
+
 typedef struct EnSyatekiMan {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
@@ -27,7 +40,7 @@ typedef struct EnSyatekiMan {
     /* 0x026A */ s16 shootingGameState;
     /* 0x026C */ union {
                     s16 guaySpawnTimer; // Guays spawn when this reaches 140 OR when you kill all scrubs
-                    s16 unk_26C;
+                    s16 octorokState;
                 };
     /* 0x026E */ union {
                     s16 bonusDekuScrubHitCounter;
