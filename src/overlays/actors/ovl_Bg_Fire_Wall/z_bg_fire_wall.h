@@ -10,14 +10,14 @@ typedef void (*BgFireWallActionFunc)(struct BgFireWall*, PlayState*);
 typedef struct BgFireWall {
     /* 0x000 */ Actor actor;
     /* 0x144 */ BgFireWallActionFunc actionFunc;
-    /* 0x148 */ s16 unk148;
-    /* 0x14A */ s16 unk14A;
-    /* 0x14C */ s16 unk14C;
-    /* 0x150 */ f32 unk150;
-    /* 0x154 */ f32 unk154;
-    /* 0x158 */ f32 unk158;
-    /* 0x15C */ f32 unk15C;
-    /* 0x160 */ f32 unk160;
+    /* 0x148 */ s16 texIndex;
+    /* 0x14A */ s16 timer;
+    /* 0x14C */ s16 unk_14C;
+    /* 0x150 */ f32 step;
+    /* 0x154 */ f32 unk_154;
+    /* 0x158 */ f32 unk_158;
+    /* 0x15C */ f32 unk_15C;
+    /* 0x160 */ f32 unk_160;
     /* 0x164 */ ColliderCylinder collider;
 } BgFireWall; // size = 0x1B0
 
