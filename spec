@@ -2257,7 +2257,6 @@ beginseg
     name "ovl_Bg_Fire_Wall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Fire_Wall/z_bg_fire_wall.o"
-    include "build/data/ovl_Bg_Fire_Wall/ovl_Bg_Fire_Wall.data.o"
     include "build/data/ovl_Bg_Fire_Wall/ovl_Bg_Fire_Wall.reloc.o"
 endseg
 

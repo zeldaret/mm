@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_fire_wall.h"
+#include "objects/object_fwall/object_fwall.h"
 
 #define FLAGS 0x00000000
 
@@ -22,7 +23,7 @@ s32 func_809AC5C0(BgFireWall* this, PlayState* play);
 void BgFireWall_Draw(Actor* thisx, PlayState* play);
 void func_809AC760(BgFireWall* this, PlayState* play);
 void func_809AC7F8(BgFireWall* this, PlayState* play);
-#if 0
+
 const ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
     ACTORCAT_BG,
@@ -35,24 +36,24 @@ const ActorInit Bg_Fire_Wall_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_809ACC60 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x20000000, 0x01, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
     { 34, 85, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_809ACC8C = { 1, 80, 100, MASS_IMMOVABLE };
+static CollisionCheckInfoInit sColChkInfoInit = { 1, 80, 100, MASS_IMMOVABLE };
 
-#endif
-
-extern ColliderCylinderInit D_809ACC60;
-extern CollisionCheckInfoInit D_809ACC8C;
-extern TexturePtr D_809ACC94[];
-extern UNK_TYPE D_06000040;
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Init.s")
+static void *D_809ACC94[0xB] = {
+    gFwallFireball0Tex,
+    gFwallFireball1Tex,
+    gFwallFireball2Tex,
+    gFwallFireball3Tex,
+    gFwallFireball4Tex,
+    gFwallFireball5Tex,
+    gFwallFireball6Tex,
+    gFwallFireball7Tex
+};
 
 void BgFireWall_Init(Actor* thisx, PlayState* play) {
     BgFireWall* this = (BgFireWall*)thisx;
@@ -60,8 +61,8 @@ void BgFireWall_Init(Actor* thisx, PlayState* play) {
     this->unk14C = this->actor.params;
     this->actor.scale.y = 0.005f;
     Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &D_809ACC60);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_809ACC8C);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     this->actor.scale.z = 0.12f;
     this->actor.scale.x = 0.12f;
     this->unk15C = 0.09f;
@@ -73,15 +74,11 @@ void BgFireWall_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_809AC638;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Destroy.s")
-
 void BgFireWall_Destroy(Actor* thisx, PlayState* play) {
     BgFireWall* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC5C0.s")
 
 s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     BgFireWall* this = THIS;
@@ -96,8 +93,6 @@ s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC638.s")
-
 void func_809AC638(BgFireWall* this, PlayState* play) {
     if ((this->unk14C != 0) || (func_809AC5C0(this, play) != 0)) {
         this->actor.draw = BgFireWall_Draw;
@@ -105,8 +100,6 @@ void func_809AC638(BgFireWall* this, PlayState* play) {
         this->actionFunc = func_809AC68C;
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC68C.s")
 
 void func_809AC68C(BgFireWall* this, PlayState* play) {
 
@@ -133,8 +126,6 @@ void func_809AC6C0(BgFireWall *this, PlayState *play) {
     }
 }
 */
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC760.s")
-
 void func_809AC760(BgFireWall* this, PlayState* play) {
     s16 phi_a3;
 
@@ -186,8 +177,6 @@ void func_809AC7F8(BgFireWall *this, PlayState *play) {
     this->collider.dim.pos.z = (s16) (s32) ((this->actor.world.pos.z - ((f32) sp38.y * sp30)) + (sp38.z * temp_fv0_2));
 }
 */
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/func_809AC970.s")
-
 void func_809AC970(BgFireWall* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.y, 0.005f, this->unk158)) {
         Actor_MarkForDeath(&this->actor);
@@ -220,8 +209,6 @@ void BgFireWall_Update(Actor* thisx, PlayState* play) {
     }
 }
 */
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Draw.s")
-
 void BgFireWall_Draw(Actor *thisx, PlayState *play) {
     BgFireWall* this = THIS;
 
@@ -232,7 +219,7 @@ void BgFireWall_Draw(Actor *thisx, PlayState *play) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x01, 255, 255, 0, 150);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &D_06000040);
+    gSPDisplayList(POLY_XLU_DISP++, object_fwall_DL_000040);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
