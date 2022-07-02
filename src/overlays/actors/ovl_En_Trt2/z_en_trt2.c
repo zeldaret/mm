@@ -334,7 +334,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
         this->unk_3D8 = false;
     } else if ((sp27 == 5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         func_80AD3380(&this->skelAnime, sAnimations, 6);
         this->unk_3B2 = 4;
     }
@@ -362,7 +362,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (Interface_HasEmptyBottle()) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
             gSaveContext.save.weekEventReg[85] |= 0x10;
@@ -390,7 +390,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
         }
     } else if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
     }
 }
@@ -434,7 +434,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             func_80AD3DA4(this, play);
         } else {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 func_80AD3380(&this->skelAnime, sAnimations, 6);
                 this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
@@ -516,7 +516,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
 
     if ((sp23 == 5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
     }
 }
 

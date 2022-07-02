@@ -1149,7 +1149,7 @@ void func_80BAD130(EnSuttari* this, PlayState* play) {
 
     if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         if (this->flags1 & 8) {
             this->actionFunc = func_80BAD004;
         } else if (this->flags1 & 4) {
@@ -1186,7 +1186,7 @@ void func_80BAD2B4(EnSuttari* this, PlayState* play) {
         } else {
             ActorCutscene_Stop(this->cutscenes[1]);
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
             this->actionFunc = func_80BAD380;
         }
@@ -1210,7 +1210,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->flags1 &= ~0x4000;
             ActorCutscene_Stop(this->cutscenes[1]);
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
         }
         if (this->flags1 & 0x100) {
@@ -1351,7 +1351,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
                     this->flags2 &= ~1;
                 }
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->textId = 0;
                 if (this->flags1 & 1) {
                     this->actionFunc = func_80BACA14;

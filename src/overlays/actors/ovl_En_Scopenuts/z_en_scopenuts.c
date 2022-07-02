@@ -319,7 +319,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
@@ -342,7 +342,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     } else {
                         func_8019F208();
                         play->msgCtx.msgMode = 0x43;
-                        play->msgCtx.unk12023 = 4;
+                        play->msgCtx.stateTimer = 4;
                         func_801159EC(this->unk_358 * -1);
                         this->actionFunc = func_80BCB90C;
                     }

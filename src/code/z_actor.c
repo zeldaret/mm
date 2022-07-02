@@ -1887,7 +1887,7 @@ s32 func_800B863C(Actor* actor, PlayState* play) {
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }

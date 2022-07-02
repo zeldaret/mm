@@ -579,7 +579,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9E94(DoorWarp1* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->unk_1CE = 110;
         DoorWarp1_SetupAction(this, func_808B9ED8);
     }

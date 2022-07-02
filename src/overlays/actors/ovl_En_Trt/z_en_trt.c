@@ -205,7 +205,7 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
@@ -348,7 +348,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
             default:
@@ -393,7 +393,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, PlayState* play) {
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;
@@ -638,7 +638,7 @@ void EnTrt_SetupBuyItemWithFanfare(PlayState* play, EnTrt* this) {
 
     Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -956,7 +956,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;

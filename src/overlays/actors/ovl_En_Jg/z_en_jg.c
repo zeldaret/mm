@@ -362,7 +362,7 @@ void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
         } else {
@@ -427,7 +427,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
         if ((messageState == 5) && Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->animationIndex = EN_JG_ANIMATION_WALK;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
@@ -485,7 +485,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_SetupWalk;
             return;
@@ -497,7 +497,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
             } else if (((gSaveContext.save.weekEventReg[24] & 0x40)) ||
@@ -511,7 +511,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 // already have the Lullaby or Lullaby Intro. End the current conversation and
                 // start the cutscene that teaches the Lullaby Intro.
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -602,7 +602,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
 void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->actionFunc = EnJg_FrozenIdle;
     }
 }

@@ -183,7 +183,7 @@ typedef enum {
 typedef enum {
     /*  0 */ TEXT_STATE_NONE,
     /*  1 */ TEXT_STATE_1,
-    /*  2 */ TEXT_STATE_2,
+    /*  2 */ TEXT_STATE_CLOSING,
     /*  3 */ TEXT_STATE_3,
     /*  4 */ TEXT_STATE_4,
     /*  5 */ TEXT_STATE_5,
@@ -866,7 +866,7 @@ typedef struct {
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
-    /* 0x12023 */ u8 unk12023;
+    /* 0x12023 */ u8 stateTimer;
     /* 0x12024 */ s16 unk12024;
     /* 0x12026 */ u16 unk12026;
     /* 0x12028 */ u16 songPlayed;

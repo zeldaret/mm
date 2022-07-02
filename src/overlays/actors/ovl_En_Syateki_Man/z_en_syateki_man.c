@@ -271,7 +271,7 @@ void func_809C6A04(EnSyatekiMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26A = 7;
                 player->stateFlags1 |= 0x20;
                 this->actionFunc = func_809C7FFC;
@@ -320,7 +320,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
             case 0xA2C:
             case 0xA35:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(play);
                 play->interfaceCtx.hbaAmmo = 80;
@@ -353,7 +353,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
 
             case 0xA34:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 player->stateFlags1 |= 0x20;
@@ -388,7 +388,7 @@ void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
         case 6:
             if (Message_ShouldAdvance(play)) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~0x20;
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -628,7 +628,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
                     }
                 } else {
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     player->actor.freezeTimer = 0;
                     this->unk_26A = 7;
                     player->stateFlags1 |= 0x20;
@@ -641,7 +641,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
             case 0x3FE:
             case 0x400:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 this->unk_27E = 0;
                 func_80112AFC(play);
@@ -688,7 +688,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
             case 0x406:
             case 0x407:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 this->actionFunc = func_809C7D14;

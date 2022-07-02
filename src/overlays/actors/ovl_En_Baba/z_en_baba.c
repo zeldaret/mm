@@ -531,7 +531,7 @@ void func_80BA9848(EnBaba* this, PlayState* play) {
 
     if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80BA9B80;
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
@@ -545,7 +545,7 @@ void func_80BA98EC(EnBaba* this, PlayState* play) {
             if (this->unk_40A & 1) {
                 this->unk_40A &= ~1;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 if (this->unk_40A & 8) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (play->msgCtx.unk120B1 == 0) {
@@ -564,7 +564,7 @@ void func_80BA98EC(EnBaba* this, PlayState* play) {
             } else if (this->unk_40A & 0x20) {
                 this->unk_40A &= ~0x20;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BA9AB8;
             } else {
                 func_80BA886C(this, play);

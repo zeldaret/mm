@@ -552,7 +552,7 @@ void func_80BB26EC(EnGeg* this, PlayState* play) {
             case 0xD61:
                 ActorCutscene_Stop(this->unk_498);
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_230 &= ~0x10;
                 this->actionFunc = func_80BB221C;
                 return;
@@ -568,14 +568,14 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
         switch (this->unk_496) {
             case 0xD63:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB221C;
                 break;
 
             case 0xD69:
                 this->unk_49A = this->unk_49C[6];
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB2520;
                 break;
 
@@ -583,7 +583,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
             case 0xD6F:
             case 0xD8A:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB31B8;
                 break;
 
@@ -591,7 +591,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
             case 0xD75:
             case 0xD8B:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_230 &= ~0x10;
                 this->unk_49A = this->unk_49C[7];
                 this->actionFunc = func_80BB2520;
@@ -618,7 +618,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
     } else if ((sp27 == 5) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD67) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->unk_49A = this->unk_49C[4];
             this->actionFunc = func_80BB2520;
         } else {
@@ -635,7 +635,7 @@ void func_80BB2A54(EnGeg* this, PlayState* play) {
             this->unk_230 &= ~0x10;
             this->unk_244 = 65;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BB347C;
         } else {
             this->unk_496 = func_80BB16D0(this);

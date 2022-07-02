@@ -100,7 +100,7 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
     if (talkState == 5) {
         if (Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             func_80B3C260(this);
         }
     } else if (talkState == 4) {
@@ -119,7 +119,7 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
                 case 2:
                     func_8019F230();
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
             }
         }

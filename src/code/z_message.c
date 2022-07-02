@@ -100,7 +100,7 @@ void func_801477B4(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (play->msgCtx.msgLength != 0) {
-        msgCtx->unk12023 = 2;
+        msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
         play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
@@ -325,7 +325,7 @@ void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
     func_80150D08(play, textId);
     msgCtx->unkActor = Actor;
     msgCtx->msgMode = 1;
-    msgCtx->unk12023 = 0;
+    msgCtx->stateTimer = 0;
     msgCtx->unk12024 = 0;
     play->msgCtx.ocarinaMode = 0;
 }
@@ -338,7 +338,7 @@ void func_80151938(PlayState* play, u16 textId) {
     func_80150D08(play, textId);
     func_80150A84(play);
     msgCtx->msgMode = 5;
-    msgCtx->unk12023 = 8;
+    msgCtx->stateTimer = 8;
     msgCtx->unk12024 = 0;
 
     if (interfaceCtx->unk_222 == 0) {
@@ -354,7 +354,7 @@ void func_80151938(PlayState* play, u16 textId) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
         func_80149C18(play);
-        msgCtx->unk12023 = 1;
+        msgCtx->stateTimer = 1;
     }
 }
 
@@ -368,7 +368,7 @@ void func_80151A68(PlayState* play, u16 textId) {
     msgCtx->msgMode = 0x45;
     msgCtx->unk12024 = 0;
     msgCtx->unk1203C = msgCtx->unk1203A = msgCtx->unk1201E = 0;
-    msgCtx->unk12023 = 0x1E;
+    msgCtx->stateTimer = 0x1E;
 
     // Day/Dawn/Night.. Messages
     if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
@@ -457,7 +457,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
         if (msgCtx->unk12020 == 0x41) {
             return TEXT_STATE_16;
         }
-        if (((s32)msgCtx->unk12020 >= 0x50) && ((s32)msgCtx->unk12020 < 0x58)) {
+        if ((msgCtx->unk12020 >= 0x50) && (msgCtx->unk12020 < 0x58)) {
             return TEXT_STATE_3;
         }
         if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
@@ -487,11 +487,11 @@ u8 Message_GetState(MessageContext* msgCtx) {
         return TEXT_STATE_12;
     } else if (msgCtx->msgMode == 0x40) {
         return TEXT_STATE_13;
-    } else if ((msgCtx->msgMode == 0x43) && (msgCtx->unk12023 == 1) && (msgCtx->unk120B1 == 0)) {
-        return TEXT_STATE_2;
+    } else if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+        return TEXT_STATE_CLOSING;
     }
 
-    return 3;
+    return TEXT_STATE_3;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")

@@ -394,7 +394,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                 func_801159EC(-this->unk_434);
                 func_800B7298(play, NULL, 7);
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C1C9C;
                 return;
             }
@@ -455,7 +455,7 @@ void func_809C1D64(EnAob01* this, PlayState* play) {
         }
     } else if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_210 = 0;
         this->actionFunc = func_809C2060;
     }
@@ -583,7 +583,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C2060;
             } else {
                 func_809C16DC(this, play);
@@ -752,7 +752,7 @@ void func_809C2A64(EnAob01* this, PlayState* play) {
         if ((sp2F == 5) && Message_ShouldAdvance(play)) {
             this->unk_434 = 0;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
         }
 
         if (Actor_HasParent(&this->actor, play)) {

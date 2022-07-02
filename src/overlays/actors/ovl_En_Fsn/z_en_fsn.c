@@ -392,7 +392,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
@@ -960,7 +960,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
             case 0:
                 func_8019F208();
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
@@ -1160,7 +1160,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             item->buyFanfareFunc(play, item);
             Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             Interface_ChangeAlpha(50);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
@@ -1197,7 +1197,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1269,7 +1269,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1316,7 +1316,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
             }
         } else {
             EnFsn_EndInteraction(this, play);
@@ -1370,12 +1370,12 @@ void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_IdleBackroom;
         } else if (this->flags & ENFSN_GIVE_ITEM) {
             this->flags &= ~ENFSN_GIVE_ITEM;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_GiveItem;
         } else {
             EnFsn_HandleConversationBackroom(this, play);
