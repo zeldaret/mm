@@ -8830,7 +8830,7 @@
     0x809AC7F8:("func_809AC7F8",),
     0x809AC970:("func_809AC970",),
     0x809AC9B8:("BgFireWall_Update",),
-    0x809ACB28:("func_809ACB28",),
+    0x809ACB28:("BgFireWall_Draw",),
     0x809ACD90:("EnBu_Init",),
     0x809ACDA8:("EnBu_Destroy",),
     0x809ACDB8:("EnBu_DoNothing",),
