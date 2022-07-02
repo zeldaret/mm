@@ -630,8 +630,8 @@ void func_80BA0A04(EnZob* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     temp_v0 = Message_GetState(&play->msgCtx);
-    if (temp_v0 != 2) {
-        if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
+    if (temp_v0 != TEXT_STATE_CLOSING) {
+        if ((temp_v0 == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = func_80BA0AD8;
             this->unk_304 = 0;

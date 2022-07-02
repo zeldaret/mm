@@ -1475,15 +1475,14 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
 
 void func_808F6334(EnIn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 newUnk4C8;
+    s32 talkState = Message_GetState(&play->msgCtx);
 
-    newUnk4C8 = Message_GetState(&play->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (&this->actor == player->targetActor &&
-        !(play->msgCtx.currentTextId >= 0xFF && play->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
+        !(play->msgCtx.currentTextId >= 0xFF && play->msgCtx.currentTextId <= 0x200) && talkState == TEXT_STATE_3 &&
         this->unk4C8 == 3) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
@@ -1491,7 +1490,7 @@ void func_808F6334(EnIn* this, PlayState* play) {
     } else {
         this->unk4C0 = 0.0f;
     }
-    this->unk4C8 = newUnk4C8;
+    this->unk4C8 = talkState;
 }
 
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -97,13 +97,13 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
 void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             func_80B3C260(this);
         }
-    } else if (talkState == 4) {
+    } else if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:

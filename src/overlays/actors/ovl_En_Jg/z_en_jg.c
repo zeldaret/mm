@@ -415,7 +415,7 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
  * set his speed to 0, causing him to walk in place.
  */
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
-    u8 messageState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
@@ -425,7 +425,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
-        if ((messageState == 5) && Message_ShouldAdvance(play)) {
+        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
@@ -470,7 +470,7 @@ void EnJg_Walk(EnJg* this, PlayState* play) {
 }
 
 void EnJg_Talk(EnJg* this, PlayState* play) {
-    u8 messageState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
     u16 temp;
@@ -480,7 +480,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     }
 
-    if ((messageState == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         temp = this->textId;
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.

@@ -527,9 +527,9 @@ void func_80BA9758(EnBaba* this, PlayState* play) {
 }
 
 void func_80BA9848(EnBaba* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80BA9B80;
@@ -538,9 +538,9 @@ void func_80BA9848(EnBaba* this, PlayState* play) {
 }
 
 void func_80BA98EC(EnBaba* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_40A & 1) {
                 this->unk_40A &= ~1;
@@ -570,7 +570,7 @@ void func_80BA98EC(EnBaba* this, PlayState* play) {
                 func_80BA886C(this, play);
             }
         }
-    } else if (temp_v0 == 6) {
+    } else if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
             func_80BA8C4C(play, 0xD670);

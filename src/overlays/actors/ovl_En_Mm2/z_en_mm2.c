@@ -48,8 +48,8 @@ void EnMm2_Destroy(Actor* thisx, PlayState* play) {
 void EnMm2_Reading(EnMm2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState != 2) {
-        if (talkState == 5 && Message_ShouldAdvance(play)) {
+    if (talkState != TEXT_STATE_CLOSING) {
+        if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = EnMm2_WaitForRead;
         }

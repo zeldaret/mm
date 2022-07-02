@@ -426,9 +426,9 @@ void func_809C1C9C(EnAob01* this, PlayState* play) {
 }
 
 void func_809C1D64(EnAob01* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 4) {
+    if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -453,7 +453,7 @@ void func_809C1D64(EnAob01* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_210 = 0;
@@ -521,7 +521,7 @@ void func_809C2060(EnAob01* this, PlayState* play) {
 }
 
 void func_809C21E0(EnAob01* this, PlayState* play) {
-    u8 sp2F = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
 
@@ -561,7 +561,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
             }
             this->unk_2D2 &= ~8;
         }
-    } else if (sp2F == 4) {
+    } else if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             this->unk_2D2 &= ~0x40;
             switch (play->msgCtx.choiceIndex) {
@@ -577,7 +577,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
                     break;
             }
         }
-    } else if (sp2F == 5) {
+    } else if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
@@ -589,7 +589,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
                 func_809C16DC(this, play);
             }
         }
-    } else if ((sp2F == 14) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_14) && Message_ShouldAdvance(play)) {
         this->unk_2D2 &= ~0x40;
         this->unk_434 = play->msgCtx.bankRupeesSelected;
         func_809C16DC(this, play);
@@ -746,10 +746,10 @@ void func_809C28B8(EnAob01* this, PlayState* play) {
 }
 
 void func_809C2A64(EnAob01* this, PlayState* play) {
-    u8 sp2F = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     if (func_809C15BC(this)) {
-        if ((sp2F == 5) && Message_ShouldAdvance(play)) {
+        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->unk_434 = 0;
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
@@ -776,9 +776,9 @@ void func_809C2A64(EnAob01* this, PlayState* play) {
 }
 
 void func_809C2BE4(EnAob01* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (gSaveContext.save.weekEventReg[63] & 2) {
             gSaveContext.save.weekEventReg[63] &= (u8)~2;
         }
@@ -805,7 +805,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play) {
 }
 
 void func_809C2D0C(EnAob01* this, PlayState* play) {
-    u8 sp2F = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
 
@@ -819,7 +819,7 @@ void func_809C2D0C(EnAob01* this, PlayState* play) {
         }
     }
 
-    if ((sp2F == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->unk_2D2 &= ~0x40;
         this->unk_2D2 &= ~0x80;
         if (this->unk_434 >= 150) {

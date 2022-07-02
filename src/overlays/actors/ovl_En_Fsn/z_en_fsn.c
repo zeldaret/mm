@@ -822,7 +822,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-    if (talkState == 5 && Message_ShouldAdvance(play)) {
+    if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         switch (this->actor.textId) {
             case 0x29CC:
                 this->actor.textId = 0x29CD;
@@ -849,7 +849,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
 void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             switch (this->actor.textId) {
                 case 0x29CC:
@@ -880,7 +880,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if (talkState == 4) {
+    } else if (talkState == TEXT_STATE_4) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -955,7 +955,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if (talkState == 4 && Message_ShouldAdvance(play)) {
+    if (talkState == TEXT_STATE_4 && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -1106,7 +1106,7 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickLeftPrompt.isEnabled = true;
         EnFsn_UpdateCursorPos(this, play);
-        if (talkstate == 5) {
+        if (talkstate == TEXT_STATE_5) {
             func_8011552C(play, 6);
             if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
@@ -1191,7 +1191,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
 void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
@@ -1208,7 +1208,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
+    if (EnFsn_TakeItemOffShelf(this) && talkState == TEXT_STATE_4) {
         func_8011552C(play, 6);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1246,7 +1246,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1263,7 +1263,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
@@ -1292,7 +1292,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1310,7 +1310,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
@@ -1328,7 +1328,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     u8 cursorIdx;
 
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_4) {
         func_8011552C(play, 6);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
@@ -1342,7 +1342,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
                 play_sound(NA_SE_SY_CURSOR);
             }
         }
-    } else if (talkState == 5 && Message_ShouldAdvance(play)) {
+    } else if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         this->actor.textId = 0x29D6;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
         if (play) {}

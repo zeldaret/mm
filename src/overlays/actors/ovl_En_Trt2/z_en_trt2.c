@@ -326,13 +326,13 @@ void func_80AD3C94(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3CEC(EnTrt2* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     func_80AD46F8(this);
     if (this->unk_3D8) {
         Message_StartTextbox(play, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
-    } else if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         func_80AD3380(&this->skelAnime, sAnimations, 6);
@@ -374,9 +374,9 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3EF0(EnTrt2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 6) {
+    if (talkState == 6) {
         if (Message_ShouldAdvance(play)) {
             if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
                 !(gSaveContext.save.weekEventReg[12] & 0x10)) {
@@ -388,7 +388,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
                 this->unk_3B2 = 10;
             }
         }
-    } else if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
@@ -507,14 +507,14 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
 
 void func_80AD4550(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u8 sp23 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
         func_80AD3380(&this->skelAnime, sAnimations, 7);
         this->unk_3B2 = 17;
     }
 
-    if ((sp23 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
     }

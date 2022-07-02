@@ -416,7 +416,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 5 && Message_ShouldAdvance(play)) || talkState == 2)) {
+    if (((talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) || talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
             play->nextEntranceIndex = 0xD010;
 

@@ -660,9 +660,9 @@ void func_80B51760(EnGk* this, PlayState* play) {
 }
 
 void func_80B51970(EnGk* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((temp_v0 == 6) || (temp_v0 == 5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if ((this->unk_31C == 0xE84) || (this->unk_31C == 0xE99)) {
             ActorCutscene_Stop(this->unk_318);
             this->unk_318 = ActorCutscene_GetAdditionalCutscene(this->unk_318);
@@ -710,9 +710,9 @@ void func_80B51970(EnGk* this, PlayState* play) {
 }
 
 void func_80B51B40(EnGk* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 6) {
+    if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_1E4 & 1) {
                 this->unk_1E4 &= ~1;
@@ -741,7 +741,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();

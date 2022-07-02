@@ -416,10 +416,10 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 
 void func_80ADB924(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u8 msgState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s32 item;
 
-    if (msgState == 0x10) {
+    if (talkState == TEXT_STATE_16) {
         item = func_80123810(play);
         if (item > EXCH_ITEM_NONE) {
             if (item == EXCH_ITEM_2A) {
@@ -438,7 +438,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
             func_80151938(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((msgState == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             func_80151938(play, this->unk_340);
@@ -452,7 +452,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animation);
 
@@ -468,7 +468,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 6);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
@@ -505,7 +505,7 @@ void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBD64(EnSellnuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animation);
 
@@ -514,7 +514,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 0);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
@@ -737,7 +737,7 @@ void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
-    s32 temp = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
 
     if (this->unk_366 == 0) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -749,7 +749,7 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if ((this->unk_366 == 1) && (temp == 5) && Message_ShouldAdvance(play)) {
+    } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;

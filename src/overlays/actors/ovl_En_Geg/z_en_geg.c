@@ -606,7 +606,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB2944(EnGeg* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
 
@@ -615,7 +615,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
             this->unk_4AC = 6;
             func_80BB2020(this, play);
         }
-    } else if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD67) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;

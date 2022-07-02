@@ -1240,9 +1240,9 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
@@ -1264,7 +1264,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->unk_2DC(this, play);
             }
         }
-    } else if (temp_v0 == 4) {
+    } else if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1279,7 +1279,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (temp_v0 == 16) {
+    } else if (talkState == TEXT_STATE_16) {
         func_80BEE73C(this, play);
     }
 }
@@ -1294,7 +1294,7 @@ void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
-    u8 sp27 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 sp24 = this->skelAnime.curFrame;
     s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
@@ -1310,7 +1310,7 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 6);
     }
 
-    if ((sp27 == 5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
             play->msgCtx.msgMode = 0x43;

@@ -312,9 +312,9 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
@@ -330,7 +330,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_33C, &this->actor);
             }
         }
-    } else if (temp_v0 == 4) {
+    } else if (talkState == TEXT_STATE_4) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -359,7 +359,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     break;
             }
         }
-    } else if (temp_v0 == 6) {
+    } else if (talkState == TEXT_STATE_DONE) {
         func_800B85E0(&this->actor, play, 400.0f, -1);
         this->actionFunc = func_80BCB980;
     }

@@ -1147,7 +1147,7 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
 void func_80BAD130(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         if (this->flags1 & 8) {
@@ -1204,7 +1204,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
     } else {
         this->flags1 &= ~0x8000;
         func_80BABA90(this, 1, 1);
-        if ((this->flags1 & 0x4000) && (talkState == 5) && Message_ShouldAdvance(play)) {
+        if ((this->flags1 & 0x4000) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->flags2 &= ~0x10;
             player->stateFlags1 &= ~0x10000000;
             this->flags1 &= ~0x4000;
@@ -1339,7 +1339,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
         this->animationIndex = 1;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
-    if (talkstate == 5) {
+    if (talkstate == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->flags1 & 0x400) {
                 if (this->textId == 0x29EE) {
@@ -1362,7 +1362,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
             }
             func_80BAAB78(this, play);
         }
-    } else if ((talkstate == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkstate == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();

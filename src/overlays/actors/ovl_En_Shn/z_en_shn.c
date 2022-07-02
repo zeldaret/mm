@@ -177,16 +177,15 @@ void func_80AE63A8(EnShn* this, PlayState* play) {
 
 void func_80AE6488(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 tempMsgState;
+    s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0_2;
     f32 phi_f0;
 
-    tempMsgState = Message_GetState(&play->msgCtx);
     this->unk_2D4 += (this->unk_2D0 != 0.0f) ? 40.0f : -40.0f;
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->targetActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (tempMsgState == 3) &&
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
         (this->msgState == 3)) {
         if (play->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
@@ -198,7 +197,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     } else {
         this->unk_2D0 = 0.0f;
     }
-    this->msgState = tempMsgState;
+    this->msgState = talkState;
 }
 
 s32 func_80AE65F4(EnShn* this, PlayState* play) {

@@ -386,9 +386,9 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FFA8(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
@@ -403,7 +403,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
         if (this->unk_26E == 0x14D5) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -548,9 +548,9 @@ void func_80B10584(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10634(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
@@ -572,7 +572,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_4) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.playerData.rupees < this->unk_288) {

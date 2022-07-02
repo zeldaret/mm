@@ -857,10 +857,10 @@ void func_8094F2E8(EnGm* this) {
 
 void func_8094F3D0(EnGm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp28 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
     s32 var = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((var < 0xFF) || (var > 0x200)) && (sp28 == 3) &&
+    if ((&this->actor == player->targetActor) && ((var < 0xFF) || (var > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->unk_3F0 == 3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_3AC == 120.0f) {
@@ -874,7 +874,7 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
     }
     Math_SmoothStepToF(&this->unk_3B0, this->unk_3AC, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_3B0, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_3F0 = sp28;
+    this->unk_3F0 = talkState;
 }
 
 s32 func_8094F4EC(EnGm* this, PlayState* play) {

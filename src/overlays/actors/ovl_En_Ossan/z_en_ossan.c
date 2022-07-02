@@ -563,7 +563,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnOssan_RotateHead(this, play);
-    if (talkState == 5 && Message_ShouldAdvance(play)) {
+    if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         if ((this->animationIndex == ANI_ANIMATION_APOLOGY_LOOP) && (this->actor.params == ENOSSAN_PART_TIME_WORKER)) {
             this->animationIndex = ANI_ANIMATION_STANDING_NORMAL_LOOP_2;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
@@ -580,7 +580,7 @@ void EnOssan_Hello(EnOssan* this, PlayState* play) {
             return;
         }
     }
-    if ((talkState == 10) && (this->actor.params == ENOSSAN_PART_TIME_WORKER) &&
+    if ((talkState == TEXT_STATE_10) && (this->actor.params == ENOSSAN_PART_TIME_WORKER) &&
         (player->transformation == PLAYER_FORM_ZORA) && Message_ShouldAdvance(play)) {
         this->animationIndex = ANI_ANIMATION_APOLOGY_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, ANI_ANIMATION_APOLOGY_LOOP);
@@ -629,7 +629,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_WAITING;
     } else {
-        if (talkState == 4) {
+        if (talkState == TEXT_STATE_4) {
             func_8011552C(play, 6);
             if (!EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
                 (!Message_ShouldAdvance(play) || !EnOssan_FacingShopkeeperDialogResult(this, play))) {
@@ -852,7 +852,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickRightPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
-        if (talkState == 5) {
+        if (talkState == TEXT_STATE_5) {
             func_8011552C(play, 6);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal) {
@@ -910,7 +910,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickLeftPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
-        if (talkState == 5) {
+        if (talkState == TEXT_STATE_5) {
             func_8011552C(play, 6);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal != 0) {
@@ -1051,7 +1051,7 @@ void EnOssan_HandleCanBuyItem(PlayState* play, EnOssan* this) {
 void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
+    if (EnOssan_TakeItemOffShelf(this) && talkState == TEXT_STATE_4) {
         func_8011552C(play, 6);
         if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1118,7 +1118,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnGirlA* item;
 
-    if (talkState == 4) {
+    if (talkState == TEXT_STATE_4) {
         func_8011552C(play, 6);
         if (Message_ShouldAdvance(play)) {
             EnOssan_ResetItemPosition(this);
@@ -1142,7 +1142,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
                 }
             }
         }
-    } else if (talkState == 5 && Message_ShouldAdvance(play)) {
+    } else if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(play, item);
