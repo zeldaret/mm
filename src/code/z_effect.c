@@ -40,8 +40,8 @@ EffectInfo sEffectInfoTable[] = {
     },
 };
 
-GlobalContext* Effect_GetGlobalCtx(void) {
-    return sEffectContext.globalCtx;
+PlayState* Effect_GetPlayState(void) {
+    return sEffectContext.play;
 }
 
 void* Effect_GetByIndex(s32 index) {
@@ -93,7 +93,7 @@ void Effect_InitStatus(EffectStatus* status) {
     status->unk2 = 0;
 }
 
-void Effect_Init(GlobalContext* globalCtx) {
+void Effect_Init(PlayState* play) {
     s32 i;
 
     for (i = 0; i < SPARK_COUNT; i++) {
@@ -113,10 +113,10 @@ void Effect_Init(GlobalContext* globalCtx) {
         Effect_InitStatus(&sEffectContext.tireMarks[i].status);
     }
 
-    sEffectContext.globalCtx = globalCtx;
+    sEffectContext.play = play;
 }
 
-void Effect_Add(GlobalContext* globalCtx, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* initParams) {
+void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* initParams) {
     u32 slotFound;
     s32 i;
     void* effect = NULL;
@@ -124,7 +124,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* pIndex, s32 type, u8 arg3, u8 arg
 
     *pIndex = TOTAL_EFFECT_COUNT;
 
-    if (FrameAdvance_IsEnabled(&globalCtx->state) != true) {
+    if (FrameAdvance_IsEnabled(&play->state) != true) {
         slotFound = false;
         switch (type) {
             case EFFECT_SPARK:
@@ -217,14 +217,14 @@ void Effect_DrawAll(GraphicsContext* gfxCtx) {
     }
 }
 
-void Effect_UpdateAll(GlobalContext* globalCtx) {
+void Effect_UpdateAll(PlayState* play) {
     s32 i;
 
     for (i = 0; i < SPARK_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffectContext.sparks[i].status.active) {
             if (sEffectInfoTable[EFFECT_SPARK].update(&sEffectContext.sparks[i].effect) == 1) {
-                Effect_Destroy(globalCtx, i);
+                Effect_Destroy(play, i);
             }
         }
     }
@@ -233,7 +233,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         if (1) {} // necessary to match
         if (sEffectContext.blures[i].status.active) {
             if (sEffectInfoTable[EFFECT_BLURE1].update(&sEffectContext.blures[i].effect) == 1) {
-                Effect_Destroy(globalCtx, i + SPARK_COUNT);
+                Effect_Destroy(play, i + SPARK_COUNT);
             }
         }
     }
@@ -242,7 +242,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         if (1) {} // necessary to match
         if (sEffectContext.shieldParticles[i].status.active) {
             if (sEffectInfoTable[EFFECT_SHIELD_PARTICLE].update(&sEffectContext.shieldParticles[i].effect) == 1) {
-                Effect_Destroy(globalCtx, i + SPARK_COUNT + BLURE_COUNT);
+                Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT);
             }
         }
     }
@@ -251,13 +251,13 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
         if (1) {} // necessary to match
         if (sEffectContext.tireMarks[i].status.active) {
             if (sEffectInfoTable[EFFECT_TIRE_MARK].update(&sEffectContext.tireMarks[i].effect) == 1) {
-                Effect_Destroy(globalCtx, i + SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT);
+                Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT);
             }
         }
     }
 }
 
-void Effect_Destroy(GlobalContext* globalCtx, s32 index) {
+void Effect_Destroy(PlayState* play, s32 index) {
     if (index == TOTAL_EFFECT_COUNT) {
         return;
     }
@@ -290,7 +290,7 @@ void Effect_Destroy(GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void Effect_DestroyAll(GlobalContext* globalCtx) {
+void Effect_DestroyAll(PlayState* play) {
     s32 i;
 
     for (i = 0; i < SPARK_COUNT; i++) {

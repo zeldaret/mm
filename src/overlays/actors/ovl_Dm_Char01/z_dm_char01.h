@@ -5,7 +5,7 @@
 
 struct DmChar01;
 
-typedef void (*DmChar01ActionFunc)(struct DmChar01*, GlobalContext*);
+typedef void (*DmChar01ActionFunc)(struct DmChar01*, PlayState*);
 
 #define DMCHAR01_GET(thisx) ((thisx)->params)
 

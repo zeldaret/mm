@@ -7,7 +7,7 @@ struct BgAstrBombwall;
 
 #define BGASTRBOMBWALL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 
-typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, GlobalContext*);
+typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, PlayState*);
 typedef struct BgAstrBombwall {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgAstrBombwallActionFunc actionFunc;

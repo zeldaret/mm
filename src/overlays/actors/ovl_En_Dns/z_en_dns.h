@@ -6,8 +6,8 @@
 
 struct EnDns;
 
-typedef void (*EnDnsActionFunc)(struct EnDns*, GlobalContext*);
-typedef s32 (*EnDnsFunc)(struct EnDns*, GlobalContext*);
+typedef void (*EnDnsActionFunc)(struct EnDns*, PlayState*);
+typedef s32 (*EnDnsFunc)(struct EnDns*, PlayState*);
 
 #define ENDNS_GET_7(thisx) ((thisx)->params & 7)
 #define ENDNS_GET_4000(thisx) ((thisx)->params & 0x4000)

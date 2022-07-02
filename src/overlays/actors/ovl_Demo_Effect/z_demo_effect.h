@@ -6,7 +6,7 @@
 
 struct DemoEffect;
 
-typedef void (*DemoEffectActionFunc)(struct DemoEffect*, GlobalContext*);
+typedef void (*DemoEffectActionFunc)(struct DemoEffect*, PlayState*);
 
 #define DEMO_EFFECT_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 

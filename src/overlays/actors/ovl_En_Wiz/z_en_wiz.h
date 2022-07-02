@@ -5,7 +5,7 @@
 
 struct EnWiz;
 
-typedef void (*EnWizActionFunc)(struct EnWiz*, GlobalContext*);
+typedef void (*EnWizActionFunc)(struct EnWiz*, PlayState*);
 
 typedef struct EnWiz {
     /* 0x0000 */ Actor actor;

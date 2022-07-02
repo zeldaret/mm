@@ -10,23 +10,23 @@
 
 #define THIS ((Boss05*)thisx)
 
-void Boss05_Init(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Update(Actor* thisx, GlobalContext* globalCtx);
-void Boss05_Draw(Actor* thisx, GlobalContext* globalCtx);
+void Boss05_Init(Actor* thisx, PlayState* play);
+void Boss05_Destroy(Actor* thisx, PlayState* play);
+void Boss05_Update(Actor* thisx, PlayState* play);
+void Boss05_Draw(Actor* thisx, PlayState* play);
 
-void func_809EEDE8(Boss05* this, GlobalContext* globalCtx);
-void func_809EF9BC(Boss05* this, GlobalContext* globalCtx);
-void func_809EFAB4(Boss05* this, GlobalContext* globalCtx);
-void func_809F010C(Boss05* this, GlobalContext* globalCtx);
-void func_809F0244(Boss05* this, GlobalContext* globalCtx);
-void func_809F0374(Boss05* this, GlobalContext* globalCtx);
-void func_809F04C0(Boss05* this, GlobalContext* globalCtx);
-void func_809F0590(Boss05* this, GlobalContext* globalCtx);
-void func_809F06B8(Boss05* this, GlobalContext* globalCtx);
-void func_809F0780(Boss05* this, GlobalContext* globalCtx);
-void func_809F0ABC(Boss05* this, GlobalContext* globalCtx);
-void func_809F0B0C(Boss05* this, GlobalContext* globalCtx);
+void func_809EEDE8(Boss05* this, PlayState* play);
+void func_809EF9BC(Boss05* this, PlayState* play);
+void func_809EFAB4(Boss05* this, PlayState* play);
+void func_809F010C(Boss05* this, PlayState* play);
+void func_809F0244(Boss05* this, PlayState* play);
+void func_809F0374(Boss05* this, PlayState* play);
+void func_809F04C0(Boss05* this, PlayState* play);
+void func_809F0590(Boss05* this, PlayState* play);
+void func_809F06B8(Boss05* this, PlayState* play);
+void func_809F0780(Boss05* this, PlayState* play);
+void func_809F0ABC(Boss05* this, PlayState* play);
+void func_809F0B0C(Boss05* this, PlayState* play);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {

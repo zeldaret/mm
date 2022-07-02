@@ -10,9 +10,9 @@
 
 #define THIS ((EffChange*)thisx)
 
-void EffChange_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffChange_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffChange_Update(Actor* thisx, GlobalContext* globalCtx);
+void EffChange_Init(Actor* thisx, PlayState* play);
+void EffChange_Destroy(Actor* thisx, PlayState* play);
+void EffChange_Update(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Eff_Change_InitVars = {

@@ -6,7 +6,7 @@
 
 struct EnMaYto;
 
-typedef void (*EnMaYtoActionFunc)(struct EnMaYto*, GlobalContext*);
+typedef void (*EnMaYtoActionFunc)(struct EnMaYto*, PlayState*);
 
 typedef enum {
     /* 00 */ MA2_LIMB_NONE,

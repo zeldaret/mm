@@ -5,7 +5,7 @@
 
 struct EnWarptag;
 
-typedef void (*EnWarptagActionFunc)(struct EnWarptag*, GlobalContext*);
+typedef void (*EnWarptagActionFunc)(struct EnWarptag*, PlayState*);
 
 typedef struct EnWarptag {
     /* 0x000 */ DynaPolyActor dyna;

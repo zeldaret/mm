@@ -11,19 +11,19 @@
 
 #define THIS ((EnGuruguru*)thisx)
 
-void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGuruguru_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGuruguru_Init(Actor* thisx, PlayState* play);
+void EnGuruguru_Destroy(Actor* thisx, PlayState* play);
+void EnGuruguru_Update(Actor* thisx, PlayState* play);
+void EnGuruguru_Draw(Actor* thisx, PlayState* play);
 
-void EnGuruguru_DoNothing(EnGuruguru* this, GlobalContext* globalCtx);
+void EnGuruguru_DoNothing(EnGuruguru* this, PlayState* play);
 void func_80BC6E10(EnGuruguru* this);
-void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx);
-void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx);
-void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx);
+void func_80BC6F14(EnGuruguru* this, PlayState* play);
+void func_80BC701C(EnGuruguru* this, PlayState* play);
+void func_80BC7068(EnGuruguru* this, PlayState* play);
 void func_80BC73F4(EnGuruguru* this);
-void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx);
-void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx);
+void func_80BC7440(EnGuruguru* this, PlayState* play);
+void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
@@ -68,16 +68,16 @@ static f32 D_80BC79D8[] = { 1.0f, 1.0f };
 static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
 static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
 
-void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
                        this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }
     if (!gSaveContext.save.isNight) {
         if (this->actor.params == 0) {
@@ -97,11 +97,11 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnGuruguru_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGuruguru_Destroy(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
     if (this->actor.params != 2) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(play, &this->collider);
     }
 }
 
@@ -111,7 +111,7 @@ void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
                      -4.0f);
 }
 
-void EnGuruguru_DoNothing(EnGuruguru* this, GlobalContext* globalCtx) {
+void EnGuruguru_DoNothing(EnGuruguru* this, PlayState* play) {
 }
 
 void func_80BC6E10(EnGuruguru* this) {
@@ -142,13 +142,13 @@ void func_80BC6E10(EnGuruguru* this) {
     this->actionFunc = func_80BC6F14;
 }
 
-void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
+void func_80BC6F14(EnGuruguru* this, PlayState* play) {
     s16 yaw;
     s16 yawTemp;
 
     SkelAnime_Update(&this->skelAnime);
     if (this->unk270 != 0) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -164,15 +164,15 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yaw = ABS_ALT(yawTemp);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_80BC701C(this, globalCtx);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        func_80BC701C(this, play);
     } else if (yaw <= 0x2890) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
+        func_800B8614(&this->actor, play, 60.0f);
     }
 }
 
-void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80BC701C(EnGuruguru* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if ((this->unk268 != 0) &&
         (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
@@ -184,14 +184,14 @@ void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BC7068;
 }
 
-void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80BC7068(EnGuruguru* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->unk268 != 0) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (Message_GetState(&globalCtx->msgCtx) != 5) {
+        if (Message_GetState(&play->msgCtx) != 5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -207,11 +207,11 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        func_801477B4(globalCtx);
+    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        func_801477B4(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
-            func_80151BB4(globalCtx, 0x13);
+            func_80151BB4(play, 0x13);
             gSaveContext.save.weekEventReg[79] |= 4;
             func_80BC6E10(this);
             return;
@@ -223,7 +223,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             if (this->actor.textId == 0x292A) {
                 gSaveContext.save.weekEventReg[38] |= 0x10;
             }
-            func_80151BB4(globalCtx, 0x13);
+            func_80151BB4(play, 0x13);
             func_80BC6E10(this);
             return;
         }
@@ -234,8 +234,8 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
         if (this->textIdIndex == 12) {
             gSaveContext.save.weekEventReg[38] |= 0x40;
             func_801A3B48(0);
-            func_80151BB4(globalCtx, 0x36);
-            func_80151BB4(globalCtx, 0x13);
+            func_80151BB4(play, 0x36);
+            func_80151BB4(play, 0x13);
             func_80BC6E10(this);
             return;
         }
@@ -271,11 +271,11 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
                 this->skelAnime.playSpeed = 1.0f;
             }
             this->unk266 = 1;
-            func_80151938(globalCtx, textIDs[this->textIdIndex]);
+            func_80151938(play, textIDs[this->textIdIndex]);
             return;
         }
         func_801A3B48(0);
-        func_80151BB4(globalCtx, 0x13);
+        func_80151BB4(play, 0x13);
         func_80BC6E10(this);
     }
 }
@@ -288,35 +288,35 @@ void func_80BC73F4(EnGuruguru* this) {
     this->actionFunc = func_80BC7440;
 }
 
-void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
+void func_80BC7440(EnGuruguru* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
         this->unk268 = 0;
         gSaveContext.save.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_MASK_BREMEN, 300.0f, 300.0f);
     }
 }
 
-void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
+void func_80BC7520(EnGuruguru* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
-void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGuruguru_Update(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
     s32 yaw;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s16 yawTemp;
 
     if (!gSaveContext.save.isNight) {
@@ -329,7 +329,7 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.params == 2) {
         if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) {
@@ -363,13 +363,12 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+s32 EnGuruguru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGuruguru* this = THIS;
 
     if (limbIndex == 14) {
@@ -380,15 +379,15 @@ s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     return false;
 }
 
-void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGuruguru_Draw(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->texIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->texIndex]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

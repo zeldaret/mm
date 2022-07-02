@@ -5,7 +5,7 @@
 
 struct EnLiftNuts;
 
-typedef void (*EnLiftNutsActionFunc)(struct EnLiftNuts*, GlobalContext*);
+typedef void (*EnLiftNutsActionFunc)(struct EnLiftNuts*, PlayState*);
 
 #define ENLIFTNUTS_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 
