@@ -64,7 +64,7 @@ static TexturePtr sFlameTextures[] = { gFwallFireball0Tex, gFwallFireball1Tex, g
                                        gFwallFireball4Tex, gFwallFireball5Tex, gFwallFireball6Tex, gFwallFireball7Tex };
 
 void BgFireWall_Init(Actor* thisx, PlayState* play) {
-    BgFireWall* this = (BgFireWall*)thisx;
+    BgFireWall* this = THIS;
 
     this->unk_14C = this->actor.params;
     this->actor.scale.y = 0.005f;
