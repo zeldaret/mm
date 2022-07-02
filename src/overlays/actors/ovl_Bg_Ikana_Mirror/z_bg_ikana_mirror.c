@@ -229,7 +229,7 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BgIkanaMirror* this = THIS;
-    ColliderTrisElementInit *element;
+    ColliderTrisElementInit* element;
     Vec3f vertices[3];
     s32 i;
     s32 j;
