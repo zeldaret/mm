@@ -38,7 +38,7 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
     (ActorFunc)BgIkanaMirror_Draw,
 };
 
-static ColliderTrisElementInit sMirrorColliderElementsInit[9] = {
+static ColliderTrisElementInit sMirrorColliderElementsInit[] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -153,7 +153,7 @@ static ColliderTrisInit sMirrorColliderInit = {
     sMirrorColliderElementsInit,
 };
 
-static ColliderQuadInit sLightRaysCollidersInit[2] = {
+static ColliderQuadInit sLightRaysCollidersInit[] = {
     {
         {
             COLTYPE_NONE,
@@ -229,7 +229,7 @@ void BgIkanaMirror_SetQuadVertices(BgIkanaMirror* this) {
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BgIkanaMirror* this = THIS;
-    Vec3f* vtx;
+    ColliderTrisElementInit *element;
     Vec3f vertices[3];
     s32 i;
     s32 j;
@@ -244,9 +244,9 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(sMirrorColliderElementsInit); i++) {
-        vtx = &sMirrorColliderInit.elements[i].dim.vtx[0];
+        element = &sMirrorColliderInit.elements[i];
         for (j = 0; j < 3; j++) {
-            Matrix_MultVec3f(&vtx[j], &vertices[j]);
+            Matrix_MultVec3f(&element->dim.vtx[j], &vertices[j]);
         }
         Collider_SetTrisVertices(&this->mirrorCollider, i, &vertices[0], &vertices[1], &vertices[2]);
     }
