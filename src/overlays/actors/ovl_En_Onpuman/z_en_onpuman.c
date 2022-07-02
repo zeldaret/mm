@@ -145,7 +145,7 @@ void func_80B1217C(EnOnpuman* this, PlayState* play) {
 }
 
 void func_80B121D8(EnOnpuman* this, PlayState* play) {
-    s16 absoluteValue;
+    s16 yaw;
 
     if (func_800B8718(&this->actor, &play->state)) {
         this->actionFunc = func_80B1202C;
@@ -154,9 +154,9 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B1217C;
     } else {
-        absoluteValue = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (this->actor.xzDistToPlayer < 200.0f) {
-            if (ABS_ALT(absoluteValue) <= 0x4300) {
+            if (ABS_ALT(yaw) <= 0x4300) {
                 this->actor.textId = 0x8D3;
                 func_800B8614(&this->actor, play, 100.0f);
                 func_800B874C(&this->actor, play, 100.0f, 100.0f);
