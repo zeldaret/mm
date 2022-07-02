@@ -7,9 +7,9 @@ struct ObjJgameLight;
 
 #define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJLUPYGAMELIFT_IGNITEFIRE (1 << 0)
-#define OBJLUPYGAMELIFT_DISPLAYCORRECT (2 << 0)
-#define OBJLUPYGAMELIFT_DISPLAYINCORRECT (4 << 0)
-#define OBJLUPYGAMELIFT_SNUFF_FIRE (8 << 0)
+#define OBJLUPYGAMELIFT_DISPLAYCORRECT (1 << 1)
+#define OBJLUPYGAMELIFT_DISPLAYINCORRECT (1 << 2)
+#define OBJLUPYGAMELIFT_SNUFF_FIRE (1 << 3)
 
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;
