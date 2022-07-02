@@ -113,10 +113,10 @@ void func_80AF6944(EnGamelupy* this) {
 }
 
 void func_80AF6958(EnGamelupy* this, PlayState* play) {
-    void* actor = func_800B6680(play, ACTOR_EN_GAMELUPY);
+    s16* unk_198 = func_800B6680(play, ACTOR_EN_GAMELUPY);
 
-    if (actor != NULL) {
-        this->unk_198 = actor;
+    if (unk_198 != NULL) {
+        this->unk_198 = unk_198;
         func_80AF6994(this);
     }
 }
@@ -126,11 +126,8 @@ void func_80AF6994(EnGamelupy* this) {
 }
 
 void func_80AF69A8(EnGamelupy* this, PlayState* play) {
-    s16* temp_v0;
-
-    if ((this->collider.base.ocFlags1 & OC1_HIT)) {
-        temp_v0 = this->unk_198;
-        *temp_v0 += 0x32;
+    if (this->collider.base.ocFlags1 & OC1_HIT) {
+        *this->unk_198 += 0x32;
         if (this->rupeeIndex == 1) {
             func_801159EC(5);
         } else {
@@ -152,7 +149,7 @@ void func_80AF6A78(EnGamelupy* this, PlayState* play) {
     f32 scale;
     Player* player = GET_PLAYER(play);
 
-    if (this->unk_19C >= 0x1F) {
+    if (this->unk_19C > 30) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->unk_19C++;
@@ -162,7 +159,7 @@ void func_80AF6A78(EnGamelupy* this, PlayState* play) {
         Actor_SetScale(&this->actor, scale);
         func_80AF6854(this, play);
     }
-    this->actor.shape.rot.y += 1000;
+    this->actor.shape.rot.y += 0x3E8;
 }
 
 void func_80AF6B40(EnGamelupy* this, PlayState* play) {
@@ -175,7 +172,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0x0C);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 0xC);
     func_80AF6B40(this, play);
 }
 
