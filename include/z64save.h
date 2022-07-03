@@ -78,7 +78,7 @@ typedef struct PermanentSceneFlags {
     /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
-    /* 0x14 */ u32 unk_14;
+    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited. 
     /* 0x18 */ u32 rooms;
 } PermanentSceneFlags; // size = 0x1C
 
@@ -273,7 +273,7 @@ typedef enum SunsSongState {
     /* 3 */ SUNSSONG_SPECIAL // time does not advance, but signals the song was played. used for freezing redeads
 } SunsSongState;
 
-typedef enum DungeonIndex {
+typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
     /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
     /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
