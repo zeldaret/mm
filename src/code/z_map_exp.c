@@ -242,7 +242,7 @@ void Map_Update(PlayState* play) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
-                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].floors |=
+                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
                 XREG(94) = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
