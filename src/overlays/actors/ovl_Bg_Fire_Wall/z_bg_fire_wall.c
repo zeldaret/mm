@@ -174,7 +174,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     if ((this->unk_14C == 0) || ((this->unk_14C != 0) && (this->actor.xzDistToPlayer < 240.0f))) {
-        if (this->collider.base.atFlags & 2) {
+        if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             func_809AC760(this, play);
         }
