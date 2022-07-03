@@ -67,7 +67,7 @@ typedef struct EnSyatekiMan {
     /* 0x027E */ s16 spawnPatternIndex; // Used for Octoroks in Town and Guays in Swamp
     /* 0x0280 */ s16 score;
     /* 0x0282 */ s16 talkFlags;
-    /* 0x0284 */ s16 textId;
+    /* 0x0284 */ s16 prevTextId;
 } EnSyatekiMan; // size = 0x288
 
 extern const ActorInit En_Syateki_Man_InitVars;

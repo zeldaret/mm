@@ -131,7 +131,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->unk_1E4 = Lib_SegmentedToVirtual(path->points);
-    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_PARAM_F0(&this->actor);
+    this->unk_1E8 = EN_SYATEKI_DEKUNUTS_GET_INDEX(&this->actor);
     this->unk_1EA = path->count;
     this->unk_1D8 = 0;
     this->unk_1DC = 0;

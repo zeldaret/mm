@@ -9103,7 +9103,7 @@
     0x809C81D0:("EnSyatekiMan_Swamp_RunGame",),
     0x809C8488:("EnSyatekiMan_Swamp_EndGame",),
     0x809C8610:("EnSyatekiMan_Swamp_AddBonusPoints",),
-    0x809C8710:("EnSyatekiMan_Town_MovePlayerAndExplainRules",),
+    0x809C8710:("EnSyatekiMan_Town_MovePlayerAndSayHighScore",),
     0x809C8808:("EnSyatekiMan_Town_StartGame",),
     0x809C898C:("EnSyatekiMan_Town_RunGame",),
     0x809C8BF0:("EnSyatekiMan_Town_EndGame",),
