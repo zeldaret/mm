@@ -1169,10 +1169,10 @@ void EnSyatekiMan_Town_MovePlayerAndSayHighScore(EnSyatekiMan* this, PlayState* 
 }
 
 void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
-    static s16 D_809C94A4 = 30;
+    static s16 sGameStartTimer = 30;
     Player* player = GET_PLAYER(play);
 
-    if (D_809C94A4 == 30) {
+    if (sGameStartTimer == 30) {
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
             player->actor.world.pos = sTownFierceDietyPlayerPos;
         } else {
@@ -1184,18 +1184,18 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->actor.world.rot.y = player->actor.shape.rot.y;
         play->unk_18790(play, -0x8000, &this->actor);
         player->stateFlags1 |= 0x20;
-        D_809C94A4--;
-    } else if (D_809C94A4 > 0) {
+        sGameStartTimer--;
+    } else if (sGameStartTimer > 0) {
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
-        D_809C94A4--;
-    } else if (D_809C94A4 == 0) {
+        sGameStartTimer--;
+    } else if (sGameStartTimer == 0) {
         player->stateFlags1 &= ~0x20;
         this->score = 0;
         this->spawnPatternIndex = 0;
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
         this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
-        D_809C94A4 = 30;
+        sGameStartTimer = 30;
         func_8010E9F0(1, 75);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Town_RunGame;
