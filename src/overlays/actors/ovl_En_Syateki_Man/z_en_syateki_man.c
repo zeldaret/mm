@@ -1001,12 +1001,12 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
-    static s16 D_809C949C = 0;
+    static s16 sHasSpawnedGuaysForThisWave = false;
     Player* player = GET_PLAYER(play);
 
-    if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && (D_809C949C == 0) &&
+    if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
         (this->currentWave < 4)) {
-        D_809C949C = 1;
+        sHasSpawnedGuaysForThisWave = true;
         this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
@@ -1015,13 +1015,14 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         } else {
             this->flagsIndex++;
         }
-    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (D_809C949C == 1) && (this->currentWave < 4)) {
+    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSpawnedGuaysForThisWave == true) &&
+               (this->currentWave < 4)) {
         if (this->guayHitCounter < 3) {
             this->guayHitCounter = 0;
         }
 
         this->perGameVar1.guaySpawnTimer = 0;
-        D_809C949C = 0;
+        sHasSpawnedGuaysForThisWave = false;
         this->currentWave++;
         if (this->currentWave < 4) {
             this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
@@ -1047,7 +1048,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= 0x20;
-        D_809C949C = 0;
+        sHasSpawnedGuaysForThisWave = false;
         func_801A2C20();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
     } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
@@ -1056,7 +1057,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= 0x20;
-        D_809C949C = 0;
+        sHasSpawnedGuaysForThisWave = false;
         func_801A2C20();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
         if (this->score == 2120) {
@@ -1080,6 +1081,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
             if (GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
                 SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
             }
+
             this->talkWaitTimer = 15;
             if (this->score >= 2120) {
                 // Perfect! Take this!
@@ -1107,6 +1109,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 this->prevTextId = 0xA32;
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             }
+
             this->actionFunc = EnSyatekiMan_Swamp_Talk;
         } else {
             this->talkWaitTimer--;
@@ -1119,7 +1122,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
-    static s32 D_809C94A0 = 0;
+    static s32 sBonusTimer = 0;
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= 0x20;
@@ -1130,15 +1133,15 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             this->flagsIndex = 0;
             this->currentWave = 0;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-            D_809C94A0 = 0;
-        } else if (D_809C94A0 > 10) {
+            sBonusTimer = 0;
+        } else if (sBonusTimer > 10) {
             gSaveContext.unk_3E88[1] += 100;
             play->interfaceCtx.unk_25C += 10;
             this->score += 10;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            D_809C94A0 = 0;
+            sBonusTimer = 0;
         } else {
-            D_809C94A0++;
+            sBonusTimer++;
         }
     }
 }
