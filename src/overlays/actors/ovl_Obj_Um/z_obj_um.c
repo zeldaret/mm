@@ -12,8 +12,6 @@
 
 #define THIS ((ObjUm*)thisx)
 
-#define NOT_DEBUG_PRINT 1
-
 /**
  * weekEventReg flags checked by this actor:
  * - gSaveContext.save.weekEventReg[22] & 1: Aliens defeated
@@ -223,7 +221,7 @@ void func_80B77770(ObjUm* this, PlayState* play) {
 }
 
 s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
-    Path* path = &play->setupPathList[this->pathIdx];
+    Path* path = &play->setupPathList[this->pathIndex];
     s16 pad;
     Vec3s* spawnPoints;
     EnHorse* bandit1;
@@ -234,7 +232,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
-                                    ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_19));
+                                    ENHORSE_PARAMS(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_19));
     this->bandit1 = bandit1;
 
     bandit1->unk_540 = bandit1->actor.world.pos;
@@ -242,7 +240,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     bandit1->unk_54C = 0xF;
     bandit1->unk_550 = 10;
 
-    bandit1->unk_554 = this->pathIdx;
+    bandit1->unk_554 = this->pathIndex;
     bandit1->unk_568 = 0.0f;
     bandit1->unk_56C = 0.0f;
     bandit1->unk_558 = 0;
@@ -257,7 +255,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
 
     bandit2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
                                     spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0,
-                                    ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_20));
+                                    ENHORSE_PARAMS(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_20));
     this->bandit2 = bandit2;
 
     bandit2->unk_540 = bandit2->actor.world.pos;
@@ -265,7 +263,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     bandit2->unk_54C = 0xF;
     bandit2->unk_550 = 8;
 
-    bandit2->unk_554 = this->pathIdx;
+    bandit2->unk_554 = this->pathIndex;
     bandit2->unk_568 = 0.0f;
     bandit2->unk_56C = 0.0f;
     bandit2->unk_55C = 40;
@@ -359,7 +357,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
 
 // ObjUm_Bandit_UpdatePosition?
 s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit) {
-    Path* sp6C = &play->setupPathList[this->pathIdx];
+    Path* sp6C = &play->setupPathList[this->pathIndex];
     s32 sp68;
     Vec3s* sp64;
     f32 phi_f12;
@@ -676,7 +674,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     this->unk_4CC = 0;
     this->mouthTexIndex = 0;
-    this->flags = OBJ_UM_FLAG_0000;
+    this->flags = OBJ_UM_FLAG_NONE;
     this->dyna.actor.gravity = -3.5f;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -688,8 +686,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->wheelRot = 0;
     ObjUm_StopAnim(this, play);
 
-    this->type = OBJ_UM_PARSE_TYPE(thisx->params);
-    this->initialPathIdx = OBJ_UM_PARSE_PATH_IDX(thisx->params);
+    this->type = OBJ_UM_PARSE_TYPE(thisx);
+    this->initialPathIndex = OBJ_UM_PARSE_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
@@ -700,7 +698,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     if (this->type == OBJ_UM_TYPE_TERMINA_FIELD) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
-        this->pathIdx = this->initialPathIdx;
+        this->pathIndex = this->initialPathIndex;
         if (gSaveContext.save.weekEventReg[31] & 0x80) {
             // In cutscene
 
@@ -729,7 +727,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
 
         if (!(gSaveContext.save.weekEventReg[52] & 2)) {
-            this->pathIdx = this->initialPathIdx;
+            this->pathIndex = this->initialPathIndex;
             sp54 = false;
             func_800FE484();
             ObjUm_SetupAction(this, ObjUm_PreMilkRunStartCs);
@@ -742,7 +740,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        this->pathIdx = this->initialPathIdx;
+        this->pathIndex = this->initialPathIndex;
         sp54 = false;
         func_800FE484();
         ObjUm_SetupAction(this, ObjUm_StartCs);
@@ -754,7 +752,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        this->pathIdx = this->initialPathIdx;
+        this->pathIndex = this->initialPathIndex;
         sp54 = false;
         func_800FE484();
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
@@ -786,7 +784,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->donkey =
         (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
                               this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
-                              this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_PARAMTYPE_DONKEY, ENHORSE_18));
+                              this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAMTYPE_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -1042,7 +1040,7 @@ typedef enum {
 } ObjUmPathState;
 
 ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
-    Path* path = &play->setupPathList[this->pathIdx];
+    Path* path = &play->setupPathList[this->pathIndex];
     s32 pathCount;
     Vec3s* pathPoints;
     f32 phi_f12;
@@ -1063,40 +1061,40 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
         return 0;
     }
 
-    Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIdx]);
+    Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIndex]);
 
-    if (this->pointIdx == 0) {
+    if (this->pointIndex == 0) {
         phi_f12 = pathPoints[1].x - pathPoints[0].x;
         phi_f14 = pathPoints[1].z - pathPoints[0].z;
-    } else if ((this->pointIdx + 1) == path->count) {
+    } else if ((this->pointIndex + 1) == path->count) {
         phi_f12 = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
         phi_f14 = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
     } else {
-        phi_f12 = pathPoints[this->pointIdx + 1].x - pathPoints[this->pointIdx - 1].x;
-        phi_f14 = pathPoints[this->pointIdx + 1].z - pathPoints[this->pointIdx - 1].z;
+        phi_f12 = pathPoints[this->pointIndex + 1].x - pathPoints[this->pointIndex - 1].x;
+        phi_f14 = pathPoints[this->pointIndex + 1].z - pathPoints[this->pointIndex - 1].z;
     }
 
     aux = Math_Atan2S(phi_f12, phi_f14);
 
     func_8017B7F8(&sp50, aux, &sp4C, &sp48, &sp44);
     if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
-        this->pointIdx++;
+        this->pointIndex++;
 
-        if (this->pointIdx >= (pathCount - 7)) {
+        if (this->pointIndex >= (pathCount - 7)) {
             sp3C = OBJUM_PATH_STATE_3;
         }
-        if (this->pointIdx >= (pathCount - 3)) {
+        if (this->pointIndex >= (pathCount - 3)) {
             sp3C = OBJUM_PATH_STATE_1;
         }
-        if (this->pointIdx >= (pathCount - 2)) {
+        if (this->pointIndex >= (pathCount - 2)) {
             sp3C = OBJUM_PATH_STATE_4;
         }
-        if (this->pointIdx >= pathCount) {
-            this->pointIdx = 0;
+        if (this->pointIndex >= pathCount) {
+            this->pointIndex = 0;
             sp3C = OBJUM_PATH_STATE_FINISH;
         }
 
-        Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIdx]);
+        Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIndex]);
     }
 
     if (this->donkey != NULL) {
@@ -1648,11 +1646,11 @@ typedef struct {
     /* 0x04 */ s32 animMoves;
 } struct_80B7C25C; // size = 0x08
 
-struct_80B7C25C D_80B7C25C[] = { { &object_um_Anim_012CC0, true },
-                                 { &object_um_Anim_01213C, true },
-                                 { &object_um_Anim_019E10, false },
-                                 { NULL, false },
-                                 { &object_um_Anim_0126C4, false } };
+struct_80B7C25C D_80B7C25C[] = {
+    { &object_um_Anim_012CC0, true },  { &object_um_Anim_01213C, true },
+    { &object_um_Anim_019E10, false }, { NULL, false },
+    { &object_um_Anim_0126C4, false },
+};
 
 void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
     s32 changeAnim;

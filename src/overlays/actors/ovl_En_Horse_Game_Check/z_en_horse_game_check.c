@@ -125,13 +125,13 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     play->interfaceCtx.unk_280 = 1;
 
     this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
-                                         ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_4));
+                                         ENHORSE_PARAMS(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_4));
     if (this->horse1 == NULL) {
         __assert("../z_en_horse_game_check.c", 1517);
     }
 
     this->horse2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
-                                         ENHORSE_PARAM(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_5));
+                                         ENHORSE_PARAMS(ENHORSE_PARAMTYPE_BANDIT, ENHORSE_5));
     if (this->horse2 == NULL) {
         __assert("../z_en_horse_game_check.c", 1526);
     }

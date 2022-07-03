@@ -140,7 +140,7 @@ typedef enum {
  * `paramtype` should be `ENHORSE_PARAMTYPE_BANDIT`, `ENHORSE_PARAMTYPE_4000` or `ENHORSE_PARAMTYPE_DONKEY`
  * `lower` should be a value of the enum `EnHorseParam`
  */
-#define ENHORSE_PARAM(paramtype, lower) ((paramtype) | (lower))
+#define ENHORSE_PARAMS(paramtype, lower) ((paramtype) | (lower))
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;

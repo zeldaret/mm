@@ -17,11 +17,11 @@ typedef struct ObjUm {
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
     /* 0x2AC */ s16 wheelRot;
     /* 0x2AE */ s16 type;
-    /* 0x2B0 */ s16 initialPathIdx;
+    /* 0x2B0 */ s16 initialPathIndex;
     /* 0x2B4 */ s32 unk_2B4;
     /* 0x2B8 */ EnHorse* donkey;
-    /* 0x2BC */ s32 pathIdx;
-    /* 0x2BE */ s32 pointIdx;
+    /* 0x2BC */ s32 pathIndex;
+    /* 0x2BE */ s32 pointIndex;
     /* 0x2C4 */ Vec3f unk_2C4;
     /* 0x2D0 */ Vec3f unk_2D0;
     /* 0x2DC */ Vec3f unk_2DC;
@@ -61,23 +61,23 @@ typedef enum {
     /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN // milk road, post-minigame
 } ObjUmType;
 
-#define OBJ_UM_PARSE_TYPE(params) (((params) & 0xFF00) >> 8)
-#define OBJ_UM_PARSE_PATH_IDX(params) ((params) & 0xFF)
+#define OBJ_UM_PARSE_TYPE(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define OBJ_UM_PARSE_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
-#define OBJ_UM_FLAG_0000 0x0000
-#define OBJ_UM_FLAG_0001 0x0001
-#define OBJ_UM_FLAG_MOVING 0x0002
-#define OBJ_UM_FLAG_0004 0x0004
-#define OBJ_UM_FLAG_WAITING 0x0008 // Waiting in the Ranch
-#define OBJ_UM_FLAG_0010 0x0010
-#define OBJ_UM_FLAG_DRAWN_FLOOR 0x0020
-#define OBJ_UM_FLAG_0040 0x0040
-#define OBJ_UM_FLAG_PLAYING_MINIGAME 0x0080
-#define OBJ_UM_FLAG_0100 0x0100
-#define OBJ_UM_FLAG_0200 0x0200 // Something bandit1
-#define OBJ_UM_FLAG_0400 0x0400 // Something bandit2
-#define OBJ_UM_FLAG_0800 0x0800
-#define OBJ_UM_FLAG_1000 0x1000
-#define OBJ_UM_FLAG_MINIGAME_FINISHED 0x2000
+#define OBJ_UM_FLAG_NONE (0)
+#define OBJ_UM_FLAG_0001 (1 << 0)
+#define OBJ_UM_FLAG_MOVING (1 << 1)
+#define OBJ_UM_FLAG_0004 (1 << 2)
+#define OBJ_UM_FLAG_WAITING (1 << 3) // Waiting in the Ranch
+#define OBJ_UM_FLAG_0010 (1 << 4)
+#define OBJ_UM_FLAG_DRAWN_FLOOR (1 << 5)
+#define OBJ_UM_FLAG_0040 (1 << 6)
+#define OBJ_UM_FLAG_PLAYING_MINIGAME (1 << 7)
+#define OBJ_UM_FLAG_0100 (1 << 8)
+#define OBJ_UM_FLAG_0200 (1 << 9) // Something bandit1
+#define OBJ_UM_FLAG_0400 (1 << 10) // Something bandit2
+#define OBJ_UM_FLAG_0800 (1 << 11)
+#define OBJ_UM_FLAG_1000 (1 << 12)
+#define OBJ_UM_FLAG_MINIGAME_FINISHED (1 << 13)
 
 #endif // Z_OBJ_UM_H
