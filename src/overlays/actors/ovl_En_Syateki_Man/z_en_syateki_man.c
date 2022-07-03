@@ -178,7 +178,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->spawnPatternIndex = 0;
-    this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
+    this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -1180,7 +1180,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->score = 0;
         this->spawnPatternIndex = 0;
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
-        this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
+        this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
         D_809C94A4 = 30;
         func_8010E9F0(1, 75);
         this->actor.draw = NULL;
@@ -1265,12 +1265,12 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->perGameVar2.octorokHitState != SG_OCTO_HIT_STATE_NONE) {
-            if (this->perGameVar2.octorokHitState == SG_OCTO_HIT_STATE_BLUE) {
+        if (this->perGameVar2.octorokHitType != SG_OCTO_HIT_TYPE_NONE) {
+            if (this->perGameVar2.octorokHitType == SG_OCTO_HIT_TYPE_BLUE) {
                 gSaveContext.unk_3E18[1] -= 250;
                 D_809C94A8 = (D_809C94A8 + 25) % 50;
             }
-            this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
+            this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
         }
 
         if (this->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING) {

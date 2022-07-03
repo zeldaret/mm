@@ -29,10 +29,10 @@ typedef enum {
 } ShootingGalleryOctorokState;
 
 typedef enum {
-    SG_OCTO_HIT_STATE_NONE,
-    SG_OCTO_HIT_STATE_RED,
-    SG_OCTO_HIT_STATE_BLUE,
-} ShootingGalleryOctorokHitState;
+    SG_OCTO_HIT_TYPE_NONE,
+    SG_OCTO_HIT_TYPE_RED,
+    SG_OCTO_HIT_TYPE_BLUE,
+} ShootingGalleryoctorokHitType;
 
 typedef struct EnSyatekiMan {
     /* 0x0000 */ Actor actor;
@@ -55,7 +55,7 @@ typedef struct EnSyatekiMan {
                 } perGameVar1;
     /* 0x026E */ union {
                     s16 bonusDekuScrubHitCounter;
-                    s16 octorokHitState;
+                    s16 octorokHitType;
                 } perGameVar2;
     /* 0x0270 */ s16 talkWaitTimer; // after beating the Swamp game, waits this long before he talks to you
     /* 0x0272 */ s16 dekuScrubFlags; // turn this on to spawn them, turns off when they die

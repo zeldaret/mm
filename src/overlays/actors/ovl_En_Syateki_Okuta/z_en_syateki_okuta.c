@@ -372,10 +372,10 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.unk_25C++;
             syatekiMan->score++;
-            syatekiMan->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_RED;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_BLUE;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_BLUE;
         }
 
         func_80A3657C(this);
