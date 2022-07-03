@@ -22,16 +22,16 @@ typedef enum {
 } ShootingGalleryGameState;
 
 typedef enum {
-    SG_OCTO_STATE_SPAWNING,
-    SG_OCTO_STATE_SPAWNED,
-    SG_OCTO_STATE_INITIAL = 70,
-    SG_OCTO_STATE_HIDING = 80,
+    /*  0 */ SG_OCTO_STATE_SPAWNING,
+    /*  1 */ SG_OCTO_STATE_SPAWNED,
+    /* 70 */ SG_OCTO_STATE_INITIAL = 70,
+    /* 80 */ SG_OCTO_STATE_HIDING = 80,
 } ShootingGalleryOctorokState;
 
 typedef enum {
-    SG_OCTO_HIT_TYPE_NONE,
-    SG_OCTO_HIT_TYPE_RED,
-    SG_OCTO_HIT_TYPE_BLUE,
+    /* 0 */ SG_OCTO_HIT_TYPE_NONE,
+    /* 1 */ SG_OCTO_HIT_TYPE_RED,
+    /* 2 */ SG_OCTO_HIT_TYPE_BLUE,
 } ShootingGalleryoctorokHitType;
 
 typedef struct EnSyatekiMan {
