@@ -777,7 +777,6 @@ void func_8014AAD0(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014ADBC.s")
 
-void func_80178E3C(u8*, u32, UNK_PTR, u32); /* extern */
 extern s16 D_801CFF70[];
 extern s16 D_801CFF7C[];
 extern s16 D_801CFF88[];
@@ -1301,6 +1300,29 @@ void func_80152464(GlobalContext* globalCtx, u16 arg1) {
     func_80151DA4(globalCtx, arg1);
 }
 
+typedef enum{ 
+    /*  0 */ TEXT_STATE_NONE,
+    /*  1 */ TEXT_STATE_1,
+    /*  2 */ TEXT_STATE_2,
+    /*  3 */ TEXT_STATE_3,
+    /*  4 */ TEXT_STATE_4,
+    /*  5 */ TEXT_STATE_5,
+    /*  6 */ TEXT_STATE_6,
+    /*  7 */ TEXT_STATE_7,
+    /*  8 */ TEXT_STATE_8,
+    /*  9 */ TEXT_STATE_9,
+    /* 10 */ TEXT_STATE_10,
+    /* 11 */ TEXT_STATE_11,
+    /* 12 */ TEXT_STATE_12,
+    /* 13 */ TEXT_STATE_13,
+    /* 14 */ TEXT_STATE_14,
+    /* 15 */ TEXT_STATE_15,
+    /* 16 */ TEXT_STATE_16,
+    /* 17 */ TEXT_STATE_17,
+    /* 18 */ TEXT_STATE_18,
+} TextState;
+
+
 u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->unk11F10 == 0) {
         return 0;
@@ -1356,24 +1378,21 @@ u8 Message_GetState(MessageContext* msgCtx) {
 }
 
 
-#ifdef NON_MATCHING
 extern u64 D_020029A0[];
 
 void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Gfx* gfx= *gfxp;
-    
+    Gfx* gfx = *gfxp;
+
     gDPPipeSync(gfx++);
-    if ((msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 9) || (msgCtx->unk11F0A == 0xA)) {
+    if (((u32)msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 9) || (msgCtx->unk11F0A == 0xA)) {
         gDPSetRenderMode(gfx++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
     } else if (msgCtx->unk11F0A == 3) {
         gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     }
-
     gDPSetPrimColor(gfx++, 0, 0, msgCtx->unk12034, msgCtx->unk12036, msgCtx->unk12038, msgCtx->unk1203C);
-    if(globalCtx){}
-    if ((msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 6) || (msgCtx->unk11F0A == 8) ||
+    if (((u32)msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 6) || (msgCtx->unk11F0A == 8) ||
         (msgCtx->unk11F0A == 9) || (msgCtx->unk11F0A == 0xA)) {
         gDPLoadTextureBlock_4b(gfx++, msgCtx->unk11EF8, G_IM_FMT_I, 128, 64, 0, G_TX_MIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, 7, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1381,7 +1400,7 @@ void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
         gDPPipeSync(gfx++);
         if (msgCtx->unk11F0A == 3) {
             gDPSetEnvColor(gfx++, 0x00, 0x00, 0x00, 0xFF);
-        } else if ((u32)msgCtx->unk11F0A == 0xD) {
+        } else if (msgCtx->unk11F0A == 0xD) {
             gDPSetEnvColor(gfx++, 0x14, 0x00, 0x0A, 0xFF);
         } else {
             gDPSetEnvColor(gfx++, 0x32, 0x14, 0x00, 0xFF);
@@ -1399,8 +1418,6 @@ void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
                             ((msgCtx->unk12068 + D_801CFD94) << 2), ((msgCtx->unk1206A + D_801CFD98) << 2),
                             G_TX_RENDERTILE, 0, 0, D_801CFD9C, D_801CFDA0);
     }
-    if(1){}
-
     if (msgCtx->unk11F0A == 3) {
         gDPPipeSync(gfx++);
         gDPSetCombineLERP(gfx++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE,
@@ -1413,9 +1430,6 @@ void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
     
     *gfxp = gfx++;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
-#endif
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
