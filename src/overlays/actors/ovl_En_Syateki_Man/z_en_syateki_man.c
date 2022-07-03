@@ -1262,28 +1262,34 @@ static const s32 D_809C94D0[] = {
 };
 
 void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
-    static s32 D_809C94A8 = 0;
+    static s32 sModFromLosingTime = 0;
     Player* player = GET_PLAYER(play);
-    s32 sp30 = (((void)0, gSaveContext.unk_3DE0[1]) * 0.1f) + 1.0f;
+    s32 timer = (((void)0, gSaveContext.unk_3DE0[1]) * 0.1f) + 1.0f; // unit is tenths of a second
 
-    if (sp30 < 0x2EF) {
-        s32 temp;
+    if (timer < 751) {
+        s32 waveTimer; // unit is hundredths of a second
 
-        if (D_809C94A8 == 0) {
-            temp = ((void)0, gSaveContext.unk_3DE0[1]) % 500;
+        // If you hit a Blue Octorok, you lose 2.5 seconds. If we pretend that the code below was not present,
+        // then waveTimer would drop by 250, dramatically reducing how much time you have before the Octoroks
+        // begin hiding. This code will ultimately correct waveTimer such that its value is not affected by
+        // hitting Blue Octoroks.
+        if (sModFromLosingTime == 0) {
+            waveTimer = ((void)0, gSaveContext.unk_3DE0[1]) % 500;
         } else {
-            temp = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 500;
+            waveTimer = (((void)0, gSaveContext.unk_3DE0[1]) + 250) % 500;
         }
 
-        if (temp < 100) {
+        // Octoroks begin hiding four seconds after a wave begins.
+        if (waveTimer < 100) {
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
         }
 
         if (this->perGameVar2.octorokHitType != SG_OCTO_HIT_TYPE_NONE) {
             if (this->perGameVar2.octorokHitType == SG_OCTO_HIT_TYPE_BLUE) {
                 gSaveContext.unk_3E18[1] -= 250;
-                D_809C94A8 = (D_809C94A8 + 25) % 50;
+                sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
+
             this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
         }
 
@@ -1291,7 +1297,10 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->perGameVar1.octorokState++;
         }
 
-        if ((D_809C94A8 == (sp30 % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
+        // A new wave of Octoroks should appear every five seconds. However, we need to take into account
+        // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
+        // what was done with waveTimer above.
+        if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->spawnPatternIndex < 15) {
                 this->octorokFlags = D_809C94D0[this->spawnPatternIndex++];
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
@@ -1305,7 +1314,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
             player->stateFlags1 |= 0x20;
-            D_809C94A8 = 0;
+            sModFromLosingTime = 0;
             this->actor.draw = EnSyatekiMan_Draw;
             func_801A2C20();
             this->actionFunc = EnSyatekiMan_Town_EndGame;
