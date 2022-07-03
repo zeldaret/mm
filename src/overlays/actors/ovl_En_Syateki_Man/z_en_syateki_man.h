@@ -52,11 +52,11 @@ typedef struct EnSyatekiMan {
     /* 0x026C */ union {
                     s16 guaySpawnTimer; // Guays spawn when this reaches 140 OR when you kill all scrubs
                     s16 octorokState;
-                };
+                } perGameVar1;
     /* 0x026E */ union {
                     s16 bonusDekuScrubHitCounter;
                     s16 octorokHitState;
-                };
+                } perGameVar2;
     /* 0x0270 */ s16 talkWaitTimer; // after beating the Swamp game, waits this long before he talks to you
     /* 0x0272 */ s16 dekuScrubFlags; // turn this on to spawn them, turns off when they die
     /* 0x0274 */ s16 guayFlags; // turn this on to spawn them, turns off when they die

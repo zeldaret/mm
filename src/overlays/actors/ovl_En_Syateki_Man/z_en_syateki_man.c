@@ -178,7 +178,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->spawnPatternIndex = 0;
-    this->octorokHitState = SG_OCTO_HIT_STATE_NONE;
+    this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -980,11 +980,11 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
-        this->guaySpawnTimer = 0;
+        this->perGameVar1.guaySpawnTimer = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
         this->currentWave = 0;
-        this->bonusDekuScrubHitCounter = 0;
+        this->perGameVar2.bonusDekuScrubHitCounter = 0;
         func_8010E9F0(1, 100);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_RunGame;
@@ -995,9 +995,10 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s16 D_809C949C = 0;
     Player* player = GET_PLAYER(play);
 
-    if (((this->dekuScrubFlags == 0) || (this->guaySpawnTimer > 140)) && (D_809C949C == 0) && (this->currentWave < 4)) {
+    if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && (D_809C949C == 0) &&
+        (this->currentWave < 4)) {
         D_809C949C = 1;
-        this->guaySpawnTimer = 0;
+        this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = D_809C91C8[this->spawnPatternIndex];
         if (this->spawnPatternIndex == 3) {
@@ -1009,7 +1010,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         if (this->guayHitCounter < 3) {
             this->guayHitCounter = 0;
         }
-        this->guaySpawnTimer = 0;
+        this->perGameVar1.guaySpawnTimer = 0;
         D_809C949C = 0;
         this->currentWave++;
         if (this->currentWave < 4) {
@@ -1027,7 +1028,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->wolfosFlags |= 2;
     }
 
-    this->guaySpawnTimer++;
+    this->perGameVar1.guaySpawnTimer++;
     if (gSaveContext.unk_3DE0[1] == 0) {
         gSaveContext.unk_3DE0[1] = 0;
         gSaveContext.unk_3DD0[1] = 5;
@@ -1038,7 +1039,8 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         D_809C949C = 0;
         func_801A2C20();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) && (this->bonusDekuScrubHitCounter == 2)) {
+    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
+               (this->perGameVar2.bonusDekuScrubHitCounter == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->spawnPatternIndex = 0;
         this->currentWave = 0;
@@ -1177,8 +1179,8 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->stateFlags1 &= ~0x20;
         this->score = 0;
         this->spawnPatternIndex = 0;
-        this->octorokState = SG_OCTO_STATE_INITIAL;
-        this->octorokHitState = SG_OCTO_HIT_STATE_NONE;
+        this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
+        this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
         D_809C94A4 = 30;
         func_8010E9F0(1, 75);
         this->actor.draw = NULL;
@@ -1260,32 +1262,32 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         }
 
         if (temp < 100) {
-            this->octorokState = SG_OCTO_STATE_HIDING;
+            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->octorokHitState != SG_OCTO_HIT_STATE_NONE) {
-            if (this->octorokHitState == SG_OCTO_HIT_STATE_BLUE) {
+        if (this->perGameVar2.octorokHitState != SG_OCTO_HIT_STATE_NONE) {
+            if (this->perGameVar2.octorokHitState == SG_OCTO_HIT_STATE_BLUE) {
                 gSaveContext.unk_3E18[1] -= 250;
                 D_809C94A8 = (D_809C94A8 + 25) % 50;
             }
-            this->octorokHitState = SG_OCTO_HIT_STATE_NONE;
+            this->perGameVar2.octorokHitState = SG_OCTO_HIT_STATE_NONE;
         }
 
-        if (this->octorokState == SG_OCTO_STATE_SPAWNING) {
-            this->octorokState++;
+        if (this->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING) {
+            this->perGameVar1.octorokState++;
         }
 
-        if ((D_809C94A8 == (sp30 % 50)) && (this->octorokState >= SG_OCTO_STATE_INITIAL)) {
+        if ((D_809C94A8 == (sp30 % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->spawnPatternIndex < 15) {
                 this->octorokFlags = D_809C94D0[this->spawnPatternIndex++];
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
-                this->octorokState = SG_OCTO_STATE_SPAWNING;
+                this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
             }
         }
 
         if (gSaveContext.unk_3DE0[1] == 0) {
             this->spawnPatternIndex = 0;
-            this->octorokState = SG_OCTO_STATE_HIDING;
+            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
             player->stateFlags1 |= 0x20;
