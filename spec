@@ -4625,8 +4625,7 @@ beginseg
     name "ovl_Bg_Iknv_Doukutu"
     compress
     include "build/src/overlays/actors/ovl_Bg_Iknv_Doukutu/z_bg_iknv_doukutu.o"
-    include "build/data/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu.data.o"
-    include "build/data/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu_reloc.o"
 endseg
 
 beginseg
