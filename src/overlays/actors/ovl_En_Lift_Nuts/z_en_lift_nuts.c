@@ -63,16 +63,16 @@ const ActorInit En_Lift_Nuts_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_dnt_Anim_00B0B4, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_dnt_Anim_004AA0, 1.0f, 0.0f, 0.0f, 2, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &object_dnt_Anim_005CA8, 1.0f, 0.0f, 0.0f, 2, -1.0f }, { &object_dnt_Anim_0038CC, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_dnt_Anim_003CC0, 1.0f, 0.0f, 0.0f, 2, -1.0f }, { &object_dnt_Anim_0012F4, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &object_dnt_Anim_004700, 0.0f, 0.0f, 0.0f, 2, -4.0f }, { &object_dnt_Anim_001BC8, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_dnt_Anim_003438, 1.0f, 0.0f, 0.0f, 2, -2.0f }, { &object_dnt_Anim_001E2C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_dnt_Anim_000994, 1.0f, 0.0f, 0.0f, 2, -4.0f }, { &object_dnt_Anim_002268, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { &object_dnt_Anim_002F08, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_dnt_Anim_00577C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_dnt_Anim_004E38, 1.0f, 0.0f, 0.0f, 2, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 4.0f, 0.0f, 2, -4.0f },
-    { &object_dnt_Anim_0029E8, 1.0f, 8.0f, 0.0f, 2, 0.0f },
+    { &object_dnt_Anim_005488, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &object_dnt_Anim_00B0B4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_004AA0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_005CA8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &object_dnt_Anim_0038CC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_003CC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &object_dnt_Anim_0012F4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_004700, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_001BC8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_003438, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f }, { &object_dnt_Anim_001E2C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_000994, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_002268, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_dnt_Anim_002F08, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &object_dnt_Anim_00577C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_004E38, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_0029E8, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static Gfx* sDLists[] = {
@@ -105,45 +105,43 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 void func_80AE9A20(EnLiftNuts* this, PlayState* play) {
-    static UNK_PTR D_80AEBF60 = NULL;
-    static s32 D_80AEBF64 = 0;
+    static s16 D_80AEBF60 = 0;
+    static s32 D_80AEBF64 = false;
 
-    if (D_80AEBF64 == 0) {
+    if (!D_80AEBF64) {
         func_800B6584(play, ACTOR_EN_GAMELUPY, &D_80AEBF60, sizeof(s16));
-        D_80AEBF64 = 1;
+        D_80AEBF64 = true;
     }
-    this->ptr_1EC = (s16*)&D_80AEBF60;
+    this->ptr_1EC = &D_80AEBF60;
 }
 
 void func_80AE9A80(EnLiftNuts* this, PlayState* play) {
-    static s16 D_80AEBF68 = 0;
+    static s16 D_80AEBF68 = false;
 
-    if (D_80AEBF68 == 0) {
+    if (!D_80AEBF68) {
         func_800B6608(play, ACTOR_EN_GAMELUPY);
-        D_80AEBF68 = 1;
+        D_80AEBF68 = true;
     }
 }
 
 s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
     static s32 D_80AEBF6C = 0;
-    s32* temp = &D_80AEBF6C;
-    s32 temp2;
 
     switch (arg1) {
         case 0:
-            if (*temp == 0) {
+            if (D_80AEBF6C == 0) {
                 return 1;
             }
             break;
         case 1:
-            if (*temp == 0) {
+            if (D_80AEBF6C == 0) {
                 this->unk_34E = 1;
                 D_80AEBF6C = 1;
                 return 1;
             }
             break;
         case 2:
-            if (*temp == (temp2 = 1)) {
+            if (D_80AEBF6C == 1) {
                 this->unk_34E = 0;
                 D_80AEBF6C = 0;
                 return 1;
@@ -159,7 +157,7 @@ s32 func_80AE9B4C(s32 arg0, s32 arg1) {
     static s32 D_80AEBF70 = 0;
 
     if (arg0 == 0) {
-        if (D_80AEBF70 == (arg1 ^ 0)) {
+        if (D_80AEBF70 == arg1) {
             return 1;
         }
     } else if (arg0 == 1) {
@@ -193,7 +191,7 @@ void func_80AE9BCC(EnLiftNuts* this, PlayState* play) {
         (this->actionFunc != func_80AEACF8) && (this->actionFunc != func_80AEAC64) &&
         (this->actionFunc != func_80AEA044) && (this->actionFunc != func_80AEB598) &&
         (this->actionFunc != func_80AEB698) && (func_80AE9B4C(0, 3) == 0) && (func_80AE9B8C() == 3) &&
-        (gSaveContext.save.playerForm == 3) && (this->actor.xzDistToPlayer < 150.0f)) {
+        (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (this->actor.xzDistToPlayer < 150.0f)) {
         func_80AEB828(this);
     }
 }
@@ -206,7 +204,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_0029E8, this->jointTable,
-                       this->morphTable, ARRAY_COUNT(this->jointTable));
+                       this->morphTable, OBJECT_DNT_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -321,10 +319,10 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
             if (func_80AE9B4C(0, 0)) {
                 switch (CURRENT_DAY) {
                     case 1:
-                        if (gSaveContext.save.time >= 0xFAAB || gSaveContext.save.time <= 0x4000) {
+                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
-                        } else if (gSaveContext.save.weekEventReg[0xE] & 0x10) {
+                        } else if (gSaveContext.save.weekEventReg[14] & 0x10) {
                             Message_StartTextbox(play, 0x27D9, &this->actor);
                             this->textId = 0x27D9;
                         } else {
@@ -333,17 +331,17 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         }
                         break;
                     case 2:
-                        if (gSaveContext.save.time >= 0xFAAB || gSaveContext.save.time <= 0x4000) {
-                            Message_StartTextbox(play, 0x27F7U, &this->actor);
+                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
+                            Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else {
-                            if (gSaveContext.save.weekEventReg[0xE] & 0x20) {
+                            if (gSaveContext.save.weekEventReg[14] & 0x20) {
                                 Message_StartTextbox(play, 0x27DB, &this->actor);
                                 this->textId = 0x27DB;
                                 break;
                             }
 
-                            if (gSaveContext.save.weekEventReg[0xE] & 0x10) {
+                            if (gSaveContext.save.weekEventReg[14] & 0x10) {
                                 Message_StartTextbox(play, 0x27DC, &this->actor);
                                 this->textId = 0x27DC;
                             } else {
@@ -353,10 +351,10 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         }
                         break;
                     case 3:
-                        if (gSaveContext.save.time >= 0xFAAB || gSaveContext.save.time <= 0x4000) {
+                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
-                        } else if (gSaveContext.save.weekEventReg[0xE] & 0x40) {
+                        } else if (gSaveContext.save.weekEventReg[14] & 0x40) {
                             Message_StartTextbox(play, 0x27DE, &this->actor);
                             this->textId = 0x27DE;
                         } else if (func_80AE9B8C() == 2) {
@@ -376,7 +374,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                 if (Flags_GetSwitch(play, 0x40)) {
                     Flags_UnsetSwitch(play, 0x40);
                     Inventory_SaveDekuPlaygroundHighScore(4);
-                    if ((gSaveContext.save.weekEventReg[0xE] & 0x10) && (gSaveContext.save.weekEventReg[0xE] & 0x20) &&
+                    if ((gSaveContext.save.weekEventReg[14] & 0x10) && (gSaveContext.save.weekEventReg[14] & 0x20) &&
                         CURRENT_DAY == 3) {
                         this->unk_354 = 0;
                         Message_StartTextbox(play, 0x27F4, &this->actor);
@@ -743,7 +741,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     OSTime time;
 
-    if ((player->actor.bgCheckFlags & 1 && player->actor.floorBgId == BG_ACTOR_MAX &&
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
         gSaveContext.unk_3DE0[4] >= 0x2EE0) {
         player->stateFlags1 |= 0x20;
@@ -811,10 +809,10 @@ void func_80AEB598(EnLiftNuts* this, PlayState* play) {
         func_80AEB684(this);
         return;
     }
-    if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[0xE] & 0x80)) {
-        Actor_PickUp(&this->actor, play, 0xC, 500.0f, 100.0f);
+    if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
+        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, 5, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
 }
 
@@ -824,9 +822,9 @@ void func_80AEB684(EnLiftNuts* this) {
 
 void func_80AEB698(EnLiftNuts* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((gSaveContext.save.weekEventReg[0xE] & 0x10) && (gSaveContext.save.weekEventReg[0xE] & 0x20) &&
+        if ((gSaveContext.save.weekEventReg[14] & 0x10) && (gSaveContext.save.weekEventReg[14] & 0x20) &&
             CURRENT_DAY == 3) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0xD);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 13);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
         } else if (func_80AE9B8C() > 0) {
@@ -837,17 +835,17 @@ void func_80AEB698(EnLiftNuts* this, PlayState* play) {
             Message_StartTextbox(play, 0x27F1, &this->actor);
             this->textId = 0x27F1;
         }
-        this->actor.flags &= 0xFFFEFFFF;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80AEABF0(this);
-        switch (gSaveContext.save.day % 5) {
+        switch (CURRENT_DAY) {
             case 1:
-                gSaveContext.save.weekEventReg[0xE] |= 0x10;
+                gSaveContext.save.weekEventReg[14] |= 0x10;
                 break;
             case 2:
-                gSaveContext.save.weekEventReg[0xE] |= 0x20;
+                gSaveContext.save.weekEventReg[14] |= 0x20;
                 break;
             case 3:
-                gSaveContext.save.weekEventReg[0xE] |= 0x40;
+                gSaveContext.save.weekEventReg[14] |= 0x40;
                 break;
             default:
                 break;
@@ -863,7 +861,7 @@ void func_80AEB828(EnLiftNuts* this) {
         this->unk_356 = 1;
     }
     if (this->actionFunc == func_80AE9F70) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0xF);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 15);
     }
     this->unk_354 = 0;
     this->actionFunc = func_80AEB8A4;
@@ -955,7 +953,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     func_80AE9BCC(this, play);
 
     if (func_80AE9B4C(0, 2)) {
-        thisx->flags &= -2;
+        thisx->flags &= ~ACTOR_FLAG_1;
     }
 }
 
@@ -970,7 +968,7 @@ s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == 26) {
         *dList = sDLists[this->unk_1E4];
     }
-    return 0;
+    return false;
 }
 
 void EnLiftNuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
