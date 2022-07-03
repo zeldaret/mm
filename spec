@@ -5052,7 +5052,6 @@ beginseg
     name "ovl_Demo_Moonend"
     compress
     include "build/src/overlays/actors/ovl_Demo_Moonend/z_demo_moonend.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.data.o"
     include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.reloc.o"
 endseg
 
