@@ -1,8 +1,8 @@
 #include "global.h"
 
-s16 sPlayerInitialPosX = 0;
-s16 sPlayerInitialPosZ = 0;
-s16 sPlayerInitialDirection = 0;
+s16 sMinimapInitPosX = 0;
+s16 sMinimapInitPosZ = 0;
+s16 sMinimapInitDir = 0;
 
 s32 sDungeonAndBossScenes[] = {
     SCENE_MITURIN,    SCENE_HAKUGIN,    SCENE_SEA,    SCENE_INISIE_N,  SCENE_INISIE_R,
@@ -135,30 +135,32 @@ s32 func_8010A2AC(PlayState* play) {
     return true;
 }
 
-void Map_SavePlayerInitialInfo(PlayState* play) {
+/**
+ * When a room is loaded, this function is used to save the player's position and rotation
+ * so that the red arrow on the minimap can be drawn correctly.
+ */
+void Map_SavePlayerRoomInitInfo(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    sPlayerInitialPosX = player->actor.world.pos.x;
-    sPlayerInitialPosZ = player->actor.world.pos.z;
-    sPlayerInitialDirection = (0x7FFF - player->actor.shape.rot.y) / 0x400;
+    sMinimapInitPosX = player->actor.world.pos.x;
+    sMinimapInitPosZ = player->actor.world.pos.z;
+    sMinimapInitDir = (0x7FFF - player->actor.shape.rot.y) / 0x400;
 }
 
 void Map_InitRoomData(PlayState* play, s16 room) {
-    s32 mapIndex;
-    InterfaceContext* interfaceCtx;
+    s32 mapIndex = gSaveContext.mapIndex;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    mapIndex = gSaveContext.mapIndex;
     func_80105C40(room);
+
     if (room >= 0) {
         if (Map_IsInDungeonOrBossArea(play)) {
-            interfaceCtx = &play->interfaceCtx;
-            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_18 |=
-                gBitFlags[room];
+            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].rooms |= gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->unk_27A = mapIndex;
         }
     } else {
-        play->interfaceCtx.mapRoomNum = 0;
+        interfaceCtx->mapRoomNum = 0;
     }
 
     if (gSaveContext.sunsSongState != SUNSSONG_SPEED_TIME) {
@@ -210,17 +212,19 @@ void Map_Init(PlayState* play) {
 }
 
 void Minimap_Draw(PlayState* play) {
-    func_80106644(play, sPlayerInitialPosX, sPlayerInitialPosZ, sPlayerInitialDirection);
+    func_80106644(play, sMinimapInitPosX, sMinimapInitPosZ, sMinimapInitDir);
 }
 
 s16 sLastRoomNum = 99;
+
+#define FLOOR_INDEX_MAX 4
 
 void Map_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Player* player = GET_PLAYER(play);
     Input* controller = CONTROLLER1(&play->state);
     s32 pad1;
-    s16 temp_v0_2;
+    s16 floor;
     s32 pad2;
 
     if ((play->pauseCtx.state < 4) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) && (!Play_InCsMode(play)) &&
@@ -238,18 +242,18 @@ void Map_Update(PlayState* play) {
 
     if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0)) {
         if (Map_IsInDungeonArea(play)) {
-            temp_v0_2 = func_80109124(player->actor.world.pos.y);
-            if (temp_v0_2 != -1) {
+            floor = func_80109124(player->actor.world.pos.y);
+            if (floor != -1) {
                 gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
-                    gBitFlags[4 - temp_v0_2];
-                XREG(94) = 4 - temp_v0_2;
+                    gBitFlags[FLOOR_INDEX_MAX - floor];
+                XREG(94) = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
                     sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }
         } else if (Map_IsInBossArea(play)) {
             func_80105294();
-            XREG(94) = 4 - func_80105318();
+            XREG(94) = FLOOR_INDEX_MAX - func_80105318();
         }
     }
 }

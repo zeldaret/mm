@@ -2003,7 +2003,7 @@
     0x8010A208:("Map_IsInBossArea",),
     0x8010A238:("func_8010A238",),
     0x8010A2AC:("func_8010A2AC",),
-    0x8010A2DC:("Map_SavePlayerInitialInfo",),
+    0x8010A2DC:("Map_SavePlayerRoomInitInfo",),
     0x8010A33C:("Map_InitRoomData",),
     0x8010A410:("Map_Destroy",),
     0x8010A430:("Map_Init",),

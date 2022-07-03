@@ -145,7 +145,7 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     Actor_SpawnTransitionActors(play, &play->actorCtx);
     if (-1 < roomCtx->currRoom.num) {
         Map_InitRoomData(play, roomCtx->currRoom.num);
-        Map_SavePlayerInitialInfo(play);
+        Map_SavePlayerRoomInitInfo(play);
     }
     func_801A3CD8(play->roomCtx.currRoom.echo);
 }

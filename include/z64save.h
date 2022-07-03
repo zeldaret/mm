@@ -79,7 +79,7 @@ typedef struct PermanentSceneFlags {
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
     /* 0x14 */ u32 unk_14;
-    /* 0x18 */ u32 unk_18;
+    /* 0x18 */ u32 rooms;
 } PermanentSceneFlags; // size = 0x1C
 
 typedef struct CycleSceneFlags {

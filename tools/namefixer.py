@@ -552,7 +552,7 @@ wordReplace = {
     "func_8010A164": "Map_IsInDungeonArea",
     "func_8010A194": "Map_GetBossAreaIndex",
     "func_8010A208": "Map_IsInBossArea",
-    "func_8010A2DC": "Map_SavePlayerInitialInfo",
+    "func_8010A2DC": "Map_SavePlayerRoomInitInfo",
     "func_8010A33C": "Map_InitRoomData",
     "func_8010A410": "Map_Destroy",
     "func_8010A430": "Map_Init",
