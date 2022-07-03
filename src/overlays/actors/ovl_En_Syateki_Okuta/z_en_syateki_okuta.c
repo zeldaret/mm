@@ -342,7 +342,8 @@ void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
     s16 temp_v1_2;
 
     if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
-        (syatekiMan->shootingGameState == 1) && (syatekiMan->octorokState == SG_OCTO_STATE_SPAWNING)) {
+        (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
+        (syatekiMan->octorokState == SG_OCTO_STATE_SPAWNING)) {
         temp_v1_2 = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);

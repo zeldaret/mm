@@ -11,6 +11,17 @@ typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 #define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef enum {
+    /* 0 */ SG_GAME_STATE_NONE,             // None of the states below apply.
+    /* 1 */ SG_GAME_STATE_RUNNING,          // The shooting game is in-progress.
+    /* 2 */ SG_GAME_STATE_EXPLAINING_RULES, // For the Town Shooting Gallery, this state is also used for explaining the current high score.
+    /* 3 */ SG_GAME_STATE_NOT_PLAYING,      // Either the player said "No" to playing, or they said "Yes" but don't have enough rupees.
+    /* 4 */ SG_GAME_STATE_ONE_MORE_GAME,    // The player failed to get a new high score (Town) and/or perfect score (Swamp and Town).
+    /* 5 */ SG_GAME_STATE_GIVING_BONUS,     // The player gets bonus points at the end of the Swamp game if they get a perfect score.
+    /* 6 */ SG_GAME_STATE_ENDED,            // The player got a new high score and/or perfect score (Town), or the game is over (Swamp).
+    /* 7 */ SG_GAME_STATE_MOVING_PLAYER,    // The player is automatically moving towards the spot to play the game.
+} ShootingGalleryGameState;
+
+typedef enum {
     SG_OCTO_STATE_SPAWNING,
     SG_OCTO_STATE_SPAWNED,
     SG_OCTO_STATE_INITIAL = 70,

@@ -136,10 +136,10 @@ void func_809CA5D4(EnSyatekiCrow* this) {
 void func_809CA67C(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if ((syatekiMan->shootingGameState == 1) && (this->unk_1C2 == 1) &&
+    if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_1C2 == 1) &&
         (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)))) {
         func_809CA71C(this);
-    } else if (syatekiMan->shootingGameState != 1) {
+    } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->unk_1C2 = 1;
     }
 
@@ -185,7 +185,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
     f32 sp30;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->shootingGameState != 1) {
+    if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         func_809CA5D4(this);
         return;
     }
@@ -213,7 +213,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
-    if ((syatekiMan->unk_26C % 90) == 0) {
+    if ((syatekiMan->guaySpawnTimer % 90) == 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
