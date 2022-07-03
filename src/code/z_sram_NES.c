@@ -259,7 +259,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.cycleSceneFlags[i].collectible =
             ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
-        gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
+        gSaveContext.save.permanentSceneFlags[i].floors = 0;
         gSaveContext.save.permanentSceneFlags[i].rooms = 0;
     }
 

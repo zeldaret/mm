@@ -139,7 +139,7 @@ s32 func_8010A2AC(PlayState* play) {
  * When a room is loaded, this function is used to save the player's position and rotation
  * so that the red arrow on the minimap can be drawn correctly.
  */
-void Map_SavePlayerRoomInitInfo(PlayState* play) {
+void Minimap_SavePlayerRoomInitInfo(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     sMinimapInitPosX = player->actor.world.pos.x;
@@ -157,7 +157,7 @@ void Map_InitRoomData(PlayState* play, s16 room) {
         if (Map_IsInDungeonOrBossArea(play)) {
             gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].rooms |= gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
-            interfaceCtx->unk_27A = mapIndex;
+            interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
         }
     } else {
         interfaceCtx->mapRoomNum = 0;
@@ -178,7 +178,7 @@ void Map_Init(PlayState* play) {
 
     func_80105C40(play->roomCtx.currRoom.num);
     interfaceCtx->unk_278 = -1;
-    interfaceCtx->unk_27A = -1;
+    interfaceCtx->dungeonOrBossAreaMapIndex = -1;
     interfaceCtx->mapSegment = THA_AllocEndAlign16(&play->state.heap, 0x1000);
     if (func_8010A2AC(play)) {
         gSaveContext.mapIndex = func_8010A238(play);
@@ -217,8 +217,6 @@ void Minimap_Draw(PlayState* play) {
 
 s16 sLastRoomNum = 99;
 
-#define FLOOR_INDEX_MAX 4
-
 void Map_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Player* player = GET_PLAYER(play);
@@ -244,7 +242,7 @@ void Map_Update(PlayState* play) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
-                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
+                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].floors |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
                 XREG(94) = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {

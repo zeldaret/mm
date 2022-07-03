@@ -1777,7 +1777,7 @@ s32 func_8010A0A4(PlayState* play);
 // void Map_IsInBossArea(PlayState* play);
 // void func_8010A238(PlayState* play);
 // void func_8010A2AC(PlayState* play);
-void Map_SavePlayerRoomInitInfo(PlayState* play);
+void Minimap_SavePlayerRoomInitInfo(PlayState* play);
 void Map_InitRoomData(PlayState* play, s16 room);
 // void Map_Destroy(void);
 // void Map_Init(PlayState* play);
