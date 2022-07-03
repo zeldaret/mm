@@ -80,7 +80,7 @@ static AnimationInfo sAnimations[] = {
     { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
-static s16 D_809C91C8[] = {
+static s16 sGuayFlagsPerWave[] = {
     (1 << 7) | (1 << 6) | (1 << 0),
     (1 << 9) | (1 << 8) | (1 << 1),
     (1 << 4) | (1 << 3) | (1 << 0),
@@ -177,7 +177,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnSyatekiMan_SetupIdle;
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
-    this->spawnPatternIndex = 0;
+    this->flagsIndex = 0;
     this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
@@ -731,7 +731,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
-                this->spawnPatternIndex = 0;
+                this->flagsIndex = 0;
                 func_80112AFC(play);
                 func_80123F2C(play, 0x63);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
@@ -971,18 +971,18 @@ void EnSyatekiMan_Swamp_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState*
 }
 
 void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
-    static s16 D_809C9498 = 30;
+    static s16 sGameStartTimer = 30;
     Player* player = GET_PLAYER(play);
 
-    if (D_809C9498 > 0) {
+    if (sGameStartTimer > 0) {
         player->actor.world.pos = sSwampPlayerPos;
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
         play->unk_18790(play, -0x8000, &this->actor);
-        D_809C9498--;
+        sGameStartTimer--;
     } else {
-        D_809C9498 = 30;
-        this->spawnPatternIndex = 0;
+        sGameStartTimer = 30;
+        this->flagsIndex = 0;
         this->score = 0;
         player->stateFlags1 &= ~0x20;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
@@ -1009,11 +1009,11 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         D_809C949C = 1;
         this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
-        this->guayFlags = D_809C91C8[this->spawnPatternIndex];
-        if (this->spawnPatternIndex == 3) {
-            this->spawnPatternIndex = 0;
+        this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
+        if (this->flagsIndex == 3) {
+            this->flagsIndex = 0;
         } else {
-            this->spawnPatternIndex++;
+            this->flagsIndex++;
         }
     } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (D_809C949C == 1) && (this->currentWave < 4)) {
         if (this->guayHitCounter < 3) {
@@ -1044,7 +1044,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         gSaveContext.unk_3DE0[1] = 0;
         gSaveContext.unk_3DD0[1] = 5;
         this->actor.draw = EnSyatekiMan_Draw;
-        this->spawnPatternIndex = 0;
+        this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= 0x20;
         D_809C949C = 0;
@@ -1053,7 +1053,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
     } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
                (this->perGameVar2.bonusDekuScrubHitCounter == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
-        this->spawnPatternIndex = 0;
+        this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= 0x20;
         D_809C949C = 0;
@@ -1127,7 +1127,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
         if (gSaveContext.unk_3DE0[1] == 0) {
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
-            this->spawnPatternIndex = 0;
+            this->flagsIndex = 0;
             this->currentWave = 0;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
             D_809C94A0 = 0;
@@ -1192,7 +1192,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
     } else if (sGameStartTimer == 0) {
         player->stateFlags1 &= ~0x20;
         this->score = 0;
-        this->spawnPatternIndex = 0;
+        this->flagsIndex = 0;
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
         this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
         sGameStartTimer = 30;
@@ -1202,7 +1202,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
     }
 }
 
-static const s32 D_809C94D0[] = {
+static const s32 sOctorokFlagsPerWave[] = {
     OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) |
         OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
 
@@ -1301,15 +1301,15 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
         // what was done with waveTimer above.
         if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
-            if (this->spawnPatternIndex < 15) {
-                this->octorokFlags = D_809C94D0[this->spawnPatternIndex++];
+            if (this->flagsIndex < 15) {
+                this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
                 this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
             }
         }
 
         if (gSaveContext.unk_3DE0[1] == 0) {
-            this->spawnPatternIndex = 0;
+            this->flagsIndex = 0;
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
