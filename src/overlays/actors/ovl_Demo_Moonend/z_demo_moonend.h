@@ -12,8 +12,8 @@ typedef struct DemoMoonend {
     /* 0x0144 */ SkeletonInfo skelInfo;
     /* 0x0174 */ Vec3s unk_174[30];
     /* 0x0228 */ Vec3s unk_228[30];
-    /* 0x02DC */ u16 unk_2DC;
-    /* 0x02DE */ u16 unk_2DE;
+    /* 0x02DC */ u16 actorActionCmd;
+    /* 0x02DE */ u16 actorAction;
     /* 0x02E0 */ DemoMoonendActionFunc actionFunc;
 } DemoMoonend; // size = 0x2E4
 

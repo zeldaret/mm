@@ -48,13 +48,13 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.05f);
         Actor_SetScale(&this->actor, 6.0f);
         this->actor.draw = NULL;
-        this->unk_2DC = 0x22E;
+        this->actorActionCmd = 0x22E;
         this->actionFunc = func_80C17B60;
     } else {
         Actor_SetScale(&this->actor, 0.095f);
         func_80183430(&this->skelInfo, &D_0600B5A0, &D_06001214, this->unk_174, &this->unk_228[0].x, NULL);
         func_801834A8(&this->skelInfo, &D_06001214);
-        this->unk_2DC = 0x230;
+        this->actorActionCmd = 0x230;
         this->actionFunc = func_80C17C48;
         this->actor.home.rot.z = 0;
         this->actor.draw = NULL;
@@ -75,7 +75,59 @@ void func_80C17B50(DemoMoonend* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17B60.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17C48.s")
+void func_80C17C48(DemoMoonend* this, PlayState* play) {
+    u16 action;
+
+    if (func_80183DE0(&this->skelInfo)) {
+        this->actor.home.rot.z = 0;
+    }
+    if (Cutscene_CheckActorAction(play, this->actorActionCmd)) {
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+
+        if (this->actorAction != action) {
+            this->actorAction = action;
+            switch (this->actorAction) {
+                case 1:
+                    this->actor.draw = DemoMoonend_Draw;
+                    func_801834A8(&this->skelInfo, &D_06001214);
+                    this->skelInfo.frameCtrl.unk_C = 0.0f;
+                    break;
+                case 2:
+                    this->actor.draw = DemoMoonend_Draw;
+                    func_801834A8(&this->skelInfo, &D_06001214);
+                    this->skelInfo.frameCtrl.unk_C = 0.6666667f;
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_EXPLOSION);
+                    this->actor.home.rot.z = 1;
+                    break;
+            }
+        }
+        if (this->actor.home.rot.z != 0) {
+            func_800B9010(&this->actor, 0x2159);
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+    if ((play->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 8) && (play->csCtx.currentCsIndex == 0)) {
+        switch (play->csCtx.frames) {
+            case 5:
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                return;
+            case 50:
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM2);
+                return;
+            case 100: /* switch 1 */
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM3);
+                return;
+            case 150: /* switch 1 */
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM2);
+                return;
+            case 200: /* switch 1 */
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM4);
+                break;
+        }
+    }
+}
 
 void DemoMoonend_Update(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
