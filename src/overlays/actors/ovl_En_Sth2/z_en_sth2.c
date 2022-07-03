@@ -114,7 +114,7 @@ Color_RGB8 D_80BFA01C[] = { { 189, 110, 0 },  { 0, 180, 110 },   { 0, 255, 80 },
                             { 255, 160, 60 }, { 189, 230, 250 }, { 240, 230, 120 } };
 #endif
 
-extern UNK_TYPE D_060031F8;
+extern FlexSkeletonHeader D_060031F8;
 extern AnimationHeader D_80BFA000;
 extern Gfx D_80BF9550;
 extern Gfx D_80BF9870;
