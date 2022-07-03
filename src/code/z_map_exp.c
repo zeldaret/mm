@@ -37,7 +37,7 @@ s32 Map_IsInDungeonOrBossArea(PlayState* play) {
 }
 
 s32 func_8010A0A4(PlayState* play) {
-    if ((Map_GetDungeonOrBossAreaIndex(play) == -1) || (func_80102EF0(play) == 0)) {
+    if ((Map_GetDungeonOrBossAreaIndex(play) == -1) || !func_80102EF0(play)) {
         return false;
     }
 

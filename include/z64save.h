@@ -257,7 +257,7 @@ typedef struct SaveContext {
     /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 dungeonIndex;                          // "scene_id_mix"
+    /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[27];                    // "mask_mask_bit", masks given away on the Moon
 } SaveContext; // size = 0x48C8
 
