@@ -81,7 +81,8 @@ const ActorInit Obj_Um_InitVars = {
 };
 
 static TexturePtr sEyeTextures[] = {
-    gUmEyeOpenTex, gUmEyeHalfTex, gUmEyeClosedTex, gUmEyePleasedTex, gUmEyeAngryTex, gUmEyeSadTex,
+    gUmCremiaEyeOpenTex,    gUmCremiaEyeHalfTex,  gUmCremiaEyeClosedTex,
+    gUmCremiaEyePleasedTex, gUmCremiaEyeAngryTex, gUmCremiaEyeSadTex,
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -1816,12 +1817,12 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
+    if (limbIndex == UM_LIMB_WAGON_RIGHT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = -this->wheelRot;
         }
         Matrix_MultVec3f(&sp5C, &this->unk_2C4);
-    } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
+    } else if (limbIndex == UM_LIMB_WAGON_LEFT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = this->wheelRot;
         }
@@ -1855,7 +1856,7 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
         }
-    } else if ((limbIndex == UM_LIMB_WAGGON_CART_COVER) && (this->flags & OBJ_UM_FLAG_PLAYING_MINIGAME)) {
+    } else if ((limbIndex == UM_LIMB_WAGON_CART_COVER) && (this->flags & OBJ_UM_FLAG_PLAYING_MINIGAME)) {
         *dList = NULL;
     }
 
@@ -1894,20 +1895,20 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
     spC0.y += 1700.0f;
 
-    if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
+    if (limbIndex == UM_LIMB_WAGON_CART_BED) {
         Vec3f spA4 = { 2000.0f, 1070.0f, 0.0f };
 
         Matrix_MultVec3f(&spA4, &this->unk_308);
         this->flags |= OBJ_UM_FLAG_DRAWN_FLOOR;
     }
 
-    if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
+    if (limbIndex == UM_LIMB_WAGON_CART_BED) {
         Vec3f sp98 = { 2500.0f, 200.0f, 0.0f };
 
         Matrix_MultVec3f(&sp98, &this->cartBedPos);
     }
 
-    if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
+    if (limbIndex == UM_LIMB_WAGON_CART_BED) {
         Vec3f* potPos;
         Vec3f sp88;
         Vec3s sp80;
