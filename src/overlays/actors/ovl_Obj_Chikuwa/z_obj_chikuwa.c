@@ -173,7 +173,7 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
             func_809B17D0(play, this, &temp->unk_00);
             temp_fs0 = Math3D_Vec3fDistSq(&temp->unk_00, &GET_PLAYER(play)->actor.world.pos);
             if (temp_fs0 < SQ(240.0f)) {
-                quake = Quake_Add(play->cameraPtrs[play->activeCamera], 3);
+                quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
                 if (temp_fs0 < SQ(120.0f)) {
                     var_s2 = 4;
                 } else {
