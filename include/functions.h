@@ -1390,7 +1390,7 @@ s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd);
 s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd);
 u8 Cutscene_IsPlaying(PlayState* play);
 
-void GetItem_Draw(PlayState* play, s16 index);
+void GetItem_Draw(PlayState* play, s16 drawId);
 
 void EffFootmark_Init(PlayState* play);
 void EffFootmark_Add(PlayState* play, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);

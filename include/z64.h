@@ -987,14 +987,7 @@ typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*drawFunc)(PlayState* play, s16 index);
-
 typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
-
-typedef struct {
-    /* 0x00 */ void (*drawFunc)(PlayState*, s16);
-    /* 0x04 */ Gfx* dlists[8];
-} DrawItemTableEntry; // size = 0x24
 
 typedef struct Camera {
     /* 0x000 */ char paramData[0x50];

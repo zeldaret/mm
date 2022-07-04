@@ -113,6 +113,11 @@ void GetItem_DrawSmallRupee(PlayState* play, s16 drawId);
 void GetItem_DrawWallet(PlayState* play, s16 drawId);
 void GetItem_DrawRemains(PlayState* play, s16 drawId);
 
+typedef struct {
+    /* 0x00 */ void (*drawFunc)(PlayState*, s16);
+    /* 0x04 */ Gfx* dlists[8];
+} DrawItemTableEntry; // size = 0x24
+
 static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOTTLE, OBJECT_GI_BOTTLE
     { func_800EF0F0, { gGiBottleStopperDL, gGiBottleDL } },
@@ -282,7 +287,8 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_4C
     { func_800EF0F0, { NULL } },
     // GID_POE, OBJECT_GI_GHOST
-    { GetItem_DrawPoes, { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
+    { GetItem_DrawPoes,
+      { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
     // GID_FAIRY_2, OBJECT_GI_SOUL
     { GetItem_DrawFairy2, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
     // GID_4F, OBJECT_GI_RUPY
