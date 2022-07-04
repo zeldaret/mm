@@ -8,6 +8,8 @@ struct DemoMoonend;
 
 typedef void (*DemoMoonendActionFunc)(struct DemoMoonend*, PlayState*);
 
+#define DEMOMOONEND_GET_PARAMS_F(thisx) (((thisx)->params) & 0xF)
+
 typedef struct DemoMoonend {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkeletonInfo skelInfo;
