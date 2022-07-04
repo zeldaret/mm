@@ -1424,11 +1424,11 @@ EnInvadepoh* func_80B458D8(void) {
 s8 func_80B45980(unkstructInvadepoh1* arg0, s32 arg1) {
     f32 rand = Rand_ZeroOne();
     s32 i;
+    unkstructInvadepoh1* ptr = arg0;
 
     arg1--;
-    for (i = 0; i < arg1; i++) {
-    dummy:;
-        if (arg0[i].unk04 >= rand) {
+    for (i = 0; i < arg1; i++, ptr++) {
+        if (ptr->unk04 >= rand) {
             break;
         }
     }
