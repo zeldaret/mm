@@ -6,9 +6,9 @@
 struct ObjJgameLight;
 
 #define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define OBJLUPYGAMELIFT_IGNITEFIRE (1 << 0)
-#define OBJLUPYGAMELIFT_DISPLAYCORRECT (1 << 1)
-#define OBJLUPYGAMELIFT_DISPLAYINCORRECT (1 << 2)
+#define OBJLUPYGAMELIFT_IGNITE_FIRE (1 << 0)
+#define OBJLUPYGAMELIFT_DISPLAY_CORRECT (1 << 1)
+#define OBJLUPYGAMELIFT_DISPLAY_INCORRECT (1 << 2)
 #define OBJLUPYGAMELIFT_SNUFF_FIRE (1 << 3)
 
 typedef struct ObjJgameLight {
@@ -24,7 +24,7 @@ typedef struct ObjJgameLight {
     /* 0x1B2 */ s16 alpha;
     /* 0x1B4 */ s16 signal;
     /* 0x1B6 */ s16 unk_1B6;
-    /* 0x1B8 */ u8 unk_1B8;
+    /* 0x1B8 */ u8 prevHealth;
 } ObjJgameLight; // size = 0x1BC
 
 extern const ActorInit Obj_Jgame_Light_InitVars;

@@ -75,7 +75,7 @@ void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Actor_SetFocus(&this->actor, 60.0f);
     this->actor.colChkInfo.health = 0;
-    this->unk_1B8 = 0;
+    this->prevHealth = 0;
     this->unk_1B6 = 0;
     this->lightRadius = 0;
     this->alpha = 0;
@@ -93,11 +93,11 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITEFIRE && (this->unk_1B6 == 0)) {
-        if (this->lightRadius < 0xA0) {
-            this->lightRadius += 0x28;
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && (this->unk_1B6 == 0)) {
+        if (this->lightRadius < 160) {
+            this->lightRadius += 40;
         } else {
-            this->lightRadius = 0xC8;
+            this->lightRadius = 200;
             this->unk_1B6 = 1;
         }
         if (this->unk_1A8 < 0.7f) {
@@ -106,13 +106,13 @@ void func_80C15474(ObjJgameLight* this, PlayState* play) {
             this->unk_1A8 = 1.0f;
         }
     } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_SNUFF_FIRE) {
-        if (this->lightRadius > 0x28) {
-            this->lightRadius -= 0x28;
+        if (this->lightRadius > 40) {
+            this->lightRadius -= 40;
         } else {
             this->lightRadius = -1;
             if (this->unk_1A8 == 0.0f) {
                 this->unk_1B6 = 0;
-                this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_IGNITEFIRE;
+                this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
                 this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_SNUFF_FIRE;
             }
         }
@@ -136,16 +136,17 @@ void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play) {
 }
 
 void func_80C15718(ObjJgameLight* this, PlayState* play) {
-    if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITEFIRE && !(this->unk_1B8 & 1)) {
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) &&
+        !(this->prevHealth & OBJLUPYGAMELIFT_IGNITE_FIRE)) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
-        this->unk_1B8 = this->actor.colChkInfo.health;
+        this->prevHealth = this->actor.colChkInfo.health;
     }
-    if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAYCORRECT) {
-        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAYCORRECT;
+    if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAY_CORRECT) {
+        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAY_CORRECT;
         this->alpha = 300;
         this->signal = OBJJGAMELIGHT_CORRECT;
-    } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAYINCORRECT) {
-        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAYINCORRECT;
+    } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAY_INCORRECT) {
+        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAY_INCORRECT;
         this->alpha = 300;
         this->signal = OBJJGAMELIGHT_INCORRECT;
     }
