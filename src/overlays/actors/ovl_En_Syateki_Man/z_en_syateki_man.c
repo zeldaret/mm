@@ -98,7 +98,7 @@ typedef struct {
     /* 0x00 */ s16 actorId;
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ s32 params;
-} SwampTargetActorEntry;
+} SwampTargetActorEntry; // size = 0x14
 
 static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
     { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 0) },
@@ -312,7 +312,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
-            if (!CUR_UPG_VALUE(UPG_QUIVER)) {
+            if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
                 play_sound(NA_SE_SY_ERROR);
 
                 // You don't have a bow!
@@ -607,7 +607,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
-            if (!CUR_UPG_VALUE(UPG_QUIVER)) {
+            if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
                     // You don't have a bow? Then you can't play.
