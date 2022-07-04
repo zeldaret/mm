@@ -85,10 +85,10 @@ void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
 s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_STH_LIMB_0F) {
         *dList = gEnSth2HeadDL;
     }
-    if ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13)) {
+    if ((limbIndex == OBJECT_STH_LIMB_08) || (limbIndex == OBJECT_STH_LIMB_0A) || (limbIndex == OBJECT_STH_LIMB_0D)) {
         rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 0x32) + 0x814))) * 200.0f);
         rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 0x32) + 0x940))) * 200.0f);
     }
