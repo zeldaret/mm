@@ -68,8 +68,8 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->actor);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, &this->jointTable,
-                           &this->morphTable, OBJECT_STH_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, this->jointTable,
+                           this->morphTable, OBJECT_STH_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gEnSth2WavingHandAnim);
         this->actor.update = EnSth2_UpdateActionFunc;
         this->actor.draw = EnSth2_Draw;
