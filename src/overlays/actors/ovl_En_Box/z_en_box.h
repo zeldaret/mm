@@ -62,7 +62,7 @@ typedef struct EnBox {
     /* 0x01F4 */ func_80867BDC_a0 unk_1F4;
     /* 0x0218 */ s16 cutsceneIdxA;
     /* 0x021A */ s16 cutsceneIdxB;
-    /* 0x021C */ s32 getItem;
+    /* 0x021C */ s32 getItemId;
     /* 0x0220 */ s32 collectableFlag;
 } EnBox; // size = 0x224
 

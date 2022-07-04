@@ -52,7 +52,7 @@ typedef struct EnOt {
     /* 0x0378 */ Vec3f unk_378;
     /* 0x0384 */ u8 unk_384;
     /* 0x0388 */ s32 unk_388;
-    /* 0x038C */ s32 unk_38C;
+    /* 0x038C */ s32 getItemId;
     /* 0x0390 */ s16 unk_390;
     /* 0x0394 */ Vec3f unk_394;
     /* 0x03A0 */ s16 unk_3A0;

@@ -183,7 +183,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
     this->actor.shape.shadowAlpha = 180;
     this->actor.focus.pos = this->actor.world.pos;
-    this->unk14A = GI_NONE;
+    this->getItemId = GI_NONE;
 
     if (sp30 < 0) {
         this->actionFunc = EnItem00_WaitForHeartObject;
@@ -416,12 +416,12 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 void func_800A6A40(EnItem00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->unk14A != GI_NONE) {
+    if (this->getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, play) == 0) {
-            Actor_PickUp(&this->actor, play, this->unk14A, 50.0f, 80.0f);
+            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
-            this->unk14A = GI_NONE;
+            this->getItemId = GI_NONE;
         }
     }
 
@@ -628,7 +628,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, this->unk154);
 
-    this->unk14A = GI_NONE;
+    this->getItemId = GI_NONE;
     this->actionFunc = func_800A6A40;
 }
 

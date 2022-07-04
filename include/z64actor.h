@@ -263,7 +263,7 @@ typedef struct EnItem00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnItem00ActionFunc actionFunc;
     /* 0x148 */ s16 collectibleFlag;
-    /* 0x14A */ s16 unk14A;
+    /* 0x14A */ s16 getItemId;
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
