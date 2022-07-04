@@ -202,7 +202,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOMBCHU, OBJECT_GI_BOMB_2
     { GetItem_DrawBombchu, { gGiBombchuDL } },
     // GID_SHIELD_HERO, OBJECT_GI_SHIELD_2
-    { func_800EF0F0, { object_gi_shield_2_DL_000D28, object_gi_shield_2_DL_0009F0 } },
+    { func_800EF0F0, { gGiHerosShieldEmblemDL, gGiHerosShieldDL } },
     // GID_HOOKSHOT, OBJECT_GI_HOOKSHOT
     { func_800EF1F4, { object_gi_hookshot_DL_000E48, object_gi_hookshot_DL_000A10 } },
     // GID_29, OBJECT_GI_HOOKSHOT
@@ -214,7 +214,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_KEATON, OBJECT_GI_KI_TAN_MASK
     { func_800EF0F0, { gGiKeatonMaskDL, gGiKeatonMaskEyesDL } },
     // GID_TINGLE_MAP, OBJECT_GI_FIELDMAP
-    { func_800EF1F4, { object_gi_fieldmap_DL_0006E8, object_gi_fieldmap_DL_0006E0 } },
+    { func_800EF1F4, { gGiTingleMapDL, gGiTingleMapEmptyDL } },
     // GID_BOW, OBJECT_GI_BOW
     { func_800EF1F4, { object_gi_bow_DL_000C80, object_gi_bow_DL_000F40 } },
     // GID_LENS, OBJECT_GI_GLASSES
@@ -232,7 +232,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
       { gGiPotionPotDL, gGiBluePotColorDL, gGiBlueLiquidColorDL, gGiPotionLiquidDL, gGiBluePatternColorDL,
         gGiPotionPatternDL } },
     // GID_SHIELD_MIRROR, OBJECT_GI_SHIELD_3
-    { func_800EF0F0, { object_gi_shield_3_DL_000BF8, object_gi_shield_3_DL_000770 } },
+    { func_800EF0F0, { gGiMirrorShieldEmptyDL, gGiMirrorShieldDL } },
     // GID_MAGIC_BEANS, OBJECT_GI_BEAN
     { func_800EF054, { gGiBeanDL } },
     // GID_FISH, OBJECT_GI_FISH
@@ -270,7 +270,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_GORON, OBJECT_GI_GOLONMASK
     { func_800EF0F0, { object_gi_golonmask_DL_0010D0, object_gi_golonmask_DL_000BA0 } },
     // GID_MASK_ZORA, OBJECT_GI_ZORAMASK
-    { func_800EF1F4, { object_gi_zoramask_DL_000C10, object_gi_zoramask_DL_0007D0 } },
+    { func_800EF1F4, { gGiZoraMaskEmptyDL, gGiZoraMaskDL } },
     // GID_46
     { GetItem_DrawBombchu, { NULL } },
     // GID_ARROW_FIRE, OBJECT_GI_M_ARROW
@@ -309,10 +309,10 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { func_800EF1F4, { object_gi_sword_1_DL_000998, object_gi_sword_1_DL_000850 } },
     // GID_SKULL_TOKEN_2, OBJECT_ST
     { GetItem_DrawSkullToken, { object_st_DL_004DB0, object_st_DL_004EB8 } },
-    // GID_ZORA_EGG, OBJECT_GI_BOTTLE_RED
+    // GID_57, OBJECT_GI_BOTTLE_RED
     { func_800EF0F0, { object_gi_bottle_red_DL_000CC0, object_gi_bottle_red_DL_0009B0 } },
-    // GID_58, OBJECT_GI_BOTTLE_15
-    { func_800EF0F0, { object_gi_bottle_15_DL_001010, object_gi_bottle_15_DL_000CF0 } },
+    // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
+    { func_800EF0F0, { gGiZoraEggContainerContentsDL, gGiZoraEggContainerGlassAndLidDL } },
     // GID_MOON_TEAR, OBJECT_GI_RESERVE00
     { GetItem_DrawMoonsTear, { object_gi_reserve00_DL_000D78, object_gi_reserve00_DL_000C80 } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
@@ -322,11 +322,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_REMAINS_ODOLWA, OBJECT_BSMASK
     { GetItem_DrawRemains, { object_bsmask_DL_000690, object_bsmask_DL_000690 } },
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
-    { func_800EF0F0, { object_gi_bigbomb_DL_000DA0, object_gi_bigbomb_DL_000BC0 } },
+    { func_800EF0F0, { gGiPowderKegBarrelDL, gGiPowderKegSkullsAndFuseDL } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
     { func_800EF1F4, { object_gi_gold_dust_DL_000888, object_gi_gold_dust_DL_000880 } },
     // GID_SEA_HORSE, OBJECT_GI_BOTTLE_16
-    { func_800EF0F0, { object_gi_bottle_16_DL_000D18, object_gi_bottle_16_DL_0009A0 } },
+    { func_800EF0F0, { gGiSeaHorseContainerEmptyDL, gGiSeaHorseContainerGlassAndLidDL } },
     // GID_60, OBJECT_GI_BOTTLE_22
     { func_800EF0F0, { object_gi_bottle_22_DL_000FB8, object_gi_bottle_22_DL_000C90 } },
     // GID_HYLIAN_LOACH, OBJECT_GI_LOACH
@@ -369,7 +369,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_CHATEAU, OBJECT_GI_BOTTLE_21
     { func_800EF0F0, { object_gi_bottle_21_DL_000E90, object_gi_bottle_21_DL_000A50 } },
     // GID_PICTO_BOX, OBJECT_GI_CAMERA
-    { func_800EF0F0, { object_gi_camera_DL_000EC8, object_gi_camera_DL_000BC0 } },
+    { func_800EF0F0, { gGiPictoBoxFrameDL, gGiPictoBoxBodyAndLensDL } },
     // GID_MASK_FIERCE_DEITY, OBJECT_GI_MASK03
     { func_800EF1F4, { object_gi_mask03_DL_000B90, object_gi_mask03_DL_0009B0 } },
 };
