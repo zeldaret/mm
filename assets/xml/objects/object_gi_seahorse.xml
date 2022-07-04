@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_gi_seahorse" Segment="6">
-        <!-- <Blob Name="object_gi_seahorse_Blob_000A50" Size="0x40" Offset="0xA50" /> -->
+        <Mtx Name="object_gi_seahorse_Mtx_000A50" Offset="0xA50" />
         <DList Name="object_gi_seahorse_DL_000A90" Offset="0xA90" />
         <DList Name="object_gi_seahorse_DL_000B20" Offset="0xB20" />
         <DList Name="object_gi_seahorse_DL_000F08" Offset="0xF08" />
