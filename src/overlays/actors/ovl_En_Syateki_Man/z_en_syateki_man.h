@@ -39,8 +39,8 @@ typedef struct EnSyatekiMan {
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnSyatekiManActionFunc actionFunc;
     /* 0x018C */ Path* path;
-    /* 0x0190 */ s32 octorokFlags; // turn this on to spawn them, turns off when they die
-    /* 0x0194 */ s32 swampTargetActorListIndex;
+    /* 0x0190 */ s32 octorokFlags;
+    /* 0x0194 */ s32 swampTargetActorListIndex; // used but never initialized, so the value is implicitly always 0
     /* 0x0198 */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
     /* 0x01F8 */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
     /* 0x0258 */ Vec3s headRot;
@@ -50,17 +50,17 @@ typedef struct EnSyatekiMan {
     /* 0x0268 */ UNK_TYPE1 unk268[0x2];
     /* 0x026A */ s16 shootingGameState;
     /* 0x026C */ union {
-                    s16 guaySpawnTimer; // Guays spawn when this reaches 140 OR when you kill all scrubs
+                    s16 guaySpawnTimer;
                     s16 octorokState;
                 } perGameVar1;
     /* 0x026E */ union {
                     s16 bonusDekuScrubHitCounter;
                     s16 octorokHitType;
                 } perGameVar2;
-    /* 0x0270 */ s16 talkWaitTimer; // after beating the Swamp game, waits this long before he talks to you
-    /* 0x0272 */ s16 dekuScrubFlags; // turn this on to spawn them, turns off when they die
-    /* 0x0274 */ s16 guayFlags; // turn this on to spawn them, turns off when they die
-    /* 0x0276 */ s16 wolfosFlags; // turn this on to spawn them, turns off when they die
+    /* 0x0270 */ s16 talkWaitTimer;
+    /* 0x0272 */ s16 dekuScrubFlags;
+    /* 0x0274 */ s16 guayFlags;
+    /* 0x0276 */ s16 wolfosFlags;
     /* 0x0278 */ s16 dekuScrubHitCounter;
     /* 0x027A */ s16 guayHitCounter;
     /* 0x027C */ s16 currentWave;

@@ -2,6 +2,9 @@
  * File: z_en_syateki_man.c
  * Overlay: ovl_En_Syateki_Man
  * Description: Shooting Gallery Man
+ *
+ * In addition to handling the normal NPC behavior with the Town/Swamp Shooting Gallery Man, this actor is also
+ * responsible for running their respective shooting games as well.
  */
 
 #include "z_en_syateki_man.h"
@@ -80,6 +83,10 @@ static AnimationInfo sAnimations[] = {
     { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
+/**
+ * In the Swamp Shooting Gallery, there are four waves of Guays.
+ * For each wave, these flags are used to control which Guays appear.
+ */
 static s16 sGuayFlagsPerWave[] = {
     (1 << 7) | (1 << 6) | (1 << 0),
     (1 << 9) | (1 << 8) | (1 << 1),
@@ -115,6 +122,10 @@ static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(9, 0, 2) },
 };
 
+/**
+ * This actor list is never used in-game and doesn't work properly if modded in.
+ * Without any "normal" Deku Scrubs, the game will not progress beyond the first wave.
+ */
 static SwampTargetActorEntry sUnusedSwampTargetActorList[] = {
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
     { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
@@ -146,6 +157,9 @@ static Vec3f sSwampPlayerPos = { 0.0f, 10.0f, 140.0f };
 static Vec3f sTownFierceDietyPlayerPos = { -20.0f, 20.0f, 198.0f };
 static Vec3f sTownPlayerPos = { -20.0f, 40.0f, 175.0f };
 
+/**
+ * Spawns all the actors used as targets in the Swamp Shooting Gallery.
+ */
 void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, SwampTargetActorEntry actorList[],
                                           s32 actorListLength) {
     PlayState* play = play2;
@@ -202,6 +216,10 @@ void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
     gSaveContext.save.weekEventReg[63] &= (u8)~1;
 }
 
+/**
+ * Moves the player to the target destination through automated control stick movements.
+ * This is used to move the player to the right place to play the shooting game.
+ */
 s32 EnSyatekiMan_MovePlayerToTarget(PlayState* play, Vec3f target) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
@@ -1006,6 +1024,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
 
     if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
         (this->currentWave < 4)) {
+        // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
         sHasSpawnedGuaysForThisWave = true;
         this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
@@ -1017,6 +1036,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         }
     } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSpawnedGuaysForThisWave == true) &&
                (this->currentWave < 4)) {
+        // Once all Deku Scrubs and Guays in this wave have either disappeared or died, move on to the next wave.
         if (this->guayHitCounter < 3) {
             this->guayHitCounter = 0;
         }
@@ -1099,6 +1119,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 }
 
                 // You almost had it! Well...just this once...here you go!
+                // Setting prevTextId to this is what triggers a free replay in EnSyatekiMan_Swamp_HandleNormalMessage.
                 Message_StartTextbox(play, 0xA35, &this->actor);
                 this->prevTextId = 0xA35;
                 this->shootingGameState = SG_GAME_STATE_ONE_MORE_GAME;
@@ -1205,6 +1226,10 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
     }
 }
 
+/**
+ * In the Town Shooting Gallery, there are fifteen waves of Octoroks.
+ * For each wave, these flags are used to control which Octoroks appear.
+ */
 static const s32 sOctorokFlagsPerWave[] = {
     OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) |
         OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
