@@ -81,16 +81,16 @@ void func_80A33BB4(ObjToudai* this, PlayState* play) {
 
 u8 func_80A342F4(s16 arg0) {
     u8 var_v1 = 0;
-    s16 temp = gSaveContext.save.time * 0.021972656f;
-    s32 temp2 = temp / 60;
+    s16 minutes = TIME_TO_MINUTES_F(gSaveContext.save.time);
+    s32 hours = minutes / 60;
 
-    if (temp2 >= 17) {
-        if ((temp2 == 17) && ((temp % 60) < arg0)) {
+    if (hours >= 17) {
+        if ((hours == 17) && ((minutes % 60) < arg0)) {
             return var_v1;
         }
         var_v1 = 2;
-    } else if (temp2 < 6) {
-        if ((temp2 == 5) && ((temp % 60) < arg0)) {
+    } else if (hours < 6) {
+        if ((hours == 5) && ((minutes % 60) < arg0)) {
             return var_v1;
         }
         var_v1 = 1;
