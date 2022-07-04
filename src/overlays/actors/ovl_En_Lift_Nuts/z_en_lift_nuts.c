@@ -63,15 +63,24 @@ const ActorInit En_Lift_Nuts_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &object_dnt_Anim_00B0B4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_004AA0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_005CA8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &object_dnt_Anim_0038CC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_003CC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &object_dnt_Anim_0012F4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_004700, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_001BC8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_003438, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f }, { &object_dnt_Anim_001E2C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_000994, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_002268, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dnt_Anim_002F08, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &object_dnt_Anim_00577C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_004E38, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, { &object_dnt_Anim_0029E8, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_005488, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_00B0B4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_004AA0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_0029E8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_005CA8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_dnt_Anim_0038CC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_003CC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_dnt_Anim_0012F4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_004700, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_001BC8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_003438, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f },
+    { &object_dnt_Anim_001E2C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_000994, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_002268, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_dnt_Anim_002F08, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_00577C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_dnt_Anim_004E38, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_dnt_Anim_0029E8, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
     { &object_dnt_Anim_0029E8, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
