@@ -13,7 +13,7 @@
 #define ENBABA_END_CONVERSATION (1 << 0)
 #define ENBABA_VISIBLE (1 << 1)
 #define ENBABA_KNOCKED_OVER (1 << 2) // Don't track player
-#define ENBABA_AUTOTALK (1 << 3)     // autotalk and set next entrance
+#define ENBABA_AUTOTALK (1 << 3)
 #define ENBABA_GIVE_BLAST_MASK (1 << 5)
 #define ENBABA_GAVE_BLAST_MASK (1 << 6)
 #define ENBABA_DRAW_SHADOW (1 << 7)
@@ -280,7 +280,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
     }
 }
 
-void EnBaba_SetNextEntrance(PlayState* play, u16 nextEntrance) {
+void EnBaba_TriggerTransition(PlayState* play, u16 nextEntrance) {
     play->nextEntranceIndex = nextEntrance;
     play->unk_1887F = 0x40;
     gSaveContext.nextTransition = 0x40;
@@ -454,7 +454,7 @@ s32 EnBaba_FollowTimePath(EnBaba* this, PlayState* play) {
     return false;
 }
 
-void EnBaba_HandleScheduleOutput(EnBaba* this, PlayState* play) {
+void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
     switch (this->scheduleResult) {
         case BABA_SCHEDULE_RESULT_FOLLOW_TIME_PATH:
             gSaveContext.save.weekEventReg[58] |= 0x40;
@@ -581,12 +581,12 @@ void EnBaba_Converse(EnBaba* this, PlayState* play) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                         if (play->msgCtx.unk120B1 == 0) {
                             gSaveContext.save.weekEventReg[81] |= 2;
-                            EnBaba_SetNextEntrance(play, 0xD670);
+                            EnBaba_TriggerTransition(play, 0xD670);
                             return;
                         }
                     } else {
                         gSaveContext.save.weekEventReg[81] |= 2;
-                        EnBaba_SetNextEntrance(play, 0xD670);
+                        EnBaba_TriggerTransition(play, 0xD670);
                     }
                 } else {
                     this->textId = 0;
@@ -604,7 +604,7 @@ void EnBaba_Converse(EnBaba* this, PlayState* play) {
     } else if (talkState == 6) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
-            EnBaba_SetNextEntrance(play, 0xD670);
+            EnBaba_TriggerTransition(play, 0xD670);
         }
     }
 }
@@ -645,7 +645,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     }
     this->scheduleResult = scheduleOutput.result;
 
-    EnBaba_HandleScheduleOutput(this, play);
+    EnBaba_HandleSchedule(this, play);
 
     if (this->flags & ENBABA_VISIBLE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -677,7 +677,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
     } else {
         if ((gSaveContext.save.weekEventReg[79] & 0x40) && (DECR(this->sakonDeadTimer) == 0)) {
             Audio_QueueSeqCmd(0x101400FF);
-            EnBaba_SetNextEntrance(play, 0xD670);
+            EnBaba_TriggerTransition(play, 0xD670);
         } else {
             Actor_MoveWithGravity(&this->actor);
         }
