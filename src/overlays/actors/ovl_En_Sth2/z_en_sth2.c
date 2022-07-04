@@ -79,6 +79,7 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
 
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
+
     this->actionFunc(this, play);
 }
 
