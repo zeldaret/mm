@@ -101,7 +101,7 @@ void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPDisplayList(POLY_OPA_DISP++, &gEnSth2HairDL);
+        gSPDisplayList(POLY_OPA_DISP++, gEnSth2HairDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
