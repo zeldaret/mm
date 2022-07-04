@@ -263,9 +263,8 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_000990 } },
     // GID_DEED_MOUNTAIN, OBJECT_GI_RESERVE01
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009B8 } },
-    // GID_42, OBJECT_GI_RUPY
-    { GetItem_DrawRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_000540, object_gi_rupy_DL_000730, object_gi_rupy_DL_000600 } },
+    // GID_RUPEE_HUGE, OBJECT_GI_RUPY
+    { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiGoldRupeeInnerColorDL, gGiRupeeOuterDL, gGiGoldRupeeOuterColorDL } },
     // GID_DEED_OCEAN, OBJECT_GI_RESERVE01
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009E0 } },
     // GID_MASK_GORON, OBJECT_GI_GOLONMASK
@@ -291,24 +290,21 @@ static DrawItemTableEntry sDrawItemTable[] = {
       { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
     // GID_FAIRY_2, OBJECT_GI_SOUL
     { GetItem_DrawFairy2, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
-    // GID_4F, OBJECT_GI_RUPY
+    // GID_RUPEE_GREEN, OBJECT_GI_RUPY
     { GetItem_DrawSmallRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004A0, object_gi_rupy_DL_000730, object_gi_rupy_DL_000560 } },
-    // GID_50, OBJECT_GI_RUPY
+      { gGiRupeeInnerDL, gGiGreenRupeeInnerColorDL, gGiRupeeOuterDL, gGiGreenRupeeOuterColorDL } },
+    // GID_RUPEE_BLUE, OBJECT_GI_RUPY
     { GetItem_DrawSmallRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004C0, object_gi_rupy_DL_000730, object_gi_rupy_DL_000580 } },
-    // GID_51, OBJECT_GI_RUPY
-    { GetItem_DrawSmallRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004E0, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005A0 } },
+      { gGiRupeeInnerDL, gGiBlueRupeeInnerColorDL, gGiRupeeOuterDL, gGiBlueRupeeOuterColorDL } },
+    // GID_RUPEE_RED, OBJECT_GI_RUPY
+    { GetItem_DrawSmallRupee, { gGiRupeeInnerDL, gGiRedRupeeInnerColorDL, gGiRupeeOuterDL, gGiRedRupeeOuterColorDL } },
     // GID_BIG_POE, OBJECT_GI_GHOST
     { GetItem_DrawPoes,
       { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiBigPoeColorDL } },
-    // GID_53, OBJECT_GI_RUPY
-    { GetItem_DrawRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_000500, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005C0 } },
-    // GID_54, OBJECT_GI_RUPY
-    { GetItem_DrawRupee,
-      { object_gi_rupy_DL_000620, object_gi_rupy_DL_000520, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005E0 } },
+    // GID_RUPEE_PURPLE, OBJECT_GI_RUPY
+    { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiPurpleRupeeInnerColorDL, gGiRupeeOuterDL, gGiPurpleRupeeOuterColorDL } },
+    // GID_RUPEE_SILVER, OBJECT_GI_RUPY
+    { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiSilverRupeeInnerColorDL, gGiRupeeOuterDL, gGiSilverRupeeOuterColorDL } },
     // GID_SWORD_KOKIRI, OBJECT_GI_SWORD_1
     { func_800EF1F4, { object_gi_sword_1_DL_000998, object_gi_sword_1_DL_000850 } },
     // GID_SKULL_TOKEN_2, OBJECT_ST
