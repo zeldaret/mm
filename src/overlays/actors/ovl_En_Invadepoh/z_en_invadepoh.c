@@ -618,8 +618,8 @@ unkStruct80B50350 D_80B50350[10];
 EnInvadepoh* D_80B503F0;
 EnInvadepoh* D_80B503F4;
 EnInvadepoh* D_80B503F8;
-AnimatedMaterial* alienEyeBeamTexAnim;
-AnimatedMaterial* alienEmptyTexAnim;
+AnimatedMaterial* sAlienEyeBeamTexAnim;
+AnimatedMaterial* sAlienEmptyTexAnim;
 s16 D_80B50404[3];
 EnInvadepoh* D_80B5040C;
 
@@ -1225,8 +1225,8 @@ void func_80B44FEC(void) {
 }
 
 void func_80B45080(void) {
-    alienEmptyTexAnim = Lib_SegmentedToVirtual(gAlienEmptyTexAnim);
-    alienEyeBeamTexAnim = Lib_SegmentedToVirtual(gAlienEyeBeamTexAnim);
+    sAlienEmptyTexAnim = Lib_SegmentedToVirtual(gAlienEmptyTexAnim);
+    sAlienEyeBeamTexAnim = Lib_SegmentedToVirtual(gAlienEyeBeamTexAnim);
 }
 
 s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed) {
@@ -2283,7 +2283,7 @@ void func_80B47BAC(Actor* thisx, PlayState* play) {
         func_80B45080();
         this->actor.update = func_80B47D30;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->jointTable, this->morphTable,
-                           14);
+                           ALIEN_LIMB_MAX);
         this->skelAnime.curFrame = (this->actor.params & 7) * this->skelAnime.endFrame * 0.125f;
         func_80B444BC(this, play);
         func_80B442E4(this);
@@ -4277,7 +4277,7 @@ void func_80B4D670(Actor* thisx, PlayState* play) {
         func_80B45080();
         this->actor.update = func_80B4D760;
         SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienHoldingCowAnim, this->jointTable,
-                           this->morphTable, 14);
+                           this->morphTable, ALIEN_LIMB_MAX);
         if (invadepohType < 3) {
             func_80B453F4(this, play, invadepohType);
             func_80B4D15C(this);
@@ -4373,14 +4373,14 @@ void func_80B4DB14(Actor* thisx, PlayState* play) {
 
         if (this->alienAlpha == 255) {
             func_8012C28C(play->state.gfxCtx);
-            AnimatedMat_Draw(play, alienEmptyTexAnim);
+            AnimatedMat_Draw(play, sAlienEmptyTexAnim);
             Scene_SetRenderModeXlu(play, 0, 1);
             gDPSetEnvColor(spCC->polyOpa.p++, 0, 0, 0, 255);
             spCC->polyOpa.p = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                                  this->skelAnime.dListCount, func_80B4D9D8, func_80B4D9F4, &this->actor,
                                                  spCC->polyOpa.p);
         } else {
-            AnimatedMat_Draw(play, alienEmptyTexAnim);
+            AnimatedMat_Draw(play, sAlienEmptyTexAnim);
             Scene_SetRenderModeXlu(play, 1, 2);
             gDPSetEnvColor(spCC->polyXlu.p++, 0, 0, 0, this->alienAlpha);
             spCC->polyXlu.p = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
@@ -4389,7 +4389,7 @@ void func_80B4DB14(Actor* thisx, PlayState* play) {
         }
 
         if (this->alienBeamAlpha != 0) {
-            AnimatedMat_Draw(play, alienEyeBeamTexAnim);
+            AnimatedMat_Draw(play, sAlienEyeBeamTexAnim);
             spB8 = play->state.gfxCtx;
             gfx = spBC = spB8->polyXlu.p;
             gDPPipeSync(spBC++);
