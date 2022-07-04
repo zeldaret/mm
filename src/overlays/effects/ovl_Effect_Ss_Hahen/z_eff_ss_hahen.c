@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_hahen.c
  * Overlay: ovl_Effect_Ss_Hahen
- * Description:
+ * Description: Fragments
  */
 
 #include "z_eff_ss_hahen.h"
@@ -47,7 +47,7 @@ u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rObjId = initParams->objId;
         EffectSsHahen_CheckForObject(this, play);
     } else {
-        this->gfx = gEffFragmentsDL;
+        this->gfx = gEffFragments1DL;
         this->rObjId = HAHEN_OBJECT_DEFAULT;
     }
 
