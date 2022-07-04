@@ -5,7 +5,6 @@
  */
 
 #include "z_en_sth2.h"
-#include "objects/object_sth/object_sth.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -70,7 +69,7 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->actor);
         SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, &this->jointTable,
-                           &this->morphTable, 16);
+                           &this->morphTable, OBJECT_STH_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gEnSth2WavingHandAnim);
         this->actor.update = EnSth2_UpdateActionFunc;
         this->actor.draw = EnSth2_Draw;
