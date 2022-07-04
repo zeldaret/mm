@@ -2,6 +2,7 @@
 #define Z_EN_LIFT_NUTS_H
 
 #include "global.h"
+#include "objects/object_dnt/object_dnt.h"
 
 struct EnLiftNuts;
 
@@ -18,8 +19,8 @@ typedef struct EnLiftNuts {
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ s32 unk_1E8;
     /* 0x1EC */ s16* ptr_1EC;
-    /* 0x1F0 */ Vec3s jointTable[28];
-    /* 0x298 */ Vec3s morphTable[28];
+    /* 0x1F0 */ Vec3s jointTable[OBJECT_DNT_LIMB_MAX];
+    /* 0x298 */ Vec3s morphTable[OBJECT_DNT_LIMB_MAX];
     /* 0x340 */ UNK_TYPE1 unk_340[0xC];
     /* 0x34C */ s16 textId;
     /* 0x34E */ s16 unk_34E;

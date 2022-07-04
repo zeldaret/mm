@@ -139,27 +139,27 @@ s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
     switch (arg1) {
         case 0:
             if (D_80AEBF6C == 0) {
-                return 1;
+                return true;
             }
             break;
         case 1:
             if (D_80AEBF6C == 0) {
                 this->unk_34E = 1;
                 D_80AEBF6C = 1;
-                return 1;
+                return true;
             }
             break;
         case 2:
             if (D_80AEBF6C == 1) {
                 this->unk_34E = 0;
                 D_80AEBF6C = 0;
-                return 1;
+                return true;
             }
             break;
         default:
             break;
     }
-    return 0;
+    return false;
 }
 
 s32 func_80AE9B4C(s32 arg0, s32 arg1) {
@@ -167,20 +167,20 @@ s32 func_80AE9B4C(s32 arg0, s32 arg1) {
 
     if (arg0 == 0) {
         if (D_80AEBF70 == arg1) {
-            return 1;
+            return true;
         }
     } else if (arg0 == 1) {
         D_80AEBF70 = arg1;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 s32 func_80AE9B8C() {
-    s32 ret = 0;
+    s32 ret = false;
 
     if (gSaveContext.save.weekEventReg[14] & 0x10) {
-        ret = 1;
+        ret = true;
     }
 
     if (gSaveContext.save.weekEventReg[14] & 0x20) {
@@ -235,7 +235,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -2.0f;
 
     path = &play->setupPathList[ENLIFTNUTS_GET_FF00(&this->actor)];
-    pathPos = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    pathPos = Lib_SegmentedToVirtual(path->points);
     this->vec_1D8.x = pathPos->x;
     this->vec_1D8.y = pathPos->y;
     this->vec_1D8.z = pathPos->z;
@@ -315,11 +315,8 @@ void func_80AEA128(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
-    s32 pad;
-    OSTime time;
-
     if ((func_80AE9B4C(0, 3) || func_80AE9B4C(0, 1)) && this->unk_34E == 1) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         func_80AE9FC8(this);
     }
@@ -393,8 +390,8 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         this->textId = 0x27EE;
                     }
                 } else {
-                    time = gSaveContext.unk_3DE0[4];
-                    if (time >= gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                    if (((void)0, gSaveContext.unk_3DE0[4]) >=
+                        gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                         if (gSaveContext.unk_3DE0[4] < 0x2EE0) {
                             Message_StartTextbox(play, 0x27F9, &this->actor);
                             this->textId = 0x27F9;
@@ -748,7 +745,6 @@ void func_80AEB280(EnLiftNuts* this) {
 
 void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    OSTime time;
 
     if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
@@ -760,8 +756,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     if (*this->ptr_1EC == 0x12C) {
         player->stateFlags1 |= 0x20;
 
-        time = gSaveContext.unk_3DE0[4];
-        if (time < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+        if (((void)0, gSaveContext.unk_3DE0[4]) < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -793,7 +788,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
             this->textId = 0x27EC;
         }
     } else if (this->unk_354 == 30) {
-        gSaveContext.eventInf[3] &= 0xEF;
+        gSaveContext.eventInf[3] &= (u8)~0x10;
         gSaveContext.respawn[0].entranceIndex = 0x3610;
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&play->state);
@@ -801,7 +796,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
         play->unk_1887F = 0x40;
         gSaveContext.nextTransition = 2;
     }
-    this->unk_354 += 1;
+    this->unk_354++;
 }
 
 void func_80AEB584(EnLiftNuts* this) {
@@ -816,9 +811,7 @@ void func_80AEB598(EnLiftNuts* this, PlayState* play) {
             gSaveContext.save.weekEventReg[14] |= 0x80;
         }
         func_80AEB684(this);
-        return;
-    }
-    if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
+    } else if (this->textId == 0x27F4 && !(gSaveContext.save.weekEventReg[14] & 0x80)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -969,12 +962,13 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
 s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnLiftNuts* this = THIS;
 
-    if (limbIndex == 15 || limbIndex == 16 || limbIndex == 21 || limbIndex == 23 || limbIndex == 24 ||
-        limbIndex == 21 || limbIndex == 27) {
+    if (limbIndex == OBJECT_DNT_LIMB_0F || limbIndex == OBJECT_DNT_LIMB_10 || limbIndex == OBJECT_DNT_LIMB_15 ||
+        limbIndex == OBJECT_DNT_LIMB_17 || limbIndex == OBJECT_DNT_LIMB_18 || limbIndex == OBJECT_DNT_LIMB_15 ||
+        limbIndex == OBJECT_DNT_LIMB_1B) {
         *dList = NULL;
     }
 
-    if (limbIndex == 26) {
+    if (limbIndex == OBJECT_DNT_LIMB_1A) {
         *dList = sDLists[this->unk_1E4];
     }
     return false;
@@ -983,7 +977,7 @@ s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnLiftNuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusOffset = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 25) {
+    if (limbIndex == OBJECT_DNT_LIMB_19) {
         Matrix_MultVec3f(&sFocusOffset, &thisx->focus.pos);
     }
 }
