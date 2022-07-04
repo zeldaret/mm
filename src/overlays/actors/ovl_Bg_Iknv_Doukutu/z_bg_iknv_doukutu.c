@@ -41,7 +41,7 @@ const ActorInit Bg_Iknv_Doukutu_InitVars = {
 
 void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
     BgIknvDoukutu* this = THIS;
-    CollisionHeader* sp30 = NULL;
+    CollisionHeader* colHeader = NULL;
     s32 pad;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -49,9 +49,9 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
     this->unk_15C = 0;
 
     switch (BGIKNVDOUKUTU_GET_F(&this->dyna.actor)) {
-        case 0:
+        case BGIKNVDOUKUTU_F_0:
             this->actionFunc = func_80BD71BC;
-            this->unk_15E = 0x204;
+            this->csAction = 0x204;
             this->unk_160 = 1.0f;
             if ((gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
                 this->dyna.actor.draw = func_80BD7768;
@@ -62,24 +62,24 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case 1:
+        case BGIKNVDOUKUTU_F_1:
             Actor_SetScale(&this->dyna.actor, 1.0f);
             this->dyna.actor.draw = func_80BD7820;
-            this->unk_15E = 0x204;
+            this->csAction = 0x204;
             DynaPolyActor_Init(&this->dyna, 0);
-            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &sp30);
-            this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp30);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
             if (!(gSaveContext.save.weekEventReg[14] & 4)) {
                 Actor_MarkForDeath(&this->dyna.actor);
             }
             break;
 
-        case 2:
-            this->unk_15E = 0x204;
+        case BGIKNVDOUKUTU_F_2:
+            this->csAction = 0x204;
             this->dyna.actor.draw = func_80BD78C4;
             DynaPolyActor_Init(&this->dyna, 0);
-            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &sp30);
-            this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp30);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
             if (gSaveContext.save.weekEventReg[14] & 4) {
                 this->unk_160 = 1.0f;
                 this->dyna.actor.world.pos.y += 68.0f;
@@ -98,14 +98,15 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
 void BgIknvDoukutu_Destroy(Actor* thisx, PlayState* play) {
     BgIknvDoukutu* this = THIS;
 
-    if ((BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == 1) || (BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == 2)) {
+    if ((BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == BGIKNVDOUKUTU_F_1) ||
+        (BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == BGIKNVDOUKUTU_F_2)) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
 void func_80BD716C(BgIknvDoukutu* this, PlayState* play) {
     if (this->unk_160 >= 0.05f) {
-        this->unk_160 = this->unk_160 - 0.05f;
+        this->unk_160 -= 0.05f;
     } else {
         this->actionFunc = func_80BD73D0;
         this->dyna.actor.draw = func_80BD7768;
@@ -115,8 +116,8 @@ void func_80BD716C(BgIknvDoukutu* this, PlayState* play) {
 
 void func_80BD71BC(BgIknvDoukutu* this, PlayState* play) {
     play->envCtx.lightSettingOverride = 24;
-    if (Cutscene_CheckActorAction(play, this->unk_15E) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_15E)]->action == 2)) {
+    if (Cutscene_CheckActorAction(play, this->csAction) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
         this->actionFunc = func_80BD716C;
         this->dyna.actor.draw = func_80BD7538;
     }
@@ -134,19 +135,19 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->unk_15E) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_15E)]->action == 3)) {
+    if (Cutscene_CheckActorAction(play, this->csAction) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 3)) {
         this->actionFunc = func_80BD7250;
     }
 
     if (this->unk_160 < 0.95f) {
-        this->unk_160 = this->unk_160 + 0.05f;
+        this->unk_160 += 0.05f;
     }
 }
 
 void func_80BD7360(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->unk_15E) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_15E)]->action == 2)) {
+    if (Cutscene_CheckActorAction(play, this->csAction) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
         this->actionFunc = func_80BD72BC;
     }
 }
@@ -191,16 +192,14 @@ void func_80BD7538(Actor* thisx, PlayState* play) {
 
     gfxCtx = play->state.gfxCtx;
     OPEN_DISPS(gfxCtx);
-    f32 sp48;
-    f32 sp44;
-    f32 sp40;
-    s16 sp3E = Math_Vec3f_Yaw(&play->cameraPtrs[play->activeCamera]->eye, &play->cameraPtrs[play->activeCamera]->at);
-    s16 sp3C = -Math_Vec3f_Pitch(&play->cameraPtrs[play->activeCamera]->eye, &play->cameraPtrs[play->activeCamera]->at);
+    Vec3f sp40;
+    s16 sp3E = Math_Vec3f_Yaw(&GET_ACTIVE_CAM(play)->eye, &GET_ACTIVE_CAM(play)->at);
+    s16 sp3C = -Math_Vec3f_Pitch(&GET_ACTIVE_CAM(play)->eye, &GET_ACTIVE_CAM(play)->at);
 
-    sp40 = -100.0f * Math_SinS(sp3E) * Math_CosS(sp3C);
-    sp44 = Math_SinS(sp3C) * -100.0f;
-    sp48 = -100.0f * Math_CosS(sp3E) * Math_CosS(sp3C);
-    Matrix_Translate(sp40, sp44, sp48, MTXMODE_APPLY);
+    sp40.x = -100.0f * Math_SinS(sp3E) * Math_CosS(sp3C);
+    sp40.y = Math_SinS(sp3C) * -100.0f;
+    sp40.z = -100.0f * Math_CosS(sp3E) * Math_CosS(sp3C);
+    Matrix_Translate(sp40.x, sp40.y, sp40.z, MTXMODE_APPLY);
     sp54 = this->unk_160;
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_iknv_obj_Matanimheader_00F1C0));
 
