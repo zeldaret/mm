@@ -55,8 +55,10 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 80, 100, MASS_IMMOVABLE };
 
-static TexturePtr sFlameTextures[] = { gFwallFireball0Tex, gFwallFireball1Tex, gFwallFireball2Tex, gFwallFireball3Tex,
-                                       gFwallFireball4Tex, gFwallFireball5Tex, gFwallFireball6Tex, gFwallFireball7Tex };
+static TexturePtr sFlameTextures[] = {
+    gFwallFireball0Tex, gFwallFireball1Tex, gFwallFireball2Tex, gFwallFireball3Tex,
+    gFwallFireball4Tex, gFwallFireball5Tex, gFwallFireball6Tex, gFwallFireball7Tex,
+};
 
 void BgFireWall_Init(Actor* thisx, PlayState* play) {
     BgFireWall* this = THIS;
@@ -85,10 +87,10 @@ void BgFireWall_Destroy(Actor* thisx, PlayState* play) {
 
 s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     BgFireWall* this = THIS;
-    Actor* player = &GET_PLAYER(play)->actor;
+    Player* player = GET_PLAYER(play);
     Vec3f sp1C;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->actor.world.pos);
     if ((fabsf(sp1C.x) < this->unk_160) && (fabsf(sp1C.z) < (this->unk_160 + 20.0f))) {
         return true;
     }
@@ -135,13 +137,13 @@ void func_809AC760(BgFireWall* this, PlayState* play) {
 }
 
 void func_809AC7F8(BgFireWall* this, PlayState* play) {
-    Actor* player = &GET_PLAYER(play)->actor;
+    Player* player = GET_PLAYER(play);
     Vec3f sp38;
     f32 val = 25.0f;
     f32 sin;
     f32 cos;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp38, &player->world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &sp38, &player->actor.world.pos);
     sp38.x = CLAMP(sp38.x, -80.0f, 80.0f);
 
     if (this->step == 0) {
