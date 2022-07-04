@@ -15,7 +15,7 @@ typedef struct EnSth2 {
     /* 0x1E8 */ Vec3s unk1E8;
     /* 0x1EE */ char pad1EE[0x5A];
     /* 0x248 */ s16 unk248;
-    /* 0x24A */ u8 unk24A;
+    /* 0x24A */ u8 objIndex;
     /* 0x24C */ EnSth2ActionFunc actionFunc;
 } EnSth2; // size = 0x250
 

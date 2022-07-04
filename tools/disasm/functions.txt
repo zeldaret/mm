@@ -16375,7 +16375,7 @@
     0x80BF7688:("func_80BF7688",),
     0x80BF76AC:("func_80BF76AC",),
     0x80BF77AC:("func_80BF77AC",),
-    0x80BF7814:("func_80BF7814",),
+    0x80BF7814:("EnSth2_Draw",),
     0x80BFA100:("EnYb_Init",),
     0x80BFA2D0:("EnYb_Destroy",),
     0x80BFA2FC:("func_80BFA2FC",),
