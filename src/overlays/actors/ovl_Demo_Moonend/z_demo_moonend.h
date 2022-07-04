@@ -1,7 +1,8 @@
-    #ifndef Z_DEMO_MOONEND_H
+#ifndef Z_DEMO_MOONEND_H
 #define Z_DEMO_MOONEND_H
 
 #include "global.h"
+#include "objects/object_moonend/object_moonend.h"
 
 struct DemoMoonend;
 

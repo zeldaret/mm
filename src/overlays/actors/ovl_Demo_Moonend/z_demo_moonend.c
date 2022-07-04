@@ -19,6 +19,7 @@ void DemoMoonend_Draw(Actor* thisx, PlayState* play);
 void func_80C17B50(DemoMoonend* this, PlayState* play);
 void func_80C17B60(DemoMoonend* this, PlayState* play);
 void func_80C17C48(DemoMoonend* this, PlayState* play);
+void func_80C17FCC(Actor* thisx, PlayState* play);
 
 const ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
@@ -73,7 +74,30 @@ void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
 void func_80C17B50(DemoMoonend* this, PlayState* play) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17B60.s")
+void func_80C17B60(DemoMoonend* this, PlayState* play) {
+    u16 action;
+
+    if (Cutscene_CheckActorAction(play, this->actorActionCmd)) {
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCmd));
+        if (this->actorAction != action) {
+            this->actorAction = action;
+            switch (this->actorAction) {
+                case 1:
+                    this->actor.draw = NULL;
+                    break;
+                case 2:
+                    this->actor.draw = func_80C17FCC;
+                    break;
+            }
+        }
+        if (this->actorAction == 2) {
+            func_800B9010(&this->actor, 0x21B2);
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
 
 void func_80C17C48(DemoMoonend* this, PlayState* play) {
     u16 action;
