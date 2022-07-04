@@ -583,6 +583,9 @@ void GetItem_DrawFish(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draw `dlists[0]` as Opa
+ */
 void GetItem_DrawOpa0(PlayState* play, s16 drawId) {
     s32 pad;
 
@@ -596,6 +599,9 @@ void GetItem_DrawOpa0(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draw `dlists[0]` as Opa and `dlists[1]` as Xlu
+ */
 void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId) {
     s32 pad;
 
@@ -614,6 +620,9 @@ void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draw `dlists[0]` and `dlists[1]` as Opa
+ */
 void GetItem_DrawOpa01(PlayState* play, s16 drawId) {
     s32 pad;
 
@@ -628,6 +637,9 @@ void GetItem_DrawOpa01(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * Draw `dlists[0]` and `dlists[1]` as Xlu
+ */
 void GetItem_DrawXlu01(PlayState* play, s16 drawId) {
     s32 pad;
 
