@@ -492,7 +492,7 @@ typedef enum {
     /* 0x53 */ GID_53,
     /* 0x54 */ GID_54,
     /* 0x55 */ GID_SWORD_KOKIRI,
-    /* 0x56 */ GID_56,
+    /* 0x56 */ GID_SKULL_TOKEN_2,
     /* 0x57 */ GID_ZORA_EGG,
     /* 0x58 */ GID_58,
     /* 0x59 */ GID_MOON_TEAR,

@@ -84,6 +84,34 @@
 #include "assets/objects/object_gi_truth_mask/object_gi_truth_mask.h"
 #include "assets/objects/object_gi_zoramask/object_gi_zoramask.h"
 #include "assets/objects/object_bsmask/object_bsmask.h"
+#include "assets/objects/object_st/object_st.h"
+
+extern UNK_TYPE D_06001254;
+extern UNK_TYPE D_06001C60;
+
+void GetItem_DrawBombchu(PlayState* play, s16 drawId);
+void GetItem_DrawPoes(PlayState* play, s16 drawId);
+void GetItem_DrawFairy2(PlayState* play, s16 drawId);
+void GetItem_DrawSkullToken(PlayState* play, s16 drawId);
+void GetItem_DrawCompass(PlayState* play, s16 drawId);
+void GetItem_DrawPotion(PlayState* play, s16 drawId);
+void GetItem_DrawGoronSword(PlayState* play, s16 drawId);
+void GetItem_DrawDekuNuts(PlayState* play, s16 drawId);
+void GetItem_DrawRecoveryHeart(PlayState* play, s16 drawId);
+void GetItem_DrawFish(PlayState* play, s16 drawId);
+void func_800EF054(PlayState* play, s16 drawId);
+void func_800EF0F0(PlayState* play, s16 drawId);
+void func_800EF1F4(PlayState* play, s16 drawId);
+void func_800EF2AC(PlayState* play, s16 drawId);
+void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId);
+void GetItem_DrawFairy(PlayState* play, s16 drawId);
+void GetItem_DrawMoonsTear(PlayState* play, s16 drawId);
+void GetItem_DrawMagicArrow(PlayState* play, s16 drawId);
+void GetItem_DrawUpgrades(PlayState* play, s16 drawId);
+void GetItem_DrawRupee(PlayState* play, s16 drawId);
+void GetItem_DrawSmallRupee(PlayState* play, s16 drawId);
+void GetItem_DrawWallet(PlayState* play, s16 drawId);
+void GetItem_DrawRemains(PlayState* play, s16 drawId);
 
 static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOTTLE, OBJECT_GI_BOTTLE
@@ -103,11 +131,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_07, OBJECT_GI_MELODY
     { func_800EF2AC, { object_gi_melody_DL_000AD0, object_gi_melody_DL_000AE0 } },
     // GID_HEART, OBJECT_GI_HEART
-    { func_800EEE34, { gGiRecoveryHeartDL } },
+    { GetItem_DrawRecoveryHeart, { gGiRecoveryHeartDL } },
     // GID_KEY_BOSS, OBJECT_GI_KEY_BOSS
     { func_800EF0F0, { gGiBossKeyDL, gGiBossKeyGemDL } },
     // GID_COMPASS, OBJECT_GI_COMPASS
-    { func_800EE940, { gGiCompassDL, gGiCompassGlassDL } },
+    { GetItem_DrawCompass, { gGiCompassDL, gGiCompassGlassDL } },
     // GID_BOMBERS_NOTEBOOK, OBJECT_GI_SCHEDULE
     { func_800EF0F0, { object_gi_schedule_DL_000B78, object_gi_schedule_DL_0006C0 } },
     // GID_MASK_STONE, OBJECT_GI_STONEMASK
@@ -121,23 +149,23 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_ALL_NIGHT, OBJECT_GI_MASK06
     { func_800EF0F0, { object_gi_mask06_DL_000968, object_gi_mask06_DL_0006F0 } },
     // GID_NUTS, OBJECT_GI_NUTS
-    { func_800EED20, { gGiNutDL } },
+    { GetItem_DrawDekuNuts, { gGiNutDL } },
     // GID_HEART_CONTAINER, OBJECT_GI_HEARTS
     { func_800EF2AC, { gGiHeartBorderDL, gGiHeartContainerDL } },
     // GID_HEART_PIECE, OBJECT_GI_HEARTS
     { func_800EF2AC, { gGiHeartBorderDL, gGiHeartPieceDL } },
     // GID_QUIVER_30, OBJECT_GI_ARROWCASE
-    { func_800EF89C, { gGiQuiverInnerDL, gGiQuiver30InnerColorDL, gGiQuiver30OuterColorDL, gGiQuiverOuterDL } },
+    { GetItem_DrawUpgrades, { gGiQuiverInnerDL, gGiQuiver30InnerColorDL, gGiQuiver30OuterColorDL, gGiQuiverOuterDL } },
     // GID_QUIVER_40, OBJECT_GI_ARROWCASE
-    { func_800EF89C, { gGiQuiverInnerDL, gGiQuiver40InnerColorDL, gGiQuiver40OuterColorDL, gGiQuiverOuterDL } },
+    { GetItem_DrawUpgrades, { gGiQuiverInnerDL, gGiQuiver40InnerColorDL, gGiQuiver40OuterColorDL, gGiQuiverOuterDL } },
     // GID_QUIVER_50, OBJECT_GI_ARROWCASE
-    { func_800EF89C, { gGiQuiverInnerDL, gGiQuiver50InnerColorDL, gGiQuiver50OuterColorDL, gGiQuiverOuterDL } },
+    { GetItem_DrawUpgrades, { gGiQuiverInnerDL, gGiQuiver50InnerColorDL, gGiQuiver50OuterColorDL, gGiQuiverOuterDL } },
     // GID_BOMB_BAG_20, OBJECT_GI_BOMBPOUCH
-    { func_800EF89C, { gGiBombBagDL, gGiBombBag20BagColorDL, gGiBombBag20RingColorDL, gGiBombBagRingDL } },
+    { GetItem_DrawUpgrades, { gGiBombBagDL, gGiBombBag20BagColorDL, gGiBombBag20RingColorDL, gGiBombBagRingDL } },
     // GID_BOMB_BAG_30, OBJECT_GI_BOMBPOUCH
-    { func_800EF89C, { gGiBombBagDL, gGiBombBag30BagColorDL, gGiBombBag30RingColorDL, gGiBombBagRingDL } },
+    { GetItem_DrawUpgrades, { gGiBombBagDL, gGiBombBag30BagColorDL, gGiBombBag30RingColorDL, gGiBombBagRingDL } },
     // GID_BOMB_BAG_40, OBJECT_GI_BOMBPOUCH
-    { func_800EF89C, { gGiBombBagDL, gGiBombBag40BagColorDL, gGiBombBag40RingColorDL, gGiBombBagRingDL } },
+    { GetItem_DrawUpgrades, { gGiBombBagDL, gGiBombBag40BagColorDL, gGiBombBag40RingColorDL, gGiBombBagRingDL } },
     // GID_STICK, OBJECT_GI_STICK
     { func_800EF054, { gGiStickDL } },
     // GID_DUNGEON_MAP, OBJECT_GI_MAP
@@ -151,11 +179,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_STONE_OF_AGONY, OBJECT_GI_MAP
     { func_800EF054, { gGiStoneOfAgonyDL } },
     // GID_WALLET_ADULT, OBJECT_GI_PURSE
-    { func_800EFBFC,
+    { GetItem_DrawWallet,
       { gGiWalletDL, gGiAdultWalletColorDL, gGiAdultWalletRupeeOuterColorDL, gGiWalletRupeeOuterDL,
         gGiAdultWalletStringColorDL, gGiWalletStringDL, gGiAdultWalletRupeeInnerColorDL, gGiWalletRupeeInnerDL } },
     // GID_WALLET_GIANT, OBJECT_GI_PURSE
-    { func_800EFBFC,
+    { GetItem_DrawWallet,
       { gGiWalletDL, gGiGiantsWalletColorDL, gGiGiantsWalletRupeeOuterColorDL, gGiWalletRupeeOuterDL,
         gGiGiantsWalletStringColorDL, gGiWalletStringDL, gGiGiantsWalletRupeeInnerColorDL, gGiWalletRupeeInnerDL } },
     // GID_MASK_DON_GERO, OBJECT_GI_MASK16
@@ -167,7 +195,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_ARROWS_LARGE, OBJECT_GI_ARROW
     { func_800EF054, { gGiArrowLargeDL } },
     // GID_BOMBCHU, OBJECT_GI_BOMB_2
-    { func_800EE364, { gGiBombchuDL } },
+    { GetItem_DrawBombchu, { gGiBombchuDL } },
     // GID_SHIELD_HERO, OBJECT_GI_SHIELD_2
     { func_800EF0F0, { object_gi_shield_2_DL_000D28, object_gi_shield_2_DL_0009F0 } },
     // GID_HOOKSHOT, OBJECT_GI_HOOKSHOT
@@ -187,15 +215,15 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_LENS, OBJECT_GI_GLASSES
     { func_800EF0F0, { gGiLensDL, gGiLensGlassDL } },
     // GID_POTION_GREEN, OBJECT_GI_LIQUID
-    { func_800EEA48,
+    { GetItem_DrawPotion,
       { gGiPotionPotDL, gGiGreenPotColorDL, gGiGreenLiquidColorDL, gGiPotionLiquidDL, gGiGreenPatternColorDL,
         gGiPotionPatternDL } },
     // GID_POTION_RED, OBJECT_GI_LIQUID
-    { func_800EEA48,
+    { GetItem_DrawPotion,
       { gGiPotionPotDL, gGiRedPotColorDL, gGiRedLiquidColorDL, gGiPotionLiquidDL, gGiRedPatternColorDL,
         gGiPotionPatternDL } },
     // GID_POTION_BLUE, OBJECT_GI_LIQUID
-    { func_800EEA48,
+    { GetItem_DrawPotion,
       { gGiPotionPotDL, gGiBluePotColorDL, gGiBlueLiquidColorDL, gGiPotionLiquidDL, gGiBluePatternColorDL,
         gGiPotionPatternDL } },
     // GID_SHIELD_MIRROR, OBJECT_GI_SHIELD_3
@@ -203,19 +231,19 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MAGIC_BEANS, OBJECT_GI_BEAN
     { func_800EF054, { gGiBeanDL } },
     // GID_FISH, OBJECT_GI_FISH
-    { func_800EEF4C, { gGiFishDL } },
+    { GetItem_DrawFish, { gGiFishDL } },
     // GID_LETTER_MAMA, OBJECT_GI_RESERVE_B_01
     { func_800EF0F0, { object_gi_reserve_b_01_DL_000948, object_gi_reserve_b_01_DL_000820 } },
     // GID_37
     { func_800EF054, { NULL } },
     // GID_SWORD_BGS, OBJECT_GI_LONGSWORD
-    { func_800EEC18, { gGiBiggoronSwordDL } },
+    { GetItem_DrawGoronSword, { gGiBiggoronSwordDL } },
     // GID_39, OBJECT_GI_MSSA
     { func_800EF0F0, { object_gi_mssa_DL_000DF0, object_gi_mssa_DL_000C00 } },
     // GID_MASK_BLAST, OBJECT_GI_MASK21
     { func_800EF0F0, { object_gi_mask21_DL_000AA8, object_gi_mask21_DL_000830 } },
     // GID_FAIRY, OBJECT_GI_BOTTLE_04
-    { func_800EF4D4,
+    { GetItem_DrawFairy,
       { object_gi_bottle_04_DL_000B10, object_gi_bottle_04_DL_0008B8, object_gi_bottle_04_DL_0007F0,
         (Gfx*)0x060007B0 } },
     // GID_MASK_SCENTS, OBJECT_GI_MASK22
@@ -231,7 +259,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_DEED_MOUNTAIN, OBJECT_GI_RESERVE01
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009B8 } },
     // GID_42, OBJECT_GI_RUPY
-    { func_800EF984,
+    { GetItem_DrawRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_000540, object_gi_rupy_DL_000730, object_gi_rupy_DL_000600 } },
     // GID_DEED_OCEAN, OBJECT_GI_RESERVE01
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009E0 } },
@@ -240,57 +268,57 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_ZORA, OBJECT_GI_ZORAMASK
     { func_800EF1F4, { object_gi_zoramask_DL_000C10, object_gi_zoramask_DL_0007D0 } },
     // GID_46
-    { func_800EE364, { NULL } },
+    { GetItem_DrawBombchu, { NULL } },
     // GID_ARROW_FIRE, OBJECT_GI_M_ARROW
-    { func_800EF780, { gGiMagicArrowDL, gGiFireArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiFireArrowColorDL, gGiArrowMagicDL } },
     // GID_ARROW_ICE, OBJECT_GI_M_ARROW
-    { func_800EF780, { gGiMagicArrowDL, gGiIceArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiIceArrowColorDL, gGiArrowMagicDL } },
     // GID_ARROW_LIGHT, OBJECT_GI_M_ARROW
-    { func_800EF780, { gGiMagicArrowDL, gGiLightArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiLightArrowColorDL, gGiArrowMagicDL } },
     // GID_SKULL_TOKEN, OBJECT_GI_SUTARU
-    { func_800EE7D8, { gGiSkulltulaTokenDL, gGiSkulltulaTokenFlameDL } },
+    { GetItem_DrawSkullToken, { gGiSkulltulaTokenDL, gGiSkulltulaTokenFlameDL } },
     // GID_BUG, OBJECT_GI_INSECT
     { func_800EF0F0, { gGiBugsContainerDL, gGiBugsGlassDL } },
     // GID_4C
     { func_800EF0F0, { NULL } },
     // GID_POE, OBJECT_GI_GHOST
-    { func_800EE400, { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
+    { GetItem_DrawPoes, { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
     // GID_FAIRY_2, OBJECT_GI_SOUL
-    { func_800EE5FC, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
+    { GetItem_DrawFairy2, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
     // GID_4F, OBJECT_GI_RUPY
-    { func_800EFAB8,
+    { GetItem_DrawSmallRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004A0, object_gi_rupy_DL_000730, object_gi_rupy_DL_000560 } },
     // GID_50, OBJECT_GI_RUPY
-    { func_800EFAB8,
+    { GetItem_DrawSmallRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004C0, object_gi_rupy_DL_000730, object_gi_rupy_DL_000580 } },
     // GID_51, OBJECT_GI_RUPY
-    { func_800EFAB8,
+    { GetItem_DrawSmallRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_0004E0, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005A0 } },
     // GID_BIG_POE, OBJECT_GI_GHOST
-    { func_800EE400,
+    { GetItem_DrawPoes,
       { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiBigPoeColorDL } },
     // GID_53, OBJECT_GI_RUPY
-    { func_800EF984,
+    { GetItem_DrawRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_000500, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005C0 } },
     // GID_54, OBJECT_GI_RUPY
-    { func_800EF984,
+    { GetItem_DrawRupee,
       { object_gi_rupy_DL_000620, object_gi_rupy_DL_000520, object_gi_rupy_DL_000730, object_gi_rupy_DL_0005E0 } },
     // GID_SWORD_KOKIRI, OBJECT_GI_SWORD_1
     { func_800EF1F4, { object_gi_sword_1_DL_000998, object_gi_sword_1_DL_000850 } },
-    // GID_56
-    { func_800EE7D8, { (Gfx*)0x06004DB0, (Gfx*)0x06004EB8 } },
+    // GID_SKULL_TOKEN_2, OBJECT_ST
+    { GetItem_DrawSkullToken, { object_st_DL_004DB0, object_st_DL_004EB8 } },
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_RED
     { func_800EF0F0, { object_gi_bottle_red_DL_000CC0, object_gi_bottle_red_DL_0009B0 } },
     // GID_58, OBJECT_GI_BOTTLE_15
     { func_800EF0F0, { object_gi_bottle_15_DL_001010, object_gi_bottle_15_DL_000CF0 } },
     // GID_MOON_TEAR, OBJECT_GI_RESERVE00
-    { func_800EF65C, { object_gi_reserve00_DL_000D78, object_gi_reserve00_DL_000C80 } },
+    { GetItem_DrawMoonsTear, { object_gi_reserve00_DL_000D78, object_gi_reserve00_DL_000C80 } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
     { func_800EF1F4, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_000968 } },
     // GID_MASK_DEKU, OBJECT_GI_NUTSMASK
     { func_800EF0F0, { object_gi_nutsmask_DL_000F20, object_gi_nutsmask_DL_000B50 } },
     // GID_REMAINS_ODOLWA, OBJECT_BSMASK
-    { func_800EFD44, { object_bsmask_DL_000690, object_bsmask_DL_000690 } },
+    { GetItem_DrawRemains, { object_bsmask_DL_000690, object_bsmask_DL_000690 } },
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
     { func_800EF0F0, { object_gi_bigbomb_DL_000DA0, object_gi_bigbomb_DL_000BC0 } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
@@ -302,14 +330,14 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_HYLIAN_LOACH, OBJECT_GI_LOACH
     { func_800EF0F0, { object_gi_loach_DL_000D30, object_gi_loach_DL_0007F0 } },
     // GID_SEA_HORSE_CAUGHT, OBJECT_GI_SEAHORSE
-    { func_800EF364,
+    { GetItem_DrawSeaHorseCaught,
       { object_gi_seahorse_DL_000F08, object_gi_seahorse_DL_000B20, object_gi_seahorse_DL_000A90, (Gfx*)0x06000A50 } },
     // GID_REMAINS_GOHT, OBJECT_BSMASK
-    { func_800EFD44, { object_bsmask_DL_003AD0, object_bsmask_DL_003AD0 } },
+    { GetItem_DrawRemains, { object_bsmask_DL_003AD0, object_bsmask_DL_003AD0 } },
     // GID_REMAINS_GYORG, OBJECT_BSMASK
-    { func_800EFD44, { object_bsmask_DL_001D80, object_bsmask_DL_001D80 } },
+    { GetItem_DrawRemains, { object_bsmask_DL_001D80, object_bsmask_DL_001D80 } },
     // GID_REMAINS_TWINMOLD, OBJECT_BSMASK
-    { func_800EFD44, { object_bsmask_DL_005020, object_bsmask_DL_005020 } },
+    { GetItem_DrawRemains, { object_bsmask_DL_005020, object_bsmask_DL_005020 } },
     // GID_SWORD_RAZOR, OBJECT_GI_SWORD_2
     { func_800EF1F4, { object_gi_sword_2_DL_000C08, object_gi_sword_2_DL_000C00 } },
     // GID_SWORD_GILDED, OBJECT_GI_SWORD_3
@@ -344,50 +372,459 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { func_800EF1F4, { object_gi_mask03_DL_000B90, object_gi_mask03_DL_0009B0 } },
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/GetItem_Draw.s")
+/**
+ * Draw "Get Item" Model
+ * Calls the corresponding draw function for the given draw ID
+ */
+void GetItem_Draw(PlayState* play, s16 drawId) {
+    sDrawItemTable[drawId].drawFunc(play, drawId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EE364.s")
+void GetItem_DrawBombchu(PlayState* play, s16 drawId) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EE400.s")
+    OPEN_DISPS(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EE5FC.s")
+    func_8012C214(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EE7D8.s")
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EE940.s")
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EEA48.s")
+void GetItem_DrawPoes(PlayState* play, s16 drawId) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EEC18.s")
+    OPEN_DISPS(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EED20.s")
+    func_8012C28C(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EEE34.s")
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EEF4C.s")
+    func_8012C2DC(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF054.s")
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF0F0.s")
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 0, play->state.frames * 0, 0x10, 0x20, 1,
+                                play->state.frames, -(play->state.frames * 6), 0x10, 0x20));
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF1F4.s")
+    Matrix_Push();
+    Matrix_ReplaceRotation(&play->billboardMtxF);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF2AC.s")
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF364.s")
+    Matrix_Pop();
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF4D4.s")
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF65C.s")
+void GetItem_DrawFairy2(PlayState* play, s16 drawId) {
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF780.s")
+    OPEN_DISPS(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF89C.s")
+    func_8012C28C(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EF984.s")
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EFAB8.s")
+    func_8012C2DC(play->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EFBFC.s")
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 0, play->state.frames * 0, 0x20, 0x20, 1,
+                                play->state.frames, -(play->state.frames * 6), 0x20, 0x20));
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_draw/func_800EFD44.s")
+    Matrix_Push();
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    Matrix_Pop();
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawSkullToken(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 0, -(play->state.frames * 5), 0x20, 0x20, 1,
+                                play->state.frames * 0, play->state.frames * 0, 0x20, 0x40));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawCompass(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 5);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawPotion(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames, play->state.frames, 0x20, 0x20, 1,
+                                -play->state.frames, play->state.frames, 0x20, 0x20));
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[3]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[4]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[5]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawGoronSword(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 1, play->state.frames * 0, 0x20, 0x20, 1,
+                                play->state.frames * 0, play->state.frames * 0, 0x20, 0x20));
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawDekuNuts(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 6, play->state.frames * 6, 0x20, 0x20, 1,
+                                play->state.frames * 6, play->state.frames * 6, 0x20, 0x20));
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawRecoveryHeart(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 0, -(play->state.frames * 3), 0x20, 0x20, 1,
+                                play->state.frames * 0, -(play->state.frames * 2), 0x20, 0x20));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawFish(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 0, play->state.frames * 1, 0x20, 0x20, 1,
+                                play->state.frames * 0, play->state.frames * 1, 0x20, 0x20));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_800EF054(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_800EF0F0(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_800EF1F4(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_800EF2AC(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[0]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId) {
+    s32 pad;
+    MtxF sp4C;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dlists[3]), &sp4C);
+    Matrix_Mult(&sp4C, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawFairy(PlayState* play, s16 drawId) {
+    s32 pad;
+    MtxF sp4C;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&D_06001254));
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dlists[3]), &sp4C);
+    Matrix_Mult(&sp4C, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawMoonsTear(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&D_06001C60));
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawMagicArrow(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawUpgrades(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[3]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawRupee(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawSmallRupee(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Matrix_Scale(0.7f, 0.7f, 0.7f, MTXMODE_APPLY);
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    func_8012C2DC(play->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dlists[2]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawWallet(PlayState* play, s16 drawId) {
+    s32 pad;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[3]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[4]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[5]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[6]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[7]);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void GetItem_DrawRemains(PlayState* play, s16 drawId) {
+    s32 pad;
+    s8 objectIdx;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_BSMASK);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIdx].segment);
+
+    func_8012C28C(play->state.gfxCtx);
+    Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dlists[0]);
+
+    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
