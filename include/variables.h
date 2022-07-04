@@ -870,7 +870,6 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 
 extern u8 D_801BB12C;
 
-extern s801BB170 D_801BB170[118];
 // extern UNK_TYPE1 D_801BC210;
 extern Gfx D_801BC240[9];
 extern Gfx D_801BC288[3];

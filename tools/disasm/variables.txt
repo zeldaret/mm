@@ -914,7 +914,7 @@
     0x801BB148:("sCsStateHandlers2","cutscene_update_func","[5]",0x14),
     0x801BB15C:("D_801BB15C","UNK_TYPE2","",0x2),
     0x801BB160:("D_801BB160","UNK_TYPE4","",0x4),
-    0x801BB170:("D_801BB170","s801BB170","[118]",0x1098),
+    0x801BB170:("sDrawItemTable","DrawItemTableEntry","[118]",0x1098),
     0x801BC210:("D_801BC210","UNK_TYPE1","",0x1),
     0x801BC240:("D_801BC240","Gfx","[9]",0x48),
     0x801BC288:("D_801BC288","Gfx","[3]",0x18),

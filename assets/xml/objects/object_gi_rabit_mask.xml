@@ -1,7 +1,8 @@
 ﻿<Root>
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_rabit_mask" Segment="6">
         <Texture Name="object_gi_rabit_mask_Tex_000000" OutName="tex_000000" Format="ia8" Width="16" Height="16" Offset="0x0" />
-        <DList Name="object_gi_rabit_mask_DL_000BC0" Offset="0xBC0" />
-        <DList Name="object_gi_rabit_mask_DL_000E58" Offset="0xE58" />
+        <DList Name="gGiBunnyHoodDL" Offset="0xBC0" />
+        <DList Name="gGiBunnyHoodEyesDL" Offset="0xE58" />
     </File>
 </Root>

@@ -718,7 +718,7 @@ void func_80AADD9C(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_44);
+        GetItem_Draw(play, GID_MASK_GORON);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -731,7 +731,7 @@ void func_80AADE78(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_45);
+        GetItem_Draw(play, GID_MASK_ZORA);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -744,7 +744,7 @@ void func_80AADF54(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_6B);
+        GetItem_Draw(play, GID_MASK_GIBDO);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -758,7 +758,7 @@ void func_80AAE030(PlayState* play, DmChar05* this) {
             Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
             Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
             Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-            GetItem_Draw(play, GID_03);
+            GetItem_Draw(play, GID_MASK_COUPLE);
         }
 
         if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -770,7 +770,8 @@ void func_80AAE030(PlayState* play, DmChar05* this) {
 void func_80AAE114(PlayState* play, DmChar05* this) {
     s32 sp34;
     s16 sp24[] = {
-        GID_02, GID_6A, GID_70, GID_3A, GID_0E, GID_0F, GID_3E, GID_71,
+        GID_MASK_KAMARO,        GID_MASK_GREAT_FAIRY, GID_MASK_ROMANI, GID_MASK_BLAST,
+        GID_MASK_CIRCUS_LEADER, GID_MASK_BREMEN,      GID_MASK_BUNNY,  GID_MASK_POSTMAN,
     };
 
     sp34 = DMCHAR05_GET(&this->actor) - DMCHAR05_5;

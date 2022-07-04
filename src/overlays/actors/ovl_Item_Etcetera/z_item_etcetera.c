@@ -38,13 +38,13 @@ static s16 sObjectIds[] = {
     OBJECT_GI_RUPY,   OBJECT_GI_RUPY,   OBJECT_GI_HEARTS,  OBJECT_GI_KEY,
 };
 static s16 sDrawItemIndices[] = {
-    GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_01,
-    GID_47,     GID_4F,     GID_50,     GID_51,     GID_53,     GID_13,     GID_01,
+    GID_BOTTLE,     GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE,      GID_KEY_SMALL,
+    GID_ARROW_FIRE, GID_4F,     GID_50,     GID_51,     GID_53,     GID_HEART_PIECE, GID_KEY_SMALL,
 };
 
 static s16 sGetItemIds[] = {
-    GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_KEY_SMALL,
-    GI_25,     GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,
+    GI_BOTTLE,     GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_KEY_SMALL,
+    GI_ARROW_FIRE, GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,
 };
 
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc) {
@@ -63,7 +63,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
         this->objIndex = objBankIndex;
     }
     this->giDrawId = sDrawItemIndices[type];
-    this->itemID = sGetItemIds[type];
+    this->getItemId = sGetItemIds[type];
     this->futureActionFunc = func_8092009C;
     this->drawFunc = ItemEtcetera_Draw;
     Actor_SetScale(&this->actor, 0.25f);
@@ -104,7 +104,7 @@ void func_8092009C(ItemEtcetera* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        Actor_PickUp(&this->actor, play, this->itemID, 30.0f, 50.0f);
+        Actor_PickUp(&this->actor, play, this->getItemId, 30.0f, 50.0f);
     }
 }
 

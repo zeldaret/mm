@@ -792,8 +792,8 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, PlayState* play) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001290);
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001470);
+        gSPDisplayList(POLY_XLU_DISP++, gGiHeartBorderDL);
+        gSPDisplayList(POLY_XLU_DISP++, gGiHeartContainerDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

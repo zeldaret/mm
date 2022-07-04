@@ -1,6 +1,7 @@
 ﻿<Root>
     <File Name="object_gi_bottle_04" Segment="6">
-        <!-- <Blob Name="object_gi_bottle_04_Blob_0007B0" Size="0x40" Offset="0x7B0" /> -->
+        <!-- Invalid DList -->
+        <!-- <DList Name="object_gi_bottle_04_DL_0007B0" Offset="0x7B0" /> -->
         <DList Name="object_gi_bottle_04_DL_0007F0" Offset="0x7F0" />
         <DList Name="object_gi_bottle_04_DL_0008B8" Offset="0x8B8" />
         <DList Name="object_gi_bottle_04_DL_000B10" Offset="0xB10" />

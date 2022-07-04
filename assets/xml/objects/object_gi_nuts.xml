@@ -1,6 +1,7 @@
 ﻿<Root>
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_nuts" Segment="6">
         <Texture Name="object_gi_nuts_Tex_000000" OutName="tex_000000" Format="i8" Width="32" Height="32" Offset="0x0" />
-        <DList Name="object_gi_nuts_DL_000E90" Offset="0xE90" />
+        <DList Name="gGiNutDL" Offset="0xE90" />
     </File>
 </Root>
