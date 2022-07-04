@@ -1,0 +1,14 @@
+<Root>
+    <File Name="ovl_En_Sth2" BaseAddress="0x80BF74E0" RangeStart="0x460" RangeEnd="0x2B30">
+        <Texture Name="D_80BF7940" OutName="D_80BF7940" Format="rgba16" Width="8" Height="8" Offset="0x460"/>
+        <Texture Name="D_80BF79C0" OutName="D_80BF79C0" Format="rgba16" Width="8" Height="16" Offset="0x4E0"/>
+        <Texture Name="D_80BF7AC0" OutName="D_80BF7AC0" Format="rgba16" Width="8" Height="8" Offset="0x5E0"/>
+        <Texture Name="D_80BF7B40" OutName="D_80BF7B40" Format="rgba16" Width="8" Height="8" Offset="0x660"/>
+        <Texture Name="D_80BF7BC0" OutName="D_80BF7BC0" Format="rgba16" Width="32" Height="32" Offset="0x6E0"/>
+        <Texture Name="D_80BF83C0" OutName="D_80BF83C0" Format="rgba16" Width="32" Height="16" Offset="0xEE0"/>
+        <Texture Name="D_80BF87C0" OutName="D_80BF87C0" Format="rgba16" Width="8" Height="16" Offset="0x12E0"/>
+        <DList Name="D_80BF9550" Offset="0x2070"/>
+        <DList Name="D_80BF9870" Offset="0x2390"/>
+        <Animation Name="D_80BFA000" Offset="0x2B20"/>
+    </File>
+</Root>

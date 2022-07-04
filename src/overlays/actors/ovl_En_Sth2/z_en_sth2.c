@@ -20,7 +20,7 @@ void func_80BF7814(EnSth2* this, PlayState* play2);
 s32 func_80BF76AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx); /* extern */
 void func_80BF77AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);            /* extern */
 
-#if 0
+#if 1
 const ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
     ACTORCAT_NPC,
@@ -32,7 +32,7 @@ const ActorInit En_Sth2_InitVars = {
     (ActorFunc)EnSth2_Update,
     (ActorFunc)NULL,
 };
-
+/*
 static s16 D_80BF99F8[0x2D4] = {
     0,       0x8FF,   0xC000,  0x8FF,   0x9DD,   0xB7C,   0xC62,   0xB95,   0xA10,   0x94C,   0x9E6,   0xB1E,   0xC60,
     0xD1C,   0xD53,   0xD6D,   0xD6E,   0xD5C,   0xD3A,   0xD0C,   0xCD7,   0xCA0,   0xC5C,   0xC05,   0xB9E,   0xB2F,
@@ -110,20 +110,28 @@ static JointIndex D_80BF9FA0[0x10] = {
     { 0, 0, 0x2B5 },
 };
 static AnimationHeader D_80BFA000 = { { 0x1E }, D_80BF99F8, D_80BF9FA0, 3 };
-Color_RGB8 D_80BFA01C[] = { { 189, 110, 0 },  { 0, 180, 110 },   { 0, 255, 80 },
-                            { 255, 160, 60 }, { 189, 230, 250 }, { 240, 230, 120 } };
+*/
 #endif
+#include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
 extern FlexSkeletonHeader D_060031F8;
-extern AnimationHeader D_80BFA000;
-extern Gfx D_80BF9550;
-extern Gfx D_80BF9870;
-extern Vec3f D_80BFA010;
-extern Color_RGB8 D_80BFA01C[];
+//extern AnimationHeader D_80BFA000;
+// extern Gfx D_80BF9550;
+// extern Gfx D_80BF9870;
+static Vec3f D_80BFA010[] = {
+    {68, 47, 0},
+    {0, 67, 200}
+};/*
+static Color_RGB8 D_80BFA01C[] = {
+    { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
+};*/
+Color_RGB8 D_80BFA01C[] = { { 0xBE, 110, 0 },  { 0, 180, 110 },   { 0, 255, 80 },
+                            { 255, 160, 60 }, { 189, 230, 250 }, { 240, 230, 120 } };
+
 
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
-    
+
     this->unk24A = Object_GetIndex(&play->objectCtx, 0x26A);
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
@@ -164,22 +172,22 @@ void func_80BF7688(EnSth2* this, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-s32 func_80BF76AC(PlayState *play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 func_80BF76AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
 
     if (limbIndex == 15) {
-        *dList = &D_80BF9550;
+        *dList = D_80BF9550;
     }
     if ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13)) {
-        rot->y += (s16) (Math_SinS((play->state.frames * ((limbIndex * 0x32) + 0x814))) * 200.0f);
-        rot->z += (s16) (Math_CosS((play->state.frames * ((limbIndex * 0x32) + 0x940))) * 200.0f);
+        rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 0x32) + 0x814))) * 200.0f);
+        rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 0x32) + 0x940))) * 200.0f);
     }
     return false;
 }
 
 void func_80BF77AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
-        Matrix_MultVec3f(&D_80BFA010, &thisx->focus.pos);
+        Matrix_MultVec3f(D_80BFA010, &thisx->focus.pos);
         OPEN_DISPS(play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, &D_80BF9870);
         CLOSE_DISPS(play->state.gfxCtx);
@@ -189,7 +197,7 @@ void func_80BF77AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 void func_80BF7814(EnSth2* this, PlayState* play2) {
     PlayState* play = play2;
     s32 pad;
-    
+
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
