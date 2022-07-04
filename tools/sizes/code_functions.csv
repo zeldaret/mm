@@ -1107,10 +1107,10 @@ asm/non_matchings/code/z_draw/GetItem_DrawGoronSword.s,GetItem_DrawGoronSword,0x
 asm/non_matchings/code/z_draw/GetItem_DrawDekuNuts.s,GetItem_DrawDekuNuts,0x800EED20,0x45
 asm/non_matchings/code/z_draw/GetItem_DrawRecoveryHeart.s,GetItem_DrawRecoveryHeart,0x800EEE34,0x46
 asm/non_matchings/code/z_draw/GetItem_DrawFish.s,GetItem_DrawFish,0x800EEF4C,0x42
-asm/non_matchings/code/z_draw/func_800EF054.s,func_800EF054,0x800EF054,0x27
-asm/non_matchings/code/z_draw/func_800EF0F0.s,func_800EF0F0,0x800EF0F0,0x41
-asm/non_matchings/code/z_draw/func_800EF1F4.s,func_800EF1F4,0x800EF1F4,0x2E
-asm/non_matchings/code/z_draw/func_800EF2AC.s,func_800EF2AC,0x800EF2AC,0x2E
+asm/non_matchings/code/z_draw/GetItem_DrawOpa0.s,GetItem_DrawOpa0,0x800EF054,0x27
+asm/non_matchings/code/z_draw/GetItem_DrawOpa0Xlu1.s,GetItem_DrawOpa0Xlu1,0x800EF0F0,0x41
+asm/non_matchings/code/z_draw/GetItem_DrawOpa01.s,GetItem_DrawOpa01,0x800EF1F4,0x2E
+asm/non_matchings/code/z_draw/GetItem_DrawXlu01.s,GetItem_DrawXlu01,0x800EF2AC,0x2E
 asm/non_matchings/code/z_draw/GetItem_DrawSeaHorseCaught.s,GetItem_DrawSeaHorseCaught,0x800EF364,0x5C
 asm/non_matchings/code/z_draw/GetItem_DrawFairy.s,GetItem_DrawFairy,0x800EF4D4,0x62
 asm/non_matchings/code/z_draw/GetItem_DrawMoonsTear.s,GetItem_DrawMoonsTear,0x800EF65C,0x49

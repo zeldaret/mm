@@ -463,7 +463,7 @@ typedef enum {
     /* 0x36 */ GID_LETTER_MAMA,
     /* 0x37 */ GID_37,
     /* 0x38 */ GID_SWORD_BGS,
-    /* 0x39 */ GID_39,
+    /* 0x39 */ GID_MASK_SUN,
     /* 0x3A */ GID_MASK_BLAST,
     /* 0x3B */ GID_FAIRY,
     /* 0x3C */ GID_MASK_SCENTS,
