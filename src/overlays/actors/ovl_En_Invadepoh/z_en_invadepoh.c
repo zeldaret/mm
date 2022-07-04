@@ -3683,7 +3683,7 @@ void func_80B4BA84(Actor* thisx, PlayState* play) {
 
     D_80B5040C = func_80B458D8();
     if (D_80B5040C == NULL) {
-        temp_v0_2 = (this->unk3BC < 0) ^ 1;
+        temp_v0_2 = this->unk3BC >= 0;
         this->unk3BC = -1;
         if (temp_v0_2) {
             func_80B4B820(this);
