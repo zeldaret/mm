@@ -9,7 +9,7 @@
 #include "z_bg_kin2_picture.h"
 #include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS 0x00000000 
+#define FLAGS 0x00000000
 
 #define THIS ((BgKin2Picture*)thisx)
 
@@ -18,14 +18,15 @@ void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Picture_Update(Actor* thisx, PlayState* play);
 void BgKin2Picture_Draw(Actor* thisx, PlayState* play);
 
-void func_80B6F4D4(BgKin2Picture* this, PlayState* play);
-void func_80B6F5A4(BgKin2Picture* this);
-void func_80B6F5B8(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this);
+void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void func_80B6F61C(BgKin2Picture* this);
 void func_80B6F640(BgKin2Picture* this, PlayState* play);
 void func_80B6F708(BgKin2Picture* this);
 void func_80B6F72C(BgKin2Picture* this, PlayState* play);
-void func_80B6F4C0(BgKin2Picture* this);
+void BgKin2Picture_SetupWait(BgKin2Picture* this);
 void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
 const ActorInit Bg_Kin2_Picture_InitVars = {
@@ -96,29 +97,30 @@ s32 func_80B6EFA0(PlayState* play, s32 arg1) {
     return (phi_a2 >= 0) && Flags_GetTreasure(play, phi_a2);
 }
 
-void func_80B6EFEC(BgKin2Picture *thisx, PlayState *play)
-{
-  BgKin2Picture *this = thisx;
-  s32 temp_a1;
+void func_80B6EFEC(BgKin2Picture* thisx, PlayState* play) {
+    BgKin2Picture* this = thisx;
+    s32 temp_a1;
 
-  if (((s32) (((&this->dyna.actor)->params >> 5) & 1)) == 0)
-  {
-    temp_a1 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF03;
-    if ((func_80B6EFA0(play, temp_a1) == 0) && Actor_Spawn(&play->actorCtx, play, 0x50, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0, this->dyna.actor.home.rot.y, 0, temp_a1))
-    {
-      play_sound(0x4807);
+    if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) == 0) {
+        temp_a1 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF03;
+        if ((func_80B6EFA0(play, temp_a1) == 0) &&
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y + 23.0f,
+                        this->dyna.actor.home.pos.z, 0, this->dyna.actor.home.rot.y, 0, temp_a1)) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+        }
     }
-  }
 }
 
+//dust function? Idea: BgKin2Picture_SpawnDust.
 void func_80B6F098(BgKin2Picture* this, PlayState* play) {
-    f32 temp_fs0; 
-    Vec3f spB8;
-    Vec3f spAC;
-    Vec3f spA0;
-    Vec3f sp94;
+    f32 temp_fs0;
+    Vec3f temp;
+    Vec3f pos;
+    Vec3f velocity;
+    Vec3f accel;
     s32 temp_s1;
-    s32 temp_s0;
+    s32 scale; //rename.
+    s16 scaleStep;
     s32 phi_s3;
     s32 i;
 
@@ -126,25 +128,26 @@ void func_80B6F098(BgKin2Picture* this, PlayState* play) {
                                  this->dyna.actor.world.pos.y +
                                      (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    Matrix_MultVec3f(&D_80B6FA18, &spB8);
-    spAC.y = spB8.y - 7.0f;
-    spA0.y = 0.0f;
-    sp94.y = 0.2f;
+    Matrix_MultVec3f(&D_80B6FA18, &temp);
+    pos.y = temp.y - 7.0f;
+    velocity.y = 0.0f;
+    accel.y = 0.2f;
 
     for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC) {
-        temp_s0 = Rand_ZeroOne() * 3276.0f;
-        temp_s1 = temp_s0 + phi_s3;
+        scale = Rand_ZeroOne() * 3276.0f;
+        temp_s1 = scale + phi_s3;
         temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
-        spAC.x = Math_SinS(temp_s1) * temp_fs0;
-        spAC.z = Math_CosS(temp_s1) * temp_fs0;
-        spA0.x = (Rand_ZeroOne() - 0.5f) + (spAC.x * (1.0f / 6.0f));
-        spA0.z = (Rand_ZeroOne() - 0.5f) + (spAC.z * (1.0f / 6.0f));
-        spAC.x += spB8.x;
-        spAC.z += spB8.z;
-        sp94.x = spA0.x * (-0.09f);
-        sp94.z = spA0.z * (-0.09f);
-        temp_s0 = ( (s32) (Rand_ZeroOne() * 10.0f)) + 0xA;
-        func_800B1210(play, &spAC, &spA0, &sp94, temp_s0, ( (s32) (Rand_ZeroOne() * 10.0f)) + 0xF);
+        pos.x = Math_SinS(temp_s1) * temp_fs0;
+        pos.z = Math_CosS(temp_s1) * temp_fs0;
+        velocity.x = (Rand_ZeroOne() - 0.5f) + (pos.x * (1.0f / 6.0f));
+        velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * (1.0f / 6.0f));
+        pos.x += temp.x;
+        pos.z += temp.z;
+        accel.x = velocity.x * (-0.09f);
+        accel.z = velocity.z * (-0.09f);
+        scale = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xA;
+        scaleStep = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xF;
+        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep); //dust spawn function.
     }
 }
 
@@ -152,9 +155,10 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgKin2Picture* this = THIS;
     s32 temp_a1;
-    Vec3f sp68[3];
+    Vec3f vertices[3];
     s32 i;
     s32 j;
+    ColliderTrisElementInit* element;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -166,22 +170,21 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(sTrisElementsInit); i++) {
-        for (j = 0; j < ARRAY_COUNT(sp68); j++) {
-            ColliderTrisElementInit* element = &sTrisInit.elements[i];
-
-            Matrix_MultVec3f(&element->dim.vtx[j], &sp68[j]);
+        for (j = 0; j < ARRAY_COUNT(vertices); j++) {
+            element = &sTrisInit.elements[i];
+            Matrix_MultVec3f(&element->dim.vtx[j], &vertices[j]);
         }
-        Collider_SetTrisVertices(&this->colliderTris, i, &sp68[0], &sp68[1], &sp68[2]);
+        Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
-    temp_a1 = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF03;
+    temp_a1 = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF03; //flags?
 
     if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || func_80B6EFA0(play, temp_a1)) {
         this->unk242 = -1;
     }
 
-    func_80B6F4C0(this);
+    BgKin2Picture_SetupWait(this);
 }
 
 void BgKin2Picture_Destroy(Actor* thisx, PlayState* play) {
@@ -191,56 +194,51 @@ void BgKin2Picture_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyTris(play, &this->colliderTris);
 }
 
-void func_80B6F4C0(BgKin2Picture* arg0) {
-    arg0->actionFunc = func_80B6F4D4;
+void BgKin2Picture_SetupWait(BgKin2Picture* this) {
+    this->actionFunc = BgKin2Picture_Wait;
 }
 
-void func_80B6F4D4(BgKin2Picture* this, PlayState* play) {
-    s8 temp_v0_2;
-    u8 temp_v0;
-
-    temp_v0 = this->colliderTris.base.acFlags;
-    if ((temp_v0 & 2) != 0) {
-        this->colliderTris.base.acFlags = temp_v0 & 0xFFFD;
-        ActorCutscene_SetIntentToPlay((s16)this->dyna.actor.cutscene);
-        func_80B6F5A4(this);
-        return;
-    }
-    temp_v0_2 = this->unk242;
-    if ((s32)temp_v0_2 >= 0) {
-        if (temp_v0_2 == 0) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
-            if (Rand_ZeroOne() < 0.1f) {
-                this->unk242 = Rand_S16Offset(0x28, 0x50);
+void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
+    if ((this->colliderTris.base.acFlags & AC_HIT) != 0) {
+        this->colliderTris.base.acFlags &= ~AC_HIT;
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        BgKin2Picture_SetupPlayCutscene(this);
+    } else {
+        if (this->unk242 >= 0) {
+            if (this->unk242 == 0) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+                if (Rand_ZeroOne() < 0.1f) {
+                    this->unk242 = Rand_S16Offset(40, 80);
+                } else {
+                    this->unk242 = 8;
+                }
             } else {
-                this->unk242 = 8;
+                this->unk242--;
             }
-        } else {
-            this->unk242 = temp_v0_2 - 1;
         }
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
     }
-    CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
 }
 
-void func_80B6F5A4(BgKin2Picture* arg0) {
-    arg0->actionFunc = func_80B6F5B8;
+void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this) {
+    this->actionFunc = BgKin2Picture_PlayCutscene;
 }
 
-void func_80B6F5B8(BgKin2Picture* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext((s16) this->dyna.actor.cutscene) != 0) {
+void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->unk240 = 1;
         func_80B6F61C(this);
-        return;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay((s16)this->dyna.actor.cutscene);
 }
 
-void func_80B6F61C(BgKin2Picture* arg0) {
-    arg0->unk23A = 0xD;
-    arg0->unk23C = 0;
-    arg0->unk23E = 0;
-    arg0->actionFunc = func_80B6F640;
+void func_80B6F61C(BgKin2Picture* this) {
+    this->unk23A = 0xD;
+    this->unk23C = 0;
+    this->unk23E = 0;
+    this->actionFunc = func_80B6F640;
 }
 
 void func_80B6F640(BgKin2Picture* this, PlayState* play) {
@@ -271,9 +269,7 @@ void func_80B6F708(BgKin2Picture* this) {
     this->actionFunc = func_80B6F72C;
 }
 
-void func_80B6EFEC(BgKin2Picture*, PlayState*); /* extern */
-void func_80B6F098(BgKin2Picture*, PlayState*); /* extern */
-void BgKin2Picture_SetupDoNothing(BgKin2Picture*);             /* extern */
+
 
 void func_80B6F72C(BgKin2Picture* this, PlayState* play) {
     if (this->unk23A > 0) {
@@ -324,10 +320,9 @@ void func_80B6F72C(BgKin2Picture* this, PlayState* play) {
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
         BgKin2Picture_SetupDoNothing(this);
-        return;
+    } else {
+        this->dyna.actor.shape.yOffset = Math_SinS(this->dyna.actor.shape.rot.x) * 40.0f;
     }
-
-    this->dyna.actor.shape.yOffset = Math_SinS(this->dyna.actor.shape.rot.x) * 40.0f;
 }
 
 void BgKin2Picture_SetupDoNothing(BgKin2Picture* this) {
