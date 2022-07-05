@@ -11,6 +11,7 @@
 // temp_v0 = this->dyna.actor.params;
 // #define BGIKANARAY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
+#define BG_KIN2_PICTURE_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define BG_KIN2_PICTURE_GET_100000(thisx) (((thisx)->params >> 5) & 1)
 
 struct BgKin2Picture;

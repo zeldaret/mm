@@ -88,38 +88,39 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80B6EFA0(PlayState* play, s32 arg1) {
-    s32 phi_a2 = -1;
+    s32 flag = -1;
 
     if ((u8)arg1 & 3) {
-        phi_a2 = (u8)(((arg1 & 0x3FC)) >> 2);
+        flag = (u8)(((arg1 & 0x3FC)) >> 2);
     }
 
-    return (phi_a2 >= 0) && Flags_GetTreasure(play, phi_a2);
+    return (flag >= 0) && Flags_GetTreasure(play, flag);
 }
 
 void func_80B6EFEC(BgKin2Picture* thisx, PlayState* play) {
     BgKin2Picture* this = thisx;
     s32 temp_a1;
 
-    if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) == 0) {
-        temp_a1 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF03;
-        if ((func_80B6EFA0(play, temp_a1) == 0) &&
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y + 23.0f,
-                        this->dyna.actor.home.pos.z, 0, this->dyna.actor.home.rot.y, 0, temp_a1)) {
+    if (!BG_KIN2_PICTURE_GET_100000(&this->dyna.actor)) {
+        temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03;
+        if (!func_80B6EFA0(play, temp_a1) &&
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
+                        this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
+                        this->dyna.actor.home.rot.y, 0, temp_a1)) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 }
 
-//dust function? Idea: BgKin2Picture_SpawnDust.
-void func_80B6F098(BgKin2Picture* this, PlayState* play) {
+void BgKin2Picture_SpawnEffects(BgKin2Picture* this, PlayState* play) {
     f32 temp_fs0;
     Vec3f temp;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
     s32 temp_s1;
-    s32 scale; //rename.
+    s32 temp2;
+    s32 scale;
     s16 scaleStep;
     s32 phi_s3;
     s32 i;
@@ -134,8 +135,8 @@ void func_80B6F098(BgKin2Picture* this, PlayState* play) {
     accel.y = 0.2f;
 
     for (i = 0, phi_s3 = 0; i < 20; i++, phi_s3 += 0xCCC) {
-        scale = Rand_ZeroOne() * 3276.0f;
-        temp_s1 = scale + phi_s3;
+        temp2 = Rand_ZeroOne() * 3276.0f;
+        temp_s1 = temp2 + phi_s3;
         temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
         pos.x = Math_SinS(temp_s1) * temp_fs0;
         pos.z = Math_CosS(temp_s1) * temp_fs0;
@@ -147,7 +148,7 @@ void func_80B6F098(BgKin2Picture* this, PlayState* play) {
         accel.z = velocity.z * (-0.09f);
         scale = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xA;
         scaleStep = ((s32)(Rand_ZeroOne() * 10.0f)) + 0xF;
-        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep); //dust spawn function.
+        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep); // For dust spawn.
     }
 }
 
@@ -178,8 +179,9 @@ void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->dyna.actor, 23.0f);
-    temp_a1 = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF03; //flags?
+    temp_a1 = (BG_KIN2_PICTURE_GET_1F(&this->dyna.actor) << 2) | 0xFF03; // flags?
 
+    // does it have a Golden Skulltula behind?
     if (BG_KIN2_PICTURE_GET_100000(&this->dyna.actor) || func_80B6EFA0(play, temp_a1)) {
         this->unk242 = -1;
     }
@@ -199,7 +201,8 @@ void BgKin2Picture_SetupWait(BgKin2Picture* this) {
 }
 
 void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
-    if ((this->colliderTris.base.acFlags & AC_HIT) != 0) {
+    // hit by hookshot
+    if (this->colliderTris.base.acFlags & AC_HIT) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         BgKin2Picture_SetupPlayCutscene(this);
@@ -242,24 +245,24 @@ void func_80B6F61C(BgKin2Picture* this) {
 }
 
 void func_80B6F640(BgKin2Picture* this, PlayState* play) {
-    Vec3f* new_var;
+    s32 pad;
     Vec3f sp30;
     Vec3f sp24;
-    this->unk23A += -1;
+
+    this->unk23A--;
     if (this->unk23A <= 0) {
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
         func_80B6F708(this);
-        return;
+    } else {
+        this->unk23C += 0x7BAC;
+        this->unk23E += 0x4E20;
+        sp30.x = Math_CosS(this->unk23C);
+        sp30.y = Math_CosS(this->unk23E) * 0.2f;
+        sp30.z = 0.0f;
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
+        Matrix_MultVec3f(&sp30, &sp24);
+        Math_Vec3f_Sum(&this->dyna.actor.home.pos, &sp24, &this->dyna.actor.world.pos);
     }
-    this->unk23C += 0x7BAC;
-    this->unk23E += 0x4E20;
-    sp30.x = Math_CosS(this->unk23C);
-    sp30.y = Math_CosS(this->unk23E) * 0.2f;
-    sp30.z = 0.0f;
-    Matrix_RotateYS(this->dyna.actor.shape.rot.y, 0);
-    new_var = &sp30;
-    Matrix_MultVec3f(new_var, &sp24);
-    Math_Vec3f_Sum(&this->dyna.actor.home.pos, &sp24, &this->dyna.actor.world.pos);
 }
 
 void func_80B6F708(BgKin2Picture* this) {
@@ -269,8 +272,7 @@ void func_80B6F708(BgKin2Picture* this) {
     this->actionFunc = func_80B6F72C;
 }
 
-
-
+// land or fall.
 void func_80B6F72C(BgKin2Picture* this, PlayState* play) {
     if (this->unk23A > 0) {
         this->unk23A--;
@@ -306,7 +308,7 @@ void func_80B6F72C(BgKin2Picture* this, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 23.0f);
 
     if (!(this->unk241) && (this->dyna.actor.shape.rot.x > 0x3300)) {
-        func_80B6F098(this, play);
+        BgKin2Picture_SpawnEffects(this, play);
         this->unk241 = 1;
     }
 
