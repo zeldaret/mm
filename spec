@@ -2784,8 +2784,7 @@ beginseg
     name "ovl_En_Sekihi"
     compress
     include "build/src/overlays/actors/ovl_En_Sekihi/z_en_sekihi.o"
-    include "build/data/ovl_En_Sekihi/ovl_En_Sekihi.data.o"
-    include "build/data/ovl_En_Sekihi/ovl_En_Sekihi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sekihi/ovl_En_Sekihi_reloc.o"
 endseg
 
 beginseg
