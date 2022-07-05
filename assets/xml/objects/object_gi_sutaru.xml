@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Dependencies -->
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_sutaru" Segment="6">
         <DList Name="gGiSkulltulaTokenDL" Offset="0x330" />

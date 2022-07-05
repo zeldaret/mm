@@ -100,7 +100,7 @@ void GetItem_DrawOpa0(PlayState* play, s16 drawId);
 void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId);
 void GetItem_DrawOpa01(PlayState* play, s16 drawId);
 void GetItem_DrawXlu01(PlayState* play, s16 drawId);
-void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId);
+void GetItem_DrawSeahorse(PlayState* play, s16 drawId);
 void GetItem_DrawFairyContainer(PlayState* play, s16 drawId);
 void GetItem_DrawMoonsTear(PlayState* play, s16 drawId);
 void GetItem_DrawMagicArrow(PlayState* play, s16 drawId);
@@ -139,7 +139,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_COMPASS, OBJECT_GI_COMPASS
     { GetItem_DrawCompass, { gGiCompassDL, gGiCompassGlassDL } },
     // GID_BOMBERS_NOTEBOOK, OBJECT_GI_SCHEDULE
-    { GetItem_DrawOpa0Xlu1, { object_gi_schedule_DL_000B78, object_gi_schedule_DL_0006C0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiBombersNotebookEmptyDL, gGiBombersNotebookDL } },
     // GID_MASK_STONE, OBJECT_GI_STONEMASK
     { GetItem_DrawOpa0Xlu1, { object_gi_stonemask_DL_000E48, object_gi_stonemask_DL_000A10 } },
     // GID_MASK_KAFEIS_MASK, OBJECT_GI_MASK05
@@ -235,7 +235,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_FISH, OBJECT_GI_FISH
     { GetItem_DrawFish, { gGiFishContainerDL } },
     // GID_LETTER_MAMA, OBJECT_GI_RESERVE_B_01
-    { GetItem_DrawOpa0Xlu1, { object_gi_reserve_b_01_DL_000948, object_gi_reserve_b_01_DL_000820 } },
+    { GetItem_DrawOpa0Xlu1, { gGiLetterToMamaEnvelopeLetterDL, gGiLetterToMamaInscriptionsDL } },
     // GID_37
     { GetItem_DrawOpa0, { NULL } },
     // GID_SWORD_BGS, OBJECT_GI_LONGSWORD
@@ -257,13 +257,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_TRUTH, OBJECT_GI_TRUTH_MASK
     { GetItem_DrawOpa0Xlu1, { gGiMaskOfTruthDL, gGiMaskOfTruthAccentsDL } },
     // GID_DEED_SWAMP, OBJECT_GI_RESERVE01
-    { GetItem_DrawOpa01, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_000990 } },
+    { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedSwampColorDL } },
     // GID_DEED_MOUNTAIN, OBJECT_GI_RESERVE01
-    { GetItem_DrawOpa01, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009B8 } },
+    { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedMountainColorDL } },
     // GID_RUPEE_HUGE, OBJECT_GI_RUPY
     { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiGoldRupeeInnerColorDL, gGiRupeeOuterDL, gGiGoldRupeeOuterColorDL } },
     // GID_DEED_OCEAN, OBJECT_GI_RESERVE01
-    { GetItem_DrawOpa01, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009E0 } },
+    { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedOceanColorDL } },
     // GID_MASK_GORON, OBJECT_GI_GOLONMASK
     { GetItem_DrawOpa0Xlu1, { gGiGoronMaskEmptyDL, gGiGoronMaskDL } },
     // GID_MASK_ZORA, OBJECT_GI_ZORAMASK
@@ -271,11 +271,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_46
     { GetItem_DrawBombchu, { NULL } },
     // GID_ARROW_FIRE, OBJECT_GI_M_ARROW
-    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiFireArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowAmmoDL, gGiMagicArrowFireColorDL, gGiMagicArrowGlowDL } },
     // GID_ARROW_ICE, OBJECT_GI_M_ARROW
-    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiIceArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowAmmoDL, gGiMagicArrowIceColorDL, gGiMagicArrowGlowDL } },
     // GID_ARROW_LIGHT, OBJECT_GI_M_ARROW
-    { GetItem_DrawMagicArrow, { gGiMagicArrowDL, gGiLightArrowColorDL, gGiArrowMagicDL } },
+    { GetItem_DrawMagicArrow, { gGiMagicArrowAmmoDL, gGiMagicArrowLightColorDL, gGiMagicArrowGlowDL } },
     // GID_SKULL_TOKEN, OBJECT_GI_SUTARU
     { GetItem_DrawSkullToken, { gGiSkulltulaTokenDL, gGiSkulltulaTokenFlameDL } },
     // GID_BUG, OBJECT_GI_INSECT
@@ -303,7 +303,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_RUPEE_SILVER, OBJECT_GI_RUPY
     { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiSilverRupeeInnerColorDL, gGiRupeeOuterDL, gGiSilverRupeeOuterColorDL } },
     // GID_SWORD_KOKIRI, OBJECT_GI_SWORD_1
-    { GetItem_DrawOpa01, { object_gi_sword_1_DL_000998, object_gi_sword_1_DL_000850 } },
+    { GetItem_DrawOpa01, { gGiKokiriSwordBladeHiltDL, gGiKokiriSwordGuardDL } },
     // GID_SKULL_TOKEN_2, OBJECT_ST
     { GetItem_DrawSkullToken, { object_st_DL_004DB0, object_st_DL_004EB8 } },
     // GID_57, OBJECT_GI_BOTTLE_RED
@@ -311,11 +311,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
     { GetItem_DrawOpa0Xlu1, { gGiZoraEggBottleContentsDL, gGiZoraEggBottleGlassAndCorkDL } },
     // GID_MOON_TEAR, OBJECT_GI_RESERVE00
-    { GetItem_DrawMoonsTear, { object_gi_reserve00_DL_000D78, object_gi_reserve00_DL_000C80 } },
+    { GetItem_DrawMoonsTear, { gGiMoonsTearItemDL, gGiMoonsTearGlowDL } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
-    { GetItem_DrawOpa01, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_000968 } },
+    { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedLandColorDL } },
     // GID_MASK_DEKU, OBJECT_GI_NUTSMASK
-    { GetItem_DrawOpa0Xlu1, { object_gi_nutsmask_DL_000F20, object_gi_nutsmask_DL_000B50 } },
+    { GetItem_DrawOpa0Xlu1, { gGiDekuMaskEmptyDL, gGiDekuMaskDL } },
     // GID_REMAINS_ODOLWA, OBJECT_BSMASK
     { GetItem_DrawRemains, { object_bsmask_DL_000690, object_bsmask_DL_000690 } },
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
@@ -329,7 +329,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_HYLIAN_LOACH, OBJECT_GI_LOACH
     { GetItem_DrawOpa0Xlu1, { gGiHylianLoachEmptyDL, gGiHylianLoachDL } },
     // GID_SEA_HORSE_CAUGHT, OBJECT_GI_SEAHORSE
-    { GetItem_DrawSeaHorseCaught,
+    { GetItem_DrawSeahorse,
       { gGiSeahorseEmptyDL, gGiSeahorseBodyDL, gGiSeahorseGlowDL, (Gfx*)&gGiSeahorseBillboardRotMtx } },
     // GID_REMAINS_GOHT, OBJECT_BSMASK
     { GetItem_DrawRemains, { object_bsmask_DL_003AD0, object_bsmask_DL_003AD0 } },
@@ -338,25 +338,25 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_REMAINS_TWINMOLD, OBJECT_BSMASK
     { GetItem_DrawRemains, { object_bsmask_DL_005020, object_bsmask_DL_005020 } },
     // GID_SWORD_RAZOR, OBJECT_GI_SWORD_2
-    { GetItem_DrawOpa01, { object_gi_sword_2_DL_000C08, object_gi_sword_2_DL_000C00 } },
+    { GetItem_DrawOpa01, { gGiRazorSwordDL, gGiRazorSwordEmptyDL } },
     // GID_SWORD_GILDED, OBJECT_GI_SWORD_3
-    { GetItem_DrawOpa01, { object_gi_sword_3_DL_0009E8, object_gi_sword_3_DL_0009E0 } },
+    { GetItem_DrawOpa01, { gGiGildedSwordDL, gGiGildedSwordEmptyDL } },
     // GID_SWORD_GREAT_FAIRY, OBJECT_GI_SWORD_4
-    { GetItem_DrawOpa0Xlu1, { object_gi_sword_4_DL_000AD8, object_gi_sword_4_DL_000940 } },
+    { GetItem_DrawOpa0Xlu1, { gGiGreatFairySwordBladeDL, gGiGreatFairySwordHiltEmblemDL } },
     // GID_MASK_GARO, OBJECT_GI_MASK09
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask09_DL_0008F0, object_gi_mask09_DL_0007A0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiGarosMaskCloakDL, gGiGarosMaskFaceDL } },
     // GID_MASK_GREAT_FAIRY, OBJECT_GI_MASK14
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask14_DL_001000, object_gi_mask14_DL_000ED0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiGreatFairyMaskFaceDL, gGiGreatFairyMaskLeavesDL } },
     // GID_MASK_GIBDO, OBJECT_GI_MASK15
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask15_DL_000F58, object_gi_mask15_DL_000B30 } },
+    { GetItem_DrawOpa0Xlu1, { gGiGibdoMaskEmptyDL, gGiGibdoMaskDL } },
     // GID_ROOM_KEY, OBJECT_GI_RESERVE_B_00
-    { GetItem_DrawOpa0Xlu1, { object_gi_reserve_b_00_DL_000C20, object_gi_reserve_b_00_DL_0007D0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiRoomKeyEmptyDL, gGiRoomKeyDL } },
     // GID_LETTER_TO_KAFEI, OBJECT_GI_RESERVE_C_00
-    { GetItem_DrawOpa0Xlu1, { object_gi_reserve_c_00_DL_0005F0, object_gi_reserve_c_00_DL_0004A0 } },
-    // GID_PENDANT_MEMORIES, OBJECT_GI_RESERVE_C_01
-    { GetItem_DrawOpa0Xlu1, { object_gi_reserve_c_01_DL_000C78, object_gi_reserve_c_01_DL_000750 } },
+    { GetItem_DrawOpa0Xlu1, { gGiLetterToKafeiEnvelopeLetterDL, gGiLetterToKafeiInscriptionsDL } },
+    // GID_PENDANT_OF_MEMORIES, OBJECT_GI_RESERVE_C_01
+    { GetItem_DrawOpa0Xlu1, { gGiPendantOfMemoriesEmptyDL, gGiPendantOfMemoriesDL } },
     // GID_MUSHROOM, OBJECT_GI_MAGICMUSHROOM
-    { GetItem_DrawOpa0Xlu1, { gGiMushroomEmptyDL, gGiMushroomDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiMagicMushroomEmptyDL, gGiMagicMushroomDL } },
     // GID_MASK_ROMANI, OBJECT_GI_MASK10
     { GetItem_DrawOpa0Xlu1, { object_gi_mask10_DL_000B60, object_gi_mask10_DL_000A30 } },
     // GID_MASK_POSTMAN, OBJECT_GI_MASK12
@@ -364,7 +364,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_GIANT, OBJECT_GI_MASK23
     { GetItem_DrawOpa01, { object_gi_mask23_DL_000C00, object_gi_mask23_DL_0008C0 } },
     // GID_CHATEAU, OBJECT_GI_BOTTLE_21
-    { GetItem_DrawOpa0Xlu1, { object_gi_bottle_21_DL_000E90, object_gi_bottle_21_DL_000A50 } },
+    { GetItem_DrawOpa0Xlu1, { gChateauRomaniBottleEmptyDL, gChateauRomaniBottleDL } },
     // GID_PICTO_BOX, OBJECT_GI_CAMERA
     { GetItem_DrawOpa0Xlu1, { gGiPictoBoxFrameDL, gGiPictoBoxBodyAndLensDL } },
     // GID_MASK_FIERCE_DEITY, OBJECT_GI_MASK03
@@ -651,7 +651,7 @@ void GetItem_DrawXlu01(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId) {
+void GetItem_DrawSeahorse(PlayState* play, s16 drawId) {
     s32 pad;
     MtxF mtx;
 
@@ -710,7 +710,7 @@ void GetItem_DrawMoonsTear(PlayState* play, s16 drawId) {
 
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_gi_reserve00_Matanimheader_001C60));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiMoonsTearTexAnim));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);

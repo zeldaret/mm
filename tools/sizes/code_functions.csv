@@ -1111,7 +1111,7 @@ asm/non_matchings/code/z_draw/GetItem_DrawOpa0.s,GetItem_DrawOpa0,0x800EF054,0x2
 asm/non_matchings/code/z_draw/GetItem_DrawOpa0Xlu1.s,GetItem_DrawOpa0Xlu1,0x800EF0F0,0x41
 asm/non_matchings/code/z_draw/GetItem_DrawOpa01.s,GetItem_DrawOpa01,0x800EF1F4,0x2E
 asm/non_matchings/code/z_draw/GetItem_DrawXlu01.s,GetItem_DrawXlu01,0x800EF2AC,0x2E
-asm/non_matchings/code/z_draw/GetItem_DrawSeaHorseCaught.s,GetItem_DrawSeaHorseCaught,0x800EF364,0x5C
+asm/non_matchings/code/z_draw/GetItem_DrawSeahorse.s,GetItem_DrawSeahorse,0x800EF364,0x5C
 asm/non_matchings/code/z_draw/GetItem_DrawFairyContainer.s,GetItem_DrawFairyContainer,0x800EF4D4,0x62
 asm/non_matchings/code/z_draw/GetItem_DrawMoonsTear.s,GetItem_DrawMoonsTear,0x800EF65C,0x49
 asm/non_matchings/code/z_draw/GetItem_DrawMagicArrow.s,GetItem_DrawMagicArrow,0x800EF780,0x47

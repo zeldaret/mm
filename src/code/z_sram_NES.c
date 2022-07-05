@@ -413,7 +413,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     func_801149A0(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = 1; j < 4; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
+        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             func_80112B40(play, j);
         }

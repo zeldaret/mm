@@ -1597,7 +1597,7 @@
     0x800EF0F0:("GetItem_DrawOpa0Xlu1",),
     0x800EF1F4:("GetItem_DrawOpa01",),
     0x800EF2AC:("GetItem_DrawXlu01",),
-    0x800EF364:("GetItem_DrawSeaHorseCaught",),
+    0x800EF364:("GetItem_DrawSeahorse",),
     0x800EF4D4:("GetItem_DrawFairyContainer",),
     0x800EF65C:("GetItem_DrawMoonsTear",),
     0x800EF780:("GetItem_DrawMagicArrow",),

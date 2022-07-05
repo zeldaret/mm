@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Dependencies -->
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_rupy" Segment="6">
         <DList Name="gGiGreenRupeeInnerColorDL" Offset="0x4A0" />
