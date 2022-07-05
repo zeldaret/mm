@@ -10,6 +10,8 @@
         <Texture Name="object_um_Tex_002148" OutName="tex_002148" Format="rgba16" Width="32" Height="32" Offset="0x2148" />
         <Texture Name="object_um_Tex_002948" OutName="tex_002948" Format="rgba16" Width="32" Height="32" Offset="0x2948" />
         <Texture Name="object_um_Tex_003148" OutName="tex_003148" Format="rgba16" Width="32" Height="32" Offset="0x3148" />
+
+        <!-- The bottles which the bandits try to destroy in the milk-run minigame. Referred as "milk-bottles" by Cremia in-game. -->
         <DList Name="gUmMinigamePotDL" Offset="0x3C60" />
         <Texture Name="object_um_Tex_003F00" OutName="tex_003F00" Format="rgba16" Width="16" Height="16" Offset="0x3F00" />
         <Texture Name="object_um_Tex_004100" OutName="tex_004100" Format="rgba16" Width="8" Height="8" Offset="0x4100" />
