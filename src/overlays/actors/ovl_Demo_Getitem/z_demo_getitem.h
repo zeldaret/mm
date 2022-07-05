@@ -13,7 +13,7 @@ typedef struct DemoGetitem {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s16 item;
     /* 0x146 */ u16 csAction;
-    /* 0x148 */ s8 object;
+    /* 0x148 */ s8 objectIndex;
     /* 0x14C */ DemoGetitemActionFunc actionFunc;
 } DemoGetitem; // size = 0x150
 

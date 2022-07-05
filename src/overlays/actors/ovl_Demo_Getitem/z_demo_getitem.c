@@ -1,7 +1,7 @@
 /*
  * File: z_demo_getitem.c
  * Overlay: ovl_Demo_Getitem
- * Description: Cutscene object for Great Fairy's Mask and Great Fairy's Sword
+ * Description: Cutscene objectIndex for Great Fairy's Mask and Great Fairy's Sword
  */
 
 #include "z_demo_getitem.h"
@@ -38,7 +38,7 @@ static u16 sCsActionIndices[] = { 0x6E, 0x236 };
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    s32 objIndex;
+    s32 objectIndex;
     s32 itemIndex;
     DemoGetitem* this = THIS;
 
@@ -50,11 +50,11 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80A4FB10;
     this->item = sGetItemDraws[itemIndex];
     this->csAction = sCsActionIndices[itemIndex];
-    objIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
-    if (objIndex < 0) {
+    objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
+    if (objectIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        this->object = objIndex;
+        this->objectIndex = objectIndex;
     }
 }
 
@@ -62,9 +62,9 @@ void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80A4FB10(DemoGetitem* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->object)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->actor.draw = NULL;
-        this->actor.objBankIndex = this->object;
+        this->actor.objBankIndex = this->objectIndex;
         this->actionFunc = func_80A4FB68;
     }
 }
