@@ -88,7 +88,7 @@
 
 void GetItem_DrawBombchu(PlayState* play, s16 drawId);
 void GetItem_DrawPoes(PlayState* play, s16 drawId);
-void GetItem_DrawFairy2(PlayState* play, s16 drawId);
+void GetItem_DrawFairyBottle(PlayState* play, s16 drawId);
 void GetItem_DrawSkullToken(PlayState* play, s16 drawId);
 void GetItem_DrawCompass(PlayState* play, s16 drawId);
 void GetItem_DrawPotion(PlayState* play, s16 drawId);
@@ -101,7 +101,7 @@ void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId);
 void GetItem_DrawOpa01(PlayState* play, s16 drawId);
 void GetItem_DrawXlu01(PlayState* play, s16 drawId);
 void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId);
-void GetItem_DrawFairy(PlayState* play, s16 drawId);
+void GetItem_DrawFairyContainer(PlayState* play, s16 drawId);
 void GetItem_DrawMoonsTear(PlayState* play, s16 drawId);
 void GetItem_DrawMagicArrow(PlayState* play, s16 drawId);
 void GetItem_DrawUpgrades(PlayState* play, s16 drawId);
@@ -117,7 +117,7 @@ typedef struct {
 
 static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOTTLE, OBJECT_GI_BOTTLE
-    { GetItem_DrawOpa0Xlu1, { gGiBottleStopperDL, gGiBottleDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiEmptyBottleCorkDL, gGiEmptyBottleGlassDL } },
     // GID_KEY_SMALL, OBJECT_GI_KEY
     { GetItem_DrawOpa0, { gGiSmallKeyDL } },
     // GID_MASK_KAMARO, OBJECT_GI_MASK17
@@ -201,39 +201,39 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SHIELD_HERO, OBJECT_GI_SHIELD_2
     { GetItem_DrawOpa0Xlu1, { gGiHerosShieldEmblemDL, gGiHerosShieldDL } },
     // GID_HOOKSHOT, OBJECT_GI_HOOKSHOT
-    { GetItem_DrawOpa01, { object_gi_hookshot_DL_000E48, object_gi_hookshot_DL_000A10 } },
+    { GetItem_DrawOpa01, { gGiHookshotEmptyDL, gGiHookshotDL } },
     // GID_29, OBJECT_GI_HOOKSHOT
-    { GetItem_DrawOpa01, { object_gi_hookshot_DL_000E48, object_gi_hookshot_DL_000A10 } },
+    { GetItem_DrawOpa01, { gGiHookshotEmptyDL, gGiHookshotDL } },
     // GID_OCARINA, OBJECT_GI_OCARINA
-    { GetItem_DrawOpa0Xlu1, { gGiOcarinaTimeDL, gGiOcarinaTimeHolesDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiOcarinaOfTimeDL, gGiOcarinaOfTimeHolesDL } },
     // GID_MILK, OBJECT_GI_MILK
-    { GetItem_DrawOpa0Xlu1, { gGiMilkBottleContentsDL, gGiMilkBottleDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiMilkBottleContentsDL, gGiMilkBottleGlassDL } },
     // GID_MASK_KEATON, OBJECT_GI_KI_TAN_MASK
     { GetItem_DrawOpa0Xlu1, { gGiKeatonMaskDL, gGiKeatonMaskEyesDL } },
     // GID_TINGLE_MAP, OBJECT_GI_FIELDMAP
     { GetItem_DrawOpa01, { gGiTingleMapDL, gGiTingleMapEmptyDL } },
     // GID_BOW, OBJECT_GI_BOW
-    { GetItem_DrawOpa01, { object_gi_bow_DL_000C80, object_gi_bow_DL_000F40 } },
+    { GetItem_DrawOpa01, { gGiBowHandleDL, gGiBowStringDL } },
     // GID_LENS, OBJECT_GI_GLASSES
     { GetItem_DrawOpa0Xlu1, { gGiLensDL, gGiLensGlassDL } },
     // GID_POTION_GREEN, OBJECT_GI_LIQUID
     { GetItem_DrawPotion,
-      { gGiPotionPotDL, gGiGreenPotColorDL, gGiGreenLiquidColorDL, gGiPotionLiquidDL, gGiGreenPatternColorDL,
-        gGiPotionPatternDL } },
+      { gGiPotionContainerPotDL, gGiPotionContainerGreenPotColorDL, gGiPotionContainerGreenLiquidColorDL,
+        gGiPotionContainerLiquidDL, gGiPotionContainerGreenPatternColorDL, gGiPotionContainerPatternDL } },
     // GID_POTION_RED, OBJECT_GI_LIQUID
     { GetItem_DrawPotion,
-      { gGiPotionPotDL, gGiRedPotColorDL, gGiRedLiquidColorDL, gGiPotionLiquidDL, gGiRedPatternColorDL,
-        gGiPotionPatternDL } },
+      { gGiPotionContainerPotDL, gGiPotionContainerRedPotColorDL, gGiPotionContainerRedLiquidColorDL,
+        gGiPotionContainerLiquidDL, gGiPotionContainerRedPatternColorDL, gGiPotionContainerPatternDL } },
     // GID_POTION_BLUE, OBJECT_GI_LIQUID
     { GetItem_DrawPotion,
-      { gGiPotionPotDL, gGiBluePotColorDL, gGiBlueLiquidColorDL, gGiPotionLiquidDL, gGiBluePatternColorDL,
-        gGiPotionPatternDL } },
+      { gGiPotionContainerPotDL, gGiPotionContainerBluePotColorDL, gGiPotionContainerBlueLiquidColorDL,
+        gGiPotionContainerLiquidDL, gGiPotionContainerBluePatternColorDL, gGiPotionContainerPatternDL } },
     // GID_SHIELD_MIRROR, OBJECT_GI_SHIELD_3
     { GetItem_DrawOpa0Xlu1, { gGiMirrorShieldEmptyDL, gGiMirrorShieldDL } },
     // GID_MAGIC_BEANS, OBJECT_GI_BEAN
     { GetItem_DrawOpa0, { gGiBeanDL } },
     // GID_FISH, OBJECT_GI_FISH
-    { GetItem_DrawFish, { gGiFishDL } },
+    { GetItem_DrawFish, { gGiFishContainerDL } },
     // GID_LETTER_MAMA, OBJECT_GI_RESERVE_B_01
     { GetItem_DrawOpa0Xlu1, { object_gi_reserve_b_01_DL_000948, object_gi_reserve_b_01_DL_000820 } },
     // GID_37
@@ -245,13 +245,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_BLAST, OBJECT_GI_MASK21
     { GetItem_DrawOpa0Xlu1, { object_gi_mask21_DL_000AA8, object_gi_mask21_DL_000830 } },
     // GID_FAIRY, OBJECT_GI_BOTTLE_04
-    { GetItem_DrawFairy,
-      { object_gi_bottle_04_DL_000B10, object_gi_bottle_04_DL_0008B8, object_gi_bottle_04_DL_0007F0,
-        (Gfx*)&object_gi_bottle_04_Mtx_0007B0 } },
+    { GetItem_DrawFairyContainer,
+      { gGiFairyBottleEmptyDL, gGiFairyBottleGlassCorkDL, gGiFairyBottleContentsDL,
+        (Gfx*)&gGiFairyBottleBillboardRotMtx } },
     // GID_MASK_SCENTS, OBJECT_GI_MASK22
     { GetItem_DrawOpa01, { object_gi_mask22_DL_000918, object_gi_mask22_DL_000880 } },
     // GID_MASK_CAPTAIN, OBJECT_GI_MASK18
-    { GetItem_DrawOpa01, { object_gi_mask18_DL_000FA0, object_gi_mask18_DL_000CF0 } },
+    { GetItem_DrawOpa01, { gGiCaptainsHatBodyDL, gGiCaptainsHatFaceDL } },
     // GID_MASK_BUNNY, OBJECT_GI_RABIT_MASK
     { GetItem_DrawOpa0Xlu1, { gGiBunnyHoodDL, gGiBunnyHoodEyesDL } },
     // GID_MASK_TRUTH, OBJECT_GI_TRUTH_MASK
@@ -265,7 +265,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_DEED_OCEAN, OBJECT_GI_RESERVE01
     { GetItem_DrawOpa01, { object_gi_reserve01_DL_000A08, object_gi_reserve01_DL_0009E0 } },
     // GID_MASK_GORON, OBJECT_GI_GOLONMASK
-    { GetItem_DrawOpa0Xlu1, { object_gi_golonmask_DL_0010D0, object_gi_golonmask_DL_000BA0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiGoronMaskEmptyDL, gGiGoronMaskDL } },
     // GID_MASK_ZORA, OBJECT_GI_ZORAMASK
     { GetItem_DrawOpa01, { gGiZoraMaskEmptyDL, gGiZoraMaskDL } },
     // GID_46
@@ -279,14 +279,14 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SKULL_TOKEN, OBJECT_GI_SUTARU
     { GetItem_DrawSkullToken, { gGiSkulltulaTokenDL, gGiSkulltulaTokenFlameDL } },
     // GID_BUG, OBJECT_GI_INSECT
-    { GetItem_DrawOpa0Xlu1, { gGiBugsContainerDL, gGiBugsGlassDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiBugContainerContentsDL, gGiBugContainerGlassDL } },
     // GID_4C
     { GetItem_DrawOpa0Xlu1, { NULL } },
     // GID_POE, OBJECT_GI_GHOST
     { GetItem_DrawPoes,
-      { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiPoeColorDL } },
+      { gGiPoeContainerLidDL, gGiPoeContainerGlassDL, gGiPoeContainerContentsDL, gGiPoeContainerPoeColorDL } },
     // GID_FAIRY_2, OBJECT_GI_SOUL
-    { GetItem_DrawFairy2, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
+    { GetItem_DrawFairyBottle, { gGiFairyContainerBaseCapDL, gGiFairyContainerGlassDL, gGiFairyContainerContentsDL } },
     // GID_RUPEE_GREEN, OBJECT_GI_RUPY
     { GetItem_DrawSmallRupee,
       { gGiRupeeInnerDL, gGiGreenRupeeInnerColorDL, gGiRupeeOuterDL, gGiGreenRupeeOuterColorDL } },
@@ -297,7 +297,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawSmallRupee, { gGiRupeeInnerDL, gGiRedRupeeInnerColorDL, gGiRupeeOuterDL, gGiRedRupeeOuterColorDL } },
     // GID_BIG_POE, OBJECT_GI_GHOST
     { GetItem_DrawPoes,
-      { gGiGhostContainerLidDL, gGiGhostContainerGlassDL, gGiGhostContainerContentsDL, gGiBigPoeColorDL } },
+      { gGiPoeContainerLidDL, gGiPoeContainerGlassDL, gGiPoeContainerContentsDL, gGiPoeContainerBigPoeColorDL } },
     // GID_RUPEE_PURPLE, OBJECT_GI_RUPY
     { GetItem_DrawRupee, { gGiRupeeInnerDL, gGiPurpleRupeeInnerColorDL, gGiRupeeOuterDL, gGiPurpleRupeeOuterColorDL } },
     // GID_RUPEE_SILVER, OBJECT_GI_RUPY
@@ -307,9 +307,9 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SKULL_TOKEN_2, OBJECT_ST
     { GetItem_DrawSkullToken, { object_st_DL_004DB0, object_st_DL_004EB8 } },
     // GID_57, OBJECT_GI_BOTTLE_RED
-    { GetItem_DrawOpa0Xlu1, { object_gi_bottle_red_DL_000CC0, object_gi_bottle_red_DL_0009B0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiRedPotionBottleEmptyDL, gGiRedPotionBottleDL } },
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
-    { GetItem_DrawOpa0Xlu1, { gGiZoraEggContainerContentsDL, gGiZoraEggContainerGlassAndLidDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiZoraEggBottleContentsDL, gGiZoraEggBottleGlassAndCorkDL } },
     // GID_MOON_TEAR, OBJECT_GI_RESERVE00
     { GetItem_DrawMoonsTear, { object_gi_reserve00_DL_000D78, object_gi_reserve00_DL_000C80 } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
@@ -321,17 +321,16 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
     { GetItem_DrawOpa0Xlu1, { gGiPowderKegBarrelDL, gGiPowderKegSkullsAndFuseDL } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
-    { GetItem_DrawOpa01, { object_gi_gold_dust_DL_000888, object_gi_gold_dust_DL_000880 } },
+    { GetItem_DrawOpa01, { gGiGoldDustPowderDL, gGiGoldDustPowderEmptyDL } },
     // GID_SEA_HORSE, OBJECT_GI_BOTTLE_16
-    { GetItem_DrawOpa0Xlu1, { gGiSeaHorseContainerEmptyDL, gGiSeaHorseContainerGlassAndLidDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiSeahorseBottleEmptyDL, gGiSeahorseBottleGlassAndCorkDL } },
     // GID_60, OBJECT_GI_BOTTLE_22
-    { GetItem_DrawOpa0Xlu1, { object_gi_bottle_22_DL_000FB8, object_gi_bottle_22_DL_000C90 } },
+    { GetItem_DrawOpa0Xlu1, { gGiHylianLoachBottleContentsDL, gGiHylianLoachBottleGlassCorkWaterDL } },
     // GID_HYLIAN_LOACH, OBJECT_GI_LOACH
-    { GetItem_DrawOpa0Xlu1, { object_gi_loach_DL_000D30, object_gi_loach_DL_0007F0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiHylianLoachEmptyDL, gGiHylianLoachDL } },
     // GID_SEA_HORSE_CAUGHT, OBJECT_GI_SEAHORSE
     { GetItem_DrawSeaHorseCaught,
-      { object_gi_seahorse_DL_000F08, object_gi_seahorse_DL_000B20, object_gi_seahorse_DL_000A90,
-        (Gfx*)&object_gi_seahorse_Mtx_000A50 } },
+      { gGiSeahorseEmptyDL, gGiSeahorseBodyDL, gGiSeahorseGlowDL, (Gfx*)&gGiSeahorseBillboardRotMtx } },
     // GID_REMAINS_GOHT, OBJECT_BSMASK
     { GetItem_DrawRemains, { object_bsmask_DL_003AD0, object_bsmask_DL_003AD0 } },
     // GID_REMAINS_GYORG, OBJECT_BSMASK
@@ -357,7 +356,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_PENDANT_MEMORIES, OBJECT_GI_RESERVE_C_01
     { GetItem_DrawOpa0Xlu1, { object_gi_reserve_c_01_DL_000C78, object_gi_reserve_c_01_DL_000750 } },
     // GID_MUSHROOM, OBJECT_GI_MAGICMUSHROOM
-    { GetItem_DrawOpa0Xlu1, { object_gi_magicmushroom_DL_000958, object_gi_magicmushroom_DL_000640 } },
+    { GetItem_DrawOpa0Xlu1, { gGiMushroomEmptyDL, gGiMushroomDL } },
     // GID_MASK_ROMANI, OBJECT_GI_MASK10
     { GetItem_DrawOpa0Xlu1, { object_gi_mask10_DL_000B60, object_gi_mask10_DL_000A30 } },
     // GID_MASK_POSTMAN, OBJECT_GI_MASK12
@@ -424,7 +423,7 @@ void GetItem_DrawPoes(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void GetItem_DrawFairy2(PlayState* play, s16 drawId) {
+void GetItem_DrawFairyBottle(PlayState* play, s16 drawId) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -654,7 +653,7 @@ void GetItem_DrawXlu01(PlayState* play, s16 drawId) {
 
 void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId) {
     s32 pad;
-    MtxF sp4C;
+    MtxF mtx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -668,8 +667,8 @@ void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
 
-    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &sp4C);
-    Matrix_Mult(&sp4C, MTXMODE_APPLY);
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &mtx);
+    Matrix_Mult(&mtx, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -678,15 +677,15 @@ void GetItem_DrawSeaHorseCaught(PlayState* play, s16 drawId) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void GetItem_DrawFairy(PlayState* play, s16 drawId) {
+void GetItem_DrawFairyContainer(PlayState* play, s16 drawId) {
     s32 pad;
-    MtxF sp4C;
+    MtxF mtx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_gi_bottle_04_Matanimheader_001254));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiFairyBottleTexAnim));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
@@ -694,8 +693,8 @@ void GetItem_DrawFairy(PlayState* play, s16 drawId) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
 
-    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &sp4C);
-    Matrix_Mult(&sp4C, MTXMODE_APPLY);
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &mtx);
+    Matrix_Mult(&mtx, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

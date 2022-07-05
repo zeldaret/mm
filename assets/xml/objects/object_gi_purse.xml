@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_gi_purse" Segment="6">
-        <Texture Name="object_gi_purse_Tex_000000" OutName="tex_000000" Format="i8" Width="64" Height="64" Offset="0x0" />
+        <Texture Name="gGiWalletTex" OutName="gi_wallet" Format="i8" Width="64" Height="64" Offset="0x0" />
         <DList Name="gGiAdultWalletColorDL" Offset="0x1750" />
         <DList Name="gGiGiantsWalletColorDL" Offset="0x1770" />
         <DList Name="gGiAdultWalletRupeeOuterColorDL" Offset="0x1790" />

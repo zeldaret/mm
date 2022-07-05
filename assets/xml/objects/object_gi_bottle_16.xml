@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_gi_bottle_16" Segment="6">
-        <DList Name="gGiSeaHorseContainerGlassAndLidDL" Offset="0x9A0" />
-        <DList Name="gGiSeaHorseContainerEmptyDL" Offset="0xD18" />
-        <Texture Name="gGiSeaHorseContainerLidTex" OutName="gi_sea_horse_container_lid" Format="i8" Width="32" Height="32" Offset="0xD20" />
-        <Texture Name="gGiSeaHorseContainerGlassTex" OutName="gi_sea_horse_container_glass" Format="i4" Width="32" Height="32" Offset="0x1120" />
+        <DList Name="gGiSeahorseBottleGlassAndCorkDL" Offset="0x9A0" />
+        <DList Name="gGiSeahorseBottleEmptyDL" Offset="0xD18" />
+        <Texture Name="gGiSeahorseBottleCorkTex" OutName="gi_sea_horse_bottle_cork" Format="i8" Width="32" Height="32" Offset="0xD20" />
+        <Texture Name="gGiSeahorseBottleGlassTex" OutName="gi_sea_horse_bottle_glass" Format="i4" Width="32" Height="32" Offset="0x1120" />
     </File>
 </Root>

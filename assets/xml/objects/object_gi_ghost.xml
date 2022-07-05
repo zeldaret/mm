@@ -1,12 +1,12 @@
 ﻿<Root>
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_ghost" Segment="6">
-        <Texture Name="object_gi_ghost_Tex_000000" OutName="tex_000000" Format="i8" Width="16" Height="32" Offset="0x0" />
-        <Texture Name="object_gi_ghost_Tex_000200" OutName="tex_000200" Format="i8" Width="16" Height="32" Offset="0x200" />
-        <DList Name="gGiPoeColorDL" Offset="0x950" />
-        <DList Name="gGiBigPoeColorDL" Offset="0x970" />
-        <DList Name="gGiGhostContainerLidDL" Offset="0x990" />
-        <DList Name="gGiGhostContainerGlassDL" Offset="0xBE0" />
-        <DList Name="gGiGhostContainerContentsDL" Offset="0xCF0" />
+        <Texture Name="gGiPoeContainerFlameTex" OutName="gi_poe_container_flame" Format="i8" Width="16" Height="32" Offset="0x0" />
+        <Texture Name="gGiPoeContainerPatternTex" OutName="gi_poe_container_pattern" Format="i8" Width="16" Height="32" Offset="0x200" />
+        <DList Name="gGiPoeContainerPoeColorDL" Offset="0x950" />
+        <DList Name="gGiPoeContainerBigPoeColorDL" Offset="0x970" />
+        <DList Name="gGiPoeContainerLidDL" Offset="0x990" />
+        <DList Name="gGiPoeContainerGlassDL" Offset="0xBE0" />
+        <DList Name="gGiPoeContainerContentsDL" Offset="0xCF0" />
     </File>
 </Root>

@@ -1,7 +1,8 @@
 ﻿<Root>
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_insect" Segment="6">
-        <DList Name="gGiBugsContainerDL" Offset="0x830" />
-        <DList Name="gGiBugsGlassDL" Offset="0xB20" />
+        <!-- bug, green cover, handle -->
+        <DList Name="gGiBugContainerContentsDL" Offset="0x830" />
+        <DList Name="gGiBugContainerGlassDL" Offset="0xB20" />
     </File>
 </Root>

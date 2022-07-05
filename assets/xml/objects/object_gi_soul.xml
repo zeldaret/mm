@@ -1,7 +1,7 @@
 ﻿<Root>
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_soul" Segment="6">
-        <Texture Name="object_gi_soul_Tex_000000" OutName="tex_000000" Format="i8" Width="32" Height="32" Offset="0x0" />
+        <Texture Name="gGiFairyContainerFairyTex" OutName="gi_fairy_container_fairy_tex" Format="i8" Width="32" Height="32" Offset="0x0" />
         <DList Name="gGiFairyContainerBaseCapDL" Offset="0xBD0" />
         <DList Name="gGiFairyContainerGlassDL" Offset="0xDB8" />
         <DList Name="gGiFairyContainerContentsDL" Offset="0xEF0" />

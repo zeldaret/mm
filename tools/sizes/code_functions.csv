@@ -1099,7 +1099,7 @@ asm/non_matchings/code/z_demo/Cutscene_IsPlaying.s,Cutscene_IsPlaying,0x800EE2F4
 asm/non_matchings/code/z_draw/GetItem_Draw.s,GetItem_Draw,0x800EE320,0x11
 asm/non_matchings/code/z_draw/GetItem_DrawBombchu.s,GetItem_DrawBombchu,0x800EE364,0x27
 asm/non_matchings/code/z_draw/GetItem_DrawPoes.s,GetItem_DrawPoes,0x800EE400,0x7F
-asm/non_matchings/code/z_draw/GetItem_DrawFairy2.s,GetItem_DrawFairy2,0x800EE5FC,0x77
+asm/non_matchings/code/z_draw/GetItem_DrawFairyBottle.s,GetItem_DrawFairyBottle,0x800EE5FC,0x77
 asm/non_matchings/code/z_draw/GetItem_DrawSkullToken.s,GetItem_DrawSkullToken,0x800EE7D8,0x5A
 asm/non_matchings/code/z_draw/GetItem_DrawCompass.s,GetItem_DrawCompass,0x800EE940,0x42
 asm/non_matchings/code/z_draw/GetItem_DrawPotion.s,GetItem_DrawPotion,0x800EEA48,0x74
@@ -1112,7 +1112,7 @@ asm/non_matchings/code/z_draw/GetItem_DrawOpa0Xlu1.s,GetItem_DrawOpa0Xlu1,0x800E
 asm/non_matchings/code/z_draw/GetItem_DrawOpa01.s,GetItem_DrawOpa01,0x800EF1F4,0x2E
 asm/non_matchings/code/z_draw/GetItem_DrawXlu01.s,GetItem_DrawXlu01,0x800EF2AC,0x2E
 asm/non_matchings/code/z_draw/GetItem_DrawSeaHorseCaught.s,GetItem_DrawSeaHorseCaught,0x800EF364,0x5C
-asm/non_matchings/code/z_draw/GetItem_DrawFairy.s,GetItem_DrawFairy,0x800EF4D4,0x62
+asm/non_matchings/code/z_draw/GetItem_DrawFairyContainer.s,GetItem_DrawFairyContainer,0x800EF4D4,0x62
 asm/non_matchings/code/z_draw/GetItem_DrawMoonsTear.s,GetItem_DrawMoonsTear,0x800EF65C,0x49
 asm/non_matchings/code/z_draw/GetItem_DrawMagicArrow.s,GetItem_DrawMagicArrow,0x800EF780,0x47
 asm/non_matchings/code/z_draw/GetItem_DrawUpgrades.s,GetItem_DrawUpgrades,0x800EF89C,0x3A

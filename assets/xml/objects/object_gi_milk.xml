@@ -1,8 +1,10 @@
 ﻿<Root>
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_gi_milk" Segment="6">
-        <Texture Name="object_gi_milk_Tex_000000" OutName="tex_000000" Format="i8" Width="72" Height="24" Offset="0x0" />
+        <Texture Name="gGiMilkBottleLabel" OutName="gi_milk_bottle_label" Format="i8" Width="72" Height="24" Offset="0x0" />
+        <!-- Milk, Label, Cork -->
         <DList Name="gGiMilkBottleContentsDL" Offset="0x1060" />
-        <DList Name="gGiMilkBottleDL" Offset="0x1288" />
+        <!-- Glass -->
+        <DList Name="gGiMilkBottleGlassDL" Offset="0x1288" />
     </File>
 </Root>
