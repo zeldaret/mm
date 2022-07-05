@@ -9,10 +9,10 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
 s32 func_801039EC(PlayState* play);
 void func_80103A58(PlayState* play, Actor* actor);
 
-// ? func_80104AE8(GlobalContext *);                   /* extern */
-// ? func_80105FE0(GlobalContext *, s32, s32, s32);    /* extern */
-// s32 func_80106450(GlobalContext *);                 /* extern */
-// s32 func_801064CC(GlobalContext *);                 /* extern */
+// ? func_80104AE8(PlayState *);                   /* extern */
+// ? func_80105FE0(PlayState *, s32, s32, s32);    /* extern */
+// s32 func_80106450(PlayState *);                 /* extern */
+// s32 func_801064CC(PlayState *);                 /* extern */
 // s32 func_8010657C(s32, s32);                        /* extern */
 extern T_D_801BEBB8 D_801BEBB8;
 extern s32 D_801BEC1C; //scene rooms
@@ -74,7 +74,7 @@ void func_801030F4(T_func_801030F4* arg0, s32* arg1, s32* arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801031D0.s")
 
-s32 func_801039EC(GlobalContext *play) {
+s32 func_801039EC(PlayState *play) {
     if (play->sceneNum == SCENE_35TAKI) {
         return true;
     }
@@ -84,7 +84,7 @@ s32 func_801039EC(GlobalContext *play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80103A10.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80103A58.s")
-// void func_80103A58(GlobalContext *play, Actor *actor) {
+// void func_80103A58(PlayState *play, Actor *actor) {
 //     u16 *spDC;
 //     s32 spD8;
 //     s32 spD4;
@@ -357,7 +357,7 @@ s32 func_801039EC(GlobalContext *play) {
 //     }
 // }
 
-void func_8010439C(GlobalContext *play) {
+void func_8010439C(PlayState *play) {
     ActorContext *actorCtx;
     s32 i;
 
@@ -390,10 +390,10 @@ void func_8010439C(GlobalContext *play) {
 // ? func_80103090(u16*, ?*, ?*);                      /* extern */
 // ? func_801030B4(u16*, s32*, GraphicsContext*, T_D_801BEBB8*); /* extern */
 // ? func_801030F4(f32, f32, u16*, s32*, s32*, T_D_801BEBB8*); /* extern */
-// s32 func_80103A10(GlobalContext*);                  /* extern */
+// s32 func_80103A10(PlayState*);                  /* extern */
 // extern ? D_801BEC2C;
 
-// void func_801045AC(GlobalContext* play, Actor* actor) {
+// void func_801045AC(PlayState* play, Actor* actor) {
 //     u16* sp7C;
 //     s32 sp78;
 //     s32 sp74;
@@ -527,7 +527,7 @@ void func_8010439C(GlobalContext *play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801045AC.s")
 // #endif
 
-void func_80104AE8(GlobalContext *play) {
+void func_80104AE8(PlayState *play) {
     s32 i;
     Actor* actor;
 
@@ -556,97 +556,73 @@ void func_80104AE8(GlobalContext *play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80104CF4.s")
 
-#ifdef NON_MATCHING
-void func_80104F34(GlobalContext* arg0) {
-    s16 temp_a3;
-    s16 temp_s0;
-    s16 temp_t3;
-    s16 temp_t5;
-    s32 var_t2;
-    s16* temp_a3_2;
-    s16* temp_t2_2;
-    s32 temp_t0;
-    s32 var_a3;
-    s32 var_a3_2;
-    s32 var_t0;
-    s32 var_t0_2;
-    s32 var_t1_4;
-    s32 var_t3;
-    s32 var_t5;
-    MinimapEntry* temp_t2;
-    MinimapEntry* temp_t0_2;
-    void* temp_t9;
-    void* temp_v1;
-    s32 i;
+void func_80104F34(PlayState* arg0) {
+    s32 i1;
+    s32 i2;
+    s32 i3;
+    s32 i4;
 
-    for (var_t0 = 0; var_t0 < 32; var_t0++){
-        D_801BEBB8.unk48[var_t0] = -0x7FFF;
+    for (i1 = 0; i1 < 32; i1++){
+        D_801BEBB8.unk48[i1] = -0x7FFF;
     }
-    for (var_t3 = 0; var_t3 < D_801BEC1C; var_t3++) {
-        var_t0_2 = 0;
-        temp_t2 = D_801BEBB8.unk0->entry + var_t3;
-        if (temp_t2->unk0  == 0xFFFF) {
-            
-        } else {
-            for (var_t0_2 = 0; var_t0_2 < 32; var_t0_2++)
-            {
-                if (D_801BEBB8.unk48[var_t0_2] == -0x7FFF) {
-                    D_801BEBB8.unk48[var_t0_2] = temp_t2->unk4;
-                    break;
-                }
-                else if(fabsf((f32) D_801BEBB8.unk48[var_t0_2] - (f32) temp_t2->unk4) < 5.0f) {
-                    break;
-                }
-            }
+    for (i2 = 0; i2 < D_801BEC1C; i2++) {
+        MinimapEntry* mapEntry1 = &D_801BEBB8.unk0->entry[i2];
+        
+        if (mapEntry1->unk0 == 0xFFFF) {
+            continue;
         }
-    }
-    for (var_a3 = 0; var_a3 < D_801BEC1C; var_a3++) {
-        if (D_801BEBB8.unk48[var_a3] == -0x7FFF) {
-            break;
-        } else {
-            for (temp_t0 = var_a3+ 1; temp_t0 < D_801BEC1C; temp_t0++) {
-                temp_s0 = D_801BEBB8.unk48[temp_t0];
-                temp_t2_2 = &D_801BEBB8.unk48[var_a3];
-                if (temp_s0 != -0x7FFF) {
-                    temp_t3 = *temp_t2_2;
-                    if (temp_s0 < temp_t3) {
-                        *temp_t2_2 = temp_s0;
-                        D_801BEBB8.unk48[temp_t0] = temp_t3;
-                    }
-                }
-                else {
-                    break;
-                }
-            }
-        }
-    }
-    for (var_a3 = 0; var_a3 < D_801BEC1C; var_a3++) {
-        D_801BEBB8.unk3C[var_a3] = -1;
-        temp_t0_2 = &D_801BEBB8.unk0->entry[var_a3]; 
-
-        for (var_t2 = 0; var_t2 < D_801BEC1C; var_t2++) {
-            if ((D_801BEBB8.unk48[var_t2] != -0x7FFF) && (fabsf((f32) D_801BEBB8.unk48[var_t2] - (f32) temp_t0_2->unk4) < 5.0f)) {
-                D_801BEBB8.unk3C[var_a3] = var_t2;
+        for (i1 = 0; i1 < 32; i1++) {
+            if (D_801BEBB8.unk48[i1] == -0x7FFF) {
+                D_801BEBB8.unk48[i1] = mapEntry1->unk4;
+                break;
+            } else if(fabsf((f32) D_801BEBB8.unk48[i1] - (f32) mapEntry1->unk4) < 5.0f) {
                 break;
             }
         }
     }
+    for (i2 = 0; i2 < D_801BEC1C; i2++) {
+        if (D_801BEBB8.unk48[i2] == -0x7FFF) {
+            break;
+        } 
+        for (i3 = i2+1; i3 < D_801BEC1C; i3++) {
+            if (D_801BEBB8.unk48[i3] == -0x7FFF) {
+                break;
+            }
+            if (D_801BEBB8.unk48[i3] < D_801BEBB8.unk48[i2]) {
+                s16 temp_t3 = D_801BEBB8.unk48[i2];
+                
+                D_801BEBB8.unk48[i2] = D_801BEBB8.unk48[i3];
+                D_801BEBB8.unk48[i3] = temp_t3;
+            }
+        }
+    }
+    for (i2 = 0; i2 < D_801BEC1C; i2++) {
+        MinimapEntry* mapEntry2 = &D_801BEBB8.unk0->entry[i2];
+        
+        D_801BEBB8.unk3C[i2] = -1;
+
+        for (i4 = 0; i4 < D_801BEC1C; i4++) {
+            if (D_801BEBB8.unk48[i4] != -0x7FFF) {
+                if (fabsf((f32) D_801BEBB8.unk48[i4] - (f32) mapEntry2->unk4) < 5.0f) {
+                    D_801BEBB8.unk3C[i2] = i4;
+                    break;
+                }
+            }
+        }
+    }
     D_801BEBB8.unk40 = 0;
-    for (var_t1_4 = 0; var_t1_4 < D_801BEC1C; var_t1_4++) {
-        if (D_801BEBB8.unk48[var_t1_4] != -0x7FFF) {
+    for (i2 = 0; i2 < D_801BEC1C; i2++) {
+        if (D_801BEBB8.unk48[i2] != -0x7FFF) {
             D_801BEBB8.unk40++;
         }
     }
     D_801BEBB8.unk44 = 0;
-    for (i = 0; i < 5; i++) {
-        if (arg0->sceneNum == D_801BEC5C[i].unk0) {
-            D_801BEBB8.unk44 = D_801BEC5C[i].unk2;
+    for (i2 = 0; i2 < 5; i2++) {
+        if (arg0->sceneNum == D_801BEC5C[i2].unk0) {
+            D_801BEBB8.unk44 = D_801BEC5C[i2].unk2;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80104F34.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105294.s")
 
@@ -657,11 +633,11 @@ void func_80104F34(GlobalContext* arg0) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_8010534C.s")
 
 
-// ? func_80104F34(GlobalContext*);                    /* extern */
-// ? func_8010534C(GlobalContext*);                    /* extern */
+// ? func_80104F34(PlayState*);                    /* extern */
+// ? func_8010534C(PlayState*);                    /* extern */
 
 #ifdef NON_MATCHING
-void func_8010549C(GlobalContext* globalCtx, void* segmentAddress) {
+void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
     MinimapEntry* var_v1;
     MinimapList* temp_v0;
     s32 i;
