@@ -1735,8 +1735,7 @@ beginseg
     name "ovl_Shot_Sun"
     compress
     include "build/src/overlays/actors/ovl_Shot_Sun/z_shot_sun.o"
-    include "build/data/ovl_Shot_Sun/ovl_Shot_Sun.data.o"
-    include "build/data/ovl_Shot_Sun/ovl_Shot_Sun.reloc.o"
+    include "build/src/overlays/actors/ovl_Shot_Sun/ovl_Shot_Sun_reloc.o"
 endseg
 
 beginseg
