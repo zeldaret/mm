@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-# Clang-Format version and options (see .clang-format for rules applied)
-# Version 11 is used when available for more consistency between contributors
-FORMAT_VER="11"
+# clang-Format and clang-tidy default version
+# Version 11 is forced for clang-format for more consistency between contributors
+CLANG_VER="11"
+
+# Clang-Format options (see .clang-format for rules applied)
 FORMAT_OPTS="-i -style=file"
 
 # Clang-Tidy options (see .clang-tidy for checks enabled)
@@ -32,25 +34,25 @@ export -f add_final_newline
 
 shopt -s globstar
 
-if [ $(command -v clang-format-${FORMAT_VER}) ]
+if [ $(command -v clang-format-${CLANG_VER}) ]
 then
-    CLANG_FORMAT="clang-format-${FORMAT_VER}"
+    CLANG_FORMAT="clang-format-${CLANG_VER}"
 else
-    if [ $(command -v clang-format) ]
-    then
-        CLANG_FORMAT="clang-format"
-    else
-        echo "Neither clang-format nor clang-format-${FORMAT_VER} found. Exiting."
-        exit 1
-    fi
+    echo "clang-format-${CLANG_VER} not found. Exiting."
+    exit 1
 fi
 
-if [ $(command -v clang-tidy) ]
+if [ $(command -v clang-tidy-${CLANG_VER}) ]
 then
-    CLANG_TIDY="clang-tidy"
+    CLANG_TIDY="clang-tidy-${CLANG_VER}"
 else
-    echo "clang-tidy not found. Exiting."
-    exit 1
+    if [ $(command -v clang-tidy) ]
+    then
+        CLANG_TIDY="clang-tidy"
+    else
+        echo "Neither clang-tidy-${CLANG_VER} nor clang-tidy found. Exiting."
+        exit 1
+    fi
 fi
 
 # Try to detect the clang-tidy version and add --fix-notes for version 13+
