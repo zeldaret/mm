@@ -60,7 +60,6 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = func_809738D0;
         this->actor.flags |= ACTOR_FLAG_8000000;
-        ;
     } else {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -119,14 +118,14 @@ void func_809738D0(ShotSun* this, PlayState* play) {
     s32 params = SHOTSUN_GET_FF(&this->actor);
 
     if (play->msgCtx.ocarinaMode == 3) {
-        switch (play->msgCtx.unk1202E) {
-            case 10:
+        switch (play->msgCtx.lastPlayedSong) {
+            case OCARINA_SONG_STORMS:
                 if (params == 0x41) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
                 }
                 break;
-            case 11:
+            case OCARINA_SONG_SUNS:
                 if (params == 0x40) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
@@ -165,9 +164,9 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
         Actor_MarkForDeath(&this->actor);
     } else if (!(this->actor.xzDistToPlayer > 120.0f)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 30)) && (gSaveContext.save.time < CLOCK_TIME(7, 30))) {
-            cylinderPos.x = player->bodyPartsPos[7].x + (play->envCtx.unk_4 * 0.16666667f);
-            cylinderPos.y = (player->bodyPartsPos[7].y - 30.0f) + (play->envCtx.unk_8 * 0.16666667f);
-            cylinderPos.z = player->bodyPartsPos[7].z + (play->envCtx.unk_C * 0.16666667f);
+            cylinderPos.x = player->bodyPartsPos[7].x + (play->envCtx.unk_4 * (1.0f / 6.0f));
+            cylinderPos.y = (player->bodyPartsPos[7].y - 30.0f) + (play->envCtx.unk_8 * (1.0f / 6.0f));
+            cylinderPos.z = player->bodyPartsPos[7].z + (play->envCtx.unk_C * (1.0f / 6.0f));
 
             this->hitboxPos = cylinderPos;
 

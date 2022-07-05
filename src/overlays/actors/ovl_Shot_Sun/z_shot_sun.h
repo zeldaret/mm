@@ -16,7 +16,6 @@ typedef struct ShotSun {
     /* 0x194 */ Vec3s hitboxPos;
     /* 0x19A */ s16 timer;
     /* 0x19C */ s8 unused;
-    /* 0x19D */ UNK_TYPE1 pad19D[3];
 } ShotSun; // size = 0x1A0
 
 extern const ActorInit Shot_Sun_InitVars;
