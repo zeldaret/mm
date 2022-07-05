@@ -1,7 +1,7 @@
 /*
  * File: z_shot_sun.c
  * Overlay: ovl_Shot_Sun
- * Description: Leftover sun hitbox  from OOT
+ * Description: Leftover sun hitbox from OOT
  */
 
 #include "z_shot_sun.h"
