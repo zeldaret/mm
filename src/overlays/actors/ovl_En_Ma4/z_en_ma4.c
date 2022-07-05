@@ -628,8 +628,6 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 }
 
 void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
-    s32 temp_v0;
-
     switch (Message_GetState(&play->msgCtx)) {
         default:
             break;
