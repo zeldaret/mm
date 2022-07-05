@@ -1,6 +1,5 @@
 #include "global.h"
 #include "z64map.h"
-#define PlayState GlobalContext
 
 void func_801031D0(PlayState* play, s32, s32, s32, s32, f32);
 void func_80103090(u16*, s32*, s32*);

@@ -11,10 +11,10 @@
 
 #define THIS ((DmNb*)thisx)
 
-void DmNb_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmNb_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmNb_Init(Actor* thisx, PlayState* play);
+void DmNb_Destroy(Actor* thisx, PlayState* play);
+void DmNb_Update(Actor* thisx, PlayState* play);
+void DmNb_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
@@ -40,25 +40,25 @@ s32 func_80C1DED0(DmNb* this, s32 arg1) {
     return ret;
 }
 
-void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
+void func_80C1DF18(DmNb* this, PlayState* play) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
     u16 actionUnk0;
     s32 actionIndex;
 
-    if (globalCtx->csCtx.state != 0) {
+    if (play->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
             this->unk1EC = 0xFF;
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (Cutscene_CheckActorAction(globalCtx, 562)) {
-            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 562);
-            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->action;
+        if (Cutscene_CheckActorAction(play, 562)) {
+            actionIndex = Cutscene_GetActorActionIndex(play, 562);
+            actionUnk0 = play->csCtx.actorActions[actionIndex]->action;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
@@ -66,12 +66,11 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
     }
 }
 
-void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmNb_Init(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable,
-                       8);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable, 8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -79,24 +78,24 @@ void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80C1DF18;
 }
 
-void DmNb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmNb_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmNb_Update(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-void DmNb_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DmNb_Draw(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, DmNb_TransformLimbDraw, &this->actor);
 }

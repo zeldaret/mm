@@ -5,9 +5,9 @@
 
 struct EnAl;
 
-typedef void (*EnAlActionFunc)(struct EnAl*, GlobalContext*);
-typedef s32 (*EnAlUnkFunc)(struct EnAl*, GlobalContext*);
-typedef void (*EnAlUnkFunc2)(struct EnAl*, GlobalContext*);
+typedef void (*EnAlActionFunc)(struct EnAl*, PlayState*);
+typedef s32 (*EnAlUnkFunc)(struct EnAl*, PlayState*);
+typedef void (*EnAlUnkFunc2)(struct EnAl*, PlayState*);
 
 typedef struct EnAl {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct ObjMure3;
 
-typedef void (*ObjMure3ActionFunc)(struct ObjMure3*, GlobalContext*);
+typedef void (*ObjMure3ActionFunc)(struct ObjMure3*, PlayState*);
 
 typedef struct ObjMure3 {
     /* 0x0000 */ Actor actor;

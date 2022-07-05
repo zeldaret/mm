@@ -10,10 +10,10 @@
 
 #define THIS ((EffStk*)thisx)
 
-void EffStk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffStk_Update(Actor* thisx, GlobalContext* globalCtx);
-void EffStk_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EffStk_Init(Actor* thisx, PlayState* play);
+void EffStk_Destroy(Actor* thisx, PlayState* play);
+void EffStk_Update(Actor* thisx, PlayState* play);
+void EffStk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit Eff_Stk_InitVars = {

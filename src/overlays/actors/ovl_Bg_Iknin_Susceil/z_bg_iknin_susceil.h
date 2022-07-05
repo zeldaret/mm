@@ -7,7 +7,7 @@
 
 struct BgIkninSusceil;
 
-typedef void (*BgIkninSusceilActionFunc)(struct BgIkninSusceil*, GlobalContext*);
+typedef void (*BgIkninSusceilActionFunc)(struct BgIkninSusceil*, PlayState*);
 
 typedef struct BgIkninSusceil {
     /* 0x000 */ DynaPolyActor dyna;

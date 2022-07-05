@@ -5,7 +5,7 @@
 
 struct ObjComb;
 
-typedef void (*ObjCombActionFunc)(struct ObjComb*, GlobalContext*);
+typedef void (*ObjCombActionFunc)(struct ObjComb*, PlayState*);
 
 #define OBJCOMB_GET_F(thisx) ((thisx)->params & 0xF)
 #define OBJCOMB_GET_10(thisx) (((thisx)->params >> 4) & 0x1)

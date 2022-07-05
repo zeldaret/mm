@@ -10,10 +10,10 @@
 
 #define THIS ((EnLiftNuts*)thisx)
 
-void EnLiftNuts_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnLiftNuts_Init(Actor* thisx, PlayState* play);
+void EnLiftNuts_Destroy(Actor* thisx, PlayState* play);
+void EnLiftNuts_Update(Actor* thisx, PlayState* play);
+void EnLiftNuts_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 const ActorInit En_Lift_Nuts_InitVars = {
