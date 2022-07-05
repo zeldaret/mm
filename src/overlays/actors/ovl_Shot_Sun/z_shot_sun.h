@@ -4,6 +4,8 @@
 #include "global.h"
 
 #define SHOTSUN_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define SHOTSUN_40 0x40
+#define SHOTSUN_41 0x41
 
 struct ShotSun;
 

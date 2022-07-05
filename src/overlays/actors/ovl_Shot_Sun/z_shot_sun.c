@@ -54,7 +54,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ShotSun* this = THIS;
 
-    if ((SHOTSUN_GET_FF(thisx) == 0x40) || (SHOTSUN_GET_FF(thisx) == 0x41)) {
+    if ((SHOTSUN_GET_FF(thisx) == SHOTSUN_40) || (SHOTSUN_GET_FF(thisx) == SHOTSUN_41)) {
         this->unused = 0;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
@@ -71,7 +71,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
 void ShotSun_Destroy(Actor* thisx, PlayState* play) {
     ShotSun* this = THIS;
 
-    if ((SHOTSUN_GET_FF(thisx) != 0x40) && (SHOTSUN_GET_FF(thisx) != 0x41)) {
+    if ((SHOTSUN_GET_FF(thisx) != SHOTSUN_40) && (SHOTSUN_GET_FF(thisx) != SHOTSUN_41)) {
         Collider_DestroyCylinder(play, &this->collider);
     }
 }
@@ -86,10 +86,10 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
     } else {
         ActorCutscene_Stop(this->actor.cutscene);
         switch (params) {
-            case 0x40:
+            case SHOTSUN_40:
                 fairyType = 7;
                 break;
-            case 0x41:
+            case SHOTSUN_41:
                 fairyType = 7;
                 break;
         }
@@ -120,13 +120,13 @@ void func_809738D0(ShotSun* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 3) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
-                if (params == 0x41) {
+                if (params == SHOTSUN_41) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
                 }
                 break;
             case OCARINA_SONG_SUNS:
-                if (params == 0x40) {
+                if (params == SHOTSUN_40) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
                 }
