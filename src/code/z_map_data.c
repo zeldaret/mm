@@ -1,15 +1,24 @@
 #include "global.h"
 #include "z64map.h"
 
-extern T_D_801BED4C D_801BED4C[];
-extern T_D_801BED88 D_801BED88[];
+extern T_801BED4C D_801BED4C[];
+extern T_801BED88 D_801BED88[];
+extern s32 D_801BF15C[5];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801094A0.s")
-// extern ? D_801BED40;
+extern T_801BF170 D_801BF170[];
 
-// void func_801094A0(s32 arg0, ?* arg1) {
-//     *arg1 = (unaligned s32) *((arg0 * 4) + &D_801BED40);
-// }
+typedef struct {
+    char unk0[4];
+} T_801BED40; //size 0x04
+
+extern T_801BED40 D_801BED40[];
+
+extern s32 D_801BF3B4[];
+extern s32 D_801BEFC8[];
+
+void func_801094A0(s32 arg0, T_801BED40* arg1) {
+    *arg1 = D_801BED40[arg0];
+}
 
 void func_801094C8(s32 arg0, s32 *arg1, s32 *arg2) {
     *arg1 = D_801BED4C[arg0].unk4;
@@ -153,40 +162,223 @@ u8 func_80109908(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109964.s")
+s32 func_80109964(s32 arg0) {
+    return D_801BF15C[arg0];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_8010997C.s")
+void func_8010997C(s32 arg0, s32* arg1, s32* arg2) {
+    *arg1 = D_801BF170[arg0].unk0;
+    *arg2 = D_801BF170[arg0].unk1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801099AC.s")
+void func_801099AC(s32 arg0, s32* arg1, s32* arg2) {
+    *arg1 =  D_801BF170[arg0].unk2;
+    *arg2 =  D_801BF170[arg0].unk4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_801099DC.s")
+void func_801099DC(s32 arg0, s32* arg1) {
+    *arg1 = D_801BF170[arg0].unk6;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109A00.s")
+u8 func_80109A00(s32 arg0) {
+    return D_801BF170[arg0].unk7;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109A20.s")
+s16 func_80109A20(s32 arg0) {
+    return D_801BF170[arg0].unk8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109A40.s")
+s32 func_80109A98(s32);                             /* extern */
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109A98.s")
+s32 func_80109A40(s32 arg0) {
+    s32 temp_s2;
+    s32 var_s0;
+    s32 var_s1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109AD8.s")
+    var_s1 = 0;
+    for (var_s0 = 1; var_s0 < arg0+1; var_s0++)
+    {
+        var_s1 += func_80109A98(var_s0 - 1);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109B38.s")
+    return var_s1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109BA0.s")
+s32 func_80109A98(s32 arg0) {
+    return (D_801BF170[arg0].unk0 * D_801BF170[arg0].unk1) / 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109BF4.s")
+s32 func_80109AD8(s32 arg0) {
+    switch (func_80109714(arg0)) {
+    case 0:
+        return D_801BF3B4[arg0];
+    case 1:
+        return D_801BEFC8[arg0];
+    default:
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109C38.s")
+s32 func_80109B38(s32 arg0) {
+    if (func_80109AD8(arg0) != 0x3A) {
+        return 1;
+    }
+    switch (func_80109714(arg0)) {
+    case 0:
+        return 2;
+    case 1:
+        return 0;
+    default:
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109CBC.s")
+s32 func_80109BA0(s32 arg0) {
+    s32 temp_v0 = func_80109AD8(arg0);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109D40.s")
+    if (temp_v0 != 0x3A) {
+        return temp_v0;
+    }
+    if ((arg0 >= 0x100) && (arg0 < 0x162)) {
+        return arg0 - 0xC6;
+    }
+    return -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109DD8.s")
+s32 func_80109BF4(s32 arg0) {
+    if (arg0 == -1) {
+        return 2;
+    }
+    if (arg0 < 0x3A) {
+        return 1;
+    }
+    if (arg0 >= 0x3A) {
+        return 0;
+    }
+    return 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109E70.s")
+s32 func_80109C38(s32 arg0) {
+    if (arg0 == -1) {
+        return 0;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        return func_80109670(arg0 + 0xC6);
+    case 1:
+        return func_80109A40(arg0);
+    case 2:
+        return 0;
+    default:
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109EF8.s")
+s32 func_80109CBC(s32 arg0) {
+    if (arg0 == -1) {
+        return 0;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        return func_801096D4(arg0 + 0xC6);
+    case 1:
+        return func_80109A98(arg0);
+    case 2:
+        return 0;
+    default:
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_data/func_80109F78.s")
+void func_80109D40(s32 arg0, s32* arg1, s32* arg2) {
+    if (arg0 == -1) {
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        func_801095AC(arg0 + 0xC6, arg1, arg2);
+        return;
+    case 1:
+        func_8010997C(arg0, arg1, arg2);
+        return;
+    default:
+    case 2:
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+}
+
+void func_80109DD8(s32 arg0, s32* arg1, s32* arg2) {
+    s32 temp_v0;
+
+    if (arg0 == -1) {
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        func_801095DC(arg0 + 0xC6, arg1, arg2);
+        return;
+    case 1:
+        func_801099AC(arg0, arg1, arg2);
+        return;
+    default:
+    case 2:
+        *arg2 = 0;
+        *arg1 = 0;
+        return;
+    }
+}
+
+void func_80109E70(s32 arg0, s32* arg1) {
+    if (arg0 == -1) {
+        *arg1 = 0;
+        return;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        func_8010960C(arg0 + 0xC6, arg1);
+        return;
+    case 1:
+        func_801099DC(arg0, arg1);
+        return;
+    case 2:
+    default:
+        *arg1 = 0;
+        return;
+    }
+}
+
+u8 func_80109EF8(s32 arg0) {
+    if (arg0 == -1) {
+        return 0;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        return func_80109630(arg0 + 0xC6);
+    case 1:
+        return func_80109A00(arg0);
+    case 2:
+    default:
+        return 0;
+    }
+}
+
+s16 func_80109F78(s32 arg0) {
+    if (arg0 == -1) {
+        return 0;
+    }
+    switch (func_80109BF4(arg0)) {
+    case 0:
+        return func_80109650(arg0 + 0xC6);
+    case 1:
+        return func_80109A20(arg0);
+    case 2:
+    default:
+        return 0;
+    }
+}

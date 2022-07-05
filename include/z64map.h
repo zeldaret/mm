@@ -13,7 +13,7 @@ typedef struct {
     /* 0x08 */ u8 unk8;
     /* 0x09 */ u8 unk9;
     /* 0x0A */ s16 unkA;
-} T_D_801BED4C; // size 0x0C?
+} T_801BED4C; // size 0x0C?
 
 typedef struct {
     /* 0x00 */ u8 unk0;
@@ -23,7 +23,17 @@ typedef struct {
     /* 0x06 */ u8 unk6;
     /* 0x07 */ u8 unk7;
     /* 0x08 */ s16 unk8;
-} T_D_801BED88; // size 0x0A
+} T_801BED88; // size 0x0A
+
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    s16 unk2;
+    s16 unk4;
+    u8 unk6;
+    u8 unk7;
+    s16 unk8;
+} T_801BF170; // size 0x0A, ident to T_801BED88
 
 /* z_map_disp */
 
@@ -32,7 +42,7 @@ typedef struct {
     /* 0x00 */ s16 unk2;
     /* 0x00 */ s16 unk4;
     /* 0x00 */ s16 unk6;
-} T_D_801BEBB8_unk48;
+} T_801BEBB8_unk48;
 
 typedef struct {
     /* 0x00 */ MinimapList* unk0; //unk0 -> sub1 -> s16[5]
@@ -59,7 +69,7 @@ typedef struct {
     /* 0x42 */ char unk42[2];
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
-} T_D_801BEBB8;
+} T_801BEBB8;
 
 typedef struct{
     /* 0x00 */ u16 unk0;
@@ -72,7 +82,7 @@ typedef struct{
 typedef struct {
     /* 0x00 */ s16 unk0; //scene
     /* 0x02 */ s16 unk2;
-} T_D_801BEC5C;
+} T_801BEC5C;
 
 /* z_map_data */
 s32 func_801096D4(s32 arg0);

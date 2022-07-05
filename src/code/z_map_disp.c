@@ -13,9 +13,9 @@ void func_80103A58(PlayState* play, Actor* actor);
 // s32 func_80106450(PlayState *);                 /* extern */
 // s32 func_801064CC(PlayState *);                 /* extern */
 // s32 func_8010657C(s32, s32);                        /* extern */
-extern T_D_801BEBB8 D_801BEBB8;
+extern T_801BEBB8 D_801BEBB8;
 extern s32 D_801BEC1C; //scene rooms
-extern T_D_801BEC5C D_801BEC5C[5];
+extern T_801BEC5C D_801BEC5C[5];
 extern TexturePtr D_801BEB38;
 
 extern MinimapList D_801BEC14;
@@ -39,7 +39,7 @@ void func_80103090(u16* arg0, s32* out1, s32* out2){
     func_80109754(*arg0, out1, out2);
 }
 
-//func_801030B4(u16 *, s32 *, u16 *, T_D_801BEBB8 *);
+//func_801030B4(u16 *, s32 *, u16 *, T_801BEBB8 *);
 void func_801030B4(u16 *arg0, s32 *arg1) {
     func_8010983C(*arg0, arg1);
     if (*arg1 == 0) {
@@ -387,8 +387,8 @@ void func_8010439C(PlayState *play) {
 
 //#ifdef NON_MATCHING
 // ? func_80103090(u16*, ?*, ?*);                      /* extern */
-// ? func_801030B4(u16*, s32*, GraphicsContext*, T_D_801BEBB8*); /* extern */
-// ? func_801030F4(f32, f32, u16*, s32*, s32*, T_D_801BEBB8*); /* extern */
+// ? func_801030B4(u16*, s32*, GraphicsContext*, T_801BEBB8*); /* extern */
+// ? func_801030F4(f32, f32, u16*, s32*, s32*, T_801BEBB8*); /* extern */
 // s32 func_80103A10(PlayState*);                  /* extern */
 // extern ? D_801BEC2C;
 
