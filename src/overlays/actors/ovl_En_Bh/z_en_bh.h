@@ -8,8 +8,19 @@ struct EnBh;
 typedef void (*EnBhActionFunc)(struct EnBh*, PlayState*);
 
 typedef struct EnBh {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0xA4];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelanime;
+    /* 0x188 */ Vec3s unk188;
+    /* 0x18E */ UNK_TYPE1 pad18E[0x1E];
+    /* 0x1AC */ Vec3s unk1AC;
+    /* 0x1B2 */ UNK_TYPE1 pad1B2[0x1E];
+    /* 0x1D0 */ Vec3f pos;
+    /* 0x1DC */ s16 unk1DC;
+    /* 0x1DE */ s16 unk1DE;
+    /* 0x1E0 */ s16 step;
+    /* 0x1E2 */ s16 unk1E2;
+    /* 0x1E4 */ s16 unk1E4;
+    /* 0x1E6 */ UNK_TYPE1 pad1E6[2];
     /* 0x01E8 */ EnBhActionFunc actionFunc;
 } EnBh; // size = 0x1EC
 
