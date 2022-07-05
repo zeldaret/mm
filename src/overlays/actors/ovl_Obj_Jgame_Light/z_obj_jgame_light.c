@@ -18,6 +18,11 @@ typedef enum {
     /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
 } ObjJgameLightSignal;
 
+typedef enum {
+    /* 0x0 */ OBJJGAMELIGHT_TORCH_OFF,
+    /* 0x1 */ OBJJGAMELIGHT_TORCH_ON,
+} ObjJgameLightTorchStatus;
+
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
 void ObjJgameLight_Update(Actor* thisx, PlayState* play);
@@ -76,11 +81,11 @@ void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 60.0f);
     this->actor.colChkInfo.health = 0;
     this->prevHealth = 0;
-    this->unk_1B6 = 0;
+    this->torchStatus = OBJJGAMELIGHT_TORCH_OFF;
     this->lightRadius = 0;
     this->alpha = 0;
     this->signal = OBJJGAMELIGHT_NONE;
-    this->unk_1A8 = 0.0f;
+    this->flameScaleProportion = 0.0f;
 }
 
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
@@ -93,36 +98,37 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && (this->unk_1B6 == 0)) {
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) &&
+        (this->torchStatus == OBJJGAMELIGHT_TORCH_OFF)) {
         if (this->lightRadius < 160) {
             this->lightRadius += 40;
         } else {
             this->lightRadius = 200;
-            this->unk_1B6 = 1;
+            this->torchStatus = OBJJGAMELIGHT_TORCH_ON;
         }
-        if (this->unk_1A8 < 0.7f) {
-            this->unk_1A8 += 0.3f;
+        if (this->flameScaleProportion < 0.7f) {
+            this->flameScaleProportion += 0.3f;
         } else {
-            this->unk_1A8 = 1.0f;
+            this->flameScaleProportion = 1.0f;
         }
     } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_SNUFF_FIRE) {
         if (this->lightRadius > 40) {
             this->lightRadius -= 40;
         } else {
             this->lightRadius = -1;
-            if (this->unk_1A8 == 0.0f) {
-                this->unk_1B6 = 0;
+            if (this->flameScaleProportion == 0.0f) {
+                this->torchStatus = OBJJGAMELIGHT_TORCH_OFF;
                 this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
                 this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_SNUFF_FIRE;
             }
         }
-        if (this->unk_1A8 > 0.3f) {
-            this->unk_1A8 -= 0.3f;
+        if (this->flameScaleProportion > 0.3f) {
+            this->flameScaleProportion -= 0.3f;
         } else {
-            this->unk_1A8 = 0.0f;
+            this->flameScaleProportion = 0.0f;
         }
     }
-    if (this->unk_1A8 > 0.1f) {
+    if (this->flameScaleProportion > 0.1f) {
         func_800B9010(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
     temp_a1 = (s32)(Rand_ZeroOne() * 127.0f) + 128;
@@ -163,7 +169,7 @@ void ObjJgameLight_Update(Actor* thisx, PlayState* play) {
     func_80C15718(this, play);
     func_80C15474(this, play);
     ObjJgameLight_UpdateCollision(this, play);
-    this->unk_1AE++;
+    this->flameScroll++;
 }
 
 void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
@@ -189,13 +195,13 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightIncorrectDL);
         }
     }
-    if (this->unk_1A8 != 0.0f) {
+    if (this->flameScaleProportion != 0.0f) {
         f32 scale;
 
         func_8012C2DC(play->state.gfxCtx);
-        scale = (this->unk_1A8 * 27.0f) / 10000.0f;
+        scale = (this->flameScaleProportion * 27.0f) / 10000.0f;
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->unk_1AE * -0x14) & 0x1FF,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->flameScroll * -20) & 0x1FF,
                                     0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);

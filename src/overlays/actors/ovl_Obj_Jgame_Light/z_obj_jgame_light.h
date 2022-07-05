@@ -17,13 +17,13 @@ typedef struct ObjJgameLight {
     /* 0x190 */ UNK_TYPE1 pad_190[4];
     /* 0x194 */ LightNode* lightNode;
     /* 0x198 */ LightInfo lightInfo;
-    /* 0x1A8 */ f32 unk_1A8;
+    /* 0x1A8 */ f32 flameScaleProportion;
     /* 0x1AC */ s16 lightRadius;
-    /* 0x1AE */ s16 unk_1AE;
+    /* 0x1AE */ s16 flameScroll;
     /* 0x1B0 */ UNK_TYPE1 pad_1B0[2];
     /* 0x1B2 */ s16 alpha;
     /* 0x1B4 */ s16 signal;
-    /* 0x1B6 */ s16 unk_1B6;
+    /* 0x1B6 */ s16 torchStatus;
     /* 0x1B8 */ u8 prevHealth;
 } ObjJgameLight; // size = 0x1BC
 
