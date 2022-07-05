@@ -35,9 +35,8 @@ void EnBh_Init(Actor* thisx, PlayState* play) {
 
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelanime, &object_bh_Skel_001E60, &object_bh_Anim_000074, &this->unk188,
-                       &this->unk1AC, 6);
-    Animation_PlayLoop(&this->skelanime, &object_bh_Anim_000074);
+    SkelAnime_InitFlex(play, &this->skelanime, &gEnBhNoneSkel, &gEnBhFlyingAnim, &this->unk188, &this->unk1AC, 6);
+    Animation_PlayLoop(&this->skelanime, &gEnBhFlyingAnim);
     this->actionFunc = func_80C22DEC;
 }
 
