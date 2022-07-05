@@ -121,7 +121,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_KEY_SMALL, OBJECT_GI_KEY
     { GetItem_DrawOpa0, { gGiSmallKeyDL } },
     // GID_MASK_KAMARO, OBJECT_GI_MASK17
-    { GetItem_DrawOpa01, { gGiKamarosMaskDL, gGiKamarosMaskEmptyDL } },
+    { GetItem_DrawOpa01, { gGiKamaroMaskDL, gGiKamaroMaskEmptyDL } },
     // GID_MASK_COUPLE, OBJECT_GI_MASK13
     { GetItem_DrawOpa0Xlu1, { object_gi_mask13_DL_0006A0, object_gi_mask13_DL_0005A0 } },
     // GID_04, OBJECT_GI_MELODY
@@ -141,7 +141,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOMBERS_NOTEBOOK, OBJECT_GI_SCHEDULE
     { GetItem_DrawOpa0Xlu1, { gGiBombersNotebookEmptyDL, gGiBombersNotebookDL } },
     // GID_MASK_STONE, OBJECT_GI_STONEMASK
-    { GetItem_DrawOpa0Xlu1, { object_gi_stonemask_DL_000E48, object_gi_stonemask_DL_000A10 } },
+    { GetItem_DrawOpa0Xlu1, { gGiStoneMaskEmptyDP, gGiStoneMaskDP } },
     // GID_MASK_KAFEIS_MASK, OBJECT_GI_MASK05
     { GetItem_DrawOpa01, { object_gi_mask05_DL_001048, object_gi_mask05_DL_001040 } },
     // GID_MASK_CIRCUS_LEADER, OBJECT_GI_MASK11
@@ -241,7 +241,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SWORD_BGS, OBJECT_GI_LONGSWORD
     { GetItem_DrawGoronSword, { gGiBiggoronSwordDL } },
     // GID_MASK_SUN, OBJECT_GI_MSSA
-    { GetItem_DrawOpa0Xlu1, { object_gi_mssa_DL_000DF0, object_gi_mssa_DL_000C00 } },
+    { GetItem_DrawOpa0Xlu1, { gGiSunMaskFaceDL, gGiSunMaskEyesSidePatternsDL } },
     // GID_MASK_BLAST, OBJECT_GI_MASK21
     { GetItem_DrawOpa0Xlu1, { object_gi_mask21_DL_000AA8, object_gi_mask21_DL_000830 } },
     // GID_FAIRY, OBJECT_GI_BOTTLE_04
@@ -317,7 +317,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_DEKU, OBJECT_GI_NUTSMASK
     { GetItem_DrawOpa0Xlu1, { gGiDekuMaskEmptyDL, gGiDekuMaskDL } },
     // GID_REMAINS_ODOLWA, OBJECT_BSMASK
-    { GetItem_DrawRemains, { object_bsmask_DL_000690, object_bsmask_DL_000690 } },
+    { GetItem_DrawRemains, { gRemainsOdolwaDL, gRemainsOdolwaDL } },
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
     { GetItem_DrawOpa0Xlu1, { gGiPowderKegBarrelDL, gGiPowderKegSkullsAndFuseDL } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
@@ -332,11 +332,11 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawSeahorse,
       { gGiSeahorseEmptyDL, gGiSeahorseBodyDL, gGiSeahorseGlowDL, (Gfx*)&gGiSeahorseBillboardRotMtx } },
     // GID_REMAINS_GOHT, OBJECT_BSMASK
-    { GetItem_DrawRemains, { object_bsmask_DL_003AD0, object_bsmask_DL_003AD0 } },
+    { GetItem_DrawRemains, { gRemainsGohtDL, gRemainsGohtDL } },
     // GID_REMAINS_GYORG, OBJECT_BSMASK
-    { GetItem_DrawRemains, { object_bsmask_DL_001D80, object_bsmask_DL_001D80 } },
+    { GetItem_DrawRemains, { gRemainsGyorgDL, gRemainsGyorgDL } },
     // GID_REMAINS_TWINMOLD, OBJECT_BSMASK
-    { GetItem_DrawRemains, { object_bsmask_DL_005020, object_bsmask_DL_005020 } },
+    { GetItem_DrawRemains, { gRemainsTwinmoldDL, gRemainsTwinmoldDL } },
     // GID_SWORD_RAZOR, OBJECT_GI_SWORD_2
     { GetItem_DrawOpa01, { gGiRazorSwordDL, gGiRazorSwordEmptyDL } },
     // GID_SWORD_GILDED, OBJECT_GI_SWORD_3

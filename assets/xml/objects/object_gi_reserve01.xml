@@ -3,7 +3,7 @@
     <File Name="object_gi_reserve01" Segment="6"> <!-- "object_gi_kenrisyo" -->
 
         <!-- Title Deed Common Display Lists -->
-        <DList Name="gGiTitleDeedPinDL" Offset="0x600" />
+        <DList Name="gGiTitleDeedSealAndRibbonDL" Offset="0x600" />
         <DList Name="gGiTitleDeedPaperDL" Offset="0x788" />
         <DList Name="gGiTitleDeedEmptyDL" Offset="0xA08" />
 
@@ -16,6 +16,6 @@
         <!-- Title Deed Textures -->
         <Texture Name="gGiTitleDeedRightInscriptionsTex" OutName="gi_title_deed_right_inscriptions" Format="i8" Width="32" Height="32" Offset="0xA10" />
         <Texture Name="gGiTitleDeedLeftInscriptionsTex" OutName="gi_title_deed_left_inscriptions" Format="i8" Width="32" Height="32" Offset="0xE10" />
-        <Texture Name="gGiTitleDeedPinTex" OutName="gi_title_deed_pin" Format="i8" Width="32" Height="32" Offset="0x1210" />
+        <Texture Name="gGiTitleDeedSealAndRibbonTex" OutName="gi_title_deed_seal_and_ribbon" Format="i8" Width="32" Height="32" Offset="0x1210" />
     </File>
 </Root>
