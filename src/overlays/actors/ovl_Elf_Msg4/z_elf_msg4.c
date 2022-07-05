@@ -19,7 +19,7 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play);
 void func_80AFD668(ElfMsg4* this, PlayState* play);
 void func_80AFD770(ElfMsg4* this, PlayState* play);
 s32 func_80AFD380(ElfMsg4* this, PlayState* play);
-s32 func_80AFD5B4(ElfMsg4* this);
+s32 ElfMsg4_GetTextId(ElfMsg4* this);
 s32 func_80AFD5E0(ElfMsg4* this);
 
 const ActorInit Elf_Msg4_InitVars = {
@@ -96,11 +96,11 @@ void ElfMsg4_Init(Actor* thisx, PlayState* play) {
 void ElfMsg4_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 func_80AFD5B4(ElfMsg4* this) {
+s32 ElfMsg4_GetTextId(ElfMsg4* this) {
     if (ELFMSG4_GET_8000(&this->actor) != 0) {
-        return ELFMSG4_GET_FF(&this->actor) + 0x200;
+        return ELFMSG4_GET_TEXT(&this->actor) + 0x200;
     } else {
-        return -0x200 - ELFMSG4_GET_FF(&this->actor);
+        return -ELFMSG4_GET_TEXT(&this->actor) - 0x200;
     }
 }
 
@@ -114,7 +114,7 @@ void func_80AFD668(ElfMsg4* this, PlayState* play) {
     EnElf* tatl = (EnElf*)player->tatlActor;
 
     if ((player->tatlActor != NULL) && func_80AFD5E0(this)) {
-        player->tatlTextId = func_80AFD5B4(this);
+        player->tatlTextId = ElfMsg4_GetTextId(this);
         ActorCutscene_SetIntentToPlay(0x7C);
         tatl->elfMsg = this->elfMsg5;
         if (this->actor.cutscene == -1) {
@@ -138,7 +138,7 @@ void func_80AFD770(ElfMsg4* this, PlayState* play) {
     Actor* bgActor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (bgActor != NULL) {
-        if ((bgActor->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_FF(&this->actor) != ELFMSG5_GET_FF(bgActor)) ||
+        if ((bgActor->id != ACTOR_ELF_MSG5) || (ELFMSG4_GET_TEXT(&this->actor) != ELFMSG5_GET_FF(bgActor)) ||
             (this->actor.cutscene != bgActor->cutscene)) {
             bgActor = bgActor->next;
         } else {
