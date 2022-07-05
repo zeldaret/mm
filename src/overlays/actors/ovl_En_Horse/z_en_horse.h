@@ -104,13 +104,13 @@ typedef enum {
     /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
 } HorseType;
 
-#define ENHORSE_PARAMTYPE_BANDIT 0x2000
-#define ENHORSE_PARAMTYPE_4000 0x4000
-#define ENHORSE_PARAMTYPE_DONKEY 0x8000
+#define ENHORSE_PARAM_BANDIT 0x2000
+#define ENHORSE_PARAM_4000 0x4000
+#define ENHORSE_PARAM_DONKEY 0x8000
 
-#define ENHORSE_PARAMTYPE_ISBANDIT(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_BANDIT)
-#define ENHORSE_PARAMTYPE_IS4000(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_4000)
-#define ENHORSE_PARAMTYPE_ISDONKEY(thisx) ((thisx)->params & ENHORSE_PARAMTYPE_DONKEY)
+#define ENHORSE_IS_BANDIT_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_BANDIT)
+#define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
+#define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
 
 typedef enum {
     /*  0 */ ENHORSE_0,
@@ -137,7 +137,7 @@ typedef enum {
 } EnHorseParam;
 
 /**
- * `paramtype` should be `ENHORSE_PARAMTYPE_BANDIT`, `ENHORSE_PARAMTYPE_4000` or `ENHORSE_PARAMTYPE_DONKEY`
+ * `paramtype` should be `ENHORSE_PARAM_BANDIT`, `ENHORSE_PARAM_4000` or `ENHORSE_PARAM_DONKEY`
  * `lower` should be a value of the enum `EnHorseParam`
  */
 #define ENHORSE_PARAMS(paramtype, lower) ((paramtype) | (lower))

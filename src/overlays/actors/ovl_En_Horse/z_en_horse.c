@@ -696,7 +696,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     this->unk_3E8 = 0.0f;
     this->unk_528 = 100.0f;
 
-    if (ENHORSE_PARAMTYPE_ISDONKEY(&this->actor)) {
+    if (ENHORSE_IS_DONKEY_TYPE(&this->actor)) {
         this->type = HORSE_TYPE_DONKEY;
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
@@ -706,7 +706,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         }
         this->unk_1EC |= 1;
         thisx->update = func_8087D540;
-    } else if (ENHORSE_PARAMTYPE_IS4000(&this->actor)) {
+    } else if (ENHORSE_IS_4000_TYPE(&this->actor)) {
         this->type = HORSE_TYPE_2;
         this->unk_528 = 64.8f;
         this->boostSpeed = 15;
@@ -719,7 +719,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         } else {
             thisx->update = func_8087D540;
         }
-    } else if (ENHORSE_PARAMTYPE_ISBANDIT(&this->actor)) {
+    } else if (ENHORSE_IS_BANDIT_TYPE(&this->actor)) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
@@ -734,7 +734,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    this->actor.params &= ~(ENHORSE_PARAMTYPE_DONKEY | ENHORSE_PARAMTYPE_4000 | ENHORSE_PARAMTYPE_BANDIT);
+    this->actor.params &= ~(ENHORSE_PARAM_DONKEY | ENHORSE_PARAM_4000 | ENHORSE_PARAM_BANDIT);
     if (this->actor.params == 0x1FFF) {
         this->actor.params = ENHORSE_1;
     }
