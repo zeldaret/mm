@@ -11,7 +11,7 @@
 
         <!-- Alien Animations -->
         <Animation Name="gAlienDeathAnim" Offset="0x608" /> <!-- Original name is "uch_die_body" -->
-        <Animation Name="gAlienDamageAnim" Offset="0x6C8" /> <!-- Original name is "uch_gaku_body" (probably short for the onomatopoeia for "jerking") -->
+        <Animation Name="gAlienJerkingAnim" Offset="0x6C8" /> <!-- Original name is "uch_gaku_body" (probably short for the onomatopoeia for "jerking") -->
 
         <!-- Assets for the flash of light that appears when an alien dies. -->
         <DList Name="gAlienDeathFlashDL" Offset="0x720" />

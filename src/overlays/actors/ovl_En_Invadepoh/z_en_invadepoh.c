@@ -2186,7 +2186,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    Animation_PlayLoop(&this->skelAnime, &gAlienDamageAnim);
+    Animation_PlayLoop(&this->skelAnime, &gAlienJerkingAnim);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
