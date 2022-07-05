@@ -634,7 +634,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
 void EnItem00_DrawRupee(EnItem00* this, PlayState* play);
 void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
-void EnItem00_DrawHeartContainer(EnItem00* actor, PlayState* play);
+void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
 void EnItem00_Draw(Actor* thisx, PlayState* play) {
@@ -780,11 +780,11 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnItem00_DrawHeartContainer(EnItem00* actor, PlayState* play) {
+void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     s32 pad;
     s32 pad2;
 
-    if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
+    if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);
