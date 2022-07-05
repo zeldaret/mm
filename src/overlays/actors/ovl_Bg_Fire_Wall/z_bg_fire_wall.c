@@ -73,7 +73,7 @@ void BgFireWall_Init(Actor* thisx, PlayState* play) {
     this->unk_15C = 0.09f;
     this->unk_158 = 0.1f;
     this->unk_160 = 300.0f;
-    this->texIndex = Rand_S16Offset(0, 7);
+    this->texIndex = Rand_S16Offset(0, ARRAY_COUNT(sFlameTextures) - 1);
     this->actor.flags |= ACTOR_FLAG_10;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->actionFunc = func_809AC638;
@@ -189,7 +189,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     }
-    this->texIndex = (this->texIndex + 1) % 8;
+    this->texIndex = (this->texIndex + 1) % ARRAY_COUNT(sFlameTextures);
     if (this->actionFunc != func_809AC970) {
         if (this->actor.parent != NULL) {
             EnEncount4* parent = (EnEncount4*)this->actor.parent;
