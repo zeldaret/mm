@@ -15,8 +15,8 @@ typedef struct EnBh {
     /* 0x1AC */ Vec3s unk1AC;
     /* 0x1B2 */ UNK_TYPE1 pad1B2[0x1E];
     /* 0x1D0 */ Vec3f pos;
-    /* 0x1DC */ s16 unk1DC;
-    /* 0x1DE */ s16 unk1DE;
+    /* 0x1DC */ s16 timer;
+    /* 0x1DE */ s16 timer2;
     /* 0x1E0 */ s16 step;
     /* 0x1E2 */ s16 unk1E2;
     /* 0x1E4 */ s16 unk1E4;

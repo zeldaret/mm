@@ -59,11 +59,11 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     zDiff = this->pos.z - this->actor.world.pos.z;
     hypotenuse = sqrtf(SQ(xDiff) + SQ(zDiff));
 
-    if ((this->unk1DE == 0) || (hypotenuse < 100.0f)) {
+    if ((this->timer2 == 0) || (hypotenuse < 100.0f)) {
         this->pos.x = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.x;
         this->pos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.home.pos.y;
         this->pos.z = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.z;
-        this->unk1DE = Rand_ZeroFloat(50.0f) + 30.0f;
+        this->timer2 = Rand_ZeroFloat(50.0f) + 30.0f;
         this->step = 0;
     }
 
@@ -82,17 +82,17 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     Math_ApproachS(&this->step, 0x200, 1, 0x10);
 
     if (((s32)this->skelanime.playSpeed) == 0) {
-        if (this->unk1DC == 0) {
+        if (this->timer == 0) {
             this->skelanime.playSpeed = 1.0f;
-            this->unk1DC = Rand_ZeroFloat(70.0f) + 50.0f;
-        } else if (((this->unk1DC & 7) == 7) && (Rand_ZeroOne() < 0.5f)) {
+            this->timer = Rand_ZeroFloat(70.0f) + 50.0f;
+        } else if (((this->timer & 7) == 7) && (Rand_ZeroOne() < 0.5f)) {
             this->unk1E4 = randPlusMinusPoint5Scaled(3000.0f);
         }
     } else {
         SkelAnime_Update(&this->skelanime);
-        if ((this->unk1DC == 0) && (Animation_OnFrame(&this->skelanime, 6.0f) != 0)) {
+        if ((this->timer == 0) && (Animation_OnFrame(&this->skelanime, 6.0f) != 0)) {
             this->skelanime.playSpeed = 0.0f;
-            this->unk1DC = Rand_ZeroFloat(50.0f) + 50.0f;
+            this->timer = Rand_ZeroFloat(50.0f) + 50.0f;
         }
     }
 
@@ -106,12 +106,8 @@ void EnBh_Update(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
     Actor_MoveWithoutGravity(&this->actor);
-    if (this->unk1DE != 0) {
-        this->unk1DE--;
-    }
-    if (this->unk1DC != 0) {
-        this->unk1DC--;
-    }
+    DECR(this->timer2);
+    DECR(this->timer);
     this->actionFunc(this, play);
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
 }
