@@ -37,7 +37,7 @@ static s16 sObjectIds[] = {
     OBJECT_GI_BOTTLE, OBJECT_GI_KEY,    OBJECT_GI_M_ARROW, OBJECT_GI_RUPY,   OBJECT_GI_RUPY,
     OBJECT_GI_RUPY,   OBJECT_GI_RUPY,   OBJECT_GI_HEARTS,  OBJECT_GI_KEY,
 };
-static s16 sDrawItemIndices[] = {
+static s16 sGetItemDrawIds[] = {
     GID_BOTTLE,     GID_BOTTLE,      GID_BOTTLE,     GID_BOTTLE,    GID_BOTTLE,       GID_BOTTLE,      GID_KEY_SMALL,
     GID_ARROW_FIRE, GID_RUPEE_GREEN, GID_RUPEE_BLUE, GID_RUPEE_RED, GID_RUPEE_PURPLE, GID_HEART_PIECE, GID_KEY_SMALL,
 };
@@ -62,7 +62,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     } else {
         this->objIndex = objBankIndex;
     }
-    this->giDrawId = sDrawItemIndices[type];
+    this->getItemDrawId = sGetItemDrawIds[type];
     this->getItemId = sGetItemIds[type];
     this->futureActionFunc = func_8092009C;
     this->drawFunc = ItemEtcetera_Draw;
@@ -126,7 +126,7 @@ void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
     if (play->actorCtx.unk4 == 100) {
         func_800B8050(&this->actor, play, 0);
         func_800B8118(&this->actor, play, 0);
-        GetItem_Draw(play, this->giDrawId);
+        GetItem_Draw(play, this->getItemDrawId);
     }
 }
 
@@ -135,5 +135,5 @@ void ItemEtcetera_Draw(Actor* thisx, PlayState* play) {
 
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);
-    GetItem_Draw(play, this->giDrawId);
+    GetItem_Draw(play, this->getItemDrawId);
 }

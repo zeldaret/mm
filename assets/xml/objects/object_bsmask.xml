@@ -29,7 +29,7 @@
         <Texture Name="gRemainsGohtTopPatternTex" OutName="remains_goht_top_pattern" Format="rgba16" Width="32" Height="64" Offset="0x9390" />
         <!-- Used for the lower part of Goht's Remains for the mouth of Twinmold's Remains -->
         <Texture Name="gRemainsGohtTwinmoldPatternTex" OutName="remains_goht_twinmold_pattern" Format="rgba16" Width="32" Height="64" Offset="0xA390" />
-        <Texture Name="gRemainsGohtSpikeTwinmoldMandible" OutName="remains_goht_spike_twinmold_mandible" Format="rgba16" Width="32" Height="32" Offset="0xB390" />
+        <Texture Name="gRemainsGohtSpikeTwinmoldMandibleTex" OutName="remains_goht_spike_twinmold_mandible" Format="rgba16" Width="32" Height="32" Offset="0xB390" />
         <Texture Name="gRemainsTwinmoldSkinTex" OutName="remains_twinmold_skin" Format="ci4" Width="64" Height="64" Offset="0xBB90" />
         <Texture Name="gRemainsTwinmoldSnoutTex" OutName="remains_twinmold_snout" Format="ci4" Width="64" Height="64" Offset="0xC390" />
     </File>

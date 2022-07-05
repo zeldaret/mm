@@ -1,3 +1,7 @@
+/**
+ * @file z_draw.c
+ * @brief Draw get-item models
+ */
 #include "global.h"
 #include "assets/objects/object_gi_arrow/object_gi_arrow.h"
 #include "assets/objects/object_gi_arrowcase/object_gi_arrowcase.h"
@@ -132,7 +136,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawXlu01, { gGiNocturneColorDL, gGiSongNoteDL } },
     // GID_07, OBJECT_GI_MELODY
     { GetItem_DrawXlu01, { gGiPreludeColorDL, gGiSongNoteDL } },
-    // GID_HEART, OBJECT_GI_HEART
+    // GID_RECOVERY_HEART, OBJECT_GI_HEART
     { GetItem_DrawRecoveryHeart, { gGiRecoveryHeartDL } },
     // GID_KEY_BOSS, OBJECT_GI_KEY_BOSS
     { GetItem_DrawOpa0Xlu1, { gGiBossKeyDL, gGiBossKeyGemDL } },
@@ -364,7 +368,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_GIANT, OBJECT_GI_MASK23
     { GetItem_DrawOpa01, { object_gi_mask23_DL_000C00, object_gi_mask23_DL_0008C0 } },
     // GID_CHATEAU, OBJECT_GI_BOTTLE_21
-    { GetItem_DrawOpa0Xlu1, { gChateauRomaniBottleEmptyDL, gChateauRomaniBottleDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiChateauRomaniBottleEmptyDL, gGiChateauRomaniBottleDL } },
     // GID_PICTO_BOX, OBJECT_GI_CAMERA
     { GetItem_DrawOpa0Xlu1, { gGiPictoBoxFrameDL, gGiPictoBoxBodyAndLensDL } },
     // GID_MASK_FIERCE_DEITY, OBJECT_GI_MASK03

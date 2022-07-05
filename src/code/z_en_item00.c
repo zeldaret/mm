@@ -78,14 +78,14 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         if (this->actor.params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
-            this->actor.params = ITEM00_HEART;
+            this->actor.params = ITEM00_RECOVERY_HEART;
         } else {
             Actor_MarkForDeath(&this->actor);
             return;
         }
     }
     if (this->actor.params == ITEM00_3_HEARTS) {
-        this->actor.params = ITEM00_HEART;
+        this->actor.params = ITEM00_RECOVERY_HEART;
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -117,7 +117,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
                 sp30 = -1;
             }
             break;
-        case ITEM00_HEART:
+        case ITEM00_RECOVERY_HEART:
             this->actor.home.rot.z = randPlusMinusPoint5Scaled(65535.0f);
             shadowOffset = 430.0f;
             Actor_SetScale(&this->actor, 0.02f);
@@ -219,8 +219,8 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_RUPEE_HUGE:
             Item_Give(play, ITEM_RUPEE_HUGE);
             break;
-        case ITEM00_HEART:
-            Item_Give(play, ITEM_HEART);
+        case ITEM00_RECOVERY_HEART:
+            Item_Give(play, ITEM_RECOVERY_HEART);
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
@@ -286,7 +286,8 @@ void EnItem00_WaitForHeartObject(EnItem00* this, PlayState* play) {
 }
 
 void func_800A640C(EnItem00* this, PlayState* play) {
-    if ((this->actor.params <= ITEM00_RUPEE_RED) || ((this->actor.params == ITEM00_HEART) && (this->unk152 < 0)) ||
+    if ((this->actor.params <= ITEM00_RUPEE_RED) ||
+        ((this->actor.params == ITEM00_RECOVERY_HEART) && (this->unk152 < 0)) ||
         (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) &&
@@ -366,7 +367,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 
     this->unk152++;
 
-    if (this->actor.params == ITEM00_HEART) {
+    if (this->actor.params == ITEM00_RECOVERY_HEART) {
         if (this->actor.velocity.y < 0.0f) {
             this->actor.speedXZ = 0.0f;
             this->actor.gravity = -0.4f;
@@ -434,7 +435,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
-    } else if (this->actor.params == ITEM00_HEART) {
+    } else if (this->actor.params == ITEM00_RECOVERY_HEART) {
         this->actor.shape.rot.y = 0;
     }
 
@@ -532,8 +533,8 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         case ITEM00_NUTS_10:
             getItemId = GI_NUTS_10;
             break;
-        case ITEM00_HEART:
-            Item_Give(play, ITEM_HEART);
+        case ITEM00_RECOVERY_HEART:
+            Item_Give(play, ITEM_RECOVERY_HEART);
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
@@ -656,7 +657,7 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
             case ITEM00_HEART_CONTAINER:
                 EnItem00_DrawHeartContainer(this, play);
                 break;
-            case ITEM00_HEART:
+            case ITEM00_RECOVERY_HEART:
                 if (this->unk152 < 0) {
                     if (this->unk152 == -1) {
                         s8 bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_HEART);
@@ -667,7 +668,7 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
                         }
                     } else {
                         Matrix_Scale(16.0f, 16.0f, 16.0f, MTXMODE_APPLY);
-                        GetItem_Draw(play, 8);
+                        GetItem_Draw(play, GID_RECOVERY_HEART);
                     }
                     break;
                 }
@@ -825,7 +826,7 @@ s16 func_800A7650(s16 dropId) {
         return ITEM00_NO_DROP;
     }
 
-    if (dropId == ITEM00_HEART) {
+    if (dropId == ITEM00_RECOVERY_HEART) {
         if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
@@ -850,7 +851,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
 
     if (paramFF == ITEM00_3_HEARTS) {
         for (i = 0; i < 3; i++) {
-            spawnedActor = Item_DropCollectible(play, spawnPos, param7F00 | ITEM00_HEART | param8000);
+            spawnedActor = Item_DropCollectible(play, spawnPos, param7F00 | ITEM00_RECOVERY_HEART | param8000);
         }
     } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
         param7F00 >>= 8;
@@ -955,61 +956,61 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
 }
 
 u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
-    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_MASK,        ITEM00_MASK,        ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_BOMBS_A,
-    ITEM00_MAGIC_SMALL, ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_HEART,
-    ITEM00_FLEXIBLE,    ITEM00_RUPEE_GREEN, ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_MASK,        ITEM00_MASK,        ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_MAGIC_SMALL, ITEM00_NO_DROP,     ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_FLEXIBLE,    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_MASK,        ITEM00_MASK,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_BOMBS_A,     ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_FLEXIBLE,    ITEM00_RUPEE_GREEN, ITEM00_NO_DROP,
-    ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_RED,   ITEM00_NO_DROP,     ITEM00_MASK,        ITEM00_MASK,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_BOMBS_A,     ITEM00_MAGIC_SMALL, ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_HEART,       ITEM00_HEART,       ITEM00_FLEXIBLE,    ITEM00_MASK,
-    ITEM00_MASK,        ITEM00_MASK,        ITEM00_MASK,        ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_FLEXIBLE,    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_HEART,       ITEM00_HEART,       ITEM00_HEART,       ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN,
-    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_RUPEE_BLUE,
-    ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,
-    ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,
-    ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,
-    ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,
-    ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,
-    ITEM00_ARROWS_30,   ITEM00_ARROWS_30,   ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE,
-    ITEM00_MAGIC_LARGE, ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_BOMBS_A,     ITEM00_BOMBS_A,
-    ITEM00_BOMBS_A,     ITEM00_BOMBS_A,     ITEM00_BOMBS_A,     ITEM00_BOMBS_A,     ITEM00_BOMBS_A,
-    ITEM00_BOMBS_A,     ITEM00_BOMBS_A,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE,
-    ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_MAGIC_LARGE, ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NUTS_1,      ITEM00_NUTS_1,
-    ITEM00_NO_DROP,     ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_STICK,
-    ITEM00_STICK,       ITEM00_NO_DROP,     ITEM00_HEART,       ITEM00_HEART,       ITEM00_FLEXIBLE,
-    ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_RED,   ITEM00_NO_DROP,
-    ITEM00_ARROWS_10,   ITEM00_ARROWS_10,   ITEM00_ARROWS_30,   ITEM00_BOMBS_A,     ITEM00_NO_DROP,
-    ITEM00_STICK,       ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE, ITEM00_HEART,       ITEM00_HEART,
-    ITEM00_FLEXIBLE,    ITEM00_RUPEE_GREEN, ITEM00_HEART,       ITEM00_HEART,       ITEM00_MAGIC_SMALL,
-    ITEM00_MASK,        ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,
-    ITEM00_NO_DROP,     ITEM00_NO_DROP,
+    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,
+    ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,
+    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_MASK,
+    ITEM00_MASK,           ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,
+    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,
+    ITEM00_ARROWS_30,      ITEM00_ARROWS_30,      ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,
+    ITEM00_MAGIC_LARGE,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
+    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
+    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
+    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,
+    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NUTS_1,         ITEM00_NUTS_1,
+    ITEM00_NO_DROP,        ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_STICK,
+    ITEM00_STICK,          ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_NO_DROP,
+    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_30,      ITEM00_BOMBS_A,        ITEM00_NO_DROP,
+    ITEM00_STICK,          ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_MAGIC_SMALL,
+    ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_NO_DROP,        ITEM00_NO_DROP,
 };
 
 u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
@@ -1050,7 +1051,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                     dropId = ITEM00_ARROWS_10;
                     break;
                 case PLAYER_FORM_ZORA:
-                    dropId = ITEM00_HEART;
+                    dropId = ITEM00_RECOVERY_HEART;
                     break;
                 case PLAYER_FORM_GORON:
                     dropId = ITEM00_MAGIC_SMALL;
@@ -1071,7 +1072,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                     dropQuantity = 1;
                 } else if (fromActor->dropFlag & 2) {
                     params = 0x10;
-                    dropId = ITEM00_HEART;
+                    dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
                 } else if (fromActor->dropFlag & 0x20) {
                     dropId = ITEM00_RUPEE_PURPLE;
@@ -1090,11 +1091,11 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
             if (gSaveContext.save.playerData.health <= 0x30) {
                 params = 0x10;
-                dropId = ITEM00_HEART;
+                dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 3;
             } else if (gSaveContext.save.playerData.health <= 0x50) {
                 params = 0x10;
-                dropId = ITEM00_HEART;
+                dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 1;
             } else if ((gSaveContext.save.playerData.magicLevel != 0) && (gSaveContext.save.playerData.magic == 0)) {
                 params = 0xD0;
@@ -1156,13 +1157,13 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 }
 
 s32 D_801AE194[32] = {
-    ITEM00_NO_DROP,      ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,         ITEM00_RUPEE_RED,
-    ITEM00_RUPEE_PURPLE, ITEM00_NO_DROP,     ITEM00_RUPEE_HUGE,  ITEM00_COMPASS,         ITEM00_MUSHROOM_CLOUD,
-    ITEM00_HEART,        ITEM00_3_HEARTS,    ITEM00_HEART_PIECE, ITEM00_HEART_CONTAINER, ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_LARGE,  ITEM00_FLEXIBLE,    ITEM00_BIG_FAIRY,   ITEM00_NO_DROP,         ITEM00_NUTS_10,
-    ITEM00_NO_DROP,      ITEM00_BOMBS_A,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
-    ITEM00_STICK,        ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
-    ITEM00_ARROWS_10,    ITEM00_ARROWS_30,
+    ITEM00_NO_DROP,        ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,         ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_PURPLE,   ITEM00_NO_DROP,     ITEM00_RUPEE_HUGE,  ITEM00_COMPASS,         ITEM00_MUSHROOM_CLOUD,
+    ITEM00_RECOVERY_HEART, ITEM00_3_HEARTS,    ITEM00_HEART_PIECE, ITEM00_HEART_CONTAINER, ITEM00_MAGIC_SMALL,
+    ITEM00_MAGIC_LARGE,    ITEM00_FLEXIBLE,    ITEM00_BIG_FAIRY,   ITEM00_NO_DROP,         ITEM00_NUTS_10,
+    ITEM00_NO_DROP,        ITEM00_BOMBS_A,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
+    ITEM00_STICK,          ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
+    ITEM00_ARROWS_10,      ITEM00_ARROWS_30,
 };
 
 s32 func_800A8150(s32 index) {
