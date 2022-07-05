@@ -8065,7 +8065,7 @@
     0x80973550:("EnTorch_Init",),
     0x80973640:("ShotSun_Init",),
     0x809736FC:("ShotSun_Destroy",),
-    0x80973740:("func_80973740",),
+    0x80973740:("ShotSun_SpawnFairy",),
     0x80973804:("func_80973804",),
     0x809738D0:("func_809738D0",),
     0x80973960:("func_80973960",),

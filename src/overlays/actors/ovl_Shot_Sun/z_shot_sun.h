@@ -9,9 +9,12 @@ typedef void (*ShotSunActionFunc)(struct ShotSun*, PlayState*);
 
 typedef struct ShotSun {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x4C];
-    /* 0x0190 */ ShotSunActionFunc actionFunc;
-    /* 0x0194 */ char unk_194[0xC];
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ ShotSunActionFunc actionFunc;
+    /* 0x194 */ Vec3s hitboxPos;                        /* inferred */
+    /* 0x19A */ s16 unk19A;
+    /* 0x19C */ s8 unk19C;
+    /* 0x19D */ char pad19D[3];
 } ShotSun; // size = 0x1A0
 
 extern const ActorInit Shot_Sun_InitVars;
