@@ -122,7 +122,8 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
 s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
-s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
+s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
+                    Vec3s* torsoRot, TrackOptionsSet* options);
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
@@ -130,7 +131,7 @@ Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 max);
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst);
 s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);
-s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
+s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* distSq);
 
 s8 SubS_IsObjectLoaded(s8 index, struct PlayState* play);
 s8 SubS_GetObjectIndex(s16 id, struct PlayState* play);

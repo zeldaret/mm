@@ -12,7 +12,7 @@
 
 #define THIS ((EnSyatekiDekunuts*)thisx)
 
-void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play);
+void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2);
 void EnSyatekiDekunuts_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play);
 void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play);

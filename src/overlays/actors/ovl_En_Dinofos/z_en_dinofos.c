@@ -13,7 +13,7 @@
 
 void EnDinofos_Init(Actor* thisx, PlayState* play);
 void EnDinofos_Destroy(Actor* thisx, PlayState* play);
-void EnDinofos_Update(Actor* thisx, PlayState* play);
+void EnDinofos_Update(Actor* thisx, PlayState* play2);
 void EnDinofos_Draw(Actor* thisx, PlayState* play);
 
 void func_8089B834(EnDinofos* this, PlayState* play);

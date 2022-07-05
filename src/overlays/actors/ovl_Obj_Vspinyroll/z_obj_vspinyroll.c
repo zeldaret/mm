@@ -13,7 +13,7 @@
 
 void ObjVspinyroll_Init(Actor* thisx, PlayState* play);
 void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play);
-void ObjVspinyroll_Update(Actor* thisx, PlayState* play);
+void ObjVspinyroll_Update(Actor* thisx, PlayState* play2);
 void ObjVspinyroll_Draw(Actor* thisx, PlayState* play);
 
 void func_80A3CEC4(ObjVspinyroll* this);

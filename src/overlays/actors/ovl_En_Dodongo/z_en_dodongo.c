@@ -15,7 +15,7 @@
 
 void EnDodongo_Init(Actor* thisx, PlayState* play);
 void EnDodongo_Destroy(Actor* thisx, PlayState* play);
-void EnDodongo_Update(Actor* thisx, PlayState* play);
+void EnDodongo_Update(Actor* thisx, PlayState* play2);
 void EnDodongo_Draw(Actor* thisx, PlayState* play);
 
 void func_808773C4(EnDodongo* this);

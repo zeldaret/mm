@@ -21,7 +21,7 @@ void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, PlayState* play);
 
 void ObjRaillift_DoNothing(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play);
-void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 arg1);
+void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 idx);
 void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);

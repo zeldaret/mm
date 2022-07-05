@@ -16,7 +16,7 @@
 
 void EnFish2_Init(Actor* thisx, PlayState* play);
 void EnFish2_Destroy(Actor* thisx, PlayState* play);
-void EnFish2_Update(Actor* thisx, PlayState* play);
+void EnFish2_Update(Actor* thisx, PlayState* play2);
 void EnFish2_Draw(Actor* thisx, PlayState* play);
 
 void func_80B28B5C(EnFish2* this);

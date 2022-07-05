@@ -634,7 +634,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
 void EnItem00_DrawRupee(EnItem00* this, PlayState* play);
 void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
-void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
+void EnItem00_DrawHeartContainer(EnItem00* actor, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
 void EnItem00_Draw(Actor* thisx, PlayState* play) {

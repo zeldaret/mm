@@ -17,7 +17,7 @@ void EnShn_Update(Actor* thisx, PlayState* play);
 void EnShn_Draw(Actor* thisx, PlayState* play);
 void func_80AE69E8(EnShn* this, PlayState* play);
 void func_80AE6A64(EnShn* this, PlayState* play);
-s32 func_80AE6704(EnShn* this, PlayState* play);
+s32 func_80AE6704(EnShn* thisx, PlayState* play);
 
 // Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {

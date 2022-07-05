@@ -13,7 +13,7 @@
 
 void EnPoh_Init(Actor* thisx, PlayState* play);
 void EnPoh_Destroy(Actor* thisx, PlayState* play);
-void EnPoh_Update(Actor* thisx, PlayState* play);
+void EnPoh_Update(Actor* thisx, PlayState* play2);
 void EnPoh_Draw(Actor* thisx, PlayState* play);
 
 void func_80B2CAA4(EnPoh* this, PlayState* play);

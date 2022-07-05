@@ -14,7 +14,7 @@
 
 void EnBomjimb_Init(Actor* thisx, PlayState* play);
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play);
-void EnBomjimb_Update(Actor* thisx, PlayState* play);
+void EnBomjimb_Update(Actor* thisx, PlayState* play2);
 void EnBomjimb_Draw(Actor* thisx, PlayState* play);
 
 void func_80C01494(EnBomjimb* this);
