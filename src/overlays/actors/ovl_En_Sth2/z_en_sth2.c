@@ -15,7 +15,7 @@ void EnSth2_Destroy(Actor* thisx, PlayState* play);
 void EnSth2_Update(Actor* thisx, PlayState* play);
 void EnSth2_Draw(Actor* thisx, PlayState* play2);
 
-void EnSth2_UpdateAnimation(EnSth2* this, PlayState* play);
+void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
 const ActorInit En_Sth2_InitVars = {
@@ -51,13 +51,13 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    this->actionFunc = EnSth2_UpdateAnimation;
+    this->actionFunc = EnSth2_UpdateSkelAnime;
 }
 
 void EnSth2_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnSth2_UpdateAnimation(EnSth2* this, PlayState* play) {
+void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
