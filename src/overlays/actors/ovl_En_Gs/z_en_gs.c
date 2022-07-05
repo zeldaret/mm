@@ -275,7 +275,7 @@ void func_80998040(EnGs* this, PlayState* play) {
 void func_8099807C(EnGs* this, PlayState* play) {
     switch (play->msgCtx.ocarinaMode) {
         case 3:
-            switch (play->msgCtx.unk1202E) {
+            switch (play->msgCtx.lastPlayedSong) {
                 case 7:
                 case 8:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
