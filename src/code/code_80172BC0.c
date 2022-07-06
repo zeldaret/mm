@@ -5,13 +5,11 @@ const u8 sSfxBankIds[] = {
 };
 
 void AudioMgr_StopAllSfxExceptSystem(void) {
-    u32 i;
+    volatile const u8* bankIdPtr;
 
-    for (i = 0; i < ARRAY_COUNT(sSfxBankIds); i++) {
-        if (sSfxBankIds[i] != BANK_SYSTEM) {
-            //! FAKE
-            i += ((void)0, 0);
-            func_801A7084(sSfxBankIds[i]);
+    for (bankIdPtr = sSfxBankIds; bankIdPtr < sSfxBankIds + sizeof(sSfxBankIds); bankIdPtr++) {
+        if (*bankIdPtr != BANK_SYSTEM) {
+            func_801A7084(*bankIdPtr);
         }
     }
 }
