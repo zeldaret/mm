@@ -132,9 +132,9 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params == ENPART_PARAMS_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
     }
-    if (this->displayList != NULL) {
+    if (this->dList != NULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, this->displayList);
+        gSPDisplayList(POLY_OPA_DISP++, this->dList);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
