@@ -6,7 +6,7 @@
 
 struct EnPoSisters;
 
-typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, GlobalContext*);
+typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 
 // todo rename without en
 #define ENPOSISTERS_GET_TYPE(thisx) (((thisx)->params >> 8) & 3)

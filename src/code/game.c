@@ -1,5 +1,6 @@
 #include "global.h"
 #include "system_malloc.h"
+#include "z64rumble.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -52,7 +53,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
                 sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
                 sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
                 sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &dlist, arg1);
+                VisMono_Draw(&sMonoColors, &dlist);
             }
         }
     }
@@ -213,10 +214,10 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         func_80140CE0(&D_801F8010);
         func_801420C0(&D_801F8020);
-        func_801418B0(&sMonoColors);
+        VisMono_Init(&sMonoColors);
         func_80140898(&D_801F8048);
         func_801773A0(&D_801F7FF0);
-        func_8013ED9C();
+        Rumble_Init();
 
         osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
@@ -231,11 +232,11 @@ void GameState_Destroy(GameState* gameState) {
         gameState->destroy(gameState);
     }
 
-    func_8013EDD0();
+    Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
     func_80140D04(&D_801F8010);
     func_801420F4(&D_801F8020);
-    func_80141900(&sMonoColors);
+    VisMono_Destroy(&sMonoColors);
     func_80140900(&D_801F8048);
     THA_Dt(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);

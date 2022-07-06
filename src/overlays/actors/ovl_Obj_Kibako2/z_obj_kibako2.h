@@ -15,7 +15,7 @@ typedef enum {
 
 struct ObjKibako2;
 
-typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, GlobalContext*);
+typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, PlayState*);
 
 typedef struct ObjKibako2 {
     /* 0x000 */ DynaPolyActor dyna;

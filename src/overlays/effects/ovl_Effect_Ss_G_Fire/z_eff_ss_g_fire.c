@@ -8,9 +8,9 @@
 
 #define PARAMS ((EffectSsGFireInitParams*)initParamsx)
 
-s32 EffectSsGFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsGFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsGFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+s32 EffectSsGFire_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsGFire_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsGFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
 #if 0
 const EffectSsInit Effect_Ss_G_Fire_InitVars = {

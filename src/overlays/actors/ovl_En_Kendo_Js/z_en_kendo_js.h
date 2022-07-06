@@ -5,7 +5,7 @@
 
 struct EnKendoJs;
 
-typedef void (*EnKendoJsActionFunc)(struct EnKendoJs*, GlobalContext*);
+typedef void (*EnKendoJsActionFunc)(struct EnKendoJs*, PlayState*);
 
 #define ENKENDOJS_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENKENDOJS_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)

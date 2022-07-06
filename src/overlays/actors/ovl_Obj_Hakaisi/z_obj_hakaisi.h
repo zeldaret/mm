@@ -5,7 +5,7 @@
 
 struct ObjHakaisi;
 
-typedef void (*ObjHakaisiActionFunc)(struct ObjHakaisi*, GlobalContext*);
+typedef void (*ObjHakaisiActionFunc)(struct ObjHakaisi*, PlayState*);
 
 #define OBJHAKAISI_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define OBJHAKAISI_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFF00) >> 8)

@@ -24,7 +24,7 @@ typedef enum {
 
 struct EnFall;
 
-typedef void (*EnFallActionFunc)(struct EnFall*, GlobalContext*);
+typedef void (*EnFallActionFunc)(struct EnFall*, PlayState*);
 
 typedef struct EnFall {
     /* 0x000 */ Actor actor;
@@ -40,7 +40,7 @@ typedef struct EnFall {
     /* 0x154 */ u16 flags;
     /* 0x158 */ union {
                     s32 fireballAlpha;
-                    s32 activeDebrisParticleCount;
+                    s32 activeDebrisEffectCount;
                 };
     /* 0x15C */ union {
                     s16 fireballYTexScroll1;

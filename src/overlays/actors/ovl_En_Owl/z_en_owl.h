@@ -5,7 +5,7 @@
 
 struct EnOwl;
 
-typedef void (*EnOwlActionFunc)(struct EnOwl*, GlobalContext*);
+typedef void (*EnOwlActionFunc)(struct EnOwl*, PlayState*);
 typedef void (*EnOwlFunc)(struct EnOwl*);
 
 #define ENOWL_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)

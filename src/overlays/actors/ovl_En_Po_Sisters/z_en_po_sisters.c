@@ -11,41 +11,41 @@
 
 #define THIS ((EnPoSisters*)thisx)
 
-void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnPoSisters_Init(Actor* thisx, PlayState* play);
+void EnPoSisters_Destroy(Actor* thisx, PlayState* play);
+void EnPoSisters_Update(Actor* thisx, PlayState* play);
+void EnPoSisters_Draw(Actor* thisx, PlayState* play);
 
 void EnPoSisters_SetupObserverIdle(EnPoSisters* this);
-void EnPoSisters_ObserverIdle(EnPoSisters* this, GlobalContext* globalCtx);
-void func_80B1ABB8(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSisters_ObserverIdle(EnPoSisters* this, PlayState* play);
+void func_80B1ABB8(EnPoSisters* this, PlayState* play);
 void func_80B1AC40(EnPoSisters* this);
-void func_80B1ACB8(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1ACB8(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupIdleFlying(EnPoSisters* this);
-void EnPoSisters_IdleFlying(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSisters_IdleFlying(EnPoSisters* this, PlayState* play);
 void func_80B1AF8C(EnPoSisters* this);
-void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B020(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinAttack(EnPoSisters* this);
-void EnPoSisters_SpinAttack(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSisters_AttackConnectDrift(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSisters_DamageFlinch(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play);
+void EnPoSisters_AttackConnectDrift(EnPoSisters* this, PlayState* play);
+void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play);
 void func_80B1B5B4(EnPoSisters* this);
-void func_80B1B628(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B628(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinToInvis(EnPoSisters* this);
-void EnPoSisters_SpinToInvis(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSisters_SetupSpinBack(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSisters_SpinBack(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SpinBack(EnPoSisters* this, PlayState* play);
 void EnPoSister_SetupDeathStage1(EnPoSisters* this);
-void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSister_SetupDeathStage2(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSister_DeathStage2(EnPoSisters* this, GlobalContext* globalCtx);
-void EnPoSisters_SpawnMegClones(EnPoSisters* this, GlobalContext* globalCtx);
-void func_80B1BE4C(EnPoSisters* this, GlobalContext* globalCtx);
-void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play);
+void EnPoSister_SetupDeathStage2(EnPoSisters* this, PlayState* play);
+void EnPoSister_DeathStage2(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play);
+void func_80B1BE4C(EnPoSisters* this, PlayState* play);
+void func_80B1BF2C(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this);
-void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, GlobalContext* globalCtx);
+void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play);
 void func_80B1C2E8(EnPoSisters* this);
-void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1C340(EnPoSisters* this, PlayState* play);
 
 static Color_RGBA8 sPoSisterFlameColors[] = {
     { 255, 170, 255, 255 }, // meg
@@ -149,24 +149,24 @@ static InitChainEntry sInitChain[] = {
 #define PO_SISTER_FLAG_DRAW_TORCH            (1 << 7)
 // clang-format on
 
-void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnPoSisters* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gPoSistersSkeleton, &gPoeSistersSwayAnim, this->jointTable,
-                   this->morphTable, OBJECT_PO_SISTERS_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gPoSistersSkeleton, &gPoeSistersSwayAnim,
+                   this->jointTable, this->morphTable, 12);
 
     this->color.r = 255;
     this->color.g = 255;
     this->color.b = 210;
     this->color.a = 255;
-
-    this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
+    this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, 0,
                             0, 0, 0);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->sisterType = ENPOSISTERS_GET_TYPE(thisx);
     this->actor.hintId = this->sisterType + 80;
@@ -186,7 +186,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.colChkInfo.health = 8;
             this->collider.info.toucher.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
-            EnPoSisters_SpawnMegClones(this, globalCtx);
+            EnPoSisters_SpawnMegClones(this, play);
             func_80B1C2E8(this);
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
@@ -201,11 +201,11 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.params &= 0xFF;
 }
 
-void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoSisters_Destroy(Actor* thisx, PlayState* play) {
     EnPoSisters* this = THIS;
 
-    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 // update the fires as they spread away from the dying poe I think
@@ -226,8 +226,8 @@ void func_80B1A648(EnPoSisters* this, s32 timer, Vec3f* pos) {
     }
 }
 
-void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 dist;
 
     if (this->megCloneNum == REALMEG || this->actionFunc != EnPoSisters_DamageFlinch) {
@@ -246,8 +246,8 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = (Math_CosS(BINANG_ROT180(this->actor.shape.rot.y)) * dist) + player->actor.world.pos.z;
 }
 
-void EnPoSisters_MatchPlayerY(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     // equalize to player height
     Math_ApproachF(&this->actor.world.pos.y, player->actor.world.pos.y + 5.0f, 0.5f, 3.0f);
@@ -273,7 +273,7 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 // check for z target
-void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1A9B0(EnPoSisters* this, PlayState* play) {
     if (this->actor.isTargeted && (this->color.a == 255)) {
         DECR(this->zTargetTimer);
     } else {
@@ -289,7 +289,7 @@ void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
         if (this->zTargetTimer == 0) {
             EnPoSisters_SetupSpinToInvis(this);
         } else if ((this->inivisTimer == 0) && (this->color.a == 0)) {
-            EnPoSisters_SetupSpinBack(this, globalCtx);
+            EnPoSisters_SetupSpinBack(this, play);
         }
     }
 }
@@ -301,7 +301,7 @@ void EnPoSisters_SetupObserverIdle(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_ObserverIdle;
 }
 
-void EnPoSisters_ObserverIdle(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_ObserverIdle(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (DECR(this->laughTimer) == 0) {
         this->laughTimer = Rand_S16Offset(100, 50);
@@ -318,7 +318,7 @@ void func_80B1AB5C(EnPoSisters* this) {
 }
 
 // does not go off in red
-void func_80B1ABB8(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1ABB8(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         DECR(this->stateTimer);
@@ -340,7 +340,7 @@ void func_80B1AC40(EnPoSisters* this) {
 }
 
 // sometimes goes off once behind the above
-void func_80B1ACB8(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1ACB8(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->actor.speedXZ, 1.0f, 0.2f);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -364,8 +364,8 @@ void EnPoSisters_SetupIdleFlying(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_IdleFlying;
 }
 
-void EnPoSisters_IdleFlying(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnPoSisters_IdleFlying(EnPoSisters* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 yawDiff;
 
     SkelAnime_Update(&this->skelAnime);
@@ -403,7 +403,7 @@ void func_80B1AF8C(EnPoSisters* this) {
 
 // EnPoSisters_SpinUp
 // gaining speed for spin attack
-void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1B020(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     DECR(this->spinupTimer);
     this->actor.shape.rot.y += ((s32)((this->skelAnime.endFrame + 1.0f) * 3.0f) - this->spinupTimer) * 0x180;
@@ -430,7 +430,7 @@ void EnPoSisters_SetupSpinAttack(EnPoSisters* this) {
 }
 
 // spin attack dive at player
-void EnPoSisters_SpinAttack(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         DECR(this->spinTimer);
@@ -448,7 +448,7 @@ void EnPoSisters_SpinAttack(EnPoSisters* this, GlobalContext* globalCtx) {
                 func_80B1AC40(this);
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
-                func_80B1BE4C(this, globalCtx);
+                func_80B1BE4C(this, play);
             }
         }
     }
@@ -469,7 +469,7 @@ void EnPoSisters_SetupAttackConnect(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_AttackConnectDrift;
 }
 
-void EnPoSisters_AttackConnectDrift(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_AttackConnectDrift(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y -= (s16)(this->actor.speedXZ * 10.0f * 128.0f);
 
@@ -479,7 +479,7 @@ void EnPoSisters_AttackConnectDrift(EnPoSisters* this, GlobalContext* globalCtx)
             func_80B1AC40(this);
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
-            func_80B1BE4C(this, globalCtx);
+            func_80B1BE4C(this, play);
         }
     }
 }
@@ -500,7 +500,7 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_DamageFlinch;
 }
 
-void EnPoSisters_DamageFlinch(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->actor.colChkInfo.health != 0) {
             if (this->sisterType != POSISTER_TYPE_MEG) {
@@ -508,7 +508,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, GlobalContext* globalCtx) {
             } else if (this->megCloneNum != REALMEG) {
                 func_80B1BE4C(this, NULL);
             } else {
-                func_80B1BE4C(this, globalCtx);
+                func_80B1BE4C(this, play);
             }
         } else {
             EnPoSister_SetupDeathStage1(this);
@@ -522,7 +522,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, GlobalContext* globalCtx) {
         alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
         this->color.a = CLAMP(alpha, 0, 255);
         this->actor.world.pos.y = this->actor.parent->world.pos.y;
-        EnPoSisters_MatchPlayerXZ(this, globalCtx);
+        EnPoSisters_MatchPlayerXZ(this, play);
 
     } else if (this->sisterType != POSISTER_TYPE_MEG) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
@@ -541,7 +541,7 @@ void func_80B1B5B4(EnPoSisters* this) {
 }
 
 // post flinch shake? a few frames of shock
-void func_80B1B628(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1B628(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 0x71C);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -570,7 +570,7 @@ void EnPoSisters_SetupSpinToInvis(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_SpinToInvis;
 }
 
-void EnPoSisters_SpinToInvis(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 0;
         this->collider.info.bumper.dmgFlags = (0x40000 | 0x1);
@@ -583,12 +583,12 @@ void EnPoSisters_SpinToInvis(EnPoSisters* this, GlobalContext* globalCtx) {
 
 // spinning back to visible
 // TODO rename to something better
-void EnPoSisters_SetupSpinBack(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gPoeSistersAppearDisappearAnim, 1.5f, 0.0f,
                      Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), 2, -3.0f);
     if (this->sisterType == POSISTER_TYPE_MEG) {
         this->megDistToPlayer = 110.0f;
-        EnPoSisters_MatchPlayerXZ(this, globalCtx);
+        EnPoSisters_MatchPlayerXZ(this, play);
         this->color.a = 0;
         this->actor.draw = EnPoSisters_Draw;
     } else {
@@ -602,7 +602,7 @@ void EnPoSisters_SetupSpinBack(EnPoSisters* this, GlobalContext* globalCtx) {
     this->actionFunc = EnPoSisters_SpinBack;
 }
 
-void EnPoSisters_SpinBack(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_SpinBack(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 255; // fully visible
         if (this->sisterType != POSISTER_TYPE_MEG) {
@@ -623,7 +623,7 @@ void EnPoSisters_SpinBack(EnPoSisters* this, GlobalContext* globalCtx) {
 
         this->color.a = CLAMP(alpha, 0, 255);
         if (this->sisterType == POSISTER_TYPE_MEG) {
-            EnPoSisters_MatchPlayerXZ(this, globalCtx);
+            EnPoSisters_MatchPlayerXZ(this, play);
         }
     }
 }
@@ -639,7 +639,7 @@ void EnPoSister_SetupDeathStage1(EnPoSisters* this) {
 }
 
 // first half, stunned
-void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play) {
     s32 i;
     s32 end = this->fireCount;
 
@@ -668,7 +668,7 @@ void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx) {
         this->fireLoc[0].y = this->fireLoc[1].y + 2.0f;
         if (this->deathTimer >= 16) {
             if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f)) {
-                EnPoSister_SetupDeathStage2(this, globalCtx);
+                EnPoSister_SetupDeathStage2(this, play);
             }
             this->actor.scale.z = this->actor.scale.x;
             this->actor.scale.y = this->actor.scale.x;
@@ -681,15 +681,15 @@ void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 // fading away, the fire has split and circles outward and away
-void EnPoSister_SetupDeathStage2(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSister_SetupDeathStage2(EnPoSisters* this, PlayState* play) {
     this->deathTimer = 0;
     this->actor.world.pos.y = this->fireLoc[0].y;
-    Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x80);
+    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (0x8 << 4)); // drop table 8
     this->actionFunc = EnPoSister_DeathStage2;
 }
 
 // might be where meg never dissapears, she might start with deathTimer > 32
-void EnPoSister_DeathStage2(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSister_DeathStage2(EnPoSisters* this, PlayState* play) {
     this->deathTimer++;
 
     if (this->deathTimer == 32) { // waiting for death animation to finish
@@ -699,15 +699,15 @@ void EnPoSister_DeathStage2(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnPoSisters_SpawnMegClones(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
     Actor* clone1 =
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x400);
     Actor* clone2 =
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x800);
     Actor* clone3 =
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0xC00);
 
     // if we cannot spawn all clones, abort
@@ -726,11 +726,11 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 /**
- * globalCtx is optional, passed only when spawning an Effect
+ * play is optional, passed only when spawning an Effect
  * meg function, where NULL is passed in at least one spot when NOT real meg
  *  think this is meg dissapearing into invisible
  */
-void func_80B1BE4C(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1BE4C(EnPoSisters* this, PlayState* play) {
     Vec3f effectLoc;
 
     this->actor.draw = NULL;
@@ -740,12 +740,12 @@ void func_80B1BE4C(EnPoSisters* this, GlobalContext* globalCtx) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.base.acFlags &= ~AC_HARD;
 
-    if (globalCtx) {
+    if (play) {
         effectLoc.x = this->actor.world.pos.x;
         effectLoc.y = this->actor.world.pos.y + 45.0f;
         effectLoc.z = this->actor.world.pos.z;
         // spawns EffectSsDeadDb
-        func_800B3030(globalCtx, &effectLoc, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
+        func_800B3030(play, &effectLoc, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
     }
 
     Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0); // light OFF
@@ -753,9 +753,8 @@ void func_80B1BE4C(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 // uses parent assume meg
-//
-void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80B1BF2C(EnPoSisters* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
     if (this->megCloneNum == REALMEG) {
@@ -765,13 +764,13 @@ void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
 
             this->actor.shape.rot.y = (rand * 0x4000) + this->actor.yawTowardsPlayer;
             this->actor.world.pos.y = player->actor.world.pos.y + 5.0f;
-            EnPoSisters_SetupSpinBack(this, globalCtx);
+            EnPoSisters_SetupSpinBack(this, play);
         }
 
     } else if (parent->actionFunc == EnPoSisters_SpinBack) {
         this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (this->megCloneNum * 0x4000);
         this->actor.world.pos.y = player->actor.world.pos.y + 5.0f;
-        EnPoSisters_SetupSpinBack(this, globalCtx);
+        EnPoSisters_SetupSpinBack(this, play);
 
     } else if (parent->actionFunc == EnPoSister_DeathStage1) {
         Actor_MarkForDeath(&this->actor);
@@ -788,7 +787,7 @@ void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_MegSurroundPlayer;
 }
 
-void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, GlobalContext* globalCtx) {
+void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     EnPoSisters* parent;
 
     DECR(this->megSurroundTimer);
@@ -824,7 +823,7 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, GlobalContext* globalCtx) 
         if (this->megCloneNum == 0) {
             EnPoSisters_SetupSpinAttack(this);
         } else {
-            func_80B1BE4C(this, globalCtx);
+            func_80B1BE4C(this, play);
         }
     } else if (this->megCloneNum != 0) {
         parent = (EnPoSisters*)this->actor.parent;
@@ -839,7 +838,7 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, GlobalContext* globalCtx) 
             EnPoSisters_SetupSpinAttack(this);
         }
     }
-    EnPoSisters_MatchPlayerXZ(this, globalCtx);
+    EnPoSisters_MatchPlayerXZ(this, play);
 }
 
 // regular spawn in for non-meg versions
@@ -851,13 +850,13 @@ void func_80B1C2E8(EnPoSisters* this) {
     this->actionFunc = func_80B1C340;
 }
 
-void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1C340(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 255;
         this->actor.flags |= ACTOR_FLAG_1;
         this->poSisterFlags |= (PO_SISTER_FLAG_UPDATE_BGCHECK_INFO | PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT);
         if (this->sisterType == POSISTER_TYPE_MEG) {
-            func_80B1BE4C(this, globalCtx);
+            func_80B1BE4C(this, play);
         } else {
             func_80B1AC40(this);
         }
@@ -870,7 +869,7 @@ void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 // combat collider? laughs and drops arrows for meg clone
-void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
+void func_80B1C408(EnPoSisters* this, PlayState* play) {
     Vec3f pos;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -880,18 +879,18 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
         if (this->megCloneNum != 0) {
             ((EnPoSisters*)this->actor.parent)->inivisTimer--;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
-            func_80B1BE4C(this, globalCtx);
+            func_80B1BE4C(this, play);
             if (Rand_ZeroOne() < 0.2f) {
                 pos.x = this->actor.world.pos.x;
                 pos.y = this->actor.world.pos.y;
                 pos.z = this->actor.world.pos.z;
-                Item_DropCollectible(globalCtx, &pos, ITEM00_ARROWS_10);
+                Item_DropCollectible(play, &pos, ITEM00_ARROWS_10);
             }
         } else if (this->collider.base.colType != 9) {
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 this->poSisterFlags |= PO_SISTER_FLAG_UPDATE_SHAPE_ROT;
-                EnPoSisters_SetupSpinBack(this, globalCtx);
+                EnPoSisters_SetupSpinBack(this, play);
             } else if ((this->sisterType == POSISTER_TYPE_MEG) && (this->actor.colChkInfo.damageEffect == 0xE) &&
                        (this->actionFunc == EnPoSisters_MegSurroundPlayer)) {
                 if (this->inivisTimer == 0) {
@@ -901,16 +900,16 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 if (Actor_ApplyDamage(&this->actor)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
                 } else {
-                    Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                    Enemy_StartFinishingBlow(play, &this->actor);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_SISTER_DEAD);
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 4) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.5f;
-                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
-                                this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
-                                this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                                this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
                 EnPoSisters_SetupDamageFlinch(this);
             }
@@ -918,7 +917,7 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoSisters_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnPoSisters* this = THIS;
     f32 alpha;
@@ -930,27 +929,27 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnPoSisters_SetupAttackConnect(this);
     }
 
-    func_80B1C408(this, globalCtx);
+    func_80B1C408(this, play);
     if (this->poSisterFlags & PO_SISTER_FLAG_CHECK_Z_TARGET) {
-        func_80B1A9B0(this, globalCtx);
+        func_80B1A9B0(this, play);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->poSisterFlags & PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT) {
-        EnPoSisters_MatchPlayerY(this, globalCtx);
+        EnPoSisters_MatchPlayerY(this, play);
     }
 
     Actor_MoveWithGravity(&this->actor);
 
     if (this->poSisterFlags & PO_SISTER_FLAG_UPDATE_BGCHECK_INFO) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 0.0f, 5);
     } else {
         checkPos.x = this->actor.world.pos.x;
         checkPos.y = this->actor.world.pos.y + 10.0f;
         checkPos.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
     }
 
     this->actor.shape.shadowAlpha = this->color.a;
@@ -982,15 +981,15 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->actionFunc == EnPoSisters_SpinAttack) {
             this->actor.flags |= ACTOR_FLAG_1000000;
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->poSisterFlags & PO_SISTER_FLAG_CHECK_AC) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->actionFunc != func_80B1BF2C) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->actionFunc == func_80B1B628) {
@@ -1035,7 +1034,7 @@ void func_80B1C974(EnPoSisters* this) {
     }
 }
 
-s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnPoSisters_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx, Gfx** gfx) {
     static Gfx* gPoSisterBodyDisplayLists[] = {
         gPoSistersMegBodyDL,
@@ -1090,7 +1089,7 @@ s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
 // TODO add more values for our wack limbPos array
 #define POSISTER_LIMBPOS_INVALID -1
 
-void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
+void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
                               Gfx** gfx) {
     static Vec3f D_80B1DAFC = { 1000.0f, -1700.0f, 0.0f };
     static s8 D_80B1DB08[] = {
@@ -1113,18 +1112,18 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     // specific matrix manipulation per limb
     if (D_80B1DB08[limbIndex] != POSISTER_LIMBPOS_INVALID) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80B1DB08[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == PO_SISTERS_LIMB_MAIN_BODY) {
-        Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->limbPos[4]);
-        Matrix_GetStateTranslationAndScaledY(3000.0f, &this->limbPos[5]);
+        Matrix_MultVecY(-2500.0f, &this->limbPos[4]);
+        Matrix_MultVecY(3000.0f, &this->limbPos[5]);
     } else if (limbIndex == PO_SISTERS_LIMB_FACE) {
-        Matrix_GetStateTranslationAndScaledY(-4000.0f, &this->limbPos[6]);
+        Matrix_MultVecY(-4000.0f, &this->limbPos[6]);
     } else if (limbIndex == PO_SISTERS_LIMB_LOWER_BODY) {
-        Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[7]);
+        Matrix_MultVecX(3000.0f, &this->limbPos[7]);
     }
 
     if (this->actionFunc == EnPoSister_DeathStage1 && this->deathTimer >= 8 && limbIndex == PO_SISTERS_LIMB_MAIN_BODY) {
-        gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList((*gfx)++, gPoSistersBurnBodyDL);
     }
 
@@ -1134,7 +1133,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                 this->fireLoc[end] = this->fireLoc[end - 1];
             }
 
-            Matrix_MultiplyVector3fByState(&D_80B1DAFC, this->fireLoc);
+            Matrix_MultVec3f(&D_80B1DAFC, this->fireLoc);
         }
 
         if (this->fireCount > 0) {
@@ -1156,12 +1155,12 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         }
 
         if (!(this->poSisterFlags & PO_SISTER_FLAG_DRAW_TORCH)) {
-            Matrix_CopyCurrentState(&this->mtxf);
+            Matrix_Get(&this->mtxf);
         }
     }
 }
 
-void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
     EnPoSisters* this = THIS;
     Color_RGBA8* sisterEnvColor = &sPoSisterEnvColors[this->sisterType];
     Color_RGBA8* flameColor = &sPoSisterFlameColors[this->sisterType];
@@ -1171,35 +1170,35 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     f32 scale;
     s32 pad2;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     func_80B1C974(this);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     if ((this->color.a == 255) || (this->color.a == 0)) {
         gDPSetEnvColor(POLY_OPA_DISP++, this->color.r, this->color.g, this->color.b, this->color.a);
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
         POLY_OPA_DISP =
-            SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                           EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+            SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoSisters_OverrideLimbDraw,
+                           EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->color.a);
         gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
         POLY_XLU_DISP =
-            SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                           EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+            SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoSisters_OverrideLimbDraw,
+                           EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     if (!(this->poSisterFlags & PO_SISTER_FLAG_DRAW_TORCH)) {
-        Matrix_SetCurrentState(&this->mtxf);
+        Matrix_Put(&this->mtxf);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gPoSistersDrawTorchDL);
     }
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (globalCtx->gameplayFrames * -20) % 512,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->gameplayFrames * -20) % 512,
                                 32, 128));
     gDPSetEnvColor(POLY_XLU_DISP++, sisterEnvColor->r, sisterEnvColor->g, sisterEnvColor->b, sisterEnvColor->a);
 
@@ -1219,8 +1218,8 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, flameColor->r, flameColor->g, flameColor->b, alpha);
 
-        Matrix_InsertTranslation(this->fireLoc[i].x, this->fireLoc[i].y, this->fireLoc[i].z, MTXMODE_NEW);
-        Matrix_InsertRotation(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
+        Matrix_Translate(this->fireLoc[i].x, this->fireLoc[i].y, this->fireLoc[i].z, MTXMODE_NEW);
+        Matrix_RotateZYX(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), 0, MTXMODE_APPLY);
 
         if (this->actionFunc == EnPoSister_DeathStage1) {
             scale = ((this->deathTimer - i) * 0.025f) + 0.5f;
@@ -1228,13 +1227,13 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
-    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->actor.scale.x * (1.0f / 0.007f) * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

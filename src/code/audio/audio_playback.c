@@ -982,7 +982,7 @@ void AudioPlayback_NoteInitAll(void) {
         note->playbackState.portamento.speed = 0;
         note->playbackState.stereoHeadsetEffects = false;
         note->playbackState.unk_84 = 0;
-        note->synthesisState.synthesisBuffers = AudioHeap_AllocDmaMemory(&gAudioContext.notesAndBuffersPool, 0x2E0);
-        note->playbackState.attributes.filterBuf = AudioHeap_AllocDmaMemory(&gAudioContext.notesAndBuffersPool, 0x10);
+        note->synthesisState.synthesisBuffers = AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, 0x2E0);
+        note->playbackState.attributes.filterBuf = AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, 0x10);
     }
 }

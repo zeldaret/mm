@@ -10,16 +10,16 @@
 
 #define THIS ((BgKin2Picture*)thisx)
 
-void BgKin2Picture_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Picture_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKin2Picture_Init(Actor* thisx, PlayState* play);
+void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
+void BgKin2Picture_Update(Actor* thisx, PlayState* play);
+void BgKin2Picture_Draw(Actor* thisx, PlayState* play);
 
-void func_80B6F4D4(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F5B8(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F640(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F72C(BgKin2Picture* this, GlobalContext* globalCtx);
-void func_80B6F90C(BgKin2Picture* this, GlobalContext* globalCtx);
+void func_80B6F4D4(BgKin2Picture* this, PlayState* play);
+void func_80B6F5B8(BgKin2Picture* this, PlayState* play);
+void func_80B6F640(BgKin2Picture* this, PlayState* play);
+void func_80B6F72C(BgKin2Picture* this, PlayState* play);
+void func_80B6F90C(BgKin2Picture* this, PlayState* play);
 
 #if 0
 const ActorInit Bg_Kin2_Picture_InitVars = {

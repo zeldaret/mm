@@ -5,7 +5,7 @@
 
 struct ObjBlockstop;
 
-typedef void (*ObjBlockstopActionFunc)(struct ObjBlockstop*, GlobalContext*);
+typedef void (*ObjBlockstopActionFunc)(struct ObjBlockstop*, PlayState*);
 
 typedef struct ObjBlockstop {
     /* 0x0000 */ Actor actor;

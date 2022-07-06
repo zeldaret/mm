@@ -5,8 +5,8 @@
 
 struct EnToto;
 
-typedef void (*EnTotoActionFunc)(struct EnToto*, GlobalContext*);
-typedef s32 (*EnTotoUnkFunc)(struct EnToto*, GlobalContext*);
+typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
+typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 
 typedef struct EnTotoText {
     /* 0x0 */ u8 unk0;

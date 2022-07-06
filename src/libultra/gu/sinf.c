@@ -1,22 +1,25 @@
 #include "libc/math.h"
 #include "macros.h"
 
-// A slightly tweaked form of the coefficients of the Maclaurin series of sine up to x^9
-// [https://mathworld.wolfram.com/MaclaurinSeries.html].
-// The commented versions do not match.
+#pragma weak sinf = __sinf
+
+// Coefficients of a degree 9 polynomial approximation of sine. It is not the Maclaurin polynamial, but some as-yet
+// undetermined more uniform approximation.
 static const du P[] = {
-    { 1.0 },                     // 1
-    { -0.16666659550427756 },    // -1/3! = 1/6
-    { 0.008333066246082155 },    // 1/5! = 1/120
-    { -0.0001980960290193795 },  // -1/7! = -1/5040
-    { 0.000002605780637968037 }, // 1/9! = 1/362880
+    { 1.0 },
+    { -0.16666659550427756 },
+    { 0.008333066246082155 },
+    { -0.0001980960290193795 },
+    { 0.000002605780637968037 },
 };
 
 static const du rpi = { 1 / 3.14159265358979323846 }; // 1/M_PI, "reciprocal of pi"
 
+// pihi + pilo is the closest double to pi, this representation allows more precise calculations since pi itself is not
+// an exact float
 static const du pihi = { 3.1415926218032837 };
 
-static const du pilo = { 3.178650954705639E-8 }; // pihi + pilo is the closest double to pi
+static const du pilo = { 3.178650954705639E-8 };
 
 static const fu zero = { 0x00000000 };
 
@@ -26,7 +29,7 @@ static const fu zero = { 0x00000000 };
 f32 __sinf(f32 x) {
     f64 dx;         // x promoted to double
     f64 xSq;        // square of dx
-    f64 polyApprox; // Most of Maclaurin polynomial of sin(x) of degree 9
+    f64 polyApprox; // Most of the polynomial approximation to sin(x)
     f64 dn;         // n promoted to double
     s32 n;          // number of multiples of pi away from the first half-period
     f64 result;
