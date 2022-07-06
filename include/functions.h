@@ -2742,7 +2742,7 @@ u32 THA_IsCrash(TwoHeadArena* tha);
 void THA_Init(TwoHeadArena* tha);
 void THA_Ct(TwoHeadArena* tha, void* ptr, size_t size);
 void THA_Dt(TwoHeadArena* tha);
-void func_80172BC0(void);
+void AudioMgr_StopAllSfxExceptSystem(void);
 void func_80172C30(AudioMgr* audioMgr);
 void AudioMgr_HandleRetrace(AudioMgr* audioMgr);
 void AudioMgr_HandlePRENMI(AudioMgr* audioMgr);
@@ -3478,7 +3478,7 @@ void Audio_PlaySfxGeneral(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f
 // void func_801A6430(void);
 // void func_801A65C8(void);
 // void func_801A6D0C(void);
-// void func_801A7084(void);
+void func_801A7084(u8 bankId);
 // void func_801A7168(void);
 // void func_801A7284(void);
 void Audio_StopSfxByPos(Vec3f* pos);
