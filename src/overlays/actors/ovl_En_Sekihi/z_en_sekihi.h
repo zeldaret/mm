@@ -3,14 +3,16 @@
 
 #include "global.h"
 
+#define ENSIKIHI_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct EnSekihi;
 
 typedef void (*EnSekihiActionFunc)(struct EnSekihi*, PlayState*);
 
 typedef struct EnSekihi {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s32 unk15C;
-    /* 0x160 */ s32 unk160;
+    /* 0x15C */ s32 opaDList;
+    /* 0x160 */ s32 xluDList;
     /* 0x164 */ s8 objectIndex;
     /* 0x165 */ UNK_TYPE1 pad165[3];
     /* 0x168 */ EnSekihiActionFunc actionFunc;
