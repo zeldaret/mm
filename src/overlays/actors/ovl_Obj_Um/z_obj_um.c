@@ -680,8 +680,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable,
-                       UM_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gUmSkel, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_um_Anim_012CC0);
 
     this->wheelRot = 0;
