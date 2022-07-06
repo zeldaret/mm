@@ -127,7 +127,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_KAMARO, OBJECT_GI_MASK17
     { GetItem_DrawOpa01, { gGiKamaroMaskDL, gGiKamaroMaskEmptyDL } },
     // GID_MASK_COUPLE, OBJECT_GI_MASK13
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask13_DL_0006A0, object_gi_mask13_DL_0005A0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiCouplesMaskFullDL, gGiCouplesMaskHalfDL } },
     // GID_04, OBJECT_GI_MELODY
     { GetItem_DrawXlu01, { gGiSerenadeColorDL, gGiSongNoteDL } },
     // GID_05, OBJECT_GI_MELODY
@@ -147,13 +147,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_STONE, OBJECT_GI_STONEMASK
     { GetItem_DrawOpa0Xlu1, { gGiStoneMaskEmptyDP, gGiStoneMaskDP } },
     // GID_MASK_KAFEIS_MASK, OBJECT_GI_MASK05
-    { GetItem_DrawOpa01, { object_gi_mask05_DL_001048, object_gi_mask05_DL_001040 } },
+    { GetItem_DrawOpa01, { gGiKafeiMaskDL, gGiKafeiMaskEmptyDL } },
     // GID_MASK_CIRCUS_LEADER, OBJECT_GI_MASK11
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask11_DL_000C00, object_gi_mask11_DL_000B50 } },
+    { GetItem_DrawOpa0Xlu1, { gGiCircusLeaderMaskFaceDL, gGiCircusLeaderMaskEyebrowsDL } },
     // GID_MASK_BREMEN, OBJECT_GI_MASK20
-    { GetItem_DrawOpa01, { object_gi_mask20_DL_000808, object_gi_mask20_DL_000800 } },
+    { GetItem_DrawOpa01, { gGiBremenMaskDL, gGiBremenMaskEmptyDL } },
     // GID_MASK_ALL_NIGHT, OBJECT_GI_MASK06
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask06_DL_000968, object_gi_mask06_DL_0006F0 } },
+    { GetItem_DrawOpa0Xlu1, { gGiAllNightMaskEyesDL, gGiAllNightMaskFaceDL } },
     // GID_NUTS, OBJECT_GI_NUTS
     { GetItem_DrawDekuNuts, { gGiNutDL } },
     // GID_HEART_CONTAINER, OBJECT_GI_HEARTS
@@ -193,7 +193,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
       { gGiWalletDL, gGiGiantsWalletColorDL, gGiGiantsWalletRupeeOuterColorDL, gGiWalletRupeeOuterDL,
         gGiGiantsWalletStringColorDL, gGiWalletStringDL, gGiGiantsWalletRupeeInnerColorDL, gGiWalletRupeeInnerDL } },
     // GID_MASK_DON_GERO, OBJECT_GI_MASK16
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask16_DL_001438, object_gi_mask16_DL_001040 } },
+    { GetItem_DrawOpa0Xlu1, { gGiDonGeroMaskFace, gGiDonGeroMaskBody } },
     // GID_ARROWS_SMALL, OBJECT_GI_ARROW
     { GetItem_DrawOpa0, { gGiArrowSmallDL } },
     // GID_ARROWS_MEDIUM, OBJECT_GI_ARROW
@@ -247,13 +247,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MASK_SUN, OBJECT_GI_MSSA
     { GetItem_DrawOpa0Xlu1, { gGiSunMaskFaceDL, gGiSunMaskEyesSidePatternsDL } },
     // GID_MASK_BLAST, OBJECT_GI_MASK21
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask21_DL_000AA8, object_gi_mask21_DL_000830 } },
+    { GetItem_DrawOpa0Xlu1, { gGiBlastMaskEmptyDL, gGiBlastMaskDL } },
     // GID_FAIRY, OBJECT_GI_BOTTLE_04
     { GetItem_DrawFairyContainer,
       { gGiFairyBottleEmptyDL, gGiFairyBottleGlassCorkDL, gGiFairyBottleContentsDL,
         (Gfx*)&gGiFairyBottleBillboardRotMtx } },
     // GID_MASK_SCENTS, OBJECT_GI_MASK22
-    { GetItem_DrawOpa01, { object_gi_mask22_DL_000918, object_gi_mask22_DL_000880 } },
+    { GetItem_DrawOpa01, { gGiMaskOfScentsFaceDL, gGiMaskOfScentsTeethDL } },
     // GID_MASK_CAPTAIN, OBJECT_GI_MASK18
     { GetItem_DrawOpa01, { gGiCaptainsHatBodyDL, gGiCaptainsHatFaceDL } },
     // GID_MASK_BUNNY, OBJECT_GI_RABIT_MASK
@@ -309,7 +309,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SWORD_KOKIRI, OBJECT_GI_SWORD_1
     { GetItem_DrawOpa01, { gGiKokiriSwordBladeHiltDL, gGiKokiriSwordGuardDL } },
     // GID_SKULL_TOKEN_2, OBJECT_ST
-    { GetItem_DrawSkullToken, { object_st_DL_004DB0, object_st_DL_004EB8 } },
+    { GetItem_DrawSkullToken, { gSkulltulaTokenDL, gSkulltulaTokenFlameDL } },
     // GID_57, OBJECT_GI_BOTTLE_RED
     { GetItem_DrawOpa0Xlu1, { gGiRedPotionBottleEmptyDL, gGiRedPotionBottleDL } },
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
@@ -362,17 +362,17 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_MUSHROOM, OBJECT_GI_MAGICMUSHROOM
     { GetItem_DrawOpa0Xlu1, { gGiMagicMushroomEmptyDL, gGiMagicMushroomDL } },
     // GID_MASK_ROMANI, OBJECT_GI_MASK10
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask10_DL_000B60, object_gi_mask10_DL_000A30 } },
+    { GetItem_DrawOpa0Xlu1, { gGiRomaniMaskCapDL, gGiRomaniMaskNoseEyeDL } },
     // GID_MASK_POSTMAN, OBJECT_GI_MASK12
-    { GetItem_DrawOpa0Xlu1, { object_gi_mask12_DL_000608, object_gi_mask12_DL_000570 } },
+    { GetItem_DrawOpa0Xlu1, { gGiPostmanHatCapDL, gGiPostmanHatBunnyLogoDL } },
     // GID_MASK_GIANT, OBJECT_GI_MASK23
-    { GetItem_DrawOpa01, { object_gi_mask23_DL_000C00, object_gi_mask23_DL_0008C0 } },
+    { GetItem_DrawOpa01, { gGiGiantMaskEmptyDL, gGiGiantMaskDL } },
     // GID_CHATEAU, OBJECT_GI_BOTTLE_21
     { GetItem_DrawOpa0Xlu1, { gGiChateauRomaniBottleEmptyDL, gGiChateauRomaniBottleDL } },
     // GID_PICTO_BOX, OBJECT_GI_CAMERA
     { GetItem_DrawOpa0Xlu1, { gGiPictoBoxFrameDL, gGiPictoBoxBodyAndLensDL } },
     // GID_MASK_FIERCE_DEITY, OBJECT_GI_MASK03
-    { GetItem_DrawOpa01, { object_gi_mask03_DL_000B90, object_gi_mask03_DL_0009B0 } },
+    { GetItem_DrawOpa01, { gGiFierceDeityMaskFaceDL, gGiFierceDeityMaskHairAndHatDL } },
 };
 
 /**
