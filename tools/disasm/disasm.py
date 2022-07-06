@@ -760,9 +760,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS
                 ), f"R_MIPS_HI16 applied to {insn.mnemonic} when it should be ADDIU or a load/store"
                 symbol_value = (prev_hi << 0x10) + insn.imm
+                """
                 put_symbols(symbols_dict, "symbols", {hi_vram: symbol_value})
                 put_symbols(symbols_dict, "symbols", {vram + reloc[2]: symbol_value})
-                """
             else:
                 assert False, "Invalid relocation type encountered"
 
@@ -1565,15 +1565,37 @@ def fixup_text_symbols(data, vram, data_regions, info):
         """
 
         extraLJust = 0
-
         if delay_slot:
             extraLJust = -1
             line += " "
 
         immOverride = None
-        symbol_value = symbols.get(vaddr, None)
-        if symbol_value is not None:
-            immOverride = proper_name(symbol_value)
+
+        if entry["instance"].isJump():
+            immOverride = proper_name(entry["instance"].getInstrIndexAsVram(), in_data=False, is_symbol=True)
+        elif entry["instance"].isHiPair():
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = f"%hi({proper_name(symbol_value)})"
+            else:
+                constant_value = constants.get(vaddr, None)
+                if constant_value is not None:
+                    immOverride = f"(0x{constant_value:08X} >> 16)"
+
+        elif entry["instance"].isLoPair() and entry["instance"].uniqueId != rabbitizer.InstrId.cpu_ori:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = f"%lo({proper_name(symbol_value)})"
+
+        elif entry["instance"].uniqueId == rabbitizer.InstrId.cpu_ori:
+            constant_value = constants.get(vaddr, None)
+            if constant_value is not None:
+                immOverride = f"(0x{constant_value:08X} & 0xFFFF)"
+
+        else:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = proper_name(symbol_value)
 
         disassembled = entry["instance"].disassemble(immOverride=immOverride, extraLJust=extraLJust)
         line += disassembled
