@@ -8,6 +8,7 @@ import multiprocessing
 from pathlib import Path
 import mips_isa
 import rabbitizer
+from typing import Union
 
 # Consider implementing gpr naming too, but already uses abi names by default
 fpr_name_options = {
@@ -766,7 +767,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 assert False, "Invalid relocation type encountered"
 
     result_files = []
-    results = [asm_header(".text")]
+    results: list[Union[str, dict]] = [asm_header(".text")]
     raw_insns = as_word_list(data)
 
     cur_file = ""
@@ -795,6 +796,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     "mnem": "",
                     "op": [f"  .word 0x{raw_insns[i]:08X}"],
                     "data": True,
+                    "instance": insn,
                 }
             )
             continue
@@ -821,18 +823,38 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             lui_tracker.pop(cl, None)
 
         if insn.id in MIPS_BRANCH_INSNS:
+            """
+            if insn.isBranch():
+            """
             func_branch_labels.add(insn.offset)
             delayed_insn = insn
         elif insn.id == mips_isa.MIPS_INS_ERET:
+            """
+            elif insn.uniqueId == rabbitizer.InstrId.cpu_eret:
+            """
             put_symbol(symbols_dict, "functions", vaddr + 4)
         elif insn.id in MIPS_JUMP_INSNS:
+            """
+            elif insn.id in MIPS_JUMP_INSNS:
+            """
             if insn.id == mips_isa.MIPS_INS_JAL:
                 # mark function at target
                 put_symbol(symbols_dict, "functions", insn.target)
+                """
+                if insn.uniqueId == rabbitizer.InstrId.cpu_jal:
+                    put_symbol(symbols_dict, "functions", insn.getInstrIndexAsVram())
+                """
             elif insn.id == mips_isa.MIPS_INS_J:
                 # mark label at target
                 func_branch_labels.add(insn.target)
+                """
+                elif insn.uniqueId == rabbitizer.InstrId.cpu_j:
+                    func_branch_labels.add(insn.getInstrIndexAsVram())
+                """
             elif insn.id == mips_isa.MIPS_INS_JR:
+                """
+                elif insn.uniqueId == rabbitizer.InstrId.cpu_jr:
+                """
                 # check if anything branches past it in either branch or jtbl labels
                 if vaddr >= max(func_branch_labels, default=0) and vaddr >= max(
                     func_jtbl_labels, default=0
@@ -865,6 +887,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             All symbol loading involves LUI, and tracking how %hi values loaded via LUI instructions propagate
             through a function is key to identifying symbol references
             """
+            """
+            elif insn.isHiPair():
+            """
             # add lui to tracker
             if (
                 delay_slot
@@ -875,20 +900,50 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 save_tracker(delayed_insn.offset, {insn.rt: (vaddr, insn.imm)})
             else:
                 lui_tracker.update({insn.rt: (vaddr, insn.imm)})
+            """
+            if (
+                delay_slot
+                and delayed_insn is not None
+                # and delayed_insn.id in MIPS_BRANCH_LIKELY_INSNS
+                and delayed_insn.isBranchLikely()
+            ):
+                # for branch likelies, the current tracker does not update but the lui is saved to be tracked at the branch target
+                save_tracker(delayed_insn.getBranchOffset(), {insn.rt: (vaddr, insn.getImmediate())})
+            else:
+                lui_tracker.update({insn.rt: (vaddr, insn.getImmediate())})
+            """
         elif insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
             # try match with tracked lui and mark symbol
+            """
+            elif insn.isLoPair() and insn.uniqueId != rabbitizer.InstrId.cpu_ori:
+            """
             hi_vram, imm_value = lui_tracker.get(
                 insn.rs if insn.id == mips_isa.MIPS_INS_ADDIU else insn.base, (None, None)
             )
+            """
+            hi_vram, imm_value = lui_tracker.get(insn.rs.value, (None, None))
+            """
             # if a match was found, validate and record the symbol, TODO improve validation
-            if hi_vram != None and (
+            if hi_vram is not None and imm_value is not None and (
                 (((imm_value >> 0x8) & 0xF) != 0 and imm_value < 0x1000)
                 or (imm_value >= 0x8000 and imm_value < 0x80D0)
                 or (imm_value >= 0xA400 and imm_value < 0xA480)
                 or (imm_value < 0x0400 and insn.id == mips_isa.MIPS_INS_ADDIU)
             ):
+                """
+                if hi_vram is not None and imm_value is not None and (
+                    (((imm_value >> 0x8) & 0xF) != 0 and imm_value < 0x1000)
+                    or (imm_value >= 0x8000 and imm_value < 0x80D0)
+                    or (imm_value >= 0xA400 and imm_value < 0xA480)
+                    # or (imm_value < 0x0400 and insn.id == mips_isa.MIPS_INS_ADDIU)
+                    or (imm_value < 0x0400 and insn.uniqueId == rabbitizer.InstrId.cpu_addiu)
+                ):
+                """
                 lo_vram = vaddr
                 symbol_value = (imm_value << 0x10) + insn.imm
+                """
+                symbol_value = (imm_value << 0x10) + insn.getImmediate()
+                """
                 put_symbols(symbols_dict, "symbols", {hi_vram: symbol_value})
                 put_symbols(symbols_dict, "symbols", {lo_vram: symbol_value})
                 if insn.id == mips_isa.MIPS_INS_LW:
@@ -902,12 +957,21 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                         mips_isa.MIPS_INS_JALR,
                         mips_isa.MIPS_INS_J,
                     ]:
+                        """
+                        while not (lookahead_insn.isBranch() or lookahead_insn.isJump()):
+                        """
                         if lookahead_insn.id == mips_isa.MIPS_INS_JR:
+                            """
+                            if lookahead_insn.uniqueId == rabbitizer.InstrId.cpu_jr:
+                            """
                             if lookahead_insn.rs == (
                                 insn.ft
                                 if insn.id in MIPS_FP_LOAD_STORE_INSNS
                                 else insn.rt
                             ):
+                                """
+                                if lookahead_insn.rs == insn.rt:
+                                """
                                 # read the jtbl and add targets to func_jtbl_labels
                                 assert (
                                     rodata is not None
@@ -951,28 +1015,49 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                             break
                         lookahead_insn = insns[cur_idx]  # TODO fix vaddr here
                 elif insn.id == mips_isa.MIPS_INS_LD:  # doubleword loads
+                    """
+                    elif insn.uniqueId == rabbitizer.InstrId.cpu_ld:  # doubleword loads
+                    """
                     put_symbol(symbols_dict, "dwords", symbol_value)
                 elif insn.id in [mips_isa.MIPS_INS_LWC1, mips_isa.MIPS_INS_SWC1]:  # float load/stores
+                    """
+                    elif insn.isFloat() and insn.doesDereference():
+                    """
                     # add float
                     put_symbol(symbols_dict, "floats", symbol_value)
                 elif insn.id in [mips_isa.MIPS_INS_LDC1, mips_isa.MIPS_INS_SDC1]:  # double load/stores
                     # add double
+                    """
+                    elif insn.isDouble() and insn.doesDereference():
+                    """
                     put_symbol(symbols_dict, "doubles", symbol_value)
                 elif (
                     insn.id == mips_isa.MIPS_INS_ADDIU and vaddr % 4 == 0
                 ):  # strings seem to only ever be 4-byte aligned
+                    """
+                    elif not insn.doesDereference() and not insn.isUnsigned() and vaddr % 4 == 0:
+                    """
                     # add possible string
                     put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
             # insn.rt == (insn.rs if insn.id == mips_isa.MIPS_INS_ADDIU else insn.base) and
             if insn.id not in MIPS_STORE_INSNS and insn.id not in MIPS_FP_LOAD_INSNS:
+                """
+                if not insn.doesStore() and (insn.doesLoad() and insn.isFloat()):
+                """
                 clobber_conditionally(insn)
         elif insn.id == mips_isa.MIPS_INS_ORI:
+            """
+            elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+            """
             # try match with tracked lui and mark constant
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
-            if hi_vram != None:  # found match
+            if hi_vram is not None and imm_value is not None:  # found match
                 lo_vram = vaddr
                 const_value = (imm_value << 0x10) | insn.imm
+                """
+                const_value = (imm_value << 0x10) | insn.getImmediate()
+                """
                 put_symbols(symbols_dict, "constants", {hi_vram: const_value})
                 put_symbols(symbols_dict, "constants", {lo_vram: const_value})
             # clear lui tracking state if register is clobbered by the ori instruction itself
@@ -992,6 +1077,13 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 #   lw   reg, %lo(symbol)(reg)
                 # instead of clobbering, keep it if the second operand is also the first
                 # if the output is not currently tracked it will behave as intended anyway
+                """
+                if (
+                    insn.uniqueId == rabbitizer.InstrId.cpu_addu
+                    and insn.rs in lui_tracker.keys()
+                    and insn.rd == insn.rs
+                ):
+                """
                 pass
             # insns listed either write to fprs/cop0 or don't write to any
             elif insn.id not in [
@@ -1025,6 +1117,39 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 mips_isa.MIPS_INS_SUB_S,
                 mips_isa.MIPS_INS_ADD_S,
             ]:
+                """
+                elif insn.uniqueId not in [
+                    rabbitizer.InstrId.cpu_mtc0,
+                    rabbitizer.InstrId.cpu_mtc1,
+                    rabbitizer.InstrId.cpu_dmtc1,
+                    rabbitizer.InstrId.cpu_mult,
+                    rabbitizer.InstrId.cpu_multu,
+                    rabbitizer.InstrId.cpu_dmult,
+                    rabbitizer.InstrId.cpu_dmultu,
+                    rabbitizer.InstrId.cpu_div,
+                    rabbitizer.InstrId.cpu_divu,
+                    rabbitizer.InstrId.cpu_div,
+                    rabbitizer.InstrId.cpu_divu,
+                    rabbitizer.InstrId.cpu_mthi,
+                    rabbitizer.InstrId.cpu_mtlo,
+                    rabbitizer.InstrId.cpu_ctc1,
+                    rabbitizer.InstrId.cpu_nop,
+                    rabbitizer.InstrId.cpu_break,
+                    rabbitizer.InstrId.cpu_tlbp,
+                    rabbitizer.InstrId.cpu_tlbr,
+                    rabbitizer.InstrId.cpu_tlbwi,
+                    rabbitizer.InstrId.cpu_mov_s,
+                    rabbitizer.InstrId.cpu_mov_d,
+                    rabbitizer.InstrId.cpu_c_lt_s,
+                    rabbitizer.InstrId.cpu_c_lt_d,
+                    rabbitizer.InstrId.cpu_div_s,
+                    rabbitizer.InstrId.cpu_mul_s,
+                    rabbitizer.InstrId.cpu_trunc_w_s,
+                    rabbitizer.InstrId.cpu_cvt_s_w,
+                    rabbitizer.InstrId.cpu_sub_s,
+                    rabbitizer.InstrId.cpu_add_s,
+                ]:
+                """
                 clobber_conditionally(insn)
 
         ############# Start text disassembly ##########
@@ -1033,6 +1158,10 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         mnemonic = f" {insn.mnemonic}" if delay_slot else insn.mnemonic
         op_str = insn.op_str
         instr = {"id": insn.id}
+        """
+        mnemonic, op_str = insn.disassemble().split(10*" ")
+        instr = {"id": insn.uniqueId}
+        """
 
         if info["name"] in full_file_list and vaddr in full_file_list[info["name"]]:
             if cur_file != "":
@@ -1045,6 +1174,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 cur_file = f"{info['name']}_{vaddr:08X}"
 
         if insn.id in MIPS_BRANCH_INSNS:
+            """
+            if insn.isBranch():
+            """
             op_str_parts = []
             for field in insn.fields:
                 if field == "offset":
@@ -1054,6 +1186,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             op_str = [", ".join(op_str_parts)]
 
         elif insn.id in MIPS_JUMP_INSNS:
+            """
+            elif insn.isJump():
+            """
             op_str = []
             op_str_parts = []
             for field in insn.fields:
@@ -1067,10 +1202,16 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 op_str.append(part)
 
         elif insn.id == mips_isa.MIPS_INS_LUI:
+            """
+            elif insn.isHiPair():
+            """
             op_str = [op_str]
             instr["rt"] = insn.rt
 
         elif insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+            """
+            elif insn.isLoPair() and insn.uniqueId != rabbitizer.InstrId.cpu_ori:
+            """
             op_str = [op_str]
             instr["rt"] = insn.rt
             instr["rs"] = insn.rs
@@ -1078,6 +1219,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             instr["base"] = insn.base
 
         elif insn.id == mips_isa.MIPS_INS_ORI:
+            """
+            elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+            """
             op_str = [op_str]
             instr["rt"] = insn.rt
             instr["rs"] = insn.rs
@@ -1090,6 +1234,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 "mnem": mnemonic,
                 "op": op_str,
                 "data": False,
+                "instance": insn,
             }
         )
 
@@ -1101,9 +1246,19 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 or delayed_insn.id == mips_isa.MIPS_INS_JALR
                 or (delayed_insn.id == mips_isa.MIPS_INS_JR and delayed_insn.rs == mips_isa.MIPS_REG_RA)
             ):
+                """
+                if (
+                    delayed_insn.uniqueId == rabbitizer.InstrId.cpu_jal
+                    or delayed_insn.uniqueId == rabbitizer.InstrId.cpu_jalr
+                    or delayed_insn.isJrRa()
+                ):
+                """
                 # destroy lui tracking state
                 lui_tracker.clear()
             elif delayed_insn.id == mips_isa.MIPS_INS_JR and vaddr == next_jtbl_jr + 4:
+                """
+                elif delayed_insn.uniqueId == rabbitizer.InstrId.cpu_jr and vaddr == next_jtbl_jr + 4:
+                """
                 # save lui tracking state for each jtbl label
                 for label in individual_jtbl_labels[next_jtbl_jr]:
                     save_tracker(label, lui_tracker.copy())
@@ -1111,8 +1266,14 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             else:
                 # save lui tracking state
                 save_tracker(delayed_insn.offset, lui_tracker.copy())
+                """
+                save_tracker(delayed_insn.getBranchOffset(), lui_tracker.copy())
+                """
                 # destroy current lui tracking state for unconditional branches
                 if delayed_insn.id == mips_isa.MIPS_INS_B:
+                    """
+                    if delayed_insn.isUnconditionalBranch():
+                    """
                     lui_tracker.clear()
 
             delayed_insn = None
@@ -1277,7 +1438,7 @@ def find_symbols_in_rodata(section):
     return symbols_dict
 
 
-def asm_header(section_name):
+def asm_header(section_name: str):
     return f""".include "macro.inc"
 
 # assembler directives
@@ -1323,6 +1484,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
 
         insn = entry["insn"]
         if insn["id"] in MIPS_JUMP_INSNS:
+            """
+            if insn["instance"].isJump():
+            """
             for op_part in entry["op"]:
                 if type(op_part) == list:
                     line += proper_name(
@@ -1332,6 +1496,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
                     line += op_part
 
         elif insn["id"] == mips_isa.MIPS_INS_LUI:
+            """
+            elif insn["instance"].isHiPair():
+            """
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
                 line += (
@@ -1347,9 +1514,15 @@ def fixup_text_symbols(data, vram, data_regions, info):
                     line += entry["op"][0]
 
         elif insn["id"] == mips_isa.MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
+            """
+            elif insn["instance"].isLoPair() and insn["instance"].uniqueId != rabbitizer.InstrId.cpu_ori:
+            """
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
                 if insn["id"] == mips_isa.MIPS_INS_ADDIU:
+                    """
+                    if insn["instance"].uniqueId == rabbitizer.InstrId.cpu_addiu:
+                    """
                     line += f"{ mips_isa.mips_gpr_names[insn['rt']]}, { mips_isa.mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
                 else:
                     line += f"{mips_isa.mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else  mips_isa.mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({ mips_isa.mips_gpr_names[insn['base']]})"
@@ -1357,6 +1530,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 line += entry["op"][0]
 
         elif insn["id"] == mips_isa.MIPS_INS_ORI:
+            """
+            elif insn["instance"].uniqueId == rabbitizer.InstrId.cpu_ori:
+            """
             constant_value = constants.get(vaddr, None)
             if constant_value is not None:
                 line += f"{ mips_isa.mips_gpr_names[insn['rt']]}, { mips_isa.mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
@@ -1398,6 +1574,15 @@ def disassemble_text(data, vram, data_regions, info):
         insn = mips_isa.decode_insn(raw_insns[i // 4], vaddr)
         mnemonic = insn.mnemonic
         op_str = insn.op_str
+        """
+        insn = rabbitizer.Instruction(raw_insns[i // 4])
+        insn.vram = vaddr
+        disassembled_pair = insn.disassemble().split(10*" ")
+        mnemonic = disassembled_pair[0]
+        op_str = ""
+        if len(disassembled_pair) > 1:
+            op_str = disassembled_pair[1]
+        """
 
         if vaddr in full_file_list[info["name"]]:
             if cur_file != "":
@@ -1485,6 +1670,22 @@ def disassemble_text(data, vram, data_regions, info):
             delay_slot = True
 
         result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  {mnemonic:12}{op_str}\n"
+
+        """
+        comment = f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */"
+        extraLJust = 0
+
+        if delay_slot:
+            extraLJust = -1
+            comment += " "
+            delayed_insn = None
+        delay_slot = False
+        if delayed_insn is not None:
+            delay_slot = True
+
+        disassembled = insn.disassemble(extraLJust=extraLJust)
+        result += f"{comment}  {disassembled}\n"
+        """
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
