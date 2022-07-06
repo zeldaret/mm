@@ -64,7 +64,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play);
 void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play);
 
 void ObjUm_StopAnim(ObjUm* this, PlayState* play);
-void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32);
+void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index);
 
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
