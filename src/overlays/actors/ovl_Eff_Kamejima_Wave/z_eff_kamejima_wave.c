@@ -81,9 +81,9 @@ void func_80BCEBC0(EffKamejimaWave* this, PlayState* play) {
 }
 
 void func_80BCEC6C(EffKamejimaWave* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x1E0U)) {
+    if (Cutscene_CheckActorAction(play, 0x1E0)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 0x1E0));
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1E0U)]->action == 2) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1E0)]->action == 2) {
             this->scaleOffset = 0.05f;
             this->actionFunc = func_80BCEBC0;
             this->actor.draw = EffKamejimaWave_Draw;
@@ -118,7 +118,7 @@ void func_80BCED34(EffKamejimaWave* this, PlayState* play) {
 void func_80BCEDE0(EffKamejimaWave* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 0x1F6)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 0x1F6));
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1F6U)]->action == 2) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x1F6)]->action == 2) {
             this->scaleOffset = 0.03f;
             this->actor.scale.x = 0.35f;
             this->actionFunc = func_80BCED34;
