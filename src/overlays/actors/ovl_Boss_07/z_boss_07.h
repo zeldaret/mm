@@ -2,6 +2,7 @@
 #define Z_BOSS_07_H
 
 #include "global.h"
+#include "objects/object_boss07/object_boss07.h"
 
 struct Boss07;
 
@@ -10,10 +11,7 @@ struct Boss07;
 #define MAJORA_TENT_MAX 100
 #define MAJORA_WHIP_MAX_LENGTH 50
 
-#define MAJORA_MASK_LIMB_COUNT 19
-#define MAJORA_INCARNATION_LIMB_COUNT 25
-#define MAJORA_WRATH_LIMB_COUNT 28
-#define MAJORA_LIMB_COUNT MAX(MAJORA_MASK_LIMB_COUNT, MAX(MAJORA_INCARNATION_LIMB_COUNT, MAJORA_WRATH_LIMB_COUNT))
+#define MAJORA_LIMB_COUNT MAX(MAJORAS_MASK_LIMB_MAX, MAX(MAJORAS_INCARNATION_LIMB_MAX, MAJORAS_WRATH_LIMB_MAX))
 
 typedef void (*Boss07ActionFunc)(struct Boss07*, GlobalContext*);
 
