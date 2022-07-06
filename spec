@@ -4534,9 +4534,7 @@ beginseg
     name "ovl_Eff_Kamejima_Wave"
     compress
     include "build/src/overlays/actors/ovl_Eff_Kamejima_Wave/z_eff_kamejima_wave.o"
-    include "build/data/ovl_Eff_Kamejima_Wave/ovl_Eff_Kamejima_Wave.data.o"
-    include "build/data/ovl_Eff_Kamejima_Wave/ovl_Eff_Kamejima_Wave.bss.o"
-    include "build/data/ovl_Eff_Kamejima_Wave/ovl_Eff_Kamejima_Wave.reloc.o"
+    include "build/src/overlays/actors/ovl_Eff_Kamejima_Wave/ovl_Eff_Kamejima_Wave_reloc.o"
 endseg
 
 beginseg
