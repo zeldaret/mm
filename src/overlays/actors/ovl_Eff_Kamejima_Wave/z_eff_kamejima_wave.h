@@ -9,8 +9,8 @@ typedef void (*EffKamejimaWaveActionFunc)(struct EffKamejimaWave*, PlayState*);
 
 typedef struct EffKamejimaWave {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ f32 unk144;                         /* inferred */
-    /* 0x148 */ char pad148[4];
+    /* 0x144 */ f32 scaleOffset;                         /* inferred */
+    /* 0x148 */ UNK_TYPE1 pad148[4];
     /* 0x14C */ EffKamejimaWaveActionFunc actionFunc;
 } EffKamejimaWave; // size = 0x150
 
