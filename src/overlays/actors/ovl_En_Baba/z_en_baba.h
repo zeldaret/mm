@@ -9,16 +9,16 @@ struct EnBaba;
 
 typedef void (*EnBabaActionFunc)(struct EnBaba*, PlayState*);
 
-#define ENBABA_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
-#define ENBABA_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)
+#define BOMB_SHOP_LADY_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3F00) >> 8)
+#define BOMB_SHOP_LADY_GET_TYPE(thisx) (((thisx)->params & 0xC000) >> 0xE)
 
-// Types ENBABA_TYPE_FOLLOW_SCHEDULE and ENBABA_TYPE_IDLE can only be used in SCENE_BACKTOWN
-// Type ENBABA_TYPE_SWAY can be used anywhere except SCENE_BACKTOWN and SCENE_BOMYA
+// Types BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE and BOMB_SHOP_LADY_TYPE_IDLE can only be used in SCENE_BACKTOWN
+// Type BOMB_SHOP_LADY_TYPE_SWAY can be used anywhere except SCENE_BACKTOWN and SCENE_BOMYA
 typedef enum {
-    /* 0 */ ENBABA_TYPE_FOLLOW_SCHEDULE,
-    /* 1 */ ENBABA_TYPE_IDLE,
-    /* 2 */ ENBABA_TYPE_SWAY
-} EnBabaType;
+    /* 0 */ BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE,
+    /* 1 */ BOMB_SHOP_LADY_TYPE_IDLE,
+    /* 2 */ BOMB_SHOP_LADY_TYPE_SWAY
+} BombShopLadyType;
 
 typedef struct EnBaba {
     /* 0x000 */ Actor actor;
@@ -43,7 +43,7 @@ typedef struct EnBaba {
     /* 0x34A */ UNK_TYPE1 unk34A[0xBA];
     /* 0x404 */ s16 sakonDeadTimer;
     /* 0x406 */ UNK_TYPE1 unk406[4];
-    /* 0x40A */ u16 flags;
+    /* 0x40A */ u16 stateFlags;
     /* 0x40C */ s32 animIndex;
     /* 0x410 */ Path* timePath;
     /* 0x414 */ Vec3f timePathPoint;

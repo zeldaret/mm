@@ -24,8 +24,8 @@ void func_80AECB0C(EnTk* this, PlayState* play);
 void func_80AECB6C(EnTk* this, PlayState* play);
 void func_80AECE0C(EnTk* this, PlayState* play);
 s32 func_80AECE60(EnTk* this, PlayState* play);
-s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* arg2);
-s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* arg2);
+s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput);
+s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput);
 void func_80AED4F8(EnTk* this, PlayState* play);
 void func_80AED610(EnTk* this, PlayState* play);
 void func_80AED898(EnTk* this, PlayState* play);
@@ -492,20 +492,20 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     return false;
 }
 
-s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* arg2) {
+s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 phi_v1 = false;
 
-    if (arg2->result != 0) {
-        phi_v1 = func_80AED38C(this, play, arg2);
+    if (scheduleOutput->result != 0) {
+        phi_v1 = func_80AED38C(this, play, scheduleOutput);
     }
     return phi_v1;
 }
 
-s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* arg2) {
+s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
-    s32 index = arg2->result - 1;
+    s32 index = scheduleOutput->result - 1;
     u16 tmp;
 
     this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[index + 1]);
@@ -516,10 +516,10 @@ s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* arg2) {
     if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->timePathTimeSpeed >= 0)) {
         phi_a1 = sp1E;
     } else {
-        phi_a1 = arg2->time0;
+        phi_a1 = scheduleOutput->time0;
     }
 
-    this->timePathTotalTime = arg2->time1 - phi_a1;
+    this->timePathTotalTime = scheduleOutput->time1 - phi_a1;
     this->timePathElapsedTime = sp1E - phi_a1;
     tmp = phi_a1 = this->timePath->count - (SUBS_TIME_PATHING_ORDER - 1);
     this->timePathWaypointTime = this->timePathTotalTime / tmp;
