@@ -7,7 +7,7 @@ const u8 sSfxBankIds[] = {
 void AudioMgr_StopAllSfxExceptSystem(void) {
     volatile const u8* bankIdPtr;
 
-    for (bankIdPtr = sSfxBankIds; bankIdPtr < (sSfxBankIds + sizeof(sSfxBankIds)); bankIdPtr++) {
+    for (bankIdPtr = sSfxBankIds; bankIdPtr < (sSfxBankIds + ARRAY_COUNT(sSfxBankIds)); bankIdPtr++) {
         if (*bankIdPtr != BANK_SYSTEM) {
             func_801A7084(*bankIdPtr);
         }
