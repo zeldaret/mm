@@ -1468,7 +1468,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
-        func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+        func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(play)) {

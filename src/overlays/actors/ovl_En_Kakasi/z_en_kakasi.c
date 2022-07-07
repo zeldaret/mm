@@ -773,10 +773,10 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         } else {
             this->unkMsgState1AC = 5;
             if (play->msgCtx.choiceIndex == 1) {
-                func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
+                func_8019F208(); // play 0x4808 sfx (decide) and calls Audio_StopSfxById
                 this->actor.textId = 0x164A;
             } else {
-                func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
+                func_8019F230(); // play 0x480A sfx (cancel) and calls Audio_StopSfxById
                 this->actor.textId = 0x1661;
             }
         }

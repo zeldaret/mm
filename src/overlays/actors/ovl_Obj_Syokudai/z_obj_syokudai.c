@@ -255,7 +255,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         }
                     }
                     Audio_PlaySfxGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                         &D_801DB4B8);
+                                         &gSfxDefaultReverb);
                 }
             }
         }

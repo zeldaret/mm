@@ -26,10 +26,10 @@ typedef enum {
     /* 19 */ OCARINA_SONG_EVAN_PART1,
     /* 20 */ OCARINA_SONG_EVAN_PART2,
     /* 21 */ OCARINA_SONG_ZELDAS_LULLABY,
-    /* 22 */ OCARINA_SONG_SCARECROW,
+    /* 22 */ OCARINA_SONG_SCARECROW_SPAWN,
     /* 23 */ OCARINA_SONG_TERMINA_WALL,
     /* 24 */ OCARINA_SONG_MAX,
-    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX
+    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 13 is considered the long scarecrow's song
 } OcarinaSongId;
 
 typedef enum {
@@ -38,6 +38,7 @@ typedef enum {
     /*  2 */ OCARINA_BTN_C_RIGHT,
     /*  3 */ OCARINA_BTN_C_LEFT,
     /*  4 */ OCARINA_BTN_C_UP,
+    /*  5 */ OCARINA_BTN_C_RIGHT_OR_C_LEFT,
     /* -1 */ OCARINA_BTN_INVALID = 0xFF
 } OcarinaButtonIndex;
 
@@ -92,12 +93,12 @@ typedef enum {
 } OcarinaRecordingState;
 
 /**
- * BFlat4Flag Note:
+ * bFlat4Flag Note:
  * Flag for resolving whether (pitch = OCARINA_PITCH_BFLAT4) 
  * gets mapped to either C_RIGHT and C_LEFT
  * 
  * This is required as C_RIGHT and C_LEFT are the only notes
- * that map to two semitones apart (NOTE_A4 and NOTE_B4)
+ * that map to two semitones apart (OCARINA_PITCH_A4 and OCARINA_PITCH_B4)
  *      0x40 - BTN_Z is pressed to lower note by a semitone
  *      0x80 - BTN_R is pressed to raise note by a semitone
  */ 
@@ -108,7 +109,7 @@ typedef struct {
     /* 0x4 */ u8 volume;
     /* 0x5 */ u8 vibrato;
     /* 0x6 */ s8 bend; // frequency multiplicative offset from the pitch defined by pitch
-    /* 0x7 */ u8 BFlat4Flag; // See note above
+    /* 0x7 */ u8 bFlat4Flag; // See note above
 } OcarinaNote;  // size = 0x8
 
 typedef struct {
