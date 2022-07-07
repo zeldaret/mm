@@ -1576,12 +1576,12 @@ def fixup_text_symbols(data, vram, data_regions, info):
                     line += part
         """
 
-        if not entry["instance"].isValid():
+        if entry["data"]:
             symbol_has_invalid_insns = True
 
         if symbol_has_invalid_insns:
             word = entry["instance"].getRaw()
-            line += f".word 0x{word:08X}"
+            line += f"  .word 0x{word:08X}"
         else:
             extraLJust = 0
             if delay_slot:
