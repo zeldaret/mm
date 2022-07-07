@@ -34,7 +34,7 @@ void EnBh_Init(Actor* thisx, PlayState* play) {
 
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelanime, &gBhNoneSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelanime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
                        OBJECT_BH_LIMB_MAX);
     Animation_PlayLoop(&this->skelanime, &gBhFlyingAnim);
     this->actionFunc = func_80C22DEC;
