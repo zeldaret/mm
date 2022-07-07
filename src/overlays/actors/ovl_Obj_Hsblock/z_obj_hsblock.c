@@ -50,7 +50,7 @@ static CollisionHeader* sColHeaders[] = {
     &object_d_hsblock_Colheader_000578,
 };
 
-static Gfx* sDisplayLists[] = { object_d_hsblock_DL_000210, object_d_hsblock_DL_000210, object_d_hsblock_DL_000470 };
+static Gfx* sDisplayLists[] = { gHookshotPostDL, gHookshotPostDL, gHookshotTargetDL };
 
 void ObjHsblock_SetupAction(ObjHsblock* this, ObjHsblockActionFunc actionFunc) {
     this->actionFunc = actionFunc;
