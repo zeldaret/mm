@@ -7,7 +7,6 @@ import bisect
 import multiprocessing
 from pathlib import Path
 import rabbitizer
-from typing import Union
 
 # Consider implementing gpr naming too, but already uses abi names by default
 fpr_name_options = {
@@ -35,7 +34,9 @@ parser.add_argument(
     required=False,
     help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
 )
-parser.add_argument("--reg-names", choices=fpr_name_options, help="How to name registers in the output")
+parser.add_argument(
+    "--reg-names", choices=fpr_name_options, help="How to name registers in the output"
+)
 
 args = parser.parse_args()
 jobs = args.jobs
@@ -506,6 +507,18 @@ def update_symbols_from_dict(symbols_dict):
         put_text(file[0], file[1])
 
 
+def validateLuiImm(imm_value: int, insn: rabbitizer.Instruction) -> bool:
+    if ((imm_value >> 0x8) & 0xF) != 0 and imm_value < 0x1000:
+        return True
+    if imm_value >= 0x8000 and imm_value < 0x80D0:
+        return True
+    if imm_value >= 0xA400 and imm_value < 0xA480:
+        return True
+    if imm_value < 0x0400 and insn.uniqueId == rabbitizer.InstrId.cpu_addiu:
+        return True
+    return False
+
+
 def find_symbols_in_text(section, rodata_section, data_regions):
     data, rodata = section[4], rodata_section[4] if rodata_section else None
     vram, vram_rodata = section[0], rodata_section[0] if rodata_section else None
@@ -557,11 +570,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         # that means no code path produces a valid symbol at he convergent code, unless the convergent code provides all the
         # new registers.
 
-        if (
-            delay_slot
-            and delayed_insn is not None
-            and delayed_insn.isBranchLikely()
-        ):
+        if delay_slot and delayed_insn is not None and delayed_insn.isBranchLikely():
             if insn.modifiesRd():
                 clobber_later.update(
                     {delayed_insn.getBranchOffset() + delayed_insn.vram: insn.rd}
@@ -605,7 +614,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 and insn_m2.uniqueId == rabbitizer.InstrId.cpu_addu
                 and insn_m3.uniqueId == rabbitizer.InstrId.cpu_lui
             ):
-                prospective_jtbls.add((insn_m3.getImmediate() << 0x10) + insn_m1.getProcessedImmediate())
+                prospective_jtbls.add(
+                    (insn_m3.getImmediate() << 0x10) + insn_m1.getProcessedImmediate()
+                )
         insns.append(insn)
 
     if relocs is not None:
@@ -623,20 +634,26 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 """
                 Relocated jump targets give us functions in this section
                 """
-                assert insn.uniqueId == rabbitizer.InstrId.cpu_jal, f"R_MIPS_26 applied to {insn.getOpcodeName()} when it should be JAL"
+                assert (
+                    insn.uniqueId == rabbitizer.InstrId.cpu_jal
+                ), f"R_MIPS_26 applied to {insn.getOpcodeName()} when it should be JAL"
                 put_symbol(symbols_dict, "functions", insn.getInstrIndexAsVram())
             elif reloc[1] == 5:  # R_MIPS_HI16
                 """
                 Relocated %hi gives us %hi values to match with associated %lo
                 """
-                assert insn.isHiPair(), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be LUI"
+                assert (
+                    insn.isHiPair()
+                ), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be LUI"
                 prev_hi = insn.getImmediate()
                 hi_vram = vram + reloc[2]
             elif reloc[1] == 6:  # R_MIPS_LO16
                 """
                 Relocated %lo + a %hi to match with gives us relocated symbols in data sections
                 """
-                assert insn.isLoPair(), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be ADDIU or a load/store"
+                assert (
+                    insn.isLoPair()
+                ), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be ADDIU or a load/store"
                 assert prev_hi is not None
                 symbol_value = (prev_hi << 0x10) + insn.getProcessedImmediate()
                 put_symbols(symbols_dict, "symbols", {hi_vram: symbol_value})
@@ -645,7 +662,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 assert False, "Invalid relocation type encountered"
 
     result_files = []
-    results: list[Union[str, dict]] = [asm_header(".text")]
+    results: list[str | dict] = [asm_header(".text")]
     raw_insns = as_word_list(data)
 
     cur_file = ""
@@ -749,7 +766,10 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 and delayed_insn.isBranchLikely()
             ):
                 # for branch likelies, the current tracker does not update but the lui is saved to be tracked at the branch target
-                save_tracker(delayed_insn.getBranchOffset() + delayed_insn.vram, {insn.rt: (vaddr, insn.getProcessedImmediate())})
+                save_tracker(
+                    delayed_insn.getBranchOffset() + delayed_insn.vram,
+                    {insn.rt: (vaddr, insn.getProcessedImmediate())},
+                )
             else:
                 lui_tracker.update({insn.rt: (vaddr, insn.getProcessedImmediate())})
         elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
@@ -768,11 +788,10 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             # try match with tracked lui and mark symbol
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
             # if a match was found, validate and record the symbol, TODO improve validation
-            if hi_vram is not None and imm_value is not None and (
-                (((imm_value >> 0x8) & 0xF) != 0 and imm_value < 0x1000)
-                or (imm_value >= 0x8000 and imm_value < 0x80D0)
-                or (imm_value >= 0xA400 and imm_value < 0xA480)
-                or (imm_value < 0x0400 and insn.uniqueId == rabbitizer.InstrId.cpu_addiu)
+            if (
+                hi_vram is not None
+                and imm_value is not None
+                and validateLuiImm(imm_value, insn)
             ):
                 lo_vram = vaddr
                 symbol_value = (imm_value << 0x10) + insn.getProcessedImmediate()
@@ -783,7 +802,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     cur_idx = i
                     lookahead_insn = insns[cur_idx]  # TODO fix vaddr here
                     # still in same block unless one of these instructions are found
-                    while lookahead_insn.isJrNotRa() or not (lookahead_insn.isBranch() or lookahead_insn.isJump()):
+                    while lookahead_insn.isJrNotRa() or not (
+                        lookahead_insn.isBranch() or lookahead_insn.isJump()
+                    ):
                         if lookahead_insn.uniqueId == rabbitizer.InstrId.cpu_jr:
                             if lookahead_insn.rs == insn.rt:
                                 # read the jtbl and add targets to func_jtbl_labels
@@ -889,14 +910,20 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             ):
                 # destroy lui tracking state
                 lui_tracker.clear()
-            elif delayed_insn.uniqueId == rabbitizer.InstrId.cpu_jr and vaddr == next_jtbl_jr + 4:
+            elif (
+                delayed_insn.uniqueId == rabbitizer.InstrId.cpu_jr
+                and vaddr == next_jtbl_jr + 4
+            ):
                 # save lui tracking state for each jtbl label
                 for label in individual_jtbl_labels[next_jtbl_jr]:
                     save_tracker(label, lui_tracker.copy())
                 next_jtbl_jr = 0
             elif delayed_insn.isBranch():
                 # save lui tracking state
-                save_tracker(delayed_insn.getBranchOffset() + delayed_insn.vram, lui_tracker.copy())
+                save_tracker(
+                    delayed_insn.getBranchOffset() + delayed_insn.vram,
+                    lui_tracker.copy(),
+                )
                 # destroy current lui tracking state for unconditional branches
                 if delayed_insn.isUnconditionalBranch():
                     lui_tracker.clear()
@@ -1077,7 +1104,7 @@ def asm_header(section_name: str):
 """
 
 
-def getImmOverride(insn: rabbitizer.Instruction, vaddr: int) -> str|None:
+def getImmOverride(insn: rabbitizer.Instruction, vaddr: int) -> str | None:
     if insn.isBranch():
         return f".L{insn.getBranchOffset() + insn.vram:08X}"
     elif insn.isJump():
@@ -1148,7 +1175,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 extraLJust = -1
                 line += " "
 
-            line += insn.disassemble(immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust)
+            line += insn.disassemble(
+                immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust
+            )
 
             delay_slot = insn.hasDelaySlot()
 
@@ -1220,7 +1249,9 @@ def disassemble_text(data, vram, data_regions, info):
             extraLJust = -1
             comment += " "
 
-        disassembled = insn.disassemble(immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust)
+        disassembled = insn.disassemble(
+            immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust
+        )
         result += f"{comment}  {disassembled}\n"
 
         delay_slot = insn.hasDelaySlot()
