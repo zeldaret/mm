@@ -643,7 +643,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 Relocated %hi gives us %hi values to match with associated %lo
                 """
                 assert (
-                    insn.isHiPair()
+                    insn.canBeHi()
                 ), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be LUI"
                 prev_hi = insn.getImmediate()
                 hi_vram = vram + reloc[2]
@@ -652,7 +652,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 Relocated %lo + a %hi to match with gives us relocated symbols in data sections
                 """
                 assert (
-                    insn.isLoPair()
+                    insn.canBeLo()
                 ), f"R_MIPS_HI16 applied to {insn.getOpcodeName()} when it should be ADDIU or a load/store"
                 assert prev_hi is not None
                 symbol_value = (prev_hi << 0x10) + insn.getProcessedImmediate()
@@ -685,10 +685,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         if in_data:
             results.append(
                 {
-                    "vaddr": vaddr,
-                    "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
+                    "insn": insn,
+                    "comment": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */",
                     "data": True,
-                    "instance": insn,
                 }
             )
             continue
@@ -752,7 +751,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                                 symbols_dict, "functions", vaddr + 8 + n_padding * 4
                             )
             delayed_insn = insn
-        elif insn.isHiPair():
+        elif insn.canBeHi():
             """
             Process LUI instruction
 
@@ -784,7 +783,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             # insn.rt == insn.rs or
             if insn.rt in lui_tracker.keys():
                 clobber_conditionally(insn)
-        elif insn.isLoPair():
+        elif insn.canBeLo():
             # try match with tracked lui and mark symbol
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
             # if a match was found, validate and record the symbol, TODO improve validation
@@ -893,10 +892,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
         results.append(
             {
-                "vaddr": vaddr,
-                "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
+                "insn": insn,
+                "comment": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */",
                 "data": False,
-                "instance": insn,
             }
         )
 
@@ -1104,31 +1102,41 @@ def asm_header(section_name: str):
 """
 
 
-def getImmOverride(insn: rabbitizer.Instruction, vaddr: int) -> str | None:
+def getImmOverride(insn: rabbitizer.Instruction) -> str | None:
     if insn.isBranch():
         return f".L{insn.getBranchOffset() + insn.vram:08X}"
     elif insn.isJump():
         return proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
 
     elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
-        constant_value = constants.get(vaddr, None)
+        constant_value = constants.get(insn.vram, None)
         if constant_value is not None:
             return f"(0x{constant_value:08X} & 0xFFFF)"
 
-    elif insn.isHiPair():
-        symbol_value = symbols.get(vaddr, None)
+    elif insn.canBeHi():
+        symbol_value = symbols.get(insn.vram, None)
         if symbol_value is not None:
             return f"%hi({proper_name(symbol_value)})"
-        constant_value = constants.get(vaddr, None)
+        constant_value = constants.get(insn.vram, None)
         if constant_value is not None:
             return f"(0x{constant_value:08X} >> 16)"
 
-    elif insn.isLoPair():
-        symbol_value = symbols.get(vaddr, None)
+    elif insn.canBeLo():
+        symbol_value = symbols.get(insn.vram, None)
         if symbol_value is not None:
             return f"%lo({proper_name(symbol_value)})"
-
     return None
+
+
+def getLabelForVaddr(vaddr: int, in_data: bool = False) -> str:
+    label = ""
+    if vaddr in functions:
+        label += f"\nglabel {proper_name(vaddr, in_data=in_data)}\n"
+    if vaddr in jtbl_labels:
+        label += f"glabel L{vaddr:08X}\n"
+    if vaddr in branch_labels:
+        label += f".L{vaddr:08X}:\n"
+    return label
 
 
 def fixup_text_symbols(data, vram, data_regions, info):
@@ -1148,41 +1156,33 @@ def fixup_text_symbols(data, vram, data_regions, info):
     # so here we loop over each instruction, and do symbol lookups, add labels etc
 
     delay_slot = False
-    symbol_has_invalid_insns = False
-    for i, entry in enumerate(file):
-        vaddr = entry["vaddr"]
-        insn = entry["instance"]
+    disasm_as_data = False
+    for entry in file:
+        insn = entry["insn"]
+        in_data = entry["data"]
+        comment = entry["comment"]
 
-        if vaddr in functions:
-            text.append(f"\nglabel {proper_name(vaddr, in_data=entry['data'])}\n")
-            symbol_has_invalid_insns = False
-        if vaddr in jtbl_labels:
-            text.append(f"glabel L{vaddr:08X}\n")
-        if vaddr in branch_labels:
-            text.append(f".L{vaddr:08X}:\n")
+        text.append(getLabelForVaddr(insn.vram, in_data))
+        if insn.vram in functions:
+            # new function, needs to check this again
+            disasm_as_data = False
 
-        line = entry["addr"]
+        if in_data or disasm_as_data:
+            disasm_as_data = True
+            text.append(f"{comment}  .word 0x{insn.getRaw():08X}\n")
+            continue
 
-        if entry["data"]:
-            symbol_has_invalid_insns = True
+        extraLJust = 0
+        if delay_slot:
+            extraLJust = -1
+            comment += " "
 
-        if symbol_has_invalid_insns:
-            word = insn.getRaw()
-            line += f"  .word 0x{word:08X}"
-        else:
-            extraLJust = 0
-            if delay_slot:
-                extraLJust = -1
-                line += " "
+        disassembled = insn.disassemble(
+            immOverride=getImmOverride(insn), extraLJust=extraLJust
+        )
+        text.append(f"{comment}  {disassembled}\n")
 
-            line += insn.disassemble(
-                immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust
-            )
-
-            delay_slot = insn.hasDelaySlot()
-
-        line += "\n"
-        text.append(line)
+        delay_slot = insn.hasDelaySlot()
 
     with open(f"{ASM_OUT}/{segment_dirname}/{info['name']}.text.s", "w") as outfile:
         outfile.write("".join(text))
@@ -1234,23 +1234,16 @@ def disassemble_text(data, vram, data_regions, info):
             )
             continue
 
-        # LABELS
-        if vaddr in functions:
-            result += f"\nglabel {proper_name(vaddr)}\n"
-        if vaddr in jtbl_labels:
-            result += f"glabel L{vaddr:08X}\n"
-        if vaddr in branch_labels:
-            result += f".L{vaddr:08X}:\n"
+        result += getLabelForVaddr(vaddr)
 
         comment = f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */"
         extraLJust = 0
-
         if delay_slot:
             extraLJust = -1
             comment += " "
 
         disassembled = insn.disassemble(
-            immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust
+            immOverride=getImmOverride(insn), extraLJust=extraLJust
         )
         result += f"{comment}  {disassembled}\n"
 
