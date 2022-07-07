@@ -590,6 +590,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
     print(f"Finding symbols from .text in {info['name']}")
 
+    rodata_words = []
     if rodata is not None:
         rodata_words = as_word_list(rodata)
 
@@ -968,7 +969,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                         mips_isa.MIPS_INS_J,
                     ]:
                     """
-                    while not (lookahead_insn.isBranch() or lookahead_insn.isJump()):
+                    while lookahead_insn.isJrNotRa() or not (lookahead_insn.isBranch() or lookahead_insn.isJump()):
                         if lookahead_insn.uniqueId == rabbitizer.InstrId.cpu_jr:
                             """
                         if lookahead_insn.id == mips_isa.MIPS_INS_JR:
@@ -2763,6 +2764,7 @@ for section in all_sections:
                 break
         else:
             rodata_section = None
+        # TODO: `rodata_section if rodata_section else None` is redundant
         # pool.apply_async(
         #     find_symbols_in_text,
         #     args=(section, rodata_section if rodata_section else None, data_regions),
