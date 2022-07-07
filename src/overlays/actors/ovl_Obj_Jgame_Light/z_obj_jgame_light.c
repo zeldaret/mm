@@ -18,11 +18,6 @@ typedef enum {
     /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
 } ObjJgameLightSignal;
 
-typedef enum {
-    /* 0x0 */ OBJJGAMELIGHT_TORCH_OFF,
-    /* 0x1 */ OBJJGAMELIGHT_TORCH_ON,
-} ObjJgameLightTorchStatus;
-
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
 void ObjJgameLight_Update(Actor* thisx, PlayState* play);
@@ -81,7 +76,7 @@ void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 60.0f);
     this->actor.colChkInfo.health = 0;
     this->prevHealth = 0;
-    this->torchStatus = OBJJGAMELIGHT_TORCH_OFF;
+    this->isOn = false;
     this->lightRadius = 0;
     this->alpha = 0;
     this->signal = OBJJGAMELIGHT_NONE;
@@ -98,13 +93,12 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) &&
-        (this->torchStatus == OBJJGAMELIGHT_TORCH_OFF)) {
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && (this->isOn == false)) {
         if (this->lightRadius < 160) {
             this->lightRadius += 40;
         } else {
             this->lightRadius = 200;
-            this->torchStatus = OBJJGAMELIGHT_TORCH_ON;
+            this->isOn = true;
         }
         if (this->flameScaleProportion < 0.7f) {
             this->flameScaleProportion += 0.3f;
@@ -117,7 +111,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play) {
         } else {
             this->lightRadius = -1;
             if (this->flameScaleProportion == 0.0f) {
-                this->torchStatus = OBJJGAMELIGHT_TORCH_OFF;
+                this->isOn = false;
                 this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
                 this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_SNUFF_FIRE;
             }

@@ -23,7 +23,7 @@ typedef struct ObjJgameLight {
     /* 0x1B0 */ UNK_TYPE1 pad_1B0[2];
     /* 0x1B2 */ s16 alpha;
     /* 0x1B4 */ s16 signal;
-    /* 0x1B6 */ s16 torchStatus;
+    /* 0x1B6 */ s16 isOn;
     /* 0x1B8 */ u8 prevHealth;
 } ObjJgameLight; // size = 0x1BC
 
