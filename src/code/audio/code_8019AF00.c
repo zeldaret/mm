@@ -3206,7 +3206,6 @@ void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
 
 u8 sRequestCustomSequence = false;
 
-// New to MM
 void AudioOcarina_SetCustomSequence(void) {
     // Never passes true as sRequestCustomSequence is never set true
     if (sRequestCustomSequence && gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
@@ -3216,7 +3215,6 @@ void AudioOcarina_SetCustomSequence(void) {
     }
 }
 
-// New to MM
 // Called by unused function
 void AudioOcarina_PlayCustomSequence(void) {
     sRequestCustomSequence = true;
@@ -3225,7 +3223,6 @@ void AudioOcarina_PlayCustomSequence(void) {
 }
 
 // Unused
-// New to MM
 #ifdef NON_MATCHING
 s32 AudioOcarina_CreateCustomSequence(void) {
     OcarinaNote* prevNote;
