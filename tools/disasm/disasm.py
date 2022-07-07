@@ -42,6 +42,9 @@ args = parser.parse_args()
 jobs = args.jobs
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
+rabbitizer.config.misc_omit0XOnSmallImm = True
+rabbitizer.config.misc_upperCaseImm = False
+rabbitizer.config.regNames_userFpcCsr = False
 mips_isa.mips_fpr_names = fpr_name_options.get(args.reg_names, mips_isa.mips_fpr_names)
 
 
@@ -1049,7 +1052,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
             # insn.rt == (insn.rs if insn.id == mips_isa.MIPS_INS_ADDIU else insn.base) and
-            if not insn.doesStore() and (insn.doesLoad() and insn.isFloat()):
+            if not insn.doesStore() and not (insn.doesLoad() and insn.isFloat()):
                 """
             if insn.id not in MIPS_STORE_INSNS and insn.id not in MIPS_FP_LOAD_INSNS:
                 """
@@ -1581,9 +1584,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 line += " "
 
             immOverride = None
-
             if entry["instance"].isBranch():
-                immOverride = proper_name(entry["instance"].getBranchOffset() + entry["instance"].vram)
+                targetBranchVram = entry["instance"].getBranchOffset() + entry["instance"].vram
+                immOverride = f".L{targetBranchVram:08X}"
             elif entry["instance"].isJump():
                 immOverride = proper_name(entry["instance"].getInstrIndexAsVram(), in_data=False, is_symbol=True)
             elif entry["instance"].isHiPair():
@@ -1611,7 +1614,10 @@ def fixup_text_symbols(data, vram, data_regions, info):
                     immOverride = proper_name(symbol_value)
 
             disassembled = entry["instance"].disassemble(immOverride=immOverride, extraLJust=extraLJust)
-            line += disassembled
+            if delay_slot:
+                line += f"{disassembled:11}"
+            else:
+                line += f"{disassembled:12}"
 
             delay_slot = entry["instance"].isBranch() or entry["instance"].isJump()
 
@@ -1747,17 +1753,47 @@ def disassemble_text(data, vram, data_regions, info):
             extraLJust = -1
             comment += " "
             delayed_insn = None
+
+        immOverride = None
+        if insn.isBranch():
+            targetBranchVram = insn.getBranchOffset() + insn.vram
+            immOverride = f".L{targetBranchVram:08X}"
+        elif insn.isJump():
+            immOverride = proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
+        elif insn.isHiPair():
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = f"%hi({proper_name(symbol_value)})"
+            else:
+                constant_value = constants.get(vaddr, None)
+                if constant_value is not None:
+                    immOverride = f"(0x{constant_value:08X} >> 16)"
+
+        elif insn.isLoPair() and insn.uniqueId != rabbitizer.InstrId.cpu_ori:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = f"%lo({proper_name(symbol_value)})"
+
+        elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+            constant_value = constants.get(vaddr, None)
+            if constant_value is not None:
+                immOverride = f"(0x{constant_value:08X} & 0xFFFF)"
+
+        else:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                immOverride = proper_name(symbol_value)
+
+
+        disassembled = insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
+        if delay_slot:
+            result += f"{comment}  {disassembled:11}\n"
+        else:
+            result += f"{comment}  {disassembled:12}\n"
+
         delay_slot = False
         if delayed_insn is not None:
             delay_slot = True
-
-        immOverride = None
-        symbol_value = symbols.get(vaddr, None)
-        if symbol_value is not None:
-            immOverride = proper_name(symbol_value)
-
-        disassembled = insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
-        result += f"{comment}  {disassembled}\n"
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
