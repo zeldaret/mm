@@ -15,14 +15,14 @@ void EnBjt_Destroy(Actor* thisx, PlayState* play);
 void EnBjt_Update(Actor* thisx, PlayState* play);
 void EnBjt_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFDA48(EnBjt* this, PlayState* play);
-void func_80BFDAE8(EnBjt* this, PlayState* play);
+void EnBjt_Talk(EnBjt* this, PlayState* play);
+void EnBjt_Wait(EnBjt* this, PlayState* play);
 
-#define TOILET_HAND_STATE_8 8             // (1 << 3)
-#define TOILET_HAND_STATE_10 0x10         // (1 << 4) // Talking
-#define TOILET_HAND_STATE_APPEARING 0x80  // (1 << 7) // Appearing
-#define TOILET_HAND_STATE_VANISHING 0x100 // (1 << 8) // Vanishing
-#define TOILET_HAND_STATE_VISIBLE 0x200   // (1 << 9) // Out
+#define TOILET_HAND_STATE_TALKING (1 << 3)   // Actually talking to Player
+#define TOILET_HAND_STATE_TEXTBOX (1 << 4)   // whenever a textbox is on screen
+#define TOILET_HAND_STATE_APPEARING (1 << 7) // Appearing
+#define TOILET_HAND_STATE_VANISHING (1 << 8) // Vanishing
+#define TOILET_HAND_STATE_VISIBLE (1 << 9)   // Out
 
 static u8 sScheduleScript[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x11 - 0x04),
@@ -74,15 +74,6 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
-// extern u8 D_80BFDEA0[];
-// extern s32 D_80BFDEB4[];
-// extern ColliderCylinderInit D_80BFDF48;
-// extern CollisionCheckInfoInit2 D_80BFDF74;
-// extern AnimationInfoS D_80BFDF80[];
-// extern Vec3f D_80BFDFE0;
-
-// extern FlexSkeletonHeader D_06002390;
 
 typedef enum {
     /* -1 */ TOILET_HAND_ANIM_NONE = -1,
@@ -141,7 +132,7 @@ void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {
         Math_Vec3f_ToVec3s(&this->collider.dim.pos, &pos);
         height = this->actor.focus.pos.y - this->actor.world.pos.y;
         this->collider.dim.height = height;
-        this->collider.dim.radius = 0x20;
+        this->collider.dim.radius = 32;
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
@@ -151,20 +142,28 @@ s32 EnBjt_TakeItem(s32 exchangeItem) {
         case EXCH_ITEM_LETTER_TO_KAFEI:
             func_801149A0(ITEM_LETTER_TO_KAFEI, SLOT(ITEM_LETTER_TO_KAFEI));
             break;
+
         case EXCH_ITEM_DEED_SWAMP:
             func_801149A0(ITEM_DEED_SWAMP, SLOT(ITEM_DEED_SWAMP));
             break;
+
         case EXCH_ITEM_DEED_MOUNTAIN:
             func_801149A0(ITEM_DEED_MOUNTAIN, SLOT(ITEM_DEED_MOUNTAIN));
             break;
+
         case EXCH_ITEM_DEED_OCEAN:
             func_801149A0(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             break;
+
         case EXCH_ITEM_DEED_LAND:
             func_801149A0(ITEM_DEED_LAND, SLOT(ITEM_DEED_LAND));
             break;
+
         case EXCH_ITEM_LETTER_MAMA:
             func_801149A0(ITEM_LETTER_MAMA, SLOT(ITEM_LETTER_MAMA));
+            break;
+
+        default:
             break;
     }
     return 0;
@@ -256,13 +255,14 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     } else if (itemAP < 0) {
                         this->playedSfx = false;
                         this->behaviour++;
-                        scriptBranch = 3; // Wrong item?
+                        scriptBranch = 3; // Not showing item
                     } else if (itemAP != 0) {
                         this->playedSfx = false;
                         this->behaviour++;
-                        scriptBranch = 2;
+                        scriptBranch = 2; // Wrong item
                     }
                     break;
+
                 default:
                     break;
             }
@@ -276,7 +276,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
             if (EnBjt_Vanish(this)) {
                 this->timer = 60;
                 this->behaviour++;
-                scriptBranch = 1;
+                scriptBranch = 1; // Right item
             }
             break;
 
@@ -293,81 +293,85 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
         case TOILET_HAND_BEHAVIOUR_REAPPEAR:
             if (EnBjt_Appear(this)) {
                 this->behaviour++;
-                scriptBranch = 1;
+                scriptBranch = 1; // Right item
             }
             break;
 
         case TOILET_HAND_BEHAVIOUR_REWARD_GIVEN:
             EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_OPEN_HAND);
             this->behaviour++;
-            scriptBranch = 1;
+            scriptBranch = 1; // Right item
             break;
 
         default:
             break;
     }
+
     return scriptBranch;
 }
 
 // Used in Update
-s32 func_80BFD8F0(EnBjt* this, PlayState* play) {
+s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
     s32 ret = false;
 
     if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->stateFlags |= TOILET_HAND_STATE_8;
+        this->stateFlags |= TOILET_HAND_STATE_TALKING;
         SubS_UpdateFlags(&this->stateFlags, 0, 7);
         this->msgEventCallback = EnBjt_ChooseBehaviour;
         this->behaviour = 0;
-        this->actionFunc = func_80BFDA48;
+        this->actionFunc = EnBjt_Talk;
         ret = true;
     }
     return ret;
 }
 
 // Used in Update
-s32 func_80BFD984(EnBjt* this, PlayState* play) {
+s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 curTextId = play->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x440) { // Talking, show item?
-        this->stateFlags |= TOILET_HAND_STATE_10;
+        this->stateFlags |= TOILET_HAND_STATE_TEXTBOX;
         if (this->textId != curTextId) {
             switch (curTextId) {
-                case 0x2949: // "Not that"
+                case 0x2949: // Wrong item
                     EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAGGING_FINGER);
                     break;
 
-                case 0x294A: // "Yay!"
+                case 0x294A: // Right item
                     EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_THUMBS_UP);
+                    break;
+
+                default:
                     break;
             }
         }
         this->textId = curTextId;
-    } else if (this->stateFlags & TOILET_HAND_STATE_10) {
-        this->stateFlags &= ~TOILET_HAND_STATE_10;
+    } else if (this->stateFlags & TOILET_HAND_STATE_TEXTBOX) {
+        this->stateFlags &= ~TOILET_HAND_STATE_TEXTBOX;
         EnBjt_ChangeAnimation(this, TOILET_HAND_ANIM_WAITING);
     }
     return 0;
 }
 
 // Action function, based on msgEvent
-void func_80BFDA48(EnBjt* this, PlayState* play) {
+void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
     // TODO: Casting to remove warning for now
     if (func_8010BF58(&this->actor, play, (s32)sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
-        this->stateFlags &= ~TOILET_HAND_STATE_8;
+        this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
         this->msgEventArg4 = 0;
-        this->actionFunc = func_80BFDAE8;
+        this->actionFunc = EnBjt_Wait;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);
     }
 }
 
-// Action function, based on schedule
-void func_80BFDAE8(EnBjt* this, PlayState* play) {
+// Change state based on schedule and stateFlags
+void EnBjt_Wait(EnBjt* this, PlayState* play) {
     ScheduleResult scheduleOutput;
 
     if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
@@ -424,7 +428,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
 
     this->scheduleResult = 0;
     this->stateFlags = 0;
-    this->actionFunc = func_80BFDAE8;
+    this->actionFunc = EnBjt_Wait;
 }
 
 void EnBjt_Destroy(Actor* thisx, PlayState* play) {
@@ -433,9 +437,9 @@ void EnBjt_Destroy(Actor* thisx, PlayState* play) {
 void EnBjt_Update(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
-    func_80BFD8F0(this, play);
+    EnBjt_CheckTalk(this, play);
     this->actionFunc(this, play);
-    func_80BFD984(this, play);
+    EnBjt_ChooseAnimation(this, play);
 
     if (this->scheduleResult != 0) {
         EnBjt_UpdateAnimation(this);
@@ -450,7 +454,7 @@ void EnBjt_Draw(Actor* thisx, PlayState* play) {
 
     if (this->scheduleResult != 0) {
         func_8012C28C(play->state.gfxCtx);
-        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, NULL, &this->actor);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                              NULL, NULL, &this->actor);
     }
 }
