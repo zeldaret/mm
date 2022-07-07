@@ -1030,24 +1030,28 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 elif insn.id == mips_isa.MIPS_INS_LD:  # doubleword loads
                     """
                     put_symbol(symbols_dict, "dwords", symbol_value)
-                elif insn.isFloat() and insn.doesDereference():
+                # this needs to be checked *after* the double check
+                # elif insn.isFloat() and insn.doesDereference():
+                elif insn.uniqueId in [rabbitizer.InstrId.cpu_lwc1, rabbitizer.InstrId.cpu_swc1]:  # float load/stores
                     """
                 elif insn.id in [mips_isa.MIPS_INS_LWC1, mips_isa.MIPS_INS_SWC1]:  # float load/stores
                     """
                     # add float
                     put_symbol(symbols_dict, "floats", symbol_value)
-                elif insn.isDouble() and insn.doesDereference():
+                elif insn.isDouble() and insn.doesDereference():  # double load/stores
                     # add double
                     """
                 elif insn.id in [mips_isa.MIPS_INS_LDC1, mips_isa.MIPS_INS_SDC1]:  # double load/stores
                     """
                     put_symbol(symbols_dict, "doubles", symbol_value)
-                elif not insn.doesDereference() and not insn.isUnsigned() and vaddr % 4 == 0:
+                # elif not insn.doesDereference() and not insn.isUnsigned() and vaddr % 4 == 0:
+                elif insn.uniqueId == rabbitizer.InstrId.cpu_addiu  and vaddr % 4 == 0:
                     """
                 elif (
                     insn.id == mips_isa.MIPS_INS_ADDIU and vaddr % 4 == 0
-                ):  # strings seem to only ever be 4-byte aligned
+                ):
                     """
+                    # strings seem to only ever be 4-byte aligned
                     # add possible string
                     put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
