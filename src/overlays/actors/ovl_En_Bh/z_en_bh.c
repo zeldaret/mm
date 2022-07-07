@@ -47,7 +47,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    f32 dist;
+    f32 xzDist;
     s16 xRot;
     s16 yRot;
     s16 zRot;
@@ -56,9 +56,9 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     xDiff = this->pos.x - this->actor.world.pos.x;
     yDiff = this->pos.y - this->actor.world.pos.y;
     zDiff = this->pos.z - this->actor.world.pos.z;
-    dist = sqrtf(SQ(xDiff) + SQ(zDiff));
+    xzDist = sqrtf(SQ(xDiff) + SQ(zDiff));
 
-    if ((this->timer2 == 0) || (dist < 100.0f)) {
+    if ((this->timer2 == 0) || (xzDist < 100.0f)) {
         this->pos.x = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.x;
         this->pos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.home.pos.y;
         this->pos.z = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.z;
@@ -67,7 +67,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     }
 
     yRot = Math_Atan2S(xDiff, zDiff);
-    xRot = Math_Atan2S(yDiff, dist);
+    xRot = Math_Atan2S(yDiff, xzDist);
     zRot = Math_SmoothStepToS(&this->actor.world.rot.y, yRot, 0xA, this->step, 0);
 
     if (zRot > 0x1000) {
@@ -80,7 +80,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     Math_ApproachS(&this->actor.world.rot.z, -zRot, 0xA, this->step);
     Math_ApproachS(&this->step, 0x200, 1, 0x10);
 
-    if (((s32)this->skelanime.playSpeed) == 0) {
+    if ((s32)this->skelanime.playSpeed == 0) {
         if (this->timer == 0) {
             this->skelanime.playSpeed = 1.0f;
             this->timer = Rand_ZeroFloat(70.0f) + 50.0f;
