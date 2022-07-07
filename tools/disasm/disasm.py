@@ -679,8 +679,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         """
         insn = mips_isa.decode_insn(raw_insn, vram + i * 4)
         """
-        insn = rabbitizer.Instruction(raw_insn)
-        insn.vram = vram + i * 4
+        insn = rabbitizer.Instruction(raw_insn, vram=vram + i * 4)
 
         if insn.isJrNotRa() and len(insns) > 3:
             """
@@ -797,7 +796,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             results.append(
                 {
                     "vaddr": vaddr,
-                    "insn": {"id": insn.uniqueId},
+                    # "insn": {"id": insn.uniqueId},
                     "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
                     # "mnem": "",
                     # "op": [f"  .word 0x{raw_insns[i]:08X}"],
@@ -878,9 +877,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                                 break
                         if not end:
                             if n_padding > 0:
-                                #assert (
-                                #    vaddr + 8 + n_padding * 4
-                                #) % 0x10 == 0, f"padding to non-0x10 alignment?, 0x{vaddr + 8 + n_padding * 4:08X}"
+                                assert (
+                                    vaddr + 8 + n_padding * 4
+                                ) % 0x10 == 0, f"padding to non-0x10 alignment?, 0x{vaddr + 8 + n_padding * 4:08X}"
                                 put_symbol(
                                     symbols_dict, "functions", vaddr + 8 + n_padding * 4
                                 )
@@ -1181,7 +1180,10 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         # op_str = " "
         # if len(disassembled_pair) > 1:
         #     op_str = disassembled_pair[1]
-        instr = {"id": insn.uniqueId, "instance": insn}
+        instr = {
+            #"id": insn.uniqueId, 
+            "instance": insn
+        }
 
         if info["name"] in full_file_list and vaddr in full_file_list[info["name"]]:
             if cur_file != "":
@@ -1653,8 +1655,7 @@ def disassemble_text(data, vram, data_regions, info):
         mnemonic = insn.mnemonic
         op_str = insn.op_str
         """
-        insn = rabbitizer.Instruction(raw_insns[i // 4])
-        insn.vram = vaddr
+        insn = rabbitizer.Instruction(raw_insns[i // 4], vram=vaddr)
         # disassembled_pair = insn.disassemble().split(10*" ")
         # mnemonic = disassembled_pair[0]
         # op_str = " "
@@ -2763,12 +2764,11 @@ for section in all_sections:
         else:
             rodata_section = None
         # TODO: `rodata_section if rodata_section else None` is redundant
-        # pool.apply_async(
-        #     find_symbols_in_text,
-        #     args=(section, rodata_section if rodata_section else None, data_regions),
-        #     callback=update_symbols_from_dict,
-        # )
-        update_symbols_from_dict(find_symbols_in_text(section, rodata_section if rodata_section else None, data_regions))
+        pool.apply_async(
+            find_symbols_in_text,
+            args=(section, rodata_section if rodata_section else None, data_regions),
+            callback=update_symbols_from_dict,
+        )
 
     elif section[2] == "data":
         pool.apply_async(
@@ -2804,17 +2804,14 @@ vrom_addrs = {addr for _, addr in vrom_variables}
 
 # Textual disassembly for each segment
 with multiprocessing.get_context("fork").Pool(jobs) as p:
-    for sec in all_sections:
-        if sec[-1]["name"] not in ("boot", "code", "makerom", "dmadata"):
-            disassemble_segment(sec)
-    # p.map(
-    #     disassemble_segment,
-    #     [
-    #         sec
-    #         for sec in all_sections
-    #         if sec[-1]["name"] not in ("boot", "code", "makerom", "dmadata")
-    #     ],
-    # )
+    p.map(
+        disassemble_segment,
+        [
+            sec
+            for sec in all_sections
+            if sec[-1]["name"] not in ("boot", "code", "makerom", "dmadata")
+        ],
+    )
 
 print("Splitting text and migrating rodata")
 
