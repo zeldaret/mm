@@ -1077,6 +1077,33 @@ def asm_header(section_name: str):
 """
 
 
+def getImmOverride(insn: rabbitizer.Instruction, vaddr: int) -> str|None:
+    if insn.isBranch():
+        return f".L{insn.getBranchOffset() + insn.vram:08X}"
+    elif insn.isJump():
+        return proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
+
+    elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+        constant_value = constants.get(vaddr, None)
+        if constant_value is not None:
+            return f"(0x{constant_value:08X} & 0xFFFF)"
+
+    elif insn.isHiPair():
+        symbol_value = symbols.get(vaddr, None)
+        if symbol_value is not None:
+            return f"%hi({proper_name(symbol_value)})"
+        constant_value = constants.get(vaddr, None)
+        if constant_value is not None:
+            return f"(0x{constant_value:08X} >> 16)"
+
+    elif insn.isLoPair():
+        symbol_value = symbols.get(vaddr, None)
+        if symbol_value is not None:
+            return f"%lo({proper_name(symbol_value)})"
+
+    return None
+
+
 def fixup_text_symbols(data, vram, data_regions, info):
     segment_dirname = "" if info["type"] != "overlay" else "overlays/"
     if info["type"] in ("boot", "code"):
@@ -1121,39 +1148,9 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 extraLJust = -1
                 line += " "
 
-            immOverride = None
-            if insn.isBranch():
-                targetBranchVram = insn.getBranchOffset() + insn.vram
-                immOverride = f".L{targetBranchVram:08X}"
-            elif insn.isJump():
-                immOverride = proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
-            elif insn.isHiPair():
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    immOverride = f"%hi({proper_name(symbol_value)})"
-                else:
-                    constant_value = constants.get(vaddr, None)
-                    if constant_value is not None:
-                        immOverride = f"(0x{constant_value:08X} >> 16)"
+            line += insn.disassemble(immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust)
 
-            elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
-                constant_value = constants.get(vaddr, None)
-                if constant_value is not None:
-                    immOverride = f"(0x{constant_value:08X} & 0xFFFF)"
-
-            elif insn.isLoPair():
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    immOverride = f"%lo({proper_name(symbol_value)})"
-
-            else:
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    immOverride = proper_name(symbol_value)
-
-            line += insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
-
-            delay_slot = insn.isBranch() or insn.isJump()
+            delay_slot = insn.hasDelaySlot()
 
         line += "\n"
         text.append(line)
@@ -1223,41 +1220,10 @@ def disassemble_text(data, vram, data_regions, info):
             extraLJust = -1
             comment += " "
 
-        immOverride = None
-        if insn.isBranch():
-            targetBranchVram = insn.getBranchOffset() + insn.vram
-            immOverride = f".L{targetBranchVram:08X}"
-        elif insn.isJump():
-            immOverride = proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
-        elif insn.isHiPair():
-            symbol_value = symbols.get(vaddr, None)
-            if symbol_value is not None:
-                immOverride = f"%hi({proper_name(symbol_value)})"
-            else:
-                constant_value = constants.get(vaddr, None)
-                if constant_value is not None:
-                    immOverride = f"(0x{constant_value:08X} >> 16)"
-
-        elif insn.isLoPair() and insn.uniqueId != rabbitizer.InstrId.cpu_ori:
-            symbol_value = symbols.get(vaddr, None)
-            if symbol_value is not None:
-                immOverride = f"%lo({proper_name(symbol_value)})"
-
-        elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
-            constant_value = constants.get(vaddr, None)
-            if constant_value is not None:
-                immOverride = f"(0x{constant_value:08X} & 0xFFFF)"
-
-        else:
-            symbol_value = symbols.get(vaddr, None)
-            if symbol_value is not None:
-                immOverride = proper_name(symbol_value)
-
-
-        disassembled = insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
+        disassembled = insn.disassemble(immOverride=getImmOverride(insn, vaddr), extraLJust=extraLJust)
         result += f"{comment}  {disassembled}\n"
 
-        delay_slot = insn.isBranch() or insn.isJump()
+        delay_slot = insn.hasDelaySlot()
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
