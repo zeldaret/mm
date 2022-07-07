@@ -25,15 +25,15 @@ void EnBjt_Wait(EnBjt* this, PlayState* play);
 #define TOILET_HAND_STATE_VISIBLE (1 << 9)   // Out
 
 typedef enum {
-    /* 0 */ TOILET_HAND_SCHEDULE_RESULT_ABSENT,
-    /* 1 */ TOILET_HAND_SCHEDULE_RESULT_PRESENT
+    /* 0 */ TOILET_HAND_SCH_NONE,
+    /* 1 */ TOILET_HAND_SCH_AVAILABLE
 } ToiletHandScheduleResult;
 
 static u8 sScheduleScript[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x11 - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x0B - 0x0A),
     /* 0x0A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0B */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, TOILET_HAND_SCHEDULE_RESULT_PRESENT),
+    /* 0x0B */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, TOILET_HAND_SCH_AVAILABLE),
     /* 0x11 */ SCHEDULE_CMD_RET_NONE(),
 };
 
@@ -380,9 +380,9 @@ void EnBjt_Wait(EnBjt* this, PlayState* play) {
     ScheduleResult scheduleOutput;
 
     if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
-        scheduleOutput.result = TOILET_HAND_SCHEDULE_RESULT_ABSENT;
+        scheduleOutput.result = TOILET_HAND_SCH_NONE;
     }
-    if (scheduleOutput.result == TOILET_HAND_SCHEDULE_RESULT_PRESENT) {
+    if (scheduleOutput.result == TOILET_HAND_SCH_AVAILABLE) {
         if (this->stateFlags & TOILET_HAND_STATE_APPEARING) {
             if (EnBjt_Appear(this)) {
                 SubS_UpdateFlags(&this->stateFlags, 3, 7);
@@ -412,7 +412,7 @@ void EnBjt_Wait(EnBjt* this, PlayState* play) {
         Actor_SetScale(&this->actor, 0.0f);
         this->stateFlags = 0;
         this->msgEventCallback = NULL;
-        this->scheduleResult = TOILET_HAND_SCHEDULE_RESULT_ABSENT;
+        this->scheduleResult = TOILET_HAND_SCH_NONE;
     }
 }
 
@@ -431,7 +431,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_8000000;
     Actor_SetScale(&this->actor, 0.0f);
 
-    this->scheduleResult = TOILET_HAND_SCHEDULE_RESULT_ABSENT;
+    this->scheduleResult = TOILET_HAND_SCH_NONE;
     this->stateFlags = 0;
     this->actionFunc = EnBjt_Wait;
 }
@@ -446,7 +446,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     EnBjt_ChooseAnimation(this, play);
 
-    if (this->scheduleResult != TOILET_HAND_SCHEDULE_RESULT_ABSENT) {
+    if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         EnBjt_UpdateSkelAnime(this);
         func_8013C964(&this->actor, play, 60.0f, 10.0f, EXCH_ITEM_NONE, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
@@ -457,7 +457,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
 void EnBjt_Draw(Actor* thisx, PlayState* play) {
     EnBjt* this = THIS;
 
-    if (this->scheduleResult != TOILET_HAND_SCHEDULE_RESULT_ABSENT) {
+    if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         func_8012C28C(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               NULL, NULL, &this->actor);
