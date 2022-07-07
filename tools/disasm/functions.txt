@@ -16436,7 +16436,7 @@
     0x80BFD148:("EnScopecoin_Destroy",),
     0x80BFD158:("EnScopecoin_Update",),
     0x80BFD17C:("EnScopecoin_Draw",),
-    0x80BFD2E0:("EnBjt_UpdateAnimation",),
+    0x80BFD2E0:("EnBjt_UpdateSkelAnime",),
     0x80BFD30C:("EnBjt_ChangeAnimation",),
     0x80BFD3A4:("EnBjt_UpdateCollision",),
     0x80BFD434:("EnBjt_TakeItem",),
