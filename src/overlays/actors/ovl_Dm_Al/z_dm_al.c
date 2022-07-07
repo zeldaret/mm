@@ -5,7 +5,6 @@
  */
 
 #include "z_dm_al.h"
-#include "objects/object_al/object_al.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -28,13 +27,8 @@ const ActorInit Dm_Al_InitVars = {
     (ActorFunc)DmAl_Draw,
 };
 
-static AnimationInfoS sAnimationSittingBarstool[] = {
-    &object_al_Anim_00DBE0,
-    1.0f,
-    0,
-    -1,
-    0,
-    0
+static AnimationInfoS sAnimationInfos[] = {
+    { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80C1BD90(DmAl* this, s32* animationIndex) {
@@ -42,15 +36,13 @@ s32 func_80C1BD90(DmAl* this, s32* animationIndex) {
 
     if (animationIndex != this->animationIndex) {
         this->animationIndex = animationIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationSittingBarstool, animationIndex);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animationIndex);
     }
     return ret;
 }
 
-void func_80C1BDD8(DmAl *this, PlayState *play) {
-    s32 D_80C1C280[] = {
-        0,0,0,0,0
-    };
+void func_80C1BDD8(DmAl* this, PlayState* play) {
+    s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
     u16 action;
     s32 actionIndex;
 
@@ -79,10 +71,11 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     DmAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, &this->morphTable, &this->unk3AE, 0x1B);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
+                       OBJECT_AL_LIMB_MAX);
     this->animationIndex = -1;
     func_80C1BD90(this, NULL);
-    this->actor.flags &= -2;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;
 }
@@ -100,12 +93,12 @@ void DmAl_Update(Actor* thisx, PlayState* play) {
 
 s32 func_80C1C028(PlayState* play, s32 limbIndex, Gfx** gfx, Vec3f* rot, Vec3s* pos, Actor* thisx) {
     switch (limbIndex) {
-        case 3:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_UPPER_LIMB:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
             *gfx = NULL;
             break;
     }
@@ -116,47 +109,50 @@ void func_80C1C064(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     DmAl* this = THIS;
 
     switch (limbIndex) {
-        case 3:
+        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
             Matrix_Get(&this->unkMtx[0]);
-            return;
-        case 11:
+            break;
+        case MADAME_AROMA_SHAWL_UPPER_LIMB:
             Matrix_Get(&this->unkMtx[1]);
-            return;
-        case 12:
+            break;
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
             Matrix_Get(&this->unkMtx[2]);
-            return;
-        case 13:
+            break;
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
             Matrix_Get(&this->unkMtx[3]);
-            return;
-        case 14:
+            break;
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
             Matrix_Get(&this->unkMtx[4]);
-            return;
-        case 15:
+            break;
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
             Matrix_Get(&this->unkMtx[5]);
-            return;
+            break;
         default:
-            return;
+            break;
     }
 }
 
 void func_80C1C11C(PlayState* play, s32 arg0, Actor* thisx) {
 }
 
-s32 D_80C1C294[6] = { 0x06006598, 0x06005920, 0x06005878, 0x060057D0, 0x06005728, 0x06005680 };
+s32 sDlists[6] = { object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
+                   object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680 };
 s32 D_80C1C2AC = 0;
 
 void DmAl_Draw(Actor* thisx, PlayState* play) {
     u32 i;
     DmAl* this = THIS;
- 
+
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                                   func_80C1C028, func_80C1C064, func_80C1C11C, &this->actor);
-    for (i = 0; i < (((sizeof(this->unkMtx)) / (sizeof(this->unkMtx[0])))); i++) {
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, func_80C1C028, func_80C1C064, func_80C1C11C,
+                                   &this->actor);
+    for (i = 0; i < ARRAY_COUNT(this->unkMtx); i++) {
         Matrix_Put(&this->unkMtx[i]);
-        gSPMatrix(__gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), (0x00 | 0x02) | 0x00);
-        gSPDisplayList(__gfxCtx->polyOpa.p++, D_80C1C294[i]);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, sDlists[i]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

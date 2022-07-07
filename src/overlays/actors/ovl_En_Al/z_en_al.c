@@ -780,7 +780,7 @@ void EnAl_Init(Actor* thisx, PlayState* play) {
     EnAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable, 27);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable, 27);
     this->unk_4F8 = -1;
     func_80BDE27C(this, 1);
     Collider_InitAndSetCylinder(play, &this->unk_310, &this->actor, &sCylinderInit);
@@ -817,16 +817,16 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
 
 s32 EnAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     switch (limbIndex) {
-        case 3:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_UPPER_LIMB:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
             *dList = NULL;
             break;
 
-        case 16:
+        case MADAME_AROMA_HEAD_LIMB:
             break;
     }
     return false;
@@ -836,31 +836,31 @@ void EnAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnAl* this = THIS;
 
     switch (limbIndex) {
-        case 3:
+        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
             Matrix_Get(&this->unk_190[0]);
             break;
 
-        case 11:
+        case MADAME_AROMA_SHAWL_UPPER_LIMB:
             Matrix_Get(&this->unk_190[1]);
             break;
 
-        case 12:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
             Matrix_Get(&this->unk_190[2]);
             break;
 
-        case 13:
+        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
             Matrix_Get(&this->unk_190[3]);
             break;
 
-        case 14:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
             Matrix_Get(&this->unk_190[4]);
             break;
 
-        case 15:
+        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
             Matrix_Get(&this->unk_190[5]);
             break;
 
-        case 16:
+        case MADAME_AROMA_HEAD_LIMB:
             Matrix_MultVec3f(&D_80BE0070, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             break;
