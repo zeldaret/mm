@@ -1285,7 +1285,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 for label in individual_jtbl_labels[next_jtbl_jr]:
                     save_tracker(label, lui_tracker.copy())
                 next_jtbl_jr = 0
-            else:
+            elif delayed_insn.isBranch():
                 # save lui tracking state
                 save_tracker(delayed_insn.getBranchOffset() + delayed_insn.vram, lui_tracker.copy())
                 """
