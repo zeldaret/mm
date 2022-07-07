@@ -752,7 +752,19 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 save_tracker(delayed_insn.getBranchOffset() + delayed_insn.vram, {insn.rt: (vaddr, insn.getProcessedImmediate())})
             else:
                 lui_tracker.update({insn.rt: (vaddr, insn.getProcessedImmediate())})
-        elif insn.isLoPair() and insn.uniqueId != rabbitizer.InstrId.cpu_ori:
+        elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+            # try match with tracked lui and mark constant
+            hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
+            if hi_vram is not None and imm_value is not None:  # found match
+                lo_vram = vaddr
+                const_value = (imm_value << 0x10) | insn.getProcessedImmediate()
+                put_symbols(symbols_dict, "constants", {hi_vram: const_value})
+                put_symbols(symbols_dict, "constants", {lo_vram: const_value})
+            # clear lui tracking state if register is clobbered by the ori instruction itself
+            # insn.rt == insn.rs or
+            if insn.rt in lui_tracker.keys():
+                clobber_conditionally(insn)
+        elif insn.isLoPair():
             # try match with tracked lui and mark symbol
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
             # if a match was found, validate and record the symbol, TODO improve validation
@@ -810,44 +822,19 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                         lookahead_insn = insns[cur_idx]  # TODO fix vaddr here
                 elif insn.uniqueId == rabbitizer.InstrId.cpu_ld:  # doubleword loads
                     put_symbol(symbols_dict, "dwords", symbol_value)
-                # TODO: this needs to be checked *after* the double check
-                # elif insn.isFloat() and insn.doesDereference():
-                elif insn.uniqueId in [rabbitizer.InstrId.cpu_lwc1, rabbitizer.InstrId.cpu_swc1]:  # float load/stores
-                    """
-                elif insn.id in [mips_isa.MIPS_INS_LWC1, mips_isa.MIPS_INS_SWC1]:  # float load/stores
-                    """
-                    # add float
-                    put_symbol(symbols_dict, "floats", symbol_value)
-                elif insn.isDouble() and insn.doesDereference():  # double load/stores
-                    # add double
-                    """
-                elif insn.id in [mips_isa.MIPS_INS_LDC1, mips_isa.MIPS_INS_SDC1]:  # double load/stores
-                    """
-                    put_symbol(symbols_dict, "doubles", symbol_value)
-                # elif not insn.doesDereference() and not insn.isUnsigned() and vaddr % 4 == 0:
-                elif insn.uniqueId == rabbitizer.InstrId.cpu_addiu  and vaddr % 4 == 0:
-                    """
-                elif (
-                    insn.id == mips_isa.MIPS_INS_ADDIU and vaddr % 4 == 0
-                ):
-                    """
-                    # strings seem to only ever be 4-byte aligned
-                    # add possible string
-                    put_symbol(symbols_dict, "prospective_strings", symbol_value)
+                elif insn.doesDereference() and insn.isFloat():
+                    if insn.isDouble():  # double load/stores
+                        # add double
+                        put_symbol(symbols_dict, "doubles", symbol_value)
+                    else:  # float load/stores
+                        # add float
+                        put_symbol(symbols_dict, "floats", symbol_value)
+                elif not insn.doesDereference() and not insn.isUnsigned():
+                    if vaddr % 4 == 0:  # strings seem to only ever be 4-byte aligned
+                        # add possible string
+                        put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
             if not insn.doesStore() and not (insn.doesLoad() and insn.isFloat()):
-                clobber_conditionally(insn)
-        elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
-            # try match with tracked lui and mark constant
-            hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
-            if hi_vram is not None and imm_value is not None:  # found match
-                lo_vram = vaddr
-                const_value = (imm_value << 0x10) | insn.getProcessedImmediate()
-                put_symbols(symbols_dict, "constants", {hi_vram: const_value})
-                put_symbols(symbols_dict, "constants", {lo_vram: const_value})
-            # clear lui tracking state if register is clobbered by the ori instruction itself
-            # insn.rt == insn.rs or
-            if insn.rt in lui_tracker.keys():
                 clobber_conditionally(insn)
         else:
             # clear lui tracking if register is clobbered by something unrelated
@@ -873,10 +860,6 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         # Symbols aren't avaialble here yet, so placeholders are added
         # in each instruction, to be looked up later
 
-        instr = {
-            "instance": insn
-        }
-
         if info["name"] in full_file_list and vaddr in full_file_list[info["name"]]:
             if cur_file != "":
                 if cur_vaddr in info["syms"]:
@@ -890,7 +873,6 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         results.append(
             {
                 "vaddr": vaddr,
-                "insn": instr,
                 "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
                 "data": False,
                 "instance": insn,
@@ -1115,6 +1097,7 @@ def fixup_text_symbols(data, vram, data_regions, info):
     symbol_has_invalid_insns = False
     for i, entry in enumerate(file):
         vaddr = entry["vaddr"]
+        insn = entry["instance"]
 
         if vaddr in functions:
             text.append(f"\nglabel {proper_name(vaddr, in_data=entry['data'])}\n")
@@ -1130,7 +1113,7 @@ def fixup_text_symbols(data, vram, data_regions, info):
             symbol_has_invalid_insns = True
 
         if symbol_has_invalid_insns:
-            word = entry["instance"].getRaw()
+            word = insn.getRaw()
             line += f"  .word 0x{word:08X}"
         else:
             extraLJust = 0
@@ -1139,12 +1122,12 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 line += " "
 
             immOverride = None
-            if entry["instance"].isBranch():
-                targetBranchVram = entry["instance"].getBranchOffset() + entry["instance"].vram
+            if insn.isBranch():
+                targetBranchVram = insn.getBranchOffset() + insn.vram
                 immOverride = f".L{targetBranchVram:08X}"
-            elif entry["instance"].isJump():
-                immOverride = proper_name(entry["instance"].getInstrIndexAsVram(), in_data=False, is_symbol=True)
-            elif entry["instance"].isHiPair():
+            elif insn.isJump():
+                immOverride = proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
+            elif insn.isHiPair():
                 symbol_value = symbols.get(vaddr, None)
                 if symbol_value is not None:
                     immOverride = f"%hi({proper_name(symbol_value)})"
@@ -1153,24 +1136,24 @@ def fixup_text_symbols(data, vram, data_regions, info):
                     if constant_value is not None:
                         immOverride = f"(0x{constant_value:08X} >> 16)"
 
-            elif entry["instance"].isLoPair() and entry["instance"].uniqueId != rabbitizer.InstrId.cpu_ori:
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    immOverride = f"%lo({proper_name(symbol_value)})"
-
-            elif entry["instance"].uniqueId == rabbitizer.InstrId.cpu_ori:
+            elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
                 constant_value = constants.get(vaddr, None)
                 if constant_value is not None:
                     immOverride = f"(0x{constant_value:08X} & 0xFFFF)"
+
+            elif insn.isLoPair():
+                symbol_value = symbols.get(vaddr, None)
+                if symbol_value is not None:
+                    immOverride = f"%lo({proper_name(symbol_value)})"
 
             else:
                 symbol_value = symbols.get(vaddr, None)
                 if symbol_value is not None:
                     immOverride = proper_name(symbol_value)
 
-            line += entry["instance"].disassemble(immOverride=immOverride, extraLJust=extraLJust)
+            line += insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
 
-            delay_slot = entry["instance"].isBranch() or entry["instance"].isJump()
+            delay_slot = insn.isBranch() or insn.isJump()
 
         line += "\n"
         text.append(line)
