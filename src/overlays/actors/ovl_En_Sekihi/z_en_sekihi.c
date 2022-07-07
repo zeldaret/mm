@@ -38,34 +38,36 @@ const ActorInit En_Sekihi_InitVars = {
 
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };
 
-static s32 sOpaDLists[] = { &gGraveTriforceSymbolDL, &gGraveGoronSymbolDL, &gGraveKokiriSymbolDL, &gTombSongOfSoaringDL,
-                            &gMikauGraveDL };
+static Gfx* sOpaDLists[] = {
+    gGraveTriforceSymbolDL, gGraveGoronSymbolDL, gGraveKokiriSymbolDL, gTombSongOfSoaringDL, gMikauGraveDL,
+};
 
-static s32 sXluDLists[] = { &gSunSongTriforceSymbolDL, &gSunSongGoronSymbolDL, &gSunSongKokiriSymbolDL,
-                            &gSekihizEmptyDL, &gMikauGraveDirtDL };
+static Gfx* sXluDLists[] = {
+    gSunSongTriforceSymbolDL, gSunSongGoronSymbolDL, gSunSongKokiriSymbolDL, gSekihizEmptyDL, gMikauGraveDirtDL,
+};
 
 static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
-    s32 params = ENSIKIHI_GET_F(thisx);
+    s32 type = ENSIKIHI_GET_F(thisx);
     s32 objectIndex;
     s32 pad;
 
-    if ((params < 0 || params >= 5) || sOpaDLists[params] == 0) {
+    if ((type < 0 || type >= 5) || sOpaDLists[type] == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
-        if ((params == 4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 0x1E)) {
+        if ((type == 4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
             gSaveContext.save.weekEventReg[13] |= 0x20;
         }
-        objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
+        objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
         if (objectIndex >= 0) {
             this->objectIndex = objectIndex;
         }
         this->actionFunc = func_80A44DE8;
-        this->opaDList = sOpaDLists[params];
-        this->xluDList = sXluDLists[params];
-        this->dyna.actor.textId = sTextIds[params];
+        this->opaDList = sOpaDLists[type];
+        this->xluDList = sXluDLists[type];
+        this->dyna.actor.textId = sTextIds[type];
         this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
         Actor_SetScale(&this->dyna.actor, 0.1f);
     }
@@ -79,15 +81,16 @@ void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
-    s32 params;
-    CollisionHeader* sColHeader[] = { &gSekihilColHeader, &gSekihigColHeader, &gSekihinColHeader, &gSekihizColHeader,
-                                      &gObjectZogColHeader };
+    s32 type;
+    CollisionHeader* sColHeader[] = {
+        &gSekihilColHeader, &gSekihigColHeader, &gSekihinColHeader, &gSekihizColHeader, &gObjectZogColHeader,
+    };
 
-    params = ENSIKIHI_GET_F(&this->dyna.actor);
+    type = ENSIKIHI_GET_F(&this->dyna.actor);
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->dyna.actor.objBankIndex = this->objectIndex;
         this->dyna.actor.draw = EnSekihi_Draw;
-        if (params == 4) {
+        if (type == 4) {
             this->actionFunc = func_80A450B0;
         } else {
             this->actionFunc = func_80A45130;
@@ -95,12 +98,12 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 0);
-        if (sColHeader[params] != 0) {
-            CollisionHeader_GetVirtual(sColHeader[params], &colHeader);
+        if (sColHeader[type] != NULL) {
+            CollisionHeader_GetVirtual(sColHeader[type], &colHeader);
         }
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-        if ((params == 4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
+        if ((type == 4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
             Actor_MarkForDeath(&this->dyna.actor);
         }
     }
@@ -133,7 +136,7 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1018:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x101A:
                     case 0x101B:

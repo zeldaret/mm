@@ -4,13 +4,13 @@
         <DList Name="gSunSongGoronSymbolDL" Offset="0x4A8" />
         <DList Name="gSekihigGraveBaseDL" Offset="0x4B8" />
         <DList Name="gGraveGoronSymbolDL" Offset="0x5C8" />
-        <Texture Name="object_sekihig_TLUT_0005E0" OutName="tlut_0005E0" Format="rgba16" Width="4" Height="4" Offset="0x5E0" />
+        <Texture Name="gSekihigTLUT" OutName="sekihig_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5E0" />
         <!-- <Blob Name="object_sekihig_Blob_000600" Size="0x60" Offset="0x600" /> -->
         <Texture Name="gSekihigGraniteTex" OutName="sekihig_granite_tex" Format="rgba16" Width="32" Height="32" Offset="0x660" />
         <Texture Name="gSekihigMarbleTex" OutName="sekihig_marble_tex" Format="rgba16" Width="32" Height="64" Offset="0xE60" />
         <Texture Name="gSekihigGoronSymbolTex" OutName="sekihig_goron_symbol_tex" Format="ci4" Width="64" Height="64" Offset="0x1E60" />
         <Texture Name="gSekihigStoneInscriptionTex" OutName="sekihig_stone_inscription_tex" Format="ia4" Width="128" Height="16" Offset="0x2660" />
         <Texture Name="gSekihigStaffNotesTex" OutName="sekihig_staff_notes_tex" Format="ia4" Width="128" Height="32" Offset="0x2A60" />
-        <Collision Name="gSekihigColHeader" Offset="0x33D8" />
+        <Collision Name="gSekihigCol" Offset="0x33D8" />
     </File>
 </Root>

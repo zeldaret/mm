@@ -14,7 +14,6 @@ typedef struct EnSekihi {
     /* 0x15C */ s32 opaDList;
     /* 0x160 */ s32 xluDList;
     /* 0x164 */ s8 objectIndex;
-    /* 0x165 */ UNK_TYPE1 pad165[3];
     /* 0x168 */ EnSekihiActionFunc actionFunc;
 } EnSekihi; // size = 0x16C
 
