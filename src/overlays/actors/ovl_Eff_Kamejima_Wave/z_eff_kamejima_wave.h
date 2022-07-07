@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define EFFKAMEJIMAWAVE_GET_F(thisx) ((thisx)->params & 0xF)
+#define PARAMS_1 1
+
 struct EffKamejimaWave;
 
 typedef void (*EffKamejimaWaveActionFunc)(struct EffKamejimaWave*, PlayState*);

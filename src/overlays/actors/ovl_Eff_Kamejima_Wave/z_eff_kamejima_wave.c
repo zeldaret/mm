@@ -20,7 +20,7 @@ void func_80BCEC6C(EffKamejimaWave* this, PlayState* play);
 void func_80BCEDE0(EffKamejimaWave* this, PlayState* play);
 void func_80BCEBC0(EffKamejimaWave* this, PlayState* play);
 void func_80BCED34(EffKamejimaWave* this, PlayState* play);
-void func_80BCEEBC(u8 vertex);
+void func_80BCEEBC(u8 alpha);
 
 const ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
@@ -49,7 +49,7 @@ void EffKamejimaWave_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.2f);
     this->actor.scale.y = 0.0f;
-    if ((this->actor.params & 0xF) == 1) {
+    if (EFFKAMEJIMAWAVE_GET_F(thisx) == PARAMS_1) {
         this->actionFunc = func_80BCEDE0;
         D_80BCF1C0 = 255;
     } else {
@@ -136,25 +136,25 @@ void EffKamejimaWave_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-void func_80BCEEBC(u8 vertex) {
-    Vtx* vtx = Lib_SegmentedToVirtual(&object_kamejima_Vtx);
+void func_80BCEEBC(u8 alpha) {
+    Vtx* vtx = Lib_SegmentedToVirtual(&object_kamejima_Vtx_000000);
 
-    vtx[2].v.cn[3] = vertex;
-    vtx[6].v.cn[3] = vertex;
-    vtx[8].v.cn[3] = vertex;
-    vtx[9].v.cn[3] = vertex;
-    vtx[12].v.cn[3] = vertex;
-    vtx[16].v.cn[3] = vertex;
-    vtx[18].v.cn[3] = vertex;
-    vtx[19].v.cn[3] = vertex;
+    vtx[2].v.cn[3] = alpha;
+    vtx[6].v.cn[3] = alpha;
+    vtx[8].v.cn[3] = alpha;
+    vtx[9].v.cn[3] = alpha;
+    vtx[12].v.cn[3] = alpha;
+    vtx[16].v.cn[3] = alpha;
+    vtx[18].v.cn[3] = alpha;
+    vtx[19].v.cn[3] = alpha;
 }
 
 void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
-    Color_RGBA8 primColors;
-    Color_RGBA8 envColors;
+    Color_RGBA8 primColor;
+    Color_RGBA8 envColor;
 
-    func_800FE7A8(sPrimColors, &primColors);
-    func_800FE7A8(sEnvColors, &envColors);
+    func_800FE7A8(sPrimColors, &primColor);
+    func_800FE7A8(sEnvColors, &envColor);
     func_80BCEEBC(D_80BCF1C0);
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -163,8 +163,8 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
     Matrix_Scale(6.0f, 5.0f, 5.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     AnimatedMat_Draw(play, D_80BCF1C4);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, primColors.r, primColors.g, primColors.b, 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, envColors.r, envColors.g, envColors.b, 255);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, primColor.r, primColor.g, primColor.b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, envColor.r, envColor.g, envColor.b, 255);
     gSPDisplayList(POLY_XLU_DISP++, object_kamejima_DL_000140);
 
     CLOSE_DISPS(play->state.gfxCtx);
