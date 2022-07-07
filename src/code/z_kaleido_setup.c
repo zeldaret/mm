@@ -121,8 +121,8 @@ void KaleidoSetup_Init(PlayState* play) {
 
     pauseCtx->unk_238[PAUSE_1] = XREG(94) + 3;
 
-    pauseCtx->unk_258 = 11;
-    pauseCtx->unk_25A = 0;
+    pauseCtx->cursorSpecialPos = 11;
+    pauseCtx->pageSwitchTimer = 0;
 
     pauseCtx->unk_25E[PAUSE_0] = 999;
     pauseCtx->unk_25E[PAUSE_1] = XREG(94) + 3;
