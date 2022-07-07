@@ -24,11 +24,11 @@ typedef struct EnBjt {
     /* 0x23C */ f32 heightOffset;
     /* 0x240 */ s16 behaviour;
     /* 0x242 */ s16 timer;
-    /* 0x244 */ char unk244[4];
+    /* 0x244 */ UNK_TYPE1 unk_244[4];
     /* 0x248 */ s32 playedSfx; // to only play once
     /* 0x24C */ MsgEventFunc msgEventCallback;
     /* 0x250 */ s32 curAnimIndex;
-    /* 0x254 */ char pad254[8];
+    /* 0x254 */ UNK_TYPE1 pad_254[8];
 } EnBjt; // size = 0x25C
 
 

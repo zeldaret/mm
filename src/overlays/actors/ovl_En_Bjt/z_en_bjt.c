@@ -86,15 +86,15 @@ typedef enum {
 } ToiletHandAnimations;
 
 static AnimationInfoS sAnimationInfos[] = {
-    /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, 0, 0 },
-    /* 1 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, 0, -4 },
-    /* 2 */ { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, 0, -4 },
-    /* 3 */ { &gToiletHandThumbsUpAnim, 1.0f, 0, -1, 0, -4 },
-    /* 4 */ { &gToiletHandOpenHandAnim, 1.0f, 0, -1, 0, -4 },
-    /* 5 */ { &gToiletHandFistAnim, 1.0f, 0, -1, 0, -4 },
+    /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    /* 1 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    /* 2 */ { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    /* 3 */ { &gToiletHandThumbsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    /* 4 */ { &gToiletHandOpenHandAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    /* 5 */ { &gToiletHandFistAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-void EnBjt_UpdateAnimation(EnBjt* this) {
+void EnBjt_UpdateSkelAnime(EnBjt* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -442,8 +442,8 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
     EnBjt_ChooseAnimation(this, play);
 
     if (this->scheduleResult != 0) {
-        EnBjt_UpdateAnimation(this);
-        func_8013C964(&this->actor, play, 60.0f, 10.0f, 0, this->stateFlags & 7);
+        EnBjt_UpdateSkelAnime(this);
+        func_8013C964(&this->actor, play, 60.0f, 10.0f, EXCH_ITEM_NONE, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
         EnBjt_UpdateCollision(this, play);
     }
