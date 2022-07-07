@@ -41,9 +41,6 @@ args = parser.parse_args()
 jobs = args.jobs
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
-rabbitizer.config.misc_omit0XOnSmallImm = True
-rabbitizer.config.misc_upperCaseImm = False
-rabbitizer.config.regNames_userFpcCsr = False
 
 
 ASM_OUT = "asm/"
@@ -869,37 +866,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 """
                 pass
             # insns listed either write to fprs/cop0 or don't write to any
-            elif insn.uniqueId not in [
-                rabbitizer.InstrId.cpu_mtc0,
-                rabbitizer.InstrId.cpu_mtc1,
-                rabbitizer.InstrId.cpu_dmtc1,
-                rabbitizer.InstrId.cpu_mult,
-                rabbitizer.InstrId.cpu_multu,
-                rabbitizer.InstrId.cpu_dmult,
-                rabbitizer.InstrId.cpu_dmultu,
-                rabbitizer.InstrId.cpu_div,
-                rabbitizer.InstrId.cpu_divu,
-                rabbitizer.InstrId.cpu_div,
-                rabbitizer.InstrId.cpu_divu,
-                rabbitizer.InstrId.cpu_mthi,
-                rabbitizer.InstrId.cpu_mtlo,
-                rabbitizer.InstrId.cpu_ctc1,
-                rabbitizer.InstrId.cpu_nop,
-                rabbitizer.InstrId.cpu_break,
-                rabbitizer.InstrId.cpu_tlbp,
-                rabbitizer.InstrId.cpu_tlbr,
-                rabbitizer.InstrId.cpu_tlbwi,
-                rabbitizer.InstrId.cpu_mov_s,
-                rabbitizer.InstrId.cpu_mov_d,
-                rabbitizer.InstrId.cpu_c_lt_s,
-                rabbitizer.InstrId.cpu_c_lt_d,
-                rabbitizer.InstrId.cpu_div_s,
-                rabbitizer.InstrId.cpu_mul_s,
-                rabbitizer.InstrId.cpu_trunc_w_s,
-                rabbitizer.InstrId.cpu_cvt_s_w,
-                rabbitizer.InstrId.cpu_sub_s,
-                rabbitizer.InstrId.cpu_add_s,
-            ]:
+            else:
                 clobber_conditionally(insn)
 
         ############# Start text disassembly ##########
@@ -1137,7 +1104,6 @@ def fixup_text_symbols(data, vram, data_regions, info):
 
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
-    # print(files_text.keys())
     file = files_text[info["name"]]
     # header
     text = [file.pop(0)]
@@ -1202,11 +1168,7 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 if symbol_value is not None:
                     immOverride = proper_name(symbol_value)
 
-            disassembled = entry["instance"].disassemble(immOverride=immOverride, extraLJust=extraLJust)
-            if delay_slot:
-                line += f"{disassembled:11}"
-            else:
-                line += f"{disassembled:12}"
+            line += entry["instance"].disassemble(immOverride=immOverride, extraLJust=extraLJust)
 
             delay_slot = entry["instance"].isBranch() or entry["instance"].isJump()
 
@@ -1310,14 +1272,9 @@ def disassemble_text(data, vram, data_regions, info):
 
 
         disassembled = insn.disassemble(immOverride=immOverride, extraLJust=extraLJust)
-        if delay_slot:
-            result += f"{comment}  {disassembled:11}\n"
-        else:
-            result += f"{comment}  {disassembled:12}\n"
+        result += f"{comment}  {disassembled}\n"
 
-        delay_slot = False
-        if insn.isBranch() or insn.isJump():
-            delay_slot = True
+        delay_slot = insn.isBranch() or insn.isJump()
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
