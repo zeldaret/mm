@@ -1643,7 +1643,6 @@ def disassemble_text(data, vram, data_regions, info):
     segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
-    delayed_insn = None
     delay_slot = False
 
     for i, raw_insn in enumerate(raw_insns, 0):
@@ -1757,7 +1756,6 @@ def disassemble_text(data, vram, data_regions, info):
         if delay_slot:
             extraLJust = -1
             comment += " "
-            delayed_insn = None
 
         immOverride = None
         if insn.isBranch():
@@ -1797,7 +1795,7 @@ def disassemble_text(data, vram, data_regions, info):
             result += f"{comment}  {disassembled:12}\n"
 
         delay_slot = False
-        if delayed_insn is not None:
+        if insn.isBranch() or insn.isJump():
             delay_slot = True
 
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
