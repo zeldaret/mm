@@ -845,10 +845,11 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
     }
 }
 
+#ifdef NON_MATCHING
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
     if (titleCtx->alpha != 0) {
-        s32 width = titleCtx->width;
-        s32 height = titleCtx->height;
+        s32 width;
+        s32 height;
         s32 unk1;
         s32 spC0;
         s32 sp38;
@@ -856,6 +857,8 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
         s32 spB4;
         s32 temp;
 
+        width = titleCtx->width;
+        height = titleCtx->height;
         temp = width * 2;
         spC0 = (titleCtx->x * 4) - temp;
         spB8 = (titleCtx->y * 4) - (height * 2);
@@ -865,8 +868,6 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         height = (width * height > TMEM_SIZE) ? TMEM_SIZE / width : height;
         spB4 = spB8 + (height * 4);
-
-        if (1) {}
 
         OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
 
@@ -894,6 +895,10 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
         CLOSE_DISPS(gameState->gfxCtx);
     }
 }
+#else
+void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/TitleCard_Draw.s")
+#endif
 
 /* End of TitleCard section */
 
