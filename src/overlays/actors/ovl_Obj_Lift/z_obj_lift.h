@@ -17,7 +17,7 @@ typedef struct ObjLift {
     /* 0x160 */ s16 unk_160;
     /* 0x162 */ s16 unk_162;
     /* 0x164 */ s16 unk_164;
-    /* 0x166 */ s16 unk_166;
+    /* 0x166 */ s16 timer;
     /* 0x168 */ Vec3f unk_168;
     /* 0x174 */ s16 unk_174;
     /* 0x176 */ s16 unk_176;

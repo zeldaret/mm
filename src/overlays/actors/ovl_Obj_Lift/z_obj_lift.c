@@ -40,8 +40,10 @@ const ActorInit Obj_Lift_InitVars = {
 
 static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };
 
-Vec2s D_8093DD60[] = { { 120, -120 }, { 120, 0 },     { 120, 120 }, { 0, -120 },  { 0, 0 },
-                       { 0, 120 },    { -120, -120 }, { -120, 0 },  { -120, 120 } };
+Vec2s D_8093DD60[] = {
+    { 120, -120 }, { 120, 0 },     { 120, 120 }, { 0, -120 },   { 0, 0 },
+    { 0, 120 },    { -120, -120 }, { -120, 0 },  { -120, 120 },
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -15000, ICHAIN_CONTINUE),
@@ -71,9 +73,9 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
         vel.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
 
         if ((s32)Rand_Next() > 0) {
-            rnd = 64;
+            rnd = 0x40;
         } else {
-            rnd = 32;
+            rnd = 0x20;
         }
 
         EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, rnd, 15, 15, 0,
@@ -95,7 +97,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     temp_fv0 = D_8093DD98[OBJLIFT_GET_1(&this->dyna.actor)];
     this->dyna.actor.scale.z = temp_fv0;
     this->dyna.actor.scale.x = temp_fv0;
-    this->dyna.actor.scale.y = 0.055555556f;
+    this->dyna.actor.scale.y = 5.0f / 90.0f;
     this->dyna.actor.shape.rot.z = 0;
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
@@ -119,7 +121,7 @@ void ObjLift_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_8093D760(ObjLift* this) {
-    this->unk_166 = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
+    this->timer = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
     this->actionFunc = func_8093D7A0;
     this->dyna.actor.draw = ObjLift_Draw;
 }
@@ -129,30 +131,30 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
     s16 quake;
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-        if (this->unk_166 <= 0) {
+        if (this->timer <= 0) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
                 quake = Quake_Add(play->cameraPtrs[play->activeCamera], 1);
-                Quake_SetSpeed((quake), 0x2710);
+                Quake_SetSpeed(quake, 10000);
                 Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-                Quake_SetCountdown(quake, 0x14);
+                Quake_SetCountdown(quake, 20);
                 func_8093D88C(this);
             }
         }
     } else {
-        this->unk_166 = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
+        this->timer = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
     }
 }
 
 void func_8093D88C(ObjLift* this) {
-    this->unk_166 = 0x14;
+    this->timer = 20;
     this->actionFunc = func_8093D8B4;
     this->dyna.actor.draw = func_8093DC90;
 }
 
 void func_8093D8B4(ObjLift* this, PlayState* play) {
-    if (this->unk_166 <= 0) {
+    if (this->timer <= 0) {
         func_8093D9C0(this);
     } else {
         this->unk_160 += 0x2710;
@@ -164,7 +166,7 @@ void func_8093D8B4(ObjLift* this, PlayState* play) {
         this->unk_168.x = Math_SinS(this->unk_164) * 3.0f;
         this->unk_168.z = Math_CosS(this->unk_164) * 3.0f;
     }
-    if ((this->unk_166 & 3) == 3) {
+    if ((this->timer & 3) == 3) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 16, NA_SE_EV_BLOCK_SHAKE);
     }
 }
@@ -180,14 +182,14 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
     s32 pad;
     s32 sp38;
     Vec3f pos;
-    f32 temp_fv0;
 
     Actor_MoveWithGravity(&this->dyna.actor);
     Math_Vec3f_Copy(&pos, &this->dyna.actor.prevPos);
     pos.y += yOffset[OBJLIFT_GET_1(&this->dyna.actor)];
-    temp_fv0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp38, &this->dyna.actor, &pos);
-    this->dyna.actor.floorHeight = temp_fv0;
-    if ((yOffset[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <= (temp_fv0 - this->dyna.actor.world.pos.y)) {
+    this->dyna.actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp38, &this->dyna.actor, &pos);
+    if ((yOffset[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <=
+        (this->dyna.actor.floorHeight - this->dyna.actor.world.pos.y)) {
         func_8093D3C0(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_BOX_BREAK);
         if (this->unk_178 > 0) {
@@ -201,13 +203,13 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
 }
 
 void func_8093DB70(ObjLift* this) {
-    this->unk_166 = this->unk_178;
+    this->timer = this->unk_178;
     this->actionFunc = func_8093DB90;
     this->dyna.actor.draw = NULL;
 }
 
 void func_8093DB90(ObjLift* this, PlayState* play) {
-    if (this->unk_166 <= 0) {
+    if (this->timer <= 0) {
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
         this->dyna.actor.world.rot = this->dyna.actor.shape.rot = this->dyna.actor.home.rot;
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -218,8 +220,8 @@ void func_8093DB90(ObjLift* this, PlayState* play) {
 void ObjLift_Update(Actor* thisx, PlayState* play) {
     ObjLift* this = THIS;
 
-    if (this->unk_166 > 0) {
-        this->unk_166--;
+    if (this->timer > 0) {
+        this->timer--;
     }
     this->actionFunc(this, play);
 }
