@@ -23,7 +23,7 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    
+
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
     # "SysMatrix_StatePop":                           "Matrix_StatePop",
@@ -626,10 +626,12 @@ wordReplace = {
     "play->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
     "play->envCtx.unk_DC": "play->envCtx.lightBlend",
 
+    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
+    "play->msgCtx.unk11F10": "play->msgCtx.msgLength",
+    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
+    "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
-    "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
-    "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
