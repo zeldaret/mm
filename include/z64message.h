@@ -40,12 +40,22 @@ typedef enum TextState {
 // TODO: should Font be in its own header or is it fine to have it here?
 // Font textures are loaded into here
 typedef struct {
-    /* 0x00000 */ u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
-    /* 0x07800 */ u8 iconBuf[FONT_CHAR_TEX_SIZE];
-    /* 0x07880 */ u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
+    /* 0x00000 */ union {
+        u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
+        u64 force_structure_alignment_charTex;
+    };
+    /* 0x07800 */ union {
+        u8 iconBuf[FONT_CHAR_TEX_SIZE];
+        u64 force_structure_alignment_icon;
+    };
+    /* 0x07880 */union {
+        u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
+        u64 force_structure_alignment_font;
+    };
     /* 0x11880 */ union {
-        u8 schar[640];
-        u16 wchar[640];
+        char schar[1280]; // msgBuf
+        u16 wchar[640]; // msgBufWide
+        u64    force_structure_alignment_msg;
     } msgBuf;
     /* 0x11D80 */ u8* messageStart;
     /* 0x11D84 */ u8* messageEnd;
@@ -79,7 +89,7 @@ typedef struct MessageContext {
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
     /* 0x11F24 */ union {
-        u8  schar[206];
+        char schar[206];
         u16 wchar[103];
     } decodedBuffer;
     /* 0x11FF2 */ u16 unk11FF2;
