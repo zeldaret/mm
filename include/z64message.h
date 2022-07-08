@@ -55,12 +55,12 @@ typedef struct {
     /* 0x11880 */ union {
         char schar[1280]; // msgBuf
         u16 wchar[640]; // msgBufWide
-        u64    force_structure_alignment_msg;
+        u64 force_structure_alignment_msg;
     } msgBuf;
     /* 0x11D80 */ u8* messageStart;
     /* 0x11D84 */ u8* messageEnd;
     /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
-} Font; // size = 0x11D8C
+} Font; // size = 0x11D90
 
 
 typedef struct {
@@ -71,7 +71,6 @@ typedef struct {
 typedef struct MessageContext {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x4];
     /* 0x11EF8 */ UNK_PTR unk11EF8;
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
     /* 0x11F00 */ MsgCtx11F00* unk11F00;
