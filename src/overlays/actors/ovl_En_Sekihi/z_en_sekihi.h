@@ -11,8 +11,8 @@ typedef void (*EnSekihiActionFunc)(struct EnSekihi*, PlayState*);
 
 typedef struct EnSekihi {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s32 opaDList;
-    /* 0x160 */ s32 xluDList;
+    /* 0x15C */ Gfx* opaDList;
+    /* 0x160 */ Gfx* xluDList;
     /* 0x164 */ s8 objectIndex;
     /* 0x168 */ EnSekihiActionFunc actionFunc;
 } EnSekihi; // size = 0x16C

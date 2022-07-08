@@ -83,7 +83,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
     s32 type;
     CollisionHeader* sColHeader[] = {
-        &gSekihilColHeader, &gSekihigColHeader, &gSekihinColHeader, &gSekihizColHeader, &gObjectZogColHeader,
+        &gSekihilCol, &gSekihigCol, &gSekihinCol, &gSekihizCol, &gObjectZogCol,
     };
 
     type = ENSIKIHI_GET_F(&this->dyna.actor);
@@ -171,7 +171,7 @@ void EnSekihi_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->xluDList != 0) {
+    if (this->xluDList != NULL) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
