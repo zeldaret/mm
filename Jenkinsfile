@@ -23,7 +23,7 @@ pipeline {
         stage('Install Python dependencies') {
             steps {
                 echo 'Installing Python dependencies'
-                sh 'python3 -m pip install --no-cache --upgrade -r requirements.txt'
+                sh 'python3 -m pip install -r requirements.txt'
             }
         }
         stage('Copy ROM') {
