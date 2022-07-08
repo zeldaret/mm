@@ -217,16 +217,16 @@ void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * Moves the player to the target destination through automated control stick movements.
+ * Moves the player to the destination through automated control stick movements.
  * This is used to move the player to the right place to play the shooting game.
  */
-s32 EnSyatekiMan_MovePlayerToTarget(PlayState* play, Vec3f target) {
+s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f pos) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
     f32 magnitude;
-    s16 yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &target);
+    s16 yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &pos);
 
-    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &target);
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &pos);
 
     if (distXZ < 5.0f) {
         magnitude = 10.0f;
@@ -970,7 +970,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Swamp_MovePlayerAndExplainRules(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (EnSyatekiMan_MovePlayerToTarget(play, sSwampPlayerPos)) {
+    if (EnSyatekiMan_MovePlayerToPos(play, sSwampPlayerPos)) {
         player->stateFlags1 |= 0x20;
         this->shootingGameState = SG_GAME_STATE_EXPLAINING_RULES;
         if (this->talkFlags != TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES) {
@@ -1176,7 +1176,7 @@ void EnSyatekiMan_Town_MovePlayerAndSayHighScore(EnSyatekiMan* this, PlayState* 
         targetPlayerPos = sTownPlayerPos;
     }
 
-    if (EnSyatekiMan_MovePlayerToTarget(play, targetPlayerPos)) {
+    if (EnSyatekiMan_MovePlayerToPos(play, targetPlayerPos)) {
         if (this->prevTextId == 0x3FD) {
             // Our highest score is [score]. If you break the record, you'll win a prize!
             Message_StartTextbox(play, 0x3FE, &this->actor);
@@ -1294,7 +1294,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 timer = (((void)0, gSaveContext.unk_3DE0[1]) * 0.1f) + 1.0f; // unit is tenths of a second
 
-    if (timer < 751) {
+    if (timer <= 750) {
         s32 waveTimer; // unit is hundredths of a second
 
         // If you hit a Blue Octorok, you lose 2.5 seconds. If we pretend that the code below was not present,

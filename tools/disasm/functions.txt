@@ -9083,7 +9083,7 @@
     0x809C64C0:("EnSyatekiMan_Swamp_SpawnTargetActors",),
     0x809C6578:("EnSyatekiMan_Init",),
     0x809C66FC:("EnSyatekiMan_Destroy",),
-    0x809C6720:("EnSyatekiMan_MovePlayerToTarget",),
+    0x809C6720:("EnSyatekiMan_MovePlayerToPos",),
     0x809C6810:("EnSyatekiMan_SetupIdle",),
     0x809C6848:("EnSyatekiMan_Swamp_Idle",),
     0x809C6A04:("EnSyatekiMan_Swamp_HandleChoice",),
