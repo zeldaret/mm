@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lift.h"
+#include "objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -14,18 +15,17 @@ void ObjLift_Init(Actor* thisx, PlayState* play);
 void ObjLift_Destroy(Actor* thisx, PlayState* play);
 void ObjLift_Update(Actor* thisx, PlayState* play);
 void ObjLift_Draw(Actor* thisx, PlayState* play);
-void func_8093D760(ObjLift* this);
-void func_8093D9C0(ObjLift* this);
-void func_8093D7A0(ObjLift* this, PlayState* play);
-void func_8093DC90(Actor* thisx, PlayState* play);
-void func_8093D8B4(ObjLift* this, PlayState* play);
 
-void func_8093D3C0(ObjLift* this, PlayState* play);
-void func_8093DB70(ObjLift* this);
-void func_8093DA48(ObjLift* this, PlayState* play);
-void func_8093DB90(ObjLift* this, PlayState* play);
+void func_8093D760(ObjLift* this);
+void func_8093D7A0(ObjLift* this, PlayState* play);
+void func_8093D9C0(ObjLift* this);
+void func_8093D8B4(ObjLift* this, PlayState* play);
 void func_8093D88C(ObjLift* this);
-#if 0
+void func_8093DA48(ObjLift* this, PlayState* play);
+void func_8093DB70(ObjLift* this);
+void func_8093DB90(ObjLift* this, PlayState* play);
+void func_8093DC90(Actor* thisx, PlayState* play);
+
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,
@@ -38,28 +38,22 @@ const ActorInit Obj_Lift_InitVars = {
     (ActorFunc)ObjLift_Draw,
 };
 
+static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };
+
+Vec2s D_8093DD60[] = {
+    { 120, -120 }, { 120, 0 },     { 120, 120 }, { 0, -120 },   { 0, 0 },
+    { 0, 120 },    { -120, -120 }, { -120, 0 },  { -120, 120 },
+};
+
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(terminalVelocity, -15000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 350, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -15000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 350, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
 };
 
-static f32 D_8093DD98[2] = { 0.1f, 0.05f };
+static f32 D_8093DD98[] = { 0.1f, 0.05f };
 
-static s16 D_8093DD50[8] = { 0, 0xA, 0x14, 0x1E, 0x28, 0x32, 0x3C, 0 };
-static f32 D_8093DDA0[4] = { -18.0f, -9.0f, 0.0f, 0.0f };
-#endif
-
-extern s16 D_8093DD50[];
-extern InitChainEntry sInitChain[];
-extern f32 D_8093DD98[];
-extern f32 D_8093DDA0[];
-extern UNK_TYPE D_06000D10;
-extern UNK_TYPE D_06000F00;
-extern Vec2s D_8093DD60[];
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/func_8093D3C0.s")
+static f32 yOffset[] = { -18.0f, -9.0f, 0.0f, 0.0f };
 
 void func_8093D3C0(ObjLift* this, PlayState* play) {
     Vec3f pos;
@@ -68,7 +62,7 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
     s32 i;
     Vec3f* actorPos = &this->dyna.actor.world.pos;
 
-    for (i = 0; i < ARRAY_COUNT(&D_8093DD60); i++) {
+    for (i = 0; i < ARRAY_COUNT(D_8093DD60); i++) {
         pos.x = (D_8093DD60[i].x * this->dyna.actor.scale.x) + actorPos->x;
         pos.y = actorPos->y;
         pos.z = (D_8093DD60[i].z * this->dyna.actor.scale.z) + actorPos->z;
@@ -77,72 +71,23 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
         vel.y = (Rand_ZeroOne() * 10.0f) + 6.0f;
         vel.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, ((s32)Rand_Next() > 0) ? 0x40 : 0x20, 0xF, 0xF, 0,
-                             ((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x, 0, 0x20, 0x32, -1, 0xED,
-                             (Gfx*)&D_06000D10);
+        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, ((s32)Rand_Next() > 0) ? 64 : 32, 15, 15, 0,
+                             ((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x, 0, 32, 50, -1,
+                             OBJECT_D_LIFT, object_d_lift_DL_000D10);
     }
-    if ((this->dyna.actor.params & 1) == 0) {
-        func_800BBFB0(play, &this->dyna.actor.world.pos, 120.0f, 0xC, 0x78, 0x64, 1);
-    } else if ((this->dyna.actor.params & 1) == 1) {
-        func_800BBFB0(play, &this->dyna.actor.world.pos, 60.0f, 8, 0x3C, 0x64, 1);
-    }
-}
-
-#ifdef shit
-void func_8093D3C0(ObjLift* this, PlayState* play) {
-    f32 spC4;
-    f32 spC0;
-    f32 spBC;
-    f32 spB8;
-    f32 spB4;
-    f32 spB0;
-    ? *temp_s0;
-    PosRot* temp_s3;
-    f32 temp_fv0;
-    s32 temp_v0;
-    ? *phi_s0;
-    s32 phi_s1;
-
-    temp_s3 = &this->dyna.actor.world;
-    phi_s0 = &D_8093DD60;
-    do {
-        temp_fv0 = (f32)phi_s0->unk0;
-        spBC = (temp_fv0 * this->dyna.actor.scale.x) + temp_s3->pos.x;
-        spC0 = temp_s3->pos.y;
-        spC4 = ((f32)phi_s0->unk2 * this->dyna.actor.scale.z) + temp_s3->pos.z;
-        spB0 = temp_fv0 * this->dyna.actor.scale.x * 0.8f;
-        spB4 = (Rand_ZeroOne() * 10.0f) + 6.0f;
-        spB8 = (f32)phi_s0->unk2 * this->dyna.actor.scale.z * 0.8f;
-        phi_s1 = 0x20;
-        if (Rand_Next() > 0) {
-            phi_s1 = 0x40;
-        }
-        EffectSsKakera_Spawn(play, (Vec3f*)&spBC, (Vec3f*)&spB0, &temp_s3->pos, (s16)-0x100, (s16)phi_s1, (s16)0xF,
-                             (s16)0xF, (s16)0,
-                             (s16)(s32)(((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x), (s16)0,
-                             (s16)0x20, 0x32, (s16)-1, (s16)0xED, (Gfx*)&D_06000D10);
-        temp_s0 = phi_s0 + 4;
-        phi_s0 = temp_s0;
-    } while (temp_s0 != sInitChain);
-    temp_v0 = this->dyna.actor.params & 1;
-    if (temp_v0 == 0) {
-        func_800BBFB0(play, &temp_s3->pos, 120.0f, 0xC, (s16)0x78, (s16)0x64, (u8)1);
-        return;
-    }
-    if (temp_v0 == 1) {
-        func_800BBFB0(play, &temp_s3->pos, 60.0f, 8, (s16)0x3C, (s16)0x64, (u8)1);
+    if (OBJLIFT_GET_1(&this->dyna.actor) == 0) {
+        func_800BBFB0(play, &this->dyna.actor.world.pos, 120.0f, 12, 120, 100, 1);
+    } else if (OBJLIFT_GET_1(&this->dyna.actor) == 1) {
+        func_800BBFB0(play, &this->dyna.actor.world.pos, 60.0f, 8, 60, 100, 1);
     }
 }
-#endif
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/ObjLift_Init.s")
 
 void ObjLift_Init(Actor* thisx, PlayState* play) {
     f32 temp_fv0;
     ObjLift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    temp_fv0 = D_8093DD98[this->dyna.actor.params & 1];
+    temp_fv0 = D_8093DD98[OBJLIFT_GET_1(&this->dyna.actor)];
     this->dyna.actor.scale.z = temp_fv0;
     this->dyna.actor.scale.x = temp_fv0;
     this->dyna.actor.scale.y = 0.055555556f;
@@ -151,15 +96,15 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, 1);
-    if ((this->unk178 <= 0) && (Flags_GetSwitch(play, ((s16)this->dyna.actor.params >> 1) & 0x7F))) {
+    if ((this->unk178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
         Actor_MarkForDeath(&this->dyna.actor);
-        return;
+    } else {
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_d_lift_Colheader_000F00);
+        this->unk160 = Rand_Next() >> 0x10;
+        this->unk162 = Rand_Next() >> 0x10;
+        this->unk164 = Rand_Next() >> 0x10;
+        func_8093D760(this);
     }
-    DynaPolyActor_LoadMesh(play, &this->dyna, (CollisionHeader*)&D_06000F00);
-    this->unk160 = (s16)(Rand_Next() >> 0x10);
-    this->unk162 = (s16)(Rand_Next() >> 0x10);
-    this->unk164 = (s16)(Rand_Next() >> 0x10);
-    func_8093D760(this);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/ObjLift_Destroy.s")
@@ -173,7 +118,7 @@ void ObjLift_Destroy(Actor* thisx, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/func_8093D760.s")
 
 void func_8093D760(ObjLift* this) {
-    this->unk166 = D_8093DD50[(this->dyna.actor.params >> 8) & 7];
+    this->unk166 = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
     this->actionFunc = func_8093D7A0;
     this->dyna.actor.draw = ObjLift_Draw;
 }
@@ -186,18 +131,18 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         if (this->unk166 <= 0) {
-            if (((this->dyna.actor.params >> 8) & 7) == 7) {
+            if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
                 quake = Quake_Add(play->cameraPtrs[play->activeCamera], 1);
-                Quake_SetSpeed((s16)(quake), 0x2710);
+                Quake_SetSpeed((quake), 0x2710);
                 Quake_SetQuakeValues(quake, 2, 0, 0, 0);
                 Quake_SetCountdown(quake, 0x14);
                 func_8093D88C(this);
             }
         }
     } else {
-        this->unk166 = D_8093DD50[(this->dyna.actor.params >> 8) & 7];
+        this->unk166 = D_8093DD50[OBJLIFT_GET_7(&this->dyna.actor)];
     }
 }
 
@@ -248,17 +193,17 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->dyna.actor);
     Math_Vec3f_Copy(&sp2C, &this->dyna.actor.prevPos);
-    sp2C.y += D_8093DDA0[this->dyna.actor.params & 1];
+    sp2C.y += yOffset[OBJLIFT_GET_1(&this->dyna.actor)];
     temp_fv0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp38, &this->dyna.actor, &sp2C);
     this->dyna.actor.floorHeight = temp_fv0;
-    if ((D_8093DDA0[this->dyna.actor.params & 1] - 0.001f) <= (temp_fv0 - this->dyna.actor.world.pos.y)) {
+    if ((yOffset[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <= (temp_fv0 - this->dyna.actor.world.pos.y)) {
         func_8093D3C0(this, play);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x14U, 0x2839U);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x14, NA_SE_EV_BOX_BREAK);
         if (this->unk178 > 0) {
             func_8093DB70(this);
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            Flags_SetSwitch(play, ((s16)this->dyna.actor.params >> 1) & 0x7F);
+            Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
             Actor_MarkForDeath(&this->dyna.actor);
         }
     }
@@ -286,7 +231,8 @@ void func_8093DB90(ObjLift* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/ObjLift_Update.s")
 
 void ObjLift_Update(Actor* thisx, PlayState* play) {
-    ObjLift* this = (ObjLift*)thisx;
+    ObjLift* this = THIS;
+    
     if (this->unk166 > 0) {
         this->unk166--;
     }
@@ -298,7 +244,7 @@ void ObjLift_Update(Actor* thisx, PlayState* play) {
 void ObjLift_Draw(Actor* thisx, PlayState* play) {
     ObjLift* this = THIS;
 
-    Gfx_DrawDListOpa(play, (Gfx*)&D_06000D10);
+    Gfx_DrawDListOpa(play, object_d_lift_DL_000D10);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/func_8093DC90.s")
@@ -314,5 +260,5 @@ void func_8093DC90(Actor* thisx, PlayState* play) {
     sp20.z = this->unk176 + this->dyna.actor.home.rot.z;
     Matrix_SetTranslateRotateYXZ(sp28.x, sp28.y, sp28.z, &sp20);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(play, (Gfx*)&D_06000D10);
+    Gfx_DrawDListOpa(play, object_d_lift_DL_000D10);
 }

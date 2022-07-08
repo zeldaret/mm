@@ -1462,8 +1462,7 @@ beginseg
     name "ovl_Obj_Lift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Lift/z_obj_lift.o"
-    include "build/data/ovl_Obj_Lift/ovl_Obj_Lift.data.o"
-    include "build/data/ovl_Obj_Lift/ovl_Obj_Lift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Lift/ovl_Obj_Lift_reloc.o"
 endseg
 
 beginseg
