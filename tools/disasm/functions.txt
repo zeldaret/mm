@@ -4227,7 +4227,7 @@
     0x80821CC4:("KaleidoScope_SwitchPage",),
     0x80821D84:("KaleidoScope_HandlePageToggles",),
     0x80821F30:("KaleidoScope_DrawPageSections",),
-    0x808221DC:("func_808221DC",),
+    0x808221DC:("KaleidoScope_DrawPages",),
     0x80823350:("func_80823350",),
     0x80824738:("func_80824738",),
     0x808248D0:("func_808248D0",),

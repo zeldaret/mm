@@ -187,9 +187,313 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
 
     return gfx;
 }
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawPageSections.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808221DC.s")
+
+void func_801091F0(PlayState*);
+void func_808160A0(PlayState*);
+void func_8081B6EC(PlayState*);
+void func_8081D6DC(PlayState*);
+void func_8081E7D8(PlayState*);
+void func_8081FF80(PlayState*);
+extern void* D_8082B700;
+extern void* D_8082B73C;
+extern void* D_8082B778;
+extern void* D_8082B7B4;
+extern s16 D_8082B890;
+extern s16 D_8082B894;
+extern s16 D_8082B898;
+extern s16 D_8082B89C;
+extern s16 D_8082B8A0;
+extern s16 D_8082B8A4;
+extern s16 D_8082B8B4;
+extern f32 D_8082B908;
+extern s16 D_8082B948[][3];
+extern s16 D_8082B96C[][3];
+extern s16 D_8082B990;
+extern s16 D_8082B994;
+
+// Should be much closer to match with in-function data
+#ifdef NON_EQUIVALENT
+void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 stepR;
+    s16 stepG;
+    s16 stepB;
+
+    OPEN_DISPS(gfxCtx);
+
+    if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
+        if (pauseCtx->state != 7) {
+
+            stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->unk_284 + D_8082B994][0]) / D_8082B990;
+            stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->unk_284 + D_8082B994][1]) / D_8082B990;
+            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->unk_284 + D_8082B994][2]) / D_8082B990;
+
+            if (D_8082B890 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][0]) {
+                D_8082B890 -= stepR;
+            } else {
+                D_8082B890 += stepR;
+            }
+
+            if (D_8082B894 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][1]) {
+                D_8082B894 -= stepG;
+            } else {
+                D_8082B894 += stepG;
+            }
+
+            if (D_8082B898 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][2]) {
+                D_8082B898 -= stepB;
+            } else {
+                D_8082B898 += stepB;
+            }
+
+            stepR = ABS_ALT(D_8082B89C - D_8082B96C[pauseCtx->unk_284 + D_8082B994][0]) / D_8082B990;
+            stepG = ABS_ALT(D_8082B8A0 - D_8082B96C[pauseCtx->unk_284 + D_8082B994][1]) / D_8082B990;
+            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->unk_284 + D_8082B994][2]) / D_8082B990;
+
+            if (D_8082B89C >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][0]) {
+                D_8082B89C -= stepR;
+            } else {
+                D_8082B89C += stepR;
+            }
+
+            if (D_8082B8A0 >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][1]) {
+                D_8082B8A0 -= stepG;
+            } else {
+                D_8082B8A0 += stepG;
+            }
+
+            if (D_8082B8A4 >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][2]) {
+                D_8082B8A4 -= stepB;
+            } else {
+                D_8082B8A4 += stepB;
+            }
+
+            D_8082B990--;
+
+            if (D_8082B990 == 0) {
+                D_8082B890 = D_8082B948[pauseCtx->unk_284 + D_8082B994][0];
+                D_8082B894 = D_8082B948[pauseCtx->unk_284 + D_8082B994][1];
+                D_8082B898 = D_8082B948[pauseCtx->unk_284 + D_8082B994][2];
+                D_8082B89C = D_8082B96C[pauseCtx->unk_284 + D_8082B994][0];
+                D_8082B8A0 = D_8082B96C[pauseCtx->unk_284 + D_8082B994][1];
+                D_8082B8A4 = D_8082B96C[pauseCtx->unk_284 + D_8082B994][2];
+                D_8082B994 ^= 1;
+                D_8082B990 = 10;
+            }
+        }
+
+        if ((pauseCtx->pageIndex != 0) && (pauseCtx->pageIndex != 2)) {
+            gDPPipeSync(POLY_OPA_DISP++);
+
+            gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                              TEXEL0, 0, SHADE, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+            Matrix_RotateYF(0.0f, MTXMODE_NEW);
+            Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+            Matrix_RotateXFApply(-pauseCtx->unk_210 / 100.0f);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C);
+
+            func_8081B6EC(play);
+        }
+
+        if ((pauseCtx->pageIndex != 1) && (pauseCtx->pageIndex != 3)) {
+            gDPPipeSync(POLY_OPA_DISP++);
+
+            gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                              TEXEL0, 0, SHADE, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+            Matrix_RotateYF(-1.57f, MTXMODE_NEW);
+            Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+            Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
+
+            if (D_8082B8B4 != 0) {
+                func_8081D6DC(play);
+                func_8012C8AC(gfxCtx);
+                gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                func_801091F0(play);
+            } else {
+                func_8081E7D8(play);
+            }
+        }
+
+        if ((pauseCtx->pageIndex != 2) && (pauseCtx->pageIndex != 0)) {
+            gDPPipeSync(POLY_OPA_DISP++);
+
+            gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
+
+            gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                              TEXEL0, 0, SHADE, 0);
+            ;
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+            Matrix_RotateYF(-3.14f, MTXMODE_NEW);
+            Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+            Matrix_RotateXFApply(-pauseCtx->unk_218 / 100.0f);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4);
+
+            func_808160A0(play);
+        }
+
+        if ((pauseCtx->pageIndex != 3) && (pauseCtx->pageIndex != 1)) {
+            gDPPipeSync(POLY_OPA_DISP++);
+
+            gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
+
+            gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
+                              TEXEL0, 0, SHADE, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+            Matrix_RotateYF(1.57f, MTXMODE_NEW);
+            Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+            Matrix_RotateXFApply(-pauseCtx->unk_21C / 100.0f);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700);
+
+            func_8081FF80(play);
+        }
+
+        switch (pauseCtx->pageIndex) {
+            case 0:
+                if (pauseCtx->unk_200 < 0x10) {
+                    gDPPipeSync(POLY_OPA_DISP++);
+
+                    gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0,
+                                      PRIMITIVE, 0, TEXEL0, 0, SHADE, 0);
+
+                    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+                    Matrix_RotateYF(0.0f, MTXMODE_NEW);
+                    Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+                    Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+                    Matrix_RotateXFApply(-pauseCtx->unk_210 / 100.0f);
+
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C);
+
+                    func_8081B6EC(play);
+
+                    return;
+                }
+                break;
+            case 1:
+                gDPPipeSync(POLY_OPA_DISP++);
+
+                gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,
+                                  0, TEXEL0, 0, SHADE, 0);
+
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+                Matrix_RotateYF(-1.57f, MTXMODE_NEW);
+                Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+                Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+                Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
+
+                if (D_8082B8B4 != 0) {
+                    func_8081D6DC(play);
+                    func_8012C8AC(gfxCtx);
+
+                    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+                    func_801091F0(play);
+                    break;
+                }
+
+                Matrix_RotateYF(gGameInfo->data[0x258] / 1000.0f, MTXMODE_NEW);
+
+                if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
+                    ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+                    Matrix_Translate(0.0f, (gGameInfo->data[0x259] - 0x1F40) / 100.0f, gGameInfo->data[0x25A] / 100.0f,
+                                     MTXMODE_APPLY);
+                } else {
+                    Matrix_Translate(0.0f, gGameInfo->data[0x259] / 100.0f, gGameInfo->data[0x25A] / 100.0f,
+                                     MTXMODE_APPLY);
+                }
+
+                Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                func_8081E7D8(play);
+                break;
+
+            case 2:
+                gDPPipeSync(POLY_OPA_DISP++);
+
+                gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,
+                                  0, TEXEL0, 0, SHADE, 0);
+
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+                gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
+
+                Matrix_RotateYF(-3.14f, MTXMODE_NEW);
+                Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+                Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+                Matrix_RotateXFApply(-pauseCtx->unk_218 / 100.0f);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4);
+
+                func_808160A0(play);
+                break;
+
+            case 3:
+                gDPPipeSync(POLY_OPA_DISP++);
+
+                gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,
+                                  0, TEXEL0, 0, SHADE, 0);
+
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
+
+                Matrix_RotateYF(1.57f, MTXMODE_NEW);
+                Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
+                Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700);
+
+                func_8081FF80(play);
+                break;
+        }
+    }
+
+    CLOSE_DISPS(gfxCtx);
+}
+#else
+void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawPages.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80823350.s")
 
