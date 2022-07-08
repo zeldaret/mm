@@ -1,7 +1,12 @@
-libyaz0>=0.5
+# Setup
 colorama>=0.4.3
-watchdog>=0.10.2
+libyaz0>=0.5
+
+# disasm
 rabbitizer>=1.0.0,<2.0.0
+
+# diff
+watchdog>=0.10.2
 argcomplete
 python-Levenshtein
 cxxfilt
