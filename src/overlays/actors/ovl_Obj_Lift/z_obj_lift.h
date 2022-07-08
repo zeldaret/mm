@@ -9,16 +9,16 @@ typedef void (*ObjLiftActionFunc)(struct ObjLift*, PlayState*);
 
 typedef struct ObjLift {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ ObjLiftActionFunc *actionFunc;
+    /* 0x15C */ ObjLiftActionFunc actionFunc;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 unk162;
     /* 0x164 */ s16 unk164;
     /* 0x166 */ s16 unk166;
-    /* 0x168 */ Vec3f unk168; 
+    /* 0x168 */ Vec3f unk168;
     /* 0x174 */ s16 unk174;
     /* 0x176 */ s16 unk176;
     /* 0x178 */ s16 unk178;
-    /* 0x17A */ char pad17A[0x1A];
+    /* 0x17A */ UNK_TYPE1 pad17A[0x1A];
 } ObjLift; // size = 0x17C
 
 extern const ActorInit Obj_Lift_InitVars;
