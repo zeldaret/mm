@@ -5051,13 +5051,13 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx)) {
+    if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     } else {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_20);
     }
 
-    if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx)) {
+    if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
         headRotTarget = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
     } else {
         headRotTarget = 0;

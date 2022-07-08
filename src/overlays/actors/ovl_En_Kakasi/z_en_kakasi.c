@@ -309,7 +309,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->actor.textId = 0x1653;
                 gSaveContext.save.weekEventReg[83] &= (u8)~1;
-                this->unkMsgState1AC = 5;
+                this->unkMsgState1AC = TEXT_STATE_5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
@@ -381,7 +381,7 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
 
-    this->unkMsgState1AC = 5;
+    this->unkMsgState1AC = TEXT_STATE_5;
     this->unkState196 = 1;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
     this->actionFunc = EnKakasi_RegularDialogue;
@@ -417,7 +417,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
     if ((this->unkMsgState1AC == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        if (this->unkMsgState1AC == 5) {
+        if (this->unkMsgState1AC == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->actor.textId == 0x1647) {
                 func_800B7298(play, &this->actor, 6);
@@ -469,7 +469,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
-                this->unkMsgState1AC = 4;
+                this->unkMsgState1AC = TEXT_STATE_CHOICE;
 
             } else if (this->actor.textId == 0x1644) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
@@ -495,14 +495,14 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 this->actor.textId = 0x1655;
             } else if (this->actor.textId == 0x1655) {
                 this->actor.textId = 0x1656;
-                this->unkMsgState1AC = 4;
+                this->unkMsgState1AC = TEXT_STATE_CHOICE;
             } else if (this->actor.textId == 0x1658) {
                 this->actor.textId = 0x1659;
             } else if (this->actor.textId == 0x165A) {
                 this->actor.textId = 0x165B;
             } else if (this->actor.textId == 0x165B) {
                 this->actor.textId = 0x165C;
-                this->unkMsgState1AC = 4;
+                this->unkMsgState1AC = TEXT_STATE_CHOICE;
 
             } else if (this->actor.textId == 0x165E) {
                 this->actor.textId = 0x165F;
@@ -511,7 +511,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 return;
             }
         } else {
-            this->unkMsgState1AC = 5;
+            this->unkMsgState1AC = TEXT_STATE_5;
 
             if (play->msgCtx.choiceIndex == 1) {
                 func_8019F208();
@@ -628,7 +628,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->cutsceneCamId = CAM_ID_MAIN;
             this->actor.textId = 0x1647;
             this->unkState1A8 = 2;
-            this->unkMsgState1AC = 5;
+            this->unkMsgState1AC = TEXT_STATE_5;
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
@@ -660,7 +660,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     this->unkCounter1A4 = 0;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
     this->cutsceneCamId = CAM_ID_MAIN;
-    this->unkMsgState1AC = 5;
+    this->unkMsgState1AC = TEXT_STATE_5;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
     this->unk20C = 0.0f;
@@ -739,7 +739,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
         func_801477B4(play);
 
-        if (this->unkMsgState1AC == 5) {
+        if (this->unkMsgState1AC == TEXT_STATE_5) {
             this->unk190++;
             if (this->unk190 > 5) {
                 this->unk190 = 5;
@@ -754,7 +754,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
             } else if (this->actor.textId == 0x1649) {
                 this->actor.textId = 0x1660;
-                this->unkMsgState1AC = 4;
+                this->unkMsgState1AC = TEXT_STATE_CHOICE;
 
             } else if (this->actor.textId == 0x164A) {
                 this->actor.textId = 0x164B;
@@ -771,7 +771,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
         } else {
-            this->unkMsgState1AC = 5;
+            this->unkMsgState1AC = TEXT_STATE_5;
             if (play->msgCtx.choiceIndex == 1) {
                 func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
                 this->actor.textId = 0x164A;

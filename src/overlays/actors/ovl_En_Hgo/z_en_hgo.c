@@ -181,14 +181,18 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
         case TEXT_STATE_3:
         case TEXT_STATE_CHOICE:
             break;
+
         case TEXT_STATE_5:
             func_80BD06FC(this, play);
             break;
+
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80BD049C(this);
             }
+            break;
     }
+
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x71C, 0xB6);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }

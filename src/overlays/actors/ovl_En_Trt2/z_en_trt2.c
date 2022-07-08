@@ -376,7 +376,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
 void func_80AD3EF0(EnTrt2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 6) {
+    if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
             if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
                 !(gSaveContext.save.weekEventReg[12] & 0x10)) {

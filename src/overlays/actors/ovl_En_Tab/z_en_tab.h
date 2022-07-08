@@ -41,7 +41,7 @@ typedef struct EnTab {
     /* 0x0328 */ EnTabUnkFunc unk_328;
     /* 0x032C */ s32 unk_32C;
     /* 0x0330 */ UNK_TYPE1 unk330[4];
-    /* 0x0334 */ s32 unk_334;
+    /* 0x0334 */ s32 prevTalkState;
     /* 0x0338 */ s32 unk_338;
 } EnTab; // size = 0x33C
 

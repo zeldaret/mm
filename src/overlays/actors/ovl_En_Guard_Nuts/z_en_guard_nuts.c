@@ -254,7 +254,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                 EnGuardNuts_SetupWait(this);
             }
         }
-    } else if ((Message_GetState(&play->msgCtx) >= 3) && (D_80ABBE20 == 0)) {
+    } else if ((Message_GetState(&play->msgCtx) >= TEXT_STATE_3) && (D_80ABBE20 == 0)) {
         if ((this->guardTextIndex == 0) || (this->guardTextIndex == 3) || (this->guardTextIndex >= 7)) {
             if (this->timer == 0) {
                 this->timer = 2;

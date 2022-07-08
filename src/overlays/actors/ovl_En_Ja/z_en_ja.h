@@ -57,7 +57,7 @@ typedef struct EnJa {
     /* 0x0368 */ void* unk_368;
     /* 0x036C */ s32 unk_36C;
     /* 0x0370 */ UNK_TYPE1 unk370[4];
-    /* 0x0374 */ s32 unk_374;
+    /* 0x0374 */ s32 prevTalkState;
 } EnJa; // size = 0x378
 
 extern const ActorInit En_Ja_InitVars;

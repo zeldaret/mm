@@ -475,21 +475,26 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             EnGinkoMan_SetupIdle(this);
             break;
+
         case TEXT_STATE_CHOICE:
             EnGinkoMan_WaitForDialogueInput(this, play);
             break;
+
         case TEXT_STATE_5:
             EnGinkoMan_DepositDialogue(this, play);
             break;
+
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this);
             }
             break;
+
         case TEXT_STATE_14:
             EnGinkoMan_WaitForRupeeCount(this, play);
             break;
+
         case TEXT_STATE_NONE:
         default:
             break;

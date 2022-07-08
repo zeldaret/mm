@@ -270,7 +270,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
 
     if ((&this->actor == player->targetActor) &&
         ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->unk_334 == 3)) {
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;
@@ -281,7 +281,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     } else {
         this->unk_304 = 0.0f;
     }
-    this->unk_334 = talkState;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {

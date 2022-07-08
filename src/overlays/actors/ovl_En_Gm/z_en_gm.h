@@ -69,7 +69,7 @@ typedef struct EnGm {
     /* 0x03E4 */ EnGmUnkFunc unk_3E4;
     /* 0x03E8 */ s32 unk_3E8;
     /* 0x03EC */ UNK_TYPE1 unk3EC[0x4];
-    /* 0x03F0 */ s32 unk_3F0;
+    /* 0x03F0 */ s32 prevTalkState;
     /* 0x03F4 */ s32 unk_3F4;
     /* 0x03F8 */ s32 unk_3F8;
     /* 0x03FC */ s32 unk_3FC;

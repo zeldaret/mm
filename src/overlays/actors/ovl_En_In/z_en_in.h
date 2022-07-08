@@ -59,7 +59,7 @@ typedef struct EnIn {
     /* 0x4B4 */ Vec3f unk4B4;
     /* 0x4C0 */ f32 unk4C0;
     /* 0x4C0 */ f32 unk4C4;
-    /* 0x4C0 */ s32 unk4C8;
+    /* 0x4C0 */ s32 prevTalkState;
 } EnIn; // size = 0x4CC
 
 extern const ActorInit En_In_InitVars;

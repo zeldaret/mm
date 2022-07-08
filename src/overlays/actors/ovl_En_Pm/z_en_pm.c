@@ -1136,7 +1136,7 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
     u16 temp_a0 = play->msgCtx.currentTextId;
 
     if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (talkState == TEXT_STATE_3) &&
-        (this->unk_388 == 3)) {
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_360 == 120.0f) {
                 this->unk_360 = 0.0f;
@@ -1149,7 +1149,7 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_388 = talkState;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80AF8D84(EnPm* this, PlayState* play) {

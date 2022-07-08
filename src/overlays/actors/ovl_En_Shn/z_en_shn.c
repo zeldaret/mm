@@ -186,7 +186,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->targetActor) &&
         ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
-        (this->msgState == 3)) {
+        (this->prevTalkState == TEXT_STATE_3)) {
         if (play->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
                 this->unk_2D0 = 0.0f;
@@ -197,7 +197,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     } else {
         this->unk_2D0 = 0.0f;
     }
-    this->msgState = talkState;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80AE65F4(EnShn* this, PlayState* play) {

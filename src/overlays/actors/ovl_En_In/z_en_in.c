@@ -1483,14 +1483,14 @@ void func_808F6334(EnIn* this, PlayState* play) {
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (&this->actor == player->targetActor &&
         !(play->msgCtx.currentTextId >= 0xFF && play->msgCtx.currentTextId <= 0x200) && talkState == TEXT_STATE_3 &&
-        this->unk4C8 == 3) {
+        this->prevTalkState == TEXT_STATE_3) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
         }
     } else {
         this->unk4C0 = 0.0f;
     }
-    this->unk4C8 = talkState;
+    this->prevTalkState = talkState;
 }
 
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -175,7 +175,7 @@ void func_80C038B4(EnBombers* this) {
 
 void func_80C039A8(EnBombers* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    this->unk_2A6 = 5;
+    this->unk_2A6 = TEXT_STATE_5;
 
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
@@ -296,7 +296,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
     if (!Text_GetFaceReaction(play, 0x12)) {
         func_80C039A8(this, play);
     } else {
-        this->unk_2A6 = 5;
+        this->unk_2A6 = TEXT_STATE_5;
         this->actor.textId = Text_GetFaceReaction(play, 0x12);
     }
 
@@ -337,11 +337,11 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
     if ((this->unk_2A6 == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         sp2A = 0;
         func_801477B4(play);
-        this->unk_2A6 = 5;
+        this->unk_2A6 = TEXT_STATE_5;
 
         if ((this->actor.textId == 0x73D) || (this->actor.textId == 0x73E) || (this->actor.textId == 0x73F)) {
             this->actor.textId = 0x740;
-            this->unk_2A6 = 4;
+            this->unk_2A6 = TEXT_STATE_CHOICE;
             sp2A = 1;
         } else if (this->actor.textId == 0x740) {
             if (play->msgCtx.choiceIndex == 0) {
@@ -361,7 +361,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
             sp2A = 1;
         } else if (this->actor.textId == 0x74B) {
             this->actor.textId = 0x74C;
-            this->unk_2A6 = 4;
+            this->unk_2A6 = TEXT_STATE_CHOICE;
             sp2A = 1;
         } else if (this->actor.textId == 0x74C) {
             if (play->msgCtx.choiceIndex == 1) {

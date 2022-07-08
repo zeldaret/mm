@@ -177,7 +177,7 @@ void EnCne01_Talk(EnHy* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     talkState = Message_GetState(&play->msgCtx);
-    this->inMsgState3 = (talkState == 3) ? true : false;
+    this->inMsgState3 = (talkState == TEXT_STATE_3) ? true : false;
 
     switch (talkState) {
         case TEXT_STATE_NONE:

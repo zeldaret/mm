@@ -50,7 +50,7 @@ typedef struct EnPm {
     /* 0x037C */ EnPmFunc unk_37C;
     /* 0x0380 */ s32 unk_380;
     /* 0x0384 */ s32 unk_384;
-    /* 0x0388 */ s32 unk_388;
+    /* 0x0388 */ s32 prevTalkState;
     /* 0x038C */ s32 unk_38C;
     /* 0x0390 */ UNK_TYPE1 unk390[0x4];
     /* 0x0394 */ s32 unk_394;
