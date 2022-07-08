@@ -2,3 +2,6 @@ libyaz0>=0.5
 colorama>=0.4.3
 watchdog>=0.10.2
 rabbitizer>=1.0.0,<2.0.0
+argcomplete
+python-Levenshtein
+cxxfilt
