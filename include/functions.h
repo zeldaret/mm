@@ -3002,7 +3002,7 @@ void func_80183070(void);
 // void func_801832B0(void);
 // void func_8018332C(void);
 // void func_8018340C(void);
-void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, s16* arg4, UnkKeyframeCallback* callbacks);
+void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, Vec3s* arg4, UnkKeyframeCallback* callbacks);
 void func_8018349C(UNK_PTR arg0);
 void func_801834A8(SkeletonInfo* skeletonInfo, void* arg1);
 // void func_80183510(void);
