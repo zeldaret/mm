@@ -5100,8 +5100,7 @@ beginseg
     name "ovl_En_Fall2"
     compress
     include "build/src/overlays/actors/ovl_En_Fall2/z_en_fall2.o"
-    include "build/data/ovl_En_Fall2/ovl_En_Fall2.data.o"
-    include "build/data/ovl_En_Fall2/ovl_En_Fall2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fall2/ovl_En_Fall2_reloc.o"
 endseg
 
 beginseg
