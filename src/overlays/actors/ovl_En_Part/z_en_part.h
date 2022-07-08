@@ -8,10 +8,10 @@ struct EnPart;
 typedef void (*EnPartActionFunc)(struct EnPart*, PlayState*);
 
 typedef enum {
-    ENPART_PARAMS_0 = 0,
-    ENPART_PARAMS_1 = 1,
-    ENPART_PARAMS_4 = 4,
-    ENPART_PARAMS_15 = 15
+    ENPART_TYPE_0 = 0,
+    ENPART_TYPE_1 = 1,
+    ENPART_TYPE_4 = 4,
+    ENPART_TYPE_15 = 15
 } EnPartParams;
 
 typedef struct EnPart {

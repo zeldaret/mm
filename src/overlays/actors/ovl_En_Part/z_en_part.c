@@ -37,20 +37,17 @@ void EnPart_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80865390(EnPart* this, PlayState* play) {
-    f32 randVar;
-
     this->actionFuncIndex = 1;
     this->actor.world.rot.y = Rand_ZeroOne() * 20000.0f;
     switch (this->actor.params) {
-        case ENPART_PARAMS_1:
-        case ENPART_PARAMS_4:
-            randVar = Rand_ZeroOne() * 17.0f;
-            this->unk146 += (s16)randVar + 5;
+        case ENPART_TYPE_1:
+        case ENPART_TYPE_4:
+            this->unk146 += (s16)(Rand_ZeroOne() * 17.0f) + 5;
             this->actor.velocity.y = Rand_ZeroOne() * 5.0f + 4.0f;
             this->actor.gravity = -0.6f - (Rand_ZeroOne() * 0.5f);
             this->unk14C = 0.15f;
             break;
-        case ENPART_PARAMS_15:
+        case ENPART_TYPE_15:
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
@@ -67,7 +64,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
     s32 i;
     Vec3f pos;
 
-    if (this->actor.params == ENPART_PARAMS_15) {
+    if (this->actor.params == ENPART_TYPE_15) {
         this->unk146--;
         if (this->unk146 > 0) {
             this->actor.shape.rot.x += 0x3A98;
@@ -85,12 +82,12 @@ void func_808654C4(EnPart* this, PlayState* play) {
         }
     } else if (this->unk146 <= 0) {
         switch (this->actor.params) {
-            case ENPART_PARAMS_1:
+            case ENPART_TYPE_1:
                 func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.y * 4000.0f, 7,
                               1);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_EXTINCT);
                 break;
-            case ENPART_PARAMS_4:
+            case ENPART_TYPE_4:
                 for (i = 7; i >= 0; i--) {
                     effectPos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
                     effectPos.y = randPlusMinusPoint5Scaled(50.0f) +
@@ -124,12 +121,12 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actor.params > ENPART_PARAMS_0) {
+    if (this->actor.params > ENPART_TYPE_0) {
         Matrix_RotateZF(this->zRot, MTXMODE_APPLY);
     }
     func_8012C28C(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
-    if (this->actor.params == ENPART_PARAMS_15) {
+    if (this->actor.params == ENPART_TYPE_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
     }
     if (this->dList != NULL) {
