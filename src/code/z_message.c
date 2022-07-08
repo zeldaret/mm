@@ -439,6 +439,9 @@ void func_80152464(PlayState* play, u16 arg1) {
     func_80151DA4(play, arg1);
 }
 
+/**
+ * @return u8 A value of the TextState enum representing the current state of the on-screen message
+ */
 u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->msgLength == 0) {
         return TEXT_STATE_NONE;
