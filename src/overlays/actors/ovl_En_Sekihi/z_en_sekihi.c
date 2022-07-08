@@ -24,6 +24,15 @@ void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
 void func_80A45130(EnSekihi* this, PlayState* play);
 
+typedef enum SekihiType {
+    /* 0x0 */ SEKIHI_TYPE_0,
+    /* 0x1 */ SEKIHI_TYPE_1,
+    /* 0x2 */ SEKIHI_TYPE_2,
+    /* 0x3 */ SEKIHI_TYPE_3,
+    /* 0x4 */ SEKIHI_TYPE_4,
+    /* 0x5 */ SEKIHI_TYPE_MAX
+} SekihiType;
+
 const ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
     ACTORCAT_PROP,
@@ -50,24 +59,24 @@ static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
-    s32 type = ENSIKIHI_GET_F(thisx);
+    s32 params = ENSIKIHI_GET_F(thisx);
     s32 objectIndex;
     s32 pad;
 
-    if ((type < 0 || type >= 5) || sOpaDLists[type] == NULL) {
+    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == SEKIHI_TYPE_0) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
-        if ((type == 4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
+        if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
             gSaveContext.save.weekEventReg[13] |= 0x20;
         }
-        objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+        objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
         if (objectIndex >= 0) {
             this->objectIndex = objectIndex;
         }
         this->actionFunc = func_80A44DE8;
-        this->opaDList = sOpaDLists[type];
-        this->xluDList = sXluDLists[type];
-        this->dyna.actor.textId = sTextIds[type];
+        this->opaDList = sOpaDLists[params];
+        this->xluDList = sXluDLists[params];
+        this->dyna.actor.textId = sTextIds[params];
         this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
         Actor_SetScale(&this->dyna.actor, 0.1f);
     }
@@ -81,16 +90,16 @@ void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
-    s32 type;
+    s32 params;
     CollisionHeader* sColHeader[] = {
         &gSekihilCol, &gSekihigCol, &gSekihinCol, &gSekihizCol, &gObjectZogCol,
     };
 
-    type = ENSIKIHI_GET_F(&this->dyna.actor);
+    params = ENSIKIHI_GET_F(&this->dyna.actor);
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->dyna.actor.objBankIndex = this->objectIndex;
         this->dyna.actor.draw = EnSekihi_Draw;
-        if (type == 4) {
+        if (params == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;
         } else {
             this->actionFunc = func_80A45130;
@@ -98,12 +107,12 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 0);
-        if (sColHeader[type] != NULL) {
-            CollisionHeader_GetVirtual(sColHeader[type], &colHeader);
+        if (sColHeader[params] != NULL) {
+            CollisionHeader_GetVirtual(sColHeader[params], &colHeader);
         }
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-        if ((type == 4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
+        if ((params == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
             Actor_MarkForDeath(&this->dyna.actor);
         }
     }
