@@ -3856,7 +3856,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             if (this->unk_172[0] <= 50) {
                 switch (this->unk_1CD) {
                     case 0:
-                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                            Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex == 0) {
@@ -3887,7 +3888,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         }
                         break;
                     case 1:
-                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                            Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
                                 func_801477B4(play);
                                 if (play->msgCtx.choiceIndex != 0) {
@@ -4876,7 +4878,8 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 11:
-            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) &&
+            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) ||
+                 Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) &&
                 Message_ShouldAdvance(play)) {
                 s32 getItemId;
 
@@ -5394,7 +5397,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             }
 
             if (D_8090CD50 == 0) {
-                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
+                    Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                     if (Message_ShouldAdvance(play)) {
                         Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
 

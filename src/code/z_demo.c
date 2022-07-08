@@ -1049,7 +1049,8 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
 
             originalCsFrames = csCtx->frames;
             talkState = Message_GetState(&play->msgCtx);
-            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) && (talkState != TEXT_STATE_8)) {
+            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+                (talkState != TEXT_STATE_8)) {
                 csCtx->frames--;
                 if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     if (play->msgCtx.choiceIndex == 0) {

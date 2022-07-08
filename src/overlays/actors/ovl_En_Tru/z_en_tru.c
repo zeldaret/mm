@@ -831,7 +831,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                     }
                     break;
             }
-        break;
+            break;
     }
 
     return ret;
