@@ -713,6 +713,8 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         if cl is not None:
             lui_tracker.pop(cl, None)
 
+        branch_likely_delay_slot_save = None
+
         if insn.isBranch():
             func_branch_labels.add(insn.getBranchOffset() + insn.vram)
             delayed_insn = insn
@@ -765,10 +767,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 and delayed_insn.isBranchLikely()
             ):
                 # for branch likelies, the current tracker does not update but the lui is saved to be tracked at the branch target
-                save_tracker(
-                    delayed_insn.getBranchOffset() + delayed_insn.vram,
-                    {insn.rt: (vaddr, insn.getProcessedImmediate())},
-                )
+                branch_likely_delay_slot_save = {insn.rt: (vaddr, insn.getProcessedImmediate())}
             else:
                 lui_tracker.update({insn.rt: (vaddr, insn.getProcessedImmediate())})
         elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
@@ -922,6 +921,8 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     delayed_insn.getBranchOffset() + delayed_insn.vram,
                     lui_tracker.copy(),
                 )
+                if branch_likely_delay_slot_save is not None:
+                    save_tracker(delayed_insn.getBranchOffset() + delayed_insn.vram, branch_likely_delay_slot_save)
                 # destroy current lui tracking state for unconditional branches
                 if delayed_insn.isUnconditionalBranch():
                     lui_tracker.clear()
