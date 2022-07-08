@@ -5,7 +5,6 @@
  */
 
 #include "z_boss_04.h"
-#include "objects/object_boss04/object_boss04.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

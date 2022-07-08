@@ -2,6 +2,7 @@
 #define Z_BOSS_04_H
 
 #include "global.h"
+#include "objects/object_boss04/object_boss04.h"
 
 struct Boss04;
 
