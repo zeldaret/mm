@@ -346,9 +346,9 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
     bandit1->unk_568 = phi_f20;
 
     if (phi_s3 == 3) {
-        bandit1->unk_558 = (s32)(Rand_ZeroOne() * 3.0f);
-    //! FAKE:
-    dummy_label_437827:;
+        f32 rand = Rand_ZeroOne();
+
+        bandit1->unk_558 = (s32)(rand * 3.0f);
     } else {
         bandit1->unk_558 = 0;
     }
