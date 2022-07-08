@@ -1,11 +1,10 @@
-FROM ubuntu:21.10 as build
+FROM ubuntu:22.04 as build
 ENV TZ=UTC
 
 LABEL Cammoguy <jpburnett@gwu.edu>
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     apt-get update && apt-get install -y \
-    make \
     build-essential \
     binutils-mips-linux-gnu \
     pkg-config \
@@ -14,8 +13,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     git \
     wget \
     unzip \
-    clang-tidy \
-    clang-format \
+    clang-tidy-11 \
+    clang-format-11 \
     libpng-dev && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
@@ -31,5 +30,3 @@ RUN mkdir /mm
 WORKDIR /mm
 
 ENTRYPOINT ["/bin/bash", "-c"]
-# CMD ["/bin/sh", "-c", \
-    # "echo 'usage:\n  docker run --rm --mount type=bind,source=\"$(pwd)\",destination=/mm mm make init -j$(nproc)'"]
