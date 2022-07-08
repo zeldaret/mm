@@ -172,7 +172,8 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F8 = 1.0f;
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gWartSkel, &gWartIdleAnim, this->jointTable, this->morphtable, 9);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWartSkel, &gWartIdleAnim, this->jointTable, this->morphtable,
+                       WART_LIMB_MAX);
     spA8.y = this->actor.world.pos.y + 200.0f;
 
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
