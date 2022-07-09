@@ -3,10 +3,10 @@
 
 #include "global.h"
 
-#define BAT_GET_TYPE(thisx) (((thisx)->params >> 0) & 0x1F)
-#define BAT_GET_E0(thisx) (((thisx)->params >> 5) & 7)
-#define BAT_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
-#define BAT_PARAMS(switchFlag, e0, type) ((type) | ((e0) << 5) | ((switchFlag) << 8))
+#define BAD_BAT_GET_TYPE(thisx) (((thisx)->params >> 0) & 0x1F)
+#define BAD_BAT_GET_E0(thisx) (((thisx)->params >> 5) & 7)
+#define BAD_BAT_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BAD_BAT_PARAMS(switchFlag, e0, type) ((type) | ((e0) << 5) | ((switchFlag) << 8))
 
 struct EnBat;
 
@@ -18,10 +18,10 @@ typedef struct EnBat {
     /* 0x148 */ u8 drawDmgEffType;
     /* 0x149 */ u8 paramsE0;
     /* 0x14A */ s16 switchFlag;
-    /* 0x14C */ s16 unk14C;
-    /* 0x14E */ s16 unk14E;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
+    /* 0x14C */ s16 timer;
+    /* 0x14E */ s16 targetPitch;
+    /* 0x150 */ s16 targetYaw;
+    /* 0x152 */ s16 animationFrame; // Manual animation using displaylists
     /* 0x154 */ f32 drawDmgEffScale;
     /* 0x158 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x15C */ f32 drawDmgEffAlpha;
