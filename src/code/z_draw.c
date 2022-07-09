@@ -145,7 +145,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOMBERS_NOTEBOOK, OBJECT_GI_SCHEDULE
     { GetItem_DrawOpa0Xlu1, { gGiBombersNotebookEmptyDL, gGiBombersNotebookDL } },
     // GID_MASK_STONE, OBJECT_GI_STONEMASK
-    { GetItem_DrawOpa0Xlu1, { gGiStoneMaskEmptyDP, gGiStoneMaskDP } },
+    { GetItem_DrawOpa0Xlu1, { gGiStoneMaskEmptyDL, gGiStoneMaskDL } },
     // GID_MASK_KAFEIS_MASK, OBJECT_GI_MASK05
     { GetItem_DrawOpa01, { gGiKafeiMaskDL, gGiKafeiMaskEmptyDL } },
     // GID_MASK_CIRCUS_LEADER, OBJECT_GI_MASK11
@@ -193,7 +193,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
       { gGiWalletDL, gGiGiantsWalletColorDL, gGiGiantsWalletRupeeOuterColorDL, gGiWalletRupeeOuterDL,
         gGiGiantsWalletStringColorDL, gGiWalletStringDL, gGiGiantsWalletRupeeInnerColorDL, gGiWalletRupeeInnerDL } },
     // GID_MASK_DON_GERO, OBJECT_GI_MASK16
-    { GetItem_DrawOpa0Xlu1, { gGiDonGeroMaskFace, gGiDonGeroMaskBody } },
+    { GetItem_DrawOpa0Xlu1, { gGiDonGeroMaskFaceDL, gGiDonGeroMaskBodyDL } },
     // GID_ARROWS_SMALL, OBJECT_GI_ARROW
     { GetItem_DrawOpa0, { gGiArrowSmallDL } },
     // GID_ARROWS_MEDIUM, OBJECT_GI_ARROW

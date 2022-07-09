@@ -7,7 +7,7 @@
         <DList Name="gGiRedPotionBottleEmptyDL" Offset="0xCC0" />
 
         <!-- Bottled Red Potion Textures -->
-        <Texture Name="gGiRedPotionBottleCorkTex" OutName="gi_red_potion_bottle_cork_tex" Format="i8" Width="16" Height="16" Offset="0xCC8" />
-        <Texture Name="gGiRedPotionBottleGlassPotionTex" OutName="gi_red_potion_bottle_glass_potion_tex" Format="i4" Width="32" Height="32" Offset="0xDC8" />
+        <Texture Name="gGiRedPotionBottleCorkTex" OutName="gi_red_potion_bottle_cork" Format="i8" Width="16" Height="16" Offset="0xCC8" />
+        <Texture Name="gGiRedPotionBottleGlassPotionTex" OutName="gi_red_potion_bottle_glass_potion" Format="i4" Width="32" Height="32" Offset="0xDC8" />
     </File>
 </Root>

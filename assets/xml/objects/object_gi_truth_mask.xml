@@ -6,8 +6,8 @@
     <File Name="object_gi_truth_mask" Segment="6">
 
         <!-- Mask of Truth Textures -->
-        <Texture Name="gGiMaskOfTruthEyebrowTriangle" OutName="gi_mask_of_truth_eyebrow_triangle" Format="i8" Width="32" Height="32" Offset="0x0" />
-        <Texture Name="gGiMaskOfTruthSideEtching" OutName="gi_mask_of_truth_side_etching" Format="i8" Width="32" Height="32" Offset="0x400" />
+        <Texture Name="gGiMaskOfTruthEyebrowTriangleTex" OutName="gi_mask_of_truth_eyebrow_triangle" Format="i8" Width="32" Height="32" Offset="0x0" />
+        <Texture Name="gGiMaskOfTruthSideEtchingTex" OutName="gi_mask_of_truth_side_etching" Format="i8" Width="32" Height="32" Offset="0x400" />
 
         <!-- Mask of Truth Display Lists -->
         <DList Name="gGiMaskOfTruthDL" Offset="0x13D0" />

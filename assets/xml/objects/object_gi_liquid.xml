@@ -5,10 +5,12 @@
     <!-- Get Item Draw: Potion Containers (refills) -->
     <File Name="object_gi_liquid" Segment="6">
 
-        <!-- Potion Containers Color Display Lists -->
+        <!-- Potion Containers Textures -->
         <Texture Name="gGiPotionContainerGreenPatternTex" OutName="gi_potion_container_green_pattern" Format="ia8" Width="16" Height="32" Offset="0x0" />
         <Texture Name="gGiPotionContainerRedPatternTex" OutName="gi_potion_container_red_pattern" Format="ia8" Width="16" Height="32" Offset="0x200" />
         <Texture Name="gGiPotionContainerBluePatternTex" OutName="gi_potion_container_blue_pattern" Format="ia8" Width="16" Height="32" Offset="0x400" />
+
+        <!-- Potion Containers Color Display Lists -->
         <DList Name="gGiPotionContainerGreenPotColorDL" Offset="0x1270" />
         <DList Name="gGiPotionContainerRedPotColorDL" Offset="0x1290" />
         <DList Name="gGiPotionContainerBluePotColorDL" Offset="0x12B0" />

@@ -3,8 +3,8 @@
     <File Name="object_gi_stonemask" Segment="6">
 
         <!-- Stone Mask Display Lists -->
-        <DList Name="gGiStoneMaskDP" Offset="0xA10" />
-        <DList Name="gGiStoneMaskEmptyDP" Offset="0xE48" />
+        <DList Name="gGiStoneMaskDL" Offset="0xA10" />
+        <DList Name="gGiStoneMaskEmptyDL" Offset="0xE48" />
 
         <!-- Stone Mask Textures -->
         <Texture Name="gGiStoneMaskFaceTex" OutName="gi_stone_mask_face" Format="i8" Width="16" Height="16" Offset="0xE50" />
