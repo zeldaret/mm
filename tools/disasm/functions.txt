@@ -4241,7 +4241,7 @@
     0x80827A8C:("func_80827A8C",),
     0x80827E08:("func_80827E08",),
     0x808283D8:("KaleidoScope_Draw",),
-    0x808286D8:("func_808286D8",),
+    0x808286D8:("KaleidoScope_GrayOutTextureRGBA32",),
     0x80828788:("func_80828788",),
     0x8082895C:("KaleidoScope_Update",),
     0x8082DA90:("func_8082DA90",),

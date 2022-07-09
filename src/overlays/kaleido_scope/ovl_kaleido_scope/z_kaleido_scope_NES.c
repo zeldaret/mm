@@ -188,7 +188,6 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
     return gfx;
 }
 
-
 void func_801091F0(PlayState*);
 void func_808160A0(PlayState*);
 void func_8081B6EC(PlayState*);
@@ -521,31 +520,31 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Draw.s")
 
-#ifdef NON_MATCHING
-void func_808286D8(u32* arg0, u16 arg1) {
-    u8 temp_t1;
-    u32 var_a1;
+void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
+    u32 rgb;
+    u32 gray;
     u16 i;
-    u32 temp_a1_2;
     s32 j;
 
-    if (!arg0) {}
+    //! FAKE
+    if (texture == NULL) {}
 
-    for (i = 0; i < arg1; i++) {
+    for (i = 0; i < pixelCount; i++) {
         j = i;
-        if (arg0[j] & ~0xFF) {
-            var_a1 = arg0[j];
-            temp_a1_2 = var_a1 >> 8;
-            if (j) {}
-            temp_t1 =
-                ((((temp_a1_2 & 0xFF0000) >> 0x10) + ((temp_a1_2 & 0xFF00) >> 7) + (temp_a1_2 & 0xFF)) / 7) & 0xFF;
-            arg0[j] = (arg0[j] & 0xFF) | (((((temp_t1 << 8) | temp_t1) << 8) | temp_t1) << 8);
+        if ((texture[j] & 0xFFFFFF00) != 0) {
+            rgb = texture[j] >> 8;
+            gray = ((((rgb & 0xFF0000) >> 16) + ((rgb & 0xFF00) >> 7) + (rgb & 0xFF)) / 7) & 0xFF;
+
+            rgb = gray;
+            rgb <<= 8;
+            rgb |= gray;
+            rgb <<= 8;
+            rgb |= gray;
+
+            texture[j] = (rgb << 8) | (texture[j] & 0xFF);
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808286D8.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
 
