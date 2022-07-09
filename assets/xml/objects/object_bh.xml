@@ -6,8 +6,8 @@
         <DList Name="gBhRightWingToBodyDL" Offset="0x450" />
         <DList Name="gBhLeftWingToEdgeDL" Offset="0x4D8" />
         <DList Name="gBhLeftWingToBodyDL" Offset="0x588" />
-        <Texture Name="gBhBodyTex" OutName="en_bh_body_tex" Format="rgba16" Width="32" Height="32" Offset="0x610" />
-        <Texture Name="gBhWingTex" OutName="en_bh_wing_tex" Format="rgba16" Width="64" Height="32" Offset="0xE10" />
+        <Texture Name="gBhBodyTex" OutName="en_bh_body" Format="rgba16" Width="32" Height="32" Offset="0x610" />
+        <Texture Name="gBhWingTex" OutName="en_bh_wing" Format="rgba16" Width="64" Height="32" Offset="0xE10" />
         <Limb Name="gBhBodyLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_BODY" Offset="0x1E10" />
         <Limb Name="gBhRightWingToBodyLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_RIGHT_WING_TO_BODY" Offset="0x1E1C" />
         <Limb Name="gBhRightWingToEdgeLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_RIGHT_WING_TO_EDGE" Offset="0x1E28" />
