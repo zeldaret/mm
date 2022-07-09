@@ -4,7 +4,6 @@
 #include "global.h"
 
 #define EFFKAMEJIMAWAVE_GET_F(thisx) ((thisx)->params & 0xF)
-#define PARAMS_1 1
 
 struct EffKamejimaWave;
 
@@ -16,6 +15,11 @@ typedef struct EffKamejimaWave {
     /* 0x148 */ UNK_TYPE1 pad148[4];
     /* 0x14C */ EffKamejimaWaveActionFunc actionFunc;
 } EffKamejimaWave; // size = 0x150
+
+typedef enum params {
+    /* 0x0 */ PARAMS_0,
+    /* 0x1 */ PARAMS_1
+} params;
 
 extern const ActorInit Eff_Kamejima_Wave_InitVars;
 

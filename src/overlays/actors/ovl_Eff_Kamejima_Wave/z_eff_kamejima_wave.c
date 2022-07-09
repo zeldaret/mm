@@ -41,7 +41,7 @@ static Color_RGBA8 sEnvColors[] = {
     { 130, 80, 90, 255 }, { 90, 120, 130, 255 }, { 130, 80, 70, 255 }, { 40, 60, 110, 255 }
 };
 
-s16 D_80BCF1C0;
+s16 sVtxAlpha;
 AnimatedMaterial* D_80BCF1C4;
 
 void EffKamejimaWave_Init(Actor* thisx, PlayState* play) {
@@ -51,10 +51,10 @@ void EffKamejimaWave_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.y = 0.0f;
     if (EFFKAMEJIMAWAVE_GET_F(thisx) == PARAMS_1) {
         this->actionFunc = func_80BCEDE0;
-        D_80BCF1C0 = 255;
+        sVtxAlpha = 255;
     } else {
         this->actionFunc = func_80BCEC6C;
-        D_80BCF1C0 = 255;
+        sVtxAlpha = 255;
     }
     D_80BCF1C4 = Lib_SegmentedToVirtual(object_kamejima_Matanimheader_001AF0);
 }
@@ -87,7 +87,7 @@ void func_80BCEC6C(EffKamejimaWave* this, PlayState* play) {
             this->scaleOffset = 0.05f;
             this->actionFunc = func_80BCEBC0;
             this->actor.draw = EffKamejimaWave_Draw;
-            D_80BCF1C0 = 255;
+            sVtxAlpha = 255;
             this->actor.shape.rot.x = 0;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_TORTOISE_WAKE_UP);
         }
@@ -106,13 +106,13 @@ void func_80BCED34(EffKamejimaWave* this, PlayState* play) {
     if (this->scaleOffset < 0.0f) {
         this->scaleOffset = 0;
     }
-    if (D_80BCF1C0 >= 4) {
-        D_80BCF1C0 -= 4;
-        return;
+    if (sVtxAlpha >= 4) {
+        sVtxAlpha -= 4;
+    } else {
+        this->actor.scale.y = 0.0f;
+        this->actionFunc = func_80BCEDE0;
+        this->actor.draw = NULL;
     }
-    this->actor.scale.y = 0.0f;
-    this->actionFunc = func_80BCEDE0;
-    this->actor.draw = NULL;
 }
 
 void func_80BCEDE0(EffKamejimaWave* this, PlayState* play) {
@@ -155,7 +155,7 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
 
     func_800FE7A8(sPrimColors, &primColor);
     func_800FE7A8(sEnvColors, &envColor);
-    func_80BCEEBC(D_80BCF1C0);
+    func_80BCEEBC(sVtxAlpha);
 
     OPEN_DISPS(play->state.gfxCtx);
 
