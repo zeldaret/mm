@@ -15668,7 +15668,7 @@
     0x80BCED34:("func_80BCED34",),
     0x80BCEDE0:("func_80BCEDE0",),
     0x80BCEE98:("EffKamejimaWave_Update",),
-    0x80BCEEBC:("EffKamejimaWave_AdjustVtxAlpha",),
+    0x80BCEEBC:("EffKamejimaWave_SetVtxAlpha",),
     0x80BCEF0C:("EffKamejimaWave_Draw",),
     0x80BCF1D0:("EnHg_Init",),
     0x80BCF328:("EnHg_Destroy",),
