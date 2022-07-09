@@ -3167,6 +3167,8 @@ void AudioOcarina_Update(void) {
     AudioOcarina_UpdateRecordingStaff();
 }
 
+#define OCARINA_INSTRUMENT_OOT_MAX 7
+
 void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
     static u8 sScarecrowAfterCreditsState = 0;
     static u8 sScarecrowAfterCreditsIntrumentId = OCARINA_INSTRUMENT_DEFAULT;
@@ -3177,7 +3179,7 @@ void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
             if (sScarecrowAfterCreditsTimer-- == 0) {
                 // OoT originally had 7 Ocarina instruments
                 // MM has more so this does not go all the way to the max
-                if (sScarecrowAfterCreditsIntrumentId < 7) {
+                if (sScarecrowAfterCreditsIntrumentId < OCARINA_INSTRUMENT_OOT_MAX) {
                     // set next ocarina instrument and restart
                     sScarecrowAfterCreditsState++;
                 } else {
