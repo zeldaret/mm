@@ -189,7 +189,7 @@ void AudioPlayback_ProcessNotes(void) {
                 playbackState->unk_04 = 1;
                 continue;
             } else if (playbackState->parentLayer->channel->seqPlayer->muted &&
-                       (playbackState->parentLayer->channel->muteBehavior & 0x40)) {
+                       (playbackState->parentLayer->channel->muteBehavior & MUTE_BEHAVIOR_STOP_NOTES)) {
                 // do nothing
             } else {
                 goto out;
@@ -301,7 +301,7 @@ void AudioPlayback_ProcessNotes(void) {
                 subAttrs.unk_16 = channel->unk_20;
                 bookOffset = channel->bookOffset & 0x7;
 
-                if (channel->seqPlayer->muted && (channel->muteBehavior & 8)) {
+                if (channel->seqPlayer->muted && (channel->muteBehavior & MUTE_BEHAVIOR_3)) {
                     subAttrs.frequency = 0.0f;
                     subAttrs.velocity = 0.0f;
                 }
@@ -522,7 +522,7 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 
             attrs->unk_6 = chan->unk_20;
             attrs->unk_4 = chan->unk_0F;
-            if (chan->seqPlayer->muted && (chan->muteBehavior & 8)) {
+            if (chan->seqPlayer->muted && (chan->muteBehavior & MUTE_BEHAVIOR_3)) {
                 note->noteSubEu.bitField0.finished = true;
             }
 

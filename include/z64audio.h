@@ -8,8 +8,15 @@
 #define TATUMS_PER_BEAT 48
 
 #define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t)(ptr) != (uintptr_t)&gAudioContext.sequenceChannelNone)
+#define SEQ_NUM_CHANNELS 16
 
 #define MAX_CHANNELS_PER_BANK 3
+
+#define MUTE_BEHAVIOR_3 (1 << 3)           // prevent further noteSubEus from playing
+#define MUTE_BEHAVIOR_4 (1 << 4)           // stop something in seqLayer scripts
+#define MUTE_BEHAVIOR_SOFTEN (1 << 5)      // lower volume, by default to half
+#define MUTE_BEHAVIOR_STOP_NOTES (1 << 6)  // prevent further notes from playing
+#define MUTE_BEHAVIOR_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
 
 #define AUDIO_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
 
@@ -139,7 +146,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ s16 delay;
     /* 0x2 */ s16 arg;
-} AdsrEnvelope; // size = 0x4
+} EnvelopePoint; // size = 0x4
 
 typedef struct {
     /* 0x00 */ u32 start;
@@ -232,7 +239,7 @@ typedef struct {
     /* 0x01 */ u8 normalRangeLo;
     /* 0x02 */ u8 normalRangeHi;
     /* 0x03 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x04 */ AdsrEnvelope* envelope;
+    /* 0x04 */ EnvelopePoint* envelope;
     /* 0x08 */ SoundFontSound lowNotesSound;
     /* 0x10 */ SoundFontSound normalNotesSound;
     /* 0x18 */ SoundFontSound highNotesSound;
@@ -243,7 +250,7 @@ typedef struct {
     /* 0x01 */ u8 pan;
     /* 0x02 */ u8 loaded;
     /* 0x04 */ SoundFontSound sound;
-    /* 0x14 */ AdsrEnvelope* envelope;
+    /* 0x14 */ EnvelopePoint* envelope;
 } Drum; // size = 0x18
 
 typedef struct {
@@ -315,7 +322,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u8 decayIndex; // index used to obtain adsr decay rate from adsrDecayTable
     /* 0x1 */ u8 sustain;
-    /* 0x4 */ AdsrEnvelope* envelope;
+    /* 0x4 */ EnvelopePoint* envelope;
 } AdsrSettings; // size = 0x8
 
 typedef struct {
@@ -337,7 +344,7 @@ typedef struct {
     /* 0x10 */ f32 current;
     /* 0x14 */ f32 target;
     /* 0x18 */ char unk_18[4];
-    /* 0x1C */ AdsrEnvelope* envelope;
+    /* 0x1C */ EnvelopePoint* envelope;
 } AdsrState; // size = 0x20
 
 typedef struct {
@@ -965,7 +972,7 @@ typedef struct {
     /* 0x4448 */ volatile u8 resetStatus;
     /* 0x4449 */ u8 audioResetSpecIdToLoad;
     /* 0x444C */ s32 audioResetFadeOutFramesLeft;
-    /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for adsr
+    /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for ADSR
     /* 0x4454 */ u8* audioHeap;
     /* 0x4458 */ size_t audioHeapSize;
     /* 0x445C */ Note* notes;

@@ -3222,7 +3222,7 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
 void AudioEffects_NoteVibratoUpdate(Note* note);
 void AudioEffects_NoteVibratoInit(Note* note);
 void AudioEffects_NotePortamentoInit(Note* note);
-void AudioEffects_AdsrInit(AdsrState* adsr, AdsrEnvelope* envelope, s16* volOut);
+void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
 f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
 void AudioSeq_SequenceChannelDisable(SequenceChannel* channel);
 void AudioSeq_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
