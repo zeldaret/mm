@@ -29,7 +29,7 @@ typedef enum {
     /* 22 */ OCARINA_SONG_SCARECROW_SPAWN,
     /* 23 */ OCARINA_SONG_TERMINA_WALL,
     /* 24 */ OCARINA_SONG_MAX,
-    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 13 is considered the long scarecrow's song
+    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 24 is considered the long scarecrow's song
 } OcarinaSongId;
 
 typedef enum {
@@ -102,6 +102,10 @@ typedef enum {
  *      0x40 - BTN_Z is pressed to lower note by a semitone
  *      0x80 - BTN_R is pressed to raise note by a semitone
  */ 
+#define OCARINA_BUTTON_MASK_PITCH 0x3F
+#define OCARINA_BUTTON_MASK_FLAG 0xC0
+#define OCARINA_BUTTON_FLAG_BFLAT_LOWER 0x40
+#define OCARINA_BUTTON_FLAG_BFLAT_RAISE 0x80
 
 typedef struct {
     /* 0x0 */ u8 pitch; // number of semitones above middle C

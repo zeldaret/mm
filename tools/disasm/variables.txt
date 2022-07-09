@@ -4351,7 +4351,7 @@
     0x801FD462:("sOcarinaHasStartedSong","UNK_TYPE1","",0x1),
     0x801FD463:("sFirstOcarinaSongIndex","UNK_TYPE1","",0x1),
     0x801FD464:("sLastOcarinaSongIndex","UNK_TYPE1","",0x1),
-    0x801FD468:("sOcarinaAvailSongFlags","UNK_TYPE1","",0x1),
+    0x801FD468:("sOcarinaAvailableSongFlags","UNK_TYPE1","",0x1),
     0x801FD46C:("sOcarinaStaffPlayingPos","UNK_TYPE1","",0x1),
     0x801FD470:("sMusicStaffPos","UNK_TYPE1","",0x1),
     0x801FD4A0:("sMusicStaffCurHeldLength","UNK_TYPE1","",0x1),
