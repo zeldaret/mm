@@ -21,7 +21,7 @@ typedef struct EnKakasi {
     /* 0x1A0 */ s32 animIndex;
     /* 0x1A4 */ s32 unkCounter1A4; // counter, counts up to F while he digs away, reused elsewhere
     /* 0x1A8 */ s32 unkState1A8;
-    /* 0x1AC */ s16 unkMsgState1AC; // might be dialog state, compared against func(msgCtx)
+    /* 0x1AC */ s16 talkState;
     /* 0x1AE */ s16 actorCutscenes[3];
     /* 0x1B4 */ f32 animeFrameCount;
     /* 0x1B8 */ f32 unkHeight;
