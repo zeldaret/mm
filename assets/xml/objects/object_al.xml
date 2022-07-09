@@ -38,7 +38,7 @@
         <Texture Name="gMadameAromaFingersTex" OutName="madame_aroma_fingers" Format="ci8" Width="16" Height="16" Offset="0x8C38" />
         <Texture Name="gMadameAromaChestTex" OutName="madame_aroma_chest" Format="ci8" Width="16" Height="16" Offset="0x8D38" />
         <Texture Name="gMadameAromaEarringsTex" OutName="madame_aroma_earrings" Format="rgba16" Width="32" Height="64" Offset="0x8E38" />
-        <Texture Name="gMadameAromaRingTex" OutName="tex_009E38" Format="rgba16" Width="8" Height="16" Offset="0x9E38" />
+        <Texture Name="gMadameAromaRingTex" OutName="madame_aroma_ring" Format="rgba16" Width="8" Height="16" Offset="0x9E38" />
         <Limb Name="gMadameAromaRootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_ROOT" Offset="0x9F38" />
         <Limb Name="gMadameAromaUpperBodyLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_UPPER_BODY" Offset="0x9F44" />
         <Limb Name="gMadameAromaShawlMiddleLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_MIDDLE" Offset="0x9F50" />
