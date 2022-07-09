@@ -129,8 +129,9 @@ static AnimationInfoS sAnimations[] = {
 Vec3f D_80BE0070 = { 1000.0f, 0.0f, 0.0f };
 
 Gfx* D_80BE007C[] = {
-    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
+    gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
+    gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
+    gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
 Actor* func_80BDE1A0(EnAl* this, PlayState* play, u8 arg0, s16 arg1) {

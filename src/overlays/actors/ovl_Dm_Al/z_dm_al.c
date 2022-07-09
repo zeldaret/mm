@@ -135,9 +135,10 @@ void DmAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 void DmAl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-s32 sDlists[6] = {
-    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
+static Gfx* sDlists[] = {
+    gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
+    gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
+    gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
 void DmAl_Draw(Actor* thisx, PlayState* play) {
