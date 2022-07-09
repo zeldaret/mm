@@ -19,7 +19,7 @@ typedef struct EffKamejimaWave {
 typedef enum params {
     /* 0x0 */ PARAMS_0,
     /* 0x1 */ PARAMS_1
-} params;
+} EffKamejimaWaveParams;
 
 extern const ActorInit Eff_Kamejima_Wave_InitVars;
 
