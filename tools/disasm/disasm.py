@@ -42,6 +42,7 @@ args = parser.parse_args()
 jobs = args.jobs
 
 rabbitizer.config.regNames_fprAbiNames = rabbitizer.Abi.fromStr(args.reg_names)
+rabbitizer.config.regNames_userFpcCsr = False
 
 
 ASM_OUT = "asm/"
