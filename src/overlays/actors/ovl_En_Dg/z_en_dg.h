@@ -28,7 +28,7 @@ typedef struct EnDg {
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ Path* path;
-    /* 0x1E0 */ s32 unk_1E0;
+    /* 0x1E0 */ s32 currentPoint;
     /* 0x1E4 */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x232 */ Vec3s morphTable[DOG_LIMB_MAX];
     /* 0x280 */ u16 unk_280;
