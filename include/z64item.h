@@ -390,7 +390,7 @@ typedef enum {
     /* 0x9C */ GI_SWORD_KOKIRI_STOLEN,
     /* 0x9D */ GI_SWORD_RAZOR_STOLEN,
     /* 0x9E */ GI_SWORD_GILDED_STOLEN,
-    /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
+    /* 0x9F */ GI_SHIELD_HERO_STOLEN, // Code that treats this as hero's shield is unused, implied as intented to be stolen
     /* 0xA0 */ GI_ROOM_KEY,
     /* 0xA1 */ GI_LETTER_TO_MAMA,
     /* 0xA9 */ GI_BOTTLE_STOLEN = 0xA9, // buy back stolen bottle

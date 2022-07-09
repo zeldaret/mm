@@ -146,8 +146,8 @@ static ShopItemEntry sShopItemEntries[] = {
       EnGirlA_BuySword, EnGirlA_BuyFanfare },
     { OBJECT_GI_SWORD_3, GID_SWORD_GILDED, func_800B8050, 3, 0x29F4, 0x29F5, GI_SWORD_GILDED_STOLEN,
       EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_2, EnGirlA_CanBuyShieldHero,
-      EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_STOLEN,
+      EnGirlA_CanBuyShieldHero, EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
     { OBJECT_GI_SHIELD_3, GID_SHIELD_MIRROR, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_MIRROR,
       EnGirlA_CanBuyShieldMirror, EnGirlA_BuyShieldMirror, EnGirlA_BuyFanfare },
 };
