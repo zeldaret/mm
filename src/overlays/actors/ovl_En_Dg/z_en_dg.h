@@ -41,7 +41,7 @@ typedef struct EnDg {
     /* 0x288 */ s16 selectedDogIndex;
     /* 0x28A */ s16 unk_28A;
     /* 0x28C */ s16 unk_28C;
-    /* 0x28E */ s16 unk_28E;
+    /* 0x28E */ s16 attackTimer;
     /* 0x290 */ s16 unk_290;
     /* 0x292 */ s16 unk_292;
     /* 0x294 */ Vec3f curRot;

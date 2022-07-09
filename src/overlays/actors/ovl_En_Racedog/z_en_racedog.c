@@ -71,9 +71,9 @@ typedef enum {
     /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
     /* 11 */ RACEDOG_ANIMATION_WALK_2,             // unused
     /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP, // unused
-    /* 14 */ RACEDOG_ANIMATION_JUMP_2,    // unused
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,    // unused
+    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,   // unused
+    /* 14 */ RACEDOG_ANIMATION_JUMP_ATTACK, // unused
+    /* 15 */ RACEDOG_ANIMATION_WALK_3,      // unused
     /* 16 */ RACEDOG_ANIMATION_MAX
 } RacedogAnimationIndex;
 
@@ -231,7 +231,7 @@ static AnimationInfoS sAnimations[] = {
     { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
     { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
     { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
