@@ -90,7 +90,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_CROW_GET_ID(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_CROW_GET_NUMBER(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
@@ -102,7 +102,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     this->unk_23C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
-    if ((path == NULL) || (EN_SYATEKI_CROW_GET_ID(&this->actor) >= 0x80)) {
+    if ((path == NULL) || (EN_SYATEKI_CROW_GET_NUMBER(&this->actor) >= 0x80)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -137,7 +137,7 @@ void func_809CA67C(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_1C2 == 1) &&
-        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_ID(&this->actor)))) {
+        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor)))) {
         func_809CA71C(this);
     } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->unk_1C2 = 1;
@@ -207,7 +207,7 @@ void func_809CA8E4(EnSyatekiCrow* this, PlayState* play) {
         this->unk_1CC++;
     } else {
         this->unk_1C2 = 0;
-        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_ID(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
         func_809CA5D4(this);
     }
 
@@ -246,7 +246,7 @@ void func_809CABC0(EnSyatekiCrow* this, PlayState* play) {
     if (this->unk_1C4 > 20) {
         func_800B3030(play, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->guayHitCounter++;
-        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_ID(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
         func_809CA5D4(this);
     }
 

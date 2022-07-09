@@ -279,19 +279,19 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
         } else {
             switch (CURRENT_DAY) {
                 case 1:
-                    // You can't play if you don't have a bow!
+                    // You can't play if you don't have a bow! (Day 1)
                     Message_StartTextbox(play, 0xA38, &this->actor);
                     this->prevTextId = 0xA38;
                     break;
 
                 case 2:
-                    // You can't play if you don't have a bow! Weird, not a single customer!
+                    // You can't play if you don't have a bow! (Day 2)
                     Message_StartTextbox(play, 0xA39, &this->actor);
                     this->prevTextId = 0xA39;
                     break;
 
                 case 3:
-                    // You can't play if you don't have a bow! Weird, nobody's been in today...what's going on?
+                    // You can't play if you don't have a bow! (Day 3)
                     Message_StartTextbox(play, 0xA3A, &this->actor);
                     this->prevTextId = 0xA3A;
                     break;
