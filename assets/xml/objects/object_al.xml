@@ -30,8 +30,8 @@
         <Texture Name="object_al_Tex_006838" OutName="tex_006838" Format="ci8" Width="8" Height="8" Offset="0x6838" />
         <Texture Name="object_al_Tex_006878" OutName="tex_006878" Format="ci8" Width="8" Height="8" Offset="0x6878" />
         <Texture Name="object_al_Tex_0068B8" OutName="tex_0068B8" Format="ci8" Width="16" Height="16" Offset="0x68B8" />
-        <Texture Name="object_al_Tex_0069B8" OutName="tex_0069B8" Format="rgba16" Width="64" Height="32" Offset="0x69B8" />
-        <Texture Name="object_al_Tex_0079B8" OutName="tex_0079B8" Format="rgba16" Width="32" Height="32" Offset="0x79B8" />
+        <Texture Name="gMadameAromaMouthTex" OutName="madame_aroma_mouth" Format="rgba16" Width="64" Height="32" Offset="0x69B8" />
+        <Texture Name="gMadameAromaEyesTex" OutName="madame_aroma_eyes" Format="rgba16" Width="32" Height="32" Offset="0x79B8" />
         <Texture Name="object_al_Tex_0081B8" OutName="tex_0081B8" Format="ci8" Width="32" Height="16" Offset="0x81B8" />
         <Texture Name="object_al_Tex_0083B8" OutName="tex_0083B8" Format="rgba16" Width="32" Height="32" Offset="0x83B8" />
         <Texture Name="object_al_Tex_008BB8" OutName="tex_008BB8" Format="rgba16" Width="8" Height="8" Offset="0x8BB8" />
@@ -39,33 +39,33 @@
         <Texture Name="object_al_Tex_008D38" OutName="tex_008D38" Format="ci8" Width="16" Height="16" Offset="0x8D38" />
         <Texture Name="object_al_Tex_008E38" OutName="tex_008E38" Format="rgba16" Width="32" Height="64" Offset="0x8E38" />
         <Texture Name="object_al_Tex_009E38" OutName="tex_009E38" Format="rgba16" Width="8" Height="16" Offset="0x9E38" />
-        <Limb Name="gMadameAromaRootLimb" Type="Standard" EnumName="MADAME_AROMA_ROOT_LIMB" Offset="0x9F38" />
-        <Limb Name="gMadameAromaUpperBody" Type="Standard" EnumName="MADAME_AROMA_UPPER_BODY_LIMB" Offset="0x9F44" />
-        <Limb Name="gMadameAromaShawlMiddle" Type="Standard" EnumName="MADAME_AROMA_SHAWL_MIDDLE_LIMB" Offset="0x9F50" />
-        <Limb Name="gMadameAromaNecklace" Type="Standard" EnumName="MADAME_AROMA_NECKLACE" Offset="0x9F5C" />
-        <Limb Name="gMadameAromaRightShoulder" Type="Standard" EnumName="MADAME_AROMA_RIGHT_SHOULDER_LIMB" Offset="0x9F68" />
-        <Limb Name="gMadameAromaRightArm" Type="Standard" EnumName="MADAME_AROMA_RIGHT_ARM_LIMB" Offset="0x9F74" />
-        <Limb Name="gMadameAromaRightHand" Type="Standard" EnumName="MADAME_AROMA_RIGHT_HAND_LIMB" Offset="0x9F80" />
-        <Limb Name="gMadameAromaLeftShoulder" Type="Standard" EnumName="MADAME_AROMA_LEFT_SHOULDER_LIMB" Offset="0x9F8C" />
-        <Limb Name="gMadameAromaLeftArm" Type="Standard" EnumName="MADAME_AROMA_LEFT_ARM_LIMB" Offset="0x9F98" />
-        <Limb Name="gMadameAromaLeftHand" Type="Standard" EnumName="MADAME_AROMA_LEFT_HAND_LIMB" Offset="0x9FA4" />
-        <Limb Name="gMadameAromaShawlUpper" Type="Standard" EnumName="MADAME_AROMA_SHAWL_UPPER_LIMB" Offset="0x9FB0" />
-        <Limb Name="gMadameAromaShawlLeftLowerMiddle" Type="Standard" EnumName="MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB" Offset="0x9FBC" />
-        <Limb Name="gMadameAromaShawlLeftLower" Type="Standard" EnumName="MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB" Offset="0x9FC8" />
-        <Limb Name="gMadameAromaShawlRightLowerMiddle" Type="Standard" EnumName="MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB" Offset="0x9FD4" />
-        <Limb Name="gMadameAromaShawlRightLower" Type="Standard" EnumName="MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB" Offset="0x9FE0" />
-        <Limb Name="gMadameAromaHead" Type="Standard" EnumName="MADAME_AROMA_HEAD_LIMB" Offset="0x9FEC" />
-        <Limb Name="gMadameAromaHairLoop" Type="Standard" EnumName="MADAME_AROMA_HAIR_LOOP_LIMB" Offset="0x9FF8" />
-        <Limb Name="gMadameAromaLeftHair" Type="Standard" EnumName="MADAME_AROMA_LEFT_HAIR_LIMB" Offset="0xA004" />
-        <Limb Name="gMadameAromaLeftHairEdge" Type="Standard" EnumName="MADAME_AROMA_LEFT_HAIR_EDGE_LIMB" Offset="0xA010" />
-        <Limb Name="gMadameAromaRightHair" Type="Standard" EnumName="MADAME_AROMA_RIGHT_HAIR_LIMB" Offset="0xA01C" />
-        <Limb Name="gMadameAromaRightHairEdge" Type="Standard" EnumName="MADAME_AROMA_RIGHT_HAIR_EDGE_LIMB" Offset="0xA028" />
-        <Limb Name="gMadameAromaMiddleBody" Type="Standard" EnumName="MADAME_AROMA_MIDDLE_BODY_LIMB" Offset="0xA034" />
-        <Limb Name="gMadameAromaLowerBody" Type="Standard" EnumName="MADAME_AROMA_LOWER_BODY_LIMB" Offset="0xA040" />
-        <Limb Name="gMadameAromaLegs" Type="Standard" EnumName="MADAME_AROMA_LEGS_LIMB" Offset="0xA04C" />
-        <Limb Name="gMadameAromaLeftFoot" Type="Standard" EnumName="MADAME_AROMA_LEFT_FOOT_LIMB_LIMB" Offset="0xA058" />
-        <Limb Name="gMadameAromaRightFoot" Type="Standard" EnumName="MADAME_AROMA_RIGHT_FOOT_LIMB" Offset="0xA064" />
-        <Skeleton Name="gMadameAromaSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AL_LIMB_NONE" LimbMax="OBJECT_AL_LIMB_MAX" EnumName="object_al_Limbs" Offset="0xA0D8" />
+        <Limb Name="gMadameAromaRootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_ROOT" Offset="0x9F38" />
+        <Limb Name="gMadameAromaUpperBody" Type="Standard" EnumName="MADAME_AROMA_LIMB_UPPER_BODY" Offset="0x9F44" />
+        <Limb Name="gMadameAromaShawlMiddle" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_MIDDLE" Offset="0x9F50" />
+        <Limb Name="gMadameAromaNecklace" Type="Standard" EnumName="MADAME_AROMA_LIMB_NECKLACE" Offset="0x9F5C" />
+        <Limb Name="gMadameAromaRightShoulder" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_SHOULDER" Offset="0x9F68" />
+        <Limb Name="gMadameAromaRightArm" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_ARM" Offset="0x9F74" />
+        <Limb Name="gMadameAromaRightHand" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_HAND" Offset="0x9F80" />
+        <Limb Name="gMadameAromaLeftShoulder" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_SHOULDER" Offset="0x9F8C" />
+        <Limb Name="gMadameAromaLeftArm" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_ARM" Offset="0x9F98" />
+        <Limb Name="gMadameAromaLeftHand" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_HAND" Offset="0x9FA4" />
+        <Limb Name="gMadameAromaShawlUpper" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_UPPER" Offset="0x9FB0" />
+        <Limb Name="gMadameAromaShawlLeftLowerMiddle" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE" Offset="0x9FBC" />
+        <Limb Name="gMadameAromaShawlLeftLower" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER" Offset="0x9FC8" />
+        <Limb Name="gMadameAromaShawlRightLowerMiddle" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE" Offset="0x9FD4" />
+        <Limb Name="gMadameAromaShawlRightLower" Type="Standard" EnumName="MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER" Offset="0x9FE0" />
+        <Limb Name="gMadameAromaHead" Type="Standard" EnumName="MADAME_AROMA_LIMB_HEAD" Offset="0x9FEC" />
+        <Limb Name="gMadameAromaHairLoop" Type="Standard" EnumName="MADAME_AROMA_LIMB_HAIR_LOOP" Offset="0x9FF8" />
+        <Limb Name="gMadameAromaLeftHair" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_HAIR" Offset="0xA004" />
+        <Limb Name="gMadameAromaLeftHairEdge" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_HAIR_EDGE" Offset="0xA010" />
+        <Limb Name="gMadameAromaRightHair" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_HAIR" Offset="0xA01C" />
+        <Limb Name="gMadameAromaRightHairEdge" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_HAIR_EDGE" Offset="0xA028" />
+        <Limb Name="gMadameAromaMiddleBody" Type="Standard" EnumName="MADAME_AROMA_LIMB_MIDDLE_BODY" Offset="0xA034" />
+        <Limb Name="gMadameAromaLowerBody" Type="Standard" EnumName="MADAME_AROMA_LIMB_LOWER_BODY" Offset="0xA040" />
+        <Limb Name="gMadameAromaLegs" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEGS" Offset="0xA04C" />
+        <Limb Name="gMadameAromaLeftFoot" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_FOOT" Offset="0xA058" />
+        <Limb Name="gMadameAromaRightFoot" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_FOOT" Offset="0xA064" />
+        <Skeleton Name="gMadameAromaSkel" Type="Flex" LimbType="Standard" LimbNone="MADAME_AROMA_LIMB_NONE" LimbMax="MADAME_AROMA_LIMB_MAX" EnumName="MadameAromaLimbs" Offset="0xA0D8" />
         <Animation Name="object_al_Anim_00A764" Offset="0xA764" />
         <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" />
         <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" />

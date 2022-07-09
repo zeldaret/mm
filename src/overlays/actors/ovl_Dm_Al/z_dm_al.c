@@ -31,14 +31,14 @@ static AnimationInfoS sAnimationInfos[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80C1BD90(DmAl* this, s32* animationIndex) {
-    s32 ret = 0;
+s32 func_80C1BD90(DmAl* this, s32 animationIndex) {
+    s32 didAnimationChange = false;
 
     if (animationIndex != this->animationIndex) {
         this->animationIndex = animationIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animationIndex);
+        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animationIndex);
     }
-    return ret;
+    return didAnimationChange;
 }
 
 void func_80C1BDD8(DmAl* this, PlayState* play) {
@@ -47,9 +47,9 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
     s32 actionIndex;
 
     if (play->csCtx.state != 0) {
-        if (this->unk45C == 0) {
+        if (!this->unk45C) {
             this->action = 0xFF;
-            this->unk45C = 1;
+            this->unk45C = true;
             this->animationIndex2 = this->animationIndex;
         }
         if (Cutscene_CheckActorAction(play, 0x232)) {
@@ -61,8 +61,8 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
-    } else if (this->unk45C != 0) {
-        this->unk45C = 0;
+    } else if (this->unk45C) {
+        this->unk45C = false;
         func_80C1BD90(this, this->animationIndex2);
     }
 }
@@ -72,9 +72,9 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
-                       OBJECT_AL_LIMB_MAX);
+                       MADAME_AROMA_LIMB_MAX);
     this->animationIndex = -1;
-    func_80C1BD90(this, NULL);
+    func_80C1BD90(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;
@@ -91,53 +91,54 @@ void DmAl_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-s32 func_80C1C028(PlayState* play, s32 limbIndex, Gfx** gfx, Vec3f* rot, Vec3s* pos, Actor* thisx) {
+s32 DmAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* rot, Vec3s* pos, Actor* thisx) {
     switch (limbIndex) {
-        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
-        case MADAME_AROMA_SHAWL_UPPER_LIMB:
-        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
-        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
-        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
-        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
-            *gfx = NULL;
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
+            *dList = NULL;
             break;
     }
     return false;
 }
 
-void func_80C1C064(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     DmAl* this = THIS;
 
     switch (limbIndex) {
-        case MADAME_AROMA_SHAWL_MIDDLE_LIMB:
-            Matrix_Get(&this->unkMtx[0]);
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
+            Matrix_Get(&this->shawlMatrices[0]);
             break;
-        case MADAME_AROMA_SHAWL_UPPER_LIMB:
-            Matrix_Get(&this->unkMtx[1]);
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
+            Matrix_Get(&this->shawlMatrices[1]);
             break;
-        case MADAME_AROMA_SHAWL_LEFT_LOWER_MIDDLE_LIMB:
-            Matrix_Get(&this->unkMtx[2]);
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
+            Matrix_Get(&this->shawlMatrices[2]);
             break;
-        case MADAME_AROMA_SHAWL_LEFT_LOWER_LIMB:
-            Matrix_Get(&this->unkMtx[3]);
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
+            Matrix_Get(&this->shawlMatrices[3]);
             break;
-        case MADAME_AROMA_SHAWL_RIGHT_LOWER_MIDDLE_LIMB:
-            Matrix_Get(&this->unkMtx[4]);
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
+            Matrix_Get(&this->shawlMatrices[4]);
             break;
-        case MADAME_AROMA_SHAWL_RIGHT_LOWER_LIMB:
-            Matrix_Get(&this->unkMtx[5]);
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
+            Matrix_Get(&this->shawlMatrices[5]);
             break;
         default:
             break;
     }
 }
 
-void func_80C1C11C(PlayState* play, s32 arg0, Actor* thisx) {
+void DmAl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-s32 sDlists[6] = { object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-                   object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680 };
-s32 D_80C1C2AC = 0;
+s32 sDlists[6] = {
+    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
+    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
+};
 
 void DmAl_Draw(Actor* thisx, PlayState* play) {
     u32 i;
@@ -147,10 +148,10 @@ void DmAl_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, func_80C1C028, func_80C1C064, func_80C1C11C,
-                                   &this->actor);
-    for (i = 0; i < ARRAY_COUNT(this->unkMtx); i++) {
-        Matrix_Put(&this->unkMtx[i]);
+                                   this->skelAnime.dListCount, DmAl_OverrideLimbDraw, DmAl_PostLimbDraw,
+                                   DmAl_TransformLimbDraw, &this->actor);
+    for (i = 0; i < ARRAY_COUNT(this->shawlMatrices); i++) {
+        Matrix_Put(&this->shawlMatrices[i]);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, sDlists[i]);
     }
