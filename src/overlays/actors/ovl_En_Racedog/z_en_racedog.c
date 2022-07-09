@@ -59,21 +59,21 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this);
 
 typedef enum {
     /*  0 */ RACEDOG_ANIMATION_IDLE,
-    /*  1 */ RACEDOG_ANIMATION_WALK_1,
+    /*  1 */ RACEDOG_ANIMATION_WALK_1, // unused
     /*  2 */ RACEDOG_ANIMATION_RUN,
-    /*  3 */ RACEDOG_ANIMATION_BARK,
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,
-    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1,
-    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,
-    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2,
-    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3,
-    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4,
-    /* 11 */ RACEDOG_ANIMATION_WALK_2,
+    /*  3 */ RACEDOG_ANIMATION_BARK,               // unused
+    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,         // unused
+    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,         // unused
+    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1, // unused
+    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,    // unused
+    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2, // unused
+    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3, // unused
+    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
+    /* 11 */ RACEDOG_ANIMATION_WALK_2,             // unused
     /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,
-    /* 14 */ RACEDOG_ANIMATION_JUMP_2,
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,
+    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP, // unused
+    /* 14 */ RACEDOG_ANIMATION_JUMP_2,    // unused
+    /* 15 */ RACEDOG_ANIMATION_WALK_3,    // unused
     /* 16 */ RACEDOG_ANIMATION_MAX
 } RacedogAnimationIndex;
 
