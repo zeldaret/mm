@@ -94,14 +94,11 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     ObjLift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    temp_fv0 = D_8093DD98[OBJLIFT_GET_1(&this->dyna.actor)];
-    this->dyna.actor.scale.z = temp_fv0;
-    this->dyna.actor.scale.x = temp_fv0;
+    this->dyna.actor.scale.x = this->dyna.actor.scale.z = D_8093DD98[OBJLIFT_GET_1(&this->dyna.actor)];
     this->dyna.actor.scale.y = 5.0f / 90.0f;
     this->dyna.actor.shape.rot.z = 0;
     this->unk_178 = this->dyna.actor.home.rot.z;
-    this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
-    this->dyna.actor.home.rot.z = this->dyna.actor.shape.rot.z;
+    this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, 1);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
         Actor_MarkForDeath(&this->dyna.actor);
