@@ -20,7 +20,7 @@ void func_80BCEC6C(EffKamejimaWave* this, PlayState* play);
 void func_80BCEDE0(EffKamejimaWave* this, PlayState* play);
 void func_80BCEBC0(EffKamejimaWave* this, PlayState* play);
 void func_80BCED34(EffKamejimaWave* this, PlayState* play);
-void func_80BCEEBC(u8 alpha);
+void EffKamejimaWave_AdjustVtxAlpha(u8 alpha);
 
 const ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
@@ -136,7 +136,7 @@ void EffKamejimaWave_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-void func_80BCEEBC(u8 alpha) {
+void EffKamejimaWave_AdjustVtxAlpha(u8 alpha) {
     Vtx* vtx = Lib_SegmentedToVirtual(&object_kamejima_Vtx_000000);
 
     vtx[2].v.cn[3] = alpha;
@@ -155,7 +155,7 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
 
     func_800FE7A8(sPrimColors, &primColor);
     func_800FE7A8(sEnvColors, &envColor);
-    func_80BCEEBC(sVtxAlpha);
+    EffKamejimaWave_AdjustVtxAlpha(sVtxAlpha);
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -17,7 +17,7 @@ void EnSekihi_Update(Actor* thisx, PlayState* play);
 void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A44F40(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
-void EffKamejimaWave_SetVtxAlpha(EnSekihi* this, PlayState* play);
+void func_80A45130(EnSekihi* this, PlayState* play);
 
 #if 0
 const ActorInit En_Sekihi_InitVars = {
@@ -44,7 +44,7 @@ const ActorInit En_Sekihi_InitVars = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sekihi/func_80A450B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sekihi/EffKamejimaWave_SetVtxAlpha.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sekihi/func_80A45130.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sekihi/EnSekihi_Update.s")
 
