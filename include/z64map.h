@@ -47,7 +47,8 @@ typedef struct {
 typedef struct {
     /* 0x00 */ MinimapList* unk0; //unk0 -> sub1 -> s16[5]
     /* 0x04 */ s32 unk4;
-    /* 0x08 */ char unk8[4];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ s16 unkA;
     /* 0x0C */ s16 unkC;
     /* 0x0E */ s16 unkE;
     /* 0x10 */ s32 unk10;
@@ -55,7 +56,7 @@ typedef struct {
     /* 0x18 */ s32 unk18;
     /* 0x1C */ s16 unk1C; //same as 0C
     /* 0x1E */ s16 unk1E; //same as 0E
-    /* 0x20 */ char unk20[4];
+    /* 0x20 */ s32 unk20;
     /* 0x24 */ s32 unk24;
     /* 0x28 */ char unk28[8];
     /* 0x30 */ s16 unk30; //scene minBounds.x
@@ -70,14 +71,6 @@ typedef struct {
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
 } T_801BEBB8;
-
-typedef struct{
-    /* 0x00 */ u16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ char unk4[2];
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ u16 unk8;
-} T_func_801030F4; //probably above, size 0x0A?
 
 typedef struct {
     /* 0x00 */ s16 unk0; //scene

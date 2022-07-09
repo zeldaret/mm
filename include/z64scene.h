@@ -470,15 +470,15 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u16 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x02 */ s16 unk2;
     /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ u16 unk8;
 } MinimapEntry; // size = 0xA
 
 typedef struct {
     /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ UNK_TYPE unk4;
+    /* 0x04 */ s16 unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {
