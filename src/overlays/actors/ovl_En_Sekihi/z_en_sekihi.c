@@ -22,16 +22,7 @@ void EnSekihi_Draw(Actor* thisx, PlayState* play);
 
 void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
-void func_80A45130(EnSekihi* this, PlayState* play);
-
-typedef enum SekihiType {
-    /* 0x0 */ SEKIHI_TYPE_0,
-    /* 0x1 */ SEKIHI_TYPE_1,
-    /* 0x2 */ SEKIHI_TYPE_2,
-    /* 0x3 */ SEKIHI_TYPE_3,
-    /* 0x4 */ SEKIHI_TYPE_4,
-    /* 0x5 */ SEKIHI_TYPE_MAX
-} SekihiType;
+void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
 const ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
@@ -59,11 +50,11 @@ static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
-    s32 params = ENSIKIHI_GET_F(thisx);
+    s32 params = ENSIKIHI_GET_TYPE(thisx);
     s32 objectIndex;
     s32 pad;
 
-    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == SEKIHI_TYPE_0) {
+    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
@@ -91,24 +82,24 @@ void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
 void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
     s32 params;
-    CollisionHeader* sColHeader[] = {
+    CollisionHeader* colHeaders[] = {
         &gSekihilCol, &gSekihigCol, &gSekihinCol, &gSekihizCol, &gObjectZogCol,
     };
 
-    params = ENSIKIHI_GET_F(&this->dyna.actor);
+    params = ENSIKIHI_GET_TYPE(&this->dyna.actor);
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->dyna.actor.objBankIndex = this->objectIndex;
         this->dyna.actor.draw = EnSekihi_Draw;
         if (params == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;
         } else {
-            this->actionFunc = func_80A45130;
+            this->actionFunc = EnSekihi_DoNothing;
         }
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 0);
-        if (sColHeader[params] != NULL) {
-            CollisionHeader_GetVirtual(sColHeader[params], &colHeader);
+        if (colHeaders[params] != NULL) {
+            CollisionHeader_GetVirtual(colHeaders[params], &colHeader);
         }
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -166,7 +157,7 @@ void func_80A450B0(EnSekihi* this, PlayState* play) {
     }
 }
 
-void func_80A45130(EnSekihi* this, PlayState* play) {
+void EnSekihi_DoNothing(EnSekihi* this, PlayState* play) {
 }
 
 void EnSekihi_Update(Actor* thisx, PlayState* play) {

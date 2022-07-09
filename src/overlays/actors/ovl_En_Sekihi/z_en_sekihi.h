@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ENSIKIHI_GET_F(thisx) ((thisx)->params & 0xF)
+#define ENSIKIHI_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
 struct EnSekihi;
 
@@ -16,6 +16,15 @@ typedef struct EnSekihi {
     /* 0x164 */ s8 objectIndex;
     /* 0x168 */ EnSekihiActionFunc actionFunc;
 } EnSekihi; // size = 0x16C
+
+typedef enum SekihiType {
+    /* 0x0 */ SEKIHI_TYPE_0,
+    /* 0x1 */ SEKIHI_TYPE_1,
+    /* 0x2 */ SEKIHI_TYPE_2,
+    /* 0x3 */ SEKIHI_TYPE_3,
+    /* 0x4 */ SEKIHI_TYPE_4,
+    /* 0x5 */ SEKIHI_TYPE_MAX
+} SekihiType;
 
 extern const ActorInit En_Sekihi_InitVars;
 
