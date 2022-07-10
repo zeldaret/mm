@@ -18,14 +18,14 @@ void EnBat_Update(Actor* thisx, PlayState* play);
 void EnBat_Draw(Actor* thisx, PlayState* play);
 
 s32 EnBat_IsGraveyardOnSecondDay(PlayState* play);
-void func_80A43870(EnBat* this);
-void func_80A438D4(EnBat* this, PlayState* play);
-void func_80A438F8(EnBat* this);
-void func_80A4392C(EnBat* this, PlayState* play);
-void func_80A43CA0(EnBat* this);
-void func_80A43CE8(EnBat* this, PlayState* play);
-void func_80A44114(EnBat* this, PlayState* play);
-void func_80A4431C(EnBat* this, PlayState* play);
+void EnBat_SetupPerch(EnBat* this);
+void EnBat_Perch(EnBat* this, PlayState* play);
+void EnBat_SetupFlyIdle(EnBat* this);
+void EnBat_FlyIdle(EnBat* this, PlayState* play);
+void EnBat_SetupDiveAttack(EnBat* this);
+void EnBat_DiveAttack(EnBat* this, PlayState* play);
+void EnBat_Die(EnBat* this, PlayState* play);
+void EnBat_Stunned(EnBat* this, PlayState* play);
 
 const ActorInit En_Bat_InitVars = {
     ACTOR_EN_BAT,
@@ -112,18 +112,20 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-Gfx* D_80A44A64[] = {
+static Gfx* D_80A44A64[] = {
     0x060001B0, 0x060002A0, 0x06000390, 0x06000480, 0x06000570, 0x06000660, 0x06000750, 0x06000840, 0x06000930,
 };
 
-s32 D_80A44C70;
+#define BAD_BAT_MAX_NUMBER_ATTACKING 3
+
+s32 sNumberAttacking; //! Limit number attacking player to at most `BAD_BAT_MAX_NUMBER_ATTACKING`
 s32 sAlreadySpawned;
 
 extern Gfx D_060000A0[];
 extern Gfx D_060000C8[];
 
 void EnBat_Init(Actor* thisx, PlayState* play) {
-    EnBat* this = (EnBat*)thisx;
+    EnBat* this = THIS;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     Collider_InitAndSetSphere(play, &this->collider, thisx, &sSphereInit);
@@ -151,18 +153,18 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
 
     if (this->paramsE0 & 4) {
         thisx->params = 0;
-        func_80A43870(this);
+        EnBat_SetupPerch(this);
     } else {
         if (thisx->params == 0x1F) {
             thisx->params = 0;
         }
-        func_80A438F8(this);
+        EnBat_SetupFlyIdle(this);
         while (thisx->params >= 2) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_BAT,
                                           thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
                                           thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
                                           thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f),
-                                          randPlusMinusPoint5Scaled((f32)0x2000), Rand_ZeroOne() * ((f32)0xFFFF), 0,
+                                          randPlusMinusPoint5Scaled((f32)0x2000), (f32)0xFFFF * Rand_ZeroOne(), 0,
                                           BAD_BAT_PARAMS(this->switchFlag, this->paramsE0, 0), -1, thisx->unk20, NULL);
             thisx->params--;
         }
@@ -195,30 +197,28 @@ void EnBat_StepAnimation(EnBat* this, s32 frameStep) {
     }
 }
 
-// Action functions
-
-void func_80A43870(EnBat* this) {
+void EnBat_SetupPerch(EnBat* this) {
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.atFlags |= AT_ON;
     this->collider.dim.worldSphere.center.x = this->actor.focus.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.focus.pos.y;
     this->collider.dim.worldSphere.center.z = this->actor.focus.pos.z;
     this->actor.speedXZ = 0.0f;
-    this->actionFunc = func_80A438D4;
+    this->actionFunc = EnBat_Perch;
 }
 
-void func_80A438D4(EnBat* this, PlayState* play) {
+void EnBat_Perch(EnBat* this, PlayState* play) {
     EnBat_StepAnimation(this, 1);
 }
 
-void func_80A438F8(EnBat* this) {
+void EnBat_SetupFlyIdle(EnBat* this) {
     this->timer = 100;
     this->collider.base.acFlags |= AC_ON;
     this->actor.speedXZ = 3.5f;
-    this->actionFunc = func_80A4392C;
+    this->actionFunc = EnBat_FlyIdle;
 }
 
-void func_80A4392C(EnBat* this, PlayState* play) {
+void EnBat_FlyIdle(EnBat* this, PlayState* play) {
     s32 finishedRotStep;
 
     EnBat_StepAnimation(this, 1);
@@ -232,8 +232,8 @@ void func_80A4392C(EnBat* this, PlayState* play) {
                                         this->actor.home.pos.z) > 90000.0f) {
         this->targetYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
-        this->targetYaw =
-            (((s32)(4096.0f * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1)) + this->actor.shape.rot.y;
+        this->targetYaw = this->actor.shape.rot.y +
+                          (((s32)((f32)0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
 
     finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.x, this->targetPitch, 0x100);
@@ -241,11 +241,11 @@ void func_80A4392C(EnBat* this, PlayState* play) {
     if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         this->targetPitch = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
-        this->targetPitch = -(s32)(Rand_ZeroOne() * 2048.0f) - 0x800;
+        this->targetPitch = -((s32)((f32)0x800 * Rand_ZeroOne()) + 0x800);
     } else if ((this->actor.home.pos.y + 100.0f) < this->actor.world.pos.y) {
-        this->targetPitch = (s32)(Rand_ZeroOne() * 2048.0f) + 0x800;
+        this->targetPitch = (s32)((f32)0x800 * Rand_ZeroOne()) + 0x800;
     } else if ((finishedRotStep) && (Rand_ZeroOne() < 0.015f)) {
-        this->targetPitch += (s16)(((s32)(1024.0f * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->targetPitch += (s16)(((s32)((f32)0x400 * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
         this->targetPitch = CLAMP(this->targetPitch, -0x1000, 0x1000);
     }
 
@@ -253,20 +253,21 @@ void func_80A4392C(EnBat* this, PlayState* play) {
         this->timer--;
     }
     if ((this->actor.xzDistToPlayer < 300.0f) && (this->timer == 0) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-        (D_80A44C70 < 3) && (!(this->paramsE0 & 2) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
-        func_80A43CA0(this);
+        (sNumberAttacking < BAD_BAT_MAX_NUMBER_ATTACKING) &&
+        (!(this->paramsE0 & 2) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
+        EnBat_SetupDiveAttack(this);
     }
 }
 
-void func_80A43CA0(EnBat* this) {
+void EnBat_SetupDiveAttack(EnBat* this) {
     this->collider.base.atFlags |= AT_ON;
     this->timer = 300;
     this->actor.speedXZ = 4.0f;
-    D_80A44C70++;
-    this->actionFunc = func_80A43CE8;
+    sNumberAttacking++;
+    this->actionFunc = EnBat_DiveAttack;
 }
 
-void func_80A43CE8(EnBat* this, PlayState* play) {
+void EnBat_DiveAttack(EnBat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 facingPlayer;
     Vec3f preyPos;
@@ -300,22 +301,19 @@ void func_80A43CE8(EnBat* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_ATTACK);
         }
         this->collider.base.atFlags &= ~AT_ON;
-        D_80A44C70--;
-        func_80A438F8(this);
-    } else if (this->actor.bgCheckFlags & 8) {
-        if (ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.yawTowardsPlayer)) > 0x6800) {
-            D_80A44C70--;
-            this->collider.base.atFlags &= ~AT_ON;
-            this->actor.bgCheckFlags &= ~8;
-            this->targetYaw = this->actor.wallYaw;
-            func_80A438F8(this);
-        }
+        sNumberAttacking--;
+        EnBat_SetupFlyIdle(this);
+    } else if ((this->actor.bgCheckFlags & 8) &&
+               (ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.yawTowardsPlayer)) > 0x6800)) {
+        sNumberAttacking--;
+        this->collider.base.atFlags &= ~AT_ON;
+        this->actor.bgCheckFlags &= ~8;
+        this->targetYaw = this->actor.wallYaw;
+        EnBat_SetupFlyIdle(this);
     }
 }
 
-// Update-related functions
-
-void func_80A43F60(EnBat* this, PlayState* play) {
+void EnBat_SetupDie(EnBat* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     Enemy_StartFinishingBlow(play, &this->actor);
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
@@ -349,13 +347,14 @@ void func_80A43F60(EnBat* this, PlayState* play) {
 
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actionFunc = func_80A44114;
+    this->actionFunc = EnBat_Die;
 }
 
-void func_80A44114(EnBat* this, PlayState* play) {
+void EnBat_Die(EnBat* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
-    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
+
+    if (!(this->actor.flags & ACTOR_FLAG_8000)) { // Carried by arrow
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;
@@ -374,6 +373,7 @@ void func_80A44114(EnBat* this, PlayState* play) {
             if (this->actor.room == -1) {
                 Actor* actor = NULL;
 
+                // Search for other EnBats. If find none, set switch flag.
                 do {
                     actor = SubS_FindActor(play, actor, ACTORCAT_ENEMY, ACTOR_EN_BAT);
                     if (actor != NULL) {
@@ -393,8 +393,8 @@ void func_80A44114(EnBat* this, PlayState* play) {
     }
 }
 
-void func_80A44294(EnBat* this) {
-    if (this->actionFunc != func_80A4431C) {
+void EnBat_SetupStunned(EnBat* this) {
+    if (this->actionFunc != EnBat_Stunned) {
         this->actor.shape.yOffset = 700.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.speedXZ = 0.0f;
@@ -402,17 +402,17 @@ void func_80A44294(EnBat* this) {
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
-    this->actionFunc = func_80A4431C;
+    this->actionFunc = EnBat_Stunned;
 }
 
-void func_80A4431C(EnBat* this, PlayState* play) {
+void EnBat_Stunned(EnBat* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == -32000.0f)) {
         if (this->timer != 0) {
             this->timer--;
         }
         if (this->timer == 0) {
-            func_80A438F8(this);
+            EnBat_SetupFlyIdle(this);
         }
     } else {
         this->actor.colorFilterTimer = 40;
@@ -422,15 +422,15 @@ void func_80A4431C(EnBat* this, PlayState* play) {
     }
 }
 
-void func_80A443D8(EnBat* this, PlayState* play) {
+void EnBat_UpdateDamage(EnBat* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
         Actor_SetDropFlag(&this->actor, &this->collider.info);
         this->collider.base.atFlags &= ~AT_ON;
 
-        if (this->actionFunc == func_80A43CE8) {
-            D_80A44C70--;
+        if (this->actionFunc == EnBat_DiveAttack) {
+            sNumberAttacking--;
         }
 
         if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_ELECTRIC) {
@@ -438,13 +438,13 @@ void func_80A443D8(EnBat* this, PlayState* play) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffScale = 0.45f;
-            func_80A44294(this);
+            EnBat_SetupStunned(this);
         } else if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_NUT) {
             this->timer = 40;
-            func_80A44294(this);
+            EnBat_SetupStunned(this);
         } else {
             Actor_ApplyDamage(&this->actor);
-            func_80A43F60(this, play);
+            EnBat_SetupDie(this, play);
         }
     }
 }
@@ -457,29 +457,29 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
         sAlreadySpawned = true;
     }
 
-    func_80A443D8(this, play);
+    EnBat_UpdateDamage(this, play);
     this->actionFunc(this, play);
 
-    if (this->actionFunc != func_80A4431C) {
+    if (this->actionFunc != EnBat_Stunned) {
         Math_StepToF(&this->actor.shape.yOffset, 2000.0f, 200.0f);
     }
 
-    if (this->actionFunc != func_80A438D4) {
+    if (this->actionFunc != EnBat_Perch) {
         Vec3f prevPos;
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actor.world.rot.x = -this->actor.shape.rot.x;
         Math_Vec3f_Copy(&prevPos, &this->actor.prevPos);
 
-        if ((this->actor.colChkInfo.health != 0) && (this->actionFunc != func_80A4431C)) {
+        if ((this->actor.colChkInfo.health != 0) && (this->actionFunc != EnBat_Stunned)) {
             Actor_MoveWithoutGravity(&this->actor);
         } else {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        if (this->actionFunc == func_80A43CE8) {
+        if (this->actionFunc == EnBat_DiveAttack) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
-        } else if ((this->actionFunc != func_80A4392C) ||
+        } else if ((this->actionFunc != EnBat_FlyIdle) ||
                    ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.projectedPos.z > 0.0f))) {
             if (this->paramsE0 & 1) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
@@ -499,7 +499,7 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
     if (this->collider.base.atFlags & AT_ON) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
-    if (this->actionFunc == func_80A43CE8) {
+    if (this->actionFunc == EnBat_DiveAttack) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
     if (this->collider.base.acFlags & AC_ON) {
@@ -546,8 +546,8 @@ void EnBat_Draw(Actor* thisx, PlayState* play) {
             rollAngle = this->animationFrame * (15 * (0x10000 / 360));
         } else {
             rollAngle = (this->animationFrame >= BAD_BAT_FLAP_FRAME)
-                       ? (this->animationFrame * (15 * (0x10000 / 360))) - (120 * (0x10000 / 360))
-                       : 0;
+                            ? (this->animationFrame * (15 * (0x10000 / 360))) - (120 * (0x10000 / 360))
+                            : 0;
         }
         Matrix_MultZero(&this->bodyPartPoss[0]);
         Matrix_RotateZS(rollAngle, MTXMODE_APPLY);
