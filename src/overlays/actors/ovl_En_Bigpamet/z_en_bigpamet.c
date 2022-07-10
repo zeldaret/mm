@@ -242,8 +242,7 @@ void func_80A27970(EnBigpamet* this, PlayState* play2) {
             sp9C.y = temp_fs1;
             EffectSsGSplash_Spawn(play, &sp9C, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         } else {
-            func_800B12F0(play, &sp9C, &D_80A2977C, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0xA, 10),
-                          20);
+            func_800B12F0(play, &sp9C, &D_80A2977C, &gZeroVec3f, Rand_S16Offset(950, 100), Rand_S16Offset(10, 10), 20);
         }
     }
 }
@@ -324,7 +323,7 @@ void func_80A27DD8(EnBigpamet* this, PlayState* play) {
         pos.y = (Math_SinS(temp_s0) * temp_fs0) + sp8C.y;
         pos.z = (Math_CosS(temp_s0) * temp_fs0 * temp_fs5) + sp8C.z;
 
-        func_800B12F0(play, &pos, &gZeroVec3f, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0x14, 0xA), 20);
+        func_800B12F0(play, &pos, &gZeroVec3f, &gZeroVec3f, Rand_S16Offset(950, 100), Rand_S16Offset(20, 10), 20);
     }
 }
 
