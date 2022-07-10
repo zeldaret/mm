@@ -9,11 +9,11 @@ typedef void (*EffLastdayActionFunc)(struct EffLastday*, PlayState*);
 
 typedef struct EffLastday {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Gfx* unk144;
-    /* 0x148 */ AnimatedMaterial* unk148;
-    /* 0x14C */ s16 unk14C;
-    /* 0x14E */ s16 unk14E;
-    /* 0x150 */ s16 unk150;
+    /* 0x144 */ Gfx* dList;
+    /* 0x148 */ AnimatedMaterial* matAnim;
+    /* 0x14C */ s16 step;
+    /* 0x14E */ s16 alpha;
+    /* 0x150 */ s16 actionCmd;
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 
