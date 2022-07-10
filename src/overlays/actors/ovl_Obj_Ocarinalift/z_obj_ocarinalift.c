@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_ocarinalift.h"
+#include "objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -30,7 +31,7 @@ void func_80AC9B48(ObjOcarinalift* this);
 void func_80AC9B5C(ObjOcarinalift* this, PlayState* play);
 void func_80AC9C20(ObjOcarinalift* this);
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play);
-#if 0
+
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,
     ACTORCAT_BG,
@@ -43,8 +44,7 @@ const ActorInit Obj_Ocarinalift_InitVars = {
     (ActorFunc)ObjOcarinalift_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80AC9D70[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
@@ -52,28 +52,21 @@ static InitChainEntry D_80AC9D70[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
-
-extern InitChainEntry D_80AC9D70[];
-
-extern Gfx* D_06001DB0;
-extern Gfx* D_06001E40;
-extern UNK_TYPE D_060048D0;
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC94C0.s")
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Init.s")
+void func_80AC94C0(ObjOcarinalift *this, s32 arg1) {
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->unk170[arg1]);
+}
 
 void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     Path* path;
     f32 test;
     ObjOcarinalift* this = (ObjOcarinalift*)thisx;
-    Actor_ProcessInitChain(&this->dyna.actor, D_80AC9D70);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, (CollisionHeader*)(&D_060048D0));
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
     test = this->dyna.actor.home.rot.z * 0.1f;
     this->unk160 = ((f32)this->dyna.actor.home.rot.z) * 0.1f;
     if (1) {}
@@ -307,6 +300,6 @@ void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
 void ObjOcarinalift_Draw(Actor* thisx, PlayState* play) {
     ObjOcarinalift* this = THIS;
 
-    Gfx_DrawDListOpa(play, &D_06001E40);
-    Gfx_DrawDListXlu(play, &D_06001DB0);
+    Gfx_DrawDListOpa(play, object_raillift_DL_001E40);
+    Gfx_DrawDListXlu(play, object_raillift_DL_001DB0);
 }

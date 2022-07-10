@@ -3366,8 +3366,7 @@ beginseg
     name "ovl_Obj_Ocarinalift"
     compress
     include "build/src/overlays/actors/ovl_Obj_Ocarinalift/z_obj_ocarinalift.o"
-    include "build/data/ovl_Obj_Ocarinalift/ovl_Obj_Ocarinalift.data.o"
-    include "build/data/ovl_Obj_Ocarinalift/ovl_Obj_Ocarinalift.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Ocarinalift/ovl_Obj_Ocarinalift_reloc.o"
 endseg
 
 beginseg
