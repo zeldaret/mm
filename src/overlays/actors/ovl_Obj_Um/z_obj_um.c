@@ -64,7 +64,16 @@ void func_80B7A7AC(ObjUm* this, PlayState* play);
 void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play);
 
 void ObjUm_StopAnim(ObjUm* this, PlayState* play);
-void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index);
+
+typedef enum ObjUmAnimimations {
+    /* 0 */ OBJ_UM_ANIM_0,
+    /* 1 */ OBJ_UM_ANIM_1,
+    /* 2 */ OBJ_UM_ANIM_2,
+    /* 3 */ OBJ_UM_ANIM_3,
+    /* 4 */ OBJ_UM_ANIM_4
+} ObjUmAnimimations;
+
+void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index);
 
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
@@ -662,7 +671,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->unk_2DC = this->dyna.actor.world.pos;
     this->unk_308 = this->dyna.actor.world.pos;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < MILK_POTS_COUNT; i++) {
         this->potsLife[i] = 5;
         this->wasPotHit[i] = false;
         this->potPos[i] = gZeroVec3f;
@@ -999,7 +1008,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
 
     this->dyna.actor.flags |= ACTOR_FLAG_1;
     SkelAnime_Update(&this->skelAnime);
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
         if (!(player->stateFlags1 & 0x800000)) {
@@ -1032,7 +1041,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     }
 }
 
-typedef enum {
+typedef enum ObjUmPathState {
     /* 0 */ OBJUM_PATH_STATE_0,
     /* 1 */ OBJUM_PATH_STATE_1,
     /* 2 */ OBJUM_PATH_STATE_FINISH,
@@ -1142,7 +1151,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
-    ObjUm_UpdateAnim(this, play, 0);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
@@ -1165,7 +1174,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
 }
 
 void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1194,9 +1203,9 @@ void func_80B7A070(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7A0E0(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, play, 0);
+        ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
         ObjUm_SetupAction(this, func_80B7A070);
     }
 }
@@ -1208,7 +1217,7 @@ void func_80B7A144(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0100;
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= 0x20;
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
 
@@ -1236,7 +1245,7 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7A240(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1247,7 +1256,7 @@ void func_80B7A240(ObjUm* this, PlayState* play) {
 
 void func_80B7A2AC(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
-    ObjUm_UpdateAnim(this, play, 0);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
@@ -1274,7 +1283,7 @@ void func_80B7A394(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, play, 0);
+        ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 }
@@ -1299,7 +1308,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0x7FFF);
     this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
-    ObjUm_UpdateAnim(this, play, 1);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_1);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
@@ -1342,7 +1351,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
-    ObjUm_UpdateAnim(this, play, 1);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_1);
 
     if (ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
         this->unk_4DC = 1;
@@ -1398,7 +1407,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0010;
     func_80B78DF0(this, play);
     this->flags |= 4;
-    ObjUm_UpdateAnim(this, play, 1);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_1);
     ObjUm_SetupAction(this, func_80B7A614);
 }
 
@@ -1499,7 +1508,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7AB78(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
@@ -1511,7 +1520,7 @@ void func_80B7AB78(ObjUm* this, PlayState* play) {
 void func_80B7ABE4(ObjUm* this, PlayState* play) {
     this->wheelRot += 1000;
 
-    ObjUm_UpdateAnim(this, play, 0);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_FINISH:
             func_80B79524(this);
@@ -1554,7 +1563,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
     this->wheelRot += 1000;
-    ObjUm_UpdateAnim(this, play, 0);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_0);
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
@@ -1577,7 +1586,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1588,7 +1597,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
 }
 
 void ObjUm_TerminaFieldIdle(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, 2);
+    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_2);
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -1653,7 +1662,7 @@ struct_80B7C25C D_80B7C25C[] = {
     { &object_um_Anim_0126C4, false },
 };
 
-void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
+void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index) {
     s32 changeAnim;
     s32 temp;
     s32 indexTemp = index;
@@ -1665,11 +1674,11 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
         this->flags &= ~OBJ_UM_FLAG_MOVING;
     }
 
-    if (index == 0) {
+    if (index == OBJ_UM_ANIM_0) {
         animPlaybackSpeed = this->dyna.actor.speedXZ * 0.25f;
-    } else if (index == 1) {
+    } else if (index == OBJ_UM_ANIM_1) {
         animPlaybackSpeed = this->dyna.actor.speedXZ * 0.2f;
-    } else if (index == 2) {
+    } else if (index == OBJ_UM_ANIM_2) {
         animPlaybackSpeed = 1.0f;
     }
     this->skelAnime.playSpeed = animPlaybackSpeed;
@@ -1701,10 +1710,10 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
             }
 
             if (changeAnim) {
-                temp = 3 - index;
+                temp = 3 - index; // OBJ_UM_ANIM_4
                 Animation_MorphToPlayOnce(&this->skelAnime, D_80B7C25C[temp].anim, -10.0f);
             } else {
-                temp = 3 - index;
+                temp = 3 - index; // OBJ_UM_ANIM_4
                 Animation_PlayOnce(&this->skelAnime, D_80B7C25C[temp].anim);
             }
         }
