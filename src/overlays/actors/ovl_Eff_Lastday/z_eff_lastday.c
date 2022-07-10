@@ -39,21 +39,21 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.1f);
     switch (EFFLASTDAY_GET_F(&this->actor)) {
-        case 1:
+        case ACTION_1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
             this->actionCmd = 0x1FC;
             this->actionFunc = func_80BEBDF8;
             Actor_SetScale(&this->actor, 1.0f);
             break;
-        case 2:
+        case ACTION_2:
             this->dList = object_lastday_DL_000210;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000308);
             this->actionCmd = 0x1FD;
             this->actionFunc = func_80BEBEB8;
             Actor_SetScale(&this->actor, 0.5f);
             break;
-        case 3:
+        case ACTION_3:
             this->dList = object_lastday_DL_000060;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000148);
             this->actionCmd = 0x1FE;
@@ -92,7 +92,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
                 this->alpha = 0;
                 this->step = 0;
                 break;
-            case 2:
+            case ACTION_2:
                 this->actor.draw = NULL;
                 this->actor.draw = EffLastday_Draw;
                 if (this->alpha < 255) {
@@ -103,7 +103,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
                 }
                 this->step++;
                 break;
-            case 3:
+            case ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -123,11 +123,11 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
                 this->actor.draw = NULL;
                 this->step = 0;
                 break;
-            case 2:
+            case ACTION_2:
                 this->actor.draw = EffLastday_Draw;
                 this->step++;
                 break;
-            case 3:
+            case ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -147,11 +147,11 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
                 this->actor.draw = NULL;
                 this->step = 0;
                 break;
-            case 2:
+            case ACTION_2:
                 this->actor.draw = EffLastday_Draw;
                 this->step++;
                 break;
-            case 3:
+            case ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -172,7 +172,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
                 this->alpha = 0;
                 this->step = 0;
                 break;
-            case 2:
+            case ACTION_2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
@@ -186,7 +186,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
                 }
                 this->step++;
                 break;
-            case 3:
+            case ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -216,10 +216,10 @@ void EffLastday_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (EFFLASTDAY_GET_F(thisx)) {
-        case 1:
-        case 2:
+        case PARAMS_1:
+        case PARAMS_2:
             break;
-        case 3:
+        case PARAMS_3:
             EffLastday_Draw_SetVtxAlpha(this->alpha);
             break;
         default:

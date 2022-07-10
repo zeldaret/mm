@@ -19,6 +19,20 @@ typedef struct EffLastday {
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 
+typedef enum EffLastDayAction {
+    /* 0x0 */ ACTION_NONE,
+    /* 0x1 */ ACTION_1,
+    /* 0x2 */ ACTION_2,
+    /* 0x3 */ ACTION_3
+} EffLastDayAction;
+
+typedef enum EffLastDayParams {
+    /* 0x0 */ PARAMS_NONE,
+    /* 0x1 */ PARAMS_1,
+    /* 0x2 */ PARAMS_2,
+    /* 0x3 */ PARAMS_3
+} EffLastDayParams;
+
 extern const ActorInit Eff_Lastday_InitVars;
 
 #endif // Z_EFF_LASTDAY_H
