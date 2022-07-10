@@ -1678,7 +1678,7 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
         index = -1;
     }
 
-    changeAnim = index != this->unk_304;
+    changeAnim = (index != this->unk_304);
     if (SkelAnime_Update(&this->skelAnime) || changeAnim) {
         this->unk_304 = index;
 
