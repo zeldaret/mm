@@ -208,18 +208,18 @@ typedef enum {
     /*  1 */ RACEDOG_ANIMATION_WALK_1, // unused
     /*  2 */ RACEDOG_ANIMATION_RUN,
     /*  3 */ RACEDOG_ANIMATION_BARK,               // unused
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,         // unused
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,         // unused
+    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_ONCE,      // unused
+    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN,           // unused
     /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1, // unused
     /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,    // unused
     /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2, // unused
     /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3, // unused
     /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
-    /* 11 */ RACEDOG_ANIMATION_WALK_2,             // unused
+    /* 11 */ RACEDOG_ANIMATION_WALK_BACKWARDS,     // unused
     /* 12 */ RACEDOG_ANIMATION_JUMP,
     /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,   // unused
     /* 14 */ RACEDOG_ANIMATION_JUMP_ATTACK, // unused
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,      // unused
+    /* 15 */ RACEDOG_ANIMATION_SWIM,        // unused
     /* 16 */ RACEDOG_ANIMATION_MAX
 } RacedogAnimationIndex;
 
