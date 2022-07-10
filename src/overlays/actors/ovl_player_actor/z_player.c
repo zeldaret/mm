@@ -5,6 +5,7 @@
  */
 
 #include "global.h"
+#include "src/overlays/actors/ovl_En_Test3/z_en_test3.h"
 
 #define THIS ((Player*)thisx)
 
@@ -16,6 +17,11 @@ void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
+
+void func_8084BC64(Player* this, PlayState* play);
+void func_808548B8(Player* this, PlayState* play);
+void func_8084FE7C(Player* this, PlayState* play);
+void func_808505D0(Player* this, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 
@@ -137,6 +143,7 @@ void Player_Draw(Actor* thisx, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EEE0.s")
 
+s32 func_8082EF20(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EF20.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EF54.s")
@@ -745,7 +752,112 @@ void Player_Draw(Actor* thisx, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843178.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843EC0.s")
+void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
+    u8 seqMode;
+    s32 pad[2];
+    Camera* camera;
+    s32 camMode;
+
+    if (this == GET_PLAYER(play)) {
+        seqMode = SEQ_MODE_DEFAULT;
+        if (this->stateFlags1 & 0x100000) {
+            seqMode = SEQ_MODE_STILL;
+        } else if (this->csMode != 0) {
+            Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_NORMAL);
+        } else {
+            camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
+                                                      : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
+            if ((this->actor.parent != NULL) && (this->stateFlags3 & 0x80)) {
+                camMode = CAM_MODE_HOOKSHOT;
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->actor.parent);
+            } else if (func_8084BC64 == this->unk_748) {
+                camMode = CAM_MODE_STILL;
+            } else if (this->stateFlags3 & 0x8000) {
+                if (this->stateFlags1 & 0x8000000) {
+                    camMode = CAM_MODE_GORONDASH;
+                } else {
+                    camMode = CAM_MODE_FREEFALL;
+                }
+            } else if (this->stateFlags3 & 0x80000) {
+                if (this->actor.bgCheckFlags & 1) {
+                    camMode = CAM_MODE_GORONDASH;
+                } else {
+                    camMode = CAM_MODE_GORONJUMP;
+                }
+            } else if (this->stateFlags2 & 0x100) {
+                camMode = CAM_MODE_PUSHPULL;
+            } else if (this->unk_730 != NULL) {
+                if ((this->actor.flags & 0x100) == 0x100) {
+                    camMode = CAM_MODE_TALK;
+                } else if (this->stateFlags1 & 0x10000) {
+                    if (this->stateFlags1 & 0x2000000) {
+                        camMode = CAM_MODE_FOLLOWBOOMERANG;
+                    } else {
+                        camMode = CAM_MODE_FOLLOWTARGET;
+                    }
+                } else {
+                    camMode = CAM_MODE_BATTLE;
+                }
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->unk_730);
+            } else if (this->stateFlags1 & 0x1000) {
+                camMode = CAM_MODE_CHARGE;
+            } else if (this->stateFlags3 & 0x100) {
+                camMode = CAM_MODE_DEKUHIDE;
+            } else if (this->stateFlags1 & 0x02000000) {
+                camMode = CAM_MODE_FOLLOWBOOMERANG;
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->boomerangActor);
+            } else if (this->stateFlags1 & 0x6004) {
+                if (func_80123434(this)) {
+                    camMode = CAM_MODE_HANGZ;
+                } else {
+                    camMode = CAM_MODE_HANG;
+                }
+            } else if ((this->stateFlags3 & 0x2000) && (this->actor.velocity.y < 0.0f)) {
+                if (this->stateFlags1 & 0x40020000) {
+                    camMode = CAM_MODE_DEKUFLYZ;
+                } else {
+                    camMode = CAM_MODE_DEKUFLY;
+                }
+            } else if (this->stateFlags1 & 0x40020000) {
+                if (func_800B7128(this) || func_8082EF20(this)) {
+                    camMode = CAM_MODE_BOWARROWZ;
+                } else if (this->stateFlags1 & 0x200000) {
+                    camMode = CAM_MODE_CLIMBZ;
+                } else {
+                    camMode = CAM_MODE_TARGET;
+                }
+            } else if ((this->stateFlags1 & 0x400000) && (this->transformation != 0)) {
+                camMode = CAM_MODE_STILL;
+            } else if (this->stateFlags1 & 0x40000) {
+                camMode = CAM_MODE_JUMP;
+            } else if (this->stateFlags1 & 0x200000) {
+                camMode = CAM_MODE_CLIMB;
+            } else if (this->stateFlags1 & 0x80000) {
+                camMode = CAM_MODE_FREEFALL;
+            } else if (((func_808548B8 == this->unk_748) && (this->swordAnimation >= 0) &&
+                        (this->swordAnimation < 0x1E)) ||
+                       (this->stateFlags3 & 8) || ((func_8084FE7C == this->unk_748) && (this->unk_AE8 == 0)) ||
+                       (func_808505D0 == this->unk_748)) {
+                camMode = CAM_MODE_STILL;
+            } else {
+                camMode = CAM_MODE_NORMAL;
+                if ((this->linearVelocity == 0.0f) &&
+                    (!(this->stateFlags1 & 0x800000) || (this->rideActor->speedXZ == 0.0f))) {
+                    seqMode = SEQ_MODE_STILL;
+                }
+            }
+
+            Camera_ChangeMode(camera, camMode);
+        }
+
+        if (play->actorCtx.targetContext.bgmEnemy != NULL) {
+            seqMode = SEQ_MODE_ENEMY;
+            Audio_SetBgmEnemyVolume(sqrtf(play->actorCtx.targetContext.bgmEnemy->xyzDistToPlayerSq));
+        }
+
+        Audio_SetSequenceMode(seqMode);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808442D8.s")
 

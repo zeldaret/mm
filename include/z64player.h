@@ -185,7 +185,7 @@ typedef struct {
     /* 0x10 */ Vec3f base;
 } WeaponInfo; // size = 0x1C
 
-
+typedef void (*PlayerFunc748)(struct Player*, struct PlayState*);
 typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
 
 typedef struct Player {
@@ -291,7 +291,8 @@ typedef struct Player {
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 blureEffectIndex[3];
-    /* 0x748 */ char unk_748[0x320];
+    /* 0x748 */ PlayerFunc748 unk_748;
+    /* 0x74C */ char unk_74C[0x31C];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
