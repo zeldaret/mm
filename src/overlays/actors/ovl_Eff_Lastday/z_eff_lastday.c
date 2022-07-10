@@ -38,7 +38,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
     EffLastday* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
-    switch (this->actor.params & 0xF) {
+    switch (EFFLASTDAY_GET_F(&this->actor)) {
         case 1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
@@ -101,7 +101,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
                 if (this->alpha > 255) {
                     this->alpha = 255;
                 }
-                this->step += 1;
+                this->step++;
                 break;
             case 3:
                 this->actor.draw = EffLastday_Draw;
@@ -125,7 +125,7 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
                 break;
             case 2:
                 this->actor.draw = EffLastday_Draw;
-                this->step += 1;
+                this->step++;
                 break;
             case 3:
                 this->actor.draw = EffLastday_Draw;
@@ -149,7 +149,7 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
                 break;
             case 2:
                 this->actor.draw = EffLastday_Draw;
-                this->step += 1;
+                this->step++;
                 break;
             case 3:
                 this->actor.draw = EffLastday_Draw;
@@ -181,10 +181,10 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
                 if (this->alpha < 255) {
                     this->alpha += 5;
                 }
-                if (this->alpha >= 0x100) {
+                if (this->alpha > 255) {
                     this->alpha = 255;
                 }
-                this->step += 1;
+                this->step++;
                 break;
             case 3:
                 this->actor.draw = EffLastday_Draw;
@@ -215,7 +215,7 @@ void EffLastday_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    switch (this->actor.params & 0xF) {
+    switch (EFFLASTDAY_GET_F(thisx)) {
         case 1:
         case 2:
             break;

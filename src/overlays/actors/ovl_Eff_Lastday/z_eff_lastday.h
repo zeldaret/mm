@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define EFFLASTDAY_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct EffLastday;
 
 typedef void (*EffLastdayActionFunc)(struct EffLastday*, PlayState*);
