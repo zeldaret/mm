@@ -137,10 +137,10 @@ void EnBigpamet_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    SkelAnime_InitFlex(play, &this->skelAnime1, &object_tl_Skel_007C70, &object_tl_Anim_004210, this->jointTable1,
-                       this->morphTable1, OBJECT_TL_2_LIMB_MAX);
-    SkelAnime_InitFlex(play, &this->skelAnime2, &object_tl_Skel_001A50, &object_tl_Anim_000B30, this->jointTable2,
-                       this->morphTable2, OBJECT_TL_1_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime2, &object_tl_Skel_007C70, &object_tl_Anim_004210, this->jointTable2,
+                       this->morphTable2, OBJECT_TL_2_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime1, &object_tl_Skel_001A50, &object_tl_Anim_000B30, this->jointTable1,
+                       this->morphTable1, OBJECT_TL_1_LIMB_MAX);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 55.0f);
 
@@ -154,7 +154,7 @@ void EnBigpamet_Init(Actor* thisx, PlayState* play) {
         D_80A29778 = true;
     }
 
-    this->actor.params = 1;
+    this->actor.params = ENBIGPAMET_1;
     func_80A281B4(this);
 }
 
@@ -240,19 +240,18 @@ void func_80A27970(EnBigpamet* this, PlayState* play2) {
 
         if (BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &sp84, &sp94, &this->actor, &sp9C) < temp_fs1) {
             sp9C.y = temp_fs1;
-            EffectSsGSplash_Spawn(play, &sp9C, NULL, NULL, 0, Rand_S16Offset(1000, 0xC8));
+            EffectSsGSplash_Spawn(play, &sp9C, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         } else {
-            func_800B12F0(play, &sp9C, &D_80A2977C, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0xA, 0xA),
+            func_800B12F0(play, &sp9C, &D_80A2977C, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0xA, 10),
                           20);
         }
     }
 }
 
-#ifdef NON_MATCHING
 void func_80A27B58(EnBigpamet* this) {
-    Vec3f sp64;
-    s32 i;
     EnBigpametStruct* ptr;
+    s32 i;
+    Vec3f sp64;
     f32 temp_fs0;
     s16 temp_s2;
     f32 temp_fs2;
@@ -297,14 +296,10 @@ void func_80A27B58(EnBigpamet* this) {
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_BREAK);
 }
-#else
-void func_80A27B58(EnBigpamet* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpamet/func_80A27B58.s")
-#endif
 
 void func_80A27DD8(EnBigpamet* this, PlayState* play) {
     s32 i;
-    Vec3f sp98;
+    Vec3f pos;
     Vec3f sp8C;
     f32 temp_fs0;
     f32 temp_fs4;
@@ -325,44 +320,44 @@ void func_80A27DD8(EnBigpamet* this, PlayState* play) {
         temp_fs0 = Rand_ZeroFloat(60.0f) + 50.0f;
         temp_s0 = Rand_Next() >> 0x11;
 
-        sp98.x = (Math_CosS(temp_s0) * temp_fs0 * temp_fs4) + sp8C.x;
-        sp98.y = (Math_SinS(temp_s0) * temp_fs0) + sp8C.y;
-        sp98.z = (Math_CosS(temp_s0) * temp_fs0 * temp_fs5) + sp8C.z;
+        pos.x = (Math_CosS(temp_s0) * temp_fs0 * temp_fs4) + sp8C.x;
+        pos.y = (Math_SinS(temp_s0) * temp_fs0) + sp8C.y;
+        pos.z = (Math_CosS(temp_s0) * temp_fs0 * temp_fs5) + sp8C.z;
 
-        func_800B12F0(play, &sp98, &gZeroVec3f, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0x14, 0xA), 20);
+        func_800B12F0(play, &pos, &gZeroVec3f, &gZeroVec3f, Rand_S16Offset(950, 0x64), Rand_S16Offset(0x14, 0xA), 20);
     }
 }
 
 void func_80A27FE8(EnBigpamet* this, PlayState* play) {
-    Vec3f sp34;
+    Vec3f pos;
     s16 sp32;
 
     if (this->actor.depthInWater > 0.0f) {
-        sp34.x = this->actor.world.pos.x;
-        sp34.z = this->actor.world.pos.z;
-        sp34.y = this->actor.world.pos.y + this->actor.depthInWater;
+        pos.x = this->actor.world.pos.x;
+        pos.z = this->actor.world.pos.z;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
-        EffectSsGRipple_Spawn(play, &sp34, 500, 900, 0);
-        sp34.y += 8.0f;
+        EffectSsGRipple_Spawn(play, &pos, 500, 900, 0);
+        pos.y += 8.0f;
 
         if (this->actionFunc != func_80A28D0C) {
             sp32 = (s32)randPlusMinusPoint5Scaled(32768.0f) + this->actor.world.rot.y;
-            sp34.x -= 55.0f * Math_SinS(sp32);
-            sp34.z -= 55.0f * Math_CosS(sp32);
+            pos.x -= 55.0f * Math_SinS(sp32);
+            pos.z -= 55.0f * Math_CosS(sp32);
         }
-        EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, Rand_S16Offset(1400, 0xC8));
+        EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, Rand_S16Offset(1400, 200));
     }
 }
 
 void func_80A2811C(EnBigpamet* this, PlayState* play) {
-    Vec3f sp2C;
+    Vec3f pos;
 
     if ((this->actor.depthInWater > 0.0f) && ((play->gameplayFrames % 14) == 0)) {
-        sp2C.x = this->actor.world.pos.x;
-        sp2C.y = this->actor.world.pos.y + this->actor.depthInWater;
-        sp2C.z = this->actor.world.pos.z;
+        pos.x = this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
+        pos.z = this->actor.world.pos.z;
 
-        EffectSsGRipple_Spawn(play, &sp2C, 500, 900, 0);
+        EffectSsGRipple_Spawn(play, &pos, 500, 900, 0);
     }
 }
 
@@ -390,16 +385,16 @@ void func_80A281DC(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28274(EnBigpamet* this) {
-    Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_004210);
+    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_004210);
     this->actor.draw = EnBigpamet_Draw;
-    this->unk_29E = 0x14;
+    this->unk_29E = 20;
     this->actionFunc = func_80A282C8;
 }
 
 void func_80A282C8(EnBigpamet* this, PlayState* play) {
     if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.floorHeight, 0.7f, 30.0f, 10.0f) < 1.0f) {
         this->unk_29E--;
-        if (this->unk_29E >= 0x10) {
+        if (this->unk_29E >= 16) {
             func_80A27970(this, play);
         }
         if (this->unk_29E == 0) {
@@ -417,22 +412,22 @@ void func_80A28378(EnBigpamet* this) {
 }
 
 void func_80A283A0(EnBigpamet* this, PlayState* play) {
-    SkelAnime_Update(&this->skelAnime1);
+    SkelAnime_Update(&this->skelAnime2);
     if (this->actor.parent->params == 3) {
         func_80A28E40(this);
     }
 }
 
 void func_80A283F0(EnBigpamet* this) {
-    Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_00823C);
+    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_00823C);
     this->actor.speedXZ = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.params = 1;
+    this->actor.params = ENBIGPAMET_1;
     this->actionFunc = func_80A2844C;
 }
 
 void func_80A2844C(EnBigpamet* this, PlayState* play) {
-    SkelAnime_Update(&this->skelAnime1);
+    SkelAnime_Update(&this->skelAnime2);
 
     if (this->actor.parent->params == 7) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.parent), 0x400);
@@ -445,7 +440,7 @@ void func_80A2844C(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A284E4(EnBigpamet* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_001C68, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_001C68, -3.0f);
     this->unk_29E = 0;
     this->unk_2A8 = 1.0f;
     this->unk_2A4 = 1.0f;
@@ -456,13 +451,13 @@ void func_80A284E4(EnBigpamet* this) {
 }
 
 void func_80A2855C(EnBigpamet* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime1)) {
+    if (SkelAnime_Update(&this->skelAnime2)) {
         func_80A28618(this);
-    } else if (this->skelAnime1.curFrame > 2.0f) {
-        this->unk_2A8 = 1.5f - ((this->skelAnime1.curFrame - 2.0f) * 0.23333333f);
-        this->unk_2A4 = 1.5f - ((this->skelAnime1.curFrame - 2.0f) * 0.083333336f);
+    } else if (this->skelAnime2.curFrame > 2.0f) {
+        this->unk_2A8 = 1.5f - ((this->skelAnime2.curFrame - 2.0f) * 0.23333333f);
+        this->unk_2A4 = 1.5f - ((this->skelAnime2.curFrame - 2.0f) * 0.083333336f);
     } else {
-        f32 frame = this->skelAnime1.curFrame;
+        f32 frame = this->skelAnime2.curFrame;
         this->unk_2A4 = this->unk_2A8 = (0.25f * frame) + 1.0f;
     }
 }
@@ -486,7 +481,7 @@ void func_80A286C0(EnBigpamet* this) {
     this->collider.info.bumper.dmgFlags = 0xF7CF7FFF;
     this->collider.base.atFlags |= AT_ON;
     this->actor.shape.rot.z = 0x680;
-    this->unk_29E = 0xF;
+    this->unk_29E = 15;
     this->unk_2A8 = 1.0f;
     this->actionFunc = func_80A28708;
 }
@@ -507,7 +502,7 @@ void func_80A28760(EnBigpamet* this) {
 
         this->actor.bgCheckFlags &= ~8;
 
-        if (temp_v1 >= 0x3C01) {
+        if (temp_v1 > 0x3C00) {
             this->actor.world.rot.y = this->actor.wallYaw + 0x3C00;
         } else if (temp_v1 < -0x3C00) {
             this->actor.world.rot.y = this->actor.wallYaw - 0x3C00;
@@ -573,7 +568,7 @@ void func_80A289C8(EnBigpamet* this, PlayState* play) {
 
 void func_80A28A28(EnBigpamet* this) {
     this->actor.draw = EnBigpamet_Draw;
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0031DC, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_0031DC, -3.0f);
     this->unk_2A8 = 0.1f;
     this->unk_2A4 = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -585,21 +580,21 @@ void func_80A28A98(EnBigpamet* this, PlayState* play) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x600);
 
-    if (SkelAnime_Update(&this->skelAnime1)) {
+    if (SkelAnime_Update(&this->skelAnime2)) {
         if ((this->actor.parent->params == 7) || (this->actor.parent->params == 8)) {
             func_80A283F0(this);
         } else {
             func_80A284E4(this);
         }
     } else {
-        curFrame = this->skelAnime1.curFrame;
+        curFrame = this->skelAnime2.curFrame;
 
         if (curFrame > 7.0f) {
-            this->unk_2A8 = 1.5f - ((curFrame - 7.0f) * 0.16666667f);
-            this->unk_2A4 = 1.5f - ((curFrame - 7.0f) * 0.16666667f);
+            this->unk_2A8 = 1.5f - ((curFrame - 7.0f) * (1.0f / 6.0f));
+            this->unk_2A4 = 1.5f - ((curFrame - 7.0f) * (1.0f / 6.0f));
         } else {
             this->unk_2A8 = (0.2f * curFrame) + 0.1f;
-            this->unk_2A4 = (0.071428575f * curFrame) + 1.0f;
+            this->unk_2A4 = ((1.0f / 14.0f) * curFrame) + 1.0f;
         }
     }
 }
@@ -607,11 +602,11 @@ void func_80A28A98(EnBigpamet* this, PlayState* play) {
 void func_80A28B98(EnBigpamet* this, PlayState* play) {
     Actor* sp24;
 
-    Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_000AF4);
+    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_000AF4);
 
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
-    this->collider.base.atFlags &= ~(2 | 4);
+    this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
     this->collider.base.acFlags &= ~AC_ON;
 
     this->actor.velocity.y = 22.0f;
@@ -626,7 +621,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.bgCheckFlags &= ~1;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.params = 0;
+    this->actor.params = ENBIGPAMET_0;
 
     if ((this->actor.parent->params == 3) || (this->actor.parent->params == 4) || (this->actor.parent->params == 8)) {
         this->actor.parent->params = 5;
@@ -643,7 +638,7 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28D0C(EnBigpamet* this, PlayState* play) {
-    SkelAnime_Update(&this->skelAnime1);
+    SkelAnime_Update(&this->skelAnime2);
     if (this->actor.bgCheckFlags & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80A27FE8(this, play);
@@ -674,14 +669,14 @@ void func_80A28DC0(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28E40(EnBigpamet* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_000440, -2.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_000440, -2.0f);
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80A28E98;
 }
 
 void func_80A28E98(EnBigpamet* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime1)) {
+    if (SkelAnime_Update(&this->skelAnime2)) {
         func_80A284E4(this);
     }
 }
@@ -691,7 +686,7 @@ void func_80A28ED4(EnBigpamet* this) {
 }
 
 void func_80A28EE8(EnBigpamet* this, PlayState* play) {
-    Vec3f sp3C;
+    Vec3f pos;
     s16 sp3A;
 
     this->actor.shape.rot.x = (s32)Rand_Next() >> 0x16;
@@ -700,11 +695,11 @@ void func_80A28EE8(EnBigpamet* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.00075f)) {
         sp3A = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
 
-        sp3C.x = (Math_SinS(sp3A) * 20.0f) + this->actor.world.pos.x;
-        sp3C.y = this->actor.world.pos.y + 25.0f;
-        sp3C.z = (Math_CosS(sp3A) * 20.0f) + this->actor.world.pos.z;
+        pos.x = (Math_SinS(sp3A) * 20.0f) + this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + 25.0f;
+        pos.z = (Math_CosS(sp3A) * 20.0f) + this->actor.world.pos.z;
 
-        func_800B0DE0(play, &sp3C, &gZeroVec3f, &gZeroVec3f, &D_80A29788, &D_80A2978C, 0x320, 0x32);
+        func_800B0DE0(play, &pos, &gZeroVec3f, &gZeroVec3f, &D_80A29788, &D_80A2978C, 0x320, 0x32);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x32, NA_SE_EN_NPC_FADEAWAY);
         Actor_MarkForDeath(&this->actor);
     }
@@ -832,7 +827,7 @@ void EnBigpamet_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80A29754[this->unk_29C]);
 
-    SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable, this->skelAnime1.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable, this->skelAnime2.dListCount,
                           EnBigpamet_OverrideLimbDraw2, EnBigpamet_PostLimbDraw2, &this->actor);
     func_80A292A8(this, play);
 
@@ -869,7 +864,7 @@ void func_80A2966C(Actor* thisx, PlayState* play) {
     EnBigpamet* this = THIS;
 
     func_8012C28C(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable, this->skelAnime2.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable, this->skelAnime1.dListCount,
                           EnBigpamet_OverrideLimbDraw1, EnBigpamet_PostLimbDraw1, &this->actor);
     func_80A292A8(this, play);
 }

@@ -8,6 +8,11 @@ struct EnBigpamet;
 
 typedef void (*EnBigpametActionFunc)(struct EnBigpamet*, PlayState*);
 
+enum {
+    ENBIGPAMET_0,    
+    ENBIGPAMET_1,    
+};
+
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
@@ -17,12 +22,12 @@ typedef struct {
 
 typedef struct EnBigpamet {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime skelAnime1;
-    /* 0x188 */ Vec3s jointTable1[OBJECT_TL_2_LIMB_MAX];
-    /* 0x1D6 */ Vec3s morphTable1[OBJECT_TL_2_LIMB_MAX];
-    /* 0x224 */ SkelAnime skelAnime2;
-    /* 0x268 */ Vec3s jointTable2[OBJECT_TL_1_LIMB_MAX];
-    /* 0x280 */ Vec3s morphTable2[OBJECT_TL_1_LIMB_MAX];
+    /* 0x144 */ SkelAnime skelAnime2;
+    /* 0x188 */ Vec3s jointTable2[OBJECT_TL_2_LIMB_MAX];
+    /* 0x1D6 */ Vec3s morphTable2[OBJECT_TL_2_LIMB_MAX];
+    /* 0x224 */ SkelAnime skelAnime1;
+    /* 0x268 */ Vec3s jointTable1[OBJECT_TL_1_LIMB_MAX];
+    /* 0x280 */ Vec3s morphTable1[OBJECT_TL_1_LIMB_MAX];
     /* 0x298 */ EnBigpametActionFunc actionFunc;
     /* 0x29C */ u8 unk_29C;
     /* 0x29E */ s16 unk_29E;
