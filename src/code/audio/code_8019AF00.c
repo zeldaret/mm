@@ -987,13 +987,13 @@ NatureAmbienceDataIO sNatureAmbienceData[20] = {
 u8 sIsOcarinaInputEnabled = false;
 s8 sOcarinaInstrumentId = OCARINA_INSTRUMENT_OFF;
 u8 sCurOcarinaPitch = OCARINA_PITCH_NONE;
-u8 sPrevOcarinaPitch = 0;
-u8 sCurOcarinaButtonIndex = 0;
-u8 sMusicStaffPrevPitch = 0;
+u8 sPrevOcarinaPitch = OCARINA_PITCH_C4;
+u8 sCurOcarinaButtonIndex = OCARINA_BTN_A;
+u8 sMusicStaffPrevPitch = OCARINA_PITCH_C4;
 f32 sCurOcarinaBendFreq = 1.0f;
-f32 sDefaultOcarinaVolume = 0.68503935f;
+f32 sDefaultOcarinaVolume = 87.0f / 127.0f;
 s8 sCurOcarinaBendIndex = 0;
-s8 sCurOcarinaVolume = 0x57;
+s8 sCurOcarinaVolume = 87;
 s8 sCurOcarinaVibrato = 0;
 u8 sPlaybackState = 0;
 u8 sPlaybackStaffStopPos = 0xFF;
@@ -1003,7 +1003,7 @@ s32 sPlaybackNoteTimer = 0;
 u16 sPlaybackNotePos = 0;
 u16 sPlaybackStaffPos = 0;
 u32 sPrevOcarinaWithMusicStaffFlags = 0; // Stores sOcarinaFlags but never used
-u8 sPlaybackPitch = OCARINA_PITCH_NONE;
+u8 sPlaybackPitch = OCARINA_PITCH_NONE;  // Pitch + PitchFlags
 u8 sNotePlaybackVolume = 0;
 u8 sNotePlaybackVibrato = 0;
 s8 sNotePlaybackBend = 0;
@@ -1030,7 +1030,7 @@ u8 sOcarinaMemoryGameAppendPos = 0;
 u8 sOcarinaMemoryGameEndPos = 0;
 u8 sOcarinaMemoryGameNumNotes[] = { 5, 6, 8 };
 OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
-    // 0: Sonata of Awakening
+    // OCARINA_SONG_SONATA
     {
         { OCARINA_PITCH_D5, 19, 92, 0, 0, 0 },
         { OCARINA_PITCH_B4, 19, 90, 0, 0, 0 },
@@ -1042,7 +1042,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 86, 0, 0, 0 },
     },
 
-    // 1: Goron Lullaby
+    // OCARINA_SONG_GORON_LULLABY
     {
         { OCARINA_PITCH_D4, 41, 80, 0, 0, 0 },
         { OCARINA_PITCH_A4, 40, 72, 0, 0, 0 },
@@ -1056,7 +1056,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 2: New Wave Bossa Nova
+    // OCARINA_SONG_NEW_WAVE
     {
         { OCARINA_PITCH_B4, 64, 74, 0, 0, 0 },
         { OCARINA_PITCH_D5, 13, 88, 0, 0, 0 },
@@ -1068,7 +1068,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 3: Elegy of Emptyness
+    // OCARINA_SONG_ELEGY
     {
         { OCARINA_PITCH_A4, 85, 93, 0, 0, 0 },
         { OCARINA_PITCH_B4, 43, 91, 0, 0, 0 },
@@ -1080,7 +1080,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 94, 0, 0, 0 },
     },
 
-    // 4: Oath to Order
+    // OCARINA_SONG_OATH
     {
         { OCARINA_PITCH_A4, 97, 104, 0, 0, 0 },
         { OCARINA_PITCH_F4, 48, 88, 0, 0, 0 },
@@ -1092,7 +1092,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
 
     },
 
-    // 5: Sarias Song
+    // OCARINA_SONG_SARIAS
     {
         { OCARINA_PITCH_F4, 17, 84, 0, 0, 0 },
         { OCARINA_PITCH_A4, 17, 88, 0, 0, 0 },
@@ -1103,7 +1103,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 6: Song of Time
+    // OCARINA_SONG_TIME
     {
         { OCARINA_PITCH_A4, 32, 84, 0, 0, 0 },
         { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
@@ -1114,7 +1114,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 7: Song of Healing
+    // OCARINA_SONG_HEALING
     {
         { OCARINA_PITCH_B4, 32, 88, 0, 0, 0 },
         { OCARINA_PITCH_A4, 33, 88, 0, 0, 0 },
@@ -1126,7 +1126,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 8: Eponas Song
+    // OCARINA_SONG_EPONAS
     {
         { OCARINA_PITCH_D5, 18, 84, 0, 0, 0 },
         { OCARINA_PITCH_B4, 18, 88, 0, 0, 0 },
@@ -1137,7 +1137,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 9: Song of Soaring
+    // OCARINA_SONG_SOARING
     {
         { OCARINA_PITCH_F4, 18, 84, 0, 0, 0 },
         { OCARINA_PITCH_B4, 18, 80, 0, 0, 0 },
@@ -1148,7 +1148,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 10: Song of Storms
+    // OCARINA_SONG_STORMS
     {
         { OCARINA_PITCH_D4, 11, 84, 0, 0, 0 },
         { OCARINA_PITCH_F4, 11, 88, 0, 0, 0 },
@@ -1159,7 +1159,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 11: Suns Song
+    // OCARINA_SONG_SUNS
     {
         { OCARINA_PITCH_A4, 12, 84, 0, 0, 0 },
         { OCARINA_PITCH_F4, 13, 88, 0, 0, 0 },
@@ -1171,7 +1171,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 12: Inverted Song of Time
+    // OCARINA_SONG_INVERTED_TIME
     {
         { OCARINA_PITCH_F4, 32, 84, 0, 0, 0 },
         { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
@@ -1182,7 +1182,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 13: Song of Double Time
+    // OCARINA_SONG_DOUBLE_TIME
     {
         { OCARINA_PITCH_A4, 29, 84, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
@@ -1198,7 +1198,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 0, 0, 0, 0 },
     },
 
-    // 14: Goron Lullaby Intro
+    // OCARINA_SONG_GORON_LULLABY_INTRO
     {
         { OCARINA_PITCH_D4, 32, 78, 0, 0, 0 },
         { OCARINA_PITCH_A4, 33, 90, 0, 0, 0 },
@@ -1209,7 +1209,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 15: Milk Bar Jam "Ballad of the Wind Fish" Human
+    // OCARINA_SONG_WIND_FISH_HUMAN
     {
         { OCARINA_PITCH_D5, 89, 80, 0, 0, 0 },
         { OCARINA_PITCH_A4, 41, 72, 0, 0, 0 },
@@ -1219,7 +1219,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 16: Milk Bar Jam "Ballad of the Wind Fish" Goron
+    // OCARINA_SONG_WIND_FISH_GORON
     {
         { OCARINA_PITCH_D4, 52, 80, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
@@ -1238,7 +1238,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 17: Milk Bar Jam "Ballad of the Wind Fish" Zora
+    // OCARINA_SONG_WIND_FISH_ZORA
     {
         { OCARINA_PITCH_D5, 11, 80, 0, 0, 0 },
         { OCARINA_PITCH_A4, 11, 72, 0, 0, 0 },
@@ -1251,7 +1251,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 18: Milk Bar Jam "Ballad of the Wind Fish" Deku
+    // OCARINA_SONG_WIND_FISH_DEKU
     {
         { OCARINA_PITCH_A4, 54, 80, 0, 0, 0 },
         { OCARINA_PITCH_D4, 77, 72, 0, 0, 0 },
@@ -1261,7 +1261,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 19: Evan HP (Zora Band Leader) Song Part 1
+    // OCARINA_SONG_EVAN_PART1
     {
         { OCARINA_PITCH_A4, 33, 100, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 3, 92, 0, 0, 0 },
@@ -1276,7 +1276,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 20: Evan HP (Zora Band Leader) Song Part 2
+    // OCARINA_SONG_EVAN_PART2
     {
         { OCARINA_PITCH_B4, 33, 107, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 3, 100, 0, 0, 0 },
@@ -1291,7 +1291,7 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
-    // 21: Zeldas Lullaby
+    // OCARINA_SONG_ZELDAS_LULLABY
     {
         { OCARINA_PITCH_B4, 51, 84, 0, 0, 0 },
         { OCARINA_PITCH_D5, 25, 88, 0, 0, 0 },
@@ -1302,13 +1302,13 @@ OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
         { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
-    // 22: Scarecrow
+    // OCARINA_SONG_SCARECROW_SPAWN
     {
         { OCARINA_PITCH_D4, 3, 0, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 0, 255, 0, 0, 0 },
     },
 
-    // 23: Termina Field 2D Song Buttons Appearing on Wall (In OoT, this is Ocarina Memory Game)
+    // OCARINA_SONG_TERMINA_WALL
     {
         { OCARINA_PITCH_D4, 3, 0, 0, 0, 0 },
         { OCARINA_PITCH_NONE, 0, 255, 0, 0, 0 },
@@ -1434,7 +1434,7 @@ u8 sOoTOcarinaSongsNumNotes[] = {
     6, // Suns Song
 };
 
-OcarinaNote* sPlaybackSong = sOcarinaSongNotes[OCARINA_SONG_SONATA];
+OcarinaNote* sPlaybackSong = sOcarinaSongNotes[0];
 u8 sFrogsSongNotes[14] = {
     OCARINA_BTN_A,       OCARINA_BTN_C_LEFT,  OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN, OCARINA_BTN_C_LEFT,
     OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN,  OCARINA_BTN_A,       OCARINA_BTN_C_DOWN, OCARINA_BTN_A,
@@ -1453,7 +1453,7 @@ u8 sPlayedOcarinaSongIndexPlusOne = 0;
 u8 sMusicStaffNumNotesPerTest = 0;
 u8 D_801D8530 = false;
 u32 D_801D8534 = 0;
-u8 sOcarinaDropInputTimer = false;
+u8 sOcarinaDropInputTimer = 0;
 
 OcarinaNote sScarecrowsLongSongNotes[108] = {
     { OCARINA_PITCH_NONE, 0, 0, 0, 0, 0 },
@@ -1465,34 +1465,77 @@ u8* gScarecrowSpawnSongPtr = (u8*)&sOcarinaSongNotes[OCARINA_SONG_SCARECROW_SPAW
 OcarinaNote* sTerminaWallSongPtr = sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL];
 
 u8 sPitchToButtonMap[16] = {
-    OCARINA_BTN_A,                            // OCARINA_PITCH_C4
-    OCARINA_BTN_A,                            // OCARINA_PITCH_DFLAT4
-    OCARINA_BTN_A,                            // OCARINA_PITCH_D4
-    OCARINA_BTN_A,                            // OCARINA_PITCH_EFLAT4
-    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_E4
-    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_F4
-    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_GFLAT4
-    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_G4
-    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_AFLAT4
-    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_A4
-    OCARINA_BTN_C_RIGHT + OCARINA_BTN_C_LEFT, // OCARINA_PITCH_BFLAT4: Interface/Overlap between C_RIGHT and C_LEFT
-    OCARINA_BTN_C_LEFT,                       // OCARINA_PITCH_B4
-    OCARINA_BTN_C_LEFT,                       // OCARINA_PITCH_C5
-    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_DFLAT5
-    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_D5
-    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_EFLAT5
+    OCARINA_BTN_A,                 // OCARINA_PITCH_C4
+    OCARINA_BTN_A,                 // OCARINA_PITCH_DFLAT4
+    OCARINA_BTN_A,                 // OCARINA_PITCH_D4
+    OCARINA_BTN_A,                 // OCARINA_PITCH_EFLAT4
+    OCARINA_BTN_C_DOWN,            // OCARINA_PITCH_E4
+    OCARINA_BTN_C_DOWN,            // OCARINA_PITCH_F4
+    OCARINA_BTN_C_DOWN,            // OCARINA_PITCH_GFLAT4
+    OCARINA_BTN_C_RIGHT,           // OCARINA_PITCH_G4
+    OCARINA_BTN_C_RIGHT,           // OCARINA_PITCH_AFLAT4
+    OCARINA_BTN_C_RIGHT,           // OCARINA_PITCH_A4
+    OCARINA_BTN_C_RIGHT_OR_C_LEFT, // OCARINA_PITCH_BFLAT4: Interface/Overlap between C_RIGHT and C_LEFT
+    OCARINA_BTN_C_LEFT,            // OCARINA_PITCH_B4
+    OCARINA_BTN_C_LEFT,            // OCARINA_PITCH_C5
+    OCARINA_BTN_C_UP,              // OCARINA_PITCH_DFLAT5
+    OCARINA_BTN_C_UP,              // OCARINA_PITCH_D5
+    OCARINA_BTN_C_UP,              // OCARINA_PITCH_EFLAT5
 };
 
 // seqData written in the music macro language
 // Only used in unused functions
+// clang-format off
 u8 sCustomSequenceScript[400] = {
-    0xFE, 0xFE, 0xD3, 0x20, 0xD7, 0x00, 0x01, 0xCC, 0x00, 0x70, 0x90, 0x00, 0x16, 0xDB, 0x64, 0xDD, 0x78,
-    0xFE, 0x00, 0xF3, 0xFC, 0xFF, 0xC3, 0x88, 0x00, 0x29, 0x89, 0x00, 0x2B, 0xDF, 0x7F, 0xE9, 0x0F, 0xDD,
-    0x37, 0xD4, 0x40, 0xC1, 0x52, 0xFE, 0x80, 0xF3, 0xFC, 0xFF, 0xC2, 0xFB, 0xC0, 0x00, 0xC1, 0x57, 0xC9,
+    /* 0 */ 0xFE, // delay1
+    /* 1 */ 0xFE, // delay1
+    /* 2 */ 0xD3, 0x20, // mutebhv 0x20
+    /* 4 */ 0xD7, 0x00, 0x01, // initchan 0x0001
+    /* 7 */ 0xCC, 0x00, // ldi 0
+    /* 9 */ 0x70, // stio 0
+    /* 10 */ 0x90, 0x00, 22, // ldchan 0, chan0
+    /* 13 */ 0xDB, 100, // vol 100
+    /* 15 */ 0xDD, 120, // tempo 120
+
+    // .sequence seq_loop
+    /* 17 */ 0xFE, // delay1
+    /* 18 */ 0x00, // testchan 0
+    /* 19 */ 0xF3, -4, // rbeqz seq_loop
+    /* 21 */ 0xFF, // end
+
+    // .channel chan0
+    /* 22 */ 0xC3, // short
+    /* 23 */ 0x88, 0x00, 41, // ldlayer 0, layer0
+    /* 26 */ 0x89, 0x00, 43, // ldlayer 1, layer1
+    /* 29 */ 0xDF, 127, // vol 127
+    /* 31 */ 0xE9, 0x0F, // notepri 0x0F
+    /* 33 */ 0xDD, 55, // pan 55
+    /* 35 */ 0xD4, 64, // reverb 64
+    /* 37 */ 0xC1, 82, // instr 82
+
+    // .channel chan_loop
+    /* 39 */ 0xFE, // delay1
+    /* 40 */ 0x80, // testlayer 0
+
+    // (no end or loop; channel script seems to run into the note layers?)
+    
+    // .layer layer0
+    /* 41 */ 0xF3, -4, // rbeqz chan_loop
+
+    // .layer layer1
+    /* 43 */ 0xFF, // end
+
+    // .layer layer2?
+    /* 44 */ 0xC2, -5, // transpose -5
+    /* 46 */ 0xC0, 0, // ldelay 0 
+    /* 48 */ 0xC1, 87, // shortvel 87 
+    /* 50 */ 0xC9, 0, // shortgate 0
+    /* 52 */ 0, // empty until the end
 };
+// clang-format on
 
 OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
-    // 0: Sonata of Awakening
+    // OCARINA_SONG_SONATA
     {
         7,
         {
@@ -1506,7 +1549,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 1: Goron Lullaby
+    // OCARINA_SONG_GORON_LULLABY
     {
         8,
         {
@@ -1521,7 +1564,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 2: New Wave Bossa Nova
+    // OCARINA_SONG_NEW_WAVE
     {
         7,
         {
@@ -1535,7 +1578,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 3: Elegy of Emptyness
+    // OCARINA_SONG_ELEGY
     {
         7,
         {
@@ -1549,7 +1592,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 4: Oath to Order
+    // OCARINA_SONG_OATH
     {
         6,
         {
@@ -1562,7 +1605,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 5; Sarias Song
+    // OCARINA_SONG_SARIAS
     {
         6,
         {
@@ -1575,7 +1618,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 6: Song of Time
+    // OCARINA_SONG_TIME
     {
         6,
         {
@@ -1588,7 +1631,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 7: Song of Healing
+    // OCARINA_SONG_HEALING
     {
         6,
         {
@@ -1601,7 +1644,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 8: Eponas Song
+    // OCARINA_SONG_EPONAS
     {
         6,
         {
@@ -1614,7 +1657,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 9: Song of Soaring
+    // OCARINA_SONG_SOARING
     {
         6,
         {
@@ -1627,7 +1670,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 10: Song of Storms
+    // OCARINA_SONG_STORMS
     {
         6,
         {
@@ -1640,7 +1683,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 11: Suns Song
+    // OCARINA_SONG_SUNS
     {
         6,
         {
@@ -1653,7 +1696,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 12: Inverted Song of Time
+    // OCARINA_SONG_INVERTED_TIME
     {
         6,
         {
@@ -1666,7 +1709,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 13; Song of Double Time
+    // OCARINA_SONG_DOUBLE_TIME
     {
         6,
         {
@@ -1679,7 +1722,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 14: Goron Lullaby Intro
+    // OCARINA_SONG_GORON_LULLABY_INTRO
     {
         6,
         {
@@ -1692,7 +1735,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 15: Milk Bar Jam "Ballad of the Wind Fish" Human
+    // OCARINA_SONG_WIND_FISH_HUMAN
     {
         4,
         {
@@ -1703,7 +1746,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 16: Milk Bar Jam "Ballad of the Wind Fish" Goron
+    // OCARINA_SONG_WIND_FISH_GORON
     {
         8,
         {
@@ -1718,7 +1761,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 17: Milk Bar Jam "Ballad of the Wind Fish" Zora
+    // OCARINA_SONG_WIND_FISH_ZORA
     {
         8,
         {
@@ -1733,7 +1776,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 18: Milk Bar Jam "Ballad of the Wind Fish" Deku
+    // OCARINA_SONG_WIND_FISH_DEKU
     {
         5,
         {
@@ -1745,7 +1788,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 19: Evan HP (Zora Band Leader) Song Part 1
+    // OCARINA_SONG_EVAN_PART1
     {
         8,
         {
@@ -1760,7 +1803,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 20: Evan HP (Zora Band Leader) Song Part 2
+    // OCARINA_SONG_EVAN_PART2
     {
         8,
         {
@@ -1775,7 +1818,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 21: Zeldas Lullaby
+    // OCARINA_SONG_ZELDAS_LULLABY
     {
         6,
         {
@@ -1788,7 +1831,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 22: Scarecrow
+    // OCARINA_SONG_SCARECROW_SPAWN
     {
         8,
         {
@@ -1803,7 +1846,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
         },
     },
 
-    // 23: Termina Field 2D Song Buttons Appearing on Wall (In OoT, this is Ocarina Memory Game)
+    // OCARINA_SONG_TERMINA_WALL
     {
         8,
         {
@@ -1819,7 +1862,6 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
     },
 };
 
-// OoT's soundEffects from EnRiverSound
 const u16 gAudioEnvironmentalSfx[] = {
     NA_SE_EV_RIVER_STREAM - SFX_FLAG,   NA_SE_EV_WAVE - SFX_FLAG,
     NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, NA_SE_EV_WATER_WALL - SFX_FLAG,
