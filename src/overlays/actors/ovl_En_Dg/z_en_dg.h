@@ -36,15 +36,15 @@ typedef struct EnDg {
     /* 0x1E4 */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x232 */ Vec3s morphTable[DOG_LIMB_MAX];
     /* 0x280 */ u16 dogFlags;
-    /* 0x282 */ s16 unk_282;
-    /* 0x284 */ s16 unk_284;
+    /* 0x282 */ s16 timer;
+    /* 0x284 */ s16 swimTimer;
     /* 0x286 */ s16 index;
     /* 0x288 */ s16 selectedDogIndex;
-    /* 0x28A */ s16 unk_28A;
-    /* 0x28C */ s16 unk_28C;
+    /* 0x28A */ s16 sitAfterThrowTimer;
+    /* 0x28C */ s16 behavior;
     /* 0x28E */ s16 attackTimer;
-    /* 0x290 */ s16 unk_290;
-    /* 0x292 */ s16 unk_292;
+    /* 0x290 */ s16 grabState;
+    /* 0x292 */ s16 bremenBarkTimer;
     /* 0x294 */ Vec3f curRot;
 } EnDg; // size = 0x2A0
 

@@ -56,6 +56,24 @@ const ActorInit En_Dg_InitVars = {
 #define DOG_FLAG_THROWN (1 << 4)
 #define DOG_FLAG_FOLLOWING_BREMEN_MASK (1 << 5)
 
+typedef enum {
+    /* 0 */ DOG_GRAB_STATE_NONE,
+    /* 1 */ DOG_GRAB_STATE_HELD,
+    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW,
+} DogGrabState;
+
+typedef enum {
+    /* 0 */ DOG_BEHAVIOR_INITIAL, // Gets immediately replaced by DOG_BEHAVIOR_DEFAULT in EnDg_Update
+    /* 1 */ DOG_BEHAVIOR_HUMAN,   // Gets immediately replaced by DOG_BEHAVIOR_DEFAULT in EnDg_Update
+    /* 2 */ DOG_BEHAVIOR_GORON,
+    /* 3 */ DOG_BEHAVIOR_GORON_WAIT,
+    /* 4 */ DOG_BEHAVIOR_ZORA,
+    /* 5 */ DOG_BEHAVIOR_ZORA_WAIT,
+    /* 6 */ DOG_BEHAVIOR_DEKU,
+    /* 7 */ DOG_BEHAVIOR_DEKU_WAIT,
+    /* 8 */ DOG_BEHAVIOR_DEFAULT,
+} DogBehavior;
+
 static u8 D_8098C2A0 = 0;
 
 static s16 sBremenMaskFollowerIndex = 99;
@@ -206,7 +224,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderAT(play, &this->collider.base);
     }
 
-    if ((this->unk_290 != 1) && !(this->dogFlags & DOG_FLAG_JUMP_ATTACKING)) {
+    if ((this->grabState != DOG_GRAB_STATE_HELD) && !(this->dogFlags & DOG_FLAG_JUMP_ATTACKING)) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
         Collider_ResetCylinderOC(play, &this->collider.base);
@@ -451,7 +469,7 @@ void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
-        this->unk_290 = 1;
+        this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (D_8098C2A0 == 0) {
             this->actor.flags |= ACTOR_FLAG_8000000;
@@ -517,8 +535,8 @@ void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
                 this->actionFunc = EnDg_SetupBremenMaskApproachPlayer;
             } else if ((this->actionFunc == EnDg_ApproachPlayer) ||
                        (this->actionFunc == EnDg_SitNextToPlayerAndMakeNoise)) {
-                if (DECR(this->unk_292) == 0) {
-                    this->unk_292 = 10;
+                if (DECR(this->bremenBarkTimer) == 0) {
+                    this->bremenBarkTimer = 10;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
@@ -558,8 +576,8 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (this->unk_28C != 1) {
-                    this->unk_28C = 1;
+                if (this->behavior != DOG_BEHAVIOR_HUMAN) {
+                    this->behavior = DOG_BEHAVIOR_HUMAN;
                     this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
                     EnDg_SetupIdleMove(this, play);
                 }
@@ -567,43 +585,43 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
 
             case PLAYER_FORM_ZORA:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->unk_28C != 4) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 4;
+                if ((this->behavior != DOG_BEHAVIOR_ZORA) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_ZORA;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
                     this->actionFunc = EnDg_ApproachPlayer;
                 }
 
-                if ((this->unk_28C != 5) && (this->unk_28C != 4)) {
-                    this->unk_28C = 5;
+                if ((this->behavior != DOG_BEHAVIOR_ZORA_WAIT) && (this->behavior != DOG_BEHAVIOR_ZORA)) {
+                    this->behavior = DOG_BEHAVIOR_ZORA_WAIT;
                     EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_GORON:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->unk_28C != 2) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 2;
+                if ((this->behavior != DOG_BEHAVIOR_GORON) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_GORON;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_3);
-                    this->unk_282 = 50;
+                    this->timer = 50;
                     this->actionFunc = EnDg_BackAwayFromGoron;
                 }
 
-                if ((this->unk_28C != 3) && (this->unk_28C != 2)) {
-                    this->unk_28C = 3;
+                if ((this->behavior != DOG_BEHAVIOR_GORON_WAIT) && (this->behavior != DOG_BEHAVIOR_GORON)) {
+                    this->behavior = DOG_BEHAVIOR_GORON_WAIT;
                     EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_DEKU:
                 this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
-                if ((this->unk_28C != 6) && (player->actor.speedXZ > 1.0f)) {
-                    this->unk_28C = 6;
+                if ((this->behavior != DOG_BEHAVIOR_DEKU) && (player->actor.speedXZ > 1.0f)) {
+                    this->behavior = DOG_BEHAVIOR_DEKU;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
                     this->actionFunc = EnDg_ApproachPlayerToAttack;
                 }
 
-                if ((this->unk_28C != 7) && (this->unk_28C != 6)) {
-                    this->unk_28C = 7;
+                if ((this->behavior != DOG_BEHAVIOR_DEKU_WAIT) && (this->behavior != DOG_BEHAVIOR_DEKU)) {
+                    this->behavior = DOG_BEHAVIOR_DEKU_WAIT;
                     EnDg_SetupIdleMove(this, play);
                 }
                 break;
@@ -628,8 +646,8 @@ void EnDg_IdleMove(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_Fall;
     }
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = Rand_S16Offset(20, 20);
+    if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(20, 20);
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_BARK);
         this->actionFunc = EnDg_IdleBark;
     }
@@ -648,8 +666,8 @@ void EnDg_IdleBark(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_Fall;
     }
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = Rand_S16Offset(60, 60);
+    if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(60, 60);
         EnDg_SetupIdleMove(this, play);
     }
 }
@@ -658,8 +676,8 @@ void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
 
-    if (DECR(this->unk_282) == 0) {
-        this->unk_282 = 50;
+    if (DECR(this->timer) == 0) {
+        this->timer = 50;
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
         this->actionFunc = EnDg_RunAwayFromGoron;
     } else {
@@ -719,7 +737,7 @@ void EnDg_BarkAtGoron(EnDg* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 250.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_3);
-        this->unk_282 = 50;
+        this->timer = 50;
         this->actionFunc = EnDg_BackAwayFromGoron;
     }
 
@@ -871,7 +889,7 @@ void func_8098AE58(EnDg* this, PlayState* play) {
 
 void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play) {
     if (func_801A46F8() == 1) {
-        this->unk_292 = 10;
+        this->bremenBarkTimer = 10;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->actionFunc = EnDg_ApproachPlayer;
     }
@@ -992,7 +1010,7 @@ void EnDg_SetupSwim(EnDg* this, PlayState* play) {
     if (this->actor.depthInWater > 0.0f) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
-        this->unk_284 = 10;
+        this->swimTimer = 10;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         this->actionFunc = EnDg_Swim;
     }
@@ -1017,13 +1035,13 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     pos.y = this->actor.home.pos.y + 100.0f;
     pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
 
-    if (DECR(this->unk_284) == 0) {
+    if (DECR(this->swimTimer) == 0) {
         if (!(this->dogFlags & DOG_FLAG_SWIMMING)) {
             this->dogFlags |= DOG_FLAG_SWIMMING;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
 
-        this->unk_284 = 5;
+        this->swimTimer = 5;
         EffectSsGRipple_Spawn(play, &ripplePos, 100, 500, 30);
     }
 
@@ -1055,8 +1073,8 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     } else if ((this->actor.bgCheckFlags & 1) && !(this->actor.bgCheckFlags & 0x20)) {
         this->actor.gravity = -3.0f;
         this->dogFlags &= ~DOG_FLAG_SWIMMING;
-        this->unk_28C = 8;
-        this->unk_282 = Rand_S16Offset(60, 60);
+        this->behavior = DOG_BEHAVIOR_DEFAULT;
+        this->timer = Rand_S16Offset(60, 60);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -1077,8 +1095,8 @@ void EnDg_Swim2(EnDg* this, PlayState* play) {
     pos.y = this->actor.world.pos.y + this->actor.depthInWater;
     pos.z = this->actor.world.pos.z + 20.0f;
 
-    if (DECR(this->unk_284) == 0) {
-        this->unk_284 = 5;
+    if (DECR(this->swimTimer) == 0) {
+        this->swimTimer = 5;
         EffectSsGRipple_Spawn(play, &pos, 100, 500, 30);
     }
 
@@ -1095,10 +1113,10 @@ void EnDg_Swim2(EnDg* this, PlayState* play) {
     }
 
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        this->unk_28C = 8;
+        this->behavior = DOG_BEHAVIOR_DEFAULT;
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
-        this->unk_282 = Rand_S16Offset(60, 60);
+        this->timer = Rand_S16Offset(60, 60);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
         this->actionFunc = EnDg_IdleMove;
@@ -1112,7 +1130,7 @@ void EnDg_Swim2(EnDg* this, PlayState* play) {
 
 void EnDg_Held(EnDg* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->unk_290 = 2;
+        this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
         this->actor.flags |= ACTOR_FLAG_1;
         if (D_8098C2A0 != 0) {
             this->actor.flags &= ~ACTOR_FLAG_8000000;
@@ -1122,7 +1140,7 @@ void EnDg_Held(EnDg* this, PlayState* play) {
 
         this->selectedDogIndex = -1;
         sSelectedRacetrackDogInfo.index = this->selectedDogIndex;
-        this->unk_28A = 100;
+        this->sitAfterThrowTimer = 100;
         Actor_MoveWithGravity(&this->actor);
         this->dogFlags |= DOG_FLAG_THROWN;
         this->actionFunc = EnDg_Thrown;
@@ -1145,8 +1163,8 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
         }
     }
 
-    if (DECR(this->unk_28A) == 0) {
-        this->unk_290 = 0;
+    if (DECR(this->sitAfterThrowTimer) == 0) {
+        this->grabState = DOG_GRAB_STATE_NONE;
         EnDg_SetupIdleMove(this, play);
         this->actionFunc = EnDg_IdleMove;
     }
@@ -1181,19 +1199,20 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
+
     this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
-    this->unk_282 = Rand_S16Offset(60, 60);
+    this->timer = Rand_S16Offset(60, 60);
     this->dogFlags = DOG_FLAG_NONE;
     this->attackTimer = 20;
-    this->unk_284 = 10;
+    this->swimTimer = 10;
     this->index = ENDG_GET_INDEX(&this->actor);
-    this->unk_28C = 0;
-    this->unk_290 = 0;
+    this->behavior = DOG_BEHAVIOR_INITIAL;
+    this->grabState = DOG_GRAB_STATE_NONE;
     if (play->sceneNum == SCENE_F01_B) {
-        this->unk_28A = 100;
+        this->sitAfterThrowTimer = 100;
         EnDg_UpdateTextId(this);
     }
 
@@ -1216,8 +1235,8 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
     if (!(player->stateFlags1 & 0x20) || (play->sceneNum != SCENE_CLOCKTOWER)) {
         if (EnDg_IsInInteractionRange(this, play)) {
             EnDg_ChooseActionForForm(this, play);
-        } else if (this->unk_28C != 8) {
-            this->unk_28C = 8;
+        } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {
+            this->behavior = DOG_BEHAVIOR_DEFAULT;
             EnDg_SetupIdleMove(this, play);
         }
 
