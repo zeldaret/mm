@@ -8343,7 +8343,7 @@
     0x8098B390:("func_8098B390",),
     0x8098B464:("EnDg_SetupSwim",),
     0x8098B560:("EnDg_Swim",),
-    0x8098B88C:("EnDg_Swim2",),
+    0x8098B88C:("EnDg_StopSwimming",),
     0x8098BA64:("EnDg_Held",),
     0x8098BB10:("EnDg_Thrown",),
     0x8098BBEC:("EnDg_SetupTalk",),

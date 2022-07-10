@@ -30,7 +30,7 @@ void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play);
 void func_8098B28C(EnDg* this, PlayState* play);
 void func_8098B390(EnDg* this, PlayState* play);
 void EnDg_Swim(EnDg* this, PlayState* play);
-void EnDg_Swim2(EnDg* this, PlayState* play);
+void EnDg_StopSwimming(EnDg* this, PlayState* play);
 void EnDg_Held(EnDg* this, PlayState* play);
 void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
@@ -1056,14 +1056,14 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
                 this->dogFlags &= ~DOG_FLAG_SWIMMING;
-                this->actionFunc = EnDg_Swim2;
+                this->actionFunc = EnDg_StopSwimming;
             } else {
                 yRotation = this->actor.wallYaw;
             }
         } else if (floorHeight > -100.0f) {
             if (waterSurface < floorHeight) {
                 this->dogFlags &= ~DOG_FLAG_SWIMMING;
-                this->actionFunc = EnDg_Swim2;
+                this->actionFunc = EnDg_StopSwimming;
             } else {
                 yRotation = this->actor.wallYaw;
             }
@@ -1087,8 +1087,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 }
 
-// Name is terrible but we'll improve it later.
-void EnDg_Swim2(EnDg* this, PlayState* play) {
+void EnDg_StopSwimming(EnDg* this, PlayState* play) {
     Vec3f pos;
 
     pos.x = this->actor.world.pos.x;
