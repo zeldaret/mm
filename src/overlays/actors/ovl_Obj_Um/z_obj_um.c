@@ -1004,7 +1004,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
         if (!(player->stateFlags1 & 0x800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
-    } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.save.time > CLOCK_TIME(19, 0)) {
+    } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
         gSaveContext.save.weekEventReg[34] |= 0x80;
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
