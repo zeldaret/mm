@@ -511,10 +511,13 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80825A50.s")
 
+// KaleidoScope_InitVertices
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80825E28.s")
 
+// KaleidoScope_UpdateCursorSize
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808274DC.s")
 
+// KaleidoScope_DrawCursor
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80827A8C.s")
 
 extern s16 D_8082B880;
