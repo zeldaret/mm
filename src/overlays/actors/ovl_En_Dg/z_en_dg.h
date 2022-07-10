@@ -35,7 +35,7 @@ typedef struct EnDg {
     /* 0x1E0 */ s32 currentPoint;
     /* 0x1E4 */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x232 */ Vec3s morphTable[DOG_LIMB_MAX];
-    /* 0x280 */ u16 unk_280;
+    /* 0x280 */ u16 dogFlags;
     /* 0x282 */ s16 unk_282;
     /* 0x284 */ s16 unk_284;
     /* 0x286 */ s16 index;

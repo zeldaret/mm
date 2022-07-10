@@ -57,26 +57,6 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this);
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
-typedef enum {
-    /*  0 */ RACEDOG_ANIMATION_IDLE,
-    /*  1 */ RACEDOG_ANIMATION_WALK_1, // unused
-    /*  2 */ RACEDOG_ANIMATION_RUN,
-    /*  3 */ RACEDOG_ANIMATION_BARK,               // unused
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,         // unused
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,         // unused
-    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1, // unused
-    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,    // unused
-    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2, // unused
-    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3, // unused
-    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
-    /* 11 */ RACEDOG_ANIMATION_WALK_2,             // unused
-    /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,   // unused
-    /* 14 */ RACEDOG_ANIMATION_JUMP_ATTACK, // unused
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,      // unused
-    /* 16 */ RACEDOG_ANIMATION_MAX
-} RacedogAnimationIndex;
-
 /**
  * Stores various information for each dog in the race, mostly related to speed.
  */
@@ -222,6 +202,26 @@ static DamageTable sDamageTable = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
+
+typedef enum {
+    /*  0 */ RACEDOG_ANIMATION_IDLE,
+    /*  1 */ RACEDOG_ANIMATION_WALK_1, // unused
+    /*  2 */ RACEDOG_ANIMATION_RUN,
+    /*  3 */ RACEDOG_ANIMATION_BARK,               // unused
+    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,         // unused
+    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,         // unused
+    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1, // unused
+    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,    // unused
+    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2, // unused
+    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3, // unused
+    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
+    /* 11 */ RACEDOG_ANIMATION_WALK_2,             // unused
+    /* 12 */ RACEDOG_ANIMATION_JUMP,
+    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,   // unused
+    /* 14 */ RACEDOG_ANIMATION_JUMP_ATTACK, // unused
+    /* 15 */ RACEDOG_ANIMATION_WALK_3,      // unused
+    /* 16 */ RACEDOG_ANIMATION_MAX
+} RacedogAnimationIndex;
 
 static AnimationInfoS sAnimations[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },

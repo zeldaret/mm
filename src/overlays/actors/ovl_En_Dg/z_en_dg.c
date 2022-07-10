@@ -48,25 +48,13 @@ const ActorInit En_Dg_InitVars = {
     (ActorFunc)EnDg_Draw,
 };
 
-typedef enum {
-    /*  0 */ DOG_ANIMATION_WALK_1,
-    /*  1 */ DOG_ANIMATION_WALK_2,
-    /*  2 */ DOG_ANIMATION_RUN,
-    /*  3 */ DOG_ANIMATION_BARK,
-    /*  4 */ DOG_ANIMATION_SIT_DOWN_1, // unused
-    /*  5 */ DOG_ANIMATION_SIT_DOWN_2,
-    /*  6 */ DOG_ANIMATION_LYING_DOWN_START_1, // unused
-    /*  7 */ DOG_ANIMATION_LYING_DOWN_LOOP,    // unused
-    /*  8 */ DOG_ANIMATION_LYING_DOWN_START_2, // unused
-    /*  9 */ DOG_ANIMATION_LYING_DOWN_START_3, // unused
-    /* 10 */ DOG_ANIMATION_LYING_DOWN_START_4, // unused
-    /* 11 */ DOG_ANIMATION_WALK_3,
-    /* 12 */ DOG_ANIMATION_JUMP,
-    /* 13 */ DOG_ANIMATION_LONG_JUMP, // unused
-    /* 14 */ DOG_ANIMATION_JUMP_ATTACK,
-    /* 15 */ DOG_ANIMATION_WALK_4,
-    /* 16 */ DOG_ANIMATION_MAX
-} DogAnimationIndex;
+#define DOG_FLAG_NONE 0
+#define DOG_FLAG_HELD (1 << 0)
+#define DOG_FLAG_JUMP_ATTACKING (1 << 1)
+#define DOG_FLAG_SWIMMING (1 << 2)
+#define DOG_FLAG_BOUNCED (1 << 3)
+#define DOG_FLAG_THROWN (1 << 4)
+#define DOG_FLAG_FOLLOWING_BREMEN_MASK (1 << 5)
 
 static u8 D_8098C2A0 = 0;
 
@@ -156,6 +144,26 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+typedef enum {
+    /*  0 */ DOG_ANIMATION_WALK_1,
+    /*  1 */ DOG_ANIMATION_WALK_2,
+    /*  2 */ DOG_ANIMATION_RUN,
+    /*  3 */ DOG_ANIMATION_BARK,
+    /*  4 */ DOG_ANIMATION_SIT_DOWN_1, // unused
+    /*  5 */ DOG_ANIMATION_SIT_DOWN_2,
+    /*  6 */ DOG_ANIMATION_LYING_DOWN_START_1, // unused
+    /*  7 */ DOG_ANIMATION_LYING_DOWN_LOOP,    // unused
+    /*  8 */ DOG_ANIMATION_LYING_DOWN_START_2, // unused
+    /*  9 */ DOG_ANIMATION_LYING_DOWN_START_3, // unused
+    /* 10 */ DOG_ANIMATION_LYING_DOWN_START_4, // unused
+    /* 11 */ DOG_ANIMATION_WALK_3,
+    /* 12 */ DOG_ANIMATION_JUMP,
+    /* 13 */ DOG_ANIMATION_LONG_JUMP, // unused
+    /* 14 */ DOG_ANIMATION_JUMP_ATTACK,
+    /* 15 */ DOG_ANIMATION_WALK_4,
+    /* 16 */ DOG_ANIMATION_MAX
+} DogAnimationIndex;
+
 static AnimationInfoS sAnimations[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
@@ -198,7 +206,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderAT(play, &this->collider.base);
     }
 
-    if ((this->unk_290 != 1) && !(this->unk_280 & 2)) {
+    if ((this->unk_290 != 1) && !(this->dogFlags & DOG_FLAG_JUMP_ATTACKING)) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
         Collider_ResetCylinderOC(play, &this->collider.base);
@@ -433,12 +441,12 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
 void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
     RacetrackDogInfo* temp;
 
-    if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
+    if ((D_8098C2A0 != 0) && !(this->dogFlags & DOG_FLAG_HELD)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
-        this->unk_280 |= 1;
-    } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
+        this->dogFlags |= DOG_FLAG_HELD;
+    } else if ((D_8098C2A0 == 0) && (this->dogFlags & DOG_FLAG_HELD)) {
         this->actor.flags &= ~ACTOR_FLAG_8000000;
-        this->unk_280 &= ~1;
+        this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
@@ -448,7 +456,7 @@ void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
         if (D_8098C2A0 == 0) {
             this->actor.flags |= ACTOR_FLAG_8000000;
             D_8098C2A0 = 1;
-            this->unk_280 |= 1;
+            this->dogFlags |= DOG_FLAG_HELD;
         }
 
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_SIT_DOWN_2);
@@ -503,8 +511,8 @@ void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
         }
 
         if (this->index == sBremenMaskFollowerIndex) {
-            if (!(this->unk_280 & 0x20)) {
-                this->unk_280 |= 0x20;
+            if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
+                this->dogFlags |= DOG_FLAG_FOLLOWING_BREMEN_MASK;
                 EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_2);
                 this->actionFunc = EnDg_SetupBremenMaskApproachPlayer;
             } else if ((this->actionFunc == EnDg_ApproachPlayer) ||
@@ -516,7 +524,7 @@ void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
             }
         }
     } else if (this->index == sBremenMaskFollowerIndex) {
-        this->unk_280 &= ~0x20;
+        this->dogFlags &= ~DOG_FLAG_FOLLOWING_BREMEN_MASK;
         sBremenMaskFollowerIndex = 99;
         EnDg_SetupIdleMove(this, play);
         this->actionFunc = EnDg_IdleMove;
@@ -552,13 +560,13 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
             case PLAYER_FORM_HUMAN:
                 if (this->unk_28C != 1) {
                     this->unk_28C = 1;
-                    this->unk_280 &= ~2;
+                    this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
                     EnDg_SetupIdleMove(this, play);
                 }
                 break;
 
             case PLAYER_FORM_ZORA:
-                this->unk_280 &= ~2;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
                 if ((this->unk_28C != 4) && (player->actor.speedXZ > 1.0f)) {
                     this->unk_28C = 4;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
@@ -572,7 +580,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
                 break;
 
             case PLAYER_FORM_GORON:
-                this->unk_280 &= ~2;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
                 if ((this->unk_28C != 2) && (player->actor.speedXZ > 1.0f)) {
                     this->unk_28C = 2;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_3);
@@ -587,7 +595,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
                 break;
 
             case PLAYER_FORM_DEKU:
-                this->unk_280 &= ~2;
+                this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
                 if ((this->unk_28C != 6) && (player->actor.speedXZ > 1.0f)) {
                     this->unk_28C = 6;
                     EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
@@ -755,7 +763,7 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
 }
 
 void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
-    this->unk_280 &= ~8;
+    this->dogFlags &= ~DOG_FLAG_BOUNCED;
     Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
     Actor_MoveWithGravity(&this->actor);
     if (DECR(this->attackTimer) == 0) {
@@ -788,7 +796,7 @@ void EnDg_SitNextToPlayerAndMakeNoise(EnDg* this, PlayState* play) {
     }
 
     EnDg_CheckForBremenMask(this, play);
-    if (!(this->unk_280 & 0x20)) {
+    if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
         EnDg_PlaySfxWhine(this);
     }
 }
@@ -798,8 +806,8 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
     if ((this->actor.xyzDistToPlayerSq < 800.0f) && (this->collider.base.atFlags & AT_BOUNCED)) {
         this->attackTimer = 60;
-        this->unk_280 &= ~2;
-        this->unk_280 |= 8;
+        this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
+        this->dogFlags |= DOG_FLAG_BOUNCED;
         this->collider.base.atFlags &= ~AT_BOUNCED;
         this->actor.speedXZ *= -1.0f;
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
@@ -809,7 +817,7 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
     if (DECR(this->attackTimer) == 0) {
         this->attackTimer = 60;
-        this->unk_280 &= ~2;
+        this->dogFlags &= ~DOG_FLAG_JUMP_ATTACKING;
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_RUN);
         this->actionFunc = EnDg_RunAfterAttacking;
     }
@@ -821,7 +829,7 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
         EnDg_SpawnFloorDustRing(this, play);
     } else {
-        this->unk_280 |= 2;
+        this->dogFlags |= DOG_FLAG_JUMP_ATTACKING;
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
@@ -907,7 +915,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
     EnDg_CheckForBremenMask(this, play);
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
-    if (!(this->unk_280 & 0x20)) {
+    if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
         EnDg_PlaySfxBark(this, 3.0f);
     }
 }
@@ -1010,8 +1018,8 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
 
     if (DECR(this->unk_284) == 0) {
-        if (!(this->unk_280 & 4)) {
-            this->unk_280 |= 4;
+        if (!(this->dogFlags & DOG_FLAG_SWIMMING)) {
+            this->dogFlags |= DOG_FLAG_SWIMMING;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
 
@@ -1029,14 +1037,14 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 8) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
-                this->unk_280 &= ~4;
+                this->dogFlags &= ~DOG_FLAG_SWIMMING;
                 this->actionFunc = EnDg_Swim2;
             } else {
                 yRotation = this->actor.wallYaw;
             }
         } else if (floorHeight > -100.0f) {
             if (waterSurface < floorHeight) {
-                this->unk_280 &= ~4;
+                this->dogFlags &= ~DOG_FLAG_SWIMMING;
                 this->actionFunc = EnDg_Swim2;
             } else {
                 yRotation = this->actor.wallYaw;
@@ -1046,7 +1054,7 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
         }
     } else if ((this->actor.bgCheckFlags & 1) && !(this->actor.bgCheckFlags & 0x20)) {
         this->actor.gravity = -3.0f;
-        this->unk_280 &= ~4;
+        this->dogFlags &= ~DOG_FLAG_SWIMMING;
         this->unk_28C = 8;
         this->unk_282 = Rand_S16Offset(60, 60);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
@@ -1109,14 +1117,14 @@ void EnDg_Held(EnDg* this, PlayState* play) {
         if (D_8098C2A0 != 0) {
             this->actor.flags &= ~ACTOR_FLAG_8000000;
             D_8098C2A0 = 0;
-            this->unk_280 &= ~1;
+            this->dogFlags &= ~DOG_FLAG_HELD;
         }
 
         this->selectedDogIndex = -1;
         sSelectedRacetrackDogInfo.index = this->selectedDogIndex;
         this->unk_28A = 100;
         Actor_MoveWithGravity(&this->actor);
-        this->unk_280 |= 0x10;
+        this->dogFlags |= DOG_FLAG_THROWN;
         this->actionFunc = EnDg_Thrown;
     }
 }
@@ -1125,8 +1133,8 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.bgCheckFlags & 1) {
-        if (this->unk_280 & 0x10) {
-            this->unk_280 &= ~0x10;
+        if (this->dogFlags & DOG_FLAG_THROWN) {
+            this->dogFlags &= ~DOG_FLAG_THROWN;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
@@ -1178,7 +1186,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
     this->unk_282 = Rand_S16Offset(60, 60);
-    this->unk_280 = 0;
+    this->dogFlags = DOG_FLAG_NONE;
     this->attackTimer = 20;
     this->unk_284 = 10;
     this->index = ENDG_GET_INDEX(&this->actor);
