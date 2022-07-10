@@ -16218,7 +16218,7 @@
     0x80BEBEB8:("func_80BEBEB8",),
     0x80BEBF78:("func_80BEBF78",),
     0x80BEC080:("EffLastday_Update",),
-    0x80BEC0A4:("func_80BEC0A4",),
+    0x80BEC0A4:("EffLastday_Draw_SetVtxAlpha",),
     0x80BEC0DC:("EffLastday_Draw",),
     0x80BEC240:("BgIkanaDharma_SpawnEffects",),
     0x80BEC3F4:("BgIkanaDharma_Init",),

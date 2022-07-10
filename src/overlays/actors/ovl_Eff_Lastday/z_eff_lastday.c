@@ -20,8 +20,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play);
 void func_80BEBDF8(EffLastday* this, PlayState* play);
 void func_80BEBEB8(EffLastday* this, PlayState* play);
 void func_80BEBF78(EffLastday* this, PlayState* play);
-void func_80BEC0A4(s16);
-#if 0
+
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,
@@ -33,21 +32,6 @@ const ActorInit Eff_Lastday_InitVars = {
     (ActorFunc)EffLastday_Update,
     (ActorFunc)EffLastday_Draw,
 };
-
-#endif
-
-extern UNK_TYPE D_06000000;
-extern UNK_TYPE D_06000510;
-
-extern Gfx* D_06000060;
-extern AnimatedMaterial D_06000148;
-extern Gfx* D_06000210;
-extern AnimatedMaterial D_06000308;
-extern Gfx* D_06000370;
-extern AnimatedMaterial D_06000448;
-extern AnimatedMaterial D_06000608;
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Init.s")
 
 void EffLastday_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
@@ -83,22 +67,19 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
             this->unk150 = 0x1FB;
             this->actionFunc = func_80BEBD0C;
             Actor_SetScale(&this->actor, 1.0f);
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0x272, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 1);
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0x272, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 2);
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0x272, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 3);
             break;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Destroy.s")
-
 void EffLastday_Destroy(Actor* thisx, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBD0C.s")
 void func_80BEBD0C(EffLastday* this, PlayState* play) {
     u16 action;
 
@@ -114,11 +95,11 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
             case 2:
                 this->actor.draw = NULL;
                 this->actor.draw = EffLastday_Draw;
-                if (this->unk14E < 0xFF) {
-                    this->unk14E = this->unk14E + 0xA;
+                if (this->unk14E < 255) {
+                    this->unk14E = this->unk14E + 10;
                 }
-                if (this->unk14E >= 0x100) {
-                    this->unk14E = 0xFF;
+                if (this->unk14E > 255) {
+                    this->unk14E = 255;
                 }
                 this->unk14C += 1;
                 break;
@@ -130,15 +111,13 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBDF8.s")
 
 void func_80BEBDF8(EffLastday* this, PlayState* play) {
     u16 action;
 
-    if (Cutscene_CheckActorAction(play, (u16)this->unk150)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, (u16)this->unk150));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, (u16)this->unk150)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk150)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk150));
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk150)]->action;
         switch (action) {
             default:
                 this->actor.draw = NULL;
@@ -156,15 +135,13 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBEB8.s")
 
 void func_80BEBEB8(EffLastday* this, PlayState* play) {
     u16 action;
 
-    if (Cutscene_CheckActorAction(play, (u16)this->unk150)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, (u16)this->unk150));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, (u16)this->unk150)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk150)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk150));
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk150)]->action;
         switch (action) {
             default:
                 this->actor.draw = NULL;
@@ -183,14 +160,12 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEBF78.s")
-
 void func_80BEBF78(EffLastday* this, PlayState* play) {
     u16 action;
 
-    if (Cutscene_CheckActorAction(play, (u16)this->unk150)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, (u16)this->unk150));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, (u16)this->unk150)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk150)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk150));
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk150)]->action;
         switch (action) {
             default:
                 this->actor.draw = NULL;
@@ -200,14 +175,14 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
             case 2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
-                    Actor_PlaySfxAtPos(&this->actor, 0x2987);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
                 }
                 this->actor.draw = EffLastday_Draw;
-                if (this->unk14E < 0xFF) {
+                if (this->unk14E < 255) {
                     this->unk14E += 5;
                 }
                 if (this->unk14E >= 0x100) {
-                    this->unk14E = 0xFF;
+                    this->unk14E = 255;
                 }
                 this->unk14C += 1;
                 break;
@@ -220,27 +195,20 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Update.s")
-
 void EffLastday_Update(Actor* thisx, PlayState* play) {
     EffLastday* this = THIS;
 
     this->actionFunc(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/func_80BEC0A4.s")
+void EffLastday_Draw_SetVtxAlpha(s16 alpha) {
+    Vtx* vtx = Lib_SegmentedToVirtual(object_lastday_Vtx_000000);
 
-void func_80BEC0A4(s16 arg0) {
-    Vtx *vtx;
-
-    vtx = Lib_SegmentedToVirtual(object_lastday_Vtx_000000);
-    vtx[0].v.cn[3] = arg0;
-    vtx[3].v.cn[3] = arg0;
-    vtx[4].v.cn[3] = arg0;
-    vtx[5].v.cn[3] = arg0;
+    vtx[0].v.cn[3] = alpha;
+    vtx[3].v.cn[3] = alpha;
+    vtx[4].v.cn[3] = alpha;
+    vtx[5].v.cn[3] = alpha;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Draw.s")
 
 void EffLastday_Draw(Actor* thisx, PlayState* play) {
     EffLastday* this = THIS;
@@ -252,15 +220,14 @@ void EffLastday_Draw(Actor* thisx, PlayState* play) {
         case 2:
             break;
         case 3:
-            func_80BEC0A4(this->unk14E);
-        break;
+            EffLastday_Draw_SetVtxAlpha(this->unk14E);
+            break;
         default:
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 170, this->unk14E);
             break;
     }
-    AnimatedMat_DrawAlphaStep(play, this->unk148, 1.0f, (u32)this->unk14C);
-    Gfx_DrawDListXlu(play, (Gfx*)this->unk144);
+    AnimatedMat_DrawAlphaStep(play, this->unk148, 1.0f, this->unk14C);
+    Gfx_DrawDListXlu(play, this->unk144);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-
