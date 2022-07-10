@@ -22,7 +22,8 @@ typedef void (*EnDgActionFunc)(struct EnDg*, PlayState*);
 #define ENDG_INDEX_SWAMP_SPIDER_HOUSE 21
 
 #define ENDG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
-#define ENDG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENDG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define ENDG_PARAMS(path, index) ((path << 10) | (index << 5))
 
 typedef struct EnDg {
     /* 0x000 */ Actor actor;
