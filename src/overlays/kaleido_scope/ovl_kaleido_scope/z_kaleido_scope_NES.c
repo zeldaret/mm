@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
 extern UNK_TYPE D_02001360;
 extern UNK_TYPE D_020044A0;
@@ -516,7 +517,71 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80827A8C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80827E08.s")
+extern s16 D_8082B880;
+extern s16 D_8082B884;
+extern s16 D_8082B888;
+extern s16 D_8082B88C;
+extern s16 D_8082B8A8;
+extern s16 D_8082B8AC;
+extern s16 D_8082B8B0;
+extern s16 D_8082B944;
+extern s16 D_8082BE84;
+
+#ifdef NON_MATCHING
+void KaleidoScope_DrawGameOver(PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    s16 temp;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C628(gfxCtx);
+
+    gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
+    gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_XLU_SURF2);
+    gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, TEXEL0, PRIMITIVE, ENVIRONMENT,
+                      COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 80, D_8082B880, D_8082B884, D_8082B888, D_8082B88C);
+    gDPSetEnvColor(POLY_OPA_DISP++, D_8082B8A8, D_8082B8AC, D_8082B8B0, 255);
+
+    temp = D_8082BE84 - 2;
+
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP1Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gDPLoadMultiBlock(POLY_OPA_DISP++, gGameOverMaskTex, 256, 1, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
+                      G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, 5, G_TX_NOLOD, G_TX_NOLOD);
+
+    gDPSetTileSize(POLY_OPA_DISP++, 1, 0, temp & 0x7F, 252, (temp & 0x7F) + 0x7C);
+
+    D_8082BE84 = temp;
+
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x0100, D_8082B944 << 2, 0x0200, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
+                        1 << 10, 1 << 10);
+
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP2Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x0200, D_8082B944 << 2, 0x0300, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
+                        1 << 10, 1 << 10);
+
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gGameOverP3Tex, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x0300, D_8082B944 << 2, 0x0400, (D_8082B944 + 32) << 2, G_TX_RENDERTILE, 0, 0,
+                        1 << 10, 1 << 10);
+
+    //! FAKE
+    temp = D_8082BE84 - 2;
+    temp += 0;
+
+    CLOSE_DISPS(gfxCtx);
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawGameOver.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Draw.s")
 

@@ -4239,7 +4239,7 @@
     0x80825E28:("func_80825E28",),
     0x808274DC:("func_808274DC",),
     0x80827A8C:("func_80827A8C",),
-    0x80827E08:("func_80827E08",),
+    0x80827E08:("KaleidoScope_DrawGameOver",),
     0x808283D8:("KaleidoScope_Draw",),
     0x808286D8:("KaleidoScope_GrayOutTextureRGBA32",),
     0x80828788:("func_80828788",),
