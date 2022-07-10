@@ -28,12 +28,13 @@ const ActorInit Obj_Usiyane_InitVars = {
     (ActorFunc)ObjUsiyane_Draw,
 };
 
+// TODO: See if this is just a PosRot
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
-    /* 0x00 */ Vec3s unk_0C;
+    /* 0x0C */ Vec3s unk_0C;
 } ObjUsiyaneStruct2; // size = 0x14
 
-ObjUsiyaneStruct2 D_80C08660[4] = {
+PosRot D_80C08660[] = {
     { { 800.0f, -940.0f, 2000.0f }, { 0, 0, 0x2AF8 } },
     { { 560.0f, -790.0f, -2000.0f }, { 0, 0, 0x2EE0 } },
     { { -480.0f, -780.0f, -1990.0f }, { 0, 0, -0x2710 } },
@@ -106,9 +107,9 @@ void func_80C07DFC(Vec3f* arg0, Vec3s* arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4,
     arg6->x = ((arg2->x - arg0->x) * temp_fv0) + arg0->x;
     arg6->y = ((arg2->y - arg0->y) * temp_fv0) + arg0->y;
     arg6->z = ((arg2->z - arg0->z) * temp_fv0) + arg0->z;
-    arg7->x = ((arg3->x - (f32)arg1->x) * temp_fv0) + arg1->x;
-    arg7->y = ((arg3->y - (f32)arg1->y) * temp_fv0) + arg1->y;
-    arg7->z = ((arg3->z - (f32)arg1->z) * temp_fv0) + arg1->z;
+    arg7->x = (((f32)arg3->x - (f32)arg1->x) * temp_fv0) + arg1->x;
+    arg7->y = (((f32)arg3->y - (f32)arg1->y) * temp_fv0) + arg1->y;
+    arg7->z = (((f32)arg3->z - (f32)arg1->z) * temp_fv0) + arg1->z;
 }
 
 void func_80C07F30(ObjUsiyane* this, PlayState* play) {
@@ -119,11 +120,10 @@ void func_80C07F30(ObjUsiyane* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->unk_168[0]); i++) {
         for (j = 0; j < ARRAY_COUNT(this->unk_168); j++) {
             if (i != ARRAY_COUNT(this->unk_168[0]) - 1) {
-                func_80C07DFC(&this->unk_710[i], &D_80C08660[i].unk_0C, &this->unk_710[i + 1],
-                              &D_80C08660[i + 1].unk_0C, j, 10, &this->unk_168[j][i].unk_00,
-                              &this->unk_168[j][i].unk_18);
+                func_80C07DFC(&this->unk_710[i], &D_80C08660[i].rot, &this->unk_710[i + 1], &D_80C08660[i + 1].rot, j,
+                              10, &this->unk_168[j][i].unk_00, &this->unk_168[j][i].unk_18);
             } else {
-                func_80C07DFC(&this->unk_710[i], &D_80C08660[i].unk_0C, &this->unk_710[0], &D_80C08660[0].unk_0C, j, 10,
+                func_80C07DFC(&this->unk_710[i], &D_80C08660[i].rot, &this->unk_710[0], &D_80C08660[0].rot, j, 10,
                               &this->unk_168[j][i].unk_00, &this->unk_168[j][i].unk_18);
             }
             func_800B12F0(play, &this->unk_168[j][i].unk_00, &gZeroVec3f, &gZeroVec3f, 100, 30, 7);
@@ -184,14 +184,13 @@ void func_80C082CC(ObjUsiyane* this, PlayState* play) {
 }
 
 void func_80C082E0(ObjUsiyane* this, PlayState* play) {
-    s32 temp_v0;
-    CsCmdActorAction* temp;
+    CsCmdActorAction* csAction;
 
     if (Cutscene_CheckActorAction(play, 0x228)) {
         this->unk_160 = Cutscene_GetActorActionIndex(play, 0x228);
-        temp = play->csCtx.actorActions[this->unk_160];
-        if (this->unk_164 != temp->action) {
-            this->unk_164 = temp->action;
+        csAction = play->csCtx.actorActions[this->unk_160];
+        if (this->unk_164 != csAction->action) {
+            this->unk_164 = csAction->action;
             if (this->unk_164 == 2) {
                 func_80C07F30(this, play);
                 this->actionFunc = func_80C081C8;
@@ -241,7 +240,7 @@ void ObjUsiyane_Update(Actor* thisx, PlayState* play) {
 
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play) {
     ObjUsiyane* this = THIS;
-    MtxF sp84;
+    MtxF mf;
 
     if (!(this->unk_744 & 1)) {
         Gfx_DrawDListOpa(play, object_obj_usiyane_DL_000838);
@@ -253,7 +252,7 @@ void ObjUsiyane_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(D_80C08660); i++) {
             Vec3f sp74;
 
-            Matrix_MultVec3f(&D_80C08660[i].unk_00, &this->unk_710[i]);
+            Matrix_MultVec3f(&D_80C08660[i].pos, &this->unk_710[i]);
             Matrix_MultVec3f(&gZeroVec3f, &sp74);
             this->unk_708 = sp74.x;
             this->unk_70C = sp74.z;
@@ -268,11 +267,11 @@ void ObjUsiyane_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(this->unk_168[0]); i++) {
             for (j = 0; j < ARRAY_COUNT(this->unk_168); j++) {
                 Matrix_Push();
-                SkinMatrix_SetScaleRotateRPYTranslate(&sp84, 0.1f, 0.1f, 0.1f, this->unk_168[j][i].unk_18.x,
+                SkinMatrix_SetScaleRotateRPYTranslate(&mf, 0.1f, 0.1f, 0.1f, this->unk_168[j][i].unk_18.x,
                                                       this->unk_168[j][i].unk_18.y, this->unk_168[j][i].unk_18.z,
                                                       this->unk_168[j][i].unk_00.x, this->unk_168[j][i].unk_00.y,
                                                       this->unk_168[j][i].unk_00.z);
-                Matrix_Put(&sp84);
+                Matrix_Put(&mf);
                 Gfx_DrawDListOpa(play, object_obj_usiyane_DL_000098);
                 Matrix_Pop();
             }
