@@ -1084,7 +1084,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
         // Termina Field
         play->nextEntranceIndex = 0x54D0;
     } else {
-        // Romani's Ranch
+        // Romani Ranch
         play->nextEntranceIndex = 0x6480;
     }
     gSaveContext.nextCutsceneIndex = 0;
