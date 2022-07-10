@@ -296,7 +296,7 @@ typedef struct {
     /* 0x010 */ u16 delay;
     /* 0x012 */ u16 fadeTimer;
     /* 0x014 */ u16 fadeTimerUnkEu;
-    /* 0x016 */ u16 unk_16; // New to MM
+    /* 0x016 */ u16 unk_16;
     union {
         /* 0x018 */ u8* seqData;
         /* 0x018 */ u16* seqData16;
@@ -417,8 +417,8 @@ typedef struct SequenceChannel {
     /* 0x0D */ u8 velocityRandomVariance;
     /* 0x0E */ u8 gateTimeRandomVariance;
     /* 0x0F */ u8 unk_0F;
-    /* 0x10 */ u8 unk_10; // New to MM
-    /* 0x11 */ u8 unk_11; // New to MM
+    /* 0x10 */ u8 unk_10;
+    /* 0x11 */ u8 unk_11;
     /* 0x12 */ VibratoSubStruct vibrato;
     /* 0x20 */ u16 delay;
     /* 0x22 */ u16 unk_20;
@@ -441,11 +441,11 @@ typedef struct SequenceChannel {
     /* 0x80 */ AdsrSettings adsr;
     /* 0x88 */ NotePool notePool;
     /* 0xC8 */ s8 soundScriptIO[8]; // bridge between sound script and audio lib, "io ports"
-    /* 0xD0 */ u8* sfxState; // New to MM
+    /* 0xD0 */ u8* sfxState;
     /* 0xD4 */ s16* filter;
     /* 0xD8 */ Stereo stereo;
-    /* 0xDC */ s32 unk_DC; // New to MM
-    /* 0xE0 */ s32 unk_E0; // New to MM
+    /* 0xDC */ s32 unk_DC;
+    /* 0xE0 */ s32 unk_E0;
 } SequenceChannel; // size = 0xE4
 
 // Might also be known as a Track, according to sm64 debug strings (?).
@@ -538,7 +538,7 @@ typedef struct {
     /* 0x04 */ u8 reverbVol;
     /* 0x05 */ u8 numParts;
     /* 0x06 */ u16 samplePosFrac;
-    /* 0x08 */ u16 unk_08; // New to MM
+    /* 0x08 */ u16 unk_08;
     /* 0x0C */ s32 samplePosInt;
     /* 0x10 */ NoteSynthesisBuffers* synthesisBuffers;
     /* 0x14 */ s16 curVolLeft;
@@ -618,8 +618,8 @@ typedef struct {
         /* 0x10 */ s16* samples; // used for synthetic waves
             } sound;
     /* 0x14 */ s16* filter;
-    /* 0x18 */ u8 unk_18; // New to MM
-    /* 0x19 */ u8 unk_19; // New to MM
+    /* 0x18 */ u8 unk_18;
+    /* 0x19 */ u8 unk_19;
     /* 0x1A */ UNK_TYPE1 pad_1A[0x6];
 } NoteSubEu; // size = 0x20
 
@@ -1057,7 +1057,7 @@ typedef struct {
     /* 0x218 */ u8 unk_4C;
     /* 0x219 */ u8 unk_4D;
     /* 0x21A */ u8 unk_4E;
-    /* 0x21B */ u8 unk_21B; // New to MM
+    /* 0x21B */ u8 unk_21B;
 } unk_D_8016E750; // size = 0x21C
 
 typedef struct {
