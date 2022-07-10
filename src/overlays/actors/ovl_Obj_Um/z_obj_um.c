@@ -229,7 +229,7 @@ s32 ObjUm_InitBandits(ObjUm* this, PlayState* play) {
     EnHorse* bandit2;
 
     spawnPoints = Lib_SegmentedToVirtual(path->points);
-    Audio_QueueSeqCmd(0x8003);
+    Audio_QueueSeqCmd(0x8000 | NA_BGM_CHASE);
 
     bandit1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
                                     spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0,
@@ -393,15 +393,15 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     Math_Vec3s_ToVec3f(&sp50, &sp64[bandit->curRaceWaypoint]);
 
     if (bandit->curRaceWaypoint == 0) {
-        phi_f12 = (f32)(sp64[1].x - sp64[0].x);
-        phi_f14 = (f32)(sp64[1].z - sp64[0].z);
+        phi_f12 = sp64[1].x - sp64[0].x;
+        phi_f14 = sp64[1].z - sp64[0].z;
     } else {
         if ((bandit->curRaceWaypoint + 1) == sp6C->count) {
-            phi_f12 = (f32)(sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x);
-            phi_f14 = (f32)(sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z);
+            phi_f12 = sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x;
+            phi_f14 = sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z;
         } else {
-            phi_f12 = (f32)(sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x);
-            phi_f14 = (f32)(sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z);
+            phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
+            phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
         }
     }
 
@@ -758,7 +758,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
-        func_801A3098(0x19);
+        func_801A3098(NA_BGM_CLEAR_EVENT);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
@@ -793,8 +793,6 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->banditsCollisions[0], &this->dyna.actor, &sCylinderInit);
     Collider_InitAndSetCylinder(play, &this->banditsCollisions[1], &this->dyna.actor, &sCylinderInit);
-
-    return;
 }
 
 void ObjUm_Destroy(Actor* thisx, PlayState* play) {
@@ -913,7 +911,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 }
 
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
-    u16 textId;
+    u16 textId = 0;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         if (gSaveContext.save.weekEventReg[31] & 0x40) {
@@ -965,8 +963,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
 
     phi_v1 = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
     temp_v0_2 = ABS_ALT(phi_v1);
-
-    if (temp_v0_2 >= 20000) {
+    if (temp_v0_2 >= 0x4E20) {
         return 0;
     }
 
@@ -986,11 +983,15 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
 }
 
 s32 func_80B79A24(s32 arg0) {
-    if ((arg0 == 1) || (arg0 == 2) || (arg0 == 3)) {
-        return true;
-    }
+    switch (arg0) {
+        case 1:
+        case 2:
+        case 3:
+            return true;
 
-    return false;
+        default:
+            return false;
+    }
 }
 
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
@@ -1043,15 +1044,15 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     Path* path = &play->setupPathList[this->pathIndex];
     s32 pathCount;
     Vec3s* pathPoints;
-    f32 phi_f12;
-    f32 phi_f14;
+    f32 xDiff;
+    f32 zDiff;
     Vec3f sp50;
     f32 sp4C;
     f32 sp48;
     f32 sp44;
-    s32 aux;
+    s32 angle;
     ObjUmPathState sp3C;
-    s16 phi_a2;
+    s16 yawDiff;
 
     pathCount = path->count;
     pathPoints = Lib_SegmentedToVirtual(path->points);
@@ -1064,19 +1065,19 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIndex]);
 
     if (this->pointIndex == 0) {
-        phi_f12 = pathPoints[1].x - pathPoints[0].x;
-        phi_f14 = pathPoints[1].z - pathPoints[0].z;
+        xDiff = pathPoints[1].x - pathPoints[0].x;
+        zDiff = pathPoints[1].z - pathPoints[0].z;
     } else if ((this->pointIndex + 1) == path->count) {
-        phi_f12 = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
-        phi_f14 = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
+        xDiff = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
+        zDiff = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
     } else {
-        phi_f12 = pathPoints[this->pointIndex + 1].x - pathPoints[this->pointIndex - 1].x;
-        phi_f14 = pathPoints[this->pointIndex + 1].z - pathPoints[this->pointIndex - 1].z;
+        xDiff = pathPoints[this->pointIndex + 1].x - pathPoints[this->pointIndex - 1].x;
+        zDiff = pathPoints[this->pointIndex + 1].z - pathPoints[this->pointIndex - 1].z;
     }
 
-    aux = Math_Atan2S(phi_f12, phi_f14);
+    angle = Math_Atan2S(xDiff, zDiff);
 
-    func_8017B7F8(&sp50, aux, &sp4C, &sp48, &sp44);
+    func_8017B7F8(&sp50, angle, &sp4C, &sp48, &sp44);
     if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
         this->pointIndex++;
 
@@ -1103,29 +1104,29 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
         if (1) {}
 
-        phi_a2 = this->donkey->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
-        if (fabsf(phi_a2) < 2730.0f) {
-            if (fabsf(phi_a2) < 100.0f) {
+        yawDiff = this->donkey->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
+        if (fabsf(yawDiff) < 2730.0f) {
+            if (fabsf(yawDiff) < 100.0f) {
                 this->dyna.actor.shape.rot.y = this->donkey->actor.shape.rot.y;
-            } else if (phi_a2 > 0) {
+            } else if (yawDiff > 0) {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
-                phi_a2 = 0x64;
-            } else if (phi_a2 < 0) {
+                yawDiff = 0x64;
+            } else if (yawDiff < 0) {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x64;
-                phi_a2 = -0x64;
+                yawDiff = -0x64;
             }
-        } else if (phi_a2 > 0) {
+        } else if (yawDiff > 0) {
             this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
-            phi_a2 = 0x190;
+            yawDiff = 0x190;
         } else {
-            if (phi_a2 < 0) {
+            if (yawDiff < 0) {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
-                phi_a2 = -0x190;
+                yawDiff = -0x190;
             }
         }
 
         if (this->flags & (OBJ_UM_FLAG_0010 | OBJ_UM_FLAG_0004)) {
-            ObjUm_RotatePlayerView(this, play, phi_a2);
+            ObjUm_RotatePlayerView(this, play, yawDiff);
         }
     }
 
@@ -1962,12 +1963,14 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     }
                 }
             } else {
+                // !@bug: skips CLOSE_DISPS
                 return;
             }
         }
 
         CLOSE_DISPS(gfxCtx);
     }
+
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         Matrix_MultZero(&this->dyna.actor.focus.pos);
     }

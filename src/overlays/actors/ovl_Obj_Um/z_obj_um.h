@@ -9,6 +9,8 @@ struct ObjUm;
 
 typedef void (*ObjUmActionFunc)(struct ObjUm*, PlayState*);
 
+#define MILK_POTS_COUNT 3
+
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjUmActionFunc actionFunc;
@@ -31,9 +33,9 @@ typedef struct ObjUm {
     /* 0x2FE */ Vec3s unk_2FE;
     /* 0x304 */ s32 unk_304;
     /* 0x308 */ Vec3f unk_308;
-    /* 0x314 */ s32 potsLife[3];
-    /* 0x320 */ s32 wasPotHit[3]; // resets to false in the same frame
-    /* 0x32C */ Vec3f potPos[3];
+    /* 0x314 */ s32 potsLife[MILK_POTS_COUNT];
+    /* 0x320 */ s32 wasPotHit[MILK_POTS_COUNT]; // resets to false in the same frame
+    /* 0x32C */ Vec3f potPos[MILK_POTS_COUNT];
     /* 0x350 */ s32 unk_350; // unused counter?
     /* 0x354 */ s32 unk_354; // unused?
     /* 0x358 */ EnHorse* bandit1;
