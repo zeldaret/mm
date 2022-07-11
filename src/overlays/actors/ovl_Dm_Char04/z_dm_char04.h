@@ -8,14 +8,15 @@ struct DmChar04;
 typedef void (*DmChar04ActionFunc)(struct DmChar04*, PlayState*);
 
 typedef struct unkStruct {
-    s32 member1;
-    s32 member2;
-    s32 member3;
-    s32 member4;
+    f32 unk_240;
+    f32 unk_244;
+    f32 unk_248;
+    f32 unk_24C;
 } unkStruct;
+
 typedef struct DmChar04 {
     /* 0x0000 */ Actor actor;
-    /* 0x144 */ SkelAnime unk144;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable;
     /* 0x18E */ char pad18E[0x54];
     /* 0x1E2 */ Vec3s morphTable;
