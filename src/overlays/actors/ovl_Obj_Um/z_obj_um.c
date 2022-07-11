@@ -1598,8 +1598,7 @@ void func_80B7AF30(ObjUm* this, PlayState* play) {
         this->dyna.actor.shape.rot.z = 0;
     } else {
         CollisionPoly* sp44;
-        s32 pad;
-        s32 pad2;
+        s32 pad[2];
         Vec3f sp30;
 
         this->flags &= ~OBJ_UM_FLAG_0001;
