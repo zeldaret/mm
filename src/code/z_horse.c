@@ -34,11 +34,20 @@ void func_800F3B2C(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3B68.s")
 
+void func_800F3C44(PlayState* play, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3C44.s")
 
+void func_800F3ED4(PlayState* play, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3ED4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F40A0.s")
+void func_800F40A0(PlayState* play, Player* player) {
+    if (((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) || ((play->sceneNum == 0x35) && (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) && (player->transformation == 4)) || ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2)))) {
+        func_800F3ED4(play, player);
+    } else {
+        func_800F3C44(play, player);
+    }
+    D_801BDAA0 = 0;
+}
 
 void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2) {
     s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, arg1) - actor->world.rot.y;

@@ -1467,7 +1467,7 @@ void func_800F3B2C(PlayState* play);
 // void func_800F3B68(void);
 // void func_800F3C44(void);
 // void func_800F3ED4(void);
-void func_800F40A0(GameState* gameState, Player* player);
+void func_800F40A0(PlayState* play, Player* player);
 void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2);
 UNK_TYPE func_800F41E4(PlayState* play, ActorContext* actorCtx);
 

@@ -1358,8 +1358,8 @@ s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & 0x20000080) || (player->csMode != 0);
 }
 
-void func_800B722C(GameState* gameState, Player* player) {
-    func_800F40A0(gameState, player);
+void func_800B722C(PlayState* play, Player* player) {
+    func_800F40A0(play, player);
 }
 
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
@@ -2268,7 +2268,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     func_800B9120(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(&play->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
+    func_800B722C(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
 /**
