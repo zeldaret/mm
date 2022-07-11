@@ -57,16 +57,8 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play);
 void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
-void func_80B7A070(ObjUm* this, PlayState* play);
-void func_80B7A0E0(ObjUm* this, PlayState* play);
-void func_80B7A614(ObjUm* this, PlayState* play);
-void func_80B7A7AC(ObjUm* this, PlayState* play);
-void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play);
-
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-
 void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index);
-
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 const ActorInit Obj_Um_InitVars = {
