@@ -879,7 +879,7 @@ void func_80144A94(SramContext* sramCtx) {
         gSaveContext.unk_3EC0[i] = 0;
     }
 
-    D_801BDAA0 = 1;
+    D_801BDAA0 = true;
     D_801BDA9C = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;

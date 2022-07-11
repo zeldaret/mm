@@ -170,7 +170,7 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
 
     D_801BDA9C = false;
     if (player->stateFlags1 & 0x800000) {
-        D_801BDAA0 = 1;
+        D_801BDAA0 = true;
     }
     play->nextEntranceIndex = 0xCE20;
     play->sceneLoadFlag = 0x14;

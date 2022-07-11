@@ -90,9 +90,8 @@ void func_800F3B2C(PlayState* play) {
 }
 
 s32 D_801BDA9C = false;
-
-s32 D_801BDAA0 = 0x00000000;
-s32 D_801BDAA4 = 0;
+s32 D_801BDAA0 = false;
+s32 D_801BDAA4 = false;
 
 struct_801BDAA8 D_801BDAA8[] = {
     { SCENE_00KEIKOKU, 4 },      // Termina Field
@@ -124,18 +123,18 @@ void func_800F3C44(PlayState* play, Player* player) {
 
     if (D_801BDA9C && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         s32 pad;
-        Vec3f sp60;
-        f32 var_fv1;
-        CollisionPoly* sp58;
+        Vec3f pos;
+        f32 yIntersect;
+        CollisionPoly* poly;
         s32 pad2[3];
 
-        sp60 = player->actor.world.pos;
-        sp60.y += 5.0f;
-        var_fv1 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp58, &sp60);
-        if (var_fv1 == BGCHECK_Y_MIN) {
-            var_fv1 = player->actor.world.pos.y;
+        pos = player->actor.world.pos;
+        pos.y += 5.0f;
+        yIntersect = BgCheck_EntityRaycastFloor1(&play->colCtx, &poly, &pos);
+        if (yIntersect == BGCHECK_Y_MIN) {
+            yIntersect = player->actor.world.pos.y;
         }
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, var_fv1,
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, yIntersect,
                                         player->actor.world.pos.z, player->actor.shape.rot.x, player->actor.shape.rot.y,
                                         player->actor.shape.rot.z, 0x400B);
         Actor_MountHorse(play, player, player->rideActor);
@@ -185,11 +184,11 @@ void func_800F40A0(PlayState* play, Player* player) {
     } else {
         func_800F3C44(play, player);
     }
-    D_801BDAA0 = 0;
+    D_801BDAA0 = false;
 }
 
-void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2) {
-    s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, arg1) - actor->world.rot.y;
+void func_800F415C(Actor* actor, Vec3f* pos, s16 arg2) {
+    s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, pos) - actor->world.rot.y;
 
     if (arg2 < yaw) {
         actor->world.rot.y += arg2;

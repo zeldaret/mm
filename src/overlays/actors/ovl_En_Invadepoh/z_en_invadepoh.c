@@ -1998,7 +1998,7 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
         play->sceneLoadFlag = 0x14;
         play->unk_1887F = 0x49;
         gSaveContext.nextTransition = 0x48;
-        D_801BDAA0 = 1;
+        D_801BDAA0 = true;
         D_801BDA9C = false;
         func_80B47248(this);
     }

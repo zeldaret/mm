@@ -681,7 +681,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     EnHorse_ClearDustFlags(&this->dustFlags);
-    D_801BDAA4 = 0;
+    D_801BDAA4 = false;
     Skin_Setup(&this->skin);
     this->riderPos = thisx->world.pos;
     this->unk_52C = 0;
@@ -1862,8 +1862,8 @@ void EnHorse_InitInactive(EnHorse* this) {
 }
 
 void EnHorse_Inactive(EnHorse* this, PlayState* play) {
-    if ((D_801BDAA4 != 0) && (this->type == HORSE_2)) {
-        D_801BDAA4 = 0;
+    if (D_801BDAA4 && (this->type == HORSE_2)) {
+        D_801BDAA4 = false;
         if (EnHorse_Spawn(this, play)) {
             if (this->type == HORSE_2) {
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
@@ -1942,8 +1942,8 @@ void EnHorse_Idle(EnHorse* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     EnHorse_IdleAnimSounds(this, play);
 
-    if ((D_801BDAA4 != 0) && (this->type == HORSE_2)) {
-        D_801BDAA4 = 0;
+    if (D_801BDAA4 && (this->type == HORSE_2)) {
+        D_801BDAA4 = false;
         if (!func_8087C38C(play, this, &this->actor.world.pos)) {
             if (EnHorse_Spawn(this, play)) {
                 if (this->type == HORSE_2) {
@@ -2038,7 +2038,7 @@ void EnHorse_SetFollowAnimation(EnHorse* this, PlayState* play) {
 void EnHorse_FollowPlayer(EnHorse* this, PlayState* play) {
     f32 distToPlayer;
 
-    D_801BDAA4 = 0;
+    D_801BDAA4 = false;
     distToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &GET_PLAYER(play)->actor);
 
     if (((this->playerDir == PLAYER_DIR_BACK_R) || (this->playerDir == PLAYER_DIR_BACK_L)) && (distToPlayer > 300.0f) &&
@@ -2952,7 +2952,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
     s32 animFinished;
     s16 yaw;
 
-    if ((D_801BDAA4 != 0) || (this->type == HORSE_HNI)) {
+    if (D_801BDAA4 || (this->type == HORSE_HNI)) {
         EnHorse_StartIdleRidable(this);
         if (this->type == HORSE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
@@ -3313,7 +3313,7 @@ void func_808848C8(EnHorse* this, PlayState* play) {
 
     EnHorse_PlayWalkingSound(this);
     this->actor.speedXZ = 4.0f;
-    func_800F415C(&this->actor, &sp24, 2000);
+    func_800F415C(&this->actor, &sp24, 0x7D0);
     this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
     if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {
