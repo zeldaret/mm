@@ -34,7 +34,35 @@ s32 func_800F3940(PlayState* play) {
     return -1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F39B4.s")
+s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
+    Path* temp_v0;
+    Vec3s* temp_v1_2;
+    s32 temp_v1;
+
+    temp_v0 = &play->setupPathList[arg1];
+    temp_v1 = temp_v0->count;
+    arg3->x = 0;
+    arg3->y = 0;
+    arg3->z = 0;
+    *arg4 = 0;
+
+    if (temp_v1 == 0) {
+        return 0;
+    }
+    if (arg2 >= temp_v1) {
+        return 0;
+    }
+
+    temp_v1_2 = Lib_SegmentedToVirtual(temp_v0->points);
+    temp_v1_2 += arg2;
+
+    arg3->x = temp_v1_2->x;
+    arg3->y = temp_v1_2->y;
+    arg3->z = temp_v1_2->z;
+    *arg4 = 0;
+    return 1;
+}
+
 
 //extern s16 sValidScenes[11];
 extern s16 D_801BDA70[11];
