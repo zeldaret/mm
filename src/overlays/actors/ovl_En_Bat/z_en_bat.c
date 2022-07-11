@@ -138,7 +138,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
-    thisx->depthInWater = -32000.0f;
+    thisx->depthInWater = BGCHECK_Y_MIN;
     Actor_SetFocus(thisx, 20.0f);
 
     if (sAlreadySpawned) {
@@ -186,13 +186,13 @@ s32 EnBat_IsGraveyardOnSecondDay(PlayState* play) {
 }
 
 void EnBat_StepAnimation(EnBat* this, s32 frameStep) {
-    s32 previousFrame = this->animationFrame;
+    s32 prevFrame = this->animationFrame;
 
     this->animationFrame += frameStep;
     if (this->animationFrame >= ARRAY_COUNT(sWingsDLs)) {
         this->animationFrame -= ARRAY_COUNT(sWingsDLs);
     }
-    if ((previousFrame < BAD_BAT_FLAP_FRAME) && (this->animationFrame >= BAD_BAT_FLAP_FRAME)) {
+    if ((prevFrame < BAD_BAT_FLAP_FRAME) && (this->animationFrame >= BAD_BAT_FLAP_FRAME)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_FLY);
     }
 }
@@ -229,7 +229,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
         this->actor.bgCheckFlags &= ~8;
         this->yawTarget = this->actor.wallYaw;
     } else if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
-                                        this->actor.home.pos.z) > 90000.0f) {
+                                        this->actor.home.pos.z) > SQ(300.0f)) {
         this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
         this->yawTarget = this->actor.shape.rot.y +
@@ -360,7 +360,7 @@ void EnBat_Die(EnBat* this, PlayState* play) {
             this->actor.shape.rot.z += 0x1780;
         }
 
-        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == -32000.0f)) {
+        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 Actor_SpawnIceEffects(play, &this->actor, this->bodyPartPoss, ARRAY_COUNT(this->bodyPartPoss), 2, 0.2f,
                                       0.2f);
@@ -371,21 +371,20 @@ void EnBat_Die(EnBat* this, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
 
             if (this->actor.room == -1) {
-                Actor* actor = NULL;
+                Actor* enemy = NULL;
 
                 // Search for other EnBats. If find none, set switch flag.
                 do {
-                    actor = SubS_FindActor(play, actor, ACTORCAT_ENEMY, ACTOR_EN_BAT);
-                    if (actor != NULL) {
-                        if (actor == &this->actor) {
-                            actor = actor->next;
-                        } else {
+                    enemy = SubS_FindActor(play, enemy, ACTORCAT_ENEMY, ACTOR_EN_BAT);
+                    if (enemy != NULL) {
+                        if (enemy != &this->actor) {
                             break;
                         }
+                        enemy = enemy->next;
                     }
-                } while (actor != NULL);
+                } while (enemy != NULL);
 
-                if (actor == NULL) {
+                if (enemy == NULL) {
                     Flags_SetSwitch(play, this->switchFlag);
                 }
             }
@@ -407,7 +406,7 @@ void EnBat_SetupStunned(EnBat* this) {
 
 void EnBat_Stunned(EnBat* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x100);
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == -32000.0f)) {
+    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         if (this->timer != 0) {
             this->timer--;
         }
