@@ -37,8 +37,19 @@ void func_800F3B2C(PlayState* play) {
 void func_800F3C44(PlayState* play, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3C44.s")
 
-void func_800F3ED4(PlayState* play, Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3ED4.s")
+void func_800F3ED4(PlayState* play, Player* player) {
+    if ((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) {
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1262.0f, -106.0f, 470.0f, (s16) 0, (s16) 0x7FFF, (s16) 0, 0x400D);
+        Actor_MountHorse(play, player, player->rideActor);
+        Actor_SetCameraHorseSetting(play, player);
+    } else if ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2))) {
+        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, D_801DD7E8, (s16) 0, (s16) -0x4FA4, (s16) 0, 0x4001);
+    } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) && (player->transformation == 4)) {
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, D_801DD7EC, (s16) 0, (s16) 0x13, (s16) 0, 0x4007);
+        Actor_MountHorse(play, player, player->rideActor);
+        Actor_SetCameraHorseSetting(play, player);
+    }
+}
 
 void func_800F40A0(PlayState* play, Player* player) {
     if (((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) || ((play->sceneNum == 0x35) && (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) && (player->transformation == 4)) || ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2)))) {
