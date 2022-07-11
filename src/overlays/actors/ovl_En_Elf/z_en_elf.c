@@ -1555,7 +1555,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         if (this->fairyFlags & 0x200) {
             scale *= 2.0f;
         }
-        scale *= this->actor.scale.x * 124.99999f;
+        scale *= this->actor.scale.x * (1.0f / 0.008f);
 
         Matrix_MultVec3f(&zeroVec, &sp34);
         Matrix_Translate(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
