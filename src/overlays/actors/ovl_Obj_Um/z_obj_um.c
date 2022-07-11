@@ -774,7 +774,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_um_Colheader_007F50);
     }
 
-    if (this->dyna.bgId == 0x32) {
+    if (this->dyna.bgId == BGCHECK_SCENE) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
