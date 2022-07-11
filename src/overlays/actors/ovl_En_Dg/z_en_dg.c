@@ -21,16 +21,16 @@ void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play);
 void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play);
 void EnDg_BarkAtGoron(EnDg* this, PlayState* play);
 void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play);
-void EnDg_SitNextToPlayerAndMakeNoise(EnDg* this, PlayState* play);
+void EnDg_SitNextToPlayer(EnDg* this, PlayState* play);
 void EnDg_JumpAttack(EnDg* this, PlayState* play);
 void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play);
 void EnDg_Fall(EnDg* this, PlayState* play);
 void EnDg_ApproachPlayer(EnDg* this, PlayState* play);
 void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play);
-void func_8098B28C(EnDg* this, PlayState* play);
-void func_8098B390(EnDg* this, PlayState* play);
+void EnDg_UnusedBackAwayFromPlayer(EnDg* this, PlayState* play);
+void EnDg_UnusedBarkAtPlayer(EnDg* this, PlayState* play);
 void EnDg_Swim(EnDg* this, PlayState* play);
-void EnDg_StopSwimming(EnDg* this, PlayState* play);
+void EnDg_JumpOutOfWater(EnDg* this, PlayState* play);
 void EnDg_Held(EnDg* this, PlayState* play);
 void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
@@ -74,7 +74,7 @@ typedef enum {
     /* 8 */ DOG_BEHAVIOR_DEFAULT,
 } DogBehavior;
 
-static u8 D_8098C2A0 = 0;
+static u8 sIsAnyDogHeld = false;
 
 static s16 sBremenMaskFollowerIndex = 99;
 
@@ -101,7 +101,7 @@ static RacetrackDogInfo sRacetrackDogInfo[] = {
 
 /**
  * Stores the RacetrackDogInfo for the dog that is selected by the player. These values are just
- * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in EnDg_WaitToBePickedUp.
+ * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in EnDg_CheckIfPickedUp.
  */
 static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x353E };
 
@@ -218,12 +218,15 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
     Collider_UpdateCylinder(&this->actor, &this->collider);
+
     if ((player->transformation == PLAYER_FORM_DEKU) && (this->actionFunc == EnDg_JumpAttack)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     } else {
         Collider_ResetCylinderAT(play, &this->collider.base);
     }
 
+    // The check for DOG_FLAG_JUMP_ATTACKING here makes it so the dog passes through the
+    // player if it hits them with their jump attack.
     if ((this->grabState != DOG_GRAB_STATE_HELD) && !(this->dogFlags & DOG_FLAG_JUMP_ATTACKING)) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
@@ -283,6 +286,9 @@ s32 EnDg_ReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
     return reached;
 }
 
+/**
+ * Returns the Y-rotation the dog should have to move to the next point along its path.
+ */
 s16 EnDg_GetYRotation(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     Vec3s* points;
     f32 diffX;
@@ -303,6 +309,9 @@ s16 EnDg_GetYRotation(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
+/**
+ * Updates the dog's Y-rotation and speed so that it moves along its path.
+ */
 void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
     s16 yRotation;
     f32 distSq;
@@ -377,7 +386,7 @@ void EnDg_PlaySfxWhine(EnDg* this) {
     }
 }
 
-void EnDg_PlaySfxGroan(EnDg* this, f32 frame) {
+void EnDg_PlaySfxGrowl(EnDg* this, f32 frame) {
     if (Animation_OnFrame(&this->skelAnime, frame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
@@ -456,13 +465,14 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
     }
 }
 
-void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
-    RacetrackDogInfo* temp;
-
-    if ((D_8098C2A0 != 0) && !(this->dogFlags & DOG_FLAG_HELD)) {
+/**
+ * Checks to see if the player picked up the dog and sets the appropriate state if they did.
+ */
+void EnDg_CheckIfPickedUp(EnDg* this, PlayState* play) {
+    if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         this->dogFlags |= DOG_FLAG_HELD;
-    } else if ((D_8098C2A0 == 0) && (this->dogFlags & DOG_FLAG_HELD)) {
+    } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
         this->actor.flags &= ~ACTOR_FLAG_8000000;
         this->dogFlags &= ~DOG_FLAG_HELD;
     }
@@ -471,9 +481,9 @@ void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
-        if (D_8098C2A0 == 0) {
+        if (!sIsAnyDogHeld) {
             this->actor.flags |= ACTOR_FLAG_8000000;
-            D_8098C2A0 = 1;
+            sIsAnyDogHeld = true;
             this->dogFlags |= DOG_FLAG_HELD;
         }
 
@@ -492,6 +502,10 @@ void EnDg_WaitToBePickedUp(EnDg* this, PlayState* play) {
     }
 }
 
+/**
+ * Returns true if it finds a dog to follow the player around while they're marching with
+ * the Bremen Mask. The index of the dog it finds is stored in sBremenMaskFollowerIndex.
+ */
 s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
     EnDg* enemy = (EnDg*)play->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     f32 minDist = 9999.0f;
@@ -510,6 +524,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
                 minDist = dist;
             }
         }
+
         enemy = (EnDg*)enemy->actor.next;
     }
 
@@ -520,7 +535,15 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
     return false;
 }
 
-void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
+/**
+ * This checks for two conditions:
+ * - If the player has started marching with the Bremen Mask, then it makes the dog
+ *   start following the player around (assuming it's the best candidate found in
+ *   EnDg_FindFollowerForBremenMask above).
+ * - If the player has stopped marching with the Bremen Mask, and this dog was
+ *   following them around, then it returns the dog to its idle state.
+ */
+void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & 0x20000000) { // bremen mask march
@@ -533,8 +556,7 @@ void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
                 this->dogFlags |= DOG_FLAG_FOLLOWING_BREMEN_MASK;
                 EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK);
                 this->actionFunc = EnDg_SetupBremenMaskApproachPlayer;
-            } else if ((this->actionFunc == EnDg_ApproachPlayer) ||
-                       (this->actionFunc == EnDg_SitNextToPlayerAndMakeNoise)) {
+            } else if ((this->actionFunc == EnDg_ApproachPlayer) || (this->actionFunc == EnDg_SitNextToPlayer)) {
                 if (DECR(this->bremenBarkTimer) == 0) {
                     this->bremenBarkTimer = 10;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
@@ -549,8 +571,11 @@ void EnDg_CheckForBremenMask(EnDg* this, PlayState* play) {
     }
 }
 
-// Maybe name should suggest it only affects non-human?
-s32 EnDg_IsInInteractionRange(EnDg* this, PlayState* play) {
+/**
+ * Returns true if the player is not human and the dog is close enough to start
+ * reacting to their current form.
+ */
+s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (player->transformation) {
@@ -559,6 +584,7 @@ s32 EnDg_IsInInteractionRange(EnDg* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 300.0f) {
                 return true;
             }
+            // fallthrough
 
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
@@ -570,6 +596,13 @@ s32 EnDg_IsInInteractionRange(EnDg* this, PlayState* play) {
     return false;
 }
 
+/**
+ * Sets the appropriate actionFunc given the player's current form and the dog's current behavior.
+ * Specifically, it makes sure that the dog doesn't start reacting to the player's form until the
+ * player starts moving a bit. This was presumably done so the player could more easily react to
+ * the dog changing its behavior; it would be strange if the dog attacked the player the instant
+ * they put on the Deku Mask, for example.
+ */
 void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -629,6 +662,9 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
     }
 }
 
+/**
+ * Simply moves the dog along its path, stopping to bark at random intervals.
+ */
 void EnDg_IdleMove(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -637,10 +673,10 @@ void EnDg_IdleMove(EnDg* this, PlayState* play) {
     EnDg_MoveAlongPath(this, play);
     Actor_MoveWithGravity(&this->actor);
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        EnDg_WaitToBePickedUp(this, play);
+        EnDg_CheckIfPickedUp(this, play);
     }
 
-    EnDg_CheckForBremenMask(this, play);
+    EnDg_CheckForBremenMaskMarch(this, play);
     EnDg_PlaySfxWalk(this);
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actionFunc = EnDg_Fall;
@@ -653,15 +689,19 @@ void EnDg_IdleMove(EnDg* this, PlayState* play) {
     }
 }
 
+/**
+ * Stops and barks, before returning to moving along its path.
+ */
 void EnDg_IdleBark(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        EnDg_WaitToBePickedUp(this, play);
+        EnDg_CheckIfPickedUp(this, play);
     }
 
     EnDg_PlaySfxBark(this, 13.0f);
     EnDg_PlaySfxBark(this, 19.0f);
+
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actionFunc = EnDg_Fall;
     }
@@ -672,6 +712,10 @@ void EnDg_IdleBark(EnDg* this, PlayState* play) {
     }
 }
 
+/**
+ * Slowly back away from the player while growling. After a short time backing away,
+ * this function will make the dog away from the player.
+ */
 void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
@@ -685,29 +729,34 @@ void EnDg_BackAwayFromGoron(EnDg* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 8) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
+
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 
     EnDg_PlaySfxWalk(this);
-    EnDg_PlaySfxGroan(this, 0);
+    EnDg_PlaySfxGrowl(this, 0);
 }
 
+/**
+ * Quickly run away from the player. Once the dog is far enough from the player,
+ * this function will make them start barking at them.
+ */
 void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 phi_a1;
+    s16 yRotation;
 
     if (this->actor.xzDistToPlayer < 250.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, -this->actor.yawTowardsPlayer, 4, 0xC00);
 
         if (this->actor.bgCheckFlags & 8) {
-            phi_a1 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         } else {
-            phi_a1 = 0;
+            yRotation = 0;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (player->actor.speedXZ != 0.0f) {
             Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 0.2f, 1.0f);
@@ -725,6 +774,7 @@ void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
+
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
@@ -732,6 +782,9 @@ void EnDg_RunAwayFromGoron(EnDg* this, PlayState* play) {
     }
 }
 
+/**
+ * Bark at the player until they get close enough, at which point the dog starts backing away.
+ */
 void EnDg_BarkAtGoron(EnDg* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -758,10 +811,10 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 70.0f) {
         Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 1.0f);
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            s16 y = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
+            s16 yawDiff = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
 
             this->attackTimer = 20;
-            if (y < 0x4000) {
+            if (yawDiff < 0x4000) {
                 EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_JUMP_ATTACK);
                 this->actionFunc = EnDg_JumpAttack;
             } else {
@@ -780,6 +833,10 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
     EnDg_PlaySfxAngryBark(this, 5.0f);
 }
 
+/**
+ * Simply makes the dog run around for a bit after attacking before it
+ * starts to approach the player for another attack.
+ */
 void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
     this->dogFlags &= ~DOG_FLAG_BOUNCED;
     Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
@@ -793,7 +850,11 @@ void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
     EnDg_PlaySfxAngryBark(this, 3.0f);
 }
 
-void EnDg_SitNextToPlayerAndMakeNoise(EnDg* this, PlayState* play) {
+/**
+ * Makes the dog sit next to the player until they get too far away, at which point
+ * it will attempt to approach them again.
+ */
+void EnDg_SitNextToPlayer(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!(this->actor.bgCheckFlags & 1)) {
@@ -813,7 +874,10 @@ void EnDg_SitNextToPlayerAndMakeNoise(EnDg* this, PlayState* play) {
         this->actionFunc = EnDg_ApproachPlayer;
     }
 
-    EnDg_CheckForBremenMask(this, play);
+    EnDg_CheckForBremenMaskMarch(this, play);
+
+    // If we're in this function, the player is either marching with the Bremen Mask, or
+    // they're a Zora. The below code will make the dog repeatedly whine in the latter case.
     if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
         EnDg_PlaySfxWhine(this);
     }
@@ -865,17 +929,21 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    EnDg_PlaySfxGroan(this, 10.0f);
+    EnDg_PlaySfxGrowl(this, 10.0f);
 }
 
-// Closed loop with other unused functions
-void func_8098AE58(EnDg* this, PlayState* play) {
+/**
+ * An unused function that will make the dog walk slowly towards the player until they're
+ * in a specific range, at which point they will bark at them. This might be part of an
+ * unused or early variation of how dogs react to Goron Link.
+ */
+void EnDg_UnusedWalkToPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_BACKWARDS);
-        this->actionFunc = func_8098B28C;
+        this->actionFunc = EnDg_UnusedBackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_BARK);
-        this->actionFunc = func_8098B390;
+        this->actionFunc = EnDg_UnusedBarkAtPlayer;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -905,6 +973,10 @@ void EnDg_Fall(EnDg* this, PlayState* play) {
     EnDg_PlaySfxBark(this, 3.0f);
 }
 
+/**
+ * Approach the player non-aggressively. If the player stops moving, then
+ * eventually the dog will sit down next to them.
+ */
 void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -919,7 +991,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 40.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_SIT_DOWN);
-        this->actionFunc = EnDg_SitNextToPlayerAndMakeNoise;
+        this->actionFunc = EnDg_SitNextToPlayer;
     } else if (player->stateFlags3 & 0x20000000) { // bremen mask march
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
             Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
@@ -930,14 +1002,21 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
     }
 
-    EnDg_CheckForBremenMask(this, play);
+    EnDg_CheckForBremenMaskMarch(this, play);
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
+
+    // If we're in this function, the player is either marching with the Bremen Mask, or
+    // they're a Zora. The below code will make the dog repeatedly bark in the latter case.
     if (!(this->dogFlags & DOG_FLAG_FOLLOWING_BREMEN_MASK)) {
         EnDg_PlaySfxBark(this, 3.0f);
     }
 }
 
+/**
+ * Makes the dog slowly back up and face the player before performing a jump attack. Used to
+ * give the dog a bit of time to correct its angle if they were unlikely to hit the player.
+ */
 void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer > 72.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_JUMP_ATTACK);
@@ -955,17 +1034,22 @@ void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play) {
     Math_ApproachF(&this->actor.speedXZ, -1.0f, 0.2f, 1.0f);
     Actor_MoveWithGravity(&this->actor);
     EnDg_PlaySfxWalk(this);
-    EnDg_PlaySfxGroan(this, 4.0f);
+    EnDg_PlaySfxGrowl(this, 4.0f);
 }
 
-// Closed loop with other unused functions
-void func_8098B28C(EnDg* this, PlayState* play) {
+/**
+ * An unused function that will make the dog back away from the player while growling.
+ * It is quite similar to EnDg_BackAwayFromGoron; perhaps this is an earlier version of it?
+ * Unlike that function, this will make the dog approach the player if they move too far away.
+ * It also lacks the behavior where the dog runs away in a panic after a short time.
+ */
+void EnDg_UnusedBackAwayFromPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer > 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK);
-        this->actionFunc = func_8098AE58;
+        this->actionFunc = EnDg_UnusedWalkToPlayer;
     } else if (this->actor.xzDistToPlayer > 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_BARK);
-        this->actionFunc = func_8098B390;
+        this->actionFunc = EnDg_UnusedBarkAtPlayer;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
@@ -981,23 +1065,32 @@ void func_8098B28C(EnDg* this, PlayState* play) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
-// Closed loop with other unused functions
-void func_8098B390(EnDg* this, PlayState* play) {
+/**
+ * An unused function that will make the dog bark at the player endlessly.
+ * It is quite similar to EnDg_BarkAtGoron; perhaps this is an earlier version of it?
+ * Unlike that function, this will make the dog approach the player if they move too far away.
+ * It also mixes in multiple growls into the bark.
+ */
+void EnDg_UnusedBarkAtPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_BACKWARDS);
-        this->actionFunc = func_8098B28C;
+        this->actionFunc = EnDg_UnusedBackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer > 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK);
-        this->actionFunc = func_8098AE58;
+        this->actionFunc = EnDg_UnusedWalkToPlayer;
     }
 
-    EnDg_PlaySfxGroan(this, 0.0f);
-    EnDg_PlaySfxGroan(this, 1.0f);
-    EnDg_PlaySfxGroan(this, 2.0f);
-    EnDg_PlaySfxGroan(this, 3.0f);
+    EnDg_PlaySfxGrowl(this, 0.0f);
+    EnDg_PlaySfxGrowl(this, 1.0f);
+    EnDg_PlaySfxGrowl(this, 2.0f);
+    EnDg_PlaySfxGrowl(this, 3.0f);
     EnDg_PlaySfxBark(this, 5.0f);
 }
 
+/**
+ * Makes a splash effect and plays the splash SFX when the dog enters the water, then
+ * makes them start swimming.
+ */
 void EnDg_SetupSwim(EnDg* this, PlayState* play) {
     Vec3f pos;
 
@@ -1019,6 +1112,11 @@ void EnDg_SetupSwim(EnDg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 }
 
+/**
+ * Makes the dog swim until it either:
+ * - Touches land, at which point it will just resume its idle movement.
+ * - Touches a wall, at which point it will attempt to jump out of the water.
+ */
 void EnDg_Swim(EnDg* this, PlayState* play) {
     Vec3f ripplePos;
     Vec3f pos;
@@ -1052,18 +1150,23 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     }
 
     floorHeight = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos);
+
+    // Checking *only* that the dog is touching a wall here can result in some strange
+    // behavior. For example, if the player throws the dog at a wall next to some water,
+    // this code will make the dog "skip" along the water's surface, assuming the floor
+    // height is low enough to make it try to jump out.
     if (this->actor.bgCheckFlags & 8) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
                 this->dogFlags &= ~DOG_FLAG_SWIMMING;
-                this->actionFunc = EnDg_StopSwimming;
+                this->actionFunc = EnDg_JumpOutOfWater;
             } else {
                 yRotation = this->actor.wallYaw;
             }
         } else if (floorHeight > -100.0f) {
             if (waterSurface < floorHeight) {
                 this->dogFlags &= ~DOG_FLAG_SWIMMING;
-                this->actionFunc = EnDg_StopSwimming;
+                this->actionFunc = EnDg_JumpOutOfWater;
             } else {
                 yRotation = this->actor.wallYaw;
             }
@@ -1087,7 +1190,12 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 }
 
-void EnDg_StopSwimming(EnDg* this, PlayState* play) {
+/**
+ * This function attempts to get the dog out of water by making it jump near walls.
+ * The point of this is seemingly to let the dog escape the shallow water pools in
+ * South Clock Town.
+ */
+void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
     Vec3f pos;
 
     pos.x = this->actor.world.pos.x;
@@ -1131,9 +1239,9 @@ void EnDg_Held(EnDg* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
         this->actor.flags |= ACTOR_FLAG_1;
-        if (D_8098C2A0 != 0) {
+        if (sIsAnyDogHeld) {
             this->actor.flags &= ~ACTOR_FLAG_8000000;
-            D_8098C2A0 = 0;
+            sIsAnyDogHeld = false;
             this->dogFlags &= ~DOG_FLAG_HELD;
         }
 
@@ -1158,7 +1266,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         this->actor.gravity = -3.0f;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            EnDg_WaitToBePickedUp(this, play);
+            EnDg_CheckIfPickedUp(this, play);
         }
     }
 
@@ -1232,7 +1340,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
 
     this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
     if (!(player->stateFlags1 & 0x20) || (play->sceneNum != SCENE_CLOCKTOWER)) {
-        if (EnDg_IsInInteractionRange(this, play)) {
+        if (EnDg_ShouldReactToNonHumanPlayer(this, play)) {
             EnDg_ChooseActionForForm(this, play);
         } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {
             this->behavior = DOG_BEHAVIOR_DEFAULT;
