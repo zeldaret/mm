@@ -11572,7 +11572,7 @@
     0x80AAB9A8:("func_80AAB9A8",),
     0x80AAB9BC:("DmChar03_Draw",),
     0x80AABA84:("func_80AABA84",),
-    0x80AABC40:("func_80AABC40",),
+    0x80AABC40:("DmChar04_ChangeAnim",),
     0x80AABCDC:("DmChar04_Init",),
     0x80AABE24:("DmChar04_Destroy",),
     0x80AABE34:("func_80AABE34",),
