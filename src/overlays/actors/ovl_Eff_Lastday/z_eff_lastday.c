@@ -39,21 +39,23 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.1f);
     switch (EFFLASTDAY_GET_F(&this->actor)) {
-        case PARAMS_1:
+        case EFFLASTDAY_PARAMS_1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
             this->actionCmd = 0x1FC;
             this->actionFunc = func_80BEBDF8;
             Actor_SetScale(&this->actor, 1.0f);
             break;
-        case PARAMS_2:
+
+        case EFFLASTDAY_PARAMS_2:
             this->dList = object_lastday_DL_000210;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000308);
             this->actionCmd = 0x1FD;
             this->actionFunc = func_80BEBEB8;
             Actor_SetScale(&this->actor, 0.5f);
             break;
-        case PARAMS_3:
+
+        case EFFLASTDAY_PARAMS_3:
             this->dList = object_lastday_DL_000060;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000148);
             this->actionCmd = 0x1FE;
@@ -61,6 +63,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
             Actor_SetScale(&this->actor, 0.2f);
             this->actor.home.rot.z = 0;
             break;
+
         default:
             this->dList = object_lastday_DL_000370;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000448);
@@ -93,7 +96,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
                 this->step = 0;
                 break;
 
-            case ACTION_2:
+            case EFFLASTDAY_ACTION_2:
                 this->actor.draw = NULL;
                 this->actor.draw = EffLastday_Draw;
                 if (this->alpha < 255) {
@@ -105,7 +108,7 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
                 this->step++;
                 break;
 
-            case ACTION_3:
+            case EFFLASTDAY_ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -126,12 +129,12 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
                 this->step = 0;
                 break;
 
-            case ACTION_2:
+            case EFFLASTDAY_ACTION_2:
                 this->actor.draw = EffLastday_Draw;
                 this->step++;
                 break;
 
-            case ACTION_3:
+            case EFFLASTDAY_ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -152,12 +155,12 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
                 this->step = 0;
                 break;
 
-            case ACTION_2:
+            case EFFLASTDAY_ACTION_2:
                 this->actor.draw = EffLastday_Draw;
                 this->step++;
                 break;
 
-            case ACTION_3:
+            case EFFLASTDAY_ACTION_3:
                 this->actor.draw = EffLastday_Draw;
                 break;
         }
@@ -179,7 +182,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
                 this->step = 0;
                 break;
 
-            case ACTION_2:
+            case EFFLASTDAY_ACTION_2:
                 if (!this->actor.home.rot.z) {
                     this->actor.home.rot.z = true;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COMING_FIRE);
@@ -194,7 +197,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
                 this->step++;
                 break;
 
-            case ACTION_3:
+            case EFFLASTDAY_ACTION_3:
 
                 this->actor.draw = EffLastday_Draw;
                 break;
@@ -225,10 +228,10 @@ void EffLastday_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (EFFLASTDAY_GET_F(thisx)) {
-        case PARAMS_1:
-        case PARAMS_2:
+        case EFFLASTDAY_PARAMS_1:
+        case EFFLASTDAY_PARAMS_2:
             break;
-        case PARAMS_3:
+        case EFFLASTDAY_PARAMS_3:
             EffLastday_SetVtxAlpha(this->alpha);
             break;
         default:
