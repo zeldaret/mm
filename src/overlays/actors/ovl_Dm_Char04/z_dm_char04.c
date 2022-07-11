@@ -30,18 +30,18 @@ const ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Draw,
 };
 
-void DmChar04_ChangeAnim(SkelAnime* arg0, AnimationInfo* animation, u16 arg2) {
+void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     f32 phi_fv1;
 
-    animation += arg2;
+    animation += index;
 
     if (animation->frameCount < 0.0f) {
         phi_fv1 = Animation_GetLastFrame(animation->animation);
     } else {
         phi_fv1 = animation->frameCount;
     }
-    Animation_Change(arg0, animation->animation, animation->playSpeed, animation->startFrame, phi_fv1, animation->mode,
-                     animation->morphFrames);
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_fv1,
+                     animation->mode, animation->morphFrames);
 }
 
 static AnimationInfo sAnimations[] = {
