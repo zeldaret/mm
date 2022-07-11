@@ -18,12 +18,29 @@ struct EnDg;
 
 typedef void (*EnDgActionFunc)(struct EnDg*, PlayState*);
 
-#define ENDG_INDEX_ROMANI_RANCH 20
-#define ENDG_INDEX_SWAMP_SPIDER_HOUSE 21
-
 #define ENDG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENDG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 #define ENDG_PARAMS(path, index) ((path << 10) | (index << 5))
+
+typedef enum {
+    /*  0 */ ENDG_INDEX_RACETRACK_0,
+    /*  1 */ ENDG_INDEX_RACETRACK_1,
+    /*  2 */ ENDG_INDEX_RACETRACK_2,
+    /*  3 */ ENDG_INDEX_RACETRACK_3,
+    /*  4 */ ENDG_INDEX_RACETRACK_4,
+    /*  5 */ ENDG_INDEX_RACETRACK_5,
+    /*  6 */ ENDG_INDEX_RACETRACK_6,
+    /*  7 */ ENDG_INDEX_RACETRACK_7,
+    /*  8 */ ENDG_INDEX_RACETRACK_8,
+    /*  9 */ ENDG_INDEX_RACETRACK_9,
+    /* 10 */ ENDG_INDEX_RACETRACK_10,
+    /* 11 */ ENDG_INDEX_RACETRACK_11,
+    /* 12 */ ENDG_INDEX_RACETRACK_12,
+    /* 13 */ ENDG_INDEX_RACETRACK_13,
+    /* 20 */ ENDG_INDEX_ROMANI_RANCH = 20,
+    /* 21 */ ENDG_INDEX_SWAMP_SPIDER_HOUSE = 21,
+    /* 31 */ ENDG_INDEX_SOUTH_CLOCK_TOWN = 31
+} EnDgIndex;
 
 typedef struct EnDg {
     /* 0x000 */ Actor actor;

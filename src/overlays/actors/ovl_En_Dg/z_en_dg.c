@@ -454,7 +454,7 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
             // I miss the ranch...
             Message_StartTextbox(play, 0x91E, NULL);
         }
-    } else if ((this->index >= 0) && (this->index < 14)) {
+    } else if ((this->index >= ENDG_INDEX_RACETRACK_0) && (this->index <= ENDG_INDEX_RACETRACK_13)) {
         Message_StartTextbox(play, sRacetrackDogInfo[this->index].textId, NULL);
     } else if (this->index == ENDG_INDEX_ROMANI_RANCH) {
         // I wonder if I can stop practicing...
