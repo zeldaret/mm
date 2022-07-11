@@ -21,26 +21,26 @@ s32 D_8082B3C4 = 0;
 
 s16 D_8082B3C8 = 10;
 
-u8 gSlotAgeReqs[5][24] = {
+u8 gSlotTransformReqs[5][24] = {
     {
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, true,  true,  true,  true,  true,  true,
     },
     {
-        0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        true, false, false, false, false, true, false, false, false, false, false, true,
+        true, true,  true,  false, false, true, true,  true,  true,  true,  true,  true,
     },
     {
-        0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        true,  false, false, false, false, true, false, false, false, false, false, true,
+        false, true,  true,  false, false, true, true,  true,  true,  true,  true,  true,
     },
     {
-        0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01,
-        0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        true,  false, false, false, false, true, false, false, false, true, false, true,
+        false, true,  true,  false, false, true, true,  true,  true,  true, true,  true,
     },
     {
-        0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-        0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        true,  true, true, true, true, true, true, true, true, true, true, true,
+        false, true, true, true, true, true, true, true, true, true, true, true,
     },
 };
 
@@ -94,7 +94,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (gSlotAgeReqs[((void)0, gSaveContext.save.playerForm)][gItemSlots[item]] == 0) {
+    if (!gSlotTransformReqs[((void)0, gSaveContext.save.playerForm)][gItemSlots[item]]) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 100, 100, pauseCtx->alpha);
     } else {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);

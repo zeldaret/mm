@@ -21,17 +21,14 @@ void* D_8082B700[] = {
     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
 };
-
 void* D_8082B73C[] = {
     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
 };
-
 void* D_8082B778[] = {
     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
 };
-
 void* D_8082B7B4[] = {
     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
@@ -42,7 +39,6 @@ s16 D_8082B7F0[] = {
     0x0040, 0x0030, 0x0040, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
     0x0008, 0x0008, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018,
 };
-
 s16 D_8082B838[] = {
     0x0028, 0x001F, 0x0035, 0x0035, 0x0035, 0x0034, 0x0023, 0x0023, 0x0020, 0x0040, 0x0040, 0x0040,
     0x0040, 0x0052, 0x003D, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
@@ -62,7 +58,8 @@ s16 D_8082B8A4 = 0;
 s16 D_8082B8A8 = 255;
 s16 D_8082B8AC = 0;
 s16 D_8082B8B0 = 0;
-s16 D_8082B8B4 = 0;
+
+s16 sInDungeonScene = false;
 
 f32 D_8082B8B8[] = {
     -4.0f, 4.0f, 4.0f, 4.0f, 4.0f, -4.0f, -4.0f, -4.0f,
@@ -73,7 +70,7 @@ f32 D_8082B8D8[] = {
 };
 
 s16 D_8082B8F8[] = {
-    0x0001, 0x0003, 0x0002, 0x0000, 0x0003, 0x0001, 0x0000, 0x0002,
+    PAUSE_MAP, PAUSE_MASK, PAUSE_QUEST, PAUSE_ITEM, PAUSE_MASK, PAUSE_MAP, PAUSE_ITEM, PAUSE_QUEST,
 };
 
 f32 D_8082B908 = 0.0f;
@@ -492,7 +489,7 @@ void func_801091F0(PlayState*);
 void func_808160A0(PlayState*);
 void func_8081B6EC(PlayState*);
 void func_8081D6DC(PlayState*);
-void func_8081E7D8(PlayState*);
+void KaleidoScope_DrawWorldMap(PlayState*);
 void func_8081FF80(PlayState*);
 
 // Should be much closer to match with in-function data
@@ -603,13 +600,13 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
 
-            if (D_8082B8B4 != 0) {
+            if (sInDungeonScene) {
                 func_8081D6DC(play);
                 func_8012C8AC(gfxCtx);
                 gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 func_801091F0(play);
             } else {
-                func_8081E7D8(play);
+                KaleidoScope_DrawWorldMap(play);
             }
         }
 
@@ -700,33 +697,33 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
 
-                if (D_8082B8B4 != 0) {
+                if (sInDungeonScene) {
                     func_8081D6DC(play);
                     func_8012C8AC(gfxCtx);
 
                     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
                     func_801091F0(play);
-                    break;
-                }
-
-                Matrix_RotateYF(gGameInfo->data[0x258] / 1000.0f, MTXMODE_NEW);
-
-                if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
-                    ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
-                    Matrix_Translate(0.0f, (gGameInfo->data[0x259] - 0x1F40) / 100.0f, gGameInfo->data[0x25A] / 100.0f,
-                                     MTXMODE_APPLY);
                 } else {
-                    Matrix_Translate(0.0f, gGameInfo->data[0x259] / 100.0f, gGameInfo->data[0x25A] / 100.0f,
-                                     MTXMODE_APPLY);
+                    Matrix_RotateYF(gGameInfo->data[0x258] / 1000.0f, MTXMODE_NEW);
+
+                    if ((pauseCtx->state == 4) || (pauseCtx->state == 0x16) || (pauseCtx->state >= 0x19) ||
+                        ((pauseCtx->state == 7) && ((pauseCtx->unk_208 == 3) || (pauseCtx->unk_208 == 7)))) {
+                        Matrix_Translate(0.0f, (gGameInfo->data[0x259] - 0x1F40) / 100.0f,
+                                         gGameInfo->data[0x25A] / 100.0f, MTXMODE_APPLY);
+                    } else {
+                        Matrix_Translate(0.0f, gGameInfo->data[0x259] / 100.0f, gGameInfo->data[0x25A] / 100.0f,
+                                         MTXMODE_APPLY);
+                    }
+
+                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                    Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
+
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    KaleidoScope_DrawWorldMap(play);
                 }
 
-                Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                Matrix_RotateXFApply(-pauseCtx->unk_214 / 100.0f);
-
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                func_8081E7D8(play);
                 break;
 
             case PAUSE_QUEST:

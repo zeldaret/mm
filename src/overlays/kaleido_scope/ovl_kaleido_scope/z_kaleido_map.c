@@ -102,6 +102,6 @@ s32 D_8082B5F4[] = { 0, 0, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081E118.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081E7D8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawWorldMap.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FB1C.s")

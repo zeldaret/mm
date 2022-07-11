@@ -4212,7 +4212,7 @@
     0x8081D240:("func_8081D240",),
     0x8081D6DC:("func_8081D6DC",),
     0x8081E118:("func_8081E118",),
-    0x8081E7D8:("func_8081E7D8",),
+    0x8081E7D8:("KaleidoScope_DrawWorldMap",),
     0x8081FB1C:("func_8081FB1C",),
     0x8081FF80:("func_8081FF80",),
     0x808204AC:("func_808204AC",),
