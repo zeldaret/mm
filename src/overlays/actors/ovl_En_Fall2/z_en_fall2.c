@@ -65,7 +65,7 @@ u8 sAlphaTableIndices[] = {
 };
 
 void func_80C1B724(f32 arg0) {
-    Vtx* vertex = Lib_SegmentedToVirtual(object_fall2Vtx_005F10);
+    Vtx* vertex = Lib_SegmentedToVirtual(object_fall2_Vtx_005F10);
     u8 perVertexAlphaTable[6];
     s32 i;
 
@@ -162,7 +162,7 @@ void EnFall2_Draw(Actor* thisx, PlayState* play) {
 
         if (mtx != NULL) {
             func_8012C2DC(play->state.gfxCtx);
-            Matrix_RotateYS((s16)(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) + 0x8000), MTXMODE_APPLY);
+            Matrix_RotateYS((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
             func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
         }
     }

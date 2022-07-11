@@ -13,6 +13,9 @@
         <Texture Name="gOpenMouthMoonTeethTex" OutName="open_mouth_moon_teeth" Format="rgba16" Width="64" Height="32" Offset="0x4CE8" />
         <!-- <Blob Name="object_fall2_Blob_005CE8" Size="0x20C" Offset="0x5CE8" /> -->
         <Blob Name="object_fall2_Blob_005EF4" Size="0x1C" Offset="0x5EF4" />
+        <Array Name="object_fall2_Vtx_005F10" Count="239" Offset="0x5F10">
+            <Vtx />
+        </Array>
         <DList Name="object_fall2_DL_006E00" Offset="0x6E00" />
         <DList Name="object_fall2_DL_006EF0" Offset="0x6EF0" />
         <DList Name="object_fall2_DL_006FF8" Offset="0x6FF8" />
