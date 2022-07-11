@@ -1119,11 +1119,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
         } else if (yawDiff > 0) {
             this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
             yawDiff = 0x190;
-        } else {
-            if (yawDiff < 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
-                yawDiff = -0x190;
-            }
+        } else if (yawDiff < 0) {
+            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
+            yawDiff = -0x190;
         }
 
         if (this->flags & (OBJ_UM_FLAG_0010 | OBJ_UM_FLAG_0004)) {
@@ -1427,11 +1425,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         // "We'll go through here as fast as we can"
         case 0x33BB:
-            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if ((fabsf(this->skelAnime.curFrame) < 0.008f) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
+            } else if (fabsf(this->skelAnime.morphWeight) < 0.008f) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1444,11 +1442,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         // "Chase pursuers with your arrows"
         case 0x33BC:
-            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if ((fabsf(this->skelAnime.curFrame) < 0.008f) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
+            } else if (fabsf(this->skelAnime.morphWeight) < 0.008f) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1460,11 +1458,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         // "Understand?"
         case 0x33BD:
-            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if ((fabsf(this->skelAnime.curFrame) < 0.008f) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
+            } else if (fabsf(this->skelAnime.morphWeight) < 0.008f) {
                 this->unk_4CC = 2;
             } else {
                 this->unk_4CC = 5;
@@ -1482,7 +1480,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         case 0x33BF:
             this->unk_4D8++;
-            if (IS_ZERO(this->skelAnime.morphWeight) && this->unk_4D8 >= 6) {
+            if ((fabsf(this->skelAnime.morphWeight) < 0.008f) && this->unk_4D8 >= 6) {
                 this->unk_4CC = 0;
                 this->mouthTexIndex = 0;
             } else {
