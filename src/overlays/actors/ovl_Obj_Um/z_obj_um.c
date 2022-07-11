@@ -1558,7 +1558,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Audio_SetCutsceneFlag(0);
+        Audio_SetCutsceneFlag(false);
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntranceIndex = 0x5400;
