@@ -1711,7 +1711,7 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, s32 index) {
 
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
-        // Required to match
+        //! FAKE
         if (!&D_80B7C25C[0]) {}
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
