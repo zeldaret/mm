@@ -27,7 +27,7 @@ typedef enum EffLastDayAction {
 } EffLastDayAction;
 
 typedef enum EffLastDayParams {
-    /* 0x0 */ PARAMS_NONE,
+    /* 0x0 */ PARAMS_0,
     /* 0x1 */ PARAMS_1,
     /* 0x2 */ PARAMS_2,
     /* 0x3 */ PARAMS_3
