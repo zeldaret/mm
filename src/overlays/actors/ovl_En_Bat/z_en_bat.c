@@ -62,7 +62,7 @@ static ColliderSphereInit sSphereInit = {
 
 typedef enum {
     /* 0 */ BAD_BAT_DMGEFF_NONE,
-    /* 1 */ BAD_BAT_DMGEFF_NUT,
+    /* 1 */ BAD_BAT_DMGEFF_STUN,
     /* 2 */ BAD_BAT_DMGEFF_FIRE,
     /* 3 */ BAD_BAT_DMGEFF_ICE,
     /* 4 */ BAD_BAT_DMGEFF_LIGHT,
@@ -70,7 +70,7 @@ typedef enum {
 } BatDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, BAD_BAT_DMGEFF_NUT),
+    /* Deku Nut       */ DMG_ENTRY(0, BAD_BAT_DMGEFF_STUN),
     /* Deku Stick     */ DMG_ENTRY(1, BAD_BAT_DMGEFF_NONE),
     /* Horse trample  */ DMG_ENTRY(1, BAD_BAT_DMGEFF_NONE),
     /* Explosives     */ DMG_ENTRY(1, BAD_BAT_DMGEFF_NONE),
@@ -88,7 +88,7 @@ static DamageTable sDamageTable = {
     /* Deku spin      */ DMG_ENTRY(1, BAD_BAT_DMGEFF_NONE),
     /* Deku bubble    */ DMG_ENTRY(1, BAD_BAT_DMGEFF_NONE),
     /* Deku launch    */ DMG_ENTRY(2, BAD_BAT_DMGEFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BAD_BAT_DMGEFF_NUT),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BAD_BAT_DMGEFF_STUN),
     /* Zora barrier   */ DMG_ENTRY(0, BAD_BAT_DMGEFF_ELECTRIC),
     /* Normal shield  */ DMG_ENTRY(0, BAD_BAT_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, BAD_BAT_DMGEFF_NONE),
@@ -134,7 +134,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
 
     this->animationFrame = Rand_ZeroOne() * 9.0f;
 
-    this->paramflags = BAD_BAT_GET_PARAMFLAGS(thisx);
+    this->paramFlags = BAD_BAT_GET_PARAMFLAGS(thisx);
     this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
@@ -151,7 +151,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (this->paramflags & BAD_BAT_PARAMFLAG_PERCH) {
+    if (this->paramFlags & BAD_BAT_PARAMFLAG_PERCH) {
         thisx->params = 0;
         EnBat_SetupPerch(this);
     } else {
@@ -164,7 +164,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
                 &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
                 thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
                 thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled((f32)0x2000),
-                (f32)0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramflags, 0), -1,
+                (f32)0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1,
                 thisx->unk20, NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
@@ -223,30 +223,30 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
 
     EnBat_StepAnimation(this, 1);
 
-    finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetYaw, 0x300);
+    finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.y, this->yawTarget, 0x300);
 
     if (this->actor.bgCheckFlags & 8) {
         this->actor.bgCheckFlags &= ~8;
-        this->targetYaw = this->actor.wallYaw;
+        this->yawTarget = this->actor.wallYaw;
     } else if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
                                         this->actor.home.pos.z) > 90000.0f) {
-        this->targetYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
-        this->targetYaw = this->actor.shape.rot.y +
+        this->yawTarget = this->actor.shape.rot.y +
                           (((s32)((f32)0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
 
-    finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.x, this->targetPitch, 0x100);
+    finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0x100);
 
     if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
-        this->targetPitch = -0x1000;
+        this->pitchTarget = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
-        this->targetPitch = -((s32)((f32)0x800 * Rand_ZeroOne()) + 0x800);
+        this->pitchTarget = -((s32)((f32)0x800 * Rand_ZeroOne()) + 0x800);
     } else if ((this->actor.home.pos.y + 100.0f) < this->actor.world.pos.y) {
-        this->targetPitch = (s32)((f32)0x800 * Rand_ZeroOne()) + 0x800;
+        this->pitchTarget = (s32)((f32)0x800 * Rand_ZeroOne()) + 0x800;
     } else if ((finishedRotStep) && (Rand_ZeroOne() < 0.015f)) {
-        this->targetPitch += (s16)(((s32)((f32)0x400 * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
-        this->targetPitch = CLAMP(this->targetPitch, -0x1000, 0x1000);
+        this->pitchTarget += (s16)(((s32)((f32)0x400 * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->pitchTarget = CLAMP(this->pitchTarget, -0x1000, 0x1000);
     }
 
     if (this->timer != 0) {
@@ -254,7 +254,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
     }
     if ((this->actor.xzDistToPlayer < 300.0f) && (this->timer == 0) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (sNumberAttacking < BAD_BAT_MAX_NUMBER_ATTACKING) &&
-        (!(this->paramflags & BAD_BAT_PARAMFLAG_CHECK_HEIGHTREL) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
+        (!(this->paramFlags & BAD_BAT_PARAMFLAG_CHECK_HEIGHTREL) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
         EnBat_SetupDiveAttack(this);
     }
 }
@@ -269,26 +269,26 @@ void EnBat_SetupDiveAttack(EnBat* this) {
 
 void EnBat_DiveAttack(EnBat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 facingPlayer;
+    s32 isFacingPlayer;
     Vec3f preyPos;
 
     EnBat_StepAnimation(this, 2);
-    facingPlayer = Actor_IsFacingPlayer(&this->actor, 0x2800);
+    isFacingPlayer = Actor_IsFacingPlayer(&this->actor, 0x2800);
 
-    if (facingPlayer) {
-        s16 targetPitch;
+    if (isFacingPlayer) {
+        s16 pitchTarget;
 
         preyPos.x = player->actor.world.pos.x;
         preyPos.y = player->actor.world.pos.y + 20.0f;
         preyPos.z = player->actor.world.pos.z;
 
-        targetPitch = Actor_PitchToPoint(&this->actor, &preyPos);
-        targetPitch = CLAMP(targetPitch, -0x3000, 0x3000);
-        Math_SmoothStepToS(&this->actor.shape.rot.x, targetPitch, 2, 0x400, 0x40);
+        pitchTarget = Actor_PitchToPoint(&this->actor, &preyPos);
+        pitchTarget = CLAMP(pitchTarget, -0x3000, 0x3000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 0x40);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, 0x10);
     }
-    if (facingPlayer || (this->actor.xzDistToPlayer > 80.0f)) {
+    if (isFacingPlayer || (this->actor.xzDistToPlayer > 80.0f)) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00, 0xC0);
     }
 
@@ -308,7 +308,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
         sNumberAttacking--;
         this->collider.base.atFlags &= ~AT_ON;
         this->actor.bgCheckFlags &= ~8;
-        this->targetYaw = this->actor.wallYaw;
+        this->yawTarget = this->actor.wallYaw;
         EnBat_SetupFlyIdle(this);
     }
 }
@@ -439,7 +439,7 @@ void EnBat_UpdateDamage(EnBat* this, PlayState* play) {
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffScale = 0.45f;
             EnBat_SetupStunned(this);
-        } else if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_NUT) {
+        } else if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_STUN) {
             this->timer = 40;
             EnBat_SetupStunned(this);
         } else {
@@ -481,7 +481,7 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
         } else if ((this->actionFunc != EnBat_FlyIdle) ||
                    ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.projectedPos.z > 0.0f))) {
-            if (this->paramflags & BAD_BAT_PARAMFLAG_0) {
+            if (this->paramFlags & BAD_BAT_PARAMFLAG_0) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
             } else {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 4);
