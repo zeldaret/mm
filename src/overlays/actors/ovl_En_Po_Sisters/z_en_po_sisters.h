@@ -35,15 +35,19 @@ typedef struct EnPoSisters {
     /* 0x0192 */ union {
                 // stateTimer gets reused in different actionfuncs
                 s16 stateTimer;  // generic name for resets
-                s16 deathTimer;  // controls timings of the death cutscene, reset between the two stages
+                s16 deathTimer;  // (incr) controls timings of the death cutscene, reset between the two stages
                 s16 laughTimer;  // if observer, will laugh once in awhile
                 s16 spinupTimer; // frames of spinning up (gaining speed) for attack (jo/beth/amy attack)
                 s16 spinTimer;   // frames of spinning since spin attack starts, when zero checks collision
-                s16 flinchTimer; // after being hit, 5 frames until deciding how to react to flinch
+                s16 fleeTimer; // after being hit, 5 frames of flying away
                 s16 spinInvisibleTimer; // frames of spining away to invisible and back to visible
-                s16 megSurroundTimer; // frames since meg attack starts
+                s16 megSurroundTimer; // frames of meg circling the player menacingly until spin attack
+                // TODO one more statetimer
     };
-    /* 0x0194 */ s16 inivisTimer;
+    /* 0x0194 */ union {
+                s16 inivisTimer; // frames until coming back to fight from invisible (all combat variants)
+                s16 megAttackTimer; // (negative frames counting up to 0), time to spin attack after circling
+    };
     /* 0x0196 */ Vec3s jointTable[PO_SISTERS_LIMB_MAX];
     /* 0x01DE */ Vec3s morphTable[PO_SISTERS_LIMB_MAX];
     /* 0x0226 */ Color_RGBA8 color;

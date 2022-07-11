@@ -29,8 +29,8 @@ void EnPoSisters_SetupSpinAttack(EnPoSisters* this);
 void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play);
 void EnPoSisters_AttackConnectDrift(EnPoSisters* this, PlayState* play);
 void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play);
-void func_80B1B5B4(EnPoSisters* this);
-void func_80B1B628(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupFlee(EnPoSisters* this);
+void EnPoSisters_Flee(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinToInvis(EnPoSisters* this);
 void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play);
@@ -44,8 +44,8 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play);
 void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this);
 void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play);
-void func_80B1C2E8(EnPoSisters* this);
-void func_80B1C340(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupSpinIntoVisible(EnPoSisters* this);
+void EnPoSisters_SpinIntoVisible(EnPoSisters* this, PlayState* play);
 
 static Color_RGBA8 sPoSisterFlameColors[] = {
     { 255, 170, 255, 255 }, // meg
@@ -96,39 +96,49 @@ static ColliderCylinderInit sCylinderInit = {
 // health:6, mass:50
 static CollisionCheckInfoInit sColChkInfoInit = { 6, 25, 60, 50 };
 
+typedef enum {
+    /* 0x0 */ POSISTERS_DAMAGEEFFECT_NOEFFECT,
+    /* 0x1 */ POSISTERS_DAMAGEEFFECT_UNKDMG12,
+    /* 0x4 */ POSISTERS_DAMAGEEFFECT_LIGHTARROWS = 0x4,
+    /* 0xE */ POSISTERS_DAMAGEEFFECT_SPINATTACK = 0xE,
+    /* 0xF */ POSISTERS_DAMAGEEFFECT_DEKUNUT = 0xF,
+
+} PoSisterDamageEffect;
+
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0x0),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(0, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x0),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0xE),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_DEKUNUT),
+    /* Deku Stick     */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Horse trample  */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Explosives     */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Zora boomerang */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Normal arrow   */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Hookshot       */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Goron punch    */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Sword          */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Goron pound    */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Fire arrow     */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Ice arrow      */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Light arrow    */ DMG_ENTRY(2, POSISTERS_DAMAGEEFFECT_LIGHTARROWS),
+    /* Goron spikes   */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Deku spin      */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Deku bubble    */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Deku launch    */ DMG_ENTRY(2, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_UNKDMG12),
+    /* Zora barrier   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Normal shield  */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Light ray      */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Thrown object  */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Zora punch     */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Spin attack    */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_SPINATTACK),
+    /* Sword beam     */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Normal Roll    */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Unblockable    */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POSISTERS_DAMAGEEFFECT_NOEFFECT),
+    /* Powder Keg     */ DMG_ENTRY(1, POSISTERS_DAMAGEEFFECT_NOEFFECT),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -144,7 +154,7 @@ static InitChainEntry sInitChain[] = {
 #define PO_SISTER_FLAG_CHECK_Z_TARGET        (1 << 2) // meg doesnt go invis if you ztarget her for too long
 #define PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3)
 #define PO_SISTER_FLAG_UPDATE_BGCHECK_INFO   (1 << 4)
-#define PO_SISTER_FLAG_UPDATE_FIRES          (1 << 5)
+#define PO_SISTER_FLAG_UPDATE_FIRES          (1 << 5) // firePos updated to match limb in PostLimbDraw
 #define PO_SISTER_FLAG_REAL_MEG_ROTATION     (1 << 6) // real meg rotates different than her clones for one cycle
 #define PO_SISTER_FLAG_DRAW_TORCH            (1 << 7)
 // clang-format on
@@ -187,7 +197,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
             EnPoSisters_SpawnMegClones(this, play);
-            func_80B1C2E8(this);
+            EnPoSisters_SetupSpinIntoVisible(this);
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.info.elemType = ELEMTYPE_UNK4;
@@ -196,7 +206,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_MegCloneVanish(this, NULL);
         }
     } else {
-        func_80B1C2E8(this);
+        EnPoSisters_SetupSpinIntoVisible(this);
     }
     this->actor.params &= 0xFF;
 }
@@ -208,21 +218,19 @@ void EnPoSisters_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-// update the fires as they spread away from the dying poe I think
-// only used once, arg2 "pos" is this->deathTimer
-// some stupid shit, it takes timer as a param, and uses param from itself anyway, both at the same time
-void func_80B1A648(EnPoSisters* this, s32 timer, Vec3f* pos) {
+// For some reason, it uses this->deathTimer and takes deathTimer as a parameter...
+void EnPoSisters_UpdateDeathFlameSwirl(EnPoSisters* this, s32 deathTimerParam, Vec3f* pos) {
     s32 i;
-    Vec3f* ptr;
-    f32 timerf = timer;
+    Vec3f* firePos;
+    f32 deathTimerParamF = deathTimerParam;
 
     for (i = 0; i < this->fireCount; i++) {
-        ptr = &this->firePos[i];
-        ptr->x = Math_SinS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) * (SQ(timerf) * 0.1f) +
+        firePos = &this->firePos[i];
+        firePos->x = Math_SinS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) * (SQ(deathTimerParamF) * 0.1f) +
                  pos->x;
-        ptr->z = Math_CosS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) * (SQ(timerf) * 0.1f) +
+        firePos->z = Math_CosS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) * (SQ(deathTimerParamF) * 0.1f) +
                  pos->z;
-        ptr->y = pos->y + timerf;
+        firePos->y = pos->y + deathTimerParamF;
     }
 }
 
@@ -264,7 +272,7 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
 
     // fully opaque
     if (this->color.a == 255 && this->actionFunc != EnPoSisters_SpinAttack && this->actionFunc != EnPoSisters_SpinUp) {
-        if (this->actionFunc == func_80B1B628) {
+        if (this->actionFunc == EnPoSisters_Flee) {
             func_800B9010(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
         } else {
             func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
@@ -504,7 +512,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->actor.colChkInfo.health != 0) {
             if (this->type != POSISTER_TYPE_MEG) {
-                func_80B1B5B4(this);
+                EnPoSisters_SetupFlee(this);
             } else if (this->megCloneId != REALMEG) {
                 EnPoSisters_MegCloneVanish(this, NULL);
             } else {
@@ -529,30 +537,29 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
     }
 }
 
-// still alive, after flinch
-void func_80B1B5B4(EnPoSisters* this) {
+void EnPoSisters_SetupFlee(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &gPoSistersFleeAnim, -3.0f);
     this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-    this->flinchTimer = 5;
+    this->fleeTimer = 5;
     this->poSisterFlags |=
         (PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT | PO_SISTER_FLAG_UPDATE_SHAPE_ROT | PO_SISTER_FLAG_CHECK_AC);
     this->actor.speedXZ = 5.0f;
-    this->actionFunc = func_80B1B628;
+    this->actionFunc = EnPoSisters_Flee;
 }
 
 // post flinch shake? a few frames of shock
-void func_80B1B628(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 0x71C);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        DECR(this->flinchTimer);
+        DECR(this->fleeTimer);
     }
 
     if (this->actor.bgCheckFlags & 8) { // touching a wall
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->poSisterFlags |= PO_SISTER_FLAG_UPDATE_SHAPE_ROT;
         EnPoSisters_SetupSpinToInvis(this);
-    } else if (this->flinchTimer == 0 && this->actor.xzDistToPlayer > 480.0f) {
+    } else if (this->fleeTimer == 0 && this->actor.xzDistToPlayer > 480.0f) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B1AC40(this);
     }
@@ -695,7 +702,7 @@ void EnPoSisters_DeathStage2(EnPoSisters* this, PlayState* play) {
     if (this->deathTimer == 32) { // waiting for death animation to finish
         Actor_MarkForDeath(&this->actor);
     } else {
-        func_80B1A648(this, this->deathTimer, &this->actor.world.pos);
+        EnPoSisters_UpdateDeathFlameSwirl(this, this->deathTimer, &this->actor.world.pos);
     }
 }
 
@@ -732,21 +739,21 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
  * PlayState is an optional parameter, passed only when drawing the fire flash as they vanish.
  */
 void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play) {
-    Vec3f effectLoc;
+    Vec3f pos;
 
     this->actor.draw = NULL;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->inivisTimer = 100;
+    this->inivisTimer = 100; // 5 seconds
     this->poSisterFlags = PO_SISTER_FLAG_UPDATE_FIRES;
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.base.acFlags &= ~AC_HARD;
 
     if (play) {
-        effectLoc.x = this->actor.world.pos.x;
-        effectLoc.y = this->actor.world.pos.y + 45.0f;
-        effectLoc.z = this->actor.world.pos.z;
+        pos.x = this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + 45.0f;
+        pos.z = this->actor.world.pos.z;
         // spawns EffectSsDeadDb
-        func_800B3030(play, &effectLoc, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
+        func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
     }
 
     Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0); // light OFF
@@ -759,7 +766,7 @@ void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play) {
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
     if (this->megCloneId == REALMEG) {
-        DECR(this->inivisTimer);
+        DECR(this->inivisTimer); // TODO 
         if (this->inivisTimer == 0) {
             s32 rand = Rand_ZeroFloat(4.0f);
 
@@ -831,29 +838,26 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
         if (parent->actionFunc == EnPoSisters_DamageFlinch) {
             EnPoSisters_SetupDamageFlinch(this);
         }
-    } else if (this->inivisTimer == 0) {
-        this->inivisTimer = -15;
-    } else if (this->inivisTimer < 0) {
-        this->inivisTimer++;
-        if (this->inivisTimer == 0) {
+    } else if (this->megAttackTimer == 0) {
+        this->megAttackTimer = -15;
+    } else if (this->megAttackTimer < 0) {
+        this->megAttackTimer++;
+        if (this->megAttackTimer == 0) {
             EnPoSisters_SetupSpinAttack(this);
         }
     }
     EnPoSisters_MatchPlayerXZ(this, play);
 }
 
-// regular spawn in for non-meg versions
-// also regular meg
-void func_80B1C2E8(EnPoSisters* this) {
+void EnPoSisters_SetupSpinIntoVisible(EnPoSisters* this) {
     Animation_PlayOnce(&this->skelAnime, &gPoeSistersAppearDisappearAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->color.a = 0;
     this->poSisterFlags = PO_SISTER_FLAG_UPDATE_FIRES;
-    this->actionFunc = func_80B1C340;
+    this->actionFunc = EnPoSisters_SpinIntoVisible;
 }
 
-// summoning in?
-void func_80B1C340(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_SpinIntoVisible(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 255;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -871,8 +875,7 @@ void func_80B1C340(EnPoSisters* this, PlayState* play) {
     }
 }
 
-// combat collider? laughs and drops arrows for meg clone
-void func_80B1C408(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
     Vec3f pos;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -880,7 +883,7 @@ void func_80B1C408(EnPoSisters* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (this->megCloneId != REALMEG) {
-            ((EnPoSisters*)this->actor.parent)->inivisTimer--;
+            ((EnPoSisters*)this->actor.parent)->megAttackTimer--;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
             EnPoSisters_MegCloneVanish(this, play);
             if (Rand_ZeroOne() < 0.2f) {
@@ -890,14 +893,14 @@ void func_80B1C408(EnPoSisters* this, PlayState* play) {
                 Item_DropCollectible(play, &pos, ITEM00_ARROWS_10);
             }
         } else if (this->collider.base.colType != 9) {
-            if (this->actor.colChkInfo.damageEffect == 0xF) {
+            if (this->actor.colChkInfo.damageEffect == POSISTERS_DAMAGEEFFECT_DEKUNUT) {
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 this->poSisterFlags |= PO_SISTER_FLAG_UPDATE_SHAPE_ROT;
                 EnPoSisters_SetupSpinBack(this, play);
-            } else if ((this->type == POSISTER_TYPE_MEG) && (this->actor.colChkInfo.damageEffect == 0xE) &&
+            } else if ((this->type == POSISTER_TYPE_MEG) && (this->actor.colChkInfo.damageEffect == POSISTERS_DAMAGEEFFECT_SPINATTACK) &&
                        (this->actionFunc == EnPoSisters_MegSurroundPlayer)) {
-                if (this->inivisTimer == 0) {
-                    this->inivisTimer = -45;
+                if (this->megAttackTimer == 0) {
+                    this->megAttackTimer = -45;
                 }
             } else {
                 if (Actor_ApplyDamage(&this->actor)) {
@@ -907,7 +910,7 @@ void func_80B1C408(EnPoSisters* this, PlayState* play) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_SISTER_DEAD);
                 }
 
-                if (this->actor.colChkInfo.damageEffect == 4) {
+                if (this->actor.colChkInfo.damageEffect == POSISTERS_DAMAGEEFFECT_LIGHTARROWS) {
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.5f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
@@ -932,7 +935,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
         EnPoSisters_SetupAttackConnect(this);
     }
 
-    func_80B1C408(this, play);
+    EnPoSisters_CheckCollision(this, play);
     if (this->poSisterFlags & PO_SISTER_FLAG_CHECK_Z_TARGET) {
         EnPoSisters_CheckZTarget(this, play);
     }
@@ -995,7 +998,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
 
-        if (this->actionFunc == func_80B1B628) {
+        if (this->actionFunc == EnPoSisters_Flee) {
             this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
         } else if (this->poSisterFlags & PO_SISTER_FLAG_UPDATE_SHAPE_ROT) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1110,7 +1113,6 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     s32 end;
     f32 brightness;
 
-    // specific matrix manipulation per limb
     if (D_80B1DB08[limbIndex] != POSISTER_LIMBPOS_INVALID) {
         Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == PO_SISTERS_LIMB_MAIN_BODY) {
