@@ -5,6 +5,7 @@
  */
 
 #include "z_dm_char04.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,11 +16,8 @@ void DmChar04_Destroy(Actor* thisx, PlayState* play);
 void DmChar04_Update(Actor* thisx, PlayState* play);
 void DmChar04_Draw(Actor* thisx, PlayState* play);
 
-void func_80AABC40(SkelAnime*, AnimationInfo* str, u16 arg2);
 void func_80AABE34(DmChar04* this, PlayState* play);
-s32 func_80AABF74(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx);
 
-#if 1
 const ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
     ACTORCAT_ITEMACTION,
@@ -31,32 +29,6 @@ const ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Update,
     (ActorFunc)DmChar04_Draw,
 };
-
-static AnimationInfo D_80AAC460[2] = {
-    { (AnimationHeader *)0x0402B2E8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { (AnimationHeader *)0x04029140, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-};
-
-unkStruct D_80AAC490[3] = {
-    { 250.0f, 255.0f, 230.0f, 255.0f },
-    { 10.0f, 10.0f, 40.0f, 255.0f },
-    { 255.0f, 235.0f, 220.0f, 255.0f },
-};
-unkStruct D_80AAC4C0[3] = {
-    { 220.0f, 160.0f, 80.0f, 255.0f },
-    { 120.0f, 255.0f, 255.0f, 255.0f },
-    { 255.0f, 235.0f, 220.0f, 255.0f },
-};
-
-static Vec3f D_80AAC4F0 = { 0.0f, 0.0f, 0.0f };
-#endif
-
-extern unkStruct D_80AAC490[];
-extern unkStruct D_80AAC4C0[];
-extern AnimationHeader D_04029140;
-extern SkeletonHeader D_0402AF58;
-extern AnimationInfo D_80AAC460[];
-extern Vec3f D_80AAC4F0;
 
 void func_80AABC40(SkelAnime* arg0, AnimationInfo* animation, u16 arg2) {
     f32 phi_fv1;
@@ -72,18 +44,33 @@ void func_80AABC40(SkelAnime* arg0, AnimationInfo* animation, u16 arg2) {
                      animation->morphFrames);
 }
 
+static AnimationInfo sAnimations[] = {
+    { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+};
+
+Color_RGBAf sPrimColors[] = { { 250.0f, 255.0f, 230.0f, 255.0f },
+                              { 10.0f, 10.0f, 40.0f, 255.0f },
+                              { 255.0f, 235.0f, 220.0f, 255.0f } };
+Color_RGBAf sEnvColors[] = {
+    { 220.0f, 160.0f, 80.0f, 255.0f },
+    { 120.0f, 255.0f, 255.0f, 255.0f },
+    { 255.0f, 235.0f, 220.0f, 255.0f },
+};
+
 void DmChar04_Init(Actor* thisx, PlayState* play) {
     DmChar04* this = THIS;
 
-    this->str = D_80AAC490[this->actor.params];
-    this->str2 = D_80AAC4C0[this->actor.params];
+    this->primColors = sPrimColors[this->actor.params];
+    this->envColors = sEnvColors[this->actor.params];
     this->actor.targetArrowOffset = 3000.0f;
-    this->unk260 = 0x63;
-    this->unk262 = this->actor.params << 0xB;
+    this->csAction = 0x63;
+    this->unk_262 = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_Init(play, &this->skelAnime, &D_0402AF58, &D_04029140, &this->jointTable, &this->morphTable, 7);
+    SkelAnime_Init(play, &this->skelAnime, (SkeletonHeader*)&gameplay_keep_Skel_02AF58, &gameplay_keep_Anim_029140,
+                   this->jointTable, this->morphTable, 7);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 15.0f);
-    func_80AABC40(&this->skelAnime, &D_80AAC460, 0);
+    func_80AABC40(&this->skelAnime, sAnimations, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80AABE34;
 }
@@ -98,19 +85,19 @@ void func_80AABE34(DmChar04* this, PlayState* play) {
         s32 actionIndex = Cutscene_GetActorActionIndex(play, params);
 
         if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (this->unk260 != play->csCtx.actorActions[actionIndex]->action) {
-                this->unk260 = play->csCtx.actorActions[actionIndex]->action;
+            if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+                this->csAction = play->csCtx.actorActions[actionIndex]->action;
                 if (play->csCtx.actorActions[actionIndex]->action == 1) {
-                    this->unk261 = 0;
+                    this->animationIndex = 0;
                 } else {
-                    this->unk261 = 0;
+                    this->animationIndex = 0;
                 }
-                func_80AABC40(&this->skelAnime, &D_80AAC460[this->unk261], 0);
+                func_80AABC40(&this->skelAnime, &sAnimations[this->animationIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
     } else {
-        this->unk260 = 0x63;
+        this->csAction = 0x63;
     }
 }
 
@@ -119,24 +106,25 @@ void DmChar04_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
-    this->unk262++;
+    this->unk_262++;
 }
+static Vec3f D_80AAC4F0 = { 0.0f, 0.0f, 0.0f };
 
-s32 func_80AABF74(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                              Gfx** gfx) {
     PlayState* play = play2;
     f32 sp28;
     Vec3f sp1C;
     DmChar04* this = THIS;
 
     if (limbIndex == 6) {
-        sp28 = ((Math_SinS((this->unk262 << 0xC)) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * 124.99999f);
+        sp28 = ((Math_SinS((this->unk_262 << 0xC)) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * 124.99999f);
         Matrix_MultVec3f(&D_80AAC4F0, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
     }
     return false;
 }
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char04/DmChar04_Draw.s")
 
 void DmChar04_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
@@ -147,20 +135,20 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C94C(play->state.gfxCtx);
-    phi_a0 = (this->unk262 * 0x32) & 0x1FF;
+    phi_a0 = (this->unk_262 * 0x32) & 0x1FF;
     if (phi_a0 >= 0x100) {
         phi_a0 = 0x1FF - phi_a0;
     }
     gSPSegment(POLY_XLU_DISP++, 0x08, &gfx[0]);
     gDPPipeSync(gfx++);
-    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->str.unk_240, (u8)this->str.unk_244, (u8)this->str.unk_248,
-                    (u8)(this->str.unk_24C * 1));
+    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->primColors.r, (u8)this->primColors.g, (u8)this->primColors.b,
+                    (u8)(this->primColors.a * 1));
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPEndDisplayList(gfx);
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->str2.unk_240, (u8)(s8)this->str2.unk_244, (u8)(s8)this->str2.unk_248,
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->envColors.r, (u8)(s8)this->envColors.g, (u8)(s8)this->envColors.b,
                    (u8)(s8)((f32)phi_a0 * 1));
     gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
-    POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80AABF74, NULL,
-                                   &this->actor, POLY_XLU_DISP);
+    POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   DmChar04_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
     CLOSE_DISPS(play->state.gfxCtx);
 }

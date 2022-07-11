@@ -11577,7 +11577,7 @@
     0x80AABE24:("DmChar04_Destroy",),
     0x80AABE34:("func_80AABE34",),
     0x80AABF28:("DmChar04_Update",),
-    0x80AABF74:("func_80AABF74",),
+    0x80AABF74:("DmChar04_OverrideLimbDraw",),
     0x80AAC03C:("DmChar04_Draw",),
     0x80AAC5A0:("func_80AAC5A0",),
     0x80AAC63C:("func_80AAC63C",),
