@@ -222,6 +222,14 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
+typedef s32 (*PictoFunc)(struct PlayState*, Actor*);
+
+typedef struct {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ PictoFunc pictoFunc;
+} PictoActor;
+
+
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,

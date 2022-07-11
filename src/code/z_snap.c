@@ -1,10 +1,5 @@
 #include "global.h"
 
-typedef struct {
-    Actor actor;
-    s32 (*pictoFunc)(PlayState* play, Actor* actor);
-} PictoActor;
-
 s32 func_8013A240(PlayState* play) {
     PictoActor* pictoActor;
     Actor* actor;
