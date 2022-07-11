@@ -1460,16 +1460,14 @@ void FireObj_Init(PlayState* play, FireObj* fire, FireObjInitParams* init, Actor
 void FireObj_Destroy(PlayState* play, FireObj* fire);
 void FireObj_SetState2(FireObj* fire, f32 dynamicSizeStep, u8 newState);
 void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor);
+
 s32 func_800F3940(PlayState* play);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);
 void func_800F3B2C(PlayState* play);
-// void func_800F3B68(void);
-// void func_800F3C44(void);
-// void func_800F3ED4(void);
 void func_800F40A0(PlayState* play, Player* player);
 void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2);
-UNK_TYPE func_800F41E4(PlayState* play, ActorContext* actorCtx);
+s32 func_800F41E4(PlayState* play, ActorContext* actorCtx);
 
 void func_800F4A10(PlayState* play);
 void KaleidoSetup_Update(PlayState* play);

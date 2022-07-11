@@ -20,6 +20,7 @@ s32 func_800F3940(PlayState* play) {
     return -1;
 }
 
+// unused
 s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
     Path* path = &play->setupPathList[arg1];
     Vec3s* points;
@@ -48,23 +49,31 @@ s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
     return 1;
 }
 
-typedef struct struct_801BDA70 {
-    /* 0x0 */ s16 sceneId;
-    /* 0x2 */ s16 unk_2;
-} struct_801BDA70; // size = 0x4
+typedef struct {
+    /* 0x0 */ s16 sceneNum;
+    /* 0x2 */ s16 sceneSetupIndex;
+} struct_801BDAA8; // size = 0x4
 
-// extern struct_801BDA70 sValidScenes[];
-struct_801BDA70 D_801BDA70[] = {
-    { 0x002D, 0x0000 }, { 0x0040, 0x0000 }, { 0x0035, 0x0000 }, { 0x006A, 0x0000 },
-    { 0x0045, 0x0000 }, { 0x0000, 0x0000 }, { 0x0037, 0x0000 }, { 0x0038, 0x0000 },
-    { 0x0022, 0x0000 }, { 0x0053, 0x0000 }, { 0x001C, 0x0000 },
+// extern struct_801BDAA8 sValidScenes[];
+struct_801BDAA8 D_801BDA70[] = {
+    { SCENE_00KEIKOKU, 0 },      // Termina Field
+    { SCENE_24KEMONOMITI, 0 },   // Road to southern swap
+    { SCENE_F01, 0 },            // Romani ranch
+    { SCENE_KOEPONARACE, 0 },    // Gorman track
+    { SCENE_20SICHITAI, 0 },     // Southern swamp poisoned
+    { SCENE_20SICHITAI2, 0 },    // Souther swamp clear
+    { SCENE_30GYOSON, 0 },       // Great bay coast
+    { SCENE_31MISAKI, 0 },       // Zora cape
+    { SCENE_ROMANYMAE, 0 },      // Milk road
+    { SCENE_IKANAMAE, 0 },       // Road to Ikana
+    { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village
 };
 
-s32 func_800F3A64(s16 scene) {
+s32 func_800F3A64(s16 sceneNum) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_801BDA70); i++) {
-        if (scene == D_801BDA70[i].sceneId) {
+        if (sceneNum == D_801BDA70[i].sceneNum) {
             return true;
         }
     }
@@ -72,30 +81,25 @@ s32 func_800F3A64(s16 scene) {
     return false;
 }
 
+void func_800F3B2C(PlayState* play) {
+    gSaveContext.save.horseData.scene = SCENE_F01;
+    gSaveContext.save.horseData.pos.x = -1420;
+    gSaveContext.save.horseData.pos.y = 257;
+    gSaveContext.save.horseData.pos.z = -1285;
+    gSaveContext.save.horseData.yaw = 0x2AAA;
+}
+
 s32 D_801BDA9C = false;
 
 s32 D_801BDAA0 = 0x00000000;
 s32 D_801BDAA4 = 0;
 
-typedef struct {
-    /* 0x0 */ s16 sceneNum;
-    /* 0x2 */ s16 sceneSetupIndex;
-} struct_801BDAA8; // size = 0x4
-
 struct_801BDAA8 D_801BDAA8[] = {
-    { 0x002D, 0x0004 },
-    { 0x0037, 0x0000 },
-    { 0x0038, 0x0000 },
-    { 0x001C, 0x0000 },
+    { SCENE_00KEIKOKU, 4 },      // Termina Field
+    { SCENE_30GYOSON, 0 },       // Great bay coast
+    { SCENE_31MISAKI, 0 },       // Zora cape
+    { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village
 };
-
-void func_800F3B2C(PlayState* play) {
-    gSaveContext.save.horseData.scene = 0x35;
-    gSaveContext.save.horseData.pos.x = -0x58C;
-    gSaveContext.save.horseData.pos.y = 0x101;
-    gSaveContext.save.horseData.pos.z = -0x505;
-    gSaveContext.save.horseData.yaw = 0x2AAA;
-}
 
 s32 func_800F3B68(PlayState* play, Player* player) {
     s32 i;
@@ -144,7 +148,7 @@ void func_800F3C44(PlayState* play, Player* player) {
         } else {
             func_800F3B2C(play);
         }
-    } else if ((play->sceneNum == 0x35) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+    } else if ((play->sceneNum == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, 0x4001);
     } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && (func_800F3A64(play->sceneNum))) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
@@ -153,12 +157,12 @@ void func_800F3C44(PlayState* play, Player* player) {
 }
 
 void func_800F3ED4(PlayState* play, Player* player) {
-    if ((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) {
+    if ((play->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) {
         player->rideActor =
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x400D);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
-    } else if ((play->sceneNum == 0x6A) &&
+    } else if ((play->sceneNum == SCENE_KOEPONARACE) &&
                ((((gSaveContext.save.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.weekEventReg[92] & 7) == 2))) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, 0x4001);
     } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) &&
@@ -171,10 +175,11 @@ void func_800F3ED4(PlayState* play, Player* player) {
 }
 
 void func_800F40A0(PlayState* play, Player* player) {
-    if (((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) ||
-        ((play->sceneNum == 0x35) && (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) &&
-         (player->transformation == 4)) ||
-        ((play->sceneNum == 0x6A) &&
+    if (((play->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) ||
+        ((play->sceneNum == SCENE_F01) &&
+         (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) &&
+         (player->transformation == PLAYER_FORM_HUMAN)) ||
+        ((play->sceneNum == SCENE_KOEPONARACE) &&
          ((((gSaveContext.save.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.weekEventReg[92] & 7) == 2)))) {
         func_800F3ED4(play, player);
     } else {
@@ -204,7 +209,7 @@ s32 func_800F41E4(PlayState* play, ActorContext* actorCtx) {
         while (true) {
             if ((bgActor->update != NULL) && (bgActor->init == NULL)) {
                 if (Object_IsLoaded(&play->objectCtx, bgActor->objBankIndex)) {
-                    if ((bgActor->id == ACTOR_EN_HORSE) && (((EnHorse*)bgActor)->action != 1)) {
+                    if ((bgActor->id == ACTOR_EN_HORSE) && (((EnHorse*)bgActor)->action != ENHORSE_ACT_INACTIVE)) {
                         return true;
                     }
                 }

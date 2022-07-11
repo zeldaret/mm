@@ -650,8 +650,9 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
 
     if ((player->stateFlags1 & 1) || (func_800B7128(GET_PLAYER(play)) == true) || (player->stateFlags1 & 0x100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
-        (this->action == 19) || (player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != 0) ||
-        (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & 0x20) || (player->csMode != 0)) {
+        (this->action == ENHORSE_ACT_FLEE_PLAYER) || (player->actor.flags & ACTOR_FLAG_100) ||
+        (play->csCtx.state != 0) || (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & 0x20) ||
+        (player->csMode != 0)) {
         return false;
     }
     return true;
