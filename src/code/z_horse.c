@@ -4,7 +4,7 @@
 
 extern s16 D_801BDA74;
 extern s16 D_801BDA78;
-extern s16 D_801BDAA8;
+//extern s16 D_801BDAA8;
 extern s16 D_801BDAAA;
 extern s16 D_801BDAAC;
 extern s16 D_801BDAAE;
@@ -62,11 +62,12 @@ s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
 }
 
 
-//extern s16 sValidScenes[11];
-extern s32 D_801BDA70[11];
-#if 0
-static s16 sValidScenes[11] = { 
-    0x002D0000,0x00400000,0x00350000,
+// ??
+//extern s32 sValidScenes[11];
+s32 D_801BDA70[] = {
+    0x002D0000,
+    0x00400000,
+    0x00350000,
     0x006A0000,
     0x00450000,
     0x00000000,
@@ -76,7 +77,6 @@ static s16 sValidScenes[11] = {
     0x00530000,
     0x001C0000,
 };
-#endif 
 s32 func_800F3A64(s16 scene) {
     s32 i;
 
@@ -89,6 +89,23 @@ s32 func_800F3A64(s16 scene) {
     return false;
 }
 
+s32 D_801BDA9C = false;
+
+s32 D_801BDAA0 = 0x00000000;
+s32 D_801BDAA4 = 0;
+
+typedef struct {
+    /* 0x0 */ s16 sceneNum;
+    /* 0x2 */ s16 sceneSetupIndex;
+} struct_801BDAA8; // size = 0x4
+
+struct_801BDAA8 D_801BDAA8[] = {
+    {0x002D, 0x0004},
+    {0x0037, 0x0000},
+    {0x0038, 0x0000},
+    {0x001C, 0x0000},
+};
+
 void func_800F3B2C(PlayState* play) {
     gSaveContext.save.horseData.scene = 0x35;
     gSaveContext.save.horseData.pos.x = -0x58C;
@@ -97,31 +114,20 @@ void func_800F3B2C(PlayState* play) {
     gSaveContext.save.horseData.yaw = 0x2AAA;
 }
 
-#ifdef NON_MATCHING
-// swapped instructions
 s32 func_800F3B68(PlayState* play, Player* player) {
+    s32 i;
+
     if (gSaveContext.sceneSetupIndex == 0) {
         return true;
     }
 
-    if ((D_801BDAA8 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAAA + 1))) {
-        return true;
-    }
-    if ((D_801BDAAC == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAAE + 1))) {
-        return true;
-    }
-    if ((D_801BDAB0 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAB2 + 1))) {
-        return true;
-    }
-    if ((D_801BDAB4 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAB6 + 1))) {
-        return true;
+    for (i = 0; i < ARRAY_COUNT(D_801BDAA8); i++) {
+        if ((D_801BDAA8[i].sceneNum == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAA8[i].sceneSetupIndex + 1))) {
+            return true;
+        }
     }
     return false;
 }
-#else
-s32 func_800F3B68(PlayState* play, Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3B68.s")
-#endif
 
 void func_800F3C44(PlayState* play, Player* player) {
     if (!func_800F3B68(play, player)) {
