@@ -316,7 +316,6 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
     return scriptBranch;
 }
 
-// Used in Update
 s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
     s32 ret = false;
 
@@ -331,7 +330,6 @@ s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
     return ret;
 }
 
-// Used in Update
 s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 curTextId = play->msgCtx.currentTextId;
