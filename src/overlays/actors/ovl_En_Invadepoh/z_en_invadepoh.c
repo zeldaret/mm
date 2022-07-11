@@ -177,8 +177,6 @@ void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
-extern s32 D_801BDA9C;
-
 const ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
     ACTORCAT_PROP,
@@ -2001,7 +1999,7 @@ void func_80B47108(EnInvadepoh* this, PlayState* play) {
         play->unk_1887F = 0x49;
         gSaveContext.nextTransition = 0x48;
         D_801BDAA0 = 1;
-        D_801BDA9C = 0;
+        D_801BDA9C = false;
         func_80B47248(this);
     }
 }

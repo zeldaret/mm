@@ -12,7 +12,6 @@ extern s16 D_801BDAB0;
 extern s16 D_801BDAB2;
 extern s16 D_801BDAB4;
 extern s16 D_801BDAB6;
-extern s32 D_801BDA9C;
 extern s32 D_801BDAA0;
 
 
@@ -35,37 +34,36 @@ s32 func_800F3940(PlayState* play) {
 }
 
 s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
-    Path* temp_v0;
-    Vec3s* temp_v1_2;
-    s32 temp_v1;
+    Path* path = &play->setupPathList[arg1];
+    Vec3s* points;
+    s32 count;
 
-    temp_v0 = &play->setupPathList[arg1];
-    temp_v1 = temp_v0->count;
+    count = path->count;
     arg3->x = 0;
     arg3->y = 0;
     arg3->z = 0;
     *arg4 = 0;
 
-    if (temp_v1 == 0) {
+    if (count == 0) {
         return 0;
     }
-    if (arg2 >= temp_v1) {
+    if (arg2 >= count) {
         return 0;
     }
 
-    temp_v1_2 = Lib_SegmentedToVirtual(temp_v0->points);
-    temp_v1_2 += arg2;
+    points = Lib_SegmentedToVirtual(path->points);
+    points += arg2;
 
-    arg3->x = temp_v1_2->x;
-    arg3->y = temp_v1_2->y;
-    arg3->z = temp_v1_2->z;
+    arg3->x = points->x;
+    arg3->y = points->y;
+    arg3->z = points->z;
     *arg4 = 0;
     return 1;
 }
 
 
 //extern s16 sValidScenes[11];
-extern s16 D_801BDA70[11];
+extern s32 D_801BDA70[11];
 #if 0
 static s16 sValidScenes[11] = { 
     0x002D0000,0x00400000,0x00350000,
@@ -83,12 +81,12 @@ s32 func_800F3A64(s16 scene) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_801BDA70); i++) {
-        if (scene == D_801BDA70[i*2]) {
-            return 1;
+        if (scene == ((s16*)D_801BDA70)[i*2]) {
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 void func_800F3B2C(PlayState* play) {
@@ -126,60 +124,55 @@ s32 func_800F3B68(PlayState* play, Player* player);
 #endif
 
 void func_800F3C44(PlayState* play, Player* player) {
-    if (func_800F3B68(play, player)) {
-        if ((D_801BDA9C != 0) && CHECK_QUEST_ITEM(0xE)) {
-            s32 pad;
-            Vec3f sp60;
-            f32 var_fv1;
-            CollisionPoly* sp58;
-            s32 pad2[3];
+    if (!func_800F3B68(play, player)) {
+        return;
+    }
 
-            sp60 = player->actor.world.pos;
-            sp60.y += 5.0f;
-            var_fv1 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp58, &sp60);
-            if (var_fv1 == -32000.0f) {
-                var_fv1 = player->actor.world.pos.y;
-            }
-            player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, player->actor.world.pos.x, var_fv1, player->actor.world.pos.z,  player->actor.shape.rot.x, player->actor.shape.rot.y, player->actor.shape.rot.z, 0x400B);
-            Actor_MountHorse(play, player, player->rideActor);
-            Actor_SetCameraHorseSetting(play, player);
-            return;
+    if (D_801BDA9C && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+        s32 pad;
+        Vec3f sp60;
+        f32 var_fv1;
+        CollisionPoly* sp58;
+        s32 pad2[3];
+
+        sp60 = player->actor.world.pos;
+        sp60.y += 5.0f;
+        var_fv1 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp58, &sp60);
+        if (var_fv1 == BGCHECK_Y_MIN) {
+            var_fv1 = player->actor.world.pos.y;
         }
-
-        if ((play->sceneNum == gSaveContext.save.horseData.scene) && CHECK_QUEST_ITEM(0xE)) {
-            if (func_800F3A64(gSaveContext.save.horseData.scene) != 0) {
-                Actor_Spawn(&play->actorCtx, play, 0xD, gSaveContext.save.horseData.pos.x, gSaveContext.save.horseData.pos.y, gSaveContext.save.horseData.pos.z, 0, gSaveContext.save.horseData.yaw, 0, 0x4001);
-                return;
-            }
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, var_fv1, player->actor.world.pos.z,  player->actor.shape.rot.x, player->actor.shape.rot.y, player->actor.shape.rot.z, 0x400B);
+        Actor_MountHorse(play, player, player->rideActor);
+        Actor_SetCameraHorseSetting(play, player);
+    } else if ((play->sceneNum == gSaveContext.save.horseData.scene) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+        if (func_800F3A64(gSaveContext.save.horseData.scene)) {
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, gSaveContext.save.horseData.pos.x, gSaveContext.save.horseData.pos.y, gSaveContext.save.horseData.pos.z, 0, gSaveContext.save.horseData.yaw, 0, 0x4001);
+        } else {
             func_800F3B2C(play);
-            return;
         }
-        if ((play->sceneNum == 0x35) && !CHECK_QUEST_ITEM(0xE)) {
-            Actor_Spawn(&play->actorCtx, play, 0xD, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, 0x4001);
-            return;
-        }
-        if (CHECK_QUEST_ITEM(0xE) && (func_800F3A64(play->sceneNum) != 0)) {
-            Actor_Spawn(&play->actorCtx, play, 0xD, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, 0x4002);
-        }
+    } else if ((play->sceneNum == 0x35) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, 0x4001);
+    } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && (func_800F3A64(play->sceneNum))) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, 0x4002);
     }
 }
 
 void func_800F3ED4(PlayState* play, Player* player) {
-    if ((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) {
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x400D);
+    if ((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) {
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x400D);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
-    } else if ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2))) {
-        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, 0x4001);
-    } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) && (player->transformation == 4)) {
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, 0x4007);
+    } else if ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.weekEventReg[92] & 7) == 2))) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, 0x4001);
+    } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) && (player->transformation == PLAYER_FORM_HUMAN)) {
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, 0x4007);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     }
 }
 
 void func_800F40A0(PlayState* play, Player* player) {
-    if (((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) || ((play->sceneNum == 0x35) && (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) && (player->transformation == 4)) || ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2)))) {
+    if (((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) || ((play->sceneNum == 0x35) && (((gSaveContext.sceneSetupIndex == 1)) || (gSaveContext.sceneSetupIndex == 5)) && (player->transformation == 4)) || ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.weekEventReg[92] & 7) == 2)))) {
         func_800F3ED4(play, player);
     } else {
         func_800F3C44(play, player);
