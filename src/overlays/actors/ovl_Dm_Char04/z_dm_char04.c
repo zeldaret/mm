@@ -31,16 +31,16 @@ const ActorInit Dm_Char04_InitVars = {
 };
 
 void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
-    f32 phi_fv1;
+    f32 endFrame;
 
     animation += index;
 
     if (animation->frameCount < 0.0f) {
-        phi_fv1 = Animation_GetLastFrame(animation->animation);
+        endFrame = Animation_GetLastFrame(animation->animation);
     } else {
-        phi_fv1 = animation->frameCount;
+        endFrame = animation->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_fv1,
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
                      animation->mode, animation->morphFrames);
 }
 
