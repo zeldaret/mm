@@ -61,27 +61,31 @@ s32 func_800F39B4(PlayState* play, s32 arg1, s32 arg2, Vec3s* arg3, s16* arg4) {
     return 1;
 }
 
+typedef struct struct_801BDA70 {
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ s16 unk_2;
+} struct_801BDA70; // size = 0x4
 
-// ??
-//extern s32 sValidScenes[11];
-s32 D_801BDA70[] = {
-    0x002D0000,
-    0x00400000,
-    0x00350000,
-    0x006A0000,
-    0x00450000,
-    0x00000000,
-    0x00370000,
-    0x00380000,
-    0x00220000,
-    0x00530000,
-    0x001C0000,
+//extern struct_801BDA70 sValidScenes[];
+struct_801BDA70 D_801BDA70[] = {
+    {0x002D, 0x0000},
+    {0x0040, 0x0000},
+    {0x0035, 0x0000},
+    {0x006A, 0x0000},
+    {0x0045, 0x0000},
+    {0x0000, 0x0000},
+    {0x0037, 0x0000},
+    {0x0038, 0x0000},
+    {0x0022, 0x0000},
+    {0x0053, 0x0000},
+    {0x001C, 0x0000},
 };
+
 s32 func_800F3A64(s16 scene) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_801BDA70); i++) {
-        if (scene == ((s16*)D_801BDA70)[i*2]) {
+        if (scene == D_801BDA70[i].sceneId) {
             return true;
         }
     }
