@@ -19,7 +19,7 @@ void EnBjt_Talk(EnBjt* this, PlayState* play);
 void EnBjt_Wait(EnBjt* this, PlayState* play);
 
 #define TOILET_HAND_STATE_TALKING (1 << 3)   // Actually talking to Player
-#define TOILET_HAND_STATE_TEXTBOX (1 << 4)   // whenever a textbox is on screen
+#define TOILET_HAND_STATE_TEXTBOX (1 << 4)   // Whenever a textbox is on screen
 #define TOILET_HAND_STATE_APPEARING (1 << 7) // Appearing
 #define TOILET_HAND_STATE_VANISHING (1 << 8) // Vanishing
 #define TOILET_HAND_STATE_VISIBLE (1 << 9)   // Out
@@ -248,6 +248,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     if (!Message_ShouldAdvance(play)) {
                         break;
                     }
+                    // Fallthrough
                 case 16:
                     itemAP = func_80123810(play);
                     if ((itemAP == EXCH_ITEM_DEED_LAND) || (itemAP == EXCH_ITEM_LETTER_TO_KAFEI) ||
@@ -399,7 +400,7 @@ void EnBjt_Wait(EnBjt* this, PlayState* play) {
                 this->stateFlags |= TOILET_HAND_STATE_VANISHING;
             }
         } else {
-            // Appear if player approaches an heart piece not given
+            // Appear if player approaches and heart piece not given
             if ((fabsf(this->actor.playerHeightRel) < 20.0f) && (this->actor.xzDistToPlayer < 70.0f) &&
                 !(gSaveContext.save.weekEventReg[90] & 0x80)) {
                 this->stateFlags |= TOILET_HAND_STATE_APPEARING;
