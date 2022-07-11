@@ -1388,7 +1388,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
-                    case 576:
+                    case 0x240:
                         func_80151938(play, 0x245);
                         break;
 

@@ -743,7 +743,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
         case TEXT_STATE_NONE:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;
-            if (!temp) {
+            if (temp == 0) {
                 switch (this->unk_384) {
                     case 0:
                         if ((this->unk_33C != 1) && (this->unk_33C == 2)) {
