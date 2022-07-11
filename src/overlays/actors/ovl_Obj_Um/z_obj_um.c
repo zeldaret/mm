@@ -407,7 +407,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
 
-    func_8017B7F8(&sp50, (s16)temp_a1, &sp4C, &sp48, &sp44);
+    func_8017B7F8(&sp50, temp_a1, &sp4C, &sp48, &sp44);
     if (((bandit->actor.world.pos.x * sp4C) + (sp48 * bandit->actor.world.pos.z) + sp44) > 0.0f) {
         bandit->curRaceWaypoint++;
         if (bandit->curRaceWaypoint >= sp68) {
