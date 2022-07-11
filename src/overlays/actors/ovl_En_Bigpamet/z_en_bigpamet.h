@@ -9,8 +9,8 @@ struct EnBigpamet;
 typedef void (*EnBigpametActionFunc)(struct EnBigpamet*, PlayState*);
 
 enum {
-    ENBIGPAMET_0,    
-    ENBIGPAMET_1,    
+    /* 0 */ ENBIGPAMET_0,    
+    /* 1 */ ENBIGPAMET_1,    
 };
 
 typedef struct {

@@ -6,6 +6,7 @@
 
 #include "z_en_bigpamet.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
@@ -176,13 +177,13 @@ void func_80A2768C(EnBigpamet* this) {
 }
 
 void func_80A276F4(EnBigpamet* this) {
-    if (this->actor.parent->params == 3) {
+    if (this->actor.parent->params == GEKKO_ON_SNAPPER) {
         this->actor.parent->shape.rot.y = this->actor.shape.rot.y;
         this->actor.parent->shape.rot.z = this->actor.shape.rot.z;
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->unk_2AC, this->actor.world.pos.z,
                                      &this->actor.shape.rot);
         Matrix_MultVecY(46.0f, &this->actor.parent->world.pos);
-    } else if (this->actor.parent->params == 4) {
+    } else if (this->actor.parent->params == GEKKO_REAR_ON_SNAPPER) {
         this->actor.parent->world.pos.x = this->actor.world.pos.x;
         this->actor.parent->world.pos.z = this->actor.world.pos.z;
     }
@@ -340,7 +341,7 @@ void func_80A27FE8(EnBigpamet* this, PlayState* play) {
         pos.y += 8.0f;
 
         if (this->actionFunc != func_80A28D0C) {
-            sp32 = (s32)randPlusMinusPoint5Scaled(32768.0f) + this->actor.world.rot.y;
+            sp32 = (s32)randPlusMinusPoint5Scaled(0x8000) + this->actor.world.rot.y;
             pos.x -= 55.0f * Math_SinS(sp32);
             pos.z -= 55.0f * Math_CosS(sp32);
         }
@@ -370,7 +371,7 @@ void func_80A281DC(EnBigpamet* this, PlayState* play) {
     WaterBox* sp2C;
     f32 sp28;
 
-    if (this->actor.parent->params == 1) {
+    if (this->actor.parent->params == GEKKO_GET_SNAPPER) {
         if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp28, &sp2C)) {
             this->actor.depthInWater = sp28 - this->actor.world.pos.y;
         } else {
@@ -405,14 +406,14 @@ void func_80A282C8(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28378(EnBigpamet* this) {
-    this->actor.parent->params = 2;
+    this->actor.parent->params = GEKKO_INIT_SNAPPER;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80A283A0;
 }
 
 void func_80A283A0(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
-    if (this->actor.parent->params == 3) {
+    if (this->actor.parent->params == GEKKO_ON_SNAPPER) {
         func_80A28E40(this);
     }
 }
@@ -428,12 +429,12 @@ void func_80A283F0(EnBigpamet* this) {
 void func_80A2844C(EnBigpamet* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime2);
 
-    if (this->actor.parent->params == 7) {
+    if (this->actor.parent->params == GEKKO_RETURN_TO_SNAPPER) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.parent), 0x400);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-    } else if (this->actor.parent->params == 8) {
+    } else if (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER) {
         this->actor.speedXZ = 0.0f;
-    } else if (this->actor.parent->params == 3) {
+    } else if (this->actor.parent->params == GEKKO_ON_SNAPPER) {
         func_80A28E40(this);
     }
 }
@@ -456,8 +457,9 @@ void func_80A2855C(EnBigpamet* this, PlayState* play) {
         this->unk_2A8 = 1.5f - ((this->skelAnime2.curFrame - 2.0f) * 0.23333333f);
         this->unk_2A4 = 1.5f - ((this->skelAnime2.curFrame - 2.0f) * 0.083333336f);
     } else {
-        f32 frame = this->skelAnime2.curFrame;
-        this->unk_2A4 = this->unk_2A8 = (0.25f * frame) + 1.0f;
+        f32 curFrame = this->skelAnime2.curFrame;
+
+        this->unk_2A4 = this->unk_2A8 = (0.25f * curFrame) + 1.0f;
     }
 }
 
@@ -536,7 +538,7 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 8) {
-        quake = Quake_Add(play->cameraPtrs[play->activeCamera], 3);
+        quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
         this->actor.velocity.y = this->unk_29E * 0.375f;
         Quake_SetSpeed(quake, 0x4E20);
         Quake_SetQuakeValues(quake, 15, 0, 0, 0);
@@ -580,7 +582,8 @@ void func_80A28A98(EnBigpamet* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x600);
 
     if (SkelAnime_Update(&this->skelAnime2)) {
-        if ((this->actor.parent->params == 7) || (this->actor.parent->params == 8)) {
+        if ((this->actor.parent->params == GEKKO_RETURN_TO_SNAPPER) ||
+            (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER)) {
             func_80A283F0(this);
         } else {
             func_80A284E4(this);
@@ -599,7 +602,7 @@ void func_80A28A98(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28B98(EnBigpamet* this, PlayState* play) {
-    Actor* sp24;
+    Actor* collectible;
 
     Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_000AF4);
 
@@ -622,14 +625,15 @@ void func_80A28B98(EnBigpamet* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.params = ENBIGPAMET_0;
 
-    if ((this->actor.parent->params == 3) || (this->actor.parent->params == 4) || (this->actor.parent->params == 8)) {
-        this->actor.parent->params = 5;
+    if ((this->actor.parent->params == GEKKO_ON_SNAPPER) || (this->actor.parent->params == GEKKO_REAR_ON_SNAPPER) ||
+        (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER)) {
+        this->actor.parent->params = GEKKO_CUTSCENE;
     }
 
-    sp24 = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
-    if (sp24 != NULL) {
-        sp24->velocity.y = 15.0f;
-        sp24->world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    collectible = Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
+    if (collectible != NULL) {
+        collectible->velocity.y = 15.0f;
+        collectible->world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_PAMET_REVERSE);
@@ -660,9 +664,10 @@ void func_80A28D80(EnBigpamet* this) {
 void func_80A28DC0(EnBigpamet* this, PlayState* play) {
     this->actor.shape.rot.x = (s32)Rand_Next() >> 0x16;
     this->actor.shape.rot.z = (s32)Rand_Next() >> 0x16;
-    if ((this->actor.parent->params == 7) || (this->actor.parent->params == 8)) {
+    if ((this->actor.parent->params == GEKKO_RETURN_TO_SNAPPER) ||
+        (this->actor.parent->params == GEKKO_JUMP_ON_SNAPPER)) {
         func_80A28A28(this);
-    } else if (this->actor.parent->params == 9) {
+    } else if (this->actor.parent->params == GEKKO_DEFEAT) {
         func_80A28ED4(this);
     }
 }
@@ -698,8 +703,8 @@ void func_80A28EE8(EnBigpamet* this, PlayState* play) {
         pos.y = this->actor.world.pos.y + 25.0f;
         pos.z = (Math_CosS(sp3A) * 20.0f) + this->actor.world.pos.z;
 
-        func_800B0DE0(play, &pos, &gZeroVec3f, &gZeroVec3f, &D_80A29788, &D_80A2978C, 0x320, 0x32);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x32, NA_SE_EN_NPC_FADEAWAY);
+        func_800B0DE0(play, &pos, &gZeroVec3f, &gZeroVec3f, &D_80A29788, &D_80A2978C, 800, 50);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_NPC_FADEAWAY);
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -710,7 +715,7 @@ void func_80A28EE8(EnBigpamet* this, PlayState* play) {
 void func_80A29028(EnBigpamet* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if ((this->actor.colChkInfo.damageEffect == 0xF) && (this->actor.parent->params != 8) &&
+        if ((this->actor.colChkInfo.damageEffect == 0xF) && (this->actor.parent->params != GEKKO_JUMP_ON_SNAPPER) &&
             (this->actionFunc != func_80A28E98)) {
             func_80A28B98(this, play);
         }
@@ -720,7 +725,6 @@ void func_80A29028(EnBigpamet* this, PlayState* play) {
 void func_80A29094(EnBigpamet* this) {
     EnBigpametStruct* ptr = &this->unk_2FC[0];
     s32 i;
-    s32 a;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2FC); i++, ptr++) {
         ptr->unk_0C.y -= 1.0f;
