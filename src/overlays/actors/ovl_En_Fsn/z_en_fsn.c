@@ -1342,7 +1342,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
                 play_sound(NA_SE_SY_CURSOR);
             }
         }
-    } else if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.textId = 0x29D6;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
         if (play) {}
@@ -1350,7 +1350,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_SetupEndInteractionImmediately(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         EnFsn_EndInteraction(this, play);
     }
 }
@@ -1366,7 +1366,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
             play->msgCtx.msgMode = 0x43;

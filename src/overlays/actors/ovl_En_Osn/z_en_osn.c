@@ -749,7 +749,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
 void func_80AD19A0(EnOsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((talkState == TEXT_STATE_DONE || talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= ~0x20;
             play->msgCtx.msgMode = 0x43;

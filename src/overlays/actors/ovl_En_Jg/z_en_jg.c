@@ -600,7 +600,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
 }
 
 void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = EnJg_FrozenIdle;
