@@ -1914,6 +1914,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
 
+        //! FAKE
         if (!i) {}
 
         sp80.x = 0;
