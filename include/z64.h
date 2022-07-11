@@ -452,6 +452,14 @@ typedef void(*fault_update_input_func)(Input* input);
 #define PAUSE_CURSOR_PAGE_LEFT 10
 #define PAUSE_CURSOR_PAGE_RIGHT 11
 
+typedef enum {
+    /* 0x00 */ PAUSE_ITEM,
+    /* 0x01 */ PAUSE_MAP,
+    /* 0x02 */ PAUSE_QUEST,
+    /* 0x03 */ PAUSE_MASK,
+    /* 0x04 */ PAUSE_WORLD_MAP
+} PauseMenuPage;
+
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
@@ -496,15 +504,15 @@ typedef struct {
     /* 0x22C */ s32 unk_22C;
     /* 0x230 */ s32 stickRelX;
     /* 0x234 */ s32 unk_234;
-    /* 0x238 */ s16 unk_238[5];
+    /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 unk_242[5];
     /* 0x24C */ s16 unk_24C[5];
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5]; // ItemId
-    /* 0x268 */ u16 unk_268[5];
+    /* 0x25E */ u16 cursorItem[5];
+    /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
     /* 0x276 */ u16 equipTargetCBtn;

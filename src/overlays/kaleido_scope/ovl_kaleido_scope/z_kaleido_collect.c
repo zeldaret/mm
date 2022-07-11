@@ -20,4 +20,8 @@ extern UNK_TYPE D_0C006C00;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80817B5C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80818904.s")
+s32 KaleidoScope_UpdateQuestStatusPoint(PauseContext* pauseCtx, s16 point) {
+    pauseCtx->cursorPoint[PAUSE_QUEST] = point;
+
+    return 1;
+}

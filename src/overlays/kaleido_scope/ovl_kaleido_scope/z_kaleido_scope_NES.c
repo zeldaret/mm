@@ -34,7 +34,7 @@ void func_80821958(s32 arg0, s32 arg1) {
 void func_80821984(PlayState* play, s16 cursorSpecialPos) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    pauseCtx->unk_268[pauseCtx->pageIndex] = 0;
+    pauseCtx->cursorSlot[pauseCtx->pageIndex] = 0;
     pauseCtx->cursorSpecialPos = cursorSpecialPos;
     pauseCtx->pageSwitchTimer = 0;
 
@@ -86,7 +86,7 @@ void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, void* texture, 
 }
 
 void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 pt) {
-    pauseCtx->unk_268[pauseCtx->pageIndex] = 0;
+    pauseCtx->cursorSlot[pauseCtx->pageIndex] = 0;
     pauseCtx->unk_200 = 1;
     pauseCtx->unk_206 = 0;
 
@@ -283,7 +283,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             }
         }
 
-        if ((pauseCtx->pageIndex != 0) && (pauseCtx->pageIndex != 2)) {
+        if ((pauseCtx->pageIndex != PAUSE_ITEM) && (pauseCtx->pageIndex != PAUSE_QUEST)) {
             gDPPipeSync(POLY_OPA_DISP++);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
@@ -303,7 +303,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             func_8081B6EC(play);
         }
 
-        if ((pauseCtx->pageIndex != 1) && (pauseCtx->pageIndex != 3)) {
+        if ((pauseCtx->pageIndex != PAUSE_MAP) && (pauseCtx->pageIndex != PAUSE_MASK)) {
             gDPPipeSync(POLY_OPA_DISP++);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
@@ -330,7 +330,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             }
         }
 
-        if ((pauseCtx->pageIndex != 2) && (pauseCtx->pageIndex != 0)) {
+        if ((pauseCtx->pageIndex != PAUSE_QUEST) && (pauseCtx->pageIndex != PAUSE_ITEM)) {
             gDPPipeSync(POLY_OPA_DISP++);
 
             gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
@@ -353,7 +353,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
             func_808160A0(play);
         }
 
-        if ((pauseCtx->pageIndex != 3) && (pauseCtx->pageIndex != 1)) {
+        if ((pauseCtx->pageIndex != PAUSE_MASK) && (pauseCtx->pageIndex != PAUSE_MAP)) {
             gDPPipeSync(POLY_OPA_DISP++);
 
             gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
@@ -376,7 +376,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
         }
 
         switch (pauseCtx->pageIndex) {
-            case 0:
+            case PAUSE_ITEM:
                 if (pauseCtx->unk_200 < 0x10) {
                     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -399,7 +399,8 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                     return;
                 }
                 break;
-            case 1:
+
+            case PAUSE_MAP:
                 gDPPipeSync(POLY_OPA_DISP++);
 
                 gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,
@@ -445,7 +446,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 func_8081E7D8(play);
                 break;
 
-            case 2:
+            case PAUSE_QUEST:
                 gDPPipeSync(POLY_OPA_DISP++);
 
                 gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,
@@ -467,7 +468,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 func_808160A0(play);
                 break;
 
-            case 3:
+            case PAUSE_MASK:
                 gDPPipeSync(POLY_OPA_DISP++);
 
                 gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE,

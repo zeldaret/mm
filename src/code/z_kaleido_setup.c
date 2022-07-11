@@ -2,7 +2,7 @@
 #include "z64rumble.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
-s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
+s16 D_801BDB00[] = { PAUSE_MAP, PAUSE_QUEST, PAUSE_MASK, PAUSE_ITEM };
 f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
 f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
 
@@ -33,12 +33,12 @@ void func_800F4A10(PlayState* play) {
         for (i = 9; i >= 0; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = 1;
-                pauseCtx->unk_238[4] = i;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
         }
 
         if ((gSaveContext.save.playerData.owlActivationFlags >> 4) & 1) {
-            pauseCtx->unk_238[4] = 4;
+            pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 4;
         }
     }
 
@@ -108,7 +108,7 @@ void KaleidoSetup_Init(PlayState* play) {
 
     bzero(pauseCtx, sizeof(PauseContext));
 
-    pauseCtx->pageIndex = PAUSE_0;
+    pauseCtx->pageIndex = PAUSE_ITEM;
 
     pauseCtx->unk_21C = 160.0f;
     pauseCtx->unk_218 = 160.0f;
@@ -119,18 +119,18 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->unk_220 = -314.0f;
 
-    pauseCtx->unk_238[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->cursorPoint[PAUSE_MAP] = XREG(94) + 3;
 
     pauseCtx->cursorSpecialPos = 11;
     pauseCtx->pageSwitchTimer = 0;
 
-    pauseCtx->unk_25E[PAUSE_0] = 999;
-    pauseCtx->unk_25E[PAUSE_1] = XREG(94) + 3;
-    pauseCtx->unk_25E[PAUSE_2] = 999;
-    pauseCtx->unk_25E[PAUSE_3] = 999;
+    pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
+    pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
+    pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
-    pauseCtx->unk_268[PAUSE_0] = 0;
-    pauseCtx->unk_268[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
+    pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 3;
 
     pauseCtx->unk_284 = 2;
     pauseCtx->unk_2A0 = -1;
