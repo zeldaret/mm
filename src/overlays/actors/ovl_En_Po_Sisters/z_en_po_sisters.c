@@ -35,10 +35,10 @@ void EnPoSisters_SetupSpinToInvis(EnPoSisters* this);
 void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SpinBack(EnPoSisters* this, PlayState* play);
-void EnPoSister_SetupDeathStage1(EnPoSisters* this);
-void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play);
-void EnPoSister_SetupDeathStage2(EnPoSisters* this, PlayState* play);
-void EnPoSister_DeathStage2(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupDeathStage1(EnPoSisters* this);
+void EnPoSisters_DeathStage1(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupDeathStage2(EnPoSisters* this, PlayState* play);
+void EnPoSisters_DeathStage2(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play);
 void func_80B1BE4C(EnPoSisters* this, PlayState* play);
 void func_80B1BF2C(EnPoSisters* this, PlayState* play);
@@ -209,7 +209,7 @@ void EnPoSisters_Destroy(Actor* thisx, PlayState* play) {
 }
 
 // update the fires as they spread away from the dying poe I think
-// only used once, arg2"pos" is this->deathTimer
+// only used once, arg2 "pos" is this->deathTimer
 // some stupid shit, it takes timer as a param, and uses param from itself anyway, both at the same time
 void func_80B1A648(EnPoSisters* this, s32 timer, Vec3f* pos) {
     s32 i;
@@ -511,7 +511,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
                 func_80B1BE4C(this, play);
             }
         } else {
-            EnPoSister_SetupDeathStage1(this);
+            EnPoSisters_SetupDeathStage1(this);
         }
     }
 
@@ -628,18 +628,18 @@ void EnPoSisters_SpinBack(EnPoSisters* this, PlayState* play) {
     }
 }
 
-void EnPoSister_SetupDeathStage1(EnPoSisters* this) {
+void EnPoSisters_SetupDeathStage1(EnPoSisters* this) {
     this->deathTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.pos.y += 42.0f;
     this->actor.shape.yOffset = -6000.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->poSisterFlags = PO_SISTER_FLAG_CLEAR;
-    this->actionFunc = EnPoSister_DeathStage1;
+    this->actionFunc = EnPoSisters_DeathStage1;
 }
 
 // first half, stunned
-void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_DeathStage1(EnPoSisters* this, PlayState* play) {
     s32 i;
     s32 end = this->fireCount;
 
@@ -668,7 +668,7 @@ void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play) {
         this->fireLoc[0].y = this->fireLoc[1].y + 2.0f;
         if (this->deathTimer >= 16) {
             if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f)) {
-                EnPoSister_SetupDeathStage2(this, play);
+                EnPoSisters_SetupDeathStage2(this, play);
             }
             this->actor.scale.z = this->actor.scale.x;
             this->actor.scale.y = this->actor.scale.x;
@@ -681,15 +681,15 @@ void EnPoSister_DeathStage1(EnPoSisters* this, PlayState* play) {
 }
 
 // fading away, the fire has split and circles outward and away
-void EnPoSister_SetupDeathStage2(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_SetupDeathStage2(EnPoSisters* this, PlayState* play) {
     this->deathTimer = 0;
     this->actor.world.pos.y = this->fireLoc[0].y;
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (0x8 << 4)); // drop table 8
-    this->actionFunc = EnPoSister_DeathStage2;
+    this->actionFunc = EnPoSisters_DeathStage2;
 }
 
 // might be where meg never dissapears, she might start with deathTimer > 32
-void EnPoSister_DeathStage2(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_DeathStage2(EnPoSisters* this, PlayState* play) {
     this->deathTimer++;
 
     if (this->deathTimer == 32) { // waiting for death animation to finish
@@ -726,8 +726,8 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
 }
 
 /**
- * play is optional, passed only when spawning an Effect
- * meg function, where NULL is passed in at least one spot when NOT real meg
+ * PlayState is an optional parameter, passed only when spawning an Effect
+ * Meg function, where NULL is passed in at least one spot when NOT real meg
  *  think this is meg dissapearing into invisible
  */
 void func_80B1BE4C(EnPoSisters* this, PlayState* play) {
@@ -772,7 +772,7 @@ void func_80B1BF2C(EnPoSisters* this, PlayState* play) {
         this->actor.world.pos.y = player->actor.world.pos.y + 5.0f;
         EnPoSisters_SetupSpinBack(this, play);
 
-    } else if (parent->actionFunc == EnPoSister_DeathStage1) {
+    } else if (parent->actionFunc == EnPoSisters_DeathStage1) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -921,8 +921,8 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnPoSisters* this = THIS;
     f32 alpha;
-    Vec3f checkPos; // unused by us
-    s32 bgId;       // unused by us
+    Vec3f checkPos; // set by BgCheck_EntityRaycastFloor5 unused by us after
+    s32 bgId;       // set by BgCheck_EntityRaycastFloor5 unused by us after
 
     if (this->collider.base.atFlags & AT_HIT) { // collided with player
         this->collider.base.atFlags &= ~AT_HIT;
@@ -975,7 +975,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
         if ((this->actionFunc == EnPoSisters_SpinAttack) || (this->actionFunc == func_80B1B020)) {
             this->fireCount++;
             this->fireCount = CLAMP_MAX(this->fireCount, ARRAY_COUNT(this->fireLoc));
-        } else if (this->actionFunc != EnPoSister_DeathStage1) {
+        } else if (this->actionFunc != EnPoSisters_DeathStage1) {
             this->fireCount = CLAMP_MIN(this->fireCount - 1, 1);
         }
 
@@ -1067,7 +1067,7 @@ s32 EnPoSisters_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
     // todo bunch of limb enum here
     if ((this->color.a == 0) || (limbIndex == 8) ||
-        ((this->actionFunc == EnPoSister_DeathStage1) && (this->deathTimer >= 8))) {
+        ((this->actionFunc == EnPoSisters_DeathStage1) && (this->deathTimer >= 8))) {
         *dList = NULL;
     } else if (limbIndex == 9) {
         *dList = gPoSisterBodyDisplayLists[this->sisterType];
@@ -1122,7 +1122,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         Matrix_MultVecX(3000.0f, &this->limbPos[7]);
     }
 
-    if (this->actionFunc == EnPoSister_DeathStage1 && this->deathTimer >= 8 && limbIndex == PO_SISTERS_LIMB_MAIN_BODY) {
+    if (this->actionFunc == EnPoSisters_DeathStage1 && this->deathTimer >= 8 && limbIndex == PO_SISTERS_LIMB_MAIN_BODY) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList((*gfx)++, gPoSistersBurnBodyDL);
     }
@@ -1141,7 +1141,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
             brightness = Rand_ZeroFloat(0.3f) + 0.7f; // flickering torch light level
 
-            if (this->actionFunc == EnPoSister_DeathStage2) {
+            if (this->actionFunc == EnPoSisters_DeathStage2) {
                 Lights_PointNoGlowSetInfo(&this->lightInfo, this->fireLoc[0].x, this->fireLoc[0].y + 15.0f,
                                           this->fireLoc[0].z, flameColor->r * brightness, flameColor->g * brightness,
                                           flameColor->b * brightness, 200);
@@ -1202,7 +1202,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
                                 32, 128));
     gDPSetEnvColor(POLY_XLU_DISP++, sisterEnvColor->r, sisterEnvColor->g, sisterEnvColor->b, sisterEnvColor->a);
 
-    if (this->actionFunc == EnPoSister_DeathStage2) {
+    if (this->actionFunc == EnPoSisters_DeathStage2) {
         alpha = ((-this->deathTimer * 255) + 0x1FE0) / 32;
         scale = (7 / 1.2500 * 0.001f);
     } else {
@@ -1211,7 +1211,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
     }
 
     for (i = 0; i < this->fireCount; i++) {
-        if (this->actionFunc != EnPoSister_DeathStage2) {
+        if (this->actionFunc != EnPoSisters_DeathStage2) {
             alpha = (-i * 31) + 248;
         }
 
@@ -1221,7 +1221,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(this->fireLoc[i].x, this->fireLoc[i].y, this->fireLoc[i].z, MTXMODE_NEW);
         Matrix_RotateZYX(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), 0, MTXMODE_APPLY);
 
-        if (this->actionFunc == EnPoSister_DeathStage1) {
+        if (this->actionFunc == EnPoSisters_DeathStage1) {
             scale = ((this->deathTimer - i) * 0.025f) + 0.5f;
             scale = CLAMP(scale, 0.5f, 0.8f) * 0.007f;
         }
