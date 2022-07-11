@@ -2856,7 +2856,7 @@ void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gfxCtx);
 void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* gameState);
 void func_801780F0(Mtx* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7);
 // void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+void func_8017842C(MtxF* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 arg10);
 // void func_80178750(void);
 // void func_80178818(void);
 void func_80178978(void);
