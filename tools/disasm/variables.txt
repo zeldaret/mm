@@ -15056,7 +15056,7 @@
     0x80B7C138:("sCylinderInit","UNK_TYPE1","",0x1),
     0x80B7C164:("D_80B7C164","UNK_TYPE4","",0x4),
     0x80B7C254:("sInitChain","UNK_TYPE4","",0x4),
-    0x80B7C25C:("D_80B7C25C","UNK_TYPE1","[5]",0x28),
+    0x80B7C25C:("sUmAnims","UNK_TYPE1","[5]",0x28),
     0x80B7C284:("D_80B7C284","UNK_TYPE4","",0x4),
     0x80B7C290:("D_80B7C290","UNK_TYPE4","",0x4),
     0x80B7C29C:("D_80B7C29C","UNK_TYPE4","",0x4),

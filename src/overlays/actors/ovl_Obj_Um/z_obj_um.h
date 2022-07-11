@@ -11,6 +11,15 @@ typedef void (*ObjUmActionFunc)(struct ObjUm*, PlayState*);
 
 #define MILK_POTS_COUNT 3
 
+typedef enum ObjUmAnimimations {
+    /* -1 */ OBJ_UM_ANIM_MINUS_1 = -1,
+    /*  0 */ OBJ_UM_ANIM_TROT,
+    /*  1 */ OBJ_UM_ANIM_GALLOP,
+    /*  2 */ OBJ_UM_ANIM_IDLE,
+    /*  3 */ OBJ_UM_ANIM_3, // NULL pointer
+    /*  4 */ OBJ_UM_ANIM_LOOK_BACK
+} ObjUmAnimimations;
+
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjUmActionFunc actionFunc;
@@ -31,7 +40,7 @@ typedef struct ObjUm {
     /* 0x2F4 */ s32 flags;
     /* 0x2BC */ Vec3s unk_2F8;
     /* 0x2FE */ Vec3s unk_2FE;
-    /* 0x304 */ s32 unk_304;
+    /* 0x304 */ ObjUmAnimimations currentAnimIndex;
     /* 0x308 */ Vec3f unk_308;
     /* 0x314 */ s32 potsLife[MILK_POTS_COUNT];
     /* 0x320 */ s32 wasPotHit[MILK_POTS_COUNT]; // resets to false in the same frame
@@ -78,7 +87,7 @@ typedef enum {
 #define OBJ_UM_FLAG_0100 (1 << 8)
 #define OBJ_UM_FLAG_0200 (1 << 9) // Something bandit1
 #define OBJ_UM_FLAG_0400 (1 << 10) // Something bandit2
-#define OBJ_UM_FLAG_0800 (1 << 11)
+#define OBJ_UM_FLAG_LOOK_BACK (1 << 11)
 #define OBJ_UM_FLAG_1000 (1 << 12)
 #define OBJ_UM_FLAG_MINIGAME_FINISHED (1 << 13)
 

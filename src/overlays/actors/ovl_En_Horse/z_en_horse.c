@@ -7,6 +7,7 @@
 #include "z_en_horse.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
+#include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
 #include "objects/object_horse_link_child/object_horse_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -891,7 +892,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     thisx->world.rot.z = thisx->shape.rot.z;
     thisx->home.rot.z = thisx->shape.rot.z;
     this->unk_3EC = thisx->world.rot.y;
-    this->unk_538 = 0;
+    this->unk_538 = OBJ_UM_ANIM_TROT;
 
     if (this->unk_1EC & 0x100) {
         this->colliderCylinder1.base.colType = COLTYPE_HIT3;
@@ -3369,9 +3370,9 @@ void func_80884A40(EnHorse* this, PlayState* play) {
                              0.0f);
         }
 
-        if ((this->unk_538 == 0) || (this->unk_538 == 1)) {
+        if ((this->unk_538 == OBJ_UM_ANIM_TROT) || (this->unk_538 == OBJ_UM_ANIM_GALLOP)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HORSE_RUN);
-        } else if (this->unk_538 == 2) {
+        } else if (this->unk_538 == OBJ_UM_ANIM_IDLE) {
             if (this->animationIdx == ENHORSE_ANIM_IDLE) {
                 EnHorse_IdleAnimSounds(this, play);
             } else if (this->animationIdx == ENHORSE_ANIM_WHINNEY) {

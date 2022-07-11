@@ -14507,7 +14507,7 @@
     0x80B7AE58:("ObjUm_PostMilkRunStartCs",),
     0x80B7AEFC:("ObjUm_TerminaFieldIdle",),
     0x80B7AF30:("func_80B7AF30",),
-    0x80B7B154:("ObjUm_StopAnim",),
+    0x80B7B154:("ObjUm_DefaultAnim",),
     0x80B7B18C:("ObjUm_UpdateAnim",),
     0x80B7B368:("ObjUm_Update",),
     0x80B7B598:("ObjUm_OverrideLimbDraw",),

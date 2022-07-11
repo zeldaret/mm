@@ -79,9 +79,9 @@
 
         <Skeleton Name="gUmSkel" Type="Flex" LimbType="Standard" LimbNone="UM_LIMB_NONE" LimbMax="UM_LIMB_MAX" EnumName="ObjectUmLimbs" Offset="0x11DF8" />
 
-        <Animation Name="object_um_Anim_01213C" Offset="0x1213C" />
-        <Animation Name="object_um_Anim_0126C4" Offset="0x126C4" />
-        <Animation Name="object_um_Anim_012CC0" Offset="0x12CC0" />
+        <Animation Name="gUmGallopAnim" Offset="0x1213C" />
+        <Animation Name="gUmLookBackAnim" Offset="0x126C4" />
+        <Animation Name="gUmTrotAnim" Offset="0x12CC0" />
 
         <Texture Name="object_um_TLUT_012CD0" OutName="tlut_012CD0" Format="rgba16" Width="16" Height="16" Offset="0x12CD0" />
         <Texture Name="object_um_TLUT_012ED0" OutName="tlut_012ED0" Format="rgba16" Width="16" Height="16" Offset="0x12ED0" />
@@ -121,6 +121,6 @@
         <Texture Name="object_um_Tex_019210" OutName="tex_019210" Format="ci8" Width="16" Height="16" Offset="0x19210" />
         <Texture Name="object_um_Tex_019310" OutName="tex_019310" Format="ci8" Width="16" Height="32" Offset="0x19310" />
         <Texture Name="object_um_Tex_019510" OutName="tex_019510" Format="ci8" Width="64" Height="16" Offset="0x19510" />
-        <Animation Name="object_um_Anim_019E10" Offset="0x19E10" />
+        <Animation Name="gUmIdleAnim" Offset="0x19E10" />
     </File>
 </Root>
