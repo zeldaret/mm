@@ -22,6 +22,7 @@ s32 func_800F3940(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F39B4.s")
 
+s32 func_800F3A64(s16 arg0);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3A64.s")
 
 void func_800F3B2C(PlayState* play) {
@@ -34,18 +35,54 @@ void func_800F3B2C(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3B68.s")
 
-void func_800F3C44(PlayState* play, Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3C44.s")
+void func_800F3C44(PlayState* play, Player* player) {
+    if (func_800F3B68(play, player) != 0) {
+        if ((D_801BDA9C != 0) && CHECK_QUEST_ITEM(0xE)) {
+            s32 pad;
+            Vec3f sp60;
+            f32 var_fv1;
+            CollisionPoly* sp58;
+            s32 pad2[3];
+
+            sp60 = player->actor.world.pos;
+            sp60.y += 5.0f;
+            var_fv1 = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp58, &sp60);
+            if (var_fv1 == -32000.0f) {
+                var_fv1 = player->actor.world.pos.y;
+            }
+            player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, player->actor.world.pos.x, var_fv1, player->actor.world.pos.z,  player->actor.shape.rot.x, player->actor.shape.rot.y, player->actor.shape.rot.z, 0x400B);
+            Actor_MountHorse(play, player, player->rideActor);
+            Actor_SetCameraHorseSetting(play, player);
+            return;
+        }
+
+        if ((play->sceneNum == gSaveContext.save.horseData.scene) && CHECK_QUEST_ITEM(0xE)) {
+            if (func_800F3A64(gSaveContext.save.horseData.scene) != 0) {
+                Actor_Spawn(&play->actorCtx, play, 0xD, gSaveContext.save.horseData.pos.x, gSaveContext.save.horseData.pos.y, gSaveContext.save.horseData.pos.z, 0, gSaveContext.save.horseData.yaw, 0, 0x4001);
+                return;
+            }
+            func_800F3B2C(play);
+            return;
+        }
+        if ((play->sceneNum == 0x35) && !CHECK_QUEST_ITEM(0xE)) {
+            Actor_Spawn(&play->actorCtx, play, 0xD, -1420.0f, D_801DD7E0, D_801DD7E4, 0, 0x2AAA, 0, 0x4001);
+            return;
+        }
+        if (CHECK_QUEST_ITEM(0xE) && (func_800F3A64(play->sceneNum) != 0)) {
+            Actor_Spawn(&play->actorCtx, play, 0xD, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, 0x4002);
+        }
+    }
+}
 
 void func_800F3ED4(PlayState* play, Player* player) {
     if ((play->sceneNum == 0x6A) && ((gSaveContext.save.weekEventReg[0x5C] & 7) == 1)) {
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1262.0f, -106.0f, 470.0f, (s16) 0, (s16) 0x7FFF, (s16) 0, 0x400D);
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x400D);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2))) {
-        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, D_801DD7E8, (s16) 0, (s16) -0x4FA4, (s16) 0, 0x4001);
+        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, D_801DD7E8, 0, -0x4FA4, 0, 0x4001);
     } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) && (player->transformation == 4)) {
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, D_801DD7EC, (s16) 0, (s16) 0x13, (s16) 0, 0x4007);
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, D_801DD7EC, 0, 0x13, 0, 0x4007);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     }
