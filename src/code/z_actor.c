@@ -4224,7 +4224,7 @@ Gfx D_801AEF88[] = {
     gsSPEndDisplayList(),
 };
 
-Gfx D_801AEFA0[] = {
+Gfx D_801AEFA0[] = { // gActorEmptyDL
     gsSPEndDisplayList(),
 };
 
