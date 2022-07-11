@@ -270,7 +270,7 @@ void EnHorse_RaceWaypointPos(RaceWaypoint* waypoints, s32 idx, Vec3f* pos) {
 }
 
 void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnAmount) {
-    func_800F415C(&this->actor, pos, turnAmount);
+    Horse_RotateToPoint(&this->actor, pos, turnAmount);
 }
 
 void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
@@ -3313,7 +3313,7 @@ void func_808848C8(EnHorse* this, PlayState* play) {
 
     EnHorse_PlayWalkingSound(this);
     this->actor.speedXZ = 4.0f;
-    func_800F415C(&this->actor, &sp24, 0x7D0);
+    Horse_RotateToPoint(&this->actor, &sp24, 0x7D0);
     this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
     if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {

@@ -435,7 +435,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
     sp36 = Actor_YawBetweenActors(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
 
     if ((Math_CosS(sp36) < 0.7071f) && (this->unk_148 == 2)) {
-        func_800F415C(&this->actor, &GET_PLAYER(play)->actor.world.pos, 0x12C);
+        Horse_RotateToPoint(&this->actor, &GET_PLAYER(play)->actor.world.pos, 0x12C);
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
@@ -471,9 +471,9 @@ void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
 
     if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
         if (this->unk_1E0 == 0) {
-            func_800F415C(&this->actor, &player->actor.world.pos, 0x12C);
+            Horse_RotateToPoint(&this->actor, &player->actor.world.pos, 0x12C);
         } else {
-            func_800F415C(&this->actor, &this->actor.home.pos, 0x12C);
+            Horse_RotateToPoint(&this->actor, &this->actor.home.pos, 0x12C);
         }
     }
 

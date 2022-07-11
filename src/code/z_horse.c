@@ -136,43 +136,44 @@ void func_800F3C44(PlayState* play, Player* player) {
         }
         player->rideActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, yIntersect,
                                         player->actor.world.pos.z, player->actor.shape.rot.x, player->actor.shape.rot.y,
-                                        player->actor.shape.rot.z, 0x400B);
+                                        player->actor.shape.rot.z, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_11));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneNum == gSaveContext.save.horseData.scene) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         if (func_800F3A64(gSaveContext.save.horseData.scene)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, gSaveContext.save.horseData.pos.x,
                         gSaveContext.save.horseData.pos.y, gSaveContext.save.horseData.pos.z, 0,
-                        gSaveContext.save.horseData.yaw, 0, 0x4001);
+                        gSaveContext.save.horseData.yaw, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
         } else {
             func_800F3B2C(play);
         }
     } else if ((play->sceneNum == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, 0x4001);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
     } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && (func_800F3A64(play->sceneNum))) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
-                    player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, 0x4002);
+                    player->actor.world.pos.z, 0, player->actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_2));
     }
 }
 
 void func_800F3ED4(PlayState* play, Player* player) {
     if ((play->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) {
         player->rideActor =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x400D);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1262.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_13));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneNum == SCENE_KOEPONARACE) &&
                ((((gSaveContext.save.weekEventReg[92] & 7) == 3)) || ((gSaveContext.save.weekEventReg[92] & 7) == 2))) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, 0x4001);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
     } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) &&
                (player->transformation == PLAYER_FORM_HUMAN)) {
         player->rideActor =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, 0x4007);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_7));
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     }
 }
 
+// Horse_Spawn?
 void func_800F40A0(PlayState* play, Player* player) {
     if (((play->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & 7) == 1)) ||
         ((play->sceneNum == SCENE_F01) &&
@@ -187,13 +188,13 @@ void func_800F40A0(PlayState* play, Player* player) {
     D_801BDAA0 = false;
 }
 
-void func_800F415C(Actor* actor, Vec3f* pos, s16 arg2) {
+void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount) {
     s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, pos) - actor->world.rot.y;
 
-    if (arg2 < yaw) {
-        actor->world.rot.y += arg2;
-    } else if (yaw < -arg2) {
-        actor->world.rot.y -= arg2;
+    if (turnAmount < yaw) {
+        actor->world.rot.y += turnAmount;
+    } else if (yaw < -turnAmount) {
+        actor->world.rot.y -= turnAmount;
     } else {
         actor->world.rot.y += yaw;
     }

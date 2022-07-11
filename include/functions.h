@@ -1466,7 +1466,7 @@ s32 func_800F3940(PlayState* play);
 // void func_800F3A64(void);
 void func_800F3B2C(PlayState* play);
 void func_800F40A0(PlayState* play, Player* player);
-void func_800F415C(Actor* actor, Vec3f* pos, s16 arg2);
+void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnAmount);
 s32 func_800F41E4(PlayState* play, ActorContext* actorCtx);
 
 void func_800F4A10(PlayState* play);

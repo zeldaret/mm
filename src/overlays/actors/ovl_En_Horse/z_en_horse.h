@@ -104,11 +104,15 @@ typedef enum {
     /* 4 */ HORSE_4
 } HorseType;
 
+#define ENHORSE_PARAM_BANDIT 0x2000
+#define ENHORSE_PARAM_4000 0x4000
+#define ENHORSE_PARAM_DONKEY 0x8000
+
 #define ENHORSE_GET_2000(thisx) ((thisx)->params & 0x2000)
 #define ENHORSE_GET_4000(thisx) ((thisx)->params & 0x4000)
 #define ENHORSE_GET_8000(thisx) ((thisx)->params & 0x8000)
 
-enum {
+typedef enum EnHorseParam {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -130,7 +134,13 @@ enum {
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
     /* 20 */ ENHORSE_20,
-};
+} EnHorseParam;
+
+/**
+ * `paramtype` should be `ENHORSE_PARAM_BANDIT`, `ENHORSE_PARAM_4000` or `ENHORSE_PARAM_DONKEY`
+ * `lower` should be a value of the enum `EnHorseParam`
+ */
+#define ENHORSE_PARAMS(type, lower) ((type) | (lower))
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;
