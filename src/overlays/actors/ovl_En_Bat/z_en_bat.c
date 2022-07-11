@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bat.h"
+#include "objects/object_bat/object_bat.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
@@ -112,17 +113,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-static Gfx* D_80A44A64[] = {
-    0x060001B0, 0x060002A0, 0x06000390, 0x06000480, 0x06000570, 0x06000660, 0x06000750, 0x06000840, 0x06000930,
+static Gfx* sWingsDLs[] = {
+    gBadBatWingsFrame0DL, gBadBatWingsFrame1DL, gBadBatWingsFrame2DL, gBadBatWingsFrame3DL, gBadBatWingsFrame4DL,
+    gBadBatWingsFrame5DL, gBadBatWingsFrame6DL, gBadBatWingsFrame7DL, gBadBatWingsFrame8DL,
 };
 
 #define BAD_BAT_MAX_NUMBER_ATTACKING 3
 
-s32 sNumberAttacking; //! Limit number attacking player to at most `BAD_BAT_MAX_NUMBER_ATTACKING`
-s32 sAlreadySpawned;
-
-extern Gfx D_060000A0[];
-extern Gfx D_060000C8[];
+s32 sNumberAttacking; //!< Limit number attacking player to at most `BAD_BAT_MAX_NUMBER_ATTACKING`
+s32 sAlreadySpawned;  //!< used for those spawned with room -1 in Graveyard to avoid respawn on room change
 
 void EnBat_Init(Actor* thisx, PlayState* play) {
     EnBat* this = THIS;
@@ -134,7 +133,8 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&thisx->shape, 2000.0f, ActorShadow_DrawCircle, 25.0f);
 
     this->animationFrame = Rand_ZeroOne() * 9.0f;
-    this->paramsE0 = BAD_BAT_GET_E0(thisx);
+
+    this->paramflags = BAD_BAT_GET_PARAMFLAGS(thisx);
     this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
@@ -151,7 +151,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (this->paramsE0 & 4) {
+    if (this->paramflags & BAD_BAT_PARAMFLAG_PERCH) {
         thisx->params = 0;
         EnBat_SetupPerch(this);
     } else {
@@ -159,14 +159,14 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
             thisx->params = 0;
         }
         EnBat_SetupFlyIdle(this);
-        while (thisx->params >= 2) {
-            Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_BAT,
-                                          thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
-                                          thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
-                                          thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f),
-                                          randPlusMinusPoint5Scaled((f32)0x2000), (f32)0xFFFF * Rand_ZeroOne(), 0,
-                                          BAD_BAT_PARAMS(this->switchFlag, this->paramsE0, 0), -1, thisx->unk20, NULL);
-            thisx->params--;
+        while (BAD_BAT_GET_NUMBER_TO_SPAWN(thisx) > 1) {
+            Actor_SpawnAsChildAndCutscene(
+                &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
+                thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
+                thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled((f32)0x2000),
+                (f32)0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramflags, 0), -1,
+                thisx->unk20, NULL);
+            BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
 }
@@ -189,8 +189,8 @@ void EnBat_StepAnimation(EnBat* this, s32 frameStep) {
     s32 previousFrame = this->animationFrame;
 
     this->animationFrame += frameStep;
-    if (this->animationFrame >= ARRAY_COUNT(D_80A44A64)) {
-        this->animationFrame -= ARRAY_COUNT(D_80A44A64);
+    if (this->animationFrame >= ARRAY_COUNT(sWingsDLs)) {
+        this->animationFrame -= ARRAY_COUNT(sWingsDLs);
     }
     if ((previousFrame < BAD_BAT_FLAP_FRAME) && (this->animationFrame >= BAD_BAT_FLAP_FRAME)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_FLY);
@@ -254,7 +254,7 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
     }
     if ((this->actor.xzDistToPlayer < 300.0f) && (this->timer == 0) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (sNumberAttacking < BAD_BAT_MAX_NUMBER_ATTACKING) &&
-        (!(this->paramsE0 & 2) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
+        (!(this->paramflags & BAD_BAT_PARAMFLAG_CHECK_HEIGHTREL) || (fabsf(this->actor.playerHeightRel) < 150.0f))) {
         EnBat_SetupDiveAttack(this);
     }
 }
@@ -481,7 +481,7 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
         } else if ((this->actionFunc != EnBat_FlyIdle) ||
                    ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.projectedPos.z > 0.0f))) {
-            if (this->paramsE0 & 1) {
+            if (this->paramflags & BAD_BAT_PARAMFLAG_0) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 5);
             } else {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f, 15.0f, 50.0f, 4);
@@ -527,11 +527,11 @@ void EnBat_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[150]);
+        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[2], D_060000A0);
-        gSPDisplayList(&gfx[3], D_060000C8);
-        gSPDisplayList(&gfx[4], D_80A44A64[this->animationFrame]);
+        gSPDisplayList(&gfx[2], gBadBatSetupDL);
+        gSPDisplayList(&gfx[3], gBadBatBodyDL);
+        gSPDisplayList(&gfx[4], sWingsDLs[this->animationFrame]);
 
         POLY_OPA_DISP = &gfx[5];
 

@@ -4,9 +4,20 @@
 #include "global.h"
 
 #define BAD_BAT_GET_TYPE(thisx) (((thisx)->params >> 0) & 0x1F)
-#define BAD_BAT_GET_E0(thisx) (((thisx)->params >> 5) & 7)
+#define BAD_BAT_GET_PARAMFLAGS(thisx) (((thisx)->params >> 5) & 7)
 #define BAD_BAT_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
-#define BAD_BAT_PARAMS(switchFlag, e0, type) ((type) | ((e0) << 5) | ((switchFlag) << 8))
+#define BAD_BAT_PARAMS(switchFlag, e0, type) ((type) | ((flags) << 5) | ((switchFlag) << 8))
+
+//! PARAMFLAGS
+//! Affects which flags are used in Actor_UpdateBgCheckInfo in certain circumstances
+#define BAD_BAT_PARAMFLAG_0 (1 << 0)
+//! Whether to apply a height range check to attack
+#define BAD_BAT_PARAMFLAG_CHECK_HEIGHTREL (1 << 1)
+//! Spawn as perching instead of flying
+#define BAD_BAT_PARAMFLAG_PERCH (1 << 2)
+
+#define BAD_BAT_GET_NUMBER_TO_SPAWN(thisx) ((thisx)->params)
+#define BAD_BAT_SPAWN_COUNT(n) (n)
 
 struct EnBat;
 
@@ -16,12 +27,12 @@ typedef struct EnBat {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnBatActionFunc actionFunc;
     /* 0x148 */ u8 drawDmgEffType;
-    /* 0x149 */ u8 paramsE0;
+    /* 0x149 */ u8 paramflags;
     /* 0x14A */ s16 switchFlag;
     /* 0x14C */ s16 timer;
     /* 0x14E */ s16 targetPitch;
     /* 0x150 */ s16 targetYaw;
-    /* 0x152 */ s16 animationFrame; // Manual animation using displaylists
+    /* 0x152 */ s16 animationFrame; //!< Manual animation using displaylists
     /* 0x154 */ f32 drawDmgEffScale;
     /* 0x158 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x15C */ f32 drawDmgEffAlpha;
