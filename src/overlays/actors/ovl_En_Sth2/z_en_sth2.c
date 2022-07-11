@@ -32,12 +32,6 @@ const ActorInit En_Sth2_InitVars = {
 
 #include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
-static Vec3f D_80BFA010 = { 700.0f, 400.0f, 0.0f };
-
-static Color_RGB8 sEnvColors[] = {
-    { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
-};
-
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
 
@@ -97,6 +91,8 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80BFA010 = { 700.0f, 400.0f, 0.0f };
+
     if (limbIndex == OBJECT_STH_LIMB_0F) {
         Matrix_MultVec3f(&D_80BFA010, &thisx->focus.pos);
 
@@ -109,6 +105,8 @@ void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnSth2_Draw(Actor* thisx, PlayState* play2) {
+    static Color_RGB8 sEnvColors[] = { { 190, 110, 0 },  { 0, 180, 110 },   { 0, 255, 80 },
+                                       { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 } };
     PlayState* play = play2;
     EnSth2* this = THIS;
 
