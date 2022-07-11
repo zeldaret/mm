@@ -2,6 +2,20 @@
 #include "overlays/actors/ovl_Bg_Umajump/z_bg_umajump.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
+extern s16 D_801BDA74;
+extern s16 D_801BDA78;
+extern s16 D_801BDAA8;
+extern s16 D_801BDAAA;
+extern s16 D_801BDAAC;
+extern s16 D_801BDAAE;
+extern s16 D_801BDAB0;
+extern s16 D_801BDAB2;
+extern s16 D_801BDAB4;
+extern s16 D_801BDAB6;
+extern s32 D_801BDA9C;
+extern s32 D_801BDAA0;
+
+
 s32 func_800F3940(PlayState* play) {
     Actor* actor;
 
@@ -22,8 +36,32 @@ s32 func_800F3940(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F39B4.s")
 
-s32 func_800F3A64(s16 arg0);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3A64.s")
+//extern s16 sValidScenes[11];
+extern s16 D_801BDA70[11];
+#if 0
+static s16 sValidScenes[11] = { 
+    0x002D0000,0x00400000,0x00350000,
+    0x006A0000,
+    0x00450000,
+    0x00000000,
+    0x00370000,
+    0x00380000,
+    0x00220000,
+    0x00530000,
+    0x001C0000,
+};
+#endif 
+s32 func_800F3A64(s16 scene) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(D_801BDA70); i++) {
+        if (scene == D_801BDA70[i*2]) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_800F3B2C(PlayState* play) {
     gSaveContext.save.horseData.scene = 0x35;
@@ -32,21 +70,6 @@ void func_800F3B2C(PlayState* play) {
     gSaveContext.save.horseData.pos.z = -0x505;
     gSaveContext.save.horseData.yaw = 0x2AAA;
 }
-
-extern s16 D_801BDA70;
-extern s16 D_801BDA74;
-extern s16 D_801BDA78;
-extern s16 D_801BDAA8;
-extern s16 D_801BDAAA;
-extern s16 D_801BDAAC;
-extern s16 D_801BDAAE;
-extern s16 D_801BDAB0;
-extern s16 D_801BDAB2;
-extern s16 D_801BDAB4;
-extern s16 D_801BDAB6;
-extern s32 D_801BDA9C;
-extern s32 D_801BDAA0;
-
 
 #ifdef NON_MATCHING
 // swapped instructions
@@ -104,7 +127,7 @@ void func_800F3C44(PlayState* play, Player* player) {
             return;
         }
         if ((play->sceneNum == 0x35) && !CHECK_QUEST_ITEM(0xE)) {
-            Actor_Spawn(&play->actorCtx, play, 0xD, -1420.0f, D_801DD7E0, D_801DD7E4, 0, 0x2AAA, 0, 0x4001);
+            Actor_Spawn(&play->actorCtx, play, 0xD, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0, 0x4001);
             return;
         }
         if (CHECK_QUEST_ITEM(0xE) && (func_800F3A64(play->sceneNum) != 0)) {
@@ -119,9 +142,9 @@ void func_800F3ED4(PlayState* play, Player* player) {
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     } else if ((play->sceneNum == 0x6A) && ((((gSaveContext.save.weekEventReg[0x5C] & 7) == 3)) || ((gSaveContext.save.weekEventReg[0x5C] & 7) == 2))) {
-        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, D_801DD7E8, 0, -0x4FA4, 0, 0x4001);
+        Actor_Spawn(&play->actorCtx, play, 0xD, -1741.0f, -106.0f, -641.0f, 0, -0x4FA4, 0, 0x4001);
     } else if ((gSaveContext.save.entranceIndex == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0) && (player->transformation == 4)) {
-        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, D_801DD7EC, 0, 0x13, 0, 0x4007);
+        player->rideActor = Actor_Spawn(&play->actorCtx, play, 0xD, -1106.0f, 260.0f, -1185.0f, 0, 0x13, 0, 0x4007);
         Actor_MountHorse(play, player, player->rideActor);
         Actor_SetCameraHorseSetting(play, player);
     }
