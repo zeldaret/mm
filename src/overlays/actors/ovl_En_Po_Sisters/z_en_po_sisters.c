@@ -1,7 +1,7 @@
 /*
  * File: z_en_po_sisters.c
  * Overlay: ovl_En_Po_Sisters
- * Description: Poe Sisters
+ * Description: Poe Sisters (fought in a mini-game in Ikana for a HP)
  */
 
 #include "z_en_po_sisters.h"
@@ -18,11 +18,11 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play);
 
 void EnPoSisters_SetupObserverIdle(EnPoSisters* this);
 void EnPoSisters_ObserverIdle(EnPoSisters* this, PlayState* play);
-void func_80B1ABB8(EnPoSisters* this, PlayState* play);
-void func_80B1AC40(EnPoSisters* this);
-void func_80B1ACB8(EnPoSisters* this, PlayState* play);
-void EnPoSisters_SetupIdleFlying(EnPoSisters* this);
-void EnPoSisters_IdleFlying(EnPoSisters* this, PlayState* play);
+void EnPoSisters_AimlessIdleFlying2(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupAimlessIdleFlying(EnPoSisters* this);
+void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupInvestigating(EnPoSisters* this);
+void EnPoSisters_Investigating(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinUp(EnPoSisters* this);
 void EnPoSisters_SpinUp(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupSpinAttack(EnPoSisters* this);
@@ -44,8 +44,8 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play);
 void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this);
 void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play);
-void EnPoSisters_SetupSpinIntoVisible(EnPoSisters* this);
-void EnPoSisters_SpinIntoVisible(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupMegStart(EnPoSisters* this);
+void EnPoSisters_MegStart(EnPoSisters* this, PlayState* play);
 
 static Color_RGBA8 sPoSisterFlameColors[] = {
     { 255, 170, 255, 255 }, // meg
@@ -152,7 +152,7 @@ static InitChainEntry sInitChain[] = {
 #define PO_SISTER_FLAG_CHECK_AC              (1 << 0)
 #define PO_SISTER_FLAG_UPDATE_SHAPE_ROT      (1 << 1)
 #define PO_SISTER_FLAG_CHECK_Z_TARGET        (1 << 2) // meg doesnt go invis if you ztarget her for too long
-#define PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3)
+#define PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT   (1 << 3) // the po is attempting to level with player's height
 #define PO_SISTER_FLAG_UPDATE_BGCHECK_INFO   (1 << 4)
 #define PO_SISTER_FLAG_UPDATE_FIRES          (1 << 5) // firePos updated to match limb in PostLimbDraw
 #define PO_SISTER_FLAG_REAL_MEG_ROTATION     (1 << 6) // real meg rotates different than her clones for one cycle
@@ -197,7 +197,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
             EnPoSisters_SpawnMegClones(this, play);
-            EnPoSisters_SetupSpinIntoVisible(this);
+            EnPoSisters_SetupMegStart(this);
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.info.elemType = ELEMTYPE_UNK4;
@@ -206,7 +206,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_MegCloneVanish(this, NULL);
         }
     } else {
-        EnPoSisters_SetupSpinIntoVisible(this);
+        EnPoSisters_SetupMegStart(this);
     }
     this->actor.params &= 0xFF;
 }
@@ -317,48 +317,54 @@ void EnPoSisters_ObserverIdle(EnPoSisters* this, PlayState* play) {
     }
 }
 
-// does not go off in red
-void func_80B1AB5C(EnPoSisters* this) {
+/**
+ *  Change animation, but keep flying idle in straight line.
+ *
+ *  This is never reached because conditions are never met in EnPoSisters_AimlessIdleFlying
+ */ 
+void EnPoSisters_SetupAimlessIdleFlying2(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &gPoeSistersSwayAnim, -3.0f);
-    this->stateTimer = Rand_S16Offset(2, 3);
+    this->idleFlyingAnimationCounter = Rand_S16Offset(2, 3);
     this->actor.speedXZ = 0.0f;
-    this->actionFunc = func_80B1ABB8;
+    this->actionFunc = EnPoSisters_AimlessIdleFlying2;
 }
 
-// does not go off in red
-void func_80B1ABB8(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_AimlessIdleFlying2(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        DECR(this->stateTimer);
+        DECR(this->idleFlyingAnimationCounter);
     }
 
-    if ((this->stateTimer == 0) || (this->actor.xzDistToPlayer < 600.0f)) {
-        func_80B1AC40(this);
+    if ((this->idleFlyingAnimationCounter == 0) || (this->actor.xzDistToPlayer < 600.0f)) {
+        EnPoSisters_SetupAimlessIdleFlying(this);
     }
 }
 
-// goes off once after rolling attack
-void func_80B1AC40(EnPoSisters* this) {
-    if (this->actionFunc != EnPoSisters_IdleFlying) {
+/**
+ *  Flying in a straight line, until player comes near.
+ */ 
+void EnPoSisters_SetupAimlessIdleFlying(EnPoSisters* this) {
+    if (this->actionFunc != EnPoSisters_Investigating) {
         Animation_MorphToLoop(&this->skelAnime, &gPoeSistersFloatAnim, -3.0f);
     }
-    this->stateTimer = Rand_S16Offset(15, 3);
+    this->idleFlyingAnimationCounter = Rand_S16Offset(15, 3);
     this->poSisterFlags |= (PO_SISTER_FLAG_CHECK_Z_TARGET | PO_SISTER_FLAG_UPDATE_SHAPE_ROT | PO_SISTER_FLAG_CHECK_AC);
-    this->actionFunc = func_80B1ACB8;
+    this->actionFunc = EnPoSisters_AimlessIdleFlying;
 }
 
-// sometimes goes off once behind the above
-void func_80B1ACB8(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->actor.speedXZ, 1.0f, 0.2f);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        DECR(this->stateTimer);
+        DECR(this->idleFlyingAnimationCounter);
     }
 
     if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
-        EnPoSisters_SetupIdleFlying(this);
-    } else if ((this->stateTimer == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
-        func_80B1AB5C(this);
+        EnPoSisters_SetupInvestigating(this);
+    } else if ((this->idleFlyingAnimationCounter == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
+        // ! @Bug: this is never reached because the speedXZ is reduced
+        //         at the same rate it is increased at the top of this function
+        EnPoSisters_SetupAimlessIdleFlying2(this);
     }
 
     if (this->actor.bgCheckFlags & 8) {
@@ -368,11 +374,16 @@ void func_80B1ACB8(EnPoSisters* this, PlayState* play) {
     }
 }
 
-void EnPoSisters_SetupIdleFlying(EnPoSisters* this) {
-    this->actionFunc = EnPoSisters_IdleFlying;
+
+/**
+ * Not yet agressive, gently steering toward the player.
+ */
+void EnPoSisters_SetupInvestigating(EnPoSisters* this) {
+    this->actionFunc = EnPoSisters_Investigating;
 }
 
-void EnPoSisters_IdleFlying(EnPoSisters* this, PlayState* play) {
+
+void EnPoSisters_Investigating(EnPoSisters* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 yawDiff;
 
@@ -391,11 +402,12 @@ void EnPoSisters_IdleFlying(EnPoSisters* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 320.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
         EnPoSisters_SetupSpinUp(this);
     } else if (this->actor.xzDistToPlayer > 720.0f) {
-        func_80B1AC40(this);
+        EnPoSisters_SetupAimlessIdleFlying(this);
     }
 }
-
-// EnPoSisters_SetupSpinUp
+/**
+ * Gaining speed for spin attack before the actual attack, windup.
+ */
 void EnPoSisters_SetupSpinUp(EnPoSisters* this) {
     if (this->color.a != 0) {
         this->collider.base.colType = COLTYPE_METAL;
@@ -409,8 +421,6 @@ void EnPoSisters_SetupSpinUp(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_SpinUp;
 }
 
-// EnPoSisters_SpinUp
-// gaining speed for spin attack
 void EnPoSisters_SpinUp(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     DECR(this->spinupTimer);
@@ -422,7 +432,6 @@ void EnPoSisters_SpinUp(EnPoSisters* this, PlayState* play) {
     }
 }
 
-// setup spin dive
 void EnPoSisters_SetupSpinAttack(EnPoSisters* this) {
     this->actor.speedXZ = 5.0f;
     if (this->type == POSISTER_TYPE_MEG) {
@@ -437,7 +446,6 @@ void EnPoSisters_SetupSpinAttack(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_SpinAttack;
 }
 
-// spin attack dive at player
 void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -453,7 +461,7 @@ void EnPoSisters_SpinAttack(EnPoSisters* this, PlayState* play) {
             if (this->type != POSISTER_TYPE_MEG) {
                 this->collider.base.colType = COLTYPE_HIT3;
                 this->collider.base.acFlags &= ~AC_HARD;
-                func_80B1AC40(this);
+                EnPoSisters_SetupAimlessIdleFlying(this);
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
                 EnPoSisters_MegCloneVanish(this, play);
@@ -484,7 +492,7 @@ void EnPoSisters_AttackConnectDrift(EnPoSisters* this, PlayState* play) {
     if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f)) { // wait to stop moving
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->type != POSISTER_TYPE_MEG) {
-            func_80B1AC40(this);
+            EnPoSisters_SetupAimlessIdleFlying(this);
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
             EnPoSisters_MegCloneVanish(this, play);
@@ -547,7 +555,6 @@ void EnPoSisters_SetupFlee(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_Flee;
 }
 
-// post flinch shake? a few frames of shock
 void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 0x71C);
@@ -561,7 +568,7 @@ void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupSpinToInvis(this);
     } else if (this->fleeTimer == 0 && this->actor.xzDistToPlayer > 480.0f) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_80B1AC40(this);
+        EnPoSisters_SetupAimlessIdleFlying(this);
     }
 }
 
@@ -581,14 +588,13 @@ void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 0;
         this->collider.info.bumper.dmgFlags = (0x40000 | 0x1);
-        func_80B1AC40(this);
+        EnPoSisters_SetupAimlessIdleFlying(this);
     } else {
         s32 alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
         this->color.a = CLAMP(alpha, 0, 255);
     }
 }
 
-// spinning back to visible
 // TODO rename to something better
 void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gPoeSistersAppearDisappearAnim, 1.5f, 0.0f,
@@ -620,7 +626,7 @@ void EnPoSisters_SpinBack(EnPoSisters* this, PlayState* play) {
 
             if (this->spinInvisibleTimer == 0) {
                 this->zTargetTimer = 20;
-                func_80B1AC40(this);
+                EnPoSisters_SetupAimlessIdleFlying(this);
             }
         } else {
             EnPoSisters_SetupMegSurroundPlayer(this);
@@ -849,15 +855,15 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     EnPoSisters_MatchPlayerXZ(this, play);
 }
 
-void EnPoSisters_SetupSpinIntoVisible(EnPoSisters* this) {
+void EnPoSisters_SetupMegStart(EnPoSisters* this) {
     Animation_PlayOnce(&this->skelAnime, &gPoeSistersAppearDisappearAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->color.a = 0;
     this->poSisterFlags = PO_SISTER_FLAG_UPDATE_FIRES;
-    this->actionFunc = EnPoSisters_SpinIntoVisible;
+    this->actionFunc = EnPoSisters_MegStart;
 }
 
-void EnPoSisters_SpinIntoVisible(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_MegStart(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 255;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -865,7 +871,7 @@ void EnPoSisters_SpinIntoVisible(EnPoSisters* this, PlayState* play) {
         if (this->type == POSISTER_TYPE_MEG) {
             EnPoSisters_MegCloneVanish(this, play);
         } else {
-            func_80B1AC40(this);
+            EnPoSisters_SetupAimlessIdleFlying(this);
         }
     } else {
         f32 alphaPercent = this->skelAnime.curFrame / this->skelAnime.endFrame;

@@ -13,6 +13,9 @@ typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 #define ENPOSISTERS_GET_MEG_CLONE(thisx) (((thisx)->params >> 0xA) & 3)
 #define ENPOSISTERS_GET_OBSERVER_FLAG(thisx) ((thisx)->params & 0x1000)
 
+// TODO make combination macros
+
+// TODO make real ENUM for meg and clones
 #define REALMEG 0
 
 typedef enum EnPoSisterType {
@@ -42,7 +45,7 @@ typedef struct EnPoSisters {
                 s16 fleeTimer; // after being hit, 5 frames of flying away
                 s16 spinInvisibleTimer; // frames of spining away to invisible and back to visible
                 s16 megSurroundTimer; // frames of meg circling the player menacingly until spin attack
-                // TODO one more statetimer
+                s16 idleFlyingAnimationCounter; // count: animations completed since entering actionFunc
     };
     /* 0x0194 */ union {
                 s16 inivisTimer; // frames until coming back to fight from invisible (all combat variants)
