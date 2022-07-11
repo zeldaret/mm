@@ -1721,7 +1721,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
     ObjUm* this = THIS;
 
     this->actionFunc(this, play);
-    this->unk_350 += 1;
+    this->unk_350++;
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 
     if (this->donkey != NULL) {
