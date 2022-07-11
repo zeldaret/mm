@@ -509,7 +509,7 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
     if (phi_v1_5 > 0x190) {
         bandit1->actor.shape.rot.y += 0x190;
     } else if (phi_v1_5 < -0x190) {
-        bandit1->actor.shape.rot.y += -0x190;
+        bandit1->actor.shape.rot.y -= 0x190;
     } else {
         bandit1->actor.shape.rot.y += phi_v1_5;
     }
