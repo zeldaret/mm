@@ -60,7 +60,7 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
     Vec3f vel;
     Vec3f* actorPos = &this->dyna.actor.world.pos;
     s32 i;
-    s32 rnd;
+    s32 rand;
     s32 pad;
 
     for (i = 0; i < ARRAY_COUNT(D_8093DD60); i++) {
@@ -73,12 +73,12 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
         vel.z = D_8093DD60[i].z * this->dyna.actor.scale.z * 0.8f;
 
         if ((s32)Rand_Next() > 0) {
-            rnd = 0x40;
+            rand = 0x40;
         } else {
-            rnd = 0x20;
+            rand = 0x20;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, rnd, 15, 15, 0,
+        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0x100, rand, 15, 15, 0,
                              ((Rand_ZeroOne() * 50.0f) + 50.0f) * this->dyna.actor.scale.x, 0, 32, 50, -1,
                              OBJECT_D_LIFT, gDampeGraveBrownElevatorDL);
     }
@@ -132,7 +132,7 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
-                quake = Quake_Add(play->cameraPtrs[play->activeCamera], 1);
+                quake = Quake_Add(GET_ACTIVE_CAM(play), 1);
                 Quake_SetSpeed(quake, 10000);
                 Quake_SetQuakeValues(quake, 2, 0, 0, 0);
                 Quake_SetCountdown(quake, 20);
