@@ -104,20 +104,19 @@ void func_80AC96B4(ObjOcarinalift* this) {
 }
 
 void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
-    PlayState* play2 = play;
+    Actor* thisx = &this->dyna.actor;
     Vec3f sp48;
     f32 magnitude;
-    ObjOcarinalift* new_var = this;
     f32 phi_fv0;
     f32 phi_fa0;
-    s32 sp34;
     s32 params;
+    s32 sp34;
     Vec3s* temp_v1_2;
 
-    func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     Math_Vec3s_ToVec3f(&sp48, this->unk170 + this->unk168 + this->unk16C);
-    Math_Vec3f_Diff(&sp48, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
-    magnitude = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
+    Math_Vec3f_Diff(&sp48, &thisx->world.pos, &thisx->velocity);
+    magnitude = Math3D_Vec3fMagnitude(&thisx->velocity);
 
     if ((magnitude < (this->unk160 * 8.0f)) && (this->unk160 > 2.0f)) {
         phi_fv0 = ((this->unk160 - 2.0f) * 0.1f) + 2.0f;
@@ -127,18 +126,18 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         phi_fa0 = this->unk160 * 0.16f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, phi_fv0, phi_fa0);
-    if ((this->dyna.actor.speedXZ + 0.05f) < magnitude) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / magnitude);
-        this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
-        this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
-        this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
+    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
+    if ((thisx->speedXZ + 0.05f) < magnitude) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / magnitude);
+        thisx->world.pos.x += thisx->velocity.x;
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->velocity.z;
     } else {
-        params = OBJOCARINALIFT_GET_C(&this->dyna.actor);
+        params = OBJOCARINALIFT_GET_C(thisx);
         sp34 = true;
         this->unk168 += this->unk16C;
-        new_var->dyna.actor.speedXZ *= 0.4f;
-        if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (new_var->unk16C < 0))) {
+        thisx->speedXZ *= 0.4f;
+        if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
             if (params == PARAMS_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
@@ -157,11 +156,11 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     func_80AC99C0(this);
                     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
+                } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
+        } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {
@@ -257,7 +256,7 @@ void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 10.0f);
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
-        if (!this->cutsceneTimer) {
+        if (this->cutsceneTimer == 0) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
     }
