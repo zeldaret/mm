@@ -118,8 +118,8 @@ void EffectSsHahen_Draw(PlayState* play, u32 index, EffectSs* this) {
 void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this) {
     Player* player = GET_PLAYER(play);
 
-    this->rPitch += 55;
-    this->rYaw += 10;
+    this->rPitch += 0x37;
+    this->rYaw += 0xA;
 
     if ((this->pos.y <= player->actor.floorHeight) && (this->life < this->rMinLife)) {
         this->life = 0;
