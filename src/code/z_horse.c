@@ -33,10 +33,49 @@ void func_800F3B2C(PlayState* play) {
     gSaveContext.save.horseData.yaw = 0x2AAA;
 }
 
+extern s16 D_801BDA70;
+extern s16 D_801BDA74;
+extern s16 D_801BDA78;
+extern s16 D_801BDAA8;
+extern s16 D_801BDAAA;
+extern s16 D_801BDAAC;
+extern s16 D_801BDAAE;
+extern s16 D_801BDAB0;
+extern s16 D_801BDAB2;
+extern s16 D_801BDAB4;
+extern s16 D_801BDAB6;
+extern s32 D_801BDA9C;
+extern s32 D_801BDAA0;
+
+
+#ifdef NON_MATCHING
+// swapped instructions
+s32 func_800F3B68(PlayState* play, Player* player) {
+    if (gSaveContext.sceneSetupIndex == 0) {
+        return true;
+    }
+
+    if ((D_801BDAA8 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAAA + 1))) {
+        return true;
+    }
+    if ((D_801BDAAC == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAAE + 1))) {
+        return true;
+    }
+    if ((D_801BDAB0 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAB2 + 1))) {
+        return true;
+    }
+    if ((D_801BDAB4 == play->sceneNum) && (gSaveContext.sceneSetupIndex == (D_801BDAB6 + 1))) {
+        return true;
+    }
+    return false;
+}
+#else
+s32 func_800F3B68(PlayState* play, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_horse/func_800F3B68.s")
+#endif
 
 void func_800F3C44(PlayState* play, Player* player) {
-    if (func_800F3B68(play, player) != 0) {
+    if (func_800F3B68(play, player)) {
         if ((D_801BDA9C != 0) && CHECK_QUEST_ITEM(0xE)) {
             s32 pad;
             Vec3f sp60;
