@@ -847,27 +847,27 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
 
 #ifdef NON_MATCHING
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
-    if (titleCtx->alpha != 0) {
-        s32 width;
-        s32 height;
-        s32 unk1;
-        s32 spC0;
-        s32 sp38;
-        s32 spB8;
-        s32 spB4;
-        s32 temp;
+    s32 width;
+    s32 height;
+    s32 doubleWidth;
+    s32 titleX;
+    s32 doubleHeight;
+    s32 titleY;
+    s32 titleSecondY;
+    s32 textureLanguageOffset;
 
+    if (titleCtx->alpha != 0) {
         width = titleCtx->width;
         height = titleCtx->height;
-        temp = width * 2;
-        spC0 = (titleCtx->x * 4) - temp;
-        spB8 = (titleCtx->y * 4) - (height * 2);
-        sp38 = width * 2;
+        doubleWidth = width * 2;
+        doubleHeight = height * 2;
+        titleX = (titleCtx->x * 4) - doubleWidth;
+        titleY = (titleCtx->y * 4) - doubleHeight;
 
         OPEN_DISPS(gameState->gfxCtx);
 
         height = (width * height > TMEM_SIZE) ? TMEM_SIZE / width : height;
-        spB4 = spB8 + (height * 4);
+        titleSecondY = titleY + (height * 4);
 
         OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
 
@@ -878,18 +878,21 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1,
+        gSPTextureRectangle(OVERLAY_DISP++, titleX, titleY, ((doubleWidth * 2) + titleX) - 4, titleY + (height * 4) - 1,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        if (1) {}
 
         height = titleCtx->height - height;
 
+        // If texture is bigger than 0x1000, display the rest
         if (height > 0) {
             gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
                                 height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                                 G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (height * 4) - 1,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            gSPTextureRectangle(OVERLAY_DISP++, titleX, titleSecondY, ((doubleWidth * 2) + titleX) - 4,
+                                titleSecondY + (height * 4) - 1, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            if (1) {}
         }
 
         CLOSE_DISPS(gameState->gfxCtx);

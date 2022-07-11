@@ -503,7 +503,7 @@ typedef struct {
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s32 unk_22C;
     /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 unk_234;
+    /* 0x234 */ s32 stickRelY;
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 unk_242[5];
     /* 0x24C */ s16 unk_24C[5];
