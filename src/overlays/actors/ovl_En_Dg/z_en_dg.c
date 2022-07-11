@@ -27,8 +27,8 @@ void EnDg_SetupBremenMaskApproachPlayer(EnDg* this, PlayState* play);
 void EnDg_Fall(EnDg* this, PlayState* play);
 void EnDg_ApproachPlayer(EnDg* this, PlayState* play);
 void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play);
-void EnDg_UnusedBackAwayFromPlayer(EnDg* this, PlayState* play);
-void EnDg_UnusedBarkAtPlayer(EnDg* this, PlayState* play);
+void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play);
+void EnDg_BarkAtPlayer(EnDg* this, PlayState* play);
 void EnDg_Swim(EnDg* this, PlayState* play);
 void EnDg_JumpOutOfWater(EnDg* this, PlayState* play);
 void EnDg_Held(EnDg* this, PlayState* play);
@@ -937,13 +937,13 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
  * in a specific range, at which point they will bark at them. This might be part of an
  * unused or early variation of how dogs react to Goron Link.
  */
-void EnDg_UnusedWalkToPlayer(EnDg* this, PlayState* play) {
+void EnDg_WalkToPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_BACKWARDS);
-        this->actionFunc = EnDg_UnusedBackAwayFromPlayer;
+        this->actionFunc = EnDg_BackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_BARK);
-        this->actionFunc = EnDg_UnusedBarkAtPlayer;
+        this->actionFunc = EnDg_BarkAtPlayer;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1043,13 +1043,13 @@ void EnDg_SlowlyBackUpBeforeAttacking(EnDg* this, PlayState* play) {
  * Unlike that function, this will make the dog approach the player if they move too far away.
  * It also lacks the behavior where the dog runs away in a panic after a short time.
  */
-void EnDg_UnusedBackAwayFromPlayer(EnDg* this, PlayState* play) {
+void EnDg_BackAwayFromPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer > 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK);
-        this->actionFunc = EnDg_UnusedWalkToPlayer;
+        this->actionFunc = EnDg_WalkToPlayer;
     } else if (this->actor.xzDistToPlayer > 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_BARK);
-        this->actionFunc = EnDg_UnusedBarkAtPlayer;
+        this->actionFunc = EnDg_BarkAtPlayer;
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
@@ -1071,13 +1071,13 @@ void EnDg_UnusedBackAwayFromPlayer(EnDg* this, PlayState* play) {
  * Unlike that function, this will make the dog approach the player if they move too far away.
  * It also mixes in multiple growls into the bark.
  */
-void EnDg_UnusedBarkAtPlayer(EnDg* this, PlayState* play) {
+void EnDg_BarkAtPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_BACKWARDS);
-        this->actionFunc = EnDg_UnusedBackAwayFromPlayer;
+        this->actionFunc = EnDg_BackAwayFromPlayer;
     } else if (this->actor.xzDistToPlayer > 200.0f) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK);
-        this->actionFunc = EnDg_UnusedWalkToPlayer;
+        this->actionFunc = EnDg_WalkToPlayer;
     }
 
     EnDg_PlaySfxGrowl(this, 0.0f);
@@ -1088,7 +1088,7 @@ void EnDg_UnusedBarkAtPlayer(EnDg* this, PlayState* play) {
 }
 
 /**
- * Makes a splash effect and plays the splash SFX when the dog enters the water, then
+ * Makes a splash effect and plays the splash sfx when the dog enters the water, then
  * makes them start swimming.
  */
 void EnDg_SetupSwim(EnDg* this, PlayState* play) {
