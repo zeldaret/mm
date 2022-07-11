@@ -175,7 +175,7 @@ void EnAni_IdleStanding(EnAni* this, PlayState* play) {
 
 void EnAni_Talk(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING && play->msgCtx.currentTextId == 0x6DE) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && play->msgCtx.currentTextId == 0x6DE) {
         this->actionFunc = EnAni_IdleInPain;
     }
 }

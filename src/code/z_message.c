@@ -371,7 +371,7 @@ void func_80151A68(PlayState* play, u16 textId) {
     msgCtx->stateTimer = 30;
 
     // Day/Dawn/Night.. Messages
-    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
+    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;

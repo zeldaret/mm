@@ -209,7 +209,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE && Message_ShouldAdvance(play) &&
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
         func_800B85E0(&this->actor, play, 400.0f, EXCH_ITEM_MINUS1);
@@ -822,7 +822,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-    if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (this->actor.textId) {
             case 0x29CC:
                 this->actor.textId = 0x29CD;
@@ -1191,7 +1191,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
 void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
@@ -1208,7 +1208,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnFsn_TakeItemOffShelf(this) && talkState == TEXT_STATE_CHOICE) {
+    if (EnFsn_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
         func_8011552C(play, 6);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1225,7 +1225,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1263,7 +1263,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
+    } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);
@@ -1310,7 +1310,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                     break;
             }
         }
-    } else if ((talkState == TEXT_STATE_5 || talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
+    } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (play->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, play);

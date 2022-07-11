@@ -356,7 +356,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if (play->msgCtx.choiceIndex == 0) {
             func_8019F208();

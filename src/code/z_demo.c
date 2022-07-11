@@ -1090,7 +1090,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                     }
                 }
 
-                if (talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) {
+                if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                     func_80152434(play, cmd->base);
                 }
             }

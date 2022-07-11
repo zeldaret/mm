@@ -1129,7 +1129,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                 }
 
                 if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
-                    if (Message_ShouldAdvance(play) || Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                    if (Message_ShouldAdvance(play) || (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                         func_801477B4(play);
                         func_801159EC(-50);
                         effect->unk_2C = -1;
@@ -5489,7 +5489,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         D_809171CB--;
     }
 
-    if ((D_809171CB == 1) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
+    if ((D_809171CB == 1) && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
         D_809171CB = 200;
 
         if (Rand_ZeroOne() < 0.5f) {

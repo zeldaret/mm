@@ -37,7 +37,7 @@ typedef struct EnBombers2 {
     /* 0x02C0 */ s16 unk_2C0;
     /* 0x02C2 */ s16 textIdIndex;
     /* 0x02C4 */ s16 correctDigitSlots[5];
-    /* 0x02CE */ s16 unk_2CE;  
+    /* 0x02CE */ s16 talkState;
     /* 0x02D0 */ ColliderCylinder collider;
 } EnBombers2; // size = 0x31C
 
