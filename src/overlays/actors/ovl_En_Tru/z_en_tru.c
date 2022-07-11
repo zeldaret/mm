@@ -811,25 +811,26 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
-            if (Message_ShouldAdvance(play)) {
-                case TEXT_STATE_16:
-                    temp_v0 = func_80123810(play);
-                    if ((temp_v0 == 35) || (temp_v0 == 36)) {
-                        this->unk_34E |= 8;
-                        if (temp_v0 == 35) {
-                            this->unk_390 = 1;
-                        } else {
-                            this->unk_390 = 2;
-                        }
-                        this->unk_378 = func_80A87880;
-                        this->unk_364 = 0;
-                        ret = 1;
-                    } else if (temp_v0 < 0) {
-                        ret = 3;
-                    } else if (temp_v0 != 0) {
-                        ret = 2;
-                    }
-                    break;
+            if (!Message_ShouldAdvance(play)) {
+                break;
+            }
+        // Fallthrough
+        case TEXT_STATE_16:
+            temp_v0 = func_80123810(play);
+            if ((temp_v0 == 35) || (temp_v0 == 36)) {
+                this->unk_34E |= 8;
+                if (temp_v0 == 35) {
+                    this->unk_390 = 1;
+                } else {
+                    this->unk_390 = 2;
+                }
+                this->unk_378 = func_80A87880;
+                this->unk_364 = 0;
+                ret = 1;
+            } else if (temp_v0 < 0) {
+                ret = 3;
+            } else if (temp_v0 != 0) {
+                ret = 2;
             }
             break;
     }

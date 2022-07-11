@@ -605,7 +605,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
 }
 
 void func_80B41E18(EnKgy* this, PlayState* play) {
-    u16 temp;
+    u16 textId;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -617,9 +617,9 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
         switch (Message_GetState(&play->msgCtx)) {
             case TEXT_STATE_CHOICE:
                 if (Message_ShouldAdvance(play)) {
-                    temp = play->msgCtx.currentTextId;
+                    textId = play->msgCtx.currentTextId;
 
-                    switch (temp) {
+                    switch (textId) {
                         case 0xC3B:
                             switch (play->msgCtx.choiceIndex) {
                                 case 0:
@@ -635,7 +635,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                                 case 1:
                                     func_8019F230();
-                                    func_80B40EBC(this, play, temp);
+                                    func_80B40EBC(this, play, textId);
                                     break;
                             }
                             break;
@@ -659,12 +659,12 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
             case TEXT_STATE_5:
                 if (Message_ShouldAdvance(play)) {
-                    temp = play->msgCtx.currentTextId;
+                    textId = play->msgCtx.currentTextId;
 
-                    switch (temp) {
+                    switch (textId) {
                         case 0xC35:
                             play->msgCtx.msgLength = 0;
-                            this->actor.textId = temp;
+                            this->actor.textId = textId;
                             this->unk_29C |= 4;
                             this->unk_2E8 = 3;
                             func_80B40E38(this);
@@ -696,7 +696,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC3C:
                         case 0xC3F:
                         case 0xC4C:
-                            func_80B40EBC(this, play, temp);
+                            func_80B40EBC(this, play, textId);
                             break;
 
                         case 0xC3D:
@@ -764,19 +764,19 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                                 player->exchangeItemId = EXCH_ITEM_NONE;
                                 this->unk_29C &= ~8;
                             }
-                            func_80B40EBC(this, play, temp);
+                            func_80B40EBC(this, play, textId);
                             break;
 
                         case 0xC48:
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 0);
-                            this->actor.textId = temp + 1;
+                            this->actor.textId = textId + 1;
                             break;
 
                         case 0xC49:
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 4);
-                            this->actor.textId = temp + 1;
+                            this->actor.textId = textId + 1;
                             break;
 
                         case 0xC4A:
@@ -807,7 +807,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC53:
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 0);
-                            this->actor.textId = temp + 1;
+                            this->actor.textId = textId + 1;
                             func_80B40D30(play);
                             break;
 
@@ -885,7 +885,7 @@ void func_80B42714(EnKgy* this, PlayState* play) {
 
 void func_80B427C8(EnKgy* this, PlayState* play) {
     s32 pad;
-    u16 temp_a2;
+    u16 textId;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 5) {
@@ -898,12 +898,12 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        temp_a2 = play->msgCtx.currentTextId;
+        textId = play->msgCtx.currentTextId;
 
-        switch (temp_a2) {
+        switch (textId) {
             case 0xC30:
                 play->msgCtx.msgLength = 0;
-                this->actor.textId = temp_a2;
+                this->actor.textId = textId;
                 this->unk_29C |= 4;
                 this->unk_2E8 = 3;
                 break;
@@ -911,12 +911,12 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
             case 0xC31:
                 play->msgCtx.msgLength = 0;
                 func_80B41368(this, play, 4);
-                this->actor.textId = temp_a2 + 1;
+                this->actor.textId = textId + 1;
                 break;
 
             case 0xC32:
             case 0xC33:
-                func_80B40EBC(this, play, temp_a2);
+                func_80B40EBC(this, play, textId);
                 break;
 
             case 0xC34:
@@ -955,7 +955,7 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
 }
 
 void func_80B42A8C(EnKgy* this, PlayState* play) {
-    u16 temp_a2;
+    u16 textId;
     s32 pad;
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -970,12 +970,12 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        temp_a2 = play->msgCtx.currentTextId;
-        switch (temp_a2) {
+        textId = play->msgCtx.currentTextId;
+        switch (textId) {
             case 0xC1D:
             case 0xC2D:
                 play->msgCtx.msgLength = 0;
-                this->actor.textId = temp_a2;
+                this->actor.textId = textId;
                 this->unk_29C |= 4;
                 this->unk_2E8 = 3;
                 break;
@@ -983,7 +983,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
             case 0xC1E:
                 play->msgCtx.msgLength = 0;
                 func_80B41368(this, play, 1);
-                this->actor.textId = temp_a2 + 1;
+                this->actor.textId = textId + 1;
                 func_80B40E38(this);
                 break;
 
@@ -991,7 +991,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
             case 0xC23:
             case 0xC24:
             case 0xC27:
-                func_80B40EBC(this, play, temp_a2);
+                func_80B40EBC(this, play, textId);
                 break;
 
             case 0xC20:
@@ -1000,7 +1000,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
                 play->msgCtx.msgLength = 0;
                 this->unk_29C |= 4;
                 this->unk_2E8 = 3;
-                this->actor.textId = temp_a2;
+                this->actor.textId = textId;
                 func_80B40E38(this);
                 break;
 
@@ -1008,7 +1008,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
             case 0xC29:
                 play->msgCtx.msgLength = 0;
                 func_80B41368(this, play, 0);
-                this->actor.textId = temp_a2 + 1;
+                this->actor.textId = textId + 1;
                 break;
 
             case 0xC22:
@@ -1017,13 +1017,13 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
             case 0xC2E:
                 play->msgCtx.msgLength = 0;
                 func_80B41368(this, play, 1);
-                this->actor.textId = temp_a2 + 1;
+                this->actor.textId = textId + 1;
                 break;
 
             case 0xC25:
                 play->msgCtx.msgLength = 0;
                 func_80B41368(this, play, 2);
-                this->actor.textId = temp_a2 + 1;
+                this->actor.textId = textId + 1;
                 break;
 
             case 0xC2A:
