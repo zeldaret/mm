@@ -408,7 +408,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
 
-    func_8017B7F8(&sp50, (s16)temp_a1, &sp4C, &sp48, &sp44);
+    func_8017B7F8(&sp50, temp_a1, &sp4C, &sp48, &sp44);
     if (((bandit->actor.world.pos.x * sp4C) + (sp48 * bandit->actor.world.pos.z) + sp44) > 0.0f) {
         bandit->curRaceWaypoint++;
         if (bandit->curRaceWaypoint >= sp68) {
@@ -510,7 +510,7 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
     if (phi_v1_5 > 0x190) {
         bandit1->actor.shape.rot.y += 0x190;
     } else if (phi_v1_5 < -0x190) {
-        bandit1->actor.shape.rot.y += -0x190;
+        bandit1->actor.shape.rot.y -= 0x190;
     } else {
         bandit1->actor.shape.rot.y += phi_v1_5;
     }
@@ -1559,7 +1559,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Audio_SetCutsceneFlag(0);
+        Audio_SetCutsceneFlag(false);
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntranceIndex = 0x5400;
@@ -1599,8 +1599,7 @@ void func_80B7AF30(ObjUm* this, PlayState* play) {
         this->dyna.actor.shape.rot.z = 0;
     } else {
         CollisionPoly* sp44;
-        s32 pad;
-        s32 pad2;
+        s32 pad[2];
         Vec3f sp30;
 
         this->flags &= ~OBJ_UM_FLAG_0001;
@@ -1715,7 +1714,7 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index) {
 
     if (this->wheelRot / 0x199A != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
-        // Required to match
+        //! FAKE
         if (!&sUmAnims[0]) {}
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
@@ -1725,7 +1724,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
     ObjUm* this = THIS;
 
     this->actionFunc(this, play);
-    this->unk_350 += 1;
+    this->unk_350++;
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 
     if (this->donkey != NULL) {
@@ -1918,6 +1917,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
 
+        //! FAKE
         if (!i) {}
 
         sp80.x = 0;
