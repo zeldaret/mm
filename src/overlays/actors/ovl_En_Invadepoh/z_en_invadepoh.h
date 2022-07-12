@@ -25,7 +25,7 @@ typedef enum{
     /*  10  */ TYPE_DOG,
     /*  11  */ TYPE_CREMIA,
     /*  12  */ TYPE_ROMANI5,
-    /*  13  */ TYPE_ALIEN1
+    /*  13  */ TYPE_ALIEN_CARRYING_COW
 } EnInvadepohType;
 
 typedef enum {

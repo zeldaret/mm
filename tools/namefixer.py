@@ -543,6 +543,9 @@ wordReplace = {
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
     "Effect_GetGlobalCtx": "Effect_GetPlayState",
+    "EffectSsHitMark_Spawn": "EffectSsHitmark_Spawn",
+    "EffectSsHitMark_SpawnFixedScale": "EffectSsHitmark_SpawnFixedScale",
+    "EffectSsHitMark_SpawnCustomScale": "EffectSsHitmark_SpawnCustomScale",
 
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
