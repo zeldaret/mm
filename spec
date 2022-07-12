@@ -5018,8 +5018,7 @@ beginseg
     name "ovl_Obj_Jgame_Light"
     compress
     include "build/src/overlays/actors/ovl_Obj_Jgame_Light/z_obj_jgame_light.o"
-    include "build/data/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light.data.o"
-    include "build/data/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light_reloc.o"
 endseg
 
 beginseg
