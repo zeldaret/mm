@@ -139,7 +139,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -549,7 +549,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            func_800DFD04(play->cameraPtrs[play->activeCamera], 2, 15, 10); // camera shake?
+            Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 15, 10);
             Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 

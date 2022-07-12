@@ -314,7 +314,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
 }
 
 s32 func_80BE0D38(EnTab* this, PlayState* play) {
-    return Interface_HasEmptyBottle();
+    return Inventory_HasEmptyBottle();
 }
 
 s32 func_80BE0D60(EnTab* this, PlayState* play) {
@@ -581,7 +581,7 @@ void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 }
 
-void EnTab_TransformDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTab* this = THIS;
     s32 rotStep;
     s32 overrideStep;
@@ -624,7 +624,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnTab_OverrideLimbDraw, EnTab_PostLimbDraw,
-                                       EnTab_TransformDraw, &this->actor);
+                                       EnTab_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
