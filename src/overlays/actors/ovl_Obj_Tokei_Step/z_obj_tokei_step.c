@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tokei_step.h"
+#include "z64rumble.h"
 #include "objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
@@ -66,7 +67,7 @@ void ObjTokeiStep_AddQuake(ObjTokeiStep* this, PlayState* play) {
     Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+    Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
 void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, PlayState* play) {

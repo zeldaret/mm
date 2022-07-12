@@ -127,7 +127,7 @@ void MirRay3_Update(Actor* thisx, PlayState* play) {
 
     this->unk_210 &= ~2;
 
-    if (func_8012405C(play)) {
+    if (Player_HasMirrorShieldEquipped(play)) {
         if (this->colliderCylinder.base.acFlags & AC_HIT) {
             this->unk_210 |= 2;
         }
@@ -353,7 +353,7 @@ void MirRay3_Draw(Actor* thisx, PlayState* play) {
     f32 temp;
     u16 time;
 
-    if (!(this->unk_210 & 1) && func_8012405C(play)) {
+    if (!(this->unk_210 & 1) && Player_HasMirrorShieldEquipped(play)) {
         Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         func_80B9E544(this, play);
 

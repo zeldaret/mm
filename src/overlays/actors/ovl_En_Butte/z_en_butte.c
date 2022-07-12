@@ -13,7 +13,7 @@
 #define THIS ((EnButte*)thisx)
 
 void EnButte_Init(Actor* thisx, PlayState* play);
-void EnButte_Destroy(Actor* thisx, PlayState* play);
+void EnButte_Destroy(Actor* thisx, PlayState* play2);
 void EnButte_Update(Actor* thisx, PlayState* play);
 void EnButte_Draw(Actor* thisx, PlayState* play);
 
@@ -49,7 +49,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -143,7 +143,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
     sp48 = Math_SinS(D_8091D3A0) * 250.0f;
     sp48 = CLAMP(sp48, 0, 255);
 
-    func_800DFC90(&sp40, GET_ACTIVE_CAM(play));
+    Camera_GetCamDir(&sp40, GET_ACTIVE_CAM(play));
     Matrix_RotateYS(sp40.y, MTXMODE_NEW);
     Matrix_RotateXS(sp40.x, MTXMODE_APPLY);
     Matrix_RotateZS(sp40.z, MTXMODE_APPLY);
@@ -190,14 +190,17 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     this->unk_256 = Rand_ZeroOne() * 0xFFFF;
     this->unk_258 = Rand_ZeroOne() * 0xFFFF;
 
-    Animation_Change(&this->skelAnime, &gameplay_field_keep_Anim_001D20, 1.0f, 0.0f, 0.0f, 1, 0.0f);
+    Animation_Change(&this->skelAnime, &gameplay_field_keep_Anim_001D20, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, 0.0f);
     func_8091C748(this);
     this->actor.shape.rot.x -= 0x2320;
     this->unk_250 = 1;
 }
 
-void EnButte_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyJntSph(play, &THIS->collider);
+void EnButte_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnButte* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8091C524(EnButte* this) {
@@ -318,9 +321,9 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
     sp40 = 0.0f;
 
     if ((this->unk_24E != 0) && (this->unk_24C < 12)) {
-        sp48.x = player->swordInfo[0].tip.x + (Math_SinS(player->actor.shape.rot.y) * 10.0f);
-        sp48.y = player->swordInfo[0].tip.y;
-        sp48.z = player->swordInfo[0].tip.z + (Math_CosS(player->actor.shape.rot.y) * 10.0f);
+        sp48.x = player->meleeWeaponInfo[0].tip.x + (Math_SinS(player->actor.shape.rot.y) * 10.0f);
+        sp48.y = player->meleeWeaponInfo[0].tip.y;
+        sp48.z = player->meleeWeaponInfo[0].tip.z + (Math_CosS(player->actor.shape.rot.y) * 10.0f);
 
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &sp48);
         if (Math_ScaledStepToS(&this->actor.world.rot.y, yaw + (s32)(Rand_ZeroOne() * D_8091D3F0), 0x7D0)) {
@@ -332,10 +335,10 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         }
     }
 
-    if (player->swordInfo[0].tip.y < player->actor.world.pos.y + 30.0f) {
+    if (player->meleeWeaponInfo[0].tip.y < player->actor.world.pos.y + 30.0f) {
         this->unk_25C = player->actor.world.pos.y + 30.0f;
     } else {
-        this->unk_25C = player->swordInfo[0].tip.y;
+        this->unk_25C = player->meleeWeaponInfo[0].tip.y;
     }
 
     func_8091C6B4(this);
@@ -356,7 +359,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
         !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
-               (Math3D_XZDistanceSquared(player->swordInfo[0].tip.x, player->swordInfo[0].tip.z,
+               (Math3D_XZDistanceSquared(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
                                          this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
         func_8091CF64(this);
     }
@@ -413,7 +416,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
     this->unk_258 += 0x600;
 
     if (ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) {
-        if (GET_PLAYER(play)->swordState == 0) {
+        if (GET_PLAYER(play)->meleeWeaponState == 0) {
             if (this->unk_252 > 0) {
                 this->unk_252--;
             }

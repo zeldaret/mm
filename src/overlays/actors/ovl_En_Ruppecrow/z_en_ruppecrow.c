@@ -75,7 +75,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -440,7 +440,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
@@ -543,7 +543,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         // Finished spawning rupees; fly up and then despawn
         this->speedModifier = 6.0f;
 
-        // Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
+        //! @bug: Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
         this->actor.gravity = 0.0f;
 
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);

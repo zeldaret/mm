@@ -132,7 +132,7 @@ void func_80BD599C(BgIkanaShutter* this) {
 }
 
 void func_80BD59C4(BgIkanaShutter* this, PlayState* play) {
-    if (BgIkanaShutter_AllSwitchesPressed(this, play) == 0) {
+    if (!BgIkanaShutter_AllSwitchesPressed(this, play)) {
         func_80BD59F8(this);
     }
 }
