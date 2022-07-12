@@ -381,9 +381,9 @@ void func_8012301C(Player* player, PlayState* play2) {
     }
 }
 
-FlexSkeletonHeader* D_801BFE00[PLAYER_FORM_MAX] = {
-    &object_link_boy_Skel_00D878,  &object_link_goron_Skel_017A84, &object_link_zora_Skel_012C34,
-    &object_link_nuts_Skel_00BA24, &object_link_child_Skel_01E244,
+FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
+    &gLinkFierceDeitySkel,  &gLinkGoronSkel, &gLinkZoraSkel,
+    &gLinkDekuSkel, &gLinkHumanSkel,
 };
 
 s16 D_801BFE14[][18] = {
@@ -586,9 +586,48 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
                                                           : ITEM_NONE;
 }
 
-u16 D_801BFF34[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
+s32 func_80123810(PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s32 temp_v0;
+    s32 itemId;
+    s32 i;
+
+    if (gSaveContext.save.unk_06 == 0) {
+        if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
+            play->interfaceCtx.unk_222 = 0;
+            play->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            return -1;
+        }
+    } else {
+        gSaveContext.save.unk_06--;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {
+        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, sCItemButtons[i])) {
+            i++;
+            itemId = func_8012364C(play, player, i);
+
+            play->interfaceCtx.unk_222 = 0;
+            play->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+
+            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+                play_sound(NA_SE_SY_ERROR);
+                return -1;
+            } else {
+                s32 pad;
+
+                player->heldItemButton = i;
+                return temp_v0;
+            }
+        }
+    }
+
+    return 0;
+}
 
 u8 sActionModelGroups[] = {
     3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
@@ -1361,8 +1400,8 @@ u8 D_801C08A0[][2] = {
 // OoT's func_8008F470
 void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
                    s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;          // eyeIndex
-    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
+    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;
+    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1;
     Gfx* dl;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1968,11 +2007,8 @@ void func_801278F8(PlayState* play, Player* player) {
         }
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)phi_a0);
-
         gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
-
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
-
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - phi_a0));
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
