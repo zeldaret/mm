@@ -2931,8 +2931,7 @@ beginseg
     name "ovl_Bg_Spout_Fire"
     compress
     include "build/src/overlays/actors/ovl_Bg_Spout_Fire/z_bg_spout_fire.o"
-    include "build/data/ovl_Bg_Spout_Fire/ovl_Bg_Spout_Fire.data.o"
-    include "build/data/ovl_Bg_Spout_Fire/ovl_Bg_Spout_Fire.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Spout_Fire/ovl_Bg_Spout_Fire_reloc.o"
 endseg
 
 beginseg

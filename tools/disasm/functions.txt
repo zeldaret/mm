@@ -10749,7 +10749,7 @@
     0x80A60DA0:("func_80A60DA0",),
     0x80A60E08:("func_80A60E08",),
     0x80A60F68:("BgSpoutFire_Update",),
-    0x80A61040:("func_80A61040",),
+    0x80A61040:("BgSpoutFire_Draw",),
     0x80A612B0:("EnDyExtra_Destroy",),
     0x80A612C0:("EnDyExtra_Init",),
     0x80A61334:("func_80A61334",),
