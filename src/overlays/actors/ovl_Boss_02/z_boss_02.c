@@ -1633,8 +1633,8 @@ void func_809DD934(Boss02* this, PlayState* play) {
             if (player->stateFlags1 & 0x100) {
                 Cutscene_Start(play, &play->csCtx);
                 this->unk_1D22 = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->unk_1D22, 7);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
                 func_8016566C(150);
                 this->unk_1D14 = 0;
                 this->unk_1D5C = 0.0f;
@@ -2059,8 +2059,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
             Cutscene_Start(play, &play->csCtx);
             this->unk_1D22 = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, this->unk_1D22, 7);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
             this->unk_1D20 = 2;
             this->unk_1D1C = 0;
 
@@ -2156,8 +2156,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 this->unk_1D22 = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->unk_1D22, 7);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
                 this->unk_1D20 = 101;
                 this->unk_1D1C = 0;
                 this->unk_1D5C = 1.0f;

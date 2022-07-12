@@ -19,8 +19,7 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-#define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamera])
-#define CAM_ID_MAIN 0
+#define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \

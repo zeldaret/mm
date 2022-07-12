@@ -226,7 +226,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
             if (this->dyna.actor.bgCheckFlags & 2) {
-                s16 quake = Quake_Add(play->cameraPtrs[play->activeCamera], 3);
+                s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
 
                 Quake_SetSpeed(quake, 21536);
                 Quake_SetQuakeValues(quake, 4, 0, 0, 0);
