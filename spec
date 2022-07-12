@@ -3050,7 +3050,6 @@ beginseg
     name "ovl_Obj_Purify"
     compress
     include "build/src/overlays/actors/ovl_Obj_Purify/z_obj_purify.o"
-    // include "build/data/ovl_Obj_Purify/ovl_Obj_Purify.data.o"
     include "build/src/overlays/actors/ovl_Obj_Purify/ovl_Obj_Purify_reloc.o"
 endseg
 
