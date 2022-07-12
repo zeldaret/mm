@@ -108,14 +108,14 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
 
-u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataId) {
-    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataId];
+u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
 
     return actorCsCamList->setting;
 }
 
-Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataId) {
-    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataId];
+Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
 
     return Lib_SegmentedToVirtual(actorCsCamList->actorCsCamFuncData);
 }
