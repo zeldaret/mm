@@ -23,7 +23,7 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    
+
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
     # "SysMatrix_StatePop":                           "Matrix_StatePop",
@@ -277,6 +277,7 @@ wordReplace = {
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
+    "func_800DF840": "Camera_ChangeMode",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",
@@ -568,6 +569,7 @@ wordReplace = {
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
+    "Effect_Getplay": "Effect_GetPlayState",
     "Effect_GetGlobalCtx": "Effect_GetPlayState",
     "EffectSsHitMark_Spawn": "EffectSsHitmark_Spawn",
     "EffectSsHitMark_SpawnFixedScale": "EffectSsHitmark_SpawnFixedScale",
@@ -648,6 +650,7 @@ wordReplace = {
     "gSaveContext.equips": "gSaveContext.save.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
 
     "player->unk_A87": "player->exchangeItemId",
@@ -662,6 +665,7 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
     "csCtx.unk_12": "csCtx.currentCsIndex",
@@ -684,9 +688,6 @@ wordReplace = {
     "D_801D15BC" : "gZeroVec3s",
     "D_801D1DE0" : "gIdentityMtx",
     "D_801D1E20" : "gIdentityMtxF",
-    "D_04020658" : "gameplay_keep_Anim_020658",
-    "D_04022B28" : "gDoorSkel",
-    "D_04023100" : "gDoorCol",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

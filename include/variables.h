@@ -1,5 +1,5 @@
-#ifndef _VARIABLES_H_
-#define _VARIABLES_H_
+#ifndef VARIABLES_H
+#define VARIABLES_H
 
 #include "z64.h"
 #include "segment_symbols.h"
@@ -1228,7 +1228,7 @@ extern u8 gPlayerModelTypes[][5];
 // extern UNK_TYPE1 D_801C0838;
 extern Gfx D_801C0850[];
 // extern UNK_TYPE1 D_801C0860;
-extern UNK_PTR D_801C0870;
+// extern UNK_PTR D_801C0870;
 // extern UNK_TYPE1 D_801C0890;
 // extern UNK_TYPE1 D_801C08A0;
 // extern UNK_TYPE1 D_801C08C0;
@@ -1238,7 +1238,7 @@ extern UNK_PTR D_801C0870;
 // extern UNK_TYPE1 D_801C0938;
 // extern UNK_TYPE1 D_801C094C;
 // extern UNK_TYPE4 D_801C0958;
-extern UNK_PTR D_801C095C;
+//extern UNK_PTR D_801C095C;
 // extern UNK_TYPE1 D_801C0964;
 // extern UNK_TYPE1 D_801C096C;
 // extern UNK_TYPE1 D_801C0970;
@@ -1254,10 +1254,6 @@ extern UNK_PTR D_801C095C;
 // extern UNK_TYPE1 D_801C0ABC;
 // extern UNK_TYPE1 D_801C0AC4;
 // extern UNK_TYPE1 D_801C0ADC;
-extern UNK_PTR D_801C0AF4;
-extern UNK_PTR D_801C0AFC;
-extern UNK_PTR D_801C0B04;
-extern UNK_PTR D_801C0B0C;
 // extern UNK_TYPE1 D_801C0B14;
 // extern UNK_TYPE1 D_801C0B1C;
 // extern UNK_TYPE1 D_801C0B20;
