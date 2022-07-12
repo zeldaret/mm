@@ -123,7 +123,7 @@ void func_8092E284(ElfMsg* this, PlayState* play) {
             } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
                 this->actor.home.rot.x = 0;
                 ActorCutscene_Start(this->actor.cutscene, &this->actor);
-                func_800E0348(play->cameraPtrs[0]);
+                func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
                 ActorCutscene_SetIntentToPlay(this->actor.cutscene);
             }

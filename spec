@@ -500,8 +500,6 @@ beginseg
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
-    include "build/data/code/z_parameter.data.o"
-    include "build/data/code/z_parameter.bss.o"
     include "build/src/code/z_path.o"
     include "build/src/code/z_pause.o"
     include "build/src/code/z_player_lib.o"

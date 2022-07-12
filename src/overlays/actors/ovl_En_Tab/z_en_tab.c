@@ -314,7 +314,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
 }
 
 s32 func_80BE0D38(EnTab* this, PlayState* play) {
-    return Interface_HasEmptyBottle();
+    return Inventory_HasEmptyBottle();
 }
 
 s32 func_80BE0D60(EnTab* this, PlayState* play) {

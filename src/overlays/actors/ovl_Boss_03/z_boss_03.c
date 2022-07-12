@@ -1151,8 +1151,8 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
                 this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
 
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
@@ -1451,8 +1451,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
                 // Player is above water && Player is standing on ground
@@ -1665,8 +1665,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->csCamId, CAM_STATUS_ACTIVE);
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 
@@ -2441,8 +2441,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamera]) * (M_PI / 0x8000),
-                                MTXMODE_APPLY);
+                Matrix_RotateYF(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) * (M_PI / 0x8000), MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&play->billboardMtxF);
             }

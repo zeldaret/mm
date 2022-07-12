@@ -260,8 +260,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->unk_704 = 0;
                     Cutscene_Start(play, &play->csCtx);
                     this->unk_70A = Play_CreateSubCamera(play);
-                    Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                    Play_CameraChangeStatus(play, this->unk_70A, 7);
+                    Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_CameraChangeStatus(play, this->unk_70A, CAM_STATUS_ACTIVE);
                     func_800B7298(play, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
