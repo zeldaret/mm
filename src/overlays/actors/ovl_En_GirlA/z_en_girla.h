@@ -48,63 +48,63 @@ typedef struct EnGirlA {
 } EnGirlA; // size = 0x1CC
 
 typedef enum {
-    /* 0 */ CANBUY_RESULT_SUCCESS_1,
-    /* 1 */ CANBUY_RESULT_SUCCESS_2,
-    /* 2 */ CANBUY_RESULT_NO_ROOM,
-    /* 3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
-    /* 4 */ CANBUY_RESULT_NEED_RUPEES,
-    /* 5 */ CANBUY_RESULT_CANNOT_GET_NOW,
-    /* 6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
-    /* 7 */ CANBUY_RESULT_NO_ROOM_2,
-    /* 8 */ CANBUY_RESULT_ALREADY_HAVE,
-    /* 9 */ CANBUY_RESULT_HAVE_BETTER
+    /* 0x0 */ CANBUY_RESULT_SUCCESS_1,
+    /* 0x1 */ CANBUY_RESULT_SUCCESS_2,
+    /* 0x2 */ CANBUY_RESULT_NO_ROOM,
+    /* 0x3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
+    /* 0x4 */ CANBUY_RESULT_NEED_RUPEES,
+    /* 0x5 */ CANBUY_RESULT_CANNOT_GET_NOW,
+    /* 0x6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
+    /* 0x7 */ CANBUY_RESULT_NO_ROOM_2,
+    /* 0x8 */ CANBUY_RESULT_ALREADY_HAVE,
+    /* 0x9 */ CANBUY_RESULT_HAVE_BETTER
 } EnGirlACanBuyResult;
 
 typedef enum {
-	/* 00 */ SI_POTION_RED_1,
-	/* 01 */ SI_POTION_GREEN_1,
-	/* 02 */ SI_POTION_BLUE,
-	/* 03 */ SI_FAIRY_1,
-	/* 04 */ SI_ARROWS_LARGE_1,
-	/* 05 */ SI_POTION_GREEN_2,
-	/* 06 */ SI_SHIELD_HERO_1,
-	/* 07 */ SI_STICK_1,
-	/* 08 */ SI_ARROWS_MEDIUM_1,
-	/* 09 */ SI_NUTS_1,
-	/* 10 */ SI_POTION_RED_2,
-	/* 11 */ SI_FAIRY_2,
-	/* 12 */ SI_ARROWS_MEDIUM_2,
-	/* 13 */ SI_ARROWS_LARGE_2,
-	/* 14 */ SI_POTION_GREEN_3,
-	/* 15 */ SI_NUTS_2,
-	/* 16 */ SI_STICK_2,
-	/* 17 */ SI_SHIELD_HERO_2,
-	/* 18 */ SI_POTION_RED_3,
-	/* 19 */ SI_MASK_ALL_NIGHT,
-	/* 20 */ SI_BOMB_BAG_20_1,
-	/* 21 */ SI_BOMB_BAG_30_1,
-	/* 22 */ SI_BOMB_BAG_40,
-	/* 23 */ SI_BOMB_BAG_20_2,
-	/* 24 */ SI_BOMB_BAG_30_2,
-	/* 25 */ SI_BOMBCHU,
-	/* 26 */ SI_BOMB_1,
-	/* 27 */ SI_SHIELD_HERO_3,
-	/* 28 */ SI_ARROWS_SMALL_1,
-	/* 29 */ SI_POTION_RED_4,
-	/* 30 */ SI_BOMB_2,
-	/* 31 */ SI_ARROWS_SMALL_2,
-	/* 32 */ SI_POTION_RED_5,
-	/* 33 */ SI_BOMB_3,
-	/* 34 */ SI_ARROWS_SMALL_3,
-	/* 35 */ SI_POTION_RED_6,
-	/* 36 */ SI_BOTTLE,
-	/* 37 */ SI_SWORD_GREAT_FAIRY,
-	/* 38 */ SI_SWORD_KOKIRI,
-	/* 39 */ SI_SWORD_RAZOR,
-	/* 40 */ SI_SWORD_GILDED,
-	/* 41 */ SI_SHIELD_HERO_4,
-	/* 42 */ SI_SHIELD_MIRROR,
-    /* 43 */ SI_MAX
+    /* 0x00 */ SI_POTION_RED_1,
+    /* 0x01 */ SI_POTION_GREEN_1,
+    /* 0x02 */ SI_POTION_BLUE,
+    /* 0x03 */ SI_FAIRY_1,
+    /* 0x04 */ SI_ARROWS_LARGE_1,
+    /* 0x05 */ SI_POTION_GREEN_2,
+    /* 0x06 */ SI_SHIELD_HERO_1,
+    /* 0x07 */ SI_STICK_1,
+    /* 0x08 */ SI_ARROWS_MEDIUM_1,
+    /* 0x09 */ SI_NUTS_1,
+    /* 0x0A */ SI_POTION_RED_2,
+    /* 0x0B */ SI_FAIRY_2,
+    /* 0x0C */ SI_ARROWS_MEDIUM_2,
+    /* 0x0D */ SI_ARROWS_LARGE_2,
+    /* 0x0E */ SI_POTION_GREEN_3,
+    /* 0x0F */ SI_NUTS_2,
+    /* 0x10 */ SI_STICK_2,
+    /* 0x11 */ SI_SHIELD_HERO_2,
+    /* 0x12 */ SI_POTION_RED_3,
+    /* 0x13 */ SI_MASK_ALL_NIGHT,
+    /* 0x14 */ SI_BOMB_BAG_20_1,
+    /* 0x15 */ SI_BOMB_BAG_30_1,
+    /* 0x16 */ SI_BOMB_BAG_40,
+    /* 0x17 */ SI_BOMB_BAG_20_2,
+    /* 0x18 */ SI_BOMB_BAG_30_2,
+    /* 0x19 */ SI_BOMBCHU,
+    /* 0x1A */ SI_BOMB_1,
+    /* 0x1B */ SI_SHIELD_HERO_3,
+    /* 0x1C */ SI_ARROWS_SMALL_1,
+    /* 0x1D */ SI_POTION_RED_4,
+    /* 0x1E */ SI_BOMB_2,
+    /* 0x1F */ SI_ARROWS_SMALL_2,
+    /* 0x20 */ SI_POTION_RED_5,
+    /* 0x21 */ SI_BOMB_3,
+    /* 0x22 */ SI_ARROWS_SMALL_3,
+    /* 0x23 */ SI_POTION_RED_6,
+    /* 0x24 */ SI_BOTTLE,
+    /* 0x25 */ SI_SWORD_GREAT_FAIRY,
+    /* 0x26 */ SI_SWORD_KOKIRI,
+    /* 0x27 */ SI_SWORD_RAZOR,
+    /* 0x28 */ SI_SWORD_GILDED,
+    /* 0x29 */ SI_SHIELD_HERO_4,
+    /* 0x2A */ SI_SHIELD_MIRROR,
+    /* 0x2B */ SI_MAX
 } EnGirlAShopItemId;
 
 extern const ActorInit En_GirlA_InitVars;
@@ -127,8 +127,8 @@ typedef struct {
 } StickDirectionPrompt; // size = 0x38
 
 typedef struct ShopItem {
-    /* 0x00 */ s16 shopItemId;
-    /* 0x02 */ Vec3s spawnPos;
-} ShopItem; // size = 0x8;
+    /* 0x0 */ s16 shopItemId;
+    /* 0x2 */ Vec3s spawnPos;
+} ShopItem; // size = 0x8
 
 #endif // Z_EN_GIRLA_H

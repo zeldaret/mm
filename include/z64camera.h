@@ -1613,5 +1613,4 @@ typedef struct Camera {
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
 
-
 #endif

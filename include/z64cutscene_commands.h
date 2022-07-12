@@ -548,8 +548,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x08
  */
-#define CS_RUMBLE(base, startFrame, endFrame, unk6, unk7, unk8) \
-    { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, unk6, unk7) }, { CMD_BBBB(unk8, 0, 0, 0) }
+#define CS_RUMBLE(base, startFrame, endFrame, intensity, decayTimer, decayStep) \
+    { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, intensity, decayTimer) }, { CMD_BBBB(decayStep, 0, 0, 0) }
 
 
 /**

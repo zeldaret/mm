@@ -15,22 +15,22 @@ typedef void (*EnButteActionFunc)(struct EnButte*, PlayState*);
 #define ENBUTTE_1 1
 
 typedef struct EnButte {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderJntSph collider;
-    /* 0x0164 */ ColliderJntSphElement colldierElements[1];
-    /* 0x01A4 */ SkelAnime skelAnime;
-    /* 0x01E8 */ Vec3s jointTable[8];
-    /* 0x0218 */ Vec3s morphTable[8];
-    /* 0x0248 */ EnButteActionFunc actionFunc;
-    /* 0x024C */ s16 unk_24C;
-    /* 0x024E */ u8 unk_24E;
-    /* 0x024F */ u8 unk_24F;
-    /* 0x0250 */ u8 unk_250;
-    /* 0x0252 */ s16 unk_252;
-    /* 0x0254 */ s16 unk_254;
-    /* 0x0256 */ s16 unk_256;
-    /* 0x0258 */ s16 unk_258;
-    /* 0x025C */ f32 unk_25C;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderJntSph collider;
+    /* 0x164 */ ColliderJntSphElement colldierElements[1];
+    /* 0x1A4 */ SkelAnime skelAnime;
+    /* 0x1E8 */ Vec3s jointTable[8];
+    /* 0x218 */ Vec3s morphTable[8];
+    /* 0x248 */ EnButteActionFunc actionFunc;
+    /* 0x24C */ s16 unk_24C;
+    /* 0x24E */ u8 unk_24E;
+    /* 0x24F */ u8 unk_24F;
+    /* 0x250 */ u8 unk_250;
+    /* 0x252 */ s16 unk_252;
+    /* 0x254 */ s16 unk_254;
+    /* 0x256 */ s16 unk_256;
+    /* 0x258 */ s16 unk_258;
+    /* 0x25C */ f32 unk_25C;
 } EnButte; // size = 0x260
 
 extern const ActorInit En_Butte_InitVars;

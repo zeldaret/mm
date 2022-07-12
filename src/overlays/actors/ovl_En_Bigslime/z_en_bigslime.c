@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigslime.h"
+#include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -747,7 +748,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 15, 0, 0, 0);
     Quake_SetCountdown(quake, 15);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 
@@ -2319,7 +2320,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     s16 yawOffset;
 
     Animation_Change(&this->skelAnime, &gGekkoDamagedAnim, 0.5f, 0.0f,
-                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), 3, 0.0f);
+                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), ANIMMODE_ONCE_INTERP, 0.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->defeatTimer = 60;
     this->actor.speedXZ = 10.0f;

@@ -458,7 +458,7 @@ s32 func_800CBAAC(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        return ((Player*)focalActor)->swordState;
+        return ((Player*)focalActor)->meleeWeaponState;
     } else {
         return 0;
     }
@@ -496,13 +496,13 @@ s32 func_800CBB88(Camera* camera) {
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
         // unknown sword animation
-        if ((((Player*)focalActor)->swordState != 0) && (((Player*)focalActor)->swordAnimation == 26)) {
+        if ((((Player*)focalActor)->meleeWeaponState != 0) && (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT)) {
             return 3;
         }
 
         // A non-magic spin attack
         if ((((Player*)focalActor)->stateFlags2 & 0x20000) ||
-            ((((Player*)focalActor)->swordState != 0) && (((Player*)focalActor)->swordAnimation == 29))) {
+            ((((Player*)focalActor)->meleeWeaponState != 0) && (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK))) {
             return 1;
         }
     }

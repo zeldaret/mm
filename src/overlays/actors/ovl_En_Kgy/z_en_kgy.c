@@ -4,8 +4,6 @@
  * Description: Blacksmith - Gabora
  */
 
-#include "overlays/actors/ovl_En_Kbt/z_en_kbt.h"
-#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "z_en_kgy.h"
 #include "objects/object_kgy/object_kgy.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -65,25 +63,25 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
         play->envCtx.lightSettingOverride = 1;
         gSaveContext.save.weekEventReg[21] |= 1;
         if (!func_80B40D64(play)) {
-            EnKgy_ChangeAnim(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
             this->actionFunc = func_80B425A0;
             this->actor.textId = 0xC35;
         } else if (!func_80B40DB4(play)) {
-            EnKgy_ChangeAnim(this, 6, 2, 0);
+            EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, 0);
             this->actionFunc = func_80B419B0;
             this->actor.textId = 0xC4E;
             this->unk_29C |= 1;
             this->unk_2EA = 3;
         } else {
-            EnKgy_ChangeAnim(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
             this->actionFunc = func_80B42714;
             this->actor.textId = 0xC50;
         }
     } else {
         if (gSaveContext.save.weekEventReg[20] & 0x80) {
-            EnKgy_ChangeAnim(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
         } else {
-            EnKgy_ChangeAnim(this, 0, 0, 0);
+            EnKgy_ChangeAnim(this, 0, ANIMMODE_LOOP, 0);
         }
         this->actionFunc = func_80B42D28;
     }
@@ -124,7 +122,7 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
 
 void func_80B40BC0(EnKgy* this, s16 arg1) {
     if (arg1 != this->unk_2D2) {
-        EnKgy_ChangeAnim(this, arg1, 0, -5.0f);
+        EnKgy_ChangeAnim(this, arg1, ANIMMODE_LOOP, -5.0f);
     }
 }
 
@@ -221,7 +219,7 @@ void func_80B40EE8(EnKgy* this, PlayState* play) {
         this->unk_2E4--;
         if ((this->unk_2E4 == 0) && (this->unk_2E2 >= 0)) {
             if (this->unk_2E2 == 3) {
-                EnKgy_ChangeAnim(this, 3, 2, -5.0f);
+                EnKgy_ChangeAnim(this, 3, ANIMMODE_ONCE, -5.0f);
             } else {
                 func_80B40BC0(this, this->unk_2E2);
             }
@@ -422,14 +420,14 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 6) {
             if (this->unk_2EA > 0) {
-                EnKgy_ChangeAnim(this, 6, 2, 0.0f);
+                EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, 0.0f);
                 this->unk_2EA--;
             } else {
-                EnKgy_ChangeAnim(this, 9, 2, -5.0f);
+                EnKgy_ChangeAnim(this, 9, ANIMMODE_ONCE, -5.0f);
                 this->unk_2EA = (s32)Rand_ZeroFloat(3.0f) + 2;
             }
         } else {
-            EnKgy_ChangeAnim(this, 6, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, -5.0f);
         }
         SkelAnime_Update(&this->skelAnime);
     }
@@ -943,7 +941,7 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
         if (this->unk_2D2 == 4) {
             func_80B40BC0(this, 7);
         } else {
-            EnKgy_ChangeAnim(this, 5, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 5, ANIMMODE_ONCE, -5.0f);
         }
         func_80B411DC(this, play, 0);
         func_80B40E18(this, this->actor.textId);
@@ -1055,7 +1053,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
         if (this->actor.textId == 0xC2D) {
             func_80B40BC0(this, 1);
         } else {
-            EnKgy_ChangeAnim(this, 5, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 5, ANIMMODE_ONCE, -5.0f);
             gSaveContext.save.weekEventReg[20] |= 0x80;
         }
         func_80B411DC(this, play, 0);
@@ -1075,7 +1073,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
         }
 
         if ((this->unk_2D2 == 0) && (this->actor.xzDistToPlayer < 200.0f)) {
-            EnKgy_ChangeAnim(this, 8, 2, 5.0f);
+            EnKgy_ChangeAnim(this, 8, ANIMMODE_ONCE, 5.0f);
         }
     }
 }

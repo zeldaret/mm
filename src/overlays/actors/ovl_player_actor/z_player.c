@@ -6,6 +6,7 @@
 
 #include "global.h"
 #include "src/overlays/actors/ovl_En_Test3/z_en_test3.h"
+#include "z64rumble.h"
 
 #define THIS ((Player*)thisx)
 
@@ -834,8 +835,8 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 camMode = CAM_MODE_CLIMB;
             } else if (this->stateFlags1 & 0x80000) {
                 camMode = CAM_MODE_FREEFALL;
-            } else if (((func_808548B8 == this->unk_748) && (this->swordAnimation >= 0) &&
-                        (this->swordAnimation < 0x1E)) ||
+            } else if (((func_808548B8 == this->unk_748) && (this->meleeWeaponAnimation >= PLAYER_MWA_FORWARD_SLASH_1H) &&
+                        (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_PUNCH_KICK)) ||
                        (this->stateFlags3 & 8) || ((func_8084FE7C == this->unk_748) && (this->unk_AE8 == 0)) ||
                        (func_808505D0 == this->unk_748)) {
                 camMode = CAM_MODE_STILL;

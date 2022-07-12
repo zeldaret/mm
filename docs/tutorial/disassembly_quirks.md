@@ -10,11 +10,9 @@ Variables must be renamed in `tools/disasm/variables.txt`. It may also be necess
 
 You can avoid having to redisassemble every time by running `rename_global_asm.py`, which will rename the individual functions' assembly files in `asm/nonmatchings/` to the name of the function they contain.
 
-
 ## Fake and incorrect symbols
 
 TODO
-
 
 ## Resplitting a file
 
@@ -31,6 +29,3 @@ To change a split for a file, find its entry in `tools/disasm/files.txt`, and ch
 to the file will extract it correctly as a separate file. It also is necessary to make a new C file and move the `GLOBAL_ASM` declaration into it.
 
 Unfortunately you essentially have to redisassemble after telling the disassembler to resplit a file.
-
-
-## 

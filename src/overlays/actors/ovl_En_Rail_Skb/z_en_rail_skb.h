@@ -2,6 +2,7 @@
 #define Z_EN_RAIL_SKB_H
 
 #include "global.h"
+#include "overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.h"
 
 struct EnRailSkb;
 

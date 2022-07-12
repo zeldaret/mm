@@ -45,7 +45,7 @@ extern const ActorInit En_Kakasi_InitVars;
 
 #define ENKAKASI_ABOVE_GROUND_TYPE 2
 
-#define GET_KAKASI_SUMMON_DISTANCE(this) ((this->actor.params >> 0x8) & 0xFF) 
-#define GET_KAKASI_ABOVE_GROUND(this) (this->actor.params & 0x1) 
+#define GET_KAKASI_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 
+#define GET_KAKASI_ABOVE_GROUND(thisx) ((thisx)->params & 0x1) 
 
 #endif // Z_EN_KAKASI_H
