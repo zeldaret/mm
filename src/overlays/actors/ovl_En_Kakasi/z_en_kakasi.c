@@ -267,8 +267,8 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
 
         Math_ApproachF(&this->unk20C, this->unk210, 0.3f, 10.0f);
 
-        Play_CameraSetAtEye(play, this->cutsceneCamId, &this->unk220, &this->unk214);
-        Play_CameraSetFov(play, this->cutsceneCamId, this->unk20C);
+        Play_SetCameraAtEye(play, this->cutsceneCamId, &this->unk220, &this->unk214);
+        Play_SetCameraFov(play, this->cutsceneCamId, this->unk20C);
     }
 }
 

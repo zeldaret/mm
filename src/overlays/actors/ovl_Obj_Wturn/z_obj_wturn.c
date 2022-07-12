@@ -76,7 +76,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     eye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + at.x;
     eye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + at.z;
     eye.y = at.y + 4.0f;
-    Play_CameraSetAtEye(play, this->camId, &at, &eye);
+    Play_SetCameraAtEye(play, this->camId, &at, &eye);
     this->actionFunc = func_808A7BA0;
 }
 
@@ -85,7 +85,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
         func_808A7C04(this, play);
     }
     func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
-    Play_CameraSetRoll(play, this->camId, this->actor.shape.rot.z);
+    Play_SetCameraRoll(play, this->camId, this->actor.shape.rot.z);
 }
 
 void func_808A7C04(ObjWturn* this, PlayState* play) {
@@ -107,7 +107,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
 
     this->unk_14A++;
     player->actor.world.pos.y = this->actor.world.pos.y + this->unk_14A * 4.0f;
-    Play_CameraSetAtEyeUp(play, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
+    Play_SetCameraAtEyeUp(play, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
     if (this->unk_14A == 1) {
         play->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;

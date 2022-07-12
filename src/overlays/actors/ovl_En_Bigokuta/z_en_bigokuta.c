@@ -132,7 +132,7 @@ void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* at
 
     ActorCutscene_Start(this->actor.cutscene, &this->actor);
     this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-    Play_CameraSetAtEye(play, this->camId, at, eye);
+    Play_SetCameraAtEye(play, this->camId, at, eye);
 
     angle = BINANG_SUB(Actor_YawToPoint(&this->actor, eye), this->actor.home.rot.y);
     if (angle > 0) {
@@ -151,7 +151,7 @@ void EnBigokuta_MoveCamera(EnBigokuta* this, PlayState* play) {
 
     Math_Vec3f_StepTo(&camera->eye, &this->camEye, 20.0f);
     Math_Vec3f_StepTo(&camera->at, &this->camAt, 20.0f);
-    Play_CameraSetAtEye(play, this->camId, &camera->at, &camera->eye);
+    Play_SetCameraAtEye(play, this->camId, &camera->at, &camera->eye);
 }
 
 void EnBigokuta_ResetCamera(EnBigokuta* this, PlayState* play) {
@@ -159,7 +159,7 @@ void EnBigokuta_ResetCamera(EnBigokuta* this, PlayState* play) {
 
     if (this->camId != 0) {
         camera = Play_GetCamera(play, this->camId);
-        Play_CameraSetAtEye(play, 0, &camera->at, &camera->eye);
+        Play_SetCameraAtEye(play, 0, &camera->at, &camera->eye);
         this->camId = 0;
         ActorCutscene_Stop(this->actor.cutscene);
     }
