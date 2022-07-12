@@ -24,8 +24,10 @@ s32 func_8013A240(PlayState* play) {
                         seen = 1;
                     }
                     break;
+
                 default:
                     seen = 0;
+                    break;
             }
 
             if (actor->id) {
@@ -41,12 +43,15 @@ s32 func_8013A240(PlayState* play) {
                 case ACTOR_EN_ZOV:
                     seen |= 2;
                     break;
+
                 case ACTOR_EN_BAL:
                     seen |= 2;
                     break;
+
                 case ACTOR_EN_DNQ:
                     seen |= 2;
                     break;
+
                 case ACTOR_EN_GE1:
                 case ACTOR_EN_GE3:
                 case ACTOR_EN_KAIZOKU:
@@ -78,6 +83,7 @@ void func_8013A41C(s32 flag) {
     }
 }
 
+// Unused
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
         gSaveContext.save.pictoFlags0 &= ~(1 << flag);
@@ -99,7 +105,7 @@ u32 func_8013A4C4(s32 flag) {
 }
 
 s16 func_8013A504(s16 val) {
-    return (val >= 0) ? val : -val;
+    return ABS(val);
 }
 
 s32 func_8013A530(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax,
