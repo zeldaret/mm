@@ -3,10 +3,12 @@
 
 #include "global.h"
 
+#define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
+#define GERUDO_WHITE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
+
 struct EnGe1;
 
 typedef void (*EnGe1ActionFunc)(struct EnGe1*, PlayState*);
-
 
 typedef struct EnGe1 {
     /* 0x000 */ PictoActor picto;
@@ -15,17 +17,17 @@ typedef struct EnGe1 {
     /* 0x1D8 */ Vec3f unk1D8;
     /* 0x1E4 */ Vec3s jointTable[16];
     /* 0x244 */ Vec3s morphTable[16];
-    /* 0x2A4 */ Vec3s unk2A4;
-    /* 0x2AA */ Vec3s unk2AA;
-    /* 0x2B0 */ Path *unk2B0;                         /* inferred */
-    /* 0x2B4 */ s32 unk2B4;                         /* inferred */
-    /* 0x2B8 */ s16 unk2B8;                         /* inferred */
-    /* 0x2BA */ s16 unk2BA;                         /* inferred */
-    /* 0x2BC */ u16 unk2BC;                         /* inferred */
-    /* 0x2BE */ s16 unk2BE;                         /* inferred */
-    /* 0x2C0 */ s16 unk2C0;                         /* inferred */
-    /* 0x2C2 */ s16 unk2C2;                         /* inferred */
-    /* 0x2C4 */ u8 unk2C4;                          /* inferred */
+    /* 0x2A4 */ Vec3s headRot;
+    /* 0x2AA */ Vec3s torsoRot;
+    /* 0x2B0 */ Path* path;
+    /* 0x2B4 */ s32 curPoint;
+    /* 0x2B8 */ s16 eyeIndex;
+    /* 0x2BA */ s16 blinkTimer;
+    /* 0x2BC */ u16 stateFlags;
+    /* 0x2BE */ s16 curAnim; // Index
+    /* 0x2C0 */ s16 csAction;
+    /* 0x2C2 */ s16 screamTimer;
+    /* 0x2C4 */ u8 hairstyle;
     /* 0x2C8 */ EnGe1ActionFunc actionFunc;
 } EnGe1; // size = 0x2CC
 
