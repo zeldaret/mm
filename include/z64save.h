@@ -78,8 +78,8 @@ typedef struct PermanentSceneFlags {
     /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
-    /* 0x14 */ u32 unk_14;
-    /* 0x18 */ u32 unk_18;
+    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited. 
+    /* 0x18 */ u32 rooms;
 } PermanentSceneFlags; // size = 0x1C
 
 typedef struct CycleSceneFlags {
@@ -257,7 +257,7 @@ typedef struct SaveContext {
     /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 unk_48C8;                          // "scene_id_mix"
+    /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[27];                    // "mask_mask_bit", masks given away on the Moon
 } SaveContext; // size = 0x48C8
 
@@ -333,6 +333,13 @@ typedef enum SunsSongState {
 #define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
 #define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = (gSaveContext.save.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
 #define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.shootingGalleryHighScores = ((gSaveContext.save.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
+
+typedef enum {
+    /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
+    /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
+    /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE, // Also applies to Inverted Stone Tower Temple
+} DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);

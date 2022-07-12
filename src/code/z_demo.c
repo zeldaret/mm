@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
 void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);
@@ -505,14 +506,14 @@ void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumbl
     switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
-                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
             }
             break;
 
         case 2:
             if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
                 if ((csCtx->frames == cmd->startFrame) || (play->state.frames % 64 == 0)) {
-                    func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                    Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
                 }
             }
             break;
