@@ -61,19 +61,19 @@ s32 func_80ADABA4(BgFuMizu* this, PlayState* play) {
 }
 
 void BgFuMizu_Update(Actor* thisx, PlayState* play) {
-    f32 phi_fv0;
+    f32 heightTarget;
     BgFuMizu* this = THIS;
 
     if (this->unk_160 == 0) {
         if (func_80ADABA4(this, play)) {
-            phi_fv0 = -10.0f + this->dyna.actor.home.pos.y;
+            heightTarget = -10.0f + this->dyna.actor.home.pos.y;
         } else {
-            phi_fv0 = 10.0f + this->dyna.actor.home.pos.y;
+            heightTarget = 10.0f + this->dyna.actor.home.pos.y;
         }
     } else {
-        phi_fv0 = 25.0f + this->dyna.actor.home.pos.y;
+        heightTarget = 25.0f + this->dyna.actor.home.pos.y;
     }
-    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, phi_fv0, 0.05f, 1.0f, 0.5f) > 1.0f) {
+    if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, heightTarget, 0.05f, 1.0f, 0.5f) > 1.0f) {
         if (this->unk_160 == 1) {
             func_800B9010(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
         } else {
