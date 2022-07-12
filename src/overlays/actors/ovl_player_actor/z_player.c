@@ -835,7 +835,8 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 camMode = CAM_MODE_CLIMB;
             } else if (this->stateFlags1 & 0x80000) {
                 camMode = CAM_MODE_FREEFALL;
-            } else if (((func_808548B8 == this->unk_748) && (this->meleeWeaponAnimation >= PLAYER_MWA_FORWARD_SLASH_1H) &&
+            } else if (((func_808548B8 == this->unk_748) &&
+                        (this->meleeWeaponAnimation >= PLAYER_MWA_FORWARD_SLASH_1H) &&
                         (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_PUNCH_KICK)) ||
                        (this->stateFlags3 & 8) || ((func_8084FE7C == this->unk_748) && (this->unk_AE8 == 0)) ||
                        (func_808505D0 == this->unk_748)) {
