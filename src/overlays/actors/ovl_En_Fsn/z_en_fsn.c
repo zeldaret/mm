@@ -416,7 +416,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
 
 s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
         return true;
     }
@@ -467,7 +467,7 @@ s32 EnFsn_HasPlayerSelectedItem(EnFsn* this, PlayState* play, Input* input) {
     }
     if (EnFsn_TestItemSelected(play)) {
         if (!this->items[this->cursorIdx]->isOutOfStock) {
-            this->tmpActionFunc = this->actionFunc;
+            this->prevActionFunc = this->actionFunc;
             func_80151938(play, this->items[this->cursorIdx]->choiceTextId);
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
@@ -1217,7 +1217,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
                     break;
                 case 1:
                     func_8019F230();
-                    this->actionFunc = this->tmpActionFunc;
+                    this->actionFunc = this->prevActionFunc;
                     func_80151938(play, this->items[this->cursorIdx]->actor.textId);
             }
         }
@@ -1226,7 +1226,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
 
 void EnFsn_PlayerCannotBuy(EnFsn* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIdx]->actor.textId);
     }
 }

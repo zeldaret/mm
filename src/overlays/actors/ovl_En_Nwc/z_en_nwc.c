@@ -246,7 +246,8 @@ void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
-        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, 0.0f);
+        Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
+                         ANIMMODE_LOOP, 0.0f);
 
         gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;

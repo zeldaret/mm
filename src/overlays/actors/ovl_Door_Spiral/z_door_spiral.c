@@ -246,7 +246,7 @@ f32 DoorSpiral_GetDistFromPlayer(PlayState* play, DoorSpiral* this, f32 yOffset,
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist = DoorSpiral_GetDistFromPlayer(play, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
 

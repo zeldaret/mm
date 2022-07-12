@@ -134,10 +134,10 @@ s32 EnBba01_TestIsTalking(EnBba01* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &play->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmptrackTarget = this->enHy.trackTarget;
-        this->enHy.tmpHeadRot = this->enHy.headRot;
-        this->enHy.tmpTorsoRot = this->enHy.torsoRot;
-        this->enHy.tmpActionFunc = this->enHy.actionFunc;
+        this->enHy.prevTrackTarget = this->enHy.trackTarget;
+        this->enHy.prevHeadRot = this->enHy.headRot;
+        this->enHy.prevTorsoRot = this->enHy.torsoRot;
+        this->enHy.prevActionFunc = this->enHy.actionFunc;
         this->enHy.actionFunc = EnBba01_Talk;
     }
     return isTalking;
@@ -197,12 +197,12 @@ void EnBba01_Talk(EnHy* this, PlayState* play) {
             break;
         case 2:
             this->actor.textId = 0;
-            this->trackTarget = this->tmptrackTarget;
-            this->headRot = this->tmpHeadRot;
-            this->torsoRot = this->tmpTorsoRot;
+            this->trackTarget = this->prevTrackTarget;
+            this->headRot = this->prevHeadRot;
+            this->torsoRot = this->prevTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            this->actionFunc = this->tmpActionFunc;
-            this->tmpActionFunc = NULL;
+            this->actionFunc = this->prevActionFunc;
+            this->prevActionFunc = NULL;
             break;
     }
 }

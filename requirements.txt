@@ -1,7 +1,12 @@
+# Setup
 libyaz0>=0.5
-pyelftools>=0.26
 colorama>=0.4.3
-ansiwrap>=0.8.4
-attrs>=18.2.0
+
+# disasm
+rabbitizer>=1.0.0,<2.0.0
+
+# diff
 watchdog>=0.10.2
-GitPython>=3.1.14
+argcomplete
+python-Levenshtein
+cxxfilt

@@ -8,10 +8,10 @@ struct EnPst;
 typedef void (*EnPstActionFunc)(struct EnPst*, PlayState*);
 
 typedef struct EnPst {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnPstActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x94];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x44];
+    /* 0x188 */ EnPstActionFunc actionFunc;
+    /* 0x18C */ char unk_18C[0x94];
 } EnPst; // size = 0x220
 
 extern const ActorInit En_Pst_InitVars;
