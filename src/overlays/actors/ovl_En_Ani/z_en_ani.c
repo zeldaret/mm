@@ -219,7 +219,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         // the animation gets cut short, (first 16 frames only) only the landing part is seen
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
-        quakeValue = Quake_Add(play->cameraPtrs[0], 3);
+        quakeValue = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], 3);
         Quake_SetSpeed(quakeValue, 0x6978);
         Quake_SetQuakeValues(quakeValue, 7, 0, 0, 0);
         Quake_SetCountdown(quakeValue, 0x14);

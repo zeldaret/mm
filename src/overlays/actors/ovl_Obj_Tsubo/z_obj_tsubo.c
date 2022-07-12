@@ -144,7 +144,7 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
     if (func_809275C0(this, play)) {
         params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
         child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, params);
+                            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, params);
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;
@@ -507,7 +507,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
-                    if (absYawDiff > DEGF_TO_BINANG(120.0f)) {
+                    if (absYawDiff > (0x10000 / 3)) {
                         Actor_PickUp(&this->actor, play, 0, 36.0f, 30.0f);
                     }
                 }

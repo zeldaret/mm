@@ -33,31 +33,31 @@ typedef enum {
 #define OBJSWITCH_INVERSE_BLUE 0x30
 
 typedef struct ObjSwitch {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ObjSwitchActionFunc actionFunc;
-    /* 0x0160 */ s16 floorSwitchReleaseTimer;
-    /* 0x0162 */ s16 disableCrystalSwitchTimer;
-    /* 0x0164 */ s8 eyeTexIndex;
-    /* 0x0165 */ s8 sfxTimer;
-    /* 0x0168 */ s32 crystalAnimTimer;
-    /* 0x016C */ Color_RGB8 color;
-    /* 0x016F */ u8 collisionFlags;
-    /* 0x0170 */ s8 floorSwitchPlayerSnapState;
-    /* 0x0171 */ s8 nextSwitchFlagState;
-    /* 0x0172 */ s8 isPlayingCutscene;
-    /* 0x0174 */ ObjSwitchSetupActionFunc setupFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjSwitchActionFunc actionFunc;
+    /* 0x160 */ s16 floorSwitchReleaseTimer;
+    /* 0x162 */ s16 disableCrystalSwitchTimer;
+    /* 0x164 */ s8 eyeTexIndex;
+    /* 0x165 */ s8 sfxTimer;
+    /* 0x168 */ s32 crystalAnimTimer;
+    /* 0x16C */ Color_RGB8 color;
+    /* 0x16F */ u8 collisionFlags;
+    /* 0x170 */ s8 floorSwitchPlayerSnapState;
+    /* 0x171 */ s8 nextSwitchFlagState;
+    /* 0x172 */ s8 isPlayingCutscene;
+    /* 0x174 */ ObjSwitchSetupActionFunc setupFunc;
     union {
         struct {
-    /* 0x0178 */ ColliderJntSph colliderJntSph;
-    /* 0x0198 */ ColliderJntSphElement colliderJntSphElements[1];
+    /* 0x178 */ ColliderJntSph colliderJntSph;
+    /* 0x198 */ ColliderJntSphElement colliderJntSphElements[1];
         };
         struct {
-    /* 0x0178 */ ColliderTris colliderTris;
-    /* 0x0198 */ ColliderTrisElement colliderTrisElements[2];
+    /* 0x178 */ ColliderTris colliderTris;
+    /* 0x198 */ ColliderTrisElement colliderTrisElements[2];
         };
     };
-    /* 0x0250 */ f32 floorSwitchUpScale;
-    /* 0x0254 */ f32 floorSwitchDownScale;
+    /* 0x250 */ f32 floorSwitchUpScale;
+    /* 0x254 */ f32 floorSwitchDownScale;
 } ObjSwitch; // size = 0x258
 
 extern const ActorInit Obj_Switch_InitVars;
