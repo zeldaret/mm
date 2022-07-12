@@ -13,15 +13,15 @@ typedef void (*BgSpdwebActionFunc)(struct BgSpdweb*, PlayState*);
 #define BGSPDWEB_FF_1 1
 
 typedef struct BgSpdweb {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ BgSpdwebActionFunc actionFunc;
-    /* 0x0160 */ u8 switchFlag;
-    /* 0x0161 */ u8 unk_161;
-    /* 0x0162 */ s16 unk_162;
-    /* 0x0164 */ f32 unk_164;
-    /* 0x0168 */ ColliderTris collider;
-    /* 0x0188 */ ColliderTrisElement colliderElements[4];
-    /* 0x02F8 */ Vec3s* unk_2F8;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgSpdwebActionFunc actionFunc;
+    /* 0x160 */ u8 switchFlag;
+    /* 0x161 */ u8 unk_161;
+    /* 0x162 */ s16 unk_162;
+    /* 0x164 */ f32 unk_164;
+    /* 0x168 */ ColliderTris collider;
+    /* 0x188 */ ColliderTrisElement colliderElements[4];
+    /* 0x2F8 */ Vec3s* unk_2F8;
 } BgSpdweb; // size = 0x2FC
 
 extern const ActorInit Bg_Spdweb_InitVars;

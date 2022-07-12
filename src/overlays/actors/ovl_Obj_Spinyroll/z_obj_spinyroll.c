@@ -118,7 +118,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    6,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -148,7 +148,7 @@ void func_80A1DA50(PlayState* play, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3
 
     Math_Vec3f_Sum(arg2, arg3, &sp1C);
     Math_Vec3f_Scale(&sp1C, 0.5f);
-    EffectSsHitMark_SpawnFixedScale(play, 3, &sp1C);
+    EffectSsHitmark_SpawnFixedScale(play, 3, &sp1C);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
