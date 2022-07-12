@@ -2,6 +2,7 @@
 #define Z_EN_GE1_H
 
 #include "global.h"
+#include "objects/object_ge1/object_ge1.h"
 
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
 #define GERUDO_WHITE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
@@ -14,9 +15,9 @@ typedef struct EnGe1 {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ ColliderCylinder collider;
     /* 0x194 */ SkelAnime skelAnime;
-    /* 0x1D8 */ Vec3f unk1D8;
-    /* 0x1E4 */ Vec3s jointTable[16];
-    /* 0x244 */ Vec3s morphTable[16];
+    /* 0x1D8 */ Vec3f waistPos;
+    /* 0x1E4 */ Vec3s jointTable[GERUDO_WHITE_LIMB_MAX];
+    /* 0x244 */ Vec3s morphTable[GERUDO_WHITE_LIMB_MAX];
     /* 0x2A4 */ Vec3s headRot;
     /* 0x2AA */ Vec3s torsoRot;
     /* 0x2B0 */ Path* path;

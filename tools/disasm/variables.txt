@@ -8449,7 +8449,7 @@
     0x809464D0:("sCylinderInit","ColliderCylinderInit","",0x1),
     0x809464FC:("sAnimations","AnimationHeader","10",0x28),
     0x80946524:("sHairstyleDLs","Gfx*","3",0xC),
-    0x80946530:("D_80946530","Vec3f","",0xC),
+    0x80946530:("sInitialFocusPos","Vec3f","",0xC),
     0x8094653C:("sZeroVec","Vec3f","",0xC),
     0x80946548:("sEyeTextures","TexturePtr","3",0xC),
     0x80946560:("jtbl_80946560","UNK_PTR","",0x4),

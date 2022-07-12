@@ -84,7 +84,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
     Actor_SetScale(&this->picto.actor, 0.01f);
-    this->curAnim = this->csAction = -1;
+    this->curAnim = this->csAction = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
     EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_0, ANIMMODE_LOOP, 0.0f);
     this->actionFunc = EnGe1_Wait;
@@ -129,6 +129,7 @@ void EnGe1_SetAnimation(EnGe1* this, s16 index, u8 mode, f32 morphFrames) {
         0x0600202C, 0x06002954, 0x06000ABC, 0x06002148, 0x06002148,
     };
 
+    // The 8/9 cases are single frames of an "animation" used as static poses.
     switch (index) {
         case 8:
             Animation_Change(&this->skelAnime, sAnimations[index], 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
@@ -163,7 +164,7 @@ void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play) {
     EnGe1* this = THIS;
 
     Math_Vec3f_Copy(&pos, &this->picto.actor.world.pos);
-    Math_Vec3f_Copy(&this->picto.actor.world.pos, &this->unk1D8);
+    Math_Vec3f_Copy(&this->picto.actor.world.pos, &this->waistPos);
     func_800B4AEC(play, &this->picto.actor, 50.0f);
     this->picto.actor.world.pos.y = MAX(this->picto.actor.floorHeight, pos.y);
     ActorShadow_DrawCircle(&this->picto.actor, lights, play);
@@ -380,33 +381,41 @@ s32 EnGe1_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     s32 pad;
     EnGe1* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == GERUDO_WHITE_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
-    if ((this->curAnim == 0) && ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13))) {
-        rot->y += (s16)(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
-        rot->z += (s16)(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
+    if (this->curAnim == GERUDO_WHITE_ANIM_0) {
+        // Make small fidgeting movements if in standing animation.
+        if ((limbIndex == GERUDO_WHITE_LIMB_TORSO) || (limbIndex == GERUDO_WHITE_LIMB_LEFT_FOREARM) ||
+            (limbIndex == GERUDO_WHITE_LIMB_RIGHT_FOREARM)) {
+            rot->y += (s16)(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
+            rot->z += (s16)(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
+        }
     }
     return false;
 }
 
 void EnGe1_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* sHairstyleDLs[] = { 0x0600BB08, 0x0600BDA0, 0x0600C000 };
-    static Vec3f D_80946530 = { 600.0f, 700.0f, 0.0f };
+    static Gfx* sHairstyleDLs[] = {
+        gGerudoWhiteHairstyleBobDL,
+        gGerudoWhiteHairstyleStraightFringeDL,
+        gGerudoWhiteHairstyleSpikyDL,
+    };
+    static Vec3f sInitialFocusPos = { 600.0f, 700.0f, 0.0f };
     static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     EnGe1* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (limbIndex) {
-        case 1:
-            Matrix_MultVec3f(&sZeroVec, &this->unk1D8);
+        case GERUDO_WHITE_LIMB_WAIST:
+            Matrix_MultVec3f(&sZeroVec, &this->waistPos);
             break;
 
-        case 15:
+        case GERUDO_WHITE_LIMB_HEAD:
             gSPDisplayList(POLY_OPA_DISP++, sHairstyleDLs[this->hairstyle]);
-            Matrix_MultVec3f(&D_80946530, &this->picto.actor.focus.pos);
+            Matrix_MultVec3f(&sInitialFocusPos, &this->picto.actor.focus.pos);
             break;
     }
 
@@ -415,9 +424,9 @@ void EnGe1_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnGe1_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = {
-        0x06003078,
-        0x06003878,
-        0x06004078,
+        gGerudoWhiteEyeOpenTex,
+        gGerudoWhiteEyeHalfTex,
+        gGerudoWhiteEyeClosedTex,
     };
     s32 pad;
     EnGe1* this = THIS;
