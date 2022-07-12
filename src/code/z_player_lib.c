@@ -652,11 +652,7 @@ Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
     object_link_child_DL_00BDB0, object_link_child_DL_00BDB0,
 };
 
-typedef struct {
-    Gfx* unk_00;
-    Gfx* unk_04;
-} Gfx1;
-Gfx1 D_801C0024[PLAYER_SHIELD_MAX - 1] = {
+Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
     { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
     { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
@@ -823,7 +819,6 @@ Gfx** sPlayerDListGroups[] = {
     D_801C01F4, D_801C021C, D_801C0244, D_801C0034, D_801C005C, D_801C0084, D_801C0084, D_801BFFFC, NULL,
 };
 
-
 struct_80124618 D_801C0340[] = {
     { 0, { 0, 0, 0 } },       { 5, { 0, 0, 0 } },        { 7, { 100, 100, 100 } },
     { 9, { 110, 110, 110 } }, { 11, { 100, 100, 100 } },
@@ -931,7 +926,11 @@ struct_80124618 D_801C0698[] = {
 struct_80124618 D_801C06B8[] = {
     { 0, { 100, 100, 100 } }, { 7, { 100, 100, 100 } }, { 8, { 70, 30, 70 } }, { 10, { 0, 0, 0 } }, { 14, { 0, 0, 0 } },
 };
-struct_80124618 D_801C06E0[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 14, { 0, 0, 0 } } };
+struct_80124618 D_801C06E0[] = {
+    { 0, { 140, 140, 140 } },
+    { 1, { 0, 0, 0 } },
+    { 14, { 0, 0, 0 } },
+};
 struct_80124618 D_801C06F8[] = {
     { 0, { 100, 100, 100 } },
     { 5, { 100, 100, 100 } },
@@ -957,7 +956,9 @@ struct_80124618 D_801C0750[] = {
 };
 
 // alpha values
-u8 D_801C0778[] = { 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100 };
+u8 D_801C0778[] = {
+    0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100,
+};
 
 struct_80124618 D_801C0784[] = {
     { 0, { 100, 100, 100 } },  { 14, { 100, 100, 100 } }, { 15, { 200, 200, 200 } },
@@ -1282,6 +1283,7 @@ s32 func_801242DC(PlayState* play) {
     return envIndex + 1;
 }
 
+void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
@@ -1297,7 +1299,6 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
     } while (temp_v1 < currentFrame);
 
     temp_f0 = arg0[-1].unk_0;
-
     progress = (curFrame - temp_f0) / (temp_v1 - temp_f0);
 
     temp_f14 = arg0[-1].unk_2.x;
@@ -1402,10 +1403,18 @@ Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
     { 408.0f, 0.0f, 0.0f },  { 695.0f, 0.0f, 0.0f },
 };
 
-f32 D_801C08FC[PLAYER_FORM_MAX] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f };
-f32 D_801C0910[PLAYER_FORM_MAX] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f };
-f32 D_801C0924[PLAYER_FORM_MAX] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
-f32 D_801C0938[PLAYER_FORM_MAX] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
+f32 D_801C08FC[PLAYER_FORM_MAX] = {
+    1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f,
+};
+f32 D_801C0910[PLAYER_FORM_MAX] = {
+    170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f,
+};
+f32 D_801C0924[PLAYER_FORM_MAX] = {
+    10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f,
+};
+f32 D_801C0938[PLAYER_FORM_MAX] = {
+    5.0f, 4.0f, 1.0f, 1.0f, 3.0f,
+};
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
 
@@ -1453,8 +1462,14 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
 
 s32 D_801C0958 = false;
 
-Gfx** D_801C095C[] = { D_801C013C, D_801C0114 };
-Gfx** D_801C0964[] = { D_801C01CC, D_801C01A4 };
+Gfx** D_801C095C[] = {
+    D_801C013C,
+    D_801C0114,
+};
+Gfx** D_801C0964[] = {
+    D_801C01CC,
+    D_801C01A4,
+};
 
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     f32 phi_f12;
@@ -1747,7 +1762,10 @@ Gfx* D_801C0B20[] = {
     object_mask_nuts_DL_001D90,
 };
 
-Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
+Vec3f D_801C0B90[] = {
+    { 950.0f, -800.0f, 300.0f },
+    { 950.0f, -800.0f, -300.0f },
+};
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
@@ -1845,12 +1863,6 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
     gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
-
-/*
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
-*/
 
 void func_80127594(PlayState* play, Actor* actor) {
     static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
@@ -1969,11 +1981,10 @@ void func_801278F8(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-
 Vec3f D_801C0BE0 = { 0.0f, 0.3f, 0.0f };
 Vec3f D_801C0BEC = { 0.0f, -0.025f, 0.0f };
-Color_RGBA8 D_801C0BF8 = { 0xFA, 0x64, 0x64, 0 };
-Color_RGBA8 D_801C0BFC = { 0, 0, 0x64, 0 };
+Color_RGBA8 D_801C0BF8 = { 250, 100, 100, 0 };
+Color_RGBA8 D_801C0BFC = { 0, 0, 100, 0 };
 
 Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
 
@@ -2012,18 +2023,26 @@ Color_RGB8 D_801C0CA8[] = {
     { 255, 255, 255 }, { 255, 255, 255 }, { 80, 80, 255 },
 };
 
-Vec3f D_801C0CE8[5] = {
+Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
     { 0.0f, 0.0f, 0.0f },    { 300.0f, 300.0f, -230.0f }, { 0.0f, 90.0f, -50.0f },
     { 0.0f, 20.0f, -60.0f }, { 0.0f, 0.0f, 0.0f },
 };
-Vec3f D_801C0D24[5] = {
+Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
     { 200.0f, 300.0f, 0.0f }, { 200.0f, 200.0f, 0.0f }, { 200.0f, 300.0f, 0.0f },
     { 200.0f, 150.0f, 0.0f }, { 200.0f, 200.0f, 0.0f },
 };
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
-f32 D_801C0D78[] = { 0.0f, 3000.0f, 3000.0f, 4000.0f, 5500.0f, -1.0f, 2500.0f };
+f32 D_801C0D78[] = {
+    0.0f,    // Player is not holding a melee weapon
+    3000.0f, // PLAYER_AP_SWORD_KOKIRI
+    3000.0f, // PLAYER_AP_SWORD_RAZOR
+    4000.0f, // PLAYER_AP_SWORD_GILDED
+    5500.0f, // PLAYER_AP_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_AP_STICK
+    2500.0f, // PLAYER_AP_ZORA_FINS
+};
 
 Gfx* D_801C0D94 = object_link_child_DL_017818;
 
@@ -2048,7 +2067,7 @@ Gfx* D_801C0DF0[] = {
     object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
 };
 
-Vec2f D_801C0E04[] = {
+Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
     { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
 };
 
@@ -2056,7 +2075,7 @@ Gfx* D_801C0E2C[] = {
     object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
     object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
 };
-Vec3f D_801C0E40[] = {
+Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
     { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
     { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
 };
@@ -2069,7 +2088,6 @@ Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
 Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
 Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
 Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
 
