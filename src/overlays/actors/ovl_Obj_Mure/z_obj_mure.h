@@ -10,23 +10,23 @@ typedef void (*ObjMureActionFunc)(struct ObjMure*, PlayState*);
 #define OBJMURE_MAX_SPAWNS 15
 
 typedef struct {
-    Actor actor;
+    /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x53];
     /* 0x197 */ u8 unk_197;
-} ObjMureChild;
+} ObjMureChild; // size = 0x198
 
 typedef struct ObjMure {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjMureActionFunc actionFunc;
-    /* 0x0148 */ s16 chNum;
-    /* 0x014A */ s16 ptn;
-    /* 0x014C */ s16 svNum;
-    /* 0x014E */ s16 type;
-    /* 0x0150 */ Actor* children[OBJMURE_MAX_SPAWNS];
-    /* 0x018C */ u8 childrenStates[OBJMURE_MAX_SPAWNS];
-    /* 0x019C */ s16 unk_19C;
-    /* 0x019E */ s16 unk_19E;
-    /* 0x01A0 */ s16 unk_1A0;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjMureActionFunc actionFunc;
+    /* 0x148 */ s16 chNum;
+    /* 0x14A */ s16 ptn;
+    /* 0x14C */ s16 svNum;
+    /* 0x14E */ s16 type;
+    /* 0x150 */ Actor* children[OBJMURE_MAX_SPAWNS];
+    /* 0x18C */ u8 childrenStates[OBJMURE_MAX_SPAWNS];
+    /* 0x19C */ s16 unk_19C;
+    /* 0x19E */ s16 unk_19E;
+    /* 0x1A0 */ s16 unk_1A0;
 } ObjMure; // size = 0x1A4
 
 extern const ActorInit Obj_Mure_InitVars;

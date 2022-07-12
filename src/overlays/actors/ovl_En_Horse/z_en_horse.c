@@ -206,7 +206,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1 | OC2_UNK1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -773,7 +773,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & (1 | 2 | 4)) == 1)) ||
+    if (((play->sceneNum == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
         ((gSaveContext.save.entranceIndex == 0x6400) && Cutscene_GetSceneSetupIndex(play))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
@@ -2456,7 +2456,7 @@ void func_808819D8(EnHorse* this, PlayState* play) {
         func_8088168C(this);
     }
 
-    if ((gSaveContext.save.weekEventReg[92] & (1 | 2 | 4)) == 3) {
+    if (GET_RACE_FLAGS == 3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animationIdx, this->skin.skelAnime.curFrame, this->unk_394 & 1,

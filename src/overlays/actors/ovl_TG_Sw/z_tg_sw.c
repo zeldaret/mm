@@ -45,7 +45,7 @@ void TGSw_ActionDecider(TGSw* this, PlayState* play) {
         }
         unk1F4 = play->actorCtx.unk1F4;
         if (unk1F4 == 2 || unk1F4 == 0) {
-            this->actionFunc = &TGSw_ActionExecuteOneShot;
+            this->actionFunc = TGSw_ActionExecuteOneShot;
         }
     }
 }
@@ -89,16 +89,17 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
 
 void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
+
     this->actor.cutscene = this->actor.world.rot.z;
-    this->actionFunc = &TGSw_ActionDecider;
+    this->actionFunc = TGSw_ActionDecider;
 }
 
 void TGSw_Destroy(Actor* thisx, PlayState* play) {
-    ;
 }
 
 void TGSw_Update(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
+
     this->actionFunc(this, play);
 }
 
