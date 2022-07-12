@@ -19,13 +19,13 @@ enum {
 };
 
 typedef struct EnElfgrp {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ s16 unk_144;
-    /* 0x0146 */ u8 unk_146;
-    /* 0x0147 */ u8 unk_147;
-    /* 0x0148 */ s8 unk_148;
-    /* 0x014A */ u16 unk_14A;
-    /* 0x014C */ EnElfgrpActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ s16 unk_144;
+    /* 0x146 */ u8 unk_146;
+    /* 0x147 */ u8 unk_147;
+    /* 0x148 */ s8 unk_148;
+    /* 0x14A */ u16 unk_14A;
+    /* 0x14C */ EnElfgrpActionFunc actionFunc;
 } EnElfgrp; // size = 0x150
 
 extern const ActorInit En_Elfgrp_InitVars;

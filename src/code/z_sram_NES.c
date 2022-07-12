@@ -260,7 +260,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
             ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
-        gSaveContext.save.permanentSceneFlags[i].unk_18 = 0;
+        gSaveContext.save.permanentSceneFlags[i].rooms = 0;
     }
 
     for (; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -595,7 +595,7 @@ ItemEquips sSaveDefaultItemEquips = {
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
-        { ITEM_UNK_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { ITEM_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
     },
     {
         { SLOT_OCARINA, SLOT_NONE, SLOT_NONE, SLOT_NONE },

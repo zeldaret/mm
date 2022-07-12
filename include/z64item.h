@@ -280,7 +280,10 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEA_HORSE_CAUGHT,
-    /* 0xFD */ ITEM_UNK_FD = 0xFD,
+    /* 0xF0 */ ITEM_F0 = 0xF0,
+    /* 0xF1 */ ITEM_F1,
+    /* 0xF2 */ ITEM_F2,
+    /* 0xFD */ ITEM_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 
@@ -329,6 +332,7 @@ typedef enum {
     /* 0x3D */ GI_KEY_BOSS,
     /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
+    /* 0x4C */ GI_OCARINA = 0x4C,
     /* 0x50 */ GI_50 = 0x50,
     /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
@@ -426,7 +430,7 @@ typedef enum {
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
     /* 0x68 */ GID_SWORD_GREAT_FAIRY,
-    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6A */ GID_MASK_GREAT_FAIRY = 0x6A,
     /* 0x6B */ GID_6B,
     /* 0x70 */ GID_70 = 0x70,
     /* 0x71 */ GID_71

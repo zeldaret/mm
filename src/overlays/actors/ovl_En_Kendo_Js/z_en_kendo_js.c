@@ -356,7 +356,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
+                (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             break;
@@ -366,7 +367,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             break;
@@ -376,14 +377,16 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
+                (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             this->unk_28E = 0;
             break;
 
         case 3:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 4) || (player->swordAnimation == 6))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -395,7 +398,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
             break;
 
         case 4:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 0) || (player->swordAnimation == 2))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_COMBO_1H))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -407,7 +411,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
             break;
 
         case 5:
-            if ((this->unk_28E == 1) && (player->swordAnimation == 12)) {
+            if ((this->unk_28E == 1) && (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H)) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -419,7 +423,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
             break;
 
         case 6:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 17) || (player->swordAnimation == 20))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
+                                         (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -449,7 +454,7 @@ s32 func_80B26F6C(EnKendoJs* this, PlayState* play) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (func_80124190(player)) {
+            if (Player_GetMeleeWeaponHeld(player) != 0) {
                 Message_StartTextbox(play, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;
@@ -600,8 +605,8 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
         }
 
         play_sound(NA_SE_SY_FOUND);
-        func_80B279F0(this, play, (((s32)Rand_Next() & 0xFF) % 3) + 1);
-        func_80B279F0(this, play, (((s32)Rand_Next() & 0xFF) % 3) + 4);
+        func_80B279F0(this, play, ((u8)Rand_Next() % 3) + 1);
+        func_80B279F0(this, play, ((u8)Rand_Next() % 3) + 4);
         this->unk_290 = 0;
         this->unk_284++;
     } else if (this->unk_290 == 120) {
@@ -612,12 +617,13 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
     }
 
     if (this->unk_28E == 1) {
-        if ((player->swordAnimation == 17) || (player->swordAnimation == 20)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
+            (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
             play->interfaceCtx.unk_25C = 3;
             if (gSaveContext.minigameScore >= 27) {
                 player->stateFlags1 |= 0x20;
             }
-        } else if (player->swordAnimation == 12) {
+        } else if (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H) {
             play->interfaceCtx.unk_25C = 2;
         } else {
             play->interfaceCtx.unk_25C = 1;

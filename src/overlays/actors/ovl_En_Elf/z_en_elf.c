@@ -662,7 +662,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    if (Player_InCsMode(&play->state)) {
+    if (Player_InCsMode(play)) {
         if ((this->fairyFlags & 0x4000) && (this->fairyFlags & 0x100) && func_8088DCA4(this)) {
             return;
         }

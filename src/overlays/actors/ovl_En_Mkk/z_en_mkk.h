@@ -8,9 +8,9 @@ struct EnMkk;
 typedef void (*EnMkkActionFunc)(struct EnMkk*, PlayState*);
 
 typedef struct EnMkk {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnMkkActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0x8C];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnMkkActionFunc actionFunc;
+    /* 0x148 */ char unk_148[0x8C];
 } EnMkk; // size = 0x1D4
 
 extern const ActorInit En_Mkk_InitVars;

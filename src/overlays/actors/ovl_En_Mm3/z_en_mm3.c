@@ -84,7 +84,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, &object_mm_Anim_00A4E0, this->jointTable,
                        this->morphTable, 16);
     Animation_Change(&this->skelAnime, &object_mm_Anim_00A4E0, -1.0f, Animation_GetLastFrame(&object_mm_Anim_00A4E0),
-                     0.0f, 2, 0.0f);
+                     0.0f, ANIMMODE_ONCE, 0.0f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);

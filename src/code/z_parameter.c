@@ -937,7 +937,7 @@ void Inventory_UpdateDeitySwordEquip(PlayState* play) {
 
     if (CUR_FORM == PLAYER_FORM_FIERCE_DEITY) {
         interfaceCtx->unk_21C = 0;
-        interfaceCtx->unk_21E = 0;
+        interfaceCtx->bButtonDoAction = 0;
 
         // Is simply checking if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY)
         if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
@@ -955,7 +955,7 @@ void Inventory_UpdateDeitySwordEquip(PlayState* play) {
     }
 
     for (btn = EQUIP_SLOT_B; btn <= EQUIP_SLOT_B; btn++) {
-        if ((GET_CUR_FORM_BTN_ITEM(btn) != ITEM_NONE) && (GET_CUR_FORM_BTN_ITEM(btn) != ITEM_UNK_FD)) {
+        if ((GET_CUR_FORM_BTN_ITEM(btn) != ITEM_NONE) && (GET_CUR_FORM_BTN_ITEM(btn) != ITEM_FD)) {
             Interface_LoadItemIconImpl(play, btn);
         }
     }

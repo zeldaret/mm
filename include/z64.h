@@ -36,6 +36,7 @@
 #include "z64effect.h"
 #include "z64item.h"
 #include "z64light.h"
+#include "z64map.h"
 #include "z64math.h"
 #include "z64object.h"
 #include "z64ocarina.h"
@@ -554,7 +555,7 @@ typedef struct {
     /* 0x214 */ u16 unk_214;
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 bButtonDoAction;
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
@@ -590,7 +591,7 @@ typedef struct {
     /* 0x274 */ s16 minimapAlpha;
     /* 0x276 */ s16 startAlpha;
     /* 0x278 */ s16 unk_278;
-    /* 0x27A */ s16 unk_27A;
+    /* 0x27A */ s16 dungeonOrBossAreaMapIndex;
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
@@ -1302,7 +1303,7 @@ struct PlayState {
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 arg2, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1329,7 +1330,7 @@ struct PlayState {
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
     /* 0x1887F */ u8 unk_1887F; // fadeTransition

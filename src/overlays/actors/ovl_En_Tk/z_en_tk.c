@@ -227,7 +227,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_tk_Skel_00B9E8, NULL, this->jointTable, this->morphTable, 18);
     Animation_Change(&this->skelAnime, &object_tk_Anim_0030A4, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&object_tk_Anim_0030A4.common), 0, 0.0f);
+                     Animation_GetLastFrame(&object_tk_Anim_0030A4.common), ANIMMODE_LOOP, 0.0f);
     this->unk_318 = 0;
     this->unk_2D4 = -1;
     Actor_SetScale(&this->actor, 0.01f);

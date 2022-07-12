@@ -6,6 +6,7 @@
 
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
@@ -372,12 +373,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB1FCC(EnGeg* this, PlayState* play) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void func_80BB2020(EnGeg* this, PlayState* play) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_4AC);
 }
 
@@ -692,8 +693,8 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
                 this->unk_4C0[i].x *= temp_f20;
                 this->unk_4C0[i].y *= temp_f20;
                 this->unk_4C0[i].z *= temp_f20;
-                EffectSsHahen_Spawn(play, &this->unk_4B4, &this->unk_4C0[i], &sp74, 1, sp68, 1, 15,
-                                    gameplay_keep_DL_06AB30);
+                EffectSsHahen_Spawn(play, &this->unk_4B4, &this->unk_4C0[i], &sp74, HAHEN_SMALL, sp68, GAMEPLAY_KEEP,
+                                    15, gameplay_keep_DL_06AB30);
             }
         }
         this->unk_4E0--;
