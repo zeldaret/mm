@@ -8,26 +8,26 @@ struct EffDust;
 typedef void (*EffDustActionFunc)(struct EffDust*, PlayState*);
 
 typedef struct EffDust {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ f32 distanceTraveled[64]; // For each particle. Normalized. From 0.0f to 1.0f
-    /* 0x0244 */ Vec3f initialPositions[64]; // Array of position for each dust particle.
-    /* 0x0544 */ u8 index;
-    /* 0x0545 */ u8 life; // Only considered if actor.params is 2, 3 or 4.
-    /* 0x0548 */ f32 dx; // Normalized. 0.0f to 1.0f
-    /* 0x054C */ f32 dy; // Normalized. 0.0f to 1.0f
-    /* 0x0550 */ f32 dz; // Normalized. 0.0f to 1.0f
-    /* 0x0554 */ f32 scalingFactor;
-    /* 0x0558 */ EffDustActionFunc actionFunc;
-    /* 0x055C */ ActorFunc drawFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ f32 distanceTraveled[64]; // For each particle. Normalized. From 0.0f to 1.0f
+    /* 0x244 */ Vec3f initialPositions[64]; // Array of position for each dust particle.
+    /* 0x544 */ u8 index;
+    /* 0x545 */ u8 life; // Only considered if actor.params is 2, 3 or 4.
+    /* 0x548 */ f32 dx; // Normalized. 0.0f to 1.0f
+    /* 0x54C */ f32 dy; // Normalized. 0.0f to 1.0f
+    /* 0x550 */ f32 dz; // Normalized. 0.0f to 1.0f
+    /* 0x554 */ f32 scalingFactor;
+    /* 0x558 */ EffDustActionFunc actionFunc;
+    /* 0x55C */ ActorFunc drawFunc;
 } EffDust; // size = 0x560
 
 typedef enum {
-    /* 0x00 */ EFF_DUST_TYPE_0,
-    /* 0x01 */ EFF_DUST_TYPE_1,
-    /* 0x02 */ EFF_DUST_TYPE_2,
-    /* 0x03 */ EFF_DUST_TYPE_3,
-    /* 0x04 */ EFF_DUST_TYPE_4,
-    /* 0x05 */ EFF_DUST_TYPE_5
+    /* 0x0 */ EFF_DUST_TYPE_0,
+    /* 0x1 */ EFF_DUST_TYPE_1,
+    /* 0x2 */ EFF_DUST_TYPE_2,
+    /* 0x3 */ EFF_DUST_TYPE_3,
+    /* 0x4 */ EFF_DUST_TYPE_4,
+    /* 0x5 */ EFF_DUST_TYPE_5
 } EffDustType;
 
 extern const ActorInit Eff_Dust_InitVars;

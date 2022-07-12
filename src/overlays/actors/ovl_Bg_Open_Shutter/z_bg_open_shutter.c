@@ -67,7 +67,7 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
     f32 temp_fv0;
     s16 temp_v0;
 
-    if (!Player_InCsMode(&play->state) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
+    if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
         temp_fv0 = func_80ACAB10(play, &this->dyna.actor, 0.0f, 65.0f, 15.0f);
         if (fabsf(temp_fv0) < 50.0f) {
             temp_v0 = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
