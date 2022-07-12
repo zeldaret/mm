@@ -328,7 +328,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
 void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     this->timer = 40;
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &object_firefly_Anim_00017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_firefly_Anim_00017C, 0.0f, 6.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= ACTOR_FLAG_10;
 

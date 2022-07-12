@@ -13,7 +13,6 @@ typedef struct ObjGrassStruct1_1 {
     /* 0x0E */ s8 unk_0E;
     /* 0x0F */ u8 unk_0F;
     /* 0x10 */ u8 unk_10;
-    /* 0x11 */ UNK_TYPE1 unk_11[0x3];
 } ObjGrassStruct1_1; // size = 0x14
 
 typedef struct {

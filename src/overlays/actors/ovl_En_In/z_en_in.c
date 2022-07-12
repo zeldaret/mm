@@ -77,7 +77,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -319,7 +319,7 @@ void func_808F374C(EnIn* this, PlayState* play) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
         this->unk486 = this->unk488;
         Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->unk488]), 2, -10.0f);
+                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
     }
 }
 
@@ -458,84 +458,82 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) {
-        s32 requiredScopeTemp;
-
         if (!(gSaveContext.save.weekEventReg[63] & 0x40)) {
-            return 0x34A9;
+            textId = 0x34A9;
         } else if (this->unk4AC & 8) {
-            return 0x34B1;
+            textId = 0x34B1;
         } else {
             textId = 0x34AF;
         }
-    } else {
-        switch (arg2) {
-            case 0:
-                if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                    (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
-                    textId = 0x345C;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x3460;
-                } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
-                    textId = 0x3458;
-                } else {
-                    textId = 0x345B;
-                }
-                break;
-            case 1:
-                if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
-                    textId = 0x3463;
-                } else {
-                    textId = 0x346B;
-                }
-                break;
-            case 3:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x3485;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x3484;
-                } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
-                    textId = 0x346D;
-                } else {
-                    textId = 0x3482;
-                }
-                break;
-            case 4:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                    gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x348A;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x348B;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
-                    textId = 0x3486;
-                } else {
-                    textId = 0x3489;
-                }
-                break;
-            case 5:
-                if (func_808F33B8()) {
-                    textId = 0x34B3;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
-                    textId = 0x348E;
-                } else {
-                    textId = 0x3493;
-                }
-                break;
-            case 7:
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-                    textId = 0x34A8;
-                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-                    textId = 0x34A7;
-                } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
-                    textId = 0x3495;
-                } else {
-                    textId = 0x34A5;
-                }
-        }
-        if (textId == 0) {
-            textId = 1;
-        }
+        return textId;
+    }
+
+    switch (arg2) {
+        case 0:
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+                textId = 0x345C;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x3460;
+            } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
+                textId = 0x3458;
+            } else {
+                textId = 0x345B;
+            }
+            break;
+        case 1:
+            if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
+                textId = 0x3463;
+            } else {
+                textId = 0x346B;
+            }
+            break;
+        case 3:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x3485;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x3484;
+            } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
+                textId = 0x346D;
+            } else {
+                textId = 0x3482;
+            }
+            break;
+        case 4:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA || gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x348A;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x348B;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
+                textId = 0x3486;
+            } else {
+                textId = 0x3489;
+            }
+            break;
+        case 5:
+            if (func_808F33B8()) {
+                textId = 0x34B3;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
+                textId = 0x348E;
+            } else {
+                textId = 0x3493;
+            }
+            break;
+        case 7:
+            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                textId = 0x34A8;
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+                textId = 0x34A7;
+            } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
+                textId = 0x3495;
+            } else {
+                textId = 0x34A5;
+            }
+    }
+    if (textId == 0) {
+        textId = 1;
     }
     return textId;
 }
@@ -1376,7 +1374,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_in_Anim_016A60), 2, 0.0f);
+                         Animation_GetLastFrame(&object_in_Anim_016A60), ANIMMODE_ONCE, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;

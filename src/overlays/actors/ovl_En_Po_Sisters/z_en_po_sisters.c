@@ -212,7 +212,7 @@ void func_80B1A768(EnPoSisters* this, PlayState* play) {
     f32 sp20;
 
     if ((this->unk_18D == 0) || (this->actionFunc != func_80B1B444)) {
-        if (((player->swordState == 0) || (player->swordAnimation >= 30)) &&
+        if (((player->meleeWeaponState == 0) || (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H)) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->unk_2EC, 110.0f, 3.0f);
         } else {
@@ -537,7 +537,7 @@ void func_80B1B628(EnPoSisters* this, PlayState* play) {
 
 void func_80B1B70C(EnPoSisters* this) {
     Animation_Change(&this->skelAnime, &object_po_sisters_Anim_00119C, 1.5f, 0.0f,
-                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), 2, -3.0f);
+                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), ANIMMODE_ONCE, -3.0f);
     this->unk_194 = 100;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -562,7 +562,7 @@ void func_80B1B7BC(EnPoSisters* this, PlayState* play) {
 
 void func_80B1B860(EnPoSisters* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &object_po_sisters_Anim_00119C, 1.5f, 0.0f,
-                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), 2, -3.0f);
+                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), ANIMMODE_ONCE, -3.0f);
     if (this->unk_18C == 0) {
         this->unk_2EC = 110.0f;
         func_80B1A768(this, play);
