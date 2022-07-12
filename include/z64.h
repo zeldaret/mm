@@ -29,6 +29,7 @@
 #include "z64animation.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
+#include "z64camera.h"
 #include "z64collision_check.h"
 #include "z64curve.h"
 #include "z64cutscene.h"
@@ -443,7 +444,7 @@ typedef struct {
     /* 0x150 */ Vec3f curDistortionScale;
     /* 0x15C */ u16 normal;
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ UNK_TYPE4 unk164;
+    /* 0x164 */ s32 unk164;
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
@@ -1004,73 +1005,6 @@ typedef struct {
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
 
-typedef struct Camera {
-    /* 0x000 */ char paramData[0x50];
-    /* 0x050 */ Vec3f at;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f up;
-    /* 0x074 */ Vec3f eyeNext;
-    /* 0x080 */ Vec3f skyboxOffset;
-    /* 0x08C */ struct PlayState* play;
-    /* 0x090 */ struct Player* player;
-    /* 0x094 */ PosRot playerPosRot;
-    /* 0x0A8 */ struct Actor* target;
-    /* 0x0AC */ PosRot targetPosRot;
-    /* 0x0C0 */ f32 rUpdateRateInv;
-    /* 0x0C4 */ f32 pitchUpdateRateInv;
-    /* 0x0C8 */ f32 yawUpdateRateInv;
-    /* 0x0CC */ f32 yOffsetUpdateRate;
-    /* 0x0D0 */ f32 xzOffsetUpdateRate;
-    /* 0x0D4 */ f32 fovUpdateRate;
-    /* 0x0D8 */ f32 xzSpeed;
-    /* 0x0DC */ f32 dist;
-    /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f posOffset;
-    /* 0x0F0 */ Vec3f playerPosDelta;
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 atLERPStepScale;
-    /* 0x104 */ f32 playerGroundY;
-    /* 0x108 */ Vec3f floorNorm;
-    /* 0x114 */ f32 waterYPos;
-    /* 0x118 */ s32 waterPrevCamIdx;
-    /* 0x11C */ s32 waterPrevCamSetting;
-    /* 0x120 */ s16 waterQuakeId;
-    /* 0x122 */ s16 unk122;
-    /* 0x124 */ void* data0;
-    /* 0x128 */ void* data1;
-    /* 0x12C */ s16 data2;
-    /* 0x12E */ s16 data3;
-    /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132[2];
-    /* 0x134 */ Vec3s inputDir;
-    /* 0x13A */ Vec3s camDir;
-    /* 0x140 */ s16 status;
-    /* 0x142 */ s16 setting;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ s16 bgCheckId;
-    /* 0x148 */ s16 camDataIdx;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
-    /* 0x14E */ s16 childCamIdx;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ s16 prevSetting;
-    /* 0x156 */ s16 nextCamDataIdx;
-    /* 0x158 */ s16 nextBGCheckId;
-    /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 animState;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 camId;
-    /* 0x166 */ s16 prevCamDataIdx;
-    /* 0x168 */ s16 unk168;
-    /* 0x16A */ s16 unk16A;
-    /* 0x16C */ Vec3f meshActorPos;
-} Camera; // size = 0x178
-
-typedef s32(*camera_update_func)(Camera* camera);
-
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
     /* 0x0C */ Vec3f eyeOffset;
@@ -1266,9 +1200,9 @@ struct PlayState {
     /* 0x000B4 */ char unk_B4[0x4];
     /* 0x000B8 */ View view;
     /* 0x00220 */ Camera mainCamera;
-    /* 0x00398 */ Camera subCameras[3];
-    /* 0x00800 */ Camera* cameraPtrs[4];
-    /* 0x00810 */ s16 activeCamera;
+    /* 0x00398 */ Camera subCameras[NUM_CAMS - CAM_ID_SUB_FIRST];
+    /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
+    /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
     /* 0x00814 */ SoundContext soundCtx;
     /* 0x00818 */ LightContext lightCtx;

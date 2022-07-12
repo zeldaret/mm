@@ -200,9 +200,8 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         Matrix_Translate(0.0f, 52.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateYS(
-            ((Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
-            MTXMODE_APPLY);
+        Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
+                        MTXMODE_APPLY);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);

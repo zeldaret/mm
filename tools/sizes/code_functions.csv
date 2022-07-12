@@ -785,15 +785,15 @@ asm/non_matchings/code/z_camera/Camera_SetMode.s,Camera_SetMode,0x800DF4D0,0xDC
 asm/non_matchings/code/z_camera/Camera_ChangeMode.s,Camera_ChangeMode,0x800DF840,0xB
 asm/non_matchings/code/z_camera/func_800DF86C.s,func_800DF86C,0x800DF86C,0x20
 asm/non_matchings/code/z_camera/func_800DF8EC.s,func_800DF8EC,0x800DF8EC,0x77
-asm/non_matchings/code/z_camera/func_800DFAC8.s,func_800DFAC8,0x800DFAC8,0x13
+asm/non_matchings/code/z_camera/Camera_ChangeSetting.s,Camera_ChangeSetting,0x800DFAC8,0x13
 asm/non_matchings/code/z_camera/Camera_ChangeDataIdx.s,Camera_ChangeDataIdx,0x800DFB14,0x42
 asm/non_matchings/code/z_camera/func_800DFC1C.s,func_800DFC1C,0x800DFC1C,0x9
 asm/non_matchings/code/z_camera/func_800DFC40.s,func_800DFC40,0x800DFC40,0xA
 asm/non_matchings/code/z_camera/Camera_GetInputDirYaw.s,Camera_GetInputDirYaw,0x800DFC68,0xA
-asm/non_matchings/code/z_camera/func_800DFC90.s,func_800DFC90,0x800DFC90,0x9
+asm/non_matchings/code/z_camera/Camera_GetCamDir.s,Camera_GetCamDir,0x800DFC90,0x9
 asm/non_matchings/code/z_camera/Camera_GetCamDirPitch.s,Camera_GetCamDirPitch,0x800DFCB4,0xA
 asm/non_matchings/code/z_camera/Camera_GetCamDirYaw.s,Camera_GetCamDirYaw,0x800DFCDC,0xA
-asm/non_matchings/code/z_camera/func_800DFD04.s,func_800DFD04,0x800DFD04,0x1D
+asm/non_matchings/code/z_camera/Camera_AddQuake.s,Camera_AddQuake,0x800DFD04,0x1D
 asm/non_matchings/code/z_camera/func_800DFD78.s,func_800DFD78,0x800DFD78,0x5E
 asm/non_matchings/code/z_camera/func_800DFEF0.s,func_800DFEF0,0x800DFEF0,0xA
 asm/non_matchings/code/z_camera/func_800DFF18.s,func_800DFF18,0x800DFF18,0x7
@@ -801,7 +801,7 @@ asm/non_matchings/code/z_camera/func_800DFF34.s,func_800DFF34,0x800DFF34,0x4
 asm/non_matchings/code/z_camera/func_800DFF44.s,func_800DFF44,0x800DFF44,0x7
 asm/non_matchings/code/z_camera/Camera_SetFlags.s,Camera_SetFlags,0x800DFF60,0x9
 asm/non_matchings/code/z_camera/Camera_ClearFlags.s,Camera_ClearFlags,0x800DFF84,0xA
-asm/non_matchings/code/z_camera/func_800DFFAC.s,func_800DFFAC,0x800DFFAC,0x34
+asm/non_matchings/code/z_camera/Camera_ChangeDoorCam.s,Camera_ChangeDoorCam,0x800DFFAC,0x34
 asm/non_matchings/code/z_camera/func_800E007C.s,func_800E007C,0x800E007C,0x4C
 asm/non_matchings/code/z_camera/func_800E01AC.s,func_800E01AC,0x800E01AC,0x3
 asm/non_matchings/code/z_camera/Camera_GetQuakeOffset.s,Camera_GetQuakeOffset,0x800E01B8,0x9
