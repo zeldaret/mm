@@ -61,19 +61,19 @@ typedef struct {
 
 typedef enum {
     NA_SE_PL_BASE = 0x7FF,
-    #include "tables/sfx/playerbank_table.h"
+    #include "tables/sfx/0_playerbank_table.h"
     NA_SE_IT_BASE = 0x17FF,
-    #include "tables/sfx/itembank_table.h"
+    #include "tables/sfx/1_itembank_table.h"
     NA_SE_EV_BASE = 0x27FF,
-    #include "tables/sfx/environmentbank_table.h"
+    #include "tables/sfx/2_environmentbank_table.h"
     NA_SE_EN_BASE = 0x37FF,
-    #include "tables/sfx/enemybank_table.h"
+    #include "tables/sfx/3_enemybank_table.h"
     NA_SE_SY_BASE = 0x47FF,
-    #include "tables/sfx/systembank_table.h"
+    #include "tables/sfx/4_systembank_table.h"
     NA_SE_OC_BASE = 0x57FF,
-    #include "tables/sfx/ocarinabank_table.h"
+    #include "tables/sfx/5_ocarinabank_table.h"
     NA_SE_VO_BASE = 0x67FF,
-    #include "tables/sfx/voicebank_table.h"
+    #include "tables/sfx/6_voicebank_table.h"
     NA_SE_MAX
 } SfxId;
 
