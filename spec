@@ -4933,8 +4933,7 @@ beginseg
     name "ovl_Eff_Zoraband"
     compress
     include "build/src/overlays/actors/ovl_Eff_Zoraband/z_eff_zoraband.o"
-    include "build/data/ovl_Eff_Zoraband/ovl_Eff_Zoraband.data.o"
-    include "build/data/ovl_Eff_Zoraband/ovl_Eff_Zoraband.reloc.o"
+    include "build/src/overlays/actors/ovl_Eff_Zoraband/ovl_Eff_Zoraband_reloc.o"
 endseg
 
 beginseg
