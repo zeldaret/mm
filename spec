@@ -3531,8 +3531,7 @@ beginseg
     name "ovl_En_Ds2n"
     compress
     include "build/src/overlays/actors/ovl_En_Ds2n/z_en_ds2n.o"
-    include "build/data/ovl_En_Ds2n/ovl_En_Ds2n.data.o"
-    include "build/data/ovl_En_Ds2n/ovl_En_Ds2n.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ds2n/ovl_En_Ds2n_reloc.o"
 endseg
 
 beginseg
