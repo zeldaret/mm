@@ -255,7 +255,7 @@ void func_808F169C(EnKarebaba* this, PlayState* play) {
 
 void func_808F16FC(EnKarebaba* this) {
     Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 4.0f, 0.0f,
-                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), 0, -3.0f);
+                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), ANIMMODE_LOOP, -3.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = func_808F1778;
 }
@@ -501,7 +501,7 @@ void func_808F21A4(EnKarebaba* this, PlayState* play) {
 
 void func_808F220C(EnKarebaba* this) {
     Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, -3.0f,
-                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), 0.0f, 2, -3.0f);
+                     Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), 0.0f, ANIMMODE_ONCE, -3.0f);
     func_808F152C(this);
     this->actionFunc = func_808F228C;
 }
@@ -526,7 +526,7 @@ void func_808F228C(EnKarebaba* this, PlayState* play) {
 }
 
 void func_808F238C(EnKarebaba* this) {
-    Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 0.0f, 0.0f, 0.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
     func_808F152C(this);
     this->actor.shape.rot.x = -0x4000;
     this->unk_1EE = 200;

@@ -126,7 +126,7 @@ void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, PlayState* play) {
 
 void ObjEtcetera_StartRustleAnimation(ObjEtcetera* this) {
     Animation_Change(&this->skelAnime, &gDekuFlowerRustleAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuFlowerRustleAnim), 2, 0.0f);
+                     Animation_GetLastFrame(&gDekuFlowerRustleAnim), ANIMMODE_ONCE, 0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
     this->actionFunc = ObjEtcetera_PlayRustleAnimation;
 }
@@ -138,7 +138,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
         Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gDekuFlowerBounceAnim), 2, 0.0f);
+                         Animation_GetLastFrame(&gDekuFlowerBounceAnim), ANIMMODE_ONCE, 0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
         this->actionFunc = ObjEtcetera_DoBounceOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -300,7 +300,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
             case DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE:
             case DEKU_FLOWER_TYPE_GOLD_WITH_INITIAL_BOUNCE:
                 Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
-                                 Animation_GetLastFrame(&gDekuFlowerBounceAnim), 2, 0.0f);
+                                 Animation_GetLastFrame(&gDekuFlowerBounceAnim), ANIMMODE_ONCE, 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoBounceOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);

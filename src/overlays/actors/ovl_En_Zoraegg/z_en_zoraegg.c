@@ -472,7 +472,7 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, this->actorActionCmd) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCmd)]->action == 3)) {
         Animation_Change(&this->skelAnime, &object_zoraegg_Anim_004D20, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_zoraegg_Anim_004D20), 2, 5.0f);
+                         Animation_GetLastFrame(&object_zoraegg_Anim_004D20), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
         gSaveContext.save.weekEventReg[19] |= 0x40;
@@ -493,7 +493,7 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
         if (this->unk_1E8 >= 2) {
             this->actionFunc = func_80B326F4;
             Animation_Change(&this->skelAnime, &object_zoraegg_Anim_005098, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&object_zoraegg_Anim_005098), 0, 10.0f);
+                             Animation_GetLastFrame(&object_zoraegg_Anim_005098), ANIMMODE_LOOP, 10.0f);
             this->unk_1E8 = 0;
             SkelAnime_Update(&this->skelAnime);
             return;

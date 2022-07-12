@@ -90,7 +90,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    3,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -776,7 +776,7 @@ void func_80C12378(EnThiefbird* this, PlayState* play) {
 }
 
 void func_80C1242C(EnThiefbird* this) {
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, 0, -4.0f);
+    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f);
     this->actor.flags |= ACTOR_FLAG_10;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C124B0;
@@ -837,7 +837,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
 
 void func_80C12744(EnThiefbird* this) {
     Animation_MorphToLoop(&this->skelAnime, &object_thiefbird_Anim_000604, -4.0f);
-    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -4.0f);
     this->unk_190 = 0;
     this->collider.base.acFlags |= AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;

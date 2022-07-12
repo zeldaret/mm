@@ -177,7 +177,7 @@ EnMinifrog* EnMinifrog_GetFrog(PlayState* play) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
+        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
     }
 }
 

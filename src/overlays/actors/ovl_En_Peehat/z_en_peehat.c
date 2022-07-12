@@ -124,7 +124,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_TYPE_1,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -288,7 +288,7 @@ void func_80897390(EnPeehat* this, PlayState* play) {
 
 void func_80897498(EnPeehat* this) {
     Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
-                     Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
+                     Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     this->unk_2B0 = 0;
     this->unk_2AD = 1;
     this->colliderCylinder.base.acFlags &= ~AC_HIT;
@@ -324,7 +324,7 @@ void func_80897520(EnPeehat* this, PlayState* play) {
 void func_80897648(EnPeehat* this) {
     if (this->actionFunc != func_80898454) {
         Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
-                         Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
+                         Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     }
     this->unk_2B0 = 16;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_UP);

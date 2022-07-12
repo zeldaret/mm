@@ -208,7 +208,7 @@ void EnBigokuta_SpawnRipple(EnBigokuta* this, PlayState* play) {
 }
 
 void EnBigokuta_SetupIdle(EnBigokuta* this) {
-    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 0.5f, 0.0f, 0.0f, 1, -3.0f);
+    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actionFunc = EnBigokuta_Idle;
 }
 
@@ -287,7 +287,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, PlayState* play) {
     Math_Vec3f_Copy(&this->playerPos, &player->actor.world.pos);
     this->timer = 0;
 
-    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, ANIMMODE_ONCE, -3.0f);
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 
     this->playerHoldPos.x = (Math_SinS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.x;

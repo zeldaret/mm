@@ -49,7 +49,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -190,7 +190,7 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     this->unk_256 = Rand_ZeroOne() * 0xFFFF;
     this->unk_258 = Rand_ZeroOne() * 0xFFFF;
 
-    Animation_Change(&this->skelAnime, &gameplay_field_keep_Anim_001D20, 1.0f, 0.0f, 0.0f, 1, 0.0f);
+    Animation_Change(&this->skelAnime, &gameplay_field_keep_Anim_001D20, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, 0.0f);
     func_8091C748(this);
     this->actor.shape.rot.x -= 0x2320;
     this->unk_250 = 1;
