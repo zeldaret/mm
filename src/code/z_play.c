@@ -92,6 +92,7 @@ s16 Play_CreateSubCamera(PlayState* this) {
         }
     }
 
+    // if no subCameras available
     if (subCamId == NUM_CAMS) {
         return CAM_ID_NONE;
     }
@@ -168,6 +169,9 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     return successfullySet;
 }
 
+/**
+ * @return bit-packed success if each of the params were applied
+ */
 s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
     s32 successfullySet = 0;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
@@ -260,7 +264,7 @@ s16 Play_GetCameraUID(PlayState* this, s16 camId) {
     }
 }
 
-// Unused, purpose is very unclear
+// Unused in both MM and OoT, purpose is very unclear
 s16 func_80169BF8(PlayState* this, s16 camId, s16 uid) {
     Camera* camera = this->cameraPtrs[camId];
 

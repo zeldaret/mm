@@ -518,8 +518,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
             Play_GetScreenPos(play, &worldPos, &screenPos);
 
             // checking if particle is on screen
-            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
-                screenPos.y < SCREEN_HEIGHT) {
+            if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+                (screenPos.y < SCREEN_HEIGHT)) {
                 Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->effects[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
