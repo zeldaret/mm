@@ -437,7 +437,7 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (inPositionToAttack == true)) {
                 this->grabState = EN_RAILGIBUD_GRAB_ATTACK;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_ATTACK);
-            } else if (!(player->stateFlags2 & 0x80)) {
+            } else if (!(player->stateFlags2 & PLAYER_STATE2_80)) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
@@ -462,9 +462,9 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
-            if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
-                if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
-                    player->stateFlags2 &= ~0x80;
+            if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
+                if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
+                    player->stateFlags2 &= ~PLAYER_STATE2_80;
                     player->unk_AE8 = 100;
                 }
 

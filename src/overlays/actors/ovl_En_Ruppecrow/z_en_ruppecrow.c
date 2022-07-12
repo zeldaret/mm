@@ -507,7 +507,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
-    if (player->stateFlags2 & 0x8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.1f, 0.1f);

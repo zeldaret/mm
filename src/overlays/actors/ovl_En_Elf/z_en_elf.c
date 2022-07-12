@@ -1140,7 +1140,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
         } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == 4)) {
             if (arrowPointedActor != NULL) {
                 this->unk_25C = 100;
-                player->stateFlags2 |= 0x100000;
+                player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;
             } else {
                 switch (this->unk_244) {
@@ -1164,7 +1164,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
                                 this->unk_24A--;
                                 sp34 = 5;
                             } else {
-                                player->stateFlags2 |= 0x100000;
+                                player->stateFlags2 |= PLAYER_STATE2_100000;
                                 sp34 = 0;
                             }
                         } else {
@@ -1196,7 +1196,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
 
         switch (sp34) {
             case 0:
-                if (!(player->stateFlags2 & 0x100000)) {
+                if (!(player->stateFlags2 & PLAYER_STATE2_100000)) {
                     sp34 = 5;
                     if (this->unk_269 == 0) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_NAVY_VANISH);
@@ -1205,25 +1205,25 @@ void func_8088F214(EnElf* this, PlayState* play) {
                 break;
 
             case 6:
-                if (player->stateFlags2 & 0x100000) {
+                if (player->stateFlags2 & PLAYER_STATE2_100000) {
                     sp34 = 9;
                     this->unk_25C = 0x2A;
                     if (this->unk_269 == 0) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
                     }
                 } else if (player->stateFlags1 & PLAYER_STATE1_40) {
-                    player->stateFlags2 |= 0x100000;
+                    player->stateFlags2 |= PLAYER_STATE2_100000;
                     sp34 = 0;
                     this->unk_25C = 0;
                 }
                 break;
 
             case 5:
-                player->stateFlags2 &= ~0x100000;
+                player->stateFlags2 &= ~PLAYER_STATE2_100000;
                 break;
 
             default:
-                player->stateFlags2 |= 0x100000;
+                player->stateFlags2 |= PLAYER_STATE2_100000;
                 break;
         }
     }

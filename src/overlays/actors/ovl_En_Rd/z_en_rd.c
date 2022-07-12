@@ -838,9 +838,9 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 1500, 0);
 
         case EN_RD_GRAB_ATTACK:
-            if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
-                if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
-                    player->stateFlags2 &= ~0x80;
+            if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
+                if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
+                    player->stateFlags2 &= ~PLAYER_STATE2_80;
                     player->unk_AE8 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,

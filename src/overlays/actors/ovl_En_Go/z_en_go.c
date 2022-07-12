@@ -635,7 +635,7 @@ void func_80A12660(EnGo* this, PlayState* play) {
 void func_80A126BC(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags2 & 0x4000)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000)) {
         if (this->unk_3C6 != 0) {
             this->unk_3C6--;
         }

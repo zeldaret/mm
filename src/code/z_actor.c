@@ -1335,7 +1335,7 @@ s32 func_800B7128(Player* player) {
 s32 func_800B715C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return player->stateFlags2 & 0x8;
+    return player->stateFlags2 & PLAYER_STATE2_8;
 }
 
 void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
@@ -2435,7 +2435,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
 
     tmp = D_801AED58;
 
-    if (player->stateFlags2 & 0x8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         params.unk_08 = 0x2000000;
     } else {
         params.unk_08 = 0;
@@ -2914,7 +2914,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
 
     if (play->actorCtx.unk3 != 0) {
         Math_StepToC(&play->actorCtx.unk4, 100, 20);
-        if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
+        if (GET_PLAYER(play)->stateFlags2 & PLAYER_STATE2_8000000) {
             func_800B90F4(play);
         }
     } else {

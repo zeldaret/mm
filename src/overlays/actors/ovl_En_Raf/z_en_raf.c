@@ -372,7 +372,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
+    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -414,7 +414,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->chewScale, targetChewScale, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & 0x80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -432,7 +432,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
                 play->damagePlayer(play, -2);
                 func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
-                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
+                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
                     EnRaf_SetupThrow(this, play);
                     return;

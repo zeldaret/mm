@@ -753,7 +753,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
 
     this->unk_1E98 = player->actor.draw;
     player->actor.draw = NULL;
-    player->stateFlags2 |= 0x20000000;
+    player->stateFlags2 |= PLAYER_STATE2_20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
     if (play->roomCtx.currRoom.unk3 != 1) {
@@ -905,7 +905,7 @@ void func_80AF2F98(EnTest7* this, PlayState* play) {
         this->unk_148.unk_00 = this->unk_148.unk_04;
         this->unk_148.unk_08 = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
         this->unk_148.unk_0C = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
-        player->stateFlags2 &= ~0x20000000;
+        player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     }
 }
 

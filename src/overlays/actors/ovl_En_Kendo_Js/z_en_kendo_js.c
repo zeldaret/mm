@@ -357,7 +357,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
             }
 
             if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
-                (player->stateFlags2 & 0x80000)) {
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -367,7 +367,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             break;
@@ -378,7 +378,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
             }
 
             if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
-                (player->stateFlags2 & 0x80000)) {
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return 1;
             }
             this->unk_28E = 0;
@@ -391,7 +391,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -404,7 +404,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -416,7 +416,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -429,7 +429,7 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
