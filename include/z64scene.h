@@ -260,7 +260,7 @@ typedef union {
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2;
+    /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 unk5;

@@ -411,7 +411,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     }
 
     if (func_800BE184(play, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
-        ((player->swordAnimation == 0x11) || ((play->gameplayFrames % 2) != 0))) {
+        ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0))) {
         func_8099282C(this);
         return true;
     }
@@ -424,7 +424,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
             return true;
         }
 
-        if ((player->swordAnimation == 0x11) || ((play->gameplayFrames % 2) != 0)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
             func_8099282C(this);
             return true;
         }
@@ -615,7 +615,7 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->swordState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -665,7 +665,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->swordState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -1066,7 +1066,7 @@ void func_809928CC(EnWf* this, PlayState* play) {
         if (this->unk_2A0 != 0) {
             this->unk_2A0--;
         } else if (func_800BE184(play, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
-            if ((player->swordAnimation != 0x11) || ((play->gameplayFrames % 2) != 0)) {
+            if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
                 this->unk_2A0 = 10;
             } else {
                 func_8099223C(this);

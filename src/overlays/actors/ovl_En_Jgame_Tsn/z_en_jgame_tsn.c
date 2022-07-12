@@ -410,7 +410,7 @@ void func_80C14684(EnJgameTsn* this, PlayState* play) {
             if (gSaveContext.save.playerData.rupees >= 20) {
                 Message_StartTextbox(play, 0x109E, &this->actor);
                 this->unk_300 = 0x109E;
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
             } else {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                 Message_StartTextbox(play, 0x109D, &this->actor);

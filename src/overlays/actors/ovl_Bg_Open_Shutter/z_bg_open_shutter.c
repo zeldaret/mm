@@ -67,7 +67,7 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
     f32 temp_fv0;
     s16 temp_v0;
 
-    if (!Player_InCsMode(&play->state) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
+    if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer < 100.0f)) {
         temp_fv0 = func_80ACAB10(play, &this->dyna.actor, 0.0f, 65.0f, 15.0f);
         if (fabsf(temp_fv0) < 50.0f) {
             temp_v0 = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
@@ -111,7 +111,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
-        func_800DFFAC(play->cameraPtrs[0], &this->dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->dyna.actor, player->unk_3BA, 0.0f, 12, 15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
         this->dyna.actor.velocity.y = 0.0f;

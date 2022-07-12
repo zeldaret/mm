@@ -437,10 +437,10 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
     }
 
     scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, play);
-            func_80115908(play, 48);
+            Health_ChangeBy(play, 0x30);
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
                     Flags_SetCollectible(play, STRAY_FAIRY_FLAG(&this->actor));

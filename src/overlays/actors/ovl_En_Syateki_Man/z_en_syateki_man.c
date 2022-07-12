@@ -331,7 +331,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
@@ -638,7 +638,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 this->shootingGameState = SG_GAME_STATE_EXPLAINING_RULES;
                 if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES)) {
                     this->talkFlags |= TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES;

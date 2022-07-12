@@ -741,7 +741,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP | ENHORSE_UNRIDEABLE;
     } else if (thisx->params == ENHORSE_8) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP;
-        if (CHECK_QUEST_ITEM(14)) {
+        if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
             this->stateFlags &= ~ENHORSE_CANT_JUMP;
             this->stateFlags |= ENHORSE_FLAG_26;
         }
