@@ -34,7 +34,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801660B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Fini.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
 
@@ -46,7 +46,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166B30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167814.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
@@ -56,7 +56,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
 
 s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
@@ -74,39 +74,203 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
+void Play_GetScreenPos(PlayState* this, Vec3f* src, Vec3f* dest) {
+    f32 cappedInvW;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CreateSubCamera.s")
+    Actor_GetProjectedPos(this, src, dest, &cappedInvW);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
+    dest->x = (SCREEN_WIDTH / 2) + (dest->x * cappedInvW * (SCREEN_WIDTH / 2));
+    dest->y = (SCREEN_HEIGHT / 2) - (dest->y * cappedInvW * (SCREEN_HEIGHT / 2));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeStatus.s")
+s16 Play_CreateSubCamera(PlayState* this) {
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
+    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
+        if (this->cameraPtrs[i] == NULL) {
+            break;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s")
+    if (i == NUM_CAMS) {
+        return CAM_ID_NONE;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
+    this->cameraPtrs[i] = &this->subCameras[i - CAM_ID_SUB_FIRST];
+    Camera_Init(this->cameraPtrs[i], &this->view, &this->colCtx, this);
+    this->cameraPtrs[i]->camId = i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
+    return i;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s")
+s16 Play_GetActiveCamId(PlayState* this) {
+    return this->activeCamId;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
+s32 Play_CameraChangeStatus(PlayState* this, s16 camId, s16 status) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetRoll.s")
+    if (status == CAM_STATUS_ACTIVE) {
+        this->activeCamId = camIdx;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
+    return Camera_ChangeStatus(this->cameraPtrs[camIdx], status);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169A50.s")
+void Play_ClearCamera(PlayState* this, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeSetting.s")
+    if (this->cameraPtrs[camIdx] != NULL) {
+        Camera_ChangeStatus(this->cameraPtrs[camIdx], CAM_STATUS_INACTIVE);
+        this->cameraPtrs[camIdx] = NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AFC.s")
+void Play_ClearAllSubCameras(PlayState* this) {
+    s16 subCamId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraGetUID.s")
+    for (subCamId = CAM_ID_SUB_FIRST; subCamId < NUM_CAMS; subCamId++) {
+        if (this->cameraPtrs[subCamId] != NULL) {
+            Play_ClearCamera(this, subCamId);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
+    this->activeCamId = CAM_ID_MAIN;
+}
+
+Camera* Play_GetCamera(PlayState* this, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+
+    return this->cameraPtrs[camIdx];
+}
+
+s32 Play_CameraSetAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
+    s32 ret = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    ret *= 2;
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->focalActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLerpStepScale = 0.01f;
+
+    return ret;
+}
+
+s32 Play_CameraSetAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
+    s32 ret = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    ret <<= 1;
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+    ret <<= 1;
+    ret |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->focalActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLerpStepScale = 0.01f;
+
+    return ret;
+}
+
+s32 Play_CameraSetFov(PlayState* this, s16 camId, f32 fov) {
+    s32 ret = Camera_SetViewParam(this->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
+
+    if (1) {}
+    return ret;
+}
+
+s32 Play_CameraSetRoll(PlayState* this, s16 camId, s16 roll) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    camera->roll = roll;
+
+    return 1;
+}
+
+void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
+    s16 srcCamId2 = (srcCamId == CAM_ID_NONE) ? this->activeCamId : srcCamId;
+    s16 destCamId1 = (destCamId == CAM_ID_NONE) ? this->activeCamId : destCamId;
+
+    Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
+}
+
+s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
+    Camera* camera;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+
+    camera = this->cameraPtrs[camIdx];
+    Camera_InitPlayerSettings(camera, player);
+    return Camera_ChangeSetting(camera, setting);
+}
+
+s32 Play_CameraChangeSetting(PlayState* this, s16 camId, s16 setting) {
+    return Camera_ChangeSetting(Play_GetCamera(this, camId), setting);
+}
+
+void func_80169AFC(PlayState* this, s16 camId, s16 arg2) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    s16 i;
+
+    Play_ClearCamera(this, camIdx);
+
+    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
+        if (this->cameraPtrs[i] != NULL) {
+            Play_ClearCamera(this, i);
+        }
+    }
+
+    if (arg2 <= 0) {
+        Play_CameraChangeStatus(this, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
+        this->cameraPtrs[CAM_ID_MAIN]->childCamId = this->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = 0;
+    }
+}
+
+s16 Play_CameraGetUID(PlayState* this, s16 camId) {
+    Camera* camera = this->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return camera->uid;
+    } else {
+        return -1;
+    }
+}
+
+s16 func_80169BF8(PlayState* this, s16 camId, s16 arg2) {
+    Camera* camera = this->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return 0;
+    } else if (camera->uid != arg2) {
+        return 0;
+    } else if (camera->status != CAM_STATUS_ACTIVE) {
+        return 2;
+    } else {
+        return 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
 

@@ -706,8 +706,8 @@ void func_80123E90(PlayState* play, Actor* actor) {
     player->unk_730 = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
-    func_800DFD78(Play_GetCamera(play, CAM_ID_MAIN), 8, actor);
-    Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), 9);
+    Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
+    Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
 
 s32 func_80123F14(PlayState* play) {

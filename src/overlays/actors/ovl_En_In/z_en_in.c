@@ -1240,7 +1240,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         }
         return 0;
     }
-    if (!func_800B8934(play, &this->actor)) {
+    if (!Actor_OnScreen(play, &this->actor)) {
         return 0;
     }
     yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
