@@ -1,3 +1,15 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80172BC0/func_80172BC0.s")
+const u8 sSfxBankIds[] = {
+    BANK_PLAYER, BANK_ITEM, BANK_ENV, BANK_ENEMY, BANK_SYSTEM, BANK_OCARINA, BANK_VOICE,
+};
+
+void AudioMgr_StopAllSfxExceptSystem(void) {
+    volatile const u8* bankIdPtr;
+
+    for (bankIdPtr = sSfxBankIds; bankIdPtr < (sSfxBankIds + ARRAY_COUNT(sSfxBankIds)); bankIdPtr++) {
+        if (*bankIdPtr != BANK_SYSTEM) {
+            func_801A7084(*bankIdPtr);
+        }
+    }
+}

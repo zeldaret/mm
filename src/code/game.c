@@ -224,7 +224,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 }
 
 void GameState_Destroy(GameState* gameState) {
-    func_80172BC0();
+    AudioMgr_StopAllSfxExceptSystem();
     func_8019E014();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
