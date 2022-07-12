@@ -2691,8 +2691,7 @@ beginseg
     name "ovl_Obj_Shutter"
     compress
     include "build/src/overlays/actors/ovl_Obj_Shutter/z_obj_shutter.o"
-    include "build/data/ovl_Obj_Shutter/ovl_Obj_Shutter.data.o"
-    include "build/data/ovl_Obj_Shutter/ovl_Obj_Shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Shutter/ovl_Obj_Shutter_reloc.o"
 endseg
 
 beginseg
