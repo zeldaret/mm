@@ -1996,8 +1996,7 @@ beginseg
     name "ovl_Obj_Demo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Demo/z_obj_demo.o"
-    include "build/data/ovl_Obj_Demo/ovl_Obj_Demo.data.o"
-    include "build/data/ovl_Obj_Demo/ovl_Obj_Demo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Demo/ovl_Obj_Demo_reloc.o"
 endseg
 
 beginseg
