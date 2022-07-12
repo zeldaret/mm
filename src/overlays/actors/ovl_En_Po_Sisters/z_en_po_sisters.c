@@ -341,7 +341,7 @@ void EnPoSisters_AimlessIdleFlying2(EnPoSisters* this, PlayState* play) {
 }
 
 /**
- *  Flying in a straight line, until player comes near.
+ *  Flying in a straight line, until wall or player comes near.
  */ 
 void EnPoSisters_SetupAimlessIdleFlying(EnPoSisters* this) {
     if (this->actionFunc != EnPoSisters_Investigating) {
@@ -367,7 +367,7 @@ void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupAimlessIdleFlying2(this);
     }
 
-    if (this->actor.bgCheckFlags & 8) {
+    if (this->actor.bgCheckFlags & 8) { // wall
         Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 600.0f) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
