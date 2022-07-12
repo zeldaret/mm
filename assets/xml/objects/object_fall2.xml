@@ -11,7 +11,11 @@
         <Texture Name="gOpenMouthMoonFarSideTex" OutName="open_mouth_moon_far_side" Format="ci4" Width="64" Height="64" Offset="0x3CE8" />
         <Texture Name="gOpenMouthMoonFaceTex" OutName="open_mouth_moon_face" Format="ci4" Width="64" Height="64" Offset="0x44E8" />
         <Texture Name="gOpenMouthMoonTeethTex" OutName="open_mouth_moon_teeth" Format="rgba16" Width="64" Height="32" Offset="0x4CE8" />
-        <!-- <Blob Name="object_fall2_Blob_005CE8" Size="0x228" Offset="0x5CE8" /> -->
+        <!-- <Blob Name="object_fall2_Blob_005CE8" Size="0x20C" Offset="0x5CE8" /> -->
+        <Blob Name="object_fall2_Blob_005EF4" Size="0x1C" Offset="0x5EF4" />
+        <Array Name="object_fall2_Vtx_005F10" Count="239" Offset="0x5F10">
+            <Vtx />
+        </Array>
         <DList Name="object_fall2_DL_006E00" Offset="0x6E00" />
         <DList Name="object_fall2_DL_006EF0" Offset="0x6EF0" />
         <DList Name="object_fall2_DL_006FF8" Offset="0x6FF8" />
@@ -25,5 +29,6 @@
         <Texture Name="object_fall2_Tex_007838" OutName="tex_007838" Format="i4" Width="64" Height="64" Offset="0x7838" />
         <Texture Name="object_fall2_Tex_008038" OutName="tex_008038" Format="i4" Width="64" Height="64" Offset="0x8038" />
         <TextureAnimation Name="object_fall2_Matanimheader_008840" Offset="0x8840" />
+        <Blob Name="object_fall2_Blob_008898" Size="0x8" Offset="0x8898" />
     </File>
 </Root>

@@ -318,7 +318,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF8EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFAC8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeSetting.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeDataIdx.s")
 
@@ -328,13 +328,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetInputDirYaw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFC90.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetCamDir.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetCamDirPitch.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetCamDirYaw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFD04.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_AddQuake.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFD78.s")
 
@@ -350,7 +350,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ClearFlags.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFFAC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeDoorCam.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E007C.s")
 

@@ -466,7 +466,7 @@ s32 EnSob1_TestEndInteraction(EnSob1* this, PlayState* play, Input* input) {
 
 s32 EnSob1_TestCancelOption(EnSob1* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIndex]->actor.textId);
         return true;
     }
@@ -882,7 +882,7 @@ s32 EnSob1_HasPlayerSelectedItem(PlayState* play, EnSob1* this, Input* input) {
     }
     if (EnSob1_TestItemSelected(play)) {
         if (!item->isOutOfStock) {
-            this->tmpActionFunc = this->actionFunc;
+            this->prevActionFunc = this->actionFunc;
             func_80151938(play, this->items[this->cursorIndex]->choiceTextId);
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
@@ -1028,7 +1028,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
                     break;
                 case 1:
                     func_8019F230();
-                    this->actionFunc = this->tmpActionFunc;
+                    this->actionFunc = this->prevActionFunc;
                     func_80151938(play, this->items[this->cursorIndex]->actor.textId);
                     break;
             }
@@ -1039,7 +1039,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
 void EnSob1_CannotBuy(EnSob1* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5) {
         if (Message_ShouldAdvance(play)) {
-            this->actionFunc = this->tmpActionFunc;
+            this->actionFunc = this->prevActionFunc;
             func_80151938(play, this->items[this->cursorIndex]->actor.textId);
         }
     }
@@ -1053,7 +1053,7 @@ void EnSob1_CanBuy(EnSob1* this, PlayState* play) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIndex];
         item->restockFunc(play, item);
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, this->items[this->cursorIndex]->actor.textId);
     }
 }

@@ -328,7 +328,7 @@ void EnSnowman_SpawnBigSnowballFragmentEffects(EnSnowman* this, PlayState* play)
         pos.y = (Rand_ZeroFloat(8.0f) * velocity.y) + this->snowballPos.y;
         pos.z = (Rand_ZeroFloat(10.0f) * velocity.z) + this->snowballPos.z;
         EffectSsHahen_Spawn(play, &pos, &velocity, &sAccel, 0,
-                            Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), 452, 20,
+                            Rand_S16Offset((((i % 3) * 50) + 50), (((i % 3) * 25) + 25)), OBJECT_SNOWMAN, 20,
                             sSnowballFragmentDLs[i % 3]);
     }
 
@@ -755,7 +755,7 @@ void EnSnowman_Dead(EnSnowman* this, PlayState* play) {
         pos.y = (Rand_ZeroFloat(3.0f) * velocity.y) + this->actor.world.pos.y;
         pos.z = (Rand_ZeroFloat(6.0f) * velocity.z) + this->actor.world.pos.z;
         EffectSsHahen_Spawn(play, &pos, &velocity, &sAccel, 0,
-                            Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), 452, 20,
+                            Rand_S16Offset((((i % 3) * 20) + 20), (((i % 3) * 10) + 10)), OBJECT_SNOWMAN, 20,
                             sSnowballFragmentDLs[i % 3]);
     }
 
@@ -1086,7 +1086,7 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SMALL_SNOWBALL) {
             scale = 10;
             for (i = 0; i < 3; i++) {
-                EffectSsHahen_SpawnBurst(play, &thisx->world.pos, 5.0f, 0, scale, scale >> 1, 3, 452, 20,
+                EffectSsHahen_SpawnBurst(play, &thisx->world.pos, 5.0f, 0, scale, scale >> 1, 3, OBJECT_SNOWMAN, 20,
                                          sSnowballFragmentDLs[i]);
                 scale *= 2;
             }

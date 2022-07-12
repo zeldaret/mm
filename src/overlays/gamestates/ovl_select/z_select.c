@@ -22,11 +22,11 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
         Sram_InitDebugSave();
     }
 
-    gSaveContext.buttonStatus[0] = BTN_ENABLED;
-    gSaveContext.buttonStatus[1] = BTN_ENABLED;
-    gSaveContext.buttonStatus[2] = BTN_ENABLED;
-    gSaveContext.buttonStatus[3] = BTN_ENABLED;
-    gSaveContext.buttonStatus[4] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+    gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
     gSaveContext.unk_3F1E = 0;
     gSaveContext.unk_3F20 = 0;
     gSaveContext.unk_3F22 = 0;
@@ -44,7 +44,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
         gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     }
 
-    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = 0xFFFF;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0xFFFF;
     gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;

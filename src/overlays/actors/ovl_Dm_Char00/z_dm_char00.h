@@ -21,18 +21,18 @@ typedef struct {
 } DmChar00Struct; // size = 0x10
 
 typedef struct DmChar00 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[7];
-    /* 0x01B2 */ UNK_TYPE1 unk_1B2[0x30];
-    /* 0x01E2 */ Vec3s morphTable[7];
-    /* 0x020C */ UNK_TYPE1 unk_20C[0x30];
-    /* 0x023C */ DmChar00ActionFunc actionFunc;
-    /* 0x0240 */ DmChar00Struct unk_240;
-    /* 0x0250 */ DmChar00Struct unk_250;
-    /* 0x0260 */ u8 unk_260;
-    /* 0x0261 */ u8 unk_261;
-    /* 0x0262 */ u16 unk_262;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[7];
+    /* 0x1B2 */ UNK_TYPE1 unk_1B2[0x30];
+    /* 0x1E2 */ Vec3s morphTable[7];
+    /* 0x20C */ UNK_TYPE1 unk_20C[0x30];
+    /* 0x23C */ DmChar00ActionFunc actionFunc;
+    /* 0x240 */ DmChar00Struct unk_240;
+    /* 0x250 */ DmChar00Struct unk_250;
+    /* 0x260 */ u8 unk_260;
+    /* 0x261 */ u8 unk_261;
+    /* 0x262 */ u16 unk_262;
 } DmChar00; // size = 0x264
 
 extern const ActorInit Dm_Char00_InitVars;
