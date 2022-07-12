@@ -688,7 +688,7 @@ u8 gPlayerModelTypes[][5] = {
 Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
     object_link_zora_DL_00AB40,  object_link_zora_DL_00AB40,  object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
-    object_link_child_DL_00BDB0, object_link_child_DL_00BDB0,
+    gLinkHumanWaistDL, gLinkHumanWaistDL,
 };
 
 Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
@@ -741,7 +741,7 @@ Gfx* D_801C00AC[][2] = {
 };
 
 Gfx* D_801C00BC[][2] = {
-    { object_link_child_DL_01DAD8, object_link_child_DL_01DAD8 },
+    { gLinkHumanSheathDL, gLinkHumanSheathDL },
     { object_link_child_DL_01DB40, object_link_child_DL_01DB40 },
     { object_link_child_DL_01DB60, object_link_child_DL_01DB60 },
 };
@@ -761,7 +761,7 @@ Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
 Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_00D528, object_link_child_DL_00D528,
+    gLinkHumanLeftHandDL, gLinkHumanLeftHandDL,
 };
 
 Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
@@ -785,7 +785,7 @@ Gfx* D_801C018C[][2] = {
 Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00D058, object_link_child_DL_00D058,
+    gLinkHumanRightHandDL, gLinkHumanRightHandDL,
 };
 
 Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
@@ -822,7 +822,7 @@ Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = {
     object_link_boy_DL_006C38,  object_link_goron_DL_00A220, object_link_zora_DL_00C020,
-    object_link_nuts_DL_003AB8, object_link_child_DL_00D3D8,
+    object_link_nuts_DL_003AB8, gLinkHumanLeftForearmDL,
 };
 
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
@@ -832,7 +832,7 @@ Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
 
 Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
     object_link_boy_DL_006410,  object_link_goron_DL_009A98, object_link_zora_DL_00B820,
-    object_link_nuts_DL_0036B0, object_link_child_DL_00CCE0,
+    object_link_nuts_DL_0036B0, gLinkHumanRightShoulderDL,
 };
 
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
@@ -1379,24 +1379,6 @@ Gfx D_801C0860[] = {
     gsSPEndDisplayList(),
 };
 
-typedef enum {
-    /* 0 */ PLAYER_EYES_OPEN,
-    /* 1 */ PLAYER_EYES_HALF,
-    /* 2 */ PLAYER_EYES_CLOSED,
-    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
-    /* 4 */ PLAYER_EYES_ROLL_LEFT,
-    /* 5 */ PLAYER_EYES_ROLL_UP,
-    /* 6 */ PLAYER_EYES_ROLL_DOWN,
-    /* 7 */ PLAYER_EYES_7
-} PlayerEyesIndices;
-
-typedef enum {
-    /* 0 */ PLAYER_MOUTH_CLOSED,
-    /* 1 */ PLAYER_MOUTH_1,
-    /* 2 */ PLAYER_MOUTH_OPEN,
-    /* 3 */ PLAYER_MOUTH_HAPPY
-} PlayerMouthIndices;
-
 TexturePtr sPlayerEyesTextures[] = {
     gLinkHumanEyesOpenTex, gLinkHumanEyesHalfTex, gLinkHumanEyesClosedTex,
     gLinkHumanEyesRollRightTex, gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex,
@@ -1414,25 +1396,6 @@ typedef struct PlayerFaceIndices {
     /* 0x00 */ u8 eyeIndex;
     /* 0x01 */ u8 mouthIndex;
 } PlayerFaceIndices; // size = 0x02
-
-typedef enum {
-    /*  0 */ PLAYER_FACE_0,
-    /*  1 */ PLAYER_FACE_1,
-    /*  2 */ PLAYER_FACE_2,
-    /*  3 */ PLAYER_FACE_3,
-    /*  4 */ PLAYER_FACE_4,
-    /*  5 */ PLAYER_FACE_5,
-    /*  6 */ PLAYER_FACE_6,
-    /*  7 */ PLAYER_FACE_7,
-    /*  8 */ PLAYER_FACE_8,
-    /*  9 */ PLAYER_FACE_9,
-    /* 10 */ PLAYER_FACE_10,
-    /* 11 */ PLAYER_FACE_11,
-    /* 12 */ PLAYER_FACE_12,
-    /* 13 */ PLAYER_FACE_13,
-    /* 14 */ PLAYER_FACE_14,
-    /* 15 */ PLAYER_FACE_15
-} PlayerFaceExpression;
 
 PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_0

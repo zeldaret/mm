@@ -188,6 +188,43 @@ typedef enum {
 } PlayerMeleeWeaponAnimation;
 
 typedef enum {
+    /* 0 */ PLAYER_EYES_OPEN,
+    /* 1 */ PLAYER_EYES_HALF,
+    /* 2 */ PLAYER_EYES_CLOSED,
+    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
+    /* 4 */ PLAYER_EYES_ROLL_LEFT,
+    /* 5 */ PLAYER_EYES_ROLL_UP,
+    /* 6 */ PLAYER_EYES_ROLL_DOWN,
+    /* 7 */ PLAYER_EYES_7
+} PlayerEyesIndices;
+
+typedef enum {
+    /* 0 */ PLAYER_MOUTH_CLOSED,
+    /* 1 */ PLAYER_MOUTH_1,
+    /* 2 */ PLAYER_MOUTH_OPEN,
+    /* 3 */ PLAYER_MOUTH_HAPPY
+} PlayerMouthIndices;
+
+typedef enum {
+    /*  0 */ PLAYER_FACE_0,
+    /*  1 */ PLAYER_FACE_1,
+    /*  2 */ PLAYER_FACE_2,
+    /*  3 */ PLAYER_FACE_3,
+    /*  4 */ PLAYER_FACE_4,
+    /*  5 */ PLAYER_FACE_5,
+    /*  6 */ PLAYER_FACE_6,
+    /*  7 */ PLAYER_FACE_7,
+    /*  8 */ PLAYER_FACE_8,
+    /*  9 */ PLAYER_FACE_9,
+    /* 10 */ PLAYER_FACE_10,
+    /* 11 */ PLAYER_FACE_11,
+    /* 12 */ PLAYER_FACE_12,
+    /* 13 */ PLAYER_FACE_13,
+    /* 14 */ PLAYER_FACE_14,
+    /* 15 */ PLAYER_FACE_15
+} PlayerFaceExpression;
+
+typedef enum {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
     /* 0x02 */ PLAYER_LIMB_WAIST,
