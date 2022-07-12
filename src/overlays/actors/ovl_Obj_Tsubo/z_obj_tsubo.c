@@ -144,7 +144,7 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
     if (func_809275C0(this, play)) {
         params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
         child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, (u32)Rand_Next() >> 0x10, 0, params);
+                            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, params);
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;

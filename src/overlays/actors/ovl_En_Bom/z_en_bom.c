@@ -89,7 +89,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -116,7 +116,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -502,7 +502,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                                                                (this->collider1.base.oc->category == ACTORCAT_BOSS)))) {
                 this->timer = 0;
                 thisx->shape.rot.z = 0;
-            } else if ((this->timer > 100) && (func_80123F48(play, &thisx->world.pos, 30.0f, 50.0f))) {
+            } else if ((this->timer > 100) && (Player_IsBurningStickInRange(play, &thisx->world.pos, 30.0f, 50.0f))) {
                 this->timer = 100;
             }
 

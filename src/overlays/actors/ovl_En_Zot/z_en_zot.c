@@ -138,25 +138,25 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             } else {
                 this->path = NULL;
             }
-            func_80B96BEC(this, 5, 0);
+            func_80B96BEC(this, 5, ANIMMODE_LOOP);
             break;
 
         case 6:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 2, 0);
+            func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             break;
 
         case 7:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 0, 0);
+            func_80B96BEC(this, 0, ANIMMODE_LOOP);
             break;
 
         case 8:
             this->actor.flags |= ACTOR_FLAG_2000000;
             this->actionFunc = func_80B98CA8;
-            func_80B96BEC(this, 5, 0);
+            func_80B96BEC(this, 5, ANIMMODE_LOOP);
             break;
 
         case 9:
@@ -165,7 +165,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 10:
             this->actionFunc = func_80B992C0;
-            func_80B96BEC(this, 1, 0);
+            func_80B96BEC(this, 1, ANIMMODE_LOOP);
             if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
                 this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
             } else {
@@ -181,7 +181,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 16:
         case 17:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 2, 0);
+            func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
@@ -197,15 +197,15 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
 
         case 19:
-            func_80B96BEC(this, 7, 0);
+            func_80B96BEC(this, 7, ANIMMODE_LOOP);
             break;
 
         case 20:
-            func_80B96BEC(this, 8, 2);
+            func_80B96BEC(this, 8, ANIMMODE_ONCE);
             break;
 
         case 21:
-            func_80B96BEC(this, 9, 2);
+            func_80B96BEC(this, 9, ANIMMODE_ONCE);
             break;
 
         case 22:
@@ -650,7 +650,7 @@ void func_80B9787C(EnZot* this, PlayState* play) {
 void func_80B979DC(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97B5C;
-        func_80B96BEC(this, 0, 0);
+        func_80B96BEC(this, 0, ANIMMODE_LOOP);
         this->actor.speedXZ = 0.0f;
     } else {
         this->actor.speedXZ = 1.5f;
@@ -679,7 +679,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
                 if (!(this->unk_2F2 & 2)) {
                     this->unk_2F2 |= 2;
                     this->actionFunc = func_80B979DC;
-                    func_80B96BEC(this, 1, 0);
+                    func_80B96BEC(this, 1, ANIMMODE_LOOP);
                 } else {
                     this->actionFunc = func_80B97B5C;
                 }
@@ -737,7 +737,7 @@ void func_80B97D6C(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97CC8;
         this->actor.speedXZ = 0.0f;
-        func_80B96BEC(this, 0, 0);
+        func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
         this->actor.speedXZ = 8.0f;
     }
@@ -750,16 +750,15 @@ void func_80B97D6C(EnZot* this, PlayState* play) {
 void func_80B97E0C(EnZot* this, PlayState* play) {
     if (this->unk_2F2 & 0x40) {
         this->actionFunc = func_80B97D6C;
-        func_80B96BEC(this, 3, 0);
+        func_80B96BEC(this, 3, ANIMMODE_LOOP);
     }
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     if (this->unk_2F2 & 0x40) {
-        func_80B96BEC(this, 0, 0);
+        func_80B96BEC(this, 0, ANIMMODE_LOOP);
     }
 
     if (!(this->unk_2F2 & 4)) {
@@ -771,7 +770,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x128C:
                 this->unk_2F2 &= ~4;
-                func_80B96BEC(this, 6, 2);
+                func_80B96BEC(this, 6, ANIMMODE_ONCE);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
@@ -785,7 +784,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
                 func_801477B4(play);
                 this->actionFunc = func_80B97D6C;
                 this->unk_2F2 |= 4;
-                func_80B96BEC(this, 3, 0);
+                func_80B96BEC(this, 3, ANIMMODE_LOOP);
                 gSaveContext.save.weekEventReg[38] |= 8;
                 break;
 
@@ -807,7 +806,7 @@ void func_80B97FD0(EnZot* this, PlayState* play) {
         if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97E0C;
-            func_80B96BEC(this, 6, 2);
+            func_80B96BEC(this, 6, ANIMMODE_ONCE);
         }
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -823,7 +822,7 @@ void func_80B980FC(EnZot* this, PlayState* play) {
     } else {
         this->actor.speedXZ = 8.0f;
         if (this->unk_2F0 != 3) {
-            func_80B96BEC(this, 3, 0);
+            func_80B96BEC(this, 3, ANIMMODE_LOOP);
         }
     }
 }
@@ -1284,7 +1283,7 @@ void func_80B991E4(EnZot* this, PlayState* play) {
         } else {
             func_801477B4(play);
             this->actionFunc = func_80B992C0;
-            func_80B96BEC(this, 1, 0);
+            func_80B96BEC(this, 1, ANIMMODE_LOOP);
         }
     }
 }
@@ -1294,7 +1293,7 @@ void func_80B992C0(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, play);
         this->actor.speedXZ = 0.0f;
-        func_80B96BEC(this, 0, 0);
+        func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
         if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B8614(&this->actor, play, 120.0f);

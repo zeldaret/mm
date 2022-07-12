@@ -57,7 +57,7 @@ void osInitialize(void) {
     osUnmapTLBAll();
     osMapTLBRdb();
 
-    osClockRate = (u64)((osClockRate * 3ll) / 4ull);
+    osClockRate = (u64)((osClockRate * 3LL) / 4ULL);
 
     if (osResetType == COLD_RESET) {
         bzero(osAppNmiBuffer, 64);

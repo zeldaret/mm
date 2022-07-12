@@ -12,7 +12,7 @@
 #define THIS ((ObjComb*)thisx)
 
 void ObjComb_Init(Actor* thisx, PlayState* play);
-void ObjComb_Destroy(Actor* thisx, PlayState* play);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2);
 void ObjComb_Update(Actor* thisx, PlayState* play);
 void ObjComb_Draw(Actor* thisx, PlayState* play);
 
@@ -57,7 +57,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -352,8 +352,11 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     func_8098DC44(this);
 }
 
-void ObjComb_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyJntSph(play, &THIS->collider);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjComb* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8098DC44(ObjComb* this) {
