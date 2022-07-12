@@ -59,7 +59,7 @@ typedef struct {
     /* 0x04 */ s16 unk_4;
     /* 0x06 */ s16 unk_6;
     /* 0x08 */ s16 unk_8;
-} struct_801F59D0;
+} struct_801F59D0; // size = 0x0A
 
 struct_801F59D0 D_801F59D0;
 
@@ -2095,11 +2095,48 @@ Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127BE8.s")
 
+void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1 arg2[], s32 arg3, Vec3f* arg4,
+                   Vec3f* arg5, u32* arg6);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127DA4.s")
 
+void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128388.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801284A0.s")
+void func_801284A0(PlayState* play, Player* player) {
+    s32 pad;
+    Mtx* sp90 = GRAPH_ALLOC(play->state.gfxCtx, 6 * sizeof(Mtx));
+    Vec3f sp84;
+    Vec3f sp78;
+    Vec3f* iter = D_801C0C0C;
+    Vec3f* iter2 = D_801C0C30;
+    u32 sp6C = play->gameplayFrames;
+    s32 i;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
+
+    Matrix_MultVec3f(&D_801C0C00, &D_801C0C54[1].unk_08);
+    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[2].unk_08);
+
+    for (i = 0; i < ARRAY_COUNT(D_801C0C0C); i++) {
+        Matrix_MultVec3f(iter, &sp84);
+        Matrix_MultVec3f(iter2, &sp78);
+
+        func_80127DA4(play, D_801F58B0[i], D_801C0C54, 3, &sp84, &sp78, &sp6C);
+        sp6C += 11;
+
+        Matrix_Push();
+        Matrix_Translate(iter->x, iter->y, iter->z, MTXMODE_APPLY);
+        func_80128388(D_801F58B0[i], D_801C0C54, 3, &sp90);
+        Matrix_Pop();
+        iter++;
+        iter2++;
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128640.s")
 

@@ -3173,17 +3173,7 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F5834;
 // extern NmiBuff* gNMIBuffer;
 // extern UNK_TYPE1 D_801F5850;
-// extern UNK_TYPE1 D_801F58B0;
-// extern UNK_TYPE1 D_801F59AC;
-// extern UNK_TYPE1 D_801F59B0;
-// extern UNK_TYPE1 D_801F59C8;
-// extern UNK_TYPE1 D_801F59D0;
-// extern UNK_TYPE1 D_801F59DC;
-// extern UNK_TYPE1 D_801F59E0;
-// extern UNK_TYPE1 D_801F59E4;
-// extern UNK_TYPE1 D_801F59E8;
-// extern UNK_TYPE1 D_801F59F4;
-// extern UNK_TYPE1 D_801F59F8;
+
 // extern UNK_TYPE1 sSkyboxDrawMatrix;
 // extern UNK_TYPE1 D_801F6AF0;
 // extern UNK_TYPE1 D_801F6AF2;
