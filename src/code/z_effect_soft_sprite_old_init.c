@@ -529,7 +529,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale, s16 objId,
+void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objId,
                          s16 life, Gfx* dList) {
     EffectSsHahenInitParams initParams;
 
@@ -537,7 +537,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.dList = dList;
-    initParams.unused = unused;
+    initParams.flags = flags;
     initParams.scale = scale;
     initParams.objId = objId;
     initParams.life = life;
@@ -554,7 +554,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 unused, s16 scale, s16 randScaleRange,
+void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 flags, s16 scale, s16 randScaleRange,
                               s16 count, s16 objId, s16 life, Gfx* dList) {
     s32 i;
     Vec3f velocity;
@@ -568,7 +568,7 @@ void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 u
         velocity.z = (Rand_ZeroOne() - 0.5f) * burstScale;
         velocity.y = ((Rand_ZeroOne() * 0.5f) + 0.5f) * burstScale;
 
-        EffectSsHahen_Spawn(play, pos, &velocity, &accel, unused, Rand_S16Offset(scale, randScaleRange), objId, life,
+        EffectSsHahen_Spawn(play, pos, &velocity, &accel, flags, Rand_S16Offset(scale, randScaleRange), objId, life,
                             dList);
     }
 }
@@ -576,7 +576,7 @@ void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 u
 void func_800B2364(PlayState* play, Vec3f* pos, Gfx* dList) {
     Vec3f accel = { 0.0f, -2.0f, 0.0f };
 
-    EffectSsHahen_Spawn(play, pos, &gZeroVec3f, &accel, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(play, pos, &gZeroVec3f, &accel, HAHEN_SMALL, 5, GAMEPLAY_KEEP, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
