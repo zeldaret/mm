@@ -45,17 +45,34 @@ typedef struct {
     /* 0x1A */ s16 unk_1A;
 } struct_801F58B0; // size = 0x1C
 
-extern struct_801F58B0 D_801F58B0[3][3];
+struct_801F58B0 D_801F58B0[3][3];
 
-extern Vec3f D_801F59B0[2];
+UNK_TYPE D_801F59AC; // Padding? Can be deleted and still match
 
-extern s32 D_801F59C8[2];
+Vec3f D_801F59B0[2];
 
-extern s32 D_801F59E0;
+s32 D_801F59C8[2];
 
-extern s32 D_801F59E4;
+typedef struct {
+    /* 0x00 */ s16 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ s16 unk_4;
+    /* 0x06 */ s16 unk_6;
+    /* 0x08 */ s16 unk_8;
+} struct_801F59D0;
 
-extern Vec3f D_801F59E8;
+struct_801F59D0 D_801F59D0;
+
+Vec3f* D_801F59DC;
+
+s32 D_801F59E0;
+
+s32 D_801F59E4;
+
+Vec3f D_801F59E8;
+
+s32 D_801F59F4;
+s32 D_801F59F8;
 
 void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
