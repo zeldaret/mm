@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import annotations
-
 import argparse, ast, math, os, re, struct
 import bisect
 import multiprocessing
@@ -592,7 +590,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         if region[1] % 0x10 == 0:
             put_symbol(symbols_dict, "files", region[1])
 
-    insns: list[rabbitizer.Instruction] = []
+    insns = []
     for i, raw_insn in enumerate(raw_insns, 0):
         insn = rabbitizer.Instruction(raw_insn, vram=vram + i * 4)
 
@@ -663,7 +661,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 assert False, "Invalid relocation type encountered"
 
     result_files = []
-    results: list[str | dict] = [asm_header(".text")]
+    results = [asm_header(".text")]
     raw_insns = as_word_list(data)
 
     cur_file = ""
@@ -1104,7 +1102,7 @@ def asm_header(section_name: str):
 """
 
 
-def getImmOverride(insn: rabbitizer.Instruction) -> str | None:
+def getImmOverride(insn: rabbitizer.Instruction):
     if insn.isBranch():
         return f".L{insn.getBranchOffset() + insn.vram:08X}"
     elif insn.isJump():
