@@ -430,7 +430,7 @@ void func_80962588(EnFu* this, PlayState* play) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.playerData.rupees >= 10) {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 func_80963DE4(this, play);
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -1163,11 +1163,11 @@ void func_80963F44(EnFu* this, PlayState* play) {
 
 void func_80963F88(EnFu* this, PlayState* play) {
     if (this->unk_542 == 1) {
-        func_800DFAC8(play->cameraPtrs[CAM_ID_MAIN], 75);
+        Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
         play->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         play->unk_1887D = 0;
-        func_800DFAC8(play->cameraPtrs[CAM_ID_MAIN], 75);
+        Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
     }
 }
 

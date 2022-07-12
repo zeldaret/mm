@@ -221,36 +221,36 @@ s16 func_80BECF6C(Path* path) {
 s32 func_80BECFBC(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x98;
+            return GI_DEED_SWAMP;
 
         case 1:
-            return 0x99;
+            return GI_DEED_MOUNTAIN;
 
         case 2:
-            return 0x9A;
+            return GI_DEED_OCEAN;
 
         case 3:
-            func_801149A0(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
-            return 0x7;
+            Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
+            return GI_RUPEE_HUGE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x35;
+            return GI_MAGIC_BEANS;
 
         case 1:
-            return 0x1D;
+            return GI_BOMB_BAG_40;
 
         case 2:
-            return 0x5C;
+            return GI_POTION_GREEN;
 
         case 3:
-            return 0x5D;
+            return GI_POTION_BLUE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 void func_80BED090(PlayState* play) {
@@ -296,7 +296,7 @@ s32 func_80BED140(PlayState* play) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10U) {
+    if ((u32)INV_CONTENT(ITEM_MAGIC_BEANS) != ITEM_MAGIC_BEANS) {
         return 0;
     }
 
@@ -332,7 +332,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -346,7 +346,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -1326,7 +1326,7 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
     if (this->unk_32C & 0x40) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
-            func_801159EC(this->unk_364);
+            Rupees_ChangeBy(this->unk_364);
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {

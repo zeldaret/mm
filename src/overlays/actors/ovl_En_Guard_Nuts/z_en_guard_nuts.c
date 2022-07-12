@@ -5,6 +5,7 @@
  */
 
 #include "z_en_guard_nuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
@@ -273,7 +274,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     EnGuardNuts_ChangeAnim(this, DIG_ANIM);
     Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
     digPos.y = this->actor.floorHeight;
-    EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->targetHeadPos.x = this->targetHeadPos.y;
@@ -304,7 +305,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
         if ((yawDiff < 0x4000) && ((D_80ABBE20 == 0) || (this->actor.xzDistToPlayer > 150.0f))) {
             Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
             digPos.y = this->actor.floorHeight;
-            EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
+            EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             D_80ABBE20 = 0;
             if (this->guardTextIndex == 9) {

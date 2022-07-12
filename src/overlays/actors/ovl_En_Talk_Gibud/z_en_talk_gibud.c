@@ -609,7 +609,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
-                     0.0f, 2, -8.0f);
+                     0.0f, ANIMMODE_ONCE, -8.0f);
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->deathTimer = 0;
@@ -714,7 +714,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
                 return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
         }
-        if (Interface_HasItemInBottle(requestedItem->item)) {
+        if (Inventory_HasItemInBottle(requestedItem->item)) {
             return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }
@@ -820,7 +820,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
-                        func_80115A14(requestedItem->item, -requestedItem->amount);
+                        Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
                         func_80123D50(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }

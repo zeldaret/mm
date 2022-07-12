@@ -13,10 +13,10 @@ struct BgIkanaDharma;
 typedef void (*BgIkanaDharmaActionFunc)(struct BgIkanaDharma*, PlayState*);
 
 typedef struct BgIkanaDharma {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ColliderCylinder collider;
-    /* 0x01A8 */ BgIkanaDharmaActionFunc actionFunc;
-    /* 0x01AC */ s8 cutsceneFramesRemaining;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ BgIkanaDharmaActionFunc actionFunc;
+    /* 0x1AC */ s8 cutsceneFramesRemaining;
 } BgIkanaDharma; // size = 0x1B0
 
 extern const ActorInit Bg_Ikana_Dharma_InitVars;

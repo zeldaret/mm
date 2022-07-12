@@ -348,7 +348,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
         this->unk_3B2 = 11;
         return;
     } else if (this->unk_3A8 == 0x88F) {
-        if (Interface_HasEmptyBottle()) {
+        if (Inventory_HasEmptyBottle()) {
             this->unk_3B2 = 11;
         } else {
             this->unk_3B2 = 10;
@@ -360,7 +360,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        if (Interface_HasEmptyBottle()) {
+        if (Inventory_HasEmptyBottle()) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
@@ -378,7 +378,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
+            if ((Inventory_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
                 !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 this->unk_3B2 = 12;
             } else {

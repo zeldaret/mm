@@ -1455,7 +1455,7 @@ void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
 }
 
 void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(&play->state)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(play)) {
         gSaveContext.save.cutscene = 0xFFFD;
     }
 

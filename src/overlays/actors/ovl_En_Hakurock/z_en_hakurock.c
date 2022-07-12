@@ -209,7 +209,7 @@ void func_80B221E8(EnHakurock* this, PlayState* play) {
     this->actor.shape.rot.y += 0x900;
     this->actor.shape.rot.z += 0xB00;
 
-    if (this->collider.base.atFlags & AT_HIT || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
+    if ((this->collider.base.atFlags & AT_HIT) || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
         ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);

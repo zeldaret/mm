@@ -41,7 +41,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-static s32 texturesDesegmented = false;
+static s32 sTexturesDesegmented = false;
 
 void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
@@ -52,11 +52,11 @@ void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, 24);
 
-    if (!texturesDesegmented) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        texturesDesegmented = true;
+        sTexturesDesegmented = true;
     }
 
     this->eyeTexIndex = 2;

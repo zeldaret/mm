@@ -40,7 +40,7 @@ typedef struct View {
     /* 0x150 */ Vec3f curDistortionScale;
     /* 0x15C */ u16 normal; // used to normalize the projection matrix
     /* 0x160 */ u32 flags;  // bit 3: Render to an orthographic perspective
-    /* 0x164 */ UNK_TYPE4 unk164;
+    /* 0x164 */ s32 unk164;
 } View; // size = 0x168
 
 #define SET_FULLSCREEN_VIEWPORT(view)      \

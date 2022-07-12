@@ -72,6 +72,22 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
+static AnimationHeader* sAnimations[] = {
+    &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+    &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
+    &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
+    &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
+    &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
+    &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
+};
+
+static u8 sAnimModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
+};
+
 void EnBomjimb_Init(Actor* thisx, PlayState* play) {
     EnBomjimb* this = THIS;
 
@@ -159,21 +175,9 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
-    static AnimationHeader* sAnimations[] = {
-        &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
-        &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
-        &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
-        &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
-        &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
-        &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
-    };
-    static u8 D_80C03218[] = {
-        0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0,
-    };
-
     this->unk_2DC = arg1;
     this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, D_80C03218[this->unk_2DC],
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8, sAnimModes[this->unk_2DC],
                      -4.0f);
 }
 

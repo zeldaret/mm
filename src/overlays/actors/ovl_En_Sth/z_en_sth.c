@@ -179,8 +179,8 @@ s32 func_80B6703C(EnSth* this, PlayState* play) {
 
 void func_80B670A4(EnSth* this, s16 arg1) {
     if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(D_80B6D1C8)) && (arg1 != this->unk_29A)) {
-        Animation_Change(&this->skelAnime, D_80B6D1C8[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B6D1C8[arg1]), 0,
-                         -5.0f);
+        Animation_Change(&this->skelAnime, D_80B6D1C8[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B6D1C8[arg1]),
+                         ANIMMODE_LOOP, -5.0f);
         this->unk_29A = arg1;
     }
 }
