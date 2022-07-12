@@ -123,7 +123,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    4,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -549,7 +549,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 }
 
 void func_80990FC8(EnWf* this) {
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80991040;
@@ -572,7 +572,7 @@ void func_80991040(EnWf* this, PlayState* play) {
 void func_809910F0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, -5.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, -5.0f);
     this->unk_2A0 = 5;
     this->actionFunc = func_80991174;
 }
@@ -879,7 +879,8 @@ void func_80991FD8(EnWf* this) {
     if (this->skelAnime.curFrame > 15.0f) {
         phi_f0 = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0,
+                     ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider1.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80992068;
 }
@@ -1021,7 +1022,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
 void func_809926D0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     Animation_Change(&this->skelAnime, &gWolfosBackflippingAnim, -1.0f,
-                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, 2, -3.0f);
+                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, ANIMMODE_ONCE, -3.0f);
     this->unk_2A0 = 0;
     this->actor.speedXZ = 6.5f;
     this->actor.velocity.y = 15.0f;
@@ -1053,7 +1054,7 @@ void func_8099282C(EnWf* this) {
     this->unk_2A0 = 10;
     this->actor.speedXZ = 0.0f;
     Animation_Change(&this->skelAnime, &gWolfosBlockingAnim, -1.0f, Animation_GetLastFrame(&gWolfosBlockingAnim.common),
-                     0.0f, 2, -2.0f);
+                     0.0f, ANIMMODE_ONCE, -2.0f);
     this->actionFunc = func_809928CC;
 }
 

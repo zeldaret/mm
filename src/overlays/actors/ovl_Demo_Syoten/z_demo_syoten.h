@@ -24,7 +24,7 @@ typedef struct DemoSyoten {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkeletonInfo unk_144;
     /* 0x0174 */ Vec3s unk_174[51];
-    /* 0x02A6 */ s16 unk_2A6[153];
+    /* 0x02A6 */ Vec3s unk_2A6[51];
     /* 0x03D8 */ f32 unk_3D8;
     /* 0x03DC */ Gfx* unk_3DC;
     /* 0x03E0 */ AnimatedMaterial* unk_3E0;

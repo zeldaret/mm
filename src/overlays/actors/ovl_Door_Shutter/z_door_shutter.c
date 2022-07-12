@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
 #include "objects/object_numa_obj/object_numa_obj.h"
@@ -611,7 +612,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
         Quake_SetSpeed(quake, -32536);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);
-        func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
         func_808A1884(this, play);
     }
 }

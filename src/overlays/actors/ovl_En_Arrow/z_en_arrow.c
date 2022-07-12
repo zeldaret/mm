@@ -389,7 +389,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sp82);
             Actor_MarkForDeath(&this->actor);
         } else {
-            EffectSsHitMark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
+            EffectSsHitmark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
 
             if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
