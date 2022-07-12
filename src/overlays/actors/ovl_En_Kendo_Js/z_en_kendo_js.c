@@ -216,7 +216,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
     if (Message_ShouldAdvance(play) && (this->unk_288 == 0x2716)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
@@ -227,14 +227,14 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     this->unk_288 = 0x2718;
                 } else {
                     func_8019F208();
-                    func_801159EC(-play->msgCtx.unk1206C);
+                    Rupees_ChangeBy(-play->msgCtx.unk1206C);
                     Message_StartTextbox(play, 0x2719, &this->actor);
                     this->unk_288 = 0x2719;
                 }
                 break;
 
             case 1:
-                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
@@ -245,7 +245,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     this->unk_288 = 0x2718;
                 } else {
                     func_8019F208();
-                    func_801159EC(-play->msgCtx.unk12070);
+                    Rupees_ChangeBy(-play->msgCtx.unk12070);
                     Message_StartTextbox(play, 0x273A, &this->actor);
                     this->unk_288 = 0x273A;
                 }

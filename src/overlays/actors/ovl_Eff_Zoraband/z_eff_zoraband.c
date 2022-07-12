@@ -80,7 +80,7 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);
-        Matrix_RotateYS((Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) + 0x8000), MTXMODE_APPLY);
+        Matrix_RotateYS((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->actor.home.rot.z != 0) {
