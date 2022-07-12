@@ -51,14 +51,13 @@ s32 func_80ADABA4(BgFuMizu* this, PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (actor != NULL) {
-        
-            if ((actor != NULL) && (actor->id == ACTOR_EN_FU_KAGO) && (actor->colChkInfo.health == 0)) {
-                return 0;
-            }
-            actor = actor->next;
+        if ((actor != NULL) && (actor->id == ACTOR_EN_FU_KAGO) && (actor->colChkInfo.health == 0)) {
+            return false;
+        }
+        actor = actor->next;
     }
-    
-    return 1;
+
+    return true;
 }
 
 void BgFuMizu_Update(Actor* thisx, PlayState* play) {
@@ -67,12 +66,12 @@ void BgFuMizu_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_160 == 0) {
         if (func_80ADABA4(this, play)) {
-            phi_fv0 = this->dyna.actor.home.pos.y + -10.0f;
+            phi_fv0 = -10.0f + this->dyna.actor.home.pos.y;
         } else {
-            phi_fv0 = this->dyna.actor.home.pos.y + 10.0f;
+            phi_fv0 = 10.0f + this->dyna.actor.home.pos.y;
         }
     } else {
-        phi_fv0 = this->dyna.actor.home.pos.y + 25.0f;
+        phi_fv0 = 25.0f + this->dyna.actor.home.pos.y;
     }
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, phi_fv0, 0.05f, 1.0f, 0.5f) > 1.0f) {
         if (this->unk_160 == 1) {
