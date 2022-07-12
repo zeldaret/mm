@@ -459,7 +459,7 @@ void func_80BFF03C(EnBomjima* this, PlayState* play) {
     } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D4[0])) {
         ActorCutscene_SetIntentToPlay(this->unk_2D4[0]);
     } else {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         gSaveContext.save.weekEventReg[83] &= (u8)~4;
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
@@ -921,8 +921,8 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
         this->collider.dim.height = 30;
         if ((this->unk_2A0 == 4) || (this->unk_2CA == 1) || ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
             this->unk_28E = 0;
-            if (player->stateFlags1 & 0x20) {
-                player->stateFlags1 &= ~0x20;
+            if (player->stateFlags1 & PLAYER_STATE1_20) {
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
             }
 
             if ((this->unk_2F0 == 0) || (this->unk_2F0->actor.update == NULL) ||

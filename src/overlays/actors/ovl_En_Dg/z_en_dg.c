@@ -1157,7 +1157,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
     Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
-    if (!(player->stateFlags1 & 0x20) || (play->sceneNum != SCENE_CLOCKTOWER)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20) || (play->sceneNum != SCENE_CLOCKTOWER)) {
         if (func_8098A1B4(this, play)) {
             func_8098A234(this, play);
         } else if (this->unk_28C != 8) {

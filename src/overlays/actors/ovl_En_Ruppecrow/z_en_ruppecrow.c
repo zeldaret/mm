@@ -240,7 +240,7 @@ s32 EnRuppecrow_CanSpawnBlueRupees(PlayState* play) {
         case PLAYER_FORM_ZORA:
             return false;
         case PLAYER_FORM_HUMAN:
-            if (player->stateFlags1 & 0x800000) {
+            if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 return true;
             } else {
                 return false;
@@ -417,7 +417,7 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
             this->speedModifier = 7.0f;
             break;
         case PLAYER_FORM_HUMAN:
-            if (player->stateFlags1 & 0x800000) {
+            if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 this->speedModifier = 16.0f;
             } else {
                 this->speedModifier = 7.0f;

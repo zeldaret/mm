@@ -2150,7 +2150,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             Math_ApproachF(&D_809101C0, 195.0f, 1.0f, 1.0f);
 
-            if (player->stateFlags1 & 0x8000000) {
+            if (player->stateFlags1 & PLAYER_STATE1_8000000) {
                 D_80917204 = 0;
                 player->unk_B28 = 0;
             }

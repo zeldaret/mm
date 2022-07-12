@@ -750,7 +750,7 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play
     }
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 100.0f) &&
-        !(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
+        !(player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_80000 | PLAYER_STATE1_40000 | PLAYER_STATE1_4000 | PLAYER_STATE1_2000 | PLAYER_STATE1_80)) &&
         !(player->stateFlags2 & (0x4000 | 0x80))) {
         return true;
     }

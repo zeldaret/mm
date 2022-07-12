@@ -828,7 +828,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_392 != temp) {
             switch (temp) {
                 case 0xE1A:

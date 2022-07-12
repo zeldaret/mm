@@ -309,7 +309,7 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
     EnHoll* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if ((play->sceneLoadFlag == 0) && (play->unk_18B4A == 0) && !(player->stateFlags1 & 0x200)) {
+    if ((play->sceneLoadFlag == 0) && (play->unk_18B4A == 0) && !(player->stateFlags1 & PLAYER_STATE1_200)) {
         this->actionFunc(this, play);
     }
 }

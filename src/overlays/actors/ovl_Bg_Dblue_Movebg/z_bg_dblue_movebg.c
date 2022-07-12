@@ -515,7 +515,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
             Flags_UnsetSwitch(play, this->unk_1C0);
         }
 
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         player->stateFlags2 &= ~0x10;
         this->dyna.pushForce = 0.0f;
 
@@ -564,12 +564,12 @@ void func_80A2AAB8(BgDblueMovebg* this, PlayState* play) {
 
         if (this->unk_1D0 == 1) {
             this->dyna.pushForce = 0.0f;
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
             player->stateFlags2 &= ~0x10;
         }
 
         if (this->unk_1D0 <= 0) {
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->actionFunc = func_80A2A714;
         }
     }

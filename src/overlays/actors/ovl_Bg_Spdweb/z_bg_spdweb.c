@@ -311,7 +311,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             this->unk_164 = temp_f12;
             this->unk_162 = 12;
             if (sp3A > 50) {
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
         } else if (player->actor.speedXZ != 0.0f) {
@@ -332,7 +332,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
             player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {

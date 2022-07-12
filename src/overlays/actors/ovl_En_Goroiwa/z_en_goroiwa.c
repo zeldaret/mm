@@ -1432,7 +1432,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     u32 temp_v0_2;
     CollisionPoly* tmp;
 
-    if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_80 | PLAYER_STATE1_40))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }

@@ -402,10 +402,10 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
 
     EnElforg_CirclePlayer(this, play);
     player->actor.freezeTimer = 100;
-    player->stateFlags1 |= 0x20000000;
+    player->stateFlags1 |= PLAYER_STATE1_20000000;
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 0;
-        player->stateFlags1 &= ~0x20000000;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         Actor_MarkForDeath(&this->actor);
         gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
@@ -455,7 +455,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
-                player->stateFlags1 |= 0x20000000;
+                player->stateFlags1 |= PLAYER_STATE1_20000000;
                 Message_StartTextbox(play, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
                 ActorCutscene_SetIntentToPlay(0x7C);

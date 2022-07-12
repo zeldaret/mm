@@ -409,7 +409,7 @@ void func_80962340(EnFu* this, PlayState* play) {
                 this->unk_552 = 0x2889;
             }
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->unk_54A = 1;
         } else {
             Message_StartTextbox(play, 0x283C, &this->actor);
@@ -534,7 +534,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 func_801477B4(play);
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
@@ -643,7 +643,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
     }
 
     play_sound(NA_SE_SY_FOUND);
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     func_8010E9F0(4, 60);
     if (this->unk_546 == 1) {
         func_809616E0(this, play);
@@ -680,7 +680,7 @@ void func_80962BCC(EnFu* this, PlayState* play) {
     }
 
     play_sound(NA_SE_SY_FOUND);
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= 0x400000;
     func_8010E9F0(4, 60);
 
@@ -711,7 +711,7 @@ void func_80962D60(EnFu* this, PlayState* play) {
     }
 
     play_sound(NA_SE_SY_FOUND);
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= 0x400000;
     func_8010E9F0(4, 60);
 
@@ -780,7 +780,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
         (gSaveContext.unk_3DE0[4] < 1) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~0x400000;
         func_80961E88(play);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         if (this->unk_548 < this->unk_54C) {
             if (gSaveContext.unk_3DE0[4] == 0) {
                 Message_StartTextbox(play, 0x2885, &this->actor);
@@ -931,7 +931,7 @@ void func_80963630(EnFu* this, PlayState* play) {
                     break;
             }
         }
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
         func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
@@ -1173,7 +1173,7 @@ void func_80963F88(EnFu* this, PlayState* play) {
 void func_80963FF8(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 0x100000) {
+    if (player->stateFlags1 & PLAYER_STATE1_100000) {
         play->actorCtx.unk268 = 1;
         play->actorCtx.unk_26C.press.button = 0x8000;
     } else {

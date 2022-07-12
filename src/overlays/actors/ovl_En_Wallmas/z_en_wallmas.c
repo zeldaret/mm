@@ -243,7 +243,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, PlayState* play) {
         this->timer--;
     }
 
-    if ((player->stateFlags1 & 0x08100000) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
+    if ((player->stateFlags1 & (PLAYER_STATE1_8000000 | PLAYER_STATE1_100000)) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
         (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
         ((WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
