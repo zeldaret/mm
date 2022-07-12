@@ -25,6 +25,14 @@ typedef enum {
 } PlayerBoots;
 
 typedef enum {
+    /* 0x00 */ PLAYER_STRENGTH_DEKU,
+    /* 0x01 */ PLAYER_STRENGTH_HUMAN,
+    /* 0x02 */ PLAYER_STRENGTH_ZORA,
+    /* 0x03 */ PLAYER_STRENGTH_GORON,
+    /* 0x04 */ PLAYER_STRENGTH_MAX
+} PlayerStrength;
+
+typedef enum {
     /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
     /* 0x01 */ PLAYER_FORM_GORON,
     /* 0x02 */ PLAYER_FORM_ZORA,
@@ -64,14 +72,14 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ PLAYER_AP_NONE,
-    /* 0x01 */ PLAYER_AP_UNK_1,
-    /* 0x02 */ PLAYER_AP_UNK_2,
+    /* 0x01 */ PLAYER_AP_LAST_USED,
+    /* 0x02 */ PLAYER_AP_FISHING_POLE,
     /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
     /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
     /* 0x05 */ PLAYER_AP_SWORD_GILDED,
     /* 0x06 */ PLAYER_AP_SWORD_GREAT_FAIRY,
     /* 0x07 */ PLAYER_AP_STICK,
-    /* 0x08 */ PLAYER_AP_UNK_8,
+    /* 0x08 */ PLAYER_AP_ZORA_FINS,
     /* 0x09 */ PLAYER_AP_BOW,
     /* 0x0A */ PLAYER_AP_BOW_FIRE,
     /* 0x0B */ PLAYER_AP_BOW_ICE,
@@ -142,6 +150,44 @@ typedef enum {
 } PlayerActionParam;
 
 typedef enum {
+    /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
+    /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
+    /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
+    /*  3 */ PLAYER_MWA_FORWARD_COMBO_2H,      // Third vertical two-handed slash
+    /*  4 */ PLAYER_MWA_RIGHT_SLASH_1H,        // Horizontal one-handed slash
+    /*  5 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
+    /*  6 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
+    /*  7 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
+    /*  8 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targeted one-handed rightwalk slash
+    /*  9 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targeted two-handed rightwalk slash
+    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targeted one-handed rightwalk slash
+    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targeted two-handed rightwalk slash
+    /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targeted one-handed stab
+    /* 13 */ PLAYER_MWA_STAB_2H,               // Targeted two-handed stab
+    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,         // Third targeted one-handed stab
+    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,         // Third targeted two-handed stab
+    /* 16 */ PLAYER_MWA_FLIPSLASH_START,       // unused
+    /* 17 */ PLAYER_MWA_JUMPSLASH_START,       // Start of jumpslash
+    /* 18 */ PLAYER_MWA_ZORA_JUMPKICK_START,   // Start of Zora jump attack
+    /* 19 */ PLAYER_MWA_FLIPSLASH_FINISH,      // unused
+    /* 20 */ PLAYER_MWA_JUMPSLASH_FINISH,      // End of jumpslash
+    /* 21 */ PLAYER_MWA_ZORA_JUMPKICK_FINISH,  // End of Zora jump attack
+    /* 22 */ PLAYER_MWA_BACKSLASH_RIGHT,       // unused
+    /* 23 */ PLAYER_MWA_BACKSLASH_LEFT,        // unused
+    /* 24 */ PLAYER_MWA_GORON_PUNCH_LEFT,      // Goron punch
+    /* 25 */ PLAYER_MWA_GORON_PUNCH_RIGHT,     // Second Goron punch
+    /* 26 */ PLAYER_MWA_GORON_PUNCH_BUTT,      // Goron butt punch
+    /* 27 */ PLAYER_MWA_ZORA_PUNCH_LEFT,       // Zora punch
+    /* 28 */ PLAYER_MWA_ZORA_PUNCH_COMBO,      // Second Zora punch
+    /* 29 */ PLAYER_MWA_ZORA_PUNCH_KICK,       // Zora kick
+    /* 30 */ PLAYER_MWA_SPIN_ATTACK_1H,        // Half-charged one-handed spin
+    /* 31 */ PLAYER_MWA_SPIN_ATTACK_2H,        // Half-charged two-handed spin
+    /* 32 */ PLAYER_MWA_BIG_SPIN_1H,           // Fully-charged one-handed spin
+    /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
+    /* 34 */ PLAYER_MWA_MAX
+} PlayerMeleeWeaponAnimation;
+
+typedef enum {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
     /* 0x02 */ PLAYER_LIMB_WAIST,
@@ -204,7 +250,6 @@ typedef struct {
     /* 0xD4 */ LinkAnimationHeader* unk_D4[2];
 } PlayerAgeProperties; // size = 0xDC
 
-
 typedef struct {
     /* 0x00 */ s32 active;
     /* 0x04 */ Vec3f tip;
@@ -216,9 +261,8 @@ typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ char unk_02[2]; // probably alignment padding
-    /* 0x04 */ MtxF unk_04;
+    /* 0x01 */ u8 alpha;
+    /* 0x04 */ MtxF mf;
 } struct_80122D44_arg1_unk_04; // size = 0x44
 
 typedef struct {
@@ -227,6 +271,14 @@ typedef struct {
     /* 0x02 */ char unk_02[2]; // probably alignment padding
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
 } struct_80122D44_arg1; // size >= 0x114
+
+typedef struct struct_80122744_arg1 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02;
+    /* 0x03 */ s8 unk_03;
+    /* 0x04 */ Vec3s* unk_04;
+} struct_80122744_arg1; // size = 0x08
 
 // 
 #define PLAYER_STATE1_1          (1 << 0)
@@ -282,7 +334,7 @@ typedef struct {
 #define PLAYER_STATE1_2000000    (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
-// 
+// Swimming?
 #define PLAYER_STATE1_8000000    (1 << 27)
 // 
 #define PLAYER_STATE1_10000000   (1 << 28)
@@ -418,14 +470,12 @@ typedef struct {
 #define PLAYER_STATE3_8000000    (1 << 27)
 // 
 #define PLAYER_STATE3_10000000   (1 << 28)
-// 
+// breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
 #define PLAYER_STATE3_40000000   (1 << 30)
 // 
 #define PLAYER_STATE3_80000000   (1 << 31)
-
-
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
@@ -477,7 +527,7 @@ typedef struct Player {
     /* 0x1DC */ OSMesgQueue giObjectLoadQueue;
     /* 0x1F4 */ OSMesg giObjectLoadMsg;
     /* 0x1F8 */ void* giObjectSegment;
-    /* 0x1FC */ u8 maskObjectLoading;
+    /* 0x1FC */ u8 maskObjectLoadState;
     /* 0x1FD */ s8 maskId;
     /* 0x200 */ DmaRequest maskDmaRequest;
     /* 0x220 */ OSMesgQueue maskObjectLoadQueue;

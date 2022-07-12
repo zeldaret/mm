@@ -38,7 +38,6 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 }
 ```
 
-
 Notable features are the GraphicsContext temps, and blocks of the form
 
 ```C
@@ -54,14 +53,15 @@ Each of these blocks converts into a graphics macro. They are usually (but not a
 
 For our purposes, we only need one of the programs this provides: `gfxdis.f3dex2`.
 
-
 Graphics are actually 64-bit on the Nintendo 64. This code block is a result of instructions telling the processor what to do with the graphics pointer. There are two main types of graphics pointer (there are a couple of others used in `code`, but actors will only use these two),
+
 - polyOpa ("opaque") for solid textures
 - polyXlu ("Xlucent" i.e. "translucent") for translucent textures
 
 Our example is polyOpa, not surprisingly since our receptionist is solid.
 
 `words.w0` and `words.w1` contain the actual graphics instruction, in hex format. Usually, `w0` is constant and `w1` contains the arguments. To find out what sort of macro we are dealing with, we use `gfxdis.f3dex2`. `w1` is variable, but we need to give the program a constant placeholder. A common word to use is 12345678, so in this case we run
+
 ```
 gfxdis.f3dex2 -x -g "POLY_OPA_DISP++" -d DB06002012345678
 ```
@@ -73,6 +73,7 @@ gfxdis.f3dex2 -x -g "POLY_OPA_DISP++" -d DB06002012345678
 Our standard now is to use decimal colors. If you have a constant second argument rather than a variable one, you can also use `-dc` to get decimal colors instead of the default hex.
 
 The output looks like
+
 ```
 gSPSegment(POLY_OPA_DISP++, 0x08, 0x12345678);
 ```
@@ -90,6 +91,7 @@ You repeat this for every block in the function.
 If you have worked on OoT, you will be aware of the functions `Graph_OpenDisps` and `Graph_CloseDisps`, and might be surprised to see them missing here. These functions are actually a debug feature: the `OPEN_DISPS` and `CLOSE_DISPS` macros still exist, but they don't expand to functions. Of course this means you have to guess where they go. A sensible guess for `OPEN_DISPS` is where the `gfxCtx` temp assignment first happens; `CLOSE_DISPS` is a bit harder, although it's basically just a `}`, so it *shouldn't* matter as much.
 
 It's sensible to eliminate all the `gfxCtx` temps and reintroduce as needed. Also remember to change the prototype and function definition back!
+
 ```C
 s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s")
@@ -116,11 +118,14 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 And this matches.
 
 The last two functions in the actor are used as arguments in `SkelAnime_DrawTransformFlexOpa`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
+
 ```C
 void SkelAnime_DrawTransformFlexOpa(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount,
                    OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, TransformLimbDrawOpa transformLimbDraw, Actor* actor)
 ```
+
 The typedefs of the callbacks it uses are in `z64animation.h`:
+
 ```C
 typedef s32 (*OverrideLimbDrawOpa)(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                 struct Actor* thisx);
@@ -132,6 +137,7 @@ typedef void (*PostLimbDrawOpa)(struct PlayState* play, s32 limbIndex, Gfx** dLi
 
 typedef void (*TransformLimbDrawOpa)(struct PlayState* play, s32 limbIndex, struct Actor* thisx);
 ```
+
 which is where mips2c got them from.
 
 In this case, only two of them are used, and it is these that are the last functions standing between us and a decompiled actor.
@@ -139,6 +145,7 @@ In this case, only two of them are used, and it is these that are the last funct
 ## OverrideLimbDraw, PostLimbDraw, TransformLimbDraw
 
 Well, we don't have a PostLimbDraw here, but as we see from the prototype, it's much the same as the OverrideLimbDraw but without the `pos` argument and no return value.
+
 ```C
 s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor) {
     if (limbIndex == 5) {
@@ -147,7 +154,9 @@ s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s
     return 0;
 }
 ```
+
 Only two things to do here: we need to use `EnRecepgirl` to get to `actor + 0x2B0`, and the return value is used as a boolean, so we replace `0` by `false` (`true` means "don't draw the limb", and is hardly ever used).
+
 ```C
 s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
     EnRecepgirl* this = THIS;
@@ -160,6 +169,7 @@ s32 func_80C10558(PlayState* play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s
 ```
 
 As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
+
 ```C
 void func_80C10590(PlayState* play, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
@@ -168,10 +178,13 @@ void func_80C10590(PlayState* play, s32 limbIndex, Actor *actor) {
     }
 }
 ```
-There is only minor cleanup needed here: 
+
+There is only minor cleanup needed here:
+
 - recasting the last argument, 
 - replacing the last argument of `Matrix_RotateYS` by the enum `MTXMODE_APPLY` (which means "use the current matrix instead of starting from a new identity matrix"), and the first argument by `0x400 - this->unk_2AE.x`.
 - `(Vec3f *) &actor->focus` to `&actor->focus.pos` (this is the same issue as `(Actor*)this`, where mips2c doesn't climb deep enough into the struct).
+
 ```C
 void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
     EnRecepgirl* this = THIS;
@@ -186,6 +199,7 @@ void func_80C10590(PlayState* play, s32 limbIndex, Actor *thisx) {
 ## Some more examples: ObjTree
 
 Since EnRecepgirl was a bit light on graphics macros, we will look at an example that has a few more. A nice simple one is `ObjTree_Draw`: the original mips2c output is
+
 ```C
 void ObjTree_Draw(Actor* thisx, PlayState* play) {
     s16 sp36;
@@ -225,7 +239,9 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     temp_v0_4->words.w0 = 0xDE000000;
 }
 ```
+
 We can see there are four blocks here, although only two different macros:
+
 ```C
     temp_v0 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0 + 8;
@@ -233,12 +249,16 @@ We can see there are four blocks here, although only two different macros:
     sp28 = temp_v0;
     sp28->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
 ```
+
 gfxdis gives
+
 ```
 $ gfxdis.f3dex2 -x -g POLY_OPA_DISP++ -d DA38000312345678
 gSPMatrix(POLY_OPA_DISP++, 0x12345678, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 ```
+
 so it becomes
+
 ```C
 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 ```
@@ -249,11 +269,14 @@ gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_M
     temp_v0_2->words.w1 = (u32) &D_06000680;
     temp_v0_2->words.w0 = 0xDE000000;
 ```
+
 ```
 $ gfxdis.f3dex2 -x -g POLY_OPA_DISP++ -d DE00000012345678
 gSPDisplayList(POLY_OPA_DISP++, 0x12345678);
 ```
+
 so this one is
+
 ```C
 gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 ```
@@ -265,16 +288,20 @@ gSPDisplayList(POLY_OPA_DISP++, D_06000680);
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
 ```
+
 This is the same as the first one. Indeed, it's identical.
+
 ```C
     temp_v0_4 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_4 + 8;
     temp_v0_4->words.w1 = (u32) &D_060007C8;
     temp_v0_4->words.w0 = 0xDE000000;
 ```
+
 This is the same as the second one, but with a different second word.
 
 Tidying up and inserting `OPEN_DISPS` and `CLOSE_DISPS`, we end up with
+
 ```C
 void ObjTree_Draw(Actor* thisx, PlayState* play) {
     s16 sp36 = (f32) thisx->shape.rot.x;

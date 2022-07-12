@@ -79,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -414,7 +414,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
                     play->envCtx.lightSettings.ambientColor[2] = 250;
 
-                func_800DFD04(&play->mainCamera, 2, 11, 8);
+                Camera_AddQuake(&play->mainCamera, 2, 11, 8);
 
                 this->actor.params = ENBOMBF_1;
                 this->timer = 10;

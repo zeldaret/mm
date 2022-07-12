@@ -9,18 +9,26 @@ struct Boss02;
 typedef void (*Boss02ActionFunc)(struct Boss02*, PlayState*);
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ u8 unk_24;
-    /* 0x26 */ s16 unk_26;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ Vec3f accel;
+    /* 0x24 */ u8 type;
+    /* 0x26 */ s16 timer;
     /* 0x28 */ UNK_TYPE1 unk_28[0x4];
-    /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E;
-    /* 0x30 */ s16 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-} Boss02Effects; // size = 0x3C
+    /* 0x2C */ s16 alpha;
+    /* 0x2E */ s16 rotX;
+    /* 0x30 */ s16 rotY;
+    /* 0x34 */ f32 scale;
+    /* 0x38 */ f32 targetScale;
+} TwinmoldEffect; // size = 0x3C
+
+typedef enum {
+    /* 0 */ TWINMOLD_EFFECT_NONE,
+    /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
+    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // Unused
+    /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
+    /* 4 */ TWINMOLD_EFFECT_FLASH,      // The flashes of light that appear when the parts of Twinmold explode
+} TwinmoldEffectType;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;

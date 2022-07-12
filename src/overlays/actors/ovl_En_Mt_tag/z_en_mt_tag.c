@@ -234,7 +234,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 s32 EnMttag_ExitRace(PlayState* play, s32 arg1, s32 nextTransition) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     play->nextEntranceIndex = 0xD020;
-    if ((gSaveContext.save.weekEventReg[33] & 0x80)) {
+    if (gSaveContext.save.weekEventReg[33] & 0x80) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {

@@ -8,14 +8,14 @@ struct EnTest4;
 typedef void (*EnTest4ActionFunc)(struct EnTest4*, PlayState*);
 
 typedef struct EnTest4 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ s8 unk_144; // 0 on night, 1 on day
-    /* 0x0145 */ u8 transitionCsTimer;
-    /* 0x0146 */ u16 unk_146;
-    /* 0x0148 */ u16 nextBellTime; // Next time the bell will sound
-    /* 0x014A */ u16 lastBellTime; // Last time the bell sounded
-    /* 0x014C */ u8 state;
-    /* 0x0150 */ EnTest4ActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ s8 unk_144; // 0 on night, 1 on day
+    /* 0x145 */ u8 transitionCsTimer;
+    /* 0x146 */ u16 unk_146;
+    /* 0x148 */ u16 nextBellTime; // Next time the bell will sound
+    /* 0x14A */ u16 lastBellTime; // Last time the bell sounded
+    /* 0x14C */ u8 state;
+    /* 0x150 */ EnTest4ActionFunc actionFunc;
 } EnTest4; // size = 0x154
 
 typedef enum {
