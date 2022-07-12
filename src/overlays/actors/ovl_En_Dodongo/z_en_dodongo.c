@@ -957,9 +957,9 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 CollisionCheck_BlueBlood(play, NULL, &sp3C);
-                EffectSsHitMark_SpawnFixedScale(play, 0, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, 0, &sp3C);
             } else if (this->actor.colChkInfo.damageEffect != 14) {
-                EffectSsHitMark_SpawnFixedScale(play, 3, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, 3, &sp3C);
                 CollisionCheck_SpawnShieldParticlesMetalSound(play, &sp3C, &this->actor.projectedPos);
             }
         }

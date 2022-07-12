@@ -6,6 +6,7 @@
 
 #include "z_obj_bigicicle.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigicicle/object_bigicicle.h"
 
 #define FLAGS 0x00000000
@@ -166,8 +167,8 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
         sp8C.y = Rand_ZeroFloat(2.0f);
         sp8C.z = randPlusMinusPoint5Scaled(13.0f);
 
-        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, 2, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
-                            OBJECT_BIGICICLE, 0x28, object_bigicicle_DL_0009B0);
+        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
+                            OBJECT_BIGICICLE, 40, object_bigicicle_DL_0009B0);
     }
 
     sp98.x = this->actor.world.pos.x;
@@ -278,7 +279,7 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
         sp98.y = this->actor.world.pos.y + (sp8C.y * 7.0f * temp_f20);
         sp98.z = this->actor.world.pos.z + (sp8C.z * 5.0f * temp_f20);
 
-        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, 2, (Rand_ZeroFloat(30.0f) + 40.0f) * temp_f20,
+        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(30.0f) + 40.0f) * temp_f20,
                             OBJECT_BIGICICLE, 30, object_bigicicle_DL_0009B0);
     }
 

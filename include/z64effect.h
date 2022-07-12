@@ -19,9 +19,9 @@ struct PlayState;
 
 /* G Effect Regs */
 
-#define rgTexIdx regs[0]
+#define rgTexIndex regs[0]
 #define rgScale regs[1]
-#define rgTexIdxStep regs[2]
+#define rgTexIndexStep regs[2]
 #define rgPrimColorR regs[3]
 #define rgPrimColorG regs[4]
 #define rgPrimColorB regs[5]
@@ -30,7 +30,7 @@ struct PlayState;
 #define rgEnvColorG regs[8]
 #define rgEnvColorB regs[9]
 #define rgEnvColorA regs[10]
-#define rgObjBankIdx regs[11]
+#define rgObjBankIndex regs[11]
 
 typedef struct {
     /* 0x00 */ u8 active;

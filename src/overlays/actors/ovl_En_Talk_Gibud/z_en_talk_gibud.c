@@ -5,6 +5,7 @@
  */
 
 #include "z_en_talk_gibud.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -310,7 +311,7 @@ void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, PlayState* play) {
 
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(play, &this->actor);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnTalkGibud_SetupWalkToPlayer(this);
@@ -355,7 +356,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
             if (this->playerStunWaitTimer == 0) {
                 player->actor.freezeTimer = 40;
                 this->playerStunWaitTimer = 60;
-                func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+                Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(play, &this->actor);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
@@ -409,7 +410,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
                 damageSfxId = player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 func_800B8E58(player, damageSfxId);
-                func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
+                Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 0;
             } else {
                 this->grabDamageTimer++;

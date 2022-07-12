@@ -23,6 +23,7 @@
  */
 
 #include "z_en_rd.h"
+#include "z64rumble.h"
 #include "objects/object_rd/object_rd.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
@@ -660,7 +661,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                     player->actor.freezeTimer = 40;
                     func_80123E90(play, &this->actor);
                     GET_PLAYER(play)->unk_A78 = &this->actor;
-                    func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+                    Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->playerStunWaitTimer = 60;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
@@ -829,7 +830,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadGrabAttackAnim);
             this->grabState++;
             play->damagePlayer(play, -8);
-            func_8013ECE0(this->actor.xzDistToPlayer, 255, 1, 12);
+            Rumble_Request(this->actor.xzDistToPlayer, 255, 1, 12);
             this->grabDamageTimer = 20;
 
         case EN_RD_GRAB_START:
@@ -877,7 +878,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             this->grabDamageTimer--;
             if (this->grabDamageTimer == 0) {
                 play->damagePlayer(play, -8);
-                func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
+                Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
                 func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
             }
@@ -917,7 +918,7 @@ void EnRd_AttemptPlayerFreeze(EnRd* this, PlayState* play) {
     if (ABS_ALT(yaw) < 0x2008) {
         if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
             player->actor.freezeTimer = 60;
-            func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+            Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(play, &this->actor);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);

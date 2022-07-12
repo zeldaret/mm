@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "z64load.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -3544,7 +3545,7 @@ void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 arg2, Gfx** dList) 
             part = (EnPart*)spawnedPart;
 
             Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
-            part->unk_150 = *dList;
+            part->dList = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }
     }
@@ -3793,11 +3794,12 @@ void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
+// Actor_RequestRumble?
 void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
-        func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
+        Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
-        func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
     func_800BC770(play, y, countdown);
 }

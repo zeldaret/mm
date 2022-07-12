@@ -1,5 +1,5 @@
-#ifndef _FUNCTIONS_H_
-#define _FUNCTIONS_H_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "z64.h"
 
@@ -544,18 +544,17 @@ void EffectSsGRipple_Spawn(PlayState* play, Vec3f* pos, s16 radius, s16 radiusMa
 void EffectSsGSplash_Spawn(PlayState* play, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 type, s16 scale);
 // void EffectSsGFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2);
 // void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
+void EffectSsDtBubble_SpawnColorProfile(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 life, s16 colorProfile, s16 randXZ);
 void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 life, s16 randXZ);
-void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale, s16 objId, s16 life, Gfx* dList);
-void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 unused, s16 scale, s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
+void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objId, s16 life, Gfx* dList);
+void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 flags, s16 scale, s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
 // void func_800B2364(void);
 // void EffectSsStick_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
 // void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 void EffectSsSibuki_SpawnBurst(PlayState* play, Vec3f* pos);
 void EffectSsStone1_Spawn(PlayState* play, Vec3f* pos, s32 reg0);
-// void EffectSsHitMark_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vec3f* pzParm4);
-void EffectSsHitMark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos);
-void EffectSsHitMark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos);
+void EffectSsHitmark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos);
+void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos);
 // void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
 // void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
 void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16* linkDetected, s16 drawFlag);
@@ -2392,16 +2391,7 @@ void func_8013A46C(s32 flag);
 u32 func_8013A4C4(s32 flag);
 s16 func_8013A504(s16 val);
 s32 func_8013A530(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
-// void func_8013EC10(void);
 
-void func_8013EC44(f32 a, u8 b, u8 c, u8 d);
-void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
-void func_8013ED9C(void);
-void func_8013EDD0(void);
-u32 func_8013EE04(void);
-void func_8013EE24(void);
-// void func_8013EE38(void);
-// void func_8013EE48(void);
 void View_ViewportToVp(Vp* dest, Viewport* src);
 void View_Init(View* view, GraphicsContext* gfxCtx);
 void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* at, Vec3f* up);
@@ -2807,8 +2797,8 @@ ListAlloc* ListAlloc_Init(ListAlloc* this);
 void ListAlloc_FreeAll(ListAlloc* this);
 void Main(void* arg);
 u32 Padmgr_GetControllerBitmask(void);
-// void func_80174F24(void);
-// void func_80174F44(void);
+void func_80174F24(void (*arg0)(void*), void* arg1);
+void func_80174F44(void (*arg0)(void*), void* arg1);
 // void func_80174F7C(void);
 // void func_80174F9C(void);
 // OSMesgQueue* Padmgr_GetEventCallback(void);
@@ -2819,10 +2809,10 @@ void Padmgr_SetEventCallback(OSMesg pvParm1);
 // void Padmgr_Unlock(void);
 // void func_801750FC(void);
 // void func_80175364(void);
-// void func_80175434(void);
-// void func_8017544C(void);
-// void func_80175474(void);
-// void func_801754C0(void);
+void func_80175434(void);
+void func_8017544C(s32 port, s32 rumbleOn);
+void PadMgr_RumbleSet(u8 rumbleEnabled[MAXCONTROLLERS]);
+s32 PadMgr_ControllerHasRumblePak(s32 port);
 void Padmgr_CalcStickEdges(Input* input);
 // void Padmgr_ParseState(void);
 // void func_801759BC(void);
@@ -3002,9 +2992,6 @@ size_t SysUcode_GetUCodeBootSize(void);
 u64* SysUcode_GetUCode(void);
 u64* SysUcode_GetUCodeData(void);
 
-// void func_80182CE0(void);
-// void func_80183020(void);
-// void func_80183058(void);
 void func_80183070(void);
 // void func_801830A0(void);
 // void func_801830C8(void);
@@ -3014,7 +3001,7 @@ void func_80183070(void);
 // void func_801832B0(void);
 // void func_8018332C(void);
 // void func_8018340C(void);
-void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, s16* arg4, UnkKeyframeCallback* callbacks);
+void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, Vec3s* arg4, UnkKeyframeCallback* callbacks);
 void func_8018349C(UNK_PTR arg0);
 void func_801834A8(SkeletonInfo* skeletonInfo, void* arg1);
 // void func_80183510(void);
