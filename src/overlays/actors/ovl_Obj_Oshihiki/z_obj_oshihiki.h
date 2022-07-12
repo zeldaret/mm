@@ -38,26 +38,26 @@ enum {
 #define PUSHBLOCK_MOVE_UNDER     (1 << 8)
 
 typedef struct ObjOshihiki {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ObjOshihikiActionFunc actionFunc;
-    /* 0x0160 */ u16 stateFlags;
-    /* 0x0162 */ s16 timer;
-    /* 0x0164 */ f32 yawSin;
-    /* 0x0168 */ f32 yawCos;
-    /* 0x016C */ f32 pushSpeed;
-    /* 0x0170 */ f32 pushDist;
-    /* 0x0174 */ f32 direction;
-    /* 0x0178 */ s32 floorBgIds[5];
-    /* 0x018C */ CollisionPoly* floorPolys[5];
-    /* 0x01A0 */ f32 floorHeights[5];
-    /* 0x01B4 */ s16 highestFloor;
-    /* 0x01B6 */ u8 cantMove;
-    /* 0x01B8 */ struct ObjOshihiki* blockUnder;
-    /* 0x01BC */ f32 underDistX;
-    /* 0x01C0 */ f32 underDistZ;
-    /* 0x01C4 */ s8 textureStep;
-    /* 0x01C5 */ Color_RGB8 color;
-    /* 0x01C8 */ AnimatedMaterial* texture;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjOshihikiActionFunc actionFunc;
+    /* 0x160 */ u16 stateFlags;
+    /* 0x162 */ s16 timer;
+    /* 0x164 */ f32 yawSin;
+    /* 0x168 */ f32 yawCos;
+    /* 0x16C */ f32 pushSpeed;
+    /* 0x170 */ f32 pushDist;
+    /* 0x174 */ f32 direction;
+    /* 0x178 */ s32 floorBgIds[5];
+    /* 0x18C */ CollisionPoly* floorPolys[5];
+    /* 0x1A0 */ f32 floorHeights[5];
+    /* 0x1B4 */ s16 highestFloor;
+    /* 0x1B6 */ u8 cantMove;
+    /* 0x1B8 */ struct ObjOshihiki* blockUnder;
+    /* 0x1BC */ f32 underDistX;
+    /* 0x1C0 */ f32 underDistZ;
+    /* 0x1C4 */ s8 textureStep;
+    /* 0x1C5 */ Color_RGB8 color;
+    /* 0x1C8 */ AnimatedMaterial* texture;
 } ObjOshihiki; // size = 0x1CC
 
 extern const ActorInit Obj_Oshihiki_InitVars;

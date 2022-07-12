@@ -9,9 +9,9 @@ struct EnCrow;
 typedef void (*EnCrowActionFunc)(struct EnCrow*, PlayState*);
 
 typedef struct EnCrow {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ EnCrowActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnCrowActionFunc actionFunc;
     /* 0x18C */ u8 deathMode;
     /* 0x18E */ s16 timer;
     /* 0x190 */ s16 aimRotX;

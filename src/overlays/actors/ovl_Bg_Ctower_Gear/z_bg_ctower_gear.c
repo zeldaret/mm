@@ -66,7 +66,7 @@ static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gCloc
 
 void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
     s32 i;
-    s32 flag40 = this->dyna.actor.flags & 0x40;
+    s32 flag40 = this->dyna.actor.flags & ACTOR_FLAG_40;
     Vec3f splashSpawnPos;
     Vec3f splashOffset;
     s32 pad;

@@ -34,10 +34,9 @@ It currently builds the following ROM:
 
 Please refer to the following for more information:
 
-- [Website](https://zelda64.dev/)
-- [Discord](https://discord.zelda64.dev/)
-- [How to Contribute](CONTRIBUTING.md)
-
+* [Website](https://zelda64.dev/)
+* [Discord](https://discord.zelda64.dev/)
+* [How to Contribute](docs/CONTRIBUTING.md)
 
 ## Installation
 
@@ -47,11 +46,9 @@ For Windows 10, install WSL and a distribution by following this
 [Windows Subsystem for Linux Installation Guide](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
-
 ### MacOS
 
 Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
-
 
 ### Linux (Native or under WSL / VM)
 
@@ -129,7 +126,7 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
-**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`). 
+**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`).
 The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
 (`-j` also exists, which uses unlimited jobs, but is generally slower.)
 
