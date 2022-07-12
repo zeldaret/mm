@@ -1,19 +1,22 @@
 ﻿<Root>
     <File Name="object_link_child" Segment="6">
-        <Texture Name="object_link_child_Tex_000000" OutName="tex_000000" Format="ci8" Width="64" Height="32" Offset="0x0" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_000800" OutName="tex_000800" Format="ci8" Width="64" Height="32" Offset="0x800" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_001000" OutName="tex_001000" Format="ci8" Width="64" Height="32" Offset="0x1000" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_001800" OutName="tex_001800" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_002000" OutName="tex_002000" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_002800" OutName="tex_002800" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_003000" OutName="tex_003000" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesOpenTex" OutName="eyes_open" Format="ci8" Width="64" Height="32" Offset="0x0" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesHalfTex" OutName="eyes_half" Format="ci8" Width="64" Height="32" Offset="0x800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesClosedTex" OutName="eyes_closed" Format="ci8" Width="64" Height="32" Offset="0x1000" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesRollRightTex" OutName="eyes_roll_right" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesRollLeftTex" OutName="eyes_roll_left" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesRollUpTex" OutName="eyes_roll_up" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesRollDownTex" OutName="eyes_roll_down" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5000" />
         <Texture Name="object_link_child_Tex_003800" OutName="tex_003800" Format="ci8" Width="64" Height="32" Offset="0x3800" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_004000" OutName="tex_004000" Format="ci8" Width="32" Height="32" Offset="0x4000" TlutOffset="0x5200" />
+
+        <Texture Name="gLinkHumanMouthClosedTex" OutName="mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x4000" TlutOffset="0x5200" />
         <Texture Name="object_link_child_Tex_004400" OutName="tex_004400" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
-        <Texture Name="object_link_child_Tex_004800" OutName="tex_004800" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
-        <Texture Name="object_link_child_Tex_004C00" OutName="tex_004C00" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
-        <Texture Name="object_link_child_TLUT_005000" OutName="tlut_005000" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
-        <Texture Name="object_link_child_Tex_005200" OutName="tex_005200" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
+        <Texture Name="gLinkHumanMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
+        <Texture Name="gLinkHumanMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
+
+        <Texture Name="gLinkHumanEyesTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
+        <Texture Name="gLinkHumanMouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
+
         <Texture Name="object_link_child_Tex_005400" OutName="tex_005400" Format="rgba16" Width="8" Height="16" Offset="0x5400" />
         <Texture Name="object_link_child_Tex_005500" OutName="tex_005500" Format="ci8" Width="8" Height="8" Offset="0x5500" />
         <Texture Name="object_link_child_Tex_005540" OutName="tex_005540" Format="ci8" Width="16" Height="16" Offset="0x5540" />
@@ -29,6 +32,7 @@
         <Texture Name="object_link_child_Tex_006B00" OutName="tex_006B00" Format="rgba16" Width="16" Height="16" Offset="0x6B00" />
         <!-- <Blob Name="object_link_child_Blob_006D00" Size="0xA00" Offset="0x6D00" /> -->
         <Texture Name="object_link_child_Tex_007700" OutName="tex_007700" Format="rgba16" Width="16" Height="16" Offset="0x7700" />
+
         <DList Name="object_link_child_DL_00B360" Offset="0xB360" />
         <DList Name="object_link_child_DL_00B538" Offset="0xB538" />
         <DList Name="object_link_child_DL_00B778" Offset="0xB778" />

@@ -2007,7 +2007,7 @@ s32 func_801242B4(Player* player);
 s32 func_801242DC(PlayState* play);
 void func_80124420(Player* player);
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2);
-void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor);
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor);
 void func_80125318(Vec3f* arg0, Vec3s* arg1);
 void Player_DrawZoraShield(PlayState* play, Player* player);
 void func_80125500(PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot);

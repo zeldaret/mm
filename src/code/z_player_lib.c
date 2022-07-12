@@ -1379,29 +1379,84 @@ Gfx D_801C0860[] = {
     gsSPEndDisplayList(),
 };
 
+typedef enum {
+    /* 0 */ PLAYER_EYES_OPEN,
+    /* 1 */ PLAYER_EYES_HALF,
+    /* 2 */ PLAYER_EYES_CLOSED,
+    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
+    /* 4 */ PLAYER_EYES_ROLL_LEFT,
+    /* 5 */ PLAYER_EYES_ROLL_UP,
+    /* 6 */ PLAYER_EYES_ROLL_DOWN,
+    /* 7 */ PLAYER_EYES_7
+} PlayerEyesIndices;
+
+typedef enum {
+    /* 0 */ PLAYER_MOUTH_CLOSED,
+    /* 1 */ PLAYER_MOUTH_1,
+    /* 2 */ PLAYER_MOUTH_OPEN,
+    /* 3 */ PLAYER_MOUTH_HAPPY
+} PlayerMouthIndices;
+
 TexturePtr sPlayerEyesTextures[] = {
-    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000,
-    object_link_child_Tex_001800, object_link_child_Tex_002000, object_link_child_Tex_002800,
-    object_link_child_Tex_003000, object_link_child_Tex_003800,
+    gLinkHumanEyesOpenTex, gLinkHumanEyesHalfTex, gLinkHumanEyesClosedTex,
+    gLinkHumanEyesRollRightTex, gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex,
+    gLinkHumanEyesRollDownTex, object_link_child_Tex_003800,
 };
 
 TexturePtr sPlayerMouthTextures[] = {
-    object_link_child_Tex_004000,
+    gLinkHumanMouthClosedTex,
     object_link_child_Tex_004400,
-    object_link_child_Tex_004800,
-    object_link_child_Tex_004C00,
+    gLinkHumanMouthOpenTex,
+    gLinkHumanMouthHappyTex,
 };
 
-u8 D_801C08A0[][2] = {
-    { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 },
-    { 7, 2 }, { 0, 2 }, { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 3 },
+typedef struct PlayerFaceIndices {
+    /* 0x00 */ u8 eyeIndex;
+    /* 0x01 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x02
+
+typedef enum {
+    /*  0 */ PLAYER_FACE_0,
+    /*  1 */ PLAYER_FACE_1,
+    /*  2 */ PLAYER_FACE_2,
+    /*  3 */ PLAYER_FACE_3,
+    /*  4 */ PLAYER_FACE_4,
+    /*  5 */ PLAYER_FACE_5,
+    /*  6 */ PLAYER_FACE_6,
+    /*  7 */ PLAYER_FACE_7,
+    /*  8 */ PLAYER_FACE_8,
+    /*  9 */ PLAYER_FACE_9,
+    /* 10 */ PLAYER_FACE_10,
+    /* 11 */ PLAYER_FACE_11,
+    /* 12 */ PLAYER_FACE_12,
+    /* 13 */ PLAYER_FACE_13,
+    /* 14 */ PLAYER_FACE_14,
+    /* 15 */ PLAYER_FACE_15
+} PlayerFaceExpression;
+
+PlayerFaceIndices sPlayerFaces[] = {
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_0
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_1
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_2
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_3
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_4
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_5
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_6
+    { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_1 }, // PLAYER_FACE_7
+    { PLAYER_EYES_7, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_8
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_9
+    { PLAYER_EYES_ROLL_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_10
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_11
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_12
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_1 }, // PLAYER_FACE_13
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_14
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY }, // PLAYER_FACE_15
 };
 
-// OoT's func_8008F470
-void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
-                   s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;
-    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1;
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
+                     s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+    s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
+    s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
     Gfx* dl;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1409,21 +1464,21 @@ void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dLis
     dl = POLY_OPA_DISP;
 
     if (eyeIndex < 0) {
-        eyeIndex = D_801C08A0[face][0];
+        eyeIndex = sPlayerFaces[face].eyeIndex;
     }
 
     if (tunic == 1) {
-        if ((eyeIndex >= 3) && (eyeIndex < 7)) {
-            eyeIndex = 0;
-        } else if (eyeIndex == 7) {
-            eyeIndex = 3;
+        if ((eyeIndex >= PLAYER_EYES_ROLL_RIGHT) && (eyeIndex <= PLAYER_EYES_ROLL_DOWN)) {
+            eyeIndex = PLAYER_EYES_OPEN;
+        } else if (eyeIndex == PLAYER_EYES_7) {
+            eyeIndex = PLAYER_EYES_ROLL_RIGHT;
         }
     }
 
     gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
-        mouthIndex = D_801C08A0[face][1];
+        mouthIndex = sPlayerFaces[face].mouthIndex;
     }
 
     gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
