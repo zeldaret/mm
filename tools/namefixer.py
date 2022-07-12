@@ -23,7 +23,7 @@ wordReplace = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    
+
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
     # "SysMatrix_StatePop":                           "Matrix_StatePop",
@@ -688,9 +688,6 @@ wordReplace = {
     "D_801D15BC" : "gZeroVec3s",
     "D_801D1DE0" : "gIdentityMtx",
     "D_801D1E20" : "gIdentityMtxF",
-    "D_04020658" : "gameplay_keep_Anim_020658",
-    "D_04022B28" : "gDoorSkel",
-    "D_04023100" : "gDoorCol",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
