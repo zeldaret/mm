@@ -112,7 +112,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
 
     if (1) {}
-    if (!EN_MINIFROG_IS_RETURNED(this)) {
+    if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {

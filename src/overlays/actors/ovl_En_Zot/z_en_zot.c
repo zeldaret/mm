@@ -755,8 +755,7 @@ void func_80B97E0C(EnZot* this, PlayState* play) {
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     if (this->unk_2F2 & 0x40) {
         func_80B96BEC(this, 0, 0);

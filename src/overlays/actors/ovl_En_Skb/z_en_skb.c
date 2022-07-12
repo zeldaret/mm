@@ -798,7 +798,7 @@ void func_80996474(EnSkb* this) {
 }
 
 void func_809964A0(EnSkb* this, PlayState* play) {
-    if ((this->unk_3D0++ < 19) ^ 1) {
+    if (this->unk_3D0++ >= 19) {
         Actor_MarkForDeath(&this->actor);
     }
 }

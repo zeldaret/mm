@@ -32,7 +32,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.h"
 #include "overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.h"
 
-void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, void* texture) {
+void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 scale;
     MtxF mfTrans;

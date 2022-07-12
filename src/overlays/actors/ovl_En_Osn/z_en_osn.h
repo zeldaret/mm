@@ -10,7 +10,7 @@ typedef void (*EnOsnActionFunc)(struct EnOsn*, PlayState*);
 typedef struct EnOsn {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ColliderCylinder collider;
-    /* 0X0190 */ SkelAnime skelAnime;
+    /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnOsnActionFunc actionFunc;
     /* 0x01D8 */ Vec3s unk_1D8;
     /* 0x01DE */ Vec3s unk_1DE;

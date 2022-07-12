@@ -172,14 +172,14 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         f32 alphaRatio;
 
         if ((actor->id == ACTOR_PLAYER) && (((Player*)actor)->stateFlags3 & 0x8000)) {
-            f32 tmpScaleZ = actor->scale.z;
+            f32 prevScaleZ = actor->scale.z;
 
             actor->scale.z += 0.03f * fabsf(Math_CosS(((Player*)actor)->unk_AAA));
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MAX(alphaRatio, 1.0f);
             ActorShadow_Draw(actor, mapper, play, gCircleShadowDL, NULL);
-            actor->scale.z = tmpScaleZ;
+            actor->scale.z = prevScaleZ;
         } else {
             actor->shape.shadowScale *= 0.3f;
             alphaRatio = (distToFloor - 20.0f) * 0.02f;

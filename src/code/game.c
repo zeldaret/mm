@@ -192,7 +192,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
-    gameState->frames = 0U;
+    gameState->frames = 0;
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
@@ -201,7 +201,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0U;
+    gameState->nextGameStateSize = 0;
 
     {
         s32 requiredScopeTemp;

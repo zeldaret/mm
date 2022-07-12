@@ -45,7 +45,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     }
 
     func_80C06D90(this, play);
-    this->unk14A = UNK_ACTOR_PARAM;
+    this->unk14A = OBJMUPICT_GET_F000(&this->actor);
     this->actor.targetMode = 6;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;

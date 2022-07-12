@@ -12,7 +12,7 @@
 #define THIS ((ObjBombiwa*)thisx)
 
 void ObjBombiwa_Init(Actor* thisx, PlayState* play);
-void ObjBombiwa_Destroy(Actor* thisx, PlayState* play);
+void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2);
 void ObjBombiwa_Update(Actor* thisx, PlayState* play);
 
 s32 func_809393B0(Actor* thisx);
@@ -206,8 +206,11 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     func_80939EE0(this);
 }
 
-void ObjBombiwa_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyCylinder(play, &THIS->collider);
+void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjBombiwa* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80939794(ObjBombiwa* this, PlayState* play) {

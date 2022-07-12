@@ -177,8 +177,8 @@ void func_80A1B3D0(void) {
 
 void func_80A1B840(MtxF* matrix) {
     MtxF* temp = Matrix_GetCurrent();
-    f32* tmp = (f32*)&temp->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &temp->xx;
+    f32* tmp2 = &matrix->xx;
     s32 i;
 
     for (i = 0; i < 16; i++) {

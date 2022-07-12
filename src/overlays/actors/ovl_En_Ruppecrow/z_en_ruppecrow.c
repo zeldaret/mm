@@ -543,7 +543,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         // Finished spawning rupees; fly up and then despawn
         this->speedModifier = 6.0f;
 
-        // Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
+        //! @bug: Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
         this->actor.gravity = 0.0f;
 
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
