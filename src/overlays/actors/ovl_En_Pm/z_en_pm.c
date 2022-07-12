@@ -833,7 +833,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -845,7 +845,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
             if ((gSaveContext.save.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             }
             this->unk_378++;
             ret = true;
@@ -875,7 +875,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 4:
         case 6:
         case 8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             this->unk_378++;
             ret = true;
             break;
@@ -885,7 +885,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_378++;
             ret = true;

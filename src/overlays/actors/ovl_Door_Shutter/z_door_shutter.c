@@ -608,7 +608,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, 0), 3);
+        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
         Quake_SetSpeed(quake, -32536);
         Quake_SetQuakeValues(quake, 2, 0, 0, 0);
         Quake_SetCountdown(quake, 10);

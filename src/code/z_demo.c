@@ -1474,8 +1474,8 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
             Audio_SetCutsceneFlag(true);
 
             csCtx->frames = 0xFFFF;
-            csCtx->csCamId = ActorCutscene_GetCurrentCamera(0x7F);
-            func_8016119C(Play_GetCamera(play, csCtx->csCamId), &sCutsceneCameraInfo);
+            csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
+            func_8016119C(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
