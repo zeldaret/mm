@@ -108,7 +108,7 @@ void ObjPurify_SetSysMatrix(f32 ypos) {
 s32 ObjPurify_IsPurified(ObjPurify *this) {
     ObjPurifyStruct00 *new_var;
     new_var = &D_80A85480[this->dyna.actor.params & 0xF];
-    if (!new_var->unk24) {
+    if (!new_var->isDekuCity) {
         // woodfall temple wood flower unraveled
         if ((gSaveContext.save.weekEventReg[12] & 1)) {
             return 1;
@@ -212,13 +212,13 @@ void func_80A85048(ObjPurify *this) {
     this->dyna.actor.draw = func_80A851C8;
     this->gfxIndex = 0;
     this->actionFunc = func_80A85074;
-    this->unk164 = 0x1E;
+    this->timer = 30;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85074.s")
 void func_80A85074(ObjPurify *this, PlayState *play) {
-    this->unk164--;
-    if (this->unk164 <= 0) {
+    this->timer--;
+    if (this->timer <= 0) {
         func_80A850B0(this);
     }
 }
