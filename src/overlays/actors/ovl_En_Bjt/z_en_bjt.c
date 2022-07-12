@@ -145,27 +145,27 @@ void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {
 s32 EnBjt_TakeItem(s32 exchangeItem) {
     switch (exchangeItem) {
         case EXCH_ITEM_LETTER_TO_KAFEI:
-            func_801149A0(ITEM_LETTER_TO_KAFEI, SLOT(ITEM_LETTER_TO_KAFEI));
+            Inventory_DeleteItem(ITEM_LETTER_TO_KAFEI, SLOT(ITEM_LETTER_TO_KAFEI));
             break;
 
         case EXCH_ITEM_DEED_SWAMP:
-            func_801149A0(ITEM_DEED_SWAMP, SLOT(ITEM_DEED_SWAMP));
+            Inventory_DeleteItem(ITEM_DEED_SWAMP, SLOT(ITEM_DEED_SWAMP));
             break;
 
         case EXCH_ITEM_DEED_MOUNTAIN:
-            func_801149A0(ITEM_DEED_MOUNTAIN, SLOT(ITEM_DEED_MOUNTAIN));
+            Inventory_DeleteItem(ITEM_DEED_MOUNTAIN, SLOT(ITEM_DEED_MOUNTAIN));
             break;
 
         case EXCH_ITEM_DEED_OCEAN:
-            func_801149A0(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
+            Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             break;
 
         case EXCH_ITEM_DEED_LAND:
-            func_801149A0(ITEM_DEED_LAND, SLOT(ITEM_DEED_LAND));
+            Inventory_DeleteItem(ITEM_DEED_LAND, SLOT(ITEM_DEED_LAND));
             break;
 
         case EXCH_ITEM_LETTER_MAMA:
-            func_801149A0(ITEM_LETTER_MAMA, SLOT(ITEM_LETTER_MAMA));
+            Inventory_DeleteItem(ITEM_LETTER_MAMA, SLOT(ITEM_LETTER_MAMA));
             break;
 
         default:
