@@ -16,9 +16,6 @@
 
 #define SUB_CAM_ID_DONE 0 // Used in some actors for variables holding sub camera IDs to indicate "subcam is finished"
 
-// Used for when the camera is following Player as the main tracked actor
-#define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
-
 // Camera behaviorFlags. Flags specifically for settings, modes, and bgCam
 // Used to store current state, only CAM_BEHAVIOR_SETTING_1 and CAM_BEHAVIOR_BG_2 are read from and used in logic
 // Setting (0x1, 0x10)
@@ -331,8 +328,8 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f quakeOffset;
     /* 0x08C */ struct PlayState* play;
-    /* 0x090 */ Actor* trackActor; // the actor the camera is focused on. Most often Player, but can be any actor
-    /* 0x094 */ PosRot trackActorPosRot;
+    /* 0x090 */ Actor* focalActor; // the actor the camera is focused on. Most often Player, but can be any actor
+    /* 0x094 */ PosRot focalActorPosRot;
     /* 0x0A8 */ Actor* target; // the actor that is being z-targeted
     /* 0x0AC */ PosRot targetPosRot;
     /* 0x0C0 */ f32 rUpdateRateInv;
@@ -345,7 +342,7 @@ typedef struct Camera {
     /* 0x0DC */ f32 dist;
     /* 0x0E0 */ f32 speedRatio;
     /* 0x0E4 */ Vec3f atActorOffset;
-    /* 0x0F0 */ Vec3f trackActorOffset;
+    /* 0x0F0 */ Vec3f focalActorOffset;
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLerpStepScale;
     /* 0x104 */ f32 playerFloorHeight;
