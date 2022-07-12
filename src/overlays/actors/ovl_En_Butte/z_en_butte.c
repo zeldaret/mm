@@ -13,7 +13,7 @@
 #define THIS ((EnButte*)thisx)
 
 void EnButte_Init(Actor* thisx, PlayState* play);
-void EnButte_Destroy(Actor* thisx, PlayState* play);
+void EnButte_Destroy(Actor* thisx, PlayState* play2);
 void EnButte_Update(Actor* thisx, PlayState* play);
 void EnButte_Draw(Actor* thisx, PlayState* play);
 
@@ -196,8 +196,11 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     this->unk_250 = 1;
 }
 
-void EnButte_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyJntSph(play, &THIS->collider);
+void EnButte_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnButte* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8091C524(EnButte* this) {

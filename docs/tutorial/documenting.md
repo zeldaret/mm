@@ -17,13 +17,11 @@ If you want to use `diff.py` after renaming anything, particularly functions, re
 
 Finally, *if you are not sure what something does, either ask or leave it unnamed: it will be less confusing later if things are unnamed than if they are wrongly named*
 
-
 ## Renaming things
 
 Because MM needs to regenerate the assembly code, it is necessary to tell the disassembler the names of functions and variables, so it knows what symbols to assign in the code. This is done via `functions.txt` and `variables.txt`. The best way to rename functions and symbols is via global rename in an editor like VSCode. The next best way is to run `tools/rename_sym.sh`. You should be careful with this script: it has no error-checking!
 
 Renaming symbols in theory requires re-disassembly. This can often be avoided in the case of functions by running `tools/rename_global_asm.py`, which will rename any individual functions' assembly files with the wrong names, so that the `GLOBAL_ASM`s can spot them. Renaming variables *may* require redisassembly (and if fake symbols are removed, it *will*).
-
 
 ## EnRecepgirl
 
@@ -262,12 +260,15 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 (We can delete the `GLOBAL_ASM` lines now.)
 
 The worst part of documentation is finding somewhere to start. We have a decent place to start here, though, in that we already know the function (or rather, the use) of a couple of the functions, namely the LimbDraws. So we can rename `func_80C10558` to `EnRecepgirl_OverrideLimbDraw` and `func_80C10590` to `EnRecepgirl_TransformLimbDraw`. Remember to do a global rename so that the functions in the assembly are renamed, use `rename_global_asm`,
+
 ```
 $ ./tools/rename_global_asm.py
 asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s --> asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_OverrideLimbDraw.s
 asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10590.s --> asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_UnkLimbDraw.s
 ```
+
 as well as the mentions in this chunk of `functions.txt`:
+
 ```
     0x80C0FFD0:("EnRecepgirl_Init",),
     0x80C100CC:("EnRecepgirl_Destroy",),
@@ -283,6 +284,7 @@ as well as the mentions in this chunk of `functions.txt`:
 ```
 
 That's probably as much as we can do on functions for now. Next let's think about some of the variables. We have essentially 3 sorts of variable here
+
 - struct variables
 - data/bss
 - intrafunction/stack variables
@@ -290,6 +292,7 @@ That's probably as much as we can do on functions for now. Next let's think abou
 and this is roughly the order of preference for naming them (although not necessarily the logical order to determine what they do). This actor is quite limited in the last category: only `sp30` is unnamed at the moment. Even though `Actor_TrackPlayer` is decomped, the purpose of the argument in which `sp30` is placed is not clear (and, indeed, is not named), so it's probably best to leave it unnamed for now. (With greater experience, you might analyse `Actor_TrackPlayer` to work out what this argument is for, but let's not worry about that for now.)
 
 As for the struct, there are two unnamed variables at the moment:
+
 ```C
 typedef struct EnRecepgirl {
     /* 0x000 */ Actor actor;
@@ -303,12 +306,15 @@ typedef struct EnRecepgirl {
 ```
 
 Let's start with `unk_2AC`. This is set to `2` in `Init`, something interesting happens to it in `func_80C100DC`, but it is used in the `Draw`, here:
+
 ```C
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 ```
+
 So it is used as an index into the array `D_80C106B0`, and the element with that index is placed on segment `8`. So we need to work out what this array is to name `unk_2AC`.
 
 As we discussed last time, `D_80C106B0` is an array of [segmented pointers](data.md#segmented-pointers). Since they are in segment `6`, they are in the actor's object file. Which object? The InitVars tell us: namely,
+
 ```C
 const ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
@@ -316,8 +322,8 @@ const ActorInit En_Recepgirl_InitVars = {
     FLAGS,
     OBJECT_BG,
 ```
-the fourth element is the object (it is actually an enum, but the file itself has the same name as the object enum). So, we need to look at the object file. We are very lucky that a custom tool has been written for such a thing: Z64Utils.
 
+the fourth element is the object (it is actually an enum, but the file itself has the same name as the object enum). So, we need to look at the object file. We are very lucky that a custom tool has been written for such a thing: Z64Utils.
 
 ## Z64Utils
 
@@ -336,14 +342,17 @@ Go to "Analysis -> Find Dlists" and press OK (the defaults are usually fine). Th
 ![Z64Utils, with an analyzed object](images/z64utils_object_analyzed.png)
 
 We will talk about what all these types of data are next time, but for now, all we want to know is what
+
 ```C
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
+
 actually are. We know they are set on segment 8, so we need to find where the skeleton uses them. We know from `object_bg_Skel_011B60` that this is at `0x06011B60`, so scroll down to it, right-click on it, and choose "Open in Skeleton Viewer". Pick an animation that we know it uses (sometimes Z64Utils misidentifies other things for animations), such as `object_bg_Anim_000968`, and you will get this error:
 
 ![Z64Utils, error when viewing skeleton](images/z64utils_skeleton_error.png)
 
 It needs something to be set to segment `8`. Well, that's good, we know that the code does that! Let's find out what. Z64Utils tells you the address, so we can look up the displaylist that wants it: the relevant block is
+
 ```C
 [...]
 // Multi Command Macro Found (6 instructions)
@@ -374,11 +383,13 @@ so we see that segment `8` is expecting a texture (we'll go into more detail abo
 But what sort of textures? This is an NPC, so what textures on the model would it want to change? The answer is of course the eyes: most NPCs have eye textures, with some sort of routine for changing them to appear to blink. We can set the different textures onto segment `8` and see which is which, but this is enough to know that `D_80C106B0` can be `sEyeTextures` (`s` for `static`: they essentially have to be static so that we can name them like this without the names clashing), and that `unk_2AC` is `eyeTexIndex` (these names are not completely standard, but it's best to be as consistent as possible).
 
 **N.B.** static data should not be renamed in the assembly or `variables.txt`, since assembly has no notion of file locality and there can be symbol clashes. Therefore it should only be renamed in its respective file, not globally.
+
 ```C
 static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
 
 And now it's rather more obvious what
+
 ```C
 void func_80C100DC(EnRecepgirl* this) {
     if (this->eyeTexIndex != 0) {
@@ -391,11 +402,13 @@ void func_80C100DC(EnRecepgirl* this) {
     }
 }
 ```
+
 is doing: it's running a kind of blink routine. This is slightly nonstandard: usually there is a separate timer, but this one simply perturbs the index away from `0` every frame with a 2% chance. This sort of function is usually called `Blink` or `UpdateEyes`. Since it is explicitly called in `Update`, we'll call it `UpdateEyes`, but either is fine; we'll standardise later.
 
 We have two other pieces of data. There is a suggested name for the InitChain in the code already; just replace it and replace the first line in the definition.
 
 This leaves one piece of data unnamed, `D_80C106C8`. This is initially set to `0`, checked in `Init` to decide whether to run the loop, and then set to `1` after the loop is finished:
+
 ```C
     if (D_80C106C8 == 0) {
         for (i = 0; i < 4; i++) {
@@ -404,13 +417,15 @@ This leaves one piece of data unnamed, `D_80C106C8`. This is initially set to `0
         D_80C106C8 = 1;
     }
 ```
+
 What is this doing? We need to understand that to name this variable.
 
-The N64's processors cannot use segmented addresses: they need actual RAM addresses. Therefore the segmented addresses have to be converted before being placed on a segment: this is what `Lib_SegmentedToVirtual` does. So (somewhat unusually) this loop is modifying the addresses in the actor's actual data in RAM. Having converted the addresses once, it wouldn't make any sense to convert them again, but `Init` would run every time an instantiation of the actor is created. Therefore `D_80C106C8` is present to ensure that the addresses only get converted once: it is really a boolean that indicates if the addresses have been converted. So let's call it `texturesDesegmented`, and replace its values by `true` and `false`.
+The N64's processors cannot use segmented addresses: they need actual RAM addresses. Therefore the segmented addresses have to be converted before being placed on a segment: this is what `Lib_SegmentedToVirtual` does. So (somewhat unusually) this loop is modifying the addresses in the actor's actual data in RAM. Having converted the addresses once, it wouldn't make any sense to convert them again, but `Init` would run every time an instantiation of the actor is created. Therefore `D_80C106C8` is present to ensure that the addresses only get converted once: it is really a boolean that indicates if the addresses have been converted. So let's call it `sTexturesDesegmented`, and replace its values by `true` and `false`.
 
 Finally, clearly `4` is linked to the data over which we're iterating: namely it's the size of the array. We have a macro for this, `ARRAY_COUNT(sEyeTextures)`.
 
 We've got one struct variable left. To find out what it does, we can look at a function that uses it, for example
+
 ```C
 s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
@@ -431,6 +446,7 @@ void EnRecepgirl_UnkLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 ```
+
 It is used to do a rotation of whatever limb `5` is. (The `+=` is because `rot->x` is the base rotation of the limb, and we have to add the same thing to it every frame to keep the angle changed and constant.) We can use Z64Utils to : setting segment `8` to one of what we know now are the eye textures, we can view the model in the skeleton viewer. The limb numbers in the object are one smaller than those in the actor (the root limb is only a concept for the code, not the object), so we find limb 4:
 
 ![Z64Utils highlighting a limb](images/z64utils_skeleton_head.png)
@@ -530,14 +546,15 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
 ```
 All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `Actor_ProcessTalkRequest(&this->actor, &play->state) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `Message_GetState(&play->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
 
-For more complex actors, we have a tool called `graphovl.py` that can produce function flow graphs for actors: running 
+For more complex actors, we have a tool called `graphovl.py` that can produce function flow graphs for actors: running
+
 ```
 $ ./tools/graphovl/graphovl.py En_Recepgirl
 ```
+
 produces
 
 ![EnRecepgirl's function flow graph](images/En_Recepgirl.gv.png)
-
 
 ## Miscellaneous other documentation
 
@@ -576,7 +593,6 @@ Notice that we use `thisx`: this makes the form of every one of these macros the
 ```
 
 Much clearer!
-
 
 We have now essentially documented this as far as we can without the object, so we'd better do that next.
 

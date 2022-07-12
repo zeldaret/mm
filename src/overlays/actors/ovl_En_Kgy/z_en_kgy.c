@@ -4,8 +4,6 @@
  * Description: Blacksmith - Gabora
  */
 
-#include "overlays/actors/ovl_En_Kbt/z_en_kbt.h"
-#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "z_en_kgy.h"
 #include "objects/object_kgy/object_kgy.h"
 #include "objects/gameplay_keep/gameplay_keep.h"

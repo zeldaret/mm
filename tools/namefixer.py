@@ -458,6 +458,8 @@ wordReplace = {
     "func_80169E6C": "Play_SetupRespawnPoint",
     "func_8016A0AC": "Play_IsUnderwater",
     "func_801690CC": "Play_InCsMode",
+    "func_8013EC44": "Rumble_Override",
+    "func_8013ECE0": "Rumble_Request",
     "func_8017D2FC": "Math3D_LineSegVsPlane",
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
@@ -541,6 +543,9 @@ wordReplace = {
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
     "Effect_GetGlobalCtx": "Effect_GetPlayState",
+    "EffectSsHitMark_Spawn": "EffectSsHitmark_Spawn",
+    "EffectSsHitMark_SpawnFixedScale": "EffectSsHitmark_SpawnFixedScale",
+    "EffectSsHitMark_SpawnCustomScale": "EffectSsHitmark_SpawnCustomScale",
 
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",

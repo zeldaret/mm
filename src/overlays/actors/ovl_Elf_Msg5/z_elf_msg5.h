@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define ELFMSG5_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define ELFMSG5_GET_FF(thisx) ((thisx)->params & 0xFF)
+
 struct ElfMsg5;
 
 typedef void (*ElfMsg5ActionFunc)(struct ElfMsg5*, PlayState*);

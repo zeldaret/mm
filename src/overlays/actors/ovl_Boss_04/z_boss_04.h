@@ -2,6 +2,7 @@
 #define Z_BOSS_04_H
 
 #include "global.h"
+#include "objects/object_boss04/object_boss04.h"
 
 struct Boss04;
 
@@ -10,8 +11,8 @@ typedef void (*Boss04ActionFunc)(struct Boss04*, PlayState*);
 typedef struct Boss04 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[9];
-    /* 0x1BE */ Vec3s morphtable[9];
+    /* 0x188 */ Vec3s jointTable[WART_LIMB_MAX];
+    /* 0x1BE */ Vec3s morphtable[WART_LIMB_MAX];
     /* 0x1F4 */ s16 unk_1F4;
     /* 0x1F6 */ u8 unk_1F6;
     /* 0x1F7 */ u8 unk_1F7;

@@ -390,7 +390,7 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s8 phi_a2;
     EnSb* this = THIS;
 
-    if (this->isDrawn != false) {
+    if (this->isDrawn) {
         if (limbIndex < 7) {
             phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
             Actor_SpawnBodyParts(thisx, play, phi_a2, dList);

@@ -1,7 +1,6 @@
 # Contributing to the Majora's Mask Decompilation Project
 
-
-Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask* for the N64! 
+Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask* for the N64!
 All contributions are welcome. This is a group effort, and even small contributions can make a difference. Some tasks also don't require much knowledge to get started.
 
 This document is meant to be a set of tips and guidelines for contributing to the project.
@@ -9,18 +8,16 @@ For general information about the project, see [our readme](https://github.com/z
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
-
 ## Useful Links
 
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
-- [Style Guide](docs/STYLE.md) - Description of the project style that we ask contributors to adhere to.
-- [Code Review Guidelines](docs/REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
+- [Style Guide](STYLE.md) - Description of the project style that we ask contributors to adhere to.
+- [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
 - [Zelda 64 Reverse Engineering Website](https://zelda64.dev/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
-- [MM decomp tutorial](docs/tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
+- [MM decomp tutorial](tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
 - [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - The tutorial the MM one was based on. For OOT, but largely applicable to MM as well. Covers slightly different topics, including how to get your data OK with `vbindiff`.
 - The `#resources` channel on the Discord contains many more links on specific details of decompiling IDO MIPS code.
-
 
 ## Getting Started
 
@@ -36,7 +33,6 @@ The [OoT Decompilation Project](https://github.com/zeldaret/oot) is farther alon
 
 This project only uses *publicly available code*.
 
-
 **N.B.** Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.
 
 ### Environment Setup
@@ -46,27 +42,27 @@ You should be able to build a matching ROM before you start making any changes.
 
 ### First Contribution
 
-Usually, the best place to get started is to decompile an actor overlay. 
+Usually, the best place to get started is to decompile an actor overlay.
 An *actor* is any thing in the game that moves or performs actions or interactions. This includes things like Link, enemies, NPCs, doors, pots, etc. Actors are good for a first file because they are generally small, self-contained systems.
 
 We recommend that you [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
 We track who is working on what on some Google Sheets available in the Discord. Once you've decided on or been recommended a good first file, mark it as Reserved.
 
-The workflow is: 
-- Reserve a file, 
-- decompile it, 
-- submit a PR, 
+The workflow is:
+
+- Reserve a file,
+- decompile it,
+- submit a PR,
 - repeat while addressing review comments.
 
 The expectation is that one reservation goes to one file which ends up in a one file PR, although naturally some files are more sensibly worked on as a group, for example two actors that work together. This also does not apply to large asset files like `gameplay_keep`: you can just reserve the parts that are used in your files.
 
 If possible, we expect reserved files to be completed. If you find you cannot complete a file, because it is intractable for one reason or another, or real-life circumstances get in the way, please talk to one of the leads in Discord; we may find someone else interested in helping you finish, or who is happy to take over the file from you completely. If you unreserve a file on which you have useful progress, please leave a link to your branch in the Notes column on the Google Sheet that the next person who works on the file can use.
 
-
 ## Style Guide & Conventions
 
-See the [Style Guide](docs/STYLE.md).
+See the [Style Guide](STYLE.md).
 
 ## `NON_MATCHING` and `NON_EQUIVALENT`
 
@@ -84,7 +80,8 @@ void CollisionCheck_SpawnWaterDroplets(PlayState* play, Vec3f* v);
 ```
 
 Before PRing with a `NON_MATCHING`, you can try
-- using the [decomp-permuter](tools/decomp-permuter) to find a closer match,
+
+- using the [decomp-permuter](https://github.com/simonlindholm/decomp-permuter) to find a closer match,
 - Asking in `#mm-decomp-help` in Discord; the easiest way to allow other people to play around with the function you are stuck on is to make a scratch on [decomp.me](http://decomp.me).
 
 `NON_EQUIVALENT` can be used with the same syntax as `NON_MATCHING`, but it is used to mark sections of code which do not match *and* do not have the same behavior as the original code.
@@ -104,8 +101,7 @@ Documenting is more than just adding comments. Documenting also includes:
 
 Overlays are not required to be documented at this time, but files from `code/` and `boot/` should be documented. When documentation on a file has been started it should be as complete as reasonable.
 
-See the [Style Guide](docs/STYLE.md) for more details on documentation style.
-
+See the [Style Guide](STYLE.md) for more details on documentation style.
 
 ## Pull Requests (PRs)
 
@@ -125,13 +121,15 @@ Feel free to reach out on the Discord if you have any questions about these step
 ### Pull Request Process
 
 After opening a PR, the Jenkins agent will test formatting, the contents of the spec, build the rom and check for warnings.
-If there is an error, double-check that you can successfully 
+If there is an error, double-check that you can successfully
+
 ```bash
 make disasm
 ./extract_assets.py -f
 make clean
 make
 ```
+
 locally. If the build is `OK`, the next thing to check is that all added/modified files were `git add`-ed to your commit. The final check before posting on Discord for help is that there are no new warnings added to the code causing Jenkins to fail. You can check this by running: `tools/warnings_count/check_new_warnings.sh`.
 
 Each PR needs a review from two reviewers, at least one a project lead, and final approval from Kenix.

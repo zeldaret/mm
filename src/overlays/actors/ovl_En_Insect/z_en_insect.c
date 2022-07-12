@@ -12,7 +12,7 @@
 #define THIS ((EnInsect*)thisx)
 
 void EnInsect_Init(Actor* thisx, PlayState* play);
-void EnInsect_Destroy(Actor* thisx, PlayState* play);
+void EnInsect_Destroy(Actor* thisx, PlayState* play2);
 void EnInsect_Update(Actor* thisx, PlayState* play);
 void EnInsect_Draw(Actor* thisx, PlayState* play);
 
@@ -165,8 +165,11 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnInsect_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyJntSph(play, &THIS->collider);
+void EnInsect_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnInsect* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8091AC78(EnInsect* this) {
