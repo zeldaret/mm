@@ -67,7 +67,7 @@
         <DList Name="gCrystalSwitchCoreDL" Offset="0x1BEE0" />
         <DList Name="gCrystalSwitchDiamondDL" Offset="0x1BFB8" />
         <DList Name="gCrystalSwitchBaseDL" Offset="0x1C058" />
-        <TextureAnimation Name="gCrystalSwitchAnimatedMat" Offset="0x1C118" />
+        <TextureAnimation Name="gCrystalSwitchTexAnim" Offset="0x1C118" />
         <DList Name="gameplay_dangeon_keep_DL_01C220" Offset="0x1C220" />
         <DList Name="gameplay_dangeon_keep_DL_01C228" Offset="0x1C228" />
         <Texture Name="gameplay_dangeon_keep_Tex_01C2D8" OutName="tex_01C2D8" Format="rgba16" Width="32" Height="64" Offset="0x1C2D8" />
@@ -87,7 +87,7 @@
         <!-- En_Warp_tag assets -->
         <DList Name="gWarpTagGoronTrialBaseDL" Offset="0x21EF0" />
         <Texture Name="gWarpTagRainbowTex" OutName="warptag_rainbow" Format="rgba32" Width="32" Height="32" Offset="0x21FF8" />
-        <TextureAnimation Name="gWarpTagRainbowAnimMat" Offset="0x23008" />
+        <TextureAnimation Name="gWarpTagRainbowTexAnim" Offset="0x23008" />
         <Collision Name="gWarpTagGoronTrialBaseCollider" Offset="0x2324C" />
     </File>
 </Root>
