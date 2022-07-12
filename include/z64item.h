@@ -307,6 +307,7 @@ typedef enum {
     /* 0x3D */ GI_KEY_BOSS,
     /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
+    /* 0x4C */ GI_OCARINA = 0x4C,
     /* 0x50 */ GI_50 = 0x50,
     /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
