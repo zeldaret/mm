@@ -129,9 +129,9 @@ void func_80AF69A8(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         *this->unk_198 += 0x32;
         if (this->rupeeIndex == 1) {
-            func_801159EC(5);
+            Rupees_ChangeBy(5);
         } else {
-            func_801159EC(1);
+            Rupees_ChangeBy(1);
         }
         func_80AF6A38(this);
     }

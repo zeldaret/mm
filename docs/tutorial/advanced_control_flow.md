@@ -199,7 +199,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
         }
         func_8019F208();
         Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-        func_801159EC(-0xA);
+        Rupees_ChangeBy(-0xA);
         this->actionFunc = func_809529AC;
     }
 }
@@ -290,7 +290,7 @@ block_13:
 block_15:
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -391,7 +391,7 @@ block_11:
 
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -460,7 +460,7 @@ block_11:
 
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -510,7 +510,7 @@ So let us rewrite the entire second half as a switch:
 
             func_8019F208();
             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-            func_801159EC(-0xA);
+            Rupees_ChangeBy(-0xA);
             this->actionFunc = func_809529AC;
             return;
             break;
@@ -542,7 +542,7 @@ There's a couple of other obvious things here:
             } else {
                 func_8019F208();
                 Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                func_801159EC(-0xA);
+                Rupees_ChangeBy(-0xA);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -607,7 +607,7 @@ block_7:
                 } else {
                     func_8019F208();
                     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                    func_801159EC(-0xA);
+                    Rupees_ChangeBy(-0xA);
                     this->actionFunc = func_809529AC;
                 }
                 break;
@@ -672,7 +672,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
@@ -724,7 +724,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
