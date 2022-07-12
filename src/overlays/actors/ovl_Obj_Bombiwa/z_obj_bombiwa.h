@@ -22,14 +22,14 @@ typedef struct {
 } ObjBombiwaStruct; // size = 0x1C
 
 typedef struct ObjBombiwa {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ ObjBombiwaStruct unk_190[4];
-    /* 0x0200 */ s8 unk_200;
-    /* 0x0201 */ s8 unk_201;
-    /* 0x0202 */ s8 unk_202;
-    /* 0x0203 */ u8 unk_203;
-    /* 0x0204 */ ObjBombiwaActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ ObjBombiwaStruct unk_190[4];
+    /* 0x200 */ s8 unk_200;
+    /* 0x201 */ s8 unk_201;
+    /* 0x202 */ s8 unk_202;
+    /* 0x203 */ u8 unk_203;
+    /* 0x204 */ ObjBombiwaActionFunc actionFunc;
 } ObjBombiwa; // size = 0x208
 
 extern const ActorInit Obj_Bombiwa_InitVars;

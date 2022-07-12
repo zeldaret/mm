@@ -9,7 +9,7 @@ typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh*, PlayState*);
 typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh*, PlayState*);
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh*, PlayState*);
 
-#define INVADEPOH_TYPE(x) (x->actor.params >> 4 & 0xF)
+#define INVADEPOH_TYPE(thisx) (((thisx)->params >> 4) & 0xF)
 
 typedef enum{
     /*  0   */ TYPE_UNK0,
@@ -25,7 +25,7 @@ typedef enum{
     /*  10  */ TYPE_DOG,
     /*  11  */ TYPE_CREMIA,
     /*  12  */ TYPE_ROMANI5,
-    /*  13  */ TYPE_ALIEN1
+    /*  13  */ TYPE_ALIEN_CARRYING_COW
 } EnInvadepohType;
 
 typedef enum {
