@@ -257,7 +257,7 @@ typedef struct SaveContext {
     /* 0x3F26 */ u16 unk_3F26;                          // "last_time_type"
     /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
     /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
-    /* 0x3F2C */ s16 magicUnusedFlag; // Set to 0 in func_80812D94, otherwise unused "keep_magic_flag"
+    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94, otherwise unused "keep_magic_flag"
     /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
     /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
     /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
