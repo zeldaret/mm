@@ -3309,9 +3309,7 @@ beginseg
     name "ovl_Bg_Icefloe"
     compress
     include "build/src/overlays/actors/ovl_Bg_Icefloe/z_bg_icefloe.o"
-    include "build/data/ovl_Bg_Icefloe/ovl_Bg_Icefloe.data.o"
-    include "build/data/ovl_Bg_Icefloe/ovl_Bg_Icefloe.bss.o"
-    include "build/data/ovl_Bg_Icefloe/ovl_Bg_Icefloe.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Icefloe/ovl_Bg_Icefloe_reloc.o"
 endseg
 
 beginseg
