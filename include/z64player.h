@@ -436,7 +436,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_400        (1 << 10)
 // 
 #define PLAYER_STATE3_800        (1 << 11)
-// 
+// being curled?
 #define PLAYER_STATE3_1000       (1 << 12)
 // 
 #define PLAYER_STATE3_2000       (1 << 13)

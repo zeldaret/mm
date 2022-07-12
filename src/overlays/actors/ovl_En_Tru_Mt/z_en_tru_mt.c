@@ -326,7 +326,7 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
         Message_StartTextbox(play, 0x87F, &this->actor);
         gSaveContext.eventInf[3] |= 0x40;
         gSaveContext.eventInf[4] |= 1;
-        player->stateFlags3 &= ~0x400;
+        player->stateFlags3 &= ~PLAYER_STATE3_400;
         this->actor.speedXZ = 0.0f;
         this->actionFunc = func_80B76BB8;
     } else if (gSaveContext.eventInf[4] & 1) {
@@ -346,7 +346,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 
     func_80B76924(this);
     func_80B76980(this, play);
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
 
     if (this->path != NULL) {
         func_80B76540(this->path, this->unk_36C, &this->actor.world.pos, &sp34);
@@ -386,7 +386,7 @@ void func_80B76C38(EnTruMt* this, PlayState* play) {
 
     func_80B76924(this);
     func_80B76980(this, play);
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
 }
 
 void EnTruMt_Init(Actor* thisx, PlayState* play) {

@@ -540,7 +540,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
                 }
 
                 if (this->unk_26A == 4) {
-                    player->stateFlags3 &= ~0x400;
+                    player->stateFlags3 &= ~PLAYER_STATE3_400;
                     gSaveContext.minigameState = 3;
                 }
                 this->unk_26A = 3;
@@ -570,7 +570,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
             }
 
             if (this->unk_26A == 4) {
-                player->stateFlags3 &= ~0x400;
+                player->stateFlags3 &= ~PLAYER_STATE3_400;
                 gSaveContext.minigameState = 3;
             }
             this->unk_26A = 3;

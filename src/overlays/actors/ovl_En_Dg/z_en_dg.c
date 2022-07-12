@@ -462,7 +462,7 @@ s32 func_80989FC8(PlayState* play) {
 void func_8098A064(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x20000000) {
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if (D_8098C2A4.unk_00 == 99) {
             func_80989FC8(play);
         }
@@ -741,7 +741,7 @@ void func_8098AB48(EnDg* this, PlayState* play) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
-        if (player->stateFlags3 & 0x20000000) {
+        if (player->stateFlags3 & PLAYER_STATE3_20000000) {
             func_80989140(&this->skelAnime, sAnimations, 1);
         } else {
             func_80989140(&this->skelAnime, sAnimations, 2);
@@ -853,7 +853,7 @@ void func_8098B004(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 40.0f) {
         func_80989140(&this->skelAnime, sAnimations, 5);
         this->actionFunc = func_8098AB48;
-    } else if (player->stateFlags3 & 0x20000000) {
+    } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
             Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
         } else {

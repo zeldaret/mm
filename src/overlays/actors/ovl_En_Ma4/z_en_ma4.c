@@ -713,7 +713,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
     static s16 D_80AC0258 = 0;
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
     EnMa4_HorsebackGameCheckPlayerInteractions(this, play);
 
     if (this->poppedBalloonCounter != D_80AC0258) {

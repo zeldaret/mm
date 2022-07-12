@@ -147,7 +147,7 @@ s32 EnNwc_PlayerReleasedBremanMarch(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000) { // breman mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) { // breman mask march
         return false;
     }
 
@@ -165,7 +165,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000 && // breman mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000 && // breman mask march
         this->actor.xzDistToPlayer < 100.0f) {
         return true;
     }

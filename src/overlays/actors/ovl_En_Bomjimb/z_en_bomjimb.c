@@ -333,7 +333,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
             break;
     }
 
-    if (player->stateFlags3 != 0x1000000) {
+    if (player->stateFlags3 != PLAYER_STATE3_1000000) {
         phi_f0 = 200.0f;
 
         abs = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
@@ -538,7 +538,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (player->stateFlags3 == 0x1000000) {
+    if (player->stateFlags3 == PLAYER_STATE3_1000000) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
         func_80C01494(this);
         return;
@@ -631,7 +631,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
         this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
         func_80C0113C(this, 19, 2.0f);
         this->actionFunc = func_80C0217C;
-    } else if ((player->stateFlags3 == 0x1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
+    } else if ((player->stateFlags3 == PLAYER_STATE3_1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
         func_80C01494(this);
     }

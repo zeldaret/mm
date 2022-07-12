@@ -158,7 +158,7 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_2000000;
             }
         }
-        player->stateFlags3 |= 0x800000;
+        player->stateFlags3 |= PLAYER_STATE3_800000;
     }
 }
 

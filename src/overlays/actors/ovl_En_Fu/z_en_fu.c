@@ -681,7 +681,7 @@ void func_80962BCC(EnFu* this, PlayState* play) {
 
     play_sound(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
-    player->stateFlags3 |= 0x400000;
+    player->stateFlags3 |= PLAYER_STATE3_400000;
     func_8010E9F0(4, 60);
 
     if (this->unk_546 == 1) {
@@ -712,7 +712,7 @@ void func_80962D60(EnFu* this, PlayState* play) {
 
     play_sound(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
-    player->stateFlags3 |= 0x400000;
+    player->stateFlags3 |= PLAYER_STATE3_400000;
     func_8010E9F0(4, 60);
 
     if (this->unk_546 == 1) {
@@ -748,7 +748,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
     switch (this->unk_542) {
         case 0:
             if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-                player->stateFlags3 |= 0x400;
+                player->stateFlags3 |= PLAYER_STATE3_400;
             }
             break;
 
@@ -778,7 +778,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
     if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
          (player->actor.bgCheckFlags & 1)) ||
         (gSaveContext.unk_3DE0[4] < 1) || (this->unk_548 == this->unk_54C)) {
-        player->stateFlags3 &= ~0x400000;
+        player->stateFlags3 &= ~PLAYER_STATE3_400000;
         func_80961E88(play);
         player->stateFlags1 |= PLAYER_STATE1_20;
         if (this->unk_548 < this->unk_54C) {
