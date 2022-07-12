@@ -1,9 +1,37 @@
 #include "global.h"
 
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+#include "objects/object_link_boy/object_link_boy.h"
 #include "objects/object_link_goron/object_link_goron.h"
 #include "objects/object_link_zora/object_link_zora.h"
+#include "objects/object_link_nuts/object_link_nuts.h"
+#include "objects/object_link_child/object_link_child.h"
 
+#include "objects/object_mask_truth/object_mask_truth.h"
+#include "objects/object_mask_kerfay/object_mask_kerfay.h"
+#include "objects/object_mask_yofukasi/object_mask_yofukasi.h"
+#include "objects/object_mask_rabit/object_mask_rabit.h"
+#include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
+#include "objects/object_mask_json/object_mask_json.h"
+#include "objects/object_mask_romerny/object_mask_romerny.h"
+#include "objects/object_mask_zacho/object_mask_zacho.h"
+#include "objects/object_mask_posthat/object_mask_posthat.h"
 #include "objects/object_mask_meoto/object_mask_meoto.h"
+#include "objects/object_mask_bigelf/object_mask_bigelf.h"
+#include "objects/object_mask_gibudo/object_mask_gibudo.h"
+#include "objects/object_mask_gero/object_mask_gero.h"
+#include "objects/object_mask_dancer/object_mask_dancer.h"
+#include "objects/object_mask_skj/object_mask_skj.h"
+#include "objects/object_mask_stone/object_mask_stone.h"
+#include "objects/object_mask_bree/object_mask_bree.h"
+#include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
+#include "objects/object_mask_bu_san/object_mask_bu_san.h"
+#include "objects/object_mask_kyojin/object_mask_kyojin.h"
+#include "objects/object_mask_boy/object_mask_boy.h"
+#include "objects/object_mask_goron/object_mask_goron.h"
+#include "objects/object_mask_zora/object_mask_zora.h"
+#include "objects/object_mask_nuts/object_mask_nuts.h"
 
 void PlayerCall_Init(Actor* thisx, PlayState* play);
 void PlayerCall_Destroy(Actor* thisx, PlayState* play);
@@ -19,13 +47,17 @@ typedef struct {
 
 extern struct_801F58B0 D_801F58B0[3][3];
 
+extern Vec3f D_801F59B0[2];
+
 extern s32 D_801F59C8[2];
 
 extern s32 D_801F59E0;
 
+extern s32 D_801F59E4;
+
 extern Vec3f D_801F59E8;
 
-void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
+void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
@@ -103,8 +135,6 @@ void func_801229A0(PlayState* play, Player* player) {
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-extern s16 sMaskObjectIds[PLAYER_MASK_MAX - 1];
-#if 0
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
     OBJECT_MASK_TRUTH,  OBJECT_MASK_KERFAY,  OBJECT_MASK_YOFUKASI, OBJECT_MASK_RABIT,   OBJECT_MASK_KI_TAN,
     OBJECT_MASK_JSON,   OBJECT_MASK_ROMERNY, OBJECT_MASK_ZACHO,    OBJECT_MASK_POSTHAT, OBJECT_MASK_MEOTO,
@@ -112,7 +142,6 @@ s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
     OBJECT_MASK_STONE,  OBJECT_MASK_BREE,    OBJECT_MASK_BAKURETU, OBJECT_MASK_BU_SAN,  OBJECT_MASK_KYOJIN,
     OBJECT_MASK_BOY,    OBJECT_MASK_GORON,   OBJECT_MASK_ZORA,     OBJECT_MASK_NUTS,
 };
-#endif
 
 // Load mask object?
 /**
@@ -197,14 +226,11 @@ typedef struct {
     /* 0x4 */ Gfx* dList;
 } struct_801BFDD0; // size = 0x08
 
-extern struct_801BFDD0 D_801BFDD0[];
-#if 0
 struct_801BFDD0 D_801BFDD0[] = {
     { { 180, 200, 255 }, gLinkGoronCurledDL },
     { { 155, 0, 0 }, gLinkGoronRollingSpikesAndEffectDL },
     { { 255, 0, 0 }, gLinkGoronGoronPunchEffectDL },
 };
-#endif
 
 void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
     struct_801BFDD0* temp_s3;
@@ -240,8 +266,6 @@ void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-extern u8 sMaskItemIds[PLAYER_MASK_MAX - 1];
-#if 0
 u8 sMaskItemIds[PLAYER_MASK_MAX - 1] = {
     ITEM_MASK_TRUTH,         // PLAYER_MASK_TRUTH
     ITEM_MASK_KAFEIS_MASK,   // PLAYER_MASK_KAFEIS_MASK
@@ -268,7 +292,6 @@ u8 sMaskItemIds[PLAYER_MASK_MAX - 1] = {
     ITEM_MASK_ZORA,          // PLAYER_MASK_ZORA
     ITEM_MASK_DEKU,          // PLAYER_MASK_DEKU
 };
-#endif
 
 u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
@@ -341,7 +364,29 @@ void func_8012301C(Player* player, PlayState* play2) {
     }
 }
 
-extern s16 D_801BFE14[][18];
+FlexSkeletonHeader* D_801BFE00[PLAYER_FORM_MAX] = {
+    &object_link_boy_Skel_00D878,  &object_link_goron_Skel_017A84, &object_link_zora_Skel_012C34,
+    &object_link_nuts_Skel_00BA24, &object_link_child_Skel_01E244,
+};
+
+s16 D_801BFE14[][18] = {
+    { 0xC8, 0x29A, 0xC8, 0x2BC, 0x16E, 0xC8, 0x258, 0xAF, 0x3C, 0x320, 0x3E8, -0x64, 0x258, 0x24E, 0x320, 0x7D, 0x12C,
+      0x41 },
+    { 0xC8, 0x3E8, 0x12C, 0x320, 0x1F4, 0x190, 0x320, 0x190, 0x78, 0x320, 0x226, -0x64, 0x258, 0x21C, 0x2EE, 0x7D,
+      0x190, 0xC8 },
+    { 0x64, 0x3E8, 0x12C, 0x320, 0xFA, 0xC8, 0x320, 0xC8, 0x5A, 0x320, 0x15E, -0x50, 0x258, 0x21C, 0x2EE, 0x3C, 0xC8,
+      0xC8 },
+    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x258, 0x3E8, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
+      0x82 },
+    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0x12C, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
+      0x82 },
+    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0x12C, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
+      0x82 },
+    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0xC8, 0x78, 0x320, 0x258, -0x8C, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
+      0x82 },
+    { 0x50, 0x320, 0x96, 0x2BC, 0x1E0, 0x10E, 0x258, 0x32, 0x78, 0x320, 0x12C, -0x28, 0x190, 0x21C, 0x10E, 0x19, 0,
+      0x50 },
+};
 
 // OoT's Player_SetBootData
 void func_80123140(PlayState* play, Player* player) {
@@ -524,9 +569,16 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
                                                           : ITEM_NONE;
 }
 
+u16 D_801BFF34[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 
-extern u8 sActionModelGroups[];
+u8 sActionModelGroups[] = {
+    3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
+    0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   0,
+};
 
 s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
     s32 modelGroup = sActionModelGroups[actionParam];
@@ -537,8 +589,6 @@ s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
     return modelGroup;
 }
 
-extern u8 D_801BFF90[PLAYER_FORM_MAX];
-#if 0
 u8 D_801BFF90[PLAYER_FORM_MAX] = {
     PLAYER_BOOTS_FIERCE_DEITY, // PLAYER_FORM_FIERCE_DEITY
     PLAYER_BOOTS_GORON,        // PLAYER_FORM_GORON
@@ -546,10 +596,7 @@ u8 D_801BFF90[PLAYER_FORM_MAX] = {
     PLAYER_BOOTS_DEKU,         // PLAYER_FORM_DEKU
     PLAYER_BOOTS_HYLIAN,       // PLAYER_FORM_HUMAN
 };
-#endif
 
-extern u8 sPlayerStrengths[PLAYER_FORM_MAX];
-#if 0
 u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
     PLAYER_STRENGTH_HUMAN, // PLAYER_FORM_FIERCE_DEITY
     PLAYER_STRENGTH_GORON, // PLAYER_FORM_GORON
@@ -557,26 +604,352 @@ u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
     PLAYER_STRENGTH_DEKU,  // PLAYER_FORM_DEKU
     PLAYER_STRENGTH_HUMAN, // PLAYER_FORM_HUMAN
 };
-#endif
 
 typedef struct {
     /* 0x00 */ u8 flag;
     /* 0x02 */ u16 textId;
 } TextTriggerEntry; // size = 0x04
 
-extern TextTriggerEntry sEnvironmentTextTriggers[];
 // These textIds are OoT remnants. The corresponding text entries are not present in this game, and so these don't point
 // to anything relevant.
-#if 0
 TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 1, 0x26FC },
     { 2, 0x26FD },
     { 0, 0 },
     { 2, 0x26FD },
 };
-#endif
 
-extern Gfx** sPlayerDListGroups[];
+u8 gPlayerModelTypes[][5] = {
+    { 2, 0, 8, 0xC, 0x10 }, { 1, 2, 7, 0xF, 0x10 },   { 1, 2, 8, 0xD, 0x10 }, { 0, 0, 6, 0xE, 0x10 },
+    { 0, 0, 6, 0xE, 0x10 }, { 3, 3, 7, 0xE, 0x10 },   { 4, 1, 9, 0xE, 0x10 }, { 5, 0, 6, 0xE, 0x10 },
+    { 0, 4, 6, 0xE, 0x10 }, { 4, 0, 0xB, 0xE, 0x10 }, { 3, 1, 7, 0xE, 0x10 }, { 0, 0, 0xA, 0xE, 0x10 },
+    { 0, 5, 6, 0xE, 0x10 }, { 0, 2, 6, 0xF, 0x10 },   { 0, 1, 7, 0xE, 0x10 },
+};
+
+/* DLists groups start */
+// Note: Only the ones with size 2 * PLAYER_FORM_MAX
+
+Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
+    object_link_zora_DL_00AB40,  object_link_zora_DL_00AB40,  object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
+    object_link_child_DL_00BDB0, object_link_child_DL_00BDB0,
+};
+
+typedef struct {
+    Gfx* unk_00;
+    Gfx* unk_04;
+} Gfx1;
+Gfx1 D_801C0024[PLAYER_SHIELD_MAX - 1] = {
+    { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
+    { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
+};
+
+Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
+};
+
+Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
+};
+
+Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
+};
+
+Gfx* D_801C00AC[][2] = {
+    { object_link_child_DL_01DBC8, object_link_child_DL_01DBC8 },
+    { object_link_child_DL_01DC18, object_link_child_DL_01DC18 },
+};
+
+Gfx* D_801C00BC[][2] = {
+    { object_link_child_DL_01DAD8, object_link_child_DL_01DAD8 },
+    { object_link_child_DL_01DB40, object_link_child_DL_01DB40 },
+    { object_link_child_DL_01DB60, object_link_child_DL_01DB60 },
+};
+
+Gfx* D_801C00D4[][2] = {
+    { object_link_child_DL_017700, object_link_child_DL_017700 },
+    { object_link_child_DL_017338, object_link_child_DL_017338 },
+    { object_link_child_DL_016B80, object_link_child_DL_016B80 },
+};
+
+Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0080F0,   object_link_boy_DL_0080F0,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DCD8, object_link_child_DL_01DCD8,
+};
+
+Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_00D528, object_link_child_DL_00D528,
+};
+
+Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
+    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
+};
+
+Gfx* D_801C0164[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DC68, object_link_child_DL_01DC68,
+};
+
+Gfx* D_801C018C[][2] = {
+    { object_link_child_DL_01DC68, object_link_child_DL_01DC68 },
+    { object_link_child_DL_01DC88, object_link_child_DL_01DC88 },
+    { object_link_child_DL_01DCA8, object_link_child_DL_01DCA8 },
+};
+
+Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00D058, object_link_child_DL_00D058,
+};
+
+Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
+    object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00E738, object_link_child_DL_00E738,
+};
+
+Gfx* D_801C01F4[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_01DD18, object_link_child_DL_01DD18,
+};
+
+Gfx* D_801C021C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00ED18, object_link_child_DL_00ED18,
+};
+
+Gfx* D_801C0244[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
+};
+
+Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_011468, object_link_goron_DL_011468,
+    object_link_zora_DL_010D08,  object_link_zora_DL_010D08,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DFA8, object_link_child_DL_01DFA8,
+};
+
+/* DLists groups end */
+
+Gfx* D_801C0294[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006C38,  object_link_goron_DL_00A220, object_link_zora_DL_00C020,
+    object_link_nuts_DL_003AB8, object_link_child_DL_00D3D8,
+};
+
+Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_zora_DL_00C270,
+    object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
+};
+
+Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006410,  object_link_goron_DL_009A98, object_link_zora_DL_00B820,
+    object_link_nuts_DL_0036B0, object_link_child_DL_00CCE0,
+};
+
+Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,
+    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
+                // dlist, maybe a typo?
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_child_DL_018490,
+};
+
+Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,
+    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
+                // dlist, maybe a typo?
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_child_DL_017B40,
+};
+
+Gfx** sPlayerDListGroups[] = {
+    D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
+    D_801C01F4, D_801C021C, D_801C0244, D_801C0034, D_801C005C, D_801C0084, D_801C0084, D_801BFFFC, NULL,
+};
+
+
+struct_80124618 D_801C0340[] = {
+    { 0, { 0, 0, 0 } },       { 5, { 0, 0, 0 } },        { 7, { 100, 100, 100 } },
+    { 9, { 110, 110, 110 } }, { 11, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0368[] = {
+    { 0, { 0, 0, 0 } },       { 4, { 0, 0, 0 } },      { 6, { 120, 150, 60 } },   { 8, { 130, 80, 160 } },
+    { 9, { 100, 100, 100 } }, { 10, { 90, 100, 90 } }, { 11, { 100, 100, 100 } },
+};
+struct_80124618 D_801C03A0[] = {
+    { 0, { 100, 100, 100 } },
+    { 2, { 120, 120, 120 } },
+    { 6, { 90, 90, 90 } },
+    { 7, { 93, 93, 93 } },
+};
+struct_80124618 D_801C03C0[] = {
+    { 0, { 200, 100, 110 } },
+    { 2, { 90, 100, 100 } },
+    { 3, { 100, 100, 100 } },
+    { 7, { 100, 100, 100 } },
+};
+struct_80124618 D_801C03E0[] = {
+    { 0, { 100, 100, 110 } }, { 2, { 60, 100, 80 } },    { 3, { 130, 105, 110 } },
+    { 7, { 130, 105, 110 } }, { 10, { 100, 100, 100 } }, { 19, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0410[] = {
+    { 0, { 0, 0, 0 } },
+    { 2, { 80, 110, 80 } },
+    { 3, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0428[] = {
+    { 0, { 0, 0, 0 } },      { 6, { 0, 0, 0 } },        { 7, { 60, 60, 50 } },     { 8, { 120, 130, 100 } },
+    { 9, { 100, 120, 80 } }, { 11, { 100, 100, 100 } }, { 13, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0460[] = {
+    { 0, { 100, 100, 100 } }, { 5, { 100, 100, 100 } }, { 7, { 100, 74, 80 } },
+    { 8, { 100, 180, 130 } }, { 10, { 100, 80, 80 } },  { 13, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0490[] = {
+    { 0, { 100, 100, 100 } },  { 1, { 100, 100, 100 } },  { 2, { 90, 100, 105 } },  { 4, { 110, 100, 100 } },
+    { 5, { 90, 100, 105 } },   { 6, { 100, 100, 100 } },  { 7, { 90, 100, 105 } },  { 8, { 100, 100, 100 } },
+    { 9, { 90, 100, 105 } },   { 10, { 100, 100, 100 } }, { 11, { 90, 100, 105 } }, { 12, { 110, 100, 100 } },
+    { 13, { 100, 100, 100 } }, { 14, { 90, 100, 105 } },  { 15, { 90, 100, 105 } }, { 17, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0510[] = {
+    { 0, { 100, 100, 100 } }, { 4, { 100, 100, 100 } }, { 5, { 90, 110, 100 } },
+    { 6, { 110, 105, 100 } }, { 8, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0538[] = {
+    { 0, { 100, 100, 100 } }, { 5, { 100, 100, 100 } },  { 6, { 0, 0, 0 } },
+    { 8, { 100, 100, 100 } }, { 14, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0560[] = {
+    { 0, { 100, 100, 100 } },
+    { 2, { 95, 95, 100 } },
+    { 3, { 105, 105, 100 } },
+    { 5, { 102, 102, 102 } },
+};
+struct_80124618 D_801C0580[] = {
+    { 0, { 100, 100, 100 } }, { 9, { 100, 100, 100 } }, { 10, { 150, 150, 150 } },
+    { 12, { 0, 0, 0 } },      { 14, { 0, 0, 0 } },
+};
+struct_80124618 D_801C05A8[] = {
+    { 0, { 100, 100, 100 } },
+    { 6, { 100, 100, 100 } },
+    { 7, { 0, 0, 0 } },
+    { 17, { 0, 0, 0 } },
+};
+struct_80124618 D_801C05C8[] = {
+    { 0, { 0, 0, 0 } },
+    { 17, { 50, 50, 50 } },
+};
+struct_80124618 D_801C05D8[] = {
+    { 0, { 0, 0, 0 } },
+    { 5, { 0, 0, 0 } },
+    { 9, { 100, 100, 100 } },
+};
+struct_80124618 D_801C05F0[] = {
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
+    { 9, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0608[] = {
+    { 0, { 100, 100, 100 } },
+    { 10, { 100, 100, 100 } },
+    { 32, { 100, 115, 105 } },
+    { 58, { 100, 101, 100 } },
+};
+struct_80124618 D_801C0628[] = {
+    { 0, { 100, 100, 100 } },  { 5, { 100, 100, 100 } },  { 15, { 100, 100, 105 } }, { 25, { 100, 100, 105 } },
+    { 34, { 100, 100, 100 } }, { 46, { 100, 100, 100 } }, { 57, { 100, 100, 105 } }, { 67, { 100, 100, 105 } },
+    { 76, { 100, 100, 100 } }, { 78, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0678[] = {
+    { 0, { 0, 0, 0 } },
+    { 6, { 0, 0, 0 } },
+    { 8, { 100, 100, 100 } },
+    { 11, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0698[] = {
+    { 0, { 0, 0, 0 } },
+    { 7, { 1120, 112, 112 } },
+    { 8, { 140, 168, 168 } },
+    { 11, { 140, 140, 140 } },
+};
+struct_80124618 D_801C06B8[] = {
+    { 0, { 100, 100, 100 } }, { 7, { 100, 100, 100 } }, { 8, { 70, 30, 70 } }, { 10, { 0, 0, 0 } }, { 14, { 0, 0, 0 } },
+};
+struct_80124618 D_801C06E0[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 14, { 0, 0, 0 } } };
+struct_80124618 D_801C06F8[] = {
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
+    { 6, { 0, 0, 0 } },
+    { 10, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0718[] = {
+    { 0, { 140, 140, 140 } },
+    { 1, { 0, 0, 0 } },
+    { 10, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0730[] = {
+    { 0, { 100, 100, 100 } },
+    { 13, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0740[] = {
+    { 0, { 140, 140, 140 } },
+    { 13, { 140, 140, 140 } },
+};
+struct_80124618 D_801C0750[] = {
+    { 0, { 100, 100, 100 } },  { 5, { 100, 100, 100 } },  { 6, { 200, 200, 200 } },
+    { 10, { 200, 200, 200 } }, { 11, { 100, 100, 100 } },
+};
+
+// alpha values
+u8 D_801C0778[] = { 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100 };
+
+struct_80124618 D_801C0784[] = {
+    { 0, { 100, 100, 100 } },  { 14, { 100, 100, 100 } }, { 15, { 200, 200, 200 } },
+    { 16, { 200, 200, 200 } }, { 18, { 100, 100, 100 } },
+};
+
+u8 D_801C07AC[] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100, 0,
+};
 
 void func_801239AC(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
@@ -920,16 +1293,151 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
     arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
+struct_80124618 D_801C07C0[] = {
+    { 0, { 100, 100, 100 } },  { 10, { 100, 100, 100 } }, { 11, { 100, 120, 120 } },
+    { 12, { 100, 120, 120 } }, { 14, { 100, 100, 100 } }, { 19, { 100, 100, 100 } },
+};
+
+struct_80124618 D_801C07F0[] = {
+    { 0, { 40, 60, 70 } },    { 3, { 40, 60, 70 } },    { 4, { 75, 90, 85 } },
+    { 5, { 110, 120, 100 } }, { 7, { 100, 100, 100 } }, { 8, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0820[] = {
+    { 0, { 100, 100, 100 } },
+    { 7, { 100, 100, 100 } },
+    { 12, { 40, 60, 70 } },
+};
+struct_80124618 D_801C0838[] = {
+    { 0, { 40, 60, 70 } },
+    { 7, { 40, 60, 70 } },
+    { 12, { 100, 100, 100 } },
+};
+
+Gfx D_801C0850[] = {
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+Gfx D_801C0860[] = {
+    gsSPSetGeometryMode(G_CULL_FRONT),
+    gsSPEndDisplayList(),
+};
+
+TexturePtr sPlayerEyesTextures[] = {
+    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000,
+    object_link_child_Tex_001800, object_link_child_Tex_002000, object_link_child_Tex_002800,
+    object_link_child_Tex_003000, object_link_child_Tex_003800,
+};
+
+TexturePtr sPlayerMouthTextures[] = {
+    object_link_child_Tex_004000,
+    object_link_child_Tex_004400,
+    object_link_child_Tex_004800,
+    object_link_child_Tex_004C00,
+};
+
+u8 D_801C08A0[][2] = {
+    { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 },
+    { 7, 2 }, { 0, 2 }, { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 3 },
+};
+
+// OoT's func_8008F470
+void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
+                   s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;          // eyeIndex
+    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
+    Gfx* dl;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    dl = POLY_OPA_DISP;
+
+    if (eyeIndex < 0) {
+        eyeIndex = D_801C08A0[face][0];
+    }
+
+    if (tunic == 1) {
+        if ((eyeIndex >= 3) && (eyeIndex < 7)) {
+            eyeIndex = 0;
+        } else if (eyeIndex == 7) {
+            eyeIndex = 3;
+        }
+    }
+
+    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
+
+    if (mouthIndex < 0) {
+        mouthIndex = D_801C08A0[face][1];
+    }
+
+    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
+
+    POLY_OPA_DISP = &dl[2];
+
+    D_801F59E0 = tunic * 2;
+    D_801F59E4 = lod;
+    SkelAnime_DrawFlexLod(play, skeleton, jointTable, dListCount, overrideLimbDraw, postLimbDraw, actor, lod);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
+    { 1304.0f, 0.0f, 0.0f }, { 1156.0f, 0.0f, 0.0f }, { 1406.0f, 0.0f, 0.0f },
+    { 408.0f, 0.0f, 0.0f },  { 695.0f, 0.0f, 0.0f },
+};
+
+f32 D_801C08FC[PLAYER_FORM_MAX] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f };
+f32 D_801C0910[PLAYER_FORM_MAX] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f };
+f32 D_801C0924[PLAYER_FORM_MAX] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
+f32 D_801C0938[PLAYER_FORM_MAX] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
+void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
+    static Vec3f D_801C094C = { -500.0f, -100.0f, 0.0f };
+    CollisionPoly* poly;
+    s32 bgId;
+    Vec3f sp7C;
+    Vec3f sp70;
+    Vec3f sp64;
+    Vec3f sp58;
+    f32 sp54;
+    f32 sp50;
 
-extern s32 D_801C0958;
-#if 0
+    D_801C094C.z = 0.0f;
+    Matrix_MultVec3f(&D_801C094C, &sp7C);
+    D_801C094C.z = arg2;
+    Matrix_MultVec3f(&D_801C094C, &sp70);
+
+    if (BgCheck_AnyLineTest3(&play->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+        if (!func_800B90AC(play, &player->actor, poly, bgId, &sp64) ||
+            BgCheck_ProjectileLineTest(&play->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+            OPEN_DISPS(play->state.gfxCtx);
+
+            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
+
+            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &sp64, &sp58, &sp54);
+            if (sp54 < 200.0f) {
+                sp50 = 0.08f;
+            } else {
+                sp50 = (sp54 / 200.0f) * 0.08f;
+            }
+            Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
+            Matrix_Scale(sp50, sp50, sp50, MTXMODE_APPLY);
+
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
+            gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_04F250);
+
+            CLOSE_DISPS(play->state.gfxCtx);
+        }
+    }
+}
+
 s32 D_801C0958 = false;
-#endif
+
+Gfx** D_801C095C[] = { D_801C013C, D_801C0114 };
+Gfx** D_801C0964[] = { D_801C01CC, D_801C01A4 };
 
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     f32 phi_f12;
@@ -1063,14 +1571,11 @@ s32 func_801263FC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126440.s")
 
-extern u8 D_801C096C[PLAYER_SHIELD_MAX];
-#if 0
 u8 D_801C096C[PLAYER_SHIELD_MAX] = {
     COLTYPE_METAL,
     COLTYPE_METAL,
     COLTYPE_METAL,
 };
-#endif
 
 void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
@@ -1089,6 +1594,143 @@ void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3
         CollisionCheck_SetAT(play, &play->colChkCtx, &collider->base);
     }
 }
+
+Vec3f D_801C0970[] = {
+    { 0.0f, 400.0f, 0.0f },
+    { 0.0f, 1400.0f, -1000.0f },
+    { 0.0f, -400.0f, 1000.0f },
+};
+
+Vec3f D_801C0994[] = {
+    { 5000.0f, 400.0f, 0.0f },
+    { 5000.0f, -400.0f, 1000.0f },
+    { 5000.0f, 1400.0f, -1000.0f },
+};
+
+Vec3f D_801C09B8[] = {
+    { 0.0f, 750.0f, 750.0f },
+    { 1500.0f, 1500.0f, 1500.0f },
+    { -2500.0f, -2000.0f, -3000.0f },
+};
+
+Vec3f D_801C09DC[] = {
+    { 900.0f, 300.0f, 100.0f },
+    { 1300.0f, 700.0f, -300.0f },
+    { 500.0f, -100.0f, 500.0f },
+};
+
+Vec3f D_801C0A00[] = {
+    { -2500.0f, 1400.0f, 1100.0f },
+    { -2900.0f, 1000.0f, 1500.0f },
+    { -2100.0f, 1800.0f, 700.0f },
+};
+
+Vec3f D_801C0A24[] = {
+    { 0.0f, 0.0f, 0.0f },
+    { -800.0f, 800.0f, 800.0f },
+    { -800.0f, -800.0f, -800.0f },
+};
+
+Vec3f D_801C0A48[] = {
+    { 2000.0f, 0.0f, 0.0f },
+    { 2800.0f, -800.0f, -800.0f },
+    { 2800.0f, 800.0f, 800.0f },
+};
+
+Vec3f D_801C0A6C[] = {
+    { -400.0f, 800.0f, 0.0f },
+    { -5000.0f, -500.0f, -4000.0f },
+    { -5000.0f, 8000.0f, 4000.0f },
+};
+
+Vec3f D_801C0A90[] = {
+    { -400.0f, 1800.0f, 0.0f },
+    { 5000.0f, 8000.0f, 4000.0f },
+    { 5000.0f, -500.0f, -4000.0f },
+};
+
+Gfx* D_801C0AB4[] = {
+    object_link_zora_DL_00CC38,
+    object_link_zora_DL_00CDA0,
+};
+
+Gfx* D_801C0ABC[] = {
+    object_link_zora_DL_010868,
+    object_link_zora_DL_010978,
+};
+
+Vec3f D_801C0AC4[] = {
+    { 5400.0f, 1700.0f, 1800.0f },
+    { 5400.0f, 1700.0f, -1800.0f },
+};
+
+Vec3f D_801C0ADC[] = {
+    { 5250.0f, 570.0f, 2400.0f },
+    { 5250.0f, 570.0f, -2400.0f },
+};
+
+struct_80124618* D_801C0AF4[] = {
+    D_801C0678,
+    D_801C0698,
+};
+
+struct_80124618* D_801C0AFC[] = {
+    D_801C06B8,
+    D_801C06E0,
+};
+
+struct_80124618* D_801C0B04[] = {
+    D_801C06F8,
+    D_801C0718,
+};
+
+struct_80124618* D_801C0B0C[] = {
+    D_801C0730,
+    D_801C0740,
+};
+
+Gfx* D_801C0B14[] = {
+    object_link_nuts_DL_008760,
+    object_link_nuts_DL_008660,
+};
+
+u8 D_801C0B1C[] = {
+    0x0C,
+    0x0F,
+};
+
+Gfx* D_801C0B20[] = {
+    object_mask_truth_DL_0001A0,
+    object_mask_kerfay_DL_000D40,
+    object_mask_yofukasi_DL_000490,
+    object_mask_rabit_DL_000610,
+    object_mask_ki_tan_DL_0004A0,
+    object_mask_json_DL_0004C0,
+    object_mask_romerny_DL_0007A0,
+    object_mask_zacho_DL_000700,
+    object_mask_posthat_DL_000290,
+    object_mask_meoto_DL_0005A0,
+    object_mask_bigelf_DL_0016F0,
+    object_mask_gibudo_DL_000250,
+    gDonGeroMaskDL,
+    object_mask_dancer_DL_000EF0,
+    object_mask_skj_DL_0009F0,
+    object_mask_stone_DL_000820,
+    object_mask_bree_DL_0003C0,
+    object_mask_bakuretu_DL_0005C0,
+    object_mask_bu_san_DL_000710,
+    object_mask_kyojin_DL_000380,
+    gameplay_keep_DL_00B260,
+    gameplay_keep_DL_005A10,
+    gameplay_keep_DL_005360,
+    gameplay_keep_DL_0056C0,
+    object_mask_boy_DL_000900,
+    object_mask_goron_DL_0014A0,
+    object_mask_zora_DL_000DB0,
+    object_mask_nuts_DL_001D90,
+};
+
+Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
@@ -1187,9 +1829,230 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
+/*
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
+*/
+
+void func_80127594(PlayState* play, Actor* actor) {
+    static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
+    static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
+    Gfx* gfx;
+    s32 i;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gfx = POLY_XLU_DISP;
+
+    for (i = 0; i < ARRAY_COUNT(D_801C0B90); i++) {
+        f32 temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
+
+        Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
+
+        if (1) {}
+
+        D_801F59B0[i].y += -10.0f * temp_f22;
+
+        if (D_801F59C8[i] < 0x190) {
+            f32 phi_f20;
+
+            if (temp_f22 > 0.05f) {
+                phi_f20 = 0.05f;
+            } else {
+                phi_f20 = temp_f22;
+            }
+
+            Matrix_Push();
+            Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, 0);
+            Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
+
+            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
+            gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
+            gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
+            gSPDisplayList(&gfx[4], gEffBubbleDL);
+            gSPPopMatrix(&gfx[5], G_MTX_MODELVIEW);
+
+            Matrix_Pop();
+
+            gfx = &gfx[6];
+        } else {
+            Player* player = (Player*)actor;
+            f32 temp_f0 = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
+            s16 phi_s0 = temp_f0 * 2000.0f;
+            f32 temp_f20;
+
+            D_801C0BA8.y = temp_f0 * 0.4f;
+            D_801C0BB4.y = -0.3f;
+
+            if (phi_s0 > 0x3E80) {
+                phi_s0 = 0x3E80;
+            }
+
+            phi_s0 = player->actor.focus.rot.y + ((i != 0) ? phi_s0 : -phi_s0);
+            temp_f20 = temp_f0 * 0.2f;
+
+            if (temp_f20 > 4.0f) {
+                temp_f20 = 4.0f;
+            }
+
+            D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
+            D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
+
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
+            D_801F59C8[i] += -0x190;
+        }
+    }
+
+    POLY_XLU_DISP = gfx;
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_801278F8(PlayState* play, Player* player) {
+    static Gfx D_801C0BC0[] = {
+        gsDPSetEnvColor(0, 0, 0, 255),
+        gsSPEndDisplayList(),
+    };
+    static Gfx D_801C0BD0[] = {
+        gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              G_RM_FOG_SHADE_A,
+                          AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                              GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPEndDisplayList(),
+    };
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (player->unk_B60 != 0) {
+        s32 phi_a0;
+
+        gSegments[0xA] = PHYSICAL_TO_VIRTUAL2(player->maskObjectSegment);
+
+        AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
+
+        if (player->unk_B60 < 11) {
+            phi_a0 = (player->unk_B60 / 10.0f) * 255;
+        } else {
+            phi_a0 = 255;
+        }
+
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)phi_a0);
+
+        gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
+
+        gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
+
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - phi_a0));
+    } else {
+        gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+
+Vec3f D_801C0BE0 = { 0.0f, 0.3f, 0.0f };
+Vec3f D_801C0BEC = { 0.0f, -0.025f, 0.0f };
+Color_RGBA8 D_801C0BF8 = { 0xFA, 0x64, 0x64, 0 };
+Color_RGBA8 D_801C0BFC = { 0, 0, 0x64, 0 };
+
+Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
+
+Vec3f D_801C0C0C[] = {
+    { 174.0f, -1269.0f, -1.0f },
+    { 401.0f, -729.0f, -701.0f },
+    { 401.0f, -729.0f, 699.0f },
+};
+
+Vec3f D_801C0C30[] = {
+    { 74.0f, -1269.0f, -1.0f },
+    { 301.0f, -729.0f, -701.0f },
+    { 301.0f, -729.0f, 699.0f },
+};
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3f unk_08;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_80128388_arg1; // size = 0x1C
+
+struct_80128388_arg1 D_801C0C54[] = {
+    { 0.0f, 0x0000, 0x8000, { 0.0f, 0.0f, 0.0f }, 0.0f, 0x0000, 0x0000 },
+    { 16.7999992371f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
+    { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
+};
+
+Color_RGB8 D_801C0CA8[] = {
+    { 255, 255, 255 }, { 80, 80, 255 },   { 136, 192, 255 }, { 136, 192, 255 }, { 184, 232, 232 }, { 248, 200, 0 },
+    { 255, 180, 0 },   { 0, 128, 0 },     { 252, 238, 0 },   { 131, 0, 174 },   { 64, 64, 32 },    { 0, 0, 255 },
+    { 255, 0, 255 },   { 255, 0, 255 },   { 255, 0, 0 },     { 0, 0, 255 },     { 0, 200, 0 },     { 255, 255, 255 },
+    { 255, 255, 255 }, { 255, 255, 255 }, { 80, 80, 255 },
+};
+
+Vec3f D_801C0CE8[5] = {
+    { 0.0f, 0.0f, 0.0f },    { 300.0f, 300.0f, -230.0f }, { 0.0f, 90.0f, -50.0f },
+    { 0.0f, 20.0f, -60.0f }, { 0.0f, 0.0f, 0.0f },
+};
+Vec3f D_801C0D24[5] = {
+    { 200.0f, 300.0f, 0.0f }, { 200.0f, 200.0f, 0.0f }, { 200.0f, 300.0f, 0.0f },
+    { 200.0f, 150.0f, 0.0f }, { 200.0f, 200.0f, 0.0f },
+};
+Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
+
+f32 D_801C0D78[] = { 0.0f, 3000.0f, 3000.0f, 4000.0f, 5500.0f, -1.0f, 2500.0f };
+
+Gfx* D_801C0D94 = object_link_child_DL_017818;
+
+f32 D_801C0D98 = -35.0f;
+
+f32 D_801C0D9C = -395.0f;
+f32 D_801C0DA0 = 0.0f;
+
+f32 D_801C0DA4 = 0.0f;
+
+Vec3f D_801C0DA8[4] = {
+    { -4500.0f, -3000.0f, -600.0f },
+    { 1500.0f, -3000.0f, -600.0f },
+    { -4500.0f, 3000.0f, -600.0f },
+    { 1500.0f, 3000.0f, -600.0f },
+};
+
+Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
+Gfx* D_801C0DF0[] = {
+    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
+};
+
+Vec2f D_801C0E04[] = {
+    { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
+};
+
+Gfx* D_801C0E2C[] = {
+    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
+};
+Vec3f D_801C0E40[] = {
+    { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
+    { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
+};
+Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+
+// unused
+Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+
+Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
+Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
+Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
 
