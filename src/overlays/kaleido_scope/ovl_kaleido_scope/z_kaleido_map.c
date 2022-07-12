@@ -90,12 +90,6 @@ s16 D_8082B5CC[] = {
     0x0005, 0x0004, 0x0006, 0x0000, 0x0008, 0x0005, 0x0004, 0x0006, 0x0000, 0x0008,
 };
 
-s16 D_8082B5E0[] = {
-    0x00AF, 0x00B3, 0x00AA, 0x00B1, 0x00A9, 0x00B2, 0x00A8, 0x00B0, 0x00AC, 0x00AE,
-};
-
-s32 D_8082B5F4[] = { 0, 0, 0 };
-
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081D240.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081D6DC.s")
@@ -104,4 +98,150 @@ s32 D_8082B5F4[] = { 0, 0, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawWorldMap.s")
 
+#ifdef NON_EQUIVALENT
+void func_8081FB1C(PlayState* play) {
+    static u16 D_8082B5E0[] = {
+        0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
+    };
+    static u16 D_8082B5F4 = 0;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    s16 oldCursorPoint;
+
+    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+        pauseCtx->cursorColorSet = 0;
+        oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+
+        if (gSaveContext.buttonStatus[4] != BTN_DISABLED) {
+            gSaveContext.buttonStatus[4] = BTN_DISABLED;
+            gSaveContext.unk_3F22 = 0;
+            Interface_ChangeAlpha(50);
+        }
+
+        if (pauseCtx->cursorSpecialPos == 0) {
+            if (pauseCtx->stickRelX > 30) {
+                pauseCtx->unk_298 = 4.0f;
+                D_8082B5F4 = 0;
+
+                do {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 11) {
+                        func_80821984(play, PAUSE_CURSOR_PAGE_RIGHT);
+                        pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+                        break;
+                    }
+                } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+            } else if (pauseCtx->stickRelX < -30) {
+                pauseCtx->unk_298 = 4.0f;
+                D_8082B5F4 = 0;
+
+                do {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                        func_80821984(play, PAUSE_CURSOR_PAGE_LEFT);
+                        pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+                        break;
+                    }
+                } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+            } else {
+                D_8082B5F4++;
+            }
+            if (pauseCtx->cursorSpecialPos == 0) {
+                pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+                pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+            }
+        } else {
+            pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+            if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
+                if (pauseCtx->stickRelX > 30) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
+                    pauseCtx->cursorSpecialPos = 0;
+                    pauseCtx->unk_298 = 4.0f;
+
+                    do {
+                        pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
+                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 11) {
+                            func_80821984(play, PAUSE_CURSOR_PAGE_RIGHT);
+                            pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+                            break;
+                        }
+                    } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+
+                    if (pauseCtx->cursorSpecialPos == 0) {
+                        pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+                        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+                    }
+                    play_sound(NA_SE_SY_CURSOR);
+                    D_8082B5F4 = 0;
+                }
+            } else if (pauseCtx->stickRelX < -30) {
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
+                pauseCtx->cursorSpecialPos = 0;
+                pauseCtx->unk_298 = 4.0f;
+
+                do {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                        func_80821984(play, PAUSE_CURSOR_PAGE_LEFT);
+                        pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+                        break;
+                    }
+                } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+
+                if (pauseCtx->cursorSpecialPos == 0) {
+                    pauseCtx->cursorItem[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+                    pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+                }
+                play_sound(NA_SE_SY_CURSOR);
+                D_8082B5F4 = 0;
+            }
+        }
+
+        if (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0) {
+            pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
+        }
+        if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
+            play_sound(NA_SE_SY_CURSOR);
+        }
+    } else if (pauseCtx->state == 0x17) {
+        pauseCtx->cursorColorSet = 4;
+        oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+
+        if (pauseCtx->stickRelX > 30) {
+            pauseCtx->unk_298 = 4.0f;
+            D_8082B5F4 = 0;
+            do {
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= 10) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 0;
+                }
+            } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+        } else if (pauseCtx->stickRelX < -30) {
+            pauseCtx->unk_298 = 4.0f;
+            D_8082B5F4 = 0;
+            do {
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
+                if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 9;
+                }
+            } while (pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] == 0);
+        } else {
+            D_8082B5F4++;
+        }
+
+        pauseCtx->cursorItem[PAUSE_MAP] = D_8082B5E0[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_WORLD_MAP] + 0x1F;
+
+        if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
+            play_sound(NA_SE_SY_CURSOR);
+        }
+    }
+}
+#else
+u16 D_8082B5E0[] = {
+    0xAF, 0xB3, 0xAA, 0xB1, 0xA9, 0xB2, 0xA8, 0xB0, 0xAC, 0xAE,
+};
+u16 D_8082B5F4 = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FB1C.s")
+#endif
+
+s32 D_8082B5F8[] = { 0, 0 };

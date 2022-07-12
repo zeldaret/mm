@@ -132,7 +132,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
     pauseCtx->cursorSlot[PAUSE_MAP] = XREG(94) + 3;
 
-    pauseCtx->unk_284 = 2;
+    pauseCtx->cursorColorSet = 2;
     pauseCtx->unk_2A0 = -1;
     pauseCtx->unk_2BA = 320;
     pauseCtx->unk_2BC = 40;

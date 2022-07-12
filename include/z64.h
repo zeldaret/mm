@@ -522,7 +522,7 @@ typedef struct {
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ u16 unk_280;
     /* 0x282 */ u16 unk_282;
-    /* 0x284 */ s16 unk_284;
+    /* 0x284 */ s16 cursorColorSet;
     /* 0x286 */ s16 unk_286;
     /* 0x288 */ f32 unk_288;
     /* 0x28C */ f32 unk_28C;

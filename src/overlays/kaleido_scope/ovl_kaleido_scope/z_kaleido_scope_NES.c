@@ -492,72 +492,71 @@ void func_8081D6DC(PlayState*);
 void KaleidoScope_DrawWorldMap(PlayState*);
 void func_8081FF80(PlayState*);
 
-// Should be much closer to match with in-function data
 #ifdef NON_EQUIVALENT
 void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stepR;
     s16 stepG;
-    s16 stepB;
+    s32 stepB;
 
     OPEN_DISPS(gfxCtx);
 
     if ((pauseCtx->state < 8) || (pauseCtx->state >= 0x13)) {
         if (pauseCtx->state != 7) {
 
-            stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->unk_284 + D_8082B994][0]) / D_8082B990;
-            stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->unk_284 + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->unk_284 + D_8082B994][2]) / D_8082B990;
+            stepR = ABS_ALT(D_8082B890 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
+            stepG = ABS_ALT(D_8082B894 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
+            stepB = ABS_ALT(D_8082B898 - D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]);
 
-            if (D_8082B890 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][0]) {
+            if (D_8082B890 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0]) {
                 D_8082B890 -= stepR;
             } else {
                 D_8082B890 += stepR;
             }
 
-            if (D_8082B894 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][1]) {
+            if (D_8082B894 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1]) {
                 D_8082B894 -= stepG;
             } else {
                 D_8082B894 += stepG;
             }
 
-            if (D_8082B898 >= D_8082B948[pauseCtx->unk_284 + D_8082B994][2]) {
-                D_8082B898 -= stepB;
+            if (D_8082B898 >= D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2]) {
+                D_8082B898 -= (s16)(stepB / D_8082B990);
             } else {
-                D_8082B898 += stepB;
+                D_8082B898 += (s16)(stepB / D_8082B990);
             }
 
-            stepR = ABS_ALT(D_8082B89C - D_8082B96C[pauseCtx->unk_284 + D_8082B994][0]) / D_8082B990;
-            stepG = ABS_ALT(D_8082B8A0 - D_8082B96C[pauseCtx->unk_284 + D_8082B994][1]) / D_8082B990;
-            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->unk_284 + D_8082B994][2]) / D_8082B990;
+            stepR = ABS_ALT(D_8082B89C - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) / D_8082B990;
+            stepG = ABS_ALT(D_8082B8A0 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1]) / D_8082B990;
+            stepB = ABS_ALT(D_8082B8A4 - D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]);
 
-            if (D_8082B89C >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][0]) {
+            if (D_8082B89C >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0]) {
                 D_8082B89C -= stepR;
             } else {
                 D_8082B89C += stepR;
             }
 
-            if (D_8082B8A0 >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][1]) {
+            if (D_8082B8A0 >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1]) {
                 D_8082B8A0 -= stepG;
             } else {
                 D_8082B8A0 += stepG;
             }
 
-            if (D_8082B8A4 >= D_8082B96C[pauseCtx->unk_284 + D_8082B994][2]) {
-                D_8082B8A4 -= stepB;
+            if (D_8082B8A4 >= D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2]) {
+                D_8082B8A4 -= (s16)(stepB / D_8082B990);
             } else {
-                D_8082B8A4 += stepB;
+                D_8082B8A4 += (s16)(stepB / D_8082B990);
             }
 
             D_8082B990--;
 
             if (D_8082B990 == 0) {
-                D_8082B890 = D_8082B948[pauseCtx->unk_284 + D_8082B994][0];
-                D_8082B894 = D_8082B948[pauseCtx->unk_284 + D_8082B994][1];
-                D_8082B898 = D_8082B948[pauseCtx->unk_284 + D_8082B994][2];
-                D_8082B89C = D_8082B96C[pauseCtx->unk_284 + D_8082B994][0];
-                D_8082B8A0 = D_8082B96C[pauseCtx->unk_284 + D_8082B994][1];
-                D_8082B8A4 = D_8082B96C[pauseCtx->unk_284 + D_8082B994][2];
+                D_8082B890 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][0];
+                D_8082B894 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][1];
+                D_8082B898 = D_8082B948[pauseCtx->cursorColorSet + D_8082B994][2];
+                D_8082B89C = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][0];
+                D_8082B8A0 = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][1];
+                D_8082B8A4 = D_8082B96C[pauseCtx->cursorColorSet + D_8082B994][2];
                 D_8082B994 ^= 1;
                 D_8082B990 = 10;
             }
@@ -578,7 +577,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
 
             func_8081B6EC(play);
         }
@@ -598,7 +597,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
 
             if (sInDungeonScene) {
                 func_8081D6DC(play);
@@ -617,7 +616,6 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL0, 0, PRIMITIVE, 0, TEXEL0, 0, SHADE, 0, TEXEL0, 0, PRIMITIVE, 0,
                               TEXEL0, 0, SHADE, 0);
-            ;
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 180, 180, 120, 255);
 
@@ -628,7 +626,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
 
             func_808160A0(play);
         }
@@ -650,7 +648,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
 
             func_8081FF80(play);
         }
@@ -672,11 +670,9 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C);
+                    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, &D_8082B73C[0]);
 
                     func_8081B6EC(play);
-
-                    return;
                 }
                 break;
 
@@ -695,7 +691,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778);
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, &D_8082B778[0]);
 
                 if (sInDungeonScene) {
                     func_8081D6DC(play);
@@ -723,7 +719,6 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                     KaleidoScope_DrawWorldMap(play);
                 }
-
                 break;
 
             case PAUSE_QUEST:
@@ -743,7 +738,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4);
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, &D_8082B7B4[0]);
 
                 func_808160A0(play);
                 break;
@@ -759,10 +754,11 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 Matrix_RotateYF(1.57f, MTXMODE_NEW);
                 Matrix_Translate(0.0f, D_8082B908 / 100.0f, -93.0f, MTXMODE_APPLY);
                 Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+                Matrix_RotateXFApply(-pauseCtx->unk_21C / 100.0f);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700);
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, &D_8082B700[0]);
 
                 func_8081FF80(play);
                 break;
