@@ -3468,8 +3468,7 @@ beginseg
     name "ovl_Bg_Fu_Mizu"
     compress
     include "build/src/overlays/actors/ovl_Bg_Fu_Mizu/z_bg_fu_mizu.o"
-    include "build/data/ovl_Bg_Fu_Mizu/ovl_Bg_Fu_Mizu.data.o"
-    include "build/data/ovl_Bg_Fu_Mizu/ovl_Bg_Fu_Mizu.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Fu_Mizu/ovl_Bg_Fu_Mizu_reloc.o"
 endseg
 
 beginseg
