@@ -45,7 +45,7 @@ typedef struct EnIk {
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;
     /* 0x0498 */ ColliderTrisElement shieldColliderItems[2];
-    /* 0x0550 */ IronKnuckleEffect unk_550[7];
+    /* 0x0550 */ IronKnuckleEffect effects[7];
 } EnIk; // size = 0x668
 
 extern const ActorInit En_Ik_InitVars;
