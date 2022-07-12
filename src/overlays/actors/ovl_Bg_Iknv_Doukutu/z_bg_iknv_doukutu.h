@@ -7,11 +7,21 @@ struct BgIknvDoukutu;
 
 typedef void (*BgIknvDoukutuActionFunc)(struct BgIknvDoukutu*, PlayState*);
 
+#define BGIKNVDOUKUTU_GET_F(thisx) ((thisx)->params & 0xF)
+
+enum {
+    BGIKNVDOUKUTU_F_0,
+    BGIKNVDOUKUTU_F_1,
+    BGIKNVDOUKUTU_F_2,
+};
+
 typedef struct BgIknvDoukutu {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x20];
-    /* 0x0164 */ BgIknvDoukutuActionFunc actionFunc;
-} BgIknvDoukutu; // size = 0x168
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C; // set and not used
+    /* 0x15E */ u16 csAction;
+    /* 0x160 */ f32 unk_160;
+    /* 0x164 */ BgIknvDoukutuActionFunc actionFunc;
+} BgIknvDoukutu;// size = 0x168
 
 extern const ActorInit Bg_Iknv_Doukutu_InitVars;
 

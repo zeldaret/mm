@@ -85,7 +85,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, PlayState* play) {
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     rotZ = CLAMP(1100.0f - offset.z, 0.0f, 1000.0f);
-    func_800DFAC8(play->cameraPtrs[CAM_ID_MAIN], 17);
+    Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_DUNGEON0);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
 
     if (play->csCtx.frames == 132) {
