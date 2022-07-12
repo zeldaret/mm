@@ -2281,8 +2281,7 @@ beginseg
     name "ovl_Obj_Chikuwa"
     compress
     include "build/src/overlays/actors/ovl_Obj_Chikuwa/z_obj_chikuwa.o"
-    include "build/data/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa.data.o"
-    include "build/data/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa_reloc.o"
 endseg
 
 beginseg
