@@ -242,7 +242,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
     if ((this->unk_18C & 1) && (this->actor.colChkInfo.health != 0)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[this->unk_2C0].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_2C0].segment);
 
         gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->unk_2C0].segment);
 

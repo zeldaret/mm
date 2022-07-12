@@ -29,26 +29,26 @@ typedef enum {
 } EnHeishiLimbs;
 
 typedef struct EnHeishi {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[HEISHI_LIMB_MAX];
-    /* 0x01EE */ Vec3s morphTable[HEISHI_LIMB_MAX];
-    /* 0x0254 */ EnHeishiActionFunc actionFunc;
-    /* 0x0258 */ s16 headRotY;
-    /* 0x025A */ s16 headRotX;
-    /* 0x025C */ s16 headRotZ;
-    /* 0x025E */ s16 headRotYTarget;
-    /* 0x0260 */ s16 headRotXTarget;
-    /* 0x0262 */ s16 headRotZTarget;
-    /* 0x0264 */ s32 animIndex;
-    /* 0x0268 */ s32 paramsCopy;
-    /* 0x026C */ s32 shouldSetHeadRotation;
-    /* 0x0270 */ s16 timer;
-    /* 0x0272 */ s16 yawTowardsPlayer;
-    /* 0x0274 */ f32 frameCount;
-    /* 0x0278 */ s16 unk278;    // set and not used
-    /* 0x027C */ UNK_TYPE1 unk_27C[0x8];
-    /* 0x0284 */ ColliderCylinder colliderCylinder;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[HEISHI_LIMB_MAX];
+    /* 0x1EE */ Vec3s morphTable[HEISHI_LIMB_MAX];
+    /* 0x254 */ EnHeishiActionFunc actionFunc;
+    /* 0x258 */ s16 headRotY;
+    /* 0x25A */ s16 headRotX;
+    /* 0x25C */ s16 headRotZ;
+    /* 0x25E */ s16 headRotYTarget;
+    /* 0x260 */ s16 headRotXTarget;
+    /* 0x262 */ s16 headRotZTarget;
+    /* 0x264 */ s32 animIndex;
+    /* 0x268 */ s32 paramsCopy;
+    /* 0x26C */ s32 shouldSetHeadRotation;
+    /* 0x270 */ s16 timer;
+    /* 0x272 */ s16 yawTowardsPlayer;
+    /* 0x274 */ f32 frameCount;
+    /* 0x278 */ s16 unk278;    // set and not used
+    /* 0x27C */ UNK_TYPE1 unk_27C[0x8];
+    /* 0x284 */ ColliderCylinder colliderCylinder;
 } EnHeishi; // size = 0x2D0
 
 #endif // Z_EN_HEISHI_H

@@ -117,7 +117,7 @@ void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
                 this->textId = 0x2B62; // Not enough Rupees
             } else {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 Message_StartTextbox(play, 0x2B5F, &this->actor);
                 this->textId = 0x2B5F; // Enter number
             }

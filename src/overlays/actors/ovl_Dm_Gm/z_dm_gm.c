@@ -62,9 +62,9 @@ s32 func_80C24360(DmGm* this, PlayState* play) {
     }
 
     if (objectIndex2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
 }
@@ -81,10 +81,10 @@ s32 func_80C24428(DmGm* this, PlayState* play, s32 arg2) {
     }
 
     if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         this->unk_2C8 = arg2;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
 }
