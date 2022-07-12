@@ -8308,7 +8308,7 @@
     0x80989140:("EnDg_ChangeAnimation",),
     0x80989204:("EnDg_UpdateCollision",),
     0x8098933C:("EnDg_GetFloorRot",),
-    0x80989418:("EnDg_ReachedPoint",),
+    0x80989418:("EnDg_HasReachedPoint",),
     0x809895B4:("EnDg_GetYRotation",),
     0x80989674:("EnDg_MoveAlongPath",),
     0x80989864:("EnDg_SpawnFloorDustRing",),

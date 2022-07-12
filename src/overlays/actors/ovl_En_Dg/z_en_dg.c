@@ -56,6 +56,8 @@ const ActorInit En_Dg_InitVars = {
 #define DOG_FLAG_THROWN (1 << 4)
 #define DOG_FLAG_FOLLOWING_BREMEN_MASK (1 << 5)
 
+#define ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER 99
+
 typedef enum {
     /* 0 */ DOG_GRAB_STATE_NONE,
     /* 1 */ DOG_GRAB_STATE_HELD,
@@ -76,7 +78,7 @@ typedef enum {
 
 static u8 sIsAnyDogHeld = false;
 
-static s16 sBremenMaskFollowerIndex = 99;
+static s16 sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
 
 /**
  * Stores the state for the dogs milling about at the Doggy Racetrack.
@@ -253,7 +255,7 @@ void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
     }
 }
 
-s32 EnDg_ReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
+s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 pathCount = path->count;
     s32 currentPoint = pointIndex;
@@ -324,7 +326,7 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
 
         Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (EnDg_ReachedPoint(this, this->path, this->currentPoint)) {
+        if (EnDg_HasReachedPoint(this, this->path, this->currentPoint)) {
             if (this->currentPoint >= (this->path->count - 1)) {
                 this->currentPoint = 0;
             } else {
@@ -418,28 +420,27 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
  */
 void EnDg_UpdateTextId(EnDg* this) {
     if (this->index < 14) {
+        // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in
+        // the range of 0x3538 to 0x3545.
         if (this->index % 2) {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
+                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
         } else {
             sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & (1 | 2 | 4 | 8));
+                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 
-    // This makes sure the text ID is something in the range of 0x3538 to 0x3547. Assuming that the weekEventRegs
-    // haven't been tampered with, then the above code will produce a text ID in the range of 0x3538 to 0x3545, so
-    // this is merely a sanity check. It's not a great sanity check, though, because a text ID of 0x3547 has no
-    // text actually associated with it.
-    if ((sRacetrackDogInfo[this->index].textId >= 0x3547) || (sRacetrackDogInfo[this->index].textId < 0x3538)) {
+    // As a sanity check, this makes sure the text ID is something in the expected range of 0x3538 to 0x3546.
+    if ((sRacetrackDogInfo[this->index].textId > 0x3546) || (sRacetrackDogInfo[this->index].textId < 0x3538)) {
         sRacetrackDogInfo[this->index].textId = 0x353E;
     }
 
-    // Text ID 0x353D is actually the text for the Romani Ranch dog; it just happens to be in the middle of
-    // the race dog text block. If the dog ends up with this text ID, adjust it so the dog says a different
-    // message that indicates it's in good condition.
+    // Text ID 0x353D is the text for the Romani Ranch dog, which is in the middle of the race dog block. If
+    // the dog ends up with this text ID, adjust it so the dog says a different message indcating it's in
+    // good condition.
     if (sRacetrackDogInfo[this->index].textId == 0x353D) {
         sRacetrackDogInfo[this->index].textId = 0x3538;
     }
@@ -507,28 +508,28 @@ void EnDg_CheckIfPickedUp(EnDg* this, PlayState* play) {
  * the Bremen Mask. The index of the dog it finds is stored in sBremenMaskFollowerIndex.
  */
 s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
-    EnDg* enemy = (EnDg*)play->actorCtx.actorLists[ACTORCAT_ENEMY].first;
+    Actor* enemy = play->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     f32 minDist = 9999.0f;
     f32 dist;
 
     while (enemy != NULL) {
-        if (enemy->actor.id == ACTOR_EN_DG) {
-            if (enemy->actor.isTargeted) {
-                sBremenMaskFollowerIndex = enemy->index;
+        if (enemy->id == ACTOR_EN_DG) {
+            if (enemy->isTargeted) {
+                sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 return true;
             }
 
-            dist = enemy->actor.xzDistToPlayer;
+            dist = enemy->xzDistToPlayer;
             if (dist < minDist) {
-                sBremenMaskFollowerIndex = enemy->index;
+                sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 minDist = dist;
             }
         }
 
-        enemy = (EnDg*)enemy->actor.next;
+        enemy = enemy->next;
     }
 
-    if (sBremenMaskFollowerIndex != 99) {
+    if (sBremenMaskFollowerIndex != ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
         return true;
     }
 
@@ -547,7 +548,7 @@ void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & 0x20000000) { // bremen mask march
-        if (sBremenMaskFollowerIndex == 99) {
+        if (sBremenMaskFollowerIndex == ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
             EnDg_FindFollowerForBremenMask(play);
         }
 
@@ -565,7 +566,7 @@ void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
         }
     } else if (this->index == sBremenMaskFollowerIndex) {
         this->dogFlags &= ~DOG_FLAG_FOLLOWING_BREMEN_MASK;
-        sBremenMaskFollowerIndex = 99;
+        sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
         EnDg_SetupIdleMove(this, play);
         this->actionFunc = EnDg_IdleMove;
     }
@@ -663,7 +664,7 @@ void EnDg_ChooseActionForForm(EnDg* this, PlayState* play) {
 }
 
 /**
- * Simply moves the dog along its path, stopping to bark at random intervals.
+ * Moves the dog along its path, stopping to bark at random intervals.
  */
 void EnDg_IdleMove(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -834,7 +835,7 @@ void EnDg_ApproachPlayerToAttack(EnDg* this, PlayState* play) {
 }
 
 /**
- * Simply makes the dog run around for a bit after attacking before it
+ * Makes the dog run around for a bit after attacking before it
  * starts to approach the player for another attack.
  */
 void EnDg_RunAfterAttacking(EnDg* this, PlayState* play) {
@@ -1151,10 +1152,11 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
 
     floorHeight = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos);
 
-    // Checking *only* that the dog is touching a wall here can result in some strange
-    // behavior. For example, if the player throws the dog at a wall next to some water,
-    // this code will make the dog "skip" along the water's surface, assuming the floor
-    // height is low enough to make it try to jump out.
+    // The below code checks *only* that the dog is touching a wall, which can result in
+    // some strange behavior is touching a wall that is too tall for it to jump over. For
+    // example, if the player throws the dog at a wall next to some water, this code will
+    // make the dog "skip" along the water's surface, assuming the floor height is low
+    // enough to make it try to jump out.
     if (this->actor.bgCheckFlags & 8) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
