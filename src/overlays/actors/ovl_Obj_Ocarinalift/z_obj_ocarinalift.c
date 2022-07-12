@@ -138,7 +138,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         this->unk168 += this->unk16C;
         thisx->speedXZ *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (params == PARAMS_0) {
+            if (params == OBJOCARINALIFT_PARAMS_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
                 func_80AC9A68(this);
@@ -156,11 +156,11 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     func_80AC99C0(this);
                     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+                } else if ((params == OBJOCARINALIFT_PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((params == PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+        } else if ((params == OBJOCARINALIFT_PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {

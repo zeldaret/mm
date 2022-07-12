@@ -25,8 +25,8 @@ typedef struct ObjOcarinalift {
 } ObjOcarinalift; // size = 0x178
 
 typedef enum ObjOcarinaliftParams {
-    /* 0x0 */ PARAMS_0,
-    /* 0x1 */ PARAMS_1
+    /* 0x0 */ OBJOCARINALIFT_PARAMS_0,
+    /* 0x1 */ OBJOCARINALIFT_PARAMS_1
 } ObjOcarinaliftParams;
 
 extern const ActorInit Obj_Ocarinalift_InitVars;
