@@ -2655,8 +2655,7 @@ beginseg
     name "ovl_Obj_Toudai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Toudai/z_obj_toudai.o"
-    include "build/data/ovl_Obj_Toudai/ovl_Obj_Toudai.data.o"
-    include "build/data/ovl_Obj_Toudai/ovl_Obj_Toudai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Toudai/ovl_Obj_Toudai_reloc.o"
 endseg
 
 beginseg
