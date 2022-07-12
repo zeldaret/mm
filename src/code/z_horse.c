@@ -94,10 +94,10 @@ s32 D_801BDAA0 = false;
 s32 D_801BDAA4 = false;
 
 struct_801BDAA8 D_801BDAA8[] = {
-    { SCENE_00KEIKOKU, 4 },      // Termina Field
-    { SCENE_30GYOSON, 0 },       // Great bay coast
-    { SCENE_31MISAKI, 0 },       // Zora cape
-    { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village
+    { SCENE_00KEIKOKU, 4 },      // Termina Field - First Cycle
+    { SCENE_30GYOSON, 0 },       // Great Bay Coast - Post-Gyorg
+    { SCENE_31MISAKI, 0 },       // Zora Cape - Post-Gyorg
+    { SCENE_13HUBUKINOMITI, 0 }, // Path to Mountain Village - Post-Goht
 };
 
 s32 func_800F3B68(PlayState* play, Player* player) {
