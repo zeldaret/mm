@@ -374,7 +374,7 @@ void EnBji01_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(play, (Actor*)this, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {

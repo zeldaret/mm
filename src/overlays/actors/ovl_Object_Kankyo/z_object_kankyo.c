@@ -644,7 +644,7 @@ f32 func_808DDE74(void) {
 }
 
 #ifdef NON_MATCHING
-// play->envCtx.unk_F2[1] needs to be laoded into s0 and then copied to s7
+// play->envCtx.unk_F2[1] needs to be loaded into s0 and then copied to s7
 void func_808DDE9C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjectKankyo* this = THIS;

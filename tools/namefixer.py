@@ -547,10 +547,26 @@ wordReplace = {
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
     "Effect_GetGlobalCtx": "Effect_GetPlayState",
+    "EffectSsHitMark_Spawn": "EffectSsHitmark_Spawn",
+    "EffectSsHitMark_SpawnFixedScale": "EffectSsHitmark_SpawnFixedScale",
+    "EffectSsHitMark_SpawnCustomScale": "EffectSsHitmark_SpawnCustomScale",
 
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
+
+    "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
+    "func_8010A074": "Map_IsInDungeonOrBossArea",
+    "func_8010A0F0": "Map_GetDungeonAreaIndex",
+    "func_8010A164": "Map_IsInDungeonArea",
+    "func_8010A194": "Map_GetBossAreaIndex",
+    "func_8010A208": "Map_IsInBossArea",
+    "func_8010A2DC": "Minimap_SavePlayerRoomInitInfo",
+    "func_8010A33C": "Map_InitRoomData",
+    "func_8010A410": "Map_Destroy",
+    "func_8010A430": "Map_Init",
+    "func_8010A54C": "Minimap_Draw",
+    "func_8010A580": "Map_Update",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -610,6 +626,7 @@ wordReplace = {
     "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",

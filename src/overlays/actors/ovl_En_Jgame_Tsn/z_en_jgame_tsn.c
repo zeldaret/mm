@@ -303,7 +303,7 @@ void func_80C1418C(EnJgameTsn* this, PlayState* play) {
 void func_80C141DC(EnJgameTsn* this) {
     this->unk_218 = Rand_Next() & 3;
     this->unk_2FC = 0;
-    *this->unk_208[this->unk_218] |= 1;
+    *this->unk_208[this->unk_218] |= OBJLUPYGAMELIFT_IGNITE_FIRE;
     this->actionFunc = func_80C14230;
 }
 
@@ -324,10 +324,10 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(this->unk_208); i++) {
             if (i == this->unk_218) {
-                *this->unk_208[i] |= 1;
-                *this->unk_208[i] &= ~8;
+                *this->unk_208[i] |= OBJLUPYGAMELIFT_IGNITE_FIRE;
+                *this->unk_208[i] &= ~OBJLUPYGAMELIFT_SNUFF_FIRE;
             } else {
-                *this->unk_208[i] |= 8;
+                *this->unk_208[i] |= OBJLUPYGAMELIFT_SNUFF_FIRE;
             }
         }
     }
@@ -339,7 +339,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         Message_StartTextbox(play, 0x109F, &this->actor);
         this->unk_300 = 0x109F;
         player->stateFlags1 |= 0x20;
-        *this->unk_208[this->unk_218] &= ~1;
+        *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
     } else if ((player->actor.bgCheckFlags & 0x40) || (player->actor.bgCheckFlags & 0x20)) {
@@ -347,7 +347,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         Message_StartTextbox(play, 0x10A0, &this->actor);
         this->unk_300 = 0x10A0;
         player->stateFlags1 |= 0x20;
-        *this->unk_208[this->unk_218] &= ~1;
+        *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
     }
@@ -356,7 +356,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         Message_StartTextbox(play, 0x10A1, &this->actor);
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= 0x20;
-        *this->unk_208[this->unk_218] &= ~1;
+        *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
     }
@@ -562,17 +562,17 @@ s32 func_80C14BCC(EnJgameTsn* this, PlayState* play) {
 
         if (phi_s3 == this->unk_218) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            *this->unk_208[phi_s3] |= 2;
+            *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
             play->interfaceCtx.unk_25C = 1;
             return true;
         }
 
-        if (*this->unk_208[phi_s3] & 1) {
+        if (*this->unk_208[phi_s3] & OBJLUPYGAMELIFT_IGNITE_FIRE) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            *this->unk_208[phi_s3] |= 2;
+            *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_CORRECT;
             play->interfaceCtx.unk_25C = 1;
         } else {
-            *this->unk_208[phi_s3] |= 4;
+            *this->unk_208[phi_s3] |= OBJLUPYGAMELIFT_DISPLAY_INCORRECT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
         }
     }

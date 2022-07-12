@@ -37,6 +37,7 @@
 #include "z64effect.h"
 #include "z64item.h"
 #include "z64light.h"
+#include "z64map.h"
 #include "z64math.h"
 #include "z64object.h"
 #include "z64ocarina.h"
@@ -588,7 +589,7 @@ typedef struct {
     /* 0x274 */ s16 minimapAlpha;
     /* 0x276 */ s16 startAlpha;
     /* 0x278 */ s16 unk_278;
-    /* 0x27A */ s16 unk_27A;
+    /* 0x27A */ s16 dungeonOrBossAreaMapIndex;
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;

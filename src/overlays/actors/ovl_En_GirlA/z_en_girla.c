@@ -502,7 +502,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this) {
     func_801159EC(-play->msgCtx.unk1206C);
 }
 
-// Fanfare is handled by ovl_en_ossan
+// Fanfare is handled by the shopkeeper
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this) {
     func_801159EC(-play->msgCtx.unk1206C);
 }
