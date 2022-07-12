@@ -727,8 +727,8 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                     play->sceneLoadFlag = 0x14;
                     play->unk_1887F = 3;
                     gSaveContext.nextTransition = 3;
-                    Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                                 (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                    Magic_Add(play, ((void)0, gSaveContext.magicFillTarget) +
+                                        (gSaveContext.save.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER);
                 } else {
                     this->actionFunc = func_80B51760;
                 }

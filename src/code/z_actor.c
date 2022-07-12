@@ -2212,10 +2212,10 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
     return false;
 }
 
-void func_800B90F4(PlayState* play) {
-    if (play->actorCtx.unk3 != 0) {
-        play->actorCtx.unk3 = 0;
-        func_80115D5C(&play->state);
+void Actor_DisableLens(PlayState* play) {
+    if (play->actorCtx.lensActive) {
+        play->actorCtx.lensActive = false;
+        Magic_Reset(play);
     }
 }
 
@@ -2902,10 +2902,10 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPDisplayList(sp58, &ref2[1]);
     POLY_XLU_DISP = &ref2[1];
 
-    if (play->actorCtx.unk3 != 0) {
+    if (play->actorCtx.lensActive) {
         Math_StepToC(&play->actorCtx.unk4, 100, 20);
         if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
-            func_800B90F4(play);
+            Actor_DisableLens(play);
         }
     } else {
         Math_StepToC(&play->actorCtx.unk4, 0, 10);
