@@ -653,7 +653,7 @@ void func_80123C58(Player* player) {
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
     if (player->csMode != 0x86) {
-        player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_SHIELD);
+        player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
@@ -667,7 +667,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
 }
 
 void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam) {
-    func_80114FD0(play, itemId, player->heldItemButton);
+    Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
         player->heldItemId = itemId;

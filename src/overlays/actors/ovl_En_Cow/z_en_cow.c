@@ -234,7 +234,7 @@ void EnCow_GiveMilk(EnCow* this, PlayState* play) {
 
 void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
-        if (Interface_HasEmptyBottle()) {
+        if (Inventory_HasEmptyBottle()) {
             func_80151938(play, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
         } else {
@@ -291,7 +291,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
         if (func_801A5100() == 4) {
             if (!(gSaveContext.save.weekEventReg[87] & 1)) {
                 gSaveContext.save.weekEventReg[87] |= 1;
-                if (Interface_HasEmptyBottle()) {
+                if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.

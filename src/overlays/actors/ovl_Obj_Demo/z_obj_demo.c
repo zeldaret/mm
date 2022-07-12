@@ -84,7 +84,7 @@ void func_80983704(ObjDemo* this, PlayState* play) {
         if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             if (this->unk_148 == 1) {
                 ActorCutscene_Start(this->actor.cutscene, &this->actor);
-                func_800E0348(play->cameraPtrs[0]);
+                func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
                 ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             }

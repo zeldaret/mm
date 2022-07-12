@@ -28,15 +28,16 @@ This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The
 The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
 It currently builds the following ROM:
+
 * mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
 Please refer to the following for more information:
 
-* [Website](https://zelda64.dev/)
-* [Discord](https://discord.zelda64.dev/)
-* [How to Contribute](docs/CONTRIBUTING.md)
+- [Website](https://zelda64.dev/)
+- [Discord](https://discord.zelda64.dev/)
+- [How to Contribute](CONTRIBUTING.md)
 
 ## Installation
 
@@ -49,6 +50,10 @@ We recommend using Debian or Ubuntu 20.04 Linux distributions.
 ### MacOS
 
 Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
+
+### Docker
+
+Preparation is covered in [Building Docker](docs/BUILDING_DOCKER.md).
 
 ### Linux (Native or under WSL / VM)
 
@@ -129,7 +134,6 @@ Running `make init` will also make the `./expected` directory and copy all of th
 **Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`).
 The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
 (`-j` also exists, which uses unlimited jobs, but is generally slower.)
-
 
 ## Contributing
 

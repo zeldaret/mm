@@ -512,7 +512,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((play->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || ((u8)play->envCtx.unk_E2 == 0)) {
+    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || ((u8)play->envCtx.unk_E2 == 0)) {
         return;
     }
 
@@ -599,7 +599,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
 
         phi_f26 = CLAMP_MAX(phi_f26, 1.0f);
 
-        if (!(play->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
+        if (!(play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || (phi_f26 == 0.0f)) {
             return;
         }
     }
