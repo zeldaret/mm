@@ -2281,8 +2281,7 @@ beginseg
     name "ovl_Obj_Chikuwa"
     compress
     include "build/src/overlays/actors/ovl_Obj_Chikuwa/z_obj_chikuwa.o"
-    include "build/data/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa.data.o"
-    include "build/data/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Chikuwa/ovl_Obj_Chikuwa_reloc.o"
 endseg
 
 beginseg
@@ -2655,8 +2654,7 @@ beginseg
     name "ovl_Obj_Toudai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Toudai/z_obj_toudai.o"
-    include "build/data/ovl_Obj_Toudai/ovl_Obj_Toudai.data.o"
-    include "build/data/ovl_Obj_Toudai/ovl_Obj_Toudai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Toudai/ovl_Obj_Toudai_reloc.o"
 endseg
 
 beginseg
@@ -4602,8 +4600,7 @@ beginseg
     name "ovl_Bg_Iknv_Doukutu"
     compress
     include "build/src/overlays/actors/ovl_Bg_Iknv_Doukutu/z_bg_iknv_doukutu.o"
-    include "build/data/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu.data.o"
-    include "build/data/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Iknv_Doukutu/ovl_Bg_Iknv_Doukutu_reloc.o"
 endseg
 
 beginseg
