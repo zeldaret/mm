@@ -548,7 +548,7 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
 
     if ((this->unk_263 != 0) ||
         ((this->actor.params >= ENARROW_0) && ((this->actor.params == ENARROW_7) || (player->unk_D57 != 0))) ||
-        !func_80123358(play, player)) {
+        !Player_InBlockingCsMode(play, player)) {
         this->actionFunc(this, play);
     }
 

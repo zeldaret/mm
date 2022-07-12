@@ -481,8 +481,8 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (play->interfaceCtx.unk_21C != 0) {
-            if (play->interfaceCtx.unk_21E != 0) {
-                return play->interfaceCtx.unk_21E;
+            if (play->interfaceCtx.bButtonDoAction != 0) {
+                return play->interfaceCtx.bButtonDoAction;
             }
         }
         return ITEM_NONE;

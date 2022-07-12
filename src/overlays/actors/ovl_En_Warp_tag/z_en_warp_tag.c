@@ -91,7 +91,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
 }
 
 void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
-    if (!Player_InCsMode(&play->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
+    if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(play, NULL, 0x51);
