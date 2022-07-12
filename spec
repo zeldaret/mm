@@ -4137,8 +4137,7 @@ beginseg
     name "ovl_Bg_Ikana_Mirror"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Mirror/z_bg_ikana_mirror.o"
-    include "build/data/ovl_Bg_Ikana_Mirror/ovl_Bg_Ikana_Mirror.data.o"
-    include "build/data/ovl_Bg_Ikana_Mirror/ovl_Bg_Ikana_Mirror.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ikana_Mirror/ovl_Bg_Ikana_Mirror_reloc.o"
 endseg
 
 beginseg
