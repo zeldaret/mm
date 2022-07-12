@@ -6,6 +6,7 @@
 
 #include "z_obj_rotlift.h"
 #include "objects/object_rotlift/object_rotlift.h"
+#include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS 0x00000000
 
@@ -38,14 +39,14 @@ const ActorInit Obj_Rotlift_InitVars = {
 
 struct ModelInfo sModelInfo[] = {
     {
-        object_rotlift_DL_000400,
-        object_rotlift_Matanimheader_001F98,
-        &object_rotlift_Colheader_002190,
+        gDekuMoonDungeonRotatingPlatformsDL,
+        gDekuMoonDungeonRotatingPlatformsUnusedTexAnim,
+        &gDekuMoonDungeonRotatingPlatformsCol,
     },
     {
-        object_rotlift_DL_002CE0,
-        object_rotlift_Matanimheader_004A08,
-        &object_rotlift_Colheader_004DF0,
+        gDekuMoonDungeonRotatingSpikesDL,
+        gDekuMoonDungeonRotatingSpikesUnusedTexAnim,
+        &gDekuMoonDungeonRotatingSpikesCol,
     },
 };
 
@@ -64,6 +65,7 @@ void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->dekuFlowers); i++, dekuFlower++) {
         curDekuFlower = *dekuFlower;
+
         if (curDekuFlower->dyna.actor.update == NULL) {
             *dekuFlower = NULL;
         } else {
@@ -74,6 +76,7 @@ void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
                 this->dyna.actor.world.pos.z + posOffset * Math_CosS(this->dyna.actor.shape.rot.y);
             curDekuFlower->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y;
         }
+
         posOffset -= 600.0f;
     }
 }
@@ -82,26 +85,32 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjRotlift* this = THIS;
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
-    s32 dekuFlowerType;
+    s32 dekuFlowerParams;
     s32 i;
     ModelInfo* modelInfo;
     ObjEtcetera** dekuFlowers;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    if (type == 0) {
+    if (type == OBJROTLIFT_TYPE_PLATFORMS) {
         for (dekuFlowers = this->dekuFlowers, i = 0; i < ARRAY_COUNT(this->dekuFlowers); i++, dekuFlowers++) {
-            if (!OBJROTLIFT_GET_4000(thisx) || (i != 0)) {
-                dekuFlowerType = 0;
+            // Depending on the params, the platforms can be configured in one of two ways:
+            // 1. Pink Deku Flower, Pink Deku Flower
+            // 2. Gold Deku Flower, Pink Deku Flower
+            if (!OBJROTLIFT_FIRST_DEKU_FLOWER_IS_GOLD(thisx) || (i != 0)) {
+                dekuFlowerParams = DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK);
             } else {
-                dekuFlowerType = 0x100;
+                dekuFlowerParams = DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_GOLD);
             }
+
             *dekuFlowers = (ObjEtcetera*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerType);
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, dekuFlowerParams);
         }
+
         ObjRotlift_MoveDekuFlowers(this);
     }
+
     DynaPolyActor_Init(&this->dyna, 3);
 
     modelInfo = &sModelInfo[type];
@@ -120,14 +129,16 @@ void ObjRotlift_Update(Actor* thisx, PlayState* play) {
     s16 angShift;
     s32 angVelocity;
 
-    if (OBJROTLIFT_GET_TYPE(&this->dyna.actor) == 0) {
+    if (OBJROTLIFT_GET_TYPE(&this->dyna.actor) == OBJROTLIFT_TYPE_PLATFORMS) {
         ObjRotlift_MoveDekuFlowers(this);
     }
+
     if (thisx->params >= 0) {
         angVelocity = -0xC8;
     } else {
         angVelocity = 0xC8;
     }
+
     angShift = angVelocity;
     this->dyna.actor.shape.rot.y += angShift;
 }
@@ -137,6 +148,7 @@ void ObjRotlift_Draw(Actor* thisx, PlayState* play) {
     ObjRotlift* this = THIS;
     ModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
+    // Neither of the displaylists reference other segments, so this call is ultimately pointless.
     AnimatedMat_Draw(play, modelInfo->animMat);
     Gfx_DrawDListOpa(play, modelInfo->dList);
 }

@@ -786,17 +786,17 @@
         <Texture Name="gPinkDekuFlowerBaseLeafTex" OutName="pink_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10078" />
         <Texture Name="gGoldDekuFlowerPetalAndCenterTex" OutName="gold_deku_flower_petal_and_center" Format="rgba16" Width="16" Height="32" Offset="0x10878" />
         <Texture Name="gGoldDekuFlowerBaseLeafTex" OutName="gold_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10C78" />
-        <Limb Name="gPinkDekuFlowerBaseLimb" Type="Standard" Offset="0x11478" />
-        <Limb Name="gPinkDekuFlowerCenterLimb" Type="Standard" Offset="0x11484" />
-        <Limb Name="gPinkDekuFlowerBackLeafLimb" Type="Standard" Offset="0x11490" />
-        <Limb Name="gPinkDekuFlowerFrontLeafLimb" Type="Standard" Offset="0x1149C" />
-        <Limb Name="gPinkDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x114A8" />
-        <Limb Name="gPinkDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x114B4" />
-        <Limb Name="gPinkDekuFlowerRightLeafLimb" Type="Standard" Offset="0x114C0" />
-        <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x114CC" />
-        <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" Offset="0x114D8" />
-        <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x114E4" />
-        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" Offset="0x11518" />
+        <Limb Name="gPinkDekuFlowerBaseLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BASE" Offset="0x11478" />
+        <Limb Name="gPinkDekuFlowerCenterLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_CENTER" Offset="0x11484" />
+        <Limb Name="gPinkDekuFlowerBackLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_LEAF" Offset="0x11490" />
+        <Limb Name="gPinkDekuFlowerFrontLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_LEAF" Offset="0x1149C" />
+        <Limb Name="gPinkDekuFlowerFrontRightPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_RIGHT_PETAL" Offset="0x114A8" />
+        <Limb Name="gPinkDekuFlowerBackRightPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_RIGHT_PETAL" Offset="0x114B4" />
+        <Limb Name="gPinkDekuFlowerRightLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_RIGHT_LEAF" Offset="0x114C0" />
+        <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x114CC" />
+        <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_LEFT_LEAF" Offset="0x114D8" />
+        <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x114E4" />
+        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" LimbNone="PINK_DEKU_FLOWER_LIMB_NONE" LimbMax="PINK_DEKU_FLOWER_LIMB_MAX" EnumName="PinkDekuFlowerLimbs" Offset="0x11518" />
         <Animation Name="gDekuFlowerRustleAnim" Offset="0x117A8" /> <!-- Original name is "dnp_zawa" ("rustling") -->
         <Collision Name="gGoldDekuFlowerCol" Offset="0x118D8" />
         <DList Name="gGoldDekuFlowerIdleDL" Offset="0x11BD0" />
@@ -810,17 +810,17 @@
         <DList Name="gGoldDekuFlowerFrontRightPetalDL" Offset="0x125B0" />
         <DList Name="gGoldDekuFlowerFrontPetalDL" Offset="0x12638" />
         <DList Name="gGoldDekuFlowerBackPetalDL" Offset="0x126C0" />
-        <Limb Name="gGoldDekuFlowerBaseLimb" Type="Standard" Offset="0x12748" />
-        <Limb Name="gGoldDekuFlowerCenterLimb" Type="Standard" Offset="0x12754" />
-        <Limb Name="gGoldDekuFlowerBackPetalLimb" Type="Standard" Offset="0x12760" />
-        <Limb Name="gGoldDekuFlowerFrontPetalLimb" Type="Standard" Offset="0x1276C" />
-        <Limb Name="gGoldDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x12778" />
-        <Limb Name="gGoldDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x12784" />
-        <Limb Name="gGoldDekuFlowerRightPetalLimb" Type="Standard" Offset="0x12790" />
-        <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x1279C" />
-        <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" Offset="0x127A8" />
-        <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x127B4" />
-        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+        <Limb Name="gGoldDekuFlowerBaseLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BASE" Offset="0x12748" />
+        <Limb Name="gGoldDekuFlowerCenterLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_CENTER" Offset="0x12754" />
+        <Limb Name="gGoldDekuFlowerBackPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_PETAL" Offset="0x12760" />
+        <Limb Name="gGoldDekuFlowerFrontPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_PETAL" Offset="0x1276C" />
+        <Limb Name="gGoldDekuFlowerFrontRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_RIGHT_PETAL" Offset="0x12778" />
+        <Limb Name="gGoldDekuFlowerBackRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_RIGHT_PETAL" Offset="0x12784" />
+        <Limb Name="gGoldDekuFlowerRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_RIGHT_PETAL" Offset="0x12790" />
+        <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x1279C" />
+        <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_LEFT_PETAL" Offset="0x127A8" />
+        <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x127B4" />
+        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" LimbNone="GOLD_DEKU_FLOWER_LIMB_NONE" LimbMax="GOLD_DEKU_FLOWER_LIMB_MAX" EnumName="GoldDekuFlowerLimbs" Offset="0x127E8" />
 
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
