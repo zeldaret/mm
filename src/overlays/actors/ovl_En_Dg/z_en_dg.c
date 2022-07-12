@@ -1153,10 +1153,10 @@ void EnDg_Swim(EnDg* this, PlayState* play) {
     floorHeight = BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos);
 
     // The below code checks *only* that the dog is touching a wall, which can result in
-    // some strange behavior is touching a wall that is too tall for it to jump over. For
-    // example, if the player throws the dog at a wall next to some water, this code will
-    // make the dog "skip" along the water's surface, assuming the floor height is low
-    // enough to make it try to jump out.
+    // some strange behavior if the dog is touching a wall that is too tall for it to jump
+    // over. For example, if the player throws the dog at a tall wall next to some water,
+    // this code will make the dog "skip" along the water's surface, assuming the floor
+    // height is low enough to make it try to jump out.
     if (this->actor.bgCheckFlags & 8) {
         if (!WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (floorHeight > -100.0f) {
