@@ -16,22 +16,22 @@ typedef void (*ObjCombActionFunc)(struct ObjComb*, PlayState*);
 #define OBJCOMB_GET_8000(thisx) (((thisx)->params >> 0xE) & 2)
 
 typedef struct ObjComb {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjCombActionFunc actionFunc;
-    /* 0x0148 */ ColliderJntSph collider;
-    /* 0x0168 */ ColliderJntSphElement colliderElement;
-    /* 0x01A8 */ s16 unk_1A8;
-    /* 0x01AA */ s16 unk_1AA;
-    /* 0x01AC */ s16 unk_1AC;
-    /* 0x01AE */ s16 unk_1AE;
-    /* 0x01B0 */ s16 unk_1B0;
-    /* 0x01B2 */ s8 unk_1B2;
-    /* 0x01B3 */ s8 unk_1B3;
-    /* 0x01B4 */ s8 unk_1B4;
-    /* 0x01B5 */ s8 unk_1B5;
-    /* 0x01B6 */ s8 unk_1B6;
-    /* 0x01B7 */ s8 unk_1B7;
-    /* 0x01B8 */ s8 unk_1B8;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjCombActionFunc actionFunc;
+    /* 0x148 */ ColliderJntSph collider;
+    /* 0x168 */ ColliderJntSphElement colliderElement;
+    /* 0x1A8 */ s16 unk_1A8;
+    /* 0x1AA */ s16 unk_1AA;
+    /* 0x1AC */ s16 unk_1AC;
+    /* 0x1AE */ s16 unk_1AE;
+    /* 0x1B0 */ s16 unk_1B0;
+    /* 0x1B2 */ s8 unk_1B2;
+    /* 0x1B3 */ s8 unk_1B3;
+    /* 0x1B4 */ s8 unk_1B4;
+    /* 0x1B5 */ s8 unk_1B5;
+    /* 0x1B6 */ s8 unk_1B6;
+    /* 0x1B7 */ s8 unk_1B7;
+    /* 0x1B8 */ s8 unk_1B8;
 } ObjComb; // size = 0x1BC
 
 extern const ActorInit Obj_Comb_InitVars;

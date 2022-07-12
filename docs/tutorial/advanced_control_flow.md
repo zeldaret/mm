@@ -199,7 +199,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
         }
         func_8019F208();
         Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-        func_801159EC(-0xA);
+        Rupees_ChangeBy(-0xA);
         this->actionFunc = func_809529AC;
     }
 }
@@ -220,8 +220,7 @@ which is long, messy, and contains some rather nasty-looking control flow, inclu
         }
 ```
 
-If you read the OoT tutorial, you'll know these nested negated ifs all using the same variable are a good indicator that there's a switch. The problem is working out how to write it. 
-
+If you read the OoT tutorial, you'll know these nested negated ifs all using the same variable are a good indicator that there's a switch. The problem is working out how to write it.
 
 ## Goto-only mode
 
@@ -291,7 +290,7 @@ block_13:
 block_15:
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -303,6 +302,7 @@ block_17:
 ```
 
 which in many ways looks worse: you can see why the use of gotos in code is strongly discouraged. However, if you throw this in `diff.py`, you'll find it's rather closer than you'd have thought. Goto-only mode has the advantages that
+
 - code is always in the right order: mips2c has not had to reorder anything to get the ifs to work out
 - it is often possible to get quite close with gotos, then start removing them, checking the matching status at each point. This is usually easier than trying to puzzle out the way it's trying to jump out of an `if ( || )` or similar.
 - if you're trying to keep track of where you are in the code, the gotos mean that it is closer to the assembly in the first place.
@@ -391,7 +391,7 @@ block_11:
 
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -403,7 +403,6 @@ block_17:
 ```
 
 We can't apply this rule any more, so we need to move on to the next: `block_17` just contains a `return`. So we can replace it by `return` everywhere it appears.
-
 
 ```C
 void func_809527F8(EnMs* this, PlayState* play) {
@@ -461,7 +460,7 @@ block_11:
 
     func_8019F208();
     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-    func_801159EC(-0xA);
+    Rupees_ChangeBy(-0xA);
     this->actionFunc = func_809529AC;
     return;
 block_16:
@@ -486,6 +485,7 @@ Now let's start thinking about switches. A good indicator of a switch in goto-on
 ```
 
 because
+
 - there are multiple ifs that are simple numeric comparisons of the same argument
 - the goto blocks are in the same order as the ifs
 - there is one last goto at the end that triggers if none of the ifs does: this sounds an awful lot like a `default`!
@@ -510,7 +510,7 @@ So let us rewrite the entire second half as a switch:
 
             func_8019F208();
             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-            func_801159EC(-0xA);
+            Rupees_ChangeBy(-0xA);
             this->actionFunc = func_809529AC;
             return;
             break;
@@ -523,7 +523,8 @@ So let us rewrite the entire second half as a switch:
     }
 ```
 
-There's a couple of other obvious things here: 
+There's a couple of other obvious things here:
+
 - the last `return` in `case 0` is unnecessary since there is no other code after the switch, so breaking is equivalent to the return`
 - a common pattern everywhere, a sequence of ifs with returns as the last thing inside is the same as an if-else chain, so we can rewrite these as
 
@@ -541,7 +542,7 @@ There's a couple of other obvious things here:
             } else {
                 func_8019F208();
                 Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                func_801159EC(-0xA);
+                Rupees_ChangeBy(-0xA);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -606,7 +607,7 @@ block_7:
                 } else {
                     func_8019F208();
                     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                    func_801159EC(-0xA);
+                    Rupees_ChangeBy(-0xA);
                     this->actionFunc = func_809529AC;
                 }
                 break;
@@ -622,6 +623,7 @@ block_7:
 ```
 
 Now, the top of the function also looks like a switch:
+
 ```C
     temp_v0 = Message_GetState(&play->msgCtx);
     if (temp_v0 == 4) {
@@ -670,7 +672,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
@@ -722,7 +724,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
-                            func_801159EC(-0xA);
+                            Rupees_ChangeBy(-0xA);
                             this->actionFunc = func_809529AC;
                         }
                         break;
@@ -742,6 +744,6 @@ void func_809527F8(EnMs* this, PlayState* play) {
 }
 ```
 
-And this matches! 
+And this matches!
 
 We will not document this now, although even with so few function named it seems pretty clear that it's to do with buying beans (and indeed, Magic Beans cost 10 Rupees and have Get Item ID `0x35`) You might like to try to match this function without using goto-only mode, to compare. It is also an interesting exercise to see what each elimination does to the diff: sometimes it will stray surprisingly far for a small change.

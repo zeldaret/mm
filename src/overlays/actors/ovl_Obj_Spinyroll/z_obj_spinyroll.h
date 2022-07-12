@@ -18,9 +18,9 @@ typedef s32 (*ObjSpinyrollColFunc)(CollisionContext*, f32*, CollisionPoly**, s32
 #define OBJSPINYROLL_GET_C000_1 1
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ CollisionPoly* unk_04;
-    /* 0x08 */ s32 bgId;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ CollisionPoly* unk_04;
+    /* 0x8 */ s32 bgId;
 } ObjSpinyrollSubStruct; // size = 0xC
 
 typedef struct {
@@ -34,26 +34,26 @@ typedef struct {
 } ObjSpinyrollStruct2; // size = 0xF8?
 
 typedef struct ObjSpinyroll {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ColliderTris collider;
-    /* 0x017C */ ColliderTrisElement colliderElements[6];
-    /* 0x03A4 */ ObjSpinyrollStruct2 unk_3A4;
-    ///* 0x0494 */ ObjSpinyrollStruct* unk_494; // alternative testing
-    ///* 0x0498 */ s32 unk_498;
-    /* 0x049C */ s32 unk_49C;
-    /* 0x04A0 */ ObjSpinyrollActionFunc actionFunc;
-    /* 0x04A4 */ f32 unk_4A4;
-    /* 0x04A8 */ s32 unk_4A8;
-    /* 0x04AC */ Vec3f unk_4AC[2];
-    /* 0x04C4 */ Vec3f unk_4C4;
-    /* 0x04D0 */ f32 unk_4D0;
-    /* 0x04D4 */ f32 unk_4D4;
-    /* 0x04D8 */ s16 unk_4D8;
-    /* 0x04DA */ s16 unk_4DA;
-    /* 0x04DC */ s16 unk_4DC;
-    /* 0x04DE */ s16 unk_4DE;
-    /* 0x04E0 */ s16 unk_4E0;
-    /* 0x04E2 */ s16 unk_4E2;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderTris collider;
+    /* 0x17C */ ColliderTrisElement colliderElements[6];
+    /* 0x3A4 */ ObjSpinyrollStruct2 unk_3A4;
+    ///* 0x494 */ ObjSpinyrollStruct* unk_494; // alternative testing
+    ///* 0x498 */ s32 unk_498;
+    /* 0x49C */ s32 unk_49C;
+    /* 0x4A0 */ ObjSpinyrollActionFunc actionFunc;
+    /* 0x4A4 */ f32 unk_4A4;
+    /* 0x4A8 */ s32 unk_4A8;
+    /* 0x4AC */ Vec3f unk_4AC[2];
+    /* 0x4C4 */ Vec3f unk_4C4;
+    /* 0x4D0 */ f32 unk_4D0;
+    /* 0x4D4 */ f32 unk_4D4;
+    /* 0x4D8 */ s16 unk_4D8;
+    /* 0x4DA */ s16 unk_4DA;
+    /* 0x4DC */ s16 unk_4DC;
+    /* 0x4DE */ s16 unk_4DE;
+    /* 0x4E0 */ s16 unk_4E0;
+    /* 0x4E2 */ s16 unk_4E2;
 } ObjSpinyroll; // size = 0x4E4
 
 extern const ActorInit Obj_Spinyroll_InitVars;

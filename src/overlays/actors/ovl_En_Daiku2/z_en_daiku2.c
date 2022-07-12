@@ -127,7 +127,8 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
         &object_daiku_Anim_001A24, &object_daiku_Anim_002134, &object_daiku_Anim_00D328,
     };
     static u8 D_80BE7958[] = {
-        0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
     };
     f32 sp34 = 1.0f;
 
@@ -263,7 +264,8 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
                 func_80BE6408(this, 10);
             } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
                 this->unk_284 = Animation_GetLastFrame(&object_daiku_Anim_002134);
-                Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
+                Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, ANIMMODE_ONCE,
+                                 -4.0f);
                 this->unk_276 = 11;
             } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {
                 func_80BE6408(this, 8);

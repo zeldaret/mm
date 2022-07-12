@@ -239,7 +239,7 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
     f32 dist;
 
     if (this->megCloneId == REALMEG || this->actionFunc != EnPoSisters_DamageFlinch) {
-        if ((player->swordState == 0 || player->swordAnimation >= 30) &&
+        if ((player->meleeWeaponState == 0 || player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->megDistToPlayer, 110.0f, 3.0f);
         } else {
@@ -574,7 +574,7 @@ void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
 
 void EnPoSisters_SetupSpinToInvis(EnPoSisters* this) {
     Animation_Change(&this->skelAnime, &gPoeSistersAppearDisappearAnim, 1.5f, 0.0f,
-                     Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), 2, -3.0f);
+                     Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), ANIMMODE_ONCE, -3.0f);
     this->inivisTimer = 100;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -598,7 +598,7 @@ void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
 // TODO rename to something better
 void EnPoSisters_SetupSpinBack(EnPoSisters* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gPoeSistersAppearDisappearAnim, 1.5f, 0.0f,
-                     Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), 2, -3.0f);
+                     Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), ANIMMODE_ONCE, -3.0f);
     if (this->type == POSISTER_TYPE_MEG) {
         this->megDistToPlayer = 110.0f;
         EnPoSisters_MatchPlayerXZ(this, play);

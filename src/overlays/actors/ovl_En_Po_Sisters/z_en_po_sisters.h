@@ -26,16 +26,16 @@ typedef enum EnPoSisterType {
 } EnPoSisterType;
 
 typedef struct EnPoSisters {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ EnPoSistersActionFunc actionFunc;
-    /* 0x018C */ u8 type;
-    /* 0x018D */ u8 megCloneId;
-    /* 0x018E */ u8 floatingBobbingTimer; // counts down from 32 to zero, reset
-    /* 0x018F */ u8 zTargetTimer; // how many frames the player is z targeting, if zero -> invis
-    /* 0x0190 */ u8 fireCount;
-    /* 0x0191 */ u8 poSisterFlags;
-    /* 0x0192 */ union {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnPoSistersActionFunc actionFunc;
+    /* 0x18C */ u8 type;
+    /* 0x18D */ u8 megCloneId;
+    /* 0x18E */ u8 floatingBobbingTimer; // counts down from 32 to zero, reset
+    /* 0x18F */ u8 zTargetTimer; // how many frames the player is z targeting, if zero -> invis
+    /* 0x190 */ u8 fireCount;
+    /* 0x191 */ u8 poSisterFlags;
+    /* 0x192 */ union {
                 // stateTimer gets reused in different actionfuncs
                 s16 stateTimer;  // generic name for resets
                 s16 deathTimer;  // (incr) controls timings of the death cutscene, reset between the two stages
@@ -47,22 +47,22 @@ typedef struct EnPoSisters {
                 s16 megSurroundTimer; // frames of meg circling the player menacingly until spin attack
                 s16 idleFlyingAnimationCounter; // count: animations completed since entering actionFunc
     };
-    /* 0x0194 */ union {
+    /* 0x194 */ union {
                 s16 inivisTimer; // frames until coming back to fight from invisible (all combat variants)
                 s16 megAttackTimer; // (negative frames counting up to 0), time to spin attack after circling
     };
-    /* 0x0196 */ Vec3s jointTable[PO_SISTERS_LIMB_MAX];
-    /* 0x01DE */ Vec3s morphTable[PO_SISTERS_LIMB_MAX];
-    /* 0x0226 */ Color_RGBA8 color;
-    /* 0x022C */ Vec3f firePos[8];
-    /* 0x028C */ Vec3f limbPos[8]; // passed to Actor_DrawDamageEffects, but why is it smaller?
-    /* 0x02EC */ f32 megDistToPlayer;
-    /* 0x02F0 */ f32 drawDmgEffAlpha;
-    /* 0x02F4 */ f32 drawDmgEffScale;
-    /* 0x02F8 */ LightNode* lightNode;
-    /* 0x02FC */ LightInfo lightInfo;
-    /* 0x030C */ ColliderCylinder collider;
-    /* 0x0358 */ MtxF mtxf;
+    /* 0x196 */ Vec3s jointTable[PO_SISTERS_LIMB_MAX];
+    /* 0x1DE */ Vec3s morphTable[PO_SISTERS_LIMB_MAX];
+    /* 0x226 */ Color_RGBA8 color;
+    /* 0x22C */ Vec3f firePos[8];
+    /* 0x28C */ Vec3f limbPos[8]; // passed to Actor_DrawDamageEffects, but why is it smaller?
+    /* 0x2EC */ f32 megDistToPlayer;
+    /* 0x2F0 */ f32 drawDmgEffAlpha;
+    /* 0x2F4 */ f32 drawDmgEffScale;
+    /* 0x2F8 */ LightNode* lightNode;
+    /* 0x2FC */ LightInfo lightInfo;
+    /* 0x30C */ ColliderCylinder collider;
+    /* 0x358 */ MtxF mtxf;
 } EnPoSisters; // size = 0x398
 
 extern const ActorInit En_Po_Sisters_InitVars;
