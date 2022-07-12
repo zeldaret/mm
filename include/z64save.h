@@ -303,21 +303,32 @@ typedef enum SunsSongState {
 
 #define C_SLOT_EQUIP(form, button) (gSaveContext.save.equips.cButtonSlots[form][button])
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
+#define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
 #define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
 #define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
+#define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
 
-#define SET_CUR_FORM_BTN_ITEM(btn, item)                 \
-    do {                                                 \
-        if ((btn) == EQUIP_SLOT_B) {                     \
-            BUTTON_ITEM_EQUIP(CUR_FORM, (btn)) = (item); \
-        } else {                                         \
-            BUTTON_ITEM_EQUIP(0, (btn)) = (item);        \
-        }                                                \
-    } while (0)
+
+#define SET_CUR_FORM_BTN_ITEM(btn, item)             \
+    if ((btn) == EQUIP_SLOT_B) {                     \
+        BUTTON_ITEM_EQUIP(CUR_FORM, (btn)) = (item); \
+    } else {                                         \
+        BUTTON_ITEM_EQUIP(0, (btn)) = (item);        \
+    }                                                \
+    (void)0
+
+#define SET_CUR_FORM_BTN_SLOT(btn, item)        \
+    if ((btn) == EQUIP_SLOT_B) {                \
+        C_SLOT_EQUIP(CUR_FORM, (btn)) = (item); \
+    } else {                                    \
+        C_SLOT_EQUIP(0, (btn)) = (item);        \
+    }                                           \
+    (void)0
 
 #define STOLEN_ITEM_NONE (0)
 
