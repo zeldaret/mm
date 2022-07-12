@@ -677,7 +677,7 @@ asm/non_matchings/code/z_camera/Camera_CalcXZAngle.s,Camera_CalcXZAngle,0x800CC9
 asm/non_matchings/code/z_camera/func_800CC9C0.s,func_800CC9C0,0x800CC9C0,0xCB
 asm/non_matchings/code/z_camera/func_800CCCEC.s,func_800CCCEC,0x800CCCEC,0xD8
 asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFromPitchYawRoll,0x800CD04C,0x8F
-asm/non_matchings/code/z_camera/Camera_ClampLERPScale.s,Camera_ClampLERPScale,0x800CD288,0x16
+asm/non_matchings/code/z_camera/Camera_ClampLerpScale.s,Camera_ClampLerpScale,0x800CD288,0x16
 asm/non_matchings/code/z_camera/Camera_ResetActionFuncState.s,Camera_ResetActionFuncState,0x800CD2E0,0x4
 asm/non_matchings/code/z_camera/Camera_UpdateInterface.s,Camera_UpdateInterface,0x800CD2F0,0x3D
 asm/non_matchings/code/z_camera/Camera_BgCheckCorner.s,Camera_BgCheckCorner,0x800CD3E4,0x1A

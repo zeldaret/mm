@@ -1163,7 +1163,7 @@
     0x800CC9C0:("func_800CC9C0",),
     0x800CCCEC:("func_800CCCEC",),
     0x800CD04C:("Camera_CalcUpFromPitchYawRoll",),
-    0x800CD288:("Camera_ClampLERPScale",),
+    0x800CD288:("Camera_ClampLerpScale",),
     0x800CD2E0:("Camera_ResetActionFuncState",),
     0x800CD2F0:("Camera_UpdateInterface",),
     0x800CD3E4:("Camera_BgCheckCorner",),
