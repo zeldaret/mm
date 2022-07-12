@@ -3648,8 +3648,7 @@ beginseg
     name "ovl_Elf_Msg4"
     compress
     include "build/src/overlays/actors/ovl_Elf_Msg4/z_elf_msg4.o"
-    include "build/data/ovl_Elf_Msg4/ovl_Elf_Msg4.data.o"
-    include "build/data/ovl_Elf_Msg4/ovl_Elf_Msg4.reloc.o"
+    include "build/src/overlays/actors/ovl_Elf_Msg4/ovl_Elf_Msg4_reloc.o"
 endseg
 
 beginseg

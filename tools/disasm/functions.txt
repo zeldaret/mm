@@ -12791,7 +12791,7 @@
     0x80AFD380:("func_80AFD380",),
     0x80AFD4B8:("ElfMsg4_Init",),
     0x80AFD5A4:("ElfMsg4_Destroy",),
-    0x80AFD5B4:("func_80AFD5B4",),
+    0x80AFD5B4:("ElfMsg4_GetTextId",),
     0x80AFD5E0:("func_80AFD5E0",),
     0x80AFD668:("func_80AFD668",),
     0x80AFD770:("func_80AFD770",),
