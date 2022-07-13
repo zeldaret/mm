@@ -1382,7 +1382,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play) {
 
     this->unk_4DC = 0;
     this->arePotsBroken = false;
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0x7FFF);
     func_80B78EBC(this, play);
