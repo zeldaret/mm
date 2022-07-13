@@ -30,7 +30,7 @@ struct PlayState;
 #define rgEnvColorG regs[8]
 #define rgEnvColorB regs[9]
 #define rgEnvColorA regs[10]
-#define rgObjBankIdx regs[11]
+#define rgObjBankIndex regs[11]
 
 typedef struct {
     /* 0x00 */ u8 active;

@@ -89,23 +89,23 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
         this->actor.update = func_80A59C04;
         this->actor.draw = func_80A5A184;
         this->unk_DC6 = Rand_ZeroFloat(100.0f) + 60.0f;
-    } else if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778) ||
-               (this->actor.params == ENWATEREFFECT_779) || (this->actor.params == ENWATEREFFECT_780)) {
+    } else if ((this->actor.params == ENWATEREFFECT_309) || (this->actor.params == ENWATEREFFECT_30A) ||
+               (this->actor.params == ENWATEREFFECT_30B) || (this->actor.params == ENWATEREFFECT_30C)) {
         this->actor.update = func_80A5A534;
         this->actor.draw = func_80A5A6B8;
         this->actor.shape.rot.y = Rand_ZeroFloat(0x10000);
         Actor_SetScale(&this->actor, this->actor.shape.rot.z * 0.0002f);
 
-        if (this->actor.params == ENWATEREFFECT_777) {
+        if (this->actor.params == ENWATEREFFECT_309) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30A);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, this->actor.shape.rot.z, 0x30B);
-        } else if (this->actor.params == ENWATEREFFECT_778) {
+        } else if (this->actor.params == ENWATEREFFECT_30A) {
             this->unk_DC4 = -3;
-        } else if (this->actor.params == ENWATEREFFECT_779) {
+        } else if (this->actor.params == ENWATEREFFECT_30B) {
             this->unk_DC4 = -6;
-        } else if (this->actor.params == ENWATEREFFECT_780) {
+        } else if (this->actor.params == ENWATEREFFECT_30C) {
             this->unk_DC4 = 23;
         }
 
@@ -620,7 +620,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     Matrix_Push();
     Matrix_Push();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
+    if ((this->actor.params == ENWATEREFFECT_309) || (this->actor.params == ENWATEREFFECT_30A)) {
         if (this->unk_E2C > 1.0f) {
             func_8012C2DC(play->state.gfxCtx);
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
@@ -648,7 +648,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         Matrix_Pop();
     }
 
-    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
+    if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_30C)) {
         func_8012C2DC(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
@@ -660,7 +660,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
 
     Matrix_Pop();
 
-    if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
+    if ((this->actor.params == ENWATEREFFECT_309) || (this->actor.params == ENWATEREFFECT_30C)) {
         func_8012C2DC(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
@@ -670,7 +670,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000CD8);
     }
 
-    if (this->actor.params == ENWATEREFFECT_777) {
+    if (this->actor.params == ENWATEREFFECT_309) {
         func_8012C2DC(play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
