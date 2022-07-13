@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_g_ripple.c
  * Overlay: ovl_Effect_Ss_G_Ripple
- * Description:
+ * Description: Water Ripple
  */
 
 #include "z_eff_ss_g_ripple.h"
