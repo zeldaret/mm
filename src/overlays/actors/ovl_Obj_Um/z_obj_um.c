@@ -1198,7 +1198,7 @@ void func_80B7A144(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0100;
     this->flags |= OBJ_UM_FLAG_0004;
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
     ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
