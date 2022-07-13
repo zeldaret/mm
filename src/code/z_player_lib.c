@@ -54,12 +54,12 @@ Vec3f D_801F59B0[2];
 s32 D_801F59C8[2];
 
 typedef struct {
-    /* 0x00 */ s16 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ s16 unk_4;
-    /* 0x06 */ s16 unk_6;
-    /* 0x08 */ s16 unk_8;
-} struct_801F59D0; // size = 0x0A
+    /* 0x0 */ s16 unk_0;
+    /* 0x2 */ s16 unk_2;
+    /* 0x4 */ s16 unk_4;
+    /* 0x6 */ s16 unk_6;
+    /* 0x8 */ s16 unk_8;
+} struct_801F59D0; // size = 0xA
 
 struct_801F59D0 D_801F59D0;
 
