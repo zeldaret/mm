@@ -357,7 +357,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         this->isNewAccount = true;
                     }
 
-                    func_801159EC((s16)-play->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(-play->msgCtx.bankRupeesSelected);
                     this->previousBankValue = gSaveContext.save.bankRupees & 0xFFFF;
                     gSaveContext.save.bankRupees =
                         ((gSaveContext.save.bankRupees & 0xFFFF) + play->msgCtx.bankRupeesSelected) |
@@ -425,7 +425,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         (((gSaveContext.save.bankRupees & 0xFFFF) - play->msgCtx.bankRupeesSelected) -
                          this->serviceFee) |
                         (gSaveContext.save.bankRupees & 0xFFFF0000);
-                    func_801159EC(play->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(play->msgCtx.bankRupeesSelected);
                 }
             } else {
                 func_8019F230();

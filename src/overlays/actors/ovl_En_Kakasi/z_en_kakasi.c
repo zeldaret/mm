@@ -148,7 +148,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80971D80);
     SkelAnime_InitFlex(play, &this->skelanime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
 
-    this->songSummonDist = GET_KAKASI_SUMMON_DISTANCE(this) * 20.0f;
+    this->songSummonDist = GET_KAKASI_SUMMON_DISTANCE(&this->actor) * 20.0f;
     if (this->songSummonDist < 40.0f) {
         this->songSummonDist = 40.0f;
     }
@@ -161,7 +161,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    this->aboveGroundStatus = GET_KAKASI_ABOVE_GROUND(this);
+    this->aboveGroundStatus = GET_KAKASI_ABOVE_GROUND(&this->actor);
     this->actor.world.rot.x = 0;
     this->actor.flags |= ACTOR_FLAG_400;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -931,7 +931,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
-                Play_SetRespawnData(&play->state, RESTART_MODE_DOWN, Entrance_CreateIndexFromSpawn(0), player->unk_3CE,
+                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0), player->unk_3CE,
                                     0xBFF, &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 

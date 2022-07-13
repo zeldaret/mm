@@ -105,11 +105,11 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if (func_8010A074(play)) {
-        this->area = gSaveContext.unk_48C8 + 1;
+    if (Map_IsInDungeonOrBossArea(play)) {
+        this->area = gSaveContext.dungeonIndex + STRAY_FAIRY_AREA_WOODFALL;
     } else {
         // Needs to be thisx in order to match
-        this->area = STRAY_FAIRY_GET_PARAM_1C0(thisx) >> 6;
+        this->area = STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx);
     }
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
@@ -437,10 +437,10 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
     }
 
     scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
-    if (!Player_InCsMode(&play->state)) {
+    if (!Player_InCsMode(play)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, play);
-            func_80115908(play, 48);
+            Health_ChangeBy(play, 0x30);
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
                     Flags_SetCollectible(play, STRAY_FAIRY_FLAG(&this->actor));
@@ -462,10 +462,10 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 return;
             }
 
-            if (func_8010A074(play)) {
-                gSaveContext.save.inventory.strayFairies[gSaveContext.unk_48C8]++;
+            if (Map_IsInDungeonOrBossArea(play)) {
+                gSaveContext.save.inventory.strayFairies[gSaveContext.dungeonIndex]++;
                 Message_StartTextbox(play, 0x11, NULL);
-                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
+                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= 15) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }

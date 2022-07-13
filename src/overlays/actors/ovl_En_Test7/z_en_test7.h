@@ -47,7 +47,7 @@ typedef struct EnTest7 {
     /* 0x015C */ EnTest7Struct2 unk_15C[100];
     /* 0x18CC */ SkeletonInfo unk_18CC;
     /* 0x18FC */ Vec3s unk_18FC[114];
-    /* 0x1BA8 */ s16 unk_1BA8[342];
+    /* 0x1BA8 */ Vec3s unk_1BA8[114];
     /* 0x1E54 */ s32 unk_1E54;
     /* 0x1E58 */ EnTest7UnkFunc unk_1E58;
     /* 0x1E5C */ EnTest7ActionFunc actionFunc;

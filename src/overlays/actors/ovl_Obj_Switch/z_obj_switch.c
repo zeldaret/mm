@@ -411,7 +411,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         }
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL) {
-        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchAnimatedMat);
+        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchTexAnim);
     }
     if (OBJ_SWITCH_IS_FROZEN(&this->dyna.actor)) {
         ObjSwitch_EyeSwitchFrozenInit(this);
@@ -595,7 +595,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (Player_InCsMode(&play->state) == 0 || play->sceneNum == SCENE_SECOM)) {
+                (!Player_InCsMode(play) || play->sceneNum == SCENE_SECOM)) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -885,7 +885,7 @@ void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, PlayState* play) {
             ObjSwitch_LargeFloorSwitchRiseUpInit(this);
         }
     } else if (subType == OBJSWITCH_SUBTYPE_RESET || subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
-        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(&play->state)) {
+        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(play)) {
             if (this->floorSwitchReleaseTimer <= 0) {
                 if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_RESET) {
                     ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -945,7 +945,7 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
             break;
         case OBJSWITCH_TYPE_CRYSTAL:
         case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
-            if (!Player_InCsMode(&play->state)) {
+            if (!Player_InCsMode(play)) {
                 if (this->disableCrystalSwitchTimer > 0) {
                     this->disableCrystalSwitchTimer--;
                 }

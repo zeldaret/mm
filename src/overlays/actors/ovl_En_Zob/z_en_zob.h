@@ -15,21 +15,21 @@ enum {
 };
 
 typedef struct EnZob {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[24];
-    /* 0x0218 */ Vec3s morphTable[24];
-    /* 0x02A8 */ ColliderCylinder collider;
-    /* 0x02F4 */ u16 unk_2F4;
-    /* 0x02F6 */ Vec3s unk_2F6;
-    /* 0x02FC */ Vec3s unk_2FC;
-    /* 0x0302 */ s16 unk_302;
-    /* 0x0304 */ u16 unk_304;
-    /* 0x0306 */ s16 unk_306[4];
-    /* 0x030E */ s16 unk_30E;
-    /* 0x0310 */ s16 unk_310;
-    /* 0x0312 */ s16 unk_312;
-    /* 0x0314 */ EnZobActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[24];
+    /* 0x218 */ Vec3s morphTable[24];
+    /* 0x2A8 */ ColliderCylinder collider;
+    /* 0x2F4 */ u16 unk_2F4;
+    /* 0x2F6 */ Vec3s unk_2F6;
+    /* 0x2FC */ Vec3s unk_2FC;
+    /* 0x302 */ s16 unk_302;
+    /* 0x304 */ u16 unk_304;
+    /* 0x306 */ s16 unk_306[4];
+    /* 0x30E */ s16 unk_30E;
+    /* 0x310 */ s16 unk_310;
+    /* 0x312 */ s16 unk_312;
+    /* 0x314 */ EnZobActionFunc actionFunc;
 } EnZob; // size = 0x318
 
 extern const ActorInit En_Zob_InitVars;

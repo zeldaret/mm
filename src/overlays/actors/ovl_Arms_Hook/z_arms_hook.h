@@ -10,7 +10,7 @@ typedef void (*ArmsHookActionFunc)(struct ArmsHook*, PlayState*);
 typedef struct ArmsHook {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderQuad collider;
-    /* 0x1C4 */ WeaponInfo unk1C4;
+    /* 0x1C4 */ WeaponInfo unk_1C4;
     /* 0x1E0 */ Vec3f unk1E0;
     /* 0x1EC */ Vec3f unk1EC;
     /* 0x1F8 */ Actor* grabbed;

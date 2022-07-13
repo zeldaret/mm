@@ -109,16 +109,8 @@ void EnJcMato_SetupIdle(EnJcMato* this) {
 }
 
 void EnJcMato_Idle(EnJcMato* this, PlayState* play) {
-    s16 shouldDespawn;
-
     if (this->hitFlag) {
-        if (this->despawnTimer == 0) {
-            shouldDespawn = 0;
-        } else {
-            this->despawnTimer--;
-            shouldDespawn = this->despawnTimer;
-        }
-        if (shouldDespawn == 0) {
+        if (DECR(this->despawnTimer) == 0) {
             Actor_MarkForDeath(&this->actor);
         }
     }

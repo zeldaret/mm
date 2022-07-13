@@ -123,7 +123,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    4,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -411,7 +411,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     }
 
     if (func_800BE184(play, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
-        ((player->swordAnimation == 0x11) || ((play->gameplayFrames % 2) != 0))) {
+        ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0))) {
         func_8099282C(this);
         return true;
     }
@@ -424,7 +424,7 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
             return true;
         }
 
-        if ((player->swordAnimation == 0x11) || ((play->gameplayFrames % 2) != 0)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
             func_8099282C(this);
             return true;
         }
@@ -549,7 +549,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 }
 
 void func_80990FC8(EnWf* this) {
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80991040;
@@ -572,7 +572,7 @@ void func_80991040(EnWf* this, PlayState* play) {
 void func_809910F0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, 3, -5.0f);
+    Animation_Change(&this->skelAnime, &gWolfosRearingUpFallingOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, -5.0f);
     this->unk_2A0 = 5;
     this->actionFunc = func_80991174;
 }
@@ -615,7 +615,7 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->swordState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -665,7 +665,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->swordState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -879,7 +879,8 @@ void func_80991FD8(EnWf* this) {
     if (this->skelAnime.curFrame > 15.0f) {
         phi_f0 = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &gWolfosSlashingAnim, -0.5f, this->skelAnime.curFrame - 1.0f, phi_f0,
+                     ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider1.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80992068;
 }
@@ -1021,7 +1022,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
 void func_809926D0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     Animation_Change(&this->skelAnime, &gWolfosBackflippingAnim, -1.0f,
-                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, 2, -3.0f);
+                     Animation_GetLastFrame(&gWolfosBackflippingAnim.common), 0.0f, ANIMMODE_ONCE, -3.0f);
     this->unk_2A0 = 0;
     this->actor.speedXZ = 6.5f;
     this->actor.velocity.y = 15.0f;
@@ -1053,7 +1054,7 @@ void func_8099282C(EnWf* this) {
     this->unk_2A0 = 10;
     this->actor.speedXZ = 0.0f;
     Animation_Change(&this->skelAnime, &gWolfosBlockingAnim, -1.0f, Animation_GetLastFrame(&gWolfosBlockingAnim.common),
-                     0.0f, 2, -2.0f);
+                     0.0f, ANIMMODE_ONCE, -2.0f);
     this->actionFunc = func_809928CC;
 }
 
@@ -1065,7 +1066,7 @@ void func_809928CC(EnWf* this, PlayState* play) {
         if (this->unk_2A0 != 0) {
             this->unk_2A0--;
         } else if (func_800BE184(play, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
-            if ((player->swordAnimation != 0x11) || ((play->gameplayFrames % 2) != 0)) {
+            if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
                 this->unk_2A0 = 10;
             } else {
                 func_8099223C(this);
