@@ -142,8 +142,8 @@ typedef struct Save {
     /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
     /* 0x0E18 */ u8 unk_E18[0x54];
     /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
-    /* 0x0E78 */ u32 pictoFlags0;
-    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E78 */ u32 pictoFlags0;                       // Flags set by `PictoActor`s if pictograph is valid
+    /* 0x0E7C */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0x0E80 */ u32 unk_E80;
     /* 0x0E84 */ u32 unk_E84;
     /* 0x0E88 */ u32 unk_E88[7];                        // Invadepoh flags

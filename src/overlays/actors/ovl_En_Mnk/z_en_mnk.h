@@ -8,8 +8,8 @@ struct EnMnk;
 typedef void (*EnMnkActionFunc)(struct EnMnk*, PlayState*);
 
 typedef struct EnMnk {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2A4];
+    /* 0x000 */ PictoActor picto;
+    /* 0x144 */ char unk_148[0x2A0];
     /* 0x3E8 */ EnMnkActionFunc actionFunc;
 } EnMnk; // size = 0x3EC
 

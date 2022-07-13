@@ -132,8 +132,7 @@ s16 Snap_AbsS(s16 val) {
  * @param angleRange Size of range that counts as facing the camera (-1 is used for any allowed)
  * @return s32 0 on success, `or`ed combination of the validity flags if not
  *
- * @note It is generally not possible to recover the actual failure mode(s) from the return value, it should have `or`ed
- * the actual flags to be able to do that.)
+ * @note It is generally not possible to recover the actual failure mode(s) from the return value)
  */
 s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax,
                   s16 angleRange) {
