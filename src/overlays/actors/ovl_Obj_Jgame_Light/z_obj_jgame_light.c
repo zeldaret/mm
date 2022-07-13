@@ -5,17 +5,28 @@
  */
 
 #include "z_obj_jgame_light.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjJgameLight*)thisx)
+
+typedef enum {
+    /* 0x0 */ OBJJGAMELIGHT_NONE,
+    /* 0x1 */ OBJJGAMELIGHT_CORRECT,
+    /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
+} ObjJgameLightSignal;
 
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play);
 void ObjJgameLight_Update(Actor* thisx, PlayState* play);
 void ObjJgameLight_Draw(Actor* thisx, PlayState* play);
 
-#if 0
+void func_80C15474(ObjJgameLight* this, PlayState* play);
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
+void func_80C15718(ObjJgameLight* this, PlayState* play);
+
 const ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
     ACTORCAT_PROP,
@@ -28,29 +39,172 @@ const ActorInit Obj_Jgame_Light_InitVars = {
     (ActorFunc)ObjJgameLight_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80C15BC0 = {
-    { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x00100000, 0x00, 0x00 }, { 0xF6CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_METAL,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0x00, 0x00 },
+        { 0xF6CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 12, 45, 0, { 0, 0, 0 } },
 };
 
-#endif
+#include "assets/overlays/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light.c"
 
-extern ColliderCylinderInit D_80C15BC0;
+void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
+    ObjJgameLight* this = THIS;
+    LightInfo* lights = &this->lightInfo;
 
-extern UNK_TYPE D_060003A0;
+    Actor_SetScale(&this->actor, 1.0f);
+    func_800B4AEC(play, &this->actor, 50.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B4B50, 1.0f);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Lights_PointGlowSetInfo(lights, this->actor.world.pos.x, (this->actor.world.pos.y + 70.0f), this->actor.world.pos.z,
+                            255, 255, 180, -1);
+    this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
+    Actor_SetFocus(&this->actor, 60.0f);
+    this->actor.colChkInfo.health = 0;
+    this->prevHealth = 0;
+    this->isOn = false;
+    this->lightRadius = 0;
+    this->alpha = 0;
+    this->signal = OBJJGAMELIGHT_NONE;
+    this->flameScaleProportion = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Init.s")
+void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
+    ObjJgameLight* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Destroy.s")
+    Collider_DestroyCylinder(play, &this->collider);
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C15474.s")
+void func_80C15474(ObjJgameLight* this, PlayState* play) {
+    u8 temp_a1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C156C4.s")
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && (this->isOn == false)) {
+        if (this->lightRadius < 160) {
+            this->lightRadius += 40;
+        } else {
+            this->lightRadius = 200;
+            this->isOn = true;
+        }
+        if (this->flameScaleProportion < 0.7f) {
+            this->flameScaleProportion += 0.3f;
+        } else {
+            this->flameScaleProportion = 1.0f;
+        }
+    } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_SNUFF_FIRE) {
+        if (this->lightRadius > 40) {
+            this->lightRadius -= 40;
+        } else {
+            this->lightRadius = -1;
+            if (this->flameScaleProportion == 0.0f) {
+                this->isOn = false;
+                this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
+                this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_SNUFF_FIRE;
+            }
+        }
+        if (this->flameScaleProportion > 0.3f) {
+            this->flameScaleProportion -= 0.3f;
+        } else {
+            this->flameScaleProportion = 0.0f;
+        }
+    }
+    if (this->flameScaleProportion > 0.1f) {
+        func_800B9010(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+    }
+    temp_a1 = (s32)(Rand_ZeroOne() * 127.0f) + 128;
+    Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, temp_a1 * 0.7f, 0, this->lightRadius);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/func_80C15718.s")
+void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play) {
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Update.s")
+void func_80C15718(ObjJgameLight* this, PlayState* play) {
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) &&
+        !(this->prevHealth & OBJLUPYGAMELIFT_IGNITE_FIRE)) {
+        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
+        this->prevHealth = this->actor.colChkInfo.health;
+    }
+    if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAY_CORRECT) {
+        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAY_CORRECT;
+        this->alpha = 300;
+        this->signal = OBJJGAMELIGHT_CORRECT;
+    } else if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAY_INCORRECT) {
+        this->actor.colChkInfo.health &= ~OBJLUPYGAMELIFT_DISPLAY_INCORRECT;
+        this->alpha = 300;
+        this->signal = OBJJGAMELIGHT_INCORRECT;
+    }
+    if (this->alpha > 15) {
+        this->alpha -= 15;
+    } else {
+        this->alpha = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jgame_Light/ObjJgameLight_Draw.s")
+void ObjJgameLight_Update(Actor* thisx, PlayState* play) {
+    ObjJgameLight* this = THIS;
+
+    func_80C15718(this, play);
+    func_80C15474(this, play);
+    ObjJgameLight_UpdateCollision(this, play);
+    this->flameScroll++;
+}
+
+void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    ObjJgameLight* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, &gObjectSyokudaiTypeSwitchCausesFlameDL);
+    if (this->alpha > 0) {
+        func_8012C2DC(play->state.gfxCtx);
+        if (this->alpha > 255) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, 255);
+        } else {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->alpha);
+        }
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        if (this->signal == OBJJGAMELIGHT_CORRECT) {
+            gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightCorrectDL);
+        } else if (this->signal == OBJJGAMELIGHT_INCORRECT) {
+            gSPDisplayList(POLY_XLU_DISP++, gObjJgameLightIncorrectDL);
+        }
+    }
+    if (this->flameScaleProportion != 0.0f) {
+        f32 scale;
+
+        func_8012C2DC(play->state.gfxCtx);
+        scale = (this->flameScaleProportion * 27.0f) / 10000.0f;
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->flameScroll * -20) & 0x1FF,
+                                    0x20, 0x80));
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
+        Matrix_Translate(0.0f, 52.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
+                        MTXMODE_APPLY);
+        Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+    }
+    CLOSE_DISPS(play->state.gfxCtx);
+}

@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char03.c
  * Overlay: ovl_Dm_Char03
- * Description:
+ * Description: Deku Mask (cutscene)
  */
 
 #include "z_dm_char03.h"

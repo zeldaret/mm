@@ -125,7 +125,7 @@ static ColliderTrisInit sTrisInit1 = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    6,
+    ARRAY_COUNT(sTrisElementsInit1),
     sTrisElementsInit1,
 };
 
@@ -219,7 +219,7 @@ static ColliderTrisInit sTrisInit2 = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    6,
+    ARRAY_COUNT(sTrisElementsInit2),
     sTrisElementsInit2,
 };
 
@@ -534,14 +534,14 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;
 
-                if (func_80B2FB94(&player->swordInfo[0].tip, 6.0f, triNorm, &sp58, &sp54) &&
+                if (func_80B2FB94(&player->meleeWeaponInfo[0].tip, 6.0f, triNorm, &sp58, &sp54) &&
                     func_80B2FC98(triNorm, &sp58)) {
                     break;
                 }
             }
 
             if (i < ARRAY_COUNT(this->colliderElements)) {
-                Math_Vec3f_Copy(arg2, &player->swordInfo[0].tip);
+                Math_Vec3f_Copy(arg2, &player->meleeWeaponInfo[0].tip);
                 return true;
             }
         }

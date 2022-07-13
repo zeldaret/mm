@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
@@ -9,7 +10,7 @@ void func_800F4A10(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
 
-    func_8013EE24();
+    Rumble_StateReset();
 
     pauseCtx->unk_206 = 0;
     pauseCtx->unk_200 = 1;
@@ -123,10 +124,10 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_258 = 11;
     pauseCtx->unk_25A = 0;
 
-    pauseCtx->unk_25E[PAUSE_0] = 999;
-    pauseCtx->unk_25E[PAUSE_1] = XREG(94) + 3;
-    pauseCtx->unk_25E[PAUSE_2] = 999;
-    pauseCtx->unk_25E[PAUSE_3] = 999;
+    pauseCtx->cursorItem[PAUSE_0] = 999;
+    pauseCtx->cursorItem[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->cursorItem[PAUSE_2] = 999;
+    pauseCtx->cursorItem[PAUSE_3] = 999;
 
     pauseCtx->unk_268[PAUSE_0] = 0;
     pauseCtx->unk_268[PAUSE_1] = XREG(94) + 3;

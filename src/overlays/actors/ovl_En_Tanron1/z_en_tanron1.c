@@ -150,9 +150,9 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
-        this->unk_14C.x = player->swordInfo[0].tip.x;
-        this->unk_14C.y = player->swordInfo[0].tip.y;
-        this->unk_14C.z = player->swordInfo[0].tip.z;
+        this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
+        this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
+        this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;
 
         this->unk_158 = 0x5000;
         this->unk_15C = 50.0f;
@@ -207,8 +207,8 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
     f32 temp_f30 = this->unk_15C;
 
     if (player->unk_ADC != 0) {
-        phi_s2 = &player->swordInfo[0].tip;
-        if (player->swordAnimation >= 30) {
+        phi_s2 = &player->meleeWeaponInfo[0].tip;
+        if (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
             phi_f28 = 2500.0f;
         } else {
             phi_f28 = 400.0f;
