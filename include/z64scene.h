@@ -260,7 +260,7 @@ typedef union {
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2;
+    /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 unk5;
@@ -377,7 +377,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
-    /* 0x4 */ void* textureList;
+    /* 0x4 */ TexturePtr* textureList;
     /* 0x8 */ u8* textureIndexList;
 } AnimatedMatTexCycleParams; // size = 0xC
 

@@ -429,7 +429,7 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
                         break;
 
                     case 17:
-                        Animation_Change(&this->skelAnime, *D_80B958DC, 0.0f, 0.0f, 0.0f, 0, 0.0f);
+                        Animation_Change(&this->skelAnime, *D_80B958DC, 0.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
                         break;
                 }
                 break;
@@ -503,37 +503,37 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
 
             switch (this->unk_306) {
                 case 1:
-                    func_80B939C0(this, 7, 0);
+                    func_80B939C0(this, 7, ANIMMODE_LOOP);
                     this->unk_31C = 2;
                     this->unk_31E = 0;
                     break;
 
                 case 2:
-                    func_80B939C0(this, 11, 2);
+                    func_80B939C0(this, 11, ANIMMODE_ONCE);
                     this->unk_31C = 1;
                     this->unk_31E = 0;
                     break;
 
                 case 3:
-                    func_80B939C0(this, 15, 2);
+                    func_80B939C0(this, 15, ANIMMODE_ONCE);
                     this->unk_31C = 0;
                     this->unk_31E = 1;
                     break;
 
                 case 4:
-                    func_80B939C0(this, 13, 2);
+                    func_80B939C0(this, 13, ANIMMODE_ONCE);
                     this->unk_31C = 2;
                     this->unk_31E = 1;
                     break;
 
                 case 5:
-                    func_80B939C0(this, 16, 2);
+                    func_80B939C0(this, 16, ANIMMODE_ONCE);
                     this->unk_31C = 2;
                     this->unk_31E = 1;
                     break;
 
                 case 6:
-                    func_80B939C0(this, 8, 2);
+                    func_80B939C0(this, 8, ANIMMODE_ONCE);
                     this->unk_31C = 1;
                     this->unk_31E = 0;
                     break;
@@ -546,14 +546,14 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
                 case 9:
                     this->unk_322 = 0;
                     this->unk_30A |= 8;
-                    func_80B939C0(this, 18, 0);
+                    func_80B939C0(this, 18, ANIMMODE_LOOP);
                     this->unk_31C = 0;
                     this->unk_31E = 0;
                     this->unk_30A &= ~2;
                     break;
 
                 case 10:
-                    func_80B939C0(this, 14, 0);
+                    func_80B939C0(this, 14, ANIMMODE_LOOP);
                     this->unk_31C = 0;
                     this->unk_30A |= 2;
                     this->unk_31E = 1;

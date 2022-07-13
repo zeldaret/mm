@@ -23,15 +23,15 @@ typedef enum {
 } DemoEffectType;
 
 typedef struct DemoEffect {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelCurve skelCurve;
-    /* 0x0164 */ u8 initObjectIndex;
-    /* 0x0165 */ u8 primXluColor[3];
-    /* 0x0168 */ u8 envXluColor[3];
-    /* 0x016C */ s16 timer;
-    /* 0x0170 */ DemoEffectActionFunc initActionFunc;
-    /* 0x0174 */ ActorFunc initDrawFunc;
-    /* 0x0178 */ DemoEffectActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelCurve skelCurve;
+    /* 0x164 */ u8 initObjectIndex;
+    /* 0x165 */ u8 primXluColor[3];
+    /* 0x168 */ u8 envXluColor[3];
+    /* 0x16C */ s16 timer;
+    /* 0x170 */ DemoEffectActionFunc initActionFunc;
+    /* 0x174 */ ActorFunc initDrawFunc;
+    /* 0x178 */ DemoEffectActionFunc actionFunc;
 } DemoEffect; // size = 0x17C
 
 extern const ActorInit Demo_Effect_InitVars;

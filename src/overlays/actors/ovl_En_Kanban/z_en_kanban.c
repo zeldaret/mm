@@ -254,7 +254,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         u8 i;
 
                         if (hitItem->toucher.dmgFlags & 0x200) {
-                            this->cutType = sCutTypes[player->swordAnimation];
+                            this->cutType = sCutTypes[player->meleeWeaponAnimation];
                         } else if (hitItem->toucher.dmgFlags & 0x10) {
                             this->invincibilityTimer = 0;
                             this->cutType = this->unk_19A + 3;

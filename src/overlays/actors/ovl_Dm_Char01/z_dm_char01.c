@@ -6,6 +6,7 @@
 
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
+#include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -127,7 +128,8 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0, 0x80);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0,
+                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
             DynaPolyActor_Init(&this->dyna, 0);
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_mtoride_Colheader_00FE5C);
 
@@ -331,7 +333,8 @@ void func_80AA8F2C(DmChar01* this, PlayState* play) {
         Math_SmoothStepToF(&this->unk_348, 0.0f, 0.01f, 0.5f, 0.4f);
         if ((s32)this->dyna.actor.world.pos.y >= 0) {
             D_80AAAE26 = 2;
-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0, 0x80);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, 5.0f, 202.0f, 294.0f, 0, 0, 0,
+                        DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
             this->actionFunc = func_80AA90F4;
         }
     }
