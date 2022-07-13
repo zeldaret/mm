@@ -105,7 +105,7 @@ s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
 }
 
 void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
-    Interface_ChangeHudMode(HUD_MODE_OFF);
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     ShrinkWindow_SetLetterboxTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
@@ -115,7 +115,7 @@ void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
 
 void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
     func_800ED980(play, csCtx);
-    Interface_ChangeHudMode(HUD_MODE_OFF);
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     ShrinkWindow_SetLetterboxTarget(32);
     if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
@@ -565,7 +565,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     gSaveContext.unk_3F48 = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
-        gSaveContext.hudModeDimOnlyDisabledButtons = true;
+        gSaveContext.hudVisibilityDimOnlyDisabledButtons = true;
     }
 
     gSaveContext.save.cutscene = 0;
@@ -1100,7 +1100,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
             }
 
             if (originalCsFrames == csCtx->frames) {
-                Interface_ChangeHudMode(HUD_MODE_OFF);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 D_801BB124 = 0;
                 D_801BB128 = 0;
                 func_80161C0C();
@@ -1479,7 +1479,7 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
-                Interface_ChangeHudMode(HUD_MODE_OFF);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 ShrinkWindow_SetLetterboxTarget(32);
                 ShrinkWindow_SetLetterboxMagnitude(0x20);
                 csCtx->state++;

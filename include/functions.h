@@ -1873,7 +1873,7 @@ void func_8010EA9C(s32 arg0, s32 arg1);
 // void func_8010EBA0(void);
 // void func_8010EC54(void);
 void func_8010EE74(PlayState* play, s32 day);
-void Interface_ChangeHudMode(u16 hudMode);
+void Interface_SetHudVisibility(u16 hudVisibility);
 // void func_80110038(void);
 // void func_80111CB4(void);
 // void func_801129E4(void);

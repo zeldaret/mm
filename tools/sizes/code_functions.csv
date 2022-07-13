@@ -1614,7 +1614,7 @@ asm/non_matchings/code/z_parameter/func_8010EB50.s,func_8010EB50,0x8010EB50,0x14
 asm/non_matchings/code/z_parameter/func_8010EBA0.s,func_8010EBA0,0x8010EBA0,0x2D
 asm/non_matchings/code/z_parameter/func_8010EC54.s,func_8010EC54,0x8010EC54,0x88
 asm/non_matchings/code/z_parameter/func_8010EE74.s,func_8010EE74,0x8010EE74,0x3D
-asm/non_matchings/code/z_parameter/Interface_ChangeHudMode.s,Interface_ChangeHudMode,0x8010EF68,0xD
+asm/non_matchings/code/z_parameter/Interface_SetHudVisibility.s,Interface_SetHudVisibility,0x8010EF68,0xD
 asm/non_matchings/code/z_parameter/Interface_RaiseNonDisabledButtonAlphas.s,Interface_RaiseNonDisabledButtonAlphas,0x8010EF9C,0x4E
 asm/non_matchings/code/z_parameter/Interface_DimButtonAlphas.s,Interface_DimButtonAlphas,0x8010F0D4,0x35
 asm/non_matchings/code/z_parameter/Interface_UpdateHudAlphas.s,Interface_UpdateHudAlphas,0x8010F1A8,0x3A4

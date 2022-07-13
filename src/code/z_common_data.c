@@ -16,7 +16,7 @@ void SaveContext_Init(void) {
     gSaveContext.environmentTime = 0;
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransition = 0xFF;
-    gSaveContext.prevHudMode = HUD_MODE_ALL;
+    gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
     gSaveContext.options.language = 1;
     gSaveContext.options.audioSetting = 0;

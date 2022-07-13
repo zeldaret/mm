@@ -597,7 +597,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
-        Interface_ChangeHudMode(HUD_MODE_OFF);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
         func_800B7298(play, &this->dyna.actor, 9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
