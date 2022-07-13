@@ -47,8 +47,6 @@ typedef struct {
 
 struct_801F58B0 D_801F58B0[3][3];
 
-UNK_TYPE D_801F59AC; // Padding? Can be deleted and still match
-
 Vec3f D_801F59B0[2];
 
 s32 D_801F59C8[2];
@@ -1420,11 +1418,11 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
                      s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
     s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
-    Gfx* dl;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
     if (eyeIndex < 0) {
         eyeIndex = sPlayerFaces[face].eyeIndex;
@@ -1438,15 +1436,15 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
         }
     }
 
-    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
         mouthIndex = sPlayerFaces[face].mouthIndex;
     }
 
-    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
 
-    POLY_OPA_DISP = &dl[2];
+    POLY_OPA_DISP = &gfx[2];
 
     D_801F59E0 = tunic * 2;
     D_801F59E4 = lod;
@@ -1987,7 +1985,7 @@ void func_80127594(PlayState* play, Actor* actor) {
             D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
 
             EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
-            D_801F59C8[i] += -0x190;
+            D_801F59C8[i] -= 0x190;
         }
     }
 
