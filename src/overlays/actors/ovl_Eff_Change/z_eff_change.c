@@ -15,11 +15,10 @@ void EffChange_Init(Actor* thisx, PlayState* play);
 void EffChange_Destroy(Actor* thisx, PlayState* play);
 void EffChange_Update(Actor* thisx, PlayState* play);
 
-void func_80A4C578(EffChange* this, s32 arg1);        /* static */
+void EffChange_SetColors(EffChange* this, s32 arg1);  /* static */
 void func_80A4C5CC(EffChange* this, PlayState* play); /* static */
 void func_80A4C7B0(Actor* thisx, PlayState* play);
 
-#if 0
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,
@@ -31,24 +30,20 @@ const ActorInit Eff_Change_InitVars = {
     (ActorFunc)EffChange_Update,
     (ActorFunc)NULL,
 };
-static struct _struct_D_80A4C920_0x6 D_80A4C920[8] = {
-    { 0xFF, 0xFF, 0xAA, 0, 0x64, 0 },
-    { 0xFF, 0xFF, 0xAA, 0xC8, 0, 0 },
-    { 0xAA, 0xFF, 0xFF, 0, 0x64, 0xFF },
-    { 0xFF, 0xFF, 0xAA, 0xC8, 0x96, 0 },
-    { 0xFF, 0xFF, 0xAA, 0, 0x64, 0 },
-    { 0xFF, 0xFF, 0xAA, 0, 0x64, 0 },
-    { 0xFF, 0xFF, 0xAA, 0, 0x64, 0 },
-    { 0xFF, 0xFF, 0xAA, 0, 0x64, 0 },
+/*
+static Color_RGBA8 D_80A4C920[] = {
+    { 255, 255, 170, 0 },   { 100, 0, 255, 255 }, { 170, 200, 0, 0 },   { 170, 255, 255, 0 },
+    { 100, 255, 255, 255 }, { 170, 200, 150, 0 }, { 255, 255, 170, 0 }, { 100, 0, 255, 255 },
+    { 170, 0, 100, 0 },     { 255, 255, 170, 0 }, { 100, 0, 255, 255 }, { 170, 0, 100, 0 },
 };
-#endif
+*/
+static u8 D_80A4C920[] = { 255, 255, 170, 0,   100, 0,   255, 255, 170, 200, 0,   0,   170, 255, 255, 0,
+                           100, 255, 255, 255, 170, 200, 150, 0,   255, 255, 170, 0,   100, 0,   255, 255,
+                           170, 0,   100, 0,   255, 255, 170, 0,   100, 0,   255, 255, 170, 0,   100, 0 };
 
 extern UNK_TYPE D_040281DC;
 extern UNK_TYPE D_04028FEC;
 extern SkeletonInfo* D_0402900C;
-extern UNK_TYPE D_80A4C920[];
-extern f32 D_80A4C950;
-extern f32 D_80A4C954;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Init.s")
 
@@ -57,12 +52,12 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80A4C5CC;
     this->actor.draw = func_80A4C7B0;
-    func_80A4C578(this, this->actor.params & 7);
+    EffChange_SetColors(this, EFFCHANGE_GET_COLORS(thisx));
     Actor_SetScale(&this->actor, 0.075f);
-    this->unk1BE[3] = 0;
-    func_80183430(&this->skeletonInfo, &D_0402900C, &D_040281DC, &this->unk174, &this->unk198, NULL);
+    this->primColors[3] = 0;
+    func_80183430(&this->skeletonInfo, &D_0402900C, &D_040281DC, this->jointTable, this->morphTable, NULL);
     func_801834A8(&this->skeletonInfo, &D_040281DC);
-    this->unk1BC = 0;
+    this->step = 0;
     this->actor.shape.rot.y = 0;
     this->skeletonInfo.frameCtrl.unk_C = 0.6666667;
     ActorCutscene_SetIntentToPlay(0x7B);
@@ -76,18 +71,16 @@ void EffChange_Destroy(Actor* thisx, PlayState* play) {
     func_8018349C(&this->skeletonInfo);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C578.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_SetColors.s")
 
-void func_80A4C578(EffChange* this, s32 arg1) {
-    u8* temp_v0;
+void EffChange_SetColors(EffChange* this, s32 arg1) {
     arg1 *= 6;
-    temp_v0 = &(((u8*)D_80A4C920)[arg1]);
-    this->unk1BE[0] = temp_v0[0];
-    this->unk1BE[1] = temp_v0[1];
-    this->unk1BE[2] = temp_v0[2];
-    this->unk1C2[0] = temp_v0[3];
-    this->unk1C2[1] = temp_v0[4];
-    this->unk1C2[2] = temp_v0[5];
+    this->primColors[0] = D_80A4C920[arg1];
+    this->primColors[1] = D_80A4C920[arg1 + 1];
+    this->primColors[2] = D_80A4C920[arg1 + 2];
+    this->envColors[0] = D_80A4C920[arg1 + 3];
+    this->envColors[1] = D_80A4C920[arg1 + 4];
+    this->envColors[2] = D_80A4C920[arg1 + 5];
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C5CC.s")
@@ -100,24 +93,24 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
         ActorCutscene_Stop(0x7B);
         func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
     } else {
-        this->unk1BC++;
+        this->step++;
         if (this->skeletonInfo.frameCtrl.unk_10 < 20.0f) {
-            if ((this->unk1BE[3]) < 0xF2) {
-                this->unk1BE[3] += 0xD;
+            if ((this->primColors[3]) < 242) {
+                this->primColors[3] += 13;
             } else {
-                this->unk1BE[3] = 0xFF;
+                this->primColors[3] = 255;
             }
         } else if (this->skeletonInfo.frameCtrl.unk_10 > 70.0f) {
-            if (((s32)this->unk1BE[3]) >= 0xE) {
-                this->unk1BE[3] -= 0xD;
+            if ((this->primColors[3]) >= 14) {
+                this->primColors[3] -= 13;
             } else {
-                this->unk1BE[3] = 0;
+                this->primColors[3] = 0;
             }
         } else {
-            this->unk1BE[3] = 0xFF;
+            this->primColors[3] = 255;
         }
 
-        phi_fv0 = this->unk1BE[3] * 0.003921569f;
+        phi_fv0 = this->primColors[3] * 0.003921569f;
         if (phi_fv0 > 1.0f) {
             phi_fv0 = 1.0f;
         } else if (phi_fv0 < 0.0f) {
@@ -125,7 +118,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
         }
         func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
         if (ActorCutscene_GetCurrentIndex() != 0x7B) {
-            if (ActorCutscene_GetCanPlayNext(0x7B) != 0) {
+            if (ActorCutscene_GetCanPlayNext(0x7B)) {
                 ActorCutscene_Start(0x7B, &this->actor);
             } else {
                 ActorCutscene_SetIntentToPlay(0x7B);
@@ -149,7 +142,7 @@ void func_80A4C7B0(Actor* thisx, PlayState* play) {
     Mtx* mtx;
     EffChange* this = THIS;
 
-    AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&D_04028FEC), (u32)this->unk1BC);
+    AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
     mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
 
     if (mtx != NULL) {
@@ -158,8 +151,9 @@ void func_80A4C7B0(Actor* thisx, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->unk1BE[0], this->unk1BE[1], this->unk1BE[2], this->unk1BE[3]);
-        gDPSetEnvColor(POLY_XLU_DISP++, this->unk1C2[0], this->unk1C2[1], this->unk1C2[2], 0xFF);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->primColors[0], this->primColors[1], this->primColors[2],
+                        this->primColors[3]);
+        gDPSetEnvColor(POLY_XLU_DISP++, this->envColors[0], this->envColors[1], this->envColors[2], 255);
         func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);

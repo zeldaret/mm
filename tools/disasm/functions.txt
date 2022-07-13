@@ -10491,7 +10491,7 @@
     0x80A4BF78:("func_80A4BF78",),
     0x80A4C490:("EffChange_Init",),
     0x80A4C54C:("EffChange_Destroy",),
-    0x80A4C578:("func_80A4C578",),
+    0x80A4C578:("EffChange_SetColors",),
     0x80A4C5CC:("func_80A4C5CC",),
     0x80A4C78C:("EffChange_Update",),
     0x80A4C7B0:("func_80A4C7B0",),
