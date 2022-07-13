@@ -33,9 +33,9 @@ typedef struct EnKakasi {
     /* 0x20C */ f32 unk20C; // passed to unknown function
     /* 0x210 */ f32 unk210; // used as a target for 20C to approach
     /* 0x214 */ Vec3f unk214; // copied from unk238 regularly
-    /* 0x220 */ Vec3f unk220; //EnKakasi_TeachingSong
-    /* 0x22C */ Vec3f unk22C; //actor home copied to here
-    /* 0x238 */ Vec3f unk238; //copied from D_80971E38[unk190]
+    /* 0x220 */ Vec3f unk220; // EnKakasi_TeachingSong
+    /* 0x22C */ Vec3f unk22C; // actor home copied to here
+    /* 0x238 */ Vec3f unk238; // copied from D_80971E38[unk190]
     /* 0x244 */ Vec3f unk244;
     /* 0x250 */ f32 songSummonDist;
     /* 0x254 */ ColliderCylinder collider;
