@@ -13,15 +13,15 @@ typedef void (*EnOskActionFunc)(struct EnOsk*, PlayState*);
 #define ENOSK_2 2
 
 typedef struct EnOsk {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[17];
-    /* 0x01EE */ Vec3s morphTable[17];
-    /* 0x0254 */ s16 unk_254;
-    /* 0x0256 */ s16 unk_256;
-    /* 0x0258 */ u16 unk_258;
-    /* 0x025C */ f32 unk_25C;
-    /* 0x0260 */ EnOskActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[17];
+    /* 0x1EE */ Vec3s morphTable[17];
+    /* 0x254 */ s16 unk_254;
+    /* 0x256 */ s16 unk_256;
+    /* 0x258 */ u16 unk_258;
+    /* 0x25C */ f32 unk_25C;
+    /* 0x260 */ EnOskActionFunc actionFunc;
 } EnOsk; // size = 0x264
 
 extern const ActorInit En_Osk_InitVars;

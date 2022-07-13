@@ -48,26 +48,26 @@ typedef struct {
 } BgHakuginPostUnkStruct; // size = 0x1928
 
 typedef struct {
-    /* 0x0000 */ ColliderCylinder colliders[8];
-    /* 0x0260 */ s32 count;
+    /* 0x000 */ ColliderCylinder colliders[8];
+    /* 0x260 */ s32 count;
 } BgHakuginPostColliders; // size = 0x264
 
 typedef struct BgHakuginPost {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ BgHakuginPostActionFunc actionFunc;
-    /* 0x0160 */ f32 unk_160;
-    /* 0x0164 */ f32 unk_164;
-    /* 0x0168 */ f32 unk_168;
-    /* 0x016C */ f32 unk_16C;
-    /* 0x0170 */ s32 unk_170;
-    /* 0x0174 */ s32 unk_174;
-    /* 0x0178 */ s8 unk_178;
-    /* 0x0179 */ s8 unk_179;
-    /* 0x017C */ BgHakuginPostFunc unkFunc;
-    /* 0x0180 */ s16 unk_180;
-    /* 0x0182 */ s16 unk_182;
-    /* 0x0184 */ s16 unk_184;
-    /* 0x0186 */ s16 unk_186;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ BgHakuginPostActionFunc actionFunc;
+    /* 0x160 */ f32 unk_160;
+    /* 0x164 */ f32 unk_164;
+    /* 0x168 */ f32 unk_168;
+    /* 0x16C */ f32 unk_16C;
+    /* 0x170 */ s32 unk_170;
+    /* 0x174 */ s32 unk_174;
+    /* 0x178 */ s8 unk_178;
+    /* 0x179 */ s8 unk_179;
+    /* 0x17C */ BgHakuginPostFunc unkFunc;
+    /* 0x180 */ s16 unk_180;
+    /* 0x182 */ s16 unk_182;
+    /* 0x184 */ s16 unk_184;
+    /* 0x186 */ s16 unk_186;
 } BgHakuginPost; // size = 0x188
 
 extern const ActorInit Bg_Hakugin_Post_InitVars;
