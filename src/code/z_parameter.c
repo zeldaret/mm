@@ -288,7 +288,7 @@ void Interface_ChangeHudMode(u16 hudMode) {
 /**
  * Slowly restore buttons to the hud
  */
-void Interface_RaiseButtonAlphas(PlayState* play, s16 risingAlpha) {
+void Interface_RaiseNonDisabledButtonAlphas(PlayState* play, s16 risingAlpha) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
@@ -350,7 +350,7 @@ void Interface_DimButtonAlphas(PlayState* play, s16 dimmingAlpha, s16 risingAlph
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if (gSaveContext.hudModeOverrideButton != 0) {
-        Interface_RaiseButtonAlphas(play, risingAlpha);
+        Interface_RaiseNonDisabledButtonAlphas(play, risingAlpha);
         return;
     }
 
@@ -423,7 +423,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_HEARTS:
+        case HUD_MODE_HEARTS_W_OVERWRITE:
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
             }
@@ -483,7 +483,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_A_HEARTS_MAGIC:
+        case HUD_MODE_A_HEARTS_MAGIC_W_OVERWRITE:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
@@ -504,7 +504,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_A_HEARTS_MAGIC_MINIMAP:
+        case HUD_MODE_A_HEARTS_MAGIC_MINIMAP_W_OVERWRITE:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if (interfaceCtx->aAlpha != 255) {
@@ -531,12 +531,12 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_ALL_NO_MINIMAP:
+        case HUD_MODE_ALL_NO_MINIMAP_W_DISABLED:
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
 
-            Interface_RaiseButtonAlphas(play, risingAlpha);
+            Interface_RaiseNonDisabledButtonAlphas(play, risingAlpha);
 
             if (interfaceCtx->healthAlpha != 255) {
                 interfaceCtx->healthAlpha = risingAlpha;
@@ -618,7 +618,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_HEARTS_ALT:
+        case HUD_MODE_HEARTS:
             if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
                 interfaceCtx->bAlpha = dimmingAlpha;
             }
@@ -694,7 +694,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_HEARTS_MAGIC_ALT:
+        case HUD_MODE_HEARTS_MAGIC_W_OVERWRITE:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
@@ -715,7 +715,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_14:
+        case HUD_MODE_HEARTS_MAGIC_C:
             if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
                 interfaceCtx->bAlpha = dimmingAlpha;
             }
@@ -750,7 +750,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_15:
+        case HUD_MODE_ALL_NO_MINIMAP:
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
@@ -785,7 +785,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_16:
+        case HUD_MODE_A_B_C:
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
@@ -820,7 +820,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_17:
+        case HUD_MODE_B_MINIMAP:
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
             }
@@ -855,7 +855,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_18:
+        case HUD_MODE_HEARTS_MAGIC_MINIMAP:
             if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
                 interfaceCtx->bAlpha = dimmingAlpha;
             }
@@ -890,7 +890,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_19:
+        case HUD_MODE_A_HEARTS_MAGIC_MINIMAP:
             if ((interfaceCtx->bAlpha != 0) && (interfaceCtx->bAlpha > dimmingAlpha)) {
                 interfaceCtx->bAlpha = dimmingAlpha;
             }
@@ -925,7 +925,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_20:
+        case HUD_MODE_B_MAGIC:
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
             }
@@ -960,7 +960,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_21:
+        case HUD_MODE_A_B:
             if (interfaceCtx->aAlpha != 255) {
                 interfaceCtx->aAlpha = risingAlpha;
             }
@@ -995,7 +995,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_22:
+        case HUD_MODE_A_B_HEARTS_MAGIC_MINIMAP:
             if ((interfaceCtx->cLeftAlpha != 0) && (interfaceCtx->cLeftAlpha > dimmingAlpha)) {
                 interfaceCtx->cLeftAlpha = dimmingAlpha;
             }

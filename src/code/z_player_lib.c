@@ -508,19 +508,21 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 == 1) {
         return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.curHudMode == HUD_MODE_16) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                          : ITEM_NONE;
+               : (gSaveContext.curHudMode == HUD_MODE_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+                   : ITEM_NONE;
     }
 
     if (arg2 == 2) {
         return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
                    ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.curHudMode == HUD_MODE_16) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                          : ITEM_NONE;
+               : (gSaveContext.curHudMode == HUD_MODE_A_B_C)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+                   : ITEM_NONE;
     }
 
     return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.curHudMode == HUD_MODE_16)     ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+           : (gSaveContext.curHudMode == HUD_MODE_A_B_C)  ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
                                                           : ITEM_NONE;
 }
 

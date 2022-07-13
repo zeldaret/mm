@@ -2101,7 +2101,7 @@
     0x8010EC54:("func_8010EC54",),
     0x8010EE74:("func_8010EE74",),
     0x8010EF68:("Interface_ChangeHudMode",),
-    0x8010EF9C:("Interface_RaiseButtonAlphas",),
+    0x8010EF9C:("Interface_RaiseNonDisabledButtonAlphas",),
     0x8010F0D4:("Interface_DimButtonAlphas",),
     0x8010F1A8:("Interface_UpdateHudAlphas",),
     0x80110038:("func_80110038",),
