@@ -571,7 +571,8 @@ void func_808FAF94(EnRr* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 500, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & PLAYER_STATE2_80) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & PLAYER_STATE2_80) &&
+        (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (this->actor.xzDistToPlayer < (8421.053f * this->actor.scale.x))) {
         func_808FA260(this);
     } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speedXZ == 0.0f)) {

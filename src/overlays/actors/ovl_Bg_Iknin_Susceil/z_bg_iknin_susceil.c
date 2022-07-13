@@ -224,7 +224,8 @@ void BgIkninSusceil_Update(Actor* thisx, PlayState* play) {
     BgIkninSusceil* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & PLAYER_STATE3_100) && (player->unk_B48 > 1000.0f)) {
+    if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & PLAYER_STATE3_100) &&
+        (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, play) != 0) && (this->actionFunc != func_80C0AE5C)) {
             func_800B8E58(player, NA_SE_PL_BODY_HIT);

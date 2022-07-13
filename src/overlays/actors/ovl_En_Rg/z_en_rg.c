@@ -564,8 +564,9 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } while (phi_s0 != NULL);
         }
 
-        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) && (player->stateFlags3 & PLAYER_STATE3_80000) &&
-            (player->invincibilityTimer == 0) && func_80BF4220(this, play, &player->actor)) {
+        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
+            (player->stateFlags3 & PLAYER_STATE3_80000) && (player->invincibilityTimer == 0) &&
+            func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
             this->unk_310 |= 0x800;
             D_80BF5C10 = 1;

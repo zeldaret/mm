@@ -97,7 +97,8 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     s32 bgId;
     CollisionPoly* poly;
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_80 | PLAYER_STATE1_40))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_80 | PLAYER_STATE1_40))) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;

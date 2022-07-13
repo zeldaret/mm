@@ -380,8 +380,7 @@ void func_8012301C(Player* player, PlayState* play2) {
 }
 
 FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
-    &gLinkFierceDeitySkel,  &gLinkGoronSkel, &gLinkZoraSkel,
-    &gLinkDekuSkel, &gLinkHumanSkel,
+    &gLinkFierceDeitySkel, &gLinkGoronSkel, &gLinkZoraSkel, &gLinkDekuSkel, &gLinkHumanSkel,
 };
 
 s16 D_801BFE14[][18] = {
@@ -684,9 +683,9 @@ u8 gPlayerModelTypes[][5] = {
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
 Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
-    object_link_zora_DL_00AB40,  object_link_zora_DL_00AB40,  object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
-    gLinkHumanWaistDL, gLinkHumanWaistDL,
+    object_link_boy_DL_0049E0,  object_link_boy_DL_0049E0,  object_link_goron_DL_008C00, object_link_goron_DL_008C00,
+    object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
+    gLinkHumanWaistDL,          gLinkHumanWaistDL,
 };
 
 Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
@@ -757,9 +756,9 @@ Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    gLinkHumanLeftHandDL, gLinkHumanLeftHandDL,
+    object_link_boy_DL_006EB8,  object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    gLinkHumanLeftHandDL,       gLinkHumanLeftHandDL,
 };
 
 Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
@@ -781,9 +780,9 @@ Gfx* D_801C018C[][2] = {
 };
 
 Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    gLinkHumanRightHandDL, gLinkHumanRightHandDL,
+    object_link_boy_DL_0067D8,  object_link_boy_DL_0067D8,  object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8, object_link_zora_DL_00FBB8, object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    gLinkHumanRightHandDL,      gLinkHumanRightHandDL,
 };
 
 Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
@@ -1378,9 +1377,8 @@ Gfx D_801C0860[] = {
 };
 
 TexturePtr sPlayerEyesTextures[] = {
-    gLinkHumanEyesOpenTex, gLinkHumanEyesHalfTex, gLinkHumanEyesClosedTex,
-    gLinkHumanEyesRollRightTex, gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex,
-    gLinkHumanEyesRollDownTex, object_link_child_Tex_003800,
+    gLinkHumanEyesOpenTex,     gLinkHumanEyesHalfTex,   gLinkHumanEyesClosedTex,   gLinkHumanEyesRollRightTex,
+    gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex, gLinkHumanEyesRollDownTex, object_link_child_Tex_003800,
 };
 
 TexturePtr sPlayerMouthTextures[] = {
@@ -1396,22 +1394,22 @@ typedef struct PlayerFaceIndices {
 } PlayerFaceIndices; // size = 0x02
 
 PlayerFaceIndices sPlayerFaces[] = {
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_0
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_1
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_2
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_3
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_4
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_5
-    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_6
-    { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_1 }, // PLAYER_FACE_7
-    { PLAYER_EYES_7, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_8
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_9
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_1
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_2
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_3
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_4
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_5
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_6
+    { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_1 },         // PLAYER_FACE_7
+    { PLAYER_EYES_7, PLAYER_MOUTH_OPEN },            // PLAYER_FACE_8
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },         // PLAYER_FACE_9
     { PLAYER_EYES_ROLL_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_10
-    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_11
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_12
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_1 }, // PLAYER_FACE_13
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_14
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY }, // PLAYER_FACE_15
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_11
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN },       // PLAYER_FACE_12
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_1 },            // PLAYER_FACE_13
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },         // PLAYER_FACE_14
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
@@ -2188,7 +2186,6 @@ void func_801284A0(PlayState* play, Player* player) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128640.s")
 

@@ -391,7 +391,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -404,7 +405,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -416,7 +418,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
@@ -429,7 +432,8 @@ s32 func_80B26BF8(EnKendoJs* this, PlayState* play) {
                 return 0;
             }
 
-            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
+            if ((this->unk_28E == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+                (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 this->unk_28E = 0;
                 return 1;
             }
