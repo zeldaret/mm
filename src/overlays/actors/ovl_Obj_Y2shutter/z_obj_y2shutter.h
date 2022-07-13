@@ -6,8 +6,10 @@
 struct ObjY2shutter;
 
 typedef struct ObjY2shutter {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C;
+    /* 0x15E */ u8 unk_15E;
+    /* 0x15F */ u8 unk_15F;
 } ObjY2shutter; // size = 0x160
 
 extern const ActorInit Obj_Y2shutter_InitVars;
