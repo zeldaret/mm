@@ -2014,7 +2014,7 @@ void func_801278F8(PlayState* play, Player* player) {
     if (player->unk_B60 != 0) {
         s32 phi_a0;
 
-        gSegments[0xA] = PHYSICAL_TO_VIRTUAL2(player->maskObjectSegment);
+        gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
