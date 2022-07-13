@@ -460,9 +460,9 @@ s32 func_80BD1FC8(PlayState* play, EnZov* this) {
     s32 ret;
     s32 pad;
 
-    ret = func_8013A530(play, &this->actor, 4, &this->actor.focus.pos, &this->actor.shape.rot, 10.0f, 300.0f, -1);
-    ret |= func_8013A530(play, &this->actor, 5, &this->unk_308, &this->actor.shape.rot, 50.0f, 160.0f, 0x3000);
-    ret |= func_8013A530(play, &this->actor, 6, &this->unk_314, &this->actor.shape.rot, 50.0f, 160.0f, 0x3000);
+    ret = Snap_ValidatePictograph(play, &this->actor, 4, &this->actor.focus.pos, &this->actor.shape.rot, 10.0f, 300.0f, -1);
+    ret |= Snap_ValidatePictograph(play, &this->actor, 5, &this->unk_308, &this->actor.shape.rot, 50.0f, 160.0f, 0x3000);
+    ret |= Snap_ValidatePictograph(play, &this->actor, 6, &this->unk_314, &this->actor.shape.rot, 50.0f, 160.0f, 0x3000);
     return ret;
 }
 

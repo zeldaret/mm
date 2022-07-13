@@ -15,9 +15,8 @@ void EnShn_Init(Actor* thisx, PlayState* play);
 void EnShn_Destroy(Actor* thisx, PlayState* play);
 void EnShn_Update(Actor* thisx, PlayState* play);
 void EnShn_Draw(Actor* thisx, PlayState* play);
-void func_80AE69E8(EnShn* this, PlayState* play);
+
 void func_80AE6A64(EnShn* this, PlayState* play);
-s32 func_80AE6704(EnShn* this, PlayState* play);
 
 // Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {
@@ -63,21 +62,18 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-static AnimationInfoS sAnimations[] = {
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-    { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
-};
-
-static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
-
 void func_80AE6130(EnShn* this) {
     this->skelAnime.playSpeed = this->playSpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 func_80AE615C(EnShn* this, s32 arg1) {
+    static AnimationInfoS sAnimations[] = {
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+    };
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
 
@@ -104,7 +100,7 @@ s32 EnShn_IsFacingPlayer(EnShn* this) {
     }
     if (phi_v1 == 0) {
         this->unk_2EC ^= 1;
-        this->unk_2C8 = Rand_S16Offset(0x1E, 0x1E);
+        this->unk_2C8 = Rand_S16Offset(30, 30);
     }
     if (this->unk_2EC != 0) {
         range = 120.0f;
@@ -230,6 +226,9 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
 }
 
 s32 func_80AE6704(EnShn* thisx, PlayState* play) {
+    static s32 sPictographFlags[] = {
+        PICTOGRAPH_0, PICTOGRAPH_MONKEY, PICTOGRAPH_BIG_OCTO, PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_1,
+    };
     EnShn* this = THIS;
     s32 ret = 0;
 
@@ -247,7 +246,7 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
         case 3:
         case 4:
         case 5:
-            if (func_8013A4C4(D_80AE7258[this->unk_2C6])) {
+            if (Snap_CheckFlag(sPictographFlags[this->unk_2C6])) {
                 this->unk_2C6 = 6;
                 ret = 1;
                 REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);

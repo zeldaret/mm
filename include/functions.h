@@ -2362,12 +2362,12 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-s32 func_8013A240(PlayState* play);
-void func_8013A41C(s32 flag);
-void func_8013A46C(s32 flag);
-u32 func_8013A4C4(s32 flag);
-s16 func_8013A504(s16 val);
-s32 func_8013A530(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
+s32 Snap_RecordPictographedActors(PlayState* play);
+void Snap_SetFlag(s32 flag);
+void Snap_UnsetFlag(s32 flag);
+u32 Snap_CheckFlag(s32 flag);
+s16 Snap_AbsS(s16 val);
+s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleRange);
 
 void View_ViewportToVp(Vp* dest, Viewport* src);
 void View_Init(View* view, GraphicsContext* gfxCtx);

@@ -229,6 +229,31 @@ typedef struct {
     /* 0x144 */ PictoFunc pictoFunc;
 } PictoActor;
 
+// Picto box flags
+
+typedef enum {
+// External, set and read by actors
+    /* 0x00 */ PICTOGRAPH_0,
+    /* 0x01 */ PICTOGRAPH_1,
+    /* 0x02 */ PICTOGRAPH_MONKEY,
+    /* 0x03 */ PICTOGRAPH_BIG_OCTO,
+    /* 0x04 */ PICTOGRAPH_LULU_HEAD,
+    /* 0x05 */ PICTOGRAPH_LULU_RIGHT_ARM,
+    /* 0x06 */ PICTOGRAPH_LULU_LEFT_ARM, // Need all three of these to qualify as a good picture
+    /* 0x07 */ PICTOGRAPH_SCARECROW,
+    /* 0x08 */ PICTOGRAPH_TINGLE,
+    /* 0x09 */ PICTOGRAPH_PIRATE_GOOD,
+    /* 0x0A */ PICTOGRAPH_DEKU_KING,
+    /* 0x0B */ PICTOGRAPH_PIRATE_TOO_FAR, // overlaps with PICTOGRAPH_PIRATE_GOOD, but that is checked first
+
+    // Internal, test for failures of position, size etc.
+    /* 0x3B */ PICTOGRAPH_BEHIND_COLLISION = 0x3B,
+    /* 0x3C */ PICTOGRAPH_BEHIND_BG,
+    /* 0x3D */ PICTOGRAPH_NOT_IN_VIEW,
+    /* 0x3E */ PICTOGRAPH_BAD_ANGLE,
+    /* 0x3F */ PICTOGRAPH_BAD_DISTANCE
+} PictographFlag;
+
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,

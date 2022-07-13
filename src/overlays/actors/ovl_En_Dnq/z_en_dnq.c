@@ -81,7 +81,7 @@ static AnimationInfoS D_80A5349C[] = {
 };
 
 void func_80A52530(PlayState* play, EnDnq* this) {
-    func_8013A530(play, &this->actor, 10, &this->actor.focus.pos, &this->actor.world.rot, 120.0f, 480.0f, 0x38E3);
+    Snap_ValidatePictograph(play, &this->actor, 10, &this->actor.focus.pos, &this->actor.world.rot, 120.0f, 480.0f, 0x38E3);
 }
 
 s32 func_80A5257C(EnDnq* this, s32 arg1) {

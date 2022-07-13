@@ -180,7 +180,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 void func_80AC2B4C(PlayState* play, EnBigokuta* this) {
-    func_8013A530(play, &this->actor, 3, &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
+    Snap_ValidatePictograph(play, &this->actor, 3, &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
 }
 
 s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {

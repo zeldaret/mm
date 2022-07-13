@@ -175,7 +175,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
         i++;
     }
 
-    if (this->aboveGroundStatus) {
+    if (this->aboveGroundStatus != 0) {
         if (gSaveContext.save.weekEventReg[79] & 8) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
@@ -206,7 +206,7 @@ void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
  * set by init, called... nowhere? left over from OOT?
  */
 void EnKakasi_8096F88C(PlayState* play, EnKakasi* this) {
-    func_8013A530(play, &this->actor, 0x7, &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
+    Snap_ValidatePictograph(play, &this->actor, 0x7, &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
 }
 
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {

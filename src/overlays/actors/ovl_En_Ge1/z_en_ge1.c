@@ -52,8 +52,14 @@ extern AnimationHeader D_06002B98;
 
 //! State flags
 
-//! Disable normal movement to let cutscene and pathing control it completely.
+//! Disable normal movement to let cutscene and pathing function control it completely.
 #define GERUDO_WHITE_STATE_DISABLE_MOVEMENT 8
+
+typedef enum {
+    /* 0 */ GERUDO_WHITE_HAIR_BOB,
+    /* 1 */ GERUDO_WHITE_HAIR_STRAIGHT,
+    /* 2 */ GERUDO_WHITE_HAIR_SPIKEY
+} GerudoWhiteHairstyle;
 
 typedef enum {
     /* -1 */ GERUDO_WHITE_ANIM_NONE = -1,
@@ -92,19 +98,19 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
 
     switch (GERUDO_WHITE_GET_TYPE(&this->picto.actor)) {
         default:
-            this->hairstyle = 0;
+            this->hairstyle = GERUDO_WHITE_HAIR_BOB;
             break;
 
         case 1:
-            this->hairstyle = 1;
+            this->hairstyle = GERUDO_WHITE_HAIR_STRAIGHT;
             break;
 
         case 2:
-            this->hairstyle = 2;
+            this->hairstyle = GERUDO_WHITE_HAIR_SPIKEY;
             break;
 
         case 0: // Only type used in-game
-            this->hairstyle = 0;
+            this->hairstyle = GERUDO_WHITE_HAIR_BOB;
             this->actionFunc = EnGe1_PerformCutsceneActions;
             this->picto.actor.draw = NULL;
             this->picto.actor.flags |= ACTOR_FLAG_20 | ACTOR_FLAG_10;
@@ -269,6 +275,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
             this->csAction = csAction;
 
             switch (this->csAction) {
+                // Aveil cutscene
                 case 1:
                     EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_0, ANIMMODE_LOOP, 0.0f);
                     break;
@@ -297,6 +304,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
                     Actor_MarkForDeath(&this->picto.actor);
                     break;
 
+                    // Twister cutscene
                 case 8:
                     EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_8, ANIMMODE_ONCE, 0.0f);
                     break;
@@ -370,9 +378,11 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
 
 // Pictograph related
 s32 func_80946190(PlayState* play, Actor* thisx) {
-    s32 ret = func_8013A530(play, thisx, 9, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 400.0f, -1);
+    s32 ret =
+        Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 400.0f, -1);
 
-    ret |= func_8013A530(play, thisx, 11, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 1200.0f, -1);
+    ret |=
+        Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f, 1200.0f, -1);
 
     return ret;
 }
