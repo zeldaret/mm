@@ -424,7 +424,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_HEARTS_W_OVERWRITE:
+        case HUD_MODE_HEARTS_WITH_DIM_BTN:
             // aAlpha is immediately overwritten in Interface_DimButtonAlphas
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
@@ -486,7 +486,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_A_HEARTS_MAGIC_W_OVERWRITE:
+        case HUD_MODE_A_HEARTS_MAGIC_WITH_DIM_BTN:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
@@ -508,7 +508,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_A_HEARTS_MAGIC_MINIMAP_W_OVERWRITE:
+        case HUD_MODE_A_HEARTS_MAGIC_MINIMAP_WITH_DIM_BTN:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             // aAlpha overwrites the value set in Interface_DimButtonAlphas
@@ -699,7 +699,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_MODE_HEARTS_MAGIC_W_OVERWRITE:
+        case HUD_MODE_HEARTS_MAGIC_WITH_DIM_BTN:
             Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
