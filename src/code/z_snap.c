@@ -134,8 +134,8 @@ s16 Snap_AbsS(s16 val) {
  *
  * @note It is generally not possible to recover the actual failure mode(s) from the return value)
  */
-s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax,
-                  s16 angleRange) {
+s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+                            f32 distanceMax, s16 angleRange) {
     Vec3f projectedPos;
     s16 x;
     s16 y;

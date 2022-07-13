@@ -187,8 +187,8 @@ s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {
     WaterBox* box;
     s32 bgId;
 
-    this->picto.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->picto.actor.floorPoly, &bgId, &this->picto.actor, &this->picto.actor.world.pos);
+    this->picto.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->picto.actor.floorPoly, &bgId,
+                                                                &this->picto.actor, &this->picto.actor.world.pos);
     if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->picto.actor.world.pos.x, this->picto.actor.world.pos.z,
                                 &this->picto.actor.home.pos.y, &box) ||
         (this->picto.actor.home.pos.y <= this->picto.actor.floorHeight)) {
@@ -218,7 +218,8 @@ void EnBigokuta_Idle(EnBigokuta* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->picto.actor.world.pos.y, this->picto.actor.home.pos.y - 99.0f, 2.5f);
     Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x1000);
-    if ((this->picto.actor.xzDistToPlayer < 300.0f) && ((player->actor.world.pos.y - this->picto.actor.home.pos.y) < 100.0f)) {
+    if ((this->picto.actor.xzDistToPlayer < 300.0f) &&
+        ((player->actor.world.pos.y - this->picto.actor.home.pos.y) < 100.0f)) {
         EnBigokuta_SetupRise(this, play);
     }
 }
@@ -473,7 +474,8 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
 s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
     this->picto.actor.child = SubS_FindActor(play, NULL, ACTORCAT_BG, ACTOR_BG_INGATE);
 
-    if ((this->picto.actor.child != NULL) && (Actor_XZDistanceBetweenActors(&this->picto.actor, this->picto.actor.child) < 250.0f)) {
+    if ((this->picto.actor.child != NULL) &&
+        (Actor_XZDistanceBetweenActors(&this->picto.actor, this->picto.actor.child) < 250.0f)) {
         return true;
     } else {
         return false;
@@ -527,9 +529,11 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->bodyCollider.base.acFlags & AC_ON)) {
-        this->shellCollider.dim.pos.x = Math_SinS(this->picto.actor.shape.rot.y) * -20.0f + this->picto.actor.world.pos.x;
+        this->shellCollider.dim.pos.x =
+            Math_SinS(this->picto.actor.shape.rot.y) * -20.0f + this->picto.actor.world.pos.x;
         this->shellCollider.dim.pos.y = this->picto.actor.world.pos.y;
-        this->shellCollider.dim.pos.z = Math_CosS(this->picto.actor.shape.rot.y) * -20.0f + this->picto.actor.world.pos.z;
+        this->shellCollider.dim.pos.z =
+            Math_CosS(this->picto.actor.shape.rot.y) * -20.0f + this->picto.actor.world.pos.z;
 
         this->bodyCollider.dim.pos.x = this->shellCollider.dim.pos.x;
         this->bodyCollider.dim.pos.y = this->shellCollider.dim.pos.y;
