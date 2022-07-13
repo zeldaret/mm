@@ -442,7 +442,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.unk12023 = 4;
-    Interface_ChangeAlpha(50);
+    Interface_ChangeHudMode(HUD_MODE_ALL);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -932,7 +932,7 @@ void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
-    Interface_ChangeAlpha(50);
+    Interface_ChangeHudMode(HUD_MODE_ALL);
     this->drawCursor = 0;
     EnSob1_SetupAction(this, EnSob1_BuyItemWithFanfare);
 }

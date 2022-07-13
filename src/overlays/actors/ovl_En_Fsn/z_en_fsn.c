@@ -393,7 +393,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.unk12023 = 4;
-    Interface_ChangeAlpha(50);
+    Interface_ChangeHudMode(HUD_MODE_ALL);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -1161,7 +1161,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             Actor_PickUp(&this->actor, play, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.unk12023 = 4;
-            Interface_ChangeAlpha(50);
+            Interface_ChangeHudMode(HUD_MODE_ALL);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
             item = this->items[this->cursorIdx];

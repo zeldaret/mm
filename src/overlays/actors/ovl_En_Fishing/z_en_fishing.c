@@ -5163,7 +5163,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sCameraAt.y = camera->at.y;
             sCameraAt.z = camera->at.z;
             D_8090CD4C = 2;
-            Interface_ChangeAlpha(12);
+            Interface_ChangeHudMode(HUD_MODE_A_B_MINIMAP);
             D_80911F4C = 0.0f;
             // fallthrough
 

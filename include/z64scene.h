@@ -272,7 +272,7 @@ typedef struct {
 } Room; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Room currRoom;
+    /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page

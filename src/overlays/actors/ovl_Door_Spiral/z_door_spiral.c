@@ -120,7 +120,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, PlayState* play) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.curRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }

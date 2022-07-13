@@ -536,6 +536,34 @@ typedef struct {
     /* 0x2CA */ s16 unk_2CA;
 } PauseContext; // size = 0x2D0
 
+typedef enum {
+    /* 0 */ HUD_MODE_IDLE,
+    /* 1 */ HUD_MODE_OFF,
+    /* 2 */ HUD_MODE_OFF_ALT,
+    /* 3 */ HUD_MODE_HEARTS, // Uses Interface_DimButtonAlphas so gives the opportunity to overwrite
+    /* 4 */ HUD_MODE_A,
+    /* 5 */ HUD_MODE_A_HEARTS_MAGIC,
+    /* 6 */ HUD_MODE_A_HEARTS_MAGIC_MINIMAP,
+    /* 7 */ HUD_MODE_ALL_NO_MINIMAP,
+    /* 8 */ HUD_MODE_B,
+    /* 9 */ HUD_MODE_HEARTS_MAGIC, // Sets all alpha's directly, no opportunity to overwrite
+    /* 10 */ HUD_MODE_B_TOGGLE,
+    /* 11 */ HUD_MODE_HEARTS_ALT, // Sets all alpha's directly, no opportunity to overwrite
+    /* 12 */ HUD_MODE_A_B_MINIMAP,
+    /* 13 */ HUD_MODE_HEARTS_MAGIC_ALT, // Uses Interface_DimButtonAlphas so gives the opportunity to overwrite
+    /* 14 */ HUD_MODE_14,
+    /* 15 */ HUD_MODE_15,
+    /* 16 */ HUD_MODE_16,
+    /* 17 */ HUD_MODE_17,
+    /* 18 */ HUD_MODE_18,
+    /* 19 */ HUD_MODE_19,
+    /* 20 */ HUD_MODE_20,
+    /* 21 */ HUD_MODE_21,
+    /* 22 */ HUD_MODE_22,
+    /* 50 */ HUD_MODE_ALL = 50,
+    /* 52 */ HUD_MODE_OFF_NOW = 52
+} HudMode;
+
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ Vtx* actionVtx;

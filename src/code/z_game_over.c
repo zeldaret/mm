@@ -57,10 +57,10 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-            gSaveContext.unk_3F1E = 0;
-            gSaveContext.unk_3F20 = 0;
-            gSaveContext.unk_3F22 = 0;
-            gSaveContext.unk_3F24 = 0;
+            gSaveContext.hudModeOverrideButton = 0;
+            gSaveContext.targetHudMode = HUD_MODE_IDLE;
+            gSaveContext.curHudMode = HUD_MODE_IDLE;
+            gSaveContext.hudModeCounter = 0;
             Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
             Rumble_Request(0.0f, 126, 124, 63);

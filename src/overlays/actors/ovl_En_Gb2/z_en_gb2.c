@@ -806,11 +806,11 @@ void func_80B110F8(EnGb2* this, PlayState* play) {
 void func_80B111AC(EnGb2* this, PlayState* play) {
     s32 index;
 
-    if (play->roomCtx.currRoom.num == 1) {
+    if (play->roomCtx.curRoom.num == 1) {
         return;
     }
 
-    switch (play->roomCtx.currRoom.num) {
+    switch (play->roomCtx.curRoom.num) {
         case 2:
             index = 1;
             break;
@@ -837,7 +837,7 @@ void func_80B111AC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B11268(EnGb2* this, PlayState* play) {
-    if (play->roomCtx.currRoom.num == 1) {
+    if (play->roomCtx.curRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
         if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) && Flags_GetClear(play, 5)) {

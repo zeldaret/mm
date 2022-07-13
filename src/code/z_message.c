@@ -382,7 +382,7 @@ void func_80151A68(PlayState* play, u16 textId) {
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
-        Interface_ChangeAlpha(1);
+        Interface_ChangeHudMode(HUD_MODE_OFF);
     }
 }
 
