@@ -1540,7 +1540,7 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
