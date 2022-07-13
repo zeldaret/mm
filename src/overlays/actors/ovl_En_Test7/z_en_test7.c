@@ -398,7 +398,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     this->unk_1E94 = player->actor.scale.z;
 
     func_80183430(&this->unk_18CC, &gameplay_keep_Blob_085640, &gameplay_keep_Blob_083534, this->unk_18FC,
-                  this->unk_1BA8, 0);
+                  this->unk_1BA8, NULL);
     func_801834A8(&this->unk_18CC, &gameplay_keep_Blob_083534);
     func_80AF0838(this->unk_15C);
     func_80AF1730(&this->unk_148);
