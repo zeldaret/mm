@@ -995,7 +995,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
-        if (!(player->stateFlags1 & 0x800000)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
     } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
