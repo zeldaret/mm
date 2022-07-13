@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -1384,7 +1385,7 @@ TexturePtr sPlayerEyesTextures[] = {
 TexturePtr sPlayerMouthTextures[] = {
     gLinkHumanMouthClosedTex,
     object_link_child_Tex_004400,
-    gLinkHumanMouthOpenTex,
+    gLinkHumanMouthAngryTex,
     gLinkHumanMouthHappyTex,
 };
 
@@ -1402,13 +1403,13 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_5
     { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_6
     { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_1 },         // PLAYER_FACE_7
-    { PLAYER_EYES_7, PLAYER_MOUTH_OPEN },            // PLAYER_FACE_8
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },         // PLAYER_FACE_9
+    { PLAYER_EYES_7, PLAYER_MOUTH_ANGRY },            // PLAYER_FACE_8
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },         // PLAYER_FACE_9
     { PLAYER_EYES_ROLL_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_10
     { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_11
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN },       // PLAYER_FACE_12
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_ANGRY },       // PLAYER_FACE_12
     { PLAYER_EYES_HALF, PLAYER_MOUTH_1 },            // PLAYER_FACE_13
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },         // PLAYER_FACE_14
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },         // PLAYER_FACE_14
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 

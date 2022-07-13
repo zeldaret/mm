@@ -201,7 +201,7 @@ typedef enum {
 typedef enum {
     /* 0 */ PLAYER_MOUTH_CLOSED,
     /* 1 */ PLAYER_MOUTH_1,
-    /* 2 */ PLAYER_MOUTH_OPEN,
+    /* 2 */ PLAYER_MOUTH_ANGRY,
     /* 3 */ PLAYER_MOUTH_HAPPY
 } PlayerMouthIndices;
 
@@ -228,14 +228,14 @@ typedef enum {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
     /* 0x02 */ PLAYER_LIMB_WAIST,
-    /* 0x03 */ PLAYER_LIMB_LOWER,
+    /* 0x03 */ PLAYER_LIMB_LOWER_ROOT,
     /* 0x04 */ PLAYER_LIMB_R_THIGH,
     /* 0x05 */ PLAYER_LIMB_R_SHIN,
     /* 0x06 */ PLAYER_LIMB_R_FOOT,
     /* 0x07 */ PLAYER_LIMB_L_THIGH,
     /* 0x08 */ PLAYER_LIMB_L_SHIN,
     /* 0x09 */ PLAYER_LIMB_L_FOOT,
-    /* 0x0A */ PLAYER_LIMB_UPPER,
+    /* 0x0A */ PLAYER_LIMB_UPPER_ROOT,
     /* 0x0B */ PLAYER_LIMB_HEAD,
     /* 0x0C */ PLAYER_LIMB_HAT,
     /* 0x0D */ PLAYER_LIMB_COLLAR,

@@ -11,10 +11,10 @@
 
         <Texture Name="gLinkHumanMouthClosedTex" OutName="mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x4000" TlutOffset="0x5200" />
         <Texture Name="object_link_child_Tex_004400" OutName="tex_004400" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
-        <Texture Name="gLinkHumanMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
+        <Texture Name="gLinkHumanMouthAngryTex" OutName="mouth_angry" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
         <Texture Name="gLinkHumanMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
 
-        <Texture Name="gLinkHumanSkinTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
+        <Texture Name="gLinkHumanSkinTLUT" OutName="skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
         <Texture Name="gLinkHumanMouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
 
         <Texture Name="object_link_child_Tex_005400" OutName="tex_005400" Format="rgba16" Width="8" Height="16" Offset="0x5400" />
@@ -156,14 +156,14 @@
 
         <Limb Name="gLinkHumanRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_ROOT" Offset="0x1E0A0" />
         <Limb Name="gLinkHumanWaistLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_WAIST" Offset="0x1E0B0" />
-        <Limb Name="gLinkHumanLowerLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LOWER" Offset="0x1E0C0" />
+        <Limb Name="gLinkHumanLowerRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LOWER_ROOT" Offset="0x1E0C0" />
         <Limb Name="gLinkHumanRightThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_THIGH" Offset="0x1E0D0" />
         <Limb Name="gLinkHumanRightShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_SHIN" Offset="0x1E0E0" />
         <Limb Name="gLinkHumanRightFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_FOOT" Offset="0x1E0F0" />
         <Limb Name="gLinkHumanLeftThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_THIGH" Offset="0x1E100" />
         <Limb Name="gLinkHumanLeftShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_SHIN" Offset="0x1E110" />
         <Limb Name="gLinkHumanLeftFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_FOOT" Offset="0x1E120" />
-        <Limb Name="gLinkHumanUpperLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_UPPER" Offset="0x1E130" />
+        <Limb Name="gLinkHumanUpperRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_UPPER_ROOT" Offset="0x1E130" />
         <Limb Name="gLinkHumanHeadLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_HEAD" Offset="0x1E140" />
         <Limb Name="gLinkHumanHatLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_HAT" Offset="0x1E150" />
         <Limb Name="gLinkHumanCollarLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_COLLAR" Offset="0x1E160" />
