@@ -135,7 +135,7 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
     this->unk11F02 = 30;
     this->unk11F00 = this->state = MAG_STATE_INITIAL;
 
-    if (gSaveContext.hudModeOverrideButton != 0) {
+    if (gSaveContext.hudModeDimOnlyDisabledButtons) {
         this->mainTitleAlpha = 210;
         this->unk11F32 = 255;
         this->copyrightAlpha = 255;
@@ -158,7 +158,7 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
         this->displayEffectEnvColor[1] = 255;
         this->displayEffectEnvColor[2] = 155;
 
-        gSaveContext.hudModeOverrideButton = 0;
+        gSaveContext.hudModeDimOnlyDisabledButtons = false;
         this->state = MAG_STATE_FADE_IN_MASK;
         sInputDelayTimer = 20;
         gSaveContext.fadeDuration = 1;

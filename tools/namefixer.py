@@ -620,8 +620,8 @@ wordReplace = {
     "actor.yDistToWater": "actor.depthInWater",
     "actor.yDistToPlayer": "actor.playerHeightRel",
 
-    "gSaveContext.unk_3F1E": "gSaveContext.hudModeOverrideButton",
-    "gSaveContext.unk_3F20": "gSaveContext.targetHudMode",
+    "gSaveContext.unk_3F1E": "gSaveContext.hudModeDimOnlyDisabledButtons",
+    "gSaveContext.unk_3F20": "gSaveContext.requestHudMode",
     "gSaveContext.unk_3F22": "gSaveContext.curHudMode",
     "gSaveContext.unk_3F24": "gSaveContext.hudModeCounter",
     "gSaveContext.unk_3F26": "gSaveContext.prevHudMode",
