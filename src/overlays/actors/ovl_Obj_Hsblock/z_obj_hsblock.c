@@ -45,9 +45,9 @@ static InitChainEntry sInitChain[] = {
 };
 
 static CollisionHeader* sColHeaders[] = {
-    &object_d_hsblock_Colheader_000730,
-    &object_d_hsblock_Colheader_000730,
-    &object_d_hsblock_Colheader_000578,
+    &gHookshotPostCol,
+    &gHookshotPostCol,
+    &gHookshotTargetCol,
 };
 
 static Gfx* sDisplayLists[] = { gHookshotPostDL, gHookshotPostDL, gHookshotTargetDL };
