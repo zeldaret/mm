@@ -295,7 +295,8 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
     this->timer--;
 
     if ((this->timer == 0) || (this->collider.base.atFlags & AT_HIT) || (Player_GetMask(play) == PLAYER_MASK_STONE) ||
-        (this->actor.bgCheckFlags & 1) || (player->stateFlags1 & 0x800000) || (this->actor.depthInWater > -40.0f)) {
+        (this->actor.bgCheckFlags & 1) || (player->stateFlags1 & PLAYER_STATE1_800000) ||
+        (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_ATTACK);
