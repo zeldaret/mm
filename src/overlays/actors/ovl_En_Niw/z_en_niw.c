@@ -352,7 +352,8 @@ void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+                     -10.0f);
     this->niwState = NIW_STATE_IDLE;
     this->actionFunc = EnNiw_Idle;
 }
@@ -656,7 +657,8 @@ void EnNiw_CuccoStorm(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+                     -10.0f);
     this->isRunningRight = Rand_ZeroFloat(1.99f);
     this->niwState = NIW_STATE_RUNNING;
     this->actionFunc = EnNiw_RunAway;

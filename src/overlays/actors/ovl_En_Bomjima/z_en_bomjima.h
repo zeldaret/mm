@@ -11,7 +11,7 @@ typedef void (*EnBomjimaActionFunc)(struct EnBomjima*, PlayState*);
 #define ENBOMJIMA_GET_F(thisx) ((thisx)->params & 0xF)
 
 typedef struct EnBomjima {
-    /* 0x0000 */ Actor actor;
+    /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[21];
     /* 0x206 */ Vec3s morphTable[21];

@@ -426,7 +426,7 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gMoveWd(&dl[1], 6, 32, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
+    gSPSegment(&dl[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
     gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);
     gDPSetEnvColor(&dl[3], 255, 0, 0, 0);
     gSPDisplayList(&dl[4], &gGameplayKeepDrawFlameDL);

@@ -12,7 +12,7 @@
 #define THIS ((ObjHamishi*)thisx)
 
 void ObjHamishi_Init(Actor* thisx, PlayState* play);
-void ObjHamishi_Destroy(Actor* thisx, PlayState* play);
+void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
 void ObjHamishi_Update(Actor* thisx, PlayState* play);
 void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
@@ -192,8 +192,11 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-void ObjHamishi_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyCylinder(play, &THIS->collider);
+void ObjHamishi_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjHamishi* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjHamishi_Update(Actor* thisx, PlayState* play) {
