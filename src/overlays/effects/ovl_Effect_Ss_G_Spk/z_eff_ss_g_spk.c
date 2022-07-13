@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_g_spk.c
  * Overlay: ovl_Effect_Ss_G_Spk
- * Description:
+ * Description: Sparks
  */
 
 #include "z_eff_ss_g_spk.h"
@@ -75,14 +75,14 @@ u32 EffectSsGSpk_Init(PlayState* play, u32 index, EffectSs* this, void* initPara
 }
 
 void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    s32 pad;
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfResult;
     MtxF mfTransBillboard;
     Mtx* mtx;
     f32 scale;
-    s32 pad;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
@@ -107,7 +107,6 @@ void EffectSsGSpk_Draw(PlayState* play, u32 index, EffectSs* this) {
 }
 
 void EffectSsGSpk_Update(PlayState* play, u32 index, EffectSs* this) {
-
     this->accel.x = (Rand_ZeroOne() - 0.5f) * 3.0f;
     this->accel.z = (Rand_ZeroOne() - 0.5f) * 3.0f;
 
