@@ -834,7 +834,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 func_8019F208();
                 gSaveContext.save.weekEventReg[31] |= 0x80;
                 play->nextEntranceIndex = 0x64B0;
-                if (player->stateFlags1 & 0x800000) {
+                if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
                 }
                 play->unk_1887F = 0x40;
