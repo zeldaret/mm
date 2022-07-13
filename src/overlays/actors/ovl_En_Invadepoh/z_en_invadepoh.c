@@ -3692,17 +3692,14 @@ void func_80B4BA84(Actor* thisx, PlayState* play) {
         sp2C = this->unk3BC;
         this->unk3BC = func_80B44234(this, &D_80B5040C->actor.world.pos);
         if (sp2C != this->unk3BC) {
-            phi_v0 = this->pathIndex;
             phi_v0 = this->unk3BC - this->pathIndex;
-            temp_v0_3 = phi_v0;
-            if (temp_v0_3 < 0) {
+            if (phi_v0 < 0) {
                 phi_v0 += this->endPoint;
             }
 
-            temp_v0_3 = this->endPoint >> 1;
-            if (temp_v0_3 < phi_v0) {
+            if ((this->endPoint >> 1) < phi_v0) {
                 this->direction = DIRECTION_BACKWARD;
-            } else if (phi_v0 < temp_v0_3) {
+            } else if (phi_v0 < (this->endPoint >> 1)) {
                 this->direction = DIRECTION_FORWARD;
             }
         }
