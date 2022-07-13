@@ -105,8 +105,9 @@ void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnSth2_Draw(Actor* thisx, PlayState* play2) {
-    static Color_RGB8 sEnvColors[] = { { 190, 110, 0 },  { 0, 180, 110 },   { 0, 255, 80 },
-                                       { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 } };
+    static Color_RGB8 sEnvColors[] = {
+        { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
+    };
     PlayState* play = play2;
     EnSth2* this = THIS;
 
