@@ -69,8 +69,8 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
     this->csAction = 0x63;
     this->unk_262 = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_Init(play, &this->skelAnime, (SkeletonHeader*)&gameplay_keep_Skel_02AF58, &gameplay_keep_Anim_029140,
-                   this->jointTable, this->morphTable, 7);
+    SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
+                   this->morphTable, 7);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 15.0f);
     DmChar04_ChangeAnim(&this->skelAnime, sAnimations, 0);
     Actor_SetScale(&this->actor, 0.01f);
