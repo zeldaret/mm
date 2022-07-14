@@ -805,7 +805,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
 Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0049E0,  object_link_boy_DL_0049E0,  object_link_goron_DL_008C00, object_link_goron_DL_008C00,
+    gLinkFierceDeityWaistDL,    gLinkFierceDeityWaistDL,    object_link_goron_DL_008C00, object_link_goron_DL_008C00,
     object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
     gLinkHumanWaistDL,          gLinkHumanWaistDL,
 };
@@ -872,25 +872,32 @@ Gfx* D_801C00D4[][2] = {
 };
 
 Gfx* gPlayerLeftHand3DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0080F0,   object_link_boy_DL_0080F0,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_01DCD8, object_link_child_DL_01DCD8,
+    gLinkFierceDeityLeftHandHoldingSwordDL,
+    gLinkFierceDeityLeftHandHoldingSwordDL,
+    object_link_goron_DL_00A500,
+    object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0,
+    object_link_zora_DL_00FDF0,
+    object_link_nuts_DL_003BC0,
+    object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DCD8,
+    object_link_child_DL_01DCD8,
 };
 
 Gfx* gPlayerLeftHand0DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,  object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     gLinkHumanLeftHandDL,       gLinkHumanLeftHandDL,
 };
 
 Gfx* gPlayerLeftHand1DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
+    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
     object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
 };
 
 Gfx* gPlayerLeftHand2DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_01DC68, object_link_child_DL_01DC68,
 };
@@ -902,37 +909,37 @@ Gfx* D_801C018C[][2] = {
 };
 
 Gfx* gPlayerRightHand6DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,  object_link_boy_DL_0067D8,  object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8, object_link_zora_DL_00FBB8, object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    gLinkHumanRightHandDL,      gLinkHumanRightHandDL,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    gLinkHumanRightHandDL,       gLinkHumanRightHandDL,
 };
 
 Gfx* gPlayerRightHand7DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
     object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_00E738, object_link_child_DL_00E738,
 };
 
 Gfx* gPlayerRightHand9DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_01DD18, object_link_child_DL_01DD18,
 };
 
 Gfx* gPlayerRightHand10DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_00ED18, object_link_child_DL_00ED18,
 };
 
 Gfx* gPlayerRightHand11DLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
 };
 
 Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,      object_link_boy_DL_006EB8,     gLinkGoronLeftHandHoldBottleDL,
+    gLinkFierceDeityLeftHandDL,     gLinkFierceDeityLeftHandDL,    gLinkGoronLeftHandHoldBottleDL,
     gLinkGoronLeftHandHoldBottleDL, gLinkZoraLeftHandHoldBottleDL, gLinkZoraLeftHandHoldBottleDL,
     object_link_nuts_DL_003BC0,     object_link_nuts_DL_003BC0,    gLinkHumanLeftHandHoldBottleDL,
     gLinkHumanLeftHandHoldBottleDL,
@@ -941,22 +948,22 @@ Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
 /* DLists groups end */
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006C38,  object_link_goron_DL_00A220, object_link_zora_DL_00C020,
-    object_link_nuts_DL_003AB8, gLinkHumanLeftForearmDL,
+    gLinkFierceDeityLeftForearmDL, object_link_goron_DL_00A220, object_link_zora_DL_00C020,
+    object_link_nuts_DL_003AB8,    gLinkHumanLeftForearmDL,
 };
 
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_zora_DL_00C270,
+    gLinkFierceDeityLeftHandDL, object_link_goron_DL_00A500, object_link_zora_DL_00C270,
     object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
 };
 
 Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006410,  object_link_goron_DL_009A98, object_link_zora_DL_00B820,
-    object_link_nuts_DL_0036B0, gLinkHumanRightShoulderDL,
+    gLinkFierceDeityRightShoulderDL, object_link_goron_DL_009A98, object_link_zora_DL_00B820,
+    object_link_nuts_DL_0036B0,      gLinkHumanRightShoulderDL,
 };
 
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,
+    gLinkFierceDeityRightHandDL,
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
     object_link_zora_DL_00FBB8,
@@ -965,7 +972,7 @@ Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
 };
 
 Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,
+    gLinkFierceDeityRightHandDL,
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
     object_link_zora_DL_00FBB8,
