@@ -77,7 +77,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.home.rot.z = 0;
     this->dyna.actor.flags |= ACTOR_FLAG_10000000;
 
-    switch (this->dyna.actor.params & 0xF) {
+    switch (BGCRACEMOVEBG_GET_F(&this->dyna.actor)) {
         case 0:
         case 2:
             for (j = 0; j < D_80A710A4; j++) {
@@ -116,10 +116,10 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
 s32 func_80A7090C(PlayState* play) {
     u32 pad;
     u32 returnVal = 0;
-    Actor* tempActor = SubS_FindActor(play, NULL, 4U, 0x17F);
+    Actor* tempActor = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNO);
 
     if (tempActor != NULL) {
-        if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_3F80(tempActor)) != 0) {
+        if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_3F80(tempActor))) {
             returnVal = 2;
         } else {
             returnVal = 1;
@@ -136,7 +136,7 @@ void func_80A70970(BgCraceMovebg* this, PlayState* play) {
 }
 
 void func_80A7099C(BgCraceMovebg* this, PlayState* play) {
-    if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor)) != 0) {
+    if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor))) {
         func_80A709E4(this, play);
     }
 }
@@ -167,7 +167,7 @@ void BgCraceMovebg_Destroy(Actor* thisx, PlayState* play) {
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if (!(this->unk170 & 0x8)) {
-        switch (this->dyna.actor.params & 0xF) {
+        switch (BGCRACEMOVEBG_GET_F(&this->dyna.actor)) {
             case 0:
             case 2:
                 Flags_UnsetSwitch(play, BGCRACEMOVEBG_GET_7F0(thisx));
@@ -186,11 +186,11 @@ void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 tempRot;
 
-    switch (this->dyna.actor.params & 0xF) {
+    switch (BGCRACEMOVEBG_GET_F(&this->dyna.actor)) {
         case 0:
         case 2:
             tempRot = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.home.rot.y;
-            if ((tempRot >= -0x4000) && (tempRot < 0x4001)) {
+            if ((tempRot >= -0x4000) && (tempRot <= 0x4000)) {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y;
             } else {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y + 0x8000;
@@ -207,7 +207,7 @@ void func_80A70C04(BgCraceMovebg* this, PlayState* play) {
     Vec3f intersect;
     Vec3f diff;
 
-    if (((this->dyna.actor.params & 0xF) != 2) &&
+    if ((BGCRACEMOVEBG_GET_F(&this->dyna.actor) != 2) &&
         (SubS_LineSegVsPlane(&this->dyna.actor.home.pos, &this->dyna.actor.home.rot, D_80A710AC, &this->unk188,
                              &player->bodyPartsPos[0], &intersect)) &&
         (Matrix_RotateYS(-this->dyna.actor.home.rot.y, MTXMODE_NEW),
@@ -237,7 +237,7 @@ void func_80A70DA8(BgCraceMovebg* this, PlayState* play) {
     if (this->unk170 & 1) {
         func_80A70E2C(this, play);
     }
-    if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor)) != 0) {
+    if (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor))) {
         func_80A70F14(this, play);
     }
 }
@@ -271,8 +271,8 @@ void func_80A70F14(BgCraceMovebg* this, PlayState* play) {
 void func_80A70F2C(BgCraceMovebg* this, PlayState* play) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->unk160;
     func_80A70C04(this, play);
-    if (Math_StepToF(&this->unk160, 0.0f, 1.0f) != 0) {
-        if (!(this->unk170 & 2) && (Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor) + 1) == 0)) {
+    if (Math_StepToF(&this->unk160, 0.0f, 1.0f)) {
+        if (!(this->unk170 & 2) && !Flags_GetSwitch(play, BGCRACEMOVEBG_GET_7F0(&this->dyna.actor) + 1)) {
             play->unk_18845 = 1;
             func_80169FDC(&play->state);
             play_sound(NA_SE_OC_ABYSS);
