@@ -12,7 +12,7 @@ typedef struct BgHakaBombwall {
     /* 0x15C */ ColliderCylinder unk15C;
     /* 0x1A8 */ BgHakaBombwallActionFunc actionFunc;
     /* 0x1AC */ s8 unk1AC;
-    /* 0x1AD */ char unk_1AC[0x3];
+    /* 0x1AD */ UNK_TYPE1 unk_1AC[0x3];
 } BgHakaBombwall; // size = 0x1B0
 
 extern const ActorInit Bg_Haka_Bombwall_InitVars;
