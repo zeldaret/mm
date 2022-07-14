@@ -131,16 +131,16 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play) {
 
 void EnGe1_SetAnimation(EnGe1* this, s16 index, u8 mode, f32 morphFrames) {
     static AnimationHeader* sAnimations[] = {
-        &gGerudoWhiteArmsFoldedAnim, // GERUDO_WHITE_ANIM_ARMS_FOLDED,
-        &gGerudoWhiteUnfoldingArmsAnim, // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
+        &gGerudoWhiteArmsFoldedAnim,        // GERUDO_WHITE_ANIM_ARMS_FOLDED,
+        &gGerudoWhiteUnfoldingArmsAnim,     // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
         &gGerudoWhiteStandingHeadBowedAnim, // GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED,
-        &gGerudoWhiteStiffeningAnim, // GERUDO_WHITE_ANIM_STIFFENING,
-        &gGerudoWhiteStiffShiveringAnim, // GERUDO_WHITE_ANIM_STIFF_SHIVERING,
-        &gGerudoWhiteTrudgingOffAnim, // GERUDO_WHITE_ANIM_TRUDGING_OFF,
-        &gGerudoWhiteExcitedClappingAnim, // GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
-        &gGerudoWhiteSaluteAnim, // GERUDO_WHITE_ANIM_SALUTE,
-        &gGerudoWhiteGreatBayCutsceneAnim, // GERUDO_WHITE_ANIM_LEADING_BOAT,
-        &gGerudoWhiteGreatBayCutsceneAnim, // GERUDO_WHITE_ANIM_BLOWN_AWAY,
+        &gGerudoWhiteStiffeningAnim,        // GERUDO_WHITE_ANIM_STIFFENING,
+        &gGerudoWhiteStiffShiveringAnim,    // GERUDO_WHITE_ANIM_STIFF_SHIVERING,
+        &gGerudoWhiteTrudgingOffAnim,       // GERUDO_WHITE_ANIM_TRUDGING_OFF,
+        &gGerudoWhiteExcitedClappingAnim,   // GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
+        &gGerudoWhiteSaluteAnim,            // GERUDO_WHITE_ANIM_SALUTE,
+        &gGerudoWhiteGreatBayCutsceneAnim,  // GERUDO_WHITE_ANIM_LEADING_BOAT,
+        &gGerudoWhiteGreatBayCutsceneAnim,  // GERUDO_WHITE_ANIM_BLOWN_AWAY,
     };
 
     // The 8/9 cases are single frames of an "animation" used as static poses.
