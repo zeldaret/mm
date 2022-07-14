@@ -111,9 +111,9 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, PlayState* play) {
             pos.z += this->dyna.actor.world.pos.z;
 
             if (Rand_Next() % 4 == 0) {
-                phi_s0 = 0x20;
+                phi_s0 = 32;
             } else {
-                phi_s0 = 0x40;
+                phi_s0 = 64;
             }
 
             if (k < 2 || (s32)Rand_Next() > 0) {
