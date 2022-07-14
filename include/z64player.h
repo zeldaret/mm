@@ -195,15 +195,17 @@ typedef enum {
     /* 4 */ PLAYER_EYES_ROLL_LEFT,
     /* 5 */ PLAYER_EYES_ROLL_UP,
     /* 6 */ PLAYER_EYES_ROLL_DOWN,
-    /* 7 */ PLAYER_EYES_7
-} PlayerEyesIndices;
+    /* 7 */ PLAYER_EYES_7,
+    /* 8 */ PLAYER_EYES_MAX
+} PlayerEyeIndex;
 
 typedef enum {
     /* 0 */ PLAYER_MOUTH_CLOSED,
     /* 1 */ PLAYER_MOUTH_TEETH,
     /* 2 */ PLAYER_MOUTH_ANGRY,
-    /* 3 */ PLAYER_MOUTH_HAPPY
-} PlayerMouthIndices;
+    /* 3 */ PLAYER_MOUTH_HAPPY,
+    /* 4 */ PLAYER_MOUTH_MAX
+} PlayerMouthIndex;
 
 typedef enum {
     /*  0 */ PLAYER_FACE_0,
@@ -222,7 +224,7 @@ typedef enum {
     /* 13 */ PLAYER_FACE_13,
     /* 14 */ PLAYER_FACE_14,
     /* 15 */ PLAYER_FACE_15
-} PlayerFaceExpression;
+} PlayerFacialExpression;
 
 typedef enum {
     /* 0x00 */ PLAYER_LIMB_NONE,
