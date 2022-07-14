@@ -288,7 +288,7 @@ void Interface_SetHudVisibility(u16 hudVisibility) {
 /**
  * Slowly restore buttons to the hud unless a button is disabled
  */
-void Interface_RaiseNonDisabledButtonAlphas(PlayState* play, s16 risingAlpha) {
+void Interface_UpdateButtonAlphasByStatus(PlayState* play, s16 risingAlpha) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     if ((gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) || (gSaveContext.unk_1015 == ITEM_NONE)) {
@@ -344,14 +344,14 @@ void Interface_RaiseNonDisabledButtonAlphas(PlayState* play, s16 risingAlpha) {
 
 /**
  * Slowly diminish button alphas on the hud
- * If (gSaveContext.hudVisibilityDimOnlyDisabledButtons), then only dim disabled buttons,
- * and raise active button alphas instead
+ * If (gSaveContext.hudVisibilityForceButtonAlphasByStatus), then instead update buttons
+ * depending on button status
  */
-void Interface_DimButtonAlphas(PlayState* play, s16 dimmingAlpha, s16 risingAlpha) {
+void Interface_UpdateButtonAlphas(PlayState* play, s16 dimmingAlpha, s16 risingAlpha) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    if (gSaveContext.hudVisibilityDimOnlyDisabledButtons) {
-        Interface_RaiseNonDisabledButtonAlphas(play, risingAlpha);
+    if (gSaveContext.hudVisibilityForceButtonAlphasByStatus) {
+        Interface_UpdateButtonAlphasByStatus(play, risingAlpha);
         return;
     }
 
@@ -424,13 +424,13 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_VISIBILITY_HEARTS_WITH_DIM_BTN:
-            // aAlpha is immediately overwritten in Interface_DimButtonAlphas
+        case HUD_VISIBILITY_HEARTS_WITH_BTN_STATUS:
+            // aAlpha is immediately overwritten in Interface_UpdateButtonAlphas
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
             }
 
-            Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha + 0);
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha + 0);
 
             if ((interfaceCtx->magicAlpha != 0) && (interfaceCtx->magicAlpha > dimmingAlpha)) {
                 interfaceCtx->magicAlpha = dimmingAlpha;
@@ -486,14 +486,14 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_DIM_BTN:
-            Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
+        case HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_BTN_STATUS:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
 
-            // aAlpha overwrites the value set in Interface_DimButtonAlphas
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
             if (interfaceCtx->aAlpha != 255) {
                 interfaceCtx->aAlpha = risingAlpha;
             }
@@ -508,10 +508,10 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_DIM_BTN:
-            Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
+        case HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_BTN_STATUS:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
 
-            // aAlpha overwrites the value set in Interface_DimButtonAlphas
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
             if (interfaceCtx->aAlpha != 255) {
                 interfaceCtx->aAlpha = risingAlpha;
             }
@@ -541,7 +541,7 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
 
-            Interface_RaiseNonDisabledButtonAlphas(play, risingAlpha);
+            Interface_UpdateButtonAlphasByStatus(play, risingAlpha);
 
             if (interfaceCtx->healthAlpha != 255) {
                 interfaceCtx->healthAlpha = risingAlpha;
@@ -699,14 +699,14 @@ void Interface_UpdateHudAlphas(PlayState* play, s16 dimmingAlpha) {
 
             break;
 
-        case HUD_VISIBILITY_HEARTS_MAGIC_WITH_DIM_BTN:
-            Interface_DimButtonAlphas(play, dimmingAlpha, risingAlpha);
+        case HUD_VISIBILITY_HEARTS_MAGIC_WITH_BTN_STATUS:
+            Interface_UpdateButtonAlphas(play, dimmingAlpha, risingAlpha);
 
             if ((interfaceCtx->minimapAlpha != 0) && (interfaceCtx->minimapAlpha > dimmingAlpha)) {
                 interfaceCtx->minimapAlpha = dimmingAlpha;
             }
 
-            // aAlpha overwrites the value set in Interface_DimButtonAlphas
+            // aAlpha overwrites the value set in Interface_UpdateButtonAlphas
             if ((interfaceCtx->aAlpha != 0) && (interfaceCtx->aAlpha > dimmingAlpha)) {
                 interfaceCtx->aAlpha = dimmingAlpha;
             }

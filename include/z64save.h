@@ -24,6 +24,34 @@ typedef enum RespawnMode {
 
 #define SAVE_BUFFER_SIZE 0x4000
 
+typedef enum {
+    /*  0 */ HUD_VISIBILITY_IDLE,
+    /*  1 */ HUD_VISIBILITY_NONE,
+    /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
+    /*  3 */ HUD_VISIBILITY_HEARTS_WITH_BTN_STATUS, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  4 */ HUD_VISIBILITY_A,
+    /*  5 */ HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_BTN_STATUS, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  6 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP_WITH_BTN_STATUS, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /*  7 */ HUD_VISIBILITY_ALL_NO_MINIMAP_W_DISABLED, // Only raises button alphas if not disabled
+    /*  8 */ HUD_VISIBILITY_B,
+    /*  9 */ HUD_VISIBILITY_HEARTS_MAGIC,
+    /* 10 */ HUD_VISIBILITY_B_ALT,
+    /* 11 */ HUD_VISIBILITY_HEARTS,
+    /* 12 */ HUD_VISIBILITY_A_B_MINIMAP,
+    /* 13 */ HUD_VISIBILITY_HEARTS_MAGIC_WITH_BTN_STATUS, // Uses Interface_UpdateButtonAlphas so gives the opportunity to dim only disabled buttons
+    /* 14 */ HUD_VISIBILITY_HEARTS_MAGIC_C,
+    /* 15 */ HUD_VISIBILITY_ALL_NO_MINIMAP,
+    /* 16 */ HUD_VISIBILITY_A_B_C,
+    /* 17 */ HUD_VISIBILITY_B_MINIMAP,
+    /* 18 */ HUD_VISIBILITY_HEARTS_MAGIC_MINIMAP,
+    /* 19 */ HUD_VISIBILITY_A_HEARTS_MAGIC_MINIMAP,
+    /* 20 */ HUD_VISIBILITY_B_MAGIC,
+    /* 21 */ HUD_VISIBILITY_A_B,
+    /* 22 */ HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP,
+    /* 50 */ HUD_VISIBILITY_ALL = 50,
+    /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
+} HudVisibility;
+
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
     /* 0x04 */ u8 *saveBuf;
@@ -220,7 +248,7 @@ typedef struct SaveContext {
     /* 0x3F16 */ u8 seqIndex;                           // "old_bgm"
     /* 0x3F17 */ u8 nightSeqIndex;                      // "old_env"
     /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
-    /* 0x3F1E */ u8 hudVisibilityDimOnlyDisabledButtons; // if the buttons are requested to dim, only dim disabled buttons "ck_fg"
+    /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
     /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
     /* 0x3F22 */ u16 hudVisibility; // current hud visibility "prev_alpha_type"
     /* 0x3F24 */ u16 hudVisibilityCounter; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"

@@ -57,7 +57,7 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-            gSaveContext.hudVisibilityDimOnlyDisabledButtons = false;
+            gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
             gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             gSaveContext.hudVisibilityCounter = 0;

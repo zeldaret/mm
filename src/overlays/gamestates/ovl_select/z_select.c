@@ -27,7 +27,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-    gSaveContext.hudVisibilityDimOnlyDisabledButtons = false;
+    gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
     gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
     gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
     gSaveContext.hudVisibilityCounter = 0;

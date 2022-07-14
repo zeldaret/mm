@@ -565,7 +565,7 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     gSaveContext.unk_3F48 = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
-        gSaveContext.hudVisibilityDimOnlyDisabledButtons = true;
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
     gSaveContext.save.cutscene = 0;
