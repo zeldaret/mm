@@ -187,8 +187,19 @@ typedef enum {
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
 
+// TODO: figure out MAX
+typedef enum {
+    /* 0 */ PLAYER_ANIMTYPE_0,
+    /* 1 */ PLAYER_ANIMTYPE_1,
+    /* 2 */ PLAYER_ANIMTYPE_2,
+    /* 3 */ PLAYER_ANIMTYPE_3,
+    /* 4 */ PLAYER_ANIMTYPE_4,
+    /* 5 */ PLAYER_ANIMTYPE_5,
+    // /* 6 */ PLAYER_ANIMTYPE_MAX
+} PlayerAnimType;
+
 typedef struct PlayerModelType {
-    /* 0x0 */ u8 animType;
+    /* 0x0 */ u8 modelAnimType; // PlayerAnimType enum
     /* 0x1 */ u8 leftHandType;
     /* 0x2 */ u8 rightHandType;
     /* 0x3 */ u8 sheathType;
@@ -557,7 +568,7 @@ typedef struct Player {
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
     /* 0x14E */ s8 unk_14E;
-    /* 0x14F */ u8 modelAnimType;
+    /* 0x14F */ u8 modelAnimType; // PlayerAnimType enum
     /* 0x150 */ u8 leftHandType;
     /* 0x151 */ u8 rightHandType;
     /* 0x152 */ u8 sheathType;

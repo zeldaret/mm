@@ -755,35 +755,35 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
 
 PlayerModelType gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
     /* PLAYER_MODELGROUP_0 */
-    { 2, 0, 8, 12, 16 }, 
+    { PLAYER_ANIMTYPE_2, 0, 8, 12, 16 }, 
     /* PLAYER_MODELGROUP_1 */
-    { 1, 2, 7, 15, 16 },   
+    { PLAYER_ANIMTYPE_1, 2, 7, 15, 16 },   
     /* PLAYER_MODELGROUP_2 */
-    { 1, 2, 8, 13, 16 }, 
+    { PLAYER_ANIMTYPE_1, 2, 8, 13, 16 }, 
     /* PLAYER_MODELGROUP_3 */
-    { 0, 0, 6, 14, 16 },
+    { PLAYER_ANIMTYPE_0, 0, 6, 14, 16 },
     /* PLAYER_MODELGROUP_4 */
-    { 0, 0, 6, 14, 16 }, 
+    { PLAYER_ANIMTYPE_0, 0, 6, 14, 16 }, 
     /* PLAYER_MODELGROUP_5 */
-    { 3, 3, 7, 14, 16 },   
+    { PLAYER_ANIMTYPE_3, 3, 7, 14, 16 },   
     /* PLAYER_MODELGROUP_6 */
-    { 4, 1, 9, 14, 16 }, 
+    { PLAYER_ANIMTYPE_4, 1, 9, 14, 16 }, 
     /* PLAYER_MODELGROUP_7 */
-    { 5, 0, 6, 14, 16 },
+    { PLAYER_ANIMTYPE_5, 0, 6, 14, 16 },
     /* PLAYER_MODELGROUP_8 */
-    { 0, 4, 6, 14, 16 }, 
+    { PLAYER_ANIMTYPE_0, 4, 6, 14, 16 }, 
     /* PLAYER_MODELGROUP_9 */
-    { 4, 0, 11, 14, 16 }, 
+    { PLAYER_ANIMTYPE_4, 0, 11, 14, 16 }, 
     /* PLAYER_MODELGROUP_10 */
-    { 3, 1, 7, 14, 16 }, 
+    { PLAYER_ANIMTYPE_3, 1, 7, 14, 16 }, 
     /* PLAYER_MODELGROUP_11 */
-    { 0, 0, 10, 14, 16 },
+    { PLAYER_ANIMTYPE_0, 0, 10, 14, 16 },
     /* PLAYER_MODELGROUP_12 */
-    { 0, 5, 6, 14, 16 }, 
+    { PLAYER_ANIMTYPE_0, 5, 6, 14, 16 }, 
     /* PLAYER_MODELGROUP_13 */
-    { 0, 2, 6, 15, 16 },   
+    { PLAYER_ANIMTYPE_0, 2, 6, 15, 16 },   
     /* PLAYER_MODELGROUP_14 */
-    { 0, 1, 7, 14, 16 },
+    { PLAYER_ANIMTYPE_0, 1, 7, 14, 16 },
 };
 
 /* DLists groups start */
@@ -1128,7 +1128,7 @@ void func_801239AC(Player* player) {
                     }
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
-                    player->modelAnimType = 2;
+                    player->modelAnimType = PLAYER_ANIMTYPE_2;
                     player->heldItemActionParam = -1;
                 }
             }
@@ -1164,15 +1164,15 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
     player->modelGroup = modelGroup;
 
     if (modelGroup == PLAYER_MODELGROUP_1) {
-        player->modelAnimType = 0;
+        player->modelAnimType = PLAYER_ANIMTYPE_0;
     } else {
-        player->modelAnimType = gPlayerModelTypes[modelGroup].animType;
+        player->modelAnimType = gPlayerModelTypes[modelGroup].modelAnimType;
     }
 
-    if (player->modelAnimType < 3) {
+    if (player->modelAnimType < PLAYER_ANIMTYPE_3) {
         if (((player->transformation != PLAYER_FORM_FIERCE_DEITY) && (player->transformation != PLAYER_FORM_HUMAN)) ||
             (player->currentShield == PLAYER_SHIELD_NONE)) {
-            player->modelAnimType = 0;
+            player->modelAnimType = PLAYER_ANIMTYPE_0;
         }
     }
 
