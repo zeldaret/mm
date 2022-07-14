@@ -9,7 +9,7 @@ typedef void (*EnBalActionFunc)(struct EnBal*, PlayState*);
 
 typedef struct EnBal {
     /* 0x000 */ PictoActor picto;
-    /* 0x144 */ char unk_148[0x44];
+    /* 0x148 */ char unk_148[0x44];
     /* 0x18C */ EnBalActionFunc actionFunc;
     /* 0x190 */ char unk_190[0x224];
 } EnBal; // size = 0x3B4

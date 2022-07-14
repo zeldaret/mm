@@ -81,8 +81,8 @@ static AnimationInfoS D_80A5349C[] = {
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f, 480.0f,
-                            0x38E3);
+    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+                                   480.0f, 0x38E3);
 }
 
 s32 func_80A5257C(EnDnq* this, s32 arg1) {
