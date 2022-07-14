@@ -129,7 +129,7 @@ static ColliderJntSphElementInit D_809BDB44[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDB8C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDB44, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDB44, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -143,7 +143,7 @@ static ColliderJntSphElementInit D_809BDB68[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDB9C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDB68, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDB68, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -157,7 +157,7 @@ static ColliderJntSphElementInit D_809BDBAC[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDBD0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809BDBAC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDBAC, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -175,7 +175,7 @@ static ColliderJntSphElementInit D_809BDBE0[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809BDC28 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809BDBE0, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809BDBE0, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

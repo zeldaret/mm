@@ -13,8 +13,8 @@ typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, PlayState*);
 #define ENTIMETAG_GET_E000(thisx) (((thisx)->params & 0xE000) >> 0xD)
 
 typedef struct EnTimeTag {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnTimeTagActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnTimeTagActionFunc actionFunc;
 } EnTimeTag; // size = 0x148
 
 extern const ActorInit En_Time_Tag_InitVars;

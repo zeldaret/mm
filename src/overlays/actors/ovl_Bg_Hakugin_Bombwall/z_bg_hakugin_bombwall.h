@@ -6,7 +6,7 @@
 struct BgHakuginBombwall;
 
 typedef void (*BgHakuginBombwallActionFunc)(struct BgHakuginBombwall*, PlayState*);
-typedef s32 (*BgHakuginBombwallUnkFunc)(Actor*, PlayState*);
+typedef s32 (*BgHakuginBombwallUnkFunc)(struct BgHakuginBombwall*, PlayState*);
 typedef void (*BgHakuginBombwallUnkFunc2)(struct BgHakuginBombwall*, PlayState*);
 
 #define BGHAKUGIN_BOMBWALL_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)

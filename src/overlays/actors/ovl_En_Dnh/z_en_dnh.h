@@ -8,9 +8,9 @@ struct EnDnh;
 typedef void (*EnDnhActionFunc)(struct EnDnh*, PlayState*);
 
 typedef struct EnDnh {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnDnhActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0x74];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnDnhActionFunc actionFunc;
+    /* 0x148 */ char unk_148[0x74];
 } EnDnh; // size = 0x1BC
 
 extern const ActorInit En_Dnh_InitVars;

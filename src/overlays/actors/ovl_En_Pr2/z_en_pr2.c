@@ -99,7 +99,7 @@ static AnimationHeader* sAnimations[] = {
     &object_pr_Anim_003904,
 };
 
-u8 D_80A75C38[] = { 0, 0, 2, 0 };
+u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP };
 
 s16 D_80A75C3C[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
@@ -520,7 +520,8 @@ void func_80A751B4(EnPr2* this) {
         func_80A74510(this, 2);
     } else {
         this->unk_1F8 = Animation_GetLastFrame(&object_pr_Anim_003904);
-        Animation_Change(&this->skelAnime, &object_pr_Anim_003904, 1.0f, this->unk_1F8, this->unk_1F8, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &object_pr_Anim_003904, 1.0f, this->unk_1F8, this->unk_1F8, ANIMMODE_ONCE,
+                         0.0f);
         this->unk_1D8 = Rand_S16Offset(20, 30);
         this->unk_1E4 = 0x4000;
         if (Rand_ZeroOne() < 0.5f) {

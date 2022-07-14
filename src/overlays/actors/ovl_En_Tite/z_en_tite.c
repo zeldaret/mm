@@ -811,7 +811,7 @@ void func_80895A10(EnTite* this) {
     s32 pad;
     s16 rand;
 
-    Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, 0, 4.0f);
+    Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 4.0f);
     this->actor.speedXZ = 0.0f;
     rand = Rand_S16Offset(20, 20);
     this->unk_2BC = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * rand;

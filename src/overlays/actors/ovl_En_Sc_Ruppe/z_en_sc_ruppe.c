@@ -117,7 +117,7 @@ void func_80BD6A8C(EnScRuppe* this, PlayState* play) {
         this->ruppeDisplayTime = 0;
         this->actor.gravity = 0.0f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_GET_RUPY);
-        func_801159EC(sRupeeInfo[this->ruppeIndex].amount);
+        Rupees_ChangeBy(sRupeeInfo[this->ruppeIndex].amount);
         this->actionFunc = func_80BD6B18;
     }
     this->actor.shape.rot.y += 0x1F4;
