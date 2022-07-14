@@ -785,8 +785,8 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                 Math_ApproachF(&this->unk_5EC, 60.0f, 1.0f, 20.0f);
                 this->unk_5E8 = this->unk_5EC / 60.0f;
                 play->envCtx.screenFillColor[3] = this->unk_5E8 * 255.0f;
-                play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] =
-                    play->envCtx.screenFillColor[2] = 0xFF;
+                play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[2] =
+                    0xFF;
             }
             if (this->unk_2DC <= curFrame && this->unk_5A0 >= 0x28) {
                 this->actor.draw = NULL;
@@ -1436,8 +1436,8 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
             }
         }
 
-        if ((this->actor.bgCheckFlags & 8) || !Actor_TestFloorInDirection(&this->actor, play, this->actor.speedXZ,
-                                                                          this->actor.shape.rot.y + 0x4000)) {
+        if ((this->actor.bgCheckFlags & 8) ||
+            !Actor_TestFloorInDirection(&this->actor, play, this->actor.speedXZ, this->actor.shape.rot.y + 0x4000)) {
 
             if (this->actor.bgCheckFlags & 8) {
                 if (this->actor.speedXZ >= 0.0f) {

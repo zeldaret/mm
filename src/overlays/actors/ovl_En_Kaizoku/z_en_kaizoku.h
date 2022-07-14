@@ -90,9 +90,9 @@ typedef struct EnKaizoku {
     /* 0x59E */ s16 unk_59E; // Cam ID
     /* 0x5A0 */ s16 unk_5A0;
     /* 0x5A2 */ s16 unk_5A2;
-    /* 0x5A4 */ Vec3f unk_5A4;   // cam eye
-    /* 0x5B0 */ Vec3f unk_5B0;   // cam at
-    /* 0x5BC */ Vec3f unk_5BC;   // cam up
+    /* 0x5A4 */ Vec3f unk_5A4; // cam eye
+    /* 0x5B0 */ Vec3f unk_5B0; // cam at
+    /* 0x5BC */ Vec3f unk_5BC; // cam up
     /* 0x5C8 */ Vec3f unk_5C8;
     /* 0x5D4 */ Vec3f unk_5D4;
     /* 0x5E0 */ f32 unk_5E0;
