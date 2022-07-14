@@ -42,8 +42,8 @@ s32 func_80C1DED0(DmNb* this, s32 arg1) {
 
 void func_80C1DF18(DmNb* this, PlayState* play) {
     s32 sp2C[] = { 0, 0, 0, 0, 0 };
-    u16 action;
-    s32 actionIndex;
+    u16 csAction;
+    s32 csActionIndex;
 
     if (play->csCtx.state != 0) {
         if (this->unk1F8 == 0) {
@@ -52,13 +52,13 @@ void func_80C1DF18(DmNb* this, PlayState* play) {
             this->unk1F4 = this->unk1F0;
         }
         if (Cutscene_CheckActorAction(play, 0x232)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            action = play->csCtx.actorActions[actionIndex]->action;
-            if (this->unk1EC != (u8)action) {
-                this->unk1EC = action;
-                func_80C1DED0(this, sp2C[action]);
+            csActionIndex = Cutscene_GetActorActionIndex(play, 0x232);
+            csAction = play->csCtx.actorActions[csActionIndex]->action;
+            if (this->unk1EC != (u8)csAction) {
+                this->unk1EC = csAction;
+                func_80C1DED0(this, sp2C[csAction]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;
