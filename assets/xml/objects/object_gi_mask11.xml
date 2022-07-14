@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Circus Leader Mask -->
-    <File Name="object_gi_mask11" Segment="6"> <!-- object_gi_zachomask -->
+    <File Name="object_gi_mask11" Segment="6">
 
         <!-- Circus Leader Mask Display Lists -->
         <DList Name="gGiCircusLeaderMaskEyebrowsDL" Offset="0xB50" />

@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Kafei's Mask -->
-    <File Name="object_gi_mask05" Segment="6"> <!-- object_gi_kerfaymask -->
+    <File Name="object_gi_mask05" Segment="6">
 
         <!-- Kafei's Mask Display Lists -->
         <DList Name="gGiKafeiMaskEmptyDL" Offset="0x1040" />

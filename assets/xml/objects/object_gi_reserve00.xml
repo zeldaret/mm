@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Moon's Tear -->
-    <File Name="object_gi_reserve00" Segment="6"> <!-- "object_Obj_Moon_Stone" -->
+    <File Name="object_gi_reserve00" Segment="6">
 
         <!-- Moon's Tear Identity Mtx (unused) -->
         <Mtx Name="gGiMoonsTearIdentityMtx" Offset="0xC40" />

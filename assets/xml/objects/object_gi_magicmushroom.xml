@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Magic Mushroom -->
-    <File Name="object_gi_magicmushroom" Segment="6"> <!-- "object_gi_mushroom2" -->
+    <File Name="object_gi_magicmushroom" Segment="6">
 
         <!-- Magic Mushroom Display Lists -->
         <DList Name="gGiMagicMushroomDL" Offset="0x640" />

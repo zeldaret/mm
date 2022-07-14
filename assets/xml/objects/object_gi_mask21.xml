@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Blast Mask -->
-    <File Name="object_gi_mask21" Segment="6"> <!-- object_gi_bakuretsumask -->
+    <File Name="object_gi_mask21" Segment="6">
 
         <!-- Blast Mask Display Lists -->
         <DList Name="gGiBlastMaskDL" Offset="0x830" />

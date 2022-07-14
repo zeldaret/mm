@@ -116,8 +116,8 @@ void GetItem_DrawRemains(PlayState* play, s16 drawId);
 
 typedef struct {
     /* 0x00 */ void (*drawFunc)(PlayState*, s16);
-    /* 0x04 */ Gfx* dLists[8];
-} DrawItemTableEntry; // size = 0x24
+    /* 0x04 */ void* drawResources[8]; // Either display lists (Gfx*) or matrices (Mtx*)
+} DrawItemTableEntry;                  // size = 0x24
 
 static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOTTLE, OBJECT_GI_BOTTLE
@@ -391,7 +391,7 @@ void GetItem_DrawBombchu(PlayState* play, s16 drawId) {
     func_8012C214(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -404,12 +404,12 @@ void GetItem_DrawPoes(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 0, play->state.frames * 0, 16,
@@ -419,8 +419,8 @@ void GetItem_DrawPoes(PlayState* play, s16 drawId) {
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[3]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     Matrix_Pop();
 
@@ -435,12 +435,12 @@ void GetItem_DrawFairyBottle(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 0, play->state.frames * 0, 32,
                                 32, 1, play->state.frames, -(play->state.frames * 6), 32, 32));
@@ -449,7 +449,7 @@ void GetItem_DrawFairyBottle(PlayState* play, s16 drawId) {
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     Matrix_Pop();
 
@@ -464,7 +464,7 @@ void GetItem_DrawSkullToken(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
@@ -472,7 +472,7 @@ void GetItem_DrawSkullToken(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 0, -(play->state.frames * 5),
                                 32, 32, 1, play->state.frames * 0, play->state.frames * 0, 32, 64));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -485,12 +485,12 @@ void GetItem_DrawCompass(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 5);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -506,16 +506,16 @@ void GetItem_DrawPotion(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, -play->state.frames, play->state.frames, 32, 32, 1,
                                 -play->state.frames, play->state.frames, 32, 32));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[2]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[3]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[3]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[4]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[5]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[4]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[5]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -531,7 +531,7 @@ void GetItem_DrawGoronSword(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 1, play->state.frames * 0, 32,
                                 32, 1, play->state.frames * 0, play->state.frames * 0, 32, 32));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -547,7 +547,7 @@ void GetItem_DrawDekuNuts(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 6, play->state.frames * 6, 32,
                                 32, 1, play->state.frames * 6, play->state.frames * 6, 32, 32));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -563,7 +563,7 @@ void GetItem_DrawRecoveryHeart(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 0, -(play->state.frames * 3),
                                 32, 32, 1, play->state.frames * 0, -(play->state.frames * 2), 32, 32));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -579,13 +579,13 @@ void GetItem_DrawFish(PlayState* play, s16 drawId) {
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, play->state.frames * 0, play->state.frames * 1, 32,
                                 32, 1, play->state.frames * 0, play->state.frames * 1, 32, 32));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
- * Draw `dLists[0]` as Opa
+ * Draw `drawResources[0]` as Opa
  */
 void GetItem_DrawOpa0(PlayState* play, s16 drawId) {
     s32 pad;
@@ -595,13 +595,13 @@ void GetItem_DrawOpa0(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
- * Draw `dLists[0]` as Opa and `dLists[1]` as Xlu
+ * Draw `drawResources[0]` as Opa and `drawResources[1]` as Xlu
  */
 void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId) {
     s32 pad;
@@ -611,18 +611,18 @@ void GetItem_DrawOpa0Xlu1(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
- * Draw `dLists[0]` and `dLists[1]` as Opa
+ * Draw `drawResources[0]` and `drawResources[1]` as Opa
  */
 void GetItem_DrawOpa01(PlayState* play, s16 drawId) {
     s32 pad;
@@ -632,14 +632,14 @@ void GetItem_DrawOpa01(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 /**
- * Draw `dLists[0]` and `dLists[1]` as Xlu
+ * Draw `drawResources[0]` and `drawResources[1]` as Xlu
  */
 void GetItem_DrawXlu01(PlayState* play, s16 drawId) {
     s32 pad;
@@ -649,8 +649,8 @@ void GetItem_DrawXlu01(PlayState* play, s16 drawId) {
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[0]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[0]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -664,19 +664,19 @@ void GetItem_DrawSeahorse(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
-    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &mtx);
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].drawResources[3]), &mtx);
     Matrix_Mult(&mtx, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -692,17 +692,17 @@ void GetItem_DrawFairyContainer(PlayState* play, s16 drawId) {
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiFairyBottleTexAnim));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
-    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].dLists[3]), &mtx);
+    Matrix_MtxToMtxF(Lib_SegmentedToVirtual(sDrawItemTable[drawId].drawResources[3]), &mtx);
     Matrix_Mult(&mtx, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -717,12 +717,12 @@ void GetItem_DrawMoonsTear(PlayState* play, s16 drawId) {
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiMoonsTearTexAnim));
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -735,13 +735,13 @@ void GetItem_DrawMagicArrow(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -754,10 +754,10 @@ void GetItem_DrawUpgrades(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[2]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[3]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[3]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -770,14 +770,14 @@ void GetItem_DrawRupee(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[3]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -791,14 +791,14 @@ void GetItem_DrawSmallRupee(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     func_8012C2DC(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[3]);
-    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].dLists[2]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[3]);
+    gSPDisplayList(POLY_XLU_DISP++, sDrawItemTable[drawId].drawResources[2]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -811,14 +811,14 @@ void GetItem_DrawWallet(PlayState* play, s16 drawId) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[1]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[2]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[3]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[4]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[5]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[6]);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[7]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[1]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[2]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[3]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[4]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[5]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[6]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[7]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -837,7 +837,7 @@ void GetItem_DrawRemains(PlayState* play, s16 drawId) {
     Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].dLists[0]);
+    gSPDisplayList(POLY_OPA_DISP++, sDrawItemTable[drawId].drawResources[0]);
 
     POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
 

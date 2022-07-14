@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Boss Remains -->
-    <File Name="object_bsmask" Segment="6"> <!-- object_Dm_Hina -->
+    <File Name="object_bsmask" Segment="6">
 
         <!-- Boss Remains Display Lists -->
         <DList Name="gRemainsOdolwaDL" Offset="0x690" />

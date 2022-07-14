@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Title Deeds -->
-    <File Name="object_gi_reserve01" Segment="6"> <!-- "object_gi_kenrisyo" -->
+    <File Name="object_gi_reserve01" Segment="6">
 
         <!-- Title Deed Common Display Lists -->
         <DList Name="gGiTitleDeedSealAndRibbonDL" Offset="0x600" />

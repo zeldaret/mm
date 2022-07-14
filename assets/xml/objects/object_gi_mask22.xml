@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Mask of Scents -->
-    <File Name="object_gi_mask22" Segment="6"> <!-- object_gi_buusanmask -->
+    <File Name="object_gi_mask22" Segment="6">
 
         <!-- Mask of Scents Display Lists -->
         <DList Name="gGiMaskOfScentsTeethDL" Offset="0x880" />

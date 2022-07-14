@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Letter To Kafei -->
-    <File Name="object_gi_reserve_c_00" Segment="6"> <!-- "object_gi_c_letter" -->
+    <File Name="object_gi_reserve_c_00" Segment="6">
 
         <!-- Letter To Kafei Display Lists -->
         <DList Name="gGiLetterToKafeiInscriptionsDL" Offset="0x4A0" />

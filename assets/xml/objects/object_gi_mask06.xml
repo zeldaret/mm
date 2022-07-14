@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: All Night's Mask -->
-    <File Name="object_gi_mask06" Segment="6"> <!-- object_gi_yofukashimask -->
+    <File Name="object_gi_mask06" Segment="6">
 
         <!-- All Night's Mask Display Lists -->
         <DList Name="gGiAllNightMaskFaceDL" Offset="0x6F0" />

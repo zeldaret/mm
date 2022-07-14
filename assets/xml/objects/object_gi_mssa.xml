@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Sun Mask -->
-    <File Name="object_gi_mssa" Segment="6"> <!-- object_gi_sunmask -->
+    <File Name="object_gi_mssa" Segment="6">
 
         <!-- Sun Mask Display List -->
         <DList Name="gGiSunMaskEyesSidePatternsDL" Offset="0xC00" /> <!-- Both the eyes and side patterns -->

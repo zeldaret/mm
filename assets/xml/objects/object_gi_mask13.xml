@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Couple's Mask -->
-    <File Name="object_gi_mask13" Segment="6"> <!-- object_gi_meotomask -->
+    <File Name="object_gi_mask13" Segment="6">
 
         <!-- Couple's Mask Display Lists -->
         <DList Name="gGiCouplesMaskHalfDL" Offset="0x5A0" />

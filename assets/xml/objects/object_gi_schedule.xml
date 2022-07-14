@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Bomber's Notebook -->
-    <File Name="object_gi_schedule" Segment="6"> <!-- "object_gi_techo" -->
+    <File Name="object_gi_schedule" Segment="6">
 
         <!-- Bomber's Notebook Display Lists -->
         <DList Name="gGiBombersNotebookDL" Offset="0x6C0" />

@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Gibdo Mask -->
-    <File Name="object_gi_mask15" Segment="6"> <!-- "object_gi_gibudomask" -->
+    <File Name="object_gi_mask15" Segment="6">
 
         <!-- Gibdo Mask Display Lists -->
         <DList Name="gGiGibdoMaskDL" Offset="0xB30" />

@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Postman's Hat -->
-    <File Name="object_gi_mask12" Segment="6"> <!-- object_gi_posthat -->
+    <File Name="object_gi_mask12" Segment="6">
 
         <!-- Postman's Hat Display Lists -->
         <DList Name="gGiPostmanHatBunnyLogoDL" Offset="0x570" />

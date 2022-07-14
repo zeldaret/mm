@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Letter to Mama -->
-    <File Name="object_gi_reserve_b_01" Segment="6"> <!-- "object_gi_sokutatsu" -->
+    <File Name="object_gi_reserve_b_01" Segment="6">
 
         <!-- Letter to Mama Display Lists -->
         <DList Name="gGiLetterToMamaInscriptionsDL" Offset="0x820" />

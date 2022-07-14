@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Don Gero Mask -->
-    <File Name="object_gi_mask16" Segment="6"> <!-- object_gi_ge_romask -->
+    <File Name="object_gi_mask16" Segment="6">
 
         <!-- Don Gero Mask Display Lists -->
         <DList Name="gGiDonGeroMaskBodyDL" Offset="0x1040" />

@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Room Key -->
-    <File Name="object_gi_reserve_b_00" Segment="6"> <!-- "object_gi_inn_key" -->
+    <File Name="object_gi_reserve_b_00" Segment="6">
 
         <!-- Room Key Display Lists -->
         <DList Name="gGiRoomKeyDL" Offset="0x7D0" />

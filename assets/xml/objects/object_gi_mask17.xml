@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Kamaro Mask -->
-    <File Name="object_gi_mask17" Segment="6"> <!-- "object_gi_dancermask" -->
+    <File Name="object_gi_mask17" Segment="6">
 
         <!-- Kamaro Mask Display Lists -->
         <DList Name="gGiKamaroMaskEmptyDL" Offset="0xFD0" />

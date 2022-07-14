@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Bottled Chateau Romani -->
-    <File Name="object_gi_bottle_21" Segment="6"> <!-- "object_gi_syatoromani" -->
+    <File Name="object_gi_bottle_21" Segment="6">
 
         <!-- Bottled Chateau Romani: Display Lists -->
         <DList Name="gGiChateauRomaniBottleDL" Offset="0xA50" />

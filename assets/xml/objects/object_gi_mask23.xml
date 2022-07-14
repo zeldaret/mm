@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Giant's Mask -->
-    <File Name="object_gi_mask23" Segment="6"> <!-- object_gi_giantmask -->
+    <File Name="object_gi_mask23" Segment="6">
 
         <!-- Giant's Mask Display List -->
         <DList Name="gGiGiantMaskDL" Offset="0x8C0" />

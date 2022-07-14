@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Captains Hat -->
-    <File Name="object_gi_mask18" Segment="6"> <!-- "object_gi_skj_mask" -->
+    <File Name="object_gi_mask18" Segment="6">
 
         <!-- Captains Hat Display Lists -->
         <DList Name="gGiCaptainsHatFaceDL" Offset="0xCF0" />

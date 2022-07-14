@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Pendant of Memories -->
-    <File Name="object_gi_reserve_c_01" Segment="6"> <!-- "object_gi_pendant" -->
+    <File Name="object_gi_reserve_c_01" Segment="6">
 
         <!-- Pendant of Memories Display Lists -->
         <DList Name="gGiPendantOfMemoriesDL" Offset="0x750" />

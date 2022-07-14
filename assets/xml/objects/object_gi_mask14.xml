@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Great Fairy Mask -->
-    <File Name="object_gi_mask14" Segment="6"> <!-- "object_gi_bigelfmask" -->
+    <File Name="object_gi_mask14" Segment="6">
 
         <!-- Great Fairy Mask Display Lists -->
         <DList Name="gGiGreatFairyMaskLeavesDL" Offset="0xED0" />

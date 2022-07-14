@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Get Item Draw: Bremen Mask -->
-    <File Name="object_gi_mask20" Segment="6"> <!-- object_gi_breemask -->
+    <File Name="object_gi_mask20" Segment="6">
 
         <!-- Bremen Mask Display Lists -->
         <DList Name="gGiBremenMaskEmptyDL" Offset="0x800" />
