@@ -46,7 +46,7 @@ s32 Camera_IsSwimming(Camera* camera) {
             // Swimming as Zora
             return 999;
         } else {
-            // Swimming as non-Zora
+            // Swimming as Human or Fierce Deity
             return ((Player*)focalActor)->stateFlags1 & 0x8000000;
         }
     } else {
@@ -99,12 +99,14 @@ s32 Camera_IsSwimming(Camera* camera) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC5C8.s")
 
+#define CAM_DATA_IS_BG 0x1000 // if not set, then cam data is for actor cutscenes
+
 /**
  * Returns the CameraSettingType of the camera from either the bgCam or the actorCsCam at index `camDataId`
  */
 s16 Camera_GetBgCamOrActorCsCamSetting(Camera* camera, u32 camDataId) {
-    if (camDataId & 0x1000) {
-        return BgCheck_GetBgCamSettingImpl(&camera->play->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
+    if (camDataId & CAM_DATA_IS_BG) {
+        return BgCheck_GetBgCamSettingImpl(&camera->play->colCtx, camDataId & ~CAM_DATA_IS_BG, BGCHECK_SCENE);
     } else {
         return Play_GetActorCsCamSetting(camera->play, camDataId);
     }
@@ -114,8 +116,8 @@ s16 Camera_GetBgCamOrActorCsCamSetting(Camera* camera, u32 camDataId) {
  * Returns either the bgCam data or the actorCsCam data at index `camDataId`
  */
 Vec3s* Camera_GetBgCamOrActorCsCamFuncData(Camera* camera, u32 camDataId) {
-    if (camDataId & 0x1000) {
-        return BgCheck_GetBgCamFuncDataImpl(&camera->play->colCtx, camDataId & ~0x1000, BGCHECK_SCENE);
+    if (camDataId & CAM_DATA_IS_BG) {
+        return BgCheck_GetBgCamFuncDataImpl(&camera->play->colCtx, camDataId & ~CAM_DATA_IS_BG, BGCHECK_SCENE);
     } else {
         return Play_GetActorCsCamFuncData(camera->play, camDataId);
     }
