@@ -148,7 +148,7 @@ s32 D_801C6798[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
 
-u8 D_801C67B0[24] = {
+u8 gAmmoItems[24] = {
     ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
     ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
     ITEM_NONE,  ITEM_NONE, ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
@@ -330,8 +330,8 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
-        if (D_801C67B0[i] != ITEM_NONE) {
+    for (i = 0; i < ARRAY_COUNT(gAmmoItems); i++) {
+        if (gAmmoItems[i] != ITEM_NONE) {
             if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
                 item = gSaveContext.save.inventory.items[i];
                 AMMO(item) = 0;
