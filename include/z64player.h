@@ -213,7 +213,7 @@ typedef enum PlayerModelType {
     /*  2 */ PLAYER_MODELTYPE_LH_2,
     /*  3 */ PLAYER_MODELTYPE_LH_3,
     /*  4 */ PLAYER_MODELTYPE_LH_4,
-    /*  5 */ PLAYER_MODELTYPE_LH_5,
+    /*  5 */ PLAYER_MODELTYPE_LH_BOTTLE,
     // right hand
     /*  6 */ PLAYER_MODELTYPE_RH_6,
     /*  7 */ PLAYER_MODELTYPE_RH_7,
@@ -253,7 +253,7 @@ typedef enum PlayerModelGroup {
     /*  9 */ PLAYER_MODELGROUP_9,
     /* 10 */ PLAYER_MODELGROUP_10,
     /* 11 */ PLAYER_MODELGROUP_11,
-    /* 12 */ PLAYER_MODELGROUP_12,
+    /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
     /* 14 */ PLAYER_MODELGROUP_14,
     /* 15 */ PLAYER_MODELGROUP_MAX

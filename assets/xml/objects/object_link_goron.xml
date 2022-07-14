@@ -66,7 +66,7 @@
         <Texture Name="object_link_goron_Tex_010AB8" OutName="tex_010AB8" Format="ci8" Width="16" Height="8" Offset="0x10AB8" />
         <Texture Name="object_link_goron_Tex_010B38" OutName="tex_010B38" Format="ci8" Width="16" Height="16" Offset="0x10B38" />
         <Texture Name="object_link_goron_Tex_010C38" OutName="tex_010C38" Format="ci8" Width="32" Height="32" Offset="0x10C38" />
-        <DList Name="object_link_goron_DL_011468" Offset="0x11468" />
+        <DList Name="gLinkGoronLeftHandHoldBottleDL" Offset="0x11468" />
         <Texture Name="object_link_goron_Tex_011628" OutName="tex_011628" Format="ci8" Width="16" Height="16" Offset="0x11628" />
         <Texture Name="object_link_goron_Tex_011728" OutName="tex_011728" Format="rgba16" Width="8" Height="32" Offset="0x11728" />
         <DList Name="gLinkGoronGoronPunchEffectDL" Offset="0x11AB8" />

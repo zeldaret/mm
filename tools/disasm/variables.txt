@@ -1206,7 +1206,7 @@
     0x801C01F4:("gPlayerRightHand9DLs","UNK_TYPE1","",0x1),
     0x801C021C:("gPlayerRightHand10DLs","UNK_TYPE1","",0x1),
     0x801C0244:("gPlayerRightHand11DLs","UNK_TYPE1","",0x1),
-    0x801C026C:("gPlayerLeftHand5DLs","UNK_TYPE1","",0x1),
+    0x801C026C:("gPlayerLeftHandBottleDLs","UNK_TYPE1","",0x1),
     0x801C0294:("D_801C0294","UNK_TYPE1","",0x1),
     0x801C02A8:("D_801C02A8","UNK_TYPE1","",0x1),
     0x801C02BC:("D_801C02BC","UNK_TYPE1","",0x1),

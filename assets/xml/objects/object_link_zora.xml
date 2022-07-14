@@ -68,7 +68,7 @@
         <Texture Name="object_link_zora_Tex_010228" OutName="tex_010228" Format="rgba16" Width="16" Height="32" Offset="0x10228" />
         <DList Name="object_link_zora_DL_010868" Offset="0x10868" />
         <DList Name="object_link_zora_DL_010978" Offset="0x10978" />
-        <DList Name="object_link_zora_DL_010D08" Offset="0x10D08" />
+        <DList Name="gLinkZoraLeftHandHoldBottleDL" Offset="0x10D08" />
         <DList Name="object_link_zora_DL_0110A8" Offset="0x110A8" />
 
         <Array Name="object_link_zora_Vtx_011210" Count="80" Offset="0x011210">

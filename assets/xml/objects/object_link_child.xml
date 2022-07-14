@@ -163,7 +163,7 @@
         <DList Name="object_link_child_DL_01DD18" Offset="0x1DD18" />
         <DList Name="object_link_child_DL_01DD28" Offset="0x1DD28" />
 
-        <DList Name="object_link_child_DL_01DFA8" Offset="0x1DFA8" />
+        <DList Name="gLinkHumanLeftHandHoldBottleDL" Offset="0x1DFA8" />
 
         <Limb Name="gLinkHumanRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_ROOT" Offset="0x1E0A0" />
         <Limb Name="gLinkHumanWaistLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_WAIST" Offset="0x1E0B0" />
