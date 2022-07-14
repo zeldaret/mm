@@ -80,8 +80,8 @@ static AnimationInfoS D_80A5349C[] = {
     { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-void EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f, 480.0f,
+s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
+    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f, 480.0f,
                             0x38E3);
 }
 
@@ -432,7 +432,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_3A4 = 0;
     }
-    this->picto.pictoFunc = EnDnq_ValidatePictograph;
+    this->picto.validationFunc = EnDnq_ValidatePictograph;
     this->actionFunc = func_80A52DC8;
 }
 

@@ -2,7 +2,7 @@
 #include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
 
 /**
- * Test every loaded actor to see if it is a pictographable `PictoActor`, and if so, run its `pictoFunc` to set
+ * Test every loaded actor to see if it is a pictographable `PictoActor`, and if so, run its `validationFunc` to set
  * appropriate flags.
  *
  * @return s32 Number of pictograph actors validly captured.
@@ -18,7 +18,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
     gSaveContext.save.pictoFlags1 = 0;
 
     if (play->sceneNum == SCENE_20SICHITAI) {
-        Snap_SetFlag(1);
+        Snap_SetFlag(PICTOGRAPH_IN_SWAMP);
     }
 
     for (; category < ACTORCAT_MAX; category++) {
@@ -72,8 +72,8 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
             // If actor is recordable, run its validity function and record if valid
             if (seen != 0) {
                 pictoActor = (PictoActor*)actor;
-                if (pictoActor->pictoFunc != NULL) {
-                    if ((pictoActor->pictoFunc)(play, actor) == 0) {
+                if (pictoActor->validationFunc != NULL) {
+                    if ((pictoActor->validationFunc)(play, actor) == 0) {
                         count++;
                     }
                 }

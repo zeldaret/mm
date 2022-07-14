@@ -227,7 +227,8 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
 
 s32 func_80AE6704(EnShn* thisx, PlayState* play) {
     static s32 sPictographFlags[] = {
-        PICTOGRAPH_0, PICTOGRAPH_MONKEY, PICTOGRAPH_BIG_OCTO, PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_1,
+        PICTOGRAPH_0,      PICTOGRAPH_MONKEY,    PICTOGRAPH_BIG_OCTO,
+        PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_IN_SWAMP,
     };
     EnShn* this = THIS;
     s32 ret = 0;
@@ -241,6 +242,7 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
                 this->unk_2C6++;
             }
             break;
+
         case 1:
         case 2:
         case 3:
@@ -254,6 +256,7 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
                 this->unk_2C6++;
             }
             break;
+
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, 7);
@@ -285,12 +288,12 @@ UNK_TYPE* func_80AE6880(EnShn* this, PlayState* play) {
 
 s32 func_80AE68F0(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 ret = 0;
+    s32 ret = false;
 
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == EXCH_ITEM_13) {
+            if (player->exchangeItemId == EXCH_ITEM_PICTO_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
             } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
@@ -304,7 +307,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
                 this->unk_1D8 |= 8;
             }
             this->actionFunc = func_80AE6A64;
-            ret = 1;
+            ret = true;
         }
     }
     return ret;

@@ -97,7 +97,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     this->unk_328[1] = 0x7C;
     this->unk_322 = 0;
     this->actionFunc = func_80BD1C84;
-    this->picto.pictoFunc = EnZov_ValidatePictograph;
+    this->picto.validationFunc = EnZov_ValidatePictograph;
 
     Math_Vec3f_Copy(&this->unk_2FC, &this->picto.actor.world.pos);
     Math_Vec3f_Copy(&this->unk_308, &this->picto.actor.world.pos);

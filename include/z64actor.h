@@ -222,19 +222,19 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
-typedef s32 (*PictoFunc)(struct PlayState*, Actor*);
+typedef s32 (*PictoValidationFunc)(struct PlayState*, Actor*);
 
 typedef struct {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ PictoFunc pictoFunc;
+    /* 0x144 */ PictoValidationFunc validationFunc;
 } PictoActor;
 
 // Picto box flags
 
 typedef enum {
-// External, set and read by actors
+    // Used externally, set and read by actors
     /* 0x00 */ PICTOGRAPH_0,
-    /* 0x01 */ PICTOGRAPH_1,
+    /* 0x01 */ PICTOGRAPH_IN_SWAMP,
     /* 0x02 */ PICTOGRAPH_MONKEY,
     /* 0x03 */ PICTOGRAPH_BIG_OCTO,
     /* 0x04 */ PICTOGRAPH_LULU_HEAD,
@@ -246,7 +246,7 @@ typedef enum {
     /* 0x0A */ PICTOGRAPH_DEKU_KING,
     /* 0x0B */ PICTOGRAPH_PIRATE_TOO_FAR, // overlaps with PICTOGRAPH_PIRATE_GOOD, but that is checked first
 
-    // Internal, test for failures of position, size etc.
+    // Used internally, test for failures of position, angle etc.
     /* 0x3B */ PICTOGRAPH_BEHIND_COLLISION = 0x3B,
     /* 0x3C */ PICTOGRAPH_BEHIND_BG,
     /* 0x3D */ PICTOGRAPH_NOT_IN_VIEW,

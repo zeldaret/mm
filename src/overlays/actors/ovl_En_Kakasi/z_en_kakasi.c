@@ -20,7 +20,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play);
 void EnKakasi_InitTimeSkipDialogue(EnKakasi* this);
 void EnKakasi_SetupIdleStanding(EnKakasi* this);
 
-void EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx);
+s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx);
 
 void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play);
 void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play);
@@ -182,7 +182,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetFocus(&this->picto.actor, 60.0f);
-            this->picto.pictoFunc = EnKakasi_ValidatePictograph;
+            this->picto.validationFunc = EnKakasi_ValidatePictograph;
             if (gSaveContext.save.weekEventReg[83] & 1) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
@@ -202,8 +202,8 @@ void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
                      sAnimModes[this->animIndex], -4.0f);
 }
 
-void EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
-    Snap_ValidatePictograph(play, thisx, 0x7, &thisx->focus.pos, &thisx->shape.rot, 280.0f, 1800.0f, -1);
+s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
+    return Snap_ValidatePictograph(play, thisx, 0x7, &thisx->focus.pos, &thisx->shape.rot, 280.0f, 1800.0f, -1);
 }
 
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {

@@ -16,7 +16,7 @@ void EnBigokuta_Destroy(Actor* thisx, PlayState* play);
 void EnBigokuta_Update(Actor* thisx, PlayState* play);
 void EnBigokuta_Draw(Actor* thisx, PlayState* play);
 
-void EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx);
+s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx);
 void EnBigokuta_SetupIdle(EnBigokuta* this);
 void EnBigokuta_Idle(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupRise(EnBigokuta* this, PlayState* play);
@@ -117,7 +117,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     this->camAt.y = (this->picto.actor.home.pos.y - 49.5f) + 42.899998f;
     this->camAt.z = (Math_CosS(this->picto.actor.home.rot.y) * 66.0f) + this->picto.actor.world.pos.z;
 
-    this->picto.pictoFunc = EnBigokuta_ValidatePictograph;
+    this->picto.validationFunc = EnBigokuta_ValidatePictograph;
 }
 
 void EnBigokuta_Destroy(Actor* thisx, PlayState* play) {
@@ -179,8 +179,8 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
     EnBigokuta_ResetCamera(this, play);
 }
 
-void EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
-    Snap_ValidatePictograph(play, thisx, 3, &thisx->focus.pos, &thisx->shape.rot, 280.0f, 1800.0f, -1);
+s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
+    return Snap_ValidatePictograph(play, thisx, 3, &thisx->focus.pos, &thisx->shape.rot, 280.0f, 1800.0f, -1);
 }
 
 s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {
