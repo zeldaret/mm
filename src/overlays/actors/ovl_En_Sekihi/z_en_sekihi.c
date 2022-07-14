@@ -112,7 +112,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 void func_80A44F40(EnSekihi* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case 4:
-            if ((Message_ShouldAdvance(play)) && (play->msgCtx.currentTextId == 0x1019)) {
+            if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1019)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
