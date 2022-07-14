@@ -1470,7 +1470,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.save.weekEventReg[22] & 1)) { // Aliens defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gCremiaBoxDL);
+        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
     func_8012C28C(play->state.gfxCtx);
 

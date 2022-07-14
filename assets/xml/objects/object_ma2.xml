@@ -9,9 +9,9 @@
         <Animation Name="gCremiaClapAnim" Offset="0x4370" /> <!-- Original name is "kl_hakusyu_loop" ("applause") -->
         <Animation Name="gCremiaThinkAnim" Offset="0x5314" /> <!-- Original name is "kl_kangaeru" ("thinking/contemplating") -->
 
-        <!-- DisplayList and Texture for Cremia's Box -->
-        <DList Name="gCremiaBoxDL" Offset="0x5430" />
-        <Texture Name="gCremiaBoxTex" OutName="cremia_box" Format="rgba16" Width="32" Height="64" Offset="0x54E0" />
+        <!-- Cremia's Wooden Box DisplayList and Textures. She sits on it when petting the cows in the barn. -->
+        <DList Name="gCremiaWoodenBoxDL" Offset="0x5430" />
+        <Texture Name="gCremiaWoodenBoxTex" OutName="cremia_wooden_box" Format="rgba16" Width="32" Height="64" Offset="0x54E0" />
 
         <!-- Cremia Animations -->
         <Animation Name="gCremiaSittingAnim" Offset="0x70EC" /> <!-- Original name is "kl_suwari" ("sitting") -->
