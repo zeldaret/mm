@@ -1,7 +1,7 @@
 /*
  * File: z_shot_sun.c
  * Overlay: ovl_Shot_Sun
- * Description: Leftover sun hitbox from OOT
+ * Description: Leftover sun hitbox from OOT and fairy spawner
  */
 
 #include "z_shot_sun.h"
@@ -54,8 +54,9 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ShotSun* this = THIS;
 
-    if ((SHOTSUN_GET_FF(thisx) == SHOTSUN_40) || (SHOTSUN_GET_FF(thisx) == SHOTSUN_41)) {
-        this->unused = 0;
+    if ((SHOTSUN_GET_FF(thisx) == SHOTSUN_FAIRY_SPAWNER_SUNS) ||
+        (SHOTSUN_GET_FF(thisx) == SHOTSUN_FAIRY_SPAWNER_STORMS)) {
+        this->unk_19C = 0;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         this->actionFunc = func_809738D0;
@@ -71,7 +72,8 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
 void ShotSun_Destroy(Actor* thisx, PlayState* play) {
     ShotSun* this = THIS;
 
-    if ((SHOTSUN_GET_FF(thisx) != SHOTSUN_40) && (SHOTSUN_GET_FF(thisx) != SHOTSUN_41)) {
+    if ((SHOTSUN_GET_FF(thisx) != SHOTSUN_FAIRY_SPAWNER_SUNS) &&
+        (SHOTSUN_GET_FF(thisx) != SHOTSUN_FAIRY_SPAWNER_STORMS)) {
         Collider_DestroyCylinder(play, &this->collider);
     }
 }
@@ -86,10 +88,10 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
     } else {
         ActorCutscene_Stop(this->actor.cutscene);
         switch (params) {
-            case SHOTSUN_40:
+            case SHOTSUN_FAIRY_SPAWNER_SUNS:
                 fairyType = 7;
                 break;
-            case SHOTSUN_41:
+            case SHOTSUN_FAIRY_SPAWNER_STORMS:
                 fairyType = 7;
                 break;
         }
@@ -120,13 +122,13 @@ void func_809738D0(ShotSun* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 3) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
-                if (params == SHOTSUN_41) {
+                if (params == SHOTSUN_FAIRY_SPAWNER_STORMS) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
                 }
                 break;
             case OCARINA_SONG_SUNS:
-                if (params == SHOTSUN_40) {
+                if (params == SHOTSUN_FAIRY_SPAWNER_SUNS) {
                     this->actionFunc = ShotSun_TriggerFairy;
                     play->msgCtx.ocarinaMode = 4;
                 }
