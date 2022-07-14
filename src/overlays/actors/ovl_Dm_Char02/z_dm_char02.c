@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char02.c
  * Overlay: ovl_Dm_Char02
- * Description: Ocarina of Time (dropped from Skull Kid's hand)
+ * Description: The Ocarina of Time that for the scenes on the Clock Tower's rooftop.
  */
 
 #include "z_dm_char02.h"
