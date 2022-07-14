@@ -1993,7 +1993,7 @@ void Player_DrawCircusLeaderMask(PlayState* play, Actor* actor) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801278F8(PlayState* play, Player* player) {
+void Player_DrawBlastMask(PlayState* play, Player* player) {
     static Gfx D_801C0BC0[] = {
         gsDPSetEnvColor(0, 0, 0, 255),
         gsSPEndDisplayList(),
@@ -2009,22 +2009,22 @@ void func_801278F8(PlayState* play, Player* player) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (player->unk_B60 != 0) {
-        s32 phi_a0;
+        s32 alpha;
 
         gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
         if (player->unk_B60 < 11) {
-            phi_a0 = (player->unk_B60 / 10.0f) * 255;
+            alpha = (player->unk_B60 / 10.0f) * 255;
         } else {
-            phi_a0 = 255;
+            alpha = 255;
         }
 
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)phi_a0);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)alpha);
         gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - phi_a0));
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - alpha));
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
     }
@@ -2140,7 +2140,7 @@ Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
 Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
 Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_DrawBunnyMask.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127B64.s")
 
