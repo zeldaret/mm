@@ -16,6 +16,7 @@ void BgHakaBombwall_Destroy(Actor* thisx, PlayState* play);
 void BgHakaBombwall_Update(Actor* thisx, PlayState* play);
 void BgHakaBombwall_Draw(Actor* thisx, PlayState* play);
 
+void func_80BD5E6C(BgHakaBombwall* this, PlayState* play);
 void func_80BD6260(BgHakaBombwall* this);
 void func_80BD6274(BgHakaBombwall* this, PlayState* play);
 void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this);
@@ -136,7 +137,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, gravity, phi_s0, 30, 0, 0, D_80BD64CC[i & 3], phi_t0, 0, 50, -1,
-                             OBJECT_IKANA_OBJ, &object_haka_obj_DL_001680);
+                             OBJECT_IKANA_OBJ, object_haka_obj_DL_001680);
     }
 
     Matrix_Pop();
