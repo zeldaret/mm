@@ -21,6 +21,13 @@ void func_80BEBDF8(EffLastday* this, PlayState* play);
 void func_80BEBEB8(EffLastday* this, PlayState* play);
 void func_80BEBF78(EffLastday* this, PlayState* play);
 
+typedef enum EffLastDayAction {
+    /* 0x0 */ EFFLASTDAY_ACTION_NONE,
+    /* 0x1 */ EFFLASTDAY_ACTION_1,
+    /* 0x2 */ EFFLASTDAY_ACTION_2,
+    /* 0x3 */ EFFLASTDAY_ACTION_3
+} EffLastDayAction;
+
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,
@@ -42,7 +49,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
-            this->actionCmd = 0x1FC;
+            this->csActionCmd = 0x1FC;
             this->actionFunc = func_80BEBDF8;
             Actor_SetScale(&this->actor, 1.0f);
             break;
@@ -50,7 +57,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_2:
             this->dList = object_lastday_DL_000210;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000308);
-            this->actionCmd = 0x1FD;
+            this->csActionCmd = 0x1FD;
             this->actionFunc = func_80BEBEB8;
             Actor_SetScale(&this->actor, 0.5f);
             break;
@@ -58,7 +65,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         case EFFLASTDAY_PARAMS_3:
             this->dList = object_lastday_DL_000060;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000148);
-            this->actionCmd = 0x1FE;
+            this->csActionCmd = 0x1FE;
             this->actionFunc = func_80BEBF78;
             Actor_SetScale(&this->actor, 0.2f);
             this->actor.home.rot.z = 0;
@@ -67,15 +74,18 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
         default:
             this->dList = object_lastday_DL_000370;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000448);
-            this->actionCmd = 0x1FB;
+            this->csActionCmd = 0x1FB;
             this->actionFunc = func_80BEBD0C;
             Actor_SetScale(&this->actor, 1.0f);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 1);
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
+                               EFFLASTDAY_PARAMS_1);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 2);
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
+                               EFFLASTDAY_PARAMS_2);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
-                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 3);
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
+                               EFFLASTDAY_PARAMS_3);
             break;
     }
 }
@@ -84,12 +94,12 @@ void EffLastday_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BEBD0C(EffLastday* this, PlayState* play) {
-    u16 action;
+    u16 csAction;
 
-    if ((Cutscene_CheckActorAction(play, this->actionCmd))) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actionCmd));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actionCmd)]->action;
-        switch (action) {
+    if ((Cutscene_CheckActorAction(play, this->csActionCmd))) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
+        switch (csAction) {
             default:
                 this->actor.draw = NULL;
                 this->alpha = 0;
@@ -118,12 +128,12 @@ void func_80BEBD0C(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBDF8(EffLastday* this, PlayState* play) {
-    u16 action;
+    u16 csAction;
 
-    if (Cutscene_CheckActorAction(play, this->actionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actionCmd));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actionCmd)]->action;
-        switch (action) {
+    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
+        switch (csAction) {
             default:
                 this->actor.draw = NULL;
                 this->step = 0;
@@ -144,12 +154,12 @@ void func_80BEBDF8(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBEB8(EffLastday* this, PlayState* play) {
-    u16 action;
+    u16 csAction;
 
-    if (Cutscene_CheckActorAction(play, this->actionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actionCmd));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actionCmd)]->action;
-        switch (action) {
+    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
+        switch (csAction) {
             default:
                 this->actor.draw = NULL;
                 this->step = 0;
@@ -170,12 +180,12 @@ void func_80BEBEB8(EffLastday* this, PlayState* play) {
 }
 
 void func_80BEBF78(EffLastday* this, PlayState* play) {
-    u16 action;
+    u16 csAction;
 
-    if (Cutscene_CheckActorAction(play, this->actionCmd)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actionCmd));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actionCmd)]->action;
-        switch (action) {
+    if (Cutscene_CheckActorAction(play, this->csActionCmd)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActionCmd));
+        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActionCmd)]->action;
+        switch (csAction) {
             default:
                 this->actor.draw = NULL;
                 this->alpha = 0;

@@ -15,16 +15,9 @@ typedef struct EffLastday {
     /* 0x148 */ AnimatedMaterial* matAnim;
     /* 0x14C */ s16 step;
     /* 0x14E */ s16 alpha;
-    /* 0x150 */ s16 actionCmd;
+    /* 0x150 */ s16 csActionCmd;
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
-
-typedef enum EffLastDayAction {
-    /* 0x0 */ EFFLASTDAY_ACTION_NONE,
-    /* 0x1 */ EFFLASTDAY_ACTION_1,
-    /* 0x2 */ EFFLASTDAY_ACTION_2,
-    /* 0x3 */ EFFLASTDAY_ACTION_3
-} EffLastDayAction;
 
 typedef enum EffLastDayParams {
     /* 0x0 */ EFFLASTDAY_PARAMS_0,
