@@ -7548,7 +7548,7 @@
     0x80945CAC:("EnGe1_Wait",),
     0x80945CE4:("EnGe1_PerformCutsceneActions",),
     0x8094607C:("EnGe1_Update",),
-    0x80946190:("func_80946190",),
+    0x80946190:("EnGe1_ValidatePictograph",),
     0x80946238:("EnGe1_OverrideLimbDraw",),
     0x80946368:("EnGe1_PostLimbDraw",),
     0x80946400:("EnGe1_Draw",),

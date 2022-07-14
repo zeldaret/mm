@@ -52,7 +52,7 @@ extern AnimationHeader D_06002B98;
 
 //! State flags
 
-//! Disable normal movement to let cutscene and pathing function control it completely.
+//! Disable normal movement to let pathing function control it completely.
 #define GERUDO_WHITE_STATE_DISABLE_MOVEMENT 8
 
 typedef enum {
@@ -63,23 +63,23 @@ typedef enum {
 
 typedef enum {
     /* -1 */ GERUDO_WHITE_ANIM_NONE = -1,
-    /*  0 */ GERUDO_WHITE_ANIM_0,
-    /*  1 */ GERUDO_WHITE_ANIM_1, // Unused
-    /*  2 */ GERUDO_WHITE_ANIM_2,
-    /*  3 */ GERUDO_WHITE_ANIM_3,
-    /*  4 */ GERUDO_WHITE_ANIM_4,
-    /*  5 */ GERUDO_WHITE_ANIM_5,
-    /*  6 */ GERUDO_WHITE_ANIM_6,
-    /*  7 */ GERUDO_WHITE_ANIM_7,
-    /*  8 */ GERUDO_WHITE_ANIM_8,
-    /*  9 */ GERUDO_WHITE_ANIM_9,
+    /*  0 */ GERUDO_WHITE_ANIM_ARMS_FOLDED,
+    /*  1 */ GERUDO_WHITE_ANIM_UNFOLDING_ARMS, // Unused
+    /*  2 */ GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED,
+    /*  3 */ GERUDO_WHITE_ANIM_STIFFENING,
+    /*  4 */ GERUDO_WHITE_ANIM_STIFF_SHIVERING,
+    /*  5 */ GERUDO_WHITE_ANIM_TRUDGING_OFF,
+    /*  6 */ GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
+    /*  7 */ GERUDO_WHITE_ANIM_SALUTE,
+    /*  8 */ GERUDO_WHITE_ANIM_LEADING_BOAT,
+    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY,
 } GerudoWhiteAnimations;
 
 void EnGe1_SetAnimation(EnGe1* this, s16 index, u8 mode, f32 morphFrames);
 void EnGe1_ShadowDraw(Actor* actor, Lights* lights, PlayState* play);
 void EnGe1_Wait(EnGe1* this, PlayState* play);
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play);
-s32 func_80946190(PlayState* play, Actor* this);
+s32 EnGe1_ValidatePictograph(PlayState* play, Actor* this);
 
 void EnGe1_Init(Actor* thisx, PlayState* play) {
     EnGe1* this = THIS;
@@ -92,9 +92,9 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.01f);
     this->curAnim = this->csAction = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
-    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_0, ANIMMODE_LOOP, 0.0f);
+    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
     this->actionFunc = EnGe1_Wait;
-    this->picto.pictoFunc = func_80946190;
+    this->picto.validationFunc = EnGe1_ValidatePictograph;
 
     switch (GERUDO_WHITE_GET_TYPE(&this->picto.actor)) {
         default:
@@ -131,8 +131,16 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play) {
 
 void EnGe1_SetAnimation(EnGe1* this, s16 index, u8 mode, f32 morphFrames) {
     static AnimationHeader* sAnimations[] = {
-        0x06002B98, 0x06002AD8, 0x06000594, 0x06000CF8, 0x060013CC,
-        0x0600202C, 0x06002954, 0x06000ABC, 0x06002148, 0x06002148,
+        &gGerudoWhiteArmsFoldedAnim, // GERUDO_WHITE_ANIM_ARMS_FOLDED,
+        &gGerudoWhiteUnfoldingArmsAnim, // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
+        &gGerudoWhiteStandingHeadBowedAnim, // GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED,
+        &gGerudoWhiteStiffeningAnim, // GERUDO_WHITE_ANIM_STIFFENING,
+        &gGerudoWhiteStiffShiveringAnim, // GERUDO_WHITE_ANIM_STIFF_SHIVERING,
+        &gGerudoWhiteTrudgingOffAnim, // GERUDO_WHITE_ANIM_TRUDGING_OFF,
+        &gGerudoWhiteExcitedClappingAnim, // GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
+        &gGerudoWhiteSaluteAnim, // GERUDO_WHITE_ANIM_SALUTE,
+        &gGerudoWhiteGreatBayCutsceneAnim, // GERUDO_WHITE_ANIM_LEADING_BOAT,
+        &gGerudoWhiteGreatBayCutsceneAnim, // GERUDO_WHITE_ANIM_BLOWN_AWAY,
     };
 
     // The 8/9 cases are single frames of an "animation" used as static poses.
@@ -250,7 +258,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
     s16 csAction;
 
     if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
-        EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_4, ANIMMODE_LOOP, 0.0f);
+        EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_STIFF_SHIVERING, ANIMMODE_LOOP, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 0x79)) {
@@ -277,27 +285,27 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
             switch (this->csAction) {
                 // Aveil cutscene
                 case 1:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_0, ANIMMODE_LOOP, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case 2:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_2, ANIMMODE_LOOP, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case 3:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_3, ANIMMODE_ONCE, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_STIFFENING, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 4:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_5, ANIMMODE_ONCE, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_TRUDGING_OFF, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 5:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_6, ANIMMODE_LOOP, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_EXCITED_CLAPPING, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 case 6:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_7, ANIMMODE_ONCE, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_SALUTE, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 7:
@@ -306,11 +314,11 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
                     // Twister cutscene
                 case 8:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_8, ANIMMODE_ONCE, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_LEADING_BOAT, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 9:
-                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_9, ANIMMODE_ONCE, 0.0f);
+                    EnGe1_SetAnimation(this, GERUDO_WHITE_ANIM_BLOWN_AWAY, ANIMMODE_ONCE, 0.0f);
                     EnGe1_SetupPath(this, play);
                     this->stateFlags |= GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
@@ -320,12 +328,12 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
             SkelAnime_Update(&this->skelAnime);
         }
 
-        if ((this->curAnim == GERUDO_WHITE_ANIM_5) &&
+        if ((this->curAnim == GERUDO_WHITE_ANIM_TRUDGING_OFF) &&
             (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 25.0f))) {
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
 
-        if ((this->curAnim == GERUDO_WHITE_ANIM_7) && Animation_OnFrame(&this->skelAnime, 14.0f)) {
+        if ((this->curAnim == GERUDO_WHITE_ANIM_SALUTE) && Animation_OnFrame(&this->skelAnime, 14.0f)) {
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
     } else {
@@ -376,8 +384,7 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-// Pictograph related
-s32 func_80946190(PlayState* play, Actor* thisx) {
+s32 EnGe1_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret = Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                       400.0f, -1);
 
@@ -395,7 +402,7 @@ s32 EnGe1_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
-    if (this->curAnim == GERUDO_WHITE_ANIM_0) {
+    if (this->curAnim == GERUDO_WHITE_ANIM_ARMS_FOLDED) {
         // Make small fidgeting movements if in standing animation.
         if ((limbIndex == GERUDO_WHITE_LIMB_TORSO) || (limbIndex == GERUDO_WHITE_LIMB_LEFT_FOREARM) ||
             (limbIndex == GERUDO_WHITE_LIMB_RIGHT_FOREARM)) {
