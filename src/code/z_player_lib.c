@@ -753,37 +753,37 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 2, 0x26FD },
 };
 
-PlayerModelType gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
-    /* PLAYER_MODELGROUP_0 */
-    { PLAYER_ANIMTYPE_2, 0, 8, 12, 16 }, 
-    /* PLAYER_MODELGROUP_1 */
-    { PLAYER_ANIMTYPE_1, 2, 7, 15, 16 },   
-    /* PLAYER_MODELGROUP_2 */
-    { PLAYER_ANIMTYPE_1, 2, 8, 13, 16 }, 
-    /* PLAYER_MODELGROUP_3 */
-    { PLAYER_ANIMTYPE_0, 0, 6, 14, 16 },
-    /* PLAYER_MODELGROUP_4 */
-    { PLAYER_ANIMTYPE_0, 0, 6, 14, 16 }, 
-    /* PLAYER_MODELGROUP_5 */
-    { PLAYER_ANIMTYPE_3, 3, 7, 14, 16 },   
-    /* PLAYER_MODELGROUP_6 */
-    { PLAYER_ANIMTYPE_4, 1, 9, 14, 16 }, 
-    /* PLAYER_MODELGROUP_7 */
-    { PLAYER_ANIMTYPE_5, 0, 6, 14, 16 },
-    /* PLAYER_MODELGROUP_8 */
-    { PLAYER_ANIMTYPE_0, 4, 6, 14, 16 }, 
-    /* PLAYER_MODELGROUP_9 */
-    { PLAYER_ANIMTYPE_4, 0, 11, 14, 16 }, 
-    /* PLAYER_MODELGROUP_10 */
-    { PLAYER_ANIMTYPE_3, 1, 7, 14, 16 }, 
-    /* PLAYER_MODELGROUP_11 */
-    { PLAYER_ANIMTYPE_0, 0, 10, 14, 16 },
-    /* PLAYER_MODELGROUP_12 */
-    { PLAYER_ANIMTYPE_0, 5, 6, 14, 16 }, 
-    /* PLAYER_MODELGROUP_13 */
-    { PLAYER_ANIMTYPE_0, 2, 6, 15, 16 },   
-    /* PLAYER_MODELGROUP_14 */
-    { PLAYER_ANIMTYPE_0, 1, 7, 14, 16 },
+PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
+    /* PLAYER_MODELGROUP_0 */  
+    { PLAYER_ANIMTYPE_2, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_8, PLAYER_MODELTYPE_12, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_1 */  
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_2, PLAYER_MODELTYPE_7, PLAYER_MODELTYPE_15, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_2 */  
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_2, PLAYER_MODELTYPE_8, PLAYER_MODELTYPE_13, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_3 */  
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_4 */  
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_5 */  
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_3, PLAYER_MODELTYPE_7, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_6 */  
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_1, PLAYER_MODELTYPE_9, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_7 */  
+    { PLAYER_ANIMTYPE_5, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_8 */  
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_4, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_9 */  
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_11, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_10 */ 
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_1, PLAYER_MODELTYPE_7, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_11 */ 
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_0, PLAYER_MODELTYPE_10, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_12 */ 
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_5, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_13 */ 
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_2, PLAYER_MODELTYPE_6, PLAYER_MODELTYPE_15, PLAYER_MODELTYPE_16 },
+    /* PLAYER_MODELGROUP_14 */ 
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_1, PLAYER_MODELTYPE_7, PLAYER_MODELTYPE_14, PLAYER_MODELTYPE_16 },
 };
 
 /* DLists groups start */
@@ -957,9 +957,25 @@ Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
     object_link_child_DL_017B40,
 };
 
-Gfx** sPlayerDListGroups[] = {
-    D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
-    D_801C01F4, D_801C021C, D_801C0244, D_801C0034, D_801C005C, D_801C0084, D_801C0084, D_801BFFFC, NULL,
+Gfx** sPlayerDListGroups[PLAYER_MODELTYPE_MAX] = {
+    D_801C0114, // PLAYER_MODELTYPE_0
+    D_801C013C, // PLAYER_MODELTYPE_1
+    D_801C0164, // PLAYER_MODELTYPE_2
+    D_801C00EC, // PLAYER_MODELTYPE_3
+    D_801C0114, // PLAYER_MODELTYPE_4
+    D_801C026C, // PLAYER_MODELTYPE_5
+    D_801C01A4, // PLAYER_MODELTYPE_6
+    D_801C01CC, // PLAYER_MODELTYPE_7
+    D_801C01CC, // PLAYER_MODELTYPE_8
+    D_801C01F4, // PLAYER_MODELTYPE_9
+    D_801C021C, // PLAYER_MODELTYPE_10
+    D_801C0244, // PLAYER_MODELTYPE_11
+    D_801C0034, // PLAYER_MODELTYPE_12
+    D_801C005C, // PLAYER_MODELTYPE_13
+    D_801C0084, // PLAYER_MODELTYPE_14
+    D_801C0084, // PLAYER_MODELTYPE_15
+    D_801BFFFC, // PLAYER_MODELTYPE_16
+    NULL, // PLAYER_MODELTYPE_17
 };
 
 struct_80124618 D_801C0340[] = {
@@ -1118,13 +1134,13 @@ void func_801239AC(Player* player) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
-                    player->rightHandType = 8;
-                    player->rightHandDLists = &sPlayerDListGroups[8][D_801F59E0];
+                    player->rightHandType = PLAYER_MODELTYPE_8;
+                    player->rightHandDLists = &sPlayerDListGroups[PLAYER_MODELTYPE_8][D_801F59E0];
 
-                    if (player->sheathType == 14) {
-                        player->sheathType = 12;
-                    } else if (player->sheathType == 15) {
-                        player->sheathType = 13;
+                    if (player->sheathType == PLAYER_MODELTYPE_14) {
+                        player->sheathType = PLAYER_MODELTYPE_12;
+                    } else if (player->sheathType == PLAYER_MODELTYPE_15) {
+                        player->sheathType = PLAYER_MODELTYPE_13;
                     }
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
@@ -1137,16 +1153,16 @@ void func_801239AC(Player* player) {
 }
 
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
-    PlayerModelType* playerModelTypes;
+    PlayerModelIndices* playerModelTypes;
 
     D_801F59E0 = player->transformation * 2;
     player->leftHandType = gPlayerModelTypes[modelGroup].leftHandType;
     player->rightHandType = gPlayerModelTypes[modelGroup].rightHandType;
     player->sheathType = gPlayerModelTypes[modelGroup].sheathType;
 
-    if (player->sheathType == 14) {
+    if (player->sheathType == PLAYER_MODELTYPE_14) {
         if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
-            player->sheathType = 15;
+            player->sheathType = PLAYER_MODELTYPE_15;
         }
     }
 
@@ -1295,7 +1311,7 @@ s32 Player_HasMirrorShieldEquipped(PlayState* play) {
 s32 Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == 8) &&
+    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_8) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 

@@ -188,7 +188,7 @@ typedef enum {
 } PlayerMeleeWeaponAnimation;
 
 // TODO: figure out MAX
-typedef enum {
+typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_0,
     /* 1 */ PLAYER_ANIMTYPE_1,
     /* 2 */ PLAYER_ANIMTYPE_2,
@@ -198,13 +198,35 @@ typedef enum {
     // /* 6 */ PLAYER_ANIMTYPE_MAX
 } PlayerAnimType;
 
-typedef struct PlayerModelType {
+typedef enum PlayerModelType {
+    /*  0 */ PLAYER_MODELTYPE_0,
+    /*  1 */ PLAYER_MODELTYPE_1,
+    /*  2 */ PLAYER_MODELTYPE_2,
+    /*  3 */ PLAYER_MODELTYPE_3,
+    /*  4 */ PLAYER_MODELTYPE_4,
+    /*  5 */ PLAYER_MODELTYPE_5,
+    /*  6 */ PLAYER_MODELTYPE_6,
+    /*  7 */ PLAYER_MODELTYPE_7,
+    /*  8 */ PLAYER_MODELTYPE_8,
+    /*  9 */ PLAYER_MODELTYPE_9,
+    /* 10 */ PLAYER_MODELTYPE_10,
+    /* 11 */ PLAYER_MODELTYPE_11,
+    /* 12 */ PLAYER_MODELTYPE_12,
+    /* 13 */ PLAYER_MODELTYPE_13,
+    /* 14 */ PLAYER_MODELTYPE_14,
+    /* 15 */ PLAYER_MODELTYPE_15,
+    /* 16 */ PLAYER_MODELTYPE_16,
+    /* 17 */ PLAYER_MODELTYPE_17,
+    /* 18 */ PLAYER_MODELTYPE_MAX
+} PlayerModelType;
+
+typedef struct PlayerModelIndices {
     /* 0x0 */ u8 modelAnimType; // PlayerAnimType enum
-    /* 0x1 */ u8 leftHandType;
-    /* 0x2 */ u8 rightHandType;
-    /* 0x3 */ u8 sheathType;
-    /* 0x4 */ u8 waistType;
-} PlayerModelType; // size = 0x5
+    /* 0x1 */ u8 leftHandType; // PlayerModelType enum
+    /* 0x2 */ u8 rightHandType; // PlayerModelType enum
+    /* 0x3 */ u8 sheathType; // PlayerModelType enum
+    /* 0x4 */ u8 waistType; // PlayerModelType enum
+} PlayerModelIndices; // size = 0x5
 
 typedef enum PlayerModelGroup {
     /*  0 */ PLAYER_MODELGROUP_0,
