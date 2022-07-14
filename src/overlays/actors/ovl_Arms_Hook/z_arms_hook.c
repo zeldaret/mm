@@ -69,7 +69,7 @@ void ArmsHook_Destroy(Actor* thisx, PlayState* play) {
     ArmsHook* this = THIS;
 
     if (this->grabbed != NULL) {
-        this->grabbed->flags &= ~0x2000;
+        this->grabbed->flags &= ~ACTOR_FLAG_2000;
     }
     Collider_DestroyQuad(play, &this->collider);
 }
@@ -100,7 +100,7 @@ s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
 
 void ArmsHook_DetachHookFromActor(ArmsHook* this) {
     if (this->grabbed != NULL) {
-        this->grabbed->flags &= ~0x2000;
+        this->grabbed->flags &= ~ACTOR_FLAG_2000;
         this->grabbed = NULL;
     }
 }
@@ -109,8 +109,8 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
 
     if (Player_IsHoldingHookshot(player)) {
-        if ((player->heldItemActionParam != player->itemActionParam) || ((player->actor.flags & ACTOR_FLAG_100)) ||
-            ((player->stateFlags1 & (PLAYER_STATE1_4000000 | PLAYER_STATE1_80)))) {
+        if ((player->heldItemActionParam != player->itemActionParam) || (player->actor.flags & ACTOR_FLAG_100) ||
+            (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
             Math_Vec3f_Copy(&this->actor.world.pos, &player->rightHandWorld.pos);
@@ -121,7 +121,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
 }
 
 void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
-    actor->flags |= 0x2000;
+    actor->flags |= ACTOR_FLAG_2000;
     this->grabbed = actor;
     Math_Vec3f_Diff(&actor->world.pos, &this->actor.world.pos, &this->unk1FC);
 }
@@ -141,10 +141,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
-        if ((touchedActor->update != NULL) && (touchedActor->flags & 0x600)) {
+        if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_400 | ACTOR_FLAG_200))) {
             if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
-                if ((touchedActor->flags & 0x400) == 0x400) {
+                if (CHECK_FLAG_ALL(touchedActor->flags, ACTOR_FLAG_400)) {
                     func_808C1154(this);
                 }
             }
@@ -156,28 +156,25 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     }
 
     if (DECR(this->timer) == 0) {
-        Actor* grabbed;
+        Actor* grabbed = this->grabbed;
         Vec3f bodyDistDiffVec;
         Vec3f newPos;
         f32 bodyDistDiff;
         f32 phi_f16;
         s32 pad;
 
-        grabbed = this->grabbed;
         if (grabbed != NULL) {
-            if ((grabbed->update == NULL) || (grabbed->flags & 0x2000) != 0x2000) {
+            if ((grabbed->update == NULL) || !CHECK_FLAG_ALL(grabbed->flags, ACTOR_FLAG_2000)) {
                 grabbed = NULL;
                 this->grabbed = NULL;
-            } else {
-                if (this->actor.child != NULL) {
-                    f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
-                    f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
+            } else if (this->actor.child != NULL) {
+                f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
+                f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
 
-                    Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
-                    if (50.0f < (sp94 - sp90)) {
-                        ArmsHook_DetachHookFromActor(this);
-                        grabbed = NULL;
-                    }
+                Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
+                if (50.0f < (sp94 - sp90)) {
+                    ArmsHook_DetachHookFromActor(this);
+                    grabbed = NULL;
                 }
             }
         }
@@ -258,11 +255,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             this->actor.world.pos.z += 10.0f * nz;
             this->timer = 1;
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
-                {
-                    DynaPolyActor* dynaPolyActor;
-                    if (bgId != BGCHECK_SCENE && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
-                        ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
-                    }
+                DynaPolyActor* dynaPolyActor;
+
+                if (bgId != BGCHECK_SCENE && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
+                    ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                 }
                 func_808C1154(this);
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
@@ -270,12 +266,11 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                 CollisionCheck_SpawnShieldParticlesMetal(play, &this->actor.world.pos);
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
-        } else {
-            if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
-                              BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
-                s32 pad;
-                this->timer = 1;
-            }
+        } else if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
+                                 BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
+            s32 pad;
+
+            this->timer = 1;
         }
     }
 }
@@ -287,12 +282,12 @@ void ArmsHook_Update(Actor* thisx, PlayState* play) {
     this->unk1EC = this->unk1E0;
 }
 
-static Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
-static Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
-static Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
-static Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
-static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
+Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
+Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
+Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
+Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
+Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 void ArmsHook_Draw(Actor* thisx, PlayState* play) {
     ArmsHook* this = THIS;

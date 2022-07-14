@@ -305,7 +305,7 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if ((!(player->stateFlags1 & (PLAYER_STATE1_10000000 | PLAYER_STATE1_400 | PLAYER_STATE1_80 | PLAYER_STATE1_40))) ||
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
         (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, play);
     }

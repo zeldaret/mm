@@ -277,7 +277,7 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
             func_80B21EA4(this, 3);
             func_80B21FFC(this);
         } else if ((&player->actor == this->collider.base.oc) &&
-                   (player->stateFlags3 & (PLAYER_STATE3_80000 | PLAYER_STATE3_1000)) &&
+                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
                    (player->linearVelocity > 8.0f)) {
             player->unk_B08[0] = player->linearVelocity = -5.0f;
             player->unk_B08[1] += (player->linearVelocity * 0.05f);
