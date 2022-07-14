@@ -64,8 +64,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.z = 0;
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
-    this->unk160 = this->dyna.actor.home.rot.z * 0.1f;
-    if (1) {}
+    this->unk160 = thisx->home.rot.z * 0.1f;
     if (this->unk160 < 0.01f) {
         func_80AC9680(this);
     } else {
@@ -75,7 +74,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
         this->unk16C = 1;
         this->unk170 = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != 1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) &&
             (Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
             func_80AC96B4(this);
         } else {
@@ -109,7 +108,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
     f32 magnitude;
     f32 phi_fv0;
     f32 phi_fa0;
-    s32 params;
+    s32 paramsC;
     s32 sp34;
     Vec3s* temp_v1_2;
 
@@ -133,12 +132,12 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
-        params = OBJOCARINALIFT_GET_C(thisx);
+        paramsC = OBJOCARINALIFT_GET_C(thisx);
         sp34 = true;
         this->unk168 += this->unk16C;
         thisx->speedXZ *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (params == OBJOCARINALIFT_PARAMS_0) {
+            if (paramsC == OBJOCARINALIFT_PARAMSC_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
                 func_80AC9A68(this);
@@ -156,11 +155,11 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     func_80AC99C0(this);
                     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((params == OBJOCARINALIFT_PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+                } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((params == OBJOCARINALIFT_PARAMS_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+        } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {
@@ -177,7 +176,7 @@ void func_80AC99D4(ObjOcarinalift* this, PlayState* play) {
     if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         func_80AC94C0(this, this->unk168);
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == 1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAMSC_1) &&
             (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
             func_80AC9AB8(this);
         } else {
@@ -219,7 +218,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
     if (func_800B886C(&this->dyna.actor, play)) {
         if (play->msgCtx.ocarinaMode == 4) {
             if (play->msgCtx.unk1202E == 0) {
-                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != 1) {
+                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
                 ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

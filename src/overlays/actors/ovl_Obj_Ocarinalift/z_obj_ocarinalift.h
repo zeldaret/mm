@@ -19,14 +19,14 @@ typedef struct ObjOcarinalift {
     /* 0x164 */ s32 unk164;
     /* 0x168 */ s32 unk168;
     /* 0x16C */ s32 unk16C;
-    /* 0x170 */ Vec3s* unk170; // pointer segun mips2c
+    /* 0x170 */ Vec3s* unk170;
     /* 0x174 */ s16 timer;
     /* 0x176 */ s16 cutsceneTimer;
 } ObjOcarinalift; // size = 0x178
 
 typedef enum ObjOcarinaliftParams {
-    /* 0x0 */ OBJOCARINALIFT_PARAMS_0,
-    /* 0x1 */ OBJOCARINALIFT_PARAMS_1
+    /* 0x0 */ OBJOCARINALIFT_PARAMSC_0,
+    /* 0x1 */ OBJOCARINALIFT_PARAMSC_1
 } ObjOcarinaliftParams;
 
 extern const ActorInit Obj_Ocarinalift_InitVars;
