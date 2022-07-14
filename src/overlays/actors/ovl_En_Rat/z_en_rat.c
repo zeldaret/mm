@@ -15,6 +15,10 @@ void EnRat_Destroy(Actor* thisx, PlayState* play);
 void EnRat_Update(Actor* thisx, PlayState* play);
 void EnRat_Draw(Actor* thisx, PlayState* play);
 
+void func_80A563CC(EnRat* this);
+void func_80A5665C(EnRat* this);
+void func_80A57330(EnRat* this);
+
 #if 0
 const ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
@@ -89,11 +93,74 @@ extern CollisionCheckInfoInit D_80A5844C;
 extern InitChainEntry D_80A58464[];
 
 extern UNK_TYPE D_06000174;
-extern UNK_TYPE D_0600026C;
+extern AnimationHeader D_0600026C;
+extern FlexSkeletonHeader D_06001858;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/EnRat_Init.s")
+extern s16 D_80A58428;
+extern TexturePtr D_80A58454[];
+extern EffectBlureInit2 D_80A58470;
+extern s32 D_80A58494;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/EnRat_Destroy.s")
+void EnRat_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnRat* this = THIS;
+    s32 temp_s1;
+    s32 i;
+
+    Actor_ProcessInitChain(&this->actor, D_80A58464);
+    Collider_InitAndSetSphere(play, &this->collider, &this->actor, &D_80A58400);
+    this->collider.dim.worldSphere.radius = D_80A58428;
+
+    temp_s1 = this->actor.params & 0xFF;
+    if (ENRAT_GET_8000(&this->actor)) {
+        this->actor.params = 1;
+    } else {
+        this->actor.params = 0;
+    }
+
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06001858, &D_0600026C, this->jointTable, this->morphTable, 10);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
+    if (this->actor.params == 0) {
+        Effect_Add(play, &this->unk_260, EFFECT_BLURE2, 0, 0, &D_80A58470);
+        Effect_Add(play, &this->unk_264, EFFECT_BLURE2, 0, 0, &D_80A58470);
+        this->unk_190 = 0x1E;
+    } else {
+        this->unk_190 = 0x96;
+    }
+
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80A5842C, &D_80A5844C);
+    func_80A563CC(this);
+    func_80A5665C(this);
+
+    if ((temp_s1 == 0xFF) || (temp_s1 == 0)) {
+        this->unk_258 = 350.0f;
+    } else if (this->actor.params == 0) {
+        this->unk_258 = temp_s1 * 0.1f * 40.0f;
+    } else {
+        this->unk_258 = temp_s1 * 0.5f * 40.0f;
+    }
+
+    if (!D_80A58494) {
+        for (i = 0; i < 4; i++) {
+            D_80A58454[i] = Lib_SegmentedToVirtual(D_80A58454[i]);
+        }
+
+        D_80A58494 = true;
+    }
+
+    func_80A57330(this);
+}
+
+void EnRat_Destroy(Actor* thisx, PlayState* play) {
+    EnRat* this = THIS;
+
+    if (this->actor.params == 0) {
+        Effect_Destroy(play, this->unk_260);
+        Effect_Destroy(play, this->unk_264);
+    }
+
+    Collider_DestroySphere(play, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A563CC.s")
 
