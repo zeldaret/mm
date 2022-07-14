@@ -146,7 +146,7 @@ typedef enum {
     /* 0x50 */ PLAYER_AP_MASK_ZORA,
     /* 0x51 */ PLAYER_AP_MASK_DEKU,
     /* 0x52 */ PLAYER_AP_LENS,
-    /* 0xFD */ PLAYER_AP_MAX = 0xFD
+    /* 0x53 */ PLAYER_AP_MAX
 } PlayerActionParam;
 
 typedef enum {
@@ -186,6 +186,33 @@ typedef enum {
     /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
+
+typedef struct PlayerModelType {
+    /* 0x0 */ u8 animType;
+    /* 0x1 */ u8 leftHandType;
+    /* 0x2 */ u8 rightHandType;
+    /* 0x3 */ u8 sheathType;
+    /* 0x4 */ u8 waistType;
+} PlayerModelType; // size = 0x5
+
+typedef enum PlayerModelGroup {
+    /*  0 */ PLAYER_MODELGROUP_0,
+    /*  1 */ PLAYER_MODELGROUP_1,
+    /*  2 */ PLAYER_MODELGROUP_2,
+    /*  3 */ PLAYER_MODELGROUP_3,
+    /*  4 */ PLAYER_MODELGROUP_4,
+    /*  5 */ PLAYER_MODELGROUP_5,
+    /*  6 */ PLAYER_MODELGROUP_6,
+    /*  7 */ PLAYER_MODELGROUP_7,
+    /*  8 */ PLAYER_MODELGROUP_8,
+    /*  9 */ PLAYER_MODELGROUP_9,
+    /* 10 */ PLAYER_MODELGROUP_10,
+    /* 11 */ PLAYER_MODELGROUP_11,
+    /* 12 */ PLAYER_MODELGROUP_12,
+    /* 13 */ PLAYER_MODELGROUP_13,
+    /* 14 */ PLAYER_MODELGROUP_14,
+    /* 15 */ PLAYER_MODELGROUP_MAX
+} PlayerModelGroup;
 
 typedef enum {
     /* 0 */ PLAYER_EYES_OPEN,
@@ -522,12 +549,12 @@ typedef struct Player {
     /* 0x144 */ s8 currentShield;
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
-    /* 0x147 */ s8 itemActionParam;
-    /* 0x148 */ u8 heldItemId;
+    /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
+    /* 0x148 */ u8 heldItemId; // ItemID enum
     /* 0x149 */ s8 prevBoots;
     /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 transformation;
-    /* 0x14C */ u8 modelGroup;
+    /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
     /* 0x14E */ s8 unk_14E;
     /* 0x14F */ u8 modelAnimType;

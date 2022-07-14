@@ -1161,7 +1161,7 @@ extern UNK_PTR D_801BF5C0;
 // extern UNK_TYPE2 D_801BFD98;
 
 extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
-extern u8 gPlayerModelTypes[][5];
+extern PlayerModelType gPlayerModelTypes[];
 extern struct_80124618 D_801C03A0[];
 extern struct_80124618 D_801C0490[];
 extern Gfx gCullBackDList[];

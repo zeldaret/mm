@@ -589,7 +589,7 @@ u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 s32 func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 temp_v0;
-    s32 itemId;
+    ItemID itemId;
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
@@ -627,18 +627,98 @@ s32 func_80123810(PlayState* play) {
     return 0;
 }
 
-u8 sActionModelGroups[] = {
-    3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
-    0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC,
-    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
-    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   0,
+// Used to map action params to model groups
+u8 sActionModelGroups[PLAYER_AP_MAX] = {
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_13, 
+    PLAYER_MODELGROUP_10, 
+    PLAYER_MODELGROUP_2,   
+    PLAYER_MODELGROUP_2,   
+    PLAYER_MODELGROUP_2,   
+    PLAYER_MODELGROUP_5,   
+    PLAYER_MODELGROUP_10, 
+    PLAYER_MODELGROUP_14, 
+    PLAYER_MODELGROUP_6,   
+    PLAYER_MODELGROUP_6,   
+    PLAYER_MODELGROUP_6,   
+    PLAYER_MODELGROUP_6,   
+    PLAYER_MODELGROUP_9,   
+    PLAYER_MODELGROUP_7,   
+    PLAYER_MODELGROUP_7,   
+    PLAYER_MODELGROUP_7,   
+    PLAYER_MODELGROUP_8,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_11,
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12, 
+    PLAYER_MODELGROUP_12,
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,   
+    PLAYER_MODELGROUP_3,
 };
 
-s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
-    s32 modelGroup = sActionModelGroups[actionParam];
+PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam) {
+    PlayerModelGroup modelGroup = sActionModelGroups[actionParam];
 
-    if ((modelGroup == 2) && Player_IsGoronOrDeku(player)) {
-        return 1;
+    if ((modelGroup == PLAYER_MODELGROUP_2) && Player_IsGoronOrDeku(player)) {
+        return PLAYER_MODELGROUP_1;
     }
     return modelGroup;
 }
@@ -673,11 +753,37 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 2, 0x26FD },
 };
 
-u8 gPlayerModelTypes[][5] = {
-    { 2, 0, 8, 0xC, 0x10 }, { 1, 2, 7, 0xF, 0x10 },   { 1, 2, 8, 0xD, 0x10 }, { 0, 0, 6, 0xE, 0x10 },
-    { 0, 0, 6, 0xE, 0x10 }, { 3, 3, 7, 0xE, 0x10 },   { 4, 1, 9, 0xE, 0x10 }, { 5, 0, 6, 0xE, 0x10 },
-    { 0, 4, 6, 0xE, 0x10 }, { 4, 0, 0xB, 0xE, 0x10 }, { 3, 1, 7, 0xE, 0x10 }, { 0, 0, 0xA, 0xE, 0x10 },
-    { 0, 5, 6, 0xE, 0x10 }, { 0, 2, 6, 0xF, 0x10 },   { 0, 1, 7, 0xE, 0x10 },
+PlayerModelType gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
+    /* PLAYER_MODELGROUP_0 */
+    { 2, 0, 8, 12, 16 }, 
+    /* PLAYER_MODELGROUP_1 */
+    { 1, 2, 7, 15, 16 },   
+    /* PLAYER_MODELGROUP_2 */
+    { 1, 2, 8, 13, 16 }, 
+    /* PLAYER_MODELGROUP_3 */
+    { 0, 0, 6, 14, 16 },
+    /* PLAYER_MODELGROUP_4 */
+    { 0, 0, 6, 14, 16 }, 
+    /* PLAYER_MODELGROUP_5 */
+    { 3, 3, 7, 14, 16 },   
+    /* PLAYER_MODELGROUP_6 */
+    { 4, 1, 9, 14, 16 }, 
+    /* PLAYER_MODELGROUP_7 */
+    { 5, 0, 6, 14, 16 },
+    /* PLAYER_MODELGROUP_8 */
+    { 0, 4, 6, 14, 16 }, 
+    /* PLAYER_MODELGROUP_9 */
+    { 4, 0, 11, 14, 16 }, 
+    /* PLAYER_MODELGROUP_10 */
+    { 3, 1, 7, 14, 16 }, 
+    /* PLAYER_MODELGROUP_11 */
+    { 0, 0, 10, 14, 16 },
+    /* PLAYER_MODELGROUP_12 */
+    { 0, 5, 6, 14, 16 }, 
+    /* PLAYER_MODELGROUP_13 */
+    { 0, 2, 6, 15, 16 },   
+    /* PLAYER_MODELGROUP_14 */
+    { 0, 1, 7, 14, 16 },
 };
 
 /* DLists groups start */
@@ -1030,13 +1136,13 @@ void func_801239AC(Player* player) {
     }
 }
 
-void Player_SetModels(Player* player, s32 modelGroup) {
-    u8* playerModelTypes;
+void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
+    PlayerModelType* playerModelTypes;
 
     D_801F59E0 = player->transformation * 2;
-    player->leftHandType = gPlayerModelTypes[modelGroup][1];
-    player->rightHandType = gPlayerModelTypes[modelGroup][2];
-    player->sheathType = gPlayerModelTypes[modelGroup][3];
+    player->leftHandType = gPlayerModelTypes[modelGroup].leftHandType;
+    player->rightHandType = gPlayerModelTypes[modelGroup].rightHandType;
+    player->sheathType = gPlayerModelTypes[modelGroup].sheathType;
 
     if (player->sheathType == 14) {
         if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
@@ -1044,23 +1150,23 @@ void Player_SetModels(Player* player, s32 modelGroup) {
         }
     }
 
-    playerModelTypes = gPlayerModelTypes[modelGroup];
+    playerModelTypes = &gPlayerModelTypes[modelGroup];
 
-    player->leftHandDLists = &sPlayerDListGroups[playerModelTypes[1]][D_801F59E0];
-    player->rightHandDLists = &sPlayerDListGroups[playerModelTypes[2]][D_801F59E0];
-    player->sheathDLists = &sPlayerDListGroups[playerModelTypes[3]][D_801F59E0];
-    player->waistDLists = &sPlayerDListGroups[playerModelTypes[4]][D_801F59E0];
+    player->leftHandDLists = &sPlayerDListGroups[playerModelTypes->leftHandType][D_801F59E0];
+    player->rightHandDLists = &sPlayerDListGroups[playerModelTypes->rightHandType][D_801F59E0];
+    player->sheathDLists = &sPlayerDListGroups[playerModelTypes->sheathType][D_801F59E0];
+    player->waistDLists = &sPlayerDListGroups[playerModelTypes->waistType][D_801F59E0];
 
     func_801239AC(player);
 }
 
-void Player_SetModelGroup(Player* player, s32 modelGroup) {
+void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
     player->modelGroup = modelGroup;
 
-    if (modelGroup == 1) {
+    if (modelGroup == PLAYER_MODELGROUP_1) {
         player->modelAnimType = 0;
     } else {
-        player->modelAnimType = gPlayerModelTypes[modelGroup][0];
+        player->modelAnimType = gPlayerModelTypes[modelGroup].animType;
     }
 
     if (player->modelAnimType < 3) {
@@ -1094,7 +1200,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam) {
+void func_80123D50(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -1201,7 +1307,7 @@ s32 func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
-s32 func_80124110(Player* player, s32 actionParam) {
+s32 func_80124110(Player* player, PlayerActionParam actionParam) {
     s32 temp_v0 = actionParam - PLAYER_AP_FISHING_POLE;
 
     if (player->transformation != PLAYER_FORM_GORON) {
@@ -1218,7 +1324,7 @@ s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-s32 Player_ActionToMeleeWeapon(s32 actionParam) {
+s32 Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
     s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
 
     if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
@@ -1240,7 +1346,7 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     return false;
 }
 
-s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
     s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
     // Relies on bottle-related action params to be contiguous
@@ -1255,7 +1361,7 @@ s32 Player_GetBottleHeld(Player* Player) {
     return Player_ActionToBottle(Player, Player->itemActionParam);
 }
 
-s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
     s32 explosive = actionParam - PLAYER_AP_BOMB;
 
     // Relies on explosive-related action params to be contiguous
@@ -1270,8 +1376,7 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-// Convert actionParam to sword
-s32 func_80124278(Actor* actor, s32 actionParam) {
+s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
     s32 sword = 0;
 
     //! FAKE:

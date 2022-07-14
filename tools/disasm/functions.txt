@@ -2230,7 +2230,7 @@
     0x8012420C:("Player_GetBottleHeld",),
     0x8012422C:("Player_ActionToExplosive",),
     0x80124258:("Player_GetExplosiveHeld",),
-    0x80124278:("func_80124278",),
+    0x80124278:("Player_ActionToSword",),
     0x801242B4:("func_801242B4",),
     0x801242DC:("func_801242DC",),
     0x80124420:("func_80124420",),
