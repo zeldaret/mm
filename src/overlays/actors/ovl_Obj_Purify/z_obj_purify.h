@@ -16,16 +16,6 @@ typedef struct ObjPurify {
     /* 0x168 */ f32 unk168[2];
 } ObjPurify; // size = 0x170
 
-typedef struct ObjPurifyInfo {
-    /* 0x00 */ s16 objectId;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ Gfx* opaDLists[2];
-    /* 0x10 */ Gfx* xluDLists[2];
-    /* 0x18 */ AnimatedMaterial* animMat[2];
-    /* 0x20 */ CollisionHeader* colHeader;
-    /* 0x24 */ s32 isDekuCity;
-} ObjPurifyInfo; // size = 0x28
-
 extern const ActorInit Obj_Purify_InitVars;
 
 #endif // Z_OBJ_PURIFY_H

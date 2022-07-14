@@ -12,6 +12,9 @@
 
 #define THIS ((ObjPurify*)thisx)
 
+#define OBJPURIFY_GET_INFO_INDEX(this) (this->dyna.actor.params & 0xF)
+#define OBJPURIFY_GET_UNK_FLAG(this) ((this->dyna.actor.params >> 0xC) & 1)
+
 void ObjPurify_Init(Actor* thisx, PlayState* play);
 void ObjPurify_Destroy(Actor* thisx, PlayState* play);
 void ObjPurify_Update(Actor* thisx, PlayState* play);
@@ -31,6 +34,16 @@ void func_80A8515C(ObjPurify* this);
 void func_80A84FEC(ObjPurify* this);
 void func_80A84EAC(ObjPurify* this);
 
+typedef struct ObjPurifyInfo {
+    /* 0x00 */ s16 objectId;
+    /* 0x04 */ f32 scale;
+    /* 0x08 */ Gfx* opaDLists[2];
+    /* 0x10 */ Gfx* xluDLists[2];
+    /* 0x18 */ AnimatedMaterial* animMat[2];
+    /* 0x20 */ CollisionHeader* colHeader;
+    /* 0x24 */ s32 isDekuCity;
+} ObjPurifyInfo; // size = 0x28
+
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
@@ -45,7 +58,7 @@ const ActorInit Obj_Purify_InitVars = {
 
 ObjPurifyInfo ObjPurifyInfoList[] = {
     {
-        0x164,
+        OBJECT_NUMA_OBJ,
         0.1f,
         { NULL, NULL },
         { object_numa_obj_DL_0128E0, object_numa_obj_DL_012D90 },
@@ -54,7 +67,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         0,
     },
     {
-        0x19A,
+        OBJECT_DEKUCITY_OBJ,
         1.0f,
         { NULL, NULL },
         { object_dekucity_obj_DL_0004E0, object_dekucity_obj_DL_001030 },
@@ -63,7 +76,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         1,
     },
     {
-        0x19A,
+        OBJECT_DEKUCITY_OBJ,
         1.0f,
         { object_dekucity_obj_DL_001ED8, object_dekucity_obj_DL_003998 },
         { object_dekucity_obj_DL_001D80, NULL },
@@ -72,7 +85,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         1,
     },
     {
-        0x164,
+        OBJECT_NUMA_OBJ,
         0.1f,
         { NULL, NULL },
         { object_numa_obj_DL_012A60, object_numa_obj_DL_012F10 },
@@ -81,7 +94,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         0,
     },
     {
-        0x164,
+        OBJECT_NUMA_OBJ,
         0.1f,
         { NULL, NULL },
         { object_numa_obj_DL_012BF0, object_numa_obj_DL_0130A0 },
@@ -97,7 +110,8 @@ void ObjPurify_SetSysMatrix(f32 ypos) {
 
 s32 ObjPurify_IsPurified(ObjPurify* this) {
     ObjPurifyInfo* info;
-    info = &ObjPurifyInfoList[this->dyna.actor.params & 0xF];
+    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
+
     if (!info->isDekuCity) {
         // woodfall temple wood flower unraveled
         if ((gSaveContext.save.weekEventReg[12] & 1)) {
@@ -105,20 +119,22 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
         }
     }
     // woodfall temple purification cutscene watched
-    else if (gSaveContext.save.weekEventReg[20] & 2) {
-        return true;
+    else {
+        if (gSaveContext.save.weekEventReg[20] & 2) {
+            return true;
+        }
     }
     return false;
 }
 
 void ObjPurify_Init(Actor* thisx, PlayState* play) {
-    ObjPurify* this = THIS;
     s32 pad;
+    ObjPurify* this = THIS;
     ObjPurifyInfo* info;
     s32 sp20;
 
-    info = &ObjPurifyInfoList[this->dyna.actor.params & 0xF];
-    sp20 = (this->dyna.actor.params >> 0xC) & 1;
+    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
+    sp20 = OBJPURIFY_GET_UNK_FLAG(this);
     Actor_SetScale(&this->dyna.actor, info->scale);
     if (sp20 == 1) {
         DynaPolyActor_Init((DynaPolyActor*)this, 0);
@@ -137,7 +153,7 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
 
 void ObjPurify_Destroy(Actor* thisx, PlayState* play) {
     ObjPurify* this = THIS;
-    if (((this->dyna.actor.params >> 0xC) & 1) == 1) {
+    if (OBJPURIFY_GET_UNK_FLAG(this) == 1) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -147,17 +163,17 @@ void func_80A84EAC(ObjPurify* this) {
 }
 
 void func_80A84EC0(ObjPurify* this, PlayState* play) {
-    s16 pad;
+    s32 pad;
     s32 sp28;
-    s32 sp24;
+    s32 index;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex) != 0) {
-        sp28 = (this->dyna.actor.params >> 0xC) & 1;
-        sp24 = this->dyna.actor.params & 0xF;
+    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+        sp28 = OBJPURIFY_GET_UNK_FLAG(this);
+        index = OBJPURIFY_GET_INFO_INDEX(this);
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         if (sp28 == 1) {
-            DynaPolyActor_LoadMesh(play, &this->dyna, ObjPurifyInfoList[sp24].colHeader);
+            DynaPolyActor_LoadMesh(play, &this->dyna, ObjPurifyInfoList[index].colHeader);
             func_80A84FA0(this);
         } else if (ObjPurify_IsPurified(this)) {
             func_80A8515C(this);
@@ -230,6 +246,7 @@ void ObjPurify_DoNothing(ObjPurify* this, PlayState* play) {
 
 void ObjPurify_Update(Actor* thisx, PlayState* play) {
     ObjPurify* this = THIS;
+
     this->actionFunc(this, play);
 }
 
@@ -241,7 +258,7 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
     Gfx* xluDList;
     AnimatedMaterial* animMat;
 
-    info = &ObjPurifyInfoList[this->dyna.actor.params & 0xF];
+    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
     opaDList = info->opaDLists[this->gfxIndex];
     xluDList = info->xluDLists[this->gfxIndex];
     animMat = info->animMat[this->gfxIndex];
@@ -268,7 +285,7 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
 void func_80A85304(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info = &ObjPurifyInfoList[this->dyna.actor.params & 0xF];
+    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
     s32 sp6C[2];
     s32 i;
     s32 index;
