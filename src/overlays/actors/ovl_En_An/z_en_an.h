@@ -43,7 +43,7 @@ typedef struct EnAn {
     /* 0x1F8 */ s32 timePathWaypoint;
     /* 0x1FC */ s32 timePathElapsedTime;
     /* 0x200 */ u8 scheduleResult;
-    /* 0x204 */ s32* msgEventScript;
+    /* 0x204 */ MsgScript* msgEventScript;
     /* 0x208 */ s8 an2ObjectSlot;
     /* 0x209 */ s8 an3ObjectSlot;
     /* 0x20A */ s8 maskKerfayObjectSlot;

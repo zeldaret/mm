@@ -19,10 +19,64 @@ void func_8092D330(EnDns* this, PlayState* play);
 void EnDns_DoNothing(EnDns* this, PlayState* play);
 void func_8092D4D8(EnDns* this, PlayState* play);
 
-static s32 D_8092DCB0[] = {
-    0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
-    0x00172000, 0x050E0831, 0x0C100E08, 0x220C1000, 0x00172000, 0x050E0832, 0x0C100E08, 0x230C1000,
-    0x0E08330C, 0x09000015, 0x1C014016, 0x10000000, 0x0E082E0C, 0x10000000,
+static MsgScript D_8092DCB0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x17, 0x20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x082F),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0820),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_DONE(),
+};
+
+static MsgScript D_8092DCC0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x17, 0x20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x0830),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0821),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_DONE(),
+};
+
+static MsgScript D_8092DCD0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x17, 0x20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x0831),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0822),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_DONE(),
+};
+
+static MsgScript D_8092DCE0[] = {
+    /* 0x0000 0x05 */ MSCRIPT_BRANCH_ON_WEEK_EVENT_REG(0x17, 0x20, 0x000A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x0832),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_DONE(),
+
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x0823),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_DONE(),
+};
+
+static MsgScript D_8092DCF0[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x0833),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x0007 0x01 */ MSCRIPT_PAUSE(),
+    /* 0x0008 0x03 */ MSCRIPT_SET_EVENT_INF(0x01, 0x40),
+    /* 0x000B 0x01 */ MSCRIPT_CMD22(),
+    /* 0x000C 0x01 */ MSCRIPT_DONE(),
+};
+
+static MsgScript D_8092DD00[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x082E),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_DONE(),
 };
 
 ActorInit En_Dns_InitVars = {
@@ -178,29 +232,29 @@ void func_8092C934(EnDns* this) {
     }
 }
 
-s32* func_8092C9BC(EnDns* this, PlayState* play) {
+MsgScript* func_8092C9BC(EnDns* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
-            return &D_8092DCB0[16];
+            return D_8092DCF0;
         } else if (this->unk_2FC != 0) {
-            return &D_8092DCB0[20];
+            return D_8092DD00;
         }
     }
 
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return &D_8092DCB0[0];
+            return D_8092DCB0;
 
         case ENDNS_GET_7_1:
-            return &D_8092DCB0[4];
+            return D_8092DCC0;
 
         case ENDNS_GET_7_2:
-            return &D_8092DCB0[8];
+            return D_8092DCD0;
 
         case ENDNS_GET_7_3:
-            return &D_8092DCB0[12];
+            return D_8092DCE0;
 
         default:
             return NULL;
@@ -285,9 +339,9 @@ s32 func_8092CC68(PlayState* play) {
     return ret;
 }
 
-s32 func_8092CCEC(EnDns* this, PlayState* play) {
+s32 func_8092CCEC(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 pad;
+    EnDns* this = THIS;
     Vec3f sp3C = player->actor.world.pos;
     Vec3f sp30 = this->actor.world.pos;
     s16 sp2E;
@@ -410,7 +464,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = EnDns_DoNothing;
         } else if (CHECK_EVENTINF(EVENTINF_16)) {
-            func_8092CCEC(this, play);
+            func_8092CCEC(&this->actor, play);
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = func_8092D330;
         }
@@ -455,7 +509,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
         if (func_8092CE38(this)) {
             EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
         }
-    } else if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
+    } else if (MsgEvent_RunScript(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {

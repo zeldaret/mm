@@ -7,7 +7,6 @@
 struct EnTab;
 
 typedef void (*EnTabActionFunc)(struct EnTab*, PlayState*);
-typedef s32 (*EnTabUnkFunc)(struct EnTab*, PlayState*);
 
 typedef struct EnTab {
     /* 0x000 */ Actor actor;
@@ -38,7 +37,7 @@ typedef struct EnTab {
     /* 0x320 */ s16 unk_320;
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
-    /* 0x328 */ EnTabUnkFunc unk_328;
+    /* 0x328 */ MsgEventCallback unk_328;
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk330[4];
     /* 0x334 */ s32 prevTalkState;

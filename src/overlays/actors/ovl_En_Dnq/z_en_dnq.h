@@ -21,7 +21,7 @@ typedef struct EnDnq {
     /* 0x370 */ Vec3f unk_370;
     /* 0x37C */ u16 unk_37C;
     /* 0x37E */ s16 unk_37E;
-    /* 0x380 */ s32* unk_380;
+    /* 0x380 */ MsgScript* unk_380;
     /* 0x384 */ s16 unk_384;
     /* 0x386 */ s16 unk_386;
     /* 0x388 */ s16 unk_388;

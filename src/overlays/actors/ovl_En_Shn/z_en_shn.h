@@ -7,7 +7,6 @@
 struct EnShn;
 
 typedef void (*EnShnActionFunc)(struct EnShn*, PlayState*);
-typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 typedef struct EnShn {
     /* 0x000 */ Actor actor;
@@ -16,7 +15,7 @@ typedef struct EnShn {
     /* 0x18C */ UNK_TYPE1 pad_18C[0x4C];
     /* 0x1D8 */ u16 unk_1D8;
     /* 0x1DA */ u16 unk_1DA;
-    /* 0x1DC */ UNK_TYPE* unk_1DC;
+    /* 0x1DC */ MsgScript* unk_1DC;
     /* 0x1E0 */ s32 unk_1E0;
     /* 0x1E4 */ Player* shnPlayerRef;
     /* 0x1E8 */ Vec3f unk_1E8;
@@ -35,7 +34,7 @@ typedef struct EnShn {
     /* 0x2CC */ f32 animPlaySpeed;
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
-    /* 0x2D8 */ MsgEventFunc unk_2D8;
+    /* 0x2D8 */ MsgEventCallback msgEventCallback;
     /* 0x2DC */ s32 prevTalkState;
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;

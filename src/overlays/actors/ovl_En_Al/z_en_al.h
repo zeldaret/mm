@@ -7,7 +7,6 @@
 struct EnAl;
 
 typedef void (*EnAlActionFunc)(struct EnAl*, PlayState*);
-typedef s32 (*EnAlUnkFunc)(struct EnAl*, PlayState*);
 typedef void (*EnAlUnkFunc2)(struct EnAl*, PlayState*);
 
 typedef struct EnAl {
@@ -18,7 +17,7 @@ typedef struct EnAl {
     /* 0x190 */ MtxF unk_190[6];
     /* 0x310 */ ColliderCylinder unk_310;
     /* 0x35C */ u8 unk_35C;
-    /* 0x360 */ s32* unk_360;
+    /* 0x360 */ MsgScript* unk_360;
     /* 0x364 */ s32 unk_364;
     /* 0x368 */ Actor* unk_368;
     /* 0x36C */ Vec3f unk_36C;
@@ -39,7 +38,7 @@ typedef struct EnAl {
     /* 0x4E6 */ s16 unk_4E6;
     /* 0x4E8 */ s16 unk_4E8;
     /* 0x4EA */ s16 unk_4EA;
-    /* 0x4EC */ EnAlUnkFunc unk_4EC;
+    /* 0x4EC */ MsgEventCallback unk_4EC;
     /* 0x4F0 */ s32 unk_4F0;
     /* 0x4F4 */ s32 unk_4F4;
     /* 0x4F8 */ s32 animIndex;

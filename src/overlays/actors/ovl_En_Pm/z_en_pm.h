@@ -6,7 +6,6 @@
 struct EnPm;
 
 typedef void (*EnPmActionFunc)(struct EnPm*, PlayState*);
-typedef s32 (*EnPmFunc)(struct EnPm*, PlayState*);
 typedef s32 (*EnPmFunc2)(struct EnPm*, PlayState*);
 
 #define ENPM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
@@ -26,7 +25,7 @@ typedef struct EnPm {
     /* 0x250 */ s32 timePathWaypoint;
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
-    /* 0x25C */ UNK_TYPE* unk_25C;
+    /* 0x25C */ MsgScript* unk_25C;
     /* 0x260 */ s8 unk_260;
     /* 0x264 */ s32 unk_264;
     /* 0x268 */ Actor* unk_268;
@@ -49,7 +48,7 @@ typedef struct EnPm {
     /* 0x374 */ s16 timePathTimeSpeed;
     /* 0x376 */ s16 unk_376;
     /* 0x378 */ s16 unk_378;
-    /* 0x37C */ EnPmFunc unk_37C;
+    /* 0x37C */ MsgEventCallback unk_37C;
     /* 0x380 */ s32 unk_380;
     /* 0x384 */ s32 unk_384;
     /* 0x388 */ s32 prevTalkState;

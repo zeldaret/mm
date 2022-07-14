@@ -23,20 +23,84 @@ void func_80BC3594(EnJa* this, PlayState* play);
 
 #include "src/overlays/actors/ovl_En_Ja/scheduleScripts.schl.inc"
 
-s32 D_80BC360C[] = {
-    0x0E29370C, 0x170E2938, 0x0C180E29, 0x390C170E, 0x293A0C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC360C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x2937),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x2938),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x2939),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_BEGIN_TEXT(0x293A),
+    /* 0x0012 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_DONE(),
 };
 
-s32 D_80BC362C[] = {
-    0x0E29400C, 0x170E2941, 0x0C180E29, 0x420C170E, 0x29430C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC362C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x2940),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x2941),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x2942),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_BEGIN_TEXT(0x2943),
+    /* 0x0012 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_DONE(),
 };
 
-s32 D_80BC364C[] = {
-    0x0E293C0C, 0x170E293D, 0x0C180E29, 0x3E0C170E, 0x293F0C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC364C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x293C),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x293D),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x293E),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_BEGIN_TEXT(0x293F),
+    /* 0x0012 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_DONE(),
 };
 
-s32 D_80BC366C[] = {
-    0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC366C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_BEGIN_TEXT(0x2944),
+    /* 0x0003 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_BEGIN_TEXT(0x2945),
+    /* 0x0008 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_BEGIN_TEXT(0x2946),
+    /* 0x000D 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_BEGIN_TEXT(0x2947),
+    /* 0x0012 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_BRANCH_ON_CALLBACK_OPTIONAL(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_DONE(),
 };
 
 ActorInit En_Ja_InitVars = {
@@ -323,7 +387,7 @@ void func_80BC21A8(EnJa* this, PlayState* play) {
     func_80BC2150(this, play);
 }
 
-s32* func_80BC2274(EnJa* this, PlayState* play) {
+MsgScript* func_80BC2274(EnJa* this, PlayState* play) {
     switch (this->unk_1D8.unk_00) {
         case 1:
             if (ENJA_GET_3(&this->actor) == 0) {
@@ -343,7 +407,7 @@ s32* func_80BC2274(EnJa* this, PlayState* play) {
 }
 
 void func_80BC22F4(EnJa* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
+    if (MsgEvent_RunScript(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8.unk_04 = 0;

@@ -7,7 +7,6 @@
 struct EnBjt;
 
 typedef void (*EnBjtActionFunc)(struct EnBjt*, PlayState*);
-typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 typedef struct EnBjt {
     /* 0x000 */ Actor actor;
@@ -26,7 +25,7 @@ typedef struct EnBjt {
     /* 0x242 */ s16 timer;
     /* 0x244 */ UNK_TYPE1 unk_244[4];
     /* 0x248 */ s32 playedSfx; // to only play once
-    /* 0x24C */ MsgEventFunc msgEventCallback;
+    /* 0x24C */ MsgEventCallback msgEventCallback;
     /* 0x250 */ s32 animIndex;
     /* 0x254 */ UNK_TYPE1 pad_254[8];
 } EnBjt; // size = 0x25C
