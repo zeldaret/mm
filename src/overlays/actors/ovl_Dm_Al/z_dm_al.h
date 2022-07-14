@@ -18,8 +18,13 @@ typedef struct DmAl {
     /* 0x450 */ u8 action;
     /* 0x454 */ s32 animationIndex;
     /* 0x458 */ s32 animationIndex2;
-    /* 0x45C */ s32 unk45C;
+    /* 0x45C */ s32 unk_45C;
 } DmAl; // size = 0x460
+
+typedef enum {
+    /* 0x0 */ MADAME_AROMA_ANIMATION_0,
+    /* 0x1 */ MADAME_AROMA_ANIMATION_1
+} DmAlAnimations;
 
 extern const ActorInit Dm_Al_InitVars;
 

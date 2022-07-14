@@ -31,7 +31,7 @@ static AnimationInfoS sAnimationInfos[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80C1BD90(DmAl* this, s32 animationIndex) {
+s32 DmAl_ChangeAnimation(DmAl* this, s32 animationIndex) {
     s32 didAnimationChange = false;
 
     if (animationIndex != this->animationIndex) {
@@ -43,27 +43,27 @@ s32 func_80C1BD90(DmAl* this, s32 animationIndex) {
 
 void func_80C1BDD8(DmAl* this, PlayState* play) {
     s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
-    u16 action;
+    u16 csAction;
     s32 actionIndex;
 
     if (play->csCtx.state != 0) {
-        if (!this->unk45C) {
+        if (!this->unk_45C) {
             this->action = 0xFF;
-            this->unk45C = true;
+            this->unk_45C = true;
             this->animationIndex2 = this->animationIndex;
         }
         if (Cutscene_CheckActorAction(play, 0x232)) {
             actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            action = play->csCtx.actorActions[actionIndex]->action;
-            if (this->action != (u8)action) {
-                this->action = action;
-                func_80C1BD90(this, D_80C1C280[action]);
+            csAction = play->csCtx.actorActions[actionIndex]->action;
+            if (this->action != (u8)csAction) {
+                this->action = csAction;
+                DmAl_ChangeAnimation(this, D_80C1C280[csAction]);
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         }
-    } else if (this->unk45C) {
-        this->unk45C = false;
-        func_80C1BD90(this, this->animationIndex2);
+    } else if (this->unk_45C) {
+        this->unk_45C = false;
+        DmAl_ChangeAnimation(this, this->animationIndex2);
     }
 }
 
@@ -74,7 +74,7 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
                        MADAME_AROMA_LIMB_MAX);
     this->animationIndex = -1;
-    func_80C1BD90(this, 0);
+    DmAl_ChangeAnimation(this, MADAME_AROMA_ANIMATION_0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;
