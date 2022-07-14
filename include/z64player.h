@@ -199,24 +199,28 @@ typedef enum PlayerAnimType {
 } PlayerAnimType;
 
 typedef enum PlayerModelType {
-    /*  0 */ PLAYER_MODELTYPE_0,
-    /*  1 */ PLAYER_MODELTYPE_1,
-    /*  2 */ PLAYER_MODELTYPE_2,
-    /*  3 */ PLAYER_MODELTYPE_3,
-    /*  4 */ PLAYER_MODELTYPE_4,
-    /*  5 */ PLAYER_MODELTYPE_5,
-    /*  6 */ PLAYER_MODELTYPE_6,
-    /*  7 */ PLAYER_MODELTYPE_7,
-    /*  8 */ PLAYER_MODELTYPE_8,
-    /*  9 */ PLAYER_MODELTYPE_9,
-    /* 10 */ PLAYER_MODELTYPE_10,
-    /* 11 */ PLAYER_MODELTYPE_11,
-    /* 12 */ PLAYER_MODELTYPE_12,
-    /* 13 */ PLAYER_MODELTYPE_13,
-    /* 14 */ PLAYER_MODELTYPE_14,
-    /* 15 */ PLAYER_MODELTYPE_15,
-    /* 16 */ PLAYER_MODELTYPE_16,
-    /* 17 */ PLAYER_MODELTYPE_17,
+    // left hand
+    /*  0 */ PLAYER_MODELTYPE_LH_0,
+    /*  1 */ PLAYER_MODELTYPE_LH_1,
+    /*  2 */ PLAYER_MODELTYPE_LH_2,
+    /*  3 */ PLAYER_MODELTYPE_LH_3,
+    /*  4 */ PLAYER_MODELTYPE_LH_4,
+    /*  5 */ PLAYER_MODELTYPE_LH_5,
+    // right hand
+    /*  6 */ PLAYER_MODELTYPE_RH_6,
+    /*  7 */ PLAYER_MODELTYPE_RH_7,
+    /*  8 */ PLAYER_MODELTYPE_RH_8,
+    /*  9 */ PLAYER_MODELTYPE_RH_9,
+    /* 10 */ PLAYER_MODELTYPE_RH_10,
+    /* 11 */ PLAYER_MODELTYPE_RH_11,
+    // sheath
+    /* 12 */ PLAYER_MODELTYPE_SHEATH_12,
+    /* 13 */ PLAYER_MODELTYPE_SHEATH_13,
+    /* 14 */ PLAYER_MODELTYPE_SHEATH_14,
+    /* 15 */ PLAYER_MODELTYPE_SHEATH_15,
+    // waist
+    /* 16 */ PLAYER_MODELTYPE_WAIST,
+    /* 17 */ PLAYER_MODELTYPE_17, // NULL?
     /* 18 */ PLAYER_MODELTYPE_MAX
 } PlayerModelType;
 
