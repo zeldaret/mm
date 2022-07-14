@@ -3873,7 +3873,7 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44FEC();
         SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->jointTable, this->morphTable,
-                           22);
+                           CREMIA_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
