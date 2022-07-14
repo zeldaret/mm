@@ -74,7 +74,7 @@ s32 func_80BD5E00(BgHakaBombwall* this) {
     return false;
 }
 
-//#ifdef NON_MATCHING
+#ifdef NON_MATCHING
 void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spE0;
@@ -140,10 +140,10 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     }
 
     Matrix_Pop();
-}/*
+}
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Bombwall/func_80BD5E6C.s")
-#endif*/
+#endif
 
 void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
