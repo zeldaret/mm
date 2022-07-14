@@ -32,7 +32,7 @@
         <Limb Name="gGerudoWhiteHeadLimb" Type="Standard" EnumName="GERUDO_WHITE_LIMB_HEAD" Offset="0x2C58" />
 
         <!-- White-clothed Gerudo Skeleton -->
-        <Skeleton Name="object_ge1_Skel_002CA0" Type="Flex" LimbType="Standard" LimbNone="GERUDO_WHITE_LIMB_NONE" LimbMax="GERUDO_WHITE_LIMB_MAX" EnumName="GerudoWhiteLimb" Offset="0x2CA0" />
+        <Skeleton Name="gGerudoWhiteSkel" Type="Flex" LimbType="Standard" LimbNone="GERUDO_WHITE_LIMB_NONE" LimbMax="GERUDO_WHITE_LIMB_MAX" EnumName="GerudoWhiteLimb" Offset="0x2CA0" />
 
         <Texture Name="gGerudoWhiteGeneralTLUT" OutName="gerudo_white_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x2CB8" />
         <Texture Name="gGerudoWhiteSkinGradientTex" OutName="gerudo_white_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x2EB8" TlutOffset="0x2CB8" />

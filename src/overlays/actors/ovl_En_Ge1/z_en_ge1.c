@@ -47,9 +47,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-extern FlexSkeletonHeader D_06002CA0;
-extern AnimationHeader D_06002B98;
-
 //! State flags
 
 //! Disable normal movement to let pathing function control it completely.
@@ -85,7 +82,8 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     EnGe1* this = THIS;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, EnGe1_ShadowDraw, 30.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_06002CA0, &D_06002B98, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoWhiteSkel, &gGerudoWhiteArmsFoldedAnim, this->jointTable,
+                       this->morphTable, 16);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
