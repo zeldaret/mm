@@ -265,7 +265,7 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
         Math_ApproachF(&this->subCamAt.y, this->subCamAtNext.y, 0.4f, 4.0f);
         Math_ApproachF(&this->subCamAt.z, this->subCamAtNext.z, 0.4f, 4.0f);
 
-        Math_ApproachF(&this->subCamFov, this->unk210, 0.3f, 10.0f);
+        Math_ApproachF(&this->subCamFov, this->subCamFovNext, 0.3f, 10.0f);
 
         Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
         Play_CameraSetFov(play, this->subCamId, this->subCamFov);
@@ -549,7 +549,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
     Message_StartTextbox(play, this->actor.textId, &this->actor);
     this->subCamId = SUB_CAM_ID_DONE;
     this->subCamFov = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamFovNext = 60.0f;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
     this->unkState196 = 2;
     this->actionFunc = EnKakasi_OcarinaRemark;
@@ -664,7 +664,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
     this->subCamFov = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamFovNext = 60.0f;
 }
 
 void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
@@ -812,7 +812,7 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     this->subCamFov = 0.0f;
-    this->unk210 = 60.0f;
+    this->subCamFovNext = 60.0f;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     func_8016566C(0xB4);
@@ -960,7 +960,7 @@ void EnKakasi_SetupDigAway(EnKakasi* this) {
     }
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    this->unk210 = 60.0f;
+    this->subCamFovNext = 60.0f;
     this->subCamFov = 60.0f;
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     this->unkState196 = 4;

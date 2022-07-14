@@ -30,12 +30,12 @@ typedef struct EnKakasi {
     /* 0x204 */ s16 unk204; // set to A, F, 0x14, 0x28 frequently
     /* 0x206 */ UNK_TYPE1 pad206[2];
     /* 0x208 */ s16 subCamId;
-    /* 0x20C */ f32 subCamFov; // passed to unknown function
-    /* 0x210 */ f32 unk210; // used as a target for 20C to approach
-    /* 0x214 */ Vec3f subCamEye; // copied from subCamEyeNext regularly
-    /* 0x220 */ Vec3f subCamAt; //EnKakasi_TeachingSong
-    /* 0x22C */ Vec3f unk22C; //actor home copied to here
-    /* 0x238 */ Vec3f subCamEyeNext; //copied from D_80971E38[unk190]
+    /* 0x20C */ f32 subCamFov;
+    /* 0x210 */ f32 subCamFovNext;
+    /* 0x214 */ Vec3f subCamEye;
+    /* 0x220 */ Vec3f subCamAt;
+    /* 0x22C */ Vec3f unk22C;
+    /* 0x238 */ Vec3f subCamEyeNext;
     /* 0x244 */ Vec3f subCamAtNext;
     /* 0x250 */ f32 songSummonDist;
     /* 0x254 */ ColliderCylinder collider;
