@@ -268,16 +268,15 @@ static TexturePtr D_80B4E958[] = {
 
 static s8 D_80B4E968 = 0;
 
-static TexturePtr D_80B4E96C[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
-    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+static TexturePtr sCremiaEyeTextures[] = {
+    gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
 
-static TexturePtr D_80B4E984[] = {
-    object_ma2_Tex_014AD8,
-    object_ma2_Tex_014ED8,
-    object_ma2_Tex_0152D8,
-    object_ma2_Tex_0156D8,
+static TexturePtr sCremiaMouthTextures[] = {
+    gCremiaMouthNormalTex,
+    gCremiaMouthSlightSmileTex,
+    gCremiaMouthFrownTex,
+    gCremiaMouthHangingOpenTex,
 };
 
 static s8 D_80B4E994 = 0;
@@ -1214,11 +1213,11 @@ void func_80B44FEC(void) {
 
     if (!D_80B4E994) {
         D_80B4E994 = true;
-        for (i = 0, iter = D_80B4E96C; i < ARRAY_COUNT(D_80B4E96C); i++, iter++) {
+        for (i = 0, iter = sCremiaEyeTextures; i < ARRAY_COUNT(sCremiaEyeTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
 
-        for (i = 0, iter = D_80B4E984; i < ARRAY_COUNT(D_80B4E984); i++, iter++) {
+        for (i = 0, iter = sCremiaMouthTextures; i < ARRAY_COUNT(sCremiaMouthTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
     }
@@ -3720,7 +3719,7 @@ void func_80B4BA84(Actor* thisx, PlayState* play) {
 void func_80B4BBE0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_016720, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaWalkAnim, -6.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3801,7 +3800,7 @@ void func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
 void func_80B4BFFC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C058;
 }
@@ -3833,7 +3832,7 @@ void func_80B4C058(EnInvadepoh* this, PlayState* play) {
 void func_80B4C1BC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C218;
 }
@@ -3873,8 +3872,8 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720, this->jointTable,
-                           this->morphTable, 22);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->jointTable, this->morphTable,
+                           22);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
@@ -4597,8 +4596,8 @@ void func_80B4E7BC(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E984[this->behaviorInfo.unk10.unkF]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E96C[this->behaviorInfo.unk0.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->behaviorInfo.unk10.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->behaviorInfo.unk0.unkF]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80B4E6E4, func_80B4E784, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
