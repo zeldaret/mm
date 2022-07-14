@@ -200,7 +200,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ PLAYER_MOUTH_CLOSED,
-    /* 1 */ PLAYER_MOUTH_1,
+    /* 1 */ PLAYER_MOUTH_TEETH,
     /* 2 */ PLAYER_MOUTH_ANGRY,
     /* 3 */ PLAYER_MOUTH_HAPPY
 } PlayerMouthIndices;
