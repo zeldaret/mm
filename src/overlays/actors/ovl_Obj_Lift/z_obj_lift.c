@@ -53,7 +53,7 @@ static InitChainEntry sInitChain[] = {
 
 static f32 D_8093DD98[] = { 0.1f, 0.05f };
 
-static f32 yOffset[] = { -18.0f, -9.0f };
+static f32 yOffsets[] = { -18.0f, -9.0f };
 
 void func_8093D3C0(ObjLift* this, PlayState* play) {
     Vec3f pos;
@@ -182,10 +182,10 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
 
     Actor_MoveWithGravity(&this->dyna.actor);
     Math_Vec3f_Copy(&pos, &this->dyna.actor.prevPos);
-    pos.y += yOffset[OBJLIFT_GET_1(&this->dyna.actor)];
+    pos.y += yOffsets[OBJLIFT_GET_1(&this->dyna.actor)];
     this->dyna.actor.floorHeight =
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp38, &this->dyna.actor, &pos);
-    if ((yOffset[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <=
+    if ((yOffsets[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <=
         (this->dyna.actor.floorHeight - this->dyna.actor.world.pos.y)) {
         func_8093D3C0(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_BOX_BREAK);
