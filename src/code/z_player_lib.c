@@ -1368,11 +1368,11 @@ struct_80124618 D_801C0838[] = {
     { 12, { 100, 100, 100 } },
 };
 
-Gfx D_801C0850[] = {
+Gfx gCullBackDList[] = {
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 };
-Gfx D_801C0860[] = {
+Gfx gCullFrontDList[] = {
     gsSPSetGeometryMode(G_CULL_FRONT),
     gsSPEndDisplayList(),
 };
@@ -2063,7 +2063,7 @@ typedef struct {
 
 struct_80128388_arg1 D_801C0C54[] = {
     { 0.0f, 0x0000, 0x8000, { 0.0f, 0.0f, 0.0f }, 0.0f, 0x0000, 0x0000 },
-    { 16.7999992371f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
+    { 16.8f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
     { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
 };
 

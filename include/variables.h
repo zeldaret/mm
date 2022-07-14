@@ -1164,8 +1164,8 @@ extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
 extern u8 gPlayerModelTypes[][5];
 extern struct_80124618 D_801C03A0[];
 extern struct_80124618 D_801C0490[];
-extern Gfx D_801C0850[];
-extern Gfx D_801C0860[];
+extern Gfx gCullBackDList[];
+extern Gfx gCullFrontDList[];
 
 extern Gfx sSetupDL[438];
 extern Gfx sFillSetupDL[12];
