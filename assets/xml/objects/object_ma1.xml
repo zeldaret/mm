@@ -7,9 +7,9 @@
         <Texture Name="gRomaniBowHandleTex" OutName="romani_bow_handle" Format="ci8" Width="16" Height="16" Offset="0x7E0" />
         <Texture Name="gRomaniBowLimbTex" OutName="romani_bow_limb" Format="ci8" Width="8" Height="8" Offset="0x8E0" />
         
-        <!-- Romani's Box DisplayList and Textures -->
-        <DList Name="gRomaniBoxDL" Offset="0xA20" />
-        <Texture Name="gRomaniBoxTex" OutName="romani_box" Format="rgba16" Width="32" Height="64" Offset="0xAD0" />
+        <!-- Romani's Wooden Box DisplayList and Textures. She sits on it after being abducted by the aliens. -->
+        <DList Name="gRomaniWoodenBoxDL" Offset="0xA20" />
+        <Texture Name="gRomaniWoodenBoxTex" OutName="romani_wooden_box" Format="rgba16" Width="32" Height="64" Offset="0xAD0" />
 
         <!-- Romani Animation -->
         <Animation Name="gRomaniLookAroundAnim" Offset="0x2A8C" /> <!-- Original name is "rm_kyoro" (onomatopoeic for "looking around restlessly") -->

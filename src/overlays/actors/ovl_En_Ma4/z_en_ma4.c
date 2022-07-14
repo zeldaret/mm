@@ -1066,7 +1066,7 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     if (this->type == MA4_TYPE_ALIENS_WON) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gRomaniBoxDL);
+        gSPDisplayList(POLY_OPA_DISP++, gRomaniWoodenBoxDL);
     }
 
     func_8012C28C(play->state.gfxCtx);
