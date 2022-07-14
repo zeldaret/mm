@@ -4603,7 +4603,11 @@ beginseg
     name "ovl_Bg_Haka_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Haka_Bombwall/z_bg_haka_bombwall.o"
-    include "build/data/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall_reloc.o"
+    #else
+        include "build/data/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall.reloc.o"
+    #endif
 endseg
 
 beginseg

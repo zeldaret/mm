@@ -18,10 +18,10 @@ void BgHakaBombwall_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD6260(BgHakaBombwall* this);
 void func_80BD6274(BgHakaBombwall* this, PlayState* play);
-void func_80BD62D0(BgHakaBombwall* this);
-void func_80BD6314(BgHakaBombwall* this, PlayState* play);
-void func_80BD63B4(BgHakaBombwall* this);
-void func_80BD63D0(BgHakaBombwall* this, PlayState* play);
+void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this);
+void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play);
+void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
+void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
 const ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
@@ -65,16 +65,16 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80BD5E00(BgHakaBombwall* this) {
-    if ((this->unk15C.base.acFlags & AC_HIT)) {
-        if ((this->unk15C.base.ac != NULL) &&
-            (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->unk15C.base.ac->world.pos) < SQ(80.0f))) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        if ((this->collider.base.ac != NULL) &&
+            (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->collider.base.ac->world.pos) < SQ(80.0f))) {
             return true;
         }
     }
     return false;
 }
 
-#ifdef NON_MATCHING
+//#ifdef NON_MATCHING
 void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spE0;
@@ -84,7 +84,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     f32 temp_fs0;
     f32 phi_fs1;
     s16 phi_s0;
-    s16 temp;
+    s16 gravity;
     s16 phi_t0;
 
     Matrix_Push();
@@ -130,20 +130,20 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
         }
 
         if (D_80BD64CC[i & 3] >= 16) {
-            temp = -550;
+            gravity = -550;
         } else {
-            temp = -450;
+            gravity = -450;
         }
 
-        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD64CC[i & 3], phi_t0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, gravity, phi_s0, 30, 0, 0, D_80BD64CC[i & 3], phi_t0, 0, 50, -1,
                              OBJECT_IKANA_OBJ, &object_haka_obj_DL_001680);
     }
 
     Matrix_Pop();
-}
+}/*
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Bombwall/func_80BD5E6C.s")
-#endif
+#endif*/
 
 void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -151,13 +151,13 @@ void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    Collider_InitCylinder(play, &this->unk15C);
-    if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
+    Collider_InitCylinder(play, &this->collider);
+    if (Flags_GetSwitch(play, BGHAKABOMBWALL_GET_7F(thisx))) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000148);
-        Collider_SetCylinder(play, &this->unk15C, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->unk15C);
+        Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
+        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         func_80BD6260(this);
     }
 }
@@ -166,7 +166,7 @@ void BgHakaBombwall_Destroy(Actor* thisx, PlayState* play) {
     BgHakaBombwall* this = THIS;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(play, &this->unk15C);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80BD6260(BgHakaBombwall* this) {
@@ -175,40 +175,40 @@ void func_80BD6260(BgHakaBombwall* this) {
 
 void func_80BD6274(BgHakaBombwall* this, PlayState* play) {
     if (func_80BD5E00(this)) {
-        func_80BD62D0(this);
+        BgHakaBombwall_SetupPlayCutscene(this);
     } else {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk15C.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void func_80BD62D0(BgHakaBombwall* this) {
+void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_10;
     ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-    this->actionFunc = func_80BD6314;
+    this->actionFunc = BgHakaBombwall_PlayCutscene;
 }
 
-void func_80BD6314(BgHakaBombwall* this, PlayState* play) {
+void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         func_80BD5E6C(this, play);
         this->dyna.actor.draw = NULL;
-        Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(play, BGHAKABOMBWALL_GET_7F(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
-        func_80BD63B4(this);
-        return;
+        BgHakaBombwall_SetupEndCutscene(this);
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
 }
 
-void func_80BD63B4(BgHakaBombwall* this) {
-    this->unk1AC = 0x1E;
-    this->actionFunc = func_80BD63D0;
+void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this) {
+    this->csTimer = 30;
+    this->actionFunc = BgHakaBombwall_EndCutscene;
 }
 
-void func_80BD63D0(BgHakaBombwall* this, PlayState* play) {
-    this->unk1AC--;
-    if (this->unk1AC <= 0) {
+void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play) {
+    this->csTimer--;
+    if (this->csTimer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Actor_MarkForDeath(&this->dyna.actor);
     }
@@ -221,7 +221,5 @@ void BgHakaBombwall_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgHakaBombwall_Draw(Actor* thisx, PlayState* play) {
-    BgHakaBombwall* this = THIS;
-
     Gfx_DrawDListOpa(play, object_haka_obj_DL_000040);
 }
