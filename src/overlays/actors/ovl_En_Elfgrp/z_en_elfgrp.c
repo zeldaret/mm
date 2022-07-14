@@ -241,7 +241,7 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     s32 pad;
     s32 i;
     Actor* elforg;
-    s32 temp;
+    s32 params;
     Vec3f sp6C;
     Player* player = GET_PLAYER(play);
 
@@ -252,16 +252,16 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     if (arg3 == 0) {
         sp6C = this->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN;
+        params = STRAY_FAIRY_PARAMS(0, this->unk_147, STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN);
     } else {
         sp6C = player->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN;
+        params = STRAY_FAIRY_PARAMS(0, this->unk_147, STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN);
     }
 
     for (i = 0; i < arg2; i++) {
         elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, randPlusMinusPoint5Scaled(20.0f) + sp6C.x, sp6C.y,
-                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, temp);
+                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, params);
         if (elforg == NULL) {
             continue;
         }
