@@ -730,7 +730,7 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
                                Gfx** gfx) {
     EnFirefly* this = THIS;
 
-    if (this->isInvisible && (play->actorCtx.unk4 != 0x64)) {
+    if (this->isInvisible && (play->actorCtx.lensMaskRadius != 0x64)) {
         *dList = NULL;
     } else if (limbIndex == 1) {
         pos->y += 2300.0f;

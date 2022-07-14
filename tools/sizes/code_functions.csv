@@ -335,8 +335,8 @@ asm/non_matchings/code/z_actor/Actor_Draw.s,Actor_Draw,0x800B9A04,0xC6
 asm/non_matchings/code/z_actor/func_800B9D1C.s,func_800B9D1C,0x800B9D1C,0x48
 asm/non_matchings/code/z_actor/Actor_DrawAllSetup.s,Actor_DrawAllSetup,0x800B9E3C,0x4
 asm/non_matchings/code/z_actor/Actor_RecordUndrawnActor.s,Actor_RecordUndrawnActor,0x800B9E4C,0xE
-asm/non_matchings/code/z_actor/func_800B9E84.s,func_800B9E84,0x800B9E84,0x1C
-asm/non_matchings/code/z_actor/func_800B9EF4.s,func_800B9EF4,0x800B9EF4,0xF9
+asm/non_matchings/code/z_actor/Actor_DrawLensOverlay.s,Actor_DrawLensOverlay,0x800B9E84,0x1C
+asm/non_matchings/code/z_actor/Actor_DrawLensActors.s,Actor_DrawLensActors,0x800B9EF4,0xF9
 asm/non_matchings/code/z_actor/func_800BA2D8.s,func_800BA2D8,0x800BA2D8,0x9
 asm/non_matchings/code/z_actor/func_800BA2FC.s,func_800BA2FC,0x800BA2FC,0x4C
 asm/non_matchings/code/z_actor/Actor_DrawAll.s,Actor_DrawAll,0x800BA42C,0xB4
