@@ -481,8 +481,8 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (play->interfaceCtx.unk_21C != 0) {
-            if (play->interfaceCtx.unk_21E != 0) {
-                return play->interfaceCtx.unk_21E;
+            if (play->interfaceCtx.bButtonDoAction != 0) {
+                return play->interfaceCtx.bButtonDoAction;
             }
         }
         return ITEM_NONE;
@@ -495,7 +495,7 @@ s32 Inventory_GetBtnBItem(PlayState* play) {
  * Only changes shield
  */
 void Inventory_ChangeEquipment(s16 value) {
-    SET_EQUIP_VALUE(EQUIP_SHIELD, value);
+    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
 }
 
 /**
@@ -504,8 +504,8 @@ void Inventory_ChangeEquipment(s16 value) {
 u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
     Player* player = GET_PLAYER(play);
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
-        SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, EQUIP_VALUE_SHIELD_NONE);
         Player_SetEquipmentData(play, player);
         return true;
     }

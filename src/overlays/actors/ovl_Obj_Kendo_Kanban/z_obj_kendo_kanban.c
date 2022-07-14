@@ -94,7 +94,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_TYPE_1,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -228,7 +228,9 @@ void func_80B658A4(ObjKendoKanban* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
-        if ((player->swordAnimation == 0) || (player->swordAnimation == 1) || (player->swordAnimation == 0x14)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
+            (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
+            (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
             this->unk_30C = (OBJKENDOKANBAN_F_4 | OBJKENDOKANBAN_F_1);
             this->unk_304 = 0x71C;
             this->actor.velocity = D_80B6666C;
