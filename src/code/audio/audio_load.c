@@ -277,7 +277,7 @@ void AudioLoad_InitSampleDmaBuffers(s32 numNotes) {
         } else {
             AudioHeap_WritebackDCache(dma->ramAddr, gAudioContext.sampleDmaBufSize);
             dma->size = gAudioContext.sampleDmaBufSize;
-            dma->devAddr = 0U;
+            dma->devAddr = 0;
             dma->sizeUnused = 0;
             dma->unused = 0;
             dma->ttl = 0;

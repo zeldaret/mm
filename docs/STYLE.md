@@ -44,26 +44,31 @@ A lot of formatting is done by clang-format, such as
 There are various other conventions that it does not catch, though:
 
 - Blank line between declarations and code:
+
   ```c
   s32 var;
   
   func();
   ```
+
 - combine declarations and definitions if possible:
+
   ```c
   s32 var = 0;
   
   func();
   ```
+
   instead of
+
   ```c
   s32 var;
   
   var = 0;
   func();
   ```
-- blank lines between switch cases if they're long (use your judgement).
 
+- blank lines between switch cases if they're long (use your judgement).
 
 ## Numbers
 
@@ -98,6 +103,7 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
 - When conditions are `&&`d or `||`d together, use brackets around each that includes an arithmetic comparison or bitwise operator (i.e. not `!var` or `func()`, but ones with `==` or `&` etc.)
 - Flag checks or functions that return booleans do not need the `== 0`/`!= 0`.
 - Prefer `if-else` over `if { return; }`, i.e.
+
   ```c
   if (cond) {
       foo();
@@ -105,7 +111,9 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
       bar();
   }
   ```
+
   over
+
   ```c
   if (cond) {
       foo();
@@ -113,6 +121,7 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
   }
   bar();
   ```
+
 **Exception**: After `Actor_MarkForDeath` or sometimes setting the action function, if it makes sense to do so (this expresses the finality a bit better).
 
 ## Macros and enums
@@ -120,8 +129,8 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
 Become familiar with the various defines and enums we have available. There are too many to list all of them here, but the following are common:
 
 - Those in `macros.h`
-  - `ABS`, `ABS_ALT`, 
-  - `CLAMP` and friends, 
+  - `ABS`, `ABS_ALT`,
+  - `CLAMP` and friends,
   - `BINANG_*`, which are used for angles, especially when there's a lot of `s16` casts around
 - `MTXMODE` for many of the `sys_matrix` functions
 - CollisionCheck flags: `AT_ON` and so on. Pick the appropriate one for the collider type.
@@ -149,6 +158,7 @@ void EnFirefly_Update(Actor* thisx, PlayState* play2) {
 ```
 
 In other places the cast is actually not explictly needed, but a stack `pad` variable is still needed. For this there should just be a stack variable called `pad` of type `s32` before the actor `THIS` cast. For example in `z_bg_goron_oyu`
+
 ```c
 void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -158,10 +168,10 @@ void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
 
 In general, pads should be `s32`, or `s16`/`s8` if required.
 
-
 ## Documentation and Comments
 
 Documentation includes:
+
 - Naming functions
 - Naming struct variables
 - Naming data
@@ -175,13 +185,16 @@ Documentation includes:
 If you are not sure what something does, it is better to leave it unnamed than name it wrongly. It is fine to make a note of something you are not sure about when PRing, it means the reviewers will pay special attention to it.
 
 We use comments for:
+
 - Top of file: a short description of the system. For actors there is already a brief description of our current understanding, but feel free to add to it.
-- For function descriptions, we use multiline comments, 
+- For function descriptions, we use multiline comments,
+
   ```c
   /**
    * Describe what the function does
    */
   ```
+
   These are *optional*: if you think the code is clear enough, you do not need to put a comment. You can use Doxygen formatting if you think it adds something, but it is also not required.
 - If something in a function is strange, or unintuitive, do leave a comment explaining what's going on. We use `//` for this.
 - We also use `//` for temporary comments above a function. Feel free to use `TODO:` in these if appropriate.
@@ -199,7 +212,7 @@ All functions should go in the main C file in the same order as the assembly (th
 
 - If in doubt, leave all the data at the top of the file. Reviewers will decide for you.
 - Data must go in the same order as in the assembly files, but is only constrained by other data, not functions or rodata.
-- Some data has to be inline static to match. Generally it's better to not use `static` on data outside funtions until the file is matching, since `static` data is left out of the mapfile and this makes debugging harder. 
+- Some data has to be inline static to match. Generally it's better to not use `static` on data outside funtions until the file is matching, since `static` data is left out of the mapfile and this makes debugging harder.
 - *This is even more true of bss, where we have trouble with IDO unpredictably reordering it in certain files.*
 - For small arrays or simple data that is used in only one function, we usually inline it, if it fits in the ordering.
 - Generally data that is only used by the draw functions is put down near them: this is one of the few consistencies in ordering of actors' functions.
@@ -207,15 +220,19 @@ All functions should go in the main C file in the same order as the assembly (th
 ### Enums and defines
 
 - Actors that bitpack params should have macros made for each access or write that is made. `z_en_dg.h` has an undocumented example,
+
   ```c
   #define ENDG_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
   #define ENDG_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
   ```
+
   while `z_en_firefly.h` has a documented one,
+
   ```c
   #define KEESE_INVISIBLE (1 << 0xF)
   #define KEESE_GET_MAIN_TYPE(thisx) ((thisx)->params & 0x7FFF)
   ```
+
 - In a similar manner, actors that use `home.rot.(x|y|z)` like params should also macros made for accesses and writes. (See, e.g. `z_obj_bean.h`.)
 - Stuff that only the actor itself will use goes in the C file unless needed in the header.
 - Anything actor-specific that might be used by another file goes in the header, in particular params access macros.

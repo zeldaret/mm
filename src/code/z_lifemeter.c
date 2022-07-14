@@ -398,7 +398,7 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(&play->state) && (play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0) &&
+            if (!Player_InCsMode(play) && (play->pauseCtx.state == 0) && (play->pauseCtx.debugState == 0) &&
                 LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
@@ -415,16 +415,16 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
-    if (gSaveContext.save.playerData.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
-        criticalThreshold = 16;
+    if (gSaveContext.save.playerData.healthCapacity <= 0x50) {
+        criticalThreshold = 0x10;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
-        criticalThreshold = 24;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xA0) {
+        criticalThreshold = 0x18;
 
-    } else if (gSaveContext.save.playerData.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
-        criticalThreshold = 32;
+    } else if (gSaveContext.save.playerData.healthCapacity <= 0xF0) {
+        criticalThreshold = 0x20;
     } else {
-        criticalThreshold = 44;
+        criticalThreshold = 0x2C;
     }
 
     if ((criticalThreshold >= gSaveContext.save.playerData.health) && (gSaveContext.save.playerData.health > 0)) {

@@ -139,7 +139,7 @@ void EnLookNuts_Destroy(Actor* thisx, PlayState* play) {
 
 void EnLookNuts_SetupPatrol(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_LOOP, -10.0f);
     this->state = PALACE_GUARD_PATROLLING;
     this->actionFunc = EnLookNuts_Patrol;
 }
@@ -189,7 +189,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_ONCE, -10.0f);
     this->waitTimer = Rand_S16Offset(1, 3);
     this->headRotTarget.y = 10000.0f;
 
@@ -262,7 +262,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 2.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_LOOP, -10.0f);
     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
     this->eventTimer = 300;
     Message_StartTextbox(play, 0x833, &this->actor);
@@ -285,7 +285,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), ANIMMODE_ONCE, -10.0f);
     this->state = PALACE_GUARD_CAUGHT_PLAYER;
     this->actionFunc = EnLookNuts_SendPlayerToSpawn;
 }

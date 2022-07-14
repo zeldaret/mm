@@ -77,7 +77,7 @@ void func_80C08828(EnNnh* this) {
 
 void func_80C0883C(EnNnh* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        Message_StartTextbox(play, 0x228U, &this->actor);
+        Message_StartTextbox(play, 0x228, &this->actor);
         func_80C088A4(this);
         return;
     }

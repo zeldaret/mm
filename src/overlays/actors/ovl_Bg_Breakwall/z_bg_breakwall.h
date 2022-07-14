@@ -19,11 +19,11 @@ enum {
 };
 
 typedef struct BgBreakwall {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ s8 unk_15C;
-    /* 0x015D */ u8 switchFlag;
-    /* 0x015E */ u8 unk_15E;
-    /* 0x0160 */ BgBreakwallActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s8 unk_15C;
+    /* 0x15D */ u8 switchFlag;
+    /* 0x15E */ u8 unk_15E;
+    /* 0x160 */ BgBreakwallActionFunc actionFunc;
 } BgBreakwall; // size = 0x164
 
 extern const ActorInit Bg_Breakwall_InitVars;
