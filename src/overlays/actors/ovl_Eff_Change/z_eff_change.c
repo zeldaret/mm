@@ -5,7 +5,6 @@
  */
 
 #include "z_eff_change.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -14,10 +13,10 @@
 void EffChange_Init(Actor* thisx, PlayState* play);
 void EffChange_Destroy(Actor* thisx, PlayState* play);
 void EffChange_Update(Actor* thisx, PlayState* play);
+void EffChange_Draw(Actor* thisx, PlayState* play);
 
-void EffChange_SetColors(EffChange* this, s32 arg1);  /* static */
-void func_80A4C5CC(EffChange* this, PlayState* play); /* static */
-void func_80A4C7B0(Actor* thisx, PlayState* play);
+void EffChange_SetColors(EffChange* this, s32 arg1);
+void func_80A4C5CC(EffChange* this, PlayState* play);
 
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
@@ -30,48 +29,41 @@ const ActorInit Eff_Change_InitVars = {
     (ActorFunc)EffChange_Update,
     (ActorFunc)NULL,
 };
-/*
-static Color_RGBA8 D_80A4C920[] = {
-    { 255, 255, 170, 0 },   { 100, 0, 255, 255 }, { 170, 200, 0, 0 },   { 170, 255, 255, 0 },
-    { 100, 255, 255, 255 }, { 170, 200, 150, 0 }, { 255, 255, 170, 0 }, { 100, 0, 255, 255 },
-    { 170, 0, 100, 0 },     { 255, 255, 170, 0 }, { 100, 0, 255, 255 }, { 170, 0, 100, 0 },
+
+static u8 D_80A4C920[] = {
+    // prim r g b   env r g b
+    255, 255, 170, 0,   100, 0,   // COLOR_0
+    255, 255, 170, 200, 0,   0,   // COLOR_1
+    170, 255, 255, 0,   100, 255, // COLOR_2
+    255, 255, 170, 200, 150, 0,   // COLOR_3
+    255, 255, 170, 0,   100, 0,   // COLOR_4
+    255, 255, 170, 0,   100, 0,   // COLOR_5
+    255, 255, 170, 0,   100, 0,   // COLOR_6
+    255, 255, 170, 0,   100, 0    // COLOR_7
 };
-*/
-static u8 D_80A4C920[] = { 255, 255, 170, 0,   100, 0,   255, 255, 170, 200, 0,   0,   170, 255, 255, 0,
-                           100, 255, 255, 255, 170, 200, 150, 0,   255, 255, 170, 0,   100, 0,   255, 255,
-                           170, 0,   100, 0,   255, 255, 170, 0,   100, 0,   255, 255, 170, 0,   100, 0 };
-
-extern UNK_TYPE D_040281DC;
-extern UNK_TYPE D_04028FEC;
-extern SkeletonInfo* D_0402900C;
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Init.s")
 
 void EffChange_Init(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     this->actionFunc = func_80A4C5CC;
-    this->actor.draw = func_80A4C7B0;
+    this->actor.draw = EffChange_Draw;
     EffChange_SetColors(this, EFFCHANGE_GET_COLORS(thisx));
     Actor_SetScale(&this->actor, 0.075f);
     this->primColors[3] = 0;
-    func_80183430(&this->skeletonInfo, &D_0402900C, &D_040281DC, this->jointTable, this->morphTable, NULL);
-    func_801834A8(&this->skeletonInfo, &D_040281DC);
+    func_80183430(&this->skeletonInfo, gameplay_keep_Blob_02900C, gameplay_keep_Blob_0281DC, this->jointTable,
+                  this->morphTable, NULL);
+    func_801834A8(&this->skeletonInfo, gameplay_keep_Blob_0281DC);
     this->step = 0;
     this->actor.shape.rot.y = 0;
-    this->skeletonInfo.frameCtrl.unk_C = 0.6666667;
+    this->skeletonInfo.frameCtrl.unk_C = (2.0f / 3.0f);
     ActorCutscene_SetIntentToPlay(0x7B);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Destroy.s")
 
 void EffChange_Destroy(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     func_8018349C(&this->skeletonInfo);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_SetColors.s")
 
 void EffChange_SetColors(EffChange* this, s32 arg1) {
     arg1 *= 6;
@@ -82,8 +74,6 @@ void EffChange_SetColors(EffChange* this, s32 arg1) {
     this->envColors[1] = D_80A4C920[arg1 + 4];
     this->envColors[2] = D_80A4C920[arg1 + 5];
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C5CC.s")
 
 void func_80A4C5CC(EffChange* this, PlayState* play) {
     f32 phi_fv0;
@@ -110,7 +100,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
             this->primColors[3] = 255;
         }
 
-        phi_fv0 = this->primColors[3] * 0.003921569f;
+        phi_fv0 = this->primColors[3] * (1.0f / 255.0f);
         if (phi_fv0 > 1.0f) {
             phi_fv0 = 1.0f;
         } else if (phi_fv0 < 0.0f) {
@@ -127,17 +117,13 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Update.s")
-
 void EffChange_Update(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     this->actionFunc(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C7B0.s")
-
-void func_80A4C7B0(Actor* thisx, PlayState* play) {
+void EffChange_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     Mtx* mtx;
     EffChange* this = THIS;

@@ -10494,7 +10494,7 @@
     0x80A4C578:("EffChange_SetColors",),
     0x80A4C5CC:("func_80A4C5CC",),
     0x80A4C78C:("EffChange_Update",),
-    0x80A4C7B0:("func_80A4C7B0",),
+    0x80A4C7B0:("EffChange_Draw",),
     0x80A4C9B0:("DmStatue_Init",),
     0x80A4C9D4:("DmStatue_Destroy",),
     0x80A4C9E4:("DmStatue_Update",),
