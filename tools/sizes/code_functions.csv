@@ -1716,7 +1716,7 @@ asm/non_matchings/code/z_player_lib/func_801235DC.s,func_801235DC,0x801235DC,0x1
 asm/non_matchings/code/z_player_lib/func_8012364C.s,func_8012364C,0x8012364C,0x71
 asm/non_matchings/code/z_player_lib/func_80123810.s,func_80123810,0x80123810,0x54
 asm/non_matchings/code/z_player_lib/Player_ActionToModelGroup.s,Player_ActionToModelGroup,0x80123960,0x13
-asm/non_matchings/code/z_player_lib/func_801239AC.s,func_801239AC,0x801239AC,0x3E
+asm/non_matchings/code/z_player_lib/Player_SetModelsForHoldingShield.s,Player_SetModelsForHoldingShield,0x801239AC,0x3E
 asm/non_matchings/code/z_player_lib/Player_SetModels.s,Player_SetModels,0x80123AA4,0x4C
 asm/non_matchings/code/z_player_lib/Player_SetModelGroup.s,Player_SetModelGroup,0x80123BD4,0x21
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE

@@ -2202,7 +2202,7 @@
     0x8012364C:("func_8012364C",),
     0x80123810:("func_80123810",),
     0x80123960:("Player_ActionToModelGroup",),
-    0x801239AC:("func_801239AC",),
+    0x801239AC:("Player_SetModelsForHoldingShield",),
     0x80123AA4:("Player_SetModels",),
     0x80123BD4:("Player_SetModelGroup",),
     0x80123C58:("func_80123C58",),

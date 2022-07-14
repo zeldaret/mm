@@ -11,7 +11,7 @@
         <DList Name="object_link_nuts_DL_002E98" Offset="0x2E98" />
         <DList Name="object_link_nuts_DL_002FD0" Offset="0x2FD0" />
         <DList Name="object_link_nuts_DL_003488" Offset="0x3488" />
-        <DList Name="object_link_nuts_DL_0035F0" Offset="0x35F0" />
+        <DList Name="gLinkDekuSheathDL" Offset="0x35F0" />
         <DList Name="object_link_nuts_DL_0036B0" Offset="0x36B0" />
         <DList Name="object_link_nuts_DL_0037B8" Offset="0x37B8" />
         <DList Name="object_link_nuts_DL_0038C0" Offset="0x38C0" />

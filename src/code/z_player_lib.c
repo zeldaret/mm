@@ -804,7 +804,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
 /* DLists groups start */
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
-Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
+Gfx* sPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0049E0,  object_link_boy_DL_0049E0,  object_link_goron_DL_008C00, object_link_goron_DL_008C00,
     object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
     gLinkHumanWaistDL,          gLinkHumanWaistDL,
@@ -822,10 +822,10 @@ Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
 Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
@@ -835,10 +835,10 @@ Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
 Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
@@ -848,10 +848,10 @@ Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
 Gfx* D_801C00AC[][2] = {
@@ -989,7 +989,7 @@ Gfx** sPlayerDListGroups[PLAYER_MODELTYPE_MAX] = {
     D_801C005C, // PLAYER_MODELTYPE_SHEATH_13
     D_801C0084, // PLAYER_MODELTYPE_SHEATH_14
     D_801C0084, // PLAYER_MODELTYPE_SHEATH_15
-    D_801BFFFC, // PLAYER_MODELTYPE_WAIST
+    sPlayerWaistDLs, // PLAYER_MODELTYPE_WAIST
     NULL,       // PLAYER_MODELTYPE_17
 };
 
@@ -1143,7 +1143,7 @@ u8 D_801C07AC[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100, 0,
 };
 
-void func_801239AC(Player* player) {
+void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
@@ -1188,7 +1188,7 @@ void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
     player->sheathDLists = &sPlayerDListGroups[playerModelTypes->sheathType][D_801F59E0];
     player->waistDLists = &sPlayerDListGroups[playerModelTypes->waistType][D_801F59E0];
 
-    func_801239AC(player);
+    Player_SetModelsForHoldingShield(player);
 }
 
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {

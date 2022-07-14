@@ -1975,7 +1975,7 @@ s32 func_80123590(PlayState* play, Actor* actor);
 s32 func_8012364C(PlayState* play, Player* player, s32 arg2);
 s32 func_80123810(PlayState* play);
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam);
-void func_801239AC(Player* player);
+void Player_SetModelsForHoldingShield(Player* player);
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);

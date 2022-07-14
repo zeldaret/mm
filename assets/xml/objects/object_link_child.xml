@@ -134,9 +134,12 @@
         <Texture Name="object_link_child_Tex_01D340" OutName="tex_01D340" Format="i8" Width="16" Height="16" Offset="0x1D340" />
         <Texture Name="object_link_child_Tex_01D440" OutName="tex_01D440" Format="i8" Width="32" Height="32" Offset="0x1D440" />
         <DList Name="object_link_child_DL_01D960" Offset="0x1D960" />
-        <DList Name="object_link_child_DL_01DA90" Offset="0x1DA90" />
+
+        <DList Name="gLinkHumanSheathEmptyDL" Offset="0x1DA90" />
+
         <Mtx Name="gLinkHumanSheathMtx" Offset="0x1DA98" />
         <DList Name="gLinkHumanSheathDL" Offset="0x1DAD8" />
+
         <Mtx Name="object_link_child_Mtx_01DB00" Offset="0x1DB00" />
         <DList Name="object_link_child_DL_01DB40" Offset="0x1DB40" />
         <DList Name="object_link_child_DL_01DB60" Offset="0x1DB60" />
