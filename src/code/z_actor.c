@@ -845,7 +845,6 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
     s32 width;
     s32 height;
@@ -866,7 +865,10 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         OPEN_DISPS(gameState->gfxCtx);
 
-        height = (width * height > TMEM_SIZE) ? TMEM_SIZE / width : height;
+        if (width * height > TMEM_SIZE) {
+            height = TMEM_SIZE / width;
+        }
+
         titleSecondY = titleY + (height * 4);
 
         OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
@@ -880,7 +882,6 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         gSPTextureRectangle(OVERLAY_DISP++, titleX, titleY, ((doubleWidth * 2) + titleX) - 4, titleY + (height * 4) - 1,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
-        if (1) {}
 
         height = titleCtx->height - height;
 
@@ -892,16 +893,11 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
             gSPTextureRectangle(OVERLAY_DISP++, titleX, titleSecondY, ((doubleWidth * 2) + titleX) - 4,
                                 titleSecondY + (height * 4) - 1, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
-            if (1) {}
         }
 
         CLOSE_DISPS(gameState->gfxCtx);
     }
 }
-#else
-void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/TitleCard_Draw.s")
-#endif
 
 /* End of TitleCard section */
 
