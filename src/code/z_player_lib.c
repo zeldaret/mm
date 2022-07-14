@@ -804,7 +804,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
 /* DLists groups start */
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
-Gfx* sPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0049E0,  object_link_boy_DL_0049E0,  object_link_goron_DL_008C00, object_link_goron_DL_008C00,
     object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
     gLinkHumanWaistDL,          gLinkHumanWaistDL,
@@ -815,7 +815,7 @@ Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
     { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
 
-Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath12DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
@@ -828,7 +828,7 @@ Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
     gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath13DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
@@ -841,7 +841,7 @@ Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
     gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath14DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
@@ -871,25 +871,25 @@ Gfx* D_801C00D4[][2] = {
     { object_link_child_DL_016B80, object_link_child_DL_016B80 },
 };
 
-Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerLeftHand3DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0080F0,   object_link_boy_DL_0080F0,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_01DCD8, object_link_child_DL_01DCD8,
 };
 
-Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerLeftHand0DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_006EB8,  object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     gLinkHumanLeftHandDL,       gLinkHumanLeftHandDL,
 };
 
-Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerLeftHand1DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
     object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
 };
 
-Gfx* D_801C0164[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerLeftHand2DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
     object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_01DC68, object_link_child_DL_01DC68,
@@ -901,37 +901,37 @@ Gfx* D_801C018C[][2] = {
     { object_link_child_DL_01DCA8, object_link_child_DL_01DCA8 },
 };
 
-Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHand6DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,  object_link_boy_DL_0067D8,  object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8, object_link_zora_DL_00FBB8, object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     gLinkHumanRightHandDL,      gLinkHumanRightHandDL,
 };
 
-Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHand7DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
     object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_00E738, object_link_child_DL_00E738,
 };
 
-Gfx* D_801C01F4[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHand9DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_01DD18, object_link_child_DL_01DD18,
 };
 
-Gfx* D_801C021C[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHand10DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_00ED18, object_link_child_DL_00ED18,
 };
 
-Gfx* D_801C0244[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHand11DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
     object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
     object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
 };
 
-Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerLeftHand5DLs[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_011468, object_link_goron_DL_011468,
     object_link_zora_DL_010D08,  object_link_zora_DL_010D08,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
     object_link_child_DL_01DFA8, object_link_child_DL_01DFA8,
@@ -973,24 +973,24 @@ Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
 };
 
 Gfx** sPlayerDListGroups[PLAYER_MODELTYPE_MAX] = {
-    D_801C0114, // PLAYER_MODELTYPE_LH_0
-    D_801C013C, // PLAYER_MODELTYPE_LH_1
-    D_801C0164, // PLAYER_MODELTYPE_LH_2
-    D_801C00EC, // PLAYER_MODELTYPE_LH_3
-    D_801C0114, // PLAYER_MODELTYPE_LH_4
-    D_801C026C, // PLAYER_MODELTYPE_LH_5
-    D_801C01A4, // PLAYER_MODELTYPE_RH_6
-    D_801C01CC, // PLAYER_MODELTYPE_RH_7
-    D_801C01CC, // PLAYER_MODELTYPE_RH_8
-    D_801C01F4, // PLAYER_MODELTYPE_RH_9
-    D_801C021C, // PLAYER_MODELTYPE_RH_10
-    D_801C0244, // PLAYER_MODELTYPE_RH_11
-    D_801C0034, // PLAYER_MODELTYPE_SHEATH_12
-    D_801C005C, // PLAYER_MODELTYPE_SHEATH_13
-    D_801C0084, // PLAYER_MODELTYPE_SHEATH_14
-    D_801C0084, // PLAYER_MODELTYPE_SHEATH_15
-    sPlayerWaistDLs, // PLAYER_MODELTYPE_WAIST
-    NULL,       // PLAYER_MODELTYPE_17
+    gPlayerLeftHand0DLs,   // PLAYER_MODELTYPE_LH_0
+    gPlayerLeftHand1DLs,   // PLAYER_MODELTYPE_LH_1
+    gPlayerLeftHand2DLs,   // PLAYER_MODELTYPE_LH_2
+    gPlayerLeftHand3DLs,   // PLAYER_MODELTYPE_LH_3
+    gPlayerLeftHand0DLs,   // PLAYER_MODELTYPE_LH_4
+    gPlayerLeftHand5DLs,   // PLAYER_MODELTYPE_LH_5
+    gPlayerRightHand6DLs,  // PLAYER_MODELTYPE_RH_6
+    gPlayerRightHand7DLs,  // PLAYER_MODELTYPE_RH_7
+    gPlayerRightHand7DLs,  // PLAYER_MODELTYPE_RH_8
+    gPlayerRightHand9DLs,  // PLAYER_MODELTYPE_RH_9
+    gPlayerRightHand10DLs, // PLAYER_MODELTYPE_RH_10
+    gPlayerRightHand11DLs, // PLAYER_MODELTYPE_RH_11
+    gPlayerSheath12DLs,    // PLAYER_MODELTYPE_SHEATH_12
+    gPlayerSheath13DLs,    // PLAYER_MODELTYPE_SHEATH_13
+    gPlayerSheath14DLs,    // PLAYER_MODELTYPE_SHEATH_14
+    gPlayerSheath14DLs,    // PLAYER_MODELTYPE_SHEATH_15
+    gPlayerWaistDLs,       // PLAYER_MODELTYPE_WAIST
+    NULL,                  // PLAYER_MODELTYPE_17
 };
 
 struct_80124618 D_801C0340[] = {
@@ -1653,12 +1653,12 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
 s32 D_801C0958 = false;
 
 Gfx** D_801C095C[] = {
-    D_801C013C,
-    D_801C0114,
+    gPlayerLeftHand1DLs,
+    gPlayerLeftHand0DLs,
 };
 Gfx** D_801C0964[] = {
-    D_801C01CC,
-    D_801C01A4,
+    gPlayerRightHand7DLs,
+    gPlayerRightHand6DLs,
 };
 
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
