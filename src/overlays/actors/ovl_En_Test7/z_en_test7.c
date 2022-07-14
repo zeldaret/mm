@@ -586,7 +586,7 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     this->actor.world.pos.y += 100.0f;
 
     camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]));
-    camera->player = NULL;
+    camera->focalActor = NULL;
 
     camera->eye.x = ((camera->eye.x - this->unk_1E60.x) * sp1C) + this->unk_1E60.x;
     camera->eye.y = ((camera->eye.y - this->unk_1E60.y) * sp1C) + this->unk_1E60.y;
@@ -682,7 +682,7 @@ void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
     Camera* camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]));
 
     pos = &player->actor.world.pos;
-    camera->player = NULL;
+    camera->focalActor = NULL;
 
     sp3C.x = ((180.0f * Math_SinS(this->unk_1E8E)) * Math_CosS(0xFA0)) + pos->x;
     sp3C.y = (Math_SinS(0xFA0) * 180.0f) + pos->y;
@@ -703,7 +703,7 @@ void func_80AF2654(EnTest7* this, PlayState* play, f32 arg2) {
     Vec3f sp30;
 
     camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]));
-    camera->player = NULL;
+    camera->focalActor = NULL;
 
     pos = &player->actor.world.pos;
 
@@ -806,7 +806,7 @@ void func_80AF2BAC(EnTest7* this, PlayState* play, Vec3f* arg2, f32 arg3) {
     f32 z;
     Camera* camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]));
 
-    camera->player = NULL;
+    camera->focalActor = NULL;
     x = ((camera->at.x - arg2->x) * arg3) + arg2->x;
     y = ((camera->at.y - arg2->y) * arg3) + arg2->y;
     z = ((camera->at.z - arg2->z) * arg3) + arg2->z;

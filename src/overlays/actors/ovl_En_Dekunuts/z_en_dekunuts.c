@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dekunuts.h"
+#include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
@@ -539,8 +540,10 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play) {
         EffectSsHahen_SpawnBurst(play, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xE0);
         Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
-                    this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, gDekuScrubFlowerFragmentDL);
+                    this->actor.home.pos.z, 0, this->actor.home.rot.y, 0,
+                    DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
+        EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, OBJECT_DEKUNUTS, 10,
+                                 gDekuScrubFlowerFragmentDL);
         Actor_MarkForDeath(&this->actor);
     }
 }

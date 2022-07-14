@@ -16,12 +16,12 @@ typedef void (*ObjNozokiActionFunc)(struct ObjNozoki*, PlayState*);
 #define OBJNOZOKI_400 0x400
 
 typedef struct ObjNozoki {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ u8 unk_15C;
-    /* 0x015D */ u8 unk_15D;
-    /* 0x015E */ s8 unk_15E;
-    /* 0x015F */ s8 unk_15F;
-    /* 0x0160 */ ObjNozokiActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ u8 unk_15C;
+    /* 0x15D */ u8 unk_15D;
+    /* 0x15E */ s8 unk_15E;
+    /* 0x15F */ s8 unk_15F;
+    /* 0x160 */ ObjNozokiActionFunc actionFunc;
 } ObjNozoki; // size = 0x164
 
 extern const ActorInit Obj_Nozoki_InitVars;

@@ -18,13 +18,13 @@ typedef struct {
 } EnFuKagoStruct; // size = 0x40
 
 typedef struct EnFuKago {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ EnFuKagoActionFunc actionFunc;
-    /* 0x0160 */ ColliderSphere collider;
-    /* 0x01B8 */ EnFuKagoStruct unk_1B8[6];
-    /* 0x0338 */ s16 unk_338;
-    /* 0x033A */ s16 unk_33A;
-    /* 0x033C */ s16 unk_33C;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ EnFuKagoActionFunc actionFunc;
+    /* 0x160 */ ColliderSphere collider;
+    /* 0x1B8 */ EnFuKagoStruct unk_1B8[6];
+    /* 0x338 */ s16 unk_338;
+    /* 0x33A */ s16 unk_33A;
+    /* 0x33C */ s16 unk_33C;
 } EnFuKago; // size = 0x340
 
 extern const ActorInit En_Fu_Kago_InitVars;

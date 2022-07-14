@@ -106,7 +106,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     switch (ENZOV_GET_F(&this->actor)) {
         case ENZOV_F_1:
             this->actionFunc = func_80BD1F1C;
-            func_80BD1570(this, 9, 0);
+            func_80BD1570(this, 9, ANIMMODE_LOOP);
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -150,7 +150,7 @@ void func_80BD1440(EnZov* this, s16 arg1) {
 void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
     f32 frame;
 
-    if (((index != this->unk_322) || mode) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
+    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
         switch (index) {
             case 6:
                 frame = 30.0f;
@@ -190,25 +190,25 @@ void func_80BD160C(EnZov* this, PlayState* play) {
         if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
             textId = 0x1024;
             if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
-                func_80BD1570(this, 4, 2);
+                func_80BD1570(this, 4, ANIMMODE_ONCE);
             } else {
-                func_80BD1570(this, 6, 2);
+                func_80BD1570(this, 6, ANIMMODE_ONCE);
             }
         } else if (this->unk_320 & 4) {
             textId = 0x1023;
         } else {
             textId = 0x1022;
             this->unk_320 |= 4;
-            func_80BD1570(this, 3, 2);
+            func_80BD1570(this, 3, ANIMMODE_ONCE);
         }
     } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        func_80BD1570(this, 2, 2);
+        func_80BD1570(this, 2, ANIMMODE_ONCE);
         this->actionFunc = func_80BD19FC;
         this->unk_324 = 10;
         func_80BD1440(this, 0);
     } else {
         textId = 0x1020;
-        func_80BD1570(this, 5, 2);
+        func_80BD1570(this, 5, ANIMMODE_ONCE);
     }
 
     this->unk_320 |= 1;
@@ -222,32 +222,32 @@ void func_80BD1764(EnZov* this) {
         switch (this->unk_322) {
             case 1:
             case 6:
-                func_80BD1570(this, 6, 2);
+                func_80BD1570(this, 6, ANIMMODE_ONCE);
                 break;
 
             case 3:
             case 7:
-                func_80BD1570(this, 7, 2);
+                func_80BD1570(this, 7, ANIMMODE_ONCE);
                 break;
 
             case 4:
-                func_80BD1570(this, 0, 0);
+                func_80BD1570(this, 0, ANIMMODE_LOOP);
                 break;
 
             case 8:
-                func_80BD1570(this, 9, 0);
+                func_80BD1570(this, 9, ANIMMODE_LOOP);
                 break;
 
             case 10:
-                func_80BD1570(this, 11, 0);
+                func_80BD1570(this, 11, ANIMMODE_LOOP);
                 break;
 
             case 12:
-                func_80BD1570(this, 13, 0);
+                func_80BD1570(this, 13, ANIMMODE_LOOP);
                 break;
 
             default:
-                func_80BD1570(this, 0, 0);
+                func_80BD1570(this, 0, ANIMMODE_LOOP);
                 this->unk_320 &= ~1;
                 break;
         }
@@ -269,7 +269,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
 
                     case 0x1023:
                         if ((this->unk_322 != 6) && (this->unk_322 != 1)) {
-                            func_80BD1570(this, 1, 2);
+                            func_80BD1570(this, 1, ANIMMODE_ONCE);
                         }
                         func_801477B4(play);
                         this->actionFunc = func_80BD1C84;
@@ -277,7 +277,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
 
                     case 0x1024:
                         if (this->unk_322 != 6) {
-                            func_80BD1570(this, 0, 0);
+                            func_80BD1570(this, 0, ANIMMODE_LOOP);
                         }
                         func_801477B4(play);
                         this->actionFunc = func_80BD1C84;
@@ -285,7 +285,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
 
                     default:
                         this->unk_320 &= ~1;
-                        func_80BD1570(this, 0, 0);
+                        func_80BD1570(this, 0, ANIMMODE_LOOP);
                         func_801477B4(play);
                         this->actionFunc = func_80BD1C84;
                         break;
@@ -297,7 +297,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
             func_801477B4(play);
             this->actionFunc = func_80BD1C84;
             this->unk_320 &= ~1;
-            func_80BD1570(this, 0, 0);
+            func_80BD1570(this, 0, ANIMMODE_LOOP);
             break;
     }
 }
@@ -335,20 +335,20 @@ s32 func_80BD1AE0(EnZov* this, PlayState* play) {
             this->unk_326 = action;
             switch (this->unk_326) {
                 case 1:
-                    func_80BD1570(this, 0, 0);
+                    func_80BD1570(this, 0, ANIMMODE_LOOP);
                     break;
 
                 case 2:
-                    func_80BD1570(this, 8, 2);
+                    func_80BD1570(this, 8, ANIMMODE_ONCE);
                     this->unk_320 |= 0x10;
                     break;
 
                 case 3:
-                    func_80BD1470(this, 10, 2, 0.0f);
+                    func_80BD1470(this, 10, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 4:
-                    func_80BD1570(this, 12, 2);
+                    func_80BD1570(this, 12, ANIMMODE_ONCE);
                     break;
             }
         }
@@ -360,7 +360,7 @@ s32 func_80BD1AE0(EnZov* this, PlayState* play) {
 
 void func_80BD1BF0(EnZov* this, PlayState* play) {
     if (!func_80BD1AE0(this, play)) {
-        func_80BD1570(this, 0, 0);
+        func_80BD1570(this, 0, ANIMMODE_LOOP);
         this->actionFunc = func_80BD1C84;
     }
 }

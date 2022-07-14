@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ik.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -50,7 +51,7 @@ static ColliderTrisElementInit D_8092C048[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_8092C0C0 = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_TRIS, },
-    2, D_8092C048, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_8092C048, // sTrisElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {

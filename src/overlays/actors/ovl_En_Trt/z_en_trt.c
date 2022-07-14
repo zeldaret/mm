@@ -232,7 +232,7 @@ s32 EnTrt_TestEndInteraction(EnTrt* this, PlayState* play, Input* input) {
 
 s32 EnTrt_TestCancelOption(EnTrt* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, EnTrt_GetItemTextId(this));
         return true;
     }
@@ -387,7 +387,7 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
         if (this->textId == 0x88F) {
-            if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            if (Inventory_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -396,7 +396,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, PlayState* play) {
                 play->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
-                this->tmpTextId = this->textId;
+                this->prevTextId = this->textId;
                 this->textId = 0x88E;
                 gSaveContext.save.weekEventReg[85] |= 8;
                 Message_StartTextbox(play, this->textId, &this->actor);
@@ -408,7 +408,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, PlayState* play) {
                 EnTrt_SetupStartShopping(play, this, 0);
             } else if (gSaveContext.save.weekEventReg[84] & 0x40) {
                 this->textId = 0x83B;
-                if (Interface_HasItemInBottle(ITEM_POTION_RED)) {
+                if (Inventory_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(play, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
@@ -591,7 +591,7 @@ s32 EnTrt_HasPlayerSelectedItem(PlayState* play, EnTrt* this, Input* input) {
     }
     if (EnTrt_TestItemSelected(play)) {
         if (item->actor.params != SI_POTION_BLUE || (this->flags & ENTRT_GIVEN_MUSHROOM)) {
-            this->tmpActionFunc = this->actionFunc;
+            this->prevActionFunc = this->actionFunc;
             func_80151938(play, EnTrt_GetItemChoiceTextId(this));
             play_sound(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
@@ -714,13 +714,13 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
                         break;
                     case 1:
                         func_8019F230();
-                        this->actionFunc = this->tmpActionFunc;
+                        this->actionFunc = this->prevActionFunc;
                         func_80151938(play, EnTrt_GetItemTextId(this));
                         break;
                 }
             }
         } else if (talkState == 5 && Message_ShouldAdvance(play)) {
-            if (!Interface_HasEmptyBottle()) {
+            if (!Inventory_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(play, this, 0x846);
             } else {
@@ -755,7 +755,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     } else {
         this->talkOptionTextId = 0x885;
     }
-    this->tmpTextId = this->textId;
+    this->prevTextId = this->textId;
 
     if (player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_ZORA ||
         player->transformation == PLAYER_FORM_DEKU) {
@@ -803,7 +803,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         if (Player_GetMask(play) == PLAYER_MASK_SCENTS) {
             this->textId = 0x890;
         } else {
-            this->textId = this->tmpTextId;
+            this->textId = this->prevTextId;
         }
     } else {
         this->textId = 0x850;
@@ -931,14 +931,14 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && Message_ShouldAdvance(play)) {
-        if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+        if (Inventory_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
             }
             this->actionFunc = EnTrt_GiveRedPotionForKoume;
         } else {
-            this->tmpTextId = this->textId;
+            this->prevTextId = this->textId;
             this->textId = 0x88E;
             gSaveContext.save.weekEventReg[85] |= 8;
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -950,7 +950,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
         if (this->textId == 0x83C) {
-            if (Interface_HasEmptyBottle()) {
+            if (Inventory_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -959,7 +959,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
                 play->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
-                this->tmpTextId = this->textId;
+                this->prevTextId = this->textId;
                 this->textId = 0x88E;
                 gSaveContext.save.weekEventReg[85] |= 8;
                 Message_StartTextbox(play, this->textId, &this->actor);
@@ -1046,7 +1046,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
 
 void EnTrt_CannotBuy(EnTrt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, EnTrt_GetItemTextId(this));
     }
 }
@@ -1059,7 +1059,7 @@ void EnTrt_CanBuy(EnTrt* this, PlayState* play) {
         EnTrt_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(play, item);
-        this->actionFunc = this->tmpActionFunc;
+        this->actionFunc = this->prevActionFunc;
         func_80151938(play, EnTrt_GetItemTextId(this));
     }
 }
