@@ -93,7 +93,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 static TexturePtr sMouthTextures[] = {
-    gRomaniMouthNormalTex,
+    gRomaniMouthSlightSmileTex,
     gRomaniMouthFrownTex,
     gRomaniMouthHangingOpenTex,
     gRomaniMouthSmileTex,

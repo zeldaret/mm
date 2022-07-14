@@ -73,7 +73,7 @@
         <Texture Name="gRomaniEyeClosedTex" OutName="romani_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x10FC8" />
         <Texture Name="gRomaniEyeHappyTex" OutName="romani_eye_happy" Format="rgba16" Width="32" Height="32" Offset="0x117C8" />
         <Texture Name="gRomaniEyeSadTex" OutName="romani_eye_sad" Format="rgba16" Width="32" Height="32" Offset="0x11FC8" />
-        <Texture Name="gRomaniMouthNormalTex" OutName="romani_mouth_normal" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
+        <Texture Name="gRomaniMouthSlightSmileTex" OutName="romani_mouth_slight_smile" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
         <Texture Name="gRomaniMouthFrownTex" OutName="romani_mouth_frown" Format="rgba16" Width="32" Height="16" Offset="0x12BC8" />
         <Texture Name="gRomaniMouthHangingOpenTex" OutName="romani_mouth_hanging_open" Format="rgba16" Width="32" Height="16" Offset="0x12FC8" />
         <Texture Name="gRomaniMouthSmileTex" OutName="romani_mouth_smile" Format="rgba16" Width="32" Height="16" Offset="0x133C8" />
@@ -108,7 +108,7 @@
         <!-- Romani Animations -->
         <Animation Name="gRomaniWalkAnim" Offset="0x14088" /> <!-- Original name is "rm_walk" -->
         <Animation Name="gRomaniShootBowAnim" Offset="0x15B7C" /> <!-- Original name is "rm_yumiuti" ("shooting a bow") -->
-        <Animation Name="gRomaniAbductedAnim" Offset="0x16588" /> <!-- Original name is "romani_capture_loop". Unused? -->
+        <Animation Name="gRomaniAbductedAnim" Offset="0x16588" /> <!-- Original name is "romani_capture_loop" -->
         <Animation Name="gRomaniTurnAroundAndFlickHairAnim" Offset="0x180DC" /> <!-- Original name is "romani_furimuki" ("to turn around") -->
         <Animation Name="gRomaniSingStartAnim" Offset="0x18948" /> <!-- Original name is "romani_utau" ("sing") -->
         <Animation Name="gRomaniSingLoopAnim" Offset="0x1B76C" /> <!-- Original name is "romani_utau_loop" -->
