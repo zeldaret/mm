@@ -70,7 +70,7 @@ static ColliderTrisInit sTrisInit1 = {
         OC2_TYPE_2,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit1),
     sTrisElementsInit1,
 };
 
@@ -130,7 +130,7 @@ static ColliderTrisInit sTrisInit2 = {
         OC2_TYPE_2,
         COLSHAPE_TRIS,
     },
-    4,
+    ARRAY_COUNT(sTrisElementsInit2),
     sTrisElementsInit2,
 };
 
@@ -280,9 +280,9 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     sp40.z = this->dyna.actor.world.pos.z;
     sp3A = player->unk_B6A;
 
-    if (func_80123F48(play, &sp40, 70.0f, 50.0f)) {
-        this->dyna.actor.home.pos.x = player->swordInfo[0].tip.x;
-        this->dyna.actor.home.pos.z = player->swordInfo[0].tip.z;
+    if (Player_IsBurningStickInRange(play, &sp40, 70.0f, 50.0f)) {
+        this->dyna.actor.home.pos.x = player->meleeWeaponInfo[0].tip.x;
+        this->dyna.actor.home.pos.z = player->meleeWeaponInfo[0].tip.z;
         func_809CEE74(this);
         return;
     }
@@ -461,7 +461,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
         }
         func_809CEE74(this);
     } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&player->swordInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);
         sp30 = Math_SinS(-this->dyna.actor.shape.rot.y);
@@ -472,7 +472,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
         temp_f10 = (sp3C.x * sp2C) + (sp3C.z * sp30);
 
         if ((fabsf(temp_f10) < 70.0f) && (fabsf(sp58) < 10.0f) && (temp_f18 < 160.0f) && (temp_f18 > 20.0f)) {
-            Math_Vec3f_Copy(&this->dyna.actor.home.pos, &player->swordInfo[0].tip);
+            Math_Vec3f_Copy(&this->dyna.actor.home.pos, &player->meleeWeaponInfo[0].tip);
             func_809CEE74(this);
         }
     }

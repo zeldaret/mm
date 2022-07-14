@@ -83,7 +83,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
     OPEN_DISPS(gfxCtx);
 
     if (item == ITEM_PICTO_BOX) {
-        if (!(((void)0, gSaveContext.save.inventory.questItems) & (gBitFlags[QUEST_UNK_19]))) {
+        if (!(((void)0, gSaveContext.save.inventory.questItems) & (gBitFlags[QUEST_PICTOGRAPH]))) {
             ammo = 0;
         } else {
             ammo = 1;
