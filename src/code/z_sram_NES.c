@@ -230,8 +230,8 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     s16 sceneNum;
     s32 j;
     s32 i;
-    u8 temp;
-    u8 temp2;
+    u8 slot;
+    u8 item;
 
     gSaveContext.save.daySpeed = 0;
     gSaveContext.save.daysElapsed = 0;
@@ -260,7 +260,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
             ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
-        gSaveContext.save.permanentSceneFlags[i].unk_18 = 0;
+        gSaveContext.save.permanentSceneFlags[i].rooms = 0;
     }
 
     for (; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
@@ -276,7 +276,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x20) {
-        func_801149A0(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
+        Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
     for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
@@ -306,26 +306,26 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
-        temp2 = INV_CONTENT(ITEM_BOMB);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOMB);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 2;
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
-        temp2 = INV_CONTENT(ITEM_NUT);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_NUT);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 4;
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
-        temp2 = INV_CONTENT(ITEM_STICK);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_STICK);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 8;
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
-        temp2 = INV_CONTENT(ITEM_BOW);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOW);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 0x10;
         }
     }
@@ -333,8 +333,8 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
         if (D_801C67B0[i] != ITEM_NONE) {
             if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
-                temp2 = gSaveContext.save.inventory.items[i];
-                AMMO(temp2) = 0;
+                item = gSaveContext.save.inventory.items[i];
+                AMMO(item) = 0;
             }
         }
     }
@@ -343,10 +343,10 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         // Check for all bottled items
         if (gSaveContext.save.inventory.items[i] >= ITEM_POTION_RED) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
-                for (j = 1; j < 4; j++) {
+                for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
-                        func_80112B40(play, j);
+                        Interface_LoadItemIconImpl(play, j);
                     }
                 }
                 gSaveContext.save.inventory.items[i] = ITEM_BOTTLE;
@@ -354,26 +354,26 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         }
     }
 
-    REMOVE_QUEST_ITEM(QUEST_UNK_19);
+    REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
 
     if (gSaveContext.save.playerData.health < 0x30) {
         gSaveContext.save.playerData.health = 0x30;
     }
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) < 3) {
-        SET_EQUIP_VALUE(EQUIP_SWORD, 1);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) <= EQUIP_VALUE_SWORD_RAZOR) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_KOKIRI);
 
         if (CUR_FORM == 0) {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
@@ -385,20 +385,20 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     if (STOLEN_ITEM_1 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+        slot = SLOT(ITEM_BOTTLE);
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }
     }
 
     if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
-        for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+        slot = SLOT(ITEM_BOTTLE);
+        for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }
@@ -407,15 +407,14 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
     SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
 
-    // ??
-    func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
-    func_801149A0(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
-    func_801149A0(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
+    Inventory_DeleteItem(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
+    Inventory_DeleteItem(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
+    Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
-    for (j = 1; j < 4; j++) {
+    for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
         if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
-            func_80112B40(play, j);
+            Interface_LoadItemIconImpl(play, j);
         }
     }
 
@@ -596,7 +595,7 @@ ItemEquips sSaveDefaultItemEquips = {
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
         { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
-        { ITEM_UNK_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { ITEM_FD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
     },
     {
         { SLOT_OCARINA, SLOT_NONE, SLOT_NONE, SLOT_NONE },
@@ -809,8 +808,8 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        BUTTON_ITEM_EQUIP(0, 2) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
-        C_SLOT_EQUIP(0, 2) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
     }
 
     gSaveContext.save.hasTatl = true;

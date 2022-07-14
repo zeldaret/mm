@@ -39,22 +39,22 @@ struct ObjChan;
 typedef void (*ObjChanActionFunc)(struct ObjChan*, PlayState*);
 
 typedef struct ObjChan {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjChanActionFunc actionFunc;
-    /* 0x0148 */ ColliderCylinder collider;
-    /* 0x0194 */ u8 myPotIndex; // For OBJCHAN_SUBTYPE_POT: which pot is this?
-    /* 0x0196 */ s16 fireDelayFrames;
-    /* 0x0198 */ UNK_TYPE1 unk198[0x12];
-    /* 0x01AA */ u8 stateFlags;
-    /* 0x01AC */ struct ObjChan* pots[5]; // For OBJCHAN_SUBTYPE_BODY: pointers to pot actors
-    /* 0x01C0 */ Vec3f unk1C0;
-    /* 0x01CC */ f32 unk1CC;
-    /* 0x01D0 */ f32 unk1D0;
-    /* 0x01D4 */ s16 unk1D4;
-    /* 0x01D8 */ f32 flameSize;
-    /* 0x01DC */ s16 rotationSpeed; // Main object only. Slowly ramps up under some circumstances. In other circumstances it's immediately set to maximum speed.
-    /* 0x01DE */ s16 rotation; // Increases as the chandelier spins. Don't know why they didn't use the actor's rotation variable.
-    /* 0x01E0 */ s16 cutscenes[2];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjChanActionFunc actionFunc;
+    /* 0x148 */ ColliderCylinder collider;
+    /* 0x194 */ u8 myPotIndex; // For OBJCHAN_SUBTYPE_POT: which pot is this?
+    /* 0x196 */ s16 fireDelayFrames;
+    /* 0x198 */ UNK_TYPE1 unk198[0x12];
+    /* 0x1AA */ u8 stateFlags;
+    /* 0x1AC */ struct ObjChan* pots[5]; // For OBJCHAN_SUBTYPE_BODY: pointers to pot actors
+    /* 0x1C0 */ Vec3f unk1C0;
+    /* 0x1CC */ f32 unk1CC;
+    /* 0x1D0 */ f32 unk1D0;
+    /* 0x1D4 */ s16 unk1D4;
+    /* 0x1D8 */ f32 flameSize;
+    /* 0x1DC */ s16 rotationSpeed; // Main object only. Slowly ramps up under some circumstances. In other circumstances it's immediately set to maximum speed.
+    /* 0x1DE */ s16 rotation; // Increases as the chandelier spins. Don't know why they didn't use the actor's rotation variable.
+    /* 0x1E0 */ s16 cutscenes[2];
 } ObjChan; // size = 0x1E4
 
 extern const ActorInit Obj_Chan_InitVars;

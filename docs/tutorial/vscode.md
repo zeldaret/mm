@@ -1,6 +1,6 @@
 # VSCode
 
-A lot of people on this project use VSCode as their coding environment. 
+A lot of people on this project use VSCode as their coding environment.
 
 ## Extensions
 
@@ -13,10 +13,7 @@ There are a number of useful extensions available to make work more efficient:
 - ~~bracket pair colorizer 2~~ (now obsolete due to VSCode's built-in bracket colouring)
 - Better MIPS Support
 
-
-
-
-## Useful stuff to know:
+## Useful stuff to know
 
 - Ctrl + Alt + Up/Down (on Windows, on Linux it's Ctrl + Shift + Up/Down or Shift + Alt + Up/Down) gives multicursors across consecutive lines. If you want several cursors in a more diverse arrangement, middle clicking works, at least on Windows.
 - Alt + Up/Down moves lines up/down.

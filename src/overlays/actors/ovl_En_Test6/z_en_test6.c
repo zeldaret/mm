@@ -980,7 +980,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 play->sceneLoadFlag = 0x14;
-                play->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
+                play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
                 play->unk_1887F = 2;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
@@ -1061,7 +1061,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
                     play->sceneLoadFlag = 0x14;
-                    play->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
+                    play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
                     play->unk_1887F = 2;
                     gSaveContext.respawnFlag = 2;
                     play->msgCtx.ocarinaMode = 4;
