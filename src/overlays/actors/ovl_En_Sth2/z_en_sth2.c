@@ -84,8 +84,8 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
         *dList = gEnSth2HeadDL;
     }
     if ((limbIndex == OBJECT_STH_LIMB_08) || (limbIndex == OBJECT_STH_LIMB_0A) || (limbIndex == OBJECT_STH_LIMB_0D)) {
-        rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 0x32) + 0x814))) * 200.0f);
-        rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 0x32) + 0x940))) * 200.0f);
+        rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 50) + 0x814))) * 200.0f);
+        rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 50) + 0x940))) * 200.0f);
     }
     return false;
 }
