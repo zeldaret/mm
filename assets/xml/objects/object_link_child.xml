@@ -94,12 +94,12 @@
         <DList Name="object_link_child_DL_016E10" Offset="0x16E10" />
         <DList Name="object_link_child_DL_016F38" Offset="0x16F38" />
         <DList Name="object_link_child_DL_016FC8" Offset="0x16FC8" />
-        <DList Name="object_link_child_DL_017058" Offset="0x17058" />
+        <DList Name="gLinkHumanGildedSwordHandleDL" Offset="0x17058" />
         <DList Name="object_link_child_DL_017090" Offset="0x17090" />
         <DList Name="object_link_child_DL_017130" Offset="0x17130" />
         <DList Name="object_link_child_DL_0171D0" Offset="0x171D0" />
         <DList Name="object_link_child_DL_017270" Offset="0x17270" />
-        <DList Name="object_link_child_DL_017310" Offset="0x17310" />
+        <DList Name="gLinkHumanGildedSwordBladeDL" Offset="0x17310" />
         <DList Name="object_link_child_DL_017338" Offset="0x17338" />
         <DList Name="gLinkHumanHylianShieldDL" Offset="0x17458" />
         <DList Name="object_link_child_DL_017700" Offset="0x17700" />
@@ -150,11 +150,11 @@
         <DList Name="object_link_child_DL_01DC38" Offset="0x1DC38" />
         <DList Name="object_link_child_DL_01DC48" Offset="0x1DC48" />
         <DList Name="object_link_child_DL_01DC58" Offset="0x1DC58" />
-        <DList Name="object_link_child_DL_01DC68" Offset="0x1DC68" />
+        <DList Name="gLinkHumanLeftHandHoldingKokiriSwordDL" Offset="0x1DC68" />
         <DList Name="object_link_child_DL_01DC78" Offset="0x1DC78" />
-        <DList Name="object_link_child_DL_01DC88" Offset="0x1DC88" />
+        <DList Name="gLinkHumanLeftHandHoldingRazorSwordDL" Offset="0x1DC88" />
         <DList Name="object_link_child_DL_01DC98" Offset="0x1DC98" />
-        <DList Name="object_link_child_DL_01DCA8" Offset="0x1DCA8" />
+        <DList Name="gLinkHumanLeftHandHoldingGildedSwordDL" Offset="0x1DCA8" />
         <DList Name="object_link_child_DL_01DCC0" Offset="0x1DCC0" />
         <DList Name="gLinkHumanLeftHandHoldingGreatFairysSwordDL" Offset="0x1DCD8" />
         <DList Name="object_link_child_DL_01DCE8" Offset="0x1DCE8" />

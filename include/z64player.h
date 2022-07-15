@@ -208,10 +208,10 @@ typedef enum PlayerAnimType {
 
 typedef enum PlayerModelType {
     // left hand
-    /*  0 */ PLAYER_MODELTYPE_LH_0,
-    /*  1 */ PLAYER_MODELTYPE_LH_1,
-    /*  2 */ PLAYER_MODELTYPE_LH_2,
-    /*  3 */ PLAYER_MODELTYPE_LH_3,
+    /*  0 */ PLAYER_MODELTYPE_LH_OPEN,
+    /*  1 */ PLAYER_MODELTYPE_LH_CLOSED,
+    /*  2 */ PLAYER_MODELTYPE_LH_ONE_HAND_SWORD,
+    /*  3 */ PLAYER_MODELTYPE_LH_TWO_HAND_SWORD,
     /*  4 */ PLAYER_MODELTYPE_LH_4,
     /*  5 */ PLAYER_MODELTYPE_LH_BOTTLE,
     // right hand
