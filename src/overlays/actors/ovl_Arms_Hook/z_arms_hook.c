@@ -294,7 +294,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
     f32 f0;
     Player* player = GET_PLAYER(play);
 
-    if (player->actor.draw != NULL && player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
+    if ((player->actor.draw != NULL) && (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT)) {
         Vec3f sp68;
         Vec3f sp5C;
         Vec3f sp50;
