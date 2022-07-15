@@ -143,12 +143,14 @@
         <Mtx Name="gLinkHumanSheathedRazorSwordMtx" Offset="0x1DB00" />
         <DList Name="gLinkHumanSheathedRazorSwordDL" Offset="0x1DB40" />
         <DList Name="gLinkHumanSheathedGildedSwordDL" Offset="0x1DB60" />
-        <DList Name="object_link_child_DL_01DBC8" Offset="0x1DBC8" />
-        <DList Name="object_link_child_DL_01DC18" Offset="0x1DC18" />
+        <Mtx Name="gLinkHumanHylianShieldMtx" Offset="0x1DB88" />
+        <DList Name="gLinkHumanHylianShieldWithMtxDL" Offset="0x1DBC8" />
+        <Mtx Name="gLinkHumanMirrorShieldMtx" Offset="0x1DBD8" />
+        <DList Name="gLinkHumanMirrorShieldWithMtxDL" Offset="0x1DC18" />
 
-        <DList Name="object_link_child_DL_01DC28" Offset="0x1DC28" />
+        <DList Name="gLinkHumanRightHandHoldingHylianShieldDL" Offset="0x1DC28" />
         <DList Name="object_link_child_DL_01DC38" Offset="0x1DC38" />
-        <DList Name="object_link_child_DL_01DC48" Offset="0x1DC48" />
+        <DList Name="gLinkHumanRightHandHoldingMirrorShieldDL" Offset="0x1DC48" />
         <DList Name="object_link_child_DL_01DC58" Offset="0x1DC58" />
         <DList Name="gLinkHumanLeftHandHoldingKokiriSwordDL" Offset="0x1DC68" />
         <DList Name="object_link_child_DL_01DC78" Offset="0x1DC78" />

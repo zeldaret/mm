@@ -799,9 +799,9 @@ Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
     gLinkZoraWaistDL,        gLinkDekuWaistDL,        gLinkDekuWaistDL,  gLinkHumanWaistDL, gLinkHumanWaistDL,
 };
 
-Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
-    { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
-    { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
+Gfx* gPlayerHandHoldingShields[PLAYER_SHIELD_MAX - 1][2] = {
+    { gLinkHumanRightHandHoldingHylianShieldDL, gLinkHumanRightHandHoldingHylianShieldDL },
+    { gLinkHumanRightHandHoldingMirrorShieldDL, gLinkHumanRightHandHoldingMirrorShieldDL },
 };
 
 Gfx* gPlayerSheath12DLs[2 * PLAYER_FORM_MAX] = {
@@ -843,18 +843,18 @@ Gfx* gPlayerSheath14DLs[2 * PLAYER_FORM_MAX] = {
     gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C00AC[][2] = {
-    { object_link_child_DL_01DBC8, object_link_child_DL_01DBC8 },
-    { object_link_child_DL_01DC18, object_link_child_DL_01DC18 },
+Gfx* gPlayerShields[][2] = {
+    { gLinkHumanHylianShieldWithMtxDL, gLinkHumanHylianShieldWithMtxDL },
+    { gLinkHumanMirrorShieldWithMtxDL, gLinkHumanMirrorShieldWithMtxDL },
 };
 
-Gfx* D_801C00BC[][2] = {
+Gfx* gPlayerSheathedSwords[][2] = {
     { gLinkHumanSheathedKokiriSwordDL, gLinkHumanSheathedKokiriSwordDL },
     { gLinkHumanSheathedRazorSwordDL, gLinkHumanSheathedRazorSwordDL },
     { gLinkHumanSheathedGildedSwordDL, gLinkHumanSheathedGildedSwordDL },
 };
 
-Gfx* D_801C00D4[][2] = {
+Gfx* gPlayerSwordSheaths[][2] = {
     { gLinkHumanKokiriSwordSheathDL, gLinkHumanKokiriSwordSheathDL },
     { gLinkHumanRazorSwordSheathDL, gLinkHumanRazorSwordSheathDL },
     { gLinkHumanGildedSwordSheathDL, gLinkHumanGildedSwordSheathDL },
@@ -885,7 +885,6 @@ Gfx* gPlayerLeftHandClosedDLs[2 * PLAYER_FORM_MAX] = {
     gLinkHumanLeftHandClosedDL, gLinkHumanLeftHandClosedDL,
 };
 
-// human holds kokiri sword
 Gfx* gPlayerLeftHandOneHandSwordDLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandDL,
     gLinkFierceDeityLeftHandDL,
