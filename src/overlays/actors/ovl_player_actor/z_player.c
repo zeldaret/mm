@@ -18,6 +18,11 @@ void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
+
+void func_80844EF8(Player* player, PlayState* play, Input* input);
+s32 func_8085B134(PlayState* play);
+void func_8085B170(PlayState* play, Player* player);
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DABC.s")
@@ -248,6 +253,7 @@ void Player_Draw(Actor* thisx, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831454.s")
 
+s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState* play), s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831494.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083172C.s")
@@ -730,11 +736,434 @@ void Player_Draw(Actor* thisx, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841744.s")
 
+void func_8084182C(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084182C.s")
 
+void func_80841A50(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841A50.s")
 
+
+extern LinkAnimationHeader D_0400CF98;
+extern LinkAnimationHeader D_0400D0A8;
+extern LinkAnimationHeader D_0400D0B0;
+extern LinkAnimationHeader D_0400D0C8;
+extern LinkAnimationHeader D_0400D0D0;
+extern LinkAnimationHeader D_0400D100;
+extern LinkAnimationHeader D_0400D218;
+extern LinkAnimationHeader D_0400D220;
+extern LinkAnimationHeader D_0400D228;
+extern LinkAnimationHeader D_0400D3E8;
+extern LinkAnimationHeader D_0400D3F8;
+extern LinkAnimationHeader D_0400D420;
+extern LinkAnimationHeader D_0400D488;
+extern LinkAnimationHeader D_0400D490;
+extern LinkAnimationHeader D_0400D4A8;
+extern LinkAnimationHeader D_0400D4B0;
+extern LinkAnimationHeader D_0400D4B8;
+extern LinkAnimationHeader D_0400D4C0;
+extern LinkAnimationHeader D_0400D4D8;
+extern LinkAnimationHeader D_0400D4F0;
+extern LinkAnimationHeader D_0400D4F8;
+extern LinkAnimationHeader D_0400D500;
+extern LinkAnimationHeader D_0400D5A8;
+extern LinkAnimationHeader D_0400D5B0;
+extern LinkAnimationHeader D_0400D638;
+extern LinkAnimationHeader D_0400D660;
+extern LinkAnimationHeader D_0400D698;
+extern LinkAnimationHeader D_0400D8B0;
+extern LinkAnimationHeader D_0400D9C8;
+extern LinkAnimationHeader D_0400D9D0;
+extern LinkAnimationHeader D_0400D9D8;
+extern LinkAnimationHeader D_0400DA60;
+extern LinkAnimationHeader D_0400DA68;
+extern LinkAnimationHeader D_0400DA70;
+extern LinkAnimationHeader D_0400DA88;
+extern LinkAnimationHeader D_0400DAA0;
+extern LinkAnimationHeader D_0400DAA8;
+extern LinkAnimationHeader D_0400DAC0;
+extern LinkAnimationHeader D_0400DAC8;
+extern LinkAnimationHeader D_0400DAD0;
+extern LinkAnimationHeader D_0400DAD8;
+extern LinkAnimationHeader D_0400DAE0;
+extern LinkAnimationHeader D_0400DAF0;
+extern LinkAnimationHeader D_0400DB10;
+extern LinkAnimationHeader D_0400DB18;
+extern LinkAnimationHeader D_0400DB30;
+extern LinkAnimationHeader D_0400DB68;
+extern LinkAnimationHeader D_0400DBB0;
+extern LinkAnimationHeader D_0400DBE8;
+extern LinkAnimationHeader D_0400DC20;
+extern LinkAnimationHeader D_0400DC28;
+extern LinkAnimationHeader D_0400DC30;
+extern LinkAnimationHeader D_0400DC48;
+extern LinkAnimationHeader D_0400DC60;
+extern LinkAnimationHeader D_0400DC78;
+extern LinkAnimationHeader D_0400DC80;
+extern LinkAnimationHeader D_0400DC88;
+extern LinkAnimationHeader D_0400DCA8;
+extern LinkAnimationHeader D_0400DCD0;
+extern LinkAnimationHeader D_0400DCF8;
+extern LinkAnimationHeader D_0400DD10;
+extern LinkAnimationHeader D_0400DD30;
+extern LinkAnimationHeader D_0400DD38;
+extern LinkAnimationHeader D_0400DD40;
+extern LinkAnimationHeader D_0400DD70;
+extern LinkAnimationHeader D_0400DD78;
+extern LinkAnimationHeader D_0400DD80;
+extern LinkAnimationHeader D_0400DDF0;
+extern LinkAnimationHeader D_0400DDF8;
+extern LinkAnimationHeader D_0400DE00;
+extern LinkAnimationHeader D_0400DE08;
+extern LinkAnimationHeader D_0400DE10;
+extern LinkAnimationHeader D_0400DE28;
+extern LinkAnimationHeader D_0400DE30;
+extern LinkAnimationHeader D_0400DE50;
+extern LinkAnimationHeader D_0400DE60;
+extern LinkAnimationHeader D_0400DEA0;
+extern LinkAnimationHeader D_0400DEA8;
+extern LinkAnimationHeader D_0400DF78;
+extern LinkAnimationHeader D_0400DF90;
+extern LinkAnimationHeader D_0400DF98;
+extern LinkAnimationHeader D_0400DFA0;
+extern LinkAnimationHeader D_0400DFA8;
+extern LinkAnimationHeader D_0400DFB0;
+extern LinkAnimationHeader D_0400DFB8;
+extern LinkAnimationHeader D_0400DFC0;
+extern LinkAnimationHeader D_0400DFC8;
+extern LinkAnimationHeader D_0400DFD0;
+extern LinkAnimationHeader D_0400DFD8;
+extern LinkAnimationHeader D_0400DFE0;
+extern LinkAnimationHeader D_0400DFE8;
+extern LinkAnimationHeader D_0400DFF0;
+extern LinkAnimationHeader D_0400DFF8;
+extern LinkAnimationHeader D_0400E000;
+extern LinkAnimationHeader D_0400E008;
+extern LinkAnimationHeader D_0400E050;
+extern LinkAnimationHeader D_0400E060;
+extern LinkAnimationHeader D_0400E070;
+extern LinkAnimationHeader D_0400E080;
+extern LinkAnimationHeader D_0400E088;
+extern LinkAnimationHeader D_0400E098;
+extern LinkAnimationHeader D_0400E1F0;
+extern LinkAnimationHeader D_0400E200;
+extern LinkAnimationHeader D_0400E208;
+extern LinkAnimationHeader D_0400E260;
+extern LinkAnimationHeader D_0400E270;
+extern LinkAnimationHeader D_0400E278;
+extern LinkAnimationHeader D_0400E290;
+extern LinkAnimationHeader D_0400E298;
+extern LinkAnimationHeader D_0400E2A0;
+extern LinkAnimationHeader D_0400E2B8;
+extern LinkAnimationHeader D_0400E2C0;
+extern LinkAnimationHeader D_0400E2C8;
+extern LinkAnimationHeader D_0400E2D8;
+extern LinkAnimationHeader D_0400E2E8;
+extern LinkAnimationHeader D_0400E2F0;
+extern LinkAnimationHeader D_0400E2F8;
+extern LinkAnimationHeader D_0400E398;
+extern LinkAnimationHeader D_0400E3A0;
+extern LinkAnimationHeader D_0400E3A8;
+extern LinkAnimationHeader D_0400E3B0;
+extern LinkAnimationHeader D_0400E3B8;
+extern LinkAnimationHeader D_0400E3C0;
+extern LinkAnimationHeader D_0400E3D8;
+extern LinkAnimationHeader D_0400E408;
+extern LinkAnimationHeader D_0400E410;
+extern LinkAnimationHeader D_0400E418;
+
+// extern void (*D_8085D2CC[0x10])(PlayState*, Player*, s32);
+extern void (*D_8085D2CC[0x10])();
+extern PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX];
+extern LinkAnimationHeader* D_8085D160[PLAYER_FORM_MAX];
+extern UNK_TYPE D_8085D30C;
+extern UNK_TYPE D_8085D330;
+extern Vec3f D_8085D340;
+
+s32 func_8085B1F0(PlayState* play, Player* player);
+s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
+void func_8085B384(Player* player, PlayState* play, Player*);
+s32 func_8085B3E0(PlayState* play, s32 damage);
+void func_8085B460(PlayState* play, Actor* actor, Player* player);
+void func_8085B74C(PlayState* play);
+void func_8085B820(PlayState* play, s16 arg1, Actor* actor);
+s32 func_8085B854(PlayState* play, Player* player, s32 itemId, s32 arg3);
+s32 func_8085B930(PlayState* play, void* talkAnim, s32 arg2);
+void func_8085B08C(Player* arg0, PlayState* play);
+void func_80855818(Player* arg0, PlayState* play);
+
+#if 0
+void Player_Init(Actor* thisx, PlayState* play) {
+    s32 sp60;
+    s8* sp44;
+    PosRot* sp40;
+    PosRot* temp_a0_2;
+    RespawnData* temp_t8;
+    RespawnData* temp_t9_2;
+    SaveContext* var_v1;
+    s16 temp_v0;
+    s16 temp_v0_6;
+    s16 temp_v1_3;
+    s32 temp_v0_7;
+    s32 temp_v1;
+    s32 var_a1;
+    s32 var_a2;
+    s32 var_v0_2;
+    s32 var_v0_3;
+    s8 temp_v0_2;
+    s8* temp_a0;
+    s8* temp_v1_2;
+    u32 temp_t7;
+    u32 temp_t9;
+    u8 temp_t1;
+    u8 temp_t6;
+    u8 temp_v0_4;
+    u8 temp_v0_5;
+    u8 var_v0;
+    void* temp_v0_3;
+    Player* this = (Player* ) thisx;
+
+    play->playerInit = func_8084182C;
+    play->playerUpdate = func_80844EF8;
+    play->unk_18770 = func_8085B170;
+    play->startPlayerFishing = func_8085B134;
+    play->grabPlayer = func_8085B1F0;
+    play->startPlayerCutscene = func_8085B28C;
+    play->func_18780 = func_8085B384;
+    play->damagePlayer = func_8085B3E0;
+    play->talkWithPlayer = func_8085B460;
+    play->unk_1878C = func_8085B74C;
+    play->unk_18790 = func_8085B820;
+    play->unk_18794 = func_8085B854;
+    play->setPlayerTalkAnim = func_8085B930;
+
+    gActorOverlayTable[0].initInfo->objectId = 1;
+    temp_v0 = this->actor.shape.rot.x;
+    this->actor.room = -1;
+    this->unk_A86 = -1;
+    temp_t1 = temp_v0 - 1;
+    if (temp_v0 != 0) {
+        this->transformation = temp_t1;
+        temp_v0_2 = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[temp_t1 & 0xFF]);
+        this->actor.objBankIndex = temp_v0_2;
+        if (temp_v0_2 < 0) {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+        Actor_SetObjectDependency(play, &this->actor);
+    } else {
+        temp_t6 = gSaveContext.save.playerForm;
+        temp_v1 = temp_t6 & 0xFF;
+        this->transformation = temp_t6;
+        if (temp_v1 == 4) {
+            var_v0 = gSaveContext.save.equippedMask;
+            if (var_v0 == 0x14) {
+                gSaveContext.save.equippedMask = 0;
+                var_v0 = 0;
+            }
+            this->currentMask = var_v0;
+        } else {
+            this->currentMask = temp_v1 + 0x15;
+            gSaveContext.save.equippedMask = 0;
+        }
+        Inventory_UpdateDeitySwordEquip(play);
+        this->unk_B28 = 0;
+        this->unk_B90 = 0;
+        this->unk_B92 = 0;
+        this->unk_B94 = 0;
+        this->unk_B96 = 0;
+        this->stateFlags1 &= 0xFCFFEFF7;
+        this->stateFlags2 &= 0xBEFDFFFF;
+        this->stateFlags3 &= 0xFC424437;
+        this->unk_B08[0] = 0.0f;
+        this->unk_B08[1] = 0.0f;
+    }
+    if (this->transformation == 2) {
+        if ((this->stateFlags1 * 0x10) < 0) {
+            this->unk_B08[2] = 1.0f;
+        } else {
+            this->unk_B08[2] = 0.0f;
+        }
+    }
+    this->actor.flags &= 0xFBFDFFFF;
+    if (this->transformation != 3) {
+        this->actor.flags |= 0x04000000;
+        if (this->transformation == 1) {
+            this->actor.flags |= 0x20000;
+        }
+    }
+    this->ageProperties = &D_8085BA38[this->transformation];
+    this->heldItemActionParam = 0;
+    this->itemActionParam = 0;
+    this->heldItemId = 0xFF;
+    // todo: declaration
+    func_80831990(play, &this->actor, 0xFFU);
+    Player_SetEquipmentData(play, this);
+    this->prevBoots = this->currentBoots;
+    func_8084182C(&this->actor, play, gPlayerSkeletons[this->transformation]);
+    if (this->actor.shape.rot.z != 0) {
+        this->actor.shape.rot.z = 0;
+        // todo: declaration
+        func_8082F938((Player* ) play, this, 0, 4);
+        #if 0
+        temp_v0_3 = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
+        if (this->transformation == 1) {
+            temp_v0_3->unk_606 = (unaligned s32) D_8085D338;
+        } else {
+            temp_v0_3->unk_606 = (unaligned s32) D_8085D33C;
+        }
+        #endif
+        if ((this->csMode == 9) || (this->csMode == 0x5D)) {
+            // todo: declaration
+            func_80831494(play, this, func_8085B08C, 0);
+            this->stateFlags1 |= 0x20000000;
+            return;
+        }
+        // todo: declaration
+        func_80831494(play, this, func_80855818, 0);
+        this->actor.shape.rot.y = this->currentYaw;
+        if (this->prevMask != 0) {
+            // todo: declaration
+            func_8082DB90(play, this, &D_0400D0A8);
+        } else {
+            if (this->transformation == 4) {
+                LinkAnimation_Change(play, &this->skelAnime, D_8085D160[this->transformation], -0.6666667f, 9.0f, 0.0f, (u8) 2, 0.0f);
+            } else {
+                // todo: declaration
+                func_8082DB60(play, this, &D_0400D0D0);
+            }
+        }
+        this->stateFlags1 |= 0x30000000;
+        this->stateFlags3 |= 0x20000;
+        this->unk_B08[7] = 3.0f;
+        return;
+    }
+    this->prevMask = this->currentMask;
+    Effect_Add(play, this->meleeWeaponEffectIndex, 2, 0U, (u8) 0, &D_8085D30C);
+    Effect_Add(play, &this->meleeWeaponEffectIndex[1], 2, 0U, (u8) 0, &D_8085D30C);
+    // todo: declaration
+    func_8082F938((Player* ) play, this, 0, 4);
+    #if 0
+    if (this->transformation == 1) {
+        *(&D_8085D330 + 4) = (unaligned s32) D_8085D338;
+    } else {
+        *(&D_8085D330 + 4) = (unaligned s32) D_8085D33C;
+    }
+    #endif
+    Effect_Add(play, &this->meleeWeaponEffectIndex[2], 4, 0U, (u8) 0, &D_8085D330);
+    if (this->actor.shape.rot.x != 0) {
+        this->actor.shape.rot.x = 0;
+        this->csMode = 0x44;
+        // todo: declaration
+        func_80831494(play, this, func_8085B08C, 0);
+        this->stateFlags1 |= 0x20000000;
+        return;
+    }
+    play->unk_1887C = 0;
+    play->unk_1887D = 0;
+    play->unk_1887E = 0;
+    this->giObjectSegment = ZeldaArena_Malloc(0x2000U);
+    this->maskObjectSegment = ZeldaArena_Malloc(0x3800U);
+    temp_a0 = &this->unk_404[0x24];
+    Lights_PointNoGlowSetInfo((LightInfo* ) temp_a0, (s16) (s32) this->actor.world.pos.x, (s16) (s32) this->actor.world.pos.y, (s16) (s32) this->actor.world.pos.z, (u8) 0xFF, (u8) 0x80, (u8) 0, (s16) -1);
+    #if 0
+    this->unk_504 = LightContext_InsertLight(play, &play->lightCtx, (LightInfo* ) temp_a0);
+    #endif
+    Play_AssignPlayerActorCsIdsFromScene(&play->state, (s32) this->actor.cutscene);
+    var_a2 = gSaveContext.respawnFlag;
+    if (var_a2 != 0) {
+        if (var_a2 == -3) {
+            this->actor.params = gSaveContext.respawn[3].playerParams;
+        } else {
+            if ((var_a2 == 1) || (var_a2 == -1)) {
+                this->unk_D6A = -2;
+            }
+            if (var_a2 != -7) {
+                temp_a0_2 = &this->actor.world;
+                if ((var_a2 == -8) || (var_a2 == -5) || (var_a2 == -4)) {
+                    var_a2 = 1;
+                }
+                if ((var_a2 < 0) && (var_a2 != -1) && (var_a2 != -6)) {
+                    var_v1 = &gSaveContext;
+                } else {
+                    var_v0_2 = var_a2 - 1;
+                    if (var_a2 < 0) {
+                        var_v0_2 = 2;
+                    }
+                    temp_v1_2 = &gSaveContext + (var_v0_2 << 5);
+                    sp40 = temp_a0_2;
+                    Math_Vec3f_Copy(&temp_a0_2->pos, &gSaveContext.respawn[var_v0_2].pos);
+                    Math_Vec3f_Copy(&this->actor.home.pos, &sp40->pos);
+                    Math_Vec3f_Copy(&this->actor.prevPos, &sp40->pos);
+                    Math_Vec3f_Copy(&this->actor.focus.pos, &sp40->pos);
+                    var_v1 = (SaveContext* ) temp_v1_2;
+                    this->unk_B68 = (s16) (s32) this->actor.world.pos.y;
+                    temp_v0_6 = var_v1->respawn[0].yaw;
+                    this->actor.shape.rot.y = temp_v0_6;
+                    this->currentYaw = temp_v0_6;
+                    this->actor.params = var_v1->respawn[0].playerParams;
+                }
+                play->actorCtx.flags.switches[2] = var_v1->respawn[0].tempSwitchFlags;
+                play->actorCtx.flags.collectible[1] = var_v1->respawn[0].unk_18;
+                play->actorCtx.flags.collectible[2] = var_v1->respawn[0].tempCollectFlags;
+            }
+        }
+    }
+    if ((var_a2 == 4) || (var_a1 = 0, (gSaveContext.respawnFlag == -4))) {
+        var_a1 = 1;
+    }
+    if (func_801226E0(play, var_a1) == 0) {
+        gSaveContext.respawn[0].playerParams = (this->actor.params & 0xFF) | 0xD00;
+    }
+    gSaveContext.respawn[0].data = 1;
+    if (var_a2 == 0) {
+        temp_t9_2 = gSaveContext.respawn;
+        temp_t8 = &gSaveContext.respawn[2];
+        temp_t8->pos.x = temp_t9_2->pos.x;
+        temp_t8->pos.y = temp_t9_2->pos.y;
+        temp_t8->pos.z = temp_t9_2->pos.z;
+        temp_t8->yaw = (s32) temp_t9_2->yaw;
+        temp_t8->entranceIndex = (s32) temp_t9_2->entranceIndex;
+        temp_t8->tempSwitchFlags = temp_t9_2->tempSwitchFlags;
+        temp_t8->unk_18 = temp_t9_2->unk_18;
+        temp_t8->tempCollectFlags = temp_t9_2->tempCollectFlags;
+    }
+    gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0xD00;
+    var_v0_3 = (s32) (this->actor.params & 0xF00) >> 8;
+    if (((var_v0_3 == 5) || (var_v0_3 == 6)) && (gSaveContext.save.cutscene >= 0xFFF0)) {
+        var_v0_3 = 0xD;
+    }
+    D_8085D2CC[var_v0_3](play, this, var_a2);
+    if ((this->actor.draw != NULL) && (gSaveContext.save.hasTatl != 0)) {
+        if ((((gSaveContext.gameMode == 0)) || (gSaveContext.gameMode == 3)) && (play->sceneNum != 8)) {
+            // todo: declaration
+            this->tatlActor = func_80835C64(play, &this->actor, &this->actor.world.pos, &D_8085D340, 0);
+            temp_v1_3 = (s16) gSaveContext.dogParams;
+            if (temp_v1_3 != 0) {
+                gSaveContext.dogParams = temp_v1_3 | 0x8000;
+            }
+            if (gSaveContext.powderKegTimer != 0) {
+                this->nextModelGroup = Player_ActionToModelGroup(this, PLAYER_AP_POWDER_KEG);
+                this->heldItemId = 0xC;
+                func_8082F8BC(play, this, PLAYER_AP_POWDER_KEG);
+                // todo: declaration
+                func_808313F0(this, play);
+            } else if (gSaveContext.unk_1014 != 0) {
+                // todo: declaration
+                func_8082F5FC(this, Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0xB9, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.shape.rot.y, (s16) 0, 0x8000));
+            // todo: declaration
+                func_808313F0(this, play);
+            }
+        }
+    }
+    Minimap_SavePlayerRoomInitInfo(play);
+    // todo: declaration
+    func_80841A50(play, this);
+    this->unk_3CF = 0;
+    gGameInfo->data[0x220] = 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Init.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80842510.s")
 
