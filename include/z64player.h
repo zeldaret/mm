@@ -589,6 +589,8 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_80000000   (1 << 31)
 
 
+typedef void (*PlayerFunc748)(struct Player*, struct PlayState*);
+
 typedef struct Player {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s8 currentShield;
@@ -686,7 +688,8 @@ typedef struct Player {
     /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
     /* 0x4E4 */ UNK_TYPE1 unk_4E4[0x20];
     /* 0x504 */ LightNode* lightNode;
-    /* 0x508 */ UNK_TYPE1 unk_508[0x10];
+    /* 0x508 */ UNK_TYPE1 unk_508[0xC];
+    /* 0x514 */ s32 unk_514;
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
@@ -695,7 +698,7 @@ typedef struct Player {
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
-    /* 0x748 */ UNK_TYPE1 unk_748[0x4];
+    /* 0x748 */ PlayerFunc748 unk_748;
     /* 0x74C */ u8 unk_74C[0x9F];
     /* 0x7EB */ u8 unk_7EB[0x9F];
     /* 0x88A */ UNK_TYPE1 unk_88A[0x9F];
