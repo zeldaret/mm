@@ -37,10 +37,10 @@
         <DList Name="gLinkGoronSheathDL" Offset="0x99D8" />
         <DList Name="gLinkGoronRightShoulderDL" Offset="0x9A98" />
         <DList Name="gLinkGoronRightForearmDL" Offset="0x9C18" />
-        <DList Name="gLinkGoronRightHandDL" Offset="0x9EF8" />
+        <DList Name="gLinkGoronRightHandOpenDL" Offset="0x9EF8" />
         <DList Name="gLinkGoronLeftShoulderDL" Offset="0xA0A0" />
         <DList Name="gLinkGoronLeftForearmDL" Offset="0xA220" />
-        <DList Name="gLinkGoronLeftHandDL" Offset="0xA500" />
+        <DList Name="gLinkGoronLeftHandOpenDL" Offset="0xA500" />
         <DList Name="gLinkGoronCurledDL" Offset="0xBDD8" />
         <DList Name="object_link_goron_DL_00C540" Offset="0xC540" />
 
@@ -52,9 +52,9 @@
         <Texture Name="object_link_goron_Tex_00D3B8" OutName="tex_00D3B8" Format="rgba16" Width="8" Height="16" Offset="0xD3B8" />
         <Texture Name="object_link_goron_Tex_00D4B8" OutName="tex_00D4B8" Format="rgba16" Width="16" Height="32" Offset="0xD4B8" />
         <Texture Name="object_link_goron_Tex_00D8B8" OutName="tex_00D8B8" Format="i8" Width="8" Height="8" Offset="0xD8B8" />
-        <DList Name="object_link_goron_DL_00DE68" Offset="0xDE68" />
+        <DList Name="gLinkGoronLeftHandClosedDL" Offset="0xDE68" />
         <Texture Name="object_link_goron_Tex_00E078" OutName="tex_00E078" Format="rgba16" Width="16" Height="16" Offset="0xE078" />
-        <DList Name="object_link_goron_DL_00E7E8" Offset="0xE7E8" />
+        <DList Name="gLinkGoronRightHandClosedDL" Offset="0xE7E8" />
         <DList Name="object_link_goron_DL_00FC18" Offset="0xFC18" />
         <DList Name="object_link_goron_DL_00FCF0" Offset="0xFCF0" />
         <DList Name="object_link_goron_DL_00FF18" Offset="0xFF18" />

@@ -48,17 +48,17 @@
         <DList Name="object_link_child_DL_00CBC8" Offset="0xCBC8" />
         <DList Name="gLinkHumanRightShoulderDL" Offset="0xCCE0" />
         <DList Name="gLinkHumanRightForearmDL" Offset="0xCF08" />
-        <DList Name="gLinkHumanRightHandDL" Offset="0xD058" />
+        <DList Name="gLinkHumanRightHandOpenDL" Offset="0xD058" />
         <DList Name="gLinkHumanLeftShoulderDL" Offset="0xD1B0" />
         <DList Name="gLinkHumanLeftForearmDL" Offset="0xD3D8" />
-        <DList Name="gLinkHumanLeftHandDL" Offset="0xD528" />
+        <DList Name="gLinkHumanLeftHandOpenDL" Offset="0xD528" />
 
         <Texture Name="gLinkHumanOcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD680" />
         <!-- <Blob Name="object_link_child_Blob_00DA80" Size="0x88" Offset="0xDA80" /> -->
         <Texture Name="object_link_child_Tex_00DB08" OutName="tex_00DB08" Format="ci8" Width="16" Height="16" Offset="0xDB08" />
 
         <!-- <Blob Name="object_link_child_Blob_00DC08" Size="0x360" Offset="0xDC08" /> -->
-        <DList Name="object_link_child_DL_00E1C8" Offset="0xE1C8" />
+        <DList Name="gLinkHumanLeftHandClosedDL" Offset="0xE1C8" />
         <!-- <Blob Name="object_link_child_Blob_00E2E8" Size="0x1F0" Offset="0xE2E8" /> -->
         <DList Name="gLinkHumanRightHandClosedDL" Offset="0xE738" />
 

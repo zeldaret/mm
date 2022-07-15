@@ -44,10 +44,10 @@
         <DList Name="gLinkZoraSheathDL" Offset="0xB768" />
         <DList Name="gLinkZoraRightShoulderDL" Offset="0xB820" />
         <DList Name="gLinkZoraRightForearmDL" Offset="0xB990" />
-        <DList Name="gLinkZoraRightHandDL" Offset="0xBBE0" />
+        <DList Name="gLinkZoraRightHandClosedDL" Offset="0xBBE0" />
         <DList Name="gLinkZoraLeftShoulderDL" Offset="0xBEE8" />
         <DList Name="gLinkZoraLeftForearmDL" Offset="0xC020" />
-        <DList Name="gLinkZoraLeftHandDL" Offset="0xC270" />
+        <DList Name="gLinkZoraLeftHandClosedDL" Offset="0xC270" />
 
         <Texture Name="object_link_zora_TLUT_00C578" OutName="tlut_00C578" Format="rgba16" Width="16" Height="16" Offset="0xC578" />
         <Texture Name="object_link_zora_Tex_00C778" OutName="tex_00C778" Format="ci8" Width="16" Height="32" Offset="0xC778" />
@@ -64,8 +64,8 @@
         <Texture Name="object_link_zora_Tex_00ECF8" OutName="tex_00ECF8" Format="rgba16" Width="16" Height="16" Offset="0xECF8" />
         <Texture Name="object_link_zora_Tex_00EEF8" OutName="tex_00EEF8" Format="rgba16" Width="16" Height="32" Offset="0xEEF8" />
         <Texture Name="object_link_zora_Tex_00F2F8" OutName="tex_00F2F8" Format="rgba16" Width="16" Height="32" Offset="0xF2F8" />
-        <DList Name="object_link_zora_DL_00FBB8" Offset="0xFBB8" />
-        <DList Name="object_link_zora_DL_00FDF0" Offset="0xFDF0" />
+        <DList Name="gLinkZoraRightHandOpenDL" Offset="0xFBB8" />
+        <DList Name="gLinkZoraLeftHandOpenDL" Offset="0xFDF0" />
         <Texture Name="object_link_zora_Tex_010028" OutName="tex_010028" Format="rgba16" Width="16" Height="16" Offset="0x10028" />
         <Texture Name="object_link_zora_Tex_010228" OutName="tex_010228" Format="rgba16" Width="16" Height="32" Offset="0x10228" />
         <DList Name="object_link_zora_DL_010868" Offset="0x10868" />
