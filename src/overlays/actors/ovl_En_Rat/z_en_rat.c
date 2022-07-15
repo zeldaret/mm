@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rat.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
@@ -531,8 +532,89 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57F10.s")
+s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnRat* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57F4C.s")
+    if (limbIndex == 1) {
+        pos->y -= this->unk_25C;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/EnRat_Draw.s")
+    if (limbIndex == 5) {
+        *dList = NULL;
+    }
+
+    return false;
+}
+
+void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    PlayState* play = play2;
+    EnRat* this = THIS;
+    MtxF* currentMatrixState;
+    Vec3f* ptr;
+    f32 var_fv0;
+
+    if (limbIndex == 5) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_MultZero(&this->unk_230);
+        this->unk_230.y += 15.0f;
+        currentMatrixState = Matrix_GetCurrent();
+
+        if (this->actionFunc == func_80A5764C) {
+            s32 i;
+
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 150, 255);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x00, 0x00, 0x00);
+            Matrix_Scale(45.0f, 45.0f, 45.0f, MTXMODE_APPLY);
+
+            for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++) {
+                ptr = &this->unk_23C[i];
+                currentMatrixState->mf[3][0] = this->unk_230.x + ptr->x;
+                currentMatrixState->mf[3][1] = this->unk_230.y + ptr->y;
+                currentMatrixState->mf[3][2] = this->unk_230.z + ptr->z;
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPSegment(POLY_XLU_DISP++, 0x08, D_80A58454[(play->gameplayFrames + i) & 3]);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_037850);
+            }
+
+            Matrix_Scale(0.022222223f, 0.022222223f, 0.022222223f, MTXMODE_APPLY);
+            currentMatrixState->mf[3][0] = this->unk_230.x;
+            currentMatrixState->mf[3][1] = this->unk_230.y - 15.0f;
+            currentMatrixState->mf[3][2] = this->unk_230.z;
+        }
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+        if (this->actor.params == 0) {
+            var_fv0 = fabsf(cos_rad(this->unk_190 * 0.10471976f));
+        } else {
+            if (this->unk_190 >= 120) {
+                var_fv0 = fabsf(cos_rad((this->unk_190 % 30) * 0.10471976f));
+            } else if (this->unk_190 >= 30) {
+                var_fv0 = fabsf(cos_rad((this->unk_190 % 6) * 0.5235988f));
+            } else {
+                var_fv0 = fabsf(cos_rad((this->unk_190 % 3) * 1.0471976f));
+            }
+        }
+
+        gDPSetEnvColor(POLY_OPA_DISP++, (s32)((1.0f - var_fv0) * 255.0f), 0, 40, 255);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s32)((1.0f - var_fv0) * 255.0f), 0, 40, 255);
+        Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
+
+void EnRat_Draw(Actor* thisx, PlayState* play) {
+    EnRat* this = THIS;
+
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C974(play->state.gfxCtx);
+    func_800B8050(&this->actor, play, 0);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnRat_OverrideLimbDraw, EnRat_PostLimbDraw, &this->actor);
+}

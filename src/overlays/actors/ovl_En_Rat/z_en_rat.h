@@ -28,7 +28,7 @@ typedef struct EnRat {
     /* 0x23C */ Vec3f unk_23C[2];
     /* 0x254 */ f32 unk_254;
     /* 0x258 */ f32 unk_258;
-    /* 0x25C */ char unk_25C[0x4];
+    /* 0x25C */ f32 unk_25C;
     /* 0x260 */ s32 unk_260;
     /* 0x264 */ s32 unk_264;
     /* 0x268 */ ColliderSphere collider;
