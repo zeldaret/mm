@@ -805,9 +805,8 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
 Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityWaistDL, gLinkFierceDeityWaistDL, gLinkGoronWaistDL,          gLinkGoronWaistDL,
-    gLinkZoraWaistDL,        gLinkZoraWaistDL,        object_link_nuts_DL_002C20, object_link_nuts_DL_002C20,
-    gLinkHumanWaistDL,       gLinkHumanWaistDL,
+    gLinkFierceDeityWaistDL, gLinkFierceDeityWaistDL, gLinkGoronWaistDL, gLinkGoronWaistDL, gLinkZoraWaistDL,
+    gLinkZoraWaistDL,        gLinkDekuWaistDL,        gLinkDekuWaistDL,  gLinkHumanWaistDL, gLinkHumanWaistDL,
 };
 
 Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
@@ -879,28 +878,28 @@ Gfx* gPlayerLeftHand3DLs[2 * PLAYER_FORM_MAX] = {
     gLinkGoronLeftHandDL,
     object_link_zora_DL_00FDF0,
     object_link_zora_DL_00FDF0,
-    object_link_nuts_DL_003BC0,
-    object_link_nuts_DL_003BC0,
+    gLinkDekuLeftHandDL,
+    gLinkDekuLeftHandDL,
     gLinkHumanLeftHandHoldingGreatFairysSwordDL,
     gLinkHumanLeftHandHoldingGreatFairysSwordDL,
 };
 
 Gfx* gPlayerLeftHand0DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandDL,       gLinkGoronLeftHandDL,
-    object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0, object_link_nuts_DL_003BC0,
+    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandDL, gLinkGoronLeftHandDL,
+    object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, gLinkDekuLeftHandDL,  gLinkDekuLeftHandDL,
     gLinkHumanLeftHandDL,       gLinkHumanLeftHandDL,
 };
 
 Gfx* gPlayerLeftHand1DLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
-    gLinkZoraLeftHandDL,         gLinkZoraLeftHandDL,         object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    gLinkZoraLeftHandDL,         gLinkZoraLeftHandDL,         gLinkDekuLeftHandDL,         gLinkDekuLeftHandDL,
     object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
 };
 
 // human holds kokiri sword
 Gfx* gPlayerLeftHand2DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  gLinkGoronLeftHandDL,       gLinkGoronLeftHandDL,
-    gLinkZoraLeftHandDL,         gLinkZoraLeftHandDL,         object_link_nuts_DL_003BC0, object_link_nuts_DL_003BC0,
+    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  gLinkGoronLeftHandDL, gLinkGoronLeftHandDL,
+    gLinkZoraLeftHandDL,         gLinkZoraLeftHandDL,         gLinkDekuLeftHandDL,  gLinkDekuLeftHandDL,
     object_link_child_DL_01DC68, object_link_child_DL_01DC68,
 };
 
@@ -911,22 +910,21 @@ Gfx* D_801C018C[][2] = {
 };
 
 Gfx* gPlayerRightHandOpenDLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, gLinkGoronRightHandDL,      gLinkGoronRightHandDL,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0, object_link_nuts_DL_0038C0,
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, gLinkGoronRightHandDL, gLinkGoronRightHandDL,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  gLinkDekuRightHandDL,  gLinkDekuRightHandDL,
     gLinkHumanRightHandDL,       gLinkHumanRightHandDL,
 };
 
 Gfx* gPlayerRightHandClosedDLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
-    gLinkZoraRightHandDL,        gLinkZoraRightHandDL,        object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    gLinkZoraRightHandDL,        gLinkZoraRightHandDL,        gLinkDekuRightHandDL,        gLinkDekuRightHandDL,
     gLinkHumanRightHandClosedDL, gLinkHumanRightHandClosedDL,
 };
 
 Gfx* gPlayerRightHandBowDLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL,     gLinkFierceDeityRightHandDL, gLinkGoronRightHandDL,
-    gLinkGoronRightHandDL,           object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,      object_link_nuts_DL_0038C0,  gLinkHumanRightHandHoldingBowDL,
-    gLinkHumanRightHandHoldingBowDL,
+    gLinkFierceDeityRightHandDL,     gLinkFierceDeityRightHandDL,     gLinkGoronRightHandDL, gLinkGoronRightHandDL,
+    object_link_zora_DL_00FBB8,      object_link_zora_DL_00FBB8,      gLinkDekuRightHandDL,  gLinkDekuRightHandDL,
+    gLinkHumanRightHandHoldingBowDL, gLinkHumanRightHandHoldingBowDL,
 };
 
 Gfx* gPlayerRightHandInstrumentDLs[2 * PLAYER_FORM_MAX] = {
@@ -936,8 +934,8 @@ Gfx* gPlayerRightHandInstrumentDLs[2 * PLAYER_FORM_MAX] = {
     gLinkGoronRightHandDL,
     object_link_zora_DL_00FBB8,
     object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
-    object_link_nuts_DL_0038C0,
+    gLinkDekuRightHandDL,
+    gLinkDekuRightHandDL,
     gLinkHumanRightHandHoldingOcarinaDL,
     gLinkHumanRightHandHoldingOcarinaDL,
 };
@@ -949,16 +947,22 @@ Gfx* gPlayerRightHandHookshotDLs[2 * PLAYER_FORM_MAX] = {
     gLinkGoronRightHandDL,
     object_link_zora_DL_00FBB8,
     object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
-    object_link_nuts_DL_0038C0,
+    gLinkDekuRightHandDL,
+    gLinkDekuRightHandDL,
     gLinkHumanRightHandHoldingHookshotDL,
     gLinkHumanRightHandHoldingHookshotDL,
 };
 
 Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL,     gLinkFierceDeityLeftHandDL,    gLinkGoronLeftHandHoldBottleDL,
-    gLinkGoronLeftHandHoldBottleDL, gLinkZoraLeftHandHoldBottleDL, gLinkZoraLeftHandHoldBottleDL,
-    object_link_nuts_DL_003BC0,     object_link_nuts_DL_003BC0,    gLinkHumanLeftHandHoldBottleDL,
+    gLinkFierceDeityLeftHandDL,
+    gLinkFierceDeityLeftHandDL,
+    gLinkGoronLeftHandHoldBottleDL,
+    gLinkGoronLeftHandHoldBottleDL,
+    gLinkZoraLeftHandHoldBottleDL,
+    gLinkZoraLeftHandHoldBottleDL,
+    gLinkDekuLeftHandDL,
+    gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandHoldBottleDL,
     gLinkHumanLeftHandHoldBottleDL,
 };
 
@@ -966,17 +970,17 @@ Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftForearmDL, gLinkGoronLeftForearmDL, gLinkZoraLeftForearmDL,
-    object_link_nuts_DL_003AB8,    gLinkHumanLeftForearmDL,
+    gLinkDekuLeftForearmDL,        gLinkHumanLeftForearmDL,
 };
 
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandDL,        gLinkZoraLeftHandDL,
-    object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
+    gLinkDekuLeftHandDL,        object_link_child_DL_00E1C8,
 };
 
 Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightShoulderDL, gLinkGoronRightShoulderDL, gLinkZoraRightShoulderDL,
-    object_link_nuts_DL_0036B0,      gLinkHumanRightShoulderDL,
+    gLinkDekuRightShoulderDL,        gLinkHumanRightShoulderDL,
 };
 
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
@@ -984,7 +988,7 @@ Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
     object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
+    gLinkDekuRightHandDL,
     object_link_child_DL_018490,
 };
 
@@ -993,7 +997,7 @@ Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
     object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
+    gLinkDekuRightHandDL,
     object_link_child_DL_017B40,
 };
 
