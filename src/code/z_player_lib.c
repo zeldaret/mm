@@ -799,7 +799,7 @@ Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
     gLinkZoraWaistDL,        gLinkDekuWaistDL,        gLinkDekuWaistDL,  gLinkHumanWaistDL, gLinkHumanWaistDL,
 };
 
-Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
+Gfx* gPlayerHandHoldingShields[PLAYER_SHIELD_MAX - 1][2] = {
     { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
     { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
@@ -843,18 +843,18 @@ Gfx* gPlayerSheath14DLs[2 * PLAYER_FORM_MAX] = {
     gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C00AC[][2] = {
-    { object_link_child_DL_01DBC8, object_link_child_DL_01DBC8 },
-    { object_link_child_DL_01DC18, object_link_child_DL_01DC18 },
+Gfx* gPlayerShields[][2] = {
+    { gLinkHumanHylianShieldWithMtxDL, gLinkHumanHylianShieldWithMtxDL },
+    { gLinkHumanMirrorShieldWithMtxDL, gLinkHumanMirrorShieldWithMtxDL },
 };
 
-Gfx* D_801C00BC[][2] = {
+Gfx* gPlayerSheathedSwords[][2] = {
     { gLinkHumanSheathedKokiriSwordDL, gLinkHumanSheathedKokiriSwordDL },
     { gLinkHumanSheathedRazorSwordDL, gLinkHumanSheathedRazorSwordDL },
     { gLinkHumanSheathedGildedSwordDL, gLinkHumanSheathedGildedSwordDL },
 };
 
-Gfx* D_801C00D4[][2] = {
+Gfx* gPlayerSwordSheaths[][2] = {
     { gLinkHumanKokiriSwordSheathDL, gLinkHumanKokiriSwordSheathDL },
     { gLinkHumanRazorSwordSheathDL, gLinkHumanRazorSwordSheathDL },
     { gLinkHumanGildedSwordSheathDL, gLinkHumanGildedSwordSheathDL },
@@ -1963,6 +1963,7 @@ typedef struct {
     /* 0x144 */ f32 unk_144;
 } ActorUnknown; // size >= 0x144
 
+// Player_OverrideLimbDrawGameplayCommon
 s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     Player* player = (Player*)thisx;
@@ -2207,7 +2208,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 if (D_801F59F8 == 8) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != 0) {
-                            phi_v1 = &D_801C0024[player->currentShield - 1];
+                            phi_v1 = &gPlayerHandHoldingShields[player->currentShield - 1];
                         }
                     }
                 } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) &&
@@ -2236,9 +2237,9 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
                 if (val != 0) {
                     if ((player->sheathType == 0xE) || (player->sheathType == 0xC)) {
-                        phi_v1_2 = &D_801C00BC[val - 1][0];
+                        phi_v1_2 = &gPlayerSheathedSwords[val - 1][0];
                     } else {
-                        phi_v1_2 = &D_801C00D4[val - 1][0];
+                        phi_v1_2 = &gPlayerSwordSheaths[val - 1][0];
                     }
                 }
             }
@@ -2261,7 +2262,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125D4C.s")
 #endif
 
-// OverrideLimbDrawFlex
+// Player_OverrideLimbDrawGameplayFirstPerson
 s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
@@ -3734,7 +3735,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             (((player->sheathType == 0xE)) || (player->sheathType == 0xF))) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPDisplayList(POLY_XLU_DISP++, *D_801C00AC[player->currentShield - 1]);
+            gSPDisplayList(POLY_XLU_DISP++, *gPlayerShields[player->currentShield - 1]);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
