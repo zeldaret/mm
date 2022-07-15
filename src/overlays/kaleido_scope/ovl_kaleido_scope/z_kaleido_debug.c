@@ -1,21 +1,11 @@
 /*
  * File: z_kaleido_debug.c
  * Overlay: ovl_kaleido_scope
- * Description:
+ * Description: Debug Menu
  */
 
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
-
-extern UNK_TYPE D_02001360;
-extern UNK_TYPE D_020044A0;
-extern UNK_TYPE D_02004AA0;
-extern UNK_TYPE D_0200B998;
-extern UNK_TYPE D_08062000;
-extern UNK_TYPE D_08064340;
-extern UNK_TYPE D_0B000000;
-extern UNK_TYPE D_0C000000;
-extern UNK_TYPE D_0C006C00;
 
 s16 sCurSection = 0;
 s16 sCurRow = 0;
@@ -799,7 +789,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
                         gSaveContext.save.playerData.swordHealth = 100;
                     } else {
-                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = 0xFF;
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                     }
 
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
@@ -900,7 +890,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                 }
             } else if (sCurSection <= 68) {
                 // Songs
-                slot = sCurSection - 0x33;
+                slot = sCurSection - 51;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[slot];
                 }
@@ -972,5 +962,3 @@ s32 sPrevDBtnInput = 0;
 s32 sHeldDBtnTimer = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateDebugEditor.s")
 #endif
-
-s32 D_8082B3B4[] = { 0, 0, 0 };
