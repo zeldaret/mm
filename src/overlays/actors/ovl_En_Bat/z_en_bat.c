@@ -163,9 +163,9 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
             Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
                 thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
-                thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled((f32)0x2000),
-                (f32)0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1,
-                thisx->unk20, NULL);
+                thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled(0x2000),
+                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), -1, thisx->unk20,
+                NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
@@ -232,8 +232,8 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
                                         this->actor.home.pos.z) > SQ(300.0f)) {
         this->yawTarget = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     } else if (finishedRotStep && (Rand_ZeroOne() < 0.015f)) {
-        this->yawTarget = this->actor.shape.rot.y +
-                          (((s32)((f32)0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->yawTarget =
+            this->actor.shape.rot.y + (((s32)(0x1000 * Rand_ZeroOne()) + 0x1000) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
     }
 
     finishedRotStep = Math_ScaledStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0x100);
@@ -241,11 +241,11 @@ void EnBat_FlyIdle(EnBat* this, PlayState* play) {
     if ((this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         this->pitchTarget = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
-        this->pitchTarget = -((s32)((f32)0x800 * Rand_ZeroOne()) + 0x800);
+        this->pitchTarget = -((s32)(0x800 * Rand_ZeroOne()) + 0x800);
     } else if ((this->actor.home.pos.y + 100.0f) < this->actor.world.pos.y) {
-        this->pitchTarget = (s32)((f32)0x800 * Rand_ZeroOne()) + 0x800;
+        this->pitchTarget = (s32)(0x800 * Rand_ZeroOne()) + 0x800;
     } else if ((finishedRotStep) && (Rand_ZeroOne() < 0.015f)) {
-        this->pitchTarget += (s16)(((s32)((f32)0x400 * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
+        this->pitchTarget += (s16)(((s32)(0x400 * Rand_ZeroOne()) + 0x400) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1));
         this->pitchTarget = CLAMP(this->pitchTarget, -0x1000, 0x1000);
     }
 
