@@ -18,8 +18,7 @@ extern UNK_TYPE D_0C000000;
 extern UNK_TYPE D_0C006C00;
 
 s16 sCurSection = 0;
-
-s32 D_8082B0F4 = 0;
+s16 sCurRow = 0;
 
 s16 sSectionPositions[][3] = {
     { 65, 14, 41 },   { 145, 14, 21 },  { 193, 14, 35 },  { 42, 37, 22 },   { 65, 37, 22 },   { 88, 37, 22 },
@@ -40,21 +39,68 @@ s16 sSectionPositions[][3] = {
     { 136, 202, 38 }, { 214, 202, 74 }, { 214, 202, 74 },
 };
 
-s16 D_8082B328[] = {
-    0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x000A, 0x000B,
-    0x000C, 0x000D, 0x000E, 0x000F, 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0023,
-    0x003E, 0x0038, 0x0047, 0x0045, 0x0040, 0x0032, 0x003A, 0x0046, 0x0039, 0x0042, 0x0048, 0x0033,
-    0x003C, 0x003D, 0x0037, 0x003F, 0x0036, 0x0034, 0x0043, 0x0041, 0x003B, 0x0044, 0x0049, 0x0035,
+s16 sSlotItems[] = {
+    // Items Row 1
+    ITEM_OCARINA,
+    ITEM_BOW,
+    ITEM_ARROW_FIRE,
+    ITEM_ARROW_ICE,
+    ITEM_ARROW_LIGHT,
+    ITEM_OCARINA_FAIRY,
+    // Items Row 2
+    ITEM_BOMB,
+    ITEM_BOMBCHU,
+    ITEM_STICK,
+    ITEM_NUT,
+    ITEM_MAGIC_BEANS,
+    ITEM_SLINGSHOT,
+    // Items Row 3
+    ITEM_POWDER_KEG,
+    ITEM_PICTO_BOX,
+    ITEM_LENS,
+    ITEM_HOOKSHOT,
+    ITEM_SWORD_GREAT_FAIRY,
+    ITEM_LONGSHOT,
+    // Items Row 4
+    ITEM_BOTTLE,
+    ITEM_POTION_RED,
+    ITEM_POTION_GREEN,
+    ITEM_POTION_BLUE,
+    ITEM_FAIRY,
+    ITEM_MUSHROOM,
+    // Masks Row 1
+    ITEM_MASK_POSTMAN,
+    ITEM_MASK_ALL_NIGHT,
+    ITEM_MASK_BLAST,
+    ITEM_MASK_STONE,
+    ITEM_MASK_GREAT_FAIRY,
+    ITEM_MASK_DEKU,
+    // Masks Row 2
+    ITEM_MASK_KEATON,
+    ITEM_MASK_BREMEN,
+    ITEM_MASK_BUNNY,
+    ITEM_MASK_DON_GERO,
+    ITEM_MASK_SCENTS,
+    ITEM_MASK_GORON,
+    // Masks Row 3
+    ITEM_MASK_ROMANI,
+    ITEM_MASK_CIRCUS_LEADER,
+    ITEM_MASK_KAFEIS_MASK,
+    ITEM_MASK_COUPLE,
+    ITEM_MASK_TRUTH,
+    ITEM_MASK_ZORA,
+    // Masks Row 4
+    ITEM_MASK_KAMARO,
+    ITEM_MASK_GIBDO,
+    ITEM_MASK_GARO,
+    ITEM_MASK_CAPTAIN,
+    ITEM_MASK_GIANT,
+    ITEM_MASK_FIERCE_DEITY,
 };
 
-s16 D_8082B388[] = {
-    0x0000, 0x0001, 0x0002, 0x0003, 0x001B, 0x0033, 0x0037, 0x0038, 0x0039,
-    0x0046, 0x0047, 0x0048, 0x0049, 0x004B, 0x004C, 0x0050, 0x0054, 0x0058,
+s16 sRowFirstSections[] = {
+    0, 1, 2, 3, 27, 51, 55, 56, 57, 70, 71, 72, 73, 75, 76, 80, 84, 88,
 };
-
-s32 D_8082B3AC = 0;
-
-s32 D_8082B3B0[] = { 0, 0, 0, 0 };
 
 void KaleidoScope_DrawDebugEditorText(Gfx** gfxp) {
     GfxPrint printer;
@@ -519,4 +565,412 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+#ifdef NON_EQUIVALENT
+void KaleidoScope_UpdateDebugEditor(PlayState* play) {
+    static s32 sPrevDBtnInput = 0;
+    static s32 sHeldDBtnTimer = 0;
+    PauseContext* pauseCtx = &play->pauseCtx;
+    Input* input = CONTROLLER1(&play->state);
+    s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
+    s16 slot;
+    s16 value;
+
+    pauseCtx->stickRelX = input->rel.stick_x;
+    pauseCtx->stickRelY = input->rel.stick_y;
+
+    // Handles navigating the menu to different sections with the D-Pad
+    // When the same direction is held, registers the input periodically based on a timer
+    if (dBtnInput == sPrevDBtnInput) {
+        sHeldDBtnTimer--;
+        if (sHeldDBtnTimer < 0) {
+            sHeldDBtnTimer = 1;
+        } else {
+            dBtnInput ^= sPrevDBtnInput;
+        }
+    } else {
+        sPrevDBtnInput = dBtnInput;
+        sHeldDBtnTimer = 16;
+    }
+
+    if (dBtnInput & BTN_DDOWN) {
+        sCurRow++;
+        if (sCurRow > 17) {
+            sCurRow = 0;
+        }
+        sCurSection = sRowFirstSections[sCurRow];
+    } else if (dBtnInput & BTN_DUP) {
+        sCurRow--;
+        if (sCurRow < 0) {
+            sCurRow = 17;
+        }
+        sCurSection = sRowFirstSections[sCurRow];
+    } else if (dBtnInput & BTN_DLEFT) {
+        sCurSection--;
+        if (sCurSection < 0) {
+            sCurSection = 92;
+        }
+    } else if (dBtnInput & BTN_DRIGHT) {
+        sCurSection++;
+        if (sCurSection > 92) {
+            sCurSection = 0;
+        }
+    }
+
+    // Handles the logic to change values based on the selected section
+    switch (sCurSection) {
+        case 0:
+            if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                gSaveContext.save.playerData.rupees -= 100;
+                if (gSaveContext.save.playerData.rupees < 0) {
+                    gSaveContext.save.playerData.rupees = 0;
+                }
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                gSaveContext.save.playerData.rupees += 100;
+                if (gSaveContext.save.playerData.rupees >= 9999) {
+                    gSaveContext.save.playerData.rupees = 9999;
+                }
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                gSaveContext.save.playerData.rupees--;
+                if (gSaveContext.save.playerData.rupees < 0) {
+                    gSaveContext.save.playerData.rupees = 0;
+                }
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                gSaveContext.save.playerData.rupees++;
+                if (gSaveContext.save.playerData.rupees >= 9999) {
+                    gSaveContext.save.playerData.rupees = 9999;
+                }
+            }
+            break;
+
+        case 1:
+            if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                gSaveContext.save.playerData.healthCapacity -= 0x10;
+                if (gSaveContext.save.playerData.healthCapacity < 0x30) {
+                    gSaveContext.save.playerData.healthCapacity = 0x30;
+                }
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                       CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                gSaveContext.save.playerData.healthCapacity += 0x10;
+                if (gSaveContext.save.playerData.healthCapacity >= 0x140) {
+                    gSaveContext.save.playerData.healthCapacity = 0x140;
+                }
+            }
+            break;
+
+        case 2:
+            if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                Health_ChangeBy(play, -4);
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                Health_ChangeBy(play, 4);
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                Health_ChangeBy(play, -0x10);
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                Health_ChangeBy(play, 0x10);
+            }
+            break;
+
+        case 75:
+            if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (((gSaveContext.save.inventory.questItems & 0xF0000000) >> QUEST_HEART_PIECE_COUNT) != 0) {
+                    gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT);
+                }
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                       CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                if ((gSaveContext.save.inventory.questItems & 0xF0000000) <= (4 << QUEST_HEART_PIECE_COUNT)) {
+                    gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
+                }
+            }
+            break;
+
+        default:
+            if (sCurSection <= 50) {
+                slot = sCurSection - 3;
+                if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
+                    (slot == SLOT_MAGIC_BEANS)) {
+                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                        Inventory_DeleteItem(gAmmoItems[slot], SLOT(gAmmoItems[slot]));
+                        AMMO(gAmmoItems[slot]) = 0;
+                    }
+
+                    if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (slot != INV_CONTENT(gAmmoItems[slot])) {
+                            INV_CONTENT(gAmmoItems[slot]) = gAmmoItems[slot];
+                        }
+                        AMMO(gAmmoItems[slot])++;
+                        if (AMMO(gAmmoItems[slot]) > 99) {
+                            AMMO(gAmmoItems[slot]) = 99;
+                        }
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                        AMMO(gAmmoItems[slot])--;
+                        if (AMMO(gAmmoItems[slot]) < 0) {
+                            AMMO(gAmmoItems[slot]) = 0;
+                        }
+                    }
+                } else if ((slot == SLOT_TRADE_DEED) || (slot == SLOT_TRADE_KEY_MAMA) || (slot == SLOT_TRADE_COUPLE)) {
+                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                        Inventory_DeleteItem(sSlotItems[slot], slot);
+                    } else if (slot == SLOT_TRADE_DEED) {
+                        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
+                                gSaveContext.save.inventory.items[slot] = ITEM_MOON_TEAR;
+                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_MOON_TEAR) &&
+                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_MOUNTAIN)) {
+                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) + 1;
+                            }
+                        } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
+                                gSaveContext.save.inventory.items[slot] = ITEM_DEED_OCEAN;
+                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_DEED_LAND) &&
+                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_OCEAN)) {
+                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) - 1;
+                            }
+                        }
+                    } else if (slot == SLOT_TRADE_KEY_MAMA) {
+                        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                            if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
+                                gSaveContext.save.inventory.items[slot] = ITEM_ROOM_KEY;
+                            } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_ROOM_KEY) &&
+                                       (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_ROOM_KEY)) {
+                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) + 1;
+                            }
+                        } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                            if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
+                                gSaveContext.save.inventory.items[slot] = ITEM_ROOM_KEY;
+                            } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_ROOM_KEY) &&
+                                       (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_ROOM_KEY)) {
+                                gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) - 1;
+                            }
+                        }
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_LETTER_TO_KAFEI;
+                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_LETTER_TO_KAFEI) &&
+                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_LETTER_TO_KAFEI)) {
+                            gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) + 1;
+                        }
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                        if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_MEMORIES;
+                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_MEMORIES) &&
+                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_MEMORIES)) {
+                            gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) - 1;
+                        }
+                    }
+                } else if ((slot >= SLOT_BOTTLE_1) && (slot <= SLOT_BOTTLE_6)) {
+                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                        Inventory_DeleteItem(slot, SLOT(ITEM_BOTTLE) + slot - SLOT_BOTTLE_1);
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_BOTTLE;
+                        } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_BOTTLE) &&
+                                   (gSaveContext.save.inventory.items[slot] <= ITEM_HYLIAN_LOACH)) {
+                            gSaveContext.save.inventory.items[slot]++;
+                        }
+                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_OBABA_DRINK;
+                        } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_POTION_RED) &&
+                                   (slot <= ITEM_OBABA_DRINK)) {
+                            gSaveContext.save.inventory.items[slot]--;
+                        }
+                    }
+                } else {
+                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
+                        CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                        CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
+                            INV_CONTENT(sSlotItems[slot]) = sSlotItems[slot];
+                        } else {
+                            Inventory_DeleteItem(sSlotItems[slot], slot);
+                        }
+                    }
+                }
+            } else if (sCurSection == 55) {
+                value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    value--;
+                    if (value < EQUIP_VALUE_SWORD_NONE) {
+                        value = EQUIP_VALUE_SWORD_NONE;
+                    }
+
+                    SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, value);
+
+                    if (value != 0) {
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
+                        gSaveContext.save.playerData.swordHealth = 100;
+                    } else {
+                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = 0xFF;
+                    }
+
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    value++;
+                    if (value > EQUIP_VALUE_SWORD_DIETY) {
+                        value = EQUIP_VALUE_SWORD_DIETY;
+                    }
+
+                    SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, value);
+
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
+                    gSaveContext.save.playerData.swordHealth = 100;
+                }
+                Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+            } else if (sCurSection == 56) {
+                value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    value--;
+                    if (value < EQUIP_VALUE_SHIELD_NONE) {
+                        value = EQUIP_VALUE_SHIELD_NONE;
+                    }
+
+                    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
+
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    value++;
+                    if (value > EQUIP_VALUE_SHIELD_MAX) {
+                        value = EQUIP_VALUE_SHIELD_MAX;
+                    }
+                    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
+                }
+            } else if (sCurSection == 71) {
+                value = GET_CUR_UPG_VALUE(UPG_QUIVER);
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    value--;
+                    if (value < 0) {
+                        value = 0;
+                    }
+                    Inventory_ChangeUpgrade(UPG_QUIVER, value);
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    value++;
+                    if (value > 3) {
+                        value = 3;
+                    }
+                    Inventory_ChangeUpgrade(UPG_QUIVER, value);
+                }
+            } else if (sCurSection == 72) {
+                value = GET_CUR_UPG_VALUE(UPG_BOMB_BAG);
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    value--;
+                    if (value < 0) {
+                        value = 0;
+                    }
+                    Inventory_ChangeUpgrade(UPG_BOMB_BAG, value);
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    value++;
+                    if (value > 3) {
+                        value = 3;
+                    }
+                    Inventory_ChangeUpgrade(UPG_BOMB_BAG, value);
+                }
+            } else if (sCurSection == 73) {
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    if (((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
+                        gSaveContext.save.skullTokenCount =
+                            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) - 1) << 0x10) |
+                            (gSaveContext.save.skullTokenCount & 0xFFFF);
+                    }
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    gSaveContext.save.skullTokenCount =
+                        ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                        (gSaveContext.save.skullTokenCount & 0xFFFF);
+                }
+            } else if (sCurSection == 74) {
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    if ((gSaveContext.save.skullTokenCount & 0xFFFF) != 0) {
+                        gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount - 1) & 0xFFFF) |
+                                                            (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+                    }
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) |
+                                                        (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+                }
+            } else if (sCurSection == 70) {
+                // Bombers Notebook
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
+                }
+            } else if (sCurSection == 69) {
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
+                }
+            } else if (sCurSection <= 68) {
+                // Songs
+                slot = sCurSection - 0x33;
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.questItems ^= gBitFlags[slot];
+                }
+            } else if (sCurSection <= 79) {
+                slot = sCurSection - 76;
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.dungeonKeys[slot]--;
+                    if (gSaveContext.save.inventory.dungeonKeys[slot] < 0) {
+                        gSaveContext.save.inventory.dungeonKeys[slot] = -1;
+                    }
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    if (gSaveContext.save.inventory.dungeonKeys[slot] < 0) {
+                        gSaveContext.save.inventory.dungeonKeys[slot] = 1;
+                    } else {
+                        gSaveContext.save.inventory.dungeonKeys[slot]++;
+                        if (gSaveContext.save.inventory.dungeonKeys[slot] >= 9) {
+                            gSaveContext.save.inventory.dungeonKeys[slot] = 9;
+                        }
+                    }
+                }
+            } else if (sCurSection <= 83) {
+                slot = sCurSection - 80;
+                if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= 4;
+                }
+                if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= 2;
+                }
+                if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= 1;
+                }
+            } else if (sCurSection <= 87) {
+                slot = sCurSection - 84;
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    gSaveContext.save.inventory.strayFairies[slot]--;
+                    if (gSaveContext.save.inventory.strayFairies[slot] < 0) {
+                        gSaveContext.save.inventory.strayFairies[slot] = 0;
+                    }
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
+                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    gSaveContext.save.inventory.strayFairies[slot]++;
+                    if (gSaveContext.save.inventory.strayFairies[slot] >= 99) {
+                        gSaveContext.save.inventory.strayFairies[slot] = 99;
+                    }
+                }
+            } else {
+                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
+                    CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    gSaveContext.save.playerData.doubleDefense ^= 1;
+                    if (!gSaveContext.save.playerData.doubleDefense) {
+                        gSaveContext.save.inventory.dungeonKeys[9] = 0;
+                    } else {
+                        gSaveContext.save.inventory.dungeonKeys[9] = 20;
+                    }
+                }
+            }
+            break;
+    }
+
+    if (pauseCtx->debugState == 1) {
+        pauseCtx->debugState = 2;
+    } else if ((pauseCtx->debugState == 2) && CHECK_BTN_ALL(input->press.button, BTN_L)) {
+        pauseCtx->debugState = 0;
+    }
+}
+#else
+s32 sPrevDBtnInput = 0;
+s32 sHeldDBtnTimer = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateDebugEditor.s")
+#endif
+
+s32 D_8082B3B4[] = { 0, 0, 0 };

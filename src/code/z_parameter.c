@@ -331,7 +331,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
         gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
-        if ((gSaveContext.save.inventory.questItems & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT)) {
+        if ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT)) {
             gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT);
             gSaveContext.save.playerData.healthCapacity += 0x10;
             gSaveContext.save.playerData.health += 0x10;
