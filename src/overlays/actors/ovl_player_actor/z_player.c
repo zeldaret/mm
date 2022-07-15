@@ -1197,7 +1197,23 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Draw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Destroy.s")
+void Player_Destroy(Actor* thisx, PlayState* play) {
+    Player* this = (Player* ) thisx;
+
+    Effect_Destroy(play, this->meleeWeaponEffectIndex[0]);
+    Effect_Destroy(play, this->meleeWeaponEffectIndex[1]);
+    Effect_Destroy(play, this->meleeWeaponEffectIndex[2]);
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
+    Collider_DestroyCylinder(play, &this->cylinder);
+    Collider_DestroyCylinder(play, &this->shieldCylinder);
+    Collider_DestroyQuad(play, &this->meleeWeaponQuads[0]);
+    Collider_DestroyQuad(play, &this->meleeWeaponQuads[1]);
+    Collider_DestroyQuad(play, &this->shieldQuad);
+    ZeldaArena_Free(this->giObjectSegment);
+    ZeldaArena_Free(this->maskObjectSegment);
+    func_80115D5C(&play->state);
+    func_80831454(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80847190.s")
 

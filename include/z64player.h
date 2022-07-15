@@ -684,7 +684,9 @@ typedef struct Player {
     /* 0x3CE */ s8 unk_3CE;
     /* 0x3CF */ u8 unk_3CF;
     /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
-    /* 0x404 */ UNK_TYPE1 unk_404[0x34];
+    /* 0x4E4 */ UNK_TYPE1 unk_4E4[0x20];
+    /* 0x504 */ LightNode* lightNode;
+    /* 0x508 */ UNK_TYPE1 unk_508[0x10];
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
