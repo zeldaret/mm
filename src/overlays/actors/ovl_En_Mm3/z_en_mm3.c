@@ -336,7 +336,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                         func_8010EA9C(0, 2);
                     } else {
@@ -377,7 +377,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (gSaveContext.unk_3DD0[0] == 0x10) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags |= ACTOR_FLAG_10000;
         if (gSaveContext.unk_3DE0[0] > 1500) {
             gSaveContext.unk_3DE0[0] = 1500;
@@ -437,7 +437,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
         func_80151BB4(play, 0xB);

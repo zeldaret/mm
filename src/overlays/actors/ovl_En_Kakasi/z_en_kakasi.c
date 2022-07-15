@@ -310,12 +310,12 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->actor.textId = 0x1653;
                 gSaveContext.save.weekEventReg[83] &= (u8)~1;
                 this->unkMsgState1AC = 5;
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
 
             if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;

@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #include "objects/object_link_boy/object_link_boy.h"
@@ -47,19 +48,17 @@ typedef struct {
 
 struct_801F58B0 D_801F58B0[3][3];
 
-UNK_TYPE D_801F59AC; // Padding? Can be deleted and still match
-
 Vec3f D_801F59B0[2];
 
 s32 D_801F59C8[2];
 
 typedef struct {
-    /* 0x00 */ s16 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ s16 unk_4;
-    /* 0x06 */ s16 unk_6;
-    /* 0x08 */ s16 unk_8;
-} struct_801F59D0;
+    /* 0x0 */ s16 unk_0;
+    /* 0x2 */ s16 unk_2;
+    /* 0x4 */ s16 unk_4;
+    /* 0x6 */ s16 unk_6;
+    /* 0x8 */ s16 unk_8;
+} struct_801F59D0; // size = 0xA
 
 struct_801F59D0 D_801F59D0;
 
@@ -71,13 +70,10 @@ s32 D_801F59E4;
 
 Vec3f D_801F59E8;
 
-void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
-
 s32 D_801F59F4;
 s32 D_801F59F8;
 
-s32 Player_IsHoldingTwoHandedWeapon(Player* player);
-
+void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
@@ -329,8 +325,8 @@ u8 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        (!(player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_800000 | PLAYER_STATE1_200000 |
-                                  PLAYER_STATE1_800 | PLAYER_STATE1_400))) &&
+        (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
+                                  PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
         if (player->doorType < 0) {
             ActorCutscene_SetIntentToPlay(0x7C);
@@ -384,28 +380,19 @@ void func_8012301C(Player* player, PlayState* play2) {
     }
 }
 
-FlexSkeletonHeader* D_801BFE00[PLAYER_FORM_MAX] = {
-    &object_link_boy_Skel_00D878,  &object_link_goron_Skel_017A84, &object_link_zora_Skel_012C34,
-    &object_link_nuts_Skel_00BA24, &object_link_child_Skel_01E244,
+FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
+    &gLinkFierceDeitySkel, &gLinkGoronSkel, &gLinkZoraSkel, &gLinkDekuSkel, &gLinkHumanSkel,
 };
 
 s16 D_801BFE14[][18] = {
-    { 0xC8, 0x29A, 0xC8, 0x2BC, 0x16E, 0xC8, 0x258, 0xAF, 0x3C, 0x320, 0x3E8, -0x64, 0x258, 0x24E, 0x320, 0x7D, 0x12C,
-      0x41 },
-    { 0xC8, 0x3E8, 0x12C, 0x320, 0x1F4, 0x190, 0x320, 0x190, 0x78, 0x320, 0x226, -0x64, 0x258, 0x21C, 0x2EE, 0x7D,
-      0x190, 0xC8 },
-    { 0x64, 0x3E8, 0x12C, 0x320, 0xFA, 0xC8, 0x320, 0xC8, 0x5A, 0x320, 0x15E, -0x50, 0x258, 0x21C, 0x2EE, 0x3C, 0xC8,
-      0xC8 },
-    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x258, 0x3E8, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
-      0x82 },
-    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0x12C, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
-      0x82 },
-    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0x12C, 0x78, 0x320, 0x258, -0x64, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
-      0x82 },
-    { 0xC8, 0x3E8, 0x12C, 0x2BC, 0x226, 0x10E, 0x2BC, 0xC8, 0x78, 0x320, 0x258, -0x8C, 0x258, 0x24E, 0x2EE, 0x7D, 0xC8,
-      0x82 },
-    { 0x50, 0x320, 0x96, 0x2BC, 0x1E0, 0x10E, 0x258, 0x32, 0x78, 0x320, 0x12C, -0x28, 0x190, 0x21C, 0x10E, 0x19, 0,
-      0x50 },
+    { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
+    { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
+    { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
+    { 200, 1000, 300, 700, 550, 270, 600, 1000, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    { 200, 1000, 300, 700, 550, 270, 700, 300, 120, 800, 600, -100, 600, 590, 750, 125, 200, 130 },
+    { 200, 1000, 300, 700, 550, 270, 700, 200, 120, 800, 600, -140, 600, 590, 750, 125, 200, 130 },
+    { 80, 800, 150, 700, 480, 270, 600, 50, 120, 800, 300, -40, 400, 540, 270, 25, 0, 80 },
 };
 
 // OoT's Player_SetBootData
@@ -468,7 +455,7 @@ void func_80123140(PlayState* play, Player* player) {
 }
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_200 | PLAYER_STATE1_80)) ||
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            player->csMode != 0 || play->sceneLoadFlag == 0x14 || play->unk_18B4A != 0 ||
            (player->stateFlags1 & PLAYER_STATE1_1) || (player->stateFlags3 & PLAYER_STATE3_80) ||
            play->actorCtx.unk268 != 0;
@@ -485,7 +472,7 @@ s32 func_80123420(Player* player) {
 }
 
 s32 func_80123434(Player* player) {
-    return player->stateFlags1 & (PLAYER_STATE1_40000000 | PLAYER_STATE1_20000 | PLAYER_STATE1_10000);
+    return player->stateFlags1 & (PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
 }
 
 // Unused
@@ -543,7 +530,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
@@ -571,30 +558,28 @@ s32 func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
-                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                 : ITEM_NONE;
+        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
+               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
+                                                                              : ITEM_NONE;
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
-                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                 : ITEM_NONE;
+        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
+               : (gSaveContext.unk_3F22 == 0x10)                              ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
+                                                                              : ITEM_NONE;
     }
 
-    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-                                                          : ITEM_NONE;
+    return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
+           : (gSaveContext.unk_3F22 == 0x10)                               ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
+                                                                           : ITEM_NONE;
 }
 
-u16 D_801BFF34[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
 s32 func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 temp_v0;
-    s32 sp24;
+    ItemID itemId;
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
@@ -608,16 +593,16 @@ s32 func_80123810(PlayState* play) {
         gSaveContext.save.unk_06--;
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801BFF34); i++) {
-        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, D_801BFF34[i])) {
+    for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {
+        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, sCItemButtons[i])) {
             i++;
-            sp24 = func_8012364C(play, player, i);
+            itemId = func_8012364C(play, player, i);
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(play->msgCtx.unk_120BC);
 
-            if ((sp24 >= 0xFD) || (temp_v0 = play->unk_18794(play, player, sp24, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
                 play_sound(NA_SE_SY_ERROR);
                 return -1;
             } else {
@@ -632,18 +617,98 @@ s32 func_80123810(PlayState* play) {
     return 0;
 }
 
-u8 sActionModelGroups[] = {
-    3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
-    0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC,
-    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
-    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   0,
+// Used to map action params to model groups
+u8 sActionModelGroups[PLAYER_AP_MAX] = {
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NONE
+    PLAYER_MODELGROUP_13,             // PLAYER_AP_LAST_USED
+    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_POLE
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_KOKIRI
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_RAZOR
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_GILDED
+    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_AP_SWORD_GREAT_FAIRY
+    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_STICK
+    PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_AP_ZORA_FINS
+    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW
+    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_FIRE
+    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_ICE
+    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_LIGHT
+    PLAYER_MODELGROUP_HOOKSHOT,       // PLAYER_AP_HOOKSHOT
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_BOMB
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_POWDER_KEG
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_BOMBCHU
+    PLAYER_MODELGROUP_8,              // PLAYER_AP_11
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NUT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PICTO_BOX
+    PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_AP_OCARINA
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_FISH
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SPRING_WATER
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_ZORA_EGG
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_GOLD_DUST
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_1C
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SEA_HORSE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MUSHROOM
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_BUG
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_BIG_POE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_RED
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_BLUE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_GREEN
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MILK
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MILK_HALF
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_CHATEAU
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_FAIRY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MOON_TEAR
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_LAND
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_ROOM_KEY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LETTER_TO_KAFEI
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MAGIC_BEANS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_SWAMP
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_MOUNTAIN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_OCEAN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_32
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LETTER_MAMA
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_34
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_35
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PENDANT_MEMORIES
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_37
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_38
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_39
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_TRUTH
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KAFEIS_MASK
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ALL_NIGHT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BUNNY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KEATON
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GARO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ROMANI
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_CIRCUS_LEADER
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_POSTMAN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_COUPLE
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GREAT_FAIRY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GIBDO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_DON_GERO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KAMARO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_CAPTAIN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_STONE
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BREMEN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BLAST
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_SCENTS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GIANT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_FIERCE_DEITY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GORON
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ZORA
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_DEKU
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LENS
 };
 
-s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
-    s32 modelGroup = sActionModelGroups[actionParam];
+PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam) {
+    PlayerModelGroup modelGroup = sActionModelGroups[actionParam];
 
-    if ((modelGroup == 2) && Player_IsGoronOrDeku(player)) {
-        return 1;
+    if ((modelGroup == PLAYER_MODELGROUP_ONE_HAND_SWORD) && Player_IsGoronOrDeku(player)) {
+        return PLAYER_MODELGROUP_1;
     }
     return modelGroup;
 }
@@ -678,21 +743,60 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 2, 0x26FD },
 };
 
-
-u8 gPlayerModelTypes[][5] = {
-    { 2, 0, 8, 0xC, 0x10 }, { 1, 2, 7, 0xF, 0x10 },   { 1, 2, 8, 0xD, 0x10 }, { 0, 0, 6, 0xE, 0x10 },
-    { 0, 0, 6, 0xE, 0x10 }, { 3, 3, 7, 0xE, 0x10 },   { 4, 1, 9, 0xE, 0x10 }, { 5, 0, 6, 0xE, 0x10 },
-    { 0, 4, 6, 0xE, 0x10 }, { 4, 0, 0xB, 0xE, 0x10 }, { 3, 1, 7, 0xE, 0x10 }, { 0, 0, 0xA, 0xE, 0x10 },
-    { 0, 5, 6, 0xE, 0x10 }, { 0, 2, 6, 0xF, 0x10 },   { 0, 1, 7, 0xE, 0x10 },
+PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
+    /* PLAYER_MODELGROUP_0 */
+    { PLAYER_ANIMTYPE_2, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_SHIELD, PLAYER_MODELTYPE_SHEATH_12,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_1 */
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_ONE_HAND_SWORD, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_15,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_ONE_HAND_SWORD */
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_ONE_HAND_SWORD, PLAYER_MODELTYPE_RH_SHIELD, PLAYER_MODELTYPE_SHEATH_13,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_DEFAULT */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_4 */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_TWO_HAND_SWORD */
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_TWO_HAND_SWORD, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_BOW */
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_BOW, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_EXPLOSIVES */
+    { PLAYER_ANIMTYPE_5, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_8 */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_4, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_HOOKSHOT */
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_HOOKSHOT, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_STICK */
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_INSTRUMENT */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_INSTRUMENT, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_BOTTLE */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_BOTTLE, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_13 */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_ONE_HAND_SWORD, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_15,
+      PLAYER_MODELTYPE_WAIST },
+    /* PLAYER_MODELGROUP_ZORA_FINS */
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
+      PLAYER_MODELTYPE_WAIST },
 };
 
 /* DLists groups start */
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
-Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
-    object_link_zora_DL_00AB40,  object_link_zora_DL_00AB40,  object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
-    object_link_child_DL_00BDB0, object_link_child_DL_00BDB0,
+Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityWaistDL, gLinkFierceDeityWaistDL, gLinkGoronWaistDL, gLinkGoronWaistDL, gLinkZoraWaistDL,
+    gLinkZoraWaistDL,        gLinkDekuWaistDL,        gLinkDekuWaistDL,  gLinkHumanWaistDL, gLinkHumanWaistDL,
 };
 
 Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
@@ -700,43 +804,43 @@ Gfx* D_801C0024[PLAYER_SHIELD_MAX - 1][2] = {
     { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
 
-Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath12DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath13DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
-Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerSheath14DLs[2 * PLAYER_FORM_MAX] = {
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
     NULL,
-    object_link_nuts_DL_0035F0,
-    object_link_nuts_DL_0035F0,
-    object_link_child_DL_01DA90,
-    object_link_child_DL_01DA90,
+    gLinkDekuSheathDL,
+    gLinkDekuSheathDL,
+    gLinkHumanSheathEmptyDL,
+    gLinkHumanSheathEmptyDL,
 };
 
 Gfx* D_801C00AC[][2] = {
@@ -745,123 +849,181 @@ Gfx* D_801C00AC[][2] = {
 };
 
 Gfx* D_801C00BC[][2] = {
-    { object_link_child_DL_01DAD8, object_link_child_DL_01DAD8 },
-    { object_link_child_DL_01DB40, object_link_child_DL_01DB40 },
-    { object_link_child_DL_01DB60, object_link_child_DL_01DB60 },
+    { gLinkHumanSheathedKokiriSwordDL, gLinkHumanSheathedKokiriSwordDL },
+    { gLinkHumanSheathedRazorSwordDL, gLinkHumanSheathedRazorSwordDL },
+    { gLinkHumanSheathedGildedSwordDL, gLinkHumanSheathedGildedSwordDL },
 };
 
 Gfx* D_801C00D4[][2] = {
-    { object_link_child_DL_017700, object_link_child_DL_017700 },
-    { object_link_child_DL_017338, object_link_child_DL_017338 },
-    { object_link_child_DL_016B80, object_link_child_DL_016B80 },
+    { gLinkHumanKokiriSwordSheathDL, gLinkHumanKokiriSwordSheathDL },
+    { gLinkHumanRazorSwordSheathDL, gLinkHumanRazorSwordSheathDL },
+    { gLinkHumanGildedSwordSheathDL, gLinkHumanGildedSwordSheathDL },
 };
 
-Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0080F0,   object_link_boy_DL_0080F0,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_01DCD8, object_link_child_DL_01DCD8,
+Gfx* gPlayerLeftHandTwoHandSwordDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityLeftHandHoldingSwordDL,
+    gLinkFierceDeityLeftHandHoldingSwordDL,
+    gLinkGoronLeftHandOpenDL,
+    gLinkGoronLeftHandOpenDL,
+    gLinkZoraLeftHandOpenDL,
+    gLinkZoraLeftHandOpenDL,
+    gLinkDekuLeftHandDL,
+    gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandHoldingGreatFairysSwordDL,
+    gLinkHumanLeftHandHoldingGreatFairysSwordDL,
 };
 
-Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_00D528, object_link_child_DL_00D528,
+Gfx* gPlayerLeftHandOpenDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandOpenDL, gLinkGoronLeftHandOpenDL,
+    gLinkZoraLeftHandOpenDL,    gLinkZoraLeftHandOpenDL,    gLinkDekuLeftHandDL,      gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandOpenDL,   gLinkHumanLeftHandOpenDL,
 };
 
-Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
-    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
+Gfx* gPlayerLeftHandClosedDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandClosedDL, gLinkGoronLeftHandClosedDL,
+    gLinkZoraLeftHandClosedDL,  gLinkZoraLeftHandClosedDL,  gLinkDekuLeftHandDL,        gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandClosedDL, gLinkHumanLeftHandClosedDL,
 };
 
-Gfx* D_801C0164[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_01DC68, object_link_child_DL_01DC68,
+Gfx* gPlayerLeftHandOneHandSwordDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityLeftHandDL,
+    gLinkFierceDeityLeftHandDL,
+    gLinkGoronLeftHandOpenDL,
+    gLinkGoronLeftHandOpenDL,
+    gLinkZoraLeftHandClosedDL,
+    gLinkZoraLeftHandClosedDL,
+    gLinkDekuLeftHandDL,
+    gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandHoldingKokiriSwordDL,
+    gLinkHumanLeftHandHoldingKokiriSwordDL,
 };
 
 Gfx* D_801C018C[][2] = {
-    { object_link_child_DL_01DC68, object_link_child_DL_01DC68 },
-    { object_link_child_DL_01DC88, object_link_child_DL_01DC88 },
-    { object_link_child_DL_01DCA8, object_link_child_DL_01DCA8 },
+    { gLinkHumanLeftHandHoldingKokiriSwordDL, gLinkHumanLeftHandHoldingKokiriSwordDL },
+    { gLinkHumanLeftHandHoldingRazorSwordDL, gLinkHumanLeftHandHoldingRazorSwordDL },
+    { gLinkHumanLeftHandHoldingGildedSwordDL, gLinkHumanLeftHandHoldingGildedSwordDL },
 };
 
-Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00D058, object_link_child_DL_00D058,
+Gfx* gPlayerRightHandOpenDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, gLinkGoronRightHandOpenDL, gLinkGoronRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,    gLinkZoraRightHandOpenDL,    gLinkDekuRightHandDL,      gLinkDekuRightHandDL,
+    gLinkHumanRightHandOpenDL,   gLinkHumanRightHandOpenDL,
 };
 
-Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
-    object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00E738, object_link_child_DL_00E738,
+Gfx* gPlayerRightHandClosedDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, gLinkGoronRightHandClosedDL, gLinkGoronRightHandClosedDL,
+    gLinkZoraRightHandClosedDL,  gLinkZoraRightHandClosedDL,  gLinkDekuRightHandDL,        gLinkDekuRightHandDL,
+    gLinkHumanRightHandClosedDL, gLinkHumanRightHandClosedDL,
 };
 
-Gfx* D_801C01F4[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_01DD18, object_link_child_DL_01DD18,
+Gfx* gPlayerRightHandBowDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,
+    gLinkFierceDeityRightHandDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkDekuRightHandDL,
+    gLinkDekuRightHandDL,
+    gLinkHumanRightHandHoldingBowDL,
+    gLinkHumanRightHandHoldingBowDL,
 };
 
-Gfx* D_801C021C[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00ED18, object_link_child_DL_00ED18,
+Gfx* gPlayerRightHandInstrumentDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,
+    gLinkFierceDeityRightHandDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkDekuRightHandDL,
+    gLinkDekuRightHandDL,
+    gLinkHumanRightHandHoldingOcarinaDL,
+    gLinkHumanRightHandHoldingOcarinaDL,
 };
 
-Gfx* D_801C0244[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
+Gfx* gPlayerRightHandHookshotDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,
+    gLinkFierceDeityRightHandDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkGoronRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkZoraRightHandOpenDL,
+    gLinkDekuRightHandDL,
+    gLinkDekuRightHandDL,
+    gLinkHumanRightHandHoldingHookshotDL,
+    gLinkHumanRightHandHoldingHookshotDL,
 };
 
-Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_011468, object_link_goron_DL_011468,
-    object_link_zora_DL_010D08,  object_link_zora_DL_010D08,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
-    object_link_child_DL_01DFA8, object_link_child_DL_01DFA8,
+Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityLeftHandDL,
+    gLinkFierceDeityLeftHandDL,
+    gLinkGoronLeftHandHoldBottleDL,
+    gLinkGoronLeftHandHoldBottleDL,
+    gLinkZoraLeftHandHoldBottleDL,
+    gLinkZoraLeftHandHoldBottleDL,
+    gLinkDekuLeftHandDL,
+    gLinkDekuLeftHandDL,
+    gLinkHumanLeftHandHoldBottleDL,
+    gLinkHumanLeftHandHoldBottleDL,
 };
 
 /* DLists groups end */
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006C38,  object_link_goron_DL_00A220, object_link_zora_DL_00C020,
-    object_link_nuts_DL_003AB8, object_link_child_DL_00D3D8,
+    gLinkFierceDeityLeftForearmDL, gLinkGoronLeftForearmDL, gLinkZoraLeftForearmDL,
+    gLinkDekuLeftForearmDL,        gLinkHumanLeftForearmDL,
 };
 
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_zora_DL_00C270,
-    object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
+    gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandOpenDL,   gLinkZoraLeftHandClosedDL,
+    gLinkDekuLeftHandDL,        gLinkHumanLeftHandClosedDL,
 };
 
 Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_006410,  object_link_goron_DL_009A98, object_link_zora_DL_00B820,
-    object_link_nuts_DL_0036B0, object_link_child_DL_00CCE0,
+    gLinkFierceDeityRightShoulderDL, gLinkGoronRightShoulderDL, gLinkZoraRightShoulderDL,
+    gLinkDekuRightShoulderDL,        gLinkHumanRightShoulderDL,
 };
 
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,
+    gLinkFierceDeityRightHandDL,
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
-    object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
+    gLinkZoraRightHandOpenDL,
+    gLinkDekuRightHandDL,
     object_link_child_DL_018490,
 };
 
 Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
-    object_link_boy_DL_0067D8,
+    gLinkFierceDeityRightHandDL,
     0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
                 // dlist, maybe a typo?
-    object_link_zora_DL_00FBB8,
-    object_link_nuts_DL_0038C0,
+    gLinkZoraRightHandOpenDL,
+    gLinkDekuRightHandDL,
     object_link_child_DL_017B40,
 };
 
-Gfx** sPlayerDListGroups[] = {
-    D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
-    D_801C01F4, D_801C021C, D_801C0244, D_801C0034, D_801C005C, D_801C0084, D_801C0084, D_801BFFFC, NULL,
+// Indexed by model types (left hand, right hand, sheath or waist)
+Gfx** sPlayerDListGroups[PLAYER_MODELTYPE_MAX] = {
+    gPlayerLeftHandOpenDLs,         // PLAYER_MODELTYPE_LH_OPEN
+    gPlayerLeftHandClosedDLs,       // PLAYER_MODELTYPE_LH_CLOSED
+    gPlayerLeftHandOneHandSwordDLs, // PLAYER_MODELTYPE_LH_ONE_HAND_SWORD
+    gPlayerLeftHandTwoHandSwordDLs, // PLAYER_MODELTYPE_LH_TWO_HAND_SWORD
+    gPlayerLeftHandOpenDLs,         // PLAYER_MODELTYPE_LH_4
+    gPlayerLeftHandBottleDLs,       // PLAYER_MODELTYPE_LH_BOTTLE
+    gPlayerRightHandOpenDLs,        // PLAYER_MODELTYPE_RH_OPEN
+    gPlayerRightHandClosedDLs,      // PLAYER_MODELTYPE_RH_CLOSED
+    gPlayerRightHandClosedDLs,      // PLAYER_MODELTYPE_RH_SHIELD
+    gPlayerRightHandBowDLs,         // PLAYER_MODELTYPE_RH_BOW
+    gPlayerRightHandInstrumentDLs,  // PLAYER_MODELTYPE_RH_INSTRUMENT
+    gPlayerRightHandHookshotDLs,    // PLAYER_MODELTYPE_RH_HOOKSHOT
+    gPlayerSheath12DLs,             // PLAYER_MODELTYPE_SHEATH_12
+    gPlayerSheath13DLs,             // PLAYER_MODELTYPE_SHEATH_13
+    gPlayerSheath14DLs,             // PLAYER_MODELTYPE_SHEATH_14
+    gPlayerSheath14DLs,             // PLAYER_MODELTYPE_SHEATH_15
+    gPlayerWaistDLs,                // PLAYER_MODELTYPE_WAIST
+    NULL,                           // PLAYER_MODELTYPE_17
 };
-
 
 struct_80124618 D_801C0340[] = {
     { 0, { 0, 0, 0 } },       { 5, { 0, 0, 0 } },        { 7, { 100, 100, 100 } },
@@ -970,7 +1132,11 @@ struct_80124618 D_801C0698[] = {
 struct_80124618 D_801C06B8[] = {
     { 0, { 100, 100, 100 } }, { 7, { 100, 100, 100 } }, { 8, { 70, 30, 70 } }, { 10, { 0, 0, 0 } }, { 14, { 0, 0, 0 } },
 };
-struct_80124618 D_801C06E0[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 14, { 0, 0, 0 } }, };
+struct_80124618 D_801C06E0[] = {
+    { 0, { 140, 140, 140 } },
+    { 1, { 0, 0, 0 } },
+    { 14, { 0, 0, 0 } },
+};
 struct_80124618 D_801C06F8[] = {
     { 0, { 100, 100, 100 } },
     { 5, { 100, 100, 100 } },
@@ -996,7 +1162,9 @@ struct_80124618 D_801C0750[] = {
 };
 
 // alpha values
-u8 D_801C0778[] = { 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100, };
+u8 D_801C0778[] = {
+    0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100,
+};
 
 struct_80124618 D_801C0784[] = {
     { 0, { 100, 100, 100 } },  { 14, { 100, 100, 100 } }, { 15, { 200, 200, 200 } },
@@ -1007,24 +1175,23 @@ u8 D_801C07AC[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100, 0,
 };
 
-
-void func_801239AC(Player* player) {
+void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
-                    player->rightHandType = 8;
-                    player->rightHandDLists = &sPlayerDListGroups[8][D_801F59E0];
+                    player->rightHandType = PLAYER_MODELTYPE_RH_SHIELD;
+                    player->rightHandDLists = &sPlayerDListGroups[PLAYER_MODELTYPE_RH_SHIELD][D_801F59E0];
 
-                    if (player->sheathType == 14) {
-                        player->sheathType = 12;
-                    } else if (player->sheathType == 15) {
-                        player->sheathType = 13;
+                    if (player->sheathType == PLAYER_MODELTYPE_SHEATH_14) {
+                        player->sheathType = PLAYER_MODELTYPE_SHEATH_12;
+                    } else if (player->sheathType == PLAYER_MODELTYPE_SHEATH_15) {
+                        player->sheathType = PLAYER_MODELTYPE_SHEATH_13;
                     }
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
-                    player->modelAnimType = 2;
+                    player->modelAnimType = PLAYER_ANIMTYPE_2;
                     player->heldItemActionParam = -1;
                 }
             }
@@ -1032,43 +1199,43 @@ void func_801239AC(Player* player) {
     }
 }
 
-void Player_SetModels(Player* player, s32 modelGroup) {
-    u8* playerModelTypes;
+void Player_SetModels(Player* player, PlayerModelGroup modelGroup) {
+    PlayerModelIndices* playerModelTypes;
 
     D_801F59E0 = player->transformation * 2;
-    player->leftHandType = gPlayerModelTypes[modelGroup][1];
-    player->rightHandType = gPlayerModelTypes[modelGroup][2];
-    player->sheathType = gPlayerModelTypes[modelGroup][3];
+    player->leftHandType = gPlayerModelTypes[modelGroup].leftHandType;
+    player->rightHandType = gPlayerModelTypes[modelGroup].rightHandType;
+    player->sheathType = gPlayerModelTypes[modelGroup].sheathType;
 
-    if (player->sheathType == 14) {
+    if (player->sheathType == PLAYER_MODELTYPE_SHEATH_14) {
         if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
-            player->sheathType = 15;
+            player->sheathType = PLAYER_MODELTYPE_SHEATH_15;
         }
     }
 
-    playerModelTypes = gPlayerModelTypes[modelGroup];
+    playerModelTypes = &gPlayerModelTypes[modelGroup];
 
-    player->leftHandDLists = &sPlayerDListGroups[playerModelTypes[1]][D_801F59E0];
-    player->rightHandDLists = &sPlayerDListGroups[playerModelTypes[2]][D_801F59E0];
-    player->sheathDLists = &sPlayerDListGroups[playerModelTypes[3]][D_801F59E0];
-    player->waistDLists = &sPlayerDListGroups[playerModelTypes[4]][D_801F59E0];
+    player->leftHandDLists = &sPlayerDListGroups[playerModelTypes->leftHandType][D_801F59E0];
+    player->rightHandDLists = &sPlayerDListGroups[playerModelTypes->rightHandType][D_801F59E0];
+    player->sheathDLists = &sPlayerDListGroups[playerModelTypes->sheathType][D_801F59E0];
+    player->waistDLists = &sPlayerDListGroups[playerModelTypes->waistType][D_801F59E0];
 
-    func_801239AC(player);
+    Player_SetModelsForHoldingShield(player);
 }
 
-void Player_SetModelGroup(Player* player, s32 modelGroup) {
+void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
     player->modelGroup = modelGroup;
 
-    if (modelGroup == 1) {
-        player->modelAnimType = 0;
+    if (modelGroup == PLAYER_MODELGROUP_1) {
+        player->modelAnimType = PLAYER_ANIMTYPE_0;
     } else {
-        player->modelAnimType = gPlayerModelTypes[modelGroup][0];
+        player->modelAnimType = gPlayerModelTypes[modelGroup].modelAnimType;
     }
 
-    if (player->modelAnimType < 3) {
+    if (player->modelAnimType < PLAYER_ANIMTYPE_3) {
         if (((player->transformation != PLAYER_FORM_FIERCE_DEITY) && (player->transformation != PLAYER_FORM_HUMAN)) ||
             (player->currentShield == PLAYER_SHIELD_NONE)) {
-            player->modelAnimType = 0;
+            player->modelAnimType = PLAYER_ANIMTYPE_0;
         }
     }
 
@@ -1096,7 +1263,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, s32 itemId, s32 actionParam) {
+void func_80123D50(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -1114,16 +1281,16 @@ void func_80123DA4(Player* player) {
 
 void func_80123DC0(Player* player) {
     if ((player->actor.bgCheckFlags & 1) ||
-        (player->stateFlags1 & (PLAYER_STATE1_8000000 | PLAYER_STATE1_800000 | PLAYER_STATE1_200000)) ||
-        (!(player->stateFlags1 & (PLAYER_STATE1_80000 | PLAYER_STATE1_40000)) &&
+        (player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_800000 | PLAYER_STATE1_8000000)) ||
+        (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000)) &&
          ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
-        player->stateFlags1 &= ~(PLAYER_STATE1_40000000 | PLAYER_STATE1_80000 | PLAYER_STATE1_40000 |
-                                 PLAYER_STATE1_20000 | PLAYER_STATE1_10000 | PLAYER_STATE1_8000);
-    } else if (!(player->stateFlags1 & (PLAYER_STATE1_200000 | PLAYER_STATE1_80000 | PLAYER_STATE1_40000))) {
+        player->stateFlags1 &= ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000 |
+                                 PLAYER_STATE1_80000 | PLAYER_STATE1_40000000);
+    } else if (!(player->stateFlags1 & (PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_200000))) {
         player->stateFlags1 |= PLAYER_STATE1_80000;
     } else if ((player->stateFlags1 & PLAYER_STATE1_40000) && (player->transformation == PLAYER_FORM_DEKU)) {
         player->stateFlags1 &=
-            ~(PLAYER_STATE1_40000000 | PLAYER_STATE1_20000 | PLAYER_STATE1_10000 | PLAYER_STATE1_8000);
+            ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
     }
 
     func_80123DA4(player);
@@ -1174,6 +1341,7 @@ u8 Player_GetMask(PlayState* play) {
 
     return player->currentMask;
 }
+
 // Unused
 void Player_RemoveMask(PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -1190,7 +1358,7 @@ s32 Player_HasMirrorShieldEquipped(PlayState* play) {
 s32 Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == 8) &&
+    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
@@ -1202,7 +1370,7 @@ s32 func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
-s32 func_80124110(Player* player, s32 actionParam) {
+s32 func_80124110(Player* player, PlayerActionParam actionParam) {
     s32 temp_v0 = actionParam - PLAYER_AP_FISHING_POLE;
 
     if (player->transformation != PLAYER_FORM_GORON) {
@@ -1219,7 +1387,7 @@ s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-s32 Player_ActionToMeleeWeapon(s32 actionParam) {
+s32 Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
     s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
 
     if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
@@ -1241,7 +1409,7 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     return false;
 }
 
-s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
     s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
     // Relies on bottle-related action params to be contiguous
@@ -1256,7 +1424,7 @@ s32 Player_GetBottleHeld(Player* Player) {
     return Player_ActionToBottle(Player, Player->itemActionParam);
 }
 
-s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
     s32 explosive = actionParam - PLAYER_AP_BOMB;
 
     // Relies on explosive-related action params to be contiguous
@@ -1271,8 +1439,7 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-// Convert actionParam to sword
-s32 func_80124278(Actor* actor, s32 actionParam) {
+s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
     s32 sword = 0;
 
     //! FAKE:
@@ -1411,65 +1578,82 @@ struct_80124618 D_801C0838[] = {
     { 12, { 100, 100, 100 } },
 };
 
-Gfx D_801C0850[] = {
+Gfx gCullBackDList[] = {
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 };
-Gfx D_801C0860[] = {
+Gfx gCullFrontDList[] = {
     gsSPSetGeometryMode(G_CULL_FRONT),
     gsSPEndDisplayList(),
 };
 
-static TexturePtr sEyesTextures[] = {
-    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000,
-    object_link_child_Tex_001800, object_link_child_Tex_002000, object_link_child_Tex_002800,
-    object_link_child_Tex_003000, object_link_child_Tex_003800,
+TexturePtr sPlayerEyesTextures[] = {
+    gLinkHumanEyesOpenTex,     gLinkHumanEyesHalfTex,   gLinkHumanEyesClosedTex,   gLinkHumanEyesRollRightTex,
+    gLinkHumanEyesRollLeftTex, gLinkHumanEyesRollUpTex, gLinkHumanEyesRollDownTex, object_link_child_Tex_003800,
 };
 
-static TexturePtr sMouthTextures[] = {
-    object_link_child_Tex_004000,
-    object_link_child_Tex_004400,
-    object_link_child_Tex_004800,
-    object_link_child_Tex_004C00,
+TexturePtr sPlayerMouthTextures[] = {
+    gLinkHumanMouthClosedTex,
+    gLinkHumanMouthTeethTex,
+    gLinkHumanMouthAngryTex,
+    gLinkHumanMouthHappyTex,
 };
 
-u8 D_801C08A0[][2] = {
-    { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 },
-    { 7, 2 }, { 0, 2 }, { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 3 },
+typedef struct PlayerFaceIndices {
+    /* 0x00 */ u8 eyeIndex;
+    /* 0x01 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x02
+
+PlayerFaceIndices sPlayerFaces[] = {
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_1
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_2
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_3
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_4
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_5
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_6
+    { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_TEETH },     // PLAYER_FACE_7
+    { PLAYER_EYES_7, PLAYER_MOUTH_ANGRY },           // PLAYER_FACE_8
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },        // PLAYER_FACE_9
+    { PLAYER_EYES_ROLL_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_10
+    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_11
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_ANGRY },      // PLAYER_FACE_12
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_TEETH },        // PLAYER_FACE_13
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },        // PLAYER_FACE_14
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
-// OoT's func_8008F470
-void func_801246F4(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
-                   s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1;          // eyeIndex
-    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
-    Gfx* dl;
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
+                     s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+    s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
+    s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
     if (eyeIndex < 0) {
-        eyeIndex = D_801C08A0[face][0];
+        eyeIndex = sPlayerFaces[face].eyeIndex;
     }
 
     if (tunic == 1) {
-        if ((eyeIndex >= 3) && (eyeIndex < 7)) {
-            eyeIndex = 0;
-        } else if (eyeIndex == 7) {
-            eyeIndex = 3;
+        if ((eyeIndex >= PLAYER_EYES_ROLL_RIGHT) && (eyeIndex <= PLAYER_EYES_ROLL_DOWN)) {
+            eyeIndex = PLAYER_EYES_OPEN;
+        } else if (eyeIndex == PLAYER_EYES_7) {
+            eyeIndex = PLAYER_EYES_ROLL_RIGHT;
         }
     }
 
-    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(sEyesTextures[eyeIndex]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
-        mouthIndex = D_801C08A0[face][1];
+        mouthIndex = sPlayerFaces[face].mouthIndex;
     }
 
-    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[mouthIndex]));
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
 
-    POLY_OPA_DISP = &dl[2];
+    POLY_OPA_DISP = &gfx[2];
 
     D_801F59E0 = tunic * 2;
     D_801F59E4 = lod;
@@ -1483,10 +1667,18 @@ Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
     { 408.0f, 0.0f, 0.0f },  { 695.0f, 0.0f, 0.0f },
 };
 
-f32 D_801C08FC[PLAYER_FORM_MAX] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f, };
-f32 D_801C0910[PLAYER_FORM_MAX] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f, };
-f32 D_801C0924[PLAYER_FORM_MAX] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f, };
-f32 D_801C0938[PLAYER_FORM_MAX] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f, };
+f32 D_801C08FC[PLAYER_FORM_MAX] = {
+    1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f,
+};
+f32 D_801C0910[PLAYER_FORM_MAX] = {
+    170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f,
+};
+f32 D_801C0924[PLAYER_FORM_MAX] = {
+    10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f,
+};
+f32 D_801C0938[PLAYER_FORM_MAX] = {
+    5.0f, 4.0f, 1.0f, 1.0f, 3.0f,
+};
 
 void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6,
                    s32 arg7) {
@@ -1625,8 +1817,14 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
 
 s32 D_801C0958 = false;
 
-Gfx** D_801C095C[] = { D_801C013C, D_801C0114, };
-Gfx** D_801C0964[] = { D_801C01CC, D_801C01A4, };
+Gfx** D_801C095C[] = {
+    gPlayerLeftHandClosedDLs,
+    gPlayerLeftHandOpenDLs,
+};
+Gfx** D_801C0964[] = {
+    gPlayerRightHandClosedDLs,
+    gPlayerRightHandOpenDLs,
+};
 
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     f32 phi_f12;
@@ -1894,7 +2092,7 @@ s32 func_80125580(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 }
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
             }
-        } else if (limbIndex == PLAYER_LIMB_UPPER) {
+        } else if (limbIndex == PLAYER_LIMB_UPPER_ROOT) {
             s16 phi_a0_2;
             s16 rot_temp = 0x44C;
 
@@ -1952,11 +2150,11 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
             } else if ((D_801F59F4 == 4) && (player->stateFlags1 & PLAYER_STATE1_2000000)) {
-                phi_a0 = &D_801C0114[D_801F59E0];
+                phi_a0 = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 D_801F59F4 = 0;
             } else if ((player->leftHandType == 0) && (player->actor.speedXZ > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
-                phi_a0 = &D_801C013C[D_801F59E0];
+                phi_a0 = &gPlayerLeftHandClosedDLs[D_801F59E0];
                 D_801F59F4 = 1;
             } else {
                 if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) &&
@@ -1981,7 +2179,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             } else if (player->transformation == PLAYER_FORM_ZORA) {
                 if ((player->stateFlags1 & PLAYER_STATE1_2) || (player->stateFlags1 & PLAYER_STATE1_400) ||
                     func_801242B4(player)) {
-                    *dList = object_link_zora_DL_00FDF0;
+                    *dList = gLinkZoraLeftHandOpenDL;
                 } else {
                     phi_a1 = player->skelAnime.animation == &gameplay_keep_Linkanim_00E3E8 &&
                              player->skelAnime.curFrame >= 6.0f;
@@ -2000,7 +2198,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             if ((player->transformation == PLAYER_FORM_ZORA) &&
                 (((player->stateFlags1 & PLAYER_STATE1_2)) || (player->stateFlags1 & PLAYER_STATE1_400) ||
                  func_801242B4(player))) {
-                *dList = object_link_zora_DL_00FBB8;
+                *dList = gLinkZoraRightHandOpenDL;
             } else {
                 phi_v1 = player->rightHandDLists;
                 if (player->stateFlags3 & PLAYER_STATE3_2000) {
@@ -2014,7 +2212,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                     }
                 } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
-                    phi_v1 = &D_801C01CC[D_801F59E0];
+                    phi_v1 = &gPlayerRightHandClosedDLs[D_801F59E0];
                     D_801F59F8 = 7;
                 } else {
                     // temp_v0_9 = player->skelAnime.jointTable->unk_84 & 0xF00;
@@ -2292,7 +2490,10 @@ Gfx* D_801C0B20[] = {
     object_mask_nuts_DL_001D90,
 };
 
-Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f }, };
+Vec3f D_801C0B90[] = {
+    { 950.0f, -800.0f, 300.0f },
+    { 950.0f, -800.0f, -300.0f },
+};
 
 void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
     Vec3f sp3C;
@@ -2590,7 +2791,7 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
-void func_80127594(PlayState* play, Actor* actor) {
+void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
     static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
@@ -2656,7 +2857,7 @@ void func_80127594(PlayState* play, Actor* actor) {
             D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
 
             EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
-            D_801F59C8[i] += -0x190;
+            D_801F59C8[i] -= 0x190;
         }
     }
 
@@ -2665,7 +2866,7 @@ void func_80127594(PlayState* play, Actor* actor) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801278F8(PlayState* play, Player* player) {
+void Player_DrawBlastMask(PlayState* play, Player* player) {
     static Gfx D_801C0BC0[] = {
         gsDPSetEnvColor(0, 0, 0, 255),
         gsSPEndDisplayList(),
@@ -2681,25 +2882,22 @@ void func_801278F8(PlayState* play, Player* player) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (player->unk_B60 != 0) {
-        s32 phi_a0;
+        s32 alpha;
 
-        gSegments[0xA] = PHYSICAL_TO_VIRTUAL2(player->maskObjectSegment);
+        gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
         if (player->unk_B60 < 11) {
-            phi_a0 = (player->unk_B60 / 10.0f) * 255;
+            alpha = (player->unk_B60 / 10.0f) * 255;
         } else {
-            phi_a0 = 255;
+            alpha = 255;
         }
 
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)phi_a0);
-
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)alpha);
         gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
-
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
-
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - phi_a0));
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - alpha));
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
     }
@@ -2738,7 +2936,7 @@ typedef struct {
 
 struct_80128388_arg1 D_801C0C54[] = {
     { 0.0f, 0x0000, 0x8000, { 0.0f, 0.0f, 0.0f }, 0.0f, 0x0000, 0x0000 },
-    { 16.7999992371f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
+    { 16.8f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
     { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
 };
 
@@ -2760,13 +2958,13 @@ Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
-f32 D_801C0D78[] = { 
-    0.0f, // Player is not holding a melee weapon
+f32 D_801C0D78[] = {
+    0.0f,    // Player is not holding a melee weapon
     3000.0f, // PLAYER_AP_SWORD_KOKIRI
     3000.0f, // PLAYER_AP_SWORD_RAZOR
     4000.0f, // PLAYER_AP_SWORD_GILDED
     5500.0f, // PLAYER_AP_SWORD_GREAT_FAIRY
-    -1.0f, // PLAYER_AP_STICK
+    -1.0f,   // PLAYER_AP_STICK
     2500.0f, // PLAYER_AP_ZORA_FINS
 };
 
@@ -2793,7 +2991,7 @@ Gfx* D_801C0DF0[] = {
     object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
 };
 
-Vec2f D_801C0E04[] = {
+Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
     { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
 };
 
@@ -2801,7 +2999,7 @@ Gfx* D_801C0E2C[] = {
     object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
     object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
 };
-Vec3f D_801C0E40[] = {
+Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
     { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
     { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
 };
@@ -2815,7 +3013,7 @@ Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
 Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
 Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
-void func_80127A60(PlayState* play) {
+void Player_DrawBunnyHood(PlayState* play) {
     Mtx* temp_a1 = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Mtx));
     Vec3s sp2C;
 
@@ -3018,7 +3216,7 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
     }
 }
 
-void func_801284A0(PlayState* play, Player* player) {
+void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     s32 pad;
     Mtx* sp90 = GRAPH_ALLOC(play->state.gfxCtx, 6 * sizeof(Mtx));
     Vec3f sp84;

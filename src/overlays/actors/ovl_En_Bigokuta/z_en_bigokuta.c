@@ -380,7 +380,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             func_800B724C(play, &this->actor, 7);
         } else {
             player = GET_PLAYER(play);
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -457,7 +457,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 } else {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 &= ~0x20;
+                    player->stateFlags1 &= ~PLAYER_STATE1_20;
                 }
             }
 

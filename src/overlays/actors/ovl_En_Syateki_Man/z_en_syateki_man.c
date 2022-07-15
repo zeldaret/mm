@@ -273,7 +273,7 @@ void func_809C6A04(EnSyatekiMan* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
                 this->unk_26A = 7;
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->actionFunc = func_809C7FFC;
             }
         } else {
@@ -333,7 +333,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
             case 0xA32:
                 if (gSaveContext.save.weekEventReg[63] & 2) {
                     func_801477B4(play);
-                    player->stateFlags1 &= ~0x20;
+                    player->stateFlags1 &= ~PLAYER_STATE1_20;
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     this->actionFunc = func_809C6848;
@@ -356,7 +356,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
                 play->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->actionFunc = func_809C7A90;
                 func_809C7A90(this, play);
                 break;
@@ -367,8 +367,8 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
 void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 0x20) {
-        player->stateFlags1 |= 0x20;
+    if (player->stateFlags1 & PLAYER_STATE1_20) {
+        player->stateFlags1 |= PLAYER_STATE1_20;
     }
 
     switch (Message_GetState(&play->msgCtx)) {
@@ -389,7 +389,7 @@ void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 this->actionFunc = func_809C6848;
@@ -540,7 +540,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
                 }
 
                 if (this->unk_26A == 4) {
-                    player->stateFlags3 &= ~0x400;
+                    player->stateFlags3 &= ~PLAYER_STATE3_400;
                     gSaveContext.minigameState = 3;
                 }
                 this->unk_26A = 3;
@@ -570,7 +570,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
             }
 
             if (this->unk_26A == 4) {
-                player->stateFlags3 &= ~0x400;
+                player->stateFlags3 &= ~PLAYER_STATE3_400;
                 gSaveContext.minigameState = 3;
             }
             this->unk_26A = 3;
@@ -631,7 +631,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
                     play->msgCtx.unk12023 = 4;
                     player->actor.freezeTimer = 0;
                     this->unk_26A = 7;
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     gSaveContext.save.weekEventReg[63] |= 1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     this->actionFunc = func_809C8710;
@@ -701,8 +701,8 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
 void func_809C7990(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 0x20) {
-        player->stateFlags1 |= 0x20;
+    if (player->stateFlags1 & PLAYER_STATE1_20) {
+        player->stateFlags1 |= PLAYER_STATE1_20;
     }
 
     switch (Message_GetState(&play->msgCtx)) {
@@ -723,7 +723,7 @@ void func_809C7990(EnSyatekiMan* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->actionFunc = func_809C72D8;
                 this->unk_26A = 0;
             }
@@ -780,7 +780,7 @@ void func_809C7C14(EnSyatekiMan* this, PlayState* play) {
             Message_StartTextbox(play, 0xA37, &this->actor);
             this->unk_284 = 0xA37;
         }
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
@@ -832,7 +832,7 @@ void func_809C7EB4(EnSyatekiMan* this, PlayState* play) {
 
     if (CURRENT_DAY != 3) {
         if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->unk_280 = 0;
             this->unk_26A = 0;
             gSaveContext.save.weekEventReg[63] &= (u8)~1;
@@ -842,7 +842,7 @@ void func_809C7EB4(EnSyatekiMan* this, PlayState* play) {
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x408, &this->actor);
         this->unk_284 = 0x408;
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
@@ -856,7 +856,7 @@ void func_809C7FFC(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_809C6720(play, D_809C9474)) {
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_26A = 2;
         if (this->unk_282 != 2) {
             this->unk_282 = 2;
@@ -884,7 +884,7 @@ void func_809C80C0(EnSyatekiMan* this, PlayState* play) {
         D_809C9498 = 30;
         this->unk_27E = 0;
         this->unk_280 = 0;
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         this->unk_272 = 0x1F;
         this->unk_274 = 0;
@@ -943,7 +943,7 @@ void func_809C81D0(EnSyatekiMan* this, PlayState* play) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->unk_27E = 0;
         this->unk_27C = 0;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         D_809C949C = 0;
         func_801A2C20();
         this->actionFunc = func_809C8488;
@@ -951,7 +951,7 @@ void func_809C81D0(EnSyatekiMan* this, PlayState* play) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->unk_27E = 0;
         this->unk_27C = 0;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         D_809C949C = 0;
         func_801A2C20();
         this->unk_26A = 5;
@@ -1014,7 +1014,7 @@ void func_809C8610(EnSyatekiMan* this, PlayState* play) {
     static s32 D_809C94A0 = 0;
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     if (play->interfaceCtx.unk_286 == 0) {
         if (gSaveContext.unk_3DE0[1] == 0) {
             gSaveContext.unk_3DE0[1] = 0;
@@ -1071,14 +1071,14 @@ void func_809C8808(EnSyatekiMan* this, PlayState* play) {
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
         play->unk_18790(play, -0x8000, &this->actor);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         D_809C94A4--;
     } else if (D_809C94A4 > 0) {
         player->actor.shape.rot.y = -0x8000;
         player->actor.world.rot.y = player->actor.shape.rot.y;
         D_809C94A4--;
     } else if (D_809C94A4 == 0) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->unk_280 = 0;
         this->unk_27E = 0;
         this->unk_26C = 70;
@@ -1137,7 +1137,7 @@ void func_809C898C(EnSyatekiMan* this, PlayState* play) {
             this->unk_26C = 80;
             gSaveContext.unk_3DE0[1] = 0;
             gSaveContext.unk_3DD0[1] = 5;
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
             D_809C94A8 = 0;
             this->actor.draw = EnSyatekiMan_Draw;
             func_801A2C20();

@@ -602,10 +602,10 @@ void func_80B943EC(EnZog* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_30A & 0x10) {
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_30A &= ~0x10;
         }
-    } else if ((player->stateFlags2 & 0x8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 120.0f)) {
         this->unk_30A |= 0x10;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }

@@ -1629,7 +1629,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
 
     switch (this->unk_1D18) {
         case 0:
-            if (player->stateFlags1 & 0x100) {
+            if (player->stateFlags1 & PLAYER_STATE1_100) {
                 Cutscene_Start(play, &play->csCtx);
                 this->unk_1D22 = Play_CreateSubCamera(play);
                 Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -1752,7 +1752,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->unk_1D22 = 0;
             Cutscene_End(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
-            player->stateFlags1 &= ~0x100;
+            player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->unk_1D70 = 0.01f;
             func_80165690();
             break;

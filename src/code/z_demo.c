@@ -270,10 +270,10 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             gSaveContext.save.playerForm = PLAYER_FORM_DEKU;
             break;
         case 0x17:
-            player->stateFlags2 |= 0x4000000;
+            player->stateFlags2 |= PLAYER_STATE2_4000000;
             break;
         case 0x18:
-            player->stateFlags2 &= ~0x4000000;
+            player->stateFlags2 &= ~PLAYER_STATE2_4000000;
             break;
         case 0x19:
             sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;

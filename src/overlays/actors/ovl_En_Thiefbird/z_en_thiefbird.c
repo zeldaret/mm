@@ -518,8 +518,9 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000) &&
-        (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.depthInWater < -40.0f)) {
+    if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) &&
+        !(player->stateFlags1 & PLAYER_STATE1_800000) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+        (this->actor.depthInWater < -40.0f)) {
         func_80C118E4(this);
     }
 }
@@ -562,9 +563,9 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, rot, 4, 0x1000, 0x100);
     }
 
-    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) || (Player_GetMask(play) == PLAYER_MASK_STONE) ||
-        (this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 1) ||
-        (this->actor.depthInWater > -40.0f)) {
+    if ((this->unk_18E == 0) || (player->stateFlags1 & PLAYER_STATE1_800000) ||
+        (Player_GetMask(play) == PLAYER_MASK_STONE) || (this->collider.base.atFlags & AT_HIT) ||
+        (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);

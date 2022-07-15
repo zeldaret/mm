@@ -171,7 +171,7 @@ void func_80919230(EffDust* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & 0x1000)) {
+    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->life != 0) {
             this->life--;
         } else {

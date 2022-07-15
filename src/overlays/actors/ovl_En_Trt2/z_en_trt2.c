@@ -455,7 +455,7 @@ void func_80AD4298(EnTrt2* this, PlayState* play) {
 
     if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_3B2 = 6;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -468,7 +468,7 @@ void func_80AD4298(EnTrt2* this, PlayState* play) {
 void func_80AD431C(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 &= ~0x20;
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
     Actor_MarkForDeath(&this->actor);
 }
 
