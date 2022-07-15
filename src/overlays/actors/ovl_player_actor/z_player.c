@@ -23,6 +23,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input);
 s32 func_8085B134(PlayState* play);
 void func_8085B170(PlayState* play, Player* player);
 
+s32 func_8082DA90(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DABC.s")
@@ -47,6 +48,7 @@ void func_8085B170(PlayState* play, Player* player);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DC64.s")
 
+void func_8082DCA0(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DCA0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DD2C.s")
@@ -251,6 +253,7 @@ void func_8085B170(PlayState* play, Player* player);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808313F0.s")
 
+void func_80831454(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831454.s")
 
 s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState* play), s32 arg3);
@@ -376,6 +379,7 @@ s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083562C.s")
 
+void func_80835BC8(Player* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80835BC8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80835BF8.s")
@@ -1189,7 +1193,70 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844EF8.s")
 
+extern Vec3f D_8085D41C;
+
+#ifdef NON_MATCHING
+// in-function static bss
+void Player_Update(Actor* thisx, PlayState* play) {
+    static Vec3f D_80862AF0; // sDogSpawnPos
+    Player* this = (Player* ) thisx;
+    s32 dogParams;
+    s32 pad;
+    Input input;
+    s32 pad2;
+
+    this->stateFlags3 &= ~0x10;
+    if (gSaveContext.dogParams < 0) {
+        if (Object_GetIndex(&play->objectCtx, 0x132) < 0) {
+            gSaveContext.dogParams = 0;
+        } else {
+            Actor* dog;
+
+            gSaveContext.dogParams &= (u16)~0x8000;
+            func_80835BC8(this, &this->actor.world.pos, &D_8085D41C, &D_80862AF0);
+
+            dogParams = gSaveContext.dogParams;
+
+            dog = Actor_Spawn(&play->actorCtx, play, 0xE2, D_80862AF0.x, D_80862AF0.y, D_80862AF0.z, 0, this->actor.shape.rot.y, 0, dogParams | 0x8000);
+            if (dog != NULL) {
+                dog->room = -1;
+            }
+        }
+    }
+
+    if ((this->interactRangeActor != NULL) && (this->interactRangeActor->update == NULL)) {
+        this->interactRangeActor = NULL;
+    }
+
+    if ((this->heldActor != NULL) && (this->heldActor->update == NULL)) {
+        func_8082DCA0(play, this);
+    }
+
+    if ((play->actorCtx.unk268 != 0) && (this == GET_PLAYER(play))) {
+        input = play->actorCtx.unk_26C;
+    } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) || (func_8082DA90(play) != 0) || (gSaveContext.save.playerData.health == 0)) {
+        bzero(&input, sizeof(Input));
+        this->unk_B68 = this->actor.world.pos.y;
+    } else {
+        input = play->state.input[0];
+        if (this->unk_B5E != 0) {
+            input.cur.button &= ~0xC008;
+            input.press.button &= ~0xC008;
+        }
+    }
+
+    func_80844EF8(this, play, &input);
+    play->actorCtx.unk268 = 0;
+    bzero(&play->actorCtx.unk_26C, sizeof(Input));
+
+    gGameInfo->data[0x214] = this->actor.world.pos.x;
+    gGameInfo->data[0x215] = this->actor.world.pos.y;
+    gGameInfo->data[0x216] = this->actor.world.pos.z;
+    gGameInfo->data[0x217] = this->actor.world.rot.y;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Update.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808463C0.s")
 
