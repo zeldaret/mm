@@ -8,15 +8,22 @@
 
 struct EnRat;
 
+typedef void (*EnRatActionFunc)(struct EnRat*, PlayState*);
+
 typedef struct EnRat {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ char unk_188[0x8];
+    /* 0x188 */ EnRatActionFunc actionFunc;
+    /* 0x18C */ u8 unk_18C;
+    /* 0x18D */ char unk_18D[0x1];
+    /* 0x18E */ s16 unk_18E;
     /* 0x190 */ s16 unk_190;
     /* 0x192 */ char unk_192[0x2];
     /* 0x194 */ Vec3s jointTable[10];
     /* 0x1D0 */ Vec3s morphTable[10];
-    /* 0x20C */ char unk_20C[0x4C];
+    /* 0x20C */ Vec3f unk_20C[4];
+    /* 0x23C */ Vec3f unk_23C[2];
+    /* 0x254 */ f32 unk_254;
     /* 0x258 */ f32 unk_258;
     /* 0x25C */ char unk_25C[0x4];
     /* 0x260 */ s32 unk_260;
