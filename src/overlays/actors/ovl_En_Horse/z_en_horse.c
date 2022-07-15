@@ -4324,8 +4324,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderCylinder2.base);
         }
 
-        // TODO: What?
-        if ((player->stateFlags1 & ENHORSE_BOOST) && (player->rideActor != NULL)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_1) && (player->rideActor != NULL)) {
             EnHorse_UpdateConveyors(this, play);
         }
 
