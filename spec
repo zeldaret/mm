@@ -886,9 +886,7 @@ beginseg
     name "ovl_En_Viewer"
     compress
     include "build/src/overlays/actors/ovl_En_Viewer/z_en_viewer.o"
-    include "build/data/ovl_En_Viewer/ovl_En_Viewer.data.o"
-    include "build/data/ovl_En_Viewer/ovl_En_Viewer.bss.o"
-    include "build/data/ovl_En_Viewer/ovl_En_Viewer.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Viewer/ovl_En_Viewer_reloc.o"
 endseg
 
 beginseg
