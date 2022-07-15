@@ -235,7 +235,7 @@ void func_80A850E8(ObjPurify* this, PlayState* play) {
 }
 
 void func_80A8515C(ObjPurify* this) {
-    this->dyna.actor.flags &= ~0x10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     this->dyna.actor.draw = func_80A851C8;
     this->gfxIndex = 1;
     this->actionFunc = ObjPurify_DoNothing;
@@ -300,7 +300,7 @@ void func_80A85304(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(sp6C); i++) {
         index = sp6C[i];
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(info->animMat[index]));
         ObjPurify_SetSysMatrix(this->unk168[index]);
