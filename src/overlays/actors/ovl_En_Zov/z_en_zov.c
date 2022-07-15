@@ -460,12 +460,12 @@ s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret;
     EnZov* this = THIS;
 
-    ret = Snap_ValidatePictograph(play, &this->picto.actor, 4, &this->picto.actor.focus.pos,
+    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_HEAD, &this->picto.actor.focus.pos,
                                   &this->picto.actor.shape.rot, 10.0f, 300.0f, -1);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, 5, &this->unk_308, &this->picto.actor.shape.rot, 50.0f,
-                                   160.0f, 0x3000);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, 6, &this->unk_314, &this->picto.actor.shape.rot, 50.0f,
-                                   160.0f, 0x3000);
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_RIGHT_ARM, &this->unk_308,
+                                   &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_LEFT_ARM, &this->unk_314,
+                                   &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
     return ret;
 }
 
