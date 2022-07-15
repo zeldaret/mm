@@ -60,14 +60,14 @@
         <!-- <Blob Name="object_link_child_Blob_00DC08" Size="0x360" Offset="0xDC08" /> -->
         <DList Name="object_link_child_DL_00E1C8" Offset="0xE1C8" />
         <!-- <Blob Name="object_link_child_Blob_00E2E8" Size="0x1F0" Offset="0xE2E8" /> -->
-        <DList Name="object_link_child_DL_00E738" Offset="0xE738" />
+        <DList Name="gLinkHumanRightHandClosedDL" Offset="0xE738" />
 
-        <DList Name="object_link_child_DL_00ED18" Offset="0xED18" />
+        <DList Name="gLinkHumanRightHandHoldingOcarinaDL" Offset="0xED18" />
         <DList Name="object_link_child_DL_00F1D8" Offset="0xF1D8" />
         <DList Name="object_link_child_DL_00F548" Offset="0xF548" />
         <DList Name="object_link_child_DL_00F998" Offset="0xF998" />
         <DList Name="object_link_child_DL_00FD08" Offset="0xFD08" />
-        <!-- Duplicated of object_link_child_DL_00ED18 -->
+        <!-- Duplicated of gLinkHumanRightHandHoldingOcarinaDL -->
         <DList Name="object_link_child_DL_0102E8" Offset="0x102E8" />
 
         <DList Name="object_link_child_DL_015F98" Offset="0x15F98" />
@@ -83,7 +83,7 @@
         <DList Name="object_link_child_DL_016608" Offset="0x16608" />
         <DList Name="object_link_child_DL_0166F8" Offset="0x166F8" />
         <DList Name="object_link_child_DL_0167D0" Offset="0x167D0" />
-        <DList Name="object_link_child_DL_016898" Offset="0x16898" />
+        <DList Name="gLinkHumanGreatFairysSwordDL" Offset="0x16898" />
         <DList Name="object_link_child_DL_0168C0" Offset="0x168C0" />
         <DList Name="object_link_child_DL_016950" Offset="0x16950" />
         <DList Name="object_link_child_DL_0169E0" Offset="0x169E0" />
@@ -104,9 +104,9 @@
         <DList Name="gLinkHumanHylianShieldDL" Offset="0x17458" />
         <DList Name="object_link_child_DL_017700" Offset="0x17700" />
         <DList Name="object_link_child_DL_017818" Offset="0x17818" />
-        <DList Name="object_link_child_DL_017858" Offset="0x17858" />
+        <DList Name="gLinkHumanHookshotDL" Offset="0x17858" />
         <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />
-        <DList Name="object_link_child_DL_0181C8" Offset="0x181C8" />
+        <DList Name="gLinkHumanBowDL" Offset="0x181C8" />
         <DList Name="object_link_child_DL_018490" Offset="0x18490" />
 
         <Texture Name="object_link_child_TLUT_018A40" OutName="tlut_018A40" Format="rgba16" Width="16" Height="16" Offset="0x18A40" />
@@ -156,11 +156,11 @@
         <DList Name="object_link_child_DL_01DC98" Offset="0x1DC98" />
         <DList Name="object_link_child_DL_01DCA8" Offset="0x1DCA8" />
         <DList Name="object_link_child_DL_01DCC0" Offset="0x1DCC0" />
-        <DList Name="object_link_child_DL_01DCD8" Offset="0x1DCD8" />
+        <DList Name="gLinkHumanLeftHandHoldingGreatFairysSwordDL" Offset="0x1DCD8" />
         <DList Name="object_link_child_DL_01DCE8" Offset="0x1DCE8" />
-        <DList Name="object_link_child_DL_01DCF8" Offset="0x1DCF8" />
+        <DList Name="gLinkHumanRightHandHoldingHookshotDL" Offset="0x1DCF8" />
         <DList Name="object_link_child_DL_01DD08" Offset="0x1DD08" />
-        <DList Name="object_link_child_DL_01DD18" Offset="0x1DD18" />
+        <DList Name="gLinkHumanRightHandHoldingBowDL" Offset="0x1DD18" />
         <DList Name="object_link_child_DL_01DD28" Offset="0x1DD28" />
 
         <DList Name="gLinkHumanLeftHandHoldBottleDL" Offset="0x1DFA8" />

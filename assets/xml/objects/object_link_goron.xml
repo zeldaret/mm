@@ -23,24 +23,24 @@
         <Texture Name="object_link_goron_Tex_004240" OutName="tex_004240" Format="ci8" Width="8" Height="32" Offset="0x4240" />
         <Texture Name="object_link_goron_Tex_004340" OutName="tex_004340" Format="i8" Width="8" Height="8" Offset="0x4340" />
 
-        <DList Name="object_link_goron_DL_008140" Offset="0x8140" />
-        <DList Name="object_link_goron_DL_008230" Offset="0x8230" />
-        <DList Name="object_link_goron_DL_008500" Offset="0x8500" />
-        <DList Name="object_link_goron_DL_0086A0" Offset="0x86A0" />
-        <DList Name="object_link_goron_DL_008790" Offset="0x8790" />
-        <DList Name="object_link_goron_DL_008A60" Offset="0x8A60" />
-        <DList Name="object_link_goron_DL_008C00" Offset="0x8C00" />
-        <DList Name="object_link_goron_DL_008C98" Offset="0x8C98" />
-        <DList Name="object_link_goron_DL_008F18" Offset="0x8F18" />
-        <DList Name="object_link_goron_DL_0091F0" Offset="0x91F0" />
-        <DList Name="object_link_goron_DL_009898" Offset="0x9898" />
-        <DList Name="object_link_goron_DL_0099D8" Offset="0x99D8" />
-        <DList Name="object_link_goron_DL_009A98" Offset="0x9A98" />
-        <DList Name="object_link_goron_DL_009C18" Offset="0x9C18" />
-        <DList Name="object_link_goron_DL_009EF8" Offset="0x9EF8" />
-        <DList Name="object_link_goron_DL_00A0A0" Offset="0xA0A0" />
-        <DList Name="object_link_goron_DL_00A220" Offset="0xA220" />
-        <DList Name="object_link_goron_DL_00A500" Offset="0xA500" />
+        <DList Name="gLinkGoronRightThighDL" Offset="0x8140" />
+        <DList Name="gLinkGoronRightShinDL" Offset="0x8230" />
+        <DList Name="gLinkGoronRightFootDL" Offset="0x8500" />
+        <DList Name="gLinkGoronLeftThighDL" Offset="0x86A0" />
+        <DList Name="gLinkGoronLeftShinDL" Offset="0x8790" />
+        <DList Name="gLinkGoronLeftFootDL" Offset="0x8A60" />
+        <DList Name="gLinkGoronWaistDL" Offset="0x8C00" />
+        <DList Name="gLinkGoronCollarDL" Offset="0x8C98" />
+        <DList Name="gLinkGoronTorsoDL" Offset="0x8F18" />
+        <DList Name="gLinkGoronHeadDL" Offset="0x91F0" />
+        <DList Name="gLinkGoronHatDL" Offset="0x9898" />
+        <DList Name="gLinkGoronSheathDL" Offset="0x99D8" />
+        <DList Name="gLinkGoronRightShoulderDL" Offset="0x9A98" />
+        <DList Name="gLinkGoronRightForearmDL" Offset="0x9C18" />
+        <DList Name="gLinkGoronRightHandDL" Offset="0x9EF8" />
+        <DList Name="gLinkGoronLeftShoulderDL" Offset="0xA0A0" />
+        <DList Name="gLinkGoronLeftForearmDL" Offset="0xA220" />
+        <DList Name="gLinkGoronLeftHandDL" Offset="0xA500" />
         <DList Name="gLinkGoronCurledDL" Offset="0xBDD8" />
         <DList Name="object_link_goron_DL_00C540" Offset="0xC540" />
 

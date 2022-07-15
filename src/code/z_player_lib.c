@@ -755,49 +755,49 @@ TextTriggerEntry sEnvironmentTextTriggers[] = {
 
 PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
     /* PLAYER_MODELGROUP_0 */
-    { PLAYER_ANIMTYPE_2, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_8, PLAYER_MODELTYPE_SHEATH_12,
+    { PLAYER_ANIMTYPE_2, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_SHIELD, PLAYER_MODELTYPE_SHEATH_12,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_1 */
-    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_7, PLAYER_MODELTYPE_SHEATH_15,
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_15,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_2 */
-    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_8, PLAYER_MODELTYPE_SHEATH_13,
+    { PLAYER_ANIMTYPE_1, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_SHIELD, PLAYER_MODELTYPE_SHEATH_13,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_DEFAULT */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_4 */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_5 */
-    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_3, PLAYER_MODELTYPE_RH_7, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_3, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_6 */
-    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_9, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_BOW, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_7 */
-    { PLAYER_ANIMTYPE_5, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_5, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_8 */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_4, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_4, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_9 */
-    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_11, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_HOOKSHOT, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_10 */
-    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_7, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_11 */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_10, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_0, PLAYER_MODELTYPE_RH_INSTRUMENT, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_BOTTLE */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_BOTTLE, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_BOTTLE, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_13 */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_6, PLAYER_MODELTYPE_SHEATH_15,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_2, PLAYER_MODELTYPE_RH_OPEN, PLAYER_MODELTYPE_SHEATH_15,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_14 */
-    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_7, PLAYER_MODELTYPE_SHEATH_14,
+    { PLAYER_ANIMTYPE_0, PLAYER_MODELTYPE_LH_1, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
 };
 
@@ -805,8 +805,8 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
 // Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
 Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityWaistDL,    gLinkFierceDeityWaistDL,    object_link_goron_DL_008C00, object_link_goron_DL_008C00,
-    object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
+    gLinkFierceDeityWaistDL,    gLinkFierceDeityWaistDL,    gLinkGoronWaistDL,          gLinkGoronWaistDL,
+    object_link_zora_DL_00AB40, object_link_zora_DL_00AB40, object_link_nuts_DL_002C20, object_link_nuts_DL_002C20,
     gLinkHumanWaistDL,          gLinkHumanWaistDL,
 };
 
@@ -871,22 +871,23 @@ Gfx* D_801C00D4[][2] = {
     { object_link_child_DL_016B80, object_link_child_DL_016B80 },
 };
 
+// Possibly two-handed weapons/swords
 Gfx* gPlayerLeftHand3DLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandHoldingSwordDL,
     gLinkFierceDeityLeftHandHoldingSwordDL,
-    object_link_goron_DL_00A500,
-    object_link_goron_DL_00A500,
+    gLinkGoronLeftHandDL,
+    gLinkGoronLeftHandDL,
     object_link_zora_DL_00FDF0,
     object_link_zora_DL_00FDF0,
     object_link_nuts_DL_003BC0,
     object_link_nuts_DL_003BC0,
-    object_link_child_DL_01DCD8,
-    object_link_child_DL_01DCD8,
+    gLinkHumanLeftHandHoldingGreatFairysSwordDL,
+    gLinkHumanLeftHandHoldingGreatFairysSwordDL,
 };
 
 Gfx* gPlayerLeftHand0DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    gLinkFierceDeityLeftHandDL, gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandDL,       gLinkGoronLeftHandDL,
+    object_link_zora_DL_00FDF0, object_link_zora_DL_00FDF0, object_link_nuts_DL_003BC0, object_link_nuts_DL_003BC0,
     gLinkHumanLeftHandDL,       gLinkHumanLeftHandDL,
 };
 
@@ -896,9 +897,10 @@ Gfx* gPlayerLeftHand1DLs[2 * PLAYER_FORM_MAX] = {
     object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
 };
 
+// human holds kokiri sword
 Gfx* gPlayerLeftHand2DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  object_link_goron_DL_00A500, object_link_goron_DL_00A500,
-    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    gLinkFierceDeityLeftHandDL,  gLinkFierceDeityLeftHandDL,  gLinkGoronLeftHandDL,       gLinkGoronLeftHandDL,
+    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0, object_link_nuts_DL_003BC0,
     object_link_child_DL_01DC68, object_link_child_DL_01DC68,
 };
 
@@ -908,34 +910,49 @@ Gfx* D_801C018C[][2] = {
     { object_link_child_DL_01DCA8, object_link_child_DL_01DCA8 },
 };
 
-Gfx* gPlayerRightHand6DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+Gfx* gPlayerRightHandOpenDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, gLinkGoronRightHandDL,      gLinkGoronRightHandDL,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0, object_link_nuts_DL_0038C0,
     gLinkHumanRightHandDL,       gLinkHumanRightHandDL,
 };
 
-Gfx* gPlayerRightHand7DLs[2 * PLAYER_FORM_MAX] = {
+Gfx* gPlayerRightHandClosedDLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
     object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00E738, object_link_child_DL_00E738,
+    gLinkHumanRightHandClosedDL, gLinkHumanRightHandClosedDL,
 };
 
-Gfx* gPlayerRightHand9DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_01DD18, object_link_child_DL_01DD18,
+Gfx* gPlayerRightHandBowDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,     gLinkFierceDeityRightHandDL, gLinkGoronRightHandDL,
+    gLinkGoronRightHandDL,           object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,      object_link_nuts_DL_0038C0,  gLinkHumanRightHandHoldingBowDL,
+    gLinkHumanRightHandHoldingBowDL,
 };
 
-Gfx* gPlayerRightHand10DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_00ED18, object_link_child_DL_00ED18,
+Gfx* gPlayerRightHandInstrumentDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,
+    gLinkFierceDeityRightHandDL,
+    gLinkGoronRightHandDL,
+    gLinkGoronRightHandDL,
+    object_link_zora_DL_00FBB8,
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_nuts_DL_0038C0,
+    gLinkHumanRightHandHoldingOcarinaDL,
+    gLinkHumanRightHandHoldingOcarinaDL,
 };
 
-Gfx* gPlayerRightHand11DLs[2 * PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightHandDL, gLinkFierceDeityRightHandDL, object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
-    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
-    object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
+Gfx* gPlayerRightHandHookshotDLs[2 * PLAYER_FORM_MAX] = {
+    gLinkFierceDeityRightHandDL,
+    gLinkFierceDeityRightHandDL,
+    gLinkGoronRightHandDL,
+    gLinkGoronRightHandDL,
+    object_link_zora_DL_00FBB8,
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_nuts_DL_0038C0,
+    gLinkHumanRightHandHoldingHookshotDL,
+    gLinkHumanRightHandHoldingHookshotDL,
 };
 
 Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
@@ -948,17 +965,17 @@ Gfx* gPlayerLeftHandBottleDLs[2 * PLAYER_FORM_MAX] = {
 /* DLists groups end */
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftForearmDL, object_link_goron_DL_00A220, object_link_zora_DL_00C020,
+    gLinkFierceDeityLeftForearmDL, gLinkGoronLeftForearmDL, object_link_zora_DL_00C020,
     object_link_nuts_DL_003AB8,    gLinkHumanLeftForearmDL,
 };
 
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
-    gLinkFierceDeityLeftHandDL, object_link_goron_DL_00A500, object_link_zora_DL_00C270,
+    gLinkFierceDeityLeftHandDL, gLinkGoronLeftHandDL,        object_link_zora_DL_00C270,
     object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
 };
 
 Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
-    gLinkFierceDeityRightShoulderDL, object_link_goron_DL_009A98, object_link_zora_DL_00B820,
+    gLinkFierceDeityRightShoulderDL, gLinkGoronRightShoulderDL, object_link_zora_DL_00B820,
     object_link_nuts_DL_0036B0,      gLinkHumanRightShoulderDL,
 };
 
@@ -980,25 +997,26 @@ Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
     object_link_child_DL_017B40,
 };
 
+// Indexed by model types (left hand, right hand, sheath or waist)
 Gfx** sPlayerDListGroups[PLAYER_MODELTYPE_MAX] = {
-    gPlayerLeftHand0DLs,      // PLAYER_MODELTYPE_LH_0
-    gPlayerLeftHand1DLs,      // PLAYER_MODELTYPE_LH_1
-    gPlayerLeftHand2DLs,      // PLAYER_MODELTYPE_LH_2
-    gPlayerLeftHand3DLs,      // PLAYER_MODELTYPE_LH_3
-    gPlayerLeftHand0DLs,      // PLAYER_MODELTYPE_LH_4
-    gPlayerLeftHandBottleDLs, // PLAYER_MODELTYPE_LH_BOTTLE
-    gPlayerRightHand6DLs,     // PLAYER_MODELTYPE_RH_6
-    gPlayerRightHand7DLs,     // PLAYER_MODELTYPE_RH_7
-    gPlayerRightHand7DLs,     // PLAYER_MODELTYPE_RH_8
-    gPlayerRightHand9DLs,     // PLAYER_MODELTYPE_RH_9
-    gPlayerRightHand10DLs,    // PLAYER_MODELTYPE_RH_10
-    gPlayerRightHand11DLs,    // PLAYER_MODELTYPE_RH_11
-    gPlayerSheath12DLs,       // PLAYER_MODELTYPE_SHEATH_12
-    gPlayerSheath13DLs,       // PLAYER_MODELTYPE_SHEATH_13
-    gPlayerSheath14DLs,       // PLAYER_MODELTYPE_SHEATH_14
-    gPlayerSheath14DLs,       // PLAYER_MODELTYPE_SHEATH_15
-    gPlayerWaistDLs,          // PLAYER_MODELTYPE_WAIST
-    NULL,                     // PLAYER_MODELTYPE_17
+    gPlayerLeftHand0DLs,           // PLAYER_MODELTYPE_LH_0
+    gPlayerLeftHand1DLs,           // PLAYER_MODELTYPE_LH_1
+    gPlayerLeftHand2DLs,           // PLAYER_MODELTYPE_LH_2
+    gPlayerLeftHand3DLs,           // PLAYER_MODELTYPE_LH_3
+    gPlayerLeftHand0DLs,           // PLAYER_MODELTYPE_LH_4
+    gPlayerLeftHandBottleDLs,      // PLAYER_MODELTYPE_LH_BOTTLE
+    gPlayerRightHandOpenDLs,       // PLAYER_MODELTYPE_RH_OPEN
+    gPlayerRightHandClosedDLs,     // PLAYER_MODELTYPE_RH_CLOSED
+    gPlayerRightHandClosedDLs,     // PLAYER_MODELTYPE_RH_SHIELD
+    gPlayerRightHandBowDLs,        // PLAYER_MODELTYPE_RH_BOW
+    gPlayerRightHandInstrumentDLs, // PLAYER_MODELTYPE_RH_INSTRUMENT
+    gPlayerRightHandHookshotDLs,   // PLAYER_MODELTYPE_RH_HOOKSHOT
+    gPlayerSheath12DLs,            // PLAYER_MODELTYPE_SHEATH_12
+    gPlayerSheath13DLs,            // PLAYER_MODELTYPE_SHEATH_13
+    gPlayerSheath14DLs,            // PLAYER_MODELTYPE_SHEATH_14
+    gPlayerSheath14DLs,            // PLAYER_MODELTYPE_SHEATH_15
+    gPlayerWaistDLs,               // PLAYER_MODELTYPE_WAIST
+    NULL,                          // PLAYER_MODELTYPE_17
 };
 
 struct_80124618 D_801C0340[] = {
@@ -1157,8 +1175,8 @@ void Player_SetModelsForHoldingShield(Player* player) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
-                    player->rightHandType = PLAYER_MODELTYPE_RH_8;
-                    player->rightHandDLists = &sPlayerDListGroups[PLAYER_MODELTYPE_RH_8][D_801F59E0];
+                    player->rightHandType = PLAYER_MODELTYPE_RH_SHIELD;
+                    player->rightHandDLists = &sPlayerDListGroups[PLAYER_MODELTYPE_RH_SHIELD][D_801F59E0];
 
                     if (player->sheathType == PLAYER_MODELTYPE_SHEATH_14) {
                         player->sheathType = PLAYER_MODELTYPE_SHEATH_12;
@@ -1334,7 +1352,7 @@ s32 Player_HasMirrorShieldEquipped(PlayState* play) {
 s32 Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_RH_8) &&
+    return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
@@ -1665,8 +1683,8 @@ Gfx** D_801C095C[] = {
     gPlayerLeftHand0DLs,
 };
 Gfx** D_801C0964[] = {
-    gPlayerRightHand7DLs,
-    gPlayerRightHand6DLs,
+    gPlayerRightHandClosedDLs,
+    gPlayerRightHandOpenDLs,
 };
 
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
