@@ -1901,7 +1901,16 @@ void Player_Update(Actor* thisx, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Update.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808463C0.s")
+void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList, OverrideLimbDrawFlex overrideLimbDraw) {
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x0C, cullDList);
+    gSPSegment(POLY_XLU_DISP++, 0x0C, cullDList);
+
+    Player_DrawImpl(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, lod, this->transformation, 0, this->actor.shape.face, overrideLimbDraw, func_80128BD0, &this->actor);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 void func_80846460(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80846460.s")
@@ -2205,7 +2214,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Scale(1.1f, 0.95f, 1.05f, MTXMODE_APPLY);
                 Matrix_RotateYS(-sp70, MTXMODE_APPLY);
                 Matrix_RotateXS(-temp_s0_2, MTXMODE_APPLY);
-                func_808463C0(play, &this->actor, sp80, gCullFrontDList, sp84);
+                Player_DrawGameplay(play, &this->actor, sp80, gCullFrontDList, sp84);
                 this->actor.scale.y = -this->actor.scale.y;
                 Matrix_Pop();
             }
@@ -2231,7 +2240,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Pop();
             }
 
-            func_808463C0(play, &this->actor, sp80, gCullBackDList, sp84);
+            Player_DrawGameplay(play, &this->actor, sp80, gCullBackDList, sp84);
         }
 
         func_801229A0(play, this);
