@@ -243,19 +243,19 @@ typedef struct PlayerModelIndices {
 typedef enum PlayerModelGroup {
     /*  0 */ PLAYER_MODELGROUP_0,
     /*  1 */ PLAYER_MODELGROUP_1,
-    /*  2 */ PLAYER_MODELGROUP_2,
+    /*  2 */ PLAYER_MODELGROUP_ONE_HAND_SWORD,
     /*  3 */ PLAYER_MODELGROUP_DEFAULT, // non-specific models, for items that don't have particular link models
     /*  4 */ PLAYER_MODELGROUP_4,
-    /*  5 */ PLAYER_MODELGROUP_5,
-    /*  6 */ PLAYER_MODELGROUP_6,
-    /*  7 */ PLAYER_MODELGROUP_7,
+    /*  5 */ PLAYER_MODELGROUP_TWO_HAND_SWORD,
+    /*  6 */ PLAYER_MODELGROUP_BOW,
+    /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
     /*  8 */ PLAYER_MODELGROUP_8,
-    /*  9 */ PLAYER_MODELGROUP_9,
-    /* 10 */ PLAYER_MODELGROUP_10,
-    /* 11 */ PLAYER_MODELGROUP_11,
+    /*  9 */ PLAYER_MODELGROUP_HOOKSHOT,
+    /* 10 */ PLAYER_MODELGROUP_STICK,
+    /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
-    /* 14 */ PLAYER_MODELGROUP_14,
+    /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
