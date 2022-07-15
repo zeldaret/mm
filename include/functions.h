@@ -1972,7 +1972,7 @@ s32 func_80123448(PlayState* play);
 s32 Player_IsGoronOrDeku(Player* player);
 s32 func_801234D4(PlayState* play);
 s32 func_80123590(PlayState* play, Actor* actor);
-s32 func_8012364C(PlayState* play, Player* player, s32 arg2);
+ItemID func_8012364C(PlayState* play, Player* player, s32 arg2);
 s32 func_80123810(PlayState* play);
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam);
 void Player_SetModelsForHoldingShield(Player* player);
