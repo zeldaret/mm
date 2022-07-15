@@ -222,7 +222,7 @@ void LifeMeter_Draw(PlayState* play) {
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
     TexturePtr temp = NULL;
-    s32 ddCount = gSaveContext.save.inventory.dungeonKeys[9] - 1;
+    s32 ddCount = gSaveContext.save.inventory.defenseHearts - 1;
 
     OPEN_DISPS(gfxCtx);
 

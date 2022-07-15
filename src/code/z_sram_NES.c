@@ -433,8 +433,8 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     Sram_ClearHighscores();
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1;
-        gSaveContext.save.inventory.dungeonKeys[i] = 0;
+        gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1; // remove boss key
+        DUNGEON_KEY_COUNT(i) = 0;
         gSaveContext.save.inventory.strayFairies[i] = 0;
     }
 
@@ -624,7 +624,9 @@ Inventory sSaveDefaultInventory = {
     // dungeonItems
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dungeonKeys
-    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+    // defenceHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
@@ -768,7 +770,9 @@ Inventory sSaveDebugInventory = {
     // dungeonItems
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
     // dungeonKeys
-    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8 },
+    // defenceHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
@@ -1142,7 +1146,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                     fileChooseCtx->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                     fileChooseCtx->health[sp76] = gSaveContext.save.playerData.health;
-                    fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.dungeonKeys[9];
+                    fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
                     fileChooseCtx->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                     fileChooseCtx->unk_24458[sp76] = gSaveContext.save.time;
                     fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
@@ -1237,7 +1241,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                         fileChooseCtx->healthCapacity[sp76] = gSaveContext.save.playerData.healthCapacity;
                         fileChooseCtx->health[sp76] = gSaveContext.save.playerData.health;
-                        fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.dungeonKeys[9];
+                        fileChooseCtx->unk_24454[sp76] = gSaveContext.save.inventory.defenseHearts;
                         fileChooseCtx->unk_24444[sp76] = gSaveContext.save.inventory.questItems;
                         fileChooseCtx->unk_24458[sp76] = gSaveContext.save.time;
                         fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
@@ -1350,7 +1354,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
             fileChooseCtx->unk_24438[fileChooseCtx->fileNum] = gSaveContext.save.playerData.healthCapacity;
             fileChooseCtx->unk_24440[fileChooseCtx->fileNum] = gSaveContext.save.playerData.health;
-            fileChooseCtx->unk_24456[fileChooseCtx->fileNum] = gSaveContext.save.inventory.dungeonKeys[9];
+            fileChooseCtx->unk_24456[fileChooseCtx->fileNum] = gSaveContext.save.inventory.defenseHearts;
             fileChooseCtx->unk_2444C[fileChooseCtx->fileNum] = gSaveContext.save.inventory.questItems;
             fileChooseCtx->unk_2445C[fileChooseCtx->fileNum] = gSaveContext.save.time;
             fileChooseCtx->unk_24464[fileChooseCtx->fileNum] = gSaveContext.save.day;
@@ -1393,7 +1397,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
         fileChooseCtx->healthCapacity[fileChooseCtx->fileNum] = gSaveContext.save.playerData.healthCapacity;
         fileChooseCtx->health[fileChooseCtx->fileNum] = gSaveContext.save.playerData.health;
-        fileChooseCtx->unk_24454[fileChooseCtx->fileNum] = gSaveContext.save.inventory.dungeonKeys[9];
+        fileChooseCtx->unk_24454[fileChooseCtx->fileNum] = gSaveContext.save.inventory.defenseHearts;
         fileChooseCtx->unk_24444[fileChooseCtx->fileNum] = gSaveContext.save.inventory.questItems;
         fileChooseCtx->unk_24458[fileChooseCtx->fileNum] = gSaveContext.save.time;
         fileChooseCtx->unk_24460[fileChooseCtx->fileNum] = gSaveContext.save.day;
@@ -1462,7 +1466,7 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
         fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
         fileChooseCtx->health[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.health;
-        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.dungeonKeys[9];
+        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.defenseHearts;
         fileChooseCtx->unk_24444[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.questItems;
         fileChooseCtx->unk_24458[fileChooseCtx->unk_24480] = gSaveContext.save.time;
         fileChooseCtx->unk_24460[fileChooseCtx->unk_24480] = gSaveContext.save.day;

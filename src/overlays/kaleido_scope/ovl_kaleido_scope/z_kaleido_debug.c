@@ -10,7 +10,13 @@
 s16 sCurSection = 0;
 s16 sCurRow = 0;
 
-s16 sSectionPositions[][3] = {
+typedef struct {
+    /* 0 */ s16 x;
+    /* 1 */ s16 y;
+    /* 2 */ s16 width;
+} SectionPosition;
+
+SectionPosition sSectionPositions[] = {
     { 65, 14, 41 },   { 145, 14, 21 },  { 193, 14, 35 },  { 42, 37, 22 },   { 65, 37, 22 },   { 88, 37, 22 },
     { 111, 37, 22 },  { 134, 37, 22 },  { 157, 37, 22 },  { 42, 51, 22 },   { 65, 51, 22 },   { 88, 51, 22 },
     { 111, 51, 22 },  { 134, 51, 22 },  { 157, 51, 22 },  { 42, 65, 22 },   { 65, 65, 22 },   { 88, 65, 22 },
@@ -255,8 +261,8 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     Gfx* gfxRef;
     s32 counterDigits[4];
     s16 slot;
-    s16 j;
     s16 i;
+    s16 j;
     s32 x;
     s32 y;
 
@@ -409,6 +415,7 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
         counterDigits[3] += 14;
     }
 
+    // Goron Lullaby Intro
     counterDigits[2] = 0;
     counterDigits[3] -= 14;
     if (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
@@ -543,14 +550,15 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
         counterDigits[1] += 12;
     }
 
+    // Draw a blue rectangle over the currently selected option
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 200, 120);
 
-    gDPFillRectangle(POLY_OPA_DISP++, sSectionPositions[sCurSection][0], sSectionPositions[sCurSection][1],
-                     sSectionPositions[sCurSection][0] + sSectionPositions[sCurSection][2],
-                     sSectionPositions[sCurSection][1] + 15);
+    gDPFillRectangle(POLY_OPA_DISP++, sSectionPositions[sCurSection].x, sSectionPositions[sCurSection].y,
+                     sSectionPositions[sCurSection].x + sSectionPositions[sCurSection].width,
+                     sSectionPositions[sCurSection].y + 15);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -608,6 +616,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
     // Handles the logic to change values based on the selected section
     switch (sCurSection) {
         case 0:
+            // Rupees
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
                 gSaveContext.save.playerData.rupees -= 100;
                 if (gSaveContext.save.playerData.rupees < 0) {
@@ -632,6 +641,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             break;
 
         case 1:
+            // Health capacity
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                 gSaveContext.save.playerData.healthCapacity -= 0x10;
                 if (gSaveContext.save.playerData.healthCapacity < 0x30) {
@@ -647,6 +657,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             break;
 
         case 2:
+            // Health
             if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                 Health_ChangeBy(play, -4);
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
@@ -659,6 +670,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
             break;
 
         case 75:
+            // Heart Pieces
             if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                 if (((gSaveContext.save.inventory.questItems & 0xF0000000) >> QUEST_HEART_PIECE_COUNT) != 0) {
                     gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT);
@@ -673,6 +685,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
 
         default:
             if (sCurSection <= 50) {
+                // Inventory
                 slot = sCurSection - 3;
                 if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
                     (slot == SLOT_MAGIC_BEANS)) {
@@ -777,7 +790,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         }
                     }
                 }
+
             } else if (sCurSection == 55) {
+                // Sword
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     value--;
@@ -806,8 +821,11 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
                     gSaveContext.save.playerData.swordHealth = 100;
                 }
+
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
+
             } else if (sCurSection == 56) {
+                // Shield
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     value--;
@@ -825,7 +843,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                     SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
                 }
+
             } else if (sCurSection == 71) {
+                // Quiver
                 value = GET_CUR_UPG_VALUE(UPG_QUIVER);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     value--;
@@ -841,7 +861,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                     Inventory_ChangeUpgrade(UPG_QUIVER, value);
                 }
+
             } else if (sCurSection == 72) {
+                // Bomb Bag
                 value = GET_CUR_UPG_VALUE(UPG_BOMB_BAG);
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     value--;
@@ -857,7 +879,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                     Inventory_ChangeUpgrade(UPG_BOMB_BAG, value);
                 }
+
             } else if (sCurSection == 73) {
+                // Gold Skulls (Swamp Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     if (((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
                         gSaveContext.save.skullTokenCount =
@@ -870,7 +894,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
                         (gSaveContext.save.skullTokenCount & 0xFFFF);
                 }
+
             } else if (sCurSection == 74) {
+                // Gold Skulls (Oceans Spider House)
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     if (((u16)gSaveContext.save.skullTokenCount) != 0) {
                         gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount - 1) & 0xFFFF) |
@@ -881,51 +907,64 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) |
                                                         (gSaveContext.save.skullTokenCount & 0xFFFF0000);
                 }
+
             } else if (sCurSection == 70) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
                 }
+
             } else if (sCurSection == 69) {
+                // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
                 }
+
             } else if (sCurSection <= 68) {
                 // Songs
                 slot = sCurSection - 51;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.questItems ^= gBitFlags[slot];
                 }
+
             } else if (sCurSection <= 79) {
+                // Keys
                 slot = sCurSection - 76;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.inventory.dungeonKeys[slot]--;
-                    if (gSaveContext.save.inventory.dungeonKeys[slot] < 0) {
-                        gSaveContext.save.inventory.dungeonKeys[slot] = -1;
+                    DUNGEON_KEY_COUNT(slot)--;
+                    if (DUNGEON_KEY_COUNT(slot) < 0) {
+                        DUNGEON_KEY_COUNT(slot) = -1;
                     }
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                            CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    if (gSaveContext.save.inventory.dungeonKeys[slot] < 0) {
-                        gSaveContext.save.inventory.dungeonKeys[slot] = 1;
+                    if (DUNGEON_KEY_COUNT(slot) < 0) {
+                        DUNGEON_KEY_COUNT(slot) = 1;
                     } else {
-                        gSaveContext.save.inventory.dungeonKeys[slot]++;
-                        if (gSaveContext.save.inventory.dungeonKeys[slot] >= 9) {
-                            gSaveContext.save.inventory.dungeonKeys[slot] = 9;
+                        DUNGEON_KEY_COUNT(slot)++;
+                        if (DUNGEON_KEY_COUNT(slot) >= 9) {
+                            DUNGEON_KEY_COUNT(slot) = 9;
                         }
                     }
                 }
+
             } else if (sCurSection <= 83) {
+                // Dungeon Items
                 slot = sCurSection - 80;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    // Map
                     gSaveContext.save.inventory.dungeonItems[slot] ^= 4;
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                    // Compass
                     gSaveContext.save.inventory.dungeonItems[slot] ^= 2;
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    // Boss Key
                     gSaveContext.save.inventory.dungeonItems[slot] ^= 1;
                 }
+
             } else if (sCurSection <= 87) {
+                // Stray Fairies
                 slot = sCurSection - 84;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                     gSaveContext.save.inventory.strayFairies[slot]--;
@@ -939,14 +978,16 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                         gSaveContext.save.inventory.strayFairies[slot] = 99;
                     }
                 }
+
             } else {
+                // Double Defence
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                     CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                     gSaveContext.save.playerData.doubleDefense ^= 1;
                     if (!gSaveContext.save.playerData.doubleDefense) {
-                        gSaveContext.save.inventory.dungeonKeys[9] = 0;
+                        gSaveContext.save.inventory.defenseHearts = 0;
                     } else {
-                        gSaveContext.save.inventory.dungeonKeys[9] = 20;
+                        gSaveContext.save.inventory.defenseHearts = 20;
                     }
                 }
             }
