@@ -11,7 +11,7 @@
 
 extern UNK_TYPE D_06008860;
 extern Gfx D_0600BDD8[];
-extern UNK_TYPE D_060178D0;
+extern AnimationHeader D_060178D0;
 
 void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);
@@ -217,6 +217,7 @@ void func_8082DCA0(PlayState* play, Player* this);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808308DC.s")
 
+void func_808309CC(PlayState* play, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808309CC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830A58.s")
@@ -740,8 +741,44 @@ void func_80835BC8(Player* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841744.s")
 
-void func_8084182C(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084182C.s")
+extern InitChainEntry D_8085D2C0[];
+
+extern LinkAnimationHeader* D_8085BE84[6];
+extern Vec3s D_8085D2C4;
+extern Vec3s D_8085D2C4;
+
+extern ColliderCylinderInit D_8085C2EC;
+extern ColliderCylinderInit D_8085C318;
+extern ColliderQuadInit D_8085C344;
+extern ColliderQuadInit D_8085C394;
+extern FlexSkeletonHeader D_060177B8;
+
+void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHeader) {
+    Actor_ProcessInitChain(&this->actor, D_8085D2C0);
+    this->currentYaw = this->actor.world.rot.y;
+
+    if ((((this->actor.params & 0xF00) >> 8) != 0xC) && ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
+        func_808309CC(play, &this->actor);
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, &this->unk_74C, &this->unk_7EB, 0x16);
+        this->skelAnime.baseTransl = D_8085D2C4;
+
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, &this->unk_929, &this->unk_9C8, 0x16);
+        this->unk_284.baseTransl = D_8085D2C4;
+
+        if (this->transformation == 1) {
+            SkelAnime_InitFlex(play, &this->unk_2C8, &D_060177B8, &D_060178D0, this->jointTable, this->morphTable, 5);
+        }
+
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->unk_04);
+    }
+
+    this->unk_3BC = -1;
+    Collider_InitAndSetCylinder(play, &this->cylinder, &this->actor, &D_8085C2EC);
+    Collider_InitAndSetCylinder(play, &this->shieldCylinder, &this->actor, &D_8085C318);
+    Collider_InitAndSetQuad(play, this->meleeWeaponQuads, &this->actor, &D_8085C344);
+    Collider_InitAndSetQuad(play, &this->meleeWeaponQuads[1], &this->actor, &D_8085C344);
+    Collider_InitAndSetQuad(play, &this->shieldQuad, &this->actor, &D_8085C394);
+}
 
 void func_80841A50(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841A50.s")
@@ -926,7 +963,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     void* temp_v0_3;
     Player* this = (Player* ) thisx;
 
-    play->playerInit = func_8084182C;
+    play->playerInit = Player_InitCommon;
     play->playerUpdate = func_80844EF8;
     play->unk_18770 = func_8085B170;
     play->startPlayerFishing = func_8085B134;
@@ -1003,7 +1040,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     func_80831990(play, &this->actor, 0xFFU);
     Player_SetEquipmentData(play, this);
     this->prevBoots = this->currentBoots;
-    func_8084182C(&this->actor, play, gPlayerSkeletons[this->transformation]);
+    Player_InitCommon(&this->actor, play, gPlayerSkeletons[this->transformation]);
     if (this->actor.shape.rot.z != 0) {
         this->actor.shape.rot.z = 0;
         // todo: declaration
@@ -1289,7 +1326,6 @@ extern Gfx D_040528B0[];
 extern Gfx D_060127B0[];
 extern Gfx D_060134D0[];
 extern UNK_TYPE D_06014684;
-extern FlexSkeletonHeader D_060177B8;
 
 #if 0
 void Player_Draw(Actor* thisx, PlayState* play) {

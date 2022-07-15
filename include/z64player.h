@@ -695,7 +695,13 @@ typedef struct Player {
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
-    /* 0x748 */ char unk_748[0x320];
+    /* 0x748 */ UNK_TYPE1 unk_748[0x4];
+    /* 0x74C */ u8 unk_74C[0x9F];
+    /* 0x7EB */ u8 unk_7EB[0x9F];
+    /* 0x88A */ UNK_TYPE1 unk_88A[0x9F];
+    /* 0x929 */ u8 unk_929[0x9F];
+    /* 0x9C8 */ u8 unk_9C8[0x9F];
+    /* 0xA67 */ UNK_TYPE1 unk_A67[0x1];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
