@@ -206,8 +206,48 @@ void func_80A5665C(EnRat* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-void func_80A566E0(EnRat* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A566E0.s")
+void func_80A566E0(EnRat* this) {
+    Vec3f sp74;
+    s16 var_v1;
+
+    if (this->actionFunc != func_80A57384) {
+        var_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        if (this->unk_218.y < -0.25f) {
+            var_v1 -= 0x8000;
+        }
+    } else {
+        if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
+            Vec3f sp64;
+            Vec3f sp58;
+            Vec3f sp4C;
+            Vec3f sp40;
+
+            Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
+            Matrix_RotateXS(-this->actor.home.rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
+            Matrix_MultVec3f(&this->unk_218, &sp40);
+            Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_20C, &sp64);
+            Matrix_MultVec3f(&sp64, &sp4C);
+            Matrix_MultVec3f(&this->actor.home.pos, &sp64);
+            Matrix_MultVec3f(&this->actor.world.pos, &sp58);
+            var_v1 = Math_Vec3f_Yaw(&sp58, &sp64) - Math_Vec3f_Yaw(&sp58, &sp4C);
+            if (sp40.y < -0.25f) {
+                var_v1 -= 0x8000;
+            }
+
+            var_v1 += (s16)randPlusMinusPoint5Scaled(2048.0f);
+        } else {
+            var_v1 = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(2048.0f) : 0;
+        }
+    }
+
+    var_v1 = CLAMP(var_v1, -0x800, 0x800);
+    Matrix_RotateAxisF(var_v1 * 0.0000958738f, &this->unk_218, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->unk_20C, &sp74);
+    Math_Vec3f_Copy(&this->unk_20C, &sp74);
+    Math3D_CrossProduct(&this->unk_218, &this->unk_20C, &this->unk_224);
+    this->unk_18D = 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A56994.s")
 
@@ -215,17 +255,14 @@ void func_80A566E0(EnRat* this);
 
 void func_80A56EB8(EnRat* this, Vec3f* arg1, Vec3f* arg2) {
     f32 temp_fv0;
-    Vec3f* tmp2;
-    Vec3f* tmp1;
-    Vec3f* tmp0;
 
     temp_fv0 = arg1->x + this->unk_254;
-    tmp2 = &this->unk_224;
-    tmp1 = &this->unk_218;
-    tmp0 = &this->unk_20C;
-    arg2->x = this->actor.world.pos.x + (tmp2->x * temp_fv0) + (tmp1->x * arg1->y) + (tmp0->x * arg1->z);
-    arg2->y = this->actor.world.pos.y + (tmp2->y * temp_fv0) + (tmp1->y * arg1->y) + (tmp0->y * arg1->z);
-    arg2->z = this->actor.world.pos.z + (tmp2->z * temp_fv0) + (tmp1->z * arg1->y) + (tmp0->z * arg1->z);
+    arg2->x = this->actor.world.pos.x + (this->unk_224.x * temp_fv0) + (this->unk_218.x * arg1->y) +
+              (this->unk_20C.x * arg1->z);
+    arg2->y = this->actor.world.pos.y + (this->unk_224.y * temp_fv0) + (this->unk_218.y * arg1->y) +
+              (this->unk_20C.y * arg1->z);
+    arg2->z = this->actor.world.pos.z + (this->unk_224.z * temp_fv0) + (this->unk_218.z * arg1->y) +
+              (this->unk_20C.z * arg1->z);
 }
 
 void func_80A56F68(EnRat* this, PlayState* play) {
