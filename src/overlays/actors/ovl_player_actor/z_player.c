@@ -7,6 +7,14 @@
 #include "global.h"
 #include "z64rumble.h"
 
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+#include "objects/object_link_boy/object_link_boy.h"
+#include "objects/object_link_goron/object_link_goron.h"
+#include "objects/object_link_zora/object_link_zora.h"
+#include "objects/object_link_nuts/object_link_nuts.h"
+#include "objects/object_link_child/object_link_child.h"
+
 #define THIS ((Player*)thisx)
 
 extern UNK_TYPE D_06008860;
@@ -22,6 +30,10 @@ void Player_Draw(Actor* thisx, PlayState* play);
 void func_80844EF8(Player* player, PlayState* play, Input* input);
 s32 func_8085B134(PlayState* play);
 void func_8085B170(PlayState* play, Player* player);
+
+
+
+extern LinkAnimationHeader* D_8085BE84[6];
 
 s32 func_8082DA90(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
@@ -137,7 +149,18 @@ void func_8082DCA0(PlayState* play, Player* this);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ECE0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED20.s")
+LinkAnimationHeader* func_8082ED20(Player* this) {
+    if ((this->transformation == PLAYER_FORM_ZORA) || (this->actor.id != ACTOR_PLAYER)) {
+        return &gameplay_keep_Linkanim_00E410;
+    }
+    if (this->transformation == PLAYER_FORM_GORON) {
+        return &gameplay_keep_Linkanim_00E260;
+    }
+    if (this->currentMask == PLAYER_MASK_SCENTS) {
+        return &gameplay_keep_Linkanim_00D0B0;
+    }
+    return D_8085BE84[this->modelAnimType];
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED94.s")
 
@@ -217,7 +240,19 @@ void func_8082DCA0(PlayState* play, Player* this);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808308DC.s")
 
-void func_808309CC(PlayState* play, Player* player);
+void func_808309CC(PlayState* play, Player* this);
+/*
+void func_808309CC(PlayState* play, Player* player) {
+    if (player->unk_AC4 == func_80848808) {
+        func_808308DC(play, &player->actor);
+    }
+    func_8082F43C(play, player, D_8085C9F0[player->itemActionParam]);
+    player->unk_ACC = 0;
+    player->unk_AA4 = 0;
+    func_8082DCA0(play, player);
+    player->stateFlags3 &= 0xBFFFFFFF;
+}
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808309CC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830A58.s")
@@ -743,7 +778,6 @@ void func_80835BC8(Player* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 
 extern InitChainEntry D_8085D2C0[];
 
-extern LinkAnimationHeader* D_8085BE84[6];
 extern Vec3s D_8085D2C4;
 extern Vec3s D_8085D2C4;
 
@@ -758,11 +792,11 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     this->currentYaw = this->actor.world.rot.y;
 
     if ((((this->actor.params & 0xF00) >> 8) != 0xC) && ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
-        func_808309CC(play, &this->actor);
-        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, &this->unk_74C, &this->unk_7EB, 0x16);
+        func_808309CC(play, this);
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, (void*)this->unk_74C, (void*)this->unk_7EB, 0x16);
         this->skelAnime.baseTransl = D_8085D2C4;
 
-        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, &this->unk_929, &this->unk_9C8, 0x16);
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929, (void*)this->unk_9C8, 0x16);
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == 1) {
@@ -775,7 +809,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     this->unk_3BC = -1;
     Collider_InitAndSetCylinder(play, &this->cylinder, &this->actor, &D_8085C2EC);
     Collider_InitAndSetCylinder(play, &this->shieldCylinder, &this->actor, &D_8085C318);
-    Collider_InitAndSetQuad(play, this->meleeWeaponQuads, &this->actor, &D_8085C344);
+    Collider_InitAndSetQuad(play, &this->meleeWeaponQuads[0], &this->actor, &D_8085C344);
     Collider_InitAndSetQuad(play, &this->meleeWeaponQuads[1], &this->actor, &D_8085C344);
     Collider_InitAndSetQuad(play, &this->shieldQuad, &this->actor, &D_8085C394);
 }
