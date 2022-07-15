@@ -2088,7 +2088,7 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
-void Player_DrawCircusLeaderMask(PlayState* play, Actor* actor) {
+void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
     static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
@@ -2310,7 +2310,7 @@ Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
 Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
 Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_DrawBunnyMask.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_DrawBunnyHood.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127B64.s")
 
@@ -2323,7 +2323,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
 void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128388.s")
 
-void Player_DrawGreatFairyMask(PlayState* play, Player* player) {
+void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     s32 pad;
     Mtx* sp90 = GRAPH_ALLOC(play->state.gfxCtx, 6 * sizeof(Mtx));
     Vec3f sp84;

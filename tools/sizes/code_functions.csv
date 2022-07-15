@@ -1777,14 +1777,14 @@ asm/non_matchings/code/z_player_lib/func_801271B0.s,func_801271B0,0x801271B0,0xA
 asm/non_matchings/code/z_player_lib/func_80127438.s,func_80127438,0x80127438,0x14
 asm/non_matchings/code/z_player_lib/func_80127488.s,func_80127488,0x80127488,0x31
 asm/non_matchings/code/z_player_lib/Player_DrawCouplesMask.s,Player_DrawCouplesMask,0x8012754C,0x12
-asm/non_matchings/code/z_player_lib/Player_DrawCircusLeaderMask.s,Player_DrawCircusLeaderMask,0x80127594,0xD9
+asm/non_matchings/code/z_player_lib/Player_DrawCircusLeadersMask.s,Player_DrawCircusLeadersMask,0x80127594,0xD9
 asm/non_matchings/code/z_player_lib/Player_DrawBlastMask.s,Player_DrawBlastMask,0x801278F8,0x5A
-asm/non_matchings/code/z_player_lib/Player_DrawBunnyMask.s,Player_DrawBunnyMask,0x80127A60,0x41
+asm/non_matchings/code/z_player_lib/Player_DrawBunnyHood.s,Player_DrawBunnyHood,0x80127A60,0x41
 asm/non_matchings/code/z_player_lib/func_80127B64.s,func_80127B64,0x80127B64,0x21
 asm/non_matchings/code/z_player_lib/func_80127BE8.s,func_80127BE8,0x80127BE8,0x6F
 asm/non_matchings/code/z_player_lib/func_80127DA4.s,func_80127DA4,0x80127DA4,0x179
 asm/non_matchings/code/z_player_lib/func_80128388.s,func_80128388,0x80128388,0x46
-asm/non_matchings/code/z_player_lib/Player_DrawGreatFairyMask.s,Player_DrawGreatFairyMask,0x801284A0,0x68
+asm/non_matchings/code/z_player_lib/Player_DrawGreatFairysMask.s,Player_DrawGreatFairysMask,0x801284A0,0x68
 asm/non_matchings/code/z_player_lib/func_80128640.s,func_80128640,0x80128640,0x14D
 asm/non_matchings/code/z_player_lib/func_80128B74.s,func_80128B74,0x80128B74,0x17
 asm/non_matchings/code/z_player_lib/func_80128BD0.s,func_80128BD0,0x80128BD0,0x4C8
