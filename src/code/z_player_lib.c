@@ -849,18 +849,17 @@ Gfx* D_801C00AC[][2] = {
 };
 
 Gfx* D_801C00BC[][2] = {
-    { gLinkHumanSheathDL, gLinkHumanSheathDL },
-    { object_link_child_DL_01DB40, object_link_child_DL_01DB40 },
-    { object_link_child_DL_01DB60, object_link_child_DL_01DB60 },
+    { gLinkHumanSheathedKokiriSwordDL, gLinkHumanSheathedKokiriSwordDL },
+    { gLinkHumanSheathedRazorSwordDL, gLinkHumanSheathedRazorSwordDL },
+    { gLinkHumanSheathedGildedSwordDL, gLinkHumanSheathedGildedSwordDL },
 };
 
 Gfx* D_801C00D4[][2] = {
-    { object_link_child_DL_017700, object_link_child_DL_017700 },
-    { object_link_child_DL_017338, object_link_child_DL_017338 },
-    { object_link_child_DL_016B80, object_link_child_DL_016B80 },
+    { gLinkHumanKokiriSwordSheathDL, gLinkHumanKokiriSwordSheathDL },
+    { gLinkHumanRazorSwordSheathDL, gLinkHumanRazorSwordSheathDL },
+    { gLinkHumanGildedSwordSheathDL, gLinkHumanGildedSwordSheathDL },
 };
 
-// Possibly two-handed swords
 Gfx* gPlayerLeftHandTwoHandSwordDLs[2 * PLAYER_FORM_MAX] = {
     gLinkFierceDeityLeftHandHoldingSwordDL,
     gLinkFierceDeityLeftHandHoldingSwordDL,

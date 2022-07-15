@@ -87,7 +87,7 @@
         <DList Name="object_link_child_DL_0168C0" Offset="0x168C0" />
         <DList Name="object_link_child_DL_016950" Offset="0x16950" />
         <DList Name="object_link_child_DL_0169E0" Offset="0x169E0" />
-        <DList Name="object_link_child_DL_016B80" Offset="0x16B80" />
+        <DList Name="gLinkHumanGildedSwordSheathDL" Offset="0x16B80" />
         <DList Name="object_link_child_DL_016BA0" Offset="0x16BA0" />
         <DList Name="object_link_child_DL_016C88" Offset="0x16C88" />
         <DList Name="object_link_child_DL_016D58" Offset="0x16D58" />
@@ -100,9 +100,9 @@
         <DList Name="object_link_child_DL_0171D0" Offset="0x171D0" />
         <DList Name="object_link_child_DL_017270" Offset="0x17270" />
         <DList Name="gLinkHumanGildedSwordBladeDL" Offset="0x17310" />
-        <DList Name="object_link_child_DL_017338" Offset="0x17338" />
+        <DList Name="gLinkHumanRazorSwordSheathDL" Offset="0x17338" />
         <DList Name="gLinkHumanHylianShieldDL" Offset="0x17458" />
-        <DList Name="object_link_child_DL_017700" Offset="0x17700" />
+        <DList Name="gLinkHumanKokiriSwordSheathDL" Offset="0x17700" />
         <DList Name="object_link_child_DL_017818" Offset="0x17818" />
         <DList Name="gLinkHumanHookshotDL" Offset="0x17858" />
         <DList Name="object_link_child_DL_017B40" Offset="0x17B40" />
@@ -137,12 +137,12 @@
 
         <DList Name="gLinkHumanSheathEmptyDL" Offset="0x1DA90" />
 
-        <Mtx Name="gLinkHumanSheathMtx" Offset="0x1DA98" />
-        <DList Name="gLinkHumanSheathDL" Offset="0x1DAD8" />
+        <Mtx Name="gLinkHumanSheathedKokiriSwordMtx" Offset="0x1DA98" />
+        <DList Name="gLinkHumanSheathedKokiriSwordDL" Offset="0x1DAD8" />
 
-        <Mtx Name="object_link_child_Mtx_01DB00" Offset="0x1DB00" />
-        <DList Name="object_link_child_DL_01DB40" Offset="0x1DB40" />
-        <DList Name="object_link_child_DL_01DB60" Offset="0x1DB60" />
+        <Mtx Name="gLinkHumanSheathedRazorSwordMtx" Offset="0x1DB00" />
+        <DList Name="gLinkHumanSheathedRazorSwordDL" Offset="0x1DB40" />
+        <DList Name="gLinkHumanSheathedGildedSwordDL" Offset="0x1DB60" />
         <DList Name="object_link_child_DL_01DBC8" Offset="0x1DBC8" />
         <DList Name="object_link_child_DL_01DC18" Offset="0x1DC18" />
 
