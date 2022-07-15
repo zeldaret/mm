@@ -10,7 +10,7 @@
 #define THIS ((Player*)thisx)
 
 extern UNK_TYPE D_06008860;
-extern UNK_TYPE D_0600BDD8;
+extern Gfx D_0600BDD8[];
 extern UNK_TYPE D_060178D0;
 
 void Player_Init(Actor* thisx, PlayState* play);
@@ -1260,9 +1260,393 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808463C0.s")
 
+void func_80846460(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80846460.s")
 
+
+extern struct_80124618 D_8085D510[2];
+extern struct_80124618 D_8085D520[2];
+extern struct_80124618 D_8085D530[2];
+extern struct_80124618 D_8085D540[2];
+extern struct_80124618* D_8085D550[3];
+extern struct_80124618* D_8085D55C[3];
+extern struct_80124618* D_8085D568[3];
+extern Gfx* D_8085D574[3];
+
+
+extern Color_RGB8 D_8085D580;
+extern Color_RGB8 D_8085D584;
+extern Gfx D_0600C540[];
+
+extern UNK_TYPE D_06013138;
+
+extern UNK_TYPE D_0400E318;
+extern UNK_TYPE D_0400E330;
+extern UNK_TYPE D_0400E348;
+extern UNK_TYPE D_0400E430;
+extern Gfx D_04050D10[];
+extern Gfx D_040528B0[];
+extern Gfx D_060127B0[];
+extern Gfx D_060134D0[];
+extern UNK_TYPE D_06014684;
+extern FlexSkeletonHeader D_060177B8;
+
+#if 0
+void Player_Draw(Actor* thisx, PlayState* play) {
+    Player* this = (Player* ) thisx;
+    s32 spEC;
+    struct_80124618** spE8;
+    struct_80124618** spE4;
+    f32 spE0;
+    Gfx** spDC;
+    s32 spD8;
+    Gfx* spCC;
+    //GraphicsContext* spC4;
+    Color_RGB8 spBC;
+    f32 spB8;
+    f32 spB4;
+    u8 sp9B;
+    s32 (*sp84)(PlayState*, s32, Gfx**, Vec3f*, Vec3s*, Actor*);
+    s32 sp80;
+    Vec3f sp74;
+    s16 sp70;
+    f32 sp64;
+    Vec3f* sp48;
+    //GraphicsContext* temp_s0;
+    //GraphicsContext* var_a0;
+    f32 temp_fa0;
+    f32 temp_fa1;
+    f32 temp_ft2;
+    f32 temp_fv0;
+    f32 var_fa1;
+    f32 var_fv1;
+    s16 temp_s0_2;
+    s16 temp_v0_10;
+    s16 temp_v0_7;
+    s8 temp_v1;
+    u32 temp_v0_15;
+    u32 temp_v1_2;
+
+    spEC = 0;
+    Math_Vec3f_Copy(&this->unk_D6C, this->bodyPartsPos);
+    if (this->stateFlags3 & 0x40100) {
+        spE8 = D_8085D550;
+        // temp_s0 = play->state.gfxCtx;
+
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Matrix_Push();
+        func_8012C268(play);
+        spEC = 1;
+        if (this->stateFlags3 & 0x40000) {
+            Matrix_SetTranslateRotateYXZ(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, &gZeroVec3s);
+            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+            spE8 = D_8085D568;
+            spE0 = 0.0f;
+        } else {
+            Matrix_Translate(0.0f, -this->unk_ABC, 0.0f, MTXMODE_APPLY);
+            temp_ft2 = (f32) (this->unk_AE8 - 6);
+            spE0 = temp_ft2;
+            if (temp_ft2 < 0.0f) {
+                spE8 = D_8085D55C;
+                spE0 = (f32) this->unk_B86;
+            }
+        }
+        spDC = D_8085D574;
+        sp48 = &this->unk_AF0[1];
+        spD8 = 0;
+        spE4 = spE8;
+        do {
+            Matrix_Push();
+            func_80124618(*spE4, spE0, sp48);
+            Matrix_Scale(this->unk_AF0[1].x, this->unk_AF0[1].y, this->unk_AF0[1].z, MTXMODE_APPLY);
+
+            #if 0
+            temp_v0_2 = temp_s0->polyOpa.p;
+            temp_s0->polyOpa.p = temp_v0_2 + 8;
+            temp_v0_2->words.w0 = 0xDA380003;
+            spCC = temp_v0_2;
+            spCC->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+            #endif
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            #if 0
+            temp_v0_3 = temp_s0->polyOpa.p;
+            temp_s0->polyOpa.p = temp_v0_3 + 8;
+            temp_v0_3->words.w0 = 0xDE000000;
+            temp_v0_3->words.w1 = *spDC;
+            #endif
+            gSPDisplayList(POLY_OPA_DISP++, *spDC);
+
+            Matrix_Pop();
+            spD8 = spD8 + 1;
+            spDC += 4;
+            spE4 += 4;
+        } while (spD8 != 3);
+        Matrix_Pop();
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+
+    if ((this->stateFlags2 & 0x20000000) && (this->unk_ABC > -3900.0f)) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        //spC4 = play->state.gfxCtx;
+        if (spEC == 0) {
+            func_8012C268(play);
+        }
+
+        func_8012C2DC(play->state.gfxCtx);
+        func_800B8050(&this->actor, play, 0);
+        func_800B8118(&this->actor, play, 0);
+        func_80122868(play, this);
+        if (this->stateFlags3 & 0x1000) {
+            temp_fv0 = this->unk_ABC;
+            spB8 = temp_fv0 + 1.0f;
+            spB4 = 1.0f - (temp_fv0 * 0.5f);
+            func_80846460(this);
+            Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (1200.0f * this->actor.scale.y * spB8), this->actor.world.pos.z, MTXMODE_NEW);
+            if (this->unk_B86 != 0) {
+                Matrix_RotateYS(this->unk_B28, MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk_B86, MTXMODE_APPLY);
+                Matrix_RotateYS((s16) (this->unk_B28 * -1), MTXMODE_APPLY);
+            }
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+            if (spB8 < spB4) {
+                var_fv1 = spB4;
+            } else {
+                var_fv1 = spB8;
+            }
+            Matrix_Scale(this->actor.scale.x * spB4 * 1.15f, this->actor.scale.y * spB8 * 1.15f, var_fv1 * this->actor.scale.z * 1.15f, MTXMODE_APPLY);
+            Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+            Scene_SetRenderModeXlu(play, 0, 1U);
+            Lib_LerpRGB(&D_8085D580, &D_8085D584, this->unk_B08[2], &spBC);
+
+            #if 0
+            temp_v0_4 = spC4->polyOpa.p;
+            spC4->polyOpa.p = temp_v0_4 + 8;
+            temp_v0_4->words.w0 = 0xFB000000;
+            temp_v0_4->words.w1 = ((u8) spBC.r << 0x18) | (spBC.g << 0x10) | (spBC.b << 8) | 0xFF;
+            #endif
+            gDPSetEnvColor(POLY_OPA_DISP++, (u8) spBC.r, spBC.g, spBC.b, 255);
+
+            #if 0
+            temp_v0_5 = spC4->polyOpa.p;
+            spC4->polyOpa.p = temp_v0_5 + 8;
+            temp_v0_5->words.w0 = 0xDA380003;
+            temp_v0_5->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+            #endif
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            #if 0
+            temp_v0_6 = spC4->polyOpa.p;
+            spC4->polyOpa.p = temp_v0_6 + 8;
+            temp_v0_6->words.w0 = 0xDE000000;
+            temp_v0_6->words.w1 = (u32) &D_0600BDD8;
+            #endif
+            gSPDisplayList(POLY_OPA_DISP++, D_0600BDD8);
+
+
+            temp_v0_7 = this->unk_B88;
+
+            if (temp_v0_7 != 0) {
+                if (temp_v0_7 < 3) {
+                    func_80124618(D_8085D540, (f32) temp_v0_7, this->unk_AF0);
+                    Matrix_Scale(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, MTXMODE_APPLY);
+                    #if 0
+                    temp_v0_8 = spC4->polyOpa.p;
+                    spC4->polyOpa.p = temp_v0_8 + 8;
+                    temp_v0_8->words.w0 = 0xDA380003;
+                    temp_v0_8->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+                    #endif
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                }
+                #if 0
+                temp_v0_9 = spC4->polyOpa.p;
+                spC4->polyOpa.p = temp_v0_9 + 8;
+                temp_v0_9->words.w0 = 0xDE000000;
+                temp_v0_9->words.w1 = (u32) &D_0600C540;
+                #endif
+                gSPDisplayList(POLY_OPA_DISP++, D_0600C540);
+            }
+
+            func_80122BA4(play, &this->unk_3D0, 1, 0xFF);
+            func_80122BA4(play, &this->unk_3D0, 2, 0xFF);
+            temp_v0_10 = this->unk_B88;
+
+            if (temp_v0_10 < 3) {
+                temp_v1 = this->unk_AE7;
+                if (temp_v1 >= 5) {
+                    temp_fa1 = (f32) (temp_v1 - 4) * 0.02f;
+
+                    if (temp_v0_10 != 0) {
+                        sp9B = (temp_v0_10 * -0x55) + 0xFF;
+                    } else {
+                        sp9B = (200.0f * temp_fa1);
+                    }
+
+                    if (temp_v0_10 != 0) {
+                        var_fa1 = 0.65f;
+                    } else {
+                        var_fa1 = temp_fa1 * 1.0f;
+                    }
+
+                    Matrix_Scale(1.0f, var_fa1, var_fa1, MTXMODE_APPLY);
+
+                    #if 0
+                    temp_v0_11 = spC4->polyXlu.p;
+                    spC4->polyXlu.p = temp_v0_11 + 8;
+                    temp_v0_11->words.w0 = 0xDA380003;
+                    temp_v0_11->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+                    #endif
+                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06013138));
+
+                    #if 0
+                    temp_v0_12 = spC4->polyXlu.p;
+                    spC4->polyXlu.p = temp_v0_12 + 8;
+                    temp_v0_12->words.w0 = 0xFB000000;
+                    temp_v0_12->words.w1 = sp9B | 0x9B000000;
+                    #endif
+                    gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
+
+                    #if 0
+                    temp_v0_13 = spC4->polyXlu.p;
+                    spC4->polyXlu.p = temp_v0_13 + 8;
+                    temp_v0_13->words.w1 = (u32) &D_060127B0;
+                    temp_v0_13->words.w0 = 0xDE000000;
+                    #endif
+                    gSPDisplayList(POLY_XLU_DISP++, D_060127B0);
+
+                    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06014684));
+
+                    #if 0
+                    temp_v0_14 = spC4->polyXlu.p;
+                    spC4->polyXlu.p = temp_v0_14 + 8;
+                    temp_v0_14->words.w1 = (u32) &D_060134D0;
+                    temp_v0_14->words.w0 = 0xDE000000;
+                    #endif
+                    gSPDisplayList(POLY_XLU_DISP++, D_060134D0);
+                }
+            }
+        } else if ((this->transformation == 1) && (this->stateFlags1 & 0x400000)) {
+            func_80846460(this);
+            SkelAnime_DrawFlexOpa(play, this->unk_2C8.skeleton, this->unk_2C8.jointTable, this->unk_2C8.dListCount, NULL, NULL, NULL);
+        } else {
+            sp84 = func_80125D4C;
+
+            if ((this->csMode != 0) || (this->actor.projectedPos.z < 320.0f)) {
+                sp80 = 0;
+            } else {
+                sp80 = 1;
+            }
+
+            if (this->stateFlags1 & 0x100000) {
+                SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->actor.focus.pos, &sp74);
+                if (sp74.z < -4.0f) {
+                    sp84 = func_801262C8;
+                }
+            }
+
+            if (this->stateFlags2 & 0x04000000) {
+                temp_v0_15 = play->gameplayFrames;
+                temp_s0_2 = temp_v0_15 * 0x258;
+                sp70 = temp_v0_15 * 0x3E8;
+                Matrix_Push();
+                this->actor.scale.y = -this->actor.scale.y;
+                Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + (2.0f * this->actor.depthInWater) + (this->unk_ABC * this->actor.scale.y), this->actor.world.pos.z, &this->actor.shape.rot);
+                Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+                Matrix_RotateXS(temp_s0_2, MTXMODE_APPLY);
+                Matrix_RotateYS(sp70, MTXMODE_APPLY);
+                Matrix_Scale(1.1f, 0.95f, 1.05f, MTXMODE_APPLY);
+                Matrix_RotateYS(-sp70, MTXMODE_APPLY);
+                Matrix_RotateXS(-temp_s0_2, MTXMODE_APPLY);
+                func_808463C0(play, &this->actor, sp80, gCullFrontDList, sp84);
+                this->actor.scale.y = -this->actor.scale.y;
+                Matrix_Pop();
+            }
+
+            #if 0
+            temp_v0_16 = spC4->polyOpa.p;
+            spC4->polyOpa.p = temp_v0_16 + 8;
+            temp_v0_16->words.w1 = 0;
+            temp_v0_16->words.w0 = 0xD9FFF9FF;
+            temp_v0_17 = spC4->polyXlu.p;
+            spC4->polyXlu.p = temp_v0_17 + 8;
+            temp_v0_17->words.w1 = 0;
+            temp_v0_17->words.w0 = 0xD9FFF9FF;
+            #endif
+            gSPClearGeometryMode(POLY_OPA_DISP++, G_CULL_BOTH);
+            gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BOTH);
+
+            if ((this->transformation == 2) && (this->unk_B62 != 0) && !(this->stateFlags3 & 0x8000)) {
+                Matrix_Push();
+                Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, 0.0f, -1800.0f, MTXMODE_APPLY);
+                Player_DrawZoraShield(play, this);
+                Matrix_Pop();
+            }
+
+            func_808463C0(play, &this->actor, sp80, gCullBackDList, sp84);
+        }
+
+        func_801229A0(play, this);
+
+        if (this->stateFlags2 & 0x4000) {
+            temp_fa0 = this->unk_B48;
+            #if 0
+            temp_v0_18 = spC4->polyXlu.p;
+            spC4->polyXlu.p = temp_v0_18 + 8;
+            temp_v0_18->words.w0 = 0xDB060020;
+            temp_v1_2 = play->gameplayFrames;
+            temp_v0_18->words.w1 = Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32) temp_v1_2 & 0x7F, 0x20, 0x20, 1, 0U, ((s32) temp_v1_2 * -2) & 0x7F, 0x20, 0x20);
+            #endif
+            temp_v1_2 = play->gameplayFrames;
+            gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32) temp_v1_2 & 0x7F, 0x20, 0x20, 1, 0U, ((s32) temp_v1_2 * -2) & 0x7F, 0x20, 0x20));
+
+            Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
+
+            #if 0
+            temp_v0_19 = spC4->polyXlu.p;
+            spC4->polyXlu.p = temp_v0_19 + 8;
+            temp_v0_19->words.w0 = 0xDA380003;
+            temp_v0_19->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
+            #endif
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            #if 0
+            temp_v0_20 = spC4->polyXlu.p;
+            spC4->polyXlu.p = temp_v0_20 + 8;
+            temp_v0_20->words.w1 = 0x003264FF;
+            temp_v0_20->words.w0 = 0xFB000000;
+            #endif
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0x32, 0x64, 255);
+
+            #if 0
+            temp_v0_21 = spC4->polyXlu.p;
+            spC4->polyXlu.p = temp_v0_21 + 8;
+            temp_v0_21->words.w1 = (u32) &D_04050D10;
+            temp_v0_21->words.w0 = 0xDE000000;
+            #endif
+            gSPDisplayList(POLY_XLU_DISP++, D_04050D10);
+        }
+
+        if (this->unk_B2A > 0) {
+            Player_DrawGetItem(play, this);
+        }
+
+        func_80122D44(play, &this->unk_3D0);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+
+    play->actorCtx.unk5 &= 0xFFF7;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Draw.s")
+#endif
 
 void Player_Destroy(Actor* thisx, PlayState* play) {
     Player* this = (Player* ) thisx;
