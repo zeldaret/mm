@@ -23,6 +23,12 @@ void func_80A57488(EnRat* this);
 void func_80A574E8(EnRat* this, PlayState* play);
 void func_80A575F4(EnRat* this);
 void func_80A5764C(EnRat* this, PlayState* play);
+void func_80A57984(EnRat* this, PlayState* play);
+void func_80A57A9C(EnRat* this, PlayState* play);
+void func_80A5723C(EnRat* this, PlayState* play);
+void func_80A57A08(EnRat* this, PlayState* play);
+s32 func_80A56AFC(EnRat* this, PlayState* play);
+void func_80A57918(EnRat* this);
 
 #if 0
 const ActorInit En_Rat_InitVars = {
@@ -177,9 +183,9 @@ void func_80A563CC(EnRat* this) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultVecZ(1.0f, this->unk_20C);
-    Matrix_MultVecY(1.0f, &this->unk_20C[1]);
-    Matrix_MultVecX(1.0f, &this->unk_20C[2]);
+    Matrix_MultVecZ(1.0f, &this->unk_20C);
+    Matrix_MultVecY(1.0f, &this->unk_218);
+    Matrix_MultVecX(1.0f, &this->unk_224);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A56444.s")
@@ -187,19 +193,20 @@ void func_80A563CC(EnRat* this) {
 void func_80A5665C(EnRat* this) {
     MtxF sp18;
 
-    sp18.xx = this->unk_20C[2].x;
-    sp18.yx = this->unk_20C[2].y;
-    sp18.zx = this->unk_20C[2].z;
-    sp18.xy = this->unk_20C[1].x;
-    sp18.yy = this->unk_20C[1].y;
-    sp18.zy = this->unk_20C[1].z;
-    sp18.xz = this->unk_20C[0].x;
-    sp18.yz = this->unk_20C[0].y;
-    sp18.zz = this->unk_20C[0].z;
+    sp18.xx = this->unk_224.x;
+    sp18.yx = this->unk_224.y;
+    sp18.zx = this->unk_224.z;
+    sp18.xy = this->unk_218.x;
+    sp18.yy = this->unk_218.y;
+    sp18.zy = this->unk_218.z;
+    sp18.xz = this->unk_20C.x;
+    sp18.yz = this->unk_20C.y;
+    sp18.zz = this->unk_20C.z;
     Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, 0);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
+void func_80A566E0(EnRat* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A566E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A56994.s")
@@ -213,9 +220,9 @@ void func_80A56EB8(EnRat* this, Vec3f* arg1, Vec3f* arg2) {
     Vec3f* tmp0;
 
     temp_fv0 = arg1->x + this->unk_254;
-    tmp2 = &this->unk_20C[2];
-    tmp1 = &this->unk_20C[1];
-    tmp0 = &this->unk_20C[0];
+    tmp2 = &this->unk_224;
+    tmp1 = &this->unk_218;
+    tmp0 = &this->unk_20C;
     arg2->x = this->actor.world.pos.x + (tmp2->x * temp_fv0) + (tmp1->x * arg1->y) + (tmp0->x * arg1->z);
     arg2->y = this->actor.world.pos.y + (tmp2->y * temp_fv0) + (tmp1->y * arg1->y) + (tmp0->y * arg1->z);
     arg2->z = this->actor.world.pos.z + (tmp2->z * temp_fv0) + (tmp1->z * arg1->y) + (tmp0->z * arg1->z);
@@ -226,16 +233,17 @@ void func_80A56F68(EnRat* this, PlayState* play) {
     Vec3f sp28;
 
     EffectSsGRipple_Spawn(play, &this->actor.world.pos, 70, 500, 0);
-    sp28.x = this->actor.world.pos.x - (this->unk_20C[0].x * 10.0f);
-    sp28.z = this->actor.world.pos.z - (this->unk_20C[0].z * 10.0f);
+    sp28.x = this->actor.world.pos.x - (this->unk_20C.x * 10.0f);
+    sp28.z = this->actor.world.pos.z - (this->unk_20C.z * 10.0f);
     sp28.y = this->actor.world.pos.y + 5.0f;
     EffectSsGSplash_Spawn(play, &sp28, NULL, NULL, 1, 450);
 }
 
+void func_80A57010(EnRat* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57010.s")
 
 void func_80A57118(EnRat* this, PlayState* play) {
-    func_800B0EB0(play, &this->unk_20C[3], &gZeroVec3f, &D_80A58498, &D_80A584A4, &D_80A584A4, 75, 7, 8);
+    func_800B0EB0(play, &this->unk_230, &gZeroVec3f, &D_80A58498, &D_80A584A4, &D_80A584A4, 75, 7, 8);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57180.s")
@@ -353,7 +361,7 @@ void func_80A5764C(EnRat* this, PlayState* play) {
         func_80A56EB8(this, &D_80A584C0, &sp3C);
         EffectBlure_AddVertex(Effect_GetByIndex(this->unk_264), &sp48, &sp3C);
     } else if ((this->actor.floorPoly != NULL) && !(play->gameplayFrames & 3)) {
-        func_800B1210(play, &this->actor.world.pos, &D_80A584CC, &gZeroVec3f, (s16)0x226, (s16)0x32);
+        func_800B1210(play, &this->actor.world.pos, &D_80A584CC, &gZeroVec3f, 550, 50);
     }
 
     if ((this->actor.floorPoly == NULL) && (Animation_OnFrame(&this->skelAnime, 0.0f))) {
@@ -377,7 +385,114 @@ void func_80A5764C(EnRat* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57A9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/EnRat_Update.s")
+void EnRat_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnRat* this = THIS;
+
+    this->unk_18D = 0;
+    if (this->unk_192 == 0) {
+        SkelAnime_Update(&this->skelAnime);
+    }
+
+    if (this->collider.base.atFlags & AT_HIT) {
+        this->collider.base.atFlags &= ~AT_HIT;
+        this->collider.base.acFlags &= ~AC_HIT;
+        this->collider.base.ocFlags1 &= ~OC1_HIT;
+        if (this->collider.base.atFlags & AT_BOUNCED) {
+            func_80A57918(this);
+        } else {
+            func_80A57A08(this, play);
+            return;
+        }
+    } else if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        if (this->actor.colChkInfo.damageEffect == 0xF) {
+            this->unk_192 = -2;
+        } else if (this->actor.colChkInfo.damageEffect == 1) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+            if (this->actionFunc == func_80A57984) {
+                this->actor.speedXZ = 0.0f;
+                if (this->actor.velocity.y > 0.0f) {
+                    this->actor.velocity.y = 0.0f;
+                }
+            } else {
+                this->unk_192 = 40;
+            }
+        } else {
+            func_80A57A08(this, play);
+            return;
+        }
+    } else if (((this->collider.base.ocFlags1 & OC1_HIT) && (((this->collider.base.oc->category == ACTORCAT_ENEMY)) ||
+                                                             (this->collider.base.oc->category == ACTORCAT_BOSS) ||
+                                                             (this->collider.base.oc->category == ACTORCAT_PLAYER))) ||
+               ((this->actionFunc == func_80A5764C) && (this->unk_190 == 0))) {
+        this->collider.base.ocFlags1 &= ~OC1_HIT;
+        func_80A57A08(this, play);
+        return;
+    }
+
+    this->actionFunc(this, play);
+
+    if ((this->actionFunc != func_80A57A9C) && (this->actionFunc != func_80A5723C)) {
+        if (this->unk_192 > 0) {
+            this->unk_192--;
+        } else if (this->unk_192 < 0) {
+            if (this->unk_192 == -2) {
+                this->unk_192 = -1;
+            } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
+                func_80A57A08(this, play);
+                return;
+            }
+        } else if (this->actionFunc != func_80A57984) {
+            if (this->actor.floorBgId != 0x32) {
+                func_80A57010(this, play);
+            }
+
+            if (this->unk_18C == 0) {
+                func_80A566E0(this);
+            }
+
+            if ((this->actionFunc != func_80A574E8) && !func_80A56AFC(this, play)) {
+                func_80A57A08(this, play);
+                return;
+            }
+
+            if (this->unk_18D != 0) {
+                func_80A5665C(this);
+                this->actor.shape.rot.x = -this->actor.world.rot.x;
+                this->actor.shape.rot.y = this->actor.world.rot.y;
+                this->actor.shape.rot.z = this->actor.world.rot.z;
+            }
+
+            Actor_MoveWithoutGravity(&this->actor);
+            this->actor.floorHeight = this->actor.world.pos.y;
+        } else {
+            Actor_MoveWithGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f, 7);
+        }
+
+        if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) != 0) {
+            func_80A57A08(this, play);
+            return;
+        }
+
+        this->collider.dim.worldSphere.center.x = this->actor.world.pos.x + (this->unk_218.x * 10.0f);
+        this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + (this->unk_218.y * 10.0f);
+        this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->unk_218.z * 10.0f);
+
+        if (this->actionFunc != func_80A5723C) {
+            if (this->unk_192 == 0) {
+                CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+            }
+
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        }
+
+        Actor_SetFocus(&this->actor, this->actor.shape.yOffset * 0.015f);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rat/func_80A57F10.s")
 
