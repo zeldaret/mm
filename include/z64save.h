@@ -49,7 +49,8 @@ typedef struct Inventory {
     /* 0x48 */ u32 upgrades;                            // "non_equip_register" some bits are wallet upgrades
     /* 0x4C */ u32 questItems;                          // "collect_register"
     /* 0x50 */ u8 dungeonItems[10];                     // "key_compass_map"
-    /* 0x5A */ s8 dungeonKeys[10];                      // "key_register"
+    /* 0x5A */ s8 dungeonKeys[9];                       // "key_register"
+    /* 0x63 */ s8 defenseHearts;
     /* 0x64 */ s8 strayFairies[10];                     // "orange_fairy"
     /* 0x6E */ char dekuPlaygroundPlayerName[3][8];     // "degnuts_memory_name" Stores playerName (8 char) over (3 days) when getting a new high score
 } Inventory; // size = 0x88
@@ -307,7 +308,7 @@ void func_80147150(SramContext* sramCtx);
 void func_80147198(SramContext* sramCtx);
 
 extern s32 D_801C6798[];
-extern u8 D_801C67B0[24];
+extern u8 gAmmoItems[24];
 extern s32 D_801C67C8[];
 extern s32 D_801C67E8[];
 extern s32 D_801C67F0[];

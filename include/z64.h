@@ -452,6 +452,14 @@ typedef struct {
 
 typedef void(*fault_update_input_func)(Input* input);
 
+typedef enum {
+    /* 0x00 */ PAUSE_ITEM,
+    /* 0x01 */ PAUSE_MAP,
+    /* 0x02 */ PAUSE_QUEST,
+    /* 0x03 */ PAUSE_MASK,
+    /* 0x04 */ PAUSE_WORLD_MAP
+} PauseMenuPage;
+
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
@@ -494,8 +502,8 @@ typedef struct {
     /* 0x226 */ s16 offsetY;
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 unk_230;
-    /* 0x234 */ s32 unk_234;
+    /* 0x230 */ s32 stickRelX;
+    /* 0x234 */ s32 stickRelY;
     /* 0x238 */ s16 unk_238[5];
     /* 0x242 */ s16 unk_242[5];
     /* 0x24C */ s16 unk_24C[5];
