@@ -770,7 +770,7 @@ void func_80AAE030(PlayState* play, DmChar05* this) {
 void func_80AAE114(PlayState* play, DmChar05* this) {
     s32 sp34;
     s16 sp24[] = {
-        GID_02, GID_6A, GID_70, GID_3A, GID_0E, GID_0F, GID_3E, GID_71,
+        GID_02, GID_MASK_GREAT_FAIRY, GID_70, GID_3A, GID_0E, GID_0F, GID_3E, GID_71,
     };
 
     sp34 = DMCHAR05_GET(&this->actor) - DMCHAR05_5;

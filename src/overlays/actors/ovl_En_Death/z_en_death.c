@@ -79,7 +79,7 @@ static ColliderTrisElementInit D_808C9938[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_808C99B0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
-    2, D_808C9938, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_808C9938, // sTrisElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {

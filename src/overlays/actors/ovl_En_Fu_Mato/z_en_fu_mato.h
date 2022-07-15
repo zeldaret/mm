@@ -19,19 +19,19 @@ typedef struct {
 } EnFuMatoStruct; // size = 0x34
 
 typedef struct EnFuMato {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ EnFuMatoActionFunc actionFunc;
-    /* 0x0160 */ ColliderSphere collider;
-    /* 0x01B8 */ EnFuMatoStruct unk_1B8[6];
-    /* 0x02F0 */ s32 unk_2F0;
-    /* 0x02F4 */ s32 unk_2F4;
-    /* 0x02F8 */ Vec3s* unk_2F8;
-    /* 0x02FC */ Vec3s unk_2FC;
-    /* 0x0302 */ s16 unk_302;
-    /* 0x0304 */ s16 unk_304;
-    /* 0x0306 */ UNK_TYPE1 unk306[2];
-    /* 0x0308 */ s16 unk_308;
-    /* 0x030A */ s16 unk_30A;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ EnFuMatoActionFunc actionFunc;
+    /* 0x160 */ ColliderSphere collider;
+    /* 0x1B8 */ EnFuMatoStruct unk_1B8[6];
+    /* 0x2F0 */ s32 unk_2F0;
+    /* 0x2F4 */ s32 unk_2F4;
+    /* 0x2F8 */ Vec3s* unk_2F8;
+    /* 0x2FC */ Vec3s unk_2FC;
+    /* 0x302 */ s16 unk_302;
+    /* 0x304 */ s16 unk_304;
+    /* 0x306 */ UNK_TYPE1 unk306[2];
+    /* 0x308 */ s16 unk_308;
+    /* 0x30A */ s16 unk_30A;
 } EnFuMato; // size = 0x30C
 
 extern const ActorInit En_Fu_Mato_InitVars;

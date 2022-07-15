@@ -64,7 +64,7 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
         }
         thisx->scale.y = thisx->scale.x;
         thisx->scale.z = thisx->scale.x;
-        thisx->shape.rot.y = Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) + 0x8000;
+        thisx->shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;
     }
 }
 
