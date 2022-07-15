@@ -555,15 +555,14 @@ void KaleidoScope_DrawDebugEditor(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#ifdef NON_EQUIVALENT
 void KaleidoScope_UpdateDebugEditor(PlayState* play) {
     static s32 sPrevDBtnInput = 0;
     static s32 sHeldDBtnTimer = 0;
     PauseContext* pauseCtx = &play->pauseCtx;
     Input* input = CONTROLLER1(&play->state);
-    s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
     s16 slot;
     s16 value;
+    s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
 
     pauseCtx->stickRelX = input->rel.stick_x;
     pauseCtx->stickRelY = input->rel.stick_y;
@@ -582,24 +581,24 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
         sHeldDBtnTimer = 16;
     }
 
-    if (dBtnInput & BTN_DDOWN) {
+    if (CHECK_BTN_ANY(dBtnInput, BTN_DDOWN)) {
         sCurRow++;
         if (sCurRow > 17) {
             sCurRow = 0;
         }
         sCurSection = sRowFirstSections[sCurRow];
-    } else if (dBtnInput & BTN_DUP) {
+    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DUP)) {
         sCurRow--;
         if (sCurRow < 0) {
             sCurRow = 17;
         }
         sCurSection = sRowFirstSections[sCurRow];
-    } else if (dBtnInput & BTN_DLEFT) {
+    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DLEFT)) {
         sCurSection--;
         if (sCurSection < 0) {
             sCurSection = 92;
         }
-    } else if (dBtnInput & BTN_DRIGHT) {
+    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DRIGHT)) {
         sCurSection++;
         if (sCurSection > 92) {
             sCurSection = 0;
@@ -698,7 +697,8 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                 } else if ((slot == SLOT_TRADE_DEED) || (slot == SLOT_TRADE_KEY_MAMA) || (slot == SLOT_TRADE_COUPLE)) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
-                        Inventory_DeleteItem(sSlotItems[slot], slot);
+                        value = sSlotItems[slot];
+                        Inventory_DeleteItem(value, slot);
                     } else if (slot == SLOT_TRADE_DEED) {
                         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                             if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
@@ -725,9 +725,9 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                             }
                         } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                             if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
-                                gSaveContext.save.inventory.items[slot] = ITEM_ROOM_KEY;
-                            } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_ROOM_KEY) &&
-                                       (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_ROOM_KEY)) {
+                                gSaveContext.save.inventory.items[slot] = ITEM_LETTER_MAMA;
+                            } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_LETTER_MAMA) &&
+                                       (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_LETTER_MAMA)) {
                                 gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) - 1;
                             }
                         }
@@ -748,30 +748,32 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                     }
                 } else if ((slot >= SLOT_BOTTLE_1) && (slot <= SLOT_BOTTLE_6)) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
-                        Inventory_DeleteItem(slot, SLOT(ITEM_BOTTLE) + slot - SLOT_BOTTLE_1);
+                        value = ITEM_BOTTLE + slot - SLOT_BOTTLE_1;
+                        Inventory_DeleteItem(value, SLOT(ITEM_BOTTLE) + slot - SLOT_BOTTLE_1);
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                         if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
                             gSaveContext.save.inventory.items[slot] = ITEM_BOTTLE;
                         } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_BOTTLE) &&
                                    (gSaveContext.save.inventory.items[slot] <= ITEM_HYLIAN_LOACH)) {
-                            gSaveContext.save.inventory.items[slot]++;
+                            gSaveContext.save.inventory.items[slot] = gSaveContext.save.inventory.items[slot] + 1;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
                             gSaveContext.save.inventory.items[slot] = ITEM_OBABA_DRINK;
                         } else if ((gSaveContext.save.inventory.items[slot] >= ITEM_POTION_RED) &&
-                                   (slot <= ITEM_OBABA_DRINK)) {
-                            gSaveContext.save.inventory.items[slot]--;
+                                   (gSaveContext.save.inventory.items[slot] <= ITEM_OBABA_DRINK)) {
+                            gSaveContext.save.inventory.items[slot] = gSaveContext.save.inventory.items[slot] - 1;
                         }
                     }
                 } else {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                         CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                         CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        value = sSlotItems[slot];
                         if (gSaveContext.save.inventory.items[slot] == ITEM_NONE) {
-                            INV_CONTENT(sSlotItems[slot]) = sSlotItems[slot];
+                            INV_CONTENT(value) = value;
                         } else {
-                            Inventory_DeleteItem(sSlotItems[slot], slot);
+                            Inventory_DeleteItem(value, slot);
                         }
                     }
                 }
@@ -870,7 +872,7 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
                 }
             } else if (sCurSection == 74) {
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    if ((gSaveContext.save.skullTokenCount & 0xFFFF) != 0) {
+                    if (((u16)gSaveContext.save.skullTokenCount) != 0) {
                         gSaveContext.save.skullTokenCount = (((u16)gSaveContext.save.skullTokenCount - 1) & 0xFFFF) |
                                                             (gSaveContext.save.skullTokenCount & 0xFFFF0000);
                     }
@@ -957,8 +959,3 @@ void KaleidoScope_UpdateDebugEditor(PlayState* play) {
         pauseCtx->debugState = 0;
     }
 }
-#else
-s32 sPrevDBtnInput = 0;
-s32 sHeldDBtnTimer = 0;
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_UpdateDebugEditor.s")
-#endif
