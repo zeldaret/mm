@@ -32,6 +32,7 @@ s32 func_8085B134(PlayState* play);
 void func_8085B170(PlayState* play, Player* player);
 
 
+void func_8082F8BC(PlayState* play, Player* this, s32 arg2);
 
 extern LinkAnimationHeader* D_8085BE84[6];
 
@@ -382,7 +383,24 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F8A0.s")
 
+
+void (*D_8085CB3C[0x53])(PlayState* play, Player* this);
+
+#ifdef NON_MATCHING
+void func_8082F8BC(PlayState* play, Player* this, s32 arg2) {
+    this->itemActionParam = arg2;
+    this->heldItemActionParam = arg2;
+    this->stateFlags1 &= ~0x1000008;
+    this->unk_B08[0] = 0.0f;
+    this->unk_B08[1] = 0.0f;
+    this->unk_B28 = 0;
+    this->modelGroup = this->nextModelGroup;
+    D_8085CB3C[arg2](play, this);
+    Player_SetModelGroup(this, this->modelGroup);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F8BC.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F938.s")
 
