@@ -624,7 +624,9 @@ Inventory sSaveDefaultInventory = {
     // dungeonItems
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dungeonKeys
-    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+    // defenseHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
@@ -768,7 +770,9 @@ Inventory sSaveDebugInventory = {
     // dungeonItems
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
     // dungeonKeys
-    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8 },
+    // defenseHearts
+    0,
     // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     // dekuPlaygroundPlayerName
