@@ -1623,8 +1623,9 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 playerForm, s32 boots,
-                     s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm,
+                     s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw,
+                     Actor* actor) {
     s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
     s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
     Gfx* gfx;

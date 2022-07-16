@@ -28,11 +28,9 @@ void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
-
 void func_80844EF8(Player* player, PlayState* play, Input* input);
 s32 func_8085B134(PlayState* play);
 void func_8085B170(PlayState* play, Player* player);
-
 
 void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam);
 
@@ -40,11 +38,10 @@ void func_80831990(PlayState* play, Player* this, s32 arg2);
 
 extern LinkAnimationHeader* D_8085BE84[6];
 
-
 extern f32 D_8085D3FC[2];
 extern Input* D_80862B44;
 
-extern Vec3f D_80862AF0;                            /* type too large by 8 */
+extern Vec3f D_80862AF0; /* type too large by 8 */
 extern f32 D_80862AF4;
 extern f32 D_80862AF8;
 extern f32 D_80862AFC;
@@ -128,21 +125,20 @@ void func_8082DB3C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
 }
 
 void func_8082DB60(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    LinkAnimation_PlayLoopSetSpeed(play, &this->skelAnime, anim, 2.0f/3.0f);
+    LinkAnimation_PlayLoopSetSpeed(play, &this->skelAnime, anim, 2.0f / 3.0f);
 }
 
 void func_8082DB90(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 2.0f/3.0f);
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 2.0f / 3.0f);
 }
 
 void func_8082DBC0(PlayState* play, Player* this, LinkAnimationHeader* anim) {
-    LinkAnimation_Change(play, &this->skelAnime, anim, -2.0f/3.0f, Animation_GetLastFrame(anim), 0.0f, 2, 0.0f);
+    LinkAnimation_Change(play, &this->skelAnime, anim, -2.0f / 3.0f, Animation_GetLastFrame(anim), 0.0f, 2, 0.0f);
 }
 
 void func_8082DC28(Player* this) {
     this->skelAnime.jointTable[1].y = 0;
 }
-
 
 void func_8082DC38(Player* this) {
     this->stateFlags2 &= ~0x20000;
@@ -218,7 +214,7 @@ s32 func_8082DE88(Player* arg0, s32 arg1, s32 arg2) {
     s16 temp_v0;
 
     temp_v0 = arg0->unk_D64 - D_80862B00;
-    arg0->unk_AE8 += arg1 + (s32) (ABS_ALT(temp_v0) * fabsf(D_80862AFC) * 0.0000025415802f);
+    arg0->unk_AE8 += arg1 + (s32)(ABS_ALT(temp_v0) * fabsf(D_80862AFC) * 0.0000025415802f);
     if (D_80862B44->press.button & 0xC000) {
         arg0->unk_AE8 += 5;
     }
@@ -374,9 +370,7 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F524.s")
 
-
 void func_8082F594(PlayState* play, Player* this) {
-
 }
 
 void func_8082F5A4(PlayState* play, Player* this) {
@@ -427,7 +421,9 @@ void func_8082F62C(PlayState* play, Player* this) {
         gSaveContext.powderKegTimer = 0xC8;
     }
 
-    explosiveActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, explosiveInfo->actorId, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, explosiveType == 1 ? 1 : 0, this->actor.shape.rot.y, 0, 0);
+    explosiveActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, explosiveInfo->actorId,
+                                        this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                        explosiveType == 1 ? 1 : 0, this->actor.shape.rot.y, 0, 0);
     if (explosiveActor != NULL) {
         if ((explosiveType == 0) && (play->unk_1887E != 0)) {
             play->unk_1887E--;
@@ -455,7 +451,9 @@ void func_8082F7F4(PlayState* play, Player* this) {
     this->unk_B28 = -3;
     this->unk_B48 = 0.0f;
 
-    this->heldActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_ARMS_HOOK, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
+    this->heldActor =
+        Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_ARMS_HOOK, this->actor.world.pos.x,
+                           this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
     if (this->heldActor == NULL) {
         func_80831990(play, this, 0xFFU);
         return;
@@ -469,8 +467,6 @@ void func_8082F7F4(PlayState* play, Player* this) {
 void func_8082F8A0(PlayState* play, Player* this) {
     this->stateFlags1 |= 0x01000000;
 }
-
-
 
 extern void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState* play, Player* this);
 
@@ -1319,12 +1315,15 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     Actor_ProcessInitChain(&this->actor, D_8085D2C0);
     this->currentYaw = this->actor.world.rot.y;
 
-    if ((((this->actor.params & 0xF00) >> 8) != 0xC) && ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
+    if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
+        ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
         func_808309CC(play, this);
-        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, (void*)this->unk_74C, (void*)this->unk_7EB, 0x16);
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, (void*)this->unk_74C,
+                           (void*)this->unk_7EB, 0x16);
         this->skelAnime.baseTransl = D_8085D2C4;
 
-        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929, (void*)this->unk_9C8, 0x16);
+        SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929,
+                           (void*)this->unk_9C8, 0x16);
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == 1) {
@@ -1344,7 +1343,6 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
 
 void func_80841A50(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841A50.s")
-
 
 extern LinkAnimationHeader D_0400CF98;
 extern LinkAnimationHeader D_0400D0A8;
@@ -1607,14 +1605,14 @@ void Player_Init(Actor* thisx, PlayState* play) {
         this->actor.shape.rot.z = 0;
         // todo: declaration
         func_8082F938((Player* ) play, this, 0, 4);
-        #if 0
+#if 0
         temp_v0_3 = Effect_GetByIndex(this->meleeWeaponEffectIndex[2]);
         if (this->transformation == 1) {
             temp_v0_3->unk_606 = (unaligned s32) D_8085D338;
         } else {
             temp_v0_3->unk_606 = (unaligned s32) D_8085D33C;
         }
-        #endif
+#endif
         if ((this->csMode == 9) || (this->csMode == 0x5D)) {
             // todo: declaration
             func_80831494(play, this, func_8085B08C, 0);
@@ -1645,13 +1643,13 @@ void Player_Init(Actor* thisx, PlayState* play) {
     Effect_Add(play, &this->meleeWeaponEffectIndex[1], 2, 0U, (u8) 0, &D_8085D30C);
     // todo: declaration
     func_8082F938((Player* ) play, this, 0, 4);
-    #if 0
+#if 0
     if (this->transformation == 1) {
         *(&D_8085D330 + 4) = (unaligned s32) D_8085D338;
     } else {
         *(&D_8085D330 + 4) = (unaligned s32) D_8085D33C;
     }
-    #endif
+#endif
     Effect_Add(play, &this->meleeWeaponEffectIndex[2], 4, 0U, (u8) 0, &D_8085D330);
     if (this->actor.shape.rot.x != 0) {
         this->actor.shape.rot.x = 0;
@@ -1668,9 +1666,9 @@ void Player_Init(Actor* thisx, PlayState* play) {
     this->maskObjectSegment = ZeldaArena_Malloc(0x3800U);
     temp_a0 = &this->unk_404[0x24];
     Lights_PointNoGlowSetInfo((LightInfo* ) temp_a0, (s16) (s32) this->actor.world.pos.x, (s16) (s32) this->actor.world.pos.y, (s16) (s32) this->actor.world.pos.z, (u8) 0xFF, (u8) 0x80, (u8) 0, (s16) -1);
-    #if 0
+#if 0
     this->unk_504 = LightContext_InsertLight(play, &play->lightCtx, (LightInfo* ) temp_a0);
-    #endif
+#endif
     Play_AssignPlayerActorCsIdsFromScene(&play->state, (s32) this->actor.cutscene);
     var_a2 = gSaveContext.respawnFlag;
     if (var_a2 != 0) {
@@ -1789,8 +1787,6 @@ void Player_Init(Actor* thisx, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844784.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844D80.s")
-
-
 
 #if 0
 // Player_UpdateCommon
@@ -2313,7 +2309,7 @@ extern Vec3f D_8085D41C;
 // in-function static bss
 void Player_Update(Actor* thisx, PlayState* play) {
     static Vec3f D_80862AF0; // sDogSpawnPos
-    Player* this = (Player* ) thisx;
+    Player* this = (Player*)thisx;
     s32 dogParams;
     s32 pad;
     Input input;
@@ -2331,7 +2327,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
             dogParams = gSaveContext.dogParams;
 
-            dog = Actor_Spawn(&play->actorCtx, play, 0xE2, D_80862AF0.x, D_80862AF0.y, D_80862AF0.z, 0, this->actor.shape.rot.y, 0, dogParams | 0x8000);
+            dog = Actor_Spawn(&play->actorCtx, play, 0xE2, D_80862AF0.x, D_80862AF0.y, D_80862AF0.z, 0,
+                              this->actor.shape.rot.y, 0, dogParams | 0x8000);
             if (dog != NULL) {
                 dog->room = -1;
             }
@@ -2348,7 +2345,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     if ((play->actorCtx.unk268 != 0) && (this == GET_PLAYER(play))) {
         input = play->actorCtx.unk_26C;
-    } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) || (func_8082DA90(play) != 0) || (gSaveContext.save.playerData.health == 0)) {
+    } else if ((this->csMode == 5) || (this->stateFlags1 & 0x20000020) || (this != GET_PLAYER(play)) ||
+               (func_8082DA90(play) != 0) || (gSaveContext.save.playerData.health == 0)) {
         bzero(&input, sizeof(Input));
         this->unk_B68 = this->actor.world.pos.y;
     } else {
@@ -2372,20 +2370,21 @@ void Player_Update(Actor* thisx, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/Player_Update.s")
 #endif
 
-void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList, OverrideLimbDrawFlex overrideLimbDraw) {
+void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
+                         OverrideLimbDrawFlex overrideLimbDraw) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0C, cullDList);
     gSPSegment(POLY_XLU_DISP++, 0x0C, cullDList);
 
-    Player_DrawImpl(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, lod, this->transformation, 0, this->actor.shape.face, overrideLimbDraw, func_80128BD0, &this->actor);
+    Player_DrawImpl(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, lod,
+                    this->transformation, 0, this->actor.shape.face, overrideLimbDraw, func_80128BD0, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_80846460(Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80846460.s")
-
 
 extern struct_80124618 D_8085D510[2];
 extern struct_80124618 D_8085D520[2];
@@ -2395,7 +2394,6 @@ extern struct_80124618* D_8085D550[3];
 extern struct_80124618* D_8085D55C[3];
 extern struct_80124618* D_8085D568[3];
 extern Gfx* D_8085D574[3];
-
 
 extern Color_RGB8 D_8085D580;
 extern Color_RGB8 D_8085D584;
@@ -2483,21 +2481,21 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             func_80124618(*spE4, spE0, sp48);
             Matrix_Scale(this->unk_AF0[1].x, this->unk_AF0[1].y, this->unk_AF0[1].z, MTXMODE_APPLY);
 
-            #if 0
+#if 0
             temp_v0_2 = temp_s0->polyOpa.p;
             temp_s0->polyOpa.p = temp_v0_2 + 8;
             temp_v0_2->words.w0 = 0xDA380003;
             spCC = temp_v0_2;
             spCC->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
-            #endif
+#endif
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            #if 0
+#if 0
             temp_v0_3 = temp_s0->polyOpa.p;
             temp_s0->polyOpa.p = temp_v0_3 + 8;
             temp_v0_3->words.w0 = 0xDE000000;
             temp_v0_3->words.w1 = *spDC;
-            #endif
+#endif
             gSPDisplayList(POLY_OPA_DISP++, *spDC);
 
             Matrix_Pop();
@@ -2545,28 +2543,28 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             Scene_SetRenderModeXlu(play, 0, 1U);
             Lib_LerpRGB(&D_8085D580, &D_8085D584, this->unk_B08[2], &spBC);
 
-            #if 0
+#if 0
             temp_v0_4 = spC4->polyOpa.p;
             spC4->polyOpa.p = temp_v0_4 + 8;
             temp_v0_4->words.w0 = 0xFB000000;
             temp_v0_4->words.w1 = ((u8) spBC.r << 0x18) | (spBC.g << 0x10) | (spBC.b << 8) | 0xFF;
-            #endif
+#endif
             gDPSetEnvColor(POLY_OPA_DISP++, (u8) spBC.r, spBC.g, spBC.b, 255);
 
-            #if 0
+#if 0
             temp_v0_5 = spC4->polyOpa.p;
             spC4->polyOpa.p = temp_v0_5 + 8;
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
-            #endif
+#endif
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            #if 0
+#if 0
             temp_v0_6 = spC4->polyOpa.p;
             spC4->polyOpa.p = temp_v0_6 + 8;
             temp_v0_6->words.w0 = 0xDE000000;
             temp_v0_6->words.w1 = (u32) &D_0600BDD8;
-            #endif
+#endif
             gSPDisplayList(POLY_OPA_DISP++, D_0600BDD8);
 
 
@@ -2576,20 +2574,20 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 if (temp_v0_7 < 3) {
                     func_80124618(D_8085D540, (f32) temp_v0_7, this->unk_AF0);
                     Matrix_Scale(this->unk_AF0[0].x, this->unk_AF0[0].y, this->unk_AF0[0].z, MTXMODE_APPLY);
-                    #if 0
+#if 0
                     temp_v0_8 = spC4->polyOpa.p;
                     spC4->polyOpa.p = temp_v0_8 + 8;
                     temp_v0_8->words.w0 = 0xDA380003;
                     temp_v0_8->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
-                    #endif
+#endif
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 }
-                #if 0
+#if 0
                 temp_v0_9 = spC4->polyOpa.p;
                 spC4->polyOpa.p = temp_v0_9 + 8;
                 temp_v0_9->words.w0 = 0xDE000000;
                 temp_v0_9->words.w1 = (u32) &D_0600C540;
-                #endif
+#endif
                 gSPDisplayList(POLY_OPA_DISP++, D_0600C540);
             }
 
@@ -2616,40 +2614,40 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
                     Matrix_Scale(1.0f, var_fa1, var_fa1, MTXMODE_APPLY);
 
-                    #if 0
+#if 0
                     temp_v0_11 = spC4->polyXlu.p;
                     spC4->polyXlu.p = temp_v0_11 + 8;
                     temp_v0_11->words.w0 = 0xDA380003;
                     temp_v0_11->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
-                    #endif
+#endif
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06013138));
 
-                    #if 0
+#if 0
                     temp_v0_12 = spC4->polyXlu.p;
                     spC4->polyXlu.p = temp_v0_12 + 8;
                     temp_v0_12->words.w0 = 0xFB000000;
                     temp_v0_12->words.w1 = sp9B | 0x9B000000;
-                    #endif
+#endif
                     gDPSetEnvColor(POLY_XLU_DISP++, 155, 0, 0, sp9B);
 
-                    #if 0
+#if 0
                     temp_v0_13 = spC4->polyXlu.p;
                     spC4->polyXlu.p = temp_v0_13 + 8;
                     temp_v0_13->words.w1 = (u32) &D_060127B0;
                     temp_v0_13->words.w0 = 0xDE000000;
-                    #endif
+#endif
                     gSPDisplayList(POLY_XLU_DISP++, D_060127B0);
 
                     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&D_06014684));
 
-                    #if 0
+#if 0
                     temp_v0_14 = spC4->polyXlu.p;
                     spC4->polyXlu.p = temp_v0_14 + 8;
                     temp_v0_14->words.w1 = (u32) &D_060134D0;
                     temp_v0_14->words.w0 = 0xDE000000;
-                    #endif
+#endif
                     gSPDisplayList(POLY_XLU_DISP++, D_060134D0);
                 }
             }
@@ -2690,7 +2688,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Pop();
             }
 
-            #if 0
+#if 0
             temp_v0_16 = spC4->polyOpa.p;
             spC4->polyOpa.p = temp_v0_16 + 8;
             temp_v0_16->words.w1 = 0;
@@ -2699,7 +2697,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
             spC4->polyXlu.p = temp_v0_17 + 8;
             temp_v0_17->words.w1 = 0;
             temp_v0_17->words.w0 = 0xD9FFF9FF;
-            #endif
+#endif
             gSPClearGeometryMode(POLY_OPA_DISP++, G_CULL_BOTH);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BOTH);
 
@@ -2718,40 +2716,40 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 
         if (this->stateFlags2 & 0x4000) {
             temp_fa0 = this->unk_B48;
-            #if 0
+#if 0
             temp_v0_18 = spC4->polyXlu.p;
             spC4->polyXlu.p = temp_v0_18 + 8;
             temp_v0_18->words.w0 = 0xDB060020;
             temp_v1_2 = play->gameplayFrames;
             temp_v0_18->words.w1 = Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32) temp_v1_2 & 0x7F, 0x20, 0x20, 1, 0U, ((s32) temp_v1_2 * -2) & 0x7F, 0x20, 0x20);
-            #endif
+#endif
             temp_v1_2 = play->gameplayFrames;
             gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0U, -(s32) temp_v1_2 & 0x7F, 0x20, 0x20, 1, 0U, ((s32) temp_v1_2 * -2) & 0x7F, 0x20, 0x20));
 
             Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
 
-            #if 0
+#if 0
             temp_v0_19 = spC4->polyXlu.p;
             spC4->polyXlu.p = temp_v0_19 + 8;
             temp_v0_19->words.w0 = 0xDA380003;
             temp_v0_19->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
-            #endif
+#endif
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            #if 0
+#if 0
             temp_v0_20 = spC4->polyXlu.p;
             spC4->polyXlu.p = temp_v0_20 + 8;
             temp_v0_20->words.w1 = 0x003264FF;
             temp_v0_20->words.w0 = 0xFB000000;
-            #endif
+#endif
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0x32, 0x64, 255);
 
-            #if 0
+#if 0
             temp_v0_21 = spC4->polyXlu.p;
             spC4->polyXlu.p = temp_v0_21 + 8;
             temp_v0_21->words.w1 = (u32) &D_04050D10;
             temp_v0_21->words.w0 = 0xDE000000;
-            #endif
+#endif
             gSPDisplayList(POLY_XLU_DISP++, D_04050D10);
         }
 
@@ -2771,7 +2769,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
 #endif
 
 void Player_Destroy(Actor* thisx, PlayState* play) {
-    Player* this = (Player* ) thisx;
+    Player* this = (Player*)thisx;
 
     Effect_Destroy(play, this->meleeWeaponEffectIndex[0]);
     Effect_Destroy(play, this->meleeWeaponEffectIndex[1]);
