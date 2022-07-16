@@ -1,4 +1,5 @@
 ﻿<Root>
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
     <File Name="object_po_composer" Segment="6">
         <Animation Name="object_po_composer_Anim_00020C" Offset="0x20C" />
         <Animation Name="object_po_composer_Anim_000570" Offset="0x570" />
@@ -13,23 +14,15 @@
         <Animation Name="object_po_composer_Anim_00334C" Offset="0x334C" />
         <Animation Name="object_po_composer_Anim_003954" Offset="0x3954" />
         <Animation Name="object_po_composer_Anim_003DB0" Offset="0x3DB0" />
-        <Texture Name="object_po_composer_Tex_003DC0" OutName="tex_003DC0" Format="i8" Width="32" Height="64" Offset="0x3DC0" />
-        <DList Name="object_po_composer_DL_004600" Offset="0x4600" />
-        <DList Name="object_po_composer_DL_0052E0" Offset="0x52E0" />
-        <DList Name="object_po_composer_DL_0054E0" Offset="0x54E0" />
-        <DList Name="object_po_composer_DL_0055D0" Offset="0x55D0" />
-        <DList Name="object_po_composer_DL_005898" Offset="0x5898" />
-        <DList Name="object_po_composer_DL_005948" Offset="0x5948" />
-        <DList Name="object_po_composer_DL_005A00" Offset="0x5A00" />
-        <DList Name="object_po_composer_DL_005CB8" Offset="0x5CB8" />
-        <DList Name="object_po_composer_DL_005D68" Offset="0x5D68" />
-        <DList Name="object_po_composer_DL_006A70" Offset="0x6A70" />
-        <DList Name="object_po_composer_DL_006D80" Offset="0x6D80" />
-        <DList Name="object_po_composer_DL_006E08" Offset="0x6E08" />
-        <DList Name="object_po_composer_DL_006EA8" Offset="0x6EA8" />
-        <DList Name="object_po_composer_DL_006F38" Offset="0x6F38" />
-        <DList Name="object_po_composer_DL_006FD8" Offset="0x6FD8" />
-        <DList Name="object_po_composer_DL_007BC0" Offset="0x7BC0" />
+        <Texture Name="object_po_composer_Tex_003DC0" OutName="tex_003DC0" Format="i8" Width="32" Height="64" Offset="0x3DC0" /> <!-- soul texture -->
+        <DList Name="object_po_composer_DL_004600" Offset="0x4600" /> <!-- ??? -->
+        <DList Name="object_po_composer_DL_006A70" Offset="0x6A70" /> <!-- sharp head -->
+        <DList Name="object_po_composer_DL_006D80" Offset="0x6D80" /> <!-- ??? -->
+        <DList Name="object_po_composer_DL_006E08" Offset="0x6E08" /> <!-- ./ -->
+        <DList Name="object_po_composer_DL_006EA8" Offset="0x6EA8" /> <!-- ./ -->
+        <DList Name="object_po_composer_DL_006F38" Offset="0x6F38" /> <!-- ./ -->
+        <DList Name="object_po_composer_DL_006FD8" Offset="0x6FD8" /> <!-- ./ -->
+        <DList Name="object_po_composer_DL_007BC0" Offset="0x7BC0" /> <!-- unused burning dl -->
         <Texture Name="object_po_composer_Tex_007E80" OutName="tex_007E80" Format="rgba16" Width="16" Height="16" Offset="0x7E80" />
         <Texture Name="object_po_composer_Tex_008080" OutName="tex_008080" Format="rgba16" Width="16" Height="16" Offset="0x8080" />
         <Texture Name="object_po_composer_Tex_008280" OutName="tex_008280" Format="rgba16" Width="16" Height="16" Offset="0x8280" />
