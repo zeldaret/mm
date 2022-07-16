@@ -241,42 +241,76 @@ void func_8082DF48(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTi
     }
 }
 
-void func_8082DF8C(Player* arg0, u16 arg1) {
+void func_8082DF8C(Player* this, u16 arg1) {
     u16 var_v0;
 
-    if (arg0->currentMask == PLAYER_MASK_GIANT) {
-        func_8019F830(&arg0->actor.projectedPos, arg1);
+    if (this->currentMask == PLAYER_MASK_GIANT) {
+        func_8019F830(&this->actor.projectedPos, arg1);
         return;
     }
 
-    if (arg0->actor.id == ACTOR_PLAYER) {
-        if (arg0->currentMask == PLAYER_MASK_SCENTS) {
+    if (this->actor.id == ACTOR_PLAYER) {
+        if (this->currentMask == PLAYER_MASK_SCENTS) {
             var_v0 = 0xE0;
         } else {
-            var_v0 = arg0->ageProperties->unk_92;
+            var_v0 = this->ageProperties->unk_92;
         }
 
-        func_800B8E58(arg0, var_v0 + arg1);
+        func_800B8E58(this, var_v0 + arg1);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E00C.s")
+void func_8082E00C(Player* this) {
+    s32 i;
+    u16* var_s0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E078.s")
+    var_s0 = D_8085C3EC;
+    for (i = 0; i < ARRAY_COUNT(D_8085C3EC); i++) {
+        func_801A75E8(*var_s0 + this->ageProperties->unk_92);
+        var_s0 += 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E094.s")
+u16 func_8082E078(Player* this, u16 arg1) {
+    return arg1 + this->unk_B72;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E0CC.s")
+void func_8082E094(Player* this, u16 arg1) {
+    func_800B8E58(this, func_8082E078(this, arg1));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E0F4.s")
+u16 func_8082E0CC(Player* arg0, u16 arg1) {
+    return arg1 + arg0->unk_B72 + arg0->ageProperties->unk_94;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E12C.s")
+void func_8082E0F4(Player* arg0, u16 arg1) {
+    func_800B8E58(arg0, func_8082E0CC(arg0, arg1));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E188.s")
+void func_8082E12C(Player* this, f32 arg1) {
+    s32 var_v1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E1BC.s")
+    if (this->currentMask == PLAYER_MASK_GIANT) {
+        var_v1 = 0x8CE;
+    } else {
+        var_v1 = func_8082E0CC(this, 0x800);
+    }
+    func_8019F638(&this->actor.projectedPos, var_v1, arg1);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E1F0.s")
+void func_8082E188(Player* this) {
+    func_800B8E58(this, func_8082E0CC(this, 0x810));
+}
+
+void func_8082E1BC(Player* this) {
+    func_800B8E58(this, func_8082E0CC(this, 0x820));
+}
+
+
+void func_8082E1F0(Player* this, u16 sfxId) {
+    func_800B8E58(this, sfxId);
+    this->stateFlags2 |= 8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E224.s")
 

@@ -3307,7 +3307,7 @@ void func_8019F4AC(Vec3f* pos, u16 sfxId);
 void func_8019F540(s8 arg0);
 void func_8019F570(Vec3f* pos, s8 arg1);
 // void func_8019F5AC(void);
-// void func_8019F638(void);
+void func_8019F638(Vec3f* arg0, u16 arg1, f32 arg2);
 // void func_8019F780(void);
 // void func_8019F7D8(void);
 void func_8019F830(Vec3f* arg0, u16 arg1);
