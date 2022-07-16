@@ -372,7 +372,7 @@ void EnPoSisters_AimlessIdleFlying(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupAimlessIdleFlying2(this);
     }
 
-    if (this->actor.bgCheckFlags & 8) { // wall
+    if (this->actor.bgCheckFlags & 8) { // touching a wall
         Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 600.0f) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x71C);
@@ -540,6 +540,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
 
     if (this->megCloneId != POSISTER_MEG_REAL) {
         s32 alpha;
+        
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.parent->shape.rot.y,
                            (this->megCloneId == POSISTER_MEG_CLONE2) ? 0x800 : 0x400);
         alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
@@ -598,6 +599,7 @@ void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupAimlessIdleFlying(this);
     } else {
         s32 alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
+        
         this->color.a = CLAMP(alpha, 0, 255);
     }
 }
@@ -819,7 +821,7 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
             }
 
             // spin realmeg backwards for a bit for visual hint to player
-            if ((this->megSurroundTimer >= 284) || (this->megSurroundTimer < 31)) {
+            if ((this->megSurroundTimer >= 284) || (this->megSurroundTimer <= 30)) {
                 this->poSisterFlags |= POSISTERS_FLAG_REAL_MEG_ROTATION;
             } else {
                 this->poSisterFlags &= ~POSISTERS_FLAG_REAL_MEG_ROTATION;
@@ -830,7 +832,7 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     }
 
     if (this->megCloneId == POSISTER_MEG_REAL) {
-        if ((this->megSurroundTimer >= 284) || ((this->megSurroundTimer < 31) && (this->megSurroundTimer >= 16))) {
+        if ((this->megSurroundTimer >= 284) || ((this->megSurroundTimer <= 30) && (this->megSurroundTimer >= 16))) {
             this->poSisterFlags |= POSISTERS_FLAG_REAL_MEG_ROTATION;
         } else {
             this->poSisterFlags &= ~POSISTERS_FLAG_REAL_MEG_ROTATION;

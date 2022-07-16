@@ -14,14 +14,14 @@ typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 
 #define ENPOSISTERS_PARAMS(observerFlag, megClone, type) (((observerFlag) << 0xC) | ((megClone & 3) << 0xA) | ((type & 3) << 8))
 
-typedef enum{
+typedef enum {
     /* 0 */ POSISTER_TYPE_MEG,   // purple
     /* 1 */ POSISTER_TYPE_JO,    // red
     /* 2 */ POSISTER_TYPE_BETH,  // blue
     /* 3 */ POSISTER_TYPE_AMY,   // green
 } EnPoSisterType;
 
-typedef enum{
+typedef enum {
     /* 0 */ POSISTER_MEG_REAL,
     /* 1 */ POSISTER_MEG_CLONE1,
     /* 2 */ POSISTER_MEG_CLONE2,
