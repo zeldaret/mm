@@ -3,10 +3,6 @@
 
 #include "global.h"
 
-// Debug
-void KaleidoScope_DrawInventoryEditor(PlayState* play);
-void KaleidoScope_UpdateInventoryEditor(PlayState* play);
-
 typedef enum {
     /* 0x00 */ PAUSE_ITEM,
     /* 0x01 */ PAUSE_MAP,
@@ -21,5 +17,9 @@ typedef enum {
   /* 2 */ DEBUG_EDITOR_INVENTORY,
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
+
+// Debug
+void KaleidoScope_DrawInventoryEditor(PlayState* play);
+void KaleidoScope_UpdateInventoryEditor(PlayState* play);
 
 #endif

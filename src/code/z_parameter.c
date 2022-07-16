@@ -331,8 +331,8 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
         INCREMENT_QUEST_HEART_PIECE_COUNT;
-        if (CHECK_EQ_QUEST_HEART_PIECE_COUNT(4)) {
-            RESET_HEART_PIECE_COUNT(4);
+        if (EQ_MAX_QUEST_HEART_PIECE_COUNT) {
+            RESET_HEART_PIECE_COUNT;
             gSaveContext.save.playerData.healthCapacity += 0x10;
             gSaveContext.save.playerData.health += 0x10;
         }

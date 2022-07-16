@@ -393,7 +393,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         counterDigits[3] -= 10;
     }
 
-    // i: column
+    // Loop over columns (i)
     for (i = 0, rectLeft = 68; i < 4; i++, rectLeft += 9) {
         KaleidoScope_DrawDigit(play, counterDigits[i], rectLeft, 15);
     }
@@ -768,7 +768,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
                        CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                if (CHECK_LEQ_QUEST_HEART_PIECE_COUNT(4)) {
+                if (LEQ_MAX_QUEST_HEART_PIECE_COUNT) {
                     INCREMENT_QUEST_HEART_PIECE_COUNT;
                 }
             }
@@ -1088,8 +1088,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     }
 
     // Handles exiting the inventory editor with the L button
-    // The editor is opened with `debugEditor` set to 1, and becomes closable after a frame once `debugEditor`
-    // is set to 2
+    // The editor is opened with `debugEditor` set to DEBUG_EDITOR_INVENTORY_INIT,
+    // and becomes closable after a frame once `debugEditor` is set to DEBUG_EDITOR_INVENTORY
     if (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) {
         pauseCtx->debugEditor = DEBUG_EDITOR_INVENTORY;
     } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY) && CHECK_BTN_ALL(input->press.button, BTN_L)) {
