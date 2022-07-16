@@ -99,7 +99,7 @@ s32 Camera_IsSwimming(Camera* camera) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC5C8.s")
 
-#define CAM_DATA_IS_BG 0x1000 // if not set, then cam data is for actor cutscenes
+#define CAM_DATA_IS_BG (1 << 12) // if not set, then cam data is for actor cutscenes
 
 /**
  * Returns the CameraSettingType of the camera from either the bgCam or the actorCsCam at index `camDataId`
@@ -143,7 +143,7 @@ s32 Camera_GetBgCamIndex(Camera* camera, s32* bgId, CollisionPoly* poly) {
 /**
  * Gets the Camera setting for the water box the player is in.
  * Returns -1 if the player is not in a water box, or does not have a swimming state.
- * Returns -2 if there is no camera index for the water box.
+ * Returns -2 if there is no bgCam index for the water box.
  * Returns the camera setting otherwise.
  */
 s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
@@ -168,7 +168,7 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
 
     camSetting = WaterBox_GetBgCamSetting(&camera->play->colCtx, waterBox, bgId);
 
-    // -2: no camera data idx
+    // -2: no bgCam index
     return (camSetting == CAM_SET_NONE) ? -2 : camSetting;
 }
 
