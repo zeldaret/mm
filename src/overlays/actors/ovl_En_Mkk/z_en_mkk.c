@@ -5,6 +5,7 @@
  */
 
 #include "z_en_mkk.h"
+#include "objects/object_mkk/object_mkk.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -26,13 +27,15 @@ void func_80A4E0CC(EnMkk* this); //(EnMkk* this, s32);
 void func_80A4E190(EnMkk* this);
 void func_80A4E2B8(EnMkk* this);
 void func_80A4E58C(EnMkk* this);
-void func_80A4EDF0(EnMkk* this, s32);
+void func_80A4EDF0(EnMkk* this); // (EnMkk* this, s32)
 void func_80A4EEF4(EnMkk* this);
-void func_80A4F16C(Actor* thisx, PlayState* play);
+void func_80A4F16C(EnMkk* this, PlayState* play);
 void func_80A4F4C8(Actor* thisx, PlayState* play);
 void func_80A4E67C(EnMkk* this);
 void func_80A4E84C(EnMkk* this);
-#if 0
+void func_80A4EBBC(EnMkk* this, PlayState* play);
+
+#if 1
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
     ACTORCAT_ENEMY,
@@ -45,30 +48,38 @@ const ActorInit En_Mkk_InitVars = {
     (ActorFunc)EnMkk_Draw,
 };
 
-static s16 D_80A4F748[2] = { 0xF, 0x64 };
-static Color_RGBA8 D_80A4F780 = { 0xFA, 0xFA, 0xFA, 0xFF };
-static Color_RGBA8 D_80A4F784 = { 0xB4, 0xB4, 0xB4, 0xFF };
-static Vec3f D_80A4F788 = { 0.0f, 0.45f, 0.0f };
-static s32 D_80A4F794[2] = { 0x323232FF, 0xFFFFFFFF };
-static s32 D_80A4F79C[2] = { 0xC8C8C8FF, 0xFFFFFFFF };
-static struct _struct_D_80A4F7A4_0x10 D_80A4F7A4[2] = {
-    { 0x06000030, 0x060000B0, (Mtx *)0x060000C8, 0x06000140 },
-    { 0x060001F0, 0x06000278, (Mtx *)0x06000290, 0x06000310 },
-};
-static s32 D_80A4F7C4[7] = { 0xFFFFFFFF, 0x808080FF, 0xFF, 0xFF, 0x808080FF, 0xFFFFFFFF, 0 };
-
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_80A4F720 = {
-    { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+static ColliderSphereInit sSphereInit = {
+    {
+        COLTYPE_HIT3,
+        AT_NONE | AT_TYPE_ENEMY,
+        AC_NONE | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_SPHERE,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 1, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80A4F74C = { 1, 15, 30, 10 };
+struct _struct_D_80A4F7A4_0x10 {
+    /* 0x00 */ Gfx* unk0;
+    /* 0x04 */ Gfx* unk4;
+    /* 0x08 */ Gfx* unk8;
+    /* 0x0C */ Gfx* unkC;
+};
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A4F754 = {
+static s16 D_80A4F748[2] = { 0xF, 0x64 };
+
+static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
+
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -103,126 +114,109 @@ static DamageTable D_80A4F754 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A4F774[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
 };
 
+static Color_RGBA8 D_80A4F780 = { 250, 250, 250, 255 };
+
+static Color_RGBA8 D_80A4F784 = { 180, 180, 180, 255 };
+
+static Vec3f D_80A4F788 = { 0.0f, 0.45f, 0.0f };
+
+// static s32 D_80A4F794[2] = { 0x323232FF, 0xFFFFFFFF };
+static Color_RGBA8 D_80A4F794[] = { // prim
+    { 50, 50, 50, 255 },
+    { 255, 255, 255, 255 }
+};
+
+// static s32 D_80A4F79C[2] = { 0xC8C8C8FF, 0xFFFFFFFF };
+static Color_RGBA8 D_80A4F79C[] = { // env
+    { 200, 200, 200, 255 },
+    { 255, 255, 255, 255 }
+};
+static struct _struct_D_80A4F7A4_0x10 D_80A4F7A4[2] = {
+    { object_mkk_DL_000030, object_mkk_DL_0000B0, object_mkk_DL_0000C8, object_mkk_DL_000140 },
+    { object_mkk_DL_0001F0, object_mkk_DL_000278, object_mkk_DL_000290, object_mkk_DL_000310 },
+};
+
+//{ 0xFFFFFFFF, 0x808080FF, 0xFF, 0xFF, 0x808080FF, 0xFFFFFFFF, 0 };
+static Color_RGBA8 D_80A4F7C4[] = { { 255, 255, 255, 255 },
+                                    { 128, 128, 128, 255 },
+                                    { 0, 0, 0, 255 },
+                                    { 0, 0, 0, 255 },
+                                    { 128, 128, 128, 255 },
+                                    { 255, 255, 255, 255 },
+                                    { 0 } };
+
 #endif
 
-extern ColliderSphereInit D_80A4F720;
-extern CollisionCheckInfoInit D_80A4F74C;
-extern DamageTable D_80A4F754;
-extern InitChainEntry D_80A4F774[];
-extern f32 D_80A4F7E0;
-extern f32 D_80A4F7E4;
-extern f32 D_80A4F7E8;
-extern f32 D_80A4F7EC;
-extern f32 D_80A4F7F0;
-extern f32 D_80A4F7F4;
-extern f32 D_80A4F7F8;
-extern f32 D_80A4F7FC;
-extern f32 D_80A4F800;
-extern f32 D_80A4F804;
-extern f32 D_80A4F808;
-extern f32 D_80A4F80C;
-extern f32 D_80A4F810;
-extern f32 D_80A4F814;
-extern f32 D_80A4F818;
-extern f32 D_80A4F81C;
-extern f32 D_80A4F820;
-extern f32 D_80A4F824;
-extern f32 D_80A4F828;
-extern f32 D_80A4F82C;
-extern f32 D_80A4F830;
-extern f32 D_80A4F834;
-extern f32 D_80A4F83C;
-extern f32 D_80A4F840;
-extern s16 D_80A4F748;
+extern ColliderSphereInit sSphereInit;
+extern CollisionCheckInfoInit sColChkInfoInit;
+extern DamageTable sDamageTable;
+extern InitChainEntry sInitChain[];
+
 extern Vec3f D_80A4F788;
 extern Color_RGBA8 D_80A4F780;
 extern Color_RGBA8 D_80A4F784;
-extern Color_RGBA8 D_80A4F794[];
-extern Color_RGBA8 D_80A4F79C[];
+// extern s32 D_80A4F7C4[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Init.s")
-/*
-void EnMkk_Init(Actor *thisx, PlayState *play) {
-    //s32 sp2C;
-    //PosRot *sp24;
-    //PosRot *temp_a1;
-    //s16 temp_v0;
-    //s16 temp_v0_2;
-    //s16 temp_v0_3;
-    s32 params2;
+// extern s16 D_80A4F748;
+// extern Color_RGBA8 D_80A4F794[];
+// extern Color_RGBA8 D_80A4F79C[];
+// extern _struct_D_80A4F7A4_0x10 D_80A4F7A4[];
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Init.s")
+
+void EnMkk_Init(Actor* thisx, PlayState* play) {
+    EnMkk* this = (EnMkk*)thisx;
     s32 params8;
-    u8 phi_v1;
-    EnMkk *this = (EnMkk *) thisx;
+    s32 params2;
 
-    Actor_ProcessInitChain(&this->actor, D_80A4F774);
-    Collider_InitAndSetSphere(play, &this->unk17C, &this->actor, &D_80A4F720);
-    this->unk17C.dim.worldSphere.radius = D_80A4F748;
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80A4F754, &D_80A4F74C);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetSphere(play, &this->unk17C, &this->actor, &sSphereInit);
+    this->unk17C.dim.worldSphere.radius = D_80A4F748[0];
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 1000.0f, NULL, 0.0f);
-    //temp_v0 = this->actor.shape.rot.x;
+
     this->unk148 = 0;
     this->unk149 = 0;
-    if (this->actor.shape.rot.x >= 0) {
-        this->unk152 = this->actor.shape.rot.x;
-    } else {
-        this->unk152 = this->actor.shape.rot.x * -0x50;
-    }
-    //temp_v0_2 = this->actor.shape.rot.z;
-    //temp_a1 = &this->actor.world;
+    this->unk152 = (this->actor.shape.rot.x >= 0) ? this->actor.shape.rot.x : this->actor.shape.rot.x * -0x50;
 
-    if (this->actor.shape.rot.z < 0) {
-        this->unk14C = 0;
-    } else {
-        this->unk14C = this->actor.shape.rot.z;
-        if (this->actor.shape.rot.z >= 0x11) {
-            this->unk14C = 0x10;
-        } else {
-        }
-            this->unk14C = this->actor.shape.rot.z;
-        //this->unk14C = phi_v1;
-    }
+    this->unk14C = CLAMP(this->actor.shape.rot.z, 0, 16);
+
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
-    //sp24 = temp_a1;
+
     Math_Vec3f_Copy(&this->unk154, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk160, &this->actor.world.pos);
-    if ((this->actor.params & 4) != 0) {
-        this->unk14B = 8;
-    } else {
-        this->unk14B = 0;
-    }
-    //temp_v0_3 = this->actor.params;
-    this->actor.params = this->actor.params & 1;
+    this->unk14B = (this->actor.params & 4) ? 8 : 0;
+
     params8 = (this->actor.params >> 8) & 0xFF;
     params2 = this->actor.params & 2;
+    this->actor.params &= 1;
     if (this->actor.params == 1) {
         this->actor.hintId = 0x3C;
     } else {
         this->actor.hintId = 0x2C;
     }
     if ((params8 == 0) || (params8 == 0xFF)) {
-        //sp2C = params2;
-        func_80A4E0CC(this, params2);
-        this->unk178 = D_80A4F7E0;
+        func_80A4E0CC(this); // this, params2
+        this->unk178 = 30000.0f;
         if (params2 > 0) {
             this->unk14B |= 4;
         }
     } else {
-        this->unk178 = (f32) params8 * 40.0f * D_80A4F7E4;
-        func_80A4EDF0(this, params2);
+        this->unk178 = params8 * 40.0f * 0.1f;
+        func_80A4EDF0(this); // this, params2
         this->unk14E = 0;
     }
 }
-*/
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Destroy.s")
 
 void EnMkk_Destroy(Actor* thisx, PlayState* play) {
@@ -245,14 +239,14 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
     s32 phi_v0;
 
     if ((this->unk14B & 4) != 0) {
-        phi_v0 = this->unk14A + 0xF;
+        phi_v0 = this->unk14A + 15;
     } else {
         phi_v0 = this->unk14A + 5;
     }
     if (phi_v0 >= 0xFF) {
         this->unk148 = 3;
         this->unk17C.base.acFlags |= 1;
-        this->unk14A = 0xFF;
+        this->unk14A = 255;
         this->actor.flags |= 1;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->unk14B = this->unk14B & 0xFFFB;
@@ -295,7 +289,7 @@ void func_80A4E22C(EnMkk* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E2B8.s")
 
 void func_80A4E2B8(EnMkk* this) {
-    this->unk14E = 0x1E;
+    this->unk14E = 30;
     this->unk150 = this->actor.shape.rot.y;
     this->unk14B = this->unk14B & 0xFFFE;
     this->actionFunc = func_80A4E2E8;
@@ -373,7 +367,7 @@ void func_80A4E67C(EnMkk* this) {
     this->unk17C.base.acFlags &= -2;
     this->actor.flags = this->actor.flags | 0x10;
     Actor_PlaySfxAtPos(&this->actor, 0x3876);
-    this->unk14A = 0xFE;
+    this->unk14A = 254;
     func_800BE568(&this->actor, &this->unk17C);
     this->actor.speedXZ = 7.0f;
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -408,55 +402,273 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E84C.s")
 
-void func_80A4E84C(EnMkk *arg0) {
-    if ((arg0->unk14B & 3) != 0) {
+void func_80A4E84C(EnMkk* this) {
+    if ((this->unk14B & 3) != 0) {
         Vec3f sp34;
-        f32 temp_fv0 = Math_Vec3f_DistXYZ(&arg0->actor.world.pos, &arg0->actor.prevPos);
-        
-        Math_Vec3f_Copy(&sp34, &arg0->unk154);
-        if (temp_fv0 < D_80A4F7F8) {
-            Math_Vec3f_Copy(&arg0->unk154, &arg0->actor.prevPos);
+        f32 temp_fv0 = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.prevPos);
+
+        Math_Vec3f_Copy(&sp34, &this->unk154);
+        if (temp_fv0 < 0.001f) {
+            Math_Vec3f_Copy(&this->unk154, &this->actor.prevPos);
         } else {
             temp_fv0 = 1.0f / temp_fv0;
-            
-            arg0->unk154.x = ((arg0->actor.prevPos.x - arg0->actor.world.pos.x) * temp_fv0 * 10.0f) + arg0->actor.world.pos.x;
-            arg0->unk154.y = ((arg0->actor.prevPos.y - arg0->actor.world.pos.y) * temp_fv0 * 10.0f) + arg0->actor.world.pos.y;
-            arg0->unk154.z = ((arg0->actor.prevPos.z - arg0->actor.world.pos.z) * temp_fv0 * 10.0f) + arg0->actor.world.pos.z;
+
+            this->unk154.x =
+                ((this->actor.prevPos.x - this->actor.world.pos.x) * temp_fv0 * 10.0f) + this->actor.world.pos.x;
+            this->unk154.y =
+                ((this->actor.prevPos.y - this->actor.world.pos.y) * temp_fv0 * 10.0f) + this->actor.world.pos.y;
+            this->unk154.z =
+                ((this->actor.prevPos.z - this->actor.world.pos.z) * temp_fv0 * 10.0f) + this->actor.world.pos.z;
         }
-        temp_fv0 = Math_Vec3f_DistXYZ(&arg0->unk154, &sp34);
-        if (temp_fv0 < D_80A4F7FC) {
-            Math_Vec3f_Copy(&arg0->unk160, &sp34);
+        temp_fv0 = Math_Vec3f_DistXYZ(&this->unk154, &sp34);
+        if (temp_fv0 < 0.001f) {
+            Math_Vec3f_Copy(&this->unk160, &sp34);
         } else {
             temp_fv0 = 1.0f / temp_fv0;
-            
-            arg0->unk160.x = ((sp34.x - arg0->unk154.x) * temp_fv0 * 12.0f) + arg0->unk154.x;
-            arg0->unk160.y = ((sp34.y - arg0->unk154.y) * temp_fv0 * 12.0f) + arg0->unk154.y;
-            arg0->unk160.z = ((sp34.z - arg0->unk154.z) * temp_fv0 * 12.0f) + arg0->unk154.z;
+
+            this->unk160.x = ((sp34.x - this->unk154.x) * temp_fv0 * 12.0f) + this->unk154.x;
+            this->unk160.y = ((sp34.y - this->unk154.y) * temp_fv0 * 12.0f) + this->unk154.y;
+            this->unk160.z = ((sp34.z - this->unk154.z) * temp_fv0 * 12.0f) + this->unk154.z;
         }
     } else {
-        arg0->unk160.y = arg0->unk154.y;
-        arg0->unk154.y = arg0->actor.world.pos.y;
-        arg0->unk154.x = arg0->actor.world.pos.x - 10.0f * Math_SinS(arg0->actor.shape.rot.y + (s32) (D_80A4F804 * arg0->actor.speedXZ * sin_rad(arg0->unk14E * D_80A4F800)));
-        arg0->unk154.z = arg0->actor.world.pos.z - 10.0f * Math_CosS(arg0->actor.shape.rot.y + (s32) (D_80A4F80C * arg0->actor.speedXZ * sin_rad(arg0->unk14E * D_80A4F808)));
-        arg0->unk160.x = arg0->unk154.x - 12.0f * Math_SinS(arg0->actor.shape.rot.y - (s32) (D_80A4F814 * arg0->actor.speedXZ * sin_rad(arg0->unk14E * D_80A4F810)));
-        arg0->unk160.z = arg0->unk154.z - 12.0f * Math_CosS(arg0->actor.shape.rot.y - (s32) (D_80A4F81C * arg0->actor.speedXZ * sin_rad(arg0->unk14E * D_80A4F818)));
+        this->unk160.y = this->unk154.y;
+        this->unk154.y = this->actor.world.pos.y;
+        this->unk154.x = this->actor.world.pos.x -
+                         10.0f * Math_SinS(this->actor.shape.rot.y +
+                                           (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk14E * 0.62831855f)));
+        this->unk154.z = this->actor.world.pos.z -
+                         10.0f * Math_CosS(this->actor.shape.rot.y +
+                                           (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk14E * 0.62831855f)));
+        this->unk160.x = this->unk154.x -
+                         12.0f * Math_SinS(this->actor.shape.rot.y -
+                                           (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk14E * 0.62831855f)));
+        this->unk160.z = this->unk154.z -
+                         12.0f * Math_CosS(this->actor.shape.rot.y -
+                                           (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk14E * 0.62831855f)));
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EBBC.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EBBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Update.s")
+void func_80A4EBBC(EnMkk* this, PlayState* play) {
+    if (this->unk17C.base.acFlags & 2) {
+        this->unk17C.base.acFlags &= 0xFFFD;
+        Actor_SetDropFlag(&this->actor, &this->unk17C.info);
+        Enemy_StartFinishingBlow(play, &this->actor);
+        func_80A4E67C(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EDF0.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EE48.s")
+void EnMkk_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
+    Player* player;
+    EnMkk* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EEF4.s")
+    if (this->unk148 > 0) {
+        this->unk148--;
+    } else if ((Rand_ZeroOne() < 0.075f) && (this->actor.params != 1)) {
+        this->unk148 = 6;
+    }
+    func_80A4EBBC(&this->actor, play);
+    this->actionFunc(this, play);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 0x1D);
+    if (this->actor.params == 0) {
+        func_80A4E84C(this);
+    }
+    if (Actor_IsFacingPlayer(&this->actor, 0x3000)) {
+        player = GET_PLAYER(play);
+        this->actor.shape.rot.x = Actor_PitchToPoint(&this->actor, &player->actor.focus.pos);
+        this->actor.shape.rot.x = CLAMP(this->actor.shape.rot.x, -0x1800, 0x1800);
+    }
+    Actor_SetFocus(&this->actor, 10.0f);
+    this->unk17C.dim.worldSphere.center.x = this->actor.focus.pos.x;
+    this->unk17C.dim.worldSphere.center.y = this->actor.focus.pos.y;
+    this->unk17C.dim.worldSphere.center.z = this->actor.focus.pos.z;
+    if (this->unk17C.base.atFlags & 1) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk17C.base);
+    }
+    if (this->unk17C.base.acFlags & 1) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk17C.base);
+    }
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk17C.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EF74.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EDF0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F16C.s")
+void func_80A4EDF0(EnMkk* this) {
+    this->unk14A = 0;
+    this->unk14B |= 3;
+    this->actor.flags &= -2;
+    this->actor.draw = NULL;
+    this->actor.update = func_80A4F16C;
+    this->actor.gravity = -0.5f;
+    this->unk14E = this->unk152;
+    this->actionFunc = func_80A4EE48;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EE48.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F4C8.s")
+void func_80A4EE48(EnMkk* this, PlayState* play) {
+    if (this->unk14E > 0) {
+        this->unk14E--;
+        if (this->unk14E == 0) {
+            this->actor.flags &= -0x11;
+        }
+    } else if ((this->actor.xzDistToPlayer < this->unk178) && (Player_GetMask(play) != 0x10)) {
+        this->actor.update = EnMkk_Update;
+        this->actor.draw = EnMkk_Draw;
+        this->actor.flags &= -0x11;
+        func_80A4E0CC(this);
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EEF4.s")
+
+void func_80A4EEF4(EnMkk* this) {
+    Math_Vec3f_Copy(&this->unk16C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->unk154, &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->unk160, &this->actor.world.pos);
+    Actor_SetScale(&this->actor, 0.005f);
+    this->actor.update = func_80A4F16C;
+    this->actor.draw = func_80A4F4C8;
+    this->actionFunc = func_80A4EF74;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EF74.s")
+
+void func_80A4EF74(EnMkk* this, PlayState* play) {
+    s32 temp = this->unk14A - 20;
+
+    if (temp <= 0) {
+        if ((this->unk14B & 8) != 0) {
+            Actor_SetScale(&this->actor, 0.01f);
+            this->unk148 = 0;
+            this->unk149 = 0;
+            Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+            Math_Vec3f_Copy(&this->unk154, &this->actor.world.pos);
+            Math_Vec3f_Copy(&this->unk160, &this->actor.world.pos);
+            this->actor.speedXZ = 0.0f;
+            this->actor.velocity.y = 0.0f;
+            func_80A4EDF0(this);
+        } else {
+            Actor_MarkForDeath(&this->actor);
+        }
+    } else {
+        this->unk14A = temp;
+        this->actor.world.pos.x += 0.3f + (3.0f * Rand_ZeroOne());
+        this->actor.world.pos.y += 0.5f + (3.5f * Rand_ZeroOne());
+        this->unk16C.x -= 0.3f + (3.0f * Rand_ZeroOne());
+        this->unk16C.y += 0.5f + (3.5f * Rand_ZeroOne());
+        this->unk154.z += 0.3f + (3.0f * Rand_ZeroOne());
+        this->unk154.y += 0.5f + (3.5f * Rand_ZeroOne());
+        this->unk160.z -= 0.3f + (3.0f * Rand_ZeroOne());
+        this->unk160.y += 0.5f + (3.5f * Rand_ZeroOne());
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F16C.s")
+
+void func_80A4F16C(EnMkk* this, PlayState* play) {
+    this->actionFunc(this, play);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Draw.s")
+
+void EnMkk_Draw(Actor* thisx, PlayState* play) {
+    struct _struct_D_80A4F7A4_0x10* sp2C;
+    Gfx* gfx;
+    Color_RGBA8* temp_v0;
+    EnMkk* this = (EnMkk*)thisx;
+
+    sp2C = &D_80A4F7A4[this->actor.params];
+    if (this->actor.projectedPos.z > 0.0f) {
+        MtxF* temp_v0_2;
+        OPEN_DISPS(play->state.gfxCtx);
+        if (this->unk14A == 0xFF) {
+            temp_v0 = &D_80A4F7C4[this->unk148];
+            gfx = POLY_OPA_DISP;
+            gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+            gDPSetPrimColor(&gfx[1], 0, 0xFF, temp_v0->r, temp_v0->g, temp_v0->b, temp_v0->a);
+            gSPSegment(&gfx[2], 0x08, D_801AEFA0);
+            gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(&gfx[4], sp2C->unkC);
+            POLY_OPA_DISP = &gfx[5];
+        }
+        gfx = POLY_XLU_DISP;
+        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gDPSetEnvColor(&gfx[1], 255, 255, 255, this->unk14A);
+        gSPDisplayList(&gfx[2], sp2C->unk0);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[4], sp2C->unk4);
+        if (this->actor.params == 0) {
+            temp_v0_2 = Matrix_GetCurrent();
+            temp_v0_2->mf[3][0] = this->unk154.x;
+            temp_v0_2->mf[3][1] = this->unk154.y + 8.5f;
+            temp_v0_2->mf[3][2] = this->unk154.z;
+
+            Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
+            gSPMatrix(&gfx[5], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(&gfx[6], sp2C->unk4);
+
+            temp_v0_2->mf[3][0] = this->unk160.x;
+            temp_v0_2->mf[3][1] = this->unk160.y + 7.2250004f;
+            temp_v0_2->mf[3][2] = this->unk160.z;
+
+            Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
+            gSPMatrix(&gfx[7], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(&gfx[8], sp2C->unk4);
+            gSPDisplayList(&gfx[9], sp2C->unk8);
+
+            POLY_XLU_DISP = &gfx[10];
+        } else {
+            gSPDisplayList(&gfx[5], sp2C->unk8);
+            POLY_XLU_DISP = &gfx[6];
+        }
+    }
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F4C8.s")
+
+void func_80A4F4C8(Actor* thisx, PlayState* play) {
+    s32 pad;
+    Gfx* gfx;
+    MtxF* temp_v0_2;
+    struct _struct_D_80A4F7A4_0x10* temp_a3 = &D_80A4F7A4[thisx->params];
+    EnMkk* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gfx = POLY_XLU_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gDPSetEnvColor(&gfx[1], 255, 255, 255, this->unk14A);
+    gSPDisplayList(&gfx[2], temp_a3->unk0);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+    gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[4], temp_a3->unk4);
+    temp_v0_2 = Matrix_GetCurrent();
+    temp_v0_2->mf[3][0] = this->unk154.x;
+    temp_v0_2->mf[3][1] = this->unk154.y + 5.0f;
+    temp_v0_2->mf[3][2] = this->unk154.z;
+    gSPMatrix(&gfx[5], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[6], temp_a3->unk4);
+    temp_v0_2->mf[3][0] = this->unk160.x;
+    temp_v0_2->mf[3][1] = this->unk160.y + 5.0f;
+    temp_v0_2->mf[3][2] = this->unk160.z;
+    gSPMatrix(&gfx[7], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[8], temp_a3->unk4);
+    temp_v0_2->mf[3][0] = this->unk16C.x;
+    temp_v0_2->mf[3][1] = this->unk16C.y + 5.0f;
+    temp_v0_2->mf[3][2] = this->unk16C.z;
+    gSPMatrix(&gfx[9], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[10], temp_a3->unk4);
+    gSPDisplayList(&gfx[11], temp_a3->unk8);
+    POLY_XLU_DISP = &gfx[12];
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
