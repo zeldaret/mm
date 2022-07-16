@@ -32,7 +32,7 @@ s16 sCurRow = 0;
 #define INV_EDITOR_SECTION_STRAY_FAIRIES 84
 #define INV_EDITOR_SECTION_DOUBLE_DEFENSE 88
 
-// Geometry of the highlight on the selected section
+// Geometry of the highlights for the selected section
 typedef struct {
     /* 0 */ s16 screenX;
     /* 1 */ s16 screenY;
