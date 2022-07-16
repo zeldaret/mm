@@ -4,27 +4,23 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.h"
 
+
 struct BgDyYoseizo;
 
 typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
 
-#define BG_DY_YOSEIZO_EFFECT_COUNT 200
+#define GREAT_FAIRY_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define GREAT_FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
-// typedef struct {
-//     /* 0x00 */ u8 unk00; // alive; // drawn if 1, respawn if 0
-//     /* 0x04 */ Vec3f pos;
-//     /* 0x10 */ Vec3f velocity;
-//     /* 0x1C */ Vec3f accel;
-//     /* 0x28 */ Color_RGB8 primColor;
-//     /* 0x2B */ Color_RGB8 envColor;
-//     /* 0x2E */ s16 unk2E; // alpha;
-//     /* 0x30 */ f32 unk30; // scale;
-//     /* 0x34 */ s16 unk34; // timer; // lifetime
-//     /* 0x36 */ s16 unk36; // type; // 0 is general radiance, else is directed towards Player
-//     /* 0x38 */ s16 unk38; // pitch;
-//     /* 0x3A */ s16 unk3A; // yaw;
-//     /* 0x3C */ s16 unk3C; // roll;
-// } BgDyYoseizoEffect; // size = 0x40
+typedef enum {
+    /* 0 */ GREAT_FAIRY_TYPE_0,
+    /* 1 */ GREAT_FAIRY_TYPE_1,
+    /* 2 */ GREAT_FAIRY_TYPE_2,
+    /* 3 */ GREAT_FAIRY_TYPE_3,
+    /* 4 */ GREAT_FAIRY_TYPE_4
+} 
+
+#define BG_DY_YOSEIZO_EFFECT_COUNT 200
 
 typedef struct {
     /* 0x00 */ u8 alive; // drawn if 1, respawn if 0
@@ -39,9 +35,8 @@ typedef struct {
     /* 0x36 */ s16 type; // 0 is general radiance, else is directed towards Player
     /* 0x38 */ s16 pitch;
     /* 0x3A */ s16 yaw;
-    /* 0x3C */ s16 roll;
+    /* 0x3C */ s16 roll; // all three are f32 in OoT
 } BgDyYoseizoEffect; // size = 0x40
-
 
 typedef struct BgDyYoseizo {
     /* 0x0000 */ Actor actor;
@@ -52,15 +47,15 @@ typedef struct BgDyYoseizo {
     /* 0x02DC */ Vec3s unk2DC;
     /* 0x02DC */ Vec3s unk2E2;
     /* 0x02E8 */ EnDyExtra* unk2E8;
-    /* 0x02EC */ f32 unk2EC;                        /* inferred */
-    /* 0x02F0 */ f32 unk2F0;                        /* inferred */
-    /* 0x02F4 */ f32 unk2F4;                        /* inferred */
-    /* 0x02F8 */ s16 unk2F8;                        /* inferred */
-    /* 0x02FA */ s16 eyeIndex;                        /* inferred */
-    /* 0x02FC */ s16 mouthIndex;                        /* inferred */
-    /* 0x02FE */ s16 blinkTimer;                        /* inferred */
+    /* 0x02EC */ f32 unk2EC;
+    /* 0x02F0 */ f32 unk2F0;
+    /* 0x02F4 */ f32 unk2F4;
+    /* 0x02F8 */ s16 unk2F8;
+    /* 0x02FA */ s16 eyeIndex;
+    /* 0x02FC */ s16 mouthIndex;
+    /* 0x02FE */ s16 blinkTimer;
     /* 0x0300 */ s16 timer;
-    /* 0x0302 */ u16 unk302;                        /* inferred */
+    /* 0x0302 */ u16 unk302;
     /* 0x0304 */ BgDyYoseizoEffect effects[200];
 } BgDyYoseizo; // size = 0x3504
 

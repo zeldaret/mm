@@ -13,7 +13,7 @@
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play);
 void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play);
 void BgDyYoseizo_Update(Actor* thisx, PlayState* play);
-void func_80A0BD40(Actor* thisx, PlayState* play);
+void BgDyYoseizo_Draw(Actor* thisx, PlayState* play);
 
 void func_80A0AE1C(BgDyYoseizo* this, PlayState* play);
 void func_80A0B078(BgDyYoseizo* this, PlayState* play);
@@ -27,10 +27,10 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play);
 void func_80A0BB08(BgDyYoseizo* this, PlayState* play);
 
 /* Effect functions */
-void func_80A0BE60(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f* accel, Color_RGB8* primColor,
-                   Color_RGB8* envColor, f32 scale, s16 life, s16 type);
-void func_80A0BF70(BgDyYoseizo* this, PlayState* play);
-void func_80A0C270(BgDyYoseizo* this, PlayState* play);
+void BgDyYoseizo_SpawnEffect(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f* accel,
+                             Color_RGB8* primColor, Color_RGB8* envColor, f32 scale, s16 life, s16 type);
+void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play);
+void BgDyYoseizo_DrawEffects(BgDyYoseizo* this, PlayState* play);
 
 const ActorInit Bg_Dy_Yoseizo_InitVars = {
     ACTOR_BG_DY_YOSEIZO,
@@ -77,7 +77,7 @@ void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play) {
 
 // Has no visible effect since no segment set for manually-controllable eye textures
 // BgDyYoseizo_UpdateEyes
-void func_80A0A96C(BgDyYoseizo* this) {
+void BgDyYoseizo_UpdateEyes(BgDyYoseizo* this) {
     if (this->blinkTimer != 0) {
         this->blinkTimer--;
     }
@@ -91,11 +91,11 @@ void func_80A0A96C(BgDyYoseizo* this) {
     }
 }
 
-void func_80A0A9E4(BgDyYoseizo* this, PlayState* play) {
+void BgDyYoseizo_Bob(BgDyYoseizo* this, PlayState* play) {
     this->actor.shape.yOffset = Math_SinS(play->gameplayFrames * 1000) * 15.0f;
 }
 
-void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
+void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 arg1, s32 count) {
     static Color_RGB8 sEffectPrimColors[] = {
         { 255, 235, 220 }, { 255, 220, 220 }, { 220, 255, 220 },
         { 220, 220, 255 }, { 255, 255, 200 }, { 255, 255, 170 },
@@ -123,7 +123,7 @@ void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
         vel.y = accel.y * 10.0f;
         vel.z = accel.z * 10.0f;
 
-        for (i = 0; i < arg2; i++) {
+        for (i = 0; i < count; i++) {
             switch (arg1) {
                 case 2:
                     scale = 1.0f;
@@ -133,7 +133,7 @@ void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
                     vel.y = accel.y * 100.0f;
                     vel.z = accel.z * 100.0f;
 
-                    effectType = this->actor.params & 0xF;
+                    effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
 
                     pos.x = this->actor.world.pos.x;
                     pos.y = this->actor.world.pos.y + spawnHeightVariation +
@@ -144,7 +144,7 @@ void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
                 case 0:
                     scale = 1.0f;
                     life = 90;
-                    effectType = this->actor.params & 0xF;
+                    effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
 
                     pos.x = this->actor.world.pos.x;
                     pos.y = this->actor.world.pos.y + spawnHeightVariation +
@@ -171,7 +171,7 @@ void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
             envColor.g = sEffectEnvColors[effectType].g;
             envColor.b = sEffectEnvColors[effectType].b;
 
-            func_80A0BE60(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
+            BgDyYoseizo_SpawnEffect(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
         }
     }
 }
@@ -184,7 +184,7 @@ void func_80A0AD50(BgDyYoseizo* this) {
     Math_ApproachF(&scale, 0.035f, this->unk2F4, 0.005f);
     Math_ApproachF(&this->unk2F0, 0.8f, 0.1f, 0.02f);
     Math_ApproachF(&this->unk2F4, 0.2f, 0.03f, 0.05f);
-    func_80A0AA40(this, 0, 2);
+    BgDyYoseizo_SpawnEffects(this, 0, 2);
     Actor_SetScale(&this->actor, scale);
 }
 
@@ -199,10 +199,10 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
         this->unk2F4 = 0.0f;
         this->unk2F8 = 0;
 
-        if ((this->actor.params & 0xF) < 4) {
+        if ((GREAT_FAIRY_GET_TYPE(&this->actor)) < 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
-                        (this->actor.params & 0xF) + 4);
+                        (GREAT_FAIRY_GET_TYPE(&this->actor)) + 4);
         } else {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0, 4);
@@ -219,7 +219,7 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
             this->unk2F8 += 0x12C;
         }
 
-        func_80A0AA40(this, 0, 2);
+        BgDyYoseizo_SpawnEffects(this, 0, 2);
         Actor_SetScale(&this->actor, scale);
     }
 }
@@ -237,7 +237,7 @@ void func_80A0AFDC(BgDyYoseizo* this) {
 }
 
 void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
@@ -251,7 +251,7 @@ void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
@@ -265,7 +265,7 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
@@ -278,20 +278,20 @@ void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->timer == 60) {
-        if (!Flags_GetSwitch(play, (this->actor.params & 0xFE00) >> 9)) {
-            switch (this->actor.params & 0xF) {
-                case 0:
+        if (!Flags_GetSwitch(play, GREAT_FAIRY_GET_SWITCHFLAG(&this->actor))) {
+            switch (GREAT_FAIRY_GET_TYPE(&this->actor)) {
+                case GREAT_FAIRY_TYPE_0:
                     if (gSaveContext.save.playerData.magicAcquired != 1) {
                         gSaveContext.save.playerData.magicAcquired = 1;
                         gSaveContext.unk_3F30 = 0x30;
                     }
                     break;
 
-                case 2:
+                case GREAT_FAIRY_TYPE_2:
                     if (gSaveContext.save.playerData.doubleMagic != 1) {
                         gSaveContext.save.playerData.doubleMagic = 1;
                         gSaveContext.unk_3F30 = 0x60;
@@ -299,7 +299,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
                     }
                     break;
 
-                case 3:
+                case GREAT_FAIRY_TYPE_3:
                     if (gSaveContext.save.playerData.doubleDefense != 1) {
                         gSaveContext.save.playerData.doubleDefense = 1;
                     }
@@ -309,7 +309,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
         Interface_ChangeAlpha(9);
     }
 
-    if ((this->timer < 50) && ((this->actor.params & 0xF) == 3)) {
+    if ((this->timer < 50) && ((GREAT_FAIRY_GET_TYPE(&this->actor)) == 3)) {
         if (gSaveContext.save.inventory.defenseHearts < 20) {
             gSaveContext.save.inventory.defenseHearts++;
         }
@@ -330,7 +330,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
 void func_80A0B500(BgDyYoseizo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         Vec3f pos;
@@ -341,13 +341,13 @@ void func_80A0B500(BgDyYoseizo* this, PlayState* play) {
         pos.y = player->actor.world.pos.y + 200.0f;
         pos.z = player->actor.world.pos.z;
         this->unk2E8 = (EnDyExtra*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_DY_EXTRA, pos.x,
-                                                      pos.y, pos.z, 0, 0, 0, this->actor.params & 0xF);
+                                                      pos.y, pos.z, 0, 0, 0, GREAT_FAIRY_GET_TYPE(&this->actor));
         this->timer = 120;
     }
 }
 
 void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
-    func_80A0A9E4(this, play);
+    BgDyYoseizo_Bob(this, play);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0, 0.0f);
@@ -368,12 +368,13 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
         func_80A0AFDC(this);
     }
 
-    func_80A0A96C(this);
+    BgDyYoseizo_UpdateEyes(this);
 }
 
 void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
     func_80A0AD50(this);
     SkelAnime_Update(&this->skelAnime);
+
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 4)) {
         this->actor.shape.rot.y = 0;
@@ -385,11 +386,11 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0B834(BgDyYoseizo* this) {
-    this->actor.draw = func_80A0BD40;
+    this->actor.draw = BgDyYoseizo_Draw;
     Animation_Change(&this->skelAnime, sAnimations[2], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[2]), 2, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_APPEAR);
-    func_80A0AA40(this, 2, 30);
+    BgDyYoseizo_SpawnEffects(this, 2, 30);
 }
 
 void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
@@ -466,7 +467,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
-        this->actor.draw = func_80A0BD40;
+        this->actor.draw = BgDyYoseizo_Draw;
         Animation_PlayLoop(&this->skelAnime, sAnimations[4]);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
@@ -481,7 +482,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
         Animation_PlayLoop(&this->skelAnime, sAnimations[6]);
         this->unk2F8 = 9;
         this->actionFunc = func_80A0B8CC;
-        this->actor.draw = func_80A0BD40;
+        this->actor.draw = BgDyYoseizo_Draw;
     }
 }
 
@@ -494,10 +495,10 @@ void BgDyYoseizo_Update(Actor* thisx, PlayState* play) {
     if (this->timer != 0) {
         this->timer--;
     }
-    func_80A0BF70(this, play);
+    BgDyYoseizo_UpdateEffects(this, play);
 }
 
-s32 func_80A0BCD8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 BgDyYoseizo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     BgDyYoseizo* this = THIS;
 
     if (limbIndex == 8) {
@@ -510,7 +511,7 @@ s32 func_80A0BCD8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80A0BD40(Actor* thisx, PlayState* play) {
+void BgDyYoseizo_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sMouthTextures[] = {
         0x0601A588, // closed
         0x0601B588  // open
@@ -518,18 +519,18 @@ void func_80A0BD40(Actor* thisx, PlayState* play) {
     BgDyYoseizo* this = (BgDyYoseizo*)thisx;
     u32 step = 0;
 
-    switch (this->actor.params & 0xF) {
-        case 1:
+    switch (GREAT_FAIRY_GET_TYPE(&this->actor)) {
+        case GREAT_FAIRY_TYPE_1:
             step = 2;
             break;
 
-        case 2:
+        case GREAT_FAIRY_TYPE_2:
             step = 1;
             break;
 
-        case 3:
-        case 4:
-            step = this->actor.params & 0xF;
+        case GREAT_FAIRY_TYPE_3:
+        case GREAT_FAIRY_TYPE_4:
+            step = GREAT_FAIRY_GET_TYPE(&this->actor);
             break;
 
         default:
@@ -551,18 +552,17 @@ void func_80A0BD40(Actor* thisx, PlayState* play) {
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80A0BCD8, NULL, &this->actor);
+                          BgDyYoseizo_OverrideLimbDraw, NULL, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    func_80A0C270(this, play);
+    BgDyYoseizo_DrawEffects(this, play);
 }
 
 /* Effects functions */
 
-// BgDyYoseizo_SpawnEffect
-void func_80A0BE60(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f* accel, Color_RGB8* primColor,
-                   Color_RGB8* envColor, f32 scale, s16 life, s16 type) {
+void BgDyYoseizo_SpawnEffect(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f* accel,
+                             Color_RGB8* primColor, Color_RGB8* envColor, f32 scale, s16 life, s16 type) {
     BgDyYoseizoEffect* effect = this->effects;
     s16 i;
 
@@ -587,7 +587,7 @@ void func_80A0BE60(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f
 }
 
 // BgDyYoseizo_UpdateEffects
-void func_80A0BF70(BgDyYoseizo* this, PlayState* play) {
+void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizoEffect* effect = this->effects;
     Player* player = GET_PLAYER(play);
     Vec3f sp94;
@@ -660,8 +660,7 @@ void func_80A0BF70(BgDyYoseizo* this, PlayState* play) {
     }
 }
 
-// BgDyYoseizo_DrawEffects
-void func_80A0C270(BgDyYoseizo* this, PlayState* play) {
+void BgDyYoseizo_DrawEffects(BgDyYoseizo* this, PlayState* play) {
     static f32 sStretchFactors[] = {
         1.0f, 1.1f, 1.15f, 1.1f, 1.0f, 0.9f, 0.85f, 0.9f,
     };
