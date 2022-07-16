@@ -1,11 +1,10 @@
 /*
  * File: z_en_hgo.c
  * Overlay: ovl_En_Hgo
- * Description: Pamela's Father (Gibdo)
+ * Description: Pamela's Father (Human)
  */
 
 #include "z_en_hgo.h"
-#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -83,7 +82,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudHumanSkel, &object_harfgibud_Anim_00B644,
                        this->jointTable, this->morphTable, HGO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+
 struct EnHg;
 
 typedef void (*EnHgActionFunc)(struct EnHg*, PlayState*);
