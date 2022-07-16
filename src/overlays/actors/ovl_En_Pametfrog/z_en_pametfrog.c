@@ -8,7 +8,6 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigslime/object_bigslime.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -1370,16 +1369,16 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
 
 /* value -1: Limb Not used
  * value 0:  GEKKO_LIMB_WAIST
- * value 1:  GEKKO_LIMB_L_SHIN
- * value 2:  GEKKO_LIMB_L_FOOT
- * value 3:  GEKKO_LIMB_R_SHIN
- * value 4:  GEKKO_LIMB_R_FOOT
- * value 5:  GEKKO_LIMB_L_UPPER_ARM
- * value 6:  GEKKO_LIMB_L_FOREARM
- * value 7:  GEKKO_LIMB_L_HAND
- * value 8:  GEKKO_LIMB_R_UPPER_ARM
- * value 9:  GEKKO_LIMB_R_FOREARM
- * value 10: GEKKO_LIMB_R_HAND
+ * value 1:  GEKKO_LIMB_LEFT_SHIN
+ * value 2:  GEKKO_LIMB_LEFT_FOOT
+ * value 3:  GEKKO_LIMB_RIGHT_SHIN
+ * value 4:  GEKKO_LIMB_RIGHT_FOOT
+ * value 5:  GEKKO_LIMB_LEFT_UPPER_ARM
+ * value 6:  GEKKO_LIMB_LEFT_FOREARM
+ * value 7:  GEKKO_LIMB_LEFT_HAND
+ * value 8:  GEKKO_LIMB_RIGHT_UPPER_ARM
+ * value 9:  GEKKO_LIMB_RIGHT_FOREARM
+ * value 10: GEKKO_LIMB_RIGHT_HAND
  * value 11: GEKKO_LIMB_JAW
  */
 static s8 limbPosIndex[] = {
