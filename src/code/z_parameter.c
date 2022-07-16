@@ -2,7 +2,6 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 typedef struct {
