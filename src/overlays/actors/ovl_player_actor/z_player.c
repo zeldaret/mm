@@ -35,26 +35,50 @@ void func_8085B170(PlayState* play, Player* player);
 
 extern LinkAnimationHeader* D_8085BE84[6];
 
-s32 func_8082DA90(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DABC.s")
+s32 func_8082DA90(PlayState* play) {
+    return play->sceneLoadFlag != 0 || play->unk_18B4A != 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DAD4.s")
+void func_8082DABC(Player* this) {
+    this->linearVelocity = 0.0f;
+    this->actor.speedXZ = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DAFC.s")
+void func_8082DAD4(Player* this) {
+    func_8082DABC(this);
+    this->unk_AA5 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DB18.s")
+s32 func_8082DAFC(PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DB3C.s")
+    return CHECK_FLAG_ALL(player->actor.flags, 0x100);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DB60.s")
+void func_8082DB18(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_PlayOnce(play, &this->skelAnime, anim);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DB90.s")
+void func_8082DB3C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_PlayLoop(play, &this->skelAnime, anim);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DBC0.s")
+void func_8082DB60(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_PlayLoopSetSpeed(play, &this->skelAnime, anim, 2.0f/3.0f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DC28.s")
+void func_8082DB90(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 2.0f/3.0f);
+}
+
+void func_8082DBC0(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_Change(play, &this->skelAnime, anim, -2.0f/3.0f, Animation_GetLastFrame(anim), 0.0f, 2, 0.0f);
+}
+
+void func_8082DC28(Player* this) {
+    this->skelAnime.jointTable[1].y = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DC38.s")
 
