@@ -266,7 +266,7 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
 
     if (this->floatingBobbingTimer == 0) {
         this->floatingBobbingTimer = 32;
-       //! FAKE:
+        //! FAKE:
         if (this->floatingBobbingTimer) {}
     }
 
