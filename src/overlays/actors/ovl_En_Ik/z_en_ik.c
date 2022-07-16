@@ -480,7 +480,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
             particlePos.z = (Math_CosS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.z;
             particlePos.y = this->actor.world.pos.y;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
-            func_800DFD04(GET_ACTIVE_CAM(play), 2, 25, 5);
+            Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 25, 5);
             Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             CollisionCheck_SpawnShieldParticles(play, &particlePos);
         }
@@ -835,8 +835,8 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
     IronKnuckleEffect* ikEffect;
     Vec3f effectPos;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
-        ikEffect = &this->unk_550[i];
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+        ikEffect = &this->effects[i];
 
         if (ikEffect->enabled) {
             Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->vel, &ikEffect->pos);
@@ -963,7 +963,7 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if (this->drawArmorFlags == 0x1) {
         if (index > 0) {
-            ikEffect = &this->unk_550[index];
+            ikEffect = &this->effects[index];
             mf = Matrix_GetCurrent();
             ikEffect->pos.x = mf->mf[3][0];
             ikEffect->pos.y = mf->mf[3][1];
@@ -1034,8 +1034,8 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 
-        for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
-            ikEffect = &this->unk_550[i];
+        for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
+            ikEffect = &this->effects[i];
             if (ikEffect->enabled) {
                 Matrix_SetTranslateRotateYXZ(ikEffect->pos.x, ikEffect->pos.y, ikEffect->pos.z, &ikEffect->rot);
                 Matrix_Scale(0.012f, 0.012f, 0.012f, MTXMODE_APPLY);
@@ -1052,7 +1052,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
             }
         }
 
-        if (sp54 == ARRAY_COUNT(this->unk_550)) {
+        if (sp54 == ARRAY_COUNT(this->effects)) {
             this->drawArmorFlags = (0x1 | 0x4);
         }
 
