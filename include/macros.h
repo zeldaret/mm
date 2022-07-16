@@ -83,6 +83,13 @@
 #define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
+#define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
+#define CHECK_EQ_QUEST_HEART_PIECE_COUNT(numHp) ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == ((numHp) << QUEST_HEART_PIECE_COUNT))
+#define CHECK_LEQ_QUEST_HEART_PIECE_COUNT(numHp) ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) <= ((numHp) << QUEST_HEART_PIECE_COUNT))
+#define INCREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT))
+#define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
+#define RESET_HEART_PIECE_COUNT(maxHp) (gSaveContext.save.inventory.questItems ^= ((maxHp) << QUEST_HEART_PIECE_COUNT))
+
 #define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
 #define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
 #define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])

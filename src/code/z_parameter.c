@@ -3,6 +3,7 @@
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 typedef struct {
     /* 0x00 */ u8 scene;
@@ -330,9 +331,9 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
-        gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
-        if ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT)) {
-            gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT);
+        INCREMENT_QUEST_HEART_PIECE_COUNT;
+        if (CHECK_EQ_QUEST_HEART_PIECE_COUNT(4)) {
+            RESET_HEART_PIECE_COUNT(4);
             gSaveContext.save.playerData.healthCapacity += 0x10;
             gSaveContext.save.playerData.health += 0x10;
         }

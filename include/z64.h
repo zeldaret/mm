@@ -452,14 +452,6 @@ typedef struct {
 
 typedef void(*fault_update_input_func)(Input* input);
 
-typedef enum {
-    /* 0x00 */ PAUSE_ITEM,
-    /* 0x01 */ PAUSE_MAP,
-    /* 0x02 */ PAUSE_QUEST,
-    /* 0x03 */ PAUSE_MASK,
-    /* 0x04 */ PAUSE_WORLD_MAP
-} PauseMenuPage;
-
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
@@ -484,7 +476,7 @@ typedef struct {
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
-    /* 0x1EE */ u16 debugState;
+    /* 0x1EE */ u16 debugEditor;
     /* 0x1F0 */ u8 unk_1F0;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;

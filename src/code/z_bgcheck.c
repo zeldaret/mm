@@ -1,5 +1,6 @@
 #include "global.h"
 #include "vt.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define DYNA_RAYCAST_FLOORS 1
 #define DYNA_RAYCAST_WALLS 2
@@ -3295,7 +3296,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
     if ((result != BGCHECK_Y_MIN) && (dynaActor != NULL) && (dynaRaycast->play != NULL)) {
         pauseState = dynaRaycast->play->pauseCtx.state != 0;
         if (!pauseState) {
-            pauseState = dynaRaycast->play->pauseCtx.debugState != 0;
+            pauseState = dynaRaycast->play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE;
         }
         if (!pauseState && (dynaRaycast->colCtx->dyna.bgActorFlags[*dynaRaycast->bgId] & 2)) {
             curTransform = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].curTransform;
