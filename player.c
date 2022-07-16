@@ -96,7 +96,6 @@ s32 func_800DF86C(Camera*, ?);                      /* extern */
 s32 func_80115DB4(GameState*, u8, PlayState*, SaveContext*, ?); /* extern */
 ? func_80165DCC(?);                                 /* extern */
 ? func_80165DF0();                                  /* extern */
-? func_8019F638(Vec3f*, s32, f32, Player*);         /* extern */
 ? func_8019F780(Vec3f*, s32, f32);                  /* extern */
 ? func_8019FCB8(Vec3f*, ?, f32);                    /* extern */
 ? func_8019FD90(?, ?);                              /* extern */
@@ -1915,10 +1914,15 @@ void func_8082DD2C(PlayState* arg0, Player* arg1) {
     arg1->unk_AC0 = 0.0f;
 }
 
-void func_8082DE14(PlayState* play, Player* this) {
+s32 func_8082DE14(PlayState* play, Player* this) {
+    s32 var_v0;
+
+    var_v0 = 0;
     if (this->itemActionParam >= 2) {
         func_80831990(play, this, ITEM_NONE);
+        var_v0 = 1;
     }
+    return var_v0;
 }
 
 void func_8082DE50(PlayState* play, Player* this) {
@@ -1957,49 +1961,49 @@ void func_8082DF48(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTi
     }
 }
 
-void func_8082DF8C(Player* arg0, u16 arg1) {
+void func_8082DF8C(Player* this, u16 arg1) {
     s32 temp_a3;
     u16 var_v0;
     u8 temp_v0;
 
     temp_a3 = arg1 & 0xFFFF;
-    temp_v0 = arg0->currentMask;
+    temp_v0 = this->currentMask;
     if (temp_v0 == 0x14) {
-        func_8019F830(&arg0->actor.projectedPos, temp_a3 & 0xFFFF);
+        func_8019F830(&this->actor.projectedPos, temp_a3 & 0xFFFF);
         return;
     }
-    if (arg0->actor.id == 0) {
+    if (this->actor.id == 0) {
         if (temp_v0 == 0x13) {
             var_v0 = 0xE0;
         } else {
-            var_v0 = arg0->ageProperties->unk_92;
+            var_v0 = this->ageProperties->unk_92;
         }
-        func_800B8E58(arg0, (var_v0 + temp_a3) & 0xFFFF);
+        func_800B8E58(this, (var_v0 + temp_a3) & 0xFFFF);
     }
 }
 
-void func_8082E00C(Player* arg0) {
+void func_8082E00C(Player* this) {
     s32 var_s1;
     u16* var_s0;
 
     var_s0 = D_8085C3EC;
     var_s1 = 0;
     do {
-        func_801A75E8((*var_s0 + arg0->ageProperties->unk_92) & 0xFFFF);
+        func_801A75E8((*var_s0 + this->ageProperties->unk_92) & 0xFFFF);
         var_s1 += 1;
         var_s0 += 2;
     } while (var_s1 != 4);
 }
 
-s32 func_8082E078(Player* arg0, s32 arg1) {
-    return ((arg1 & 0xFFFF) + arg0->unk_B72) & 0xFFFF;
+u16 func_8082E078(Player* this, u16 arg1) {
+    return ((arg1 & 0xFFFF) + this->unk_B72) & 0xFFFF;
 }
 
-void func_8082E094(Player* arg0, u16 arg1) {
-    func_800B8E58(arg0, func_8082E078(arg0, arg1 & 0xFFFF) & 0xFFFF);
+void func_8082E094(Player* this, u16 arg1) {
+    func_800B8E58(this, func_8082E078(this, arg1 & 0xFFFF) & 0xFFFF);
 }
 
-s32 func_8082E0CC(Player* arg0, s32 arg1) {
+u16 func_8082E0CC(Player* arg0, u16 arg1) {
     return ((arg1 & 0xFFFF) + arg0->unk_B72 + arg0->ageProperties->unk_94) & 0xFFFF;
 }
 
@@ -2007,28 +2011,28 @@ void func_8082E0F4(Player* arg0, u16 arg1) {
     func_800B8E58(arg0, func_8082E0CC(arg0, arg1 & 0xFFFF) & 0xFFFF);
 }
 
-void func_8082E12C(Player* arg0, f32 arg1) {
-    s32 var_v1;
+void func_8082E12C(Player* this, f32 arg1) {
+    u16 var_v1;
 
-    if (arg0->currentMask == 0x14) {
+    if (this->currentMask == 0x14) {
         var_v1 = 0x8CE;
     } else {
-        var_v1 = func_8082E0CC(arg0, 0x800, arg0);
+        var_v1 = func_8082E0CC(this, 0x800U);
     }
-    func_8019F638(&arg0->actor.projectedPos, var_v1 & 0xFFFF, arg1, arg0);
+    func_8019F638(&this->actor.projectedPos, var_v1 & 0xFFFF, arg1);
 }
 
-void func_8082E188(Player* arg0) {
-    func_800B8E58(arg0, func_8082E0CC(arg0, 0x810) & 0xFFFF);
+void func_8082E188(Player* this) {
+    func_800B8E58(this, func_8082E0CC(this, 0x810U) & 0xFFFF);
 }
 
-void func_8082E1BC(Player* arg0) {
-    func_800B8E58(arg0, func_8082E0CC(arg0, 0x820) & 0xFFFF);
+void func_8082E1BC(Player* this) {
+    func_800B8E58(this, func_8082E0CC(this, 0x820U) & 0xFFFF);
 }
 
-void func_8082E1F0(Player* arg0, s32 arg1) {
-    func_800B8E58(arg0, arg1 & 0xFFFF);
-    arg0->stateFlags2 |= 8;
+void func_8082E1F0(Player* this, u16 sfxId) {
+    func_800B8E58(this, sfxId & 0xFFFF);
+    this->stateFlags2 |= 8;
 }
 
 void func_8082E224(Player* arg0, LinkAnimationHeader* arg1) {
@@ -2674,9 +2678,9 @@ void func_8082F938(PlayState* arg0, Player* arg1, s32 arg2, s32 arg3) {
 
 void func_8082FA5C(PlayState* arg0, Player* arg1, s32 arg2) {
     u16 sp26;
-    s32 var_a1;
     s8 temp_v0;
     s8 temp_v0_2;
+    u16 var_a1;
     u16 var_a2;
 
     if (arg1->meleeWeaponState == 0) {
@@ -2704,7 +2708,7 @@ void func_8082FA5C(PlayState* arg0, Player* arg1, s32 arg2) {
         }
         if (var_a1 != 0) {
             sp26 = var_a2;
-            func_8082E1F0(arg1, var_a1, var_a2);
+            func_8082E1F0(arg1, var_a1);
         }
         temp_v0_2 = arg1->meleeWeaponAnimation;
         if ((temp_v0_2 < 0x10) || (temp_v0_2 >= 0x16)) {
@@ -3158,10 +3162,10 @@ void func_808308DC(PlayState* arg0, Actor* arg1) {
         sp20 = var_v1;
         if (Player_ActionToSword(arg1, (s32) temp_a1) >= 0) {
             sp20 = var_v1;
-            func_8082E1F0((Player* ) arg1, 0x1802);
+            func_8082E1F0((Player* ) arg1, 0x1802U);
         } else {
             sp20 = var_v1;
-            func_8082E1F0((Player* ) arg1, 0x835);
+            func_8082E1F0((Player* ) arg1, 0x835U);
         }
         var_v1 = sp20;
     }
@@ -3169,11 +3173,11 @@ void func_808308DC(PlayState* arg0, Actor* arg1) {
     func_80831990(arg0, (Player* ) arg1, (s32) arg1->unk_148);
     if (var_v1 == 0) {
         if (Player_ActionToSword(arg1, (s32) arg1->unk_147) >= 0) {
-            func_8082E1F0((Player* ) arg1, 0x1803);
+            func_8082E1F0((Player* ) arg1, 0x1803U);
             return;
         }
         if (arg1->unk_147 != 0) {
-            func_8082E1F0((Player* ) arg1, 0x835);
+            func_8082E1F0((Player* ) arg1, 0x835U);
         }
     }
 }
@@ -4968,7 +4972,7 @@ void func_80834CD0(Player* arg0, f32 arg1, u16 arg2) {
     arg0->actor.velocity.y = arg1 * D_8085C3E4;
     if (temp_a1 != 0) {
         arg2 = temp_a1;
-        func_8082E188((bitwise Player* ) arg1, temp_a1);
+        func_8082E188(arg0);
         func_8082DF8C(arg0, arg2);
     }
     arg0->stateFlags1 |= 0x40000;
@@ -5168,7 +5172,7 @@ void func_808355D8(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
     func_80833AA0(arg1, arg0);
     arg1->unk_AE8 = -2;
     func_8082E5EC(arg0, arg1, arg2);
-    func_8082E1F0(arg1, 0x1852);
+    func_8082E1F0(arg1, 0x1852U);
 }
 
 s32 func_8083562C(PlayState* arg0, Actor* arg1, CollisionPoly* arg2, s32 arg3) {
@@ -5725,7 +5729,7 @@ s32 func_80836DC0(PlayState* arg0, Player* arg1) {
         arg1->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         arg1->unk_B48 = -2000.0f;
         arg1->actor.shape.shadowScale = 13.0f;
-        func_8082E1F0(arg1, 0x8E2);
+        func_8082E1F0(arg1, 0x8E2U);
         return 1;
     }
     return 0;
@@ -6847,7 +6851,7 @@ void func_808395F0(Player* arg0, Player* arg1, f32 arg2, f32 arg3, f32 arg4) {
     arg1->currentYaw = arg1->actor.shape.rot.y;
     arg1->actor.bgCheckFlags &= 0xFFFE;
     arg1->actor.velocity.y = arg4;
-    func_8082E188((bitwise Player* ) arg3, (u16) arg1);
+    func_8082E188(arg1);
     func_8082DF8C(arg1, 0x6801U);
 }
 
@@ -11222,7 +11226,7 @@ void func_80844784(PlayState* arg0, Player* arg1) {
             Math_ScaledStepToS(arg1 + 0x32, var_a3, (s16) var_v0);
         }
         if ((arg1->linearVelocity == 0.0f) && (arg1->actor.speedXZ != 0.0f)) {
-            func_8019F780(&arg1->actor.projectedPos, func_8082E078(arg1, 0xD0) & 0xFFFF, arg1->actor.speedXZ);
+            func_8019F780(&arg1->actor.projectedPos, func_8082E078(arg1, 0xD0U) & 0xFFFF, arg1->actor.speedXZ);
         }
     } else {
         arg1->actor.speedXZ = arg1->linearVelocity;
@@ -11248,7 +11252,7 @@ void func_80844784(PlayState* arg0, Player* arg1) {
             if ((temp_ft0 > 0.0f) && (arg1->transformation == 3) && !(arg1->actor.bgCheckFlags & 1)) {
                 if (func_80831494(arg0, arg1, func_80856918, 1) != 0) {
                     arg1->stateFlags3 |= 0x01002000;
-                    func_8082E1F0(arg1, 0x1850);
+                    func_8082E1F0(arg1, 0x1850U);
                     func_8019FD90(4, 2);
                 }
                 arg1->unk_AE8 = 0x270F;
@@ -11281,7 +11285,7 @@ void func_80844784(PlayState* arg0, Player* arg1) {
                 if (fabsf(temp_ft2_2) > 4.0f) {
                     func_8083FBC4((bitwise PlayState* ) sp2C, arg0, arg1);
                 }
-                func_8019F780(sp24, func_8082E078(arg1, 0xD0) & 0xFFFF, fabsf(D_80862B3C));
+                func_8019F780(sp24, func_8082E078(arg1, 0xD0U) & 0xFFFF, fabsf(D_80862B3C));
             }
             arg1->actor.velocity.x += sp48;
             arg1->actor.velocity.z += sp44;
@@ -17674,7 +17678,7 @@ void func_80853D68(Player* arg0, PlayState* arg1) {
     arg0->stateFlags2 |= 0x60;
     LinkAnimation_Update(arg1, &arg0->skelAnime);
     func_8083FBC4(arg1, (PlayState* ) arg0);
-    func_8019F780(&arg0->actor.projectedPos, func_8082E078(arg0, 0xD0) & 0xFFFF, arg0->actor.speedXZ);
+    func_8019F780(&arg0->actor.projectedPos, func_8082E078(arg0, 0xD0U) & 0xFFFF, arg0->actor.speedXZ);
     if ((func_80838A90(arg0, arg1) == 0) && ((arg0->transformation != 1) || (func_8083A114(arg0, arg1) == 0))) {
         temp_a3 = arg0->actor.floorPoly;
         if (temp_a3 == NULL) {
@@ -18703,7 +18707,7 @@ void func_808561B0(Player* arg0, PlayState* arg1) {
                     } else {
                         arg0->unk_B48 = 1450.0f;
                     }
-                    func_8082E1F0(arg0, 0x8E3);
+                    func_8082E1F0(arg0, 0x8E3U);
                 }
             } else {
                 temp_v0_3 = arg0->unk_AE8;
@@ -18764,7 +18768,7 @@ void func_808561B0(Player* arg0, PlayState* arg1) {
             if (temp_v0_5 < 8) {
                 arg0->unk_B86 = temp_v0_5 + 1;
                 if (arg0->unk_B86 == 8) {
-                    func_8082E1F0(arg0, 0x9A0);
+                    func_8082E1F0(arg0, 0x9A0U);
                 }
             }
         }
@@ -18921,7 +18925,7 @@ void func_80856918(Player* arg0, PlayState* arg1) {
                             temp_t9 = arg0->stateFlags3 & ~0x200;
                             arg0->stateFlags3 = temp_t9;
                             arg0->stateFlags3 = temp_t9 | 0x01000000;
-                            func_8082E1F0(arg0, 0x1850);
+                            func_8082E1F0(arg0, 0x1850U);
                             func_8019FD90(4, 2);
                         }
                     }
@@ -19122,7 +19126,7 @@ void func_808573A4(Player* arg0, PlayState* arg1) {
             func_8083F8A8(&arg1->state, &arg0->actor, 2.0f, 1, 2.5f, 0xA, 0x12, 1);
         }
         func_800AE930(&arg1->colCtx, Effect_GetByIndex(arg0->meleeWeaponEffectIndex[2]), &arg0->actor.world.pos, 2.0f, (s16) (s32) arg0->currentYaw, arg0->actor.floorPoly, (s32) arg0->actor.floorBgId);
-        func_800B8F98(&arg0->actor, func_8082E078(arg0, 0xD0) & 0xFFFF);
+        func_800B8F98(&arg0->actor, func_8082E078(arg0, 0xD0U) & 0xFFFF);
     }
 }
 
@@ -19471,7 +19475,7 @@ block_18:
                             arg0->unk_B88 = 1;
                             arg0->stateFlags3 |= 0x80000;
                             arg0->unk_B08[0] = 18.0f;
-                            func_8082E1F0(arg0, 0x9A3);
+                            func_8082E1F0(arg0, 0x9A3U);
                         }
                     } else {
                         temp_fv0_2 = arg0->unk_B08[1];
@@ -19653,7 +19657,7 @@ block_62:
                             arg0->unk_B86 = temp_v0_10 + temp_ft3_2;
                             if ((arg0->actor.bgCheckFlags & 1) && (temp_ft3_2 != 0) && (((temp_v0_10 + temp_ft3_2) * temp_v0_10) <= 0)) {
                                 sp54 = var_fv0;
-                                func_8019F780(&arg0->actor.projectedPos, func_8082E078(arg0, 0x990) & 0xFFFF, var_fv0);
+                                func_8019F780(&arg0->actor.projectedPos, func_8082E078(arg0, 0x990U) & 0xFFFF, var_fv0);
                             }
                         }
                     }
@@ -19860,7 +19864,7 @@ void func_80858FBC(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
 
 void func_80858FE8(Player* arg0) {
     if (&D_0400E120 == arg0->skelAnime.animation) {
-        func_8082E094((Player* )0xD0);
+        func_8082E094(arg0, 0xD0U);
         func_800B8E58(arg0, 0x6042U);
     }
 }
