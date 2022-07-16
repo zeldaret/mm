@@ -205,6 +205,7 @@ void func_8082DD2C(PlayState* arg0, Player* arg1) {
     arg1->unk_AC0 = 0.0f;
 }
 
+void func_8082DE14(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE14.s")
 
 void func_8082DE50(PlayState* play, Player* this) {
@@ -393,12 +394,60 @@ void func_8082F5C0(PlayState* play, Player* this) {
     this->unk_ACC = 0;
 }
 
+void func_8082F5FC(Player* this, Actor* actor);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F5FC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F62C.s")
+typedef struct {
+    /* 0x0 */ u8 itemId;
+    /* 0x2 */ s16 actorId;
+} struct_8085CD24; // size = 0x4
 
-void func_8082F7F4(PlayState* play, Player* this);
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F7F4.s")
+extern struct_8085CD24 D_8085CD24[];
+#if 0
+struct_8085CD24 D_8085CD24[] = {
+    { ITEM_BOMB, ACTOR_EN_BOM }, // PLAYER_AP_BOMB
+    { ITEM_POWDER_KEG, ACTOR_EN_BOM }, // PLAYER_AP_POWDER_KEG
+    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_AP_BOMBCHU
+};
+#endif
+
+void func_8082F62C(PlayState* play, Player* this) {
+    s32 explosiveType;
+    struct_8085CD24* explosiveInfo;
+    Actor* explosiveActor;
+
+    if (this->stateFlags1 & PLAYER_STATE1_800) {
+        func_8082DE14(play, this);
+        return;
+    }
+
+    explosiveType = Player_GetExplosiveHeld(this);
+    explosiveInfo = &D_8085CD24[explosiveType];
+    if ((explosiveType == 1) && (gSaveContext.powderKegTimer == 0)) {
+        gSaveContext.powderKegTimer = 0xC8;
+    }
+
+    explosiveActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, explosiveInfo->actorId, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, explosiveType == 1 ? 1 : 0, this->actor.shape.rot.y, 0, 0);
+    if (explosiveActor != NULL) {
+        if ((explosiveType == 0) && (play->unk_1887E != 0)) {
+            play->unk_1887E--;
+            if (play->unk_1887E == 0) {
+                play->unk_1887E = -1;
+            }
+        } else if ((explosiveType == 2) && (play->unk_1887D != 0)) {
+            play->unk_1887D--;
+            if (play->unk_1887D == 0) {
+                play->unk_1887D = -1;
+            }
+        } else {
+            Inventory_ChangeAmmo(explosiveInfo->itemId, -1);
+        }
+        func_8082F5FC(this, explosiveActor);
+    } else if (explosiveType == 1) {
+        gSaveContext.powderKegTimer = 0;
+    }
+}
+
 void func_8082F7F4(PlayState* play, Player* this) {
     ArmsHook* armsHook;
 
@@ -417,7 +466,6 @@ void func_8082F7F4(PlayState* play, Player* this) {
     armsHook->unk_208 = this->transformation;
 }
 
-
 void func_8082F8A0(PlayState* play, Player* this) {
     this->stateFlags1 |= 0x01000000;
 }
@@ -428,89 +476,89 @@ extern void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState* play, Player* this);
 
 #if 0
 void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F5A4,
-    // func_8082F8A0,
-    // func_8082F5C0,
-    // func_8082F5C0,
-    // func_8082F5C0,
-    // func_8082F5C0,
-    ((void (*)(PlayState*, Player*)) func_8082F7F4),
-    func_8082F62C,
-    func_8082F62C,
-    func_8082F62C,
-    // func_8082F8A0,
-    // func_8082F5C0,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
-    // func_8082F594,
+    func_8082F594, // PLAYER_AP_NONE
+    func_8082F594, // PLAYER_AP_LAST_USED
+    func_8082F594, // PLAYER_AP_FISHING_POLE
+    func_8082F594, // PLAYER_AP_SWORD_KOKIRI
+    func_8082F594, // PLAYER_AP_SWORD_RAZOR
+    func_8082F594, // PLAYER_AP_SWORD_GILDED
+    func_8082F594, // PLAYER_AP_SWORD_GREAT_FAIRY
+    func_8082F5A4, // PLAYER_AP_STICK
+    func_8082F8A0, // PLAYER_AP_ZORA_FINS
+    func_8082F5C0, // PLAYER_AP_BOW
+    func_8082F5C0, // PLAYER_AP_BOW_FIRE
+    func_8082F5C0, // PLAYER_AP_BOW_ICE
+    func_8082F5C0, // PLAYER_AP_BOW_LIGHT
+    func_8082F7F4, // PLAYER_AP_HOOKSHOT
+    func_8082F62C, // PLAYER_AP_BOMB
+    func_8082F62C, // PLAYER_AP_POWDER_KEG
+    func_8082F62C, // PLAYER_AP_BOMBCHU
+    func_8082F8A0, // PLAYER_AP_11
+    func_8082F5C0, // PLAYER_AP_NUT
+    func_8082F594, // PLAYER_AP_PICTO_BOX
+    func_8082F594, // PLAYER_AP_OCARINA
+    func_8082F594, // PLAYER_AP_BOTTLE
+    func_8082F594, // PLAYER_AP_BOTTLE_FISH
+    func_8082F594, // PLAYER_AP_BOTTLE_SPRING_WATER
+    func_8082F594, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    func_8082F594, // PLAYER_AP_BOTTLE_ZORA_EGG
+    func_8082F594, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    func_8082F594, // PLAYER_AP_BOTTLE_GOLD_DUST
+    func_8082F594, // PLAYER_AP_BOTTLE_1C
+    func_8082F594, // PLAYER_AP_BOTTLE_SEA_HORSE
+    func_8082F594, // PLAYER_AP_BOTTLE_MUSHROOM
+    func_8082F594, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    func_8082F594, // PLAYER_AP_BOTTLE_BUG
+    func_8082F594, // PLAYER_AP_BOTTLE_POE
+    func_8082F594, // PLAYER_AP_BOTTLE_BIG_POE
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_RED
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_BLUE
+    func_8082F594, // PLAYER_AP_BOTTLE_POTION_GREEN
+    func_8082F594, // PLAYER_AP_BOTTLE_MILK
+    func_8082F594, // PLAYER_AP_BOTTLE_MILK_HALF
+    func_8082F594, // PLAYER_AP_BOTTLE_CHATEAU
+    func_8082F594, // PLAYER_AP_BOTTLE_FAIRY
+    func_8082F594, // PLAYER_AP_MOON_TEAR
+    func_8082F594, // PLAYER_AP_DEED_LAND
+    func_8082F594, // PLAYER_AP_ROOM_KEY
+    func_8082F594, // PLAYER_AP_LETTER_TO_KAFEI
+    func_8082F594, // PLAYER_AP_MAGIC_BEANS
+    func_8082F594, // PLAYER_AP_DEED_SWAMP
+    func_8082F594, // PLAYER_AP_DEED_MOUNTAIN
+    func_8082F594, // PLAYER_AP_DEED_OCEAN
+    func_8082F594, // PLAYER_AP_32
+    func_8082F594, // PLAYER_AP_LETTER_MAMA
+    func_8082F594, // PLAYER_AP_34
+    func_8082F594, // PLAYER_AP_35
+    func_8082F594, // PLAYER_AP_PENDANT_MEMORIES
+    func_8082F594, // PLAYER_AP_37
+    func_8082F594, // PLAYER_AP_38
+    func_8082F594, // PLAYER_AP_39
+    func_8082F594, // PLAYER_AP_MASK_TRUTH
+    func_8082F594, // PLAYER_AP_MASK_KAFEIS_MASK
+    func_8082F594, // PLAYER_AP_MASK_ALL_NIGHT
+    func_8082F594, // PLAYER_AP_MASK_BUNNY
+    func_8082F594, // PLAYER_AP_MASK_KEATON
+    func_8082F594, // PLAYER_AP_MASK_GARO
+    func_8082F594, // PLAYER_AP_MASK_ROMANI
+    func_8082F594, // PLAYER_AP_MASK_CIRCUS_LEADER
+    func_8082F594, // PLAYER_AP_MASK_POSTMAN
+    func_8082F594, // PLAYER_AP_MASK_COUPLE
+    func_8082F594, // PLAYER_AP_MASK_GREAT_FAIRY
+    func_8082F594, // PLAYER_AP_MASK_GIBDO
+    func_8082F594, // PLAYER_AP_MASK_DON_GERO
+    func_8082F594, // PLAYER_AP_MASK_KAMARO
+    func_8082F594, // PLAYER_AP_MASK_CAPTAIN
+    func_8082F594, // PLAYER_AP_MASK_STONE
+    func_8082F594, // PLAYER_AP_MASK_BREMEN
+    func_8082F594, // PLAYER_AP_MASK_BLAST
+    func_8082F594, // PLAYER_AP_MASK_SCENTS
+    func_8082F594, // PLAYER_AP_MASK_GIANT
+    func_8082F594, // PLAYER_AP_MASK_FIERCE_DEITY
+    func_8082F594, // PLAYER_AP_MASK_GORON
+    func_8082F594, // PLAYER_AP_MASK_ZORA
+    func_8082F594, // PLAYER_AP_MASK_DEKU
+    func_8082F594, // PLAYER_AP_LENS
 };
 #endif
 
