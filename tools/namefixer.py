@@ -623,7 +623,7 @@ wordReplace = {
     "gSaveContext.unk_3F1E": "gSaveContext.hudVisibilityForceButtonAlphasByStatus",
     "gSaveContext.unk_3F20": "gSaveContext.nextHudVisibility",
     "gSaveContext.unk_3F22": "gSaveContext.hudVisibility",
-    "gSaveContext.unk_3F24": "gSaveContext.hudVisibilityCounter",
+    "gSaveContext.unk_3F24": "gSaveContext.hudVisibilityTimer",
     "gSaveContext.unk_3F26": "gSaveContext.prevHudVisibility",
     "gSaveContext.weekEventReg": "gSaveContext.save.weekEventReg",
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",

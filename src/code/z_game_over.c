@@ -60,7 +60,7 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
             gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
-            gSaveContext.hudVisibilityCounter = 0;
+            gSaveContext.hudVisibilityTimer = 0;
             Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
             Rumble_Request(0.0f, 126, 124, 63);

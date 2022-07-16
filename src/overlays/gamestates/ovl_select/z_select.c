@@ -30,7 +30,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
     gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
     gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
-    gSaveContext.hudVisibilityCounter = 0;
+    gSaveContext.hudVisibilityTimer = 0;
 
     Audio_QueueSeqCmd(NA_BGM_STOP);
     gSaveContext.save.entranceIndex = entranceIndex;
