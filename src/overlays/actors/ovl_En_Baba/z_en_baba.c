@@ -168,42 +168,51 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
         case 0:
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 if (gSaveContext.save.weekEventReg[33] & 8) {
+                    // Thanks. Can stock Bomb Bags tomorrow
                     this->textId = 0x2A34;
                     break;
                 }
 
                 if (gSaveContext.save.weekEventReg[79] & 0x40) {
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // Oh my, learned my lesson. Can't stock Bomb Bags tomorrow
                     this->textId = 0x2A33;
                     break;
                 }
 
                 this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                // Can't stock Bomb Bags tomorrow
                 this->textId = 0x2A32;
                 break;
             } else if (player->transformation == PLAYER_FORM_DEKU) {
                 if (!(gSaveContext.save.weekEventReg[79] & 0x20)) {
                     gSaveContext.save.weekEventReg[79] |= 0x20;
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // Small customer, use bombs as adult
                     this->textId = 0x2A37;
                     break;
                 } else {
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                    // use bombs as adult
                     this->textId = 0x2A38;
                 }
                 break;
             } else if (!(gSaveContext.save.weekEventReg[33] & 8)) {
                 if (!(gSaveContext.save.weekEventReg[73] & 1)) {
+                    // Thought could sell Big Bomb Bags
                     this->textId = 0x660;
                     break;
                 }
+                // Can't judge people
                 this->textId = 0x662;
                 break;
             } else {
                 if (!(gSaveContext.save.weekEventReg[73] & 2)) {
+                    // Someone helped me out
                     this->textId = 0x65A;
                     break;
                 }
+                // Buy Big Bomb Bag
                 this->textId = 0x65E;
                 break;
             }
@@ -211,16 +220,19 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
 
         case 0x660:
             Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // Don't go by yourself
             this->textId = 0x661;
             break;
 
         case 0x661:
             Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
+            // Can't judge people
             this->textId = 0x662;
             break;
 
         case 0x662:
             Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I'll go next time
             this->textId = 0x663;
             gSaveContext.save.weekEventReg[73] |= 1;
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
@@ -228,16 +240,19 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
 
         case 0x65A:
             Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // Don't pick up Bomb bags at night
             this->textId = 0x65B;
             break;
 
         case 0x65B:
             Actor_ChangeFocus(&this->bombShopkeeper->actor, play, &this->actor);
+            // Lifelong dream to sell Big Bomb Bags
             this->textId = 0x65C;
             break;
 
         case 0x65C:
             Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I worry about you
             this->textId = 0x65D;
             gSaveContext.save.weekEventReg[73] |= 2;
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
@@ -245,6 +260,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
 
         case 0x65E:
             Actor_ChangeFocus(&this->actor, play, &this->bombShopkeeper->actor);
+            // I worry about you
             this->textId = 0x65F;
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
             break;
@@ -252,15 +268,18 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
         case 0x2A34:
             if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
                 this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+                // Thank you
                 this->textId = 0x2A36;
                 break;
             }
             this->stateFlags |= BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK;
+            // It's a dangerous mask
             this->textId = 0x2A35;
             break;
 
         case 0x2A35:
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            // Thank you
             this->textId = 0x2A36;
             break;
 
@@ -464,6 +483,7 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
 
         case BOMB_SHOP_LADY_SCH_KNOCKED_OVER:
             this->animIndex = BOMB_SHOP_LADY_ANIM_KNOCKED_OVER;
+            // Ouch
             this->textId = 0x2A30;
             this->actor.speedXZ = 0.0f;
             Enemy_StartFinishingBlow(play, &this->actor);
