@@ -32,7 +32,6 @@ void func_80A0BE60(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVelocity, Vec3f
 void func_80A0BF70(BgDyYoseizo* this, PlayState* play);
 void func_80A0C270(BgDyYoseizo* this, PlayState* play);
 
-#if 0
 const ActorInit Bg_Dy_Yoseizo_InitVars = {
     ACTOR_BG_DY_YOSEIZO,
     ACTORCAT_PROP,
@@ -45,30 +44,15 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+static AnimationHeader* sAnimations[] = {
+    0x0600129C, 0x06002338, 0x0600C500, 0x060045FC, 0x06005238, 0x06008090, 0x0600D15C, 0x06006DE4, 0x06005E20,
+};
 
-// static Color_RGB8 D_80A0C4E4[] = {
-//     { 0xFF, 0xEB, 0xDC }, { 0xFF, 0xDC, 0xDC }, { 0xDC, 0xFF, 0xDC },
-//     { 0xDC, 0xDC, 0xFF }, { 0xFF, 0xFF, 0xC8 }, { 0xFF, 0xFF, 0xAA },
-// };
-// static Color_RGB8 D_80A0C4F8[] = {
-//     { 0xFF, 0x96, 0 }, { 0xFF, 0, 0 }, { 0, 0xFF, 0 }, { 0, 0, 0xFF }, { 0xFF, 0xFF, 0 }, { 0xFF, 0x64, 0xFF },
-// };
-// AnimationHeader* D_80A0C4C0[] = {
-//     0x0600129C, 0x06002338, 0x0600C500, 0x060045FC, 0x06005238, 0x06008090, 0x0600D15C, 0x06006DE4, 0x06005E20,
-// };
-// TexturePtr D_80A0C50C[] = { 0x0601A588, 0x0601B588 };
-// f32 D_80A0C514[] = {
-//     1.0f, 1.1f, 1.15f, 1.1f, 1.0f, 0.9f, 0.85f, 0.9f,
-// };
-
-extern AnimationHeader D_06008090;
-extern FlexSkeletonHeader D_0601C8B4;
 extern Gfx D_0600D1B0[];
 extern Gfx D_0600D228[];
+extern AnimationHeader D_06008090;
+extern FlexSkeletonHeader D_0601C8B4;
 extern AnimatedMaterial D_0601C6F4[];
-
-extern AnimationHeader* D_80A0C4C0[];
 
 void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
     BgDyYoseizo* this = THIS;
@@ -111,10 +95,14 @@ void func_80A0A9E4(BgDyYoseizo* this, PlayState* play) {
     this->actor.shape.yOffset = Math_SinS(play->gameplayFrames * 1000) * 15.0f;
 }
 
-extern Color_RGB8 D_80A0C4E4[];
-extern Color_RGB8 D_80A0C4F8[];
-
 void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
+    static Color_RGB8 sEffectPrimColors[] = {
+        { 255, 235, 220 }, { 255, 220, 220 }, { 220, 255, 220 },
+        { 220, 220, 255 }, { 255, 255, 200 }, { 255, 255, 170 },
+    };
+    static Color_RGB8 sEffectEnvColors[] = {
+        { 255, 150, 0 }, { 255, 0, 0 }, { 0, 255, 0 }, { 0, 0, 255 }, { 255, 255, 0 }, { 255, 100, 255 },
+    };
     Vec3f vel;
     Vec3f accel;
     Vec3f pos;
@@ -176,12 +164,12 @@ void func_80A0AA40(BgDyYoseizo* this, s16 arg1, s32 arg2) {
                     break;
             }
 
-            primColor.r = D_80A0C4E4[effectType].r;
-            primColor.g = D_80A0C4E4[effectType].g;
-            primColor.b = D_80A0C4E4[effectType].b;
-            envColor.r = D_80A0C4F8[effectType].r;
-            envColor.g = D_80A0C4F8[effectType].g;
-            envColor.b = D_80A0C4F8[effectType].b;
+            primColor.r = sEffectPrimColors[effectType].r;
+            primColor.g = sEffectPrimColors[effectType].g;
+            primColor.b = sEffectPrimColors[effectType].b;
+            envColor.r = sEffectEnvColors[effectType].r;
+            envColor.g = sEffectEnvColors[effectType].g;
+            envColor.b = sEffectEnvColors[effectType].b;
 
             func_80A0BE60(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
         }
@@ -237,7 +225,7 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
 }
 
 void func_80A0AFDC(BgDyYoseizo* this) {
-    Animation_Change(&this->skelAnime, D_80A0C4C0[2], 0.0f, 46.0f, Animation_GetLastFrame(D_80A0C4C0[2]), 2, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[2], 0.0f, 46.0f, Animation_GetLastFrame(sAnimations[2]), 2, 0.0f);
     this->actionFunc = func_80A0AE1C;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_VANISH);
@@ -254,7 +242,7 @@ void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
-        Animation_Change(&this->skelAnime, D_80A0C4C0[4], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[4]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0, 0.0f);
         this->actionFunc = func_80A0B184;
     } else if (Cutscene_CheckActorAction(play, 0x67) &&
                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 6)) {
@@ -268,7 +256,7 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 8)) {
-        Animation_Change(&this->skelAnime, D_80A0C4C0[5], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[5]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[5], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[5]), 0, 0.0f);
         this->actionFunc = func_80A0B078;
     } else if (Cutscene_CheckActorAction(play, 0x67) &&
                (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 6)) {
@@ -282,7 +270,7 @@ void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
-        Animation_Change(&this->skelAnime, D_80A0C4C0[4], 1.0f, 0.0f, (f32)Animation_GetLastFrame(D_80A0C4C0[4]), 0,
+        Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, (f32)Animation_GetLastFrame(sAnimations[4]), 0,
                          -10.0f);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
@@ -347,7 +335,7 @@ void func_80A0B500(BgDyYoseizo* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         Vec3f pos;
 
-        Animation_Change(&this->skelAnime, D_80A0C4C0[1], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[1]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[1]), 0, 0.0f);
         this->actionFunc = func_80A0B35C;
         pos.x = player->actor.world.pos.x;
         pos.y = player->actor.world.pos.y + 200.0f;
@@ -362,12 +350,13 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
     func_80A0A9E4(this, play);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_Change(&this->skelAnime, D_80A0C4C0[4], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[4]), 0, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[4], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[4]), 0, 0.0f);
     }
 
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 5)) {
-        Animation_Change(&this->skelAnime, D_80A0C4C0[0], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[0]), 2, -5.0f);
+        Animation_Change(&this->skelAnime, sAnimations[0], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[0]), 2,
+                         -5.0f);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->mouthIndex = 1;
         this->eyeIndex = 0;
@@ -389,7 +378,7 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 4)) {
         this->actor.shape.rot.y = 0;
         this->actionFunc = func_80A0B5F0;
-        Animation_Change(&this->skelAnime, D_80A0C4C0[3], 1.0f, 2.0f, Animation_GetLastFrame(D_80A0C4C0[3]), 2, 0.0f);
+        Animation_Change(&this->skelAnime, sAnimations[3], 1.0f, 2.0f, Animation_GetLastFrame(sAnimations[3]), 2, 0.0f);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->unk2F8 = 0;
     }
@@ -397,7 +386,7 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
 
 void func_80A0B834(BgDyYoseizo* this) {
     this->actor.draw = func_80A0BD40;
-    Animation_Change(&this->skelAnime, D_80A0C4C0[2], 1.0f, 0.0f, Animation_GetLastFrame(D_80A0C4C0[2]), 2, 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[2], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[2]), 2, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_APPEAR);
     func_80A0AA40(this, 2, 30);
@@ -455,13 +444,13 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play) {
     if (sp36 != this->unk2F8) {
         switch (sp36) {
             case 9:
-                Animation_PlayLoop(&this->skelAnime, D_80A0C4C0[6]);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[6]);
                 break;
             case 10:
-                Animation_PlayLoop(&this->skelAnime, D_80A0C4C0[7]);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[7]);
                 break;
             case 11:
-                Animation_PlayOnce(&this->skelAnime, D_80A0C4C0[8]);
+                Animation_PlayOnce(&this->skelAnime, sAnimations[8]);
                 break;
         }
         this->unk2F8 = sp36;
@@ -478,7 +467,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 7)) {
         this->actor.draw = func_80A0BD40;
-        Animation_PlayLoop(&this->skelAnime, D_80A0C4C0[4]);
+        Animation_PlayLoop(&this->skelAnime, sAnimations[4]);
         this->actionFunc = func_80A0B184;
         this->mouthIndex = 0;
         this->actor.world.pos.y = this->actor.home.pos.y + 40.0f;
@@ -489,7 +478,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 0x67) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x67)]->action == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
-        Animation_PlayLoop(&this->skelAnime, D_80A0C4C0[6]);
+        Animation_PlayLoop(&this->skelAnime, sAnimations[6]);
         this->unk2F8 = 9;
         this->actionFunc = func_80A0B8CC;
         this->actor.draw = func_80A0BD40;
@@ -521,9 +510,11 @@ s32 func_80A0BCD8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-extern TexturePtr D_80A0C50C[];
-
 void func_80A0BD40(Actor* thisx, PlayState* play) {
+    static TexturePtr sMouthTextures[] = {
+        0x0601A588, // closed
+        0x0601B588  // open
+    };
     BgDyYoseizo* this = (BgDyYoseizo*)thisx;
     u32 step = 0;
 
@@ -553,7 +544,7 @@ void func_80A0BD40(Actor* thisx, PlayState* play) {
     {
         Gfx* gfx = POLY_OPA_DISP;
         s16 index = this->mouthIndex;
-        TexturePtr mouthTex = Lib_SegmentedToVirtual(D_80A0C50C[index]);
+        TexturePtr mouthTex = Lib_SegmentedToVirtual(sMouthTextures[index]);
 
         gSPSegment(&gfx[0], 0x09, mouthTex);
         POLY_OPA_DISP = &gfx[1];
@@ -669,14 +660,15 @@ void func_80A0BF70(BgDyYoseizo* this, PlayState* play) {
     }
 }
 
-extern f32 D_80A0C514[];
-
 // BgDyYoseizo_DrawEffects
 void func_80A0C270(BgDyYoseizo* this, PlayState* play) {
+    static f32 sStretchFactors[] = {
+        1.0f, 1.1f, 1.15f, 1.1f, 1.0f, 0.9f, 0.85f, 0.9f,
+    };
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     u8 flag = 0;
     BgDyYoseizoEffect* effect = this->effects;
-    f32 stretchFactor = D_80A0C514[play->gameplayFrames & 7];
+    f32 stretchFactor = sStretchFactors[play->gameplayFrames & 7];
     s16 i;
 
     OPEN_DISPS(gfxCtx);
