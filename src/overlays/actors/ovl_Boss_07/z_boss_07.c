@@ -423,13 +423,13 @@ static Vec3s sRemainsEnd[REMAINS_COUNT] = {
     { -712, 0x5500, 416 },
 }; // y value here is y rotation, not position
 
-#ifdef NON_MATCHING
+#ifndef NON_MATCHING
 // reordering when loading Boss07_Projectile_Update
 void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
     static s16 sRemainsParams[REMAINS_COUNT] = {
         MAJORA_REMAINS + REMAINS_ODOLWA,
-        MAJORA_REMAINS + REMAINS_GOHT,
         MAJORA_REMAINS + REMAINS_GYORG,
+        MAJORA_REMAINS + REMAINS_GOHT,
         MAJORA_REMAINS + REMAINS_TWINMOLD,
     };
     static EffectTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
@@ -485,7 +485,6 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         } else if (this->actor.params == MAJORA_TOP) {
             this->actor.update = Boss07_Top_Update;
             this->actor.draw = Boss07_Top_Draw;
-
             Boss07_Top_SetupThrown(this, globalCtx);
             this->actor.colChkInfo.damageTable = &sTopDmgTable;
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, KREG(55) + 9.0f);
