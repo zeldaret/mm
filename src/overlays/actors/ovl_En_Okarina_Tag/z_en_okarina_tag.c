@@ -68,12 +68,12 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
 
     if (this->switchFlags >= 0) {
         if (this->unk148 == 0) {
-            if (Flags_GetSwitch(play, this->switchFlags) != 0) {
+            if (Flags_GetSwitch(play, this->switchFlags)) {
                 return;
             }
         }
         if (this->unk148 == 1) {
-            if (Flags_GetSwitch(play, this->switchFlags) == 0) {
+            if (!Flags_GetSwitch(play, this->switchFlags)) {
                 return;
             }
         }
@@ -88,7 +88,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     if (this->unk14A == -1) {
         var_v1 = 0;
     }
-    if (func_800B8718(&this->actor, &play->state) != 0) {
+    if (func_800B8718(&this->actor, &play->state)) {
         func_80152434(play, var_v1 + 0x29);
         this->actionFunc = func_8093E68C;
     } else {
@@ -128,7 +128,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                         Flags_UnsetSwitch(play, this->switchFlags);
                         break;
                     case 2:
-                        if (Flags_GetSwitch(play, this->switchFlags) != 0) {
+                        if (Flags_GetSwitch(play, this->switchFlags)) {
                             Flags_UnsetSwitch(play, this->switchFlags);
                         } else {
                             Flags_SetSwitch(play, this->switchFlags);
