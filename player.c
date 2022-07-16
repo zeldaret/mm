@@ -89,9 +89,8 @@ struct _struct_D_8085E368_0xC {
 ? EffectSsFhgFlash_SpawnShock(PlayState*, Actor*, f32*, s16, s32); /* extern */
 ? EffectSsFireTail_SpawnFlameOnPlayer(f32, f32, PlayState*, f32, s16, f32); /* extern */
 ? EffectSsIcePiece_SpawnBurst(PlayState*, PosRot*, f32); /* extern */
-? EffectSsStick_Spawn(PlayState*, void*, s16, Actor*); /* extern */
+? EffectSsStick_Spawn(PlayState*, void*, s16, Player*); /* extern */
 s32 func_800DF86C(Camera*, ?);                      /* extern */
-? func_800E0238(Camera*);                           /* extern */
 ? func_801155B4(PlayState*, s16, s16, Player*);     /* extern */
 ? func_80115764(PlayState*, ?);                     /* extern */
 s32 func_80115DB4(GameState*, u8, PlayState*, SaveContext*, ?); /* extern */
@@ -106,13 +105,8 @@ s32 func_80115DB4(GameState*, u8, PlayState*, SaveContext*, ?); /* extern */
 ? func_801A3CF4(s8);                                /* extern */
 ? func_801A3E38(?);                                 /* extern */
 ? func_801A41F8(?);                                 /* extern */
-void func_8082F594(Player* arg0, Player* arg1);     /* static */
-void func_8082F5A4(Player* arg0, Player* arg1);     /* static */
-void func_8082F5C0(Player* arg0, Player* arg1);     /* static */
 void func_8082F62C(PlayState* arg0, Player* arg1);  /* static */
-void func_8082F7F4(PlayState* arg0, Actor* arg1);   /* static */
-void func_8082F8A0(Player* arg0, Player* arg1);     /* static */
-? func_80831990(PlayState*, Actor*, u8, s32);       /* static */
+? func_80831990(PlayState*, Player*, u8, s32);      /* static */
 s32 func_80834DFC(Player* arg0, PlayState* arg1, Vec3f*); /* static */
 s32 func_808365DC(Player* arg0, PlayState* arg1, Vec3f*); /* static */
 void func_80836988(Player* arg0, PlayState* arg1, SkelAnime*); /* static */
@@ -843,91 +837,6 @@ static s32 (*D_8085C9F0[0x53])(Player*, PlayState*) = {
     func_80848780,
     func_80848780,
     func_80848780,
-};
-static void (*D_8085CB3C[0x53])(Player*, Player*) = {
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F5A4,
-    func_8082F8A0,
-    func_8082F5C0,
-    func_8082F5C0,
-    func_8082F5C0,
-    func_8082F5C0,
-    ((void (*)(Player*, Player*)) func_8082F7F4),
-    ((void (*)(Player*, Player*)) func_8082F62C),
-    ((void (*)(Player*, Player*)) func_8082F62C),
-    ((void (*)(Player*, Player*)) func_8082F62C),
-    func_8082F8A0,
-    func_8082F5C0,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
-    func_8082F594,
 };
 static struct _struct_D_8085CC88_0x8 D_8085CC88[0xF] = {
     { (LinkAnimationHeader* )0x0400DC70, 0xC },
@@ -1726,6 +1635,91 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
+void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F5A4,
+    func_8082F8A0,
+    func_8082F5C0,
+    func_8082F5C0,
+    func_8082F5C0,
+    func_8082F5C0,
+    func_8082F7F4,
+    func_8082F62C,
+    func_8082F62C,
+    func_8082F62C,
+    func_8082F8A0,
+    func_8082F5C0,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+    func_8082F594,
+};
 LinkAnimationHeader* D_8085D160[5] = {
     (LinkAnimationHeader* )0x0400E400,
     (LinkAnimationHeader* )0x0400E210,
@@ -1890,7 +1884,7 @@ void func_8082DCA0(PlayState* play, Player* this) {
         }
     }
     if (Player_GetExplosiveHeld(this) >= 0) {
-        func_8082F8BC(play, this, 0);
+        func_8082F8BC(play, this, PLAYER_AP_NONE);
         this->heldItemId = 0xFE;
     }
 }
@@ -2489,7 +2483,7 @@ void func_8082F43C(PlayState* arg0, Player* arg1, s32 (*arg2)(Player*, PlayState
     func_8082E00C(arg1);
 }
 
-void func_8082F470(PlayState* arg0, Player* arg1, s8 arg2) {
+void func_8082F470(PlayState* arg0, Player* arg1, s32 arg2) {
     s32 sp1C;
     LinkAnimationHeader** var_v0;
     s32 var_v1;
@@ -2528,16 +2522,16 @@ s8 func_8082F524(Player* arg0, s32 arg1) {
     return *(&D_8085C99C + arg1);
 }
 
-void func_8082F594(Player* arg0, Player* arg1) {
+void func_8082F594(PlayState* arg0, Player* arg1) {
 
 }
 
-void func_8082F5A4(Player* arg0, Player* arg1) {
+void func_8082F5A4(PlayState* arg0, Player* arg1) {
     arg1->unk_B28 = 0;
     arg1->unk_B08[1] = 1.0f;
 }
 
-void func_8082F5C0(Player* arg0, Player* arg1) {
+void func_8082F5C0(PlayState* arg0, Player* arg1) {
     arg1->stateFlags1 |= 8;
     if (arg1->itemActionParam == 0x12) {
         arg1->unk_B28 = -2;
@@ -2606,37 +2600,37 @@ void func_8082F62C(PlayState* arg0, Player* arg1) {
     }
 }
 
-void func_8082F7F4(PlayState* arg0, Actor* arg1) {
+void func_8082F7F4(PlayState* arg0, Player* arg1) {
     Actor* temp_v0;
     Actor* temp_v0_2;
 
-    arg1->unk_A6C = (s32) (arg1->unk_A6C | 8);
+    arg1->stateFlags1 |= 8;
     arg1->unk_B28 = -3;
     arg1->unk_B48 = 0.0f;
-    temp_v0 = Actor_SpawnAsChild(arg0 + 0x1CA0, arg1, arg0, 0x3D, arg1->world.pos.x, arg1->world.pos.y, arg1->world.pos.z, (s16) 0, (s16) (s32) arg1->shape.rot.y, (s16) 0, 0);
-    arg1->unk_34C = temp_v0;
+    temp_v0 = Actor_SpawnAsChild(&arg0->actorCtx, &arg1->actor, arg0, 0x3D, arg1->actor.world.pos.x, arg1->actor.world.pos.y, arg1->actor.world.pos.z, (s16) 0, (s16) (s32) arg1->actor.shape.rot.y, (s16) 0, 0);
+    arg1->heldActor = temp_v0;
     if (temp_v0 == NULL) {
         func_80831990(arg0, arg1, 0xFFU);
         return;
     }
-    temp_v0_2 = arg1->unk_34C;
-    temp_v0_2->objBankIndex = arg1->objBankIndex;
-    temp_v0_2->unk_208 = (u8) arg1->unk_14B;
+    temp_v0_2 = arg1->heldActor;
+    temp_v0_2->objBankIndex = arg1->actor.objBankIndex;
+    temp_v0_2->unk_208 = (u8) arg1->transformation;
 }
 
-void func_8082F8A0(Player* arg0, Player* arg1) {
+void func_8082F8A0(PlayState* arg0, Player* arg1) {
     arg1->stateFlags1 |= 0x01000000;
 }
 
-void func_8082F8BC(PlayState* play, Player* this, s8 arg2) {
-    this->itemActionParam = arg2;
-    this->heldItemActionParam = arg2;
+void func_8082F8BC(PlayState* play, Player* this, s32 actionParam) {
+    this->itemActionParam = (s8) actionParam;
+    this->heldItemActionParam = (s8) actionParam;
     this->stateFlags1 &= 0xFEFFFFF7;
     this->unk_B08[0] = 0.0f;
     this->unk_B08[1] = 0.0f;
     this->unk_B28 = 0;
     this->modelGroup = this->nextModelGroup;
-    D_8085CB3C[arg2](this, this);
+    D_8085CB3C[actionParam](play, this);
     Player_SetModelGroup(this, (enum PlayerModelGroup) this->modelGroup);
 }
 
@@ -2880,7 +2874,7 @@ void func_8082FE0C(Player* arg0, PlayState* arg1) {
                     if ((temp_v1_2 < 0) || (temp_v1_2 >= 0x18)) {
                         var_a0 = arg0->currentMask - 1;
                     }
-                    func_80831990(arg1, &arg0->actor, Player_MaskIdToItemId(var_a0));
+                    func_80831990(arg1, arg0, Player_MaskIdToItemId(var_a0));
                     return;
                 }
                 if ((arg0->currentMask == 0x14) && (gSaveContext.save.playerData.magic == 0)) {
@@ -2941,7 +2935,7 @@ block_20:
                 goto block_47;
             }
 block_46:
-            func_80831990(arg1, &arg0->actor, 0xFFU);
+            func_80831990(arg1, arg0, 0xFFU);
             return;
         }
 block_47:
@@ -2992,7 +2986,7 @@ loop_53:
                 }
             } else {
                 arg0->heldItemButton = (s8) var_a3;
-                func_80831990(arg1, &arg0->actor, (u8) temp_v0_5, var_a3);
+                func_80831990(arg1, arg0, (u8) temp_v0_5, var_a3);
             }
         }
     }
@@ -3179,7 +3173,7 @@ void func_808308DC(PlayState* arg0, Actor* arg1) {
         var_v1 = sp20;
     }
     sp20 = var_v1;
-    func_80831990(arg0, arg1, arg1->unk_148);
+    func_80831990(arg0, (Player* ) arg1, arg1->unk_148);
     if (var_v1 == 0) {
         if (Player_ActionToSword(arg1, (s32) arg1->unk_147) >= 0) {
             func_8082E1F0((Player* ) arg1, 0x1803);
@@ -3523,7 +3517,7 @@ s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState
                 Actor_SetScale(&this->actor, 0.01f);
             }
         } else if ((this->transformation == 1) && (Player_GetMeleeWeaponHeld(this) != 0)) {
-            func_80831990(play, &this->actor, 0xFFU);
+            func_80831990(play, this, 0xFFU);
         }
     }
     func_800AEF44(Effect_GetByIndex(this->meleeWeaponEffectIndex[2]));
@@ -7128,7 +7122,7 @@ s32 func_8083A114(Player* arg0, PlayState* arg1) {
             }
 block_14:
             if ((arg0->unk_ACF == 0) && (arg0->itemActionParam >= 3) && (arg0->transformation != 0)) {
-                func_80831990(arg1, &arg0->actor, 0xFFU);
+                func_80831990(arg1, arg0, 0xFFU);
             } else {
                 arg0->stateFlags2 ^= 0x100000;
             }
@@ -9500,34 +9494,34 @@ void func_8083FE90(PlayState* arg0, Player* arg1, u16 arg2) {
     func_800B8E58(arg1, arg2);
 }
 
-void func_8083FEF4(PlayState* arg0, Actor* arg1) {
+void func_8083FEF4(PlayState* arg0, Player* arg1) {
     Inventory_ChangeAmmo(8, -1);
     func_80831990(arg0, arg1, 0xFFU);
 }
 
-s32 func_8083FF30(PlayState* arg0, Actor* arg1) {
+s32 func_8083FF30(PlayState* arg0, Player* arg1) {
     s32 var_v0;
 
     var_v0 = 0;
-    if ((arg1->unk_147 == 7) && (arg1->unk_B0C > 0.5f)) {
+    if ((arg1->itemActionParam == 7) && (arg1->unk_B08[1] > 0.5f)) {
         if (gSaveContext.save.inventory.ammo[gItemSlots[8]] != 0) {
-            EffectSsStick_Spawn(arg0, arg1 + 0xCA0, (s16) (arg1->shape.rot.y + 0x8000), arg1);
-            arg1->unk_B0C = 0.5f;
+            EffectSsStick_Spawn(arg0, arg1 + 0xCA0, (s16) (arg1->actor.shape.rot.y + 0x8000), arg1);
+            arg1->unk_B08[1] = 0.5f;
             func_8083FEF4(arg0, arg1);
-            func_800B8E58((Player* ) arg1, 0x181DU);
+            func_800B8E58(arg1, 0x181DU);
         }
         var_v0 = 1;
     }
     return var_v0;
 }
 
-? func_8083FFEC(PlayState* arg0, Actor* arg1) {
+? func_8083FFEC(PlayState* arg0, Player* arg1) {
     ? var_v0;
     u16 temp_t8;
     u16 temp_v0;
 
     var_v0 = 0;
-    if (arg1->unk_147 == 4) {
+    if (arg1->itemActionParam == 4) {
         temp_v0 = gSaveContext.save.playerData.swordHealth;
         temp_t8 = temp_v0 - 1;
         if ((s32) temp_v0 > 0) {
@@ -9535,7 +9529,7 @@ s32 func_8083FF30(PlayState* arg0, Actor* arg1) {
             if ((temp_t8 & 0xFFFF) <= 0) {
                 Item_Give(arg0, 0x4DU);
                 func_80831990(arg0, arg1, 0x4DU);
-                func_800B8E58((Player* ) arg1, 0x184CU);
+                func_800B8E58(arg1, 0x184CU);
                 if (Message_GetState(&arg0->msgCtx) == 0) {
                     Message_StartTextbox(arg0, 0xF9U, NULL);
                 }
@@ -9546,7 +9540,7 @@ s32 func_8083FF30(PlayState* arg0, Actor* arg1) {
     return var_v0;
 }
 
-void func_80840094(PlayState* arg0, Actor* arg1) {
+void func_80840094(PlayState* arg0, Player* arg1) {
     func_8083FF30(arg0, arg1);
     func_8083FFEC(arg0, arg1);
 }
@@ -9578,7 +9572,7 @@ void func_808400CC(PlayState* arg0, Player* arg1) {
     }
     func_8082DF48(arg0, arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
     arg1->linearVelocity = -18.0f;
-    func_80840094(arg0, &arg1->actor);
+    func_80840094(arg0, arg1);
 }
 
 s32 func_808401F4(PlayState* arg0, Actor* arg1) {
@@ -9663,7 +9657,7 @@ s32 func_808401F4(PlayState* arg0, Actor* arg1) {
                                         func_800B8E58((Player* ) arg1, 0x181AU);
                                     }
                                 }
-                                func_80840094(arg0, arg1);
+                                func_80840094(arg0, (Player* ) arg1);
                                 func_8082DF48(arg0, (Player* ) arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
                                 arg1->unk_AD0 = -14.0f;
                             }
@@ -9692,8 +9686,8 @@ block_35:
                     func_8082DF2C(arg0);
                 }
             }
-            if (func_8083FF30(arg0, arg1) == 0) {
-                func_8083FFEC(arg0, arg1);
+            if (func_8083FF30(arg0, (Player* ) arg1) == 0) {
+                func_8083FFEC(arg0, (Player* ) arg1);
                 if (arg1->colChkInfo.atHitEffect == 1) {
                     arg1->colChkInfo.damage = 8;
                     func_80833B18(arg0, (Player* ) arg1, (Player* )4, 0.0f, 0.0f, (s16) (s32) arg1->shape.rot.y, 0x14);
@@ -10011,7 +10005,7 @@ void func_80841358(PlayState* arg0, Player* arg1, s32 arg2) {
     func_8082DCA0(arg0, arg1);
     arg1->heldItemId = (u8) sp24;
     arg1->nextModelGroup = Player_ActionToModelGroup(arg1, sp20);
-    func_8082F8BC(arg0, arg1, (s8) sp20);
+    func_8082F8BC(arg0, arg1, sp20);
     func_808309CC(arg0, arg1);
     if (arg2 != 0) {
         func_800B8E58(arg1, 0x1803U);
@@ -10226,7 +10220,7 @@ block_10:
     this->heldItemActionParam = 0;
     this->itemActionParam = 0;
     this->heldItemId = 0xFF;
-    func_80831990(play, &this->actor, 0xFFU);
+    func_80831990(play, this, 0xFFU);
     Player_SetEquipmentData(play, this);
     this->prevBoots = this->currentBoots;
     Player_InitCommon(this, play, gPlayerSkeletons[this->transformation]);
@@ -10365,7 +10359,7 @@ block_10:
         if (gSaveContext.powderKegTimer != 0) {
             this->nextModelGroup = Player_ActionToModelGroup(this, PLAYER_AP_POWDER_KEG);
             this->heldItemId = 0xC;
-            func_8082F8BC(play, this, 0xF);
+            func_8082F8BC(play, this, PLAYER_AP_POWDER_KEG);
             func_808313F0(this, play);
         } else if (gSaveContext.unk_1014 != 0) {
             func_8082F5FC(this, Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, 0xB9, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.shape.rot.y, (s16) 0, 0x8000));
@@ -11085,14 +11079,14 @@ Please modify the assembly to work around it (e.g. copy the instruction
 to all jump sources and move the label, or add a nop to the delay slot).
 */
 
-void func_808442D8(PlayState* arg0, Actor* arg1) {
+void func_808442D8(PlayState* arg0, Player* arg1) {
     f32 sp3C;
     f32 temp_fv1;
     f32 var_fa0;
     s16 temp_v0;
     s16 var_v1;
 
-    if (arg1->unk_B0C == 0.0f) {
+    if (arg1->unk_B08[1] == 0.0f) {
         func_80831990(arg0, arg1, 0xFFU);
         return;
     }
@@ -11101,24 +11095,24 @@ void func_808442D8(PlayState* arg0, Actor* arg1) {
     if (temp_v0 == 0) {
         var_v1 = 0;
     } else {
-        arg1->unk_B28 = (s16) (temp_v0 - 1);
+        arg1->unk_B28 = temp_v0 - 1;
         var_v1 = arg1->unk_B28;
     }
     if (var_v1 == 0) {
         Inventory_ChangeAmmo(8, -1);
         arg1->unk_B28 = 1;
-        arg1->unk_B0C = 0.0f;
+        arg1->unk_B08[1] = 0.0f;
         var_fa0 = 0.0f;
     } else if (arg1->unk_B28 >= 0xC9) {
         var_fa0 = (f32) (0xD2 - arg1->unk_B28) / 10.0f;
     } else if (arg1->unk_B28 < 0x14) {
         var_fa0 = (f32) arg1->unk_B28 / 20.0f;
-        arg1->unk_B0C = var_fa0;
+        arg1->unk_B08[1] = var_fa0;
     }
-    if ((var_fa0 > 0.0f) && ((sp3C = var_fa0, func_800B0EB0(arg0, arg1 + 0xB9C, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380, (s16) (s32) (var_fa0 * 200.0f), (s16) 0, (s16) 8), (arg0->roomCtx.currRoom.enablePosLights != 0)) || (gGameInfo->data[0x23D] != 0))) {
+    if ((var_fa0 > 0.0f) && ((sp3C = var_fa0, func_800B0EB0(arg0, &arg1->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380, (s16) (s32) (var_fa0 * 200.0f), (s16) 0, (s16) 8), (arg0->roomCtx.currRoom.enablePosLights != 0)) || (gGameInfo->data[0x23D] != 0))) {
         sp3C = var_fa0;
         temp_fv1 = (Rand_ZeroOne() * 30.0f) + 225.0f;
-        Lights_PointSetColorAndRadius(arg1 + 0x508, (u32) temp_fv1 & 0xFF, (u32) (temp_fv1 * 0.7f) & 0xFF, 0U, (s16) (s32) (var_fa0 * 300.0f));
+        Lights_PointSetColorAndRadius((LightInfo* ) arg1->unk_508, (u32) temp_fv1 & 0xFF, (u32) (temp_fv1 * 0.7f) & 0xFF, 0U, (s16) (s32) (var_fa0 * 300.0f));
     }
 }
 
@@ -11460,7 +11454,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
     }
     temp_v0_8 = player->itemActionParam;
     if ((temp_v0_8 == 7) && (player->unk_B28 != 0)) {
-        func_808442D8(play, &player->actor);
+        func_808442D8(play, player);
     } else if (temp_v0_8 == 2) {
         temp_v0_9 = player->unk_B28;
         if (temp_v0_9 < 0) {
@@ -12467,7 +12461,7 @@ s32 func_80847880(PlayState* arg0, Player* arg1) {
         func_8082DE50(arg0, arg1);
         func_80831494(arg0, arg1, func_80854614, 0);
         if ((func_800B7118(arg1) == 0) || (Player_IsHoldingHookshot(arg1) != 0)) {
-            func_80831990(arg0, &arg1->actor, 1U);
+            func_80831990(arg0, arg1, 1U);
         }
         func_8082DB18(arg0, arg1, func_8082ED20(arg1));
         arg1->csMode = 0;
@@ -20744,7 +20738,7 @@ s32 func_8085B134(PlayState* play) {
     temp_a1 = play->actorCtx.actorLists[2].first;
     sp1C = temp_a1;
     func_8082DE50(play, (Player* ) temp_a1);
-    func_80831990(play, temp_a1, 0x5CU);
+    func_80831990(play, (Player* ) temp_a1, 0x5CU);
     return 1;
 }
 

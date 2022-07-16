@@ -1136,7 +1136,7 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 
 Vec3f* Camera_GetQuakeOffset(Vec3f* dst, Camera* camera);
 // void func_800E01DC(s32 param_1, u32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 // UNK_TYPE4 func_800E0228(void);
-// void func_800E0238(void);
+void func_800E0238(Camera* camera);
 void Camera_SetToTrackActor(Camera* camera, Actor* actor);
 void Camera_SetTargetActor(Camera* camera, Actor* actor);
 f32 Camera_GetWaterYPos(Camera* camera);
