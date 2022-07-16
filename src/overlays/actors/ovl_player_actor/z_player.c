@@ -80,18 +80,74 @@ void func_8082DC28(Player* this) {
     this->skelAnime.jointTable[1].y = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DC38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DC64.s")
+void func_8082DC38(Player* this) {
+    this->stateFlags2 &= ~0x20000;
+    this->meleeWeaponState = 0;
+    this->meleeWeaponInfo[2].active = false;
+    this->meleeWeaponInfo[1].active = false;
+    this->meleeWeaponInfo[0].active = false;
+}
 
-void func_8082DCA0(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DCA0.s")
+void func_8082DC64(PlayState* play, Player* this) {
+    if ((this->unk_3BC != -1) && (play->cameraPtrs[this->unk_3BC] != 0)) {
+        this->unk_3BC = -1;
+    }
+    this->stateFlags2 &= ~0xC00;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DD2C.s")
+void func_8082DCA0(PlayState* play, Player* this) {
+    Actor* heldActor;
+
+    heldActor = this->heldActor;
+    if (heldActor != NULL) {
+        if (!Player_IsHoldingHookshot(this)) {
+            this->actor.child = NULL;
+            this->heldActor = NULL;
+            this->interactRangeActor = NULL;
+            heldActor->parent = NULL;
+            this->stateFlags1 &= ~0x800;
+        }
+    }
+
+    if (Player_GetExplosiveHeld(this) >= 0) {
+        func_8082F8BC(play, this, 0);
+        this->heldItemId = 0xFE;
+    }
+}
+
+void func_8082DD2C(PlayState* arg0, Player* arg1) {
+    if ((arg1->stateFlags1 & 0x800) && (arg1->heldActor == NULL)) {
+        if (arg1->interactRangeActor != NULL) {
+            if (arg1->getItemId == 0) {
+                arg1->stateFlags1 &= ~0x800;
+                arg1->interactRangeActor = NULL;
+            }
+        } else {
+            arg1->stateFlags1 &= ~0x800;
+        }
+    }
+
+    func_8082DC38(arg1);
+    arg1->unk_AA5 = 0;
+    func_8082DC64(arg0, arg1);
+    func_800E0238(Play_GetCamera(arg0, 0));
+    arg1->stateFlags1 &= ~0x306004;
+    arg1->stateFlags2 &= ~0x90;
+    arg1->unk_ADD = 0;
+    arg1->unk_ADC = 0;
+    arg1->actor.shape.rot.x = 0;
+    arg1->actor.shape.rot.z = 0;
+    arg1->unk_ABC = 0.0f;
+    arg1->unk_AC0 = 0.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE14.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE50.s")
+void func_8082DE50(PlayState* play, Player* this) {
+    func_8082DD2C(play, this);
+    func_8082DCA0(play, this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE88.s")
 
