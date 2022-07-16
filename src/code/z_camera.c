@@ -42,12 +42,12 @@ s32 Camera_IsSwimming(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
-        if (((Player*)focalActor)->stateFlags3 & 0x8000) {
+        if (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_8000) {
             // Swimming as Zora
             return 999;
         } else {
             // Swimming as Human or Fierce Deity
-            return ((Player*)focalActor)->stateFlags1 & 0x8000000;
+            return ((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_8000000;
         }
     } else {
         // Camera not focused on player
