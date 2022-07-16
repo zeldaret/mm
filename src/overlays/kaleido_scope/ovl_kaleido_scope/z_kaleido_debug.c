@@ -370,7 +370,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     // Current Health Quarter (X / 4)
-    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.playerData.health) % 16) / 4, 217, 15);
+    KaleidoScope_DrawDigit(play, (((void)0, gSaveContext.save.playerData.health) % 0x10) / 4, 217, 15);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
