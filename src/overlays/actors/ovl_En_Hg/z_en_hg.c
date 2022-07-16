@@ -121,7 +121,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C,
-                       this->jointTable, this->morphTable, HG_LIMB_MAX);
+                       this->jointTable, this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -400,9 +400,9 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
-    if (limbIndex == HG_LIMB_HEAD) {
+    if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
         Matrix_Get(&this->unk1D8);
-    } else if (limbIndex == HG_LIMB_PELVIS) {
+    } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -416,6 +416,6 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_005E28);
+    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }
