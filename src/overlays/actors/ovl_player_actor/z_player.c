@@ -36,6 +36,64 @@ void func_8085B170(PlayState* play, Player* player);
 extern LinkAnimationHeader* D_8085BE84[6];
 
 
+extern f32 D_8085D3FC[2];
+extern Input* D_80862B44;
+
+extern Vec3f D_80862AF0;                            /* type too large by 8 */
+extern f32 D_80862AF4;
+extern f32 D_80862AF8;
+extern f32 D_80862AFC;
+extern s16 D_80862B00;
+extern s16 D_80862B02;
+extern s32 D_80862B04;
+extern u32 D_80862B08;
+extern s32 D_80862B0C;
+extern u32 D_80862B10;
+extern s16 D_80862B14;
+extern s16 D_80862B16;
+extern f32 D_80862B18;
+extern s32 D_80862B1C;
+extern s32 D_80862B20;
+extern s32 D_80862B24;
+extern s16 D_80862B28;
+extern s32 D_80862B2C;
+extern Vec3f D_80862B30;
+extern f32 D_80862B3C;
+extern u32 D_80862B40;
+extern Input* D_80862B44;
+extern s32 D_80862B48;
+extern s32 D_80862B4C;
+extern UNK_TYPE D_80862B50;
+extern s32 D_80862B6C;
+extern f32 D_8085C3E4;
+
+extern f32 D_8085D404[3];
+extern f32 D_8085C3E8;
+extern u16 D_8085C3EC[4];
+
+extern u8 D_8085D174[];
+
+extern f32 D_8085D35C;
+extern f32 D_8085D360;
+extern Vec3f D_8085D364;
+extern Vec3f D_8085D370;
+extern Color_RGBA8 D_8085D37C;
+extern Color_RGBA8 D_8085D380;
+extern UNK_TYPE D_8085D384;
+extern f32 D_8085D3E0[5];
+extern Color_RGBA8 D_8085D3F4;
+extern Color_RGBA8 D_8085D3F8;
+extern f32 D_8085D3FC[2];
+extern f32 D_8085D404[3];
+extern f32 D_8085D410[3];
+
+void func_808508C8(Player* this, PlayState* play);
+void func_80854430(Player* this, PlayState* play);
+void func_8084D820(Player* this, PlayState* play);
+void func_808561B0(Player* this, PlayState* play);
+void func_80853D68(Player* this, PlayState* play);
+void func_80857BE8(Player* this, PlayState* play);
+
 s32 func_8082DA90(PlayState* play) {
     return play->sceneLoadFlag != 0 || play->unk_18B4A != 0;
 }
@@ -149,13 +207,51 @@ void func_8082DE50(PlayState* play, Player* this) {
     func_8082DCA0(play, this);
 }
 
+#ifdef NON_MATCHING
+s32 func_8082DE88(Player* arg0, s32 arg1, s32 arg2) {
+    s16 temp_v0;
+
+    temp_v0 = arg0->unk_D64 - D_80862B00;
+    arg0->unk_AE8 += arg1 + (s32) (ABS_ALT(temp_v0) * fabsf(D_80862AFC) * 0.0000025415802f);
+    if (D_80862B44->press.button & 0xC000) {
+        arg0->unk_AE8 += 5;
+    }
+    return arg0->unk_AE8 >= arg2;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE88.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DF2C.s")
+void func_8082DF2C(PlayState* play) {
+    if (play->actorCtx.freezeFlashTimer == 0) {
+        play->actorCtx.freezeFlashTimer = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DF48.s")
+void func_8082DF48(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
+    if (this == GET_PLAYER(play)) {
+        Rumble_Request(distSq, sourceIntensity, decayTimer, decayStep);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DF8C.s")
+void func_8082DF8C(Player* arg0, u16 arg1) {
+    u16 var_v0;
+
+    if (arg0->currentMask == PLAYER_MASK_GIANT) {
+        func_8019F830(&arg0->actor.projectedPos, arg1);
+        return;
+    }
+
+    if (arg0->actor.id == ACTOR_PLAYER) {
+        if (arg0->currentMask == PLAYER_MASK_SCENTS) {
+            var_v0 = 0xE0;
+        } else {
+            var_v0 = arg0->ageProperties->unk_92;
+        }
+
+        func_800B8E58(arg0, var_v0 + arg1);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082E00C.s")
 
@@ -1342,63 +1438,6 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80844D80.s")
 
-extern f32 D_8085D3FC[2];
-extern Input* D_80862B44;
-
-extern Vec3f D_80862AF0;                            /* type too large by 8 */
-extern f32 D_80862AF4;
-extern f32 D_80862AF8;
-extern f32 D_80862AFC;
-extern s16 D_80862B00;
-extern s16 D_80862B02;
-extern s32 D_80862B04;
-extern u32 D_80862B08;
-extern s32 D_80862B0C;
-extern u32 D_80862B10;
-extern s16 D_80862B14;
-extern s16 D_80862B16;
-extern f32 D_80862B18;
-extern s32 D_80862B1C;
-extern s32 D_80862B20;
-extern s32 D_80862B24;
-extern s16 D_80862B28;
-extern s32 D_80862B2C;
-extern Vec3f D_80862B30;
-extern f32 D_80862B3C;
-extern u32 D_80862B40;
-extern Input* D_80862B44;
-extern s32 D_80862B48;
-extern s32 D_80862B4C;
-extern UNK_TYPE D_80862B50;
-extern s32 D_80862B6C;
-extern f32 D_8085C3E4;
-
-extern f32 D_8085D404[3];
-extern f32 D_8085C3E8;
-extern u16 D_8085C3EC[4];
-
-extern u8 D_8085D174[];
-
-extern f32 D_8085D35C;
-extern f32 D_8085D360;
-extern Vec3f D_8085D364;
-extern Vec3f D_8085D370;
-extern Color_RGBA8 D_8085D37C;
-extern Color_RGBA8 D_8085D380;
-extern UNK_TYPE D_8085D384;
-extern f32 D_8085D3E0[5];
-extern Color_RGBA8 D_8085D3F4;
-extern Color_RGBA8 D_8085D3F8;
-extern f32 D_8085D3FC[2];
-extern f32 D_8085D404[3];
-extern f32 D_8085D410[3];
-
-void func_808508C8(Player* this, PlayState* play);
-void func_80854430(Player* this, PlayState* play);
-void func_8084D820(Player* this, PlayState* play);
-void func_808561B0(Player* this, PlayState* play);
-void func_80853D68(Player* this, PlayState* play);
-void func_80857BE8(Player* this, PlayState* play);
 
 
 #if 0
