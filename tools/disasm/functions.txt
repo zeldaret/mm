@@ -8320,7 +8320,7 @@
     0x80989ADC:("EnDg_SetupIdleMove",),
     0x80989BF8:("EnDg_UpdateTextId",),
     0x80989D38:("EnDg_StartTextBox",),
-    0x80989E18:("EnDg_CheckIfPickedUp",),
+    0x80989E18:("EnDg_TryPickUp",),
     0x80989FC8:("EnDg_FindFollowerForBremenMask",),
     0x8098A064:("EnDg_CheckForBremenMaskMarch",),
     0x8098A1B4:("EnDg_ShouldReactToNonHumanPlayer",),

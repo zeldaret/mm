@@ -103,7 +103,7 @@ static RacetrackDogInfo sRacetrackDogInfo[] = {
 
 /**
  * Stores the RacetrackDogInfo for the dog that is selected by the player. These values are just
- * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in EnDg_CheckIfPickedUp.
+ * placeholders, and the actual value gets grabbed from sRacetrackDogInfo in EnDg_TryPickUp.
  */
 static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x353E };
 
@@ -291,14 +291,14 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
 /**
  * Returns the Y-rotation the dog should have to move to the next point along its path.
  */
-s16 EnDg_GetYRotation(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(path->points);
-        points = &points[idx];
+        points = &points[index];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
     } else {
@@ -306,7 +306,7 @@ s16 EnDg_GetYRotation(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
         diffZ = 0.0f;
     }
 
-    *distSQ = SQ(diffX) + SQ(diffZ);
+    *distSq = SQ(diffX) + SQ(diffZ);
 
     return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
@@ -469,7 +469,7 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
 /**
  * Checks to see if the player picked up the dog and sets the appropriate state if they did.
  */
-void EnDg_CheckIfPickedUp(EnDg* this, PlayState* play) {
+void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         this->dogFlags |= DOG_FLAG_HELD;
@@ -586,7 +586,6 @@ s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
                 return true;
             }
             // fallthrough
-
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
                 return true;
@@ -674,7 +673,7 @@ void EnDg_IdleMove(EnDg* this, PlayState* play) {
     EnDg_MoveAlongPath(this, play);
     Actor_MoveWithGravity(&this->actor);
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        EnDg_CheckIfPickedUp(this, play);
+        EnDg_TryPickUp(this, play);
     }
 
     EnDg_CheckForBremenMaskMarch(this, play);
@@ -697,7 +696,7 @@ void EnDg_IdleBark(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->transformation == PLAYER_FORM_HUMAN) {
-        EnDg_CheckIfPickedUp(this, play);
+        EnDg_TryPickUp(this, play);
     }
 
     EnDg_PlaySfxBark(this, 13.0f);
@@ -1268,7 +1267,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         this->actor.gravity = -3.0f;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            EnDg_CheckIfPickedUp(this, play);
+            EnDg_TryPickUp(this, play);
         }
     }
 
