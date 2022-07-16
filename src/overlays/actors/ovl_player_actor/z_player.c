@@ -201,8 +201,13 @@ void func_8082DD2C(PlayState* arg0, Player* arg1) {
     arg1->unk_AC0 = 0.0f;
 }
 
-void func_8082DE14(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DE14.s")
+s32 func_8082DE14(PlayState* play, Player* this) {
+    if (this->itemActionParam > PLAYER_AP_LAST_USED) {
+        func_80831990(play, this, ITEM_NONE);
+        return true;
+    }
+    return false;
+}
 
 void func_8082DE50(PlayState* play, Player* this) {
     func_8082DD2C(play, this);
