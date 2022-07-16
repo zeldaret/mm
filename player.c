@@ -676,8 +676,8 @@ static LinkAnimationHeader* D_8085C28C[6] = {
 static ? D_8085C2A4;                                /* unable to generate initializer */
 static ? D_8085C2A8;                                /* unable to generate initializer */
 static ? D_8085C2AC;                                /* unable to generate initializer */
-static s32 D_8085C84C = 0x0400DF30;
-static s32 D_8085C850[0x1D] = {
+static s32 D_8085C84C[0x1E] = {
+    0x0400DF30,
     0x0400DEE8,
     0x0400DF40,
     0x0400DEF8,
@@ -2469,15 +2469,15 @@ s32 func_8082ECCC(Player* this) {
     return this->stateFlags1 & 0x01000000;
 }
 
-void func_8082ECE0(Player* arg0) {
+void func_8082ECE0(Player* this) {
     s8 temp_v1;
 
-    temp_v1 = ((arg0->getItemId * 6) - 6 + D_8085C3F4)->unk_2;
+    temp_v1 = ((this->getItemId * 6) - 6 + D_8085C3F4)->unk_2;
     if (temp_v1 < 0) {
-        arg0->unk_B2A = -temp_v1;
+        this->unk_B2A = -temp_v1;
         return;
     }
-    arg0->unk_B2A = temp_v1;
+    this->unk_B2A = temp_v1;
 }
 
 LinkAnimationHeader* func_8082ED20(Player* this) {
@@ -2500,37 +2500,39 @@ s32 func_8082ED94(Player* arg0) {
     s32 var_v1;
     s32* temp_v0;
     s32* temp_v0_2;
+    s32* temp_v0_3;
     s32* var_v0;
     void* temp_a1;
     void* temp_a1_2;
 
     temp_a1 = arg0->skelAnime.animation;
     if ((&D_0400DD58 != temp_a1) && (&D_0400DD68 != temp_a1) && ((temp_a1_2 = arg0->skelAnime.animation, (func_8082ED20(arg0) != temp_a1_2)) || (&D_0400D0B0 == temp_a1_2))) {
-        if (temp_a1_2 == D_8085C84C) {
+        temp_v0 = D_8085C84C + 4;
+        if (temp_a1_2 == *D_8085C84C) {
             return 1;
         }
-        var_v0 = D_8085C850 + 4;
+        var_v0 = temp_v0 + 4;
         var_v1 = 2;
-        if (temp_a1_2 == *D_8085C850) {
+        if (temp_a1_2 == *temp_v0) {
             return 2;
         }
 loop_8:
         if (temp_a1_2 == var_v0->unk_0) {
             return var_v1 + 1;
         }
-        temp_v0 = var_v0 + 4;
+        temp_v0_2 = var_v0 + 4;
         if (temp_a1_2 == var_v0->unk_4) {
             return var_v1 + 2;
         }
-        temp_v0_2 = temp_v0 + 4;
-        if (temp_a1_2 == temp_v0->unk_4) {
+        temp_v0_3 = temp_v0_2 + 4;
+        if (temp_a1_2 == temp_v0_2->unk_4) {
             return var_v1 + 3;
         }
-        if (temp_a1_2 == temp_v0_2->unk_4) {
+        if (temp_a1_2 == temp_v0_3->unk_4) {
             return var_v1 + 4;
         }
         var_v1 += 4;
-        var_v0 = temp_v0_2 + 4 + 4;
+        var_v0 = temp_v0_3 + 4 + 4;
         if (var_v1 == 0x1E) {
             return 0;
         }
@@ -9307,7 +9309,7 @@ block_10:
                     var_a1 = var_v1_2 + 9;
                 }
             }
-            temp_v1_2 = (var_a1 * 8) + &D_8085C84C;
+            temp_v1_2 = (var_a1 * 8) + D_8085C84C;
             var_v0 = temp_v1_2;
             if (arg1->modelAnimType != 1) {
                 var_v0 = temp_v1_2 + 4;
