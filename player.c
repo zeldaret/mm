@@ -246,8 +246,8 @@ void func_80858E60(? (*arg0)(), Player* arg1, LinkAnimationHeader* arg2); /* sta
 void func_80858E80(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
 void func_80858EA0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
 void func_80858EC0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
-void func_80858EFC(? (*arg0)(), Player* arg1, LinkAnimationHeader* arg2); /* static */
-void func_80858F1C(? (*arg0)(), Player* arg1, LinkAnimationHeader* arg2); /* static */
+void func_80858EFC(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
+void func_80858F1C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
 void func_80858F3C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
 void func_80858F5C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
 void func_80858F7C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2); /* static */
@@ -676,7 +676,6 @@ static LinkAnimationHeader* D_8085C28C[6] = {
 static ? D_8085C2A4;                                /* unable to generate initializer */
 static ? D_8085C2A8;                                /* unable to generate initializer */
 static ? D_8085C2AC;                                /* unable to generate initializer */
-static ? D_8085C3F4;                                /* unable to generate initializer */
 static s32 D_8085C84C = 0x0400DF30;
 static s32 D_8085C850[0x1D] = {
     0x0400DEE8,
@@ -1283,8 +1282,8 @@ static void (*D_8085D990[0x14])(? (*)(), Player*, LinkAnimationHeader*) = {
     func_80858E60,
     ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858E80),
     ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858EA0),
-    func_80858EFC,
-    func_80858F1C,
+    ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858EFC),
+    ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858F1C),
     ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858F3C),
     ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858F5C),
     ((void (*)(? (*)(), Player*, LinkAnimationHeader*)) func_80858FBC),
@@ -1651,6 +1650,193 @@ ColliderQuadInit D_8085C394 = {
 f32 D_8085C3E4 = 1.0f;
 f32 D_8085C3E8 = 1.0f;
 u16 D_8085C3EC[4] = { 0x680F, 0x680E, 0x6811, 0x6808 };
+struct_8085C3F4 D_8085C3F4[0xB9] = {
+    { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
+    { 0x85, 1, 0xAF, 2, 1, 0x3F },
+    { 0x86, 2, 0xAE, 3, 1, 0x3F },
+    { 0x87, 2, 0xAE, 4, 1, 0x3F },
+    { 0x88, 0x14, 0xAC, 5, 1, 0x3F },
+    { 0x89, 0x14, 0xAB, 6, 1, 0x3F },
+    { 0x8A, 0x13, 0xBD, 7, 1, 0x3F },
+    { 0x5A, 0xA0, 0x21, 8, 0, 0xA8 },
+    { 0x5B, 0xA0, 0x22, 9, 0, 0xA8 },
+    { 0x83, 0x80, 9, 0xA, 0, 0x90 },
+    { 0x83, 0xA0, 9, 0xB, 0, 0x90 },
+    { 0x7B, 0xA0, 0x14, 0xC, 0, 0x96 },
+    { 0x6F, 0xA0, 0x13, 0xD, 0, 0x96 },
+    { 0x79, 0x6F, -0x1D, 0xE, 0, 0xA4 },
+    { 0x7A, 0x6E, -0x1E, 0xF, 0, 0xA4 },
+    { 0x83, 0x80, 9, 0x10, 0, 0x90 },
+    { -1, 0, 0, 0x11, 0, 0 },
+    { 0x83, 0x80, 9, 0x12, 0, 0x90 },
+    { 0x83, 0x80, 9, 0x13, 0, 0x90 },
+    { 6, 0x59, -0x1F, 0x14, 0, 0xA5 },
+    { 0x8F, 0x59, -0x1F, 0x15, 0, 0xA5 },
+    { 0x90, 0x59, -0x1F, 0x16, 0, 0xA5 },
+    { 0x91, 0x59, -0x1F, 0x17, 0, 0xA5 },
+    { 0x92, 0x59, -0x1F, 0x18, 0, 0xA5 },
+    { 8, 0xD, -0x1B, 0x19, 0, 0x9F },
+    { 0x98, 0xC0, -0x27, 0x1A, 0, 0xB0 },
+    { 0x56, 0xA0, 0x18, 0x1B, 0, 0x98 },
+    { 0x57, 0xA0, 0x19, 0x1C, 0, 0x98 },
+    { 0x58, 0xA0, 0x1A, 0x1D, 0, 0x98 },
+    { 0x93, 0x48, -0x24, 0x1E, 0, 0xAF },
+    { 0x94, 0x49, -0x25, 0x1F, 0, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x20, 0, 0xAF },
+    { 0x95, 0x4A, -0x26, 0x21, 0, 0xAF },
+    { 1, 0xA0, 0x2F, 0x22, 0, 0xBF },
+    { 0x54, 0xA0, 0x16, 0x23, 0, 0x97 },
+    { 0x55, 0xA0, 0x17, 0x24, 0, 0x97 },
+    { 2, 0xA0, 0x48, 0x25, 1, 0x21 },
+    { 3, 0xA0, 0x49, 0x26, 1, 0x21 },
+    { 4, 0xA0, 0x4A, 0x27, 1, 0x21 },
+    { 9, 0xC, -0x12, 0x28, 0, 0x94 },
+    { 0x8D, 0xC, -0x12, 0x29, 0, 0x94 },
+    { 0x8E, 0xC, -0x12, 0x2A, 0, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2B, 0, 0x94 },
+    { 0x9D, 0xA0, -0x12, 0x2C, 0, 0x94 },
+    { 0x9E, 0xA0, -0x12, 0x2D, 0, 0x94 },
+    { 0x97, 0xC0, -0x27, 0x2E, 0, 0xB0 },
+    { 0x9B, 0xA0, -0x1B, 0x2F, 0, 0x9F },
+    { 0x9B, 0xA0, -0x1B, 0x30, 0, 0x9F },
+    { 0x9C, 0xA0, -0x1B, 0x31, 0, 0x9F },
+    { 0x51, 0xA0, -0x28, 0x32, 0, 0xB3 },
+    { 0x52, 0xA0, 0x34, 0x33, 0, -0x3D },
+    { 0xC, 0x80, 0x5E, 0x34, 1, -0x36 },
+    { 0xA, 0x80, -0x35, 0x35, 0, -0x3A },
+    { 0x99, 0xC0, -0x27, 0x36, 0, 0xB0 },
+    { 0x4D, 0xA0, 0x56, 0x37, 1, 0x48 },
+    { 0x4E, 0xA0, 0x67, 0x38, 1, -7 },
+    { 0x4F, 0xA0, 0x68, 0x39, 1, -6 },
+    { 0x9A, 0xC0, -0x27, 0x3A, 0, 0xB0 },
+    { 0x10, 0xA0, 0x69, 0x3B, 1, -5 },
+    { 0x78, 0xA0, -2, 0x3C, 0, 0x86 },
+    { 0x74, 0xA0, 0xA, 0x3D, 0, 0x92 },
+    { 0x76, 0xA0, 0x1C, 0x3E, 0, 0xA0 },
+    { 0x75, 0xA0, 0xB, 0x3F, 0, 0x91 },
+    { -1, 0, 0, 0x40, 0, 0 },
+    { 0xF, 0xA0, 0x29, 0x41, 0, 0xB4 },
+    { 0xE, 0xA0, 0x30, 0x42, 0, 0xC0 },
+    { 0xD, 0xA0, 0x75, 0x43, 2, 0x28 },
+    { 0xD, 0, 0, 0x44, 0, 0 },
+    { 0x83, 0x80, 9, 0x45, 0, 0x90 },
+    { -1, 0, 0, 0x46, 0, 0 },
+    { -1, 0, 0, 0x47, 0, 0 },
+    { -1, 0, 0, 0x48, 0, 0 },
+    { -1, 0, 0, 0x49, 0, 0 },
+    { -1, 0, 0, 0x4A, 0, 0 },
+    { -1, 0, 0, 0x4B, 0, 0 },
+    { 0, 0xA0, 0x2B, 0x4C, 0, 0xB5 },
+    { -1, 0, 0, 0x4D, 0, 0 },
+    { -1, 0, 0, 0x4E, 0, 0 },
+    { -1, 0, 0, 0x4F, 0, 0 },
+    { 0x6D, 0x80, 0xC, 0x50, 2, 0x53 },
+    { -1, 0xA0, 0x20, 0x51, 0, 0xA0 },
+    { 0x6E, 0x80, 0xB5, 0x52, 1, 0x25 },
+    { -1, 0, 0, 0x53, 0, 0 },
+    { -1, 0, 0, 0x54, 0, 0 },
+    { 0x5D, 0x80, 0x5D, 0x55, 0, 0 },
+    { 0x5E, 0x80, 0x64, 0x56, 0, 0 },
+    { 0x5F, 0x80, 0x65, 0x57, 0, 0 },
+    { 0x60, 0x80, 0x66, 0x58, 0, 0 },
+    { 0x11, 0x80, 0x58, 0x59, 1, 0x96 },
+    { 0x12, 0x80, 1, 0x5A, 0, 0x9E },
+    { 0x13, 0x80, 0x32, 0x5B, 0, -0x3F },
+    { 0x14, 0x80, 0x31, 0x5C, 0, -0x3F },
+    { 0x15, 0x80, 0x33, 0x5D, 0, -0x3F },
+    { 0x16, 0x80, 0x3C, 0x5E, 2, 0x72 },
+    { 0x16, 0x80, 1, 0x5F, 0, 0x9E },
+    { 0x18, 0x80, 0x2C, 0x60, 0, 0xB6 },
+    { 0x19, 0x80, 0x2C, 0x61, 0, 0xB6 },
+    { 0x1A, 0x80, 0x36, 0x62, 0, -0x39 },
+    { 0x1B, 0x80, 0x4C, 0x63, 1, 0x37 },
+    { 0x1C, 0, 0, 0x64, 0, 0 },
+    { 0x12, 0x80, 1, 0x65, 0, 0x9E },
+    { 0x1E, 0x80, 0x53, 0x66, 1, 0x39 },
+    { 0x1F, 0, 0, 0x67, 0, 0 },
+    { 0x20, 0, 0, 0x68, 0, 0 },
+    { 0x21, 0x80, 0x59, 0x69, 1, 0xAE },
+    { 0x22, 0x80, 0x60, 0x6A, 1, -0x17 },
+    { 0x23, 0x80, 0x70, 0x6B, 2, 0x1D },
+    { -1, 0, 0, 0x6C, 0, 0 },
+    { 0x12, 0x80, 1, 0x6D, 0, 0x9E },
+    { 0x24, 0x80, 0x60, 0x6E, 1, -0x17 },
+    { 0x25, 0x80, 0x74, 0x6F, 2, 0x27 },
+    { 0x12, 0x80, 1, 0x70, 0, 0x9E },
+    { -1, 0, 0, 0x71, 0, 0 },
+    { -1, 0, 0, 0x72, 0, 0 },
+    { -1, 0, 0, 0x73, 0, 0 },
+    { -1, 0, 0, 0x74, 0, 0 },
+    { -1, 0, 0, 0x75, 0, 0 },
+    { -1, 0, 0, 0x76, 0, 0 },
+    { -1, 0, 0, 0x77, 0, 0 },
+    { 0x32, 0xA0, 0x5C, 0x78, 1, 0xBD },
+    { 0x33, 0xA0, 0x45, 0x79, 1, 0x19 },
+    { 0x34, 0xA0, 0x46, 0x7A, 1, 0x1A },
+    { 0x35, 0xA0, 0x76, 0x7B, 2, 0x42 },
+    { 0x44, 0xA0, 0x3E, 0x7C, 1, 2 },
+    { 0x49, 0xA0, 0x73, 0x7D, 2, 0x26 },
+    { 0x38, 0xA0, 0x11, 0x7E, 2, 0x65 },
+    { 0x39, 0xA0, 0x3F, 0x7F, 1, 3 },
+    { 0x3A, 0xA0, 0x2D, 0x80, 1, 0 },
+    { 0x3B, 0xA0, 0x6A, 0x81, 2, 9 },
+    { 0x3C, 0xA0, 0x71, 0x82, 2, 0x1F },
+    { 0x3D, 0xA0, 0xF, 0x83, 2, 0x59 },
+    { 0x3E, 0xA0, 0x72, 0x84, 2, 0x25 },
+    { 0x3F, 0xA0, 4, 0x85, 2, 0x82 },
+    { 0x40, 0xA0, 0x6B, 0x86, 2, 0xA },
+    { 0x41, 0xA0, 0x6C, 0x87, 2, 0xB },
+    { 0x42, 0xA0, 0x23, 0x88, 2, 0x66 },
+    { 0x43, 0xA0, 3, 0x89, 2, 0x7D },
+    { 0x36, 0xA0, 0x40, 0x8A, 1, 4 },
+    { 0x45, 0xA0, 0xD, 0x8B, 2, 0x54 },
+    { 0x46, 0xA0, 0x10, 0x8C, 2, 0x5A },
+    { 0x47, 0xA0, 0x3B, 0x8D, 2, 0x6D },
+    { 0x48, 0xA0, 0x3D, 0x8E, 2, 0x7E },
+    { 0x37, 0xA0, 0xE, 0x8F, 2, 0x58 },
+    { -1, 0, 0, 0x90, 0, 0 },
+    { 0x9F, 0x80, 0x74, 0x91, 2, 0x27 },
+    { 0xA0, 0x80, 0x2C, 0x92, 0, 0xB6 },
+    { 0xA1, 0x80, 0x5F, 0x93, 1, -0x18 },
+    { 0xA2, 0x80, 0x62, 0x94, 1, -0x11 },
+    { 0xA3, 0x80, 0x63, 0x95, 1, -0x10 },
+    { 0x28, 0x80, 0x5A, 0x96, 1, 0xB1 },
+    { 0x29, 0x80, 0x5B, 0x97, 1, 0xB2 },
+    { 0x2A, 0x80, 0x41, 0x98, 1, 0xB2 },
+    { 0x2B, 0x80, 0x42, 0x99, 1, 0xB2 },
+    { 0x2C, 0x80, 0x44, 0x9A, 1, 0xB2 },
+    { 0x10, 0xA0, 0x69, 0x9B, 1, -5 },
+    { 0x4D, 0xA0, 0x56, 0x9C, 1, 0x48 },
+    { 0x4E, 0xA0, 0x67, 0x9D, 1, -7 },
+    { 0x4F, 0xA0, 0x68, 0x9E, 1, -6 },
+    { 0x51, 0xA0, -0x28, 0x9F, 0, 0xB3 },
+    { 0x2D, 0x80, 0x6D, 0xA0, 2, 0xF },
+    { 0x2E, 0x80, 0x37, 0xA1, 2, 0x45 },
+    { -1, 0, 0, 0xA2, 0, 0 },
+    { -1, 0, 0, 0xA3, 0, 0 },
+    { -1, 0x80, 0x2D, 0xA4, 1, 0 },
+    { -1, 0, 0, 0xA5, 0, 0 },
+    { -1, 0, 0, 0xA6, 0, 0 },
+    { -1, 0, 0, 0xA7, 0, 0 },
+    { -1, 0, 0, 0xA8, 0, 0 },
+    { 0x12, 0x80, 1, 0xA9, 0, 0x9E },
+    { 0x2F, 0x80, 0x6E, 0xAA, 2, 0x10 },
+    { 0x30, 0x80, 0x6F, 0xAB, 2, 0x15 },
+    { -1, 0, 0, 0xAC, 0, 0 },
+    { -1, 0, 0, 0xAD, 0, 0 },
+    { -1, 0, 0, 0xAE, 0, 0 },
+    { -1, 0, 0, 0xAF, 0, 0 },
+    { -1, 0, 0, 0xB0, 0, 0 },
+    { -1, 0, 0, 0xB1, 0, 0 },
+    { -1, 0, 0, 0xB2, 0, 0 },
+    { -1, 0x80, 0x3A, 0xB3, 2, 0x6B },
+    { 0x31, 0xA0, 0x2E, 0xB4, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB5, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB6, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB7, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
+    { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
+};
 void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F594,
     func_8082F594,
@@ -2240,53 +2426,53 @@ void func_8082EA80(PlayState* play, Player* this, LinkAnimationHeader* anim, s32
     func_8082E920(play, this, arg3);
 }
 
-void func_8082EAC8(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2, s32 arg3) {
-    func_8082EA80(arg0, arg1, arg2, arg3, 1.0f);
+void func_8082EAC8(PlayState* play, Player* this, LinkAnimationHeader* anim, s32 arg3) {
+    func_8082EA80(play, this, anim, arg3, 1.0f);
 }
 
-void func_8082EAF0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2, s32 arg3) {
-    func_8082EA80(arg0, arg1, arg2, arg3, 0.6666667f);
+void func_8082EAF0(PlayState* play, Player* this, LinkAnimationHeader* anim, s32 arg3) {
+    func_8082EA80(play, this, anim, arg3, 0.6666667f);
 }
 
-void func_8082EB18(void) {
-    func_8082EAF0((PlayState* )0x1C);
+void func_8082EB18(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    func_8082EAF0(play, this, anim, 0x1C);
 }
 
-void func_8082EB38(PlayState* arg0, Player* arg1) {
+void func_8082EB38(PlayState* play, Player* this) {
     s8 var_v0;
     s8 var_v1;
 
-    arg1->unk_D60 = D_80862AFC;
-    arg1->unk_D64 = D_80862B00;
+    this->unk_D60 = D_80862AFC;
+    this->unk_D64 = D_80862B00;
     func_800FF3A0(&D_80862AFC, &D_80862B00, D_80862B44);
     if (D_80862AFC < 8.0f) {
         D_80862AFC = 0.0f;
     }
-    D_80862B02 = Camera_GetInputDirYaw((arg0 + (arg0->activeCamId * 4))->unk_800) + D_80862B00;
-    arg1->unk_ADE = (u8) ((s32) (arg1->unk_ADE + 1) % 4);
+    D_80862B02 = Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]) + D_80862B00;
+    this->unk_ADE = (u8) ((s32) (this->unk_ADE + 1) % 4);
     var_v0 = -1;
     if (D_80862AFC < 55.0f) {
         var_v1 = -1;
     } else {
         var_v1 = (s8) ((s32) ((D_80862B00 + 0x2000) & 0xFFFF) >> 9);
-        var_v0 = (s8) ((s32) (((s16) (D_80862B02 - arg1->actor.shape.rot.y) + 0x2000) & 0xFFFF) >> 0xE);
+        var_v0 = (s8) ((s32) (((s16) (D_80862B02 - this->actor.shape.rot.y) + 0x2000) & 0xFFFF) >> 0xE);
     }
-    (arg1 + arg1->unk_ADE)->unk_ADF = var_v1;
-    (arg1 + arg1->unk_ADE)->unk_AE3 = var_v0;
+    this->unk_ADF[this->unk_ADE] = var_v1;
+    this->unk_AE3[this->unk_ADE] = var_v0;
 }
 
-void func_8082EC9C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
-    LinkAnimation_PlayOnceSetSpeed(arg0, arg1 + 0x240, arg2, D_8085C3E4);
+void func_8082EC9C(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, D_8085C3E4);
 }
 
-s32 func_8082ECCC(Player* arg0) {
-    return arg0->stateFlags1 & 0x01000000;
+s32 func_8082ECCC(Player* this) {
+    return this->stateFlags1 & 0x01000000;
 }
 
 void func_8082ECE0(Player* arg0) {
     s8 temp_v1;
 
-    temp_v1 = ((arg0->getItemId * 6) - 6 + &D_8085C3F4)->unk_2;
+    temp_v1 = ((arg0->getItemId * 6) - 6 + D_8085C3F4)->unk_2;
     if (temp_v1 < 0) {
         arg0->unk_B2A = -temp_v1;
         return;
@@ -8419,7 +8605,7 @@ s32 func_8083D23C(Actor* arg0, PlayState* arg1) {
             temp_v0 = arg0->unk_384;
             if (temp_v0 > 0) {
                 if (temp_v0 < 0xBA) {
-                    temp_a2 = (temp_v0 * 6) - 6 + &D_8085C3F4;
+                    temp_a2 = (temp_v0 * 6) - 6 + D_8085C3F4;
                     temp_t7->parent = arg0;
                     sp28 = temp_a2;
                     if ((Item_CheckObtainability(temp_a2->unk_0) == 0xFF) || (temp_a2->unk_4 == 0xB0)) {
@@ -8451,7 +8637,7 @@ s32 func_8083D23C(Actor* arg0, PlayState* arg1) {
                 if (!(temp_v1 & 0x800)) {
                     if (temp_v0 != 0) {
                         if (~(D_80862B44->press.button | 0xFFFF7FFF) == 0) {
-                            var_v1 = (temp_v0 * -6) - 6 + &D_8085C3F4;
+                            var_v1 = (temp_v0 * -6) - 6 + D_8085C3F4;
                             temp_a0 = var_v1->unk_0;
                             if ((temp_a0 != 0xFF) && (((sp24 = var_v1, temp_v1_2 = var_v1, (Item_CheckObtainability(temp_a0) == 0xFF)) && (temp_v1_2->unk_1 & 0x40)) || ((sp24 = temp_v1_2, var_v1 = temp_v1_2, (Item_CheckObtainability(temp_v1_2->unk_0) != 0xFF)) && (var_v1->unk_1 & 0x20)))) {
                                 if (temp_v1_2->unk_0 == 0x44) {
@@ -8459,7 +8645,7 @@ s32 func_8083D23C(Actor* arg0, PlayState* arg1) {
                                 } else {
                                     arg0->unk_384 = -2;
                                 }
-                                var_v1 = (arg0->unk_384 * -6) - 6 + &D_8085C3F4;
+                                var_v1 = (arg0->unk_384 * -6) - 6 + D_8085C3F4;
                             }
                             sp24 = var_v1;
                             func_80832558(arg1, arg0, func_80837C78);
@@ -12801,7 +12987,7 @@ s32 func_808482E0(PlayState* arg0, Actor* arg1) {
         return 1;
     }
     if (arg1->unk_AE7 == 0) {
-        temp_v0 = (temp_v1 * 6) - 6 + &D_8085C3F4;
+        temp_v0 = (temp_v1 * 6) - 6 + D_8085C3F4;
         arg1->unk_AE7 = 1;
         sp1C = temp_v0;
         Message_StartTextbox(arg0, (u16) temp_v0->unk_3, arg1);
@@ -17624,7 +17810,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
             }
             func_8085B460(arg1, temp_a1_2, M2C_ERROR(Read from unset register $a2));
         } else {
-            sp28 = (*(&D_8085D1A4 + temp_v0) * 6) - 6 + &D_8085C3F4;
+            sp28 = (*(&D_8085D1A4 + temp_v0) * 6) - 6 + D_8085C3F4;
             if (Player_ActionToBottle(arg0, (s32) arg0->heldItemActionParam) < 0) {
                 temp_v0_3 = sp28->unk_2;
                 if (temp_v0_3 < 0) {
@@ -17651,7 +17837,7 @@ void func_80853A5C(Player* arg0, PlayState* arg1) {
         if ((Player_ActionToBottle(arg0, (s32) arg0->heldItemActionParam) >= 0) && (LinkAnimation_OnFrame(sp20, 36.0f) != 0)) {
             Player_SetModels(arg0, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(sp20, 2.0f) != 0) {
-            func_80838830(arg0, ((*(&D_8085D1A4 + arg0->heldItemActionParam) * 6) - 6 + &D_8085C3F4)->unk_4);
+            func_80838830(arg0, ((*(&D_8085D1A4 + arg0->heldItemActionParam) * 6) - 6 + D_8085C3F4)->unk_4);
         }
         func_8082E224(arg0, &D_8085D840);
     }
@@ -19854,12 +20040,12 @@ void func_80858EC0(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
     func_8082E920(arg0, arg1, 0x9C);
 }
 
-void func_80858EFC(void) {
-    func_8082EB18();
+void func_80858EFC(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
+    func_8082EB18(arg0, arg1, arg2);
 }
 
-void func_80858F1C(void) {
-    func_8082EAC8((PlayState* )0x9C);
+void func_80858F1C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
+    func_8082EAC8(arg0, arg1, arg2, 0x9C);
 }
 
 void func_80858F3C(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
