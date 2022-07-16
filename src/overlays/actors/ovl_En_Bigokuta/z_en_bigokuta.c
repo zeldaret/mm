@@ -5,7 +5,6 @@
  */
 
 #include "z_en_bigokuta.h"
-#include "assets/objects/object_bigokuta/object_bigokuta.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -584,7 +583,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             }
             rot->x -= rotX;
         }
-    } else if (limbIndex == BIGOKUTA_LIMB_SNOUT_CENTER) {
+    } else if (limbIndex == BIGOKUTA_LIMB_CENTER_SNOUT) {
         EnBigokuta* this = THIS;
 
         if (this->actionFunc == EnBigokuta_PlayDeathEffects) {
