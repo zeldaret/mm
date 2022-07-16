@@ -39,7 +39,7 @@
         <Texture Name="object_bji_Tex_004E70" OutName="tex_004E70" Format="ci8" Width="32" Height="32" Offset="0x4E70" />
         <Texture Name="object_bji_Tex_005270" OutName="tex_005270" Format="ci8" Width="32" Height="32" Offset="0x5270" />
         
-                <!-- Unused Empty Eye Texture Animation -->
+        <!-- Unused Empty Eye Texture Animation -->
         <TextureAnimation Name="gBjiUnusedTexAnim" Offset="0x5694" />
 
         <Limb Name="gBjiPelvisLimb" Type="Standard" EnumName="BJI_LIMB_PELVIS" Offset="0x569C" />
