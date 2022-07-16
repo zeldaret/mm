@@ -266,7 +266,7 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
 
     if (this->floatingBobbingTimer == 0) {
         this->floatingBobbingTimer = 32;
-        //! @fake
+       //! FAKE:
         if (this->floatingBobbingTimer) {}
     }
 
@@ -541,7 +541,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
     if (this->megCloneId != POSISTER_MEG_REAL) {
         s32 alpha;
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.parent->shape.rot.y,
-                           (this->megCloneId == 2) ? 0x800 : 0x400);
+                           (this->megCloneId == POSISTER_MEG_CLONE2) ? 0x800 : 0x400);
         alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
         this->color.a = CLAMP(alpha, 0, 255);
         this->actor.world.pos.y = this->actor.parent->world.pos.y;
@@ -776,7 +776,7 @@ void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play) {
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
     if (this->megCloneId == POSISTER_MEG_REAL) {
-        DECR(this->inivisTimer); // no this cannot be inlined into the condition, adds branch
+        DECR(this->inivisTimer);
         if (this->inivisTimer == 0) {
             s32 rand = Rand_ZeroFloat(4.0f);
 
@@ -1042,7 +1042,7 @@ void EnPoSisters_UpdateColors(EnPoSisters* this) {
         this->color.g = CLAMP_MAX(this->color.g + 5, 255);
 
         if (this->color.b > 210) {
-            //! @fake
+            //! FAKE:
             if (this->color.b && this->color.b && this->color.b) {}
             this->color.b = CLAMP_MIN(this->color.b - 5, 210);
         } else {
