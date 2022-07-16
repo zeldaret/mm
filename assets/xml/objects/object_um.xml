@@ -66,7 +66,7 @@
         <Limb Name="gUmWagonRightLeafSpringLimb" Type="Standard" EnumName="UM_LIMB_WAGON_RIGHT_LEAF_SPRING" Offset="0x11D08" />
         <Limb Name="gUmWagonSteeringWheelLimb" Type="Standard" EnumName="UM_LIMB_WAGON_STEERING_WHEEL" Offset="0x11D14" />
         <Limb Name="gUmCremiaRootLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_ROOT" Offset="0x11D20" />
-        <Limb Name="gUmCremiaThoraxLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_THORAX" Offset="0x11D2C" />
+        <Limb Name="gUmCremiaTorsoLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_TORSO" Offset="0x11D2C" />
         <Limb Name="gUmCremiaHeadLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_HEAD" Offset="0x11D38" />
         <Limb Name="gUmCremiaHairEndLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_HAIR_END" Offset="0x11D44" />
         <Limb Name="gUmCremiaLeftUpperArmLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LEFT_UPPER_ARM" Offset="0x11D50" />
@@ -98,14 +98,14 @@
         <Texture Name="gUmCremiaEyeOpenTex" OutName="cremia_eye_open" Format="ci8" Width="32" Height="32" Offset="0x164D0" TlutOffset="0x130D0" />
         <Texture Name="gUmCremiaEyeHalfTex" OutName="cremia_eye_half" Format="ci8" Width="32" Height="32" Offset="0x168D0" TlutOffset="0x130D0" />
         <Texture Name="gUmCremiaEyeClosedTex" OutName="cremia_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x16CD0" TlutOffset="0x130D0" />
-        <Texture Name="gUmCremiaEyePleasedTex" OutName="cremia_eye_pleased" Format="ci8" Width="32" Height="32" Offset="0x170D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeHappyTex" OutName="cremia_eye_happy" Format="ci8" Width="32" Height="32" Offset="0x170D0" TlutOffset="0x130D0" />
         <Texture Name="gUmCremiaEyeAngryTex" OutName="cremia_eye_angry" Format="ci8" Width="32" Height="32" Offset="0x174D0" TlutOffset="0x130D0" />
         <Texture Name="gUmCremiaEyeSadTex" OutName="cremia_eye_sad" Format="ci8" Width="32" Height="32" Offset="0x178D0" TlutOffset="0x130D0" />
 
-        <Texture Name="gUmMouthNeutralTex" OutName="mouth_neutral" Format="ci8" Width="32" Height="16" Offset="0x17CD0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthNormalTex" OutName="mouth_normal" Format="ci8" Width="32" Height="16" Offset="0x17CD0" TlutOffset="0x130D0" />
         <Texture Name="gUmMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="16" Offset="0x17ED0" TlutOffset="0x130D0" />
-        <Texture Name="gUmMouthSadTex" OutName="mouth_sad" Format="ci8" Width="32" Height="16" Offset="0x180D0" TlutOffset="0x130D0" />
-        <Texture Name="gUmMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="16" Offset="0x182D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthFrownTex" OutName="mouth_frown" Format="ci8" Width="32" Height="16" Offset="0x180D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthHangingOpenTex" OutName="mouth_hanging_open" Format="ci8" Width="32" Height="16" Offset="0x182D0" TlutOffset="0x130D0" />
 
         <Texture Name="object_um_Tex_0184D0" OutName="tex_0184D0" Format="ci8" Width="8" Height="8" Offset="0x184D0" />
         <Texture Name="object_um_Tex_018510" OutName="tex_018510" Format="ci8" Width="16" Height="16" Offset="0x18510" />

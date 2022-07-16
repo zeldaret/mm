@@ -39,7 +39,7 @@
  * - gSaveContext.save.weekEventReg[52] |= 1: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
  * - gSaveContext.save.weekEventReg[52] |= 2: Lose Milk Run minigame
- *     Every pot was broken by bandits. Turns off the ""Win" Milk Run minigame"
+ *     Every pot was broken by bandits. Turns off the "Win Milk Run minigame"
  * - gSaveContext.save.weekEventReg[59] |= 2: ?
  *     Passed through Milk Road after winning the Milk Run
  *
@@ -74,15 +74,15 @@ const ActorInit Obj_Um_InitVars = {
 };
 
 static TexturePtr sEyeTextures[] = {
-    gUmCremiaEyeOpenTex,    gUmCremiaEyeHalfTex,  gUmCremiaEyeClosedTex,
-    gUmCremiaEyePleasedTex, gUmCremiaEyeAngryTex, gUmCremiaEyeSadTex,
+    gUmCremiaEyeOpenTex,  gUmCremiaEyeHalfTex,  gUmCremiaEyeClosedTex,
+    gUmCremiaEyeHappyTex, gUmCremiaEyeAngryTex, gUmCremiaEyeSadTex,
 };
 
 static TexturePtr sMouthTextures[] = {
-    gUmMouthNeutralTex,
+    gUmMouthNormalTex,
     gUmMouthHappyTex,
-    gUmMouthOpenTex,
-    gUmMouthSadTex,
+    gUmMouthHangingOpenTex,
+    gUmMouthFrownTex,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -510,7 +510,7 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
     return 0;
 }
 
-// ObjUm_UpdateBandits...something
+// ObjUm_UpdateBanditsDamage?
 s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
     if (this->banditsCollisions[arg2].base.acFlags & AC_HIT) {
         if (arg3->unk_550 == 3) {
@@ -1351,8 +1351,6 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
             }
 
             this->flags |= OBJ_UM_FLAG_MINIGAME_FINISHED;
-
-        dummy_label:;
         }
 
         this->unk_4DC++;
