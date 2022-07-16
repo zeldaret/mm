@@ -825,13 +825,36 @@ void func_8082EEA4(Player* this, s32 arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EEE0.s")
+extern LinkAnimationHeader* D_8085BECC[];
+extern LinkAnimationHeader* D_8085BEB4[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EF20.s")
+LinkAnimationHeader* func_8082EEE0(Player* this) {
+    if (this->unk_B64 != 0) {
+        return D_8085BECC[this->modelAnimType];
+    }
+    return D_8085BEB4[this->modelAnimType];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EF54.s")
+s32 func_8082EF20(Player* arg0) {
+    return func_8082ECCC(arg0) != 0 && arg0->unk_ACC != 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EF9C.s")
+extern LinkAnimationHeader* D_8085BEFC[];
+extern LinkAnimationHeader* D_8085BEE4[];
+
+LinkAnimationHeader* func_8082EF54(Player* arg0) {
+    if (func_8082EF20(arg0) != 0) {
+        return &gameplay_keep_Linkanim_00D490;
+    }
+    return D_8085BEFC[arg0->modelAnimType];
+}
+
+LinkAnimationHeader* func_8082EF9C(Player* arg0) {
+    if (func_8082EF20(arg0) != 0) {
+        return &gameplay_keep_Linkanim_00D488;
+    }
+    return D_8085BEE4[arg0->modelAnimType];
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EFE4.s")
 
