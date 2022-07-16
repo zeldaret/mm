@@ -31,13 +31,13 @@
         <DList Name="gIronKnuckleBasMarkingDL" Offset="0xBF80" />
         <DList Name="gIronKnuckleGerudoHeadDL" Offset="0xC200" />
         <DList Name="gIronKnuckleHelmetMarkingDL" Offset="0xCF08" />
-        <DList Name="gIronKnuckleTanArmorDL" Offset="0xD038" />
-        <DList Name="gIronKnuckleBronzeArmorDL" Offset="0xD050" />
-        <DList Name="gIronKnuckleSilverArmorDL" Offset="0xD068" />
-        <DList Name="gIronKnuckleBlackArmorDL" Offset="0xD080" />
-        <DList Name="gIronKnuckleBrownArmorDL" Offset="0xD098" />
-        <DList Name="gIronKnuckleWhiteArmorDL" Offset="0xD0B0" />
-        <DList Name="gIronKnuckleGoldArmorDL" Offset="0xD0C8" />
+        <DList Name="gIronKnuckleTanArmorMaterialDL" Offset="0xD038" />
+        <DList Name="gIronKnuckleBronzeArmorMaterialDL" Offset="0xD050" />
+        <DList Name="gIronKnuckleSilverArmorMaterialDL" Offset="0xD068" />
+        <DList Name="gIronKnuckleBlackArmorMaterialDL" Offset="0xD080" />
+        <DList Name="gIronKnuckleBrownArmorMaterialDL" Offset="0xD098" />
+        <DList Name="gIronKnuckleWhiteArmorMaterialDL" Offset="0xD0B0" />
+        <DList Name="gIronKnuckleGoldArmorMaterialDL" Offset="0xD0C8" />
         <DList Name="gIronKnuckleTorsoDL" Offset="0xEC20" />
         <DList Name="gIronKnuckleVambraceLeftDL" Offset="0xEFD8" />
         <DList Name="gIronKnuckleArmLeftDL" Offset="0xF270" />
@@ -100,6 +100,6 @@
         <Limb Name="gIronKnuckleChestArmorBackLimb" EnumName="IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK" Type="Standard" Offset="0x13608" />
         <Limb Name="gIronKnuckleTorsoLimb" EnumName="IRON_KNUCKLE_LIMB_TORSO" Type="Standard" Offset="0x13614" />
         <Limb Name="gIronKnuckleWaistLimb" EnumName="IRON_KNUCKLE_LIMB_WAIST" Type="Standard" Offset="0x13620" />
-        <Skeleton Name="gIronKnuckleSkel" Type="Flex" LimbType="Standard" LimbNone="IRON_KNUCKLE_LIMB_NONE" LimbMax="IRON_KNUCKLE_LIMB_MAX" EnumName="IronKnuckleLimbs"Offset="0x136A0" />
+        <Skeleton Name="gIronKnuckleSkel" Type="Flex" LimbType="Standard" LimbNone="IRON_KNUCKLE_LIMB_NONE" LimbMax="IRON_KNUCKLE_LIMB_MAX" EnumName="IronKnuckleLimbs" Offset="0x136A0" />
     </File>
 </Root>
