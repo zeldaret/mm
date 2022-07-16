@@ -814,8 +814,16 @@ loop_8:
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082ED94.s")
 #endif
 
+extern u8 D_8085C96C[];
+extern struct_8082E224_arg1* D_8085C93C[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EEA4.s")
+void func_8082EEA4(Player* this, s32 arg1) {
+    u8 temp_v0 = D_8085C96C[arg1];
+
+    if (temp_v0 != 0) {
+        func_8082E224(this, D_8085C93C[temp_v0-1]);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EEE0.s")
 

@@ -708,51 +708,7 @@ static s32 D_8085C84C[0x1E] = {
     0x0400D0B0,
     0x0400D0B0,
 };
-static struct_8082E224_arg1 D_8085C8C4 = { 0x680E, -0x2008 };
-static struct_8082E224_arg1 D_8085C8C8 = { 0x680F, -0x2012 };
-static struct_8082E224_arg1 D_8085C8CC = { 0x6809, -0x200D };
-static struct_8082E224_arg1 D_8085C8D0 = { 0x6809, -0x200A };
-static struct_8082E224_arg1 D_8085C8D4[5] = {
-    { 0x871, 0x82C },
-    { 0x871, 0x830 },
-    { 0x871, 0x834 },
-    { 0x871, 0x838 },
-    { 0x871, -0x83C },
-};
-static struct_8082E224_arg1 D_8085C8E8[6] = {
-    { 0, 0x4019 },
-    { 0, 0x401E },
-    { 0, 0x402C },
-    { 0, 0x4030 },
-    { 0, 0x4034 },
-    { 0, 0xBFC8 },
-};
-static struct_8082E224_arg1 D_8085C900[3] = { { 0x181F, 0x810 }, { 0x181F, 0x814 }, { 0x181F, -0x846 } };
-static struct_8082E224_arg1 D_8085C90C[4] = {
-    { 0x1812, 0x80A },
-    { 0x6814, 0x200A },
-    { 0x1801, 0x816 },
-    { 0x6800, -0x2016 },
-};
-static struct_8082E224_arg1 D_8085C91C[2] = { { 0x1801, 0x827 }, { 0x6800, -0x2027 } };
-static struct_8082E224_arg1 D_8085C924 = { 0x6811, -0x2014 };
-static struct_8082E224_arg1 D_8085C928[4] = { { 0x68E0, 0x804 }, { 0x68E0, 0x80C }, { 0x68E0, 0x81E }, { 0x68E0, 0x83D } };
-static struct_8082E224_arg1* D_8085C938[0xD] = {
-    (struct_8082E224_arg1* )0x68E0F7BC,
-    &D_8085C8C4,
-    &D_8085C8C8,
-    &D_8085C8CC,
-    &D_8085C8D0,
-    D_8085C8D4,
-    D_8085C8E8,
-    D_8085C900,
-    D_8085C90C,
-    D_8085C91C,
-    &D_8085C924,
-    D_8085C928,
-    NULL,
-};
-static ? D_8085C96C;                                /* unable to generate initializer */
+static ? D_8085C928;                                /* unable to generate initializer */
 static Color_RGB8 D_8085C98C[5] = {
     { 0, 0, 0 },
     { 0xFF, 0xFF, 0x9B },
@@ -1837,6 +1793,40 @@ struct_8085C3F4 D_8085C3F4[0xB9] = {
     { 0x31, 0xA0, 0x2E, 0xB8, 2, 0x4D },
     { 0x31, 0xA0, 0x2E, 0xB9, 2, 0x4D },
 };
+u8 D_8085C96C[0x20] = {
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    0xA,
+    3,
+    3,
+    4,
+    4,
+    8,
+    8,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    9,
+    9,
+    0xB,
+    0xB,
+    0,
+    0,
+};
 void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F594,
     func_8082F594,
@@ -2544,9 +2534,9 @@ loop_8:
 void func_8082EEA4(Player* arg0, s32 arg1) {
     u8 temp_v0;
 
-    temp_v0 = *(&D_8085C96C + arg1);
+    temp_v0 = D_8085C96C[arg1];
     if (temp_v0 != 0) {
-        func_8082E224(arg0, D_8085C938[temp_v0]);
+        func_8082E224(arg0, *(&D_8085C928 + 0x10 + (temp_v0 * 4)));
     }
 }
 
