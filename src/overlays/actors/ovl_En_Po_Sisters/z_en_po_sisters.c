@@ -540,7 +540,7 @@ void EnPoSisters_DamageFlinch(EnPoSisters* this, PlayState* play) {
 
     if (this->megCloneId != POSISTER_MEG_REAL) {
         s32 alpha;
-        
+
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.parent->shape.rot.y,
                            (this->megCloneId == POSISTER_MEG_CLONE2) ? 0x800 : 0x400);
         alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
@@ -599,7 +599,7 @@ void EnPoSisters_SpinToInvis(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupAimlessIdleFlying(this);
     } else {
         s32 alpha = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
-        
+
         this->color.a = CLAMP(alpha, 0, 255);
     }
 }
@@ -851,6 +851,8 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
             EnPoSisters_SetupDamageFlinch(this);
         }
     } else if (this->megAttackTimer == 0) {
+        // meg has finished circling the player without being hit
+        // timer switches direction, being reused as the timer until meg spin attacks player
         this->megAttackTimer = -15;
     } else if (this->megAttackTimer < 0) {
         this->megAttackTimer++;
@@ -913,6 +915,8 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
                        (this->actor.colChkInfo.damageEffect == POSISTERS_DAMAGEEFFECT_SPINATTACK) &&
                        (this->actionFunc == EnPoSisters_MegSurroundPlayer)) {
                 if (this->megAttackTimer == 0) {
+                    // meg has finished circling the player without being hit
+                    // timer switches direction, being reused as the timer until meg spin attacks player
                     this->megAttackTimer = -45;
                 }
             } else {
@@ -941,7 +945,7 @@ void EnPoSisters_Update(Actor* thisx, PlayState* play) {
     EnPoSisters* this = THIS;
     f32 alpha;
     Vec3f checkPos;
-    s32 bgId; // set by BgCheck_EntityRaycastFloor5 unused by us after
+    s32 bgId;
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
