@@ -294,14 +294,14 @@ void EnPoSisters_CheckZTarget(EnPoSisters* this, PlayState* play) {
     }
 
     if (this->color.a == 0) {
-        DECR(this->inivisTimer);
+        DECR(this->invisibleTimer);
     }
 
     if ((this->actionFunc != EnPoSisters_SpinUp) && (this->actionFunc != EnPoSisters_SpinAttack) &&
         (this->actionFunc != EnPoSisters_DamageFlinch)) {
         if (this->zTargetTimer == 0) {
             EnPoSisters_SetupSpinToInvis(this);
-        } else if ((this->inivisTimer == 0) && (this->color.a == 0)) {
+        } else if ((this->invisibleTimer == 0) && (this->color.a == 0)) {
             EnPoSisters_SetupSpinBackToVisible(this, play);
         }
     }
@@ -583,7 +583,7 @@ void EnPoSisters_Flee(EnPoSisters* this, PlayState* play) {
 void EnPoSisters_SetupSpinToInvis(EnPoSisters* this) {
     Animation_Change(&this->skelAnime, &gPoeSistersAppearDisappearAnim, 1.5f, 0.0f,
                      Animation_GetLastFrame(&gPoeSistersAppearDisappearAnim.common), ANIMMODE_ONCE, -3.0f);
-    this->inivisTimer = 100;
+    this->invisibleTimer = 100; // 5 seconds
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->poSisterFlags &= ~(POSISTERS_FLAG_CHECK_Z_TARGET | POSISTERS_FLAG_CHECK_AC);
@@ -757,7 +757,7 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play) {
 
     this->actor.draw = NULL;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->inivisTimer = 100; // 5 seconds
+    this->invisibleTimer = 100; // 5 seconds
     this->poSisterFlags = POSISTERS_FLAG_UPDATE_FIRES;
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.base.acFlags &= ~AC_HARD;
@@ -778,8 +778,8 @@ void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play) {
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
     if (this->megCloneId == POSISTER_MEG_REAL) {
-        DECR(this->inivisTimer);
-        if (this->inivisTimer == 0) {
+        DECR(this->invisibleTimer);
+        if (this->invisibleTimer == 0) {
             s32 rand = Rand_ZeroFloat(4.0f);
 
             this->actor.shape.rot.y = (rand * 0x4000) + this->actor.yawTowardsPlayer;
@@ -801,7 +801,7 @@ void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &gPoeSistersFloatAnim, -3.0f);
     this->color.a = 255;
     this->megSurroundTimer = 300; // 15 seconds
-    this->inivisTimer = 3;
+    this->megClonesRemaining = 3;
     this->poSisterFlags |= (POSISTERS_FLAG_MATCH_PLAYER_HEIGHT | POSISTERS_FLAG_CHECK_AC);
     this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = EnPoSisters_MegSurroundPlayer;
@@ -812,15 +812,16 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
 
     DECR(this->megSurroundTimer);
 
-    if (this->inivisTimer > 0 && this->megSurroundTimer >= 16) {
+    if (this->megClonesRemaining > 0 && this->megSurroundTimer >= 16) {
         SkelAnime_Update(&this->skelAnime);
         if (this->megCloneId == POSISTER_MEG_REAL) {
             if (ABS_ALT(16 - this->floatingBobbingTimer) < 14) {
-                this->actor.shape.rot.y +=
-                    (s16)((0x580 - (this->inivisTimer * 0x180)) * fabsf(Math_SinS(this->floatingBobbingTimer * 0x800)));
+                // every x frames rotate around player, the fewer meg clones remaining the faster they spin
+                this->actor.shape.rot.y += (s16)((0x580 - (this->megClonesRemaining * 0x180)) *
+                                                 fabsf(Math_SinS(this->floatingBobbingTimer * 0x800)));
             }
 
-            // spin realmeg backwards for a bit for visual hint to player
+            // twirl the real meg backwards for a bit for visual tell to player
             if ((this->megSurroundTimer >= 284) || (this->megSurroundTimer <= 30)) {
                 this->poSisterFlags |= POSISTERS_FLAG_REAL_MEG_ROTATION;
             } else {
@@ -848,11 +849,12 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     } else if (this->megCloneId != POSISTER_MEG_REAL) {
         parent = (EnPoSisters*)this->actor.parent;
         if (parent->actionFunc == EnPoSisters_DamageFlinch) {
+            // flinch clones if you hit the real meg
             EnPoSisters_SetupDamageFlinch(this);
         }
-    } else if (this->megAttackTimer == 0) {
-        // meg has finished circling the player without being hit
-        // timer switches direction, being reused as the timer until meg spin attacks player
+    } else if (this->megClonesRemaining == 0) {
+        // all meg clones have been killed, meg waits 15 frames then spin attacks
+        // timer is negative because megClonesRemaining and megAttackTimer are the same union'd variable
         this->megAttackTimer = -15;
     } else if (this->megAttackTimer < 0) {
         this->megAttackTimer++;
@@ -860,6 +862,7 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
             EnPoSisters_SetupSpinAttack(this);
         }
     }
+
     EnPoSisters_MatchPlayerXZ(this, play);
 }
 
@@ -897,7 +900,7 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (this->megCloneId != POSISTER_MEG_REAL) {
-            ((EnPoSisters*)this->actor.parent)->megAttackTimer--;
+            ((EnPoSisters*)this->actor.parent)->megClonesRemaining--;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
             EnPoSisters_MegCloneVanish(this, play);
             if (Rand_ZeroOne() < 0.2f) {
@@ -914,9 +917,9 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
             } else if ((this->type == POSISTER_TYPE_MEG) &&
                        (this->actor.colChkInfo.damageEffect == POSISTERS_DAMAGEEFFECT_SPINATTACK) &&
                        (this->actionFunc == EnPoSisters_MegSurroundPlayer)) {
-                if (this->megAttackTimer == 0) {
-                    // meg has finished circling the player without being hit
-                    // timer switches direction, being reused as the timer until meg spin attacks player
+                if (this->megClonesRemaining == 0) {
+                    // all meg clones have been killed, meg waits 45 frames then spin attacks
+                    // timer is negative because megClonesRemaining and megAttackTimer are the same union'd variable
                     this->megAttackTimer = -45;
                 }
             } else {

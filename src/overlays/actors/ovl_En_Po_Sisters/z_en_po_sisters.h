@@ -39,10 +39,9 @@ typedef struct EnPoSisters {
     /* 0x190 */ u8 fireCount;
     /* 0x191 */ u8 poSisterFlags;
     /* 0x192 */ union {
-                // stateTimer gets reused in different actionfuncs
+                s16 stateTimer; // generic name for resets
                 s16 spinTimer; // frames of spinning since spin attack starts, when zero checks collision
                 s16 fleeTimer; // after being hit, 5 frames of flying away
-                s16 stateTimer; // generic name for resets
                 s16 deathTimer; // (incr) controls timings of the death cutscene, reset between the two stages
                 s16 laughTimer; // if observer, will laugh once in awhile
                 s16 spinupTimer; // frames of spinning up (gaining speed) for attack (jo/beth/amy attack)
@@ -51,8 +50,9 @@ typedef struct EnPoSisters {
                 s16 idleFlyingAnimationCounter; // count: animations completed since entering actionFunc
     };
     /* 0x194 */ union {
-                s16 inivisTimer; // frames until coming back to fight from invisible (all combat variants)
-                s16 megAttackTimer; // (negative frames counting up to 0), time to spin attack after circling
+                s16 invisibleTimer; // frames until coming back to fight from invisible (all combat variants)
+                s16 megAttackTimer; // delay until meg spin attacks player (negative frames counting up to 0) 
+                s16 megClonesRemaining; // positive count of meg clones remaining
     };
     /* 0x196 */ Vec3s jointTable[POSISTERS_LIMB_MAX];
     /* 0x1DE */ Vec3s morphTable[POSISTERS_LIMB_MAX];
