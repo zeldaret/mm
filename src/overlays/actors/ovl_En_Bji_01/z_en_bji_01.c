@@ -5,7 +5,6 @@
  */
 
 #include "z_en_bji_01.h"
-#include "objects/object_bji/object_bji.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -330,7 +329,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBjiSkel, &object_bji_Anim_000FDC, this->jointTable,
                        this->morphTable, BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
