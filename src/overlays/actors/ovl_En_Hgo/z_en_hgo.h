@@ -18,7 +18,7 @@ typedef struct EnHgo {
     /* 0x21C */ Vec3s jointTable[HARFGIBUD_HUMAN_LIMB_MAX];
     /* 0x28E */ Vec3s morphTable[HARFGIBUD_HUMAN_LIMB_MAX];
     /* 0x300 */ Vec3s headRot;
-    /* 0x306 */ Vec3s torsoRot; // Unused
+    /* 0x306 */ Vec3s torsoRot; // Set, but not used
     /* 0x30C */ s16 unk_30C;
     /* 0x30E */ s16 unk_30E;
     /* 0x310 */ s16 unk_310;

@@ -23,7 +23,7 @@ typedef struct EnPamera {
     /* 0x1F0 */ Vec3s jointTable[PAMELA_LIMB_MAX];
     /* 0x27A */ Vec3s morphTable[PAMELA_LIMB_MAX];
     /* 0x304 */ Vec3s headRot;
-    /* 0x30A */ Vec3s torsoRot; // Unused
+    /* 0x30A */ Vec3s torsoRot; // Set, but not used
     /* 0x310 */ s16 unk_310;
     /* 0x312 */ s16 unk_312;
     /* 0x314 */ s16 unk_314;

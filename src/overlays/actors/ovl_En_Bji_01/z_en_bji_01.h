@@ -10,18 +10,18 @@ struct EnBji01;
 typedef void (*EnBji01ActionFunc)(struct EnBji01*, PlayState*);
 
 typedef enum {
-    /* 0 */ ENBJI01_PARAMS_DEFAULT,
-    /* 1 */ ENBJI01_PARAMS_FINISHED_CONVERSATION,
-    /* 3 */ ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE = 3
-} EnBji01Params;
+    /* 0 */ ENBJI01_TYPE_DEFAULT,
+    /* 1 */ ENBJI01_TYPE_FINISHED_CONVERSATION,
+    /* 3 */ ENBJI01_TYPE_LOOKED_THROUGH_TELESCOPE = 3
+} EnBji01Type;
 
 typedef struct EnBji01 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnBji01ActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[BJI_LIMB_MAX]; 
-    /* 0x238 */ Vec3s morphTable[BJI_LIMB_MAX];
+    /* 0x1D8 */ Vec3s jointTable[SHIKASHI_LIMB_MAX]; 
+    /* 0x238 */ Vec3s morphTable[SHIKASHI_LIMB_MAX];
     /* 0x298 */ s32 animationIndex;
     /* 0x29C */ s16 eyeTexIndex;
     /* 0x29E */ s16 blinkSeqIndex;
