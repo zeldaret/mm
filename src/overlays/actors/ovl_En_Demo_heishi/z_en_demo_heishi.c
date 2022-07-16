@@ -5,7 +5,6 @@
  */
 
 #include "z_en_demo_heishi.h"
-#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -69,8 +68,8 @@ void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable, this->morphTable,
-                       17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+                       SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
@@ -175,7 +174,7 @@ void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDemoheishi* this = THIS;
 
-    if (limbIndex == DEMOHEISHI_LIMB_HEAD) {
+    if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;

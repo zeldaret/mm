@@ -38,7 +38,7 @@ const ActorInit En_Ending_Hero6_InitVars = {
 
 static FlexSkeletonHeader* sSkeletons[] = {
     &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150,
-    &gSoldierSkeleton,         &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &gSoldierSkel,         &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
     &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
 };
 
