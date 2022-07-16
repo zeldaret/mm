@@ -668,7 +668,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
     f32 phi_f2;
     s16 temp_s0;
     s16 temp_s2;
-    Boss02* spB0 = this->otherTwinmold;
+    Boss02* otherTwinmold = this->otherTwinmold;
     Vec3f spA4;
     f32 spA0;
     f32 sp9C;
@@ -754,7 +754,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         this->unk_0B1C[this->unk_014E].z = BINANG_TO_RAD(this->actor.world.rot.z);
     }
 
-    if ((this->unk_0144 < 10) && (spB0->unk_0144 >= 20)) {
+    if ((this->unk_0144 < 10) && (otherTwinmold->unk_0144 >= 20)) {
         this->unk_01B0.y = -1000.0f * D_809DF5B0;
         if (sIsInGiantMode) {
             this->unk_01B0.y += 3150.0f;
@@ -976,7 +976,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
-                    if (spB0->unk_0144 >= 10) {
+                    if (otherTwinmold->unk_0144 >= 10) {
                         Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
@@ -1054,7 +1054,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
 }
 
 void func_809DBFB4(Boss02* this, PlayState* play) {
-    Boss02* temp_s6 = this->otherTwinmold;
+    Boss02* otherTwinmold = this->otherTwinmold;
     s32 temp;
     s32 i;
     u8 damage;
@@ -1088,7 +1088,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
 
                 damage = this->actor.colChkInfo.damage;
 
-                if (temp_s6->unk_0144 < 20) {
+                if (otherTwinmold->unk_0144 < 20) {
                     do {
                         do {
                             this->actor.colChkInfo.health -= damage;
@@ -1102,10 +1102,10 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                         this->skelAnime.playSpeed = 2.0f;
                         this->unk_0144 = 20;
 
-                        if (temp_s6->unk_0144 >= 10) {
+                        if (otherTwinmold->unk_0144 >= 10) {
                             Audio_QueueSeqCmd(0x100100FF);
                         } else {
-                            temp_s6->unk_0195 = 1;
+                            otherTwinmold->unk_0195 = 1;
                         }
 
                         this->unk_0146[1] = BREG(70) + 170;
