@@ -120,8 +120,8 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C,
-                       this->jointTable, this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C, this->jointTable,
+                       this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);

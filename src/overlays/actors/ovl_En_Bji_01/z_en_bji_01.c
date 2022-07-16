@@ -329,8 +329,8 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gBjiSkel, &object_bji_Anim_000FDC, this->jointTable,
-                       this->morphTable, BJI_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBjiSkel, &object_bji_Anim_000FDC, this->jointTable, this->morphTable,
+                       BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
