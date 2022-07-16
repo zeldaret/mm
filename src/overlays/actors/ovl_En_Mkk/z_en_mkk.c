@@ -75,7 +75,7 @@ struct _struct_D_80A4F7A4_0x10 {
     /* 0x0C */ Gfx* unkC;
 };
 
-static s16 D_80A4F748[2] = { 0xF, 0x64 };
+static s16 D_80A4F748[] = { 0xF, 0x64 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
@@ -143,13 +143,10 @@ static struct _struct_D_80A4F7A4_0x10 D_80A4F7A4[2] = {
 };
 
 //{ 0xFFFFFFFF, 0x808080FF, 0xFF, 0xFF, 0x808080FF, 0xFFFFFFFF, 0 };
-static Color_RGBA8 D_80A4F7C4[] = { { 255, 255, 255, 255 },
-                                    { 128, 128, 128, 255 },
-                                    { 0, 0, 0, 255 },
-                                    { 0, 0, 0, 255 },
-                                    { 128, 128, 128, 255 },
-                                    { 255, 255, 255, 255 },
-                                    { 0 } };
+static Color_RGBA8 D_80A4F7C4[] = {
+    { 255, 255, 255, 255 }, { 128, 128, 128, 255 }, { 0, 0, 0, 255 },
+    { 0, 0, 0, 255 },       { 128, 128, 128, 255 }, { 255, 255, 255, 255 },
+};
 
 #endif
 
@@ -163,7 +160,7 @@ extern Color_RGBA8 D_80A4F780;
 extern Color_RGBA8 D_80A4F784;
 // extern s32 D_80A4F7C4[];
 
-// extern s16 D_80A4F748;
+//extern s16 D_80A4F748;
 // extern Color_RGBA8 D_80A4F794[];
 // extern Color_RGBA8 D_80A4F79C[];
 // extern _struct_D_80A4F7A4_0x10 D_80A4F7A4[];
