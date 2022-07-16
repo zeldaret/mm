@@ -1581,8 +1581,9 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots,
-                     s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
+                     PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
+                     PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[22].x & 0xF) - 1;
     s32 mouthIndex = ((jointTable[22].x >> 4) & 0xF) - 1;
     Gfx* gfx;
@@ -1595,7 +1596,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
         eyeIndex = sPlayerFaces[face].eyeIndex;
     }
 
-    if (tunic == 1) {
+    if (playerForm == PLAYER_FORM_GORON) {
         if ((eyeIndex >= PLAYER_EYES_ROLL_RIGHT) && (eyeIndex <= PLAYER_EYES_ROLL_DOWN)) {
             eyeIndex = PLAYER_EYES_OPEN;
         } else if (eyeIndex == PLAYER_EYES_7) {
@@ -1613,7 +1614,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
 
     POLY_OPA_DISP = &gfx[2];
 
-    D_801F59E0 = tunic * 2;
+    D_801F59E0 = playerForm * 2;
     D_801F59E4 = lod;
     SkelAnime_DrawFlexLod(play, skeleton, jointTable, dListCount, overrideLimbDraw, postLimbDraw, actor, lod);
 
