@@ -105,7 +105,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
 
         spC8.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        spBC.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * 0.053333335f);
+        spBC.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (temp_fs0 * (4.0f / 75.0f));
         spBC.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
         spBC.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
@@ -123,7 +123,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
             phi_s0 = 64;
         }
 
-        if (i & 1) {
+        if (i % 2 != 0) {
             phi_s0 |= 1;
             phi_t0 = 1;
         } else {
