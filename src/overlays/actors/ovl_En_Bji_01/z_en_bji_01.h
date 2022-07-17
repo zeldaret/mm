@@ -10,10 +10,10 @@ struct EnBji01;
 typedef void (*EnBji01ActionFunc)(struct EnBji01*, PlayState*);
 
 typedef enum {
-    /* 0 */ ENBJI01_TYPE_DEFAULT,
-    /* 1 */ ENBJI01_TYPE_FINISHED_CONVERSATION,
-    /* 3 */ ENBJI01_TYPE_LOOKED_THROUGH_TELESCOPE = 3
-} EnBji01Type;
+    /* 0 */ SHIKASHI_TYPE_DEFAULT,
+    /* 1 */ SHIKASHI_TYPE_FINISHED_CONVERSATION,
+    /* 3 */ SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE = 3
+} ShikashiType;
 
 typedef struct EnBji01 {
     /* 0x000 */ Actor actor;

@@ -89,7 +89,7 @@ void func_809CCE98(EnBji01* this, PlayState* play) {
 
 void func_809CCEE8(EnBji01* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
-    if (this->actor.params == ENBJI01_TYPE_DEFAULT) {
+    if (this->actor.params == SHIKASHI_TYPE_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
             this->actor.flags |= ACTOR_FLAG_10000;
         } else {
@@ -117,8 +117,8 @@ void func_809CD028(EnBji01* this, PlayState* play) {
     f32 timeBeforeMoonCrash;
 
     switch (this->actor.params) {
-        case ENBJI01_TYPE_DEFAULT:
-        case ENBJI01_TYPE_FINISHED_CONVERSATION:
+        case SHIKASHI_TYPE_DEFAULT:
+        case SHIKASHI_TYPE_FINISHED_CONVERSATION:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.save.weekEventReg[17] & 0x10) {
@@ -153,7 +153,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                     break;
             }
             break;
-        case ENBJI01_TYPE_LOOKED_THROUGH_TELESCOPE:
+        case SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.save.weekEventReg[74] & 0x80) {
@@ -207,7 +207,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
         case 4:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                this->actor.params = ENBJI01_TYPE_FINISHED_CONVERSATION;
+                this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -275,14 +275,14 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F8:
                         func_801477B4(play);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
-                        this->actor.params = ENBJI01_TYPE_FINISHED_CONVERSATION;
+                        this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);
                         break;
                 }
             }
             break;
         case 6:
-            this->actor.params = ENBJI01_TYPE_FINISHED_CONVERSATION;
+            this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, play);
             break;
@@ -345,14 +345,14 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     switch (gSaveContext.save.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
         case 0x4C10: /* Observatory from Termina Field door */
-            this->actor.params = ENBJI01_TYPE_DEFAULT;
+            this->actor.params = SHIKASHI_TYPE_DEFAULT;
             func_809CCE98(this, play);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= ACTOR_FLAG_10000;
             func_801A5BD0(0);
             Audio_QueueSeqCmd(0xE0000100);
-            this->actor.params = ENBJI01_TYPE_LOOKED_THROUGH_TELESCOPE;
+            this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, play);
             break;
         default:
