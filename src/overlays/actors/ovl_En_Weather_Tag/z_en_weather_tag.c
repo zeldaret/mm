@@ -230,7 +230,7 @@ void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
 //  poisoned swamp: placed behind the water fall from ikana
 // this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, PlayState* play) {
-    if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || gWeatherMode == 2) {
+    if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || (gWeatherMode == 2)) {
         play->skyboxId = 3;
         EnWeatherTag_SetupAction(this, func_80966D20);
     } else if (D_801F4E74 <= 0.01f) {
