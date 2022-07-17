@@ -1,5 +1,7 @@
 ﻿<Root>
+    <!-- Great Fairy assets -->
     <File Name="object_dy_obj" Segment="6">
+        <!-- Great Fairy animations -->
         <Animation Name="object_dy_obj_Anim_00129C" Offset="0x129C" />
         <Animation Name="object_dy_obj_Anim_002338" Offset="0x2338" />
         <Animation Name="object_dy_obj_Anim_0027B0" Offset="0x27B0" />
@@ -16,13 +18,13 @@
         <DList Name="gGreatFairyParticleDL" Offset="0xD228" />
         <Texture Name="gGreatFairyParticleTex" OutName="great_fairy_particle" Format="i4" Width="32" Height="32" Offset="0xD240" />
 
-        <!-- Great Fairy beam -->
-        <Texture Name="object_dy_obj_Tex_00D440" OutName="tex_00D440" Format="i8" Width="16" Height="16" Offset="0xD440" />
-        <Texture Name="object_dy_obj_Tex_00D540" OutName="tex_00D540" Format="i8" Width="32" Height="64" Offset="0xD540" />
-        <Array Name="object_dy_obj_Vtx_00DD40" Count="27" Offset="0xDD40">
+        <!-- Great Fairy spiral beam -->
+        <Texture Name="gGreatFairySpiralBeamPatternTex" OutName="spiral_beam_pattern" Format="i8" Width="16" Height="16" Offset="0xD440" />
+        <Texture Name="gGreatFairySpiralBeamGradientTex" OutName="spiral_beam_gradient" Format="i8" Width="32" Height="64" Offset="0xD540" />
+        <Array Name="gGreatFairySpiralBeamVtx" Count="27" Offset="0xDD40">
             <Vtx/>
         </Array>
-        <DList Name="object_dy_obj_DL_00DEF0" Offset="0xDEF0" />
+        <DList Name="gGreatFairySpiralBeamDL" Offset="0xDEF0" />
 
         <!-- Great Fairy model -->
         <!-- Displaylists -->
@@ -76,7 +78,7 @@
 
         <TextureAnimation Name="gGreatFairyAppearenceTexAnim" Offset="0x1C6F4" />
 
-        <!-- Skeleton -->
+        <!-- Great Fairy Skeleton -->
         <Limb Name="gGreatFairyWaistLimb" Type="Standard" EnumName="GREAT_FAIRY_LIMB_WAIST" Offset="0x1C704" />
         <Limb Name="gGreatFairyLeftThighLimb" Type="Standard" EnumName="GREAT_FAIRY_LIMB_LEFT_THIGH" Offset="0x1C710" />
         <Limb Name="gGreatFairyLeftLowerLegLimb" Type="Standard" EnumName="GREAT_FAIRY_LIMB_LEFT_LOWER_LEG" Offset="0x1C71C" />

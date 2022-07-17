@@ -334,7 +334,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
     }
 
     if (this->timer == 0) {
-        this->unk2E8->unk14A = true;
+        this->unk2E8->trigger = true;
         this->actionFunc = func_80A0B290;
     }
 }
