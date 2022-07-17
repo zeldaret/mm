@@ -15,7 +15,6 @@ typedef struct EnMkk {
     /* 0x14A */ u8 unk14A;
     /* 0x14B */ u8 unk14B;
     /* 0x14C */ u8 unk14C;
-    /* 0x14D */ char pad14D[1]; 
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
@@ -23,10 +22,8 @@ typedef struct EnMkk {
     /* 0x160 */ Vec3f unk160;
     /* 0x16C */ Vec3f unk16C;
     /* 0x178 */ f32 unk178;
-    /* 0x17C */ ColliderSphere unk17C;
+    /* 0x17C */ ColliderSphere collider;
 } EnMkk; // size = 0x1D4
-
-
 
 extern const ActorInit En_Mkk_InitVars;
 

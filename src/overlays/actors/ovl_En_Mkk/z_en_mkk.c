@@ -23,19 +23,18 @@ void func_80A4E60C(EnMkk* this, PlayState* play);
 void func_80A4E72C(EnMkk* this, PlayState* play);
 void func_80A4EE48(EnMkk* this, PlayState* play);
 void func_80A4EF74(EnMkk* this, PlayState* play);
-void func_80A4E0CC(EnMkk* this); //(EnMkk* this, s32);
+void func_80A4E0CC(EnMkk* this);
 void func_80A4E190(EnMkk* this);
 void func_80A4E2B8(EnMkk* this);
 void func_80A4E58C(EnMkk* this);
-void func_80A4EDF0(EnMkk* this); // (EnMkk* this, s32)
+void func_80A4EDF0(EnMkk* this);
 void func_80A4EEF4(EnMkk* this);
 void func_80A4F16C(EnMkk* this, PlayState* play);
-void func_80A4F4C8(Actor* thisx, PlayState* play);
+void func_80A4F4C8(EnMkk* this, PlayState* play);
 void func_80A4E67C(EnMkk* this);
 void func_80A4E84C(EnMkk* this);
 void func_80A4EBBC(EnMkk* this, PlayState* play);
 
-#if 1
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
     ACTORCAT_ENEMY,
@@ -68,14 +67,12 @@ static ColliderSphereInit sSphereInit = {
     { 1, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-struct _struct_D_80A4F7A4_0x10 {
+struct EnMkkDlists {
     /* 0x00 */ Gfx* unk0;
     /* 0x04 */ Gfx* unk4;
     /* 0x08 */ Gfx* unk8;
     /* 0x0C */ Gfx* unkC;
 };
-
-static s16 D_80A4F748[] = { 0xF, 0x64 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
@@ -120,52 +117,30 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
 };
 
-static Color_RGBA8 D_80A4F780 = { 250, 250, 250, 255 };
+static Color_RGBA8 D_80A4F780 = { 250, 250, 250, 255 }; //prim
 
-static Color_RGBA8 D_80A4F784 = { 180, 180, 180, 255 };
+static Color_RGBA8 D_80A4F784 = { 180, 180, 180, 255 }; //env
 
 static Vec3f D_80A4F788 = { 0.0f, 0.45f, 0.0f };
 
-// static s32 D_80A4F794[2] = { 0x323232FF, 0xFFFFFFFF };
-static Color_RGBA8 D_80A4F794[] = { // prim
+static Color_RGBA8 sEffPrimColors[] = {
     { 50, 50, 50, 255 },
     { 255, 255, 255, 255 }
 };
 
-// static s32 D_80A4F79C[2] = { 0xC8C8C8FF, 0xFFFFFFFF };
-static Color_RGBA8 D_80A4F79C[] = { // env
+static Color_RGBA8 sEffEnvColors[] = {
     { 200, 200, 200, 255 },
     { 255, 255, 255, 255 }
 };
-static struct _struct_D_80A4F7A4_0x10 D_80A4F7A4[2] = {
+static struct EnMkkDlists sDLists[2] = {
     { object_mkk_DL_000030, object_mkk_DL_0000B0, object_mkk_DL_0000C8, object_mkk_DL_000140 },
     { object_mkk_DL_0001F0, object_mkk_DL_000278, object_mkk_DL_000290, object_mkk_DL_000310 },
 };
 
-//{ 0xFFFFFFFF, 0x808080FF, 0xFF, 0xFF, 0x808080FF, 0xFFFFFFFF, 0 };
 static Color_RGBA8 D_80A4F7C4[] = {
     { 255, 255, 255, 255 }, { 128, 128, 128, 255 }, { 0, 0, 0, 255 },
     { 0, 0, 0, 255 },       { 128, 128, 128, 255 }, { 255, 255, 255, 255 },
 };
-
-#endif
-
-extern ColliderSphereInit sSphereInit;
-extern CollisionCheckInfoInit sColChkInfoInit;
-extern DamageTable sDamageTable;
-extern InitChainEntry sInitChain[];
-
-extern Vec3f D_80A4F788;
-extern Color_RGBA8 D_80A4F780;
-extern Color_RGBA8 D_80A4F784;
-// extern s32 D_80A4F7C4[];
-
-//extern s16 D_80A4F748;
-// extern Color_RGBA8 D_80A4F794[];
-// extern Color_RGBA8 D_80A4F79C[];
-// extern _struct_D_80A4F7A4_0x10 D_80A4F7A4[];
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Init.s")
 
 void EnMkk_Init(Actor* thisx, PlayState* play) {
     EnMkk* this = (EnMkk*)thisx;
@@ -173,8 +148,8 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     s32 params2;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetSphere(play, &this->unk17C, &this->actor, &sSphereInit);
-    this->unk17C.dim.worldSphere.radius = D_80A4F748[0];
+    Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
+    this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 1000.0f, NULL, 0.0f);
 
@@ -201,27 +176,23 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     } else {
         this->actor.hintId = 0x2C;
     }
-    if ((params8 == 0) || (params8 == 0xFF)) {
-        func_80A4E0CC(this); // this, params2
+    if ((params8 == 0) || (params8 == 255)) {
+        func_80A4E0CC(this);
         this->unk178 = 30000.0f;
         if (params2 > 0) {
             this->unk14B |= 4;
         }
     } else {
         this->unk178 = params8 * 40.0f * 0.1f;
-        func_80A4EDF0(this); // this, params2
+        func_80A4EDF0(this);
         this->unk14E = 0;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Destroy.s")
-
 void EnMkk_Destroy(Actor* thisx, PlayState* play) {
     EnMkk* this = THIS;
-    Collider_DestroySphere(play, &this->unk17C);
+    Collider_DestroySphere(play, &this->collider);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E0CC.s")
 
 void func_80A4E0CC(EnMkk* this) {
     this->unk14A = 0;
@@ -229,8 +200,6 @@ void func_80A4E0CC(EnMkk* this) {
     this->actor.flags &= -2;
     this->actionFunc = func_80A4E100;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E100.s")
 
 void func_80A4E100(EnMkk* this, PlayState* play) {
     s32 phi_v0;
@@ -242,7 +211,7 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
     }
     if (phi_v0 >= 0xFF) {
         this->unk148 = 3;
-        this->unk17C.base.acFlags |= 1;
+        this->collider.base.acFlags |= 1;
         this->unk14A = 255;
         this->actor.flags |= 1;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -253,8 +222,6 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E190.s")
-
 void func_80A4E190(EnMkk* this) {
     this->unk14E = (s32)(Rand_ZeroOne() * 20.0f) + 0xA;
     if (this->unk149 != 0) {
@@ -263,16 +230,12 @@ void func_80A4E190(EnMkk* this) {
     this->actionFunc = func_80A4E1F0;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E1F0.s")
-
 void func_80A4E1F0(EnMkk* this, PlayState* play) {
     this->unk14E--;
     if (this->unk14E == 0) {
         func_80A4E2B8(this);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E22C.s")
 
 void func_80A4E22C(EnMkk* this, PlayState* play) {
     Vec3f pos;
@@ -283,16 +246,12 @@ void func_80A4E22C(EnMkk* this, PlayState* play) {
     func_800B0DE0(play, &pos, &gZeroVec3f, &D_80A4F788, &D_80A4F780, &D_80A4F784, 0x15E, 0x14);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E2B8.s")
-
 void func_80A4E2B8(EnMkk* this) {
     this->unk14E = 30;
     this->unk150 = this->actor.shape.rot.y;
     this->unk14B = this->unk14B & 0xFFFE;
     this->actionFunc = func_80A4E2E8;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E2E8.s")
 
 void func_80A4E2E8(EnMkk* this, PlayState* play) {
     Player* sp24 = GET_PLAYER(play);
@@ -331,41 +290,35 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E58C.s")
-
 void func_80A4E58C(EnMkk* this) {
     this->unk14B = this->unk14B | 1;
     this->actor.speedXZ = 3.0f;
     this->actor.velocity.y = 5.0f;
     Actor_PlaySfxAtPos(this, 0x38BD);
-    this->unk17C.base.atFlags = this->unk17C.base.atFlags | 1;
+    this->collider.base.atFlags = this->collider.base.atFlags | 1;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actionFunc = func_80A4E60C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E60C.s")
-
 void func_80A4E60C(EnMkk* this, PlayState* play) {
-    if ((this->unk17C.base.atFlags & 2)) {
-        this->unk17C.base.atFlags = (this->unk17C.base.atFlags) & 0xFFFC;
+    if ((this->collider.base.atFlags & 2)) {
+        this->collider.base.atFlags = (this->collider.base.atFlags) & 0xFFFC;
     }
     if ((this->actor.velocity.y < 0.0f) && ((this->actor.bgCheckFlags & 1))) {
         this->unk149 = 2;
-        this->unk17C.base.atFlags &= 0xFFFE;
+        this->collider.base.atFlags &= 0xFFFE;
         func_80A4E2B8(this);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E67C.s")
-
 void func_80A4E67C(EnMkk* this) {
     this->unk14B |= 1;
     this->actor.flags &= ~1;
-    this->unk17C.base.acFlags &= -2;
+    this->collider.base.acFlags &= -2;
     this->actor.flags = this->actor.flags | 0x10;
     Actor_PlaySfxAtPos(&this->actor, 0x3876);
     this->unk14A = 254;
-    func_800BE568(&this->actor, &this->unk17C);
+    func_800BE568(&this->actor, &this->collider);
     this->actor.speedXZ = 7.0f;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.velocity.y = 5.0f;
@@ -374,7 +327,6 @@ void func_80A4E67C(EnMkk* this) {
     this->actionFunc = func_80A4E72C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E72C.s")
 void func_80A4E72C(EnMkk* this, PlayState* play) {
     Vec3f temp;
 
@@ -383,8 +335,8 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
             temp.x = this->actor.world.pos.x;
             temp.y = this->actor.world.pos.y + 15.0f;
             temp.z = this->actor.world.pos.z;
-            EffectSsDeadDb_Spawn(play, &temp, &gZeroVec3f, &gZeroVec3f, &D_80A4F794[this->actor.params],
-                                 &D_80A4F79C[this->actor.params], 0x46, 4, 0xC);
+            EffectSsDeadDb_Spawn(play, &temp, &gZeroVec3f, &gZeroVec3f, &sEffPrimColors[this->actor.params],
+                                 &sEffEnvColors[this->actor.params], 0x46, 4, 0xC);
             Actor_PlaySfxAtPos(&this->actor, 0x3878);
             if (this->unk14C != 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (this->unk14C * 0x10));
@@ -396,8 +348,6 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4E84C.s")
 
 void func_80A4E84C(EnMkk* this) {
     if ((this->unk14B & 3) != 0) {
@@ -445,18 +395,14 @@ void func_80A4E84C(EnMkk* this) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EBBC.s")
-
 void func_80A4EBBC(EnMkk* this, PlayState* play) {
-    if (this->unk17C.base.acFlags & 2) {
-        this->unk17C.base.acFlags &= 0xFFFD;
-        Actor_SetDropFlag(&this->actor, &this->unk17C.info);
+    if (this->collider.base.acFlags & 2) {
+        this->collider.base.acFlags &= 0xFFFD;
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
         Enemy_StartFinishingBlow(play, &this->actor);
         func_80A4E67C(this);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Update.s")
 
 void EnMkk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -482,19 +428,17 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
         this->actor.shape.rot.x = CLAMP(this->actor.shape.rot.x, -0x1800, 0x1800);
     }
     Actor_SetFocus(&this->actor, 10.0f);
-    this->unk17C.dim.worldSphere.center.x = this->actor.focus.pos.x;
-    this->unk17C.dim.worldSphere.center.y = this->actor.focus.pos.y;
-    this->unk17C.dim.worldSphere.center.z = this->actor.focus.pos.z;
-    if (this->unk17C.base.atFlags & 1) {
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk17C.base);
+    this->collider.dim.worldSphere.center.x = this->actor.focus.pos.x;
+    this->collider.dim.worldSphere.center.y = this->actor.focus.pos.y;
+    this->collider.dim.worldSphere.center.z = this->actor.focus.pos.z;
+    if (this->collider.base.atFlags & 1) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
-    if (this->unk17C.base.acFlags & 1) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk17C.base);
+    if (this->collider.base.acFlags & 1) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
-    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk17C.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EDF0.s")
 
 void func_80A4EDF0(EnMkk* this) {
     this->unk14A = 0;
@@ -506,8 +450,6 @@ void func_80A4EDF0(EnMkk* this) {
     this->unk14E = this->unk152;
     this->actionFunc = func_80A4EE48;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EE48.s")
 
 void func_80A4EE48(EnMkk* this, PlayState* play) {
     if (this->unk14E > 0) {
@@ -523,8 +465,6 @@ void func_80A4EE48(EnMkk* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EEF4.s")
-
 void func_80A4EEF4(EnMkk* this) {
     Math_Vec3f_Copy(&this->unk16C, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk154, &this->actor.world.pos);
@@ -534,8 +474,6 @@ void func_80A4EEF4(EnMkk* this) {
     this->actor.draw = func_80A4F4C8;
     this->actionFunc = func_80A4EF74;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4EF74.s")
 
 void func_80A4EF74(EnMkk* this, PlayState* play) {
     s32 temp = this->unk14A - 20;
@@ -567,24 +505,21 @@ void func_80A4EF74(EnMkk* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F16C.s")
-
 void func_80A4F16C(EnMkk* this, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Draw.s")
-
 void EnMkk_Draw(Actor* thisx, PlayState* play) {
-    struct _struct_D_80A4F7A4_0x10* sp2C;
+    struct EnMkkDlists* sp2C;
     Gfx* gfx;
     Color_RGBA8* temp_v0;
     EnMkk* this = (EnMkk*)thisx;
 
-    sp2C = &D_80A4F7A4[this->actor.params];
+    sp2C = &sDLists[this->actor.params];
     if (this->actor.projectedPos.z > 0.0f) {
         MtxF* temp_v0_2;
         OPEN_DISPS(play->state.gfxCtx);
+        
         if (this->unk14A == 0xFF) {
             temp_v0 = &D_80A4F7C4[this->unk148];
             gfx = POLY_OPA_DISP;
@@ -630,14 +565,12 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/func_80A4F4C8.s")
-
-void func_80A4F4C8(Actor* thisx, PlayState* play) {
-    s32 pad;
+void func_80A4F4C8(EnMkk* this, PlayState* play) {
     Gfx* gfx;
+    s32 pad;
     MtxF* temp_v0_2;
-    struct _struct_D_80A4F7A4_0x10* temp_a3 = &D_80A4F7A4[thisx->params];
-    EnMkk* this = THIS;
+    struct EnMkkDlists* temp_a3 = &sDLists[this->actor.params];
+    s32 pad2;
 
     OPEN_DISPS(play->state.gfxCtx);
 
