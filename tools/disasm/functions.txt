@@ -16446,7 +16446,7 @@
     0x80BFD8F0:("EnBjt_CheckTalk",),
     0x80BFD984:("EnBjt_ChooseAnimation",),
     0x80BFDA48:("EnBjt_Talk",),
-    0x80BFDAE8:("EnBjt_Wait",),
+    0x80BFDAE8:("EnBjt_FollowSchedule",),
     0x80BFDC98:("EnBjt_Init",),
     0x80BFDD80:("EnBjt_Destroy",),
     0x80BFDD90:("EnBjt_Update",),

@@ -16,7 +16,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play);
 void EnBjt_Draw(Actor* thisx, PlayState* play);
 
 void EnBjt_Talk(EnBjt* this, PlayState* play);
-void EnBjt_Wait(EnBjt* this, PlayState* play);
+void EnBjt_FollowSchedule(EnBjt* this, PlayState* play);
 
 #define TOILET_HAND_STATE_TALKING (1 << 3)   // Actually talking to Player
 #define TOILET_HAND_STATE_TEXTBOX (1 << 4)   // Whenever a textbox is on screen
@@ -368,14 +368,14 @@ void EnBjt_Talk(EnBjt* this, PlayState* play) {
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
         this->msgEventArg4 = 0;
-        this->actionFunc = EnBjt_Wait;
+        this->actionFunc = EnBjt_FollowSchedule;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);
     }
 }
 
 // Change state based on schedule and stateFlags
-void EnBjt_Wait(EnBjt* this, PlayState* play) {
+void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
     ScheduleResult scheduleOutput;
 
     if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
@@ -432,7 +432,7 @@ void EnBjt_Init(Actor* thisx, PlayState* play) {
 
     this->scheduleResult = TOILET_HAND_SCH_NONE;
     this->stateFlags = 0;
-    this->actionFunc = EnBjt_Wait;
+    this->actionFunc = EnBjt_FollowSchedule;
 }
 
 void EnBjt_Destroy(Actor* thisx, PlayState* play) {
