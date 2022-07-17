@@ -308,7 +308,6 @@ void func_8082E1BC(Player* this) {
     func_800B8E58(this, func_8082E0CC(this, 0x820));
 }
 
-
 void func_8082E1F0(Player* this, u16 sfxId) {
     func_800B8E58(this, sfxId);
     this->stateFlags2 |= 8;
@@ -317,7 +316,7 @@ void func_8082E1F0(Player* this, u16 sfxId) {
 typedef struct struct_8082E224_arg1 {
     /* 0x0 */ u16 unk_0;
     /* 0x2 */ s16 unk_2; // negative marks the end
-} struct_8082E224_arg1; // size = 0x4
+} struct_8082E224_arg1;  // size = 0x4
 
 void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1);
 #if NON_MATCHING
@@ -330,7 +329,7 @@ void func_8082E224(Player* arg0, struct_8082E224_arg1* arg1) {
         s32 temp_v0_3;
 
         temp_v0_3 = var_s0 & 0x7800;
-        if (LinkAnimation_OnFrame(&arg0->skelAnime, fabsf((f32) (var_s0 & 0x7FF)))) {
+        if (LinkAnimation_OnFrame(&arg0->skelAnime, fabsf((f32)(var_s0 & 0x7FF)))) {
             if (temp_v0_3 == 0x800) {
                 func_800B8E58(arg0, arg1->unk_0);
             } else if (temp_v0_3 == 0x1000) {
@@ -504,7 +503,6 @@ void func_8082EB18(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     func_8082EAF0(play, this, anim, 0x1C);
 }
 
-
 void func_8082EB38(PlayState* play, Player* this) {
     s8 var_v0;
     s8 var_v1;
@@ -547,7 +545,7 @@ typedef struct {
     /* 0x5 */ s8 unk_5;
 } struct_8085C3F4; // size = 0x6
 
-extern struct_8085C3F4 D_8085C3F4[GI_MAX-1];
+extern struct_8085C3F4 D_8085C3F4[GI_MAX - 1];
 #if 0
 struct_8085C3F4 D_8085C3F4[0xB9] = {
     { 0x84, 0, 0xB0, -0x3C, 1, 0x3F },
@@ -739,7 +737,7 @@ struct_8085C3F4 D_8085C3F4[0xB9] = {
 #endif
 
 void func_8082ECE0(Player* this) {
-    struct_8085C3F4* temp = &D_8085C3F4[this->getItemId-1];
+    struct_8085C3F4* temp = &D_8085C3F4[this->getItemId - 1];
 
     this->unk_B2A = ABS_ALT(temp->unk_2);
 }
@@ -757,7 +755,6 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
     return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType);
 }
 
-
 #ifdef NON_EQUIVALENT
 extern void* D_8085C84C[0x1E];
 s32 func_8082ED94(Player* arg0) {
@@ -770,8 +767,10 @@ s32 func_8082ED94(Player* arg0) {
     s32 i;
 
     temp_a1 = arg0->skelAnime.animation;
-    if ((&gameplay_keep_Linkanim_00DD58 != temp_a1) && (&gameplay_keep_Linkanim_00DD68 != temp_a1) && (((func_8082ED20(arg0) != arg0->skelAnime.animation)) || (&gameplay_keep_Linkanim_00D0B0 == arg0->skelAnime.animation))) {
-        #if 0
+    if ((&gameplay_keep_Linkanim_00DD58 != temp_a1) && (&gameplay_keep_Linkanim_00DD68 != temp_a1) &&
+        (((func_8082ED20(arg0) != arg0->skelAnime.animation)) ||
+         (&gameplay_keep_Linkanim_00D0B0 == arg0->skelAnime.animation))) {
+#if 0
         temp_v0 = D_8085C84C + 4;
         if (temp_a1_2 == *D_8085C84C) {
             return 1;
@@ -802,13 +801,12 @@ loop_8:
             return 0;
         }
         goto loop_8;
-        #endif
+#endif
         for (i = 0; i < ARRAY_COUNT(D_8085C84C); i++) {
             if (arg0->skelAnime.animation == D_8085C84C[i]) {
-                return i+1;
+                return i + 1;
             }
         }
-
     }
     return -1;
 }
@@ -823,7 +821,7 @@ void func_8082EEA4(Player* this, s32 arg1) {
     u8 temp_v0 = D_8085C96C[arg1];
 
     if (temp_v0 != 0) {
-        func_8082E224(this, D_8085C93C[temp_v0-1]);
+        func_8082E224(this, D_8085C93C[temp_v0 - 1]);
     }
 }
 
@@ -966,9 +964,10 @@ void func_8082F1AC(PlayState* play, Player* this) {
         sp3C = Math_SinS(sp46) * sp34;
 
         new_var = Math_CosS(sp46);
-        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x + sp40, this->actor.world.pos.y + sp3C, this->actor.world.pos.z + (new_var * sp34), 100, 200, 255, 600);
+        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x + sp40, this->actor.world.pos.y + sp3C,
+                                  this->actor.world.pos.z + (new_var * sp34), 100, 200, 255, 600);
 
-        func_800B8E58(this, NA_SE_PL_ZORA_SPARK_BARRIER-SFX_FLAG);
+        func_800B8E58(this, NA_SE_PL_ZORA_SPARK_BARRIER - SFX_FLAG);
         func_800B648C(play, 1, 2, 100.0f, &this->actor.world.pos);
     }
 }
@@ -1343,7 +1342,8 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
                 if (this->unk_ADD >= 3) {
                     var_a2 = NA_SE_VO_LI_SWORD_L;
                 } else {
-                    var_a1 = (this->itemActionParam == PLAYER_AP_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING : NA_SE_IT_SWORD_SWING;
+                    var_a1 = (this->itemActionParam == PLAYER_AP_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING
+                                                                                    : NA_SE_IT_SWORD_SWING;
                 }
             }
         }
@@ -1352,7 +1352,8 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
             func_8082E1F0(this, var_a1);
         }
 
-        if (!((this->meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_START) && (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH))) {
+        if (!((this->meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_START) &&
+              (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH))) {
             func_8082DF8C(this, var_a2);
         }
 
@@ -1437,9 +1438,57 @@ s32 func_8082FDC4(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808302CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808304BC.s")
+void func_808304BC(Player* this, PlayState* play) {
+    if ((this->actor.id == 0) && !(this->stateFlags3 & 0x40000000)) {
+        if ((this->itemActionParam == this->heldItemActionParam) || (this->stateFlags1 & 0x400000)) {
+            if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == 0)) {
+                if ((this->csMode == 0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
+                    if (!func_8082DA90(play) && (gSaveContext.unk_3DD0[4] != 5)) {
+                        func_8082FE0C(this, play);
+                    }
+                }
+            }
+        }
+    }
 
+    if (this->stateFlags3 & 0x40000000) {
+        func_808302CC(this, play);
+    }
+}
+
+#ifdef NON_MATCHING
+// missing instruction
+s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3) {
+    if (arg1->itemActionParam == PLAYER_AP_NUT) {
+        *item = ITEM_NUT;
+        *arg3 = (arg1->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
+    } else {
+        *item = ITEM_BOW;
+        *arg3 = (arg1->stateFlags1 & 0x800000) ? 1 : arg1->itemActionParam - 7;
+    }
+
+    if (arg1->transformation == PLAYER_FORM_DEKU) {
+        if ((gSaveContext.save.playerData.magic >= 2) || ((gSaveContext.save.weekEventReg[8] & 1) && (arg0->sceneNum == SCENE_BOWLING))) {
+            return 1;
+        }
+        return 0;
+    }
+    if (arg1->stateFlags3 & 0x400) {
+        return 1;
+    }
+    if (gSaveContext.minigameState == 1) {
+        return arg0->interfaceCtx.hbaAmmo;
+    }
+    if (arg0->unk_1887C != 0) {
+        return arg0->unk_1887C;
+    }
+
+    return AMMO(*item);
+}
+#else
+s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808306F8.s")
 
@@ -2157,8 +2206,8 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
         ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
         func_808309CC(play, this);
-        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType), 9, (void*)this->unk_74C,
-                           (void*)this->unk_7EB, 0x16);
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType),
+                           9, (void*)this->unk_74C, (void*)this->unk_7EB, 0x16);
         this->skelAnime.baseTransl = D_8085D2C4;
 
         SkelAnime_InitLink(play, &this->unk_284, skelHeader, func_8082ED20(this), 9, (void*)this->unk_929,
