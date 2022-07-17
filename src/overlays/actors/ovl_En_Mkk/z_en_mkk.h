@@ -10,18 +10,18 @@ typedef void (*EnMkkActionFunc)(struct EnMkk*, PlayState*);
 typedef struct EnMkk {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnMkkActionFunc actionFunc;
-    /* 0x148 */ u8 unk148;
-    /* 0x149 */ u8 unk149;
-    /* 0x14A */ u8 unk14A;
-    /* 0x14B */ u8 unk14B;
-    /* 0x14C */ u8 unk14C;
-    /* 0x14E */ s16 unk14E;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ Vec3f unk154;
-    /* 0x160 */ Vec3f unk160;
-    /* 0x16C */ Vec3f unk16C;
-    /* 0x178 */ f32 unk178;
+    /* 0x148 */ u8 primColorSelect;
+    /* 0x149 */ u8 unk_149;
+    /* 0x14A */ u8 alpha;
+    /* 0x14B */ u8 unk_14B;
+    /* 0x14C */ u8 unk_14C;
+    /* 0x14E */ s16 unk_14E;
+    /* 0x150 */ s16 unk_150;
+    /* 0x152 */ s16 unk_152;
+    /* 0x154 */ Vec3f unk_154;
+    /* 0x160 */ Vec3f unk_160;
+    /* 0x16C */ Vec3f unk_16C;
+    /* 0x178 */ f32 unk_178;
     /* 0x17C */ ColliderSphere collider;
 } EnMkk; // size = 0x1D4
 
