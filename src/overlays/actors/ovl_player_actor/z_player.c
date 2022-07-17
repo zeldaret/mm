@@ -1950,8 +1950,78 @@ void func_80831454(Player* this) {
     }
 }
 
+#if 0
+s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState*), s32 arg3) {
+    if (arg2 == this->unk_748) {
+        return 0;
+    }
+
+    play->actorCtx.unk5 &= ~4;
+
+    if (this->actor.flags & ACTOR_FLAG_20000000) {
+        AudioOcarina_SetInstrumentId(0);
+        this->actor.flags &= ~ACTOR_FLAG_20000000;
+    } else if ((func_80857BE8 == this->unk_748) || (func_808561B0 == this->unk_748)) {
+        this->actor.shape.shadowDraw = ActorShadow_DrawFeet;
+        this->unk_ABC = 0.0f;
+        this->actor.shape.shadowScale = this->ageProperties->unk_04;
+        if (func_80857BE8 == this->unk_748) {
+            if (this->stateFlags3 & PLAYER_STATE3_80000) {
+                func_80115D5C(&play->state);
+            }
+            func_8082DD2C(play, this);
+            this->actor.shape.rot.x = 0;
+            this->actor.shape.rot.z = 0;
+            this->actor.bgCheckFlags &= ~0x0800;
+        } else {
+            Actor_SetScale(&this->actor, 0.01f);
+        }
+    } else if ((this->transformation == PLAYER_FORM_GORON) && (Player_GetMeleeWeaponHeld(this) != 0)) {
+        func_80831990(play, this, ITEM_NONE);
+    }
+
+    func_800AEF44(Effect_GetByIndex(this->meleeWeaponEffectIndex[2]));
+    this->unk_748 = arg2;
+
+    if ((this->itemActionParam != this->heldItemActionParam) && (!(arg3 & 1) || !(this->stateFlags1 & PLAYER_STATE1_400000))) {
+        func_80123C58(this);
+    }
+
+    if (!(arg3 & 1) && !(this->stateFlags1 & PLAYER_STATE1_800)) {
+        func_808309CC(play, this);
+        LinkAnimation_PlayLoop(play, &this->unk_284, func_8082ED20(this));
+        this->stateFlags1 &= ~ PLAYER_STATE1_400000;
+    }
+
+    func_80831454(this);
+    func_8082E794(this);
+
+    this->stateFlags1 &= 0x4BFFFFBF;
+    this->stateFlags2 &= 0xE577FFFF;
+    this->stateFlags3 &= 0xDED05D75;
+
+    this->unk_B08[7] = this->unk_B08[6] = this->unk_B08[5] = this->unk_B08[4] = this->unk_B08[3] = this->unk_B08[2] = 0.0f;
+
+    this->unk_AE7 = 0;
+    this->unk_AE8 = 0;
+    this->unk_AA4 = 0;
+    this->unk_B86 = 0;
+    this->unk_B88 = 0;
+    this->unk_B8A = 0;
+    this->unk_B8C = 0;
+    this->unk_B8E = 0;
+
+    this->actor.shape.rot.z = 0;
+
+    func_8082F09C(this);
+    func_8082E00C(this);
+
+    return 1;
+}
+#else
 s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState* play), s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831494.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083172C.s")
 
