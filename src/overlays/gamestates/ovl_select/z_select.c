@@ -1,7 +1,7 @@
 /*
  * File: z_select.c
  * Overlay: ovl_select
- * Description: Debug Scene Select Menu
+ * Description: Debug Map Select Menu
  */
 
 #include "z_select.h"
@@ -134,8 +134,8 @@ static SceneSelectEntry sScenes[] = {
     { " 13:" GFXP_HIRAGANA "ﾌﾌﾞｷ ﾉ ﾐﾁ", MapSelect_LoadGame, 0x3200 },
 
     // "14: Snowball Path" (Path to Goron Village - Part 2)
-
     { " 14:" GFXP_HIRAGANA "ﾕｷﾀﾞﾏ ﾉ ﾐﾁ", MapSelect_LoadGame, 0xB000 },
+
     // "15: Goron Racetrack" (Goron Racetrack)
     { " 15:" GFXP_KATAKANA "ｺﾞﾛﾝﾚｰｽ " GFXP_HIRAGANA "ｼﾞｮｳ", MapSelect_LoadGame, 0xD000 },
 
