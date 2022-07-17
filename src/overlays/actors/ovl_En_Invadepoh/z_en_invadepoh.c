@@ -327,7 +327,7 @@ static unkstructInvadepoh1 D_80B4EA24[] = {
     { 1, 1.0f },
 };
 
-static unkstructInvadepoh4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3c };
+static unkstructInvadepoh4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3C };
 
 static unkstructInvadepoh3 D_80B4EA40 = {
     1,
