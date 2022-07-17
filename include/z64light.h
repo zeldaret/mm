@@ -72,19 +72,19 @@ typedef struct LightsBuffer {
 } LightsBuffer; // size = 0x188
 
 typedef struct LightContext {
-    /* 0x0 */ LightNode* listHead;
-    /* 0x4 */ Color_RGB8 ambient;
-    /* 0x7 */ u8 unk7;
-    /* 0x8 */ u8 unk8;
-    /* 0x9 */ u8 unk9;
-    /* 0xA */ s16 unkA;
-    /* 0xC */ s16 unkC;
+    /* 0x00 */ LightNode* listHead;
+    /* 0x04 */ Color_RGB8 ambient;
+    /* 0x07 */ u8 unk7;
+    /* 0x08 */ u8 unk8;
+    /* 0x09 */ u8 unk9;
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s16 unkC;
 } LightContext; // size = 0x10
 
 typedef enum LightType {
-    /* 0x00 */ LIGHT_POINT_NOGLOW,
-    /* 0x01 */ LIGHT_DIRECTIONAL,
-    /* 0x02 */ LIGHT_POINT_GLOW
+    /* 0x0 */ LIGHT_POINT_NOGLOW,
+    /* 0x1 */ LIGHT_DIRECTIONAL,
+    /* 0x2 */ LIGHT_POINT_GLOW
 } LightType;
 
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
