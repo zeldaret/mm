@@ -31,18 +31,18 @@ typedef struct {
 } DamageTable; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ u8 mass;
-} CollisionCheckInfoInit;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ u8 mass;
+} CollisionCheckInfoInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8 health;
-    /* 0x02 */ s16 cylRadius;
-    /* 0x04 */ s16 cylHeight;
-    /* 0x06 */ s16 cylYShift;
-    /* 0x08 */ u8 mass;
+    /* 0x0 */ u8 health;
+    /* 0x2 */ s16 cylRadius;
+    /* 0x4 */ s16 cylHeight;
+    /* 0x6 */ s16 cylYShift;
+    /* 0x8 */ u8 mass;
 } CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
@@ -332,15 +332,15 @@ typedef struct TargetContext {
 } TargetContext; // size = 0x98
 
 typedef struct {
-    /* 0x0 */ TexturePtr texture;
-    /* 0x4 */ s16 x;
-    /* 0x6 */ s16 y;
-    /* 0x8 */ u8 width;
-    /* 0x9 */ u8 height;
-    /* 0xA */ u8 durationTimer; // how long the title card appears for before fading
-    /* 0xB */ u8 delayTimer; // how long the title card waits to appear
-    /* 0xC */ s16 alpha;
-    /* 0xE */ s16 intensity;
+    /* 0x00 */ TexturePtr texture;
+    /* 0x04 */ s16 x;
+    /* 0x06 */ s16 y;
+    /* 0x08 */ u8 width;
+    /* 0x09 */ u8 height;
+    /* 0x0A */ u8 durationTimer; // how long the title card appears for before fading
+    /* 0x0B */ u8 delayTimer; // how long the title card waits to appear
+    /* 0x0C */ s16 alpha;
+    /* 0x0E */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
 typedef struct ActorContext_unk_20C {
@@ -396,8 +396,8 @@ typedef struct ActorContext {
 } ActorContext; // size = 0x284
 
 typedef enum {
-    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
-    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /*  0 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /*  1 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
     /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
     /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
     /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
