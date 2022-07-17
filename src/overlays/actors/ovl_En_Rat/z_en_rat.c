@@ -154,8 +154,8 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
         this->actor.params = 0;
     }
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_rat_Skel_001858, &object_rat_Anim_00026C, this->jointTable,
-                       this->morphTable, OBJECT_RAT_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gRealBombchuSkel, &gRealBombchuRunAnim, this->jointTable,
+                       this->morphTable, REAL_BOMBCHU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     if (this->actor.params == 0) {
         Effect_Add(play, &this->unk_260, EFFECT_BLURE2, 0, 0, &D_80A58470);
@@ -506,7 +506,7 @@ void func_80A57180(EnRat* this) {
     func_80A5665C(this);
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_rat_Anim_000174, 0.0f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuBounceAnim, 0.0f);
     this->unk_25C = 2666.6667f;
     this->actor.draw = NULL;
     this->actor.shape.shadowDraw = NULL;
@@ -537,7 +537,7 @@ void func_80A5723C(EnRat* this, PlayState* play) {
 }
 
 void func_80A57330(EnRat* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_rat_Anim_00026C);
+    Animation_PlayLoop(&this->skelAnime, &gRealBombchuRunAnim);
     this->unk_18E = 5;
     this->actor.speedXZ = 2.0f;
     this->actionFunc = func_80A57384;
@@ -567,7 +567,7 @@ void func_80A57384(EnRat* this, PlayState* play) {
 
 void func_80A57488(EnRat* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    Animation_MorphToLoop(&this->skelAnime, &object_rat_Anim_000174, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRealBombchuBounceAnim, -5.0f);
     this->unk_18E = 3;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80A574E8;
@@ -599,7 +599,7 @@ void func_80A57570(EnRat* this) {
 }
 
 void func_80A575F4(EnRat* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_rat_Anim_00026C, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRealBombchuRunAnim, -5.0f);
     this->actor.speedXZ = 6.1f;
     func_80A57570(this);
     this->actionFunc = func_80A5764C;
@@ -823,11 +823,11 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
 s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRat* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == REAL_BOMBCHU_LIMB_BODY) {
         pos->y -= this->unk_25C;
     }
 
-    if (limbIndex == 5) {
+    if (limbIndex == REAL_BOMBCHU_LIMB_TAIL_END) {
         *dList = NULL;
     }
 
@@ -841,7 +841,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
     Vec3f* ptr;
     f32 var_fv0;
 
-    if (limbIndex == 5) {
+    if (limbIndex == REAL_BOMBCHU_LIMB_TAIL_END) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_ReplaceRotation(&play->billboardMtxF);

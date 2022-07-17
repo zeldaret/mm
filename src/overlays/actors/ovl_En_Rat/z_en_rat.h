@@ -20,8 +20,8 @@ typedef struct EnRat {
     /* 0x18E */ s16 unk_18E;
     /* 0x190 */ s16 unk_190;
     /* 0x192 */ s16 unk_192;
-    /* 0x194 */ Vec3s jointTable[OBJECT_RAT_LIMB_MAX];
-    /* 0x1D0 */ Vec3s morphTable[OBJECT_RAT_LIMB_MAX];
+    /* 0x194 */ Vec3s jointTable[REAL_BOMBCHU_LIMB_MAX];
+    /* 0x1D0 */ Vec3s morphTable[REAL_BOMBCHU_LIMB_MAX];
     /* 0x20C */ Vec3f unk_20C;
     /* 0x218 */ Vec3f unk_218;
     /* 0x224 */ Vec3f unk_224;
