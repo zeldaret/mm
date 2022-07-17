@@ -55,10 +55,10 @@ typedef struct Inventory {
 } Inventory; // size = 0x88
 
 typedef struct HorseData {
-    /* 0x00 */ s16 scene;                               // "spot_no"
-    /* 0x02 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
-    /* 0x08 */ s16 yaw;                                 // "horse_a"
-} HorseData; // size = 0x0A
+    /* 0x0 */ s16 scene;                               // "spot_no"
+    /* 0x2 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
+    /* 0x8 */ s16 yaw;                                 // "horse_a"
+} HorseData; // size = 0xA
 
 typedef struct RespawnData {
     /* 0x00 */ Vec3f pos;
@@ -91,32 +91,32 @@ typedef struct CycleSceneFlags {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct SaveOptions {
-    /* 0x00 */ u16 optionId;                            // "option_id"
-    /* 0x02 */ u8 language;                             // "j_n"
-    /* 0x03 */ s8 audioSetting;                         // "s_sound"
-    /* 0x04 */ u8 languageSetting;                      // "language"
-    /* 0x05 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
-} SaveOptions; // size = 0x06
+    /* 0x0 */ u16 optionId;                            // "option_id"
+    /* 0x2 */ u8 language;                             // "j_n"
+    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x4 */ u8 languageSetting;                      // "language"
+    /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
+} SaveOptions; // size = 0x6
 
 typedef struct SavePlayerData {
-    /* 0x0000 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x0006 */ u16 deaths;                            // "savect"
-    /* 0x0008 */ char playerName[8];                    // "player_name"
-    /* 0x0010 */ s16 healthCapacity;                    // "max_life"
-    /* 0x0012 */ s16 health;                            // "now_life"
-    /* 0x0014 */ s8 magicLevel;                         // "magic_max"
-    /* 0x0015 */ s8 magic;                              // "magic_now"
-    /* 0x0016 */ s16 rupees;                            // "lupy_count"
-    /* 0x0018 */ u16 swordHealth;                       // "long_sword_hp"
-    /* 0x001A */ u16 tatlTimer;                         // "navi_timer"
-    /* 0x001C */ u8 magicAcquired;                      // "magic_mode"
-    /* 0x001D */ u8 doubleMagic;                        // "magic_ability"
-    /* 0x001E */ u8 doubleDefense;                      // "life_ability"
-    /* 0x001F */ u8 unk_1F;                             // "ocarina_round"
-    /* 0x0020 */ u8 unk_20;                             // "first_memory"
-    /* 0x0022 */ u16 owlActivationFlags;                // "memory_warp_point"
-    /* 0x0024 */ u8 unk_24;                             // "last_warp_pt"
-    /* 0x0026 */ s16 savedSceneNum;                     // "scene_data_ID"
+    /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
+    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x08 */ char playerName[8];                    // "player_name"
+    /* 0x10 */ s16 healthCapacity;                    // "max_life"
+    /* 0x12 */ s16 health;                            // "now_life"
+    /* 0x14 */ s8 magicLevel;                         // "magic_max"
+    /* 0x15 */ s8 magic;                              // "magic_now"
+    /* 0x16 */ s16 rupees;                            // "lupy_count"
+    /* 0x18 */ u16 swordHealth;                       // "long_sword_hp"
+    /* 0x1A */ u16 tatlTimer;                         // "navi_timer"
+    /* 0x1C */ u8 magicAcquired;                      // "magic_mode"
+    /* 0x1D */ u8 doubleMagic;                        // "magic_ability"
+    /* 0x1E */ u8 doubleDefense;                      // "life_ability"
+    /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
+    /* 0x20 */ u8 unk_20;                             // "first_memory"
+    /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
+    /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
+    /* 0x26 */ s16 savedSceneNum;                     // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
 typedef struct Save {
