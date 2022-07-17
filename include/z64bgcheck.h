@@ -95,10 +95,10 @@ typedef struct {
 } CamData; // size = 0x8 (BgCamData)
 
 typedef struct {
-    /* 0x0 */ Vec3s minPos;
-    /* 0x6 */ s16 xLength;
-    /* 0x8 */ s16 zLength;
-    /* 0xC */ u32 properties;
+    /* 0x00 */ Vec3s minPos;
+    /* 0x06 */ s16 xLength;
+    /* 0x08 */ s16 zLength;
+    /* 0x0C */ u32 properties;
     // 0x0008_0000 = ?
     // 0x0007_E000 = room index, 0x3F = all rooms
     // 0x0000_1F00 = lighting setting index
@@ -148,8 +148,8 @@ typedef struct {
 } SSNode; // size = 0x4
 
 typedef struct {
-    u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
-} SSList; // represents a linked list of type SSNode
+    /* 0x0 */ u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
+} SSList; // size = 0x2 // represents a linked list of type SSNode
 
 typedef struct {
     /* 0x0 */ u16 max;
@@ -302,8 +302,9 @@ typedef struct {
 } BgSpecialSceneMeshSubdivision; // size = 0xC
 
 typedef struct {
-    s16 sceneId;
-    Vec3s subdivAmount;
-    s32 nodeListMax; // if -1, dynamically compute max nodes
-} BgCheckSceneSubdivisionEntry;
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ Vec3s subdivAmount;
+    /* 0x8 */ s32 nodeListMax; // if -1, dynamically compute max nodes
+} BgCheckSceneSubdivisionEntry; // size = 0xC
+
 #endif
