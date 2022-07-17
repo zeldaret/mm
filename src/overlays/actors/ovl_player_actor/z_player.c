@@ -1005,7 +1005,26 @@ void func_8082F470(PlayState* play, Player* this, s32 arg2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F524.s")
+// sItemActionParams
+extern u8 D_8085C99C[];
+
+s8 func_8082F524(Player* arg0, s32 arg1) {
+    if (arg1 >= 0xFD) {
+        return 0;
+    }
+    if (arg1 == 0xFC) {
+        return 1;
+    }
+    //if (arg1 == ITEM_FISHING_POLE) {
+    if (arg1 == 92) {
+        return 2;
+    }
+    //if ((arg1 == ITEM_SWORD_KOKIRI) && (arg0->transformation == 2)) {
+    if ((arg1 == 77) && (arg0->transformation == 2)) {
+        return 8;
+    }
+    return *(D_8085C99C + arg1);
+}
 
 void func_8082F594(PlayState* play, Player* this) {
 }
