@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.h"
-
+#include "objects/object_dy_obj/object_dy_obj.h"
 
 struct BgDyYoseizo;
 
@@ -13,12 +13,12 @@ typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
 #define GREAT_FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
 typedef enum {
-    /* 0 */ GREAT_FAIRY_TYPE_0,
-    /* 1 */ GREAT_FAIRY_TYPE_1,
-    /* 2 */ GREAT_FAIRY_TYPE_2,
-    /* 3 */ GREAT_FAIRY_TYPE_3,
-    /* 4 */ GREAT_FAIRY_TYPE_4
-} 
+    /* 0 */ GREAT_FAIRY_TYPE_MAGIC,
+    /* 1 */ GREAT_FAIRY_TYPE_POWER,
+    /* 2 */ GREAT_FAIRY_TYPE_WISDOM,
+    /* 3 */ GREAT_FAIRY_TYPE_COURAGE,
+    /* 4 */ GREAT_FAIRY_TYPE_KINDNESS
+} GreatFairyType;
 
 #define BG_DY_YOSEIZO_EFFECT_COUNT 200
 
@@ -42,10 +42,10 @@ typedef struct BgDyYoseizo {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ BgDyYoseizoActionFunc actionFunc;
     /* 0x0148 */ SkelAnime skelAnime;
-    /* 0x018C */ Vec3s jointTable[28];
-    /* 0x0234 */ Vec3s morphTable[28];
-    /* 0x02DC */ Vec3s unk2DC;
-    /* 0x02DC */ Vec3s unk2E2;
+    /* 0x018C */ Vec3s jointTable[GREAT_FAIRY_LIMB_MAX];
+    /* 0x0234 */ Vec3s morphTable[GREAT_FAIRY_LIMB_MAX];
+    /* 0x02DC */ Vec3s headRot;
+    /* 0x02DC */ Vec3s torsoRot;
     /* 0x02E8 */ EnDyExtra* unk2E8;
     /* 0x02EC */ f32 unk2EC;
     /* 0x02F0 */ f32 unk2F0;
@@ -56,7 +56,7 @@ typedef struct BgDyYoseizo {
     /* 0x02FE */ s16 blinkTimer;
     /* 0x0300 */ s16 timer;
     /* 0x0302 */ u16 unk302;
-    /* 0x0304 */ BgDyYoseizoEffect effects[200];
+    /* 0x0304 */ BgDyYoseizoEffect effects[BG_DY_YOSEIZO_EFFECT_COUNT];
 } BgDyYoseizo; // size = 0x3504
 
 extern const ActorInit Bg_Dy_Yoseizo_InitVars;
