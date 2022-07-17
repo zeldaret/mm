@@ -416,22 +416,22 @@ void osSyncPrintfThreadContext(OSThread* t) {
     osSyncPrintfFReg(6, &ctx->fp6.f.f_even);
     osSyncPrintf("\n");
     osSyncPrintfFReg(8, &ctx->fp8.f.f_even);
-    osSyncPrintfFReg(0xA, &ctx->fp10.f.f_even);
+    osSyncPrintfFReg(10, &ctx->fp10.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0xC, &ctx->fp12.f.f_even);
-    osSyncPrintfFReg(0xE, &ctx->fp14.f.f_even);
+    osSyncPrintfFReg(12, &ctx->fp12.f.f_even);
+    osSyncPrintfFReg(14, &ctx->fp14.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x10, &ctx->fp16.f.f_even);
-    osSyncPrintfFReg(0x12, &ctx->fp18.f.f_even);
+    osSyncPrintfFReg(16, &ctx->fp16.f.f_even);
+    osSyncPrintfFReg(18, &ctx->fp18.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x14, &ctx->fp20.f.f_even);
-    osSyncPrintfFReg(0x16, &ctx->fp22.f.f_even);
+    osSyncPrintfFReg(20, &ctx->fp20.f.f_even);
+    osSyncPrintfFReg(22, &ctx->fp22.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x18, &ctx->fp24.f.f_even);
-    osSyncPrintfFReg(0x1A, &ctx->fp26.f.f_even);
+    osSyncPrintfFReg(24, &ctx->fp24.f.f_even);
+    osSyncPrintfFReg(26, &ctx->fp26.f.f_even);
     osSyncPrintf("\n");
-    osSyncPrintfFReg(0x1C, &ctx->fp28.f.f_even);
-    osSyncPrintfFReg(0x1E, &ctx->fp30.f.f_even);
+    osSyncPrintfFReg(28, &ctx->fp28.f.f_even);
+    osSyncPrintfFReg(30, &ctx->fp30.f.f_even);
     osSyncPrintf("\n");
 }
 
@@ -696,7 +696,7 @@ void Fault_ResumeThread(OSThread* t) {
     t->context.cause = 0;
     t->context.fpcsr = 0;
     t->context.pc += 4;
-    *(u32*)t->context.pc = 0xD;
+    *(u32*)t->context.pc = 0x0000000D; // write in a break instruction
     osWritebackDCache((void*)t->context.pc, 4);
     osInvalICache((void*)t->context.pc, 4);
     osStartThread(t);
