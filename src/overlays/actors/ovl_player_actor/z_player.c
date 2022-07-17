@@ -1129,8 +1129,13 @@ void func_8082F5C0(PlayState* play, Player* this) {
     this->unk_ACC = 0;
 }
 
-void func_8082F5FC(Player* this, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F5FC.s")
+void func_8082F5FC(Player* this, Actor* actor) {
+    this->heldActor = actor;
+    this->interactRangeActor = actor;
+    this->getItemId = 0;
+    this->leftHandWorld.rot.y = actor->shape.rot.y - this->actor.shape.rot.y;
+    this->stateFlags1 |= PLAYER_STATE1_800;
+}
 
 typedef struct {
     /* 0x0 */ u8 itemId;
@@ -1315,9 +1320,49 @@ void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam)
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F8BC.s")
 #endif
 
+void func_8082F938(PlayState* play, Player* this, UNK_TYPE arg2, UNK_TYPE arg3);
+// has a loop unroll
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F938.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FA5C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FA5C.s")
+
+void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
+    u16 var_a2;
+    u16 var_a1;
+
+    if (this->meleeWeaponState == 0) {
+        var_a2 = NA_SE_VO_LI_SWORD_N;
+        if (this->transformation == PLAYER_FORM_GORON) {
+            var_a1 = NA_SE_IT_GORON_PUNCH_SWING;
+        } else {
+            var_a1 = 0;
+            if (this->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
+                var_a2 = NA_SE_VO_LI_SWORD_L;
+            } else if (this->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) {
+                var_a1 = NA_SE_IT_GORON_PUNCH_SWING;
+            } else {
+                var_a1 = NA_SE_IT_SWORD_SWING_HARD;
+                if (this->unk_ADD >= 3) {
+                    var_a2 = NA_SE_VO_LI_SWORD_L;
+                } else {
+                    var_a1 = (this->itemActionParam == PLAYER_AP_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING : NA_SE_IT_SWORD_SWING;
+                }
+            }
+        }
+
+        if (var_a1 != 0) {
+            func_8082E1F0(this, var_a1);
+        }
+
+        if (!((this->meleeWeaponAnimation >= PLAYER_MWA_FLIPSLASH_START) && (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_JUMPKICK_FINISH))) {
+            func_8082DF8C(this, var_a2);
+        }
+
+        func_8082F938(play, this, 0, 4);
+    }
+
+    this->meleeWeaponState = meleeWeaponState;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FB68.s")
 
