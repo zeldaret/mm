@@ -41,10 +41,10 @@ typedef struct {
 } SkinLimbModif; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u16 totalVtxCount; // total vertex count for all modif entries
-    /* 0x02 */ u16 limbModifCount; // count of limbModifCount
-    /* 0x04 */ SkinLimbModif* limbModifications;
-    /* 0x08 */ Gfx* dlist;
+    /* 0x0 */ u16 totalVtxCount; // total vertex count for all modif entries
+    /* 0x2 */ u16 limbModifCount; // count of limbModifCount
+    /* 0x4 */ SkinLimbModif* limbModifications;
+    /* 0x8 */ Gfx* dlist;
 } SkinAnimatedLimbData; // size = 0xC
 
 // ZAPD compatibility typedefs
@@ -71,11 +71,11 @@ typedef struct {
 } SkinLimbVtx; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ SkeletonHeader* skeletonHeader;
-    /* 0x004 */ MtxF mtx;
-    /* 0x044 */ s32 limbCount;
-    /* 0x048 */ SkinLimbVtx* vtxTable; // double buffered list of vertices for each limb
-    /* 0x04C */ SkelAnime skelAnime;
+    /* 0x00 */ SkeletonHeader* skeletonHeader;
+    /* 0x04 */ MtxF mtx;
+    /* 0x44 */ s32 limbCount;
+    /* 0x48 */ SkinLimbVtx* vtxTable; // double buffered list of vertices for each limb
+    /* 0x4C */ SkelAnime skelAnime;
 } Skin; // size = 0x90
 
 typedef void (*SkinPostDraw)(struct Actor* thisx, struct PlayState* play, Skin* skin);
