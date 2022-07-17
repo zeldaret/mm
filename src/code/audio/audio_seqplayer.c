@@ -425,7 +425,7 @@ void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 channel
         if (channelBits & 1) {
             channel = seqPlayer->channels[i];
             channel->fontId = seqPlayer->defaultFont;
-            channel->muteBehavior = seqPlayer->muteBehavior;
+            channel->muteFlags = seqPlayer->muteFlags;
             channel->noteAllocPolicy = seqPlayer->noteAllocPolicy;
         }
         channelBits = channelBits >> 1;
@@ -1122,7 +1122,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep3(SequenceLayer* layer, s32 cmd) {
         }
     }
 
-    if ((seqPlayer->muted && (channel->muteBehavior & (MUTE_BEHAVIOR_STOP_NOTES | MUTE_BEHAVIOR_4))) ||
+    if ((seqPlayer->muted && (channel->muteFlags & (MUTE_FLAGS_STOP_NOTES | MUTE_FLAGS_4))) ||
         channel->stopSomething2) {
         layer->stopSomething = true;
         return PROCESS_SCRIPT_END;
@@ -1207,7 +1207,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
     }
 
     seqPlayer = channel->seqPlayer;
-    if (seqPlayer->muted && (channel->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT)) {
+    if (seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_STOP_SCRIPT)) {
         return;
     }
 
@@ -1462,7 +1462,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
 
                 case 0xCA: // channel: set mute behavior
                     cmd = (u8)cmdArgs[0];
-                    channel->muteBehavior = cmd;
+                    channel->muteFlags = cmd;
                     channel->changes.s.volume = true;
                     break;
 
@@ -1528,7 +1528,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                 case 0xE7: // channel:
                     cmdArgU16 = (u16)cmdArgs[0];
                     data = &seqPlayer->seqData[cmdArgU16];
-                    channel->muteBehavior = data[0];
+                    channel->muteFlags = data[0];
                     data += 3;
                     channel->noteAllocPolicy = data[-2];
                     AudioSeq_SetChannelPriorities(channel, data[-1]);
@@ -1543,7 +1543,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     break;
 
                 case 0xE8: // channel:
-                    channel->muteBehavior = cmdArgs[0];
+                    channel->muteFlags = cmdArgs[0];
                     channel->noteAllocPolicy = cmdArgs[1];
                     cmd = (u8)cmdArgs[2];
                     AudioSeq_SetChannelPriorities(channel, cmd);
@@ -1871,7 +1871,7 @@ void AudioSeq_SequencePlayerProcessSequence(SequencePlayer* seqPlayer) {
     AudioLoad_SetSeqLoadStatus(seqPlayer->seqId, LOAD_STATUS_COMPLETE);
     AudioLoad_SetFontLoadStatus(seqPlayer->defaultFont, LOAD_STATUS_COMPLETE);
 
-    if (seqPlayer->muted && (seqPlayer->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT)) {
+    if (seqPlayer->muted && (seqPlayer->muteFlags & MUTE_FLAGS_STOP_SCRIPT)) {
         return;
     }
 
@@ -2018,7 +2018,7 @@ void AudioSeq_SequencePlayerProcessSequence(SequencePlayer* seqPlayer) {
                         break;
 
                     case 0xD3: // seqPlayer: set mute behavior
-                        seqPlayer->muteBehavior = AudioSeq_ScriptReadU8(seqScript);
+                        seqPlayer->muteFlags = AudioSeq_ScriptReadU8(seqScript);
                         break;
 
                     case 0xD1: // seqPlayer: set short note gatetime table
@@ -2288,7 +2288,7 @@ void AudioSeq_InitSequencePlayer(SequencePlayer* seqPlayer) {
         seqPlayer->soundScriptIO[j] = -1;
     }
 
-    seqPlayer->muteBehavior = MUTE_BEHAVIOR_SOFTEN | MUTE_BEHAVIOR_STOP_NOTES;
+    seqPlayer->muteFlags = MUTE_FLAGS_SOFTEN | MUTE_FLAGS_STOP_NOTES;
     seqPlayer->fadeVolumeScale = 1.0f;
     seqPlayer->bend = 1.0f;
 

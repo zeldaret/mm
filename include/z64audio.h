@@ -12,11 +12,11 @@
 
 #define MAX_CHANNELS_PER_BANK 3
 
-#define MUTE_BEHAVIOR_3 (1 << 3)           // prevent further noteSubEus from playing
-#define MUTE_BEHAVIOR_4 (1 << 4)           // stop something in seqLayer scripts
-#define MUTE_BEHAVIOR_SOFTEN (1 << 5)      // lower volume, by default to half
-#define MUTE_BEHAVIOR_STOP_NOTES (1 << 6)  // prevent further notes from playing
-#define MUTE_BEHAVIOR_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
+#define MUTE_FLAGS_3 (1 << 3)           // prevent further noteSubEus from playing
+#define MUTE_FLAGS_4 (1 << 4)           // stop something in seqLayer scripts
+#define MUTE_FLAGS_SOFTEN (1 << 5)      // lower volume, by default to half
+#define MUTE_FLAGS_STOP_NOTES (1 << 6)  // prevent further notes from playing
+#define MUTE_FLAGS_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
 
 #define AUDIO_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
 
@@ -284,7 +284,7 @@ typedef struct {
     /* 0x000 */ u8 applyBend : 1;
     /* 0x001 */ u8 state;
     /* 0x002 */ u8 noteAllocPolicy;
-    /* 0x003 */ u8 muteBehavior;
+    /* 0x003 */ u8 muteFlags;
     /* 0x004 */ u8 seqId;
     /* 0x005 */ u8 defaultFont;
     /* 0x006 */ u8 unk_06[1];
@@ -404,7 +404,7 @@ typedef struct SequenceChannel {
         /* 0x01 */ u8 asByte;
     } changes;
     /* 0x02 */ u8 noteAllocPolicy;
-    /* 0x03 */ u8 muteBehavior;
+    /* 0x03 */ u8 muteFlags;
     /* 0x04 */ u8 reverb;       // or dry/wet mix
     /* 0x05 */ u8 notePriority; // 0-3
     /* 0x06 */ u8 someOtherPriority;
