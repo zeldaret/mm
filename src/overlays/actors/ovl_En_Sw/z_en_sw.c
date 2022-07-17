@@ -1312,7 +1312,7 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_410 & 4) {
         if (ENSW_GET_3(&this->actor)) {
-            func_800B8050(&this->actor, play, MTXMODE_NEW);
+            func_800B8050(&this->actor, play, 0);
         }
         func_8012C28C(play->state.gfxCtx);
         Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);

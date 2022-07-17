@@ -740,7 +740,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
             if (this->unk_250 < 2.0f) {
                 this->unk_250 += 0.1f;
             } else {
-                gSaveContext.healthAccumulator = 160;
+                gSaveContext.healthAccumulator = 0xA0;
                 this->unk_246++;
             }
             break;
@@ -855,8 +855,8 @@ void func_8088E60C(EnElf* this, PlayState* play) {
         glowLightRadius = 0;
     }
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action == 6) {
+    if (Cutscene_CheckActorAction(play, 0xC9)) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0xC9)]->action == 6) {
             glowLightRadius = 0;
         }
     }
@@ -889,8 +889,8 @@ void func_8088E850(EnElf* this, PlayState* play) {
     func_8088E5A8(this, play);
     xScale = 0.0f;
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        sp38 = Cutscene_GetActorActionIndex(play, 201);
+    if (Cutscene_CheckActorAction(play, 0xC9)) {
+        sp38 = Cutscene_GetActorActionIndex(play, 0xC9);
         func_808908D0(&nextPos, play, sp38);
         this->actor.shape.rot.y = play->csCtx.actorActions[sp38]->urot.y;
         this->actor.shape.rot.x = play->csCtx.actorActions[sp38]->urot.x;
@@ -1091,7 +1091,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if ((arrayPointerActor != NULL) && (player->unk_730 != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = this->unk_269 == 0 ? 0 : 0;
 
         if (!temp) {
             Actor_PlaySfxAtPos(&this->actor, targetSfxId);
@@ -1107,8 +1107,8 @@ void func_8088F214(EnElf* this, PlayState* play) {
     s32 pad;
 
     if (play->csCtx.state != 0) {
-        if (Cutscene_CheckActorAction(play, 201)) {
-            switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action) {
+        if (Cutscene_CheckActorAction(play, 0xC9)) {
+            switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0xC9)]->action) {
                 case 4:
                     sp34 = 7;
                     break;
@@ -1577,8 +1577,8 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
     if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
-            (!Cutscene_CheckActorAction(play, 201) ||
-             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action != 6)) &&
+            (!Cutscene_CheckActorAction(play, 0xC9) ||
+             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0xC9)]->action != 6)) &&
             (!(player->stateFlags1 & 0x100000) || (kREG(90) < this->actor.projectedPos.z))) {
             Gfx* dListHead = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
             f32 alphaScale;
