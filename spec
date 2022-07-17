@@ -2885,8 +2885,7 @@ beginseg
     name "ovl_En_Rat"
     compress
     include "build/src/overlays/actors/ovl_En_Rat/z_en_rat.o"
-    include "build/data/ovl_En_Rat/ovl_En_Rat.data.o"
-    include "build/data/ovl_En_Rat/ovl_En_Rat.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Rat/ovl_En_Rat_reloc.o"
 endseg
 
 beginseg

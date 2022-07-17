@@ -2,6 +2,7 @@
 #define Z_EN_RAT_H
 
 #include "global.h"
+#include "objects/object_rat/object_rat.h"
 
 #define ENRAT_GET_8000(thisx) ((thisx)->params & 0x8000)
 #define ENRAT_GET_FF(thisx) ((thisx)->params & 0xFF)
@@ -19,8 +20,8 @@ typedef struct EnRat {
     /* 0x18E */ s16 unk_18E;
     /* 0x190 */ s16 unk_190;
     /* 0x192 */ s16 unk_192;
-    /* 0x194 */ Vec3s jointTable[10];
-    /* 0x1D0 */ Vec3s morphTable[10];
+    /* 0x194 */ Vec3s jointTable[OBJECT_RAT_LIMB_MAX];
+    /* 0x1D0 */ Vec3s morphTable[OBJECT_RAT_LIMB_MAX];
     /* 0x20C */ Vec3f unk_20C;
     /* 0x218 */ Vec3f unk_218;
     /* 0x224 */ Vec3f unk_224;
