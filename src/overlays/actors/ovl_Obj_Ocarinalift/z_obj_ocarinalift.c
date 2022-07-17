@@ -57,7 +57,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     Path* path;
     ObjOcarinalift* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    Actor_ProcessInitChain(thisx, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
