@@ -4262,7 +4262,7 @@
     0x8082DE50:("func_8082DE50",),
     0x8082DE88:("func_8082DE88",),
     0x8082DF2C:("func_8082DF2C",),
-    0x8082DF48:("func_8082DF48",),
+    0x8082DF48:("Player_RequestRumble",),
     0x8082DF8C:("func_8082DF8C",),
     0x8082E00C:("func_8082E00C",),
     0x8082E078:("func_8082E078",),

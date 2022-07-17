@@ -1112,7 +1112,7 @@ Vec3s* Camera_Update(Vec3s* param_1, Camera* camera);
 // void func_800DF498(void);
 u32 Camera_SetMode(Camera* camera, s16 mode, s8 param_3);
 s32 Camera_ChangeMode(Camera* camera, s16 mode);
-// void func_800DF86C(void);
+s32 func_800DF86C(Camera* camera, s16 arg1);
 // void func_800DF8EC(void);
 s32 Camera_ChangeSetting(Camera* camera, s16 setting);
 u32 Camera_ChangeDataIdx(Camera* camera, u32 camDataIdx);

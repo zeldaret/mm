@@ -239,7 +239,7 @@ void func_8082DF2C(PlayState* play) {
     }
 }
 
-void func_8082DF48(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
+void Player_RequestRumble(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
     if (this == GET_PLAYER(play)) {
         Rumble_Request(distSq, sourceIntensity, decayTimer, decayStep);
     }
@@ -1553,6 +1553,8 @@ s32 func_808306F8(Player* arg0, PlayState* arg1) {
     return 1;
 }
 #else
+// bool
+s32 func_808306F8(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808306F8.s")
 #endif
 
@@ -1766,35 +1768,120 @@ void func_80830CE8(PlayState* play, Player* this) {
 void func_80830D40(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830D40.s")
 
-#ifdef NON_MATCHING
 s32 func_80830DF0(Player* this, PlayState* play) {
     if (this->stateFlags3 & 0x40000000) {
         func_808302CC(this, play);
-        return true;
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+#ifdef NON_MATCHING
+// swapped instructions
+s32 func_80830E30(Player* this, PlayState* play) {
+    LinkAnimationHeader* var_a2;
+
+    if ((this->itemActionParam == 0x11) || (this->transformation == 2)) {
+        func_8082F43C(play, this, func_8084923C);
+
+        if (this->meleeWeaponAnimation == 0x1B) {
+            var_a2 = &gameplay_keep_Linkanim_00E3A8;
+        } else {
+            LinkAnimationHeader* var_v0;
+
+            if (this->meleeWeaponAnimation == 0x1C) {
+                var_v0 = &gameplay_keep_Linkanim_00E3B0;
+            } else {
+                var_v0 = &gameplay_keep_Linkanim_00E3B8;
+            }
+            var_a2 = var_v0;
+        }
+
+        LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+        this->unk_ACC = 0xA;
+    } else {
+        if (!func_808306F8(this, play)) {
+            return false;
+        }
+
+        if (Player_IsHoldingHookshot(this)) {
+            var_a2 = &gameplay_keep_Linkanim_00D9D8;
+        } else {
+            LinkAnimationHeader* var_v0_2;
+
+            if (this->transformation == 3) {
+                var_v0_2 = &gameplay_keep_Linkanim_00E2F8;
+            } else {
+                var_v0_2 = &gameplay_keep_Linkanim_00D4F0;
+            }
+            var_a2 = var_v0_2;
+        }
+
+        LinkAnimation_PlayOnce(play, &this->unk_284, var_a2);
+    }
+
+    if (this->stateFlags1 & 0x800000) {
+        func_8082DB3C(play, this, &gameplay_keep_Linkanim_00E050);
+    } else if ((this->actor.bgCheckFlags & 1) && (this->transformation != 2)) {
+        func_8082DB3C(play, this, func_8082ED20(this));
+    }
+
+    return true;
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830E30.s")
+#endif
+
+s32 func_80830F9C(PlayState* play) {
+    return play->unk_1887C > 0 && CHECK_BTN_ALL(D_80862B44->press.button, BTN_B);
+}
+
+s32 func_80830FD4(PlayState* play) {
+    return play->unk_1887C != 0 && (play->unk_1887C < 0 || CHECK_BTN_ANY(D_80862B44->cur.button, BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A));
+}
+
+s32 func_80831010(Player* this, PlayState* play) {
+    if ((this->unk_AA5 == 0) || (this->unk_AA5 == 3)) {
+        if (func_8082FBE8(this) || (this->unk_730 != NULL) || (func_800DF86C(Play_GetCamera(play, CAM_ID_MAIN), 0xD) == 0)) {
+            return true;
+        }
+        this->unk_AA5 = 3;
     }
     return false;
 }
-#else
-s32 func_80830DF0(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830DF0.s")
-#endif
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830E30.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830F9C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830FD4.s")
-
-// bool
-s32 func_80831010(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831010.s")
-
+/*
 // bool
 s32 func_80831094(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831094.s")
 
 s32 func_80831124(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831124.s")
+*/
+
+s32 func_80831094(Player* this, PlayState* play) {
+    if ((this->doorType == 0) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
+        if ((D_80862B48 != 0) || func_80830F9C(play)) {
+            if (func_80830E30(this, play)) {
+                return func_80831010(this, play);
+            }
+        }
+    }
+    return false;
+}
+
+s32 func_80831124(PlayState* play, Player* this) {
+    if (this->actor.child != NULL) {
+        if (this->heldActor == NULL) {
+            this->heldActor = this->actor.child;
+            Player_RequestRumble(play, this, 255, 10, 250, SQ(0));
+            func_800B8E58(this, NA_SE_IT_HOOKSHOT_RECEIVE);
+        }
+        return true;
+    }
+    return false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831194.s")
 

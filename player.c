@@ -2130,7 +2130,7 @@ void func_8082DF2C(PlayState* play) {
     }
 }
 
-void func_8082DF48(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
+void Player_RequestRumble(PlayState* play, Player* this, u8 sourceIntensity, u8 decayTimer, u8 decayStep, s32 distSq) {
     if (this == play->actorCtx.actorLists[2].first) {
         Rumble_Request((f32) distSq, sourceIntensity, decayTimer, decayStep);
     }
@@ -3571,7 +3571,7 @@ s32 func_80831124(PlayState* play, Player* this) {
     if (temp_v0 != NULL) {
         if (this->heldActor == NULL) {
             this->heldActor = temp_v0;
-            func_8082DF48(play, this, 0xFFU, 0xAU, (u8) 0xFA, 0);
+            Player_RequestRumble(play, this, 0xFFU, 0xAU, (u8) 0xFA, 0);
             func_800B8E58(this, 0x1828U);
         }
         return 1;
@@ -3608,9 +3608,9 @@ s32 func_80831194(PlayState* arg0, Player* arg1) {
             if (arg0->unk_1887C == 1) {
                 arg0->unk_1887C = -0xA;
             }
-            func_8082DF48(arg0, arg1, 0x96U, 0xAU, (u8) 0x96, 0);
+            Player_RequestRumble(arg0, arg1, 0x96U, 0xAU, (u8) 0x96, 0);
         } else {
-            func_8082DF48(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
+            Player_RequestRumble(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
             arg1->unk_B48 = 0.0f;
         }
         if (arg1->transformation == 3) {
@@ -4659,7 +4659,7 @@ void func_80833B18(PlayState* arg0, Player* arg1, Player* arg2, f32 arg3, f32 ar
                 sp2C = &D_0400DCD0;
                 func_8082DAD4(arg1);
                 arg1->actor.velocity.y = 0.0f;
-                func_8082DF48(arg0, arg1, 0xFFU, 0xAU, (u8) 0x28, 0);
+                Player_RequestRumble(arg0, arg1, 0xFFU, 0xAU, (u8) 0x28, 0);
                 func_800B8E58(arg1, 0x874U);
                 func_8082DF8C(arg1, 0x6806U);
                 goto block_47;
@@ -4670,14 +4670,14 @@ void func_80833B18(PlayState* arg0, Player* arg1, Player* arg2, f32 arg3, f32 ar
                 func_8082DAD4(arg1);
                 arg1->unk_AE8 = 0x14;
                 arg1->actor.velocity.y = 0.0f;
-                func_8082DF48(arg0, arg1, 0xFFU, 0x50U, (u8) 0x96, 0);
+                Player_RequestRumble(arg0, arg1, 0xFFU, 0x50U, (u8) 0x96, 0);
                 goto block_47;
             }
             arg5 -= arg1->actor.shape.rot.y;
             temp_v0 = arg1->stateFlags1;
             if ((temp_v0 * 0x10) < 0) {
                 func_80831494(arg0, arg1, func_80851B58, 0);
-                func_8082DF48(arg0, arg1, 0xB4U, 0x14U, (u8) 0x32, 0);
+                Player_RequestRumble(arg0, arg1, 0xB4U, 0x14U, (u8) 0x32, 0);
                 if (arg2 == (Player* )1) {
                     arg1->linearVelocity = arg3 * 1.5f;
                     arg1->actor.velocity.y = arg4 * 0.7f;
@@ -4692,7 +4692,7 @@ void func_80833B18(PlayState* arg0, Player* arg1, Player* arg2, f32 arg3, f32 ar
             if ((arg2 == (Player* )1) || (arg2 == (Player* )2) || !(arg1->actor.bgCheckFlags & 1) || (temp_v0 & 0x206004)) {
                 func_80831494(arg0, arg1, func_8084BC64, 0);
                 arg1->stateFlags3 |= 2;
-                func_8082DF48(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
+                Player_RequestRumble(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
                 func_8082DAD4(arg1);
                 if (arg2 == (Player* )2) {
                     arg1->unk_AE8 = 4;
@@ -4721,7 +4721,7 @@ void func_80833B18(PlayState* arg0, Player* arg1, Player* arg2, f32 arg3, f32 ar
             }
             if ((arg1->linearVelocity > 4.0f) && (func_80123420(arg1) == 0)) {
                 arg1->unk_B64 = 0x14;
-                func_8082DF48(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
+                Player_RequestRumble(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
                 func_8082DF8C(arg1, 0x6805U);
                 return;
             }
@@ -4730,10 +4730,10 @@ void func_80833B18(PlayState* arg0, Player* arg1, Player* arg2, f32 arg3, f32 ar
             func_8082FC60(arg1);
             if ((s32) arg1->actor.colChkInfo.damage < 5) {
                 sp28 = D_8085D0D4;
-                func_8082DF48(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
+                Player_RequestRumble(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
                 var_v1 = D_8085D0D4;
             } else {
-                func_8082DF48(arg0, arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
+                Player_RequestRumble(arg0, arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
                 var_v1 = D_8085D0E4;
                 arg1->linearVelocity = 23.0f;
             }
@@ -5019,7 +5019,7 @@ s32 func_80834600(Player* arg0, PlayState* arg1) {
         goto block_95;
     }
     if ((arg0->shieldQuad.base.acFlags & 0x80) || (arg0->shieldCylinder.base.acFlags & 0x80) || ((temp_v1 = arg0->invincibilityTimer, (temp_v1 < 0)) && (arg0->cylinder.base.acFlags & 2) && (temp_v0_2 = arg0->cylinder.info.acHitInfo, (temp_v0_2 != NULL)) && (temp_v0_2->toucher.dmgFlags != 0x20000000))) {
-        func_8082DF48(arg1, arg0, 0xB4U, 0x14U, (u8) 0x64, 0);
+        Player_RequestRumble(arg1, arg0, 0xB4U, 0x14U, (u8) 0x64, 0);
         if ((arg0->invincibilityTimer >= 0) && (Player_IsGoronOrDeku(arg0) == 0)) {
             sp64 = (s32) arg0->unk_748 == (s32) func_8084B5C0;
             if (func_801242B4(arg0) == 0) {
@@ -5952,7 +5952,7 @@ s32 func_80836F10(PlayState* arg0, Player* arg1) {
         }
         func_80833998(arg1, 0x28);
         func_80836EA0(arg0, 0x80C7, 2, 0x1E);
-        func_8082DF48(arg0, arg1, temp_s0->unk_1, temp_s0->unk_2, (u8) (s32) temp_s0->unk_3, 0);
+        Player_RequestRumble(arg0, arg1, temp_s0->unk_1, temp_s0->unk_2, (u8) (s32) temp_s0->unk_3, 0);
         return sp28 + 1;
     }
     var_s0_2 = var_s0 * 2;
@@ -5960,7 +5960,7 @@ s32 func_80836F10(PlayState* arg0, Player* arg1) {
         if (var_s0_2 >= 0x100) {
             var_s0_2 = 0xFF;
         }
-        func_8082DF48(arg0, arg1, (u8) var_s0_2, (u8) (s32) ((f32) var_s0_2 * 0.1f), (u8) var_s0_2, 0);
+        Player_RequestRumble(arg0, arg1, (u8) var_s0_2, (u8) (s32) ((f32) var_s0_2 * 0.1f), (u8) var_s0_2, 0);
         if (D_80862B08 == 6) {
             func_8082DF8C(arg1, 0x6804U);
         }
@@ -9664,7 +9664,7 @@ s32 func_8083FE38(Player* arg0, PlayState* arg1) {
 
 void func_8083FE90(PlayState* arg0, Player* arg1, u16 arg2) {
     func_80836EA0(arg0, 0x6C77, 7, 0x14);
-    func_8082DF48(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
+    Player_RequestRumble(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
     func_800B8E58(arg1, arg2);
 }
 
@@ -9744,7 +9744,7 @@ void func_808400CC(PlayState* arg0, Player* arg1) {
             func_8082DB90(arg0, arg1, *(&D_8085D294 + ((Player_IsHoldingTwoHandedWeapon(arg1) * 4) + (var_v1 * 4))));
         }
     }
-    func_8082DF48(arg0, arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
+    Player_RequestRumble(arg0, arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
     arg1->linearVelocity = -18.0f;
     func_80840094(arg0, arg1);
 }
@@ -9832,7 +9832,7 @@ s32 func_808401F4(PlayState* arg0, Actor* arg1) {
                                     }
                                 }
                                 func_80840094(arg0, (Player* ) arg1);
-                                func_8082DF48(arg0, (Player* ) arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
+                                Player_RequestRumble(arg0, (Player* ) arg1, 0xB4U, 0x14U, (u8) 0x64, 0);
                                 arg1->unk_AD0 = -14.0f;
                             }
                             goto block_35;
@@ -10011,7 +10011,7 @@ block_12:
             }
             arg1->linearVelocity = -arg1->linearVelocity;
             func_80836EA0(arg0, 0x81F3, 3, 0xC);
-            func_8082DF48(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
+            Player_RequestRumble(arg0, arg1, 0xFFU, 0x14U, (u8) 0x96, 0);
             func_800B648C(arg0, 2, 2, 100.0f, &arg1->actor.world.pos);
             func_800B8E58(arg1, 0x83EU);
             func_8082DF8C(arg1, 0x6804U);
@@ -11334,7 +11334,7 @@ void func_808446F4(PlayState* arg0, Player* arg1) {
     arg1->unk_A9C += var_fv0;
     if (arg1->unk_A9C > 4000000.0f) {
         arg1->unk_A9C = 0.0f;
-        func_8082DF48(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
+        Player_RequestRumble(arg0, arg1, 0x78U, 0x14U, (u8) 0xA, 0);
     }
 }
 
@@ -18763,7 +18763,7 @@ void func_80855E08(Player* arg0, PlayState* arg1) {
     if ((&D_0400D9C8 != arg0->skelAnime.animation) || (arg0->skelAnime.curFrame >= 4.0f)) {
         arg0->actor.gravity = 0.0f;
         Math_ScaledStepToS(&arg0->actor.shape.rot.x, arg0->actor.world.rot.x, 0x800);
-        func_8082DF48(arg1, arg0, 0x64U, 2U, (u8) 0x64, 0);
+        Player_RequestRumble(arg1, arg0, 0x64U, 2U, (u8) 0x64, 0);
     }
 }
 
