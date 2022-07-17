@@ -38,6 +38,8 @@ void func_80831990(PlayState* play, Player* this, s32 arg2);
 
 s32 func_80848BF4(Player* this, PlayState* play);
 
+void func_80836988(Player* this, PlayState* play);
+
 #define GET_PLAYER_ANIM(group, type) D_8085BE84[group * PLAYER_ANIMTYPE_MAX + type]
 
 extern LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX];
@@ -1851,14 +1853,6 @@ s32 func_80831010(Player* this, PlayState* play) {
     }
     return false;
 }
-/*
-// bool
-s32 func_80831094(Player* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831094.s")
-
-s32 func_80831124(PlayState* play, Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831124.s")
-*/
 
 s32 func_80831094(Player* this, PlayState* play) {
     if ((this->doorType == 0) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
@@ -1883,16 +1877,78 @@ s32 func_80831124(PlayState* play, Player* this) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831194.s")
+s32 func_80831194(PlayState* play, Player* this) {
+    if (this->heldActor != NULL) {
+        if (!Player_IsHoldingHookshot(this)) {
+            ItemID item;
+            s32 sp30;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083133C.s")
+            func_808305BC(play, this, &item, &sp30);
+            if ((this->transformation != PLAYER_FORM_DEKU) && !(this->stateFlags3 & PLAYER_STATE3_400)) {
+                if (gSaveContext.minigameState == 1) {
+                    if ((play->sceneNum != SCENE_SYATEKI_MIZU) && (play->sceneNum != SCENE_F01) && (play->sceneNum != SCENE_SYATEKI_MORI)) {
+                        play->interfaceCtx.hbaAmmo -= 1;
+                    }
+                } else if (play->unk_1887C != 0) {
+                    play->unk_1887C--;
+                } else {
+                    Inventory_ChangeAmmo(item, -1);
+                }
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808313A8.s")
+            if (play->unk_1887C == 1) {
+                play->unk_1887C = -0xA;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808313F0.s")
+            Player_RequestRumble(play, this, 150, 10, 150, SQ(0));
+        } else {
+            Player_RequestRumble(play, this, 255, 20, 150, SQ(0));
+            this->unk_B48 = 0.0f;
+        }
 
-void func_80831454(Player* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831454.s")
+        this->unk_D57 = (this->transformation == PLAYER_FORM_DEKU) ? 0x14 : 4;
+
+        this->heldActor->parent = NULL;
+        this->actor.child = NULL;
+        this->heldActor = NULL;
+        return 1;
+    }
+
+    return 0;
+}
+
+void func_8083133C(Player* this) {
+    this->stateFlags1 |= PLAYER_STATE1_20000;
+
+    if (!(this->skelAnime.moveFlags & 0x80) && (this->actor.bgCheckFlags & 0x200) && (D_80862B20 < 0x2000)) {
+        this->currentYaw = this->actor.shape.rot.y = this->actor.wallYaw + 0x8000;
+    }
+
+    this->targetYaw = this->actor.shape.rot.y;
+}
+
+s32 func_808313A8(PlayState* play, Player* this, Actor* actor) {
+    if (actor == NULL) {
+        func_8082DE50(play, this);
+        func_80836988(this, play);
+        return true;
+    }
+
+    return false;
+}
+
+void func_808313F0(Player* this, PlayState* play) {
+    if (!func_808313A8(play, this, this->heldActor)) {
+        func_8082F43C(play, this, func_808490B4);
+        LinkAnimation_PlayLoop(play, &this->unk_284, &gameplay_keep_Linkanim_00DB30);
+    }
+}
+
+void func_80831454(Player* this) {
+    if ((this->stateFlags3 & PLAYER_STATE3_20000000) || (this->stateFlags2 & PLAYER_STATE2_2000000)) {
+        Audio_QueueSeqCmd(0x110000FF);
+    }
+}
 
 s32 func_80831494(PlayState* play, Player* this, void (*arg2)(Player*, PlayState* play), s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80831494.s")
