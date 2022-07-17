@@ -69,9 +69,9 @@ EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
 // 2 - Armor Accent (Side of armor and boot tips)
 // 3 - Axe Color
 static Gfx* sIronKnuckleArmorType[3][3] = {
-    { gIronKnuckleTanArmorDL, gIronKnuckleBronzeArmorDL, gIronKnuckleSilverArmorDL },
-    { gIronKnuckleBlackArmorDL, gIronKnuckleBrownArmorDL, gIronKnuckleBrownArmorDL },
-    { gIronKnuckleWhiteArmorDL, gIronKnuckleGoldArmorDL, gIronKnuckleGoldArmorDL },
+    { gIronKnuckleTanArmorMaterialDL, gIronKnuckleBronzeArmorMaterialDL, gIronKnuckleSilverArmorMaterialDL },
+    { gIronKnuckleBlackArmorMaterialDL, gIronKnuckleBrownArmorMaterialDL, gIronKnuckleBrownArmorMaterialDL },
+    { gIronKnuckleWhiteArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL },
 };
 
 const ActorInit En_Ik_InitVars = {
