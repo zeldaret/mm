@@ -19,8 +19,13 @@ typedef struct EnViewer {
     /* 0x14C */ f32 unk_14C;
     /* 0x150 */ f32 unk_150;
     /* 0x154 */ u8 unk_154;
-    /* 0x155 */ UNK_TYPE1 pad155[3];
 } EnViewer; // size = 0x158
+
+typedef enum {
+    /* 0x0 */ ENVIEWER_PARAMS_0,
+    /* 0x1 */ ENVIEWER_PARAMS_1,
+    /* 0x2 */ ENVIEWER_PARAMS_2
+} EnViewerParams;
 
 extern const ActorInit En_Viewer_InitVars;
 
