@@ -2828,9 +2828,7 @@ beginseg
     name "ovl_En_Mkk"
     compress
     include "build/src/overlays/actors/ovl_En_Mkk/z_en_mkk.o"
-    //include "build/data/ovl_En_Mkk/ovl_En_Mkk.data.o"
-    include "build/data/ovl_En_Mkk/ovl_En_Mkk.reloc.o"
-    //include "build/src/overlays/actors/ovl_En_Mkk/ovl_En_Mkk_reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mkk/ovl_En_Mkk_reloc.o"
 endseg
 
 beginseg
