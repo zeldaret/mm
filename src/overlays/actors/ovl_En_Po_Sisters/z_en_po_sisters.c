@@ -44,8 +44,8 @@ void EnPoSisters_MegCloneVanish(EnPoSisters* this, PlayState* play);
 void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play);
 void EnPoSisters_SetupMegSurroundPlayer(EnPoSisters* this);
 void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play);
-void EnPoSisters_SetupMegStart(EnPoSisters* this);
-void EnPoSisters_MegStart(EnPoSisters* this, PlayState* play);
+void EnPoSisters_SetupSpawnPo(EnPoSisters* this);
+void EnPoSisters_PoeSpawn(EnPoSisters* this, PlayState* play);
 
 static Color_RGBA8 sPoSisterFlameColors[] = {
     { 255, 170, 255, 255 }, // Meg
@@ -195,7 +195,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
             EnPoSisters_SpawnMegClones(this, play);
-            EnPoSisters_SetupMegStart(this);
+            EnPoSisters_SetupSpawnPo(this);
         } else {
             this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.info.elemType = ELEMTYPE_UNK4;
@@ -204,7 +204,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
             EnPoSisters_MegCloneVanish(this, NULL);
         }
     } else {
-        EnPoSisters_SetupMegStart(this);
+        EnPoSisters_SetupSpawnPo(this);
     }
 
     // ! @Weird: this actor doesn't accept params in this range, so params is just cleared
@@ -866,15 +866,18 @@ void EnPoSisters_MegSurroundPlayer(EnPoSisters* this, PlayState* play) {
     EnPoSisters_MatchPlayerXZ(this, play);
 }
 
-void EnPoSisters_SetupMegStart(EnPoSisters* this) {
+/**
+ *  First ActionFunc for all Combat variants (including Meg)
+ */
+void EnPoSisters_SetupSpawnPo(EnPoSisters* this) {
     Animation_PlayOnce(&this->skelAnime, &gPoeSistersAppearDisappearAnim);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->color.a = 0;
     this->poSisterFlags = POSISTERS_FLAG_UPDATE_FIRES;
-    this->actionFunc = EnPoSisters_MegStart;
+    this->actionFunc = EnPoSisters_PoeSpawn;
 }
 
-void EnPoSisters_MegStart(EnPoSisters* this, PlayState* play) {
+void EnPoSisters_PoeSpawn(EnPoSisters* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->color.a = 255;
         this->actor.flags |= ACTOR_FLAG_1;
