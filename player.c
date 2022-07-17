@@ -368,7 +368,6 @@ static s32 D_8085C84C[0x1E] = {
     0x0400D0B0,
 };
 static ? D_8085C928;                                /* unable to generate initializer */
-static ? D_8085C99C;                                /* unable to generate initializer */
 static s32 (*D_8085C9F0[0x53])(Player*, PlayState*) = {
     func_80848780,
     func_80848780,
@@ -1738,6 +1737,92 @@ u8 D_8085C96C[0x20] = {
     0,
 };
 struct_8082F02C_arg1 D_8085C98C = { { 0, 0, 0 }, { 0xFF, 0xFF, 0x9B }, { 0x14, 0x14, 0x32 }, 0x3AC, 0x1388 };
+u8 D_8085C99C[0x54] = {
+    0x14,
+    9,
+    0xA,
+    0xB,
+    0xC,
+    0x13,
+    0xE,
+    0x10,
+    7,
+    0x12,
+    0x2E,
+    0x13,
+    0xF,
+    0x13,
+    0x52,
+    0xD,
+    6,
+    0x13,
+    0x15,
+    0x23,
+    0x25,
+    0x24,
+    0x29,
+    0x1A,
+    0x26,
+    0x27,
+    0x16,
+    0x20,
+    0x20,
+    0x21,
+    0x22,
+    0x17,
+    0x18,
+    0x19,
+    0x1B,
+    0x1E,
+    0x1D,
+    0x28,
+    0x1F,
+    0x21,
+    0x2A,
+    0x2B,
+    0x2F,
+    0x30,
+    0x31,
+    0x2C,
+    0x33,
+    0x2D,
+    0x36,
+    0x38,
+    0x51,
+    0x4F,
+    0x50,
+    0x4E,
+    0x3A,
+    0x3B,
+    0x3C,
+    0x3D,
+    0x3E,
+    0x3F,
+    0x40,
+    0x41,
+    0x42,
+    0x43,
+    0x44,
+    0x45,
+    0x46,
+    0x47,
+    0x48,
+    0x49,
+    0x4A,
+    0x4B,
+    0x4C,
+    0x4D,
+    0xA,
+    0xB,
+    0xC,
+    3,
+    4,
+    5,
+    6,
+    0,
+    0,
+    0,
+};
 void (*D_8085CB3C[0x53])(PlayState*, Player*) = {
     func_8082F594,
     func_8082F594,
@@ -2625,7 +2710,7 @@ s8 func_8082F524(Player* arg0, s32 arg1) {
     if ((arg1 == ITEM_SWORD_KOKIRI) && (arg0->transformation == 2)) {
         return 8;
     }
-    return *(&D_8085C99C + arg1);
+    return (s8) D_8085C99C[arg1];
 }
 
 void func_8082F594(PlayState* play, Player* this) {
@@ -2873,20 +2958,20 @@ void func_8082FC60(Player* arg0) {
 }
 
 s32 func_8082FC78(Player* arg0, s32 arg1) {
-    if ((arg1 < 0xFD) && (func_8082F524(arg0) == arg0->heldItemActionParam)) {
+    if ((arg1 < 0xFD) && (func_8082F524(arg0, arg1) == arg0->heldItemActionParam)) {
         return 1;
     }
     return 0;
 }
 
-s32 func_8082FCC4(s32 arg1, s32 arg2) {
-    if ((arg1 < 0xFD) && (func_8082F524() == arg2)) {
+s32 func_8082FCC4(Player* arg0, s32 arg1, s32 arg2) {
+    if ((arg1 < 0xFD) && (func_8082F524(arg0, arg1) == arg2)) {
         return 1;
     }
     return 0;
 }
 
-s32 func_8082FD0C(s32 arg0, s32 arg1) {
+s32 func_8082FD0C(Player* arg0, s32 arg1) {
     s32 var_s0;
     u8 temp_v0;
     u8 var_v0;
@@ -2962,7 +3047,7 @@ void func_8082FE0C(Player* arg0, PlayState* arg1) {
         if (arg0->transformation == 4) {
             temp_v0 = arg0->currentMask;
             if (temp_v0 != 0) {
-                temp_v0_2 = func_8082FD0C((s32) arg0, temp_v0 + 0x39);
+                temp_v0_2 = func_8082FD0C(arg0, temp_v0 + 0x39);
                 if (temp_v0_2 < 0) {
                     temp_v1 = arg0->unk_154;
                     if (temp_v1 == 0) {
@@ -2975,7 +3060,7 @@ void func_8082FE0C(Player* arg0, PlayState* arg1) {
                     } else {
                         var_a2 = gSaveContext.save.equips.buttonItems[0][temp_v1];
                     }
-                    temp_v1_2 = func_8082F524(arg0, var_a2 & 0xFF, (s32) var_a2) - 0x3A;
+                    temp_v1_2 = func_8082F524(arg0, var_a2 & 0xFF) - 0x3A;
                     var_a0 = temp_v1_2;
                     if ((temp_v1_2 < 0) || (temp_v1_2 >= 0x18)) {
                         var_a0 = arg0->currentMask - 1;
@@ -3086,7 +3171,7 @@ loop_53:
             }
             sp3C = temp_v0_5;
             sp38 = var_a3;
-            if ((func_80124110(arg0, func_8082F524(arg0, temp_v0_5, temp_v0_5, var_a3)) != 0) && (gSaveContext.jinxTimer != 0)) {
+            if ((func_80124110(arg0, func_8082F524(arg0, temp_v0_5)) != 0) && (gSaveContext.jinxTimer != 0)) {
                 if (Message_GetState(&arg1->msgCtx) == 0) {
                     Message_StartTextbox(arg1, 0xF7U, NULL);
                 }
@@ -3784,7 +3869,7 @@ s32 func_80832090(Player* arg0) {
     if ((arg0->unk_748 != (s32) func_8084D770) || ((var_v0 = (arg0->stateFlags3 & 0x40000000) != 0, (var_v0 != 0)) && ((temp_v1 = arg0->heldItemId, ((temp_v1 == 0xFC) != 0)) || (var_v0 = temp_v1 == 0xFF, (var_v0 != 0))))) {
         var_v0 = (arg0->unk_AC4 == (s32) func_80848808) == 0;
         if (var_v0 == 0) {
-            var_v0 = func_8082F524((Player* ) arg0->heldItemId) == arg0->itemActionParam;
+            var_v0 = func_8082F524(arg0, (s32) arg0->heldItemId) == arg0->itemActionParam;
         }
     }
     return var_v0;
@@ -10106,7 +10191,7 @@ void func_80841358(PlayState* arg0, Player* arg1, s32 arg2) {
 
     temp_v0 = *(&D_8085D2B0 + arg1->transformation);
     sp24 = (s32) temp_v0;
-    sp20 = (s32) *(&D_8085C99C + temp_v0);
+    sp20 = (s32) (s8) D_8085C99C[temp_v0];
     func_808317C4(arg1);
     func_8082DCA0(arg0, arg1);
     arg1->heldItemId = (u8) sp24;
