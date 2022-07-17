@@ -623,6 +623,7 @@ wordReplace = {
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
+    "gSaveContext.environmentTime": "gSaveContext.skyboxTime",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",

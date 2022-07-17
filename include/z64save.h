@@ -247,7 +247,7 @@ typedef struct SaveContext {
     /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
     /* 0x3F50 */ u8 fadeDuration;                       // "fade_speed"
     /* 0x3F51 */ u8 fadeSpeed;                          // "wipe_speed"           transition related
-    /* 0x3F52 */ u16 environmentTime;                   // "kankyo_time"
+    /* 0x3F52 */ u16 skyboxTime;                        // "kankyo_time"
     /* 0x3F54 */ u8 dogIsLost;                          // "dog_event_flag"
     /* 0x3F55 */ u8 nextTransition;                     // "next_wipe"
     /* 0x3F56 */ s16 worldMapArea;                      // "area_type"

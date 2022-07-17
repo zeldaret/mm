@@ -554,7 +554,7 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
 
         nextTime = hourAsMinutes + minutes;
         gSaveContext.save.time = nextTime;
-        gSaveContext.environmentTime = nextTime;
+        gSaveContext.skyboxTime = nextTime;
     }
 }
 
