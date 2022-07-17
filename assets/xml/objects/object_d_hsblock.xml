@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for the hookshot post -->
     <File Name="object_d_hsblock" Segment="6">
         <DList Name="gHookshotPostDL" Offset="0x210" />
         <DList Name="gHookshotTargetDL" Offset="0x470" />
