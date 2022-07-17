@@ -24,8 +24,8 @@ struct EnBat;
 typedef void (*EnBatActionFunc)(struct EnBat*, PlayState*);
 
 typedef struct EnBat {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ EnBatActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnBatActionFunc actionFunc;
     /* 0x148 */ u8 drawDmgEffType;
     /* 0x149 */ u8 paramFlags;
     /* 0x14A */ s16 switchFlag;
