@@ -779,7 +779,6 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    ///* 0xAC4 */ void* unk_AC4;
     /* 0xAC4 */ s32 (*unk_AC4)(struct Player*, struct PlayState*);
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;

@@ -1554,22 +1554,128 @@ s32 func_808306F8(Player* arg0, PlayState* arg1) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808306F8.s")
 #endif
 
+void func_808308DC(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808308DC.s")
 
-void func_808309CC(PlayState* play, Player* this);
-/*
-void func_808309CC(PlayState* play, Player* player) {
-    if (player->unk_AC4 == func_80848808) {
-        func_808308DC(play, &player->actor);
+
+s32 func_80848780(Player* this, PlayState* play);   /* static */
+s32 func_808487B8(Player* this, PlayState* play);   /* static */
+s32 func_80848808(Player* this, PlayState* play);   /* static */
+s32 func_8084894C(Player* this, PlayState* play);   /* static */
+s32 func_80848A0C(Player* this, PlayState* play);   /* static */
+s32 func_80848AB0(Player* this, PlayState* play);   /* static */
+s32 func_80848B6C(Player* this, PlayState* play);   /* static */
+s32 func_80848E4C(Player* this, PlayState* play);   /* static */
+s32 func_80849054(Player* this, PlayState* play);   /* static */
+s32 func_808490B4(Player* this, PlayState* play);   /* static */
+s32 func_808491B4(Player* this, PlayState* play);   /* static */
+s32 func_8084923C(Player* this, PlayState* play);   /* static */
+s32 func_808492C4(Player* this, PlayState* play);   /* static */
+s32 func_8084933C(Player* this, PlayState* play);   /* static */
+s32 func_80849570(Player* this, PlayState* play);   /* static */
+s32 func_80849620(Player* this, PlayState* play);   /* static */
+
+extern s32 (*D_8085C9F0[PLAYER_AP_MAX])(Player*, PlayState*);
+
+#if 0
+s32 (*D_8085C9F0[0x53])(Player*, PlayState*) = {
+    func_80848780, // PLAYER_AP_NONE
+    func_80848780, // PLAYER_AP_LAST_USED
+    func_80848780, // PLAYER_AP_FISHING_POLE
+    func_808487B8, // PLAYER_AP_SWORD_KOKIRI
+    func_808487B8, // PLAYER_AP_SWORD_RAZOR
+    func_808487B8, // PLAYER_AP_SWORD_GILDED
+    func_808487B8, // PLAYER_AP_SWORD_GREAT_FAIRY
+    func_80848780, // PLAYER_AP_STICK
+    func_80848780, // PLAYER_AP_ZORA_FINS
+    func_80848B6C, // PLAYER_AP_BOW
+    func_80848B6C, // PLAYER_AP_BOW_FIRE
+    func_80848B6C, // PLAYER_AP_BOW_ICE
+    func_80848B6C, // PLAYER_AP_BOW_LIGHT
+    func_80848B6C, // PLAYER_AP_HOOKSHOT
+    func_808490B4, // PLAYER_AP_BOMB
+    func_808490B4, // PLAYER_AP_POWDER_KEG
+    func_808490B4, // PLAYER_AP_BOMBCHU
+    func_808491B4, // PLAYER_AP_11
+    func_80848B6C, // PLAYER_AP_NUT
+    func_80848780, // PLAYER_AP_PICTO_BOX
+    func_80848780, // PLAYER_AP_OCARINA
+    func_80848780, // PLAYER_AP_BOTTLE
+    func_80848780, // PLAYER_AP_BOTTLE_FISH
+    func_80848780, // PLAYER_AP_BOTTLE_SPRING_WATER
+    func_80848780, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
+    func_80848780, // PLAYER_AP_BOTTLE_ZORA_EGG
+    func_80848780, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
+    func_80848780, // PLAYER_AP_BOTTLE_GOLD_DUST
+    func_80848780, // PLAYER_AP_BOTTLE_1C
+    func_80848780, // PLAYER_AP_BOTTLE_SEA_HORSE
+    func_80848780, // PLAYER_AP_BOTTLE_MUSHROOM
+    func_80848780, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
+    func_80848780, // PLAYER_AP_BOTTLE_BUG
+    func_80848780, // PLAYER_AP_BOTTLE_POE
+    func_80848780, // PLAYER_AP_BOTTLE_BIG_POE
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_RED
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_BLUE
+    func_80848780, // PLAYER_AP_BOTTLE_POTION_GREEN
+    func_80848780, // PLAYER_AP_BOTTLE_MILK
+    func_80848780, // PLAYER_AP_BOTTLE_MILK_HALF
+    func_80848780, // PLAYER_AP_BOTTLE_CHATEAU
+    func_80848780, // PLAYER_AP_BOTTLE_FAIRY
+    func_80848780, // PLAYER_AP_MOON_TEAR
+    func_80848780, // PLAYER_AP_DEED_LAND
+    func_80848780, // PLAYER_AP_ROOM_KEY
+    func_80848780, // PLAYER_AP_LETTER_TO_KAFEI
+    func_80848780, // PLAYER_AP_MAGIC_BEANS
+    func_80848780, // PLAYER_AP_DEED_SWAMP
+    func_80848780, // PLAYER_AP_DEED_MOUNTAIN
+    func_80848780, // PLAYER_AP_DEED_OCEAN
+    func_80848780, // PLAYER_AP_32
+    func_80848780, // PLAYER_AP_LETTER_MAMA
+    func_80848780, // PLAYER_AP_34
+    func_80848780, // PLAYER_AP_35
+    func_80848780, // PLAYER_AP_PENDANT_MEMORIES
+    func_80848780, // PLAYER_AP_37
+    func_80848780, // PLAYER_AP_38
+    func_80848780, // PLAYER_AP_39
+    func_80848780, // PLAYER_AP_MASK_TRUTH
+    func_80848780, // PLAYER_AP_MASK_KAFEIS_MASK
+    func_80848780, // PLAYER_AP_MASK_ALL_NIGHT
+    func_80848780, // PLAYER_AP_MASK_BUNNY
+    func_80848780, // PLAYER_AP_MASK_KEATON
+    func_80848780, // PLAYER_AP_MASK_GARO
+    func_80848780, // PLAYER_AP_MASK_ROMANI
+    func_80848780, // PLAYER_AP_MASK_CIRCUS_LEADER
+    func_80848780, // PLAYER_AP_MASK_POSTMAN
+    func_80848780, // PLAYER_AP_MASK_COUPLE
+    func_80848780, // PLAYER_AP_MASK_GREAT_FAIRY
+    func_80848780, // PLAYER_AP_MASK_GIBDO
+    func_80848780, // PLAYER_AP_MASK_DON_GERO
+    func_80848780, // PLAYER_AP_MASK_KAMARO
+    func_80848780, // PLAYER_AP_MASK_CAPTAIN
+    func_80848780, // PLAYER_AP_MASK_STONE
+    func_80848780, // PLAYER_AP_MASK_BREMEN
+    func_80848780, // PLAYER_AP_MASK_BLAST
+    func_80848780, // PLAYER_AP_MASK_SCENTS
+    func_80848780, // PLAYER_AP_MASK_GIANT
+    func_80848780, // PLAYER_AP_MASK_FIERCE_DEITY
+    func_80848780, // PLAYER_AP_MASK_GORON
+    func_80848780, // PLAYER_AP_MASK_ZORA
+    func_80848780, // PLAYER_AP_MASK_DEKU
+    func_80848780, // PLAYER_AP_LENS
+};
+#endif
+
+void func_808309CC(PlayState* play, Player* this) {
+    if (func_80848808 == this->unk_AC4) {
+        func_808308DC(play, this);
     }
-    func_8082F43C(play, player, D_8085C9F0[player->itemActionParam]);
-    player->unk_ACC = 0;
-    player->unk_AA4 = 0;
-    func_8082DCA0(play, player);
-    player->stateFlags3 &= 0xBFFFFFFF;
+
+    func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+    this->unk_ACC = 0;
+    this->unk_AA4 = 0;
+    func_8082DCA0(play, this);
+    this->stateFlags3 &= ~PLAYER_STATE3_40000000;
 }
-*/
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808309CC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80830A58.s")
 
