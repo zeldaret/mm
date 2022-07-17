@@ -98,7 +98,7 @@ typedef enum {
     /* 2 */ LOAD_STATUS_COMPLETE,
     /* 3 */ LOAD_STATUS_DISCARDABLE,
     /* 4 */ LOAD_STATUS_MAYBE_DISCARDABLE,
-    /* 5 */ LOAD_STATUS_PERMANENTLY_LOADED
+    /* 5 */ LOAD_STATUS_PERMANENT
 } AudioLoadStatus;
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);

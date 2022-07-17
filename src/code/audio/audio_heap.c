@@ -46,19 +46,19 @@ void AudioHeap_ResetLoadStatus(void) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.fontLoadStatus); i++) {
-        if (gAudioContext.fontLoadStatus[i] != LOAD_STATUS_PERMANENTLY_LOADED) {
+        if (gAudioContext.fontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
             gAudioContext.fontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.sampleFontLoadStatus); i++) {
-        if (gAudioContext.sampleFontLoadStatus[i] != LOAD_STATUS_PERMANENTLY_LOADED) {
+        if (gAudioContext.sampleFontLoadStatus[i] != LOAD_STATUS_PERMANENT) {
             gAudioContext.sampleFontLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.seqLoadStatus); i++) {
-        if (gAudioContext.seqLoadStatus[i] != LOAD_STATUS_PERMANENTLY_LOADED) {
+        if (gAudioContext.seqLoadStatus[i] != LOAD_STATUS_PERMANENT) {
             gAudioContext.seqLoadStatus[i] = LOAD_STATUS_NOT_LOADED;
         }
     }
