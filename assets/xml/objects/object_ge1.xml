@@ -8,8 +8,8 @@
         <Animation Name="gGerudoWhiteStiffShiveringAnim" Offset="0x13CC" /><!-- Original name: "gb_kochoku_loop" ("stiffening loop") -->
         <Animation Name="gGerudoWhiteTrudgingOffAnim" Offset="0x202C" /><!-- Original name: "gb_tobotobo" ("totteringly/trudgingly") -->
         <Animation Name="gGerudoWhiteGreatBayCutsceneAnim" Offset="0x2148" /><!-- one frame used for each part of Great Bay Temple first entry cutscene. Original name: "gb_twister" -->
-        <Animation Name="gGerudoWhiteExcitedClappingAnim" Offset="0x2954" /><!-- maybe Original name: "gb_wakuwaku", ("excited") -->
-        <Animation Name="gGerudoWhiteUnfoldingArmsAnim" Offset="0x2AD8" /><!-- maybe "ge1_hanasi" ("talk") -->
+        <Animation Name="gGerudoWhiteExcitedClappingAnim" Offset="0x2954" /><!-- Original name: "gb_wakuwaku", ("excited") -->
+        <Animation Name="gGerudoWhiteUnfoldingArmsAnim" Offset="0x2AD8" /><!-- Original name: "ge1_hanasi" ("talk") -->
 
         <!-- From here to the end this file is identical to OoT's object_ge1, offset 0x0-0x9860 -->
         <Animation Name="gGerudoWhiteArmsFoldedAnim" Offset="0x2B98" /><!-- Original name: "ge1_matsu" ("waiting") -->

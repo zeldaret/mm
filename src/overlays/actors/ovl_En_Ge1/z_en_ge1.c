@@ -50,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 //! State flags
 
 //! Disable normal movement to let pathing function control it completely.
-#define GERUDO_WHITE_STATE_DISABLE_MOVEMENT 8
+#define GERUDO_WHITE_STATE_DISABLE_MOVEMENT (1 << 3)
 
 typedef enum {
     /* 0 */ GERUDO_WHITE_HAIR_BOB,
@@ -83,7 +83,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, EnGe1_ShadowDraw, 30.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGerudoWhiteSkel, &gGerudoWhiteArmsFoldedAnim, this->jointTable,
-                       this->morphTable, 16);
+                       this->morphTable, GERUDO_WHITE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
@@ -99,15 +99,15 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
             this->hairstyle = GERUDO_WHITE_HAIR_BOB;
             break;
 
-        case 1:
+        case GERUDO_WHITE_TYPE_HAIR_STRAIGHT:
             this->hairstyle = GERUDO_WHITE_HAIR_STRAIGHT;
             break;
 
-        case 2:
+        case GERUDO_WHITE_TYPE_HAIR_SPIKEY:
             this->hairstyle = GERUDO_WHITE_HAIR_SPIKEY;
             break;
 
-        case 0: // Only type used in-game
+        case GERUDO_WHITE_TYPE_CUTSCENE: // Only type used in-game
             this->hairstyle = GERUDO_WHITE_HAIR_BOB;
             this->actionFunc = EnGe1_PerformCutsceneActions;
             this->picto.actor.draw = NULL;
@@ -141,13 +141,14 @@ void EnGe1_SetAnimation(EnGe1* this, s16 index, u8 mode, f32 morphFrames) {
         &gGerudoWhiteGreatBayCutsceneAnim,  // GERUDO_WHITE_ANIM_BLOWN_AWAY,
     };
 
-    // The 8/9 cases are single frames of an "animation" used as static poses.
+    // The GERUDO_WHITE_ANIM_LEADING_BOAT / GERUDO_WHITE_ANIM_BLOWN_AWAY cases are single frames of an "animation" used
+    // as static poses.
     switch (index) {
-        case 8:
+        case GERUDO_WHITE_ANIM_LEADING_BOAT:
             Animation_Change(&this->skelAnime, sAnimations[index], 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
             break;
 
-        case 9:
+        case GERUDO_WHITE_ANIM_BLOWN_AWAY:
             Animation_Change(&this->skelAnime, sAnimations[index], 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f);
             break;
 

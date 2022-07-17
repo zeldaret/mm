@@ -10,9 +10,9 @@
 s32 Snap_RecordPictographedActors(PlayState* play) {
     PictoActor* pictoActor;
     Actor* actor;
-    s32 category = ACTORCAT_SWITCH;
+    s32 category = 0;
     s32 seen;
-    s32 count = 0;
+    s32 validCount = 0;
 
     gSaveContext.save.pictoFlags0 = 0;
     gSaveContext.save.pictoFlags1 = 0;
@@ -49,6 +49,7 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                         seen |= 2;
                         break; //! @bug break is inside conditional, meaning it falls through if it is false
                     }
+                    // FALLTHROUGH
                 case ACTOR_EN_ZOV:
                     seen |= 2;
                     break;
@@ -74,17 +75,17 @@ s32 Snap_RecordPictographedActors(PlayState* play) {
                 pictoActor = (PictoActor*)actor;
                 if (pictoActor->validationFunc != NULL) {
                     if ((pictoActor->validationFunc)(play, actor) == 0) {
-                        count++;
+                        validCount++;
                     }
                 }
             }
         }
     }
 
-    return count;
+    return validCount;
 }
 
-// Only used by Snap_ValidatePictograph
+// Only used in this file
 void Snap_SetFlag(s32 flag) {
     if (flag < 0x20) {
         gSaveContext.save.pictoFlags0 |= (1 << flag);
@@ -163,6 +164,7 @@ s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos,
 
     // Check in viewfinder
     Actor_GetProjectedPos(play, pos, &projectedPos, &distance);
+    //! TODO: relate these numbers to the pictograph box interface / capture
     x = (s16)(projectedPos.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(projectedPos.y * distance * -120.0f + 120.0f) - 67;
     if ((x < 0) || (x > 150) || (y < 0) || (y > 105)) {

@@ -7,6 +7,13 @@
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
 #define GERUDO_WHITE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
 
+//! Only the first type is used
+typedef enum {
+    /* 0 */ GERUDO_WHITE_TYPE_CUTSCENE,
+    /* 1 */ GERUDO_WHITE_TYPE_HAIR_STRAIGHT,
+    /* 2 */ GERUDO_WHITE_TYPE_HAIR_SPIKEY
+} GerudoWhiteType;
+
 struct EnGe1;
 
 typedef void (*EnGe1ActionFunc)(struct EnGe1*, PlayState*);
