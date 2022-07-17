@@ -36,6 +36,8 @@ void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam)
 
 void func_80831990(PlayState* play, Player* this, s32 arg2);
 
+s32 func_80848BF4(Player* this, PlayState* play);
+
 #define GET_PLAYER_ANIM(group, type) D_8085BE84[group * PLAYER_ANIMTYPE_MAX + type]
 
 extern LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX];
@@ -1464,7 +1466,7 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3) {
         *arg3 = (arg1->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
     } else {
         *item = ITEM_BOW;
-        *arg3 = (arg1->stateFlags1 & 0x800000) ? 1 : arg1->itemActionParam - 7;
+        *arg3 = (arg1->stateFlags1 & PLAYER_STATE1_800000) ? 1 : arg1->itemActionParam - 7;
     }
 
     if (arg1->transformation == PLAYER_FORM_DEKU) {
@@ -1490,7 +1492,67 @@ s32 func_808305BC(PlayState* arg0, Player* arg1, ItemID* item, s32* arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808305BC.s")
 #endif
 
+// todo: fix
+extern u16 D_8085CFAE[];
+
+#if 0
+s32 func_808306F8(Player* arg0, PlayState* arg1) {
+    s32 sp50;
+    s32 sp4C;
+    s32 sp48;
+    Actor* temp_v0_4;
+    s16 temp_v0_2;
+    s16 var_v1;
+    s32 temp_v0_3;
+    s32 var_t0;
+    s8 temp_v0;
+
+    temp_v0 = arg0->itemActionParam;
+    if ((temp_v0 >= 0xA) && (temp_v0 < 0xD) && (gSaveContext.unk_3F28 != 0)) {
+        play_sound(0x4806U);
+        return 0;
+    }
+    func_8082F43C(arg1, arg0, func_80848BF4);
+    temp_v0_2 = arg0->unk_B28;
+    arg0->stateFlags3 |= 0x40;
+    arg0->unk_ACC = 0xE;
+    if (temp_v0_2 >= 0) {
+        if (temp_v0_2 < 0) {
+            var_v1 = -temp_v0_2;
+        } else {
+            var_v1 = temp_v0_2;
+        }
+        if (var_v1 != 2) {
+            func_800B8E58(arg0, D_8085CFAE[var_v1]);
+        }
+        if ((Player_IsHoldingHookshot(arg0) == 0) && (func_808305BC(arg1, arg0, &sp50, &sp4C) > 0)) {
+            temp_v0_3 = sp4C - 3;
+            if (arg0->unk_B28 >= 0) {
+                var_t0 = temp_v0_3;
+                if ((temp_v0_3 >= 0) && (temp_v0_3 < 3)) {
+                    if (gSaveContext.save.playerData.magic < (s32) *(&D_8085CFB8 + temp_v0_3)) {
+                        var_t0 = -1;
+                        sp4C = 2;
+                    }
+                } else if ((sp4C == 7) && (!(gSaveContext.save.weekEventReg[8] & 1) || (arg1->sceneNum != 0x11))) {
+                    var_t0 = 3;
+                } else {
+                    var_t0 = -1;
+                }
+                sp48 = var_t0;
+                temp_v0_4 = Actor_SpawnAsChild(&arg1->actorCtx, &arg0->actor, arg1, 0xF, arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, (s16) 0, (s16) (s32) arg0->actor.shape.rot.y, (s16) 0, sp4C);
+                arg0->heldActor = temp_v0_4;
+                if ((temp_v0_4 != NULL) && (var_t0 >= 0)) {
+                    func_80115DB4(arg1, (s16) *(&D_8085CFB8 + var_t0), 0);
+                }
+            }
+        }
+    }
+    return 1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808306F8.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808308DC.s")
 
