@@ -856,20 +856,143 @@ LinkAnimationHeader* func_8082EF9C(Player* arg0) {
     return D_8085BEE4[arg0->modelAnimType];
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082EFE4.s")
+extern LinkAnimationHeader* D_8085C094[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F02C.s")
+LinkAnimationHeader* func_8082EFE4(Player* arg0) {
+    if (func_800B7128(arg0) != 0) {
+        return &gameplay_keep_Linkanim_00D520;
+    }
+    return D_8085C094[arg0->modelAnimType];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F09C.s")
+typedef struct {
+    /* 0x0 */ Color_RGB8 unk_0;
+    /* 0x3 */ Color_RGB8 unk_3;
+    /* 0x6 */ Color_RGB8 unk_6;
+    /* 0xA */ s16 unk_A;
+    /* 0xC */ s16 unk_C;
+} struct_8082F02C_arg1; // size = 0xE
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F0E4.s")
+void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
+    func_800FD59C(play, &arg1->unk_0, arg2);
+    func_800FD5E0(play, &arg1->unk_3, arg2);
+    func_800FD654(play, &arg1->unk_6, arg2);
+    func_800FD698(play, arg1->unk_A, arg1->unk_C, arg2);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F164.s")
+void func_8082F09C(Player* this) {
+    this->cylinder.base.colType = 5;
+    this->cylinder.base.atFlags = 0;
+    this->cylinder.base.acFlags = 0x11;
+    this->cylinder.base.ocFlags1 = 0x39;
+    this->cylinder.info.elemType = 1;
+    this->cylinder.info.toucher.dmgFlags = 0;
+    this->cylinder.info.bumper.dmgFlags = 0xF7CFFFFF;
+    this->cylinder.info.toucherFlags = 0;
+    this->cylinder.dim.radius = 0xC;
+}
 
+void func_8082F0E4(Player* arg0, u32 arg1, s32 arg2, s32 arg3) {
+    arg0->cylinder.base.atFlags = 9;
+    if (arg3 >= 0x1F) {
+        arg0->cylinder.base.ocFlags1 = 0;
+    } else {
+        arg0->cylinder.base.ocFlags1 = 0x39;
+    }
+
+    arg0->cylinder.info.elemType = 2;
+    arg0->cylinder.info.toucherFlags = 5;
+    arg0->cylinder.dim.radius = arg3;
+    arg0->cylinder.info.toucher.dmgFlags = arg1;
+    arg0->cylinder.info.toucher.damage = arg2;
+
+    if (arg1 & 0x400) {
+        arg0->cylinder.base.acFlags = 0;
+    } else {
+        arg0->cylinder.base.colType = 0xA;
+        arg0->cylinder.info.bumper.dmgFlags = 0xF7CFFFFF;
+
+        if (arg1 & 0x80000) {
+            arg0->cylinder.base.acFlags = 0;
+        } else {
+            arg0->cylinder.base.acFlags = 0x11;
+        }
+    }
+}
+
+void func_8082F164(Player* arg0, u16 button) {
+    if ((arg0->transformation == PLAYER_FORM_ZORA) && CHECK_BTN_ALL(D_80862B44->cur.button, button)) {
+        arg0->stateFlags1 |= PLAYER_STATE1_10;
+    }
+}
+
+extern struct_8082F02C_arg1 D_8085C98C;
+
+#ifdef NON_MATCHING
+// stack
+void func_8082F1AC(PlayState* play, Player* this) {
+    f32 temp;
+    s32 var_v0;
+    s32 sp4C;
+    s32 pad;
+
+    sp4C = this->unk_B62;
+    if ((gSaveContext.save.playerData.magic != 0) && (this->stateFlags1 & PLAYER_STATE1_10)) {
+        if (gSaveContext.unk_3F28 == 0) {
+            // Magic_Consume
+            func_80115DB4(play, 0, 5);
+        }
+
+        temp = 16.0f;
+        if (gSaveContext.save.playerData.magic >= 16) {
+            var_v0 = 0xFF;
+        } else {
+            var_v0 = (gSaveContext.save.playerData.magic / temp) * 255.0f;
+        }
+        Math_StepToS(&this->unk_B62, var_v0, 50);
+    } else if ((Math_StepToS(&this->unk_B62, 0, 50) != 0) && (gSaveContext.unk_3F28 != 0)) {
+        // Magic_Reset
+        func_80115D5C(&play->state);
+    }
+
+    if ((this->unk_B62 != 0) || (sp4C != 0)) {
+        s16 sp46;
+        s16 sp44;
+        f32 sp40;
+        f32 sp3C;
+        f32 new_var;
+        f32 sp34;
+
+        sp46 = play->gameplayFrames * 7000;
+        sp44 = play->gameplayFrames * 14000;
+        func_8082F02C(play, &D_8085C98C, this->unk_B62 / 255.0f);
+
+        sp34 = Math_SinS(sp44) * 40.0f;
+        sp40 = Math_CosS(sp44) * 40.0f;
+        sp3C = Math_SinS(sp46) * sp34;
+
+        new_var = Math_CosS(sp46);
+        Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x + sp40, this->actor.world.pos.y + sp3C, this->actor.world.pos.z + (new_var * sp34), 100, 200, 255, 600);
+
+        func_800B8E58(this, NA_SE_PL_ZORA_SPARK_BARRIER-SFX_FLAG);
+        func_800B648C(play, 1, 2, 100.0f, &this->actor.world.pos);
+    }
+}
+#else
+void func_8082F1AC(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F1AC.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F43C.s")
+void func_8082F43C(PlayState* play, Player* this, s32 (*arg2)(Player*, PlayState*));
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F43C.s")
+void func_8082F43C(PlayState* play, Player* this, s32 (*arg2)(Player*, PlayState*)) {
+    this->unk_AC4 = arg2;
+    this->unk_ACE = 0;
+    this->unk_AC8 = 0.0f;
+    func_8082E00C(this);
+}
 
+void func_8082F470(PlayState* play, Player* this, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F470.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F524.s")

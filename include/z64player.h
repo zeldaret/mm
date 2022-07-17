@@ -688,8 +688,9 @@ typedef struct Player {
     /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
     /* 0x4E4 */ UNK_TYPE1 unk_4E4[0x20];
     /* 0x504 */ LightNode* lightNode;
-    /* 0x508 */ UNK_TYPE1 unk_508[0xC];
-    /* 0x514 */ s32 unk_514;
+    /* 0x508 */ LightInfo lightInfo;
+    ///* 0x508 */ UNK_TYPE1 unk_508[0xC];
+    ///* 0x514 */ s32 unk_514;
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
@@ -732,7 +733,8 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ void* unk_AC4;
+    ///* 0xAC4 */ void* unk_AC4;
+    /* 0xAC4 */ s32 (*unk_AC4)(struct Player*, struct PlayState*);
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
