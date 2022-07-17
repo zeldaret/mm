@@ -103,7 +103,7 @@ static AnimationSpeedInfo sAnimationInfo[] = {
 };
 
 static TexturePtr sMouthTextures[] = {
-    gRomaniMouthSlightSmileTex,
+    gRomaniMouthHappyTex,
     gRomaniMouthFrownTex,
     gRomaniMouthHangingOpenTex,
     gRomaniMouthSmileTex,

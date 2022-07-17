@@ -73,7 +73,7 @@
         <Texture Name="gRomaniEyeClosedTex" OutName="romani_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x10FC8" />
         <Texture Name="gRomaniEyeHappyTex" OutName="romani_eye_happy" Format="rgba16" Width="32" Height="32" Offset="0x117C8" />
         <Texture Name="gRomaniEyeSadTex" OutName="romani_eye_sad" Format="rgba16" Width="32" Height="32" Offset="0x11FC8" />
-        <Texture Name="gRomaniMouthSlightSmileTex" OutName="romani_mouth_slight_smile" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
+        <Texture Name="gRomaniMouthHappyTex" OutName="romani_mouth_happy" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
         <Texture Name="gRomaniMouthFrownTex" OutName="romani_mouth_frown" Format="rgba16" Width="32" Height="16" Offset="0x12BC8" />
         <Texture Name="gRomaniMouthHangingOpenTex" OutName="romani_mouth_hanging_open" Format="rgba16" Width="32" Height="16" Offset="0x12FC8" />
         <Texture Name="gRomaniMouthSmileTex" OutName="romani_mouth_smile" Format="rgba16" Width="32" Height="16" Offset="0x133C8" />
