@@ -36,7 +36,9 @@ void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam)
 
 void func_80831990(PlayState* play, Player* this, s32 arg2);
 
-extern LinkAnimationHeader* D_8085BE84[6];
+#define GET_PLAYER_ANIM(group, type) D_8085BE84[group * PLAYER_ANIMTYPE_MAX + type]
+
+extern LinkAnimationHeader* D_8085BE84[PLAYER_ANIMGROUP_MAX * PLAYER_ANIMTYPE_MAX];
 
 extern f32 D_8085D3FC[2];
 extern Input* D_80862B44;
@@ -752,7 +754,7 @@ LinkAnimationHeader* func_8082ED20(Player* this) {
     if (this->currentMask == PLAYER_MASK_SCENTS) {
         return &gameplay_keep_Linkanim_00D0B0;
     }
-    return D_8085BE84[this->modelAnimType];
+    return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType);
 }
 
 
@@ -825,44 +827,36 @@ void func_8082EEA4(Player* this, s32 arg1) {
     }
 }
 
-extern LinkAnimationHeader* D_8085BECC[];
-extern LinkAnimationHeader* D_8085BEB4[];
-
 LinkAnimationHeader* func_8082EEE0(Player* this) {
     if (this->unk_B64 != 0) {
-        return D_8085BECC[this->modelAnimType];
+        return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_3, this->modelAnimType);
     }
-    return D_8085BEB4[this->modelAnimType];
+    return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_2, this->modelAnimType);
 }
 
-s32 func_8082EF20(Player* arg0) {
-    return func_8082ECCC(arg0) != 0 && arg0->unk_ACC != 0;
+s32 func_8082EF20(Player* this) {
+    return func_8082ECCC(this) && this->unk_ACC != 0;
 }
 
-extern LinkAnimationHeader* D_8085BEFC[];
-extern LinkAnimationHeader* D_8085BEE4[];
-
-LinkAnimationHeader* func_8082EF54(Player* arg0) {
-    if (func_8082EF20(arg0) != 0) {
+LinkAnimationHeader* func_8082EF54(Player* this) {
+    if (func_8082EF20(this)) {
         return &gameplay_keep_Linkanim_00D490;
     }
-    return D_8085BEFC[arg0->modelAnimType];
+    return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_5, this->modelAnimType);
 }
 
-LinkAnimationHeader* func_8082EF9C(Player* arg0) {
-    if (func_8082EF20(arg0) != 0) {
+LinkAnimationHeader* func_8082EF9C(Player* this) {
+    if (func_8082EF20(this)) {
         return &gameplay_keep_Linkanim_00D488;
     }
-    return D_8085BEE4[arg0->modelAnimType];
+    return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_4, this->modelAnimType);
 }
 
-extern LinkAnimationHeader* D_8085C094[];
-
-LinkAnimationHeader* func_8082EFE4(Player* arg0) {
-    if (func_800B7128(arg0) != 0) {
+LinkAnimationHeader* func_8082EFE4(Player* this) {
+    if (func_800B7128(this)) {
         return &gameplay_keep_Linkanim_00D520;
     }
-    return D_8085C094[arg0->modelAnimType];
+    return GET_PLAYER_ANIM(PLAYER_ANIMGROUP_22, this->modelAnimType);
 }
 
 typedef struct {
@@ -983,8 +977,6 @@ void func_8082F1AC(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F1AC.s")
 #endif
 
-void func_8082F43C(PlayState* play, Player* this, s32 (*arg2)(Player*, PlayState*));
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F43C.s")
 void func_8082F43C(PlayState* play, Player* this, s32 (*arg2)(Player*, PlayState*)) {
     this->unk_AC4 = arg2;
     this->unk_ACE = 0;
@@ -992,8 +984,26 @@ void func_8082F43C(PlayState* play, Player* this, s32 (*arg2)(Player*, PlayState
     func_8082E00C(this);
 }
 
-void func_8082F470(PlayState* play, Player* this, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F470.s")
+// OoT: func_80833664
+void func_8082F470(PlayState* play, Player* this, s32 arg2) {
+    LinkAnimationHeader* current = this->skelAnime.animation;
+    LinkAnimationHeader** iter = &D_8085BE84[this->modelAnimType];
+    s32 i;
+
+    this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_1000000);
+
+    for (i = 0; i < PLAYER_ANIMGROUP_MAX; i++) {
+        if (current == *iter) {
+            break;
+        }
+        iter += PLAYER_ANIMTYPE_MAX;
+    }
+
+    func_8082F8BC(play, this, arg2);
+    if (i < PLAYER_ANIMGROUP_MAX) {
+        this->skelAnime.animation = GET_PLAYER_ANIM(i, this->modelAnimType);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F524.s")
 
@@ -1945,7 +1955,7 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
     if ((((this->actor.params & 0xF00) >> 8) != 0xC) &&
         ((gSaveContext.respawnFlag != 2) || (gSaveContext.respawn[1].playerParams != 0xCFF))) {
         func_808309CC(play, this);
-        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, D_8085BE84[this->modelAnimType], 9, (void*)this->unk_74C,
+        SkelAnime_InitLink(play, &this->skelAnime, skelHeader, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_0, this->modelAnimType), 9, (void*)this->unk_74C,
                            (void*)this->unk_7EB, 0x16);
         this->skelAnime.baseTransl = D_8085D2C4;
 

@@ -203,8 +203,56 @@ typedef enum PlayerAnimType {
     /* 3 */ PLAYER_ANIMTYPE_3,
     /* 4 */ PLAYER_ANIMTYPE_4,
     /* 5 */ PLAYER_ANIMTYPE_5,
-    // /* 6 */ PLAYER_ANIMTYPE_MAX
+    /* 6 */ PLAYER_ANIMTYPE_MAX
 } PlayerAnimType;
+
+typedef enum {
+    /*  0 */ PLAYER_ANIMGROUP_0,
+    /*  1 */ PLAYER_ANIMGROUP_1,
+    /*  2 */ PLAYER_ANIMGROUP_2,
+    /*  3 */ PLAYER_ANIMGROUP_3,
+    /*  4 */ PLAYER_ANIMGROUP_4,
+    /*  5 */ PLAYER_ANIMGROUP_5,
+    /*  6 */ PLAYER_ANIMGROUP_6,
+    /*  7 */ PLAYER_ANIMGROUP_7,
+    /*  8 */ PLAYER_ANIMGROUP_8,
+    /*  9 */ PLAYER_ANIMGROUP_9,
+    /* 10 */ PLAYER_ANIMGROUP_10,
+    /* 11 */ PLAYER_ANIMGROUP_11,
+    /* 12 */ PLAYER_ANIMGROUP_12,
+    /* 13 */ PLAYER_ANIMGROUP_13,
+    /* 14 */ PLAYER_ANIMGROUP_14,
+    /* 15 */ PLAYER_ANIMGROUP_15,
+    /* 16 */ PLAYER_ANIMGROUP_16,
+    /* 17 */ PLAYER_ANIMGROUP_17,
+    /* 18 */ PLAYER_ANIMGROUP_18,
+    /* 19 */ PLAYER_ANIMGROUP_19,
+    /* 20 */ PLAYER_ANIMGROUP_20,
+    /* 21 */ PLAYER_ANIMGROUP_21,
+    /* 22 */ PLAYER_ANIMGROUP_22,
+    /* 23 */ PLAYER_ANIMGROUP_23,
+    /* 24 */ PLAYER_ANIMGROUP_24,
+    /* 25 */ PLAYER_ANIMGROUP_25,
+    /* 26 */ PLAYER_ANIMGROUP_26,
+    /* 27 */ PLAYER_ANIMGROUP_27,
+    /* 28 */ PLAYER_ANIMGROUP_28,
+    /* 29 */ PLAYER_ANIMGROUP_29,
+    /* 30 */ PLAYER_ANIMGROUP_30,
+    /* 31 */ PLAYER_ANIMGROUP_31,
+    /* 32 */ PLAYER_ANIMGROUP_32,
+    /* 33 */ PLAYER_ANIMGROUP_33,
+    /* 34 */ PLAYER_ANIMGROUP_34,
+    /* 35 */ PLAYER_ANIMGROUP_35,
+    /* 36 */ PLAYER_ANIMGROUP_36,
+    /* 37 */ PLAYER_ANIMGROUP_37,
+    /* 38 */ PLAYER_ANIMGROUP_38,
+    /* 39 */ PLAYER_ANIMGROUP_39,
+    /* 40 */ PLAYER_ANIMGROUP_40,
+    /* 41 */ PLAYER_ANIMGROUP_41,
+    /* 42 */ PLAYER_ANIMGROUP_42,
+    /* 43 */ PLAYER_ANIMGROUP_43,
+    /* 44 */ PLAYER_ANIMGROUP_MAX
+} PlayerAnimGroup;
 
 typedef enum PlayerModelType {
     // left hand
@@ -689,8 +737,6 @@ typedef struct Player {
     /* 0x4E4 */ UNK_TYPE1 unk_4E4[0x20];
     /* 0x504 */ LightNode* lightNode;
     /* 0x508 */ LightInfo lightInfo;
-    ///* 0x508 */ UNK_TYPE1 unk_508[0xC];
-    ///* 0x514 */ s32 unk_514;
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
