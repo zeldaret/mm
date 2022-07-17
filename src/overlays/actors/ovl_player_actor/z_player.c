@@ -1324,8 +1324,6 @@ void func_8082F938(PlayState* play, Player* this, UNK_TYPE arg2, UNK_TYPE arg3);
 // has a loop unroll
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082F938.s")
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FA5C.s")
-
 void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
     u16 var_a2;
     u16 var_a1;
@@ -1364,21 +1362,76 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
     this->meleeWeaponState = meleeWeaponState;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FB68.s")
+s32 func_8082FB68(Player* this) {
+    if ((this->unk_730 != NULL) && CHECK_FLAG_ALL(this->unk_730->flags, ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
+        this->stateFlags3 |= PLAYER_STATE3_80000000;
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FBE8.s")
+    if (this->stateFlags3 & PLAYER_STATE3_80000000) {
+        this->stateFlags3 &= ~PLAYER_STATE3_80000000;
+        if (this->linearVelocity == 0.0f) {
+            this->currentYaw = this->actor.shape.rot.y;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FC24.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FC60.s")
+s32 func_8082FBE8(Player* this) {
+    return func_80123420(this) || func_80123434(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FC78.s")
+s32 func_8082FC24(Player* this) {
+    return func_8082FB68(this) || func_80123434(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FCC4.s")
+void func_8082FC60(Player* this) {
+    this->unk_B44 = 0.0f;
+    this->unk_B40 = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FD0C.s")
+s32 func_8082FC78(Player* this, ItemID item) {
+    if ((item < ITEM_FD) && (func_8082F524(this, item) == this->heldItemActionParam)) {
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FDC4.s")
+s32 func_8082FCC4(Player* this, ItemID item, PlayerActionParam actionParam) {
+    if ((item < ITEM_FD) && (func_8082F524(this, item) == actionParam)) {
+        return true;
+    }
+    return false;
+}
+
+s32 func_8082FD0C(Player* this, PlayerActionParam actionParam) {
+    s32 btn;
+
+    for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
+        if (func_8082FCC4(this, GET_CUR_FORM_BTN_ITEM(btn), actionParam)) {
+            return btn;
+        }
+    }
+    return -1;
+}
+
+extern u16 D_8085CFA8[4];
+#if 0
+u16 D_8085CFA8[] = { BTN_B, BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT, };
+#endif
+
+s32 func_8082FDC4(void) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(D_8085CFA8); i++) {
+        if (CHECK_BTN_ALL(D_80862B44->press.button, D_8085CFA8[i])) {
+            break;
+        }
+    }
+
+    return i;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082FE0C.s")
 
