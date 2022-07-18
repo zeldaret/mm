@@ -17,19 +17,19 @@ void EnRat_Destroy(Actor* thisx, PlayState* play);
 void EnRat_Update(Actor* thisx, PlayState* play);
 void EnRat_Draw(Actor* thisx, PlayState* play);
 
-void func_80A563CC(EnRat* this);
+void EnRat_InitializeAxes(EnRat* this);
 void EnRat_UpdateRotation(EnRat* this);
-void func_80A57330(EnRat* this);
-void func_80A57384(EnRat* this, PlayState* play);
-void func_80A57488(EnRat* this);
-void func_80A574E8(EnRat* this, PlayState* play);
-void func_80A575F4(EnRat* this);
-void func_80A5764C(EnRat* this, PlayState* play);
+void EnRat_SetupIdle(EnRat* this);
+void EnRat_Idle(EnRat* this, PlayState* play);
+void EnRat_SetupSpottedPlayer(EnRat* this);
+void EnRat_SpottedPlayer(EnRat* this, PlayState* play);
+void EnRat_SetupRunTowardsPlayer(EnRat* this);
+void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play);
 void EnRat_Bounced(EnRat* this, PlayState* play);
-void func_80A57A9C(EnRat* this, PlayState* play);
-void func_80A5723C(EnRat* this, PlayState* play);
+void EnRat_PostDetonation(EnRat* this, PlayState* play);
+void EnRat_Revive(EnRat* this, PlayState* play);
 void EnRat_Explode(EnRat* this, PlayState* play);
-s32 func_80A56AFC(EnRat* this, PlayState* play);
+s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play);
 void EnRat_SetupBounced(EnRat* this);
 
 const ActorInit En_Rat_InitVars = {
@@ -44,8 +44,7 @@ const ActorInit En_Rat_InitVars = {
     (ActorFunc)EnRat_Draw,
 };
 
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_80A58400 = {
+static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_ENEMY,
@@ -65,8 +64,7 @@ static ColliderSphereInit D_80A58400 = {
     { 1, { { 0, 0, 0 }, 23 }, 100 },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A5842C = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -101,53 +99,51 @@ static DamageTable D_80A5842C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80A5844C = { 1, 30, 30, 50 };
+static CollisionCheckInfoInit sColChkInfoInit = { 1, 30, 30, 50 };
 
-static TexturePtr D_80A58454[] = {
+static TexturePtr sSparkTextures[] = {
     gElectricSpark1Tex,
     gElectricSpark2Tex,
     gElectricSpark3Tex,
     gElectricSpark4Tex,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A58464[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 97, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 5000, ICHAIN_STOP),
 };
 
-static EffectBlureInit2 D_80A58470 = {
+static EffectBlureInit2 sBlureInit = {
     0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
     0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
 };
 
-static s32 D_80A58494 = 0;
+static s32 sTexturesDesegmented = 0;
 
-static Vec3f D_80A58498 = { 0.0f, 0.600000023842f, 0.0f };
+static Vec3f sSmokeAccel = { 0.0f, 0.6f, 0.0f };
 
-static Color_RGBA8 D_80A584A4 = { 255, 255, 255, 255 };
+static Color_RGBA8 sSmokeColor = { 255, 255, 255, 255 };
 
-static Vec3f D_80A584A8 = { 0.0f, 10.5f, -9.0f };
+static Vec3f sBlureP1Offset = { 0.0f, 10.5f, -9.0f };
 
-static Vec3f D_80A584B4 = { 18.0f, 0.0f, -7.5f };
+static Vec3f sBlureP2LeftOffset = { 18.0f, 0.0f, -7.5f };
 
-static Vec3f D_80A584C0 = { -18.0f, 0.0f, -7.5f };
+static Vec3f sBlureP2RightOffset = { -18.0f, 0.0f, -7.5f };
 
-static Vec3f D_80A584CC = { 0.0f, 3.0f, 0.0f };
+static Vec3f sDustVelocity = { 0.0f, 3.0f, 0.0f };
 
 void EnRat_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRat* this = THIS;
-    s32 temp_s1;
+    s32 attackRange;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_80A58464);
-    Collider_InitAndSetSphere(play, &this->collider, &this->actor, &D_80A58400);
-    this->collider.dim.worldSphere.radius = D_80A58400.dim.modelSphere.radius;
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
+    this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
 
-    temp_s1 = this->actor.params & 0xFF;
+    attackRange = ENRAT_GET_ATTACK_RANGE(&this->actor);
     if (ENRAT_GET_8000(&this->actor)) {
         this->actor.params = 1;
     } else {
@@ -158,34 +154,34 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, REAL_BOMBCHU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     if (this->actor.params == 0) {
-        Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &D_80A58470);
-        Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &D_80A58470);
-        this->unk_190 = 0x1E;
+        Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
+        Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
+        this->unk_190 = 30;
     } else {
-        this->unk_190 = 0x96;
+        this->unk_190 = 150;
     }
 
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80A5842C, &D_80A5844C);
-    func_80A563CC(this);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
 
-    if ((temp_s1 == 0xFF) || (temp_s1 == 0)) {
-        this->unk_258 = 350.0f;
+    if ((attackRange == 0xFF) || (attackRange == 0)) {
+        this->attackRange = 350.0f;
     } else if (this->actor.params == 0) {
-        this->unk_258 = temp_s1 * 0.1f * 40.0f;
+        this->attackRange = attackRange * 0.1f * 40.0f;
     } else {
-        this->unk_258 = temp_s1 * 0.5f * 40.0f;
+        this->attackRange = attackRange * 0.5f * 40.0f;
     }
 
-    if (!D_80A58494) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < 4; i++) {
-            D_80A58454[i] = Lib_SegmentedToVirtual(D_80A58454[i]);
+            sSparkTextures[i] = Lib_SegmentedToVirtual(sSparkTextures[i]);
         }
 
-        D_80A58494 = true;
+        sTexturesDesegmented = true;
     }
 
-    func_80A57330(this);
+    EnRat_SetupIdle(this);
 }
 
 void EnRat_Destroy(Actor* thisx, PlayState* play) {
@@ -199,10 +195,11 @@ void EnRat_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroySphere(play, &this->collider);
 }
 
-void func_80A563CC(EnRat* this) {
+void EnRat_InitializeAxes(EnRat* this) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+
     Matrix_MultVecZ(1.0f, &this->axisForwards);
     Matrix_MultVecY(1.0f, &this->axisUp);
     Matrix_MultVecX(1.0f, &this->axisLeft);
@@ -290,7 +287,7 @@ void func_80A566E0(EnRat* this) {
     Vec3f sp74;
     s16 var_v1;
 
-    if (this->actionFunc != func_80A57384) {
+    if (this->actionFunc != EnRat_Idle) {
         var_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (this->axisUp.y < -0.25f) {
             var_v1 -= 0x8000;
@@ -335,7 +332,7 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     s32 var_v1;
     f32 waterSurface;
 
-    if ((WaterBox_GetSurface1(play, &play->colCtx, posB->x, posB->z, &waterSurface, &waterBox) != 0) &&
+    if ((WaterBox_GetSurface1(play, &play->colCtx, posB->x, posB->z, &waterSurface, &waterBox)) &&
         (waterSurface <= posA->y) && (posB->y <= waterSurface)) {
         var_v1 = true;
     } else {
@@ -360,7 +357,10 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     return false;
 }
 
-s32 func_80A56AFC(EnRat* this, PlayState* play) {
+/**
+ * "Floor" in this case means floors, walls, and ceilings, since the Real Bombchu can run on any of them.
+ */
+s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
     CollisionPoly* polySide = NULL;
     CollisionPoly* polyUpDown = NULL;
     s32 bgIdSide;
@@ -438,6 +438,7 @@ s32 func_80A56AFC(EnRat* this, PlayState* play) {
         }
 
         if (i == 3) {
+            // no collision nearby
             return false;
         }
     }
@@ -460,15 +461,18 @@ void EnRat_ActorCoordsToWorld(EnRat* this, Vec3f* offset, Vec3f* pos) {
              (this->axisForwards.z * offset->z);
 }
 
-void func_80A56F68(EnRat* this, PlayState* play) {
+/**
+ * This function will spawn splashes and ripples as the Real Bombchu runs across the water's surface.
+ */
+void EnRat_SpawnWaterEffects(EnRat* this, PlayState* play) {
     s32 pad;
-    Vec3f sp28;
+    Vec3f splashPos;
 
     EffectSsGRipple_Spawn(play, &this->actor.world.pos, 70, 500, 0);
-    sp28.x = this->actor.world.pos.x - (this->axisForwards.x * 10.0f);
-    sp28.z = this->actor.world.pos.z - (this->axisForwards.z * 10.0f);
-    sp28.y = this->actor.world.pos.y + 5.0f;
-    EffectSsGSplash_Spawn(play, &sp28, NULL, NULL, 1, 450);
+    splashPos.x = this->actor.world.pos.x - (this->axisForwards.x * 10.0f);
+    splashPos.z = this->actor.world.pos.z - (this->axisForwards.z * 10.0f);
+    splashPos.y = this->actor.world.pos.y + 5.0f;
+    EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 1, 450);
 }
 
 void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
@@ -499,11 +503,11 @@ void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     }
 }
 
-void func_80A57118(EnRat* this, PlayState* play) {
-    func_800B0EB0(play, &this->unk_230, &gZeroVec3f, &D_80A58498, &D_80A584A4, &D_80A584A4, 75, 7, 8);
+void EnRat_SpawnSmoke(EnRat* this, PlayState* play) {
+    func_800B0EB0(play, &this->smokePos, &gZeroVec3f, &sSmokeAccel, &sSmokeColor, &sSmokeColor, 75, 7, 8);
 }
 
-void func_80A57180(EnRat* this) {
+void EnRat_SetupRevive(EnRat* this) {
     this->unk_18C = 0;
     this->unk_190 = 200;
     this->unk_192 = 0;
@@ -512,18 +516,18 @@ void func_80A57180(EnRat* this) {
     this->actor.shape.rot.x = this->actor.home.rot.x;
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.shape.rot.z = this->actor.home.rot.z;
-    func_80A563CC(this);
+    EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuBounceAnim, 0.0f);
-    this->unk_25C = 2666.6667f;
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuSpotAnim, 0.0f);
+    this->revivePosY = 2666.6667f;
     this->actor.draw = NULL;
     this->actor.shape.shadowDraw = NULL;
-    this->actionFunc = func_80A5723C;
+    this->actionFunc = EnRat_Revive;
 }
 
-void func_80A5723C(EnRat* this, PlayState* play) {
+void EnRat_Revive(EnRat* this, PlayState* play) {
     if (this->unk_190 > 0) {
         this->unk_190--;
         if (this->unk_190 == 0) {
@@ -532,7 +536,7 @@ void func_80A5723C(EnRat* this, PlayState* play) {
             this->skelAnime.playSpeed = 1.0f;
         }
     } else {
-        Math_StepToF(&this->unk_25C, 0.0f, 666.6667f);
+        Math_StepToF(&this->revivePosY, 0.0f, 666.6667f);
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
             func_800B1210(play, &this->actor.world.pos, &this->axisUp, &gZeroVec3f, 600, 100);
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
@@ -541,19 +545,19 @@ void func_80A5723C(EnRat* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
             this->actor.flags &= ~ACTOR_FLAG_10;
             this->unk_190 = 150;
-            func_80A57330(this);
+            EnRat_SetupIdle(this);
         }
     }
 }
 
-void func_80A57330(EnRat* this) {
+void EnRat_SetupIdle(EnRat* this) {
     Animation_PlayLoop(&this->skelAnime, &gRealBombchuRunAnim);
     this->unk_18E = 5;
     this->actor.speedXZ = 2.0f;
-    this->actionFunc = func_80A57384;
+    this->actionFunc = EnRat_Idle;
 }
 
-void func_80A57384(EnRat* this, PlayState* play) {
+void EnRat_Idle(EnRat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.speedXZ = 2.0f;
@@ -569,21 +573,21 @@ void func_80A57384(EnRat* this, PlayState* play) {
         this->unk_18E = 5;
     }
 
-    if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->unk_258) &&
+    if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->attackRange) &&
         (Player_GetMask(play) != PLAYER_MASK_STONE) && (Actor_IsFacingPlayer(&this->actor, 0x3800))) {
-        func_80A57488(this);
+        EnRat_SetupSpottedPlayer(this);
     }
 }
 
-void func_80A57488(EnRat* this) {
+void EnRat_SetupSpottedPlayer(EnRat* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    Animation_MorphToLoop(&this->skelAnime, &gRealBombchuBounceAnim, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
     this->unk_18E = 3;
     this->actor.speedXZ = 0.0f;
-    this->actionFunc = func_80A574E8;
+    this->actionFunc = EnRat_SpottedPlayer;
 }
 
-void func_80A574E8(EnRat* this, PlayState* play) {
+void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
     if ((this->unk_18E == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
     }
@@ -591,34 +595,34 @@ void func_80A574E8(EnRat* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         this->unk_18E--;
         if (this->unk_18E == 0) {
-            func_80A575F4(this);
+            EnRat_SetupRunTowardsPlayer(this);
         }
     }
 }
 
-void func_80A57570(EnRat* this) {
+void EnRat_UpdateSparkOffsets(EnRat* this) {
     s32 i;
     Vec3f* ptr;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++) {
-        ptr = &this->unk_23C[i];
+    for (i = 0; i < ARRAY_COUNT(this->sparkOffsets); i++) {
+        ptr = &this->sparkOffsets[i];
         ptr->x = randPlusMinusPoint5Scaled(6.0f);
         ptr->y = randPlusMinusPoint5Scaled(6.0f);
         ptr->z = randPlusMinusPoint5Scaled(6.0f);
     }
 }
 
-void func_80A575F4(EnRat* this) {
+void EnRat_SetupRunTowardsPlayer(EnRat* this) {
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuRunAnim, -5.0f);
     this->actor.speedXZ = 6.1f;
-    func_80A57570(this);
-    this->actionFunc = func_80A5764C;
+    EnRat_UpdateSparkOffsets(this);
+    this->actionFunc = EnRat_RunTowardsPlayer;
 }
 
-void func_80A5764C(EnRat* this, PlayState* play) {
+void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f sp48;
-    Vec3f sp3C;
+    Vec3f blureP1;
+    Vec3f blureP2;
 
     this->actor.speedXZ = 6.1f;
     if (this->unk_18C != 0) {
@@ -635,7 +639,7 @@ void func_80A5764C(EnRat* this, PlayState* play) {
             this->unk_18E--;
         }
 
-        Actor_PlaySfxAtPos(&this->actor, 0x3828U);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
     }
 
     if (this->unk_190 != 0) {
@@ -646,22 +650,24 @@ void func_80A5764C(EnRat* this, PlayState* play) {
         this->unk_190 = 30;
     }
 
-    func_80A57118(this, play);
+    EnRat_SpawnSmoke(this, play);
     this->visualJitter =
         (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->unk_190);
 
     if (this->actor.params == 0) {
-        EnRat_ActorCoordsToWorld(this, &D_80A584A8, &sp48);
-        EnRat_ActorCoordsToWorld(this, &D_80A584B4, &sp3C);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &sp48, &sp3C);
-        EnRat_ActorCoordsToWorld(this, &D_80A584C0, &sp3C);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &sp48, &sp3C);
+        EnRat_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
+
+        EnRat_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &blureP1, &blureP2);
+
+        EnRat_ActorCoordsToWorld(this, &sBlureP2RightOffset, &blureP2);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &blureP1, &blureP2);
     } else if ((this->actor.floorPoly != NULL) && !(play->gameplayFrames & 3)) {
-        func_800B1210(play, &this->actor.world.pos, &D_80A584CC, &gZeroVec3f, 550, 50);
+        func_800B1210(play, &this->actor.world.pos, &sDustVelocity, &gZeroVec3f, 550, 50);
     }
 
     if ((this->actor.floorPoly == NULL) && (Animation_OnFrame(&this->skelAnime, 0.0f))) {
-        func_80A56F68(this, play);
+        EnRat_SpawnWaterEffects(this, play);
     }
 
     if ((this->unk_18E == 0) && (Rand_ZeroOne() < 0.05f)) {
@@ -670,7 +676,7 @@ void func_80A5764C(EnRat* this, PlayState* play) {
     }
 
     func_800B9010(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
-    func_80A57570(this);
+    EnRat_UpdateSparkOffsets(this);
 }
 
 void EnRat_SetupBounced(EnRat* this) {
@@ -678,7 +684,7 @@ void EnRat_SetupBounced(EnRat* this) {
     this->actor.velocity.y = 8.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->actor.gravity = -1.0f;
-    func_80A57570(this);
+    EnRat_UpdateSparkOffsets(this);
     this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x1);
     this->actionFunc = EnRat_Bounced;
 }
@@ -710,12 +716,12 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
     }
 
     this->actor.speedXZ = 0.0f;
-    this->actionFunc = func_80A57A9C;
+    this->actionFunc = EnRat_PostDetonation;
 }
 
-void func_80A57A9C(EnRat* this, PlayState* play) {
+void EnRat_PostDetonation(EnRat* this, PlayState* play) {
     if (this->actor.params == 1) {
-        func_80A57180(this);
+        EnRat_SetupRevive(this);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -762,7 +768,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     } else if (((this->collider.base.ocFlags1 & OC1_HIT) && (((this->collider.base.oc->category == ACTORCAT_ENEMY)) ||
                                                              (this->collider.base.oc->category == ACTORCAT_BOSS) ||
                                                              (this->collider.base.oc->category == ACTORCAT_PLAYER))) ||
-               ((this->actionFunc == func_80A5764C) && (this->unk_190 == 0))) {
+               ((this->actionFunc == EnRat_RunTowardsPlayer) && (this->unk_190 == 0))) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         EnRat_Explode(this, play);
         return;
@@ -770,7 +776,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->actionFunc != func_80A57A9C) && (this->actionFunc != func_80A5723C)) {
+    if ((this->actionFunc != EnRat_PostDetonation) && (this->actionFunc != EnRat_Revive)) {
         if (this->unk_192 > 0) {
             this->unk_192--;
         } else if (this->unk_192 < 0) {
@@ -789,7 +795,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 func_80A566E0(this);
             }
 
-            if ((this->actionFunc != func_80A574E8) && !func_80A56AFC(this, play)) {
+            if ((this->actionFunc != EnRat_SpottedPlayer) && !EnRat_IsTouchingFloor(this, play)) {
                 EnRat_Explode(this, play);
                 return;
             }
@@ -817,7 +823,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + (this->axisUp.y * 10.0f);
         this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->axisUp.z * 10.0f);
 
-        if (this->actionFunc != func_80A5723C) {
+        if (this->actionFunc != EnRat_Revive) {
             if (this->unk_192 == 0) {
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
             }
@@ -834,7 +840,7 @@ s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnRat* this = THIS;
 
     if (limbIndex == REAL_BOMBCHU_LIMB_BODY) {
-        pos->y -= this->unk_25C;
+        pos->y -= this->revivePosY;
     }
 
     if (limbIndex == REAL_BOMBCHU_LIMB_TAIL_END) {
@@ -855,36 +861,36 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        Matrix_MultZero(&this->unk_230);
-        this->unk_230.y += 15.0f;
+        Matrix_MultZero(&this->smokePos);
+        this->smokePos.y += 15.0f;
         currentMatrixState = Matrix_GetCurrent();
 
-        if (this->actionFunc == func_80A5764C) {
+        if (this->actionFunc == EnRat_RunTowardsPlayer) {
             s32 i;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 150, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x00, 0x00, 0x00);
             Matrix_Scale(45.0f, 45.0f, 45.0f, MTXMODE_APPLY);
 
-            for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++) {
-                ptr = &this->unk_23C[i];
-                currentMatrixState->mf[3][0] = this->unk_230.x + ptr->x;
-                currentMatrixState->mf[3][1] = this->unk_230.y + ptr->y;
-                currentMatrixState->mf[3][2] = this->unk_230.z + ptr->z;
+            for (i = 0; i < ARRAY_COUNT(this->sparkOffsets); i++) {
+                ptr = &this->sparkOffsets[i];
+                currentMatrixState->mf[3][0] = this->smokePos.x + ptr->x;
+                currentMatrixState->mf[3][1] = this->smokePos.y + ptr->y;
+                currentMatrixState->mf[3][2] = this->smokePos.z + ptr->z;
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPSegment(POLY_XLU_DISP++, 0x08, D_80A58454[(play->gameplayFrames + i) & 3]);
+                gSPSegment(POLY_XLU_DISP++, 0x08, sSparkTextures[(play->gameplayFrames + i) & 3]);
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_037850);
             }
 
             Matrix_Scale(0.022222223f, 0.022222223f, 0.022222223f, MTXMODE_APPLY);
-            currentMatrixState->mf[3][0] = this->unk_230.x;
-            currentMatrixState->mf[3][1] = this->unk_230.y - 15.0f;
-            currentMatrixState->mf[3][2] = this->unk_230.z;
+            currentMatrixState->mf[3][0] = this->smokePos.x;
+            currentMatrixState->mf[3][1] = this->smokePos.y - 15.0f;
+            currentMatrixState->mf[3][2] = this->smokePos.z;
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+        gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (this->actor.params == 0) {
             var_fv0 = fabsf(cos_rad(this->unk_190 * 0.10471976f));
         } else {
@@ -901,7 +907,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s32)((1.0f - var_fv0) * 255.0f), 0, 40, 255);
         Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+        gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

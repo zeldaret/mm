@@ -2,7 +2,7 @@
     <!-- Assets for Real Bombchus -->
     <File Name="object_rat" Segment="6">
         <!-- Real Bombchu Animations -->
-        <Animation Name="gRealBombchuBounceAnim" Offset="0x174" /> <!-- Original name is "rat_hakken" ("detection") -->
+        <Animation Name="gRealBombchuSpotAnim" Offset="0x174" /> <!-- Original name is "rat_hakken" ("detection") -->
         <Animation Name="gRealBombchuRunAnim" Offset="0x26C" /> <!-- Original name is "rat_run" -->
 
         <!-- Real Bombchu Limb DisplayLists -->
