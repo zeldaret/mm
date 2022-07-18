@@ -887,13 +887,11 @@ void func_80144A94(SramContext* sramCtx) {
 
 u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
 
-#ifdef NON_MATCHING
-// Small regalloc between v0/t6/t7
 void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     s32 i;
     s32 pad;
     s32 phi_t1;
-    s32 pad1[2];
+    s32 pad1;
     s32 fileNum;
 
     if (gSaveContext.unk_3F3F) {
@@ -959,12 +957,11 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entranceIndex = D_801C6A58[gSaveContext.save.owlSaveLocation];
-        if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x84A0 && (gSaveContext.save.weekEventReg[20] & 2)) {
+        gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        if ((gSaveContext.save.entranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
-        } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }
@@ -988,9 +985,6 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         func_80147314(sramCtx, fileNum);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s")
-#endif
 
 // Similar to func_80145698, but accounts for owl saves?
 void func_8014546C(SramContext* sramCtx) {
