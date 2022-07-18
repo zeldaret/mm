@@ -53,7 +53,7 @@ const ActorInit Obj_Purify_InitVars = {
     (ActorFunc)NULL,
 };
 
-ObjPurifyInfo ObjPurifyInfoList[] = {
+ObjPurifyInfo sObjPurifyInfo[] = {
     {
         OBJECT_NUMA_OBJ,
         0.1f,
@@ -106,7 +106,7 @@ void ObjPurify_SetSysMatrix(f32 yPos) {
 }
 
 s32 ObjPurify_IsPurified(ObjPurify* this) {
-    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
 
     if (!info->isDekuCity) {
         // woodfall temple wood flower unraveled
@@ -126,7 +126,7 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
 void ObjPurify_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     s32 sp20 = OBJPURIFY_GET_UNK_FLAG(thisx);
 
     Actor_SetScale(&this->dyna.actor, info->scale);
@@ -167,7 +167,7 @@ void func_80A84EC0(ObjPurify* this, PlayState* play) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         if (sp28 == 1) {
-            DynaPolyActor_LoadMesh(play, &this->dyna, ObjPurifyInfoList[index].colHeader);
+            DynaPolyActor_LoadMesh(play, &this->dyna, sObjPurifyInfo[index].colHeader);
             func_80A84FA0(this);
         } else if (ObjPurify_IsPurified(this)) {
             func_80A8515C(this);
@@ -247,7 +247,7 @@ void ObjPurify_Update(Actor* thisx, PlayState* play) {
 void func_80A851C8(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     Gfx* opaDList = info->opaDLists[this->gfxIndex];
     Gfx* xluDList = info->xluDLists[this->gfxIndex];
     AnimatedMaterial* animMat = info->animMat[this->gfxIndex];
@@ -274,7 +274,7 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
 void func_80A85304(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     s32 sp6C[2];
     s32 i;
     s32 index;
