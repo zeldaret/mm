@@ -427,6 +427,7 @@ typedef enum {
     /* 0x51 */ GID_51,
     /* 0x53 */ GID_53 = 0x53,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
+    /* 0x5B */ GID_MASK_DEKU = 0x5B,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
     /* 0x68 */ GID_SWORD_GREAT_FAIRY,
