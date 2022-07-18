@@ -780,7 +780,7 @@ asm/non_matchings/code/z_camera/Camera_UpdateHotRoom.s,Camera_UpdateHotRoom,0x80
 asm/non_matchings/code/z_camera/Camera_SetSwordDistortion.s,Camera_SetSwordDistortion,0x800DE890,0x31
 asm/non_matchings/code/z_camera/Camera_RequestGiantsMaskSetting.s,Camera_RequestGiantsMaskSetting,0x800DE954,0x17
 asm/non_matchings/code/z_camera/Camera_Update.s,Camera_Update,0x800DE9B0,0x2BA
-asm/non_matchings/code/z_camera/func_800DF498.s,func_800DF498,0x800DF498,0xE
+asm/non_matchings/code/z_camera/Camera_SetModeSettingStateFlags.s,Camera_SetModeSettingStateFlags,0x800DF498,0xE
 asm/non_matchings/code/z_camera/Camera_ChangeModeFlags.s,Camera_ChangeModeFlags,0x800DF4D0,0xDC
 asm/non_matchings/code/z_camera/Camera_ChangeMode.s,Camera_ChangeMode,0x800DF840,0xB
 asm/non_matchings/code/z_camera/Camera_CheckValidMode.s,Camera_CheckValidMode,0x800DF86C,0x20

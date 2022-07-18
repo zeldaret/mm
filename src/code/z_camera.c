@@ -2385,7 +2385,7 @@ s32 Camera_Normal3(Camera* camera) {
 
         if (roData->interfaceFlags & NORMAL3_FLAG_1) {
             rwData->yawTimer = 6;
-            Camera_SetStateFlag(camera, CAM_STATE_5);
+            Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
         } else {
             rwData->yawTimer = 0;
         }
@@ -2477,7 +2477,7 @@ s32 Camera_Normal3(Camera* camera) {
         sp80.yaw += rwData->yawUpdateRate;
         rwData->yawTimer--;
         if (rwData->yawTimer == 0) {
-            Camera_UnsetStateFlag(camera, CAM_STATE_5);
+            Camera_UnsetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
         }
     }
 
@@ -2955,7 +2955,7 @@ s32 Camera_Parallel1(Camera* camera) {
     if (rwData->unk_22 != 0) {
         if (rwData->unk_24 <= 0) {
             if (rwData->unk_24 == 0) {
-                Camera_SetStateFlag(camera, CAM_STATE_5);
+                Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
             }
 
             tangle = ((rwData->unk_22 + 1) * rwData->unk_22) >> 1;
@@ -4331,11 +4331,11 @@ s32 Camera_KeepOn3(Camera* camera) {
 
     if (RELOAD_PARAMS(camera)) {
         if (camera->play->view.unk164 == 0) {
-            Camera_SetStateFlag(camera, CAM_STATE_5);
+            Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
             camera->play->view.unk164 = camera->camId | 0x50;
             return 1;
         }
-        Camera_UnsetStateFlag(camera, CAM_STATE_5);
+        Camera_UnsetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
     }
 
     Camera_UnsetStateFlag(camera, CAM_STATE_4);
@@ -4566,13 +4566,13 @@ s32 Camera_KeepOn4(Camera* camera) {
 
     if (RELOAD_PARAMS(camera)) {
         if (camera->play->view.unk164 == 0) {
-            Camera_SetStateFlag(camera, CAM_STATE_5);
+            Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
             Camera_UnsetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
             camera->play->view.unk164 = camera->camId | 0x50;
             return true;
         }
         rwData->unk_18 = *sp44;
-        Camera_UnsetStateFlag(camera, CAM_STATE_5);
+        Camera_UnsetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
     }
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
@@ -4607,7 +4607,7 @@ s32 Camera_KeepOn4(Camera* camera) {
 
     if (rwData->unk_18 != *sp44) {
         camera->animState = 20;
-        Camera_SetStateFlag(camera, CAM_STATE_5);
+        Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
         Camera_UnsetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
         camera->play->view.unk164 = camera->camId | 0x50;
         return true;
@@ -4764,7 +4764,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     spB8.r = camera->dist;
 
     if (rwData->unk_14 != 0) {
-        Camera_SetStateFlag(camera, CAM_STATE_5);
+        Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
         rwData->unk_10 += (s16)rwData->unk_00;
         rwData->unk_12 += (s16)rwData->unk_04;
         rwData->unk_14--;
@@ -7532,7 +7532,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         }
 
         camera->behaviorFlags = 0;
-        Camera_UnsetStateFlag(camera, CAM_STATE_10 | CAM_STATE_5);
+        Camera_UnsetStateFlag(camera, CAM_STATE_10 | CAM_STATE_DISABLE_MODE_CHANGE);
         Camera_SetStateFlag(camera, CAM_STATE_4);
     }
 
@@ -7621,7 +7621,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     return inputDir;
 }
 
-s32 func_800DF498(Camera* camera) {
+s32 Camera_SetModeSettingStateFlags(Camera* camera) {
     Camera_SetStateFlag(camera, CAM_STATE_3 | CAM_STATE_2); // CAM_STATE_3 is set only immediately to be unset
     Camera_UnsetStateFlag(camera, CAM_STATE_12 | CAM_STATE_3);
     return true;
@@ -7629,160 +7629,169 @@ s32 func_800DF498(Camera* camera) {
 
 #define CAM_CHANGE_MODE_0 (1 << 0)
 #define CAM_CHANGE_MODE_1 (1 << 1)
-#define CAM_CHANGE_MODE_2 (1 << 2)
-#define CAM_CHANGE_MODE_3 (1 << 3)
+#define CAM_CHANGE_MODE_BATTLE (1 << 2)
+#define CAM_CHANGE_MODE_FOLLOW_TARGET (1 << 3)
 #define CAM_CHANGE_MODE_4 (1 << 4)
-#define CAM_CHANGE_MODE_5 (1 << 5)
+#define CAM_CHANGE_MODE_FIRST_PERSON (1 << 5)
 
 s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
     static s32 modeChangeFlags = 0;
 
-    if (camera->setting == CAM_SET_TELESCOPE) {
-        if ((mode == CAM_MODE_FIRSTPERSON) || (mode == CAM_MODE_DEKUHIDE)) {
-            forceChange = true;
-        }
+    if ((camera->setting == CAM_SET_TELESCOPE) && ((mode == CAM_MODE_FIRSTPERSON) || (mode == CAM_MODE_DEKUHIDE))) {
+        forceChange = true;
     }
 
-    if ((camera->stateFlags & CAM_STATE_5) && !forceChange) {
-        camera->behaviorFlags |= CAM_BEHAVIOR_MODE_2;
+    // Mode change rejected by flag
+    if ((camera->stateFlags & CAM_STATE_DISABLE_MODE_CHANGE) && !forceChange) {
+        camera->behaviorFlags |= CAM_BEHAVIOR_MODE_VALID;
         return -1;
     }
 
+    // Mode change rejected by validModes
     if (!(sCameraSettings[camera->setting].validModes & (1 << mode))) {
         if (camera->mode != CAM_MODE_NORMAL) {
             camera->mode = CAM_MODE_NORMAL;
             Camera_ResetActionFuncState(camera, camera->mode);
-            func_800DF498(camera);
-            return 0xC0000000 | mode;
+            Camera_SetModeSettingStateFlags(camera);
+            return mode | 0xC0000000;
         } else {
-            camera->behaviorFlags |= CAM_BEHAVIOR_MODE_2;
+            camera->behaviorFlags |= CAM_BEHAVIOR_MODE_VALID;
             camera->behaviorFlags |= CAM_BEHAVIOR_MODE_1;
             return 0;
         }
-    } else {
-        if ((mode == camera->mode) && !forceChange) {
-            camera->behaviorFlags |= CAM_BEHAVIOR_MODE_2;
-            return -1;
-        }
-        camera->behaviorFlags |= CAM_BEHAVIOR_MODE_2;
-        camera->behaviorFlags |= CAM_BEHAVIOR_MODE_1;
-
-        Camera_ResetActionFuncState(camera, mode);
-
-        modeChangeFlags = 0;
-
-        switch (mode) {
-            case CAM_MODE_FIRSTPERSON:
-                modeChangeFlags = CAM_CHANGE_MODE_5;
-                break;
-
-            case CAM_MODE_BATTLE:
-                modeChangeFlags = CAM_CHANGE_MODE_2;
-                break;
-
-            case CAM_MODE_FOLLOWTARGET:
-                if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
-                    modeChangeFlags = CAM_CHANGE_MODE_3;
-                }
-                break;
-
-            case CAM_MODE_BOWARROWZ:
-            case CAM_MODE_TARGET:
-            case CAM_MODE_TALK:
-            case CAM_MODE_HANGZ:
-            case CAM_MODE_PUSHPULL:
-                modeChangeFlags = CAM_CHANGE_MODE_1;
-                break;
-
-            case CAM_MODE_NORMAL:
-            case CAM_MODE_HANG:
-                modeChangeFlags = CAM_CHANGE_MODE_4;
-                break;
-        }
-
-        switch (camera->mode) {
-            case CAM_MODE_FIRSTPERSON:
-                if (modeChangeFlags & CAM_CHANGE_MODE_5) {
-                    camera->animState = 10;
-                }
-                break;
-
-            case CAM_MODE_JUMP:
-            case CAM_MODE_HANG:
-                if (modeChangeFlags & CAM_CHANGE_MODE_4) {
-                    camera->animState = 20;
-                }
-                modeChangeFlags |= CAM_CHANGE_MODE_0;
-                break;
-
-            case CAM_MODE_CHARGE:
-                if (modeChangeFlags & CAM_CHANGE_MODE_4) {
-                    camera->animState = 20;
-                }
-                modeChangeFlags |= CAM_CHANGE_MODE_0;
-                break;
-
-            case CAM_MODE_FOLLOWTARGET:
-                if (modeChangeFlags & CAM_CHANGE_MODE_3) {
-                    camera->animState = 10;
-                }
-                modeChangeFlags |= CAM_CHANGE_MODE_0;
-                break;
-
-            case CAM_MODE_BATTLE:
-                if (modeChangeFlags & CAM_CHANGE_MODE_2) {
-                    camera->animState = 10;
-                }
-                modeChangeFlags |= 1;
-                break;
-
-            case CAM_MODE_BOWARROWZ:
-            case CAM_MODE_HANGZ:
-            case CAM_MODE_PUSHPULL:
-                modeChangeFlags |= CAM_CHANGE_MODE_0;
-                break;
-
-            case CAM_MODE_NORMAL:
-                if (modeChangeFlags & CAM_CHANGE_MODE_4) {
-                    camera->animState = 20;
-                }
-                break;
-        }
-
-        modeChangeFlags &= ~CAM_CHANGE_MODE_4;
-
-        if (camera->status == CAM_STATUS_ACTIVE) {
-            switch (modeChangeFlags) {
-                case CAM_CHANGE_MODE_0:
-                    play_sound(0);
-                    break;
-
-                case CAM_CHANGE_MODE_1:
-                    if (camera->play->roomCtx.currRoom.unk3 == 1) {
-                        play_sound(NA_SE_SY_ATTENTION_URGENCY);
-                    } else {
-
-                        play_sound(NA_SE_SY_ATTENTION_ON);
-                    }
-                    break;
-
-                case CAM_CHANGE_MODE_2:
-                    play_sound(NA_SE_SY_ATTENTION_URGENCY);
-                    break;
-
-                case CAM_CHANGE_MODE_3:
-                    play_sound(NA_SE_SY_ATTENTION_ON);
-                    break;
-            }
-        }
-
-        func_800DF498(camera);
-        camera->mode = mode;
-
-        return 0x80000000 | mode;
     }
 
-    return 0;
+    // Mode change rejected due to mode already being set. (otherwise, reset mode)
+    if ((mode == camera->mode) && !forceChange) {
+        camera->behaviorFlags |= CAM_BEHAVIOR_MODE_VALID;
+        return -1;
+    }
+
+    camera->behaviorFlags |= CAM_BEHAVIOR_MODE_VALID;
+    camera->behaviorFlags |= CAM_BEHAVIOR_MODE_1;
+
+    Camera_ResetActionFuncState(camera, mode);
+
+    modeChangeFlags = 0;
+
+    // Process Requested Camera Mode
+    switch (mode) {
+        case CAM_MODE_FIRSTPERSON:
+            modeChangeFlags = CAM_CHANGE_MODE_FIRST_PERSON;
+            break;
+
+        case CAM_MODE_BATTLE:
+            modeChangeFlags = CAM_CHANGE_MODE_BATTLE;
+            break;
+
+        case CAM_MODE_FOLLOWTARGET:
+            if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
+                modeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
+            }
+            break;
+
+        case CAM_MODE_BOWARROWZ:
+        case CAM_MODE_TARGET:
+        case CAM_MODE_TALK:
+        case CAM_MODE_HANGZ:
+        case CAM_MODE_PUSHPULL:
+            modeChangeFlags = CAM_CHANGE_MODE_1;
+            break;
+
+        case CAM_MODE_NORMAL:
+        case CAM_MODE_HANG:
+            modeChangeFlags = CAM_CHANGE_MODE_4;
+            break;
+    }
+
+    // Process Current Camera Mode
+    switch (camera->mode) {
+        case CAM_MODE_FIRSTPERSON:
+            if (modeChangeFlags & CAM_CHANGE_MODE_FIRST_PERSON) {
+                camera->animState = 10;
+            }
+            break;
+
+        case CAM_MODE_JUMP:
+        case CAM_MODE_HANG:
+            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+                camera->animState = 20;
+            }
+            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            break;
+
+        case CAM_MODE_CHARGE:
+            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+                camera->animState = 20;
+            }
+            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            break;
+
+        case CAM_MODE_FOLLOWTARGET:
+            if (modeChangeFlags & CAM_CHANGE_MODE_FOLLOW_TARGET) {
+                camera->animState = 10;
+            }
+            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            break;
+
+        case CAM_MODE_BATTLE:
+            if (modeChangeFlags & CAM_CHANGE_MODE_BATTLE) {
+                camera->animState = 10;
+            }
+            modeChangeFlags |= 1;
+            break;
+
+        case CAM_MODE_BOWARROWZ:
+        case CAM_MODE_HANGZ:
+        case CAM_MODE_PUSHPULL:
+            modeChangeFlags |= CAM_CHANGE_MODE_0;
+            break;
+
+        case CAM_MODE_NORMAL:
+            if (modeChangeFlags & CAM_CHANGE_MODE_4) {
+                camera->animState = 20;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    modeChangeFlags &= ~CAM_CHANGE_MODE_4;
+
+    // Z-Pressing Sfx
+    if (camera->status == CAM_STATUS_ACTIVE) {
+        switch (modeChangeFlags) {
+            case CAM_CHANGE_MODE_0:
+                play_sound(0);
+                break;
+
+            case CAM_CHANGE_MODE_1:
+                if (camera->play->roomCtx.currRoom.unk3 == 1) {
+                    play_sound(NA_SE_SY_ATTENTION_URGENCY);
+                } else {
+
+                    play_sound(NA_SE_SY_ATTENTION_ON);
+                }
+                break;
+
+            case CAM_CHANGE_MODE_BATTLE:
+                play_sound(NA_SE_SY_ATTENTION_URGENCY);
+                break;
+
+            case CAM_CHANGE_MODE_FOLLOW_TARGET:
+                play_sound(NA_SE_SY_ATTENTION_ON);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    Camera_SetModeSettingStateFlags(camera);
+    camera->mode = mode;
+
+    return mode | 0x80000000;
 }
 
 s32 Camera_ChangeMode(Camera* camera, s16 mode) {
@@ -7790,7 +7799,7 @@ s32 Camera_ChangeMode(Camera* camera, s16 mode) {
 }
 
 s32 Camera_CheckValidMode(Camera* camera, s16 mode) {
-    if (camera->stateFlags & CAM_STATE_5) {
+    if (camera->stateFlags & CAM_STATE_DISABLE_MODE_CHANGE) {
         return 0;
     } else if (!(sCameraSettings[camera->setting].validModes & (1 << mode))) {
         return 0;
@@ -7802,6 +7811,7 @@ s32 Camera_CheckValidMode(Camera* camera, s16 mode) {
 }
 
 s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
+    // Reject settings change based on priority
     if ((camera->behaviorFlags & CAM_BEHAVIOR_SETTING_USE_PRIORITY) &&
         ((sCameraSettings[camera->setting].flags & 0xF) >= (sCameraSettings[setting].flags & 0xF))) {
         camera->behaviorFlags |= CAM_BEHAVIOR_SETTING_2;
@@ -7811,14 +7821,17 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
         return -2;
     }
 
+    // Reject settings change based on NONE setting
     if (setting == CAM_SET_NONE) {
         return 0;
     }
 
+    // Reject settings change based on an invalid setting
     if (setting >= CAM_SET_MAX) {
         return -99;
     }
 
+    // Reject settings change based on setting already set (and flags)
     if ((setting == camera->setting) && !(flags & CAM_CHANGE_SETTING_0)) {
         camera->behaviorFlags |= CAM_BEHAVIOR_SETTING_2;
         if (!(flags & CAM_CHANGE_SETTING_1)) {
@@ -7833,7 +7846,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
         camera->behaviorFlags |= CAM_BEHAVIOR_SETTING_USE_PRIORITY;
     }
 
-    func_800DF498(camera);
+    Camera_SetModeSettingStateFlags(camera);
 
     if (!(sCameraSettings[camera->setting].flags & 0x40000000)) {
         camera->prevSetting = camera->setting;

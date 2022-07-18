@@ -1266,7 +1266,7 @@
     0x800DE890:("Camera_SetSwordDistortion",),
     0x800DE954:("Camera_RequestGiantsMaskSetting",),
     0x800DE9B0:("Camera_Update",),
-    0x800DF498:("func_800DF498",),
+    0x800DF498:("Camera_SetModeSettingStateFlags",),
     0x800DF4D0:("Camera_ChangeModeFlags",),
     0x800DF840:("Camera_ChangeMode",),
     0x800DF86C:("Camera_CheckValidMode",),

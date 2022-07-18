@@ -969,7 +969,7 @@ s32 Camera_UpdateHotRoom(Camera* camera);
 s32 Camera_SetSwordDistortion(Camera* camera);
 s32 Camera_RequestGiantsMaskSetting(Camera* camera);
 Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera);
-s32 func_800DF498(Camera* camera);
+s32 Camera_SetModeSettingStateFlags(Camera* camera);
 s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags);
 s32 Camera_ChangeMode(Camera* camera, s16 mode);
 s32 Camera_CheckValidMode(Camera* camera, s16 mode);
