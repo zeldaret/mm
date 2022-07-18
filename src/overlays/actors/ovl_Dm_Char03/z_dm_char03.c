@@ -65,9 +65,8 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAB5F8(DmChar03* this, PlayState* play) {
-    s32 index;
+    s32 index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
-    index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
     if (index >= 0) {
         this->objectIndex = index;
         this->actionFunc = func_80AAB644;
@@ -75,10 +74,8 @@ void func_80AAB5F8(DmChar03* this, PlayState* play) {
 }
 
 void func_80AAB644(DmChar03* this, PlayState* play) {
-    s32 index;
-
     if (Cutscene_CheckActorAction(play, 136)) {
-        index = Cutscene_GetActorActionIndex(play, 136);
+        s32 index = Cutscene_GetActorActionIndex(play, 136);
         if (play->csCtx.actorActions[index]->action == 4) {
             this->unk_18E = true;
             this->offset.x = play->csCtx.actorActions[index]->startPos.x;
@@ -93,10 +90,11 @@ void DmChar03_DoNothing(DmChar03* this, PlayState* play) {
 
 void func_80AAB710(DmChar03* this, PlayState* play) {
     u8 var_a2 = true;
+
     if (Cutscene_CheckActorAction(play, 0x88)) {
         s32 index = Cutscene_GetActorActionIndex(play, 0x88);
         if (play->csCtx.frames == play->csCtx.actorActions[index]->startFrame) {
-            switch (play->csCtx.actorActions[index]->action) { /* irregular */
+            switch (play->csCtx.actorActions[index]->action) {
                 case 1:
                     var_a2 = false;
                     break;
@@ -137,6 +135,7 @@ void func_80AAB838(DmChar03* this, PlayState* play) {
 
 void DmChar03_Update(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
+
     if (Cutscene_CheckActorAction(play, 0x88) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action == 2)) {
         SkelAnime_Update(&this->skelAnime);
@@ -158,6 +157,7 @@ void DmChar03_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void DmChar03_Draw(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
+
     if (!this->unk_18E) {
         if ((Cutscene_CheckActorAction(play, 0x88)) &&
             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action != 1)) {
