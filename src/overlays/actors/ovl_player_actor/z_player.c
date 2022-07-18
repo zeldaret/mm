@@ -32,9 +32,6 @@ void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
-
-
-
 extern LinkAnimationHeader D_0400CF98;
 extern LinkAnimationHeader D_0400D0A8;
 extern LinkAnimationHeader D_0400D0B0;
@@ -182,11 +179,6 @@ s32 func_8085B854(PlayState* play, Player* player, s32 itemId, s32 arg3);
 s32 func_8085B930(PlayState* play, void* talkAnim, s32 arg2);
 void func_8085B08C(Player* arg0, PlayState* play);
 void func_80855818(Player* arg0, PlayState* play);
-
-
-
-
-
 
 void func_80844EF8(Player* player, PlayState* play, Input* input);
 s32 func_8085B134(PlayState* play);
@@ -2497,12 +2489,10 @@ s32 func_808323C0(Player* this, s16 csIndex) {
     return true;
 }
 
-
 s32 func_80832444(Player* this);
 s32 func_8083249C(Player* this);
 void func_808324EC(PlayState* play, Player* this, void (*arg2)(PlayState*, Player*), s32 arg3);
 void func_80832578(Player* this, PlayState* play);
-
 
 s32 func_80832444(Player* this) {
     if (this->unk_A86 >= 0) {
@@ -2592,7 +2582,8 @@ void func_8084CCEC(Player* this, PlayState* play);
 void func_808334D4(PlayState* play, Player* this) {
     LinkAnimationHeader* anim;
 
-    if ((this->meleeWeaponAnimation >= PLAYER_MWA_RIGHT_SLASH_1H) && (this->meleeWeaponAnimation <= PLAYER_MWA_RIGHT_COMBO_2H)) {
+    if ((this->meleeWeaponAnimation >= PLAYER_MWA_RIGHT_SLASH_1H) &&
+        (this->meleeWeaponAnimation <= PLAYER_MWA_RIGHT_COMBO_2H)) {
         anim = D_8085CF58[Player_IsHoldingTwoHandedWeapon(this)];
     } else {
         anim = D_8085CF50[Player_IsHoldingTwoHandedWeapon(this)];
@@ -2655,7 +2646,7 @@ s32 func_808340D4(s32 arg0) {
     return (arg0 == 4) || (arg0 == 7) || (arg0 == 12);
 }
 
-void func_8085421C(Player* this, PlayState *play);
+void func_8085421C(Player* this, PlayState* play);
 
 void func_80834104(PlayState* play, Player* this) {
     func_80831494(play, this, func_8085421C, 0);
@@ -2821,7 +2812,7 @@ void func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** o
     posA.y = this->actor.world.pos.y + arg2->y;
     posA.z = this->actor.world.pos.z;
     func_80835BC8(this, &this->actor.world.pos, arg2, &posB);
-    BgCheck_EntityLineTest2(&play->colCtx,  &posA, &posB, posResult, outPoly, 1, 0, 0, 1, bgId, &this->actor);
+    BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, 1, 0, 0, 1, bgId, &this->actor);
 }
 
 extern Vec3f D_8085D100;
@@ -2904,7 +2895,8 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
     this->stateFlags1 |= PLAYER_STATE1_20000000;
     Actor_OffsetOfPointInActorCoords(door, &sp38, &this->actor.world.pos);
 
-    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, (42.0f - fabsf(sp38.z)) * this->doorDirection,
+                  &this->actor.world.pos);
     func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * 20.0f, &this->unk_3A0);
     func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * -120.0f, &this->unk_3AC);
 
@@ -2920,7 +2912,9 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
     }
 
     if (door->category == ACTORCAT_DOOR) {
-        this->unk_3BA = (s16) play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)].sides[this->doorDirection > 0 ? 0 : 1].bgCamDataId;
+        this->unk_3BA = (s16)play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)]
+                            .sides[this->doorDirection > 0 ? 0 : 1]
+                            .bgCamDataId;
         func_800B90F4(play);
     }
 }
@@ -2928,7 +2922,6 @@ void func_8083604C(PlayState* play, Player* this, Actor* door) {
 // doorType not PLAYER_DOORTYPE_2 neither PLAYER_DOORTYPE_4
 void func_80836258(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836258.s")
-
 
 s32 func_80839518(Player* this, PlayState* play);
 s32 func_808365DC(Player* this, PlayState* play);
@@ -2967,7 +2960,7 @@ s32 (*D_8085D054[])(Player*, PlayState*) = {
 };
 #endif
 
-void func_8085437C(Player *this, PlayState *play);
+void func_8085437C(Player* this, PlayState* play);
 
 #if 0
 // door stuff
@@ -3053,8 +3046,8 @@ s32 func_808365DC(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808365DC.s")
 #endif
 
-void func_80849A9C(Player *this, PlayState *play);
-void func_80849DD0(Player *this, PlayState *play);
+void func_80849A9C(Player* this, PlayState* play);
+void func_80849DD0(Player* this, PlayState* play);
 
 void func_80836888(Player* this, PlayState* play) {
     LinkAnimationHeader* anim;
@@ -3141,20 +3134,22 @@ void func_80836B3C(PlayState* play, Player* this, f32 arg2) {
 
     if (this->transformation == PLAYER_FORM_GORON) {
         func_80836AD8(play, this);
-        LinkAnimation_Change(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_15, this->modelAnimType), 1.5f * D_8085C3E4, 0.0f, 6.0f, 2, 0.0f);
+        LinkAnimation_Change(play, &this->skelAnime, GET_PLAYER_ANIM(PLAYER_ANIMGROUP_15, this->modelAnimType),
+                             1.5f * D_8085C3E4, 0.0f, 6.0f, 2, 0.0f);
     } else {
         LinkAnimationHeader* anim;
 
         anim = GET_PLAYER_ANIM(PLAYER_ANIMGROUP_15, this->modelAnimType);
         func_80831494(play, this, func_8084C6EC, 0);
-        LinkAnimation_Change(play, &this->skelAnime, anim, 1.25f * D_8085C3E4, arg2, Animation_GetLastFrame(anim), (u8) 2, 0.0f);
+        LinkAnimation_Change(play, &this->skelAnime, anim, 1.25f * D_8085C3E4, arg2, Animation_GetLastFrame(anim),
+                             (u8)2, 0.0f);
     }
 }
 
 #ifdef NON_MATCHING
 // matches but requires in-function static data
 void func_80836C70(PlayState* play, Player* this, s32 bodyPartIndex) {
-    static Vec3f D_8085D130 = {0,0,0};
+    static Vec3f D_8085D130 = { 0, 0, 0 };
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -3164,8 +3159,8 @@ void func_80836C70(PlayState* play, Player* this, s32 bodyPartIndex) {
         velocity.y = Rand_ZeroFloat(2.0f);
         velocity.z = randPlusMinusPoint5Scaled(4.0f);
         D_8085D130.y = -0.2f;
-        EffectSsHahen_Spawn(play, &this->bodyPartsPos[bodyPartIndex], &velocity, &D_8085D130, 0, 10, OBJECT_LINK_NUTS, 16, object_link_nuts_DL_008860);
-
+        EffectSsHahen_Spawn(play, &this->bodyPartsPos[bodyPartIndex], &velocity, &D_8085D130, 0, 10, OBJECT_LINK_NUTS,
+                            16, object_link_nuts_DL_008860);
     }
 }
 #else
@@ -3233,7 +3228,8 @@ void func_808373A4(PlayState* play, Player* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808378FC.s")
 
 s32 func_8083798C(Player* this) {
-    return (this->interactRangeActor != NULL) && (this->heldActor == NULL) && (this->transformation != PLAYER_FORM_DEKU);
+    return (this->interactRangeActor != NULL) && (this->heldActor == NULL) &&
+           (this->transformation != PLAYER_FORM_DEKU);
 }
 
 void func_8084E334(Player* this, PlayState* play);
@@ -3248,12 +3244,16 @@ void func_808379C0(PlayState* play, Player* this) {
         if ((interactRangeActor->id == ACTOR_EN_ISHI) && (ENISHI_GET_1(interactRangeActor) != 0)) {
             func_80831494(play, this, func_8084E334, 0);
             anim = &gameplay_keep_Linkanim_00DF90;
-        } else if (((interactRangeActor->id == ACTOR_EN_BOMBF) || (interactRangeActor->id == ACTOR_EN_KUSA) || (interactRangeActor->id == ACTOR_EN_KUSA2) || (interactRangeActor->id == ACTOR_OBJ_GRASS_CARRY)) && (Player_GetStrength() <= PLAYER_STRENGTH_DEKU)) {
+        } else if (((interactRangeActor->id == ACTOR_EN_BOMBF) || (interactRangeActor->id == ACTOR_EN_KUSA) ||
+                    (interactRangeActor->id == ACTOR_EN_KUSA2) || (interactRangeActor->id == ACTOR_OBJ_GRASS_CARRY)) &&
+                   (Player_GetStrength() <= PLAYER_STRENGTH_DEKU)) {
             func_80831494(play, this, func_8084E4E4, 0);
             anim = &gameplay_keep_Linkanim_00DD70;
 
-            this->actor.world.pos.x = (Math_SinS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.x;
-            this->actor.world.pos.z = (Math_CosS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.z;
+            this->actor.world.pos.x =
+                (Math_SinS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.x;
+            this->actor.world.pos.z =
+                (Math_CosS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.z;
 
             this->currentYaw = this->actor.shape.rot.y = interactRangeActor->yawTowardsPlayer + 0x8000;
         } else {
@@ -4053,7 +4053,6 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
         Audio_SetSequenceMode(seqMode);
     }
 }
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808442D8.s")
 
