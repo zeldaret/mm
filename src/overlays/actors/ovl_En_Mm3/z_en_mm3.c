@@ -148,7 +148,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                             func_8019F208();
                             Message_StartTextbox(play, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
-                            func_801159EC(-play->msgCtx.unk1206C);
+                            Rupees_ChangeBy(-play->msgCtx.unk1206C);
                         } else {
                             play_sound(NA_SE_SY_ERROR);
                             Message_StartTextbox(play, 0x279C, &this->actor);
@@ -174,7 +174,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
-                        func_801159EC(-play->msgCtx.unk1206C);
+                        Rupees_ChangeBy(-play->msgCtx.unk1206C);
                     } else {
                         play_sound(NA_SE_SY_ERROR);
                         Message_StartTextbox(play, 0x279C, &this->actor);

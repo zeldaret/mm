@@ -627,7 +627,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                                     } else {
                                         func_8019F208();
                                         func_80B40E74(this, play, 0xC42);
-                                        func_801159EC(-play->msgCtx.unk1206C);
+                                        Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                     }
                                     break;
 
@@ -716,8 +716,8 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             func_80B41368(this, play, 0);
                             this->actor.textId = 0xC43;
                             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
-                            SET_EQUIP_VALUE(EQUIP_SWORD, 0);
-                            func_80112B40(play, 0);
+                            SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_NONE);
+                            Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
                             func_80B40C74(play);
                             break;
 
@@ -750,7 +750,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             func_80B41368(this, play, 4);
                             if (this->unk_29C & 0x10) {
                                 this->actor.textId = 0xC56;
-                                func_801159EC(play->msgCtx.unk1206C);
+                                Rupees_ChangeBy(play->msgCtx.unk1206C);
                             } else {
                                 this->actor.textId = 0xC42;
                             }

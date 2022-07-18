@@ -1130,7 +1130,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                 if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == 5)) {
                     if (Message_ShouldAdvance(play) || Message_GetState(&play->msgCtx) == 0) {
                         func_801477B4(play);
-                        func_801159EC(-50);
+                        Rupees_ChangeBy(-50);
                         effect->unk_2C = -1;
                     }
                 }
@@ -4713,7 +4713,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         if (gSaveContext.save.playerData.rupees >= 20) {
-                            func_801159EC(-20);
+                            Rupees_ChangeBy(-20);
                             if (!Rumble_ControllerOneHasRumblePak()) {
                                 this->actor.textId = 0x407C;
                             } else {

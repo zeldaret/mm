@@ -430,7 +430,7 @@ void func_80962588(EnFu* this, PlayState* play) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.playerData.rupees >= 10) {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 func_80963DE4(this, play);
             } else {
                 play_sound(NA_SE_SY_ERROR);

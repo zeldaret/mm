@@ -124,10 +124,10 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_258 = 11;
     pauseCtx->unk_25A = 0;
 
-    pauseCtx->unk_25E[PAUSE_0] = 999;
-    pauseCtx->unk_25E[PAUSE_1] = XREG(94) + 3;
-    pauseCtx->unk_25E[PAUSE_2] = 999;
-    pauseCtx->unk_25E[PAUSE_3] = 999;
+    pauseCtx->cursorItem[PAUSE_0] = 999;
+    pauseCtx->cursorItem[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->cursorItem[PAUSE_2] = 999;
+    pauseCtx->cursorItem[PAUSE_3] = 999;
 
     pauseCtx->unk_268[PAUSE_0] = 0;
     pauseCtx->unk_268[PAUSE_1] = XREG(94) + 3;
