@@ -145,6 +145,9 @@ Camera* Play_GetCamera(PlayState* this, s16 camId) {
     return this->cameraPtrs[camIdx];
 }
 
+/**
+ * @return bit-packed success if each of the params were applied
+ */
 s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     s32 successfullySet = 0;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
@@ -198,6 +201,9 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     return successfullySet;
 }
 
+/**
+ * @return true if the fov was successfully set
+ */
 s32 Play_SetCameraFov(PlayState* this, s16 camId, f32 fov) {
     s32 successfullySet = Camera_SetViewParam(this->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
 
