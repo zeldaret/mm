@@ -3046,6 +3046,29 @@ s32 func_808365DC(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808365DC.s")
 #endif
 
+/*
+void func_80836888(Player* arg0, PlayState* arg1) {
+    LinkAnimationHeader* var_a2;
+
+    func_80831494(arg1, arg0, func_80849A9C, 1);
+    if (arg0->unk_B40 < 0.5f) {
+        var_a2 = func_8082EF54(arg0);
+        arg0->unk_B40 = 0.0f;
+    } else {
+        var_a2 = func_8082EF9C(arg0);
+        arg0->unk_B40 = 1.0f;
+    }
+    arg0->unk_B44 = arg0->unk_B40;
+    func_8082DB3C(arg1, arg0, var_a2);
+    arg0->currentYaw = arg0->actor.shape.rot.y;
+}
+
+void func_8083692C(Player* arg0, PlayState* arg1) {
+    func_80831494(arg1, arg0, func_80849DD0, 1);
+    func_8082E438(arg1, arg0, func_8082ED20(arg0));
+    arg0->currentYaw = arg0->actor.shape.rot.y;
+}
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836888.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083692C.s")
