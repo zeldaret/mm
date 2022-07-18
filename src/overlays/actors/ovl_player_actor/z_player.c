@@ -9,6 +9,7 @@
 
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
+#include "overlays/actors/ovl_En_Test3/z_en_test3.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -103,6 +104,11 @@ void func_8084D820(Player* this, PlayState* play);
 void func_808561B0(Player* this, PlayState* play);
 void func_80853D68(Player* this, PlayState* play);
 void func_80857BE8(Player* this, PlayState* play);
+
+void func_8084BC64(Player* this, PlayState* play);
+void func_808548B8(Player* this, PlayState* play);
+void func_8084FE7C(Player* this, PlayState* play);
+void func_808505D0(Player* this, PlayState* play);
 
 s32 func_8082DA90(PlayState* play) {
     return play->sceneLoadFlag != 0 || play->unk_18B4A != 0;
@@ -3546,7 +3552,114 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843178.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80843EC0.s")
+void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
+    u8 seqMode;
+    s32 pad[2];
+    Camera* camera;
+    s32 camMode;
+
+    if (this == GET_PLAYER(play)) {
+        seqMode = SEQ_MODE_DEFAULT;
+        if (this->stateFlags1 & PLAYER_STATE1_100000) {
+            seqMode = SEQ_MODE_STILL;
+        } else if (this->csMode != 0) {
+            Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_NORMAL);
+        } else {
+            camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
+                                                      : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
+            if ((this->actor.parent != NULL) && (this->stateFlags3 & PLAYER_STATE3_80)) {
+                camMode = CAM_MODE_HOOKSHOT;
+                func_800DFD78(camera, CAM_VIEW_TARGET, this->actor.parent);
+            } else if (func_8084BC64 == this->unk_748) {
+                camMode = CAM_MODE_STILL;
+            } else if (this->stateFlags3 & PLAYER_STATE3_8000) {
+                if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+                    camMode = CAM_MODE_GORONDASH;
+                } else {
+                    camMode = CAM_MODE_FREEFALL;
+                }
+            } else if (this->stateFlags3 & PLAYER_STATE3_80000) {
+                if (this->actor.bgCheckFlags & 1) {
+                    camMode = CAM_MODE_GORONDASH;
+                } else {
+                    camMode = CAM_MODE_GORONJUMP;
+                }
+            } else if (this->stateFlags2 & PLAYER_STATE2_100) {
+                camMode = CAM_MODE_PUSHPULL;
+            } else if (this->unk_730 != NULL) {
+                if ((this->actor.flags & ACTOR_FLAG_100) == ACTOR_FLAG_100) {
+                    camMode = CAM_MODE_TALK;
+                } else if (this->stateFlags1 & PLAYER_STATE1_10000) {
+                    if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+                        camMode = CAM_MODE_FOLLOWBOOMERANG;
+                    } else {
+                        camMode = CAM_MODE_FOLLOWTARGET;
+                    }
+                } else {
+                    camMode = CAM_MODE_BATTLE;
+                }
+                func_800DFD78(camera, CAM_VIEW_TARGET, this->unk_730);
+            } else if (this->stateFlags1 & PLAYER_STATE1_1000) {
+                camMode = CAM_MODE_CHARGE;
+            } else if (this->stateFlags3 & PLAYER_STATE3_100) {
+                camMode = CAM_MODE_DEKUHIDE;
+            } else if (this->stateFlags1 & PLAYER_STATE1_2000000) {
+                camMode = CAM_MODE_FOLLOWBOOMERANG;
+                func_800DFD78(camera, CAM_VIEW_TARGET, this->boomerangActor);
+            } else if (this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000)) {
+                if (func_80123434(this)) {
+                    camMode = CAM_MODE_HANGZ;
+                } else {
+                    camMode = CAM_MODE_HANG;
+                }
+            } else if ((this->stateFlags3 & PLAYER_STATE3_2000) && (this->actor.velocity.y < 0.0f)) {
+                if (this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) {
+                    camMode = CAM_MODE_DEKUFLYZ;
+                } else {
+                    camMode = CAM_MODE_DEKUFLY;
+                }
+            } else if (this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) {
+                if (func_800B7128(this) || func_8082EF20(this)) {
+                    camMode = CAM_MODE_BOWARROWZ;
+                } else if (this->stateFlags1 & PLAYER_STATE1_200000) {
+                    camMode = CAM_MODE_CLIMBZ;
+                } else {
+                    camMode = CAM_MODE_TARGET;
+                }
+            } else if ((this->stateFlags1 & PLAYER_STATE1_400000) && (this->transformation != 0)) {
+                camMode = CAM_MODE_STILL;
+            } else if (this->stateFlags1 & PLAYER_STATE1_40000) {
+                camMode = CAM_MODE_JUMP;
+            } else if (this->stateFlags1 & PLAYER_STATE1_200000) {
+                camMode = CAM_MODE_CLIMB;
+            } else if (this->stateFlags1 & PLAYER_STATE1_80000) {
+                camMode = CAM_MODE_FREEFALL;
+            } else if (((func_808548B8 == this->unk_748) &&
+                        (this->meleeWeaponAnimation >= PLAYER_MWA_FORWARD_SLASH_1H) &&
+                        (this->meleeWeaponAnimation <= PLAYER_MWA_ZORA_PUNCH_KICK)) ||
+                       (this->stateFlags3 & PLAYER_STATE3_8) ||
+                       ((func_8084FE7C == this->unk_748) && (this->unk_AE8 == 0)) || (func_808505D0 == this->unk_748)) {
+                camMode = CAM_MODE_STILL;
+            } else {
+                camMode = CAM_MODE_NORMAL;
+                if ((this->linearVelocity == 0.0f) &&
+                    (!(this->stateFlags1 & PLAYER_STATE1_800000) || (this->rideActor->speedXZ == 0.0f))) {
+                    seqMode = SEQ_MODE_STILL;
+                }
+            }
+
+            Camera_ChangeMode(camera, camMode);
+        }
+
+        if (play->actorCtx.targetContext.bgmEnemy != NULL) {
+            seqMode = SEQ_MODE_ENEMY;
+            Audio_SetBgmEnemyVolume(sqrtf(play->actorCtx.targetContext.bgmEnemy->xyzDistToPlayerSq));
+        }
+
+        Audio_SetSequenceMode(seqMode);
+    }
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808442D8.s")
 
@@ -3922,7 +4035,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
         if (var_v1 == 0) {
             func_808426F0(play, player);
         }
-        func_80843EC0(play, player);
+        Player_UpdateCamAndSeqModes(play, player);
         temp_v0_18 = player->skelAnime.moveFlags;
         if (temp_v0_18 & 8) {
             if (temp_v0_18 & 4) {
