@@ -3290,11 +3290,51 @@ void func_80837BF8(PlayState* play, Player* this) {
     func_80831494(play, this, func_8084ED9C, 0);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837C20.s")
+void func_8084F4E8(Player* this, PlayState* play);
+void func_80852C04(Player* this, PlayState* play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837C78.s")
+void func_80837C20(PlayState* play, Player* this) {
+    s32 sp1C = this->unk_AE8;
+    s32 sp18 = this->unk_AE7;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837CEC.s")
+    func_8083172C(play, this, func_8084F4E8, 0);
+    this->actor.velocity.y = 0.0f;
+    this->unk_AE8 = sp1C;
+    this->unk_AE7 = sp18;
+}
+
+void func_80837C78(PlayState* play, Player* this) {
+    func_8083172C(play, this, func_80852C04, 0);
+    this->stateFlags1 |= (PLAYER_STATE1_400 | PLAYER_STATE1_20000000);
+
+    if (this->getItemId == GI_HEART_CONTAINER) {
+        this->unk_AE8 = 0x14;
+    } else if (this->getItemId >= GI_NONE) {
+        this->unk_AE8 = 1;
+    } else {
+        this->getItemId = -this->getItemId;
+    }
+}
+
+void func_8084F1B8(Player* this, PlayState* play);
+
+void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3, LinkAnimationHeader* arg4) {
+    f32 sp24 = arg2->normal.x * SHT_MINV;
+    f32 sp20 = arg2->normal.z * SHT_MINV;
+
+    func_80831494(play, this, func_8084F1B8, 0);
+    func_8082DE50(play, this);
+    func_8082DB18(play, this, arg4);
+
+    this->actor.world.pos.x -= (arg3 + 1.0f) * sp24;
+    this->actor.world.pos.z -= (arg3 + 1.0f) * sp20;
+    this->actor.shape.rot.y = Math_FAtan2F(sp20, sp24);
+
+    this->currentYaw = this->actor.shape.rot.y;
+    func_8082DAD4(this);
+    this->actor.velocity.y = 0.0f;
+    func_8082E6D0(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837DEC.s")
 
