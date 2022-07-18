@@ -64,39 +64,45 @@ static ColliderSphereInit sSphereInit = {
     { 1, { { 0, 0, 0 }, 23 }, 100 },
 };
 
+typedef enum {
+    /* 0x0 */ EN_RAT_DMGEFF_NONE,
+    /* 0x1 */ EN_RAT_DMGEFF_STUN,
+    /* 0xF */ EN_RAT_DMGEFF_HOOKSHOT = 0xF, // Pulls the Real Bombchu towards the player
+} EnRatDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xF),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x0),
-    /* Light arrow    */ DMG_ENTRY(2, 0x0),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(1, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_RAT_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_RAT_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, EN_RAT_DMGEFF_NONE),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_RAT_DMGEFF_NONE),
+    /* Light arrow    */ DMG_ENTRY(2, EN_RAT_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_RAT_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_RAT_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_RAT_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_RAT_DMGEFF_NONE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 30, 30, 50 };
@@ -143,8 +149,8 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
 
-    attackRange = ENRAT_GET_ATTACK_RANGE(&this->actor);
-    if (ENRAT_GET_8000(&this->actor)) {
+    attackRange = EN_RAT_GET_ATTACK_RANGE(&this->actor);
+    if (EN_RAT_GET_8000(&this->actor)) {
         this->actor.params = 1;
     } else {
         this->actor.params = 0;
@@ -156,9 +162,9 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 0) {
         Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
         Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
-        this->unk_190 = 30;
+        this->timer = 30;
     } else {
-        this->unk_190 = 150;
+        this->timer = 150;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -283,7 +289,7 @@ void EnRat_UpdateRotation(EnRat* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-void func_80A566E0(EnRat* this) {
+void EnRat_RotateToFacePlayer(EnRat* this) {
     Vec3f sp74;
     s16 var_v1;
 
@@ -323,7 +329,7 @@ void func_80A566E0(EnRat* this) {
     Matrix_MultVec3f(&this->axisForwards, &sp74);
     Math_Vec3f_Copy(&this->axisForwards, &sp74);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
-    this->unk_18D = 1;
+    this->isTouchingFloor = 1;
 }
 
 s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
@@ -390,17 +396,17 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
         posB.z = (this->axisForwards.z * lineLength) + posA.z;
 
         if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-            if ((polySide != NULL) && (this->unk_18C != 0)) {
+            if ((polySide != NULL) && (this->hasLostTrackOfPlayer != 0)) {
                 return false;
             }
 
-            this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
+            this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
-                this->unk_18D |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
+                this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -430,7 +436,7 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
             }
 
             if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
+                this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polySide, play);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -508,9 +514,9 @@ void EnRat_SpawnSmoke(EnRat* this, PlayState* play) {
 }
 
 void EnRat_SetupRevive(EnRat* this) {
-    this->unk_18C = 0;
-    this->unk_190 = 200;
-    this->unk_192 = 0;
+    this->hasLostTrackOfPlayer = 0;
+    this->timer = 200;
+    this->stunTimer = 0;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.yOffset = 0.0f;
     this->actor.shape.rot.x = this->actor.home.rot.x;
@@ -528,9 +534,9 @@ void EnRat_SetupRevive(EnRat* this) {
 }
 
 void EnRat_Revive(EnRat* this, PlayState* play) {
-    if (this->unk_190 > 0) {
-        this->unk_190--;
-        if (this->unk_190 == 0) {
+    if (this->timer > 0) {
+        this->timer--;
+        if (this->timer == 0) {
             this->actor.flags |= ACTOR_FLAG_1;
             this->actor.draw = EnRat_Draw;
             this->skelAnime.playSpeed = 1.0f;
@@ -544,7 +550,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
             this->actor.flags &= ~ACTOR_FLAG_10;
-            this->unk_190 = 150;
+            this->timer = 150;
             EnRat_SetupIdle(this);
         }
     }
@@ -552,7 +558,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
 
 void EnRat_SetupIdle(EnRat* this) {
     Animation_PlayLoop(&this->skelAnime, &gRealBombchuRunAnim);
-    this->unk_18E = 5;
+    this->animationLoopCounter = 5;
     this->actor.speedXZ = 2.0f;
     this->actionFunc = EnRat_Idle;
 }
@@ -563,14 +569,14 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
     this->actor.speedXZ = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
-        if (this->unk_18E != 0) {
-            this->unk_18E--;
+        if (this->animationLoopCounter != 0) {
+            this->animationLoopCounter--;
         }
     }
 
-    if ((this->unk_18E == 0) && (Rand_ZeroOne() < 0.05f)) {
+    if ((this->animationLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_VOICE);
-        this->unk_18E = 5;
+        this->animationLoopCounter = 5;
     }
 
     if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->attackRange) &&
@@ -582,19 +588,19 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
 void EnRat_SetupSpottedPlayer(EnRat* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
-    this->unk_18E = 3;
+    this->animationLoopCounter = 3;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = EnRat_SpottedPlayer;
 }
 
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
-    if ((this->unk_18E == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if ((this->animationLoopCounter == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        this->unk_18E--;
-        if (this->unk_18E == 0) {
+        this->animationLoopCounter--;
+        if (this->animationLoopCounter == 0) {
             EnRat_SetupRunTowardsPlayer(this);
         }
     }
@@ -625,34 +631,34 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
     Vec3f blureP2;
 
     this->actor.speedXZ = 6.1f;
-    if (this->unk_18C != 0) {
+    if (this->hasLostTrackOfPlayer != 0) {
         if (!(player->stateFlags3 & PLAYER_STATE3_100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
             (Actor_IsFacingPlayer(&this->actor, 0x3000))) {
-            this->unk_18C = 0;
+            this->hasLostTrackOfPlayer = 0;
         }
     } else if ((player->stateFlags3 & PLAYER_STATE3_100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
-        this->unk_18C = 1;
+        this->hasLostTrackOfPlayer = 1;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        if (this->unk_18E != 0) {
-            this->unk_18E--;
+        if (this->animationLoopCounter != 0) {
+            this->animationLoopCounter--;
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
     }
 
-    if (this->unk_190 != 0) {
-        this->unk_190--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
-    if ((this->unk_190 == 0) && (this->actor.params == 0)) {
-        this->unk_190 = 30;
+    if ((this->timer == 0) && (this->actor.params == 0)) {
+        this->timer = 30;
     }
 
     EnRat_SpawnSmoke(this, play);
     this->visualJitter =
-        (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->unk_190);
+        (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->timer);
 
     if (this->actor.params == 0) {
         EnRat_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
@@ -670,9 +676,9 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
         EnRat_SpawnWaterEffects(this, play);
     }
 
-    if ((this->unk_18E == 0) && (Rand_ZeroOne() < 0.05f)) {
+    if ((this->animationLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
-        this->unk_18E = 5;
+        this->animationLoopCounter = 5;
     }
 
     func_800B9010(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
@@ -692,9 +698,9 @@ void EnRat_SetupBounced(EnRat* this) {
 void EnRat_Bounced(EnRat* this, PlayState* play) {
     this->actor.shape.rot.x -= 0x700;
     Math_StepToF(&this->actor.shape.yOffset, 1700.0f, 170.0f);
-    this->unk_190--;
-    if (this->unk_190 == 0) {
-        this->unk_190 = 30;
+    this->timer--;
+    if (this->timer == 0) {
+        this->timer = 30;
     }
 
     if (this->actor.bgCheckFlags & (0x10 | 0x8 | 0x1)) {
@@ -731,8 +737,8 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRat* this = THIS;
 
-    this->unk_18D = 0;
-    if (this->unk_192 == 0) {
+    this->isTouchingFloor = 0;
+    if (this->stunTimer == 0) {
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -748,9 +754,9 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if (this->actor.colChkInfo.damageEffect == 0xF) {
-            this->unk_192 = -2;
-        } else if (this->actor.colChkInfo.damageEffect == 1) {
+        if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_HOOKSHOT) {
+            this->stunTimer = -2;
+        } else if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_STUN) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
             if (this->actionFunc == EnRat_Bounced) {
@@ -759,7 +765,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                     this->actor.velocity.y = 0.0f;
                 }
             } else {
-                this->unk_192 = 40;
+                this->stunTimer = 40;
             }
         } else {
             EnRat_Explode(this, play);
@@ -768,7 +774,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     } else if (((this->collider.base.ocFlags1 & OC1_HIT) && (((this->collider.base.oc->category == ACTORCAT_ENEMY)) ||
                                                              (this->collider.base.oc->category == ACTORCAT_BOSS) ||
                                                              (this->collider.base.oc->category == ACTORCAT_PLAYER))) ||
-               ((this->actionFunc == EnRat_RunTowardsPlayer) && (this->unk_190 == 0))) {
+               ((this->actionFunc == EnRat_RunTowardsPlayer) && (this->timer == 0))) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         EnRat_Explode(this, play);
         return;
@@ -777,11 +783,11 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->actionFunc != EnRat_PostDetonation) && (this->actionFunc != EnRat_Revive)) {
-        if (this->unk_192 > 0) {
-            this->unk_192--;
-        } else if (this->unk_192 < 0) {
-            if (this->unk_192 == -2) {
-                this->unk_192 = -1;
+        if (this->stunTimer > 0) {
+            this->stunTimer--;
+        } else if (this->stunTimer < 0) {
+            if (this->stunTimer == -2) {
+                this->stunTimer = -1;
             } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
                 EnRat_Explode(this, play);
                 return;
@@ -791,8 +797,8 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 EnRat_HandleNonSceneCollision(this, play);
             }
 
-            if (this->unk_18C == 0) {
-                func_80A566E0(this);
+            if (this->hasLostTrackOfPlayer == 0) {
+                EnRat_RotateToFacePlayer(this);
             }
 
             if ((this->actionFunc != EnRat_SpottedPlayer) && !EnRat_IsTouchingFloor(this, play)) {
@@ -800,7 +806,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (this->unk_18D != 0) {
+            if (this->isTouchingFloor != 0) {
                 EnRat_UpdateRotation(this);
                 this->actor.shape.rot.x = -this->actor.world.rot.x;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -824,7 +830,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->axisUp.z * 10.0f);
 
         if (this->actionFunc != EnRat_Revive) {
-            if (this->unk_192 == 0) {
+            if (this->stunTimer == 0) {
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
             }
 
@@ -892,14 +898,14 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (this->actor.params == 0) {
-            var_fv0 = fabsf(cos_rad(this->unk_190 * 0.10471976f));
+            var_fv0 = fabsf(cos_rad(this->timer * 0.10471976f));
         } else {
-            if (this->unk_190 >= 120) {
-                var_fv0 = fabsf(cos_rad((this->unk_190 % 30) * 0.10471976f));
-            } else if (this->unk_190 >= 30) {
-                var_fv0 = fabsf(cos_rad((this->unk_190 % 6) * 0.5235988f));
+            if (this->timer >= 120) {
+                var_fv0 = fabsf(cos_rad((this->timer % 30) * 0.10471976f));
+            } else if (this->timer >= 30) {
+                var_fv0 = fabsf(cos_rad((this->timer % 6) * 0.5235988f));
             } else {
-                var_fv0 = fabsf(cos_rad((this->unk_190 % 3) * 1.0471976f));
+                var_fv0 = fabsf(cos_rad((this->timer % 3) * 1.0471976f));
             }
         }
 

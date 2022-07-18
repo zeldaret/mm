@@ -10644,7 +10644,7 @@
     0x80A563CC:("EnRat_InitializeAxes",),
     0x80A56444:("EnRat_UpdateFloorPoly",),
     0x80A5665C:("EnRat_UpdateRotation",),
-    0x80A566E0:("func_80A566E0",),
+    0x80A566E0:("EnRat_RotateToFacePlayer",),
     0x80A56994:("EnRat_IsOnCollisionPoly",),
     0x80A56AFC:("EnRat_IsTouchingFloor",),
     0x80A56EB8:("EnRat_ActorCoordsToWorld",),
