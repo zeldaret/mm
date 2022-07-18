@@ -194,7 +194,6 @@ void func_80853850(Player* arg0, PlayState* arg1);  /* static */
 void func_80853A5C(Player* arg0, PlayState* arg1);  /* static */
 void func_808540A0(Player* arg0, PlayState* arg1);  /* static */
 void func_80854118(Player* arg0, PlayState* arg1);  /* static */
-void func_8085421C(Player* arg0, PlayState* arg1);  /* static */
 void func_8085437C(Player* arg0, PlayState* arg1);  /* static */
 void func_8085439C(Player* arg0, PlayState* arg1);  /* static */
 void func_80854614(Player* arg0, PlayState* arg1);  /* static */
@@ -4770,7 +4769,7 @@ s32 func_808340AC(s32 arg0) {
     return -1;
 }
 
-s32 func_808340D4(u32 arg0) {
+s32 func_808340D4(s32 arg0) {
     s32 var_v0;
 
     var_v0 = arg0 == 4;
@@ -4783,25 +4782,25 @@ s32 func_808340D4(u32 arg0) {
     return var_v0;
 }
 
-void func_80834104(PlayState* arg0, Player* arg1) {
-    func_80831494(arg0, arg1, func_8085421C, 0);
-    arg1->stateFlags1 |= 0xA0000000;
+void func_80834104(PlayState* play, Player* this) {
+    func_80831494(play, this, func_8085421C, 0);
+    this->stateFlags1 |= 0xA0000000;
 }
 
-void func_80834140(PlayState* arg0, Player* arg1, LinkAnimationHeader* arg2) {
-    if (!(arg1->stateFlags1 & 0x80)) {
-        func_80834104(arg0, arg1);
-        if (func_8082DA90(arg0) != 0) {
-            arg1->unk_AE8 = -0x1E;
+void func_80834140(PlayState* play, Player* this, LinkAnimationHeader* anim) {
+    if (!(this->stateFlags1 & 0x80)) {
+        func_80834104(play, this);
+        if (func_8082DA90(play) != 0) {
+            this->unk_AE8 = -0x1E;
         }
-        arg1->stateFlags1 |= 0x80;
-        LinkAnimation_Change(arg0, &arg1->skelAnime, arg2, 1.0f, 0.0f, 84.0f, (u8) 2, -6.0f);
-        arg1->unk_AE7 = 1;
-        arg1->linearVelocity = 0.0f;
+        this->stateFlags1 |= 0x80;
+        LinkAnimation_Change(play, &this->skelAnime, anim, 1.0f, 0.0f, 84.0f, (u8) 2, -6.0f);
+        this->unk_AE7 = 1;
+        this->linearVelocity = 0.0f;
     }
 }
 
-s32 func_808341F4(PlayState* arg0, Player* arg1) {
+s32 func_808341F4(PlayState* play, Player* this) {
     f32 temp_fa0;
     f32 temp_fv0;
     f32 temp_fv0_2;
@@ -4818,26 +4817,26 @@ s32 func_808341F4(PlayState* arg0, Player* arg1) {
     u8 temp_v0_2;
     u8* var_s1;
 
-    temp_v0 = arg1->transformation;
+    temp_v0 = this->transformation;
     var_s3 = 0;
-    var_s1 = arg1 + 0xD45;
+    var_s1 = this->flameTimers;
     if ((temp_v0 == 2) || (temp_v0 == 3)) {
         var_s2 = 0;
-        if (arg1->actor.bgCheckFlags & 1) {
-            if (arg1->cylinder.base.ocFlags1 & 2) {
-                Math_Vec3f_Copy(arg1 + 0x24, arg1 + 0x108);
-                arg1->linearVelocity = 0.0f;
+        if (this->actor.bgCheckFlags & 1) {
+            if (this->cylinder.base.ocFlags1 & 2) {
+                Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
+                this->linearVelocity = 0.0f;
             }
-            func_80834140(arg0, arg1, &D_0400D698);
+            func_80834140(play, this, &D_0400D698);
         }
     } else {
         if (temp_v0 == 1) {
             var_v1 = 0x14;
         } else {
-            var_v1 = (s32) (arg1->linearVelocity * 0.4f) + 1;
+            var_v1 = (s32) (this->linearVelocity * 0.4f) + 1;
         }
         var_v0 = 0;
-        if (arg1->stateFlags2 & 8) {
+        if (this->stateFlags2 & 8) {
             var_v0 = 0x64;
         }
         var_s2 = var_v0 + var_v1;
@@ -4875,48 +4874,48 @@ s32 func_808341F4(PlayState* arg0, Player* arg1) {
                 }
                 var_fv0 = var_fv1;
             }
-            EffectSsFireTail_SpawnFlameOnPlayer(temp_fa0, var_fa1, arg0, var_fa1, var_s0, var_fv0);
+            EffectSsFireTail_SpawnFlameOnPlayer(temp_fa0, var_fa1, play, var_fa1, var_s0, var_fv0);
         }
         var_s0 += 1;
         var_s1 += 1;
     } while (var_s0 != 0x12);
     if (var_s3 != 0) {
-        func_800B8E58(arg1, 0x2031U);
-        if (!(arg0->gameplayFrames & 3)) {
-            func_8085B3E0(arg0, -1);
+        func_800B8E58(this, 0x2031U);
+        if (!(play->gameplayFrames & 3)) {
+            func_8085B3E0(play, -1);
         }
     } else {
-        arg1->isBurning = 0;
+        this->isBurning = 0;
     }
-    return arg1->stateFlags1 & 0x80;
+    return this->stateFlags1 & 0x80;
 }
 
-void func_808344C0(PlayState* arg0, Player* arg1) {
+s32 func_808344C0(PlayState* play, Player* this) {
     Player* var_s1;
     s32 var_s0;
 
     var_s0 = 0;
-    var_s1 = arg1;
+    var_s1 = this;
     do {
         var_s0 += 1;
         var_s1->flameTimers[0] = Rand_S16Offset(0, 0xC8);
         var_s1 += 1;
     } while (var_s0 != 0x12);
-    arg1->isBurning = 1;
-    func_808341F4(arg0, arg1);
+    this->isBurning = 1;
+    return func_808341F4(play, this);
 }
 
-void func_80834534(PlayState* arg0, Player* arg1) {
-    func_8082DF8C(arg1, 0x6808U);
-    func_808344C0(arg0, arg1);
+s32 func_80834534(PlayState* play, Player* this) {
+    func_8082DF8C(this, 0x6808U);
+    return func_808344C0(play, this);
 }
 
-s32 func_8083456C(PlayState* arg1) {
+s32 func_8083456C(PlayState* arg0, Player* arg1) {
     s32 var_v0;
 
     var_v0 = 0;
-    if (arg1->unk_BB == 1) {
-        var_v0 = func_80834534();
+    if (arg1->actor.colChkInfo.acHitEffect == 1) {
+        var_v0 = func_80834534(arg0, arg1);
     }
     return var_v0;
 }
@@ -5057,7 +5056,7 @@ s32 func_80834600(Player* arg0, PlayState* arg1) {
         if (temp_v0_3 == 9) {
             sp5C = (Player* )1;
             var_a2_2 = (Player* )1;
-            if (func_80834534(arg1, arg0, (Player* )1) != 0) {
+            if (func_80834534(arg1, arg0) != 0) {
 
             } else {
                 goto block_66;
@@ -5354,7 +5353,7 @@ s32 func_8083562C(PlayState* arg0, Actor* arg1, CollisionPoly* arg2, s32 arg3) {
 
     if ((arg1 == arg0->actorCtx.actorLists[2].first) && !(arg1->unk_A6C & 0x80) && (func_8082DA90(arg0) == 0) && (arg1->unk_394 == 0) && !(arg1->unk_A6C & 1)) {
         var_a3 = 0;
-        if (((arg2 != NULL) && (temp_v0 = SurfaceType_GetSceneExitIndex(&arg0->colCtx, arg2, arg3), var_a3 = temp_v0, (temp_v0 != 0)) && (((temp_v1 = arg0->sceneNum, (temp_v1 != 0x6B)) && (temp_v1 != 0x3E)) || ((s32) temp_v0 < 3)) && (((temp_v1 != 0x45) && (temp_v1 != 0)) || ((s32) temp_v0 < 0x15)) && ((temp_v1 != 0x4D) || ((s32) temp_v0 < 6))) || ((sp3C = var_a3, (func_808340D4(D_80862B08) != 0)) && (arg1->unk_D5E == 0xC))) {
+        if (((arg2 != NULL) && (temp_v0 = SurfaceType_GetSceneExitIndex(&arg0->colCtx, arg2, arg3), var_a3 = temp_v0, (temp_v0 != 0)) && (((temp_v1 = arg0->sceneNum, (temp_v1 != 0x6B)) && (temp_v1 != 0x3E)) || ((s32) temp_v0 < 3)) && (((temp_v1 != 0x45) && (temp_v1 != 0)) || ((s32) temp_v0 < 0x15)) && ((temp_v1 != 0x4D) || ((s32) temp_v0 < 6))) || ((sp3C = var_a3, (func_808340D4((s32) D_80862B08) != 0)) && (arg1->unk_D5E == 0xC))) {
             temp_t8 = arg1->unk_D68 - (s32) arg1->world.pos.y;
             sp34 = temp_t8;
             if (!(arg1->unk_A6C & 0x28800000) && !(arg1->bgCheckFlags & 1) && (temp_t8 < 0x190) && (D_80862B18 > 100.0f)) {
@@ -8054,7 +8053,7 @@ void func_8083BF54(PlayState* arg0, Actor* arg1) {
     arg1->terminalVelocity = -20.0f;
     arg1->gravity = (f32) gGameInfo->data[0x44] / 100.0f;
     sp7C = 0;
-    temp_v0 = func_808340D4(D_80862B08);
+    temp_v0 = func_808340D4((s32) D_80862B08);
     var_a2 = sp7C;
     if (temp_v0 == 0) {
         temp_v1 = D_80862B08;

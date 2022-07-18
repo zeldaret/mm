@@ -2508,9 +2508,10 @@ void func_80834140(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     }
 }
 
+s32 func_808341F4(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808341F4.s")
 
-void func_808344C0(PlayState* play, Player* this) {
+s32 func_808344C0(PlayState* play, Player* this) {
     s32 i = 0;
 
     while (i < ARRAY_COUNT(this->flameTimers)) {
@@ -2519,15 +2520,20 @@ void func_808344C0(PlayState* play, Player* this) {
     }
 
     this->isBurning = true;
-    func_808341F4(play, this);
+    return func_808341F4(play, this);
 }
 
-void func_80834534(PlayState* play, Player* this) {
+s32 func_80834534(PlayState* play, Player* this) {
     func_8082DF8C(this, NA_SE_VO_LI_FALL_L);
-    func_808344C0(play, this);
+    return func_808344C0(play, this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083456C.s")
+s32 func_8083456C(PlayState* play, Player* this) {
+    if (this->actor.colChkInfo.acHitEffect == 1) {
+        return func_80834534(play, this);
+    }
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808345A8.s")
 
