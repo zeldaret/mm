@@ -2535,9 +2535,18 @@ s32 func_8083456C(PlayState* play, Player* this) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808345A8.s")
+void func_808345A8(Player* this) {
+    if ((this->invincibilityTimer > 0) && (this->invincibilityTimer < 20)) {
+        this->invincibilityTimer = 20;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808345C8.s")
+void func_808345C8(void) {
+    if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
+        gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
+        gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80834600.s")
 
