@@ -84,30 +84,31 @@ void Play_GetScreenPos(PlayState* this, Vec3f* src, Vec3f* dest) {
 }
 
 s16 Play_CreateSubCamera(PlayState* this) {
-    s16 i;
+    s16 subCamId;
 
-    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
-        if (this->cameraPtrs[i] == NULL) {
+    for (subCamId = CAM_ID_SUB_FIRST; subCamId < NUM_CAMS; subCamId++) {
+        if (this->cameraPtrs[subCamId] == NULL) {
             break;
         }
     }
 
-    if (i == NUM_CAMS) {
+    // if no subCameras available
+    if (subCamId == NUM_CAMS) {
         return CAM_ID_NONE;
     }
 
-    this->cameraPtrs[i] = &this->subCameras[i - CAM_ID_SUB_FIRST];
-    Camera_Init(this->cameraPtrs[i], &this->view, &this->colCtx, this);
-    this->cameraPtrs[i]->camId = i;
+    this->cameraPtrs[subCamId] = &this->subCameras[subCamId - CAM_ID_SUB_FIRST];
+    Camera_Init(this->cameraPtrs[subCamId], &this->view, &this->colCtx, this);
+    this->cameraPtrs[subCamId]->camId = subCamId;
 
-    return i;
+    return subCamId;
 }
 
 s16 Play_GetActiveCamId(PlayState* this) {
     return this->activeCamId;
 }
 
-s32 Play_CameraChangeStatus(PlayState* this, s16 camId, s16 status) {
+s32 Play_ChangeCameraStatus(PlayState* this, s16 camId, s16 status) {
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
     if (status == CAM_STATUS_ACTIVE) {
@@ -144,14 +145,17 @@ Camera* Play_GetCamera(PlayState* this, s16 camId) {
     return this->cameraPtrs[camIdx];
 }
 
-s32 Play_CameraSetAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
-    s32 ret = 0;
+/**
+ * @return bit-packed success if each of the params were applied
+ */
+s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
+    s32 successfullySet = 0;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
     Camera* camera = this->cameraPtrs[camIdx];
 
-    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
-    ret *= 2;
-    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
 
     camera->dist = Math3D_Distance(at, eye);
 
@@ -165,19 +169,22 @@ s32 Play_CameraSetAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
 
     camera->atLerpStepScale = 0.01f;
 
-    return ret;
+    return successfullySet;
 }
 
-s32 Play_CameraSetAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
-    s32 ret = 0;
+/**
+ * @return bit-packed success if each of the params were applied
+ */
+s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
+    s32 successfullySet = 0;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
     Camera* camera = this->cameraPtrs[camIdx];
 
-    ret |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
-    ret <<= 1;
-    ret |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
-    ret <<= 1;
-    ret |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
 
     camera->dist = Math3D_Distance(at, eye);
 
@@ -191,17 +198,20 @@ s32 Play_CameraSetAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
 
     camera->atLerpStepScale = 0.01f;
 
-    return ret;
+    return successfullySet;
 }
 
-s32 Play_CameraSetFov(PlayState* this, s16 camId, f32 fov) {
-    s32 ret = Camera_SetViewParam(this->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
+/**
+ * @return true if the fov was successfully set
+ */
+s32 Play_SetCameraFov(PlayState* this, s16 camId, f32 fov) {
+    s32 successfullySet = Camera_SetViewParam(this->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
 
     if (1) {}
-    return ret;
+    return successfullySet;
 }
 
-s32 Play_CameraSetRoll(PlayState* this, s16 camId, s16 roll) {
+s32 Play_SetCameraRoll(PlayState* this, s16 camId, s16 roll) {
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
     Camera* camera = this->cameraPtrs[camIdx];
 
@@ -217,6 +227,7 @@ void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
     Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
 }
 
+// Same as Play_ChangeCameraSetting but also calls Camera_InitPlayerSettings
 s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
     Camera* camera;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
@@ -226,11 +237,12 @@ s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
     return Camera_ChangeSetting(camera, setting);
 }
 
-s32 Play_CameraChangeSetting(PlayState* this, s16 camId, s16 setting) {
+s32 Play_ChangeCameraSetting(PlayState* this, s16 camId, s16 setting) {
     return Camera_ChangeSetting(Play_GetCamera(this, camId), setting);
 }
 
-void func_80169AFC(PlayState* this, s16 camId, s16 arg2) {
+// Related to bosses and fishing
+void func_80169AFC(PlayState* this, s16 camId, s16 timer) {
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
     s16 i;
 
@@ -242,13 +254,13 @@ void func_80169AFC(PlayState* this, s16 camId, s16 arg2) {
         }
     }
 
-    if (arg2 <= 0) {
-        Play_CameraChangeStatus(this, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
+    if (timer <= 0) {
+        Play_ChangeCameraStatus(this, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
         this->cameraPtrs[CAM_ID_MAIN]->childCamId = this->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = 0;
     }
 }
 
-s16 Play_CameraGetUID(PlayState* this, s16 camId) {
+s16 Play_GetCameraUID(PlayState* this, s16 camId) {
     Camera* camera = this->cameraPtrs[camId];
 
     if (camera != NULL) {
@@ -258,12 +270,13 @@ s16 Play_CameraGetUID(PlayState* this, s16 camId) {
     }
 }
 
-s16 func_80169BF8(PlayState* this, s16 camId, s16 arg2) {
+// Unused in both MM and OoT, purpose is very unclear
+s16 func_80169BF8(PlayState* this, s16 camId, s16 uid) {
     Camera* camera = this->cameraPtrs[camId];
 
     if (camera != NULL) {
         return 0;
-    } else if (camera->uid != arg2) {
+    } else if (camera->uid != uid) {
         return 0;
     } else if (camera->status != CAM_STATUS_ACTIVE) {
         return 2;

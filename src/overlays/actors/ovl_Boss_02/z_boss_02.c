@@ -1632,8 +1632,8 @@ void func_809DD934(Boss02* this, PlayState* play) {
             if (player->stateFlags1 & 0x100) {
                 Cutscene_Start(play, &play->csCtx);
                 this->unk_1D22 = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
                 func_8016566C(150);
                 this->unk_1D14 = 0;
                 this->unk_1D5C = 0.0f;
@@ -2030,7 +2030,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
         Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
         Matrix_MultVecY(1.0f, &this->unk_1D3C);
-        Play_CameraSetAtEyeUp(play, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
+        Play_SetCameraAtEyeUp(play, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
         ShrinkWindow_SetLetterboxTarget(27);
     }
 }
@@ -2058,8 +2058,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
             Cutscene_Start(play, &play->csCtx);
             this->unk_1D22 = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
             this->unk_1D20 = 2;
             this->unk_1D1C = 0;
 
@@ -2155,8 +2155,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 this->unk_1D22 = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                Play_CameraChangeStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
+                Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_ChangeCameraStatus(play, this->unk_1D22, CAM_STATUS_ACTIVE);
                 this->unk_1D20 = 101;
                 this->unk_1D1C = 0;
                 this->unk_1D5C = 1.0f;
@@ -2236,7 +2236,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
     if ((this->unk_1D20 != 0) && (this->unk_1D22 != 0)) {
         sp5C = this->unk_1D24;
         sp5C.y += sp58 * D_809DF5B0;
-        Play_CameraSetAtEyeUp(play, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
+        Play_SetCameraAtEyeUp(play, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
         this->unk_1D3C.z = this->unk_1D3C.x = 0.0f;
         this->unk_1D3C.y = 1.0f;
         ShrinkWindow_SetLetterboxTarget(27);

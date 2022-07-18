@@ -260,8 +260,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->unk_704 = 0;
                     Cutscene_Start(play, &play->csCtx);
                     this->unk_70A = Play_CreateSubCamera(play);
-                    Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                    Play_CameraChangeStatus(play, this->unk_70A, CAM_STATUS_ACTIVE);
+                    Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_ChangeCameraStatus(play, this->unk_70A, CAM_STATUS_ACTIVE);
                     func_800B7298(play, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -405,8 +405,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
         }
         Math_Vec3f_Copy(&sp50, &this->unk_718);
         sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
-        Play_CameraSetAtEye(play, this->unk_70A, &sp50, &this->unk_70C);
-        Play_CameraSetFov(play, this->unk_70A, this->unk_744);
+        Play_SetCameraAtEye(play, this->unk_70A, &sp50, &this->unk_70C);
+        Play_SetCameraFov(play, this->unk_70A, this->unk_744);
         Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;

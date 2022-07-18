@@ -449,7 +449,7 @@ void EnDragon_CameraSetAtEye(EnDragon* this, PlayState* play, Vec3f eye, Vec3f a
     this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     Math_Vec3f_Copy(&this->cameraEye, &eye);
     Math_Vec3f_Copy(&this->cameraAt, &at);
-    Play_CameraSetAtEye(play, this->cameraId, &this->cameraAt, &this->cameraEye);
+    Play_SetCameraAtEye(play, this->cameraId, &this->cameraAt, &this->cameraEye);
 }
 
 void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {

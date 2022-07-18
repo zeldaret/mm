@@ -577,7 +577,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
         VEC3F_LERPIMPDST(&sp60, &temp_s3->eye, &sp54, sp4C);
 
-        Play_CameraSetAtEye(play, this->unk_284, &sp6C, &sp60);
+        Play_SetCameraAtEye(play, this->unk_284, &sp6C, &sp60);
     } else if ((this->unk_27A < 11) && (this->unk_27A > 0)) {
         temp_s3->fov += (sp78->fov - temp_s3->fov) / this->unk_27A;
     }
@@ -750,9 +750,9 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     } else if (this->unk_27A < 16) {
         sp46 = ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]);
 
-        Play_CameraSetAtEyeUp(play, sp46, &this->unk_258, &this->unk_264, &D_80A9405C);
-        Play_CameraSetFov(play, sp46, this->unk_270);
-        Play_CameraSetRoll(play, sp46, 0);
+        Play_SetCameraAtEyeUp(play, sp46, &this->unk_258, &this->unk_264, &D_80A9405C);
+        Play_SetCameraFov(play, sp46, this->unk_270);
+        Play_SetCameraRoll(play, sp46, 0);
     }
 
     switch (this->unk_27A) {
