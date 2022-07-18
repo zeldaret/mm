@@ -329,7 +329,7 @@ void EnRat_RotateToFacePlayer(EnRat* this) {
     Matrix_MultVec3f(&this->axisForwards, &sp74);
     Math_Vec3f_Copy(&this->axisForwards, &sp74);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
-    this->isTouchingFloor = 1;
+    this->unk_18D = 1;
 }
 
 s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
@@ -400,13 +400,13 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
                 return false;
             }
 
-            this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polySide, play);
+            this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
-                this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
+                this->unk_18D |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -436,7 +436,7 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
             }
 
             if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                this->isTouchingFloor |= EnRat_UpdateFloorPoly(this, polySide, play);
+                this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -737,7 +737,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRat* this = THIS;
 
-    this->isTouchingFloor = 0;
+    this->unk_18D = 0;
     if (this->stunTimer == 0) {
         SkelAnime_Update(&this->skelAnime);
     }
@@ -806,7 +806,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (this->isTouchingFloor != 0) {
+            if (this->unk_18D != 0) {
                 EnRat_UpdateRotation(this);
                 this->actor.shape.rot.x = -this->actor.world.rot.x;
                 this->actor.shape.rot.y = this->actor.world.rot.y;

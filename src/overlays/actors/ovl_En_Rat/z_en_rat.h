@@ -16,7 +16,7 @@ typedef struct EnRat {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnRatActionFunc actionFunc;
     /* 0x18C */ u8 hasLostTrackOfPlayer;
-    /* 0x18D */ u8 isTouchingFloor;
+    /* 0x18D */ u8 unk_18D;
     /* 0x18E */ s16 animationLoopCounter;
     /* 0x190 */ s16 timer; // Used for both exploding and reviving
     /* 0x192 */ s16 stunTimer; // Set to -2 and -1 when hit with the Hookshot
