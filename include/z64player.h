@@ -6,14 +6,14 @@
 
 struct Player;
 
-typedef enum {
+typedef enum PlayerShield {
     /* 0x00 */ PLAYER_SHIELD_NONE,
     /* 0x01 */ PLAYER_SHIELD_HEROS_SHIELD,
     /* 0x02 */ PLAYER_SHIELD_MIRROR_SHIELD,
     /* 0x03 */ PLAYER_SHIELD_MAX
 } PlayerShield;
 
-typedef enum {
+typedef enum PlayerBoots {
     /* 0x00 */ PLAYER_BOOTS_FIERCE_DEITY,
     /* 0x01 */ PLAYER_BOOTS_HYLIAN,
     /* 0x02 */ PLAYER_BOOTS_GIANT,
@@ -24,7 +24,7 @@ typedef enum {
     /* 0x07 */ PLAYER_BOOTS_MAX
 } PlayerBoots;
 
-typedef enum {
+typedef enum PlayerStrength {
     /* 0x00 */ PLAYER_STRENGTH_DEKU,
     /* 0x01 */ PLAYER_STRENGTH_HUMAN,
     /* 0x02 */ PLAYER_STRENGTH_ZORA,
@@ -32,7 +32,7 @@ typedef enum {
     /* 0x04 */ PLAYER_STRENGTH_MAX
 } PlayerStrength;
 
-typedef enum {
+typedef enum PlayerTransformation {
     /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
     /* 0x01 */ PLAYER_FORM_GORON,
     /* 0x02 */ PLAYER_FORM_ZORA,
@@ -41,7 +41,7 @@ typedef enum {
     /* 0x05 */ PLAYER_FORM_MAX
 } PlayerTransformation;
 
-typedef enum {
+typedef enum PlayerMask {
     /* 0x00 */ PLAYER_MASK_NONE,
     /* 0x01 */ PLAYER_MASK_TRUTH,
     /* 0x02 */ PLAYER_MASK_KAFEIS_MASK,
@@ -157,7 +157,7 @@ typedef enum PlayerActionParam {
     /* 0x53 */ PLAYER_AP_MAX
 } PlayerActionParam;
 
-typedef enum {
+typedef enum PlayerMeleeWeaponAnimation {
     /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
     /*  1 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
     /*  2 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
@@ -195,7 +195,16 @@ typedef enum {
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
 
-// TODO: figure out MAX
+typedef enum PlayerDoorType {
+    /* -1 */ PLAYER_DOORTYPE_MINUS_1 = -1, // PLAYER_DOORTYPE_AJAR = -1,
+    /*  0 */ PLAYER_DOORTYPE_0, // PLAYER_DOORTYPE_NONE,
+    /*  1 */ PLAYER_DOORTYPE_1, // PLAYER_DOORTYPE_HANDLE,
+    /*  2 */ PLAYER_DOORTYPE_2, // PLAYER_DOORTYPE_SLIDING,
+    /*  3 */ PLAYER_DOORTYPE_3, // PLAYER_DOORTYPE_FAKE
+    /*  4 */ PLAYER_DOORTYPE_4,
+    /*  5 */ PLAYER_DOORTYPE_5
+} PlayerDoorType;
+
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_0,
     /* 1 */ PLAYER_ANIMTYPE_1,
@@ -706,7 +715,7 @@ typedef struct Player {
     /* 0x350 */ PosRot leftHandWorld;
     /* 0x364 */ Actor* rightHandActor;
     /* 0x368 */ PosRot rightHandWorld;
-    /* 0x37C */ s8 doorType;
+    /* 0x37C */ s8 doorType; // PlayerDoorType enum
     /* 0x37D */ s8 doorDirection;
     /* 0x37E */ s8 doorTimer;
     /* 0x37F */ s8 doorNext; // used with spiral staircase

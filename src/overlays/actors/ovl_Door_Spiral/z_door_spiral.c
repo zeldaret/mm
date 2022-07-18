@@ -278,7 +278,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
     } else if (DoorSpiral_PlayerShouldClimb(this, play)) {
         player = GET_PLAYER(play);
 
-        player->doorType = 4;
+        player->doorType = PLAYER_DOORTYPE_4;
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);

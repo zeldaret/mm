@@ -498,18 +498,18 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 yawDiff = (0x8000 - yawDiff);
             }
             if (ABS_ALT(yawDiff) < 0x3000) {
-                player->doorType = 1;
+                player->doorType = PLAYER_DOORTYPE_1;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_MINUS_1;
                         this->dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->unk_1A4 == 4) {
-                    player->doorType = -1;
+                    player->doorType = PLAYER_DOORTYPE_MINUS_1;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                     s32 textIdOffset;
@@ -528,7 +528,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         } else if (this->unk_1A4 == 2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_MINUS_1;
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
@@ -537,7 +537,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->dyna.actor.textId = sp30.result + 0x1800;
 
-                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? 5 : -1;
+                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? PLAYER_DOORTYPE_5 : PLAYER_DOORTYPE_MINUS_1;
                     }
                 }
                 func_80122F28(player);

@@ -5711,7 +5711,7 @@ block_8:
             }
 block_13:
             temp_s0 = arg0->doorActor;
-            if (arg0->doorType < 0) {
+            if (arg0->doorType <= 0) {
                 func_8085B460(arg1, temp_s0, M2C_ERROR(Read from unset register $a2));
                 if (temp_s0->textId == 0x1821) {
                     temp_s0->flags |= 0x100;

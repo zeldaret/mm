@@ -120,7 +120,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
 
         quake = func_80ACABA8(this, play);
         if (quake > 0) {
-            player->doorType = 2;
+            player->doorType = PLAYER_DOORTYPE_2;
             player->doorDirection = quake;
             player->doorActor = &this->dyna.actor;
             func_80122F28(player);

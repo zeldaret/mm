@@ -1868,7 +1868,7 @@ s32 func_80831010(Player* this, PlayState* play) {
 }
 
 s32 func_80831094(Player* this, PlayState* play) {
-    if ((this->doorType == 0) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
+    if ((this->doorType == PLAYER_DOORTYPE_0) && !(this->stateFlags1 & PLAYER_STATE1_2000000)) {
         if ((D_80862B48 != 0) || func_80830F9C(play)) {
             if (func_80830E30(this, play)) {
                 return func_80831010(this, play);
@@ -2715,14 +2715,21 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door) {
     this->unk_B72 = 2;
 }
 #else
+// doorType == PLAYER_DOORTYPE_4
 void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80835EAC.s")
 #endif
 
+// doorType == PLAYER_DOORTYPE_2
+void func_8083604C(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083604C.s")
 
+// doorType not PLAYER_DOORTYPE_2 and PLAYER_DOORTYPE_4
+void func_80836258(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836258.s")
 
+// door stuff
+s32 func_808365DC(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808365DC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836888.s")
@@ -3947,7 +3954,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
         player->tatlTextId = 0;
         player->unk_B2B = -1;
         player->unk_AA0 = 3.4028235e38f;
-        player->doorType = 0;
+        player->doorType = PLAYER_DOORTYPE_0;
         player->unk_B75 = 0;
         player->unk_A78 = NULL;
         Math_StepToF(&player->windSpeed, 0.0f, 0.5f);
@@ -4763,6 +4770,8 @@ s32 func_808491B4(Player* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084D820.s")
 
+// door stuff
+void func_8084E034(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084E034.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8084E25C.s")
