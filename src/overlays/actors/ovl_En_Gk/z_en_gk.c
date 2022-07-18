@@ -168,7 +168,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     gSaveContext.save.weekEventReg[41] |= 4;
@@ -179,7 +179,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 gSaveContext.save.weekEventReg[41] |= 4;

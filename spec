@@ -500,8 +500,6 @@ beginseg
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
-    include "build/data/code/z_parameter.data.o"
-    include "build/data/code/z_parameter.bss.o"
     include "build/src/code/z_path.o"
     include "build/src/code/z_pause.o"
     include "build/src/code/z_player_lib.o"
@@ -1372,8 +1370,7 @@ beginseg
     name "ovl_En_Ik"
     compress
     include "build/src/overlays/actors/ovl_En_Ik/z_en_ik.o"
-    include "build/data/ovl_En_Ik/ovl_En_Ik.data.o"
-    include "build/data/ovl_En_Ik/ovl_En_Ik.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ik/ovl_En_Ik_reloc.o"
 endseg
 
 beginseg

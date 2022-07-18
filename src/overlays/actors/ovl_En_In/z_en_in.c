@@ -577,7 +577,7 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-            func_801159EC(-play->msgCtx.unk1206C);
+            Rupees_ChangeBy(-play->msgCtx.unk1206C);
             if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 func_808F4108(this, play, 0x3474);
             } else if (this->unk4AC & 8) {
@@ -603,7 +603,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= fee) {
-            func_801159EC(-fee);
+            Rupees_ChangeBy(-fee);
             if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 if (arg4 != 0) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
@@ -748,10 +748,10 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                            if (Interface_HasEmptyBottle()) {
+                            if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
-                                func_801159EC(-play->msgCtx.unk1206C);
+                                Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
                                 Actor_ContinueText(play, &this->actor, 0x3469);
@@ -894,7 +894,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x347E:
                     func_808F35D8(this, play);
-                    if (Interface_HasEmptyBottle()) {
+                    if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
@@ -1000,10 +1000,10 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                            if (Interface_HasEmptyBottle()) {
+                            if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
-                                func_801159EC(-play->msgCtx.unk1206C);
+                                Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
                                 Actor_ContinueText(play, &this->actor, 0x3469);
@@ -1098,7 +1098,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x34A1:
                     func_808F35D8(this, play);
-                    if (Interface_HasEmptyBottle()) {
+                    if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
