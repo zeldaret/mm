@@ -111,7 +111,7 @@ void func_808415A0(PlayState* arg1, Player* arg1, s32); /* static */
 void func_808415E4(PlayState* arg1, Player* arg1, s32); /* static */
 void func_80841624(PlayState* arg1, Player* arg1, s32); /* static */
 void func_80841744(PlayState* arg1, Player* arg1, s32); /* static */
-? func_80843EC0(PlayState*, Player*);               /* static */
+? Player_UpdateCamAndSeqModes(PlayState*, Player*);               /* static */
 void func_808484F0(Player* arg0);                   /* static */
 void func_808496AC(Player* arg0, PlayState* arg1);  /* static */
 void func_808497A0(Player* arg0, PlayState* arg1);  /* static */
@@ -11217,7 +11217,7 @@ block_78:
 }
 
 /*
-Decompilation failure in function func_80843EC0:
+Decompilation failure in function Player_UpdateCamAndSeqModes:
 
 Label L80844238 refers to a delay slot; this is currently not supported.
 Please modify the assembly to work around it (e.g. copy the instruction
@@ -11822,7 +11822,7 @@ void func_80844EF8(Player* player, PlayState* play, Input* input) {
         if (var_v1 == 0) {
             func_808426F0(play, player);
         }
-        func_80843EC0(play, player);
+        Player_UpdateCamAndSeqModes(play, player);
         temp_v0_18 = player->skelAnime.moveFlags;
         if (temp_v0_18 & 8) {
             if (temp_v0_18 & 4) {
