@@ -1280,7 +1280,7 @@
     0x800DFCB4:("Camera_GetCamDirPitch",),
     0x800DFCDC:("Camera_GetCamDirYaw",),
     0x800DFD04:("Camera_AddQuake",),
-    0x800DFD78:("func_800DFD78",),
+    0x800DFD78:("Camera_SetViewParam",),
     0x800DFEF0:("func_800DFEF0",),
     0x800DFF18:("func_800DFF18",),
     0x800DFF34:("func_800DFF34",),

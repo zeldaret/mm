@@ -794,7 +794,7 @@ asm/non_matchings/code/z_camera/Camera_GetCamDir.s,Camera_GetCamDir,0x800DFC90,0
 asm/non_matchings/code/z_camera/Camera_GetCamDirPitch.s,Camera_GetCamDirPitch,0x800DFCB4,0xA
 asm/non_matchings/code/z_camera/Camera_GetCamDirYaw.s,Camera_GetCamDirYaw,0x800DFCDC,0xA
 asm/non_matchings/code/z_camera/Camera_AddQuake.s,Camera_AddQuake,0x800DFD04,0x1D
-asm/non_matchings/code/z_camera/func_800DFD78.s,func_800DFD78,0x800DFD78,0x5E
+asm/non_matchings/code/z_camera/Camera_SetViewParam.s,Camera_SetViewParam,0x800DFD78,0x5E
 asm/non_matchings/code/z_camera/func_800DFEF0.s,func_800DFEF0,0x800DFEF0,0xA
 asm/non_matchings/code/z_camera/func_800DFF18.s,func_800DFF18,0x800DFF18,0x7
 asm/non_matchings/code/z_camera/func_800DFF34.s,func_800DFF34,0x800DFF34,0x4

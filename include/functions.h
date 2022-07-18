@@ -1123,7 +1123,7 @@ void Camera_GetCamDir(Vec3s* dst, Camera* camera);
 s16 Camera_GetCamDirPitch(Camera* camera);
 s16 Camera_GetCamDirYaw(Camera* camera);
 void Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown);
-void func_800DFD78(Camera* camera, s32 paramFlag, void* value);
+s32 Camera_SetViewParam(Camera* camera, s32 viewFlag, void* param);
 // UNK_TYPE4 func_800DFEF0(s32 param_1, u16 param_2);
 // UNK_TYPE4 func_800DFF18(Camera* iParm1, UNK_TYPE2 uParm2);
 // UNK_TYPE4 func_800DFF34(s32 param_1);

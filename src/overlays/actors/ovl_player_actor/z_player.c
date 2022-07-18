@@ -3758,7 +3758,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                                                       : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
             if ((this->actor.parent != NULL) && (this->stateFlags3 & PLAYER_STATE3_80)) {
                 camMode = CAM_MODE_HOOKSHOT;
-                func_800DFD78(camera, CAM_VIEW_TARGET, this->actor.parent);
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->actor.parent);
             } else if (func_8084BC64 == this->unk_748) {
                 camMode = CAM_MODE_STILL;
             } else if (this->stateFlags3 & PLAYER_STATE3_8000) {
@@ -3787,14 +3787,14 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
                 } else {
                     camMode = CAM_MODE_BATTLE;
                 }
-                func_800DFD78(camera, CAM_VIEW_TARGET, this->unk_730);
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->unk_730);
             } else if (this->stateFlags1 & PLAYER_STATE1_1000) {
                 camMode = CAM_MODE_CHARGE;
             } else if (this->stateFlags3 & PLAYER_STATE3_100) {
                 camMode = CAM_MODE_DEKUHIDE;
             } else if (this->stateFlags1 & PLAYER_STATE1_2000000) {
                 camMode = CAM_MODE_FOLLOWBOOMERANG;
-                func_800DFD78(camera, CAM_VIEW_TARGET, this->boomerangActor);
+                Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->boomerangActor);
             } else if (this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000)) {
                 if (func_80123434(this)) {
                     camMode = CAM_MODE_HANGZ;

@@ -336,7 +336,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_AddQuake.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFD78.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetViewParam.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DFEF0.s")
 
