@@ -22,16 +22,16 @@ typedef struct EnRat {
     /* 0x192 */ s16 unk_192;
     /* 0x194 */ Vec3s jointTable[REAL_BOMBCHU_LIMB_MAX];
     /* 0x1D0 */ Vec3s morphTable[REAL_BOMBCHU_LIMB_MAX];
-    /* 0x20C */ Vec3f unk_20C;
-    /* 0x218 */ Vec3f unk_218;
-    /* 0x224 */ Vec3f unk_224;
+    /* 0x20C */ Vec3f axisForwards;
+    /* 0x218 */ Vec3f axisUp;
+    /* 0x224 */ Vec3f axisLeft;
     /* 0x230 */ Vec3f unk_230;
     /* 0x23C */ Vec3f unk_23C[2];
-    /* 0x254 */ f32 unk_254;
+    /* 0x254 */ f32 visualJitter;
     /* 0x258 */ f32 unk_258;
     /* 0x25C */ f32 unk_25C;
-    /* 0x260 */ s32 unk_260;
-    /* 0x264 */ s32 unk_264;
+    /* 0x260 */ s32 blure1Index;
+    /* 0x264 */ s32 blure2Index;
     /* 0x268 */ ColliderSphere collider;
 } EnRat; // size = 0x2C0
 

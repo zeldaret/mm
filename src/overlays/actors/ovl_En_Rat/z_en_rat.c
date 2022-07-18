@@ -18,19 +18,19 @@ void EnRat_Update(Actor* thisx, PlayState* play);
 void EnRat_Draw(Actor* thisx, PlayState* play);
 
 void func_80A563CC(EnRat* this);
-void func_80A5665C(EnRat* this);
+void EnRat_UpdateRotation(EnRat* this);
 void func_80A57330(EnRat* this);
 void func_80A57384(EnRat* this, PlayState* play);
 void func_80A57488(EnRat* this);
 void func_80A574E8(EnRat* this, PlayState* play);
 void func_80A575F4(EnRat* this);
 void func_80A5764C(EnRat* this, PlayState* play);
-void func_80A57984(EnRat* this, PlayState* play);
+void EnRat_Bounced(EnRat* this, PlayState* play);
 void func_80A57A9C(EnRat* this, PlayState* play);
 void func_80A5723C(EnRat* this, PlayState* play);
-void func_80A57A08(EnRat* this, PlayState* play);
+void EnRat_Explode(EnRat* this, PlayState* play);
 s32 func_80A56AFC(EnRat* this, PlayState* play);
-void func_80A57918(EnRat* this);
+void EnRat_SetupBounced(EnRat* this);
 
 const ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
@@ -158,8 +158,8 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, REAL_BOMBCHU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     if (this->actor.params == 0) {
-        Effect_Add(play, &this->unk_260, EFFECT_BLURE2, 0, 0, &D_80A58470);
-        Effect_Add(play, &this->unk_264, EFFECT_BLURE2, 0, 0, &D_80A58470);
+        Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &D_80A58470);
+        Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &D_80A58470);
         this->unk_190 = 0x1E;
     } else {
         this->unk_190 = 0x96;
@@ -167,7 +167,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80A5842C, &D_80A5844C);
     func_80A563CC(this);
-    func_80A5665C(this);
+    EnRat_UpdateRotation(this);
 
     if ((temp_s1 == 0xFF) || (temp_s1 == 0)) {
         this->unk_258 = 350.0f;
@@ -192,8 +192,8 @@ void EnRat_Destroy(Actor* thisx, PlayState* play) {
     EnRat* this = THIS;
 
     if (this->actor.params == 0) {
-        Effect_Destroy(play, this->unk_260);
-        Effect_Destroy(play, this->unk_264);
+        Effect_Destroy(play, this->blure1Index);
+        Effect_Destroy(play, this->blure2Index);
     }
 
     Collider_DestroySphere(play, &this->collider);
@@ -203,12 +203,15 @@ void func_80A563CC(EnRat* this) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultVecZ(1.0f, &this->unk_20C);
-    Matrix_MultVecY(1.0f, &this->unk_218);
-    Matrix_MultVecX(1.0f, &this->unk_224);
+    Matrix_MultVecZ(1.0f, &this->axisForwards);
+    Matrix_MultVecY(1.0f, &this->axisUp);
+    Matrix_MultVecX(1.0f, &this->axisLeft);
 }
 
-s32 func_80A56444(EnRat* this, CollisionPoly* floorPoly, PlayState* play) {
+/**
+ * Returns true if floorPoly is valid for the Real Bombchu to move on, false otherwise.
+ */
+s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play) {
     Vec3f normal;
     Vec3f vec;
     f32 angle;
@@ -227,7 +230,7 @@ s32 func_80A56444(EnRat* this, CollisionPoly* floorPoly, PlayState* play) {
         normal.y = 1.0f;
     }
 
-    normDotUp = DOTXYZ(normal, this->unk_218);
+    normDotUp = DOTXYZ(normal, this->axisUp);
 
     if (fabsf(normDotUp) >= 0.999f) {
         return false;
@@ -238,45 +241,48 @@ s32 func_80A56444(EnRat* this, CollisionPoly* floorPoly, PlayState* play) {
         return false;
     }
 
-    Math3D_CrossProduct(&this->unk_218, &normal, &vec);
+    Math3D_CrossProduct(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
 
     if (magnitude < 0.001f) {
-        func_80A57A08(this, play);
+        EnRat_Explode(this, play);
         return false;
     }
 
     Math_Vec3f_Scale(&vec, 1.0f / magnitude);
     Matrix_RotateAxisF(angle, &vec, MTXMODE_NEW);
-    Matrix_MultVec3f(&this->unk_224, &vec);
-    Math_Vec3f_Copy(&this->unk_224, &vec);
-    Math3D_CrossProduct(&this->unk_224, &normal, &this->unk_20C);
+    Matrix_MultVec3f(&this->axisLeft, &vec);
+    Math_Vec3f_Copy(&this->axisLeft, &vec);
+    Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
 
-    magnitude = Math3D_Vec3fMagnitude(&this->unk_20C);
+    magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {
-        func_80A57A08(this, play);
+        EnRat_Explode(this, play);
         return false;
     }
 
-    Math_Vec3f_Scale(&this->unk_20C, 1.0f / magnitude);
-    Math_Vec3f_Copy(&this->unk_218, &normal);
+    Math_Vec3f_Scale(&this->axisForwards, 1.0f / magnitude);
+    Math_Vec3f_Copy(&this->axisUp, &normal);
     return true;
 }
 
-void func_80A5665C(EnRat* this) {
-    MtxF sp18;
+void EnRat_UpdateRotation(EnRat* this) {
+    MtxF mf;
 
-    sp18.xx = this->unk_224.x;
-    sp18.yx = this->unk_224.y;
-    sp18.zx = this->unk_224.z;
-    sp18.xy = this->unk_218.x;
-    sp18.yy = this->unk_218.y;
-    sp18.zy = this->unk_218.z;
-    sp18.xz = this->unk_20C.x;
-    sp18.yz = this->unk_20C.y;
-    sp18.zz = this->unk_20C.z;
-    Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, 0);
+    mf.xx = this->axisLeft.x;
+    mf.yx = this->axisLeft.y;
+    mf.zx = this->axisLeft.z;
+
+    mf.xy = this->axisUp.x;
+    mf.yy = this->axisUp.y;
+    mf.zy = this->axisUp.z;
+
+    mf.xz = this->axisForwards.x;
+    mf.yz = this->axisForwards.y;
+    mf.zz = this->axisForwards.z;
+
+    Matrix_MtxFToYXZRot(&mf, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
@@ -286,7 +292,7 @@ void func_80A566E0(EnRat* this) {
 
     if (this->actionFunc != func_80A57384) {
         var_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-        if (this->unk_218.y < -0.25f) {
+        if (this->axisUp.y < -0.25f) {
             var_v1 -= 0x8000;
         }
     } else {
@@ -299,8 +305,8 @@ void func_80A566E0(EnRat* this) {
             Matrix_RotateZS(-this->actor.home.rot.z, MTXMODE_NEW);
             Matrix_RotateXS(-this->actor.home.rot.x, MTXMODE_APPLY);
             Matrix_RotateYS(-this->actor.home.rot.y, MTXMODE_APPLY);
-            Matrix_MultVec3f(&this->unk_218, &sp40);
-            Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_20C, &sp64);
+            Matrix_MultVec3f(&this->axisUp, &sp40);
+            Math_Vec3f_Sum(&this->actor.world.pos, &this->axisForwards, &sp64);
             Matrix_MultVec3f(&sp64, &sp4C);
             Matrix_MultVec3f(&this->actor.home.pos, &sp64);
             Matrix_MultVec3f(&this->actor.world.pos, &sp58);
@@ -316,14 +322,15 @@ void func_80A566E0(EnRat* this) {
     }
 
     var_v1 = CLAMP(var_v1, -0x800, 0x800);
-    Matrix_RotateAxisF(var_v1 * 0.0000958738f, &this->unk_218, MTXMODE_NEW);
-    Matrix_MultVec3f(&this->unk_20C, &sp74);
-    Math_Vec3f_Copy(&this->unk_20C, &sp74);
-    Math3D_CrossProduct(&this->unk_218, &this->unk_20C, &this->unk_224);
+    Matrix_RotateAxisF(var_v1 * 0.0000958738f, &this->axisUp, MTXMODE_NEW);
+    Matrix_MultVec3f(&this->axisForwards, &sp74);
+    Math_Vec3f_Copy(&this->axisForwards, &sp74);
+    Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
     this->unk_18D = 1;
 }
 
-s32 func_80A56994(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly, s32* bgId) {
+s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
+                            s32* bgId) {
     WaterBox* waterBox;
     s32 var_v1;
     f32 waterSurface;
@@ -369,31 +376,31 @@ s32 func_80A56AFC(EnRat* this, PlayState* play) {
 
     lineLength = 2.0f * this->actor.speedXZ;
 
-    posA.x = this->actor.world.pos.x + (this->unk_218.x * 5.0f);
-    posA.y = this->actor.world.pos.y + (this->unk_218.y * 5.0f);
-    posA.z = this->actor.world.pos.z + (this->unk_218.z * 5.0f);
+    posA.x = this->actor.world.pos.x + (this->axisUp.x * 5.0f);
+    posA.y = this->actor.world.pos.y + (this->axisUp.y * 5.0f);
+    posA.z = this->actor.world.pos.z + (this->axisUp.z * 5.0f);
 
-    posB.x = this->actor.world.pos.x - (this->unk_218.x * 4.0f);
-    posB.y = this->actor.world.pos.y - (this->unk_218.y * 4.0f);
-    posB.z = this->actor.world.pos.z - (this->unk_218.z * 4.0f);
+    posB.x = this->actor.world.pos.x - (this->axisUp.x * 4.0f);
+    posB.y = this->actor.world.pos.y - (this->axisUp.y * 4.0f);
+    posB.z = this->actor.world.pos.z - (this->axisUp.z * 4.0f);
 
-    if (func_80A56994(play, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
-        posB.x = (this->unk_20C.x * lineLength) + posA.x;
-        posB.y = (this->unk_20C.y * lineLength) + posA.y;
-        posB.z = (this->unk_20C.z * lineLength) + posA.z;
+    if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
+        posB.x = (this->axisForwards.x * lineLength) + posA.x;
+        posB.y = (this->axisForwards.y * lineLength) + posA.y;
+        posB.z = (this->axisForwards.z * lineLength) + posA.z;
 
-        if (func_80A56994(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+        if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
             if ((polySide != NULL) && (this->unk_18C != 0)) {
                 return false;
             }
 
-            this->unk_18D |= func_80A56444(this, polySide, play);
+            this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
-                this->unk_18D |= func_80A56444(this, polyUpDown, play);
+                this->unk_18D |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -407,23 +414,23 @@ s32 func_80A56AFC(EnRat* this, PlayState* play) {
         for (i = 0; i < 3; i++) {
             if (i == 0) {
                 // backwards
-                posB.x = posA.x - (this->unk_20C.x * lineLength);
-                posB.y = posA.y - (this->unk_20C.y * lineLength);
-                posB.z = posA.z - (this->unk_20C.z * lineLength);
+                posB.x = posA.x - (this->axisForwards.x * lineLength);
+                posB.y = posA.y - (this->axisForwards.y * lineLength);
+                posB.z = posA.z - (this->axisForwards.z * lineLength);
             } else if (i == 1) {
                 // left
-                posB.x = posA.x + (this->unk_224.x * lineLength);
-                posB.y = posA.y + (this->unk_224.y * lineLength);
-                posB.z = posA.z + (this->unk_224.z * lineLength);
+                posB.x = posA.x + (this->axisLeft.x * lineLength);
+                posB.y = posA.y + (this->axisLeft.y * lineLength);
+                posB.z = posA.z + (this->axisLeft.z * lineLength);
             } else {
                 // right
-                posB.x = posA.x - (this->unk_224.x * lineLength);
-                posB.y = posA.y - (this->unk_224.y * lineLength);
-                posB.z = posA.z - (this->unk_224.z * lineLength);
+                posB.x = posA.x - (this->axisLeft.x * lineLength);
+                posB.y = posA.y - (this->axisLeft.y * lineLength);
+                posB.z = posA.z - (this->axisLeft.z * lineLength);
             }
 
-            if (func_80A56994(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                this->unk_18D |= func_80A56444(this, polySide, play);
+            if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+                this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -438,16 +445,19 @@ s32 func_80A56AFC(EnRat* this, PlayState* play) {
     return true;
 }
 
-void func_80A56EB8(EnRat* this, Vec3f* arg1, Vec3f* arg2) {
-    f32 temp_fv0;
+/**
+ * Transform coordinates from actor coordinate space to world space, according to current orientation.
+ * `offset` is expected to already be at world scale.
+ */
+void EnRat_ActorCoordsToWorld(EnRat* this, Vec3f* offset, Vec3f* pos) {
+    f32 x = offset->x + this->visualJitter;
 
-    temp_fv0 = arg1->x + this->unk_254;
-    arg2->x = this->actor.world.pos.x + (this->unk_224.x * temp_fv0) + (this->unk_218.x * arg1->y) +
-              (this->unk_20C.x * arg1->z);
-    arg2->y = this->actor.world.pos.y + (this->unk_224.y * temp_fv0) + (this->unk_218.y * arg1->y) +
-              (this->unk_20C.y * arg1->z);
-    arg2->z = this->actor.world.pos.z + (this->unk_224.z * temp_fv0) + (this->unk_218.z * arg1->y) +
-              (this->unk_20C.z * arg1->z);
+    pos->x = this->actor.world.pos.x + (this->axisLeft.x * x) + (this->axisUp.x * offset->y) +
+             (this->axisForwards.x * offset->z);
+    pos->y = this->actor.world.pos.y + (this->axisLeft.y * x) + (this->axisUp.y * offset->y) +
+             (this->axisForwards.y * offset->z);
+    pos->z = this->actor.world.pos.z + (this->axisLeft.z * x) + (this->axisUp.z * offset->y) +
+             (this->axisForwards.z * offset->z);
 }
 
 void func_80A56F68(EnRat* this, PlayState* play) {
@@ -455,13 +465,13 @@ void func_80A56F68(EnRat* this, PlayState* play) {
     Vec3f sp28;
 
     EffectSsGRipple_Spawn(play, &this->actor.world.pos, 70, 500, 0);
-    sp28.x = this->actor.world.pos.x - (this->unk_20C.x * 10.0f);
-    sp28.z = this->actor.world.pos.z - (this->unk_20C.z * 10.0f);
+    sp28.x = this->actor.world.pos.x - (this->axisForwards.x * 10.0f);
+    sp28.z = this->actor.world.pos.z - (this->axisForwards.z * 10.0f);
     sp28.y = this->actor.world.pos.y + 5.0f;
     EffectSsGSplash_Spawn(play, &sp28, NULL, NULL, 1, 450);
 }
 
-void func_80A57010(EnRat* this, PlayState* play) {
+void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     s16 yaw = this->actor.shape.rot.y;
     f32 sin;
     f32 cos;
@@ -475,17 +485,17 @@ void func_80A57010(EnRat* this, PlayState* play) {
         sin = Math_SinS(yaw);
         cos = Math_CosS(yaw);
 
-        tempX = this->unk_20C.x;
-        this->unk_20C.x = (sin * this->unk_20C.z) + (cos * tempX);
-        this->unk_20C.z = (cos * this->unk_20C.z) - (sin * tempX);
+        tempX = this->axisForwards.x;
+        this->axisForwards.x = (sin * this->axisForwards.z) + (cos * tempX);
+        this->axisForwards.z = (cos * this->axisForwards.z) - (sin * tempX);
 
-        tempX = this->unk_218.x;
-        this->unk_218.x = (sin * this->unk_218.z) + (cos * tempX);
-        this->unk_218.z = (cos * this->unk_218.z) - (sin * tempX);
+        tempX = this->axisUp.x;
+        this->axisUp.x = (sin * this->axisUp.z) + (cos * tempX);
+        this->axisUp.z = (cos * this->axisUp.z) - (sin * tempX);
 
-        tempX = this->unk_224.x;
-        this->unk_224.x = (sin * this->unk_224.z) + (cos * tempX);
-        this->unk_224.z = (cos * this->unk_224.z) - (sin * tempX);
+        tempX = this->axisLeft.x;
+        this->axisLeft.x = (sin * this->axisLeft.z) + (cos * tempX);
+        this->axisLeft.z = (cos * this->axisLeft.z) - (sin * tempX);
     }
 }
 
@@ -503,7 +513,7 @@ void func_80A57180(EnRat* this) {
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.shape.rot.z = this->actor.home.rot.z;
     func_80A563CC(this);
-    func_80A5665C(this);
+    EnRat_UpdateRotation(this);
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuBounceAnim, 0.0f);
@@ -524,7 +534,7 @@ void func_80A5723C(EnRat* this, PlayState* play) {
     } else {
         Math_StepToF(&this->unk_25C, 0.0f, 666.6667f);
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            func_800B1210(play, &this->actor.world.pos, &this->unk_218, &gZeroVec3f, 600, 100);
+            func_800B1210(play, &this->actor.world.pos, &this->axisUp, &gZeroVec3f, 600, 100);
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         }
 
@@ -637,15 +647,15 @@ void func_80A5764C(EnRat* this, PlayState* play) {
     }
 
     func_80A57118(this, play);
-    this->unk_254 =
+    this->visualJitter =
         (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->unk_190);
 
     if (this->actor.params == 0) {
-        func_80A56EB8(this, &D_80A584A8, &sp48);
-        func_80A56EB8(this, &D_80A584B4, &sp3C);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_260), &sp48, &sp3C);
-        func_80A56EB8(this, &D_80A584C0, &sp3C);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_264), &sp48, &sp3C);
+        EnRat_ActorCoordsToWorld(this, &D_80A584A8, &sp48);
+        EnRat_ActorCoordsToWorld(this, &D_80A584B4, &sp3C);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &sp48, &sp3C);
+        EnRat_ActorCoordsToWorld(this, &D_80A584C0, &sp3C);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &sp48, &sp3C);
     } else if ((this->actor.floorPoly != NULL) && !(play->gameplayFrames & 3)) {
         func_800B1210(play, &this->actor.world.pos, &D_80A584CC, &gZeroVec3f, 550, 50);
     }
@@ -663,17 +673,17 @@ void func_80A5764C(EnRat* this, PlayState* play) {
     func_80A57570(this);
 }
 
-void func_80A57918(EnRat* this) {
+void EnRat_SetupBounced(EnRat* this) {
     this->actor.speedXZ = 5.0f;
     this->actor.velocity.y = 8.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->actor.gravity = -1.0f;
     func_80A57570(this);
     this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x1);
-    this->actionFunc = func_80A57984;
+    this->actionFunc = EnRat_Bounced;
 }
 
-void func_80A57984(EnRat* this, PlayState* play) {
+void EnRat_Bounced(EnRat* this, PlayState* play) {
     this->actor.shape.rot.x -= 0x700;
     Math_StepToF(&this->actor.shape.yOffset, 1700.0f, 170.0f);
     this->unk_190--;
@@ -682,17 +692,17 @@ void func_80A57984(EnRat* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & (0x10 | 0x8 | 0x1)) {
-        func_80A57A08(this, play);
+        EnRat_Explode(this, play);
     }
 }
 
-void func_80A57A08(EnRat* this, PlayState* play) {
-    EnBom* bom;
+void EnRat_Explode(EnRat* this, PlayState* play) {
+    EnBom* bomb;
 
-    bom = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, 0, 0, 0, 0);
-    if (bom != NULL) {
-        bom->timer = 0;
+    bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                               this->actor.world.pos.z, 0, 0, 0, 0);
+    if (bomb != NULL) {
+        bomb->timer = 0;
     }
 
     if (this->actor.params == 1) {
@@ -725,9 +735,9 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         if (this->collider.base.atFlags & AT_BOUNCED) {
-            func_80A57918(this);
+            EnRat_SetupBounced(this);
         } else {
-            func_80A57A08(this, play);
+            EnRat_Explode(this, play);
             return;
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
@@ -737,7 +747,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
-            if (this->actionFunc == func_80A57984) {
+            if (this->actionFunc == EnRat_Bounced) {
                 this->actor.speedXZ = 0.0f;
                 if (this->actor.velocity.y > 0.0f) {
                     this->actor.velocity.y = 0.0f;
@@ -746,7 +756,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 this->unk_192 = 40;
             }
         } else {
-            func_80A57A08(this, play);
+            EnRat_Explode(this, play);
             return;
         }
     } else if (((this->collider.base.ocFlags1 & OC1_HIT) && (((this->collider.base.oc->category == ACTORCAT_ENEMY)) ||
@@ -754,7 +764,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                                                              (this->collider.base.oc->category == ACTORCAT_PLAYER))) ||
                ((this->actionFunc == func_80A5764C) && (this->unk_190 == 0))) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
-        func_80A57A08(this, play);
+        EnRat_Explode(this, play);
         return;
     }
 
@@ -767,12 +777,12 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             if (this->unk_192 == -2) {
                 this->unk_192 = -1;
             } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
-                func_80A57A08(this, play);
+                EnRat_Explode(this, play);
                 return;
             }
-        } else if (this->actionFunc != func_80A57984) {
-            if (this->actor.floorBgId != 0x32) {
-                func_80A57010(this, play);
+        } else if (this->actionFunc != EnRat_Bounced) {
+            if (this->actor.floorBgId != BGCHECK_SCENE) {
+                EnRat_HandleNonSceneCollision(this, play);
             }
 
             if (this->unk_18C == 0) {
@@ -780,12 +790,12 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             }
 
             if ((this->actionFunc != func_80A574E8) && !func_80A56AFC(this, play)) {
-                func_80A57A08(this, play);
+                EnRat_Explode(this, play);
                 return;
             }
 
             if (this->unk_18D != 0) {
-                func_80A5665C(this);
+                EnRat_UpdateRotation(this);
                 this->actor.shape.rot.x = -this->actor.world.rot.x;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 this->actor.shape.rot.z = this->actor.world.rot.z;
@@ -799,13 +809,13 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         }
 
         if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) != 0) {
-            func_80A57A08(this, play);
+            EnRat_Explode(this, play);
             return;
         }
 
-        this->collider.dim.worldSphere.center.x = this->actor.world.pos.x + (this->unk_218.x * 10.0f);
-        this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + (this->unk_218.y * 10.0f);
-        this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->unk_218.z * 10.0f);
+        this->collider.dim.worldSphere.center.x = this->actor.world.pos.x + (this->axisUp.x * 10.0f);
+        this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + (this->axisUp.y * 10.0f);
+        this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->axisUp.z * 10.0f);
 
         if (this->actionFunc != func_80A5723C) {
             if (this->unk_192 == 0) {
