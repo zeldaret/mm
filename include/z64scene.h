@@ -292,11 +292,11 @@ typedef struct {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ u16   params;
+    } /* 0x0 */ sides[2]; // 0 = front, 1 = back
+    /* 0x4 */ s16   id;
+    /* 0x6 */ Vec3s pos;
+    /* 0xC */ s16   rotY;
+    /* 0xE */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -305,10 +305,10 @@ typedef struct {
 } DoorContext; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ s16 id;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ Vec3s rot;
-    /* 0x0E */ s16 params;
+    /* 0x0 */ s16 id;
+    /* 0x2 */ Vec3s pos;
+    /* 0x8 */ Vec3s rot;
+    /* 0xE */ s16 params;
 } ActorEntry; // size = 0x10
 
 typedef struct {
@@ -338,12 +338,12 @@ typedef struct {
 } ObjectStatus; // size = 0x44
 
 typedef struct {
-    /* 0x00 */ RomFile segment;
-    /* 0x08 */ u16 titleTextId;
-    /* 0x0A */ u8 unk_A;
-    /* 0x0B */ u8 drawConfig;
-    /* 0x0C */ u8 unk_C;
-} SceneTableEntry; // size = 0x10;
+    /* 0x0 */ RomFile segment;
+    /* 0x8 */ u16 titleTextId;
+    /* 0xA */ u8 unk_A;
+    /* 0xB */ u8 drawConfig;
+    /* 0xC */ u8 unk_C;
+} SceneTableEntry; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 r;
@@ -361,11 +361,11 @@ typedef struct {
 } F3DEnvColor; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ u16 keyFrameLength;
-    /* 0x02 */ u16 keyFrameCount;
-    /* 0x04 */ F3DPrimColor* primColors;
-    /* 0x08 */ F3DEnvColor* envColors;
-    /* 0x0C */ u16* keyFrames;
+    /* 0x0 */ u16 keyFrameLength;
+    /* 0x2 */ u16 keyFrameCount;
+    /* 0x4 */ F3DPrimColor* primColors;
+    /* 0x8 */ F3DEnvColor* envColors;
+    /* 0xC */ u16* keyFrames;
 } AnimatedMatColorParams; // size = 0x10
 
 typedef struct {
@@ -427,9 +427,9 @@ typedef struct {
 } MeshHeader1Single; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ MeshHeader1Base base;
-    /* 0x08 */ u8 bgCnt;
-    /* 0x0C */ u32 bgRecordPtr;
+    /* 0x0 */ MeshHeader1Base base;
+    /* 0x8 */ u8 bgCnt;
+    /* 0xC */ u32 bgRecordPtr;
 } MeshHeader1Multi; // size = 0x10
 
 typedef struct {
@@ -447,12 +447,12 @@ typedef struct {
 } BackgroundRecord; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ s16 playerXMax; 
-    /* 0x02 */ s16 playerZMax;
-    /* 0x04 */ s16 playerXMin; 
-    /* 0x06 */ s16 playerZMin;
-    /* 0x08 */ u32 opaqueDList;
-    /* 0x0C */ u32 translucentDList;
+    /* 0x0 */ s16 playerXMax; 
+    /* 0x2 */ s16 playerZMax;
+    /* 0x4 */ s16 playerXMin; 
+    /* 0x6 */ s16 playerZMin;
+    /* 0x8 */ u32 opaqueDList;
+    /* 0xC */ u32 translucentDList;
 } MeshEntry2; // size = 0x10
 
 typedef struct {

@@ -72,13 +72,13 @@ typedef struct LightsBuffer {
 } LightsBuffer; // size = 0x188
 
 typedef struct LightContext {
-    /* 0x00 */ LightNode* listHead;
-    /* 0x04 */ Color_RGB8 ambient;
-    /* 0x07 */ u8 unk7;
-    /* 0x08 */ u8 unk8;
-    /* 0x09 */ u8 unk9;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ s16 unkC;
+    /* 0x0 */ LightNode* listHead;
+    /* 0x4 */ Color_RGB8 ambient;
+    /* 0x7 */ u8 unk7;
+    /* 0x8 */ u8 unk8;
+    /* 0x9 */ u8 unk9;
+    /* 0xA */ s16 unkA;
+    /* 0xC */ s16 unkC;
 } LightContext; // size = 0x10
 
 typedef enum LightType {

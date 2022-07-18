@@ -33,11 +33,11 @@ typedef struct {
 } SkinTransformation; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ u16 vtxCount; // number of vertices in this modif entry
-    /* 0x02 */ u16 transformCount;
-    /* 0x04 */ u16 unk_04; // index of limbTransformations
-    /* 0x08 */ SkinVertex* skinVertices;
-    /* 0x0C */ SkinTransformation* limbTransformations;
+    /* 0x0 */ u16 vtxCount; // number of vertices in this modif entry
+    /* 0x2 */ u16 transformCount;
+    /* 0x4 */ u16 unk_04; // index of limbTransformations
+    /* 0x8 */ SkinVertex* skinVertices;
+    /* 0xC */ SkinTransformation* limbTransformations;
 } SkinLimbModif; // size = 0x10
 
 typedef struct {
@@ -58,11 +58,11 @@ typedef SkinLimbModif Struct_800A598C;
 #define SKIN_LIMB_TYPE_NORMAL 11
 
 typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ s32 segmentType; // Type of data contained in segment
-    /* 0x0C */ void* segment; // Gfx* if segmentType is SKIN_LIMB_TYPE_NORMAL, SkinAnimatedLimbData if segmentType is SKIN_LIMB_TYPE_ANIMATED, NULL otherwise
+    /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x6 */ u8 child;
+    /* 0x7 */ u8 sibling;
+    /* 0x8 */ s32 segmentType; // Type of data contained in segment
+    /* 0xC */ void* segment; // Gfx* if segmentType is SKIN_LIMB_TYPE_NORMAL, SkinAnimatedLimbData if segmentType is SKIN_LIMB_TYPE_ANIMATED, NULL otherwise
 } SkinLimb; // size = 0x10
 
 typedef struct {

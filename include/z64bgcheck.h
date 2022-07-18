@@ -72,20 +72,20 @@ typedef struct {
 } ScaleRotPos; // size = 0x20
 
 typedef struct CollisionPoly {
-    /* 0x00 */ u16 type;
+    /* 0x0 */ u16 type;
     union {
         u16 vtxData[3];
         struct {
-            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
-            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
+            /* 0x2 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
+            /* 0x4 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
                                       // 0x2000 = poly IsConveyor surface
-            /* 0x06 */ u16 vIC;
+            /* 0x6 */ u16 vIC;
         };
     };
-    /* 0x08 */ Vec3s normal; // Unit normal vector
+    /* 0x8 */ Vec3s normal; // Unit normal vector
                              // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
 
-    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
+    /* 0xE */ s16 dist; // Plane distance from origin along the normal
 } CollisionPoly; // size = 0x10
 
 typedef struct {
@@ -95,10 +95,10 @@ typedef struct {
 } CamData; // size = 0x8 (BgCamData)
 
 typedef struct {
-    /* 0x00 */ Vec3s minPos;
-    /* 0x06 */ s16 xLength;
-    /* 0x08 */ s16 zLength;
-    /* 0x0C */ u32 properties;
+    /* 0x0 */ Vec3s minPos;
+    /* 0x6 */ s16 xLength;
+    /* 0x8 */ s16 zLength;
+    /* 0xC */ u32 properties;
     // 0x0008_0000 = ?
     // 0x0007_E000 = room index, 0x3F = all rooms
     // 0x0000_1F00 = lighting setting index

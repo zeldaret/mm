@@ -45,8 +45,8 @@ typedef struct {
 } Sphere16; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3f center;
-    /* 0x0C */ f32   radius;
+    /* 0x0 */ Vec3f center;
+    /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
 /* 

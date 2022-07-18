@@ -43,10 +43,10 @@ typedef struct {
 
 // Model has limbs with only rigid meshes
 typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ Gfx* dLists[2]; // Near and far
+    /* 0x0 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x6 */ u8 child;
+    /* 0x7 */ u8 sibling;
+    /* 0x8 */ Gfx* dLists[2]; // Near and far
 } LodLimb; // size = 0x10
 
 // Model has limbs with only rigid meshes
@@ -73,10 +73,10 @@ typedef struct {
 } AnimationHeaderCommon; // size = 0x2
 
 typedef struct {
-    /* 0x00 */ AnimationHeaderCommon common;
-    /* 0x04 */ s16* frameData; // referenced as tbl
-    /* 0x08 */ JointIndex* jointIndices; // referenced as ref_tbl
-    /* 0x0C */ u16 staticIndexMax;
+    /* 0x0 */ AnimationHeaderCommon common;
+    /* 0x4 */ s16* frameData; // referenced as tbl
+    /* 0x8 */ JointIndex* jointIndices; // referenced as ref_tbl
+    /* 0xC */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
 
 typedef struct {
@@ -118,27 +118,27 @@ typedef struct {
 } AnimEntryCopyAll; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ u8 queueFlag;
-    /* 0x01 */ u8 vecCount;
-    /* 0x04 */ Vec3s* base;
-    /* 0x08 */ Vec3s* mod;
-    /* 0x0C */ f32 weight;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* base;
+    /* 0x8 */ Vec3s* mod;
+    /* 0xC */ f32 weight;
 } AnimEntryInterp; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 queueFlag;
-    /* 0x01 */ u8 vecCount;
-    /* 0x04 */ Vec3s* dst;
-    /* 0x08 */ Vec3s* src;
-    /* 0x0C */ u8* copyFlag;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* dst;
+    /* 0x8 */ Vec3s* src;
+    /* 0xC */ u8* copyFlag;
 } AnimEntryCopyTrue; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 queueFlag;
-    /* 0x01 */ u8 vecCount;
-    /* 0x04 */ Vec3s* dst;
-    /* 0x08 */ Vec3s* src;
-    /* 0x0C */ u8* copyFlag;
+    /* 0x0 */ u8 queueFlag;
+    /* 0x1 */ u8 vecCount;
+    /* 0x4 */ Vec3s* dst;
+    /* 0x8 */ Vec3s* src;
+    /* 0xC */ u8* copyFlag;
 } AnimEntryCopyFalse; // size = 0x10
 
 typedef struct {
@@ -234,19 +234,19 @@ typedef struct {
 } AnimationInfo; // size = 0x18
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ s16 startFrame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 morphFrames;
+    /* 0x0 */ AnimationHeader* animation;
+    /* 0x4 */ f32 playSpeed;
+    /* 0x8 */ s16 startFrame;
+    /* 0xA */ s16 frameCount;
+    /* 0xC */ u8 mode;
+    /* 0xE */ s16 morphFrames;
 } AnimationInfoS; // size = 0x10
 
 typedef struct AnimationSpeedInfo {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ u8 mode;
-    /* 0x0C */ f32 morphFrames;
+    /* 0x0 */ AnimationHeader* animation;
+    /* 0x4 */ f32 playSpeed;
+    /* 0x8 */ u8 mode;
+    /* 0xC */ f32 morphFrames;
 } AnimationSpeedInfo; // size = 0x10
 
 struct SkeletonInfo;

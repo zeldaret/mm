@@ -5,11 +5,11 @@
 #include "unk.h"
 
 typedef struct {
-    /* 0x00 */ s8    continueFlag;
-    /* 0x01 */ s8    cameraRoll;
-    /* 0x02 */ u16   nextPointFrame;
-    /* 0x04 */ f32   viewAngle; // in degrees
-    /* 0x08 */ Vec3s pos;
+    /* 0x0 */ s8    continueFlag;
+    /* 0x1 */ s8    cameraRoll;
+    /* 0x2 */ u16   nextPointFrame;
+    /* 0x4 */ f32   viewAngle; // in degrees
+    /* 0x8 */ Vec3s pos;
 } CutsceneCameraPoint; // size = 0x10
 
 typedef struct {

@@ -332,15 +332,15 @@ typedef struct TargetContext {
 } TargetContext; // size = 0x98
 
 typedef struct {
-    /* 0x00 */ TexturePtr texture;
-    /* 0x04 */ s16 x;
-    /* 0x06 */ s16 y;
-    /* 0x08 */ u8 width;
-    /* 0x09 */ u8 height;
-    /* 0x0A */ u8 durationTimer; // how long the title card appears for before fading
-    /* 0x0B */ u8 delayTimer; // how long the title card waits to appear
-    /* 0x0C */ s16 alpha;
-    /* 0x0E */ s16 intensity;
+    /* 0x0 */ TexturePtr texture;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ u8 width;
+    /* 0x9 */ u8 height;
+    /* 0xA */ u8 durationTimer; // how long the title card appears for before fading
+    /* 0xB */ u8 delayTimer; // how long the title card waits to appear
+    /* 0xC */ s16 alpha;
+    /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
 typedef struct ActorContext_unk_20C {

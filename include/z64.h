@@ -96,10 +96,10 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s pos;
-    /* 0x06 */ s16   unk_06;
-    /* 0x08 */ Gfx*  opa;
-    /* 0x0C */ Gfx*  xlu;
+    /* 0x0 */ Vec3s pos;
+    /* 0x6 */ s16   unk_06;
+    /* 0x8 */ Gfx*  opa;
+    /* 0xC */ Gfx*  xlu;
 } PolygonDlist2; // size = 0x10
 
 typedef struct {
@@ -121,39 +121,39 @@ typedef struct {
 } CameraStateParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ s16 z;
-    /* 0x06 */ s16 reserved;
-    /* 0x08 */ s16 s;
-    /* 0x0A */ s16 t;
-    /* 0x0C */ s8 r;
-    /* 0x0D */ s8 g;
-    /* 0x0E */ s8 b;
-    /* 0x0F */ s8 a;
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+    /* 0x6 */ s16 reserved;
+    /* 0x8 */ s16 s;
+    /* 0xA */ s16 t;
+    /* 0xC */ s8 r;
+    /* 0xD */ s8 g;
+    /* 0xE */ s8 b;
+    /* 0xF */ s8 a;
 } F3DVertexColor; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ s16 z;
-    /* 0x06 */ s16 reserved;
-    /* 0x08 */ s16 s;
-    /* 0x0A */ s16 t;
-    /* 0x0C */ s8 normalX;
-    /* 0x0D */ s8 normalY;
-    /* 0x0E */ s8 normalZ;
-    /* 0x0F */ s8 a;
+    /* 0x0 */ s16 x;
+    /* 0x2 */ s16 y;
+    /* 0x4 */ s16 z;
+    /* 0x6 */ s16 reserved;
+    /* 0x8 */ s16 s;
+    /* 0xA */ s16 t;
+    /* 0xC */ s8 normalX;
+    /* 0xD */ s8 normalY;
+    /* 0xE */ s8 normalZ;
+    /* 0xF */ s8 a;
 } F3DVertexNormal; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ f32 size;
-    /* 0x04 */ f32 dynamicSizeStep;
-    /* 0x08 */ u8 state;
-    /* 0x09 */ u8 sizeGrowsCos2;
-    /* 0x0A */ u8 colorsIndex;
-    /* 0x0B */ u8 flags;
-    /* 0x0C */ u8 lightParamsIndex;
+    /* 0x0 */ f32 size;
+    /* 0x4 */ f32 dynamicSizeStep;
+    /* 0x8 */ u8 state;
+    /* 0x9 */ u8 sizeGrowsCos2;
+    /* 0xA */ u8 colorsIndex;
+    /* 0xB */ u8 flags;
+    /* 0xC */ u8 lightParamsIndex;
 } FireObjInitParams; // size = 0x10
 
 typedef struct FireObjColors {
@@ -200,17 +200,17 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x00 */ u32    size;
-    /* 0x04 */ void*  bufp;
-    /* 0x08 */ void*  head;
-    /* 0x0C */ void*  tail;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ void*  bufp;
+    /* 0x8 */ void*  head;
+    /* 0xC */ void*  tail;
 } TwoHeadArena; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u32    size;
-    /* 0x04 */ Gfx*   bufp;
-    /* 0x08 */ Gfx*   p;
-    /* 0x0C */ Gfx*   d;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ Gfx*   bufp;
+    /* 0x8 */ Gfx*   p;
+    /* 0xC */ Gfx*   d;
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
@@ -311,10 +311,10 @@ typedef struct {
 } ShrinkWindowContext; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ s32 topY;
-    /* 0x04 */ s32 bottomY;
-    /* 0x08 */ s32 leftX;
-    /* 0x0C */ s32 rightX;
+    /* 0x0 */ s32 topY;
+    /* 0x4 */ s32 bottomY;
+    /* 0x8 */ s32 leftX;
+    /* 0xC */ s32 rightX;
 } Viewport; // size = 0x10
 
 typedef void(*osCreateThread_func)(void*);
@@ -895,10 +895,10 @@ typedef struct FaultAddrConvClient {
 } FaultAddrConvClient; // size = 0xC
 
 typedef struct FaultClient {
-    /* 0x00 */ struct FaultClient* next;
-    /* 0x04 */ void (*callback)(void*, void*);
-    /* 0x08 */ void* param0;
-    /* 0x0C */ void* param1;
+    /* 0x0 */ struct FaultClient* next;
+    /* 0x4 */ void (*callback)(void*, void*);
+    /* 0x8 */ void* param0;
+    /* 0xC */ void* param1;
 } FaultClient; // size = 0x10
 
 typedef struct {
@@ -943,10 +943,10 @@ typedef struct {
 } GameStateOverlay; // size = 0x30
 
 typedef struct GameAllocEntry {
-    /* 0x00 */ struct GameAllocEntry* next;
-    /* 0x04 */ struct GameAllocEntry* prev;
-    /* 0x08 */ size_t size;
-    /* 0x0C */ u32 unk_0C;
+    /* 0x0 */ struct GameAllocEntry* next;
+    /* 0x4 */ struct GameAllocEntry* prev;
+    /* 0x8 */ size_t size;
+    /* 0xC */ u32 unk_0C;
 } GameAllocEntry; // size = 0x10
 
 typedef struct GameAlloc {
@@ -1304,17 +1304,17 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 color;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 color;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u32 useRgba;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x08 */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 useRgba;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 primColor;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
 typedef struct {

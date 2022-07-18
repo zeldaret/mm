@@ -122,21 +122,21 @@ typedef struct {
 } ColliderJntSph; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ ColliderInit base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderJntSphElementInit* elements;
+    /* 0x0 */ ColliderInit base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderJntSphElementInit* elements;
 } ColliderJntSphInit; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderJntSphElementInit* elements;
+    /* 0x0 */ ColliderInitType1 base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderJntSphElementInit* elements;
 } ColliderJntSphInitType1; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitToActor base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderJntSphElementInit* elements;
+    /* 0x0 */ ColliderInitToActor base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderJntSphElementInit* elements;
 } ColliderJntSphInitToActor; // size = 0x10
 
 typedef struct {
@@ -190,9 +190,9 @@ typedef struct {
 } ColliderTrisInit; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ ColliderInitType1 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ ColliderTrisElementInit* elements;
+    /* 0x0 */ ColliderInitType1 base;
+    /* 0x8 */ s32 count;
+    /* 0xC */ ColliderTrisElementInit* elements;
 } ColliderTrisInitType1; // size = 0x10
 
 typedef struct {
