@@ -728,7 +728,7 @@ typedef struct Player {
     /* 0x394 */ u8 csMode;
     /* 0x395 */ u8 unk_395; // prevCsMode?
     /* 0x396 */ u8 unk_396;
-    /* 0x397 */ u8 unk_397;
+    /* 0x397 */ u8 unk_397; // PlayerDoorType enum
     /* 0x398 */ Actor* unk_398;
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ s16 unk_39E;

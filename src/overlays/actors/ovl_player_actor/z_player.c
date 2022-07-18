@@ -9,6 +9,7 @@
 
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
+#include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -29,6 +30,162 @@ void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
+
+
+
+
+extern LinkAnimationHeader D_0400CF98;
+extern LinkAnimationHeader D_0400D0A8;
+extern LinkAnimationHeader D_0400D0B0;
+extern LinkAnimationHeader D_0400D0C8;
+extern LinkAnimationHeader D_0400D0D0;
+extern LinkAnimationHeader D_0400D100;
+extern LinkAnimationHeader D_0400D218;
+extern LinkAnimationHeader D_0400D220;
+extern LinkAnimationHeader D_0400D228;
+extern LinkAnimationHeader D_0400D3E8;
+extern LinkAnimationHeader D_0400D3F8;
+extern LinkAnimationHeader D_0400D420;
+extern LinkAnimationHeader D_0400D488;
+extern LinkAnimationHeader D_0400D490;
+extern LinkAnimationHeader D_0400D4A8;
+extern LinkAnimationHeader D_0400D4B0;
+extern LinkAnimationHeader D_0400D4B8;
+extern LinkAnimationHeader D_0400D4C0;
+extern LinkAnimationHeader D_0400D4D8;
+extern LinkAnimationHeader D_0400D4F0;
+extern LinkAnimationHeader D_0400D4F8;
+extern LinkAnimationHeader D_0400D500;
+extern LinkAnimationHeader D_0400D5A8;
+extern LinkAnimationHeader D_0400D5B0;
+extern LinkAnimationHeader D_0400D638;
+extern LinkAnimationHeader D_0400D660;
+extern LinkAnimationHeader D_0400D698;
+extern LinkAnimationHeader D_0400D8B0;
+extern LinkAnimationHeader D_0400D9C8;
+extern LinkAnimationHeader D_0400D9D0;
+extern LinkAnimationHeader D_0400D9D8;
+extern LinkAnimationHeader D_0400DA60;
+extern LinkAnimationHeader D_0400DA68;
+extern LinkAnimationHeader D_0400DA70;
+extern LinkAnimationHeader D_0400DA88;
+extern LinkAnimationHeader D_0400DAA0;
+extern LinkAnimationHeader D_0400DAA8;
+extern LinkAnimationHeader D_0400DAC0;
+extern LinkAnimationHeader D_0400DAC8;
+extern LinkAnimationHeader D_0400DAD0;
+extern LinkAnimationHeader D_0400DAD8;
+extern LinkAnimationHeader D_0400DAE0;
+extern LinkAnimationHeader D_0400DAF0;
+extern LinkAnimationHeader D_0400DB10;
+extern LinkAnimationHeader D_0400DB18;
+extern LinkAnimationHeader D_0400DB30;
+extern LinkAnimationHeader D_0400DB68;
+extern LinkAnimationHeader D_0400DBB0;
+extern LinkAnimationHeader D_0400DBE8;
+extern LinkAnimationHeader D_0400DC20;
+extern LinkAnimationHeader D_0400DC28;
+extern LinkAnimationHeader D_0400DC30;
+extern LinkAnimationHeader D_0400DC48;
+extern LinkAnimationHeader D_0400DC60;
+extern LinkAnimationHeader D_0400DC78;
+extern LinkAnimationHeader D_0400DC80;
+extern LinkAnimationHeader D_0400DC88;
+extern LinkAnimationHeader D_0400DCA8;
+extern LinkAnimationHeader D_0400DCD0;
+extern LinkAnimationHeader D_0400DCF8;
+extern LinkAnimationHeader D_0400DD10;
+extern LinkAnimationHeader D_0400DD30;
+extern LinkAnimationHeader D_0400DD38;
+extern LinkAnimationHeader D_0400DD40;
+extern LinkAnimationHeader D_0400DD70;
+extern LinkAnimationHeader D_0400DD78;
+extern LinkAnimationHeader D_0400DD80;
+extern LinkAnimationHeader D_0400DDF0;
+extern LinkAnimationHeader D_0400DDF8;
+extern LinkAnimationHeader D_0400DE00;
+extern LinkAnimationHeader D_0400DE08;
+extern LinkAnimationHeader D_0400DE10;
+extern LinkAnimationHeader D_0400DE28;
+extern LinkAnimationHeader D_0400DE30;
+extern LinkAnimationHeader D_0400DE50;
+extern LinkAnimationHeader D_0400DE60;
+extern LinkAnimationHeader D_0400DEA0;
+extern LinkAnimationHeader D_0400DEA8;
+extern LinkAnimationHeader D_0400DF78;
+extern LinkAnimationHeader D_0400DF90;
+extern LinkAnimationHeader D_0400DF98;
+extern LinkAnimationHeader D_0400DFA0;
+extern LinkAnimationHeader D_0400DFA8;
+extern LinkAnimationHeader D_0400DFB0;
+extern LinkAnimationHeader D_0400DFB8;
+extern LinkAnimationHeader D_0400DFC0;
+extern LinkAnimationHeader D_0400DFC8;
+extern LinkAnimationHeader D_0400DFD0;
+extern LinkAnimationHeader D_0400DFD8;
+extern LinkAnimationHeader D_0400DFE0;
+extern LinkAnimationHeader D_0400DFE8;
+extern LinkAnimationHeader D_0400DFF0;
+extern LinkAnimationHeader D_0400DFF8;
+extern LinkAnimationHeader D_0400E000;
+extern LinkAnimationHeader D_0400E008;
+extern LinkAnimationHeader D_0400E050;
+extern LinkAnimationHeader D_0400E060;
+extern LinkAnimationHeader D_0400E070;
+extern LinkAnimationHeader D_0400E080;
+extern LinkAnimationHeader D_0400E088;
+extern LinkAnimationHeader D_0400E098;
+extern LinkAnimationHeader D_0400E1F0;
+extern LinkAnimationHeader D_0400E200;
+extern LinkAnimationHeader D_0400E208;
+extern LinkAnimationHeader D_0400E260;
+extern LinkAnimationHeader D_0400E270;
+extern LinkAnimationHeader D_0400E278;
+extern LinkAnimationHeader D_0400E290;
+extern LinkAnimationHeader D_0400E298;
+extern LinkAnimationHeader D_0400E2A0;
+extern LinkAnimationHeader D_0400E2B8;
+extern LinkAnimationHeader D_0400E2C0;
+extern LinkAnimationHeader D_0400E2C8;
+extern LinkAnimationHeader D_0400E2D8;
+extern LinkAnimationHeader D_0400E2E8;
+extern LinkAnimationHeader D_0400E2F0;
+extern LinkAnimationHeader D_0400E2F8;
+extern LinkAnimationHeader D_0400E398;
+extern LinkAnimationHeader D_0400E3A0;
+extern LinkAnimationHeader D_0400E3A8;
+extern LinkAnimationHeader D_0400E3B0;
+extern LinkAnimationHeader D_0400E3B8;
+extern LinkAnimationHeader D_0400E3C0;
+extern LinkAnimationHeader D_0400E3D8;
+extern LinkAnimationHeader D_0400E408;
+extern LinkAnimationHeader D_0400E410;
+extern LinkAnimationHeader D_0400E418;
+
+// extern void (*D_8085D2CC[0x10])(PlayState*, Player*, s32);
+extern void (*D_8085D2CC[0x10])();
+extern PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX];
+extern LinkAnimationHeader* D_8085D160[PLAYER_FORM_MAX];
+extern UNK_TYPE D_8085D30C;
+extern UNK_TYPE D_8085D330;
+extern Vec3f D_8085D340;
+
+s32 func_8085B1F0(PlayState* play, Player* player);
+s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
+void func_8085B384(Player* player, PlayState* play, Player*);
+s32 func_8085B3E0(PlayState* play, s32 damage);
+void func_8085B460(PlayState* play, Actor* actor);
+void func_8085B74C(PlayState* play);
+void func_8085B820(PlayState* play, s16 arg1, Actor* actor);
+s32 func_8085B854(PlayState* play, Player* player, s32 itemId, s32 arg3);
+s32 func_8085B930(PlayState* play, void* talkAnim, s32 arg2);
+void func_8085B08C(Player* arg0, PlayState* play);
+void func_80855818(Player* arg0, PlayState* play);
+
+
+
+
+
 
 void func_80844EF8(Player* player, PlayState* play, Input* input);
 s32 func_8085B134(PlayState* play);
@@ -2727,17 +2884,197 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door);
 #endif
 
 // doorType == PLAYER_DOORTYPE_2
-void func_8083604C(PlayState* play, Player* this, Actor* door);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083604C.s")
+void func_8083604C(PlayState* play, Player* this, Actor* door) {
+    s32 pad;
+    Vec3f sp38;
 
-// doorType not PLAYER_DOORTYPE_2 and PLAYER_DOORTYPE_4
+    this->currentYaw = door->home.rot.y;
+    if (this->doorDirection > 0) {
+        this->currentYaw -= 0x8000;
+    }
+    this->actor.shape.rot.y = this->currentYaw;
+    if (this->linearVelocity <= 0.0f) {
+        this->linearVelocity = 0.1f;
+    }
+
+    func_80835324(play, this, 50.0f, this->actor.shape.rot.y);
+    this->unk_AE7 = 0;
+    this->unk_397 = this->doorType;
+    this->stateFlags1 |= PLAYER_STATE1_20000000;
+    Actor_OffsetOfPointInActorCoords(door, &sp38, &this->actor.world.pos);
+
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * 20.0f, &this->unk_3A0);
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * -120.0f, &this->unk_3AC);
+
+    ((DoorShutter*)door)->unk_15C = 1;
+    func_8082DAD4(this);
+
+    if (this->doorTimer != 0) {
+        this->unk_AE8 = 0;
+        func_8082E438(play, this, func_8082ED20(this));
+        this->skelAnime.endFrame = 0.0f;
+    } else {
+        this->linearVelocity = 0.1f;
+    }
+
+    if (door->category == ACTORCAT_DOOR) {
+        this->unk_3BA = (s16) play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)].sides[this->doorDirection > 0 ? 0 : 1].bgCamDataId;
+        func_800B90F4(play);
+    }
+}
+
+// doorType not PLAYER_DOORTYPE_2 neither PLAYER_DOORTYPE_4
 void func_80836258(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836258.s")
 
+
+s32 func_80839518(Player* this, PlayState* play);
+s32 func_808365DC(Player* this, PlayState* play);
+s32 func_8083D23C(Player* this, PlayState* play);
+s32 func_8083CCB4(Player* this, PlayState* play);
+s32 func_808391D8(Player* this, PlayState* play);
+s32 func_8083DFC4(Player* this, PlayState* play);
+s32 func_8083A114(Player* this, PlayState* play);
+s32 func_80848570(Player* this, PlayState* play);
+s32 func_8083A580(Player* this, PlayState* play);
+s32 func_8083D78C(Player* this, PlayState* play);
+s32 func_80839B18(Player* this, PlayState* play);
+s32 func_8083A274(Player* this, PlayState* play);
+s32 func_80834DFC(Player* this, PlayState* play);
+s32 func_80838A90(Player* this, PlayState* play);
+s32 func_8083A0CC(Player* this, PlayState* play);
+
+extern s32 (*D_8085D054[0xF])(Player* this, PlayState* play);
+#if 0
+s32 (*D_8085D054[])(Player*, PlayState*) = {
+    func_80839518,
+    func_808365DC,
+    func_8083D23C,
+    func_8083CCB4,
+    func_808391D8,
+    func_8083DFC4,
+    func_8083A114,
+    func_80848570,
+    func_8083A580,
+    func_8083D78C,
+    func_80839B18,
+    func_8083A274,
+    func_80834DFC,
+    func_80838A90,
+    func_8083A0CC,
+};
+#endif
+
+void func_8085437C(Player *this, PlayState *play);
+
+#if 0
 // door stuff
+s32 func_808365DC(Player* this, PlayState* play) {
+    Actor* temp_s0;
+    Actor* var_v0_3;
+    s32 var_v0_2;
+    s8 temp_a2;
+    s8 var_v0;
+    u8 var_v1;
+
+    if (gSaveContext.save.playerData.health != 0) {
+        var_v0 = this->doorType;
+        if (var_v0 != 0) {
+            if (this->actor.category == 2) {
+                if (var_v0 < 0) {
+                    if (ActorCutscene_GetCanPlayNext(0x7C) == 0) {
+                        var_v0 = this->doorType;
+                        goto block_6;
+                    }
+                    goto block_8;
+                }
+            block_6:
+                if ((var_v0 > 0) && (ActorCutscene_GetCanPlayNext(0x7D) != 0)) {
+            block_8:
+                    if (!(this->stateFlags1 & 0x800) && ((CHECK_BTN_ALL(D_80862B44->press.button, BTN_A)) || (this->unk_748 == func_8085437C) || (this->doorType == 4) || (this->doorType == 5))) {
+                        goto block_13;
+                    }
+                }
+                goto block_39;
+            }
+
+        block_13:
+            temp_s0 = this->doorActor;
+            if (this->doorType < 0) {
+                func_8085B460(play, temp_s0);
+                if (temp_s0->textId == 0x1821) {
+                    temp_s0->flags |= 0x100;
+                }
+                return 1;
+            }
+            gSaveContext.respawn[0].data = 0;
+
+            if (this->doorType == 4) {
+                func_80835EAC(play, this, (DoorSpiral* ) temp_s0);
+            } else if (this->doorType == 2) {
+                func_8083604C(play, this, temp_s0);
+            } else {
+                func_80836258(play, this, temp_s0);
+            }
+            var_v1 = this->actor.category;
+            if (var_v1 == 2) {
+                this->unk_A86 = 0x7D;
+                ActorCutscene_Start((s16) this->unk_A86, &this->actor);
+                var_v1 = this->actor.category;
+            }
+            if (var_v1 == 2) {
+                if ((this->doorType < 3) && (temp_s0->category == 0xA) && ((this->doorType != 1) || ((((s16) temp_s0->params >> 7) & 7) != 7))) {
+                    if (this->doorDirection > 0) {
+                        var_v0_2 = 0;
+                    } else {
+                        var_v0_2 = 1;
+                    }
+                    temp_a2 = play->doorCtx.transitionActorList[(s32) (temp_s0->params & 0xFFFF) >> 0xA].sides[var_v0_2].room;
+                    if ((temp_a2 >= 0) && (temp_a2 != play->roomCtx.currRoom.num)) {
+                        Room_StartRoomTransition(play, &play->roomCtx, (s32) temp_a2);
+                    }
+                }
+            }
+            var_v0_3 = temp_s0->child;
+            temp_s0->room = play->roomCtx.currRoom.num;
+            if ((var_v0_3 != NULL) || (var_v0_3 = temp_s0->parent, (var_v0_3 != NULL))) {
+                var_v0_3->room = play->roomCtx.currRoom.num;
+            }
+            return 1;
+        }
+    }
+block_39:
+    return 0;
+}
+#else
 s32 func_808365DC(Player* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808365DC.s")
+#endif
 
+/*
+void func_80836888(Player* arg0, PlayState* arg1) {
+    LinkAnimationHeader* var_a2;
+
+    func_80831494(arg1, arg0, func_80849A9C, 1);
+    if (arg0->unk_B40 < 0.5f) {
+        var_a2 = func_8082EF54(arg0);
+        arg0->unk_B40 = 0.0f;
+    } else {
+        var_a2 = func_8082EF9C(arg0);
+        arg0->unk_B40 = 1.0f;
+    }
+    arg0->unk_B44 = arg0->unk_B40;
+    func_8082DB3C(arg1, arg0, var_a2);
+    arg0->currentYaw = arg0->actor.shape.rot.y;
+}
+
+void func_8083692C(Player* arg0, PlayState* arg1) {
+    func_80831494(arg1, arg0, func_80849DD0, 1);
+    func_8082E438(arg1, arg0, func_8082ED20(arg0));
+    arg0->currentYaw = arg0->actor.shape.rot.y;
+}
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836888.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083692C.s")
@@ -3119,154 +3456,6 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
 
 void func_80841A50(PlayState* play, Player* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80841A50.s")
-
-extern LinkAnimationHeader D_0400CF98;
-extern LinkAnimationHeader D_0400D0A8;
-extern LinkAnimationHeader D_0400D0B0;
-extern LinkAnimationHeader D_0400D0C8;
-extern LinkAnimationHeader D_0400D0D0;
-extern LinkAnimationHeader D_0400D100;
-extern LinkAnimationHeader D_0400D218;
-extern LinkAnimationHeader D_0400D220;
-extern LinkAnimationHeader D_0400D228;
-extern LinkAnimationHeader D_0400D3E8;
-extern LinkAnimationHeader D_0400D3F8;
-extern LinkAnimationHeader D_0400D420;
-extern LinkAnimationHeader D_0400D488;
-extern LinkAnimationHeader D_0400D490;
-extern LinkAnimationHeader D_0400D4A8;
-extern LinkAnimationHeader D_0400D4B0;
-extern LinkAnimationHeader D_0400D4B8;
-extern LinkAnimationHeader D_0400D4C0;
-extern LinkAnimationHeader D_0400D4D8;
-extern LinkAnimationHeader D_0400D4F0;
-extern LinkAnimationHeader D_0400D4F8;
-extern LinkAnimationHeader D_0400D500;
-extern LinkAnimationHeader D_0400D5A8;
-extern LinkAnimationHeader D_0400D5B0;
-extern LinkAnimationHeader D_0400D638;
-extern LinkAnimationHeader D_0400D660;
-extern LinkAnimationHeader D_0400D698;
-extern LinkAnimationHeader D_0400D8B0;
-extern LinkAnimationHeader D_0400D9C8;
-extern LinkAnimationHeader D_0400D9D0;
-extern LinkAnimationHeader D_0400D9D8;
-extern LinkAnimationHeader D_0400DA60;
-extern LinkAnimationHeader D_0400DA68;
-extern LinkAnimationHeader D_0400DA70;
-extern LinkAnimationHeader D_0400DA88;
-extern LinkAnimationHeader D_0400DAA0;
-extern LinkAnimationHeader D_0400DAA8;
-extern LinkAnimationHeader D_0400DAC0;
-extern LinkAnimationHeader D_0400DAC8;
-extern LinkAnimationHeader D_0400DAD0;
-extern LinkAnimationHeader D_0400DAD8;
-extern LinkAnimationHeader D_0400DAE0;
-extern LinkAnimationHeader D_0400DAF0;
-extern LinkAnimationHeader D_0400DB10;
-extern LinkAnimationHeader D_0400DB18;
-extern LinkAnimationHeader D_0400DB30;
-extern LinkAnimationHeader D_0400DB68;
-extern LinkAnimationHeader D_0400DBB0;
-extern LinkAnimationHeader D_0400DBE8;
-extern LinkAnimationHeader D_0400DC20;
-extern LinkAnimationHeader D_0400DC28;
-extern LinkAnimationHeader D_0400DC30;
-extern LinkAnimationHeader D_0400DC48;
-extern LinkAnimationHeader D_0400DC60;
-extern LinkAnimationHeader D_0400DC78;
-extern LinkAnimationHeader D_0400DC80;
-extern LinkAnimationHeader D_0400DC88;
-extern LinkAnimationHeader D_0400DCA8;
-extern LinkAnimationHeader D_0400DCD0;
-extern LinkAnimationHeader D_0400DCF8;
-extern LinkAnimationHeader D_0400DD10;
-extern LinkAnimationHeader D_0400DD30;
-extern LinkAnimationHeader D_0400DD38;
-extern LinkAnimationHeader D_0400DD40;
-extern LinkAnimationHeader D_0400DD70;
-extern LinkAnimationHeader D_0400DD78;
-extern LinkAnimationHeader D_0400DD80;
-extern LinkAnimationHeader D_0400DDF0;
-extern LinkAnimationHeader D_0400DDF8;
-extern LinkAnimationHeader D_0400DE00;
-extern LinkAnimationHeader D_0400DE08;
-extern LinkAnimationHeader D_0400DE10;
-extern LinkAnimationHeader D_0400DE28;
-extern LinkAnimationHeader D_0400DE30;
-extern LinkAnimationHeader D_0400DE50;
-extern LinkAnimationHeader D_0400DE60;
-extern LinkAnimationHeader D_0400DEA0;
-extern LinkAnimationHeader D_0400DEA8;
-extern LinkAnimationHeader D_0400DF78;
-extern LinkAnimationHeader D_0400DF90;
-extern LinkAnimationHeader D_0400DF98;
-extern LinkAnimationHeader D_0400DFA0;
-extern LinkAnimationHeader D_0400DFA8;
-extern LinkAnimationHeader D_0400DFB0;
-extern LinkAnimationHeader D_0400DFB8;
-extern LinkAnimationHeader D_0400DFC0;
-extern LinkAnimationHeader D_0400DFC8;
-extern LinkAnimationHeader D_0400DFD0;
-extern LinkAnimationHeader D_0400DFD8;
-extern LinkAnimationHeader D_0400DFE0;
-extern LinkAnimationHeader D_0400DFE8;
-extern LinkAnimationHeader D_0400DFF0;
-extern LinkAnimationHeader D_0400DFF8;
-extern LinkAnimationHeader D_0400E000;
-extern LinkAnimationHeader D_0400E008;
-extern LinkAnimationHeader D_0400E050;
-extern LinkAnimationHeader D_0400E060;
-extern LinkAnimationHeader D_0400E070;
-extern LinkAnimationHeader D_0400E080;
-extern LinkAnimationHeader D_0400E088;
-extern LinkAnimationHeader D_0400E098;
-extern LinkAnimationHeader D_0400E1F0;
-extern LinkAnimationHeader D_0400E200;
-extern LinkAnimationHeader D_0400E208;
-extern LinkAnimationHeader D_0400E260;
-extern LinkAnimationHeader D_0400E270;
-extern LinkAnimationHeader D_0400E278;
-extern LinkAnimationHeader D_0400E290;
-extern LinkAnimationHeader D_0400E298;
-extern LinkAnimationHeader D_0400E2A0;
-extern LinkAnimationHeader D_0400E2B8;
-extern LinkAnimationHeader D_0400E2C0;
-extern LinkAnimationHeader D_0400E2C8;
-extern LinkAnimationHeader D_0400E2D8;
-extern LinkAnimationHeader D_0400E2E8;
-extern LinkAnimationHeader D_0400E2F0;
-extern LinkAnimationHeader D_0400E2F8;
-extern LinkAnimationHeader D_0400E398;
-extern LinkAnimationHeader D_0400E3A0;
-extern LinkAnimationHeader D_0400E3A8;
-extern LinkAnimationHeader D_0400E3B0;
-extern LinkAnimationHeader D_0400E3B8;
-extern LinkAnimationHeader D_0400E3C0;
-extern LinkAnimationHeader D_0400E3D8;
-extern LinkAnimationHeader D_0400E408;
-extern LinkAnimationHeader D_0400E410;
-extern LinkAnimationHeader D_0400E418;
-
-// extern void (*D_8085D2CC[0x10])(PlayState*, Player*, s32);
-extern void (*D_8085D2CC[0x10])();
-extern PlayerAgeProperties D_8085BA38[PLAYER_FORM_MAX];
-extern LinkAnimationHeader* D_8085D160[PLAYER_FORM_MAX];
-extern UNK_TYPE D_8085D30C;
-extern UNK_TYPE D_8085D330;
-extern Vec3f D_8085D340;
-
-s32 func_8085B1F0(PlayState* play, Player* player);
-s32 func_8085B28C(PlayState* play, Player* player, s32 mode);
-void func_8085B384(Player* player, PlayState* play, Player*);
-s32 func_8085B3E0(PlayState* play, s32 damage);
-void func_8085B460(PlayState* play, Actor* actor, Player* player);
-void func_8085B74C(PlayState* play);
-void func_8085B820(PlayState* play, s16 arg1, Actor* actor);
-s32 func_8085B854(PlayState* play, Player* player, s32 itemId, s32 arg3);
-s32 func_8085B930(PlayState* play, void* talkAnim, s32 arg2);
-void func_8085B08C(Player* arg0, PlayState* play);
-void func_80855818(Player* arg0, PlayState* play);
 
 #if 0
 void Player_Init(Actor* thisx, PlayState* play) {
