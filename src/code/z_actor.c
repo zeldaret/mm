@@ -2217,6 +2217,7 @@ s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgI
     return false;
 }
 
+// Actor_DisableLens
 void func_800B90F4(PlayState* play) {
     if (play->actorCtx.unk3 != 0) {
         play->actorCtx.unk3 = 0;

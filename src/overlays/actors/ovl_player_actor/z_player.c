@@ -9,6 +9,7 @@
 
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
+#include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -2721,10 +2722,47 @@ void func_80835EAC(PlayState* play, Player* this, DoorSpiral* door);
 #endif
 
 // doorType == PLAYER_DOORTYPE_2
-void func_8083604C(PlayState* play, Player* this, Actor* door);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083604C.s")
+void func_8083604C(PlayState* play, Player* this, Actor* door) {
+    s32 pad;
+    Vec3f sp38;
 
-// doorType not PLAYER_DOORTYPE_2 and PLAYER_DOORTYPE_4
+    this->currentYaw = door->home.rot.y;
+    if (this->doorDirection > 0) {
+        this->currentYaw -= 0x8000;
+    }
+    this->actor.shape.rot.y = this->currentYaw;
+    if (this->linearVelocity <= 0.0f) {
+        this->linearVelocity = 0.1f;
+    }
+
+    func_80835324(play, this, 50.0f, this->actor.shape.rot.y);
+    this->unk_AE7 = 0;
+    this->unk_397 = this->doorType;
+    this->stateFlags1 |= PLAYER_STATE1_20000000;
+    Actor_OffsetOfPointInActorCoords(door, &sp38, &this->actor.world.pos);
+
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, (42.0f - fabsf(sp38.z)) * this->doorDirection, &this->actor.world.pos);
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * 20.0f, &this->unk_3A0);
+    func_80835BF8(&this->actor.world.pos, door->shape.rot.y, this->doorDirection * -120.0f, &this->unk_3AC);
+
+    ((DoorShutter*)door)->unk_15C = 1;
+    func_8082DAD4(this);
+
+    if (this->doorTimer != 0) {
+        this->unk_AE8 = 0;
+        func_8082E438(play, this, func_8082ED20(this));
+        this->skelAnime.endFrame = 0.0f;
+    } else {
+        this->linearVelocity = 0.1f;
+    }
+
+    if (door->category == ACTORCAT_DOOR) {
+        this->unk_3BA = (s16) play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(door)].sides[this->doorDirection > 0 ? 0 : 1].bgCamDataId;
+        func_800B90F4(play);
+    }
+}
+
+// doorType not PLAYER_DOORTYPE_2 neither PLAYER_DOORTYPE_4
 void func_80836258(PlayState* play, Player* this, Actor* door);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836258.s")
 
