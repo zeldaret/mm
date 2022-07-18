@@ -18,4 +18,7 @@ typedef struct ObjPurify {
 
 extern const ActorInit Obj_Purify_InitVars;
 
+#define OBJPURIFY_GET_INFO_INDEX(thisx) ((thisx)->params & 0xF)
+#define OBJPURIFY_GET_UNK_FLAG(thisx) (((thisx)->params >> 0xC) & 1)
+
 #endif // Z_OBJ_PURIFY_H

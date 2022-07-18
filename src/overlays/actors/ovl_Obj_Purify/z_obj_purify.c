@@ -12,9 +12,6 @@
 
 #define THIS ((ObjPurify*)thisx)
 
-#define OBJPURIFY_GET_INFO_INDEX(this) (this->dyna.actor.params & 0xF)
-#define OBJPURIFY_GET_UNK_FLAG(this) ((this->dyna.actor.params >> 0xC) & 1)
-
 void ObjPurify_Init(Actor* thisx, PlayState* play);
 void ObjPurify_Destroy(Actor* thisx, PlayState* play);
 void ObjPurify_Update(Actor* thisx, PlayState* play);
@@ -64,7 +61,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         { object_numa_obj_DL_0128E0, object_numa_obj_DL_012D90 },
         { object_numa_obj_Matanimheader_012CF8, object_numa_obj_Matanimheader_0131A8 },
         &object_numa_obj_Colheader_012818,
-        0,
+        false,
     },
     {
         OBJECT_DEKUCITY_OBJ,
@@ -73,7 +70,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         { object_dekucity_obj_DL_0004E0, object_dekucity_obj_DL_001030 },
         { object_dekucity_obj_Matanimheader_000E28, object_dekucity_obj_Matanimheader_001978 },
         &object_dekucity_obj_Colheader_0002AC,
-        1,
+        true,
     },
     {
         OBJECT_DEKUCITY_OBJ,
@@ -82,7 +79,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         { object_dekucity_obj_DL_001D80, NULL },
         { object_dekucity_obj_Matanimheader_003820, NULL },
         NULL,
-        1,
+        true,
     },
     {
         OBJECT_NUMA_OBJ,
@@ -91,7 +88,7 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         { object_numa_obj_DL_012A60, object_numa_obj_DL_012F10 },
         { object_numa_obj_Matanimheader_012B58, object_numa_obj_Matanimheader_013008 },
         &object_numa_obj_Colheader_012818,
-        0,
+        false,
     },
     {
         OBJECT_NUMA_OBJ,
@@ -100,21 +97,20 @@ ObjPurifyInfo ObjPurifyInfoList[] = {
         { object_numa_obj_DL_012BF0, object_numa_obj_DL_0130A0 },
         { object_numa_obj_Matanimheader_012CE8, object_numa_obj_Matanimheader_013198 },
         &object_numa_obj_Colheader_012818,
-        0,
+        false,
     },
 };
 
-void ObjPurify_SetSysMatrix(f32 ypos) {
-    Matrix_GetCurrent()->yw = ypos;
+void ObjPurify_SetSysMatrix(f32 yPos) {
+    Matrix_GetCurrent()->yw = yPos;
 }
 
 s32 ObjPurify_IsPurified(ObjPurify* this) {
-    ObjPurifyInfo* info;
-    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
+    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
 
     if (!info->isDekuCity) {
         // woodfall temple wood flower unraveled
-        if ((gSaveContext.save.weekEventReg[12] & 1)) {
+        if (gSaveContext.save.weekEventReg[12] & 1) {
             return true;
         }
     }
@@ -130,14 +126,12 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
 void ObjPurify_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info;
-    s32 sp20;
+    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    s32 sp20 = OBJPURIFY_GET_UNK_FLAG(thisx);
 
-    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
-    sp20 = OBJPURIFY_GET_UNK_FLAG(this);
     Actor_SetScale(&this->dyna.actor, info->scale);
     if (sp20 == 1) {
-        DynaPolyActor_Init((DynaPolyActor*)this, 0);
+        DynaPolyActor_Init(&this->dyna, 0);
     }
     this->objIndex = Object_GetIndex(&play->objectCtx, info->objectId);
     if (this->objIndex < 0) {
@@ -153,7 +147,7 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
 
 void ObjPurify_Destroy(Actor* thisx, PlayState* play) {
     ObjPurify* this = THIS;
-    if (OBJPURIFY_GET_UNK_FLAG(this) == 1) {
+    if (OBJPURIFY_GET_UNK_FLAG(&this->dyna.actor) == 1) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -168,8 +162,8 @@ void func_80A84EC0(ObjPurify* this, PlayState* play) {
     s32 index;
 
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        sp28 = OBJPURIFY_GET_UNK_FLAG(this);
-        index = OBJPURIFY_GET_INFO_INDEX(this);
+        sp28 = OBJPURIFY_GET_UNK_FLAG(&this->dyna.actor);
+        index = OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor);
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         if (sp28 == 1) {
@@ -220,11 +214,11 @@ void func_80A85074(ObjPurify* this, PlayState* play) {
 }
 
 void func_80A850B0(ObjPurify* this) {
-    f32 ypos = this->dyna.actor.home.pos.y;
+    f32 yPos = this->dyna.actor.home.pos.y;
     this->dyna.actor.draw = func_80A85304;
-    this->unk168[1] = ypos - 90.0f;
+    this->unk168[1] = yPos - 90.0f;
     this->actionFunc = func_80A850E8;
-    this->unk168[0] = ypos;
+    this->unk168[0] = yPos;
 }
 
 void func_80A850E8(ObjPurify* this, PlayState* play) {
@@ -253,27 +247,22 @@ void ObjPurify_Update(Actor* thisx, PlayState* play) {
 void func_80A851C8(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info;
-    Gfx* opaDList;
-    Gfx* xluDList;
-    AnimatedMaterial* animMat;
-
-    info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
-    opaDList = info->opaDLists[this->gfxIndex];
-    xluDList = info->xluDLists[this->gfxIndex];
-    animMat = info->animMat[this->gfxIndex];
+    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
+    Gfx* opaDList = info->opaDLists[this->gfxIndex];
+    Gfx* xluDList = info->xluDLists[this->gfxIndex];
+    AnimatedMaterial* animMat = info->animMat[this->gfxIndex];
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (animMat != NULL) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(animMat));
     }
-    if (opaDList != 0) {
+    if (opaDList != NULL) {
         func_8012C28C(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, opaDList);
     }
-    if (xluDList != 0) {
+    if (xluDList != NULL) {
         func_8012C2DC(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, xluDList);
@@ -285,7 +274,7 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
 void func_80A85304(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPurify* this = THIS;
-    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(this)];
+    ObjPurifyInfo* info = &ObjPurifyInfoList[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     s32 sp6C[2];
     s32 i;
     s32 index;
