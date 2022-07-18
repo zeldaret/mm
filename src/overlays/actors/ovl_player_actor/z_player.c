@@ -10,6 +10,7 @@
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
 #include "overlays/actors/ovl_Door_Spiral/z_door_spiral.h"
 #include "overlays/actors/ovl_Door_Shutter/z_door_shutter.h"
+#include "overlays/actors/ovl_En_Ishi/z_en_ishi.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -3169,14 +3170,46 @@ void func_80836C70(PlayState* play, Player* this, s32 bodyPartIndex) {
 }
 #else
 extern Vec3f D_8085D130;
+void func_80836C70(PlayState* play, Player* this, s32 bodyPartIndex);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836C70.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836D8C.s")
+void func_80836D8C(Player* this) {
+    this->actor.focus.rot.x = 0;
+    this->actor.focus.rot.z = 0;
+    this->unk_AAC.x = 0;
+    this->unk_AAC.y = 0;
+    this->unk_AAC.z = 0;
+    this->unk_AB2.x = 0;
+    this->unk_AB2.y = 0;
+    this->unk_AB2.z = 0;
+    this->actor.shape.rot.y = this->actor.focus.rot.y;
+    this->currentYaw = this->actor.focus.rot.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836DC0.s")
+s32 func_80836DC0(PlayState* play, Player* this) {
+    if ((MREG(48) != 0) || func_800C9DDC(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+        func_80831494(play, this, func_808561B0, 0);
+        this->stateFlags1 &= ~(PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
+        func_8082E438(play, this, &gameplay_keep_Linkanim_00E270);
+        func_8082DABC(this);
+        func_80836D8C(this);
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        this->unk_B48 = -2000.0f;
+        this->actor.shape.shadowScale = 13.0f;
+        func_8082E1F0(this, NA_SE_PL_DEKUNUTS_IN_GRD);
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836EA0.s")
+void func_80836EA0(PlayState* play, s16 quakeSpeed, s16 verticalMag, s16 quakeCountdown) {
+    s16 quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+
+    Quake_SetSpeed(quake, quakeSpeed);
+    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quake, quakeCountdown);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80836F10.s")
 
@@ -3184,7 +3217,12 @@ extern Vec3f D_8085D130;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837134.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808373A4.s")
+void func_808373A4(PlayState* play, Player* this) {
+    func_8082E438(play, this, &gameplay_keep_Linkanim_00E270);
+    this->unk_B08[2] = 20000.0f;
+    this->unk_B08[3] = 196608.0f;
+    func_800B8E58(this, NA_SE_PL_DEKUNUTS_ATTACK);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808373F8.s")
 
@@ -3194,15 +3232,63 @@ extern Vec3f D_8085D130;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808378FC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083798C.s")
+s32 func_8083798C(Player* this) {
+    return (this->interactRangeActor != NULL) && (this->heldActor == NULL) && (this->transformation != PLAYER_FORM_DEKU);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808379C0.s")
+void func_8084E334(Player* this, PlayState* play);
+void func_8084E4E4(Player* this, PlayState* play);
+void func_8084E25C(Player* this, PlayState* play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837B60.s")
+void func_808379C0(PlayState* play, Player* this) {
+    if (func_8083798C(this)) {
+        Actor* interactRangeActor = this->interactRangeActor;
+        LinkAnimationHeader* anim;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837BD0.s")
+        if ((interactRangeActor->id == ACTOR_EN_ISHI) && (ENISHI_GET_1(interactRangeActor) != 0)) {
+            func_80831494(play, this, func_8084E334, 0);
+            anim = &gameplay_keep_Linkanim_00DF90;
+        } else if (((interactRangeActor->id == ACTOR_EN_BOMBF) || (interactRangeActor->id == ACTOR_EN_KUSA) || (interactRangeActor->id == ACTOR_EN_KUSA2) || (interactRangeActor->id == ACTOR_OBJ_GRASS_CARRY)) && (Player_GetStrength() <= PLAYER_STRENGTH_DEKU)) {
+            func_80831494(play, this, func_8084E4E4, 0);
+            anim = &gameplay_keep_Linkanim_00DD70;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837BF8.s")
+            this->actor.world.pos.x = (Math_SinS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.x;
+            this->actor.world.pos.z = (Math_CosS(interactRangeActor->yawTowardsPlayer) * 20.0f) + interactRangeActor->world.pos.z;
+
+            this->currentYaw = this->actor.shape.rot.y = interactRangeActor->yawTowardsPlayer + 0x8000;
+        } else {
+            func_80831494(play, this, func_8084E25C, 0);
+            anim = GET_PLAYER_ANIM(PLAYER_ANIMGROUP_12, this->modelAnimType);
+        }
+
+        func_8082DB18(play, this, anim);
+    } else {
+        func_80836988(this, play);
+        this->stateFlags1 &= ~PLAYER_STATE1_800;
+    }
+}
+
+void func_8084E980(Player* this, PlayState* play);
+void func_8084ED9C(Player* this, PlayState* play);
+
+void func_80837B60(PlayState* play, Player* this) {
+    func_8083172C(play, this, func_8084E980, 0);
+
+    this->exchangeItemId = 0;
+    this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
+    if (this->actor.textId != 0) {
+        Message_StartTextbox(play, this->actor.textId, this->targetActor);
+    }
+    this->unk_730 = this->targetActor;
+}
+
+void func_80837BD0(PlayState* play, Player* this) {
+    func_8083172C(play, this, func_8084FE7C, 0);
+}
+
+void func_80837BF8(PlayState* play, Player* this) {
+    func_80831494(play, this, func_8084ED9C, 0);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837C20.s")
 
