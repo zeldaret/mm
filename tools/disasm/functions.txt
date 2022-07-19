@@ -8155,7 +8155,7 @@
     0x80979738:("EffectSsBubble_Draw",),
     0x8097985C:("EffectSsBubble_Update",),
     0x80979B30:("EffectSsGRipple_Init",),
-    0x80979C38:("func_80979C38",),
+    0x80979C38:("EffectSsGRipple_DrawRipple",),
     0x80979E48:("EffectSsGRipple_Draw",),
     0x80979E80:("EffectSsGRipple_Update",),
     0x8097A050:("EffectSsGSplash_Init",),
