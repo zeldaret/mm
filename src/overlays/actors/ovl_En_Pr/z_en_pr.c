@@ -106,7 +106,7 @@ static AnimationHeader* sAnimations[] = {
 };
 
 u8 D_80A33934[] = {
-    0, 2, 0, 0, 2,
+    ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
 };
 
 void EnPr_Init(Actor* thisx, PlayState* play2) {

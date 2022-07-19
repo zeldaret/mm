@@ -224,7 +224,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
-            func_80115908(play, 0x70);
+            Health_ChangeBy(play, 0x70);
             break;
         case ITEM00_BOMBS_A:
         case ITEM00_BOMBS_B:
@@ -537,7 +537,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
-            func_80115908(play, 0x70);
+            Health_ChangeBy(play, 0x70);
             break;
         case ITEM00_BOMBS_A:
         case ITEM00_BOMBS_B:

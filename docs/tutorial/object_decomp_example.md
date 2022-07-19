@@ -15,6 +15,7 @@ In the resulting window, go to "Analysis -> Find Dlists" and press OK (the defau
 ![Finding object_dns's SkeletonHeader in Z64Utils](images/z64utils_dns_skeletonheader.png)
 
 When you open the Skeleton Viewer, you'll see a list of animations off to the side. Selecting one of them will display an error that says something like `RENDER ERROR AT 0x06001A98! (Could not read 0x80 bytes at address 08000000)`. This is because one of the display lists in the skeleton is expecting something to be set at segment 8. From the actor, we know that it's expecting the eye textures to be loaded into segment 8 like so:
+
 ```c
 static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
 [...]
@@ -32,6 +33,7 @@ Now that we've gotten around the error, we can see what each limb in the skeleto
 Note that some limbs don't actually render anything, so sometimes clicking on a limb will not turn anything red; this may indicate a "Root" limb that has no associated display list, or it may indicate something like an eye limb that doesn't have the right textures loaded to display anything in Z64Utils. It may be useful to skip ahead to [Step #5](#step-5-naming-limb-display-lists) to learn how to check if the limb has a display list. If it doesn't have a display list, then it's a "Root" limb that will never be highlighted.
 
 We can now start naming the skeleton and individual limbs. Since we know this particular skeleton is the King's Chamber Deku Guard, we can name the skeleton `gKingsChamberDekuGuardSkel`. For the LimbNone name, we can call it something like `KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE`, and we can name the LimbMax similarly. For the EnumName, we can name it `KingsChamberDekuGuardLimbs`. For each individual limb, we can name them based on what we see in Z64Utils; just make sure to update both the Name and the EnumName. After naming everything, we have something that looks like this:
+
 ```xml
 <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_TORSO" Offset="0x2D18" />
 <Limb Name="gKingsChamberDekuGuardHeadLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD" Offset="0x2D24" />
@@ -49,22 +51,26 @@ We can now start naming the skeleton and individual limbs. Since we know this pa
 ```
 
 Now we can run `./extract_assets.py -s objects/object_dns` to extract the object again, this time with our new names. What can we do with this? Quite a bit actually. In `z_en_dns.h`, we can add this to the top of the file to start using these new names in our code:
+
 ```c
 #include "objects/object_dns/object_dns.h"
 ```
 
 Now, we can redefine the `jointTable` and `morphTable` in terms of the limb enum we defined before, like so:
+
 ```c
 /* 0x22A */ Vec3s jointTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
 /* 0x278 */ Vec3s morphTable[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
 ```
 
 We can also use our new skeleton name and limb enum when initialization the skeleton like so:
+
 ```c
 SkelAnime_Init(play, &this->skelAnime, &gKingsChamberDekuGuardSkel, NULL, this->jointTable, this->morphTable, KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX);
 ```
 
 Lastly, we can use our limb enum in `EnDns_PostLimbDraw`. Where the code originally had:
+
 ```c
 if (limbIndex == 2) {
     [...]
@@ -72,6 +78,7 @@ if (limbIndex == 2) {
 ```
 
 We can instead write:
+
 ```c
 if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD) {
     [...]
@@ -81,11 +88,13 @@ if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD) {
 ## Step 2: Naming the animations
 
 Now that we have the skeleton figured out, it's time to name all the animations. In the Skeleton Viewer, you can hit the "play" button on any animation to see what it looks like. Note that some objects have multiple skeletons, and selecting an animation that is associated with a different skeleton than the one you're looking at can cause odd behavior. Try to give each animation a descriptive name based on what it looks like. If you're struggling;
+
 - Try viewing the animation in game. In what contexts does this animation play?
 - Try analyzing the code for the actor to see when the animation is used. Is this animation ever referenced?
 - If you're still really struggling, Majora's Mask 3D contains the original animation names for the majority of animations in the game. These original names can help you figure out what the developers were originally intending. Explaining how to find these animations in MM3D is outside of the scope of this document, so just ask in Discord if you want to try this.
 
 After naming the animations, the end result will look something like this:
+
 ```xml
 <Animation Name="gKingsChamberDekuGuardDanceAnim" Offset="0x2A8" />
 <Animation Name="gKingsChamberDekuGuardFlipAnim" Offset="0x734" />
@@ -99,6 +108,7 @@ After naming the animations, the end result will look something like this:
 ```
 
 Once again, we can run `./extract_assets.py -s objects/object_dns` to extract the object, and we can update the animation names in `z_en_dns.c` to use our new names like so:
+
 ```c
 static AnimationInfoS sAnimations[] = {
     { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -117,16 +127,19 @@ static AnimationInfoS sAnimations[] = {
 ## Step 3: Identifying the blob
 
 In the XML, you may notice undefined blobs like this:
+
 ```xml
 <!-- <Blob Name="object_dns_Blob_0028E8" Size="0x180" Offset="0x28E8" /> -->
 ```
 
 You might already have an idea as to what this is based on what you've seen before. Recall that the eye textures are referenced in the actor's code like this:
+
 ```c
 static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
 ```
 
 Do you notice how the "28E8" in `D_060028E8` also appears as the Offset in that blob? That's because the blob is just the eye textures; the process for automatically creating the XML wasn't able to figure it out on its own, so we'll need to do it ourselves. But how should we define these textures in the XML? Recall that the eye textures were loaded into segment 8; let's take a look in `object_dns.c` and see if we can find something that uses this segment. This display list has the answer:
+
 ```c
 Gfx object_dns_DL_001A50[] = {
     [...]
@@ -137,6 +150,7 @@ Gfx object_dns_DL_001A50[] = {
 ```
 
 Using `0x08000000` with `gsDPLoadTextureBlock` signals that this display list is expecting a texture in segment 8. What kind of texture is it expecting? We can look at the arguments after the `0x08000000`. It's looking for an RBGA16 texture with dimensions of 8x8, so we can define these textures in the XML like so:
+
 ```xml
 <Texture Name="object_dns_Tex_0028E8" OutName="tex_0028E8" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
 <Texture Name="object_dns_Tex_002968" OutName="tex_002968" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
@@ -144,6 +158,7 @@ Using `0x08000000` with `gsDPLoadTextureBlock` signals that this display list is
 ```
 
 Now, we just have to name them. In [Step #1](#step-1-naming-the-skeleton-and-limbs), we set segment 8 to one of the eye textures; we can use that same technique with the other two eye textures to see what they are. Like most NPCs, these various eye textures are used for handling blinking, so we can name them based on how open the eye is:
+
 ```xml
 <Texture Name="gKingsChamberDekuGuardEyeOpenTex" OutName="kings_chamber_deku_guard_eye_open" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
 <Texture Name="gKingsChamberDekuGuardEyeHalfTex" OutName="kings_chamber_deku_guard_eye_half" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
@@ -151,6 +166,7 @@ Now, we just have to name them. In [Step #1](#step-1-naming-the-skeleton-and-lim
 ```
 
 Like with previous steps, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new names:
+
 ```c
 static TexturePtr sEyeTextures[] = {
     gKingsChamberDekuGuardEyeOpenTex,
@@ -165,6 +181,7 @@ Note that this step might be tricky to do if multiple things in the actor use th
 ## Step #4: Naming anything else in the actor
 
 For some actors, there may be a few other things left to name that are directly referenced in the actor's code. In our case, there is one display list that we still need to name:
+
 ```c
 gSPDisplayList(POLY_OPA_DISP++, &D_06002C48);
 ```
@@ -178,11 +195,13 @@ We can see this is the guard's Deku Flower:
 ![Showing the guard's Deku Flower in Z64Utils](images/z64utils_dns_deku_flower.png)
 
 We can name the display list as such in the XML:
+
 ```xml
 <DList Name="gKingsChamberDekuGuardDekuFlower" Offset="0x2C48" />
 ```
 
 Then, like all steps before, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new name:
+
 ```c
 gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
 ```
@@ -194,6 +213,7 @@ Now that we've named everything that's used externally by the actor, we just nee
 ![Showing the head limb's display list in Z64Utils](images/z64utils_dns_limb_dlist.png)
 
 Another way is to simply check `object_dns.c`. Each limb lists its own display list like this:
+
 ```c
 StandardLimb gKingsChamberDekuGuardHeadLimb = { 
     { 0, 1300, 0 }, KINGS_CHAMBER_DEKU_GUARD_LIMB_STALK - 1, KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_FOOT - 1,
@@ -202,6 +222,7 @@ StandardLimb gKingsChamberDekuGuardHeadLimb = {
 ```
 
 Either way you go about it, you should be able to name all the limb display lists like so:
+
 ```xml
 <DList Name="gKingsChamberDekuGuardRightFootDL" Offset="0x1640" />
 <DList Name="gKingsChamberDekuGuardLeftFootDL" Offset="0x16F0" />
@@ -222,6 +243,7 @@ Run `./extract_assets.py -s objects/object_dns` once again, since it will help i
 ### Step #6: Naming remaining textures
 
 With every display list named, it's now a lot easier to name the remaining textures. In the `assets/objects/object_dns/` folder, you can see all the textures in the object as various PNG files. For some of the textures, just looking at them will give you a good idea as to what they should be named. For other textures, it may help to see how the texture is used in the object's display lists. Let's take a look at `object_dns_Tex_002868`, which is only used in one display list:
+
 ```c
 Gfx gKingsChamberDekuGuardSnoutDL[] = {
     [...]
@@ -240,6 +262,7 @@ Now, rebuild the game using [the steps described here](object_decomp.md#building
 ![Our custom mouth texture being shown in-game](images/custom_texture_in_game.png)
 
 This confirms our suspicion that this is indeed the mouth texture, so we can name it as such. We can use similar strategies to name all the other textures like so:
+
 ```xml
 <Texture Name="gKingsChamberDekuGuardLeafTex" OutName="kings_chamber_deku_guard_leaf" Format="rgba16" Width="32" Height="32" Offset="0x1E68" />
 <Texture Name="gKingsChamberDekuGuardBodyTex" OutName="kings_chamber_deku_guard_body" Format="rgba16" Width="16" Height="16" Offset="0x2668" />
@@ -249,6 +272,7 @@ This confirms our suspicion that this is indeed the mouth texture, so we can nam
 ### Step #7: Finishing up
 
 If you have any other unnamed assets, now's the time to identify them. Otherwise, finish up the file by putting a comment at the top above the `<File>` node:
+
 ```xml
 <Root>
     <!-- Assets for the King's Chamber Deku Guards -->

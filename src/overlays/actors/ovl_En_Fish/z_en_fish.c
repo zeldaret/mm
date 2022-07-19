@@ -58,7 +58,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -92,12 +92,12 @@ f32 func_8091D630(Vec3f* arg0, Vec3f* arg1) {
 
 void func_8091D660(EnFish* this) {
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_02F0EC, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gameplay_keep_Anim_02F0EC), 1, 2.0f);
+                     Animation_GetLastFrame(&gameplay_keep_Anim_02F0EC), ANIMMODE_LOOP_INTERP, 2.0f);
 }
 
 void func_8091D6C4(EnFish* this) {
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_02E65C, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gameplay_keep_Anim_02E65C), 1, 2.0f);
+                     Animation_GetLastFrame(&gameplay_keep_Anim_02E65C), ANIMMODE_LOOP_INTERP, 2.0f);
 }
 
 void func_8091D728(EnFish* this) {

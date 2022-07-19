@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 
 void GameOver_Init(PlayState* play) {
     play->gameOverCtx.state = GAMEOVER_INACTIVE;
@@ -35,8 +36,8 @@ void GameOver_Update(PlayState* play) {
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_DEITY) {
 
-                    if (gSaveContext.buttonStatus[0] != BTN_ENABLED) {
-                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[0];
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_ENABLED) {
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
                     } else {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
@@ -51,18 +52,18 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
             gSaveContext.eventInf[3] = 0;
-            gSaveContext.buttonStatus[0] = BTN_ENABLED;
-            gSaveContext.buttonStatus[1] = BTN_ENABLED;
-            gSaveContext.buttonStatus[2] = BTN_ENABLED;
-            gSaveContext.buttonStatus[3] = BTN_ENABLED;
-            gSaveContext.buttonStatus[4] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
             gSaveContext.unk_3F1E = 0;
             gSaveContext.unk_3F20 = 0;
             gSaveContext.unk_3F22 = 0;
             gSaveContext.unk_3F24 = 0;
             Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
@@ -72,13 +73,13 @@ void GameOver_Update(PlayState* play) {
                     gSaveContext.respawnFlag = -6;
                 }
                 gSaveContext.nextTransition = 2;
-                gSaveContext.save.playerData.health = 48;
+                gSaveContext.save.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
                     gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
                 }
-                func_8013EE24();
+                Rumble_StateReset();
             }
             break;
         case GAMEOVER_REVIVE_START:
@@ -90,7 +91,7 @@ void GameOver_Update(PlayState* play) {
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
             gameOverCtx->state++;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             break;
         case GAMEOVER_REVIVE_WAIT_GROUND:
             sGameOverTimer--;

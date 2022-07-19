@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hugebombiwa.h"
+#include "z64rumble.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -298,7 +299,7 @@ void func_80A54980(ObjHugebombiwa* this, PlayState* play, s32 arg2) {
     Quake_SetSpeed(quake, 0x4E20);
     Quake_SetQuakeValues(quake, arg2, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
 
 s32 func_80A54A0C(ObjHugebombiwa* this) {

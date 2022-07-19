@@ -72,7 +72,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
     this->unk_1FC = 255.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
-    if (!func_8012405C(play)) {
+    if (!Player_HasMirrorShieldEquipped(play)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
     }
 
@@ -266,7 +266,7 @@ void func_80A49A44(EnWizFire* this, PlayState* play) {
             }
         }
 
-        if (func_8012405C(play) && (this->collider.base.atFlags & AT_BOUNCED)) {
+        if (Player_HasMirrorShieldEquipped(play) && (this->collider.base.atFlags & AT_BOUNCED)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;

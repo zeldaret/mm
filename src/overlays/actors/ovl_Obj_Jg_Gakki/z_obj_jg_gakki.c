@@ -38,9 +38,10 @@ void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
 
     if (((play->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&
         (play->csCtx.currentCsIndex == 0)) {
-        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, ANIMMODE_ONCE,
+                         0.0f);
     } else if ((play->sceneNum == SCENE_17SETUGEN) || (play->sceneNum == SCENE_10YUKIYAMANOMURA)) {
-        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
     } else {
         Actor_MarkForDeath(&this->actor);
     }

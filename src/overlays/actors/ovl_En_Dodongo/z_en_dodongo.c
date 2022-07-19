@@ -169,7 +169,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    10,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -231,7 +231,7 @@ static ColliderJntSphInit sJntSphInit3 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    3,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -691,7 +691,7 @@ void func_80877D90(EnDodongo* this, PlayState* play) {
 }
 
 void func_80877DE0(EnDodongo* this) {
-    Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, ANIMMODE_ONCE, -4.0f);
     this->actor.flags |= ACTOR_FLAG_10;
     this->timer = 25;
     this->actionFunc = func_80877E60;
@@ -957,9 +957,9 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 CollisionCheck_BlueBlood(play, NULL, &sp3C);
-                EffectSsHitMark_SpawnFixedScale(play, 0, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, 0, &sp3C);
             } else if (this->actor.colChkInfo.damageEffect != 14) {
-                EffectSsHitMark_SpawnFixedScale(play, 3, &sp3C);
+                EffectSsHitmark_SpawnFixedScale(play, 3, &sp3C);
                 CollisionCheck_SpawnShieldParticlesMetalSound(play, &sp3C, &this->actor.projectedPos);
             }
         }

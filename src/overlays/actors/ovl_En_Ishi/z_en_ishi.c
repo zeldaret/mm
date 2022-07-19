@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ishi.h"
+#include "z64rumble.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"
@@ -598,7 +599,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
             Quake_SetSpeed(quake, 0x4350);
             Quake_SetQuakeValues(quake, 3, 0, 0, 0);
             Quake_SetCountdown(quake, 7);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 
         Actor_MarkForDeath(&this->actor);

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rr.h"
+#include "z64rumble.h"
 #include "objects/object_rr/object_rr.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
@@ -305,9 +306,9 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         this->unk_20C = 0x800;
 
         if (((this->unk_1E2 == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) &&
-            (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) == 1)) {
+            (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_HERO)) {
             sp34 = true;
-            this->unk_1E2 = Inventory_DeleteEquipment(play, 1);
+            this->unk_1E2 = Inventory_DeleteEquipment(play, EQUIP_VALUE_SHIELD_HERO);
         } else {
             sp34 = false;
         }
@@ -628,7 +629,7 @@ void func_808FB088(EnRr* this, PlayState* play) {
 void func_808FB1C0(EnRr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 2, 120);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 2, 120);
     if (!(this->unk_1E4 & 7)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
     }

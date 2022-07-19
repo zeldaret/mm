@@ -489,7 +489,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     } else if (this->unk_1A7 != 0) {
         this->actionFunc = func_80866F94;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
-    } else if (!Player_InCsMode(&play->state)) {
+    } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {

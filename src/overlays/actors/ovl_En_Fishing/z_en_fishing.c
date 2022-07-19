@@ -4,8 +4,8 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
+#include "z64rumble.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
@@ -1130,7 +1130,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                 if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == 5)) {
                     if (Message_ShouldAdvance(play) || Message_GetState(&play->msgCtx) == 0) {
                         func_801477B4(play);
-                        func_801159EC(-50);
+                        Rupees_ChangeBy(-50);
                         effect->unk_2C = -1;
                     }
                 }
@@ -3440,7 +3440,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     }
                     D_80917272 = phi_v0;
                     D_809171F4 = phi_v0;
-                    func_8013EC44(0.0f, 60, phi_v0 * 3, 10);
+                    Rumble_Override(0.0f, 60, phi_v0 * 3, 10);
                 } else {
                     if (this->unk_1A4 > 70.0f) {
                         phi_v0 = Rand_ZeroFloat(5.0f) + 10.0f;
@@ -3453,7 +3453,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     }
                     D_80917272 = phi_v0;
                     D_809171F4 = phi_v0;
-                    func_8013EC44(0.0f, 180, phi_v0 * 3, 10);
+                    Rumble_Override(0.0f, 180, phi_v0 * 3, 10);
                 }
 
                 D_80917274 = 0;
@@ -3495,11 +3495,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 if (D_80917206 == 2) {
                     D_80917272 = 30;
                     D_809171F4 = 100;
-                    func_8013EC44(0.0f, 60, 90, 10);
+                    Rumble_Override(0.0f, 60, 90, 10);
                 } else {
                     D_80917272 = 30;
                     D_809171F4 = 40;
-                    func_8013EC44(0.0f, 180, 90, 10);
+                    Rumble_Override(0.0f, 180, 90, 10);
                 }
 
                 D_80917274 = 0;
@@ -3550,7 +3550,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         temp2 = 255.0f;
                     }
 
-                    func_8013EC44(0.0f, temp2, 120, 5);
+                    Rumble_Override(0.0f, temp2, 120, 5);
                     D_809171F4 = 40;
                     D_80911E28 = 10;
                     play_sound(NA_SE_IT_FISHING_HIT);
@@ -3584,7 +3584,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         spA4 *= 3.0f / 4.0f;
                     }
 
-                    func_8013EC44(0.0f, spA4, Rand_ZeroFloat(5.0f) + 10.0f, 5);
+                    Rumble_Override(0.0f, spA4, Rand_ZeroFloat(5.0f) + 10.0f, 5);
                 }
 
                 if (this->unk_172[1] > 30) {
@@ -3620,7 +3620,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                             } else {
                                 phi_a1 = 180;
                             }
-                            func_8013EC44(0.0f, phi_a1, 90, 2);
+                            Rumble_Override(0.0f, phi_a1, 90, 2);
                             this->unk_172[0] = 20;
                             this->unk_172[1] = 100;
                             this->unk_172[2] = 20;
@@ -3748,7 +3748,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     }
                 } else {
                     // Assignment of OoT's D_80B7E086 here removed in MM
-                    func_8013EC44(0.0f, 1, 3, 1);
+                    Rumble_Override(0.0f, 1, 3, 1);
                     Audio_QueueSeqCmd(0x100A00FF);
                 }
 
@@ -3771,7 +3771,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_150 = 6;
                 this->unk_172[0] = 100;
                 player->unk_B28 = 3;
-                func_8013EC44(0.0f, 1, 3, 1);
+                Rumble_Override(0.0f, 1, 3, 1);
                 D_809171D8++;
                 Cutscene_Start(play, &play->csCtx);
                 D_8090CD4C = 100;
@@ -4713,8 +4713,8 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         if (gSaveContext.save.playerData.rupees >= 20) {
-                            func_801159EC(-20);
-                            if (func_8013EE04() == 0) {
+                            Rupees_ChangeBy(-20);
+                            if (!Rumble_ControllerOneHasRumblePak()) {
                                 this->actor.textId = 0x407C;
                             } else {
                                 this->actor.textId = 0x407D;
@@ -5138,7 +5138,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         (fabsf(player->actor.world.pos.z - sSinkingLureLocationPos[sSinkingLureLocation - 1].z) < 25.0f)) {
         sSinkingLureLocation = 0;
         D_8090CD4C = 20;
-        func_8013EC44(0.0f, 150, 10, 10);
+        Rumble_Override(0.0f, 150, 10, 10);
         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         Audio_QueueSeqCmd(0x101400FF);
     }
@@ -5153,8 +5153,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         case 1:
             sCameraId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, sCameraId, 7);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, sCameraId, CAM_STATUS_ACTIVE);
             camera = Play_GetCamera(play, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
             sCameraEye.y = camera->eye.y;
@@ -5281,8 +5281,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         case 10:
             Cutscene_Start(play, &play->csCtx);
             sCameraId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, sCameraId, 7);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, sCameraId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
             camera = Play_GetCamera(play, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
@@ -5293,7 +5293,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sCameraAt.z = camera->at.z;
             Message_StartTextbox(play, 0x409E, NULL);
             D_8090CD4C = 11;
-            func_8013EC44(0.0f, 150, 10, 10);
+            Rumble_Override(0.0f, 150, 10, 10);
             // fallthrough
 
         case 11:
@@ -5320,8 +5320,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         case 20:
             Cutscene_Start(play, &play->csCtx);
             sCameraId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, sCameraId, 7);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, sCameraId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
             camera = Play_GetCamera(play, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;

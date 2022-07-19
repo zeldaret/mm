@@ -6,6 +6,7 @@
 
 #include "z_obj_raillift.h"
 #include "objects/object_raillift/object_raillift.h"
+#include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -74,7 +75,8 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     }
     if (type == DEKU_FLOWER_PLATFORM) {
         Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_OBJ_ETCETERA, thisx->world.pos.x, thisx->world.pos.y,
-                           thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, thisx->shape.rot.z, 0);
+                           thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, thisx->shape.rot.z,
+                           DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK));
         if (isColorful) {
             thisx->draw = ObjRaillift_DrawDekuFlowerPlatformColorful;
         } else {

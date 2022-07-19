@@ -5,7 +5,6 @@
  */
 
 #include "z_boss_04.h"
-#include "objects/object_boss04/object_boss04.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -97,7 +96,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -124,7 +123,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -172,8 +171,8 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->unk_6F8 = 1.0f;
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_boss04_Skel_0045E8, &object_boss04_Anim_00004C, this->jointTable,
-                       this->morphtable, 9);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gWartSkel, &gWartIdleAnim, this->jointTable, this->morphtable,
+                       WART_LIMB_MAX);
     spA8.y = this->actor.world.pos.y + 200.0f;
 
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
@@ -261,8 +260,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->unk_704 = 0;
                     Cutscene_Start(play, &play->csCtx);
                     this->unk_70A = Play_CreateSubCamera(play);
-                    Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                    Play_CameraChangeStatus(play, this->unk_70A, 7);
+                    Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_CameraChangeStatus(play, this->unk_70A, CAM_STATUS_ACTIVE);
                     func_800B7298(play, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -781,11 +780,11 @@ s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
         rot->z += KREG(35) * 256;
     }
 
-    if ((limbIndex == 5) || (limbIndex == 7)) {
+    if ((limbIndex == WART_LIMB_TOP_EYELID_ROOT) || (limbIndex == WART_LIMB_BOTTOM_EYELID_ROOT)) {
         rot->y = (rot->y + (s16)this->unk_2CC) - 0x500;
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == WART_LIMB_EYE) {
         rot->y += this->unk_2D8;
         rot->z += this->unk_2D4;
         if (this->unk_2DA != 0) {
@@ -803,7 +802,7 @@ void Boss04_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     Boss04* this = THIS;
     Vec3f sp18;
 
-    if (limbIndex == 1) {
+    if (limbIndex == WART_LIMB_ROOT) {
         Matrix_MultVecY(-500.0f, &this->actor.focus.pos);
         Matrix_MultVec3f(&D_809EE228, &sp18);
         func_809EC040(0, &this->collider1, &sp18);
@@ -834,7 +833,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
         func_8012C448(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
-        gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
+        gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);
 
         Matrix_Translate(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -842,7 +841,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004550);
+        gSPDisplayList(POLY_XLU_DISP++, gWartShadowModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

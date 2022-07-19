@@ -662,7 +662,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    if (Player_InCsMode(&play->state)) {
+    if (Player_InCsMode(play)) {
         if ((this->fairyFlags & 0x4000) && (this->fairyFlags & 0x100) && func_8088DCA4(this)) {
             return;
         }
@@ -673,7 +673,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     if ((this->fairyFlags & 0x1000) && (heightDiff > 0.0f) && (heightDiff < 60.0f) &&
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
-        func_80115908(play, 0x80);
+        Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
                                          (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);

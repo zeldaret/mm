@@ -207,7 +207,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
                 spB4.y += this->dyna.actor.world.pos.y;
                 spB4.z += this->dyna.actor.world.pos.z;
 
-                EffectSsHitMark_SpawnFixedScale(play, 3, &spB4);
+                EffectSsHitmark_SpawnFixedScale(play, 3, &spB4);
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
             }
 

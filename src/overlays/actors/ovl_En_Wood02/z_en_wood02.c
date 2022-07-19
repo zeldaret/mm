@@ -463,23 +463,21 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnWood02_Draw(Actor* thisx, PlayState* play) {
+    EnWood02* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s16 type;
-    s16 pad;
     u8 red;
     u8 green;
     u8 blue;
 
     OPEN_DISPS(gfxCtx);
-    type = thisx->params;
 
-    if ((type == WOOD_TREE_OVAL_GREEN_SPAWNER) || (type == WOOD_TREE_OVAL_GREEN_SPAWNED) ||
-        (type == WOOD_TREE_OVAL_GREEN) || (type == WOOD_LEAF_GREEN)) {
+    if ((thisx->params == WOOD_TREE_OVAL_GREEN_SPAWNER) || (thisx->params == WOOD_TREE_OVAL_GREEN_SPAWNED) ||
+        (thisx->params == WOOD_TREE_OVAL_GREEN) || (thisx->params == WOOD_LEAF_GREEN)) {
         red = 50;
         green = 170;
         blue = 70;
-    } else if ((type == WOOD_TREE_OVAL_YELLOW_SPAWNER) || (type == WOOD_TREE_OVAL_YELLOW_SPAWNED) ||
-               (type == WOOD_LEAF_YELLOW)) {
+    } else if ((thisx->params == WOOD_TREE_OVAL_YELLOW_SPAWNER) || (thisx->params == WOOD_TREE_OVAL_YELLOW_SPAWNED) ||
+               (thisx->params == WOOD_LEAF_YELLOW)) {
         red = 180;
         green = 155;
         blue = 0;
@@ -495,17 +493,17 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
 
         Gfx_DrawDListOpa(play, object_wood02_DL_000700);
-    } else if (D_808C4D70[THIS->drawType & 0xF] != NULL) {
-        Gfx_DrawDListOpa(play, D_808C4D54[THIS->drawType & 0xF]);
+    } else if (D_808C4D70[this->drawType & 0xF] != NULL) {
+        Gfx_DrawDListOpa(play, D_808C4D54[this->drawType & 0xF]);
 
         gDPSetEnvColor(POLY_XLU_DISP++, red, green, blue, 0);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[THIS->drawType & 0xF]);
+        gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
         func_8012C2DC(gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[THIS->drawType & 0xF]);
+        gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);
     }
 
     CLOSE_DISPS(gfxCtx);

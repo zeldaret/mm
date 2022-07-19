@@ -95,7 +95,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -107,7 +107,9 @@ void func_80B28370(EnFish2* this, s32 arg0) {
         &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
         &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
-    static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
+    static u8 D_80B2B3A0[] = {
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    };
     f32 sp34;
 
     this->unk_2AC = arg0;

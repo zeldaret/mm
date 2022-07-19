@@ -267,7 +267,7 @@ void func_809C6A04(EnSyatekiMan* this, PlayState* play) {
                 this->unk_26A = 3;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
@@ -546,7 +546,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
                 this->unk_26A = 3;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 this->unk_26A = 2;
                 if (!(this->unk_282 & 0x10)) {
                     this->unk_282 |= 0x10;

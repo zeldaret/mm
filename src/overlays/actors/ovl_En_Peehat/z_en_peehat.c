@@ -6,6 +6,7 @@
 
 #include "z_en_peehat.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_ph/object_ph.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
@@ -123,7 +124,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_TYPE_1,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -260,7 +261,8 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
     D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
 
-    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4, -1, 10, NULL);
+    EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4,
+                        HAHEN_OBJECT_DEFAULT, 10, NULL);
 }
 
 void func_80897390(EnPeehat* this, PlayState* play) {
@@ -286,7 +288,7 @@ void func_80897390(EnPeehat* this, PlayState* play) {
 
 void func_80897498(EnPeehat* this) {
     Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
-                     Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
+                     Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     this->unk_2B0 = 0;
     this->unk_2AD = 1;
     this->colliderCylinder.base.acFlags &= ~AC_HIT;
@@ -322,7 +324,7 @@ void func_80897520(EnPeehat* this, PlayState* play) {
 void func_80897648(EnPeehat* this) {
     if (this->actionFunc != func_80898454) {
         Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
-                         Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
+                         Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     }
     this->unk_2B0 = 16;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_UP);
