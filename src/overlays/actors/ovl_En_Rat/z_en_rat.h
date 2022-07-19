@@ -4,8 +4,25 @@
 #include "global.h"
 #include "objects/object_rat/object_rat.h"
 
-#define EN_RAT_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define EN_RAT_IS_OVERWORLD_TYPE(thisx) ((thisx)->params & 0x8000)
+#define EN_RAT_GET_TYPE(thisx) ((thisx)->params)
 #define EN_RAT_GET_ATTACK_RANGE(thisx) ((thisx)->params & 0xFF)
+
+/**
+ * There are quite a few differences between the two types of Real Bombchu:
+ * - Dungeon-type don't respawn, while Overworld-type do.
+ * - Dungeon-type leave a blure trail behind them as they chase the player,
+ *   while Overworld-type spawn dust around themselves instead.
+ * - Dungeon-type won't detonate automatically, while Overworld-type will
+ *   detonate after 150 frames of chasing the player.
+ * - So long as EN_RAT_GET_ATTACK_RANGE returns something other than 0 or 255,
+ *   Dungeon-type have 1/5th of the attack range compared to Overworld-type.
+ * - Dungeon-type do not drop items upon defeat, while Overworld-type do.
+ */
+typedef enum {
+    /* 0 */ EN_RAT_TYPE_DUNGEON,
+    /* 1 */ EN_RAT_TYPE_OVERWORLD,
+} EnRatType;
 
 struct EnRat;
 
@@ -17,7 +34,7 @@ typedef struct EnRat {
     /* 0x188 */ EnRatActionFunc actionFunc;
     /* 0x18C */ u8 hasLostTrackOfPlayer;
     /* 0x18D */ u8 unk_18D;
-    /* 0x18E */ s16 animationLoopCounter;
+    /* 0x18E */ s16 animLoopCounter;
     /* 0x190 */ s16 timer; // Used for both exploding and reviving
     /* 0x192 */ s16 stunTimer; // Set to -2 and -1 when hit with the Hookshot
     /* 0x194 */ Vec3s jointTable[REAL_BOMBCHU_LIMB_MAX];

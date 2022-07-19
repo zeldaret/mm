@@ -150,16 +150,16 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
 
     attackRange = EN_RAT_GET_ATTACK_RANGE(&this->actor);
-    if (EN_RAT_GET_8000(&this->actor)) {
-        this->actor.params = 1;
+    if (EN_RAT_IS_OVERWORLD_TYPE(&this->actor)) {
+        this->actor.params = EN_RAT_TYPE_OVERWORLD;
     } else {
-        this->actor.params = 0;
+        this->actor.params = EN_RAT_TYPE_DUNGEON;
     }
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gRealBombchuSkel, &gRealBombchuRunAnim, this->jointTable,
                        this->morphTable, REAL_BOMBCHU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    if (this->actor.params == 0) {
+    if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
         Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
         this->timer = 30;
@@ -171,9 +171,9 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
 
-    if ((attackRange == 0xFF) || (attackRange == 0)) {
+    if ((attackRange == 255) || (attackRange == 0)) {
         this->attackRange = 350.0f;
-    } else if (this->actor.params == 0) {
+    } else if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         this->attackRange = attackRange * 0.1f * 40.0f;
     } else {
         this->attackRange = attackRange * 0.5f * 40.0f;
@@ -193,7 +193,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
 void EnRat_Destroy(Actor* thisx, PlayState* play) {
     EnRat* this = THIS;
 
-    if (this->actor.params == 0) {
+    if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         Effect_Destroy(play, this->blure1Index);
         Effect_Destroy(play, this->blure2Index);
     }
@@ -558,7 +558,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
 
 void EnRat_SetupIdle(EnRat* this) {
     Animation_PlayLoop(&this->skelAnime, &gRealBombchuRunAnim);
-    this->animationLoopCounter = 5;
+    this->animLoopCounter = 5;
     this->actor.speedXZ = 2.0f;
     this->actionFunc = EnRat_Idle;
 }
@@ -569,14 +569,14 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
     this->actor.speedXZ = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
-        if (this->animationLoopCounter != 0) {
-            this->animationLoopCounter--;
+        if (this->animLoopCounter != 0) {
+            this->animLoopCounter--;
         }
     }
 
-    if ((this->animationLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
+    if ((this->animLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_VOICE);
-        this->animationLoopCounter = 5;
+        this->animLoopCounter = 5;
     }
 
     if (!(player->stateFlags3 & PLAYER_STATE3_100) && (this->actor.xzDistToPlayer < this->attackRange) &&
@@ -588,19 +588,19 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
 void EnRat_SetupSpottedPlayer(EnRat* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
-    this->animationLoopCounter = 3;
+    this->animLoopCounter = 3;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = EnRat_SpottedPlayer;
 }
 
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
-    if ((this->animationLoopCounter == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if ((this->animLoopCounter == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        this->animationLoopCounter--;
-        if (this->animationLoopCounter == 0) {
+        this->animLoopCounter--;
+        if (this->animLoopCounter == 0) {
             EnRat_SetupRunTowardsPlayer(this);
         }
     }
@@ -641,8 +641,8 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        if (this->animationLoopCounter != 0) {
-            this->animationLoopCounter--;
+        if (this->animLoopCounter != 0) {
+            this->animLoopCounter--;
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
@@ -652,7 +652,7 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
         this->timer--;
     }
 
-    if ((this->timer == 0) && (this->actor.params == 0)) {
+    if ((this->timer == 0) && (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON)) {
         this->timer = 30;
     }
 
@@ -660,7 +660,7 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
     this->visualJitter =
         (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((Rand_ZeroOne() * 512.0f) + 12288.0f) * this->timer);
 
-    if (this->actor.params == 0) {
+    if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         EnRat_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
 
         EnRat_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);
@@ -676,9 +676,9 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
         EnRat_SpawnWaterEffects(this, play);
     }
 
-    if ((this->animationLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
+    if ((this->animLoopCounter == 0) && (Rand_ZeroOne() < 0.05f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
-        this->animationLoopCounter = 5;
+        this->animLoopCounter = 5;
     }
 
     func_800B9010(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
@@ -717,7 +717,7 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
         bomb->timer = 0;
     }
 
-    if (this->actor.params == 1) {
+    if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x100);
     }
 
@@ -726,7 +726,7 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
 }
 
 void EnRat_PostDetonation(EnRat* this, PlayState* play) {
-    if (this->actor.params == 1) {
+    if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         EnRat_SetupRevive(this);
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -897,15 +897,15 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
-        if (this->actor.params == 0) {
-            var_fv0 = fabsf(cos_rad(this->timer * 0.10471976f));
+        if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
+            var_fv0 = fabsf(cos_rad(this->timer * (M_PI / 30.f)));
         } else {
             if (this->timer >= 120) {
-                var_fv0 = fabsf(cos_rad((this->timer % 30) * 0.10471976f));
+                var_fv0 = fabsf(cos_rad((this->timer % 30) * (M_PI / 30.0f)));
             } else if (this->timer >= 30) {
-                var_fv0 = fabsf(cos_rad((this->timer % 6) * 0.5235988f));
+                var_fv0 = fabsf(cos_rad((this->timer % 6) * (M_PI / 6.0f)));
             } else {
-                var_fv0 = fabsf(cos_rad((this->timer % 3) * 1.0471976f));
+                var_fv0 = fabsf(cos_rad((this->timer % 3) * (M_PI / 3.0f)));
             }
         }
 
