@@ -50,8 +50,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 static Vec3f D_80A710AC[] = { 0.0f, 0.0f, 1.0f };
-char D_80A711B0[32];
-extern s32 func_80A711D0;
+u8 D_80A711B0[32];
 
 void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
     BgCraceMovebg* this = THIS;
@@ -87,7 +86,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
                     return;
                 }
             }
-            if (D_80A710A4 < 32) {
+            if (D_80A710A4 < ARRAY_COUNT(D_80A711B0)) {
                 D_80A711B0[(s32)D_80A710A4++] = this->unk184;
             }
             this->dyna.actor.room = -1;
@@ -244,7 +243,7 @@ void func_80A70DA8(BgCraceMovebg* this, PlayState* play) {
 }
 
 void func_80A70E2C(BgCraceMovebg* this, PlayState* play) {
-    this->unk174 = BGCRACEMOVEBG_GET_F800(&this->dyna.actor) * 0xA;
+    this->unk174 = BGCRACEMOVEBG_GET_F800(&this->dyna.actor) * 10;
     this->unk164 = 180.0f;
     this->unk160 = 180.0f;
     this->actionFunc = func_80A70E70;

@@ -25,7 +25,7 @@ typedef struct BgCraceMovebg {
     /* 0x178 */ Vec3f unk178;
     /* 0x184 */ u8 unk184;
     /* 0x188 */ Vec3f unk188;
-} BgCraceMovebg; /* size = 0x194 */
+} BgCraceMovebg; // size = 0x194
 
 extern const ActorInit Bg_Crace_Movebg_InitVars;
 
