@@ -12328,7 +12328,7 @@
     0x80A846A0:("D_80A846A0","f32","",0x4),
     0x80A849D0:("D_80A849D0","UNK_TYPE4","",0x4),
     0x80A85460:("Obj_Purify_InitVars","UNK_TYPE1","",0x1),
-    0x80A85480:("D_80A85480","UNK_TYPE1","",0x1),
+    0x80A85480:("ObjPurifyInfoList","UNK_TYPE1","",0x1),
     0x80A854A0:("D_80A854A0","UNK_TYPE1","",0x1),
     0x80A88910:("D_80A88910","UNK_TYPE1","",0x1),
     0x80A88918:("D_80A88918","UNK_TYPE1","",0x1),
