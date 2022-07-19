@@ -406,7 +406,7 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
         Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 

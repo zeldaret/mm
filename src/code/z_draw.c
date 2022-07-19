@@ -325,13 +325,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa0Xlu1, { gGiPowderKegBarrelDL, gGiPowderKegSkullsAndFuseDL } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
     { GetItem_DrawOpa01, { gGiGoldDustPowderDL, gGiGoldDustPowderEmptyDL } },
-    // GID_SEA_HORSE, OBJECT_GI_BOTTLE_16
+    // GID_SEAHORSE, OBJECT_GI_BOTTLE_16
     { GetItem_DrawOpa0Xlu1, { gGiSeahorseBottleEmptyDL, gGiSeahorseBottleGlassAndCorkDL } },
     // GID_60, OBJECT_GI_BOTTLE_22
     { GetItem_DrawOpa0Xlu1, { gGiHylianLoachBottleContentsDL, gGiHylianLoachBottleGlassCorkWaterDL } },
     // GID_HYLIAN_LOACH, OBJECT_GI_LOACH
     { GetItem_DrawOpa0Xlu1, { gGiHylianLoachEmptyDL, gGiHylianLoachDL } },
-    // GID_SEA_HORSE_CAUGHT, OBJECT_GI_SEAHORSE
+    // GID_SEAHORSE_CAUGHT, OBJECT_GI_SEAHORSE
     { GetItem_DrawSeahorse, { gGiSeahorseEmptyDL, gGiSeahorseBodyDL, gGiSeahorseGlowDL, &gGiSeahorseBillboardRotMtx } },
     // GID_REMAINS_GOHT, OBJECT_BSMASK
     { GetItem_DrawRemains, { gRemainsGohtDL, gRemainsGohtDL } },

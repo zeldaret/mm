@@ -655,7 +655,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         slot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -671,8 +671,8 @@ u8 Item_Give(PlayState* play, u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             slot = SLOT(item);
 
@@ -843,7 +843,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         bottleSlot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -859,8 +859,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             bottleSlot = SLOT(item);
 

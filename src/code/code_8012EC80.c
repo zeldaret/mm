@@ -133,7 +133,7 @@ void* gItemIcons[] = {
     0x08021000,        // ITEM_ZORA_EGG
     0x08022000,        // ITEM_GOLD_DUST
     0x08023000,        // ITEM_MUSHROOM
-    0x08024000,        // ITEM_SEA_HORSE
+    0x08024000,        // ITEM_SEAHORSE
     0x08025000,        // ITEM_CHATEAU
     0x08026000,        // ITEM_HYLIAN_LOACH
     0x08027000,        // ITEM_OBABA_DRINK
@@ -268,7 +268,7 @@ u8 gItemSlots[] = {
     SLOT_BOTTLE_1,           // ITEM_ZORA_EGG
     SLOT_BOTTLE_1,           // ITEM_GOLD_DUST
     SLOT_BOTTLE_1,           // ITEM_MUSHROOM
-    SLOT_BOTTLE_1,           // ITEM_SEA_HORSE
+    SLOT_BOTTLE_1,           // ITEM_SEAHORSE
     SLOT_BOTTLE_1,           // ITEM_CHATEAU
     SLOT_BOTTLE_1,           // ITEM_HYLIAN_LOACH
     SLOT_BOTTLE_1,           // ITEM_OBABA_DRINK
@@ -348,7 +348,7 @@ s16 gItemPrices[] = {
     20,  // ITEM_ZORA_EGG
     200, // ITEM_GOLD_DUST
     5,   // ITEM_MUSHROOM
-    0,   // ITEM_SEA_HORSE
+    0,   // ITEM_SEAHORSE
     200, // ITEM_CHATEAU
     20,  // ITEM_HYLIAN_LOACH
     0,   // ITEM_OBABA_DRINK

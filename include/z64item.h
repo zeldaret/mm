@@ -154,7 +154,7 @@ typedef enum {
     /* 0x21 */ ITEM_ZORA_EGG,
     /* 0x22 */ ITEM_GOLD_DUST,
     /* 0x23 */ ITEM_MUSHROOM,
-    /* 0x24 */ ITEM_SEA_HORSE,
+    /* 0x24 */ ITEM_SEAHORSE,
     /* 0x25 */ ITEM_CHATEAU,
     /* 0x26 */ ITEM_HYLIAN_LOACH,
     /* 0x27 */ ITEM_OBABA_DRINK,
@@ -279,7 +279,7 @@ typedef enum {
     /* 0xA0 */ ITEM_MILK,
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
-    /* 0xA3 */ ITEM_SEA_HORSE_CAUGHT,
+    /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
     /* 0xF0 */ ITEM_F0 = 0xF0,
     /* 0xF1 */ ITEM_F1,
     /* 0xF2 */ ITEM_F2,
@@ -355,7 +355,7 @@ typedef enum {
     /* 0x56 */ GI_REMAINS_GOHT,
     /* 0x57 */ GI_REMAINS_GYORG,
     /* 0x58 */ GI_REMAINS_TWINMOLD,
-    /* 0x59 */ GI_BOTTLE_POTION_RED, // ITEM_LONGSHOT
+    /* 0x59 */ GI_POTION_RED_BOTTLE, // ITEM_LONGSHOT
     /* 0x5A */ GI_BOTTLE,
     /* 0x5B */ GI_POTION_RED,
     /* 0x5C */ GI_POTION_GREEN,
@@ -374,8 +374,8 @@ typedef enum {
     /* 0x69 */ GI_ZORA_EGG,
     /* 0x6A */ GI_GOLD_DUST,
     /* 0x6B */ GI_MUSHROOM,
-    /* 0x6E */ GI_SEA_HORSE = 0x6E,
-    /* 0x6F */ GI_BOTTLE_CHATEAU,
+    /* 0x6E */ GI_SEAHORSE = 0x6E,
+    /* 0x6F */ GI_CHATEAU_BOTTLE,
     /* 0x76 */ GI_ICE_TRAP = 0x76,
     /* 0x78 */ GI_MASK_DEKU = 0x78,
     /* 0x79 */ GI_MASK_GORON,
@@ -405,7 +405,7 @@ typedef enum {
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST_2,
     /* 0x94 */ GI_HYLIAN_LOACH, // Unused bottled eel
-    /* 0x95 */ GI_SEA_HORSE_CAUGHT,
+    /* 0x95 */ GI_SEAHORSE_CAUGHT,
     /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
     /* 0x98 */ GI_DEED_SWAMP,
@@ -415,7 +415,7 @@ typedef enum {
     /* 0x9C */ GI_SWORD_KOKIRI_STOLEN,
     /* 0x9D */ GI_SWORD_RAZOR_STOLEN,
     /* 0x9E */ GI_SWORD_GILDED_STOLEN,
-    /* 0x9F */ GI_SHIELD_HERO_STOLEN, // Code that treats this as hero's shield is unused, implied as intented to be stolen
+    /* 0x9F */ GI_SHIELD_HERO_STOLEN, // Code that treats this as hero's shield is unused, implied as intended to be stolen
     /* 0xA0 */ GI_ROOM_KEY,
     /* 0xA1 */ GI_LETTER_TO_MAMA,
     /* 0xA9 */ GI_BOTTLE_STOLEN = 0xA9, // buy back stolen bottle
@@ -526,10 +526,10 @@ typedef enum {
     /* 0x5C */ GID_REMAINS_ODOLWA,
     /* 0x5D */ GID_POWDER_KEG,
     /* 0x5E */ GID_GOLD_DUST,
-    /* 0x5F */ GID_SEA_HORSE,
+    /* 0x5F */ GID_SEAHORSE,
     /* 0x60 */ GID_60,
     /* 0x61 */ GID_HYLIAN_LOACH,
-    /* 0x62 */ GID_SEA_HORSE_CAUGHT,
+    /* 0x62 */ GID_SEAHORSE_CAUGHT,
     /* 0x63 */ GID_REMAINS_GOHT,
     /* 0x64 */ GID_REMAINS_GYORG,
     /* 0x65 */ GID_REMAINS_TWINMOLD,
