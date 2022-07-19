@@ -20,39 +20,34 @@ void Overlay_LoadGameState(GameStateOverlay* gameState) {
         }
 
         if (gameState->unk_14 != NULL) {
-            temp = (void*)((uintptr_t)gameState->unk_14 -
-                           (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+            temp = (void*)((uintptr_t)gameState->unk_14 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
         } else {
             temp = NULL;
         }
         gameState->unk_14 = temp;
         if (gameState->init != NULL) {
-            temp = (void*)((uintptr_t)gameState->init -
-                           (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+            temp = (void*)((uintptr_t)gameState->init - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
         } else {
             temp = NULL;
         }
         gameState->init = temp;
 
         if (gameState->destroy != NULL) {
-            temp = (void*)((uintptr_t)gameState->destroy -
-                           (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+            temp = (void*)((uintptr_t)gameState->destroy - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
         } else {
             temp = NULL;
         }
         gameState->destroy = temp;
 
         if (gameState->unk_20 != NULL) {
-            temp = (void*)((uintptr_t)gameState->unk_20 -
-                           (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+            temp = (void*)((uintptr_t)gameState->unk_20 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
         } else {
             temp = NULL;
         }
         gameState->unk_20 = temp;
 
         if (gameState->unk_24 != NULL) {
-            temp = (void*)((uintptr_t)gameState->unk_24 -
-                           (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+            temp = (void*)((uintptr_t)gameState->unk_24 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
         } else {
             temp = NULL;
         }
@@ -70,39 +65,34 @@ void Overlay_FreeGameState(GameStateOverlay* gameState) {
         var_v0 = gameState->unk_28 != 0 ? -1 : 0;
         if (var_v0 == 0) {
             if (gameState->unk_14 != NULL) {
-                temp = (void*)((uintptr_t)gameState->unk_14 +
-                               (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+                temp = (void*)((uintptr_t)gameState->unk_14 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
             } else {
                 temp = NULL;
             }
             gameState->unk_14 = temp;
             if (gameState->init != NULL) {
-                temp = (void*)((uintptr_t)gameState->init +
-                               (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+                temp = (void*)((uintptr_t)gameState->init + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
             } else {
                 temp = NULL;
             }
             gameState->init = temp;
 
             if (gameState->destroy != NULL) {
-                temp = (void*)((uintptr_t)gameState->destroy +
-                               (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+                temp = (void*)((uintptr_t)gameState->destroy + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
             } else {
                 temp = NULL;
             }
             gameState->destroy = temp;
 
             if (gameState->unk_20 != NULL) {
-                temp = (void*)((uintptr_t)gameState->unk_20 +
-                               (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+                temp = (void*)((uintptr_t)gameState->unk_20 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
             } else {
                 temp = NULL;
             }
             gameState->unk_20 = temp;
 
             if (gameState->unk_24 != NULL) {
-                temp = (void*)((uintptr_t)gameState->unk_24 +
-                               (intptr_t)((uintptr_t)gameState->vramStart - (uintptr_t)gameState->loadedRamAddr));
+                temp = (void*)((uintptr_t)gameState->unk_24 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState));
             } else {
                 temp = NULL;
             }
