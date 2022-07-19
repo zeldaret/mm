@@ -163,7 +163,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gPoSistersSkeleton, &gPoeSistersSwayAnim, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &gPoSistersSkel, &gPoeSistersSwayAnim, this->jointTable,
                    this->morphTable, POSISTERS_LIMB_MAX);
 
     this->color.r = 255;
