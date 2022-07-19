@@ -1131,7 +1131,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 }
 
 void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
-    this->wheelRot += 1000;
+    this->wheelRot += 0x3E8;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
 
@@ -1237,7 +1237,7 @@ void func_80B7A240(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7A2AC(ObjUm* this, PlayState* play) {
-    this->wheelRot += 1000;
+    this->wheelRot += 0x3E8;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
 
     switch (ObjUm_UpdatePath(this, play)) {
@@ -1288,7 +1288,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
 void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0x7FFF);
-    this->wheelRot += 2000;
+    this->wheelRot += 0x7D0;
     this->flags |= OBJ_UM_FLAG_0010;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_GALLOP);
 
@@ -1330,7 +1330,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
 
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0x7FFF);
-    this->wheelRot += 2000;
+    this->wheelRot += 0x7D0;
     this->flags |= OBJ_UM_FLAG_0010;
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_GALLOP);
@@ -1498,7 +1498,7 @@ void func_80B7AB78(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7ABE4(ObjUm* this, PlayState* play) {
-    this->wheelRot += 1000;
+    this->wheelRot += 0x3E8;
 
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
     switch (ObjUm_UpdatePath(this, play)) {
@@ -1542,7 +1542,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
-    this->wheelRot += 1000;
+    this->wheelRot += 0x3E8;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
@@ -1818,7 +1818,7 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         }
         Matrix_MultVec3f(&sp50, &this->unk_2DC);
     } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
-        if ((SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) &&
+        if (SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) &&
             (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
@@ -1954,7 +1954,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     }
                 }
             } else {
-                // !@bug: skips CLOSE_DISPS
+                //! @bug: skips CLOSE_DISPS
                 return;
             }
         }
