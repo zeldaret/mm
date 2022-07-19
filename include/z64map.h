@@ -70,12 +70,25 @@ typedef struct {
     /* 0x42 */ char unk42[2];
     /* 0x44 */ s16 unk44;
     /* 0x48 */ s16* unk48;
+    /* 0x4C */ char unk4C[0x0C];
+    /* 0x58 */ s16 unk58;
 } T_801BEBB8;
 
 typedef struct {
     /* 0x00 */ s16 unk0; //scene
     /* 0x02 */ s16 unk2;
 } T_801BEC5C;
+
+typedef struct{
+    /* 0x00 */ s16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ UNK_TYPE2 unkA;
+    /* 0x0C */ UNK_TYPE2 unkC;
+    /* 0x0E */ u16 unkE;
+} T_801F53B0;
 
 /* z_map_data */
 s32 func_801096D4(s32 arg0);
