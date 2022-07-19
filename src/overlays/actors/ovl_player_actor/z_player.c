@@ -3338,9 +3338,27 @@ void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3,
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80837DEC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808381A0.s")
+void func_8084F3DC(Player *this, PlayState *play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808381F8.s")
+void func_808381A0(Player* this, LinkAnimationHeader* anim, PlayState* play) {
+    func_80831494(play, this, func_8084F3DC, 0);
+    LinkAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 1.3f);
+}
+
+extern Vec3f D_8085D148;
+
+s32 func_808381F8(PlayState* play, Player* this) {
+    CollisionPoly* poly;
+    s32 bgId;
+    Vec3f pos;
+    f32 yIntersect;
+
+    func_80835BC8(this, &this->actor.prevPos, &D_8085D148, &pos);
+
+    yIntersect = BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
+
+    return fabsf(yIntersect - this->actor.world.pos.y) < 10.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083827C.s")
 
