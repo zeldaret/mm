@@ -477,8 +477,7 @@ void func_80A3A610(EnElfgrp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_144 == 60) {
-        Magic_Add(play, ((void)0, gSaveContext.magicFillTarget) +
-                            (gSaveContext.save.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER);
+        Magic_Add(play, MAGIC_ADD_TO_CAPACITY);
         gSaveContext.healthAccumulator = 320;
     }
 

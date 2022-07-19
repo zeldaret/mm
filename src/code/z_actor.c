@@ -2606,8 +2606,8 @@ s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
     return true;
 }
 
-void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskRadius) {
-    func_80164C14(gfxP, gLensOfTruthMaskTex, 4, 0, 6, 6, ((100 - lensMaskRadius) * 0.003f) + 1.0f);
+void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
+    func_80164C14(gfxP, &gLensOfTruthMaskTex, 4, 0, 6, 6, ((100 - lensMaskSize) * 0.003f) + 1.0f);
 }
 
 #ifdef NON_EQUIVALENT
@@ -2682,7 +2682,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
         }
 
         // spAC = phi_s1;
-        Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskRadius);
+        Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
         phi_s1_2 = func_801660B8(play, spAC);
 
         for (spB4 = 0; spB4 < numActors; spB4++, actors++) {
@@ -2742,7 +2742,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
         spAC = phi_s1_2;
 
         // spAC = temp_s1_11;
-        Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskRadius);
+        Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
         // temp_s1_11->words.w0 = 0xE7000000;
         // temp_s1_11->words.w1 = 0;
         // temp_s1_12 = temp_s1_11 + 8;
@@ -2794,7 +2794,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
     // spAC = temp_s1_18 + 8;
     gDPSetPrimColor(spAC++, 0, 0, 74, 0, 0, 74);
 
-    Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskRadius);
+    Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
 
     OVERLAY_DISP = spAC;
 
@@ -2881,7 +2881,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
             actor->isDrawn = false;
             if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
                 if ((actor->flags & ACTOR_FLAG_80) &&
-                    ((play->roomCtx.currRoom.unk5 == 0) || (play->actorCtx.lensMaskRadius == 100) ||
+                    ((play->roomCtx.currRoom.unk5 == 0) || (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
                      (actor->room != play->roomCtx.currRoom.num))) {
                     if (Actor_RecordUndrawnActor(play, actor)) {}
                 } else {
@@ -2902,14 +2902,14 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     POLY_XLU_DISP = &ref2[1];
 
     if (play->actorCtx.lensActive) {
-        Math_StepToC(&play->actorCtx.lensMaskRadius, 100, 20);
+        Math_StepToC(&play->actorCtx.lensMaskSize, LENS_MASK_ACTIVE_SIZE, 20);
         if (GET_PLAYER(play)->stateFlags2 & 0x8000000) {
             Actor_DisableLens(play);
         }
     } else {
-        Math_StepToC(&play->actorCtx.lensMaskRadius, 0, 10);
+        Math_StepToC(&play->actorCtx.lensMaskSize, 0, 10);
     }
-    if (play->actorCtx.lensMaskRadius != 0) {
+    if (play->actorCtx.lensMaskSize != 0) {
         play->actorCtx.lensActorsDrawn = true;
         Actor_DrawLensActors(play, play->actorCtx.undrawnActorCount, play->actorCtx.undrawnActors);
     }
