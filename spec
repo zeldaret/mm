@@ -1463,8 +1463,7 @@ beginseg
     name "ovl_Obj_Hsblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hsblock/z_obj_hsblock.o"
-    include "build/data/ovl_Obj_Hsblock/ovl_Obj_Hsblock.data.o"
-    include "build/data/ovl_Obj_Hsblock/ovl_Obj_Hsblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hsblock/ovl_Obj_Hsblock_reloc.o"
 endseg
 
 beginseg
