@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ENMKK_GET_4(thisx) ((thisx)->params & 4)
+
 struct EnMkk;
 
 typedef void (*EnMkkActionFunc)(struct EnMkk*, PlayState*);

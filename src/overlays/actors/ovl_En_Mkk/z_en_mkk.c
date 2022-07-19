@@ -72,7 +72,7 @@ struct EnMkkDlists {
     /* 0x04 */ Gfx* unk4;
     /* 0x08 */ Gfx* unk8;
     /* 0x0C */ Gfx* unkC;
-};
+}; // size = 0x10
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
@@ -161,7 +161,7 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
 
     Math_Vec3f_Copy(&this->unk_154, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk_160, &this->actor.world.pos);
-    this->unk_14B = (this->actor.params & 4) ? 8 : 0;
+    this->unk_14B = ENMKK_GET_4(thisx) ? 8 : 0;
 
     params8 = (this->actor.params >> 8) & 0xFF;
     params2 = this->actor.params & 2;
@@ -200,7 +200,7 @@ void func_80A4E0CC(EnMkk* this) {
 void func_80A4E100(EnMkk* this, PlayState* play) {
     s32 newAlpha;
 
-    if ((this->unk_14B & 4) != 0) {
+    if (this->unk_14B & 4) {
         newAlpha = this->alpha + 15;
     } else {
         newAlpha = this->alpha + 5;
@@ -250,12 +250,12 @@ void func_80A4E2B8(EnMkk* this) {
 }
 
 void func_80A4E2E8(EnMkk* this, PlayState* play) {
-    Player* sp24 = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s32 sp20;
 
     this->unk_14E--;
     if ((this->actor.params == 1) && (this->actor.bgCheckFlags & 1) && (this->actor.speedXZ > 2.5f) &&
-        (!(play->gameplayFrames % 3))) {
+        ((play->gameplayFrames % 3) == 0)) {
         func_80A4E22C(this, play);
     }
     if (this->unk_14E > 0) {
@@ -264,34 +264,33 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     } else {
         sp20 = Math_StepToF(&this->actor.speedXZ, 0.0f, 0.7f);
     }
-    if ((sp24->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
+    if ((player->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
         Math_ScaledStepToS(&this->unk_150, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x400);
-    } else if ((sp24->stateFlags2 & 0x80) || (sp24->actor.freezeTimer > 0)) {
+    } else if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer + 0x8000, 0x400);
     } else {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer, 0x400);
     }
     this->actor.shape.rot.y =
-        (s32)(sin_rad(this->unk_14E * 0.41887903f) * (614.4f * this->actor.speedXZ)) + this->unk_150;
+        (s32)(sin_rad(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speedXZ)) + this->unk_150;
     func_800B9010(&this->actor, NA_SE_EN_KUROSUKE_MOVE - SFX_FLAG);
     if (sp20 != 0) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
-    } else {
-        if ((this->unk_149 == 0) && (!(sp24->stateFlags3 & 0x100)) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-            (this->actor.bgCheckFlags & 1) && (Actor_IsFacingPlayer(&this->actor, 0x1800)) &&
-            (this->actor.xzDistToPlayer < 120.0f) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
-            func_80A4E58C(this);
-        }
+    } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & 0x100)) &&
+               (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & 1) &&
+               (Actor_IsFacingPlayer(&this->actor, 0x1800)) && (this->actor.xzDistToPlayer < 120.0f) &&
+               (fabsf(this->actor.playerHeightRel) < 100.0f)) {
+        func_80A4E58C(this);
     }
 }
 
 void func_80A4E58C(EnMkk* this) {
-    this->unk_14B = this->unk_14B | 1;
+    this->unk_14B |= 1;
     this->actor.speedXZ = 3.0f;
     this->actor.velocity.y = 5.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUROSUKE_ATTACK);
-    this->collider.base.atFlags = this->collider.base.atFlags | AT_ON;
+    this->collider.base.atFlags |= AT_ON;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actionFunc = func_80A4E60C;
 }
@@ -311,7 +310,7 @@ void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags = this->actor.flags | ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
     this->alpha = 254;
     func_800BE568(&this->actor, &this->collider);
@@ -335,7 +334,7 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
                                  &sEffEnvColors[this->actor.params], 0x46, 4, 0xC);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EXTINCT);
             if (this->unk_14C != 0) {
-                Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (this->unk_14C * 0x10));
+                Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, this->unk_14C * 0x10);
             }
             func_80A4EEF4(this);
         } else {
@@ -346,7 +345,7 @@ void func_80A4E72C(EnMkk* this, PlayState* play) {
 }
 
 void func_80A4E84C(EnMkk* this) {
-    if ((this->unk_14B & 3) != 0) {
+    if (this->unk_14B & 3) {
         Vec3f sp34;
         f32 temp_fv0 = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.prevPos);
 
@@ -377,17 +376,17 @@ void func_80A4E84C(EnMkk* this) {
         this->unk_160.y = this->unk_154.y;
         this->unk_154.y = this->actor.world.pos.y;
         this->unk_154.x = this->actor.world.pos.x -
-                          10.0f * Math_SinS(this->actor.shape.rot.y + (s32)(1228.8f * this->actor.speedXZ *
-                                                                            sin_rad(this->unk_14E * 0.62831855f)));
+                          10.0f * Math_SinS(this->actor.shape.rot.y +
+                                            (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk_14E * (M_PI / 5))));
         this->unk_154.z = this->actor.world.pos.z -
-                          10.0f * Math_CosS(this->actor.shape.rot.y + (s32)(1228.8f * this->actor.speedXZ *
-                                                                            sin_rad(this->unk_14E * 0.62831855f)));
-        this->unk_160.x =
-            this->unk_154.x - 12.0f * Math_SinS(this->actor.shape.rot.y - (s32)(1228.8f * this->actor.speedXZ *
-                                                                                sin_rad(this->unk_14E * 0.62831855f)));
-        this->unk_160.z =
-            this->unk_154.z - 12.0f * Math_CosS(this->actor.shape.rot.y - (s32)(1228.8f * this->actor.speedXZ *
-                                                                                sin_rad(this->unk_14E * 0.62831855f)));
+                          10.0f * Math_CosS(this->actor.shape.rot.y +
+                                            (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk_14E * (M_PI / 5))));
+        this->unk_160.x = this->unk_154.x -
+                          12.0f * Math_SinS(this->actor.shape.rot.y -
+                                            (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk_14E * (M_PI / 5))));
+        this->unk_160.z = this->unk_154.z -
+                          12.0f * Math_CosS(this->actor.shape.rot.y -
+                                            (s32)(1228.8f * this->actor.speedXZ * sin_rad(this->unk_14E * (M_PI / 5))));
     }
 }
 
@@ -475,7 +474,7 @@ void func_80A4EF74(EnMkk* this, PlayState* play) {
     s32 newAlpha = this->alpha - 20;
 
     if (newAlpha <= 0) {
-        if ((this->unk_14B & 8) != 0) {
+        if (this->unk_14B & 8) {
             Actor_SetScale(&this->actor, 0.01f);
             this->primColorSelect = 0;
             this->unk_149 = 0;
@@ -516,6 +515,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
     dLists = &sBoeDLists[this->actor.params];
     if (this->actor.projectedPos.z > 0.0f) {
         MtxF* matrix;
+
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha == 255) {
