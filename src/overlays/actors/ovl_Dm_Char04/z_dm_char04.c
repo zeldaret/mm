@@ -67,7 +67,7 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
     this->envColors = sEnvColors[this->actor.params];
     this->actor.targetArrowOffset = 3000.0f;
     this->csAction = 0x63;
-    this->unk_262 = this->actor.params << 0xB;
+    this->timer = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
                    this->morphTable, 7);
@@ -108,7 +108,7 @@ void DmChar04_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
-    this->unk_262++;
+    this->timer++;
 }
 static Vec3f D_80AAC4F0 = { 0.0f, 0.0f, 0.0f };
 
@@ -120,7 +120,7 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
     DmChar04* this = THIS;
 
     if (limbIndex == 6) {
-        sp28 = ((Math_SinS(this->unk_262 << 0xC) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
+        sp28 = ((Math_SinS(this->timer << 0xC) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
         Matrix_MultVec3f(&D_80AAC4F0, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
@@ -137,7 +137,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C94C(play->state.gfxCtx);
-    alpha = (this->unk_262 * 50) & 0x1FF;
+    alpha = (this->timer * 50) & 0x1FF;
     if (alpha > 255) {
         alpha = 511 - alpha;
     }

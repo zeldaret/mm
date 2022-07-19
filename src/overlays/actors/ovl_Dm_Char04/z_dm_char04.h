@@ -17,7 +17,7 @@ typedef struct DmChar04 {
     /* 0x250 */ Color_RGBAf envColors;
     /* 0x260 */ u8 csAction;
     /* 0x261 */ u8 animationIndex;
-    /* 0x262 */ u16 unk_262;
+    /* 0x262 */ u16 timer;
 } DmChar04; // size = 0x264
 
 extern const ActorInit Dm_Char04_InitVars;
