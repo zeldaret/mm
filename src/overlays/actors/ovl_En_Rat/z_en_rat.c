@@ -884,7 +884,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
     EnRat* this = THIS;
     MtxF* currentMatrixState;
     Vec3f* ptr;
-    f32 var_fv0;
+    f32 redModifier;
 
     if (limbIndex == REAL_BOMBCHU_LIMB_TAIL_END) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -921,19 +921,19 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
-            var_fv0 = fabsf(cos_rad(this->timer * (M_PI / 30.f)));
+            redModifier = fabsf(cos_rad(this->timer * (M_PI / 30.f)));
         } else {
             if (this->timer >= 120) {
-                var_fv0 = fabsf(cos_rad((this->timer % 30) * (M_PI / 30.0f)));
+                redModifier = fabsf(cos_rad((this->timer % 30) * (M_PI / 30.0f)));
             } else if (this->timer >= 30) {
-                var_fv0 = fabsf(cos_rad((this->timer % 6) * (M_PI / 6.0f)));
+                redModifier = fabsf(cos_rad((this->timer % 6) * (M_PI / 6.0f)));
             } else {
-                var_fv0 = fabsf(cos_rad((this->timer % 3) * (M_PI / 3.0f)));
+                redModifier = fabsf(cos_rad((this->timer % 3) * (M_PI / 3.0f)));
             }
         }
 
-        gDPSetEnvColor(POLY_OPA_DISP++, (s32)((1.0f - var_fv0) * 255.0f), 0, 40, 255);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s32)((1.0f - var_fv0) * 255.0f), 0, 40, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, (s32)((1.0f - redModifier) * 255.0f), 0, 40, 255);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s32)((1.0f - redModifier) * 255.0f), 0, 40, 255);
         Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
