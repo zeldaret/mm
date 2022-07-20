@@ -10,19 +10,19 @@ typedef void (*EnInsectActionFunc)(struct EnInsect*, PlayState*);
 #define ENINSECT_GET_1(thisx) ((thisx)->params & 1)
 
 typedef struct EnInsect {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderJntSph collider;
-    /* 0x0164 */ ColliderJntSphElement colliderElements[1];
-    /* 0x01A4 */ SkelAnime skelAnime;
-    /* 0x01E8 */ Vec3s jointTable[24];
-    /* 0x0278 */ Vec3s morphTable[24];
-    /* 0x0308 */ EnInsectActionFunc actionFunc;
-    /* 0x030C */ u16 unk_30C;
-    /* 0x030E */ s16 unk_30E;
-    /* 0x0310 */ s16 unk_310;
-    /* 0x0312 */ s16 unk_312;
-    /* 0x0314 */ s16 unk_314;
-    /* 0x0316 */ s16 unk_316;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderJntSph collider;
+    /* 0x164 */ ColliderJntSphElement colliderElements[1];
+    /* 0x1A4 */ SkelAnime skelAnime;
+    /* 0x1E8 */ Vec3s jointTable[24];
+    /* 0x278 */ Vec3s morphTable[24];
+    /* 0x308 */ EnInsectActionFunc actionFunc;
+    /* 0x30C */ u16 unk_30C;
+    /* 0x30E */ s16 unk_30E;
+    /* 0x310 */ s16 unk_310;
+    /* 0x312 */ s16 unk_312;
+    /* 0x314 */ s16 unk_314;
+    /* 0x316 */ s16 unk_316;
 } EnInsect; // size = 0x318
 
 extern const ActorInit En_Insect_InitVars;
