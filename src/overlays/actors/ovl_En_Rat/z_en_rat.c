@@ -32,6 +32,11 @@ void EnRat_Explode(EnRat* this, PlayState* play);
 s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play);
 void EnRat_SetupBounced(EnRat* this);
 
+typedef enum {
+    /* -2 */ EN_RAT_HOOK_STARTED = -2,
+    /* -1 */ EN_RAT_HOOKED,
+} EnRatHookedState;
+
 const ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
     ACTORCAT_ENEMY,
@@ -515,7 +520,7 @@ void EnRat_SpawnSmoke(EnRat* this, PlayState* play) {
 void EnRat_SetupRevive(EnRat* this) {
     this->hasLostTrackOfPlayer = false;
     this->timer = 200;
-    this->stunTimer = 0;
+    this->damageReaction.stunTimer = 0;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.yOffset = 0.0f;
     this->actor.shape.rot.x = this->actor.home.rot.x;
@@ -761,7 +766,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     EnRat* this = THIS;
 
     this->shouldRotateOntoSurfaces = false;
-    if (this->stunTimer == 0) {
+    if (this->damageReaction.stunTimer == 0) {
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -778,7 +783,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     } else if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_HOOKSHOT) {
-            this->stunTimer = -2;
+            this->damageReaction.hookedState = EN_RAT_HOOK_STARTED;
         } else if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_STUN) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
@@ -788,7 +793,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                     this->actor.velocity.y = 0.0f;
                 }
             } else {
-                this->stunTimer = 40;
+                this->damageReaction.stunTimer = 40;
             }
         } else {
             EnRat_Explode(this, play);
@@ -806,12 +811,15 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->actionFunc != EnRat_PostDetonation) && (this->actionFunc != EnRat_Revive)) {
-        if (this->stunTimer > 0) {
-            this->stunTimer--;
-        } else if (this->stunTimer < 0) {
-            if (this->stunTimer == -2) {
-                this->stunTimer = -1;
+        if (this->damageReaction.stunTimer > 0) {
+            this->damageReaction.stunTimer--;
+        } else if (this->damageReaction.hookedState < 0) {
+            if (this->damageReaction.hookedState == EN_RAT_HOOK_STARTED) {
+                // The player just hit the Real Bombchu with the Hookshot.
+                this->damageReaction.hookedState = EN_RAT_HOOKED;
             } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
+                // The player has hooked the Real Bombchu for more than one frame, but
+                // the actor flag indicating that the Hookshot is attached is *not* set.
                 EnRat_Explode(this, play);
                 return;
             }
@@ -853,7 +861,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.center.z = this->actor.world.pos.z + (this->axisUp.z * 10.0f);
 
         if (this->actionFunc != EnRat_Revive) {
-            if (this->stunTimer == 0) {
+            if (this->damageReaction.stunTimer == 0) {
                 CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
             }
 

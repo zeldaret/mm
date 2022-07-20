@@ -36,7 +36,10 @@ typedef struct EnRat {
     /* 0x18D */ u8 shouldRotateOntoSurfaces;
     /* 0x18E */ s16 animLoopCounter;
     /* 0x190 */ s16 timer; // Used for both exploding and reviving
-    /* 0x192 */ s16 stunTimer; // Set to -2 and -1 when hit with the Hookshot
+    /* 0x192 */ union {
+                    s16 stunTimer;
+                    s16 hookedState;
+                } damageReaction;
     /* 0x194 */ Vec3s jointTable[REAL_BOMBCHU_LIMB_MAX];
     /* 0x1D0 */ Vec3s morphTable[REAL_BOMBCHU_LIMB_MAX];
     /* 0x20C */ Vec3f axisForwards;
