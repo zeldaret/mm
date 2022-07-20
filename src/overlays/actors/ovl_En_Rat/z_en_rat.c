@@ -19,6 +19,7 @@ void EnRat_Draw(Actor* thisx, PlayState* play);
 
 void EnRat_InitializeAxes(EnRat* this);
 void EnRat_UpdateRotation(EnRat* this);
+void EnRat_Revive(EnRat* this, PlayState* play);
 void EnRat_SetupIdle(EnRat* this);
 void EnRat_Idle(EnRat* this, PlayState* play);
 void EnRat_SetupSpottedPlayer(EnRat* this);
@@ -26,11 +27,8 @@ void EnRat_SpottedPlayer(EnRat* this, PlayState* play);
 void EnRat_SetupChasePlayer(EnRat* this);
 void EnRat_ChasePlayer(EnRat* this, PlayState* play);
 void EnRat_Bounced(EnRat* this, PlayState* play);
-void EnRat_PostDetonation(EnRat* this, PlayState* play);
-void EnRat_Revive(EnRat* this, PlayState* play);
 void EnRat_Explode(EnRat* this, PlayState* play);
-s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play);
-void EnRat_SetupBounced(EnRat* this);
+void EnRat_PostDetonation(EnRat* this, PlayState* play);
 
 typedef enum {
     /* -2 */ EN_RAT_HOOK_STARTED = -2,
