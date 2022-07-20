@@ -280,7 +280,7 @@ void EnRat_UpdateRotation(EnRat* this) {
 
 /**
  * Chooses to either look at the player (if the Real Bombchu has spotted the player or
- * is chasing after them) or at a semi-random point (if they're idle).
+ * is chasing after them) or at some other semi-random point (if the Bombchu is idle).
  */
 void EnRat_ChooseDirection(EnRat* this) {
     Vec3f sp74;
@@ -322,7 +322,7 @@ void EnRat_ChooseDirection(EnRat* this) {
     Matrix_MultVec3f(&this->axisForwards, &sp74);
     Math_Vec3f_Copy(&this->axisForwards, &sp74);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
-    this->shouldRotateToMoveAlongSurfaces = true;
+    this->shouldRotateOntoSurfaces = true;
 }
 
 /**
@@ -396,13 +396,13 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
                 return false;
             }
 
-            this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
+            this->shouldRotateOntoSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
-                this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
+                this->shouldRotateOntoSurfaces |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -432,7 +432,7 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
             }
 
             if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
+                this->shouldRotateOntoSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -760,7 +760,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRat* this = THIS;
 
-    this->shouldRotateToMoveAlongSurfaces = false;
+    this->shouldRotateOntoSurfaces = false;
     if (this->stunTimer == 0) {
         SkelAnime_Update(&this->skelAnime);
     }
@@ -829,7 +829,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (this->shouldRotateToMoveAlongSurfaces) {
+            if (this->shouldRotateOntoSurfaces) {
                 EnRat_UpdateRotation(this);
                 this->actor.shape.rot.x = -this->actor.world.rot.x;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
