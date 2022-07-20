@@ -23,8 +23,8 @@ void EnRat_SetupIdle(EnRat* this);
 void EnRat_Idle(EnRat* this, PlayState* play);
 void EnRat_SetupSpottedPlayer(EnRat* this);
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play);
-void EnRat_SetupRunTowardsPlayer(EnRat* this);
-void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play);
+void EnRat_SetupChasePlayer(EnRat* this);
+void EnRat_ChasePlayer(EnRat* this, PlayState* play);
 void EnRat_Bounced(EnRat* this, PlayState* play);
 void EnRat_PostDetonation(EnRat* this, PlayState* play);
 void EnRat_Revive(EnRat* this, PlayState* play);
@@ -125,19 +125,7 @@ static EffectBlureInit2 sBlureInit = {
     0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
 };
 
-static s32 sTexturesDesegmented = 0;
-
-static Vec3f sSmokeAccel = { 0.0f, 0.6f, 0.0f };
-
-static Color_RGBA8 sSmokeColor = { 255, 255, 255, 255 };
-
-static Vec3f sBlureP1Offset = { 0.0f, 10.5f, -9.0f };
-
-static Vec3f sBlureP2LeftOffset = { 18.0f, 0.0f, -7.5f };
-
-static Vec3f sBlureP2RightOffset = { -18.0f, 0.0f, -7.5f };
-
-static Vec3f sDustVelocity = { 0.0f, 3.0f, 0.0f };
+static s32 sTexturesDesegmented = false;
 
 void EnRat_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -159,6 +147,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gRealBombchuSkel, &gRealBombchuRunAnim, this->jointTable,
                        this->morphTable, REAL_BOMBCHU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
+
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         Effect_Add(play, &this->blure1Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
         Effect_Add(play, &this->blure2Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
@@ -180,7 +169,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
     }
 
     if (!sTexturesDesegmented) {
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < ARRAY_COUNT(sSparkTextures); i++) {
             sSparkTextures[i] = Lib_SegmentedToVirtual(sSparkTextures[i]);
         }
 
@@ -289,14 +278,18 @@ void EnRat_UpdateRotation(EnRat* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-void EnRat_RotateToFacePlayer(EnRat* this) {
+/**
+ * Chooses to either look at the player (if the Real Bombchu has spotted the player or
+ * is chasing after them) or at a semi-random point (if they're idle).
+ */
+void EnRat_ChooseDirection(EnRat* this) {
     Vec3f sp74;
-    s16 var_v1;
+    s16 angle;
 
     if (this->actionFunc != EnRat_Idle) {
-        var_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        angle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (this->axisUp.y < -0.25f) {
-            var_v1 -= 0x8000;
+            angle -= 0x8000;
         }
     } else {
         if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 50.0f) {
@@ -313,45 +306,48 @@ void EnRat_RotateToFacePlayer(EnRat* this) {
             Matrix_MultVec3f(&sp64, &sp4C);
             Matrix_MultVec3f(&this->actor.home.pos, &sp64);
             Matrix_MultVec3f(&this->actor.world.pos, &sp58);
-            var_v1 = Math_Vec3f_Yaw(&sp58, &sp64) - Math_Vec3f_Yaw(&sp58, &sp4C);
+            angle = Math_Vec3f_Yaw(&sp58, &sp64) - Math_Vec3f_Yaw(&sp58, &sp4C);
             if (sp40.y < -0.25f) {
-                var_v1 -= 0x8000;
+                angle -= 0x8000;
             }
 
-            var_v1 += (s16)randPlusMinusPoint5Scaled(2048.0f);
+            angle += (s16)randPlusMinusPoint5Scaled(2048.0f);
         } else {
-            var_v1 = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(2048.0f) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(2048.0f) : 0;
         }
     }
 
-    var_v1 = CLAMP(var_v1, -0x800, 0x800);
-    Matrix_RotateAxisF(var_v1 * 0.0000958738f, &this->axisUp, MTXMODE_NEW);
+    angle = CLAMP(angle, -0x800, 0x800);
+    Matrix_RotateAxisF(angle * 0.0000958738f, &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &sp74);
     Math_Vec3f_Copy(&this->axisForwards, &sp74);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
-    this->unk_18D = 1;
+    this->shouldRotateToMoveAlongSurfaces = true;
 }
 
+/**
+ * Returns true if the Real Bombchu is on a collision poly or is on the water's surface.
+ */
 s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
                             s32* bgId) {
     WaterBox* waterBox;
-    s32 var_v1;
+    s32 isOnWater;
     f32 waterSurface;
 
     if ((WaterBox_GetSurface1(play, &play->colCtx, posB->x, posB->z, &waterSurface, &waterBox)) &&
         (waterSurface <= posA->y) && (posB->y <= waterSurface)) {
-        var_v1 = true;
+        isOnWater = true;
     } else {
-        var_v1 = false;
+        isOnWater = false;
     }
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, 1, 1, 1, 1, bgId)) {
-        if (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30) && ((var_v1 == 0) || (waterSurface <= posResult->y))) {
+        if (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30) && (!isOnWater || (waterSurface <= posResult->y))) {
             return true;
         }
     }
 
-    if (var_v1) {
+    if (isOnWater) {
         posResult->x = posB->x;
         posResult->y = waterSurface;
         posResult->z = posB->z;
@@ -396,17 +392,17 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
         posB.z = (this->axisForwards.z * lineLength) + posA.z;
 
         if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-            if ((polySide != NULL) && (this->hasLostTrackOfPlayer != 0)) {
+            if ((polySide != NULL) && this->hasLostTrackOfPlayer) {
                 return false;
             }
 
-            this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
+            this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (polyUpDown != this->actor.floorPoly) {
-                this->unk_18D |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
+                this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polyUpDown, play);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -436,7 +432,7 @@ s32 EnRat_IsTouchingFloor(EnRat* this, PlayState* play) {
             }
 
             if (EnRat_IsOnCollisionPoly(play, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                this->unk_18D |= EnRat_UpdateFloorPoly(this, polySide, play);
+                this->shouldRotateToMoveAlongSurfaces |= EnRat_UpdateFloorPoly(this, polySide, play);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -509,12 +505,15 @@ void EnRat_HandleNonSceneCollision(EnRat* this, PlayState* play) {
     }
 }
 
+Vec3f sSmokeAccel = { 0.0f, 0.6f, 0.0f };
+Color_RGBA8 sSmokeColor = { 255, 255, 255, 255 };
+
 void EnRat_SpawnSmoke(EnRat* this, PlayState* play) {
     func_800B0EB0(play, &this->smokePos, &gZeroVec3f, &sSmokeAccel, &sSmokeColor, &sSmokeColor, 75, 7, 8);
 }
 
 void EnRat_SetupRevive(EnRat* this) {
-    this->hasLostTrackOfPlayer = 0;
+    this->hasLostTrackOfPlayer = false;
     this->timer = 200;
     this->stunTimer = 0;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -533,6 +532,10 @@ void EnRat_SetupRevive(EnRat* this) {
     this->actionFunc = EnRat_Revive;
 }
 
+/**
+ * Makes the Real Bombchu respawn after a certain amount of time by tunneling up from underground.
+ * Used only by Overworld-type Bombchu.
+ */
 void EnRat_Revive(EnRat* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
@@ -563,6 +566,9 @@ void EnRat_SetupIdle(EnRat* this) {
     this->actionFunc = EnRat_Idle;
 }
 
+/**
+ * Move around randomly near the Bombchu's home until it spots the player.
+ */
 void EnRat_Idle(EnRat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -593,6 +599,9 @@ void EnRat_SetupSpottedPlayer(EnRat* this) {
     this->actionFunc = EnRat_SpottedPlayer;
 }
 
+/**
+ * Play the "spotted" animation a few times, then start chasing the player.
+ */
 void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
     if ((this->animLoopCounter == 3) && (Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_AIM);
@@ -601,7 +610,7 @@ void EnRat_SpottedPlayer(EnRat* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         this->animLoopCounter--;
         if (this->animLoopCounter == 0) {
-            EnRat_SetupRunTowardsPlayer(this);
+            EnRat_SetupChasePlayer(this);
         }
     }
 }
@@ -618,26 +627,35 @@ void EnRat_UpdateSparkOffsets(EnRat* this) {
     }
 }
 
-void EnRat_SetupRunTowardsPlayer(EnRat* this) {
+void EnRat_SetupChasePlayer(EnRat* this) {
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuRunAnim, -5.0f);
     this->actor.speedXZ = 6.1f;
     EnRat_UpdateSparkOffsets(this);
-    this->actionFunc = EnRat_RunTowardsPlayer;
+    this->actionFunc = EnRat_ChasePlayer;
 }
 
-void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
+Vec3f sBlureP1Offset = { 0.0f, 10.5f, -9.0f };
+Vec3f sBlureP2LeftOffset = { 18.0f, 0.0f, -7.5f };
+Vec3f sBlureP2RightOffset = { -18.0f, 0.0f, -7.5f };
+Vec3f sDustVelocity = { 0.0f, 3.0f, 0.0f };
+
+/**
+ * Run towards the player. If the player puts on the Stone Mask or burrows into a Deku
+ * Flower, the Real Bombchu will lose track of the player and run in a straight line.
+ */
+void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f blureP1;
     Vec3f blureP2;
 
     this->actor.speedXZ = 6.1f;
-    if (this->hasLostTrackOfPlayer != 0) {
+    if (this->hasLostTrackOfPlayer) {
         if (!(player->stateFlags3 & PLAYER_STATE3_100) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
             (Actor_IsFacingPlayer(&this->actor, 0x3000))) {
-            this->hasLostTrackOfPlayer = 0;
+            this->hasLostTrackOfPlayer = false;
         }
     } else if ((player->stateFlags3 & PLAYER_STATE3_100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
-        this->hasLostTrackOfPlayer = 1;
+        this->hasLostTrackOfPlayer = true;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -648,9 +666,7 @@ void EnRat_RunTowardsPlayer(EnRat* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOMCHU_WALK);
     }
 
-    if (this->timer != 0) {
-        this->timer--;
-    }
+    DECR(this->timer);
 
     if ((this->timer == 0) && (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON)) {
         this->timer = 30;
@@ -695,6 +711,9 @@ void EnRat_SetupBounced(EnRat* this) {
     this->actionFunc = EnRat_Bounced;
 }
 
+/**
+ * Fly backwards until the Real Bombchu touches a wall, ceiling, or floor, then explode.
+ */
 void EnRat_Bounced(EnRat* this, PlayState* play) {
     this->actor.shape.rot.x -= 0x700;
     Math_StepToF(&this->actor.shape.yOffset, 1700.0f, 170.0f);
@@ -725,6 +744,10 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
     this->actionFunc = EnRat_PostDetonation;
 }
 
+/**
+ * If the Real Bombchu is an Overworld-type Bombchu, this will set it up to revive.
+ * Otherwise, it will simply kill the Bombchu.
+ */
 void EnRat_PostDetonation(EnRat* this, PlayState* play) {
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         EnRat_SetupRevive(this);
@@ -737,7 +760,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRat* this = THIS;
 
-    this->unk_18D = 0;
+    this->shouldRotateToMoveAlongSurfaces = false;
     if (this->stunTimer == 0) {
         SkelAnime_Update(&this->skelAnime);
     }
@@ -774,7 +797,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
     } else if (((this->collider.base.ocFlags1 & OC1_HIT) && (((this->collider.base.oc->category == ACTORCAT_ENEMY)) ||
                                                              (this->collider.base.oc->category == ACTORCAT_BOSS) ||
                                                              (this->collider.base.oc->category == ACTORCAT_PLAYER))) ||
-               ((this->actionFunc == EnRat_RunTowardsPlayer) && (this->timer == 0))) {
+               ((this->actionFunc == EnRat_ChasePlayer) && (this->timer == 0))) {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         EnRat_Explode(this, play);
         return;
@@ -797,8 +820,8 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 EnRat_HandleNonSceneCollision(this, play);
             }
 
-            if (this->hasLostTrackOfPlayer == 0) {
-                EnRat_RotateToFacePlayer(this);
+            if (!this->hasLostTrackOfPlayer) {
+                EnRat_ChooseDirection(this);
             }
 
             if ((this->actionFunc != EnRat_SpottedPlayer) && !EnRat_IsTouchingFloor(this, play)) {
@@ -806,7 +829,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (this->unk_18D != 0) {
+            if (this->shouldRotateToMoveAlongSurfaces) {
                 EnRat_UpdateRotation(this);
                 this->actor.shape.rot.x = -this->actor.world.rot.x;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -820,7 +843,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 30.0f, 60.0f, 7);
         }
 
-        if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) != 0) {
+        if (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
             EnRat_Explode(this, play);
             return;
         }
@@ -871,7 +894,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         this->smokePos.y += 15.0f;
         currentMatrixState = Matrix_GetCurrent();
 
-        if (this->actionFunc == EnRat_RunTowardsPlayer) {
+        if (this->actionFunc == EnRat_ChasePlayer) {
             s32 i;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 150, 255);
