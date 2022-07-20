@@ -322,7 +322,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_REMAINS_ODOLWA, OBJECT_BSMASK
     { GetItem_DrawRemains, { gRemainsOdolwaDL, gRemainsOdolwaDL } },
     // GID_POWDER_KEG, OBJECT_GI_BIGBOMB
-    { GetItem_DrawOpa0Xlu1, { gGiPowderKegBarrelDL, gGiPowderKegSkullsAndFuseDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiPowderKegBarrelDL, gGiPowderKegGoronSkullAndFuseDL } },
     // GID_GOLD_DUST, OBJECT_GI_GOLD_DUST
     { GetItem_DrawOpa01, { gGiGoldDustPowderDL, gGiGoldDustPowderEmptyDL } },
     // GID_SEAHORSE, OBJECT_GI_BOTTLE_16
