@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lightblock.h"
+#include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
 #include "objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000
@@ -15,12 +16,12 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play);
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play);
 void ObjLightblock_Update(Actor* thisx, PlayState* play);
 void ObjLightblock_Draw(Actor* thisx, PlayState* play);
-void func_80AF3AC8(ObjLightblock* this);
-void func_80AF3ADC(ObjLightblock* this, PlayState* play);
-void func_80AF3B8C(ObjLightblock* this);
-void func_80AF3BA0(ObjLightblock* this, PlayState* play);
-void func_80AF3C18(ObjLightblock* this);
-void func_80AF3C34(ObjLightblock* this, PlayState* play);
+void ObjLightblock_SetupWait(ObjLightblock* this);
+void ObjLightblock_Wait(ObjLightblock* this, PlayState* play);
+void ObjLightblock_SetupPlayCutscene(ObjLightblock* this);
+void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play);
+void ObjLightblock_SetupFadeAway(ObjLightblock* this);
+void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play);
 
 const ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
@@ -59,12 +60,12 @@ typedef struct {
     /* 0x04 */ s16 radius;
     /* 0x06 */ s16 height;
     /* 0x08 */ s16 yShift;
-    /* 0x0C */ s32 params;
+    /* 0x0C */ s32 effectParams;
 } LightblockTypeVars; // size = 0x10
 
 static LightblockTypeVars sLightblockTypeVars[] = {
-    { 0.1f, 76, 80, 19, 2 },
-    { (1.0f / 6), 126, 144, 19, 3 },
+    { 0.1f, 76, 80, 19, DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE },
+    { (1.0f / 6.0f), 126, 144, 19, DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -76,11 +77,11 @@ static InitChainEntry sInitChain[] = {
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
 
-void func_80AF3910(ObjLightblock* this, PlayState* play) {
+void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
 
     Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                this->dyna.actor.world.pos.z, 0, 0, 0, typeVars->params);
+                this->dyna.actor.world.pos.z, 0, 0, 0, typeVars->effectParams);
 }
 
 void ObjLightblock_Init(Actor* thisx, PlayState* play) {
@@ -102,7 +103,7 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = typeVars->height;
         this->collider.dim.yShift = typeVars->yShift;
         this->alpha = 255;
-        func_80AF3AC8(this);
+        ObjLightblock_SetupWait(this);
     }
 }
 
@@ -113,11 +114,14 @@ void ObjLightblock_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80AF3AC8(ObjLightblock* this) {
-    this->actionFunc = func_80AF3ADC;
+void ObjLightblock_SetupWait(ObjLightblock* this) {
+    this->actionFunc = ObjLightblock_Wait;
 }
 
-void func_80AF3ADC(ObjLightblock* this, PlayState* play) {
+/**
+ * Wait for a single collision from a Light Arrow or 8 frames of Mirror Shield ray collision.
+ */
+void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
@@ -134,39 +138,36 @@ void func_80AF3ADC(ObjLightblock* this, PlayState* play) {
 
     if (this->collisionCounter >= 8) {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
-        func_80AF3B8C(this);
+        ObjLightblock_SetupPlayCutscene(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void func_80AF3B8C(ObjLightblock* this) {
-    this->actionFunc = func_80AF3BA0;
+void ObjLightblock_SetupPlayCutscene(ObjLightblock* this) {
+    this->actionFunc = ObjLightblock_PlayCutscene;
 }
 
-void func_80AF3BA0(ObjLightblock* this, PlayState* play) {
+void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         Flags_SetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
-        func_80AF3910(this, play);
-        func_80AF3C18(this);
+        ObjLightblock_SpawnEffect(this, play);
+        ObjLightblock_SetupFadeAway(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void func_80AF3C18(ObjLightblock* this) {
+void ObjLightblock_SetupFadeAway(ObjLightblock* this) {
     this->timer = 80;
-    this->actionFunc = func_80AF3C34;
+    this->actionFunc = ObjLightblock_FadeAway;
 }
 
-void func_80AF3C34(ObjLightblock* this, PlayState* play) {
-    s8 temp_a0;
-
+void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
-        temp_a0 = this->dyna.actor.cutscene;
-        ActorCutscene_Stop(temp_a0);
+        ActorCutscene_Stop(this->dyna.actor.cutscene);
         Actor_MarkForDeath(&this->dyna.actor);
     } else if (this->timer <= 60) {
         if (this->alpha > 40) {
