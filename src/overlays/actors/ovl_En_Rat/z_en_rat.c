@@ -523,7 +523,7 @@ void EnRat_SetupRevive(EnRat* this) {
     this->actor.shape.rot.z = this->actor.home.rot.z;
     EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuSpotAnim, 0.0f);
     this->revivePosY = 2666.6667f;
@@ -731,7 +731,7 @@ void EnRat_Explode(EnRat* this, PlayState* play) {
     EnBom* bomb;
 
     bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                               this->actor.world.pos.z, 0, 0, 0, 0);
+                               this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
     if (bomb != NULL) {
         bomb->timer = 0;
     }
