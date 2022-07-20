@@ -640,7 +640,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gPowderKegDL);
+            gSPDisplayList(POLY_OPA_DISP++, gPowderKegBarrelDL);
             gSPDisplayList(POLY_OPA_DISP++, gPowderKegGoronSkullDL);
 
             func_808726DC(play, &this->actor.home.pos, &sp58, &sp4C, this->timer);

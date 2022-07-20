@@ -8,9 +8,9 @@
         <DList Name="gPowderKegFuseModel2DL" Offset="0x2290"/>
 
         <!-- Textures and DisplayList for the Powder Keg -->
-        <Texture Name="gPowderKegTLUT" OutName="powder_keg_tlut" Format="rgba16" Width="16" Height="16" Offset="0x22B0"/>
-        <Texture Name="gPowderKegTex" OutName="powder_keg" Format="ci8" Width="32" Height="32" Offset="0x24B0"/>
-        <DList Name="gPowderKegDL" Offset="0x2EF0"/>
+        <Texture Name="gPowderKegBarrelTLUT" OutName="powder_keg_barrel_tlut" Format="rgba16" Width="16" Height="16" Offset="0x22B0"/>
+        <Texture Name="gPowderKegBarrelTex" OutName="powder_keg_barrel" Format="ci8" Width="32" Height="32" Offset="0x24B0"/>
+        <DList Name="gPowderKegBarrelDL" Offset="0x2EF0"/>
 
         <!-- Textures and DisplayList for the Goron Skull on the side of the Powder Keg -->
         <Texture Name="gPowderKegGoronSkullTLUT" OutName="powder_keg_goron_skull_tlut" Format="rgba16" Width="16" Height="16" Offset="0x3048"/>
