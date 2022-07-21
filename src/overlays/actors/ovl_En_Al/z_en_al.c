@@ -129,8 +129,9 @@ static AnimationInfoS sAnimations[] = {
 Vec3f D_80BE0070 = { 1000.0f, 0.0f, 0.0f };
 
 Gfx* D_80BE007C[] = {
-    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
+    gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
+    gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
+    gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
 Actor* func_80BDE1A0(EnAl* this, PlayState* play, u8 arg0, s16 arg1) {
@@ -780,7 +781,8 @@ void EnAl_Init(Actor* thisx, PlayState* play) {
     EnAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable, 27);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
+                       MADAME_AROMA_LIMB_MAX);
     this->unk_4F8 = -1;
     func_80BDE27C(this, 1);
     Collider_InitAndSetCylinder(play, &this->unk_310, &this->actor, &sCylinderInit);
@@ -817,16 +819,16 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
 
 s32 EnAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     switch (limbIndex) {
-        case 3:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             *dList = NULL;
             break;
 
-        case 16:
+        case MADAME_AROMA_LIMB_HEAD:
             break;
     }
     return false;
@@ -836,31 +838,31 @@ void EnAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnAl* this = THIS;
 
     switch (limbIndex) {
-        case 3:
+        case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
             Matrix_Get(&this->unk_190[0]);
             break;
 
-        case 11:
+        case MADAME_AROMA_LIMB_SHAWL_UPPER:
             Matrix_Get(&this->unk_190[1]);
             break;
 
-        case 12:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
             Matrix_Get(&this->unk_190[2]);
             break;
 
-        case 13:
+        case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
             Matrix_Get(&this->unk_190[3]);
             break;
 
-        case 14:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
             Matrix_Get(&this->unk_190[4]);
             break;
 
-        case 15:
+        case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             Matrix_Get(&this->unk_190[5]);
             break;
 
-        case 16:
+        case MADAME_AROMA_LIMB_HEAD:
             Matrix_MultVec3f(&D_80BE0070, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             break;
