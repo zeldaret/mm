@@ -73,7 +73,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, D_80A3E74C);
     if ((this->actor.params == 0xB) || (this->actor.params == 0xC)) {
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
     }
 }
 
@@ -105,10 +105,12 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnTest2_SetActorFlags(Actor* thisx, PlayState* play) {
+    EnTest2* this = THIS;
+
     if (play->actorCtx.unk4 == 0x64) {
-        thisx->flags |= 0x80;
+        this->actor.flags |= ACTOR_FLAG_80;
     } else {
-        thisx->flags &= -0x81;
+        this->actor.flags &= ~ACTOR_FLAG_80;
     }
 }
 
@@ -120,7 +122,7 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
     if (this->animMat != NULL) {
         AnimatedMat_Draw(play, this->animMat);
     }
-    if ((this->actor.flags & 0x80) == 0x80) {
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);
