@@ -10284,7 +10284,7 @@
     0x80A3A484:("func_80A3A484",),
     0x80A3A4AC:("func_80A3A4AC",),
     0x80A3A520:("func_80A3A520",),
-    0x80A3A600:("func_80A3A600",),
+    0x80A3A600:("EnElfgrp_DoNothing",),
     0x80A3A610:("func_80A3A610",),
     0x80A3A6F4:("func_80A3A6F4",),
     0x80A3A77C:("func_80A3A77C",),

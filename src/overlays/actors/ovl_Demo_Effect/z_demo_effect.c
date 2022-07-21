@@ -89,9 +89,9 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
         case DEMO_EFFECT_TYPE_LIGHT_GREEN:
         case DEMO_EFFECT_TYPE_LIGHT_BLUE:
         case DEMO_EFFECT_TYPE_LIGHT_YELLOW:
-            this->envXluColor[0] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_MIN].r;
-            this->envXluColor[1] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_MIN].g;
-            this->envXluColor[2] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_MIN].b;
+            this->envXluColor[0] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].r;
+            this->envXluColor[1] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].g;
+            this->envXluColor[2] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].b;
             Actor_SetScale(&this->actor, 0.0f);
             this->initDrawFunc = DemoEffect_DrawLight;
             this->initActionFunc = DemoEffect_ExpandLight;

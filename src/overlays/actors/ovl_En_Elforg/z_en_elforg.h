@@ -8,6 +8,9 @@
 #define STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx) (((thisx)->params & 0x1C0) >> 6)
 #define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
+//! @note `area` does not always use the enum
+#define STRAY_FAIRY_PARAMS(flag, area, type) ((((flag) & 0x7F) << 9) | (((area) & 7) << 6) | (type))
+
 #define STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME (1 << 0)
 #define STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS (1 << 1)
 #define STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN (1 << 2)
