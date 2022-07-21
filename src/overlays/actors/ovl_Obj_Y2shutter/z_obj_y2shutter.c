@@ -43,31 +43,11 @@ const ActorInit Obj_Y2shutter_InitVars = {
 
 ShutterInfo sShutterInfo[] = {
     // rectangular shutter door, activated by floor plate
-    {
-        object_kaizoku_obj_DL_0032A0,
-        &object_kaizoku_obj_Colheader_0035B0,
-        120.0f,
-        20.0f,
-        3.0f,
-        -20.0f,
-        3.0f,
-        4,
-        8,
-        160
-    },
+    { object_kaizoku_obj_DL_0032A0, &object_kaizoku_obj_Colheader_0035B0, 120.0f, 20.0f, 3.0f, -20.0f, 3.0f, 4, 8,
+      160 },
     // hexagonal shutter, activated by hitting crystal switch
-    {
-        object_kaizoku_obj_DL_005720,
-        &object_kaizoku_obj_Colheader_005EC8,
-        150.0f,
-        1.0f,
-        0.04f,
-        -1.0f,
-        0.04f,
-        6,
-        0xC,
-        160
-    },
+    { object_kaizoku_obj_DL_005720, &object_kaizoku_obj_Colheader_005EC8, 150.0f, 1.0f, 0.04f, -1.0f, 0.04f, 6, 0xC,
+      160 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -81,7 +61,7 @@ void ObjY2shutter_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     ShutterInfo* info = &sShutterInfo[OBJY2SHUTTER_GET_SHUTTER_TYPE(thisx)];
     ObjY2shutter* this = THIS;
-    
+
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, info->colHeader);
@@ -110,24 +90,24 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     f32 sp28 = 0.0f;
     f32 sp24 = 0.0f;
 
-    sShutterInfo[0].unk_1E = gGameInfo->data[0x2F4] + 0xA0;
-    sShutterInfo[1].unk_1E = gGameInfo->data[0x2F5] + 0xA0;
+    sShutterInfo[0].unk_1E = DREG(84) + 0xA0;
+    sShutterInfo[1].unk_1E = DREG(85) + 0xA0;
 
-    if (((shutterType == 0) && (gGameInfo->data[0x2F6] != 0)) ||
-        ((shutterType != 0) && (gGameInfo->data[0x2F7] != 0))) {
+    if (((shutterType == 0) && (DREG(86) != 0)) ||
+        ((shutterType != 0) && (DREG(87) != 0))) {
         if (shutterType == 0) {
-            gGameInfo->data[0x2F6] = 0;
+            DREG(86) = 0;
         } else {
-            gGameInfo->data[0x2F7] = 0;
+            DREG(87) = 0;
         }
-        if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
-            Flags_UnsetSwitch(play, this->dyna.actor.params & 0x7F);
+        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
+            Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
         } else {
-            Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
+            Flags_SetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
         }
     }
     if (this->unk_15F == 0) {
-        if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
+        if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
             s16 cutscene = this->dyna.actor.cutscene;
 
             if (this->unk_15C == 0) {
@@ -148,7 +128,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
                 sp28 = info->unk_C;
                 sp24 = info->unk_10;
                 if (this->unk_15C < 2) {
-                    Flags_UnsetSwitch(play, this->dyna.actor.params & 0x7F);
+                    Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
                 } else {
                     this->unk_15C--;
                 }
@@ -180,7 +160,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     } else {
         this->unk_15E = false;
         if (shutterType != 0) {
-            func_800B9010(&this->dyna.actor, 0x2036U);
+            func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
         }
     }
     if (DECR(this->unk_15F) != 0) {
@@ -189,8 +169,8 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjY2shutter_Draw(Actor* thisx, PlayState* play) {
-    ShutterInfo* info;
     ObjY2shutter* this = THIS;
+    ShutterInfo* info;
 
     info = &sShutterInfo[(OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor))];
     Gfx_DrawDListOpa(play, info->dList);

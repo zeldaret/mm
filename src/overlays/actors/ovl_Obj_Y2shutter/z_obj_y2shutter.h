@@ -15,5 +15,6 @@ typedef struct ObjY2shutter {
 extern const ActorInit Obj_Y2shutter_InitVars;
 
 #define OBJY2SHUTTER_GET_SHUTTER_TYPE(thisx) (((thisx)->params >> 7) & 1)
+#define OBJY2SHUTTER_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 
 #endif // Z_OBJ_Y2SHUTTER_H
