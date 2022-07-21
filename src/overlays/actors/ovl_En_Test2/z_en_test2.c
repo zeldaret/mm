@@ -55,7 +55,7 @@ EnTest2DisplayObjs sDisplayObjects[] = {
     { object_hakugin_obj_DL_0035A8, NULL, object_hakugin_obj_Matanimheader_003888 },
 };
 
-static InitChainEntry D_80A3E74C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
@@ -71,7 +71,7 @@ static s16 sTest2Objects[] = {
 void EnTest2_Init(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_80A3E74C);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     if ((this->actor.params == 0xB) || (this->actor.params == 0xC)) {
         this->actor.flags |= ACTOR_FLAG_20;
     }
@@ -134,10 +134,10 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, sDisplayObjects[this->actor.params].DList1);
 
         CLOSE_DISPS(play->state.gfxCtx);
-        return;
+    } else {
+        if (dispObjects != 0) {
+            Gfx_DrawDListXlu(play, dispObjects);
+        }
+        Gfx_DrawDListOpa(play, sDisplayObjects[this->actor.params].DList1);
     }
-    if (dispObjects != 0) {
-        Gfx_DrawDListXlu(play, dispObjects);
-    }
-    Gfx_DrawDListOpa(play, sDisplayObjects[this->actor.params].DList1);
 }
