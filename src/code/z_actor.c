@@ -691,7 +691,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
 /* Start of Flags section */
 
 /**
- * Tests if current scene switch flag is set.
+ * Tests if a current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
@@ -701,7 +701,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Sets current scene switch flag.
+ * Sets a current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
@@ -710,7 +710,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Unsets current scene switch flag.
+ * Unsets a current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
@@ -719,77 +719,77 @@ void Flags_UnsetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Tests if current scene chest flag is set.
+ * Tests if a current scene chest flag is set.
  */
 s32 Flags_GetTreasure(PlayState* play, s32 flag) {
     return play->actorCtx.flags.chest & (1 << flag);
 }
 
 /**
- * Sets current scene chest flag.
+ * Sets a current scene chest flag.
  */
 void Flags_SetTreasure(PlayState* play, s32 flag) {
     play->actorCtx.flags.chest |= (1 << flag);
 }
 
 /**
- * Overrides the all the chest flags.
+ * Overrides all the current scene chest flags.
  */
 void Flags_SetAllTreasure(PlayState* play, s32 flag) {
     play->actorCtx.flags.chest = flag;
 }
 
 /**
- * Returns all the chest flags.
+ * Returns all the current scene chest flags.
  */
 s32 Flags_GetAllTreasure(PlayState* play) {
     return play->actorCtx.flags.chest;
 }
 
 /**
- * Tests if current scene clear flag is set.
+ * Tests if a current scene clear flag is set.
  */
 s32 Flags_GetClear(PlayState* play, s32 roomNumber) {
     return play->actorCtx.flags.clearedRoom & (1 << roomNumber);
 }
 
 /**
- * Sets current scene clear flag.
+ * Sets a current scene clear flag.
  */
 void Flags_SetClear(PlayState* play, s32 roomNumber) {
     play->actorCtx.flags.clearedRoom |= (1 << roomNumber);
 }
 
 /**
- * Unsets current scene clear flag.
+ * Unsets a current scene clear flag.
  */
 void Flags_UnsetClear(PlayState* play, s32 roomNumber) {
     play->actorCtx.flags.clearedRoom &= ~(1 << roomNumber);
 }
 
 /**
- * Tests if current scene temp clear flag is set.
+ * Tests if a current scene temp clear flag is set.
  */
 s32 Flags_GetClearTemp(PlayState* play, s32 roomNumber) {
     return play->actorCtx.flags.clearedRoomTemp & (1 << roomNumber);
 }
 
 /**
- * Sets current scene temp clear flag.
+ * Sets a current scene temp clear flag.
  */
 void Flags_SetClearTemp(PlayState* play, s32 roomNumber) {
     play->actorCtx.flags.clearedRoomTemp |= (1 << roomNumber);
 }
 
 /**
- * Unsets current scene temp clear flag.
+ * Unsets a current scene temp clear flag.
  */
 void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
     play->actorCtx.flags.clearedRoomTemp &= ~(1 << roomNumber);
 }
 
 /**
- * Tests if current scene collectible flag is set.
+ * Tests if a current scene collectible flag is set.
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
@@ -799,7 +799,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
 }
 
 /**
- * Sets current scene collectible flag.
+ * Sets a current scene collectible flag.
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
     if (flag > 0 && flag < 0x80) {
