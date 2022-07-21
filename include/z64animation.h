@@ -279,7 +279,7 @@ typedef struct {
     };
     /* 0x08 */ s16* unk_8;
     /* 0x0C */ s16* unk_C;
-    /* 0x0C */ char unk_10[0x2];
+    /* 0x10 */ char unk_10[0x2];
     /* 0x12 */ s16 unk_12;
 } Struct_801BFA14_Arg1; // size = 0x14
 
@@ -288,7 +288,7 @@ typedef struct {
     /* 0x04 */ s16* unk_4;
     /* 0x08 */ s16* unk_8;
     /* 0x0C */ s16* unk_C;
-    /* 0x0C */ char unk_10[0x2];
+    /* 0x10 */ char unk_10[0x2];
     /* 0x12 */ s16 unk_12;
 } SkeletonInfo_1C; // size = 0x14
 

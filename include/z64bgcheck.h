@@ -74,7 +74,7 @@ typedef struct {
 typedef struct CollisionPoly {
     /* 0x0 */ u16 type;
     union {
-        u16 vtxData[3];
+        /* 0x2 */ u16 vtxData[3];
         struct {
             /* 0x2 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
             /* 0x4 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
@@ -147,9 +147,10 @@ typedef struct {
     /* 0x2 */ u16 next; // index of the next SSNode in the list, or SS_NULL if last element 
 } SSNode; // size = 0x4
 
+// represents a linked list of type SSNode
 typedef struct {
     /* 0x0 */ u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
-} SSList; // size = 0x2 // represents a linked list of type SSNode
+} SSList; // size = 0x2
 
 typedef struct {
     /* 0x0 */ u16 max;

@@ -112,7 +112,6 @@ typedef struct {
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
 } SCmdLightSettingList; // size = 0x8
-// Cloudmodding has this as Environment Settings
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -192,10 +191,10 @@ typedef struct {
 } SCmdWorldMapVisited; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8  code;
-    /* 0x01 */ u8  data1;
-    /* 0x04 */ void* segment;
-} SCmdTextureAnimations;
+    /* 0x0 */ u8  code;
+    /* 0x1 */ u8  data1;
+    /* 0x4 */ void* segment;
+} SCmdTextureAnimations; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
