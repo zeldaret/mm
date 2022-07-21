@@ -288,93 +288,38 @@ s32 func_80968DD0(EnJs* this, PlayState* play) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968E38.s")
 
 s32 func_80968E38(s32 arg0) {
-    s32 temp_a0;
-    s32 temp_a0_2;
-    s32 temp_a1;
-    s32 temp_a1_2;
-    s32 temp_a2;
-    s32 temp_a2_2;
-    u8 temp_a3;
-    s32 phi_v0;
-    s32 phi_a1;
-    s32 phi_v0_2;
-    s32 phi_a1_2;
-    s32 phi_v1;
-    s32 phi_v1_2;
-    s32 phi_v1_3;
-    s32 phi_v1_4;
-    s32 phi_v1_5;
-    s32 phi_v1_6;
-    s32 phi_v1_7;
-    s32 phi_v1_8;
-    s32 phi_v1_9;
-    int i;
-    int count=0;
-
-    if ((arg0 < 0) || (arg0 > 9)) {
+    s32 i;
+    s32 count;
+    u8 mask;
+    u8* maskMaskBit = gSaveContext.maskMaskBit;
+    
+    if (((arg0 < 0) || (arg0 > 8))) {
         return 0;
     }
-    temp_a0 = arg0 * 3;
+
+    count = 0;
     
-    for(i=0;i < 8;i++,temp_a0++){
-        if ((gSaveContext.maskMaskBit[temp_a0] & (1 << i)) != 0) {
+    arg0 *= 3;
+    for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
+        if (maskMaskBit[arg0] & mask) {
             count++;
         }
     }
-    /*
-    phi_v0 = 1;
-    phi_a1 = 0;
-    phi_v0_2 = 1;
-    phi_a1_2 = 0;
-    do {
-        phi_v1_8 = phi_v1_9;
-        if ((*(gSaveContext.maskMaskBit + temp_a0) & phi_v0) != 0) {
-            phi_v1_8 = phi_v1_9 + 1;
+
+    arg0++;
+    for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
+        if (maskMaskBit[arg0] & mask) {
+            count++;
         }
-        temp_a1 = phi_a1 + 1;
-        phi_v0 = (phi_v0 * 2) & 0xFF;
-        phi_a1 = temp_a1;
-        phi_v1_7 = phi_v1_8;
-        phi_v1_9 = phi_v1_8;
-    } while (temp_a1 < 8);
+    }
 
-    temp_a0_2 = temp_a0 + 1;
-    do {
-        phi_v1_6 = phi_v1_7;
-        if ((gSaveContext.maskMaskBit[temp_a0_2] & phi_v0_2) != 0) {
-            phi_v1_6 = phi_v1_7 + 1;
+    arg0++;
+    for (mask = 1, i = 0; i < 5; i++, mask <<= 1) {
+        if (maskMaskBit[arg0] & mask) {
+            count++;
         }
-        temp_a1_2 = phi_a1_2 + 1;
-        phi_v0_2 = (phi_v0_2 * 2) & 0xFF;
-        phi_a1_2 = temp_a1_2;
-        phi_v1_5 = phi_v1_6;
-        phi_v1_7 = phi_v1_6;
-    } while (temp_a1_2 < 8);
-
-
-    temp_a3 = gSaveContext.maskMaskBit[temp_a0_2 + 1];
-    if ((temp_a3 & 1) != 0) {
-        phi_v1_5 = phi_v1_6 + 1;
     }
-    phi_v1_4 = phi_v1_5;
-    if (temp_a3 & 2) {
-        phi_v1_4 = phi_v1_5 + 1;
-    }
-    temp_a2 = (2 * 2) & 0xFF;
-    phi_v1_3 = phi_v1_4;
-    if ((temp_a3 & temp_a2) != 0) {
-        phi_v1_3 = phi_v1_4 + 1;
-    }
-    temp_a2_2 = (temp_a2 * 2) & 0xFF;
-    phi_v1_2 = phi_v1_3;
-    if ((temp_a3 & temp_a2_2) != 0) {
-        phi_v1_2 = phi_v1_3 + 1;
-    }
-    phi_v1 = phi_v1_2;
-    if ((temp_a3 & ((temp_a2_2 * 2) & 0xFF)) != 0) {
-        phi_v1 = phi_v1_2 + 1;
-    }
-    */
+   
     return count;
 }
 
