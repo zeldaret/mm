@@ -16,9 +16,9 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play);
 void EnElfgrp_Destroy(Actor* thisx, PlayState* play);
 void EnElfgrp_Update(Actor* thisx, PlayState* play);
 
-s32 func_80A39BD0(PlayState* play, s32 arg2);
-s32 func_80A39C1C(PlayState* play, s32 arg1);
-void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3);
+s32 func_80A39BD0(PlayState* play, s32 type);
+s32 func_80A39C1C(PlayState* play, s32 type);
+void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 fairyType);
 // void func_80A3A0AC(EnElfgrp* this, PlayState* play);
 // void func_80A3A0F4(EnElfgrp* this, PlayState* play);
 // void func_80A3A210(EnElfgrp* this, PlayState* play);
@@ -41,6 +41,12 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 #define ELFGRP_STATE_3 (1 << 3)
 #define ELFGRP_STATE_4 (1 << 4)
 
+//! Used for the type in EnElfgrp_SpawnStrayFairies()
+typedef enum {
+    /* 0 */ SPAWNED_STRAY_FAIRY_TYPE_PRESENT,  //!< STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN
+    /* 1 */ SPAWNED_STRAY_FAIRY_TYPE_RETURNING //!< STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN
+} ElfgrpSpawnedFairyTypes;
+
 const ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
     ACTORCAT_PROP,
@@ -53,14 +59,22 @@ const ActorInit En_Elfgrp_InitVars = {
     (ActorFunc)NULL,
 };
 
-void func_80A396B0(EnElfgrp* this, s32 arg1) {
-    while (arg1 > 0) {
+/**
+ * Set the actor's cutscene to a later one, or -1 if run out.
+ *
+ * @note This is only expected to be called in Init when this actor has the first cutscene set, but can also work for
+ * later cutscenes if \p numberToSkip is set correcly.
+ *
+ * @param numberToSkip Number of cutscenes in the list to skip forward to set this one.
+ */
+void EnElfgrp_SetCutscene(EnElfgrp* this, s32 numberToSkip) {
+    while (numberToSkip > 0) {
         if (this->actor.cutscene == -1) {
             break;
         }
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
-        arg1--;
+        numberToSkip--;
     }
 }
 
@@ -84,23 +98,23 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
             sp24 = func_80A39C1C(play, this->type);
             this->talkedOnceFlag = 1 << this->type;
 
-            if (sp24 < 25) {
-                func_80A39DC8(this, play, sp24, 0);
+            if (sp24 < STRAY_FAIRY_TOTAL) {
+                EnElfgrp_SpawnStrayFairies(this, play, sp24, SPAWNED_STRAY_FAIRY_TYPE_PRESENT);
             }
 
-            if (sp24 >= 25) {
+            if (sp24 >= STRAY_FAIRY_TOTAL) {
                 this->actionFunc = func_80A3A520;
-                func_80A396B0(this, 2);
+                EnElfgrp_SetCutscene(this, 2);
                 break;
             }
 
-            if ((func_80A39BD0(play, this->type) + sp24) >= 25) {
+            if ((func_80A39BD0(play, this->type) + sp24) >= STRAY_FAIRY_TOTAL) {
                 this->actionFunc = func_80A3A398;
 
                 switch (this->type) {
                     case ENELFGRP_TYPE_POWER:
                         if (gSaveContext.save.weekEventReg[23] & 2) { // Obtained great spin attack
-                            func_80A396B0(this, 1);
+                            EnElfgrp_SetCutscene(this, 1);
                         } else {
                             this->stateFlags |= ELFGRP_STATE_2;
                         }
@@ -108,19 +122,19 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 
                     case ENELFGRP_TYPE_WISDOM:
                         if (gSaveContext.save.playerData.doubleMagic == true) {
-                            func_80A396B0(this, 1);
+                            EnElfgrp_SetCutscene(this, 1);
                         }
                         break;
 
                     case ENELFGRP_TYPE_COURAGE:
                         if (gSaveContext.save.playerData.doubleDefense) {
-                            func_80A396B0(this, 1);
+                            EnElfgrp_SetCutscene(this, 1);
                         }
                         break;
 
                     case ENELFGRP_TYPE_KINDNESS:
                         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
-                            func_80A396B0(this, 1);
+                            EnElfgrp_SetCutscene(this, 1);
                         } else {
                             this->stateFlags |= ELFGRP_STATE_4;
                         }
@@ -144,35 +158,35 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
             sp24 = func_80A39C1C(play, ENELFGRP_TYPE_MAGIC);
             this->talkedOnceFlag = 1 << ENELFGRP_TYPE_MAGIC;
 
-            if (sp24 >= 25) {
+            if (sp24 >= STRAY_FAIRY_TOTAL) {
                 this->actionFunc = func_80A3A520;
 
                 if ((this->actor.home.rot.z != 0) && Flags_GetSwitch(play, this->actor.home.rot.z)) {
                     this->actionFunc = EnElfgrp_DoNothing;
                 } else if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
-                    func_80A396B0(this, 4);
+                    EnElfgrp_SetCutscene(this, 4);
                 } else if (INV_CONTENT(ITEM_MASK_DEKU) != ITEM_MASK_DEKU) {
-                    func_80A396B0(this, 5);
+                    EnElfgrp_SetCutscene(this, 5);
                 } else {
                     this->stateFlags |= ELFGRP_STATE_1;
-                    func_80A396B0(this, 6);
+                    EnElfgrp_SetCutscene(this, 6);
                 }
             } else if ((gSaveContext.save.weekEventReg[8] & 0x80)) {
-                func_80A39DC8(this, play, 24, 0);
+                EnElfgrp_SpawnStrayFairies(this, play, STRAY_FAIRY_TOTAL - 1, SPAWNED_STRAY_FAIRY_TYPE_PRESENT);
                 this->actionFunc = func_80A3A398;
 
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
-                        func_80A396B0(this, 2);
+                        EnElfgrp_SetCutscene(this, 2);
                     } else {
-                        func_80A396B0(this, 3);
+                        EnElfgrp_SetCutscene(this, 3);
                         this->stateFlags |= ELFGRP_STATE_1;
                     }
                 } else if (gSaveContext.save.playerData.magicAcquired == true) {
-                    func_80A396B0(this, 1);
+                    EnElfgrp_SetCutscene(this, 1);
                 }
             } else {
-                func_80A39DC8(this, play, 24, 0);
+                EnElfgrp_SpawnStrayFairies(this, play, STRAY_FAIRY_TOTAL - 1, SPAWNED_STRAY_FAIRY_TYPE_PRESENT);
                 this->actionFunc = func_80A3A8F8;
                 if ((gSaveContext.save.weekEventReg[9] & this->talkedOnceFlag)) {
                     this->actor.textId = 0x580;
@@ -193,7 +207,8 @@ s32 func_80A39BD0(PlayState* play, s32 type) {
         return 0;
     }
 
-    return ((void)0, gSaveContext.save.inventory.strayFairies[type - 1]) - func_80A39C1C(play, type) + 10;
+    return ((void)0, gSaveContext.save.inventory.strayFairies[type - 1]) - func_80A39C1C(play, type) +
+           (STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL);
 }
 
 s32 func_80A39C1C(PlayState* play, s32 type) {
@@ -203,42 +218,45 @@ s32 func_80A39C1C(PlayState* play, s32 type) {
     //   u32 fountains[4] : 5;
     // } FairyFountains;
     // where arg1 is:
-    //    0: clocktown
-    //    1: woodfall,
-    //    2: snowhead,
-    //    3: great bay,
-    //    4: stone tower
-    // clocktown is handled separately, and then the fountains are looked up as array indexing
+    //    0: Clock Town
+    //    1: Woodfall,
+    //    2: Snowhead,
+    //    3: Great Bay,
+    //    4: Ikana
+    // Clock Town is handled separately, and then the fountains are looked up as array indexing
+    //! @note Clock Town is handled separately in a number of places
 
     s32 temp_v1;
 
-    if ((type < 0) || (type >= 5)) {
+    if ((type < ENELFGRP_TYPE_MAGIC) || (type > ENELFGRP_TYPE_KINDNESS)) {
         return 0;
     }
 
-    if (type == 0) {
+    if (type == ENELFGRP_TYPE_MAGIC) {
         if (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1) {
-            return 25;
+            return STRAY_FAIRY_TOTAL;
+        } else {
+            return STRAY_FAIRY_TOTAL - 1;
         }
-        return 24;
     }
 
     temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 >> (((type - 1) * 5) + 1)) & 0x1F;
-    if (temp_v1 < 10) {
-        temp_v1 = 10;
-    } else if (temp_v1 > 25) {
-        temp_v1 = 25;
+    if (temp_v1 < STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL) {
+        temp_v1 = STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL;
+    } else if (temp_v1 > STRAY_FAIRY_TOTAL) {
+        temp_v1 = STRAY_FAIRY_TOTAL;
     }
     return temp_v1;
 }
 
 void func_80A39CD4(PlayState* play, s32 type, s32 arg2) {
-    if ((type < ENELFGRP_TYPE_MAGIC) || (type > ENELFGRP_TYPE_KINDNESS) || (arg2 < 10) || (arg2 > 25)) {
+    if ((type < ENELFGRP_TYPE_MAGIC) || (type > ENELFGRP_TYPE_KINDNESS) ||
+        (arg2 < (STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL)) || (arg2 > STRAY_FAIRY_TOTAL)) {
         return;
     }
 
     if (type == ENELFGRP_TYPE_MAGIC) {
-        if (arg2 == 25) {
+        if (arg2 == STRAY_FAIRY_TOTAL) {
             gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 1;
         } else {
             gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~1;
@@ -249,19 +267,19 @@ void func_80A39CD4(PlayState* play, s32 type, s32 arg2) {
     }
 }
 
-void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
+void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 fairyType) {
     s32 pad;
     s32 i;
-    Actor* elforg;
+    Actor* strayFairy;
     s32 strayFairyParams;
     Vec3f spawnCentrePos;
     Player* player = GET_PLAYER(play);
 
-    if (arg3 == 0) {
+    if (fairyType == 0) {
         this->stateFlags |= ELFGRP_STATE_3;
     }
 
-    if (arg3 == 0) {
+    if (fairyType == 0) {
         spawnCentrePos = this->actor.world.pos;
         spawnCentrePos.y += 20.0f;
         strayFairyParams = STRAY_FAIRY_PARAMS(0, this->type, STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN);
@@ -271,22 +289,23 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
         strayFairyParams = STRAY_FAIRY_PARAMS(0, this->type, STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN);
     }
 
-    for (i = 0; i < arg2; i++) {
-        elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG,
-                             randPlusMinusPoint5Scaled(20.0f) + spawnCentrePos.x, spawnCentrePos.y,
-                             randPlusMinusPoint5Scaled(20.0f) + spawnCentrePos.z, 0, 0, 0, strayFairyParams);
-        if (elforg == NULL) {
+    for (i = 0; i < count; i++) {
+        strayFairy = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG,
+                                 randPlusMinusPoint5Scaled(20.0f) + spawnCentrePos.x, spawnCentrePos.y,
+                                 randPlusMinusPoint5Scaled(20.0f) + spawnCentrePos.z, 0, 0, 0, strayFairyParams);
+
+        if (strayFairy == NULL) {
             continue;
         }
-        elforg->home.pos.x = this->actor.home.pos.x;
-        elforg->home.pos.y = this->actor.home.pos.y + 20.0f;
-        elforg->home.pos.z = this->actor.home.pos.z;
+        strayFairy->home.pos.x = this->actor.home.pos.x;
+        strayFairy->home.pos.y = this->actor.home.pos.y + 20.0f;
+        strayFairy->home.pos.z = this->actor.home.pos.z;
     }
 }
 
 s32 func_80A39F50(PlayState* play) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
-    EnElforg* elfOrg;
+    EnElforg* strayFairy;
 
     while (itemAction != NULL) {
         if ((itemAction->id != ACTOR_EN_ELFORG) ||
@@ -296,9 +315,9 @@ s32 func_80A39F50(PlayState* play) {
             continue;
         }
 
-        elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->stateFlags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME)) {
-            elfOrg->stateFlags |= STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME;
+        strayFairy = (EnElforg*)itemAction;
+        if (!(strayFairy->stateFlags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME)) {
+            strayFairy->stateFlags |= STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME;
         }
         itemAction = itemAction->next;
     }
@@ -308,7 +327,7 @@ s32 func_80A39F50(PlayState* play) {
 
 s32 func_80A39FBC(PlayState* play) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
-    EnElforg* elfOrg;
+    EnElforg* strayFairy;
     s32 phi_v1 = 30;
 
     while (itemAction != NULL) {
@@ -319,13 +338,13 @@ s32 func_80A39FBC(PlayState* play) {
             continue;
         }
 
-        elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->stateFlags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN)) {
-            elfOrg->stateFlags |= STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
+        strayFairy = (EnElforg*)itemAction;
+        if (!(strayFairy->stateFlags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN)) {
+            strayFairy->stateFlags |= STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
             if (phi_v1 >= 100) {
                 return phi_v1;
             }
-            elfOrg->secondaryTimer = phi_v1;
+            strayFairy->secondaryTimer = phi_v1;
             phi_v1 += 5;
         }
 
@@ -337,7 +356,7 @@ s32 func_80A39FBC(PlayState* play) {
 
 void func_80A3A044(PlayState* play) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
-    EnElforg* elfOrg;
+    EnElforg* strayFairy;
 
     while (itemAction != NULL) {
         if ((itemAction->id != ACTOR_EN_ELFORG) ||
@@ -347,9 +366,9 @@ void func_80A3A044(PlayState* play) {
             continue;
         }
 
-        elfOrg = (EnElforg*)itemAction;
-        elfOrg->actor.home.rot.x = 20;
-        elfOrg->stateFlags |= STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS;
+        strayFairy = (EnElforg*)itemAction;
+        strayFairy->actor.home.rot.x = 20;
+        strayFairy->stateFlags |= STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS;
 
         itemAction = itemAction->next;
     }
@@ -406,10 +425,11 @@ void func_80A3A274(EnElfgrp* this, PlayState* play) {
         switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x64)]->action) {
             case 2:
                 if (!(this->stateFlags & ELFGRP_STATE_0)) {
-                    if (this->type == ENELFGRP_TYPE_MAGIC) {
-                        func_80A39DC8(this, play, 1, 1);
+                    if (this->type == ENELFGRP_TYPE_MAGIC) { // Clock Town
+                        EnElfgrp_SpawnStrayFairies(this, play, 1, SPAWNED_STRAY_FAIRY_TYPE_RETURNING);
                     } else {
-                        func_80A39DC8(this, play, func_80A39BD0(play, this->type), 1);
+                        EnElfgrp_SpawnStrayFairies(this, play, func_80A39BD0(play, this->type),
+                                                   SPAWNED_STRAY_FAIRY_TYPE_RETURNING);
                     }
                     this->stateFlags |= ELFGRP_STATE_0;
                     func_80A39CD4(play, this->type, 25);
@@ -468,6 +488,7 @@ void func_80A3A4AC(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A520(EnElfgrp* this, PlayState* play) {
+    // Great Fairy's action
     if (Cutscene_CheckActorAction(play, 0x67)) {
         this->actionFunc = EnElfgrp_DoNothing;
     } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
@@ -544,10 +565,10 @@ void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
         this->actionFunc = func_80A3A6F4;
 
         temp_s0 = func_80A39BD0(play, this->type);
-        func_80A39DC8(this, play, temp_s0, 1);
+        EnElfgrp_SpawnStrayFairies(this, play, temp_s0, SPAWNED_STRAY_FAIRY_TYPE_RETURNING);
         temp_s0 += func_80A39C1C(play, this->type);
-        if (temp_s0 > 25) {
-            temp_s0 = 25;
+        if (temp_s0 > STRAY_FAIRY_TOTAL) {
+            temp_s0 = STRAY_FAIRY_TOTAL;
         }
 
         func_80A39CD4(play, this->type, temp_s0);

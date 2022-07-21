@@ -86,18 +86,21 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
                 return;
             }
             break;
+
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
             if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
+
         default:
             if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
+
         case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
         case STRAY_FAIRY_TYPE_BUBBLE:
         case STRAY_FAIRY_TYPE_CHEST:
@@ -119,26 +122,31 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
             this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
+
         case STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN:
             EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_TurnInFairy;
             this->secondaryTimer = 60;
             break;
+
         case STRAY_FAIRY_TYPE_BUBBLE:
             this->timer = 0;
             this->actionFunc = EnElforg_TrappedByBubble;
             break;
+
         case STRAY_FAIRY_TYPE_ENEMY:
             this->actionFunc = EnElforg_SetupTrappedByEnemy;
             EnElforg_SetupTrappedByEnemy(this, play);
             this->actor.draw = NULL;
             break;
+
         case STRAY_FAIRY_TYPE_COLLIDER:
             this->actionFunc = EnElforg_HiddenByCollider;
             this->actor.draw = NULL;
             Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             break;
+
         default:
             EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_FreeFloating;
@@ -386,6 +394,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
     this->actor.world.pos.x = playerActor->world.pos.x + (Math_SinS(this->timer * 0x1000) * orbitRadius);
     this->actor.world.pos.z = playerActor->world.pos.z + (Math_CosS(this->timer * 0x1000) * orbitRadius);
     this->actor.world.pos.y = player->bodyPartsPos[0].y;
+
     EnElforg_SpawnSparkles(this, play, 16);
 }
 
@@ -419,10 +428,11 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
     EnElforg_CirclePlayer(this, play);
 
     player->actor.freezeTimer = 100;
-    player->stateFlags1 |= 0x20000000;
+    player->stateFlags1 |= PLAYER_STATE1_20000000;
+
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 0;
-        player->stateFlags1 &= ~0x20000000;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         Actor_MarkForDeath(&this->actor);
         gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
@@ -456,6 +466,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
     }
 
     scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
+
     if (!Player_InCsMode(play)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, play);
@@ -465,9 +476,11 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
                     Flags_SetCollectible(play, STRAY_FAIRY_FLAG(&this->actor));
                     break;
+
                 case STRAY_FAIRY_TYPE_CHEST:
                     Flags_SetTreasure(play, STRAY_FAIRY_FLAG(&this->actor));
                     break;
+
                 default:
                     Flags_SetSwitch(play, STRAY_FAIRY_FLAG(&this->actor));
                     break;
@@ -475,7 +488,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
-                player->stateFlags1 |= 0x20000000;
+                player->stateFlags1 |= PLAYER_STATE1_20000000;
                 Message_StartTextbox(play, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
                 ActorCutscene_SetIntentToPlay(0x7C);
@@ -486,7 +499,8 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 gSaveContext.save.inventory.strayFairies[gSaveContext.dungeonIndex]++;
                 Message_StartTextbox(play, 0x11, NULL);
 
-                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= 15) {
+                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >=
+                    STRAY_FAIRY_SCATTERED_TOTAL) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }
@@ -624,19 +638,24 @@ void EnElforg_Draw(Actor* thisx, PlayState* play) {
         case STRAY_FAIRY_AREA_WOODFALL:
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gStrayFairyWoodfallTexAnim));
             break;
+
         case STRAY_FAIRY_AREA_SNOWHEAD:
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gStrayFairySnowheadTexAnim));
             break;
+
         case STRAY_FAIRY_AREA_GREAT_BAY:
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gStrayFairyGreatBayTexAnim));
             break;
+
         case STRAY_FAIRY_AREA_STONE_TOWER:
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gStrayFairyStoneTowerTexAnim));
             break;
+
         default: // STRAY_FAIRY_AREA_CLOCK_TOWN
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gStrayFairyClockTownTexAnim));
             break;
     }
+
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
     POLY_XLU_DISP =
