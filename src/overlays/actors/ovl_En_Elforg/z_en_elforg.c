@@ -367,9 +367,9 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
     if (this->stateFlags & STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS) {
         // This happens right before the Great Fairy appears once all
         // Stray Fairies are saved.
-        if (this->actor.home.rot.x > 0) {
+        if (STRAY_FAIRY_SPARKLE_COUNT(&this->actor) > 0) {
             EnElforg_SpawnSparkles(this, play, 10);
-            this->actor.home.rot.x--;
+            STRAY_FAIRY_SPARKLE_COUNT(&this->actor)--;
         }
 
         Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
