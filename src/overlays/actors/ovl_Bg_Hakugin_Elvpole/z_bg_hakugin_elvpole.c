@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_hakugin_elvpole.h"
+#include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -32,15 +33,109 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
 
 #endif
 
-extern UNK_TYPE D_0600ACB8;
-extern UNK_TYPE D_0600BF40;
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Init.s")
+void BgHakuginElvpole_Init(Actor *thisx, PlayState *play) {
+    s32 temp_a1;
+    CollisionHeader *sp28 = NULL;
+    BgHakuginElvpole *this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Init.s")
+    Actor_SetScale(&this->dyna.actor, 0.1f);
+    this->actionFunc = func_80ABD92C;
+    DynaPolyActor_Init(&this->dyna, 0);
+    CollisionHeader_GetVirtual(&object_hakugin_obj_Colheader_00BF40, &sp28);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp28);
+    temp_a1 = this->dyna.actor.params & 0x7F;
+    this->unk_15C = 0;
+    this->unk_160 = 0;
+    if ((temp_a1 != 0x7F) && (Flags_GetSwitch(play, temp_a1) != 0)) {
+        this->unk_15E = 0x64;
+        return;
+    }
+    this->unk_15E = -1;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Destroy.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Destroy.s")
+void BgHakuginElvpole_Destroy(Actor *thisx, PlayState *play) {
+    BgHakuginElvpole *this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/func_80ABD92C.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Update.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/func_80ABD92C.s")
+void func_80ABD92C(BgHakuginElvpole *this, PlayState *play) {
+    s32 sp28;
+    f32 var_fv1;
+    s32 temp_a1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Draw.s")
+    sp28 = 0;
+    if (this->unk_15E > 0) {
+        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) < -120.0f) {
+            this->dyna.actor.world.pos.y += 4.0f;
+            sp28 = 1;
+        } else if (this->unk_15E > 0) {
+            if (this->unk_15E == 0x64) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, 0x2893U);
+            }
+            this->unk_15E--;
+            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 120.0f;
+        }
+    } else if (this->unk_15E == 0) {
+        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) > -320.0f) {
+            this->dyna.actor.world.pos.y -= 4.0f;
+            sp28 = 1;
+        } else {
+            this->dyna.actor.world.pos.y -= 320.0f;
+            Flags_UnsetSwitch(play, this->dyna.actor.params & 0x7F);
+            this->unk_15E = -1;
+            Actor_PlaySfxAtPos(&this->dyna.actor, 0x2893U);
+        }
+    } else {
+        temp_a1 = this->dyna.actor.params & 0x7F;
+        if ((temp_a1 != 0x7F) && (Flags_GetSwitch(play, temp_a1) != 0)) {
+            this->unk_15E = 0x64;
+            this->unk_160 = 1;
+        }
+    }
+    if ((sp28 != 0) || (this->unk_15C & 7)) {
+        if (this->unk_15C & 1) {
+            var_fv1 = 1.0f;
+        } else {
+            var_fv1 = -1.0f;
+        }
+        this->unk_15C++;
+        this->dyna.actor.world.pos.x = (Math_SinS((this->unk_15C << 0xD)) * var_fv1) + this->dyna.actor.home.pos.x;
+        this->dyna.actor.world.pos.z = (Math_CosS((this->unk_15C << 0xD)) * var_fv1) + this->dyna.actor.home.pos.z;
+        func_800B9010(&this->dyna.actor, 0x2103U);
+    } else {
+        this->unk_15C = 0;
+    }
+    if (this->unk_160 != 0) {
+        if (this->dyna.actor.cutscene == -1) {
+            this->unk_160 = 0;
+            return;
+        }
+        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+            this->unk_160 = 0;
+            return;
+        }
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    }
+}
+
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Update.s")
+void BgHakuginElvpole_Update(Actor *thisx, PlayState *play) {
+    BgHakuginElvpole *this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Draw.s")
+void BgHakuginElvpole_Draw(Actor *thisx, PlayState *play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
+    CLOSE_DISPS(play->state.gfxCtx);
+}

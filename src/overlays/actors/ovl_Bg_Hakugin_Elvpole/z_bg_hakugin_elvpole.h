@@ -8,8 +8,11 @@ struct BgHakuginElvpole;
 typedef void (*BgHakuginElvpoleActionFunc)(struct BgHakuginElvpole*, PlayState*);
 
 typedef struct BgHakuginElvpole {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C;                         /* inferred */
+    /* 0x15E */ s16 unk_15E;                         /* inferred */
+    /* 0x160 */ u16 unk_160;                         /* inferred */
+    /* 0x162 */ char unk_144[2];
     /* 0x164 */ BgHakuginElvpoleActionFunc actionFunc;
 } BgHakuginElvpole; // size = 0x168
 
