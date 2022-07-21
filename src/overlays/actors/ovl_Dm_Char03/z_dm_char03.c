@@ -74,8 +74,9 @@ void func_80AAB5F8(DmChar03* this, PlayState* play) {
 }
 
 void func_80AAB644(DmChar03* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 136)) {
-        s32 index = Cutscene_GetActorActionIndex(play, 136);
+    if (Cutscene_CheckActorAction(play, 0x88)) {
+        s32 index = Cutscene_GetActorActionIndex(play, 0x88);
+
         if (play->csCtx.actorActions[index]->action == 4) {
             this->unk_18E = true;
             this->offset.x = play->csCtx.actorActions[index]->startPos.x;
@@ -89,34 +90,35 @@ void DmChar03_DoNothing(DmChar03* this, PlayState* play) {
 }
 
 void func_80AAB710(DmChar03* this, PlayState* play) {
-    u8 var_a2 = true;
+    u8 shouldChangeAnim = true;
 
     if (Cutscene_CheckActorAction(play, 0x88)) {
         s32 index = Cutscene_GetActorActionIndex(play, 0x88);
+
         if (play->csCtx.frames == play->csCtx.actorActions[index]->startFrame) {
             switch (play->csCtx.actorActions[index]->action) {
                 case 1:
-                    var_a2 = false;
+                    shouldChangeAnim = false;
                     break;
                 case 2:
                     this->animIndex = 0;
                     break;
                 case 3:
                     this->unk_18E = false;
-                    var_a2 = false;
+                    shouldChangeAnim = false;
                     Actor_MarkForDeath(&this->actor);
                     break;
                 case 4:
                     Item_Give(play, ITEM_MASK_DEKU);
-                    var_a2 = false;
+                    shouldChangeAnim = false;
                     this->actionFunc = func_80AAB5F8;
                     break;
                 default:
-                    var_a2 = false;
+                    shouldChangeAnim = false;
                     break;
             }
 
-            if (var_a2) {
+            if (shouldChangeAnim) {
                 DmChar03_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
             }
         }
@@ -172,7 +174,7 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80AABA84(PlayState* play, DmChar03* this) {
-    u32 pad;
+    s32 pad;
 
     if (this->actor.objBankIndex == this->objectIndex) {
         Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_NEW);
