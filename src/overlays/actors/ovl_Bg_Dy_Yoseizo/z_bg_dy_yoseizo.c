@@ -334,7 +334,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
     }
 
     if (this->timer == 0) {
-        this->unk2E8->trigger = true;
+        this->beam->trigger = true;
         this->actionFunc = func_80A0B290;
     }
 }
@@ -352,7 +352,7 @@ void func_80A0B500(BgDyYoseizo* this, PlayState* play) {
         pos.x = player->actor.world.pos.x;
         pos.y = player->actor.world.pos.y + 200.0f;
         pos.z = player->actor.world.pos.z;
-        this->unk2E8 = (EnDyExtra*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_DY_EXTRA, pos.x,
+        this->beam = (EnDyExtra*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_DY_EXTRA, pos.x,
                                                       pos.y, pos.z, 0, 0, 0, GREAT_FAIRY_GET_TYPE(&this->actor));
         this->timer = 120;
     }

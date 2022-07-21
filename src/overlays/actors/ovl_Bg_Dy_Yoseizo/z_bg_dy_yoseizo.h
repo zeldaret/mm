@@ -46,7 +46,7 @@ typedef struct BgDyYoseizo {
     /* 0x0234 */ Vec3s morphTable[GREAT_FAIRY_LIMB_MAX];
     /* 0x02DC */ Vec3s headRot;
     /* 0x02DC */ Vec3s torsoRot;
-    /* 0x02E8 */ EnDyExtra* unk2E8;
+    /* 0x02E8 */ EnDyExtra* beam;
     /* 0x02EC */ f32 unk2EC;
     /* 0x02F0 */ f32 unk2F0;
     /* 0x02F4 */ f32 unk2F4;
