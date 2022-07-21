@@ -12,6 +12,10 @@
 
 #define THIS ((EnBigpo*)thisx)
 
+// Note on scales:
+// 1.4000001f is either 1400.0f * 0.001f, or 0.014f * 100.0f
+// 0.014f itself can be 14.0f * 0.001f            
+
 void EnBigpo_Init(Actor* thisx, PlayState* play);
 void EnBigpo_Destroy(Actor* thisx, PlayState* play);
 void EnBigpo_Update(Actor* thisx, PlayState* play);
@@ -691,8 +695,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     if (this->idleTimer < 8) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x4800;
         if (this->idleTimer < 5) {
-            unkTemp = (this->idleTimer << 0xC) - 0x4000;
-            // 1.4.0...1 is NOT 1.4, the rodata demands it
+            unkTemp = (this->idleTimer * 0x1000) - 0x4000;
             tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
             tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
