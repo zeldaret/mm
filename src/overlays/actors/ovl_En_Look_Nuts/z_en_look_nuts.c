@@ -298,7 +298,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.weekEventReg[17] |= 4;
     }
 }
