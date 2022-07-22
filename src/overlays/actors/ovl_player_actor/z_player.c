@@ -261,7 +261,7 @@ void func_8084FE7C(Player* this, PlayState* play);
 void func_808505D0(Player* this, PlayState* play);
 
 s32 func_8082DA90(PlayState* play) {
-    return play->sceneLoadFlag != 0 || play->unk_18B4A != 0;
+    return play->transitionTrigger != TRANS_TRIGGER_OFF || play->transitionMode != TRANS_MODE_OFF;
 }
 
 void func_8082DABC(Player* this) {
