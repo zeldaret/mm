@@ -530,7 +530,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->unk_1887F = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
 }
 
 /**

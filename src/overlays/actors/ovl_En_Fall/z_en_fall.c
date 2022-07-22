@@ -343,9 +343,9 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                 } else if (play->csCtx.frames > 1600) {
                     play->nextEntranceIndex = 0x2C00;
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 2;
-                    gSaveContext.nextTransition = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_02;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_02;
                     sGiantsCutsceneState = 9;
                 }
                 break;

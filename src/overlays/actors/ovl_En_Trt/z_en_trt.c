@@ -1038,9 +1038,9 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
         } else {
             play->nextEntranceIndex = 0x8450;
         }
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 0x40;
-        play->sceneLoadFlag = 0x14;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_64;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 
