@@ -1043,7 +1043,7 @@
         <Texture Name="gameplay_keep_Tex_035FB0" OutName="tex_035FB0" Format="ia8" Width="32" Height="64" Offset="0x35FB0" />
         <Texture Name="gEffWaterRippleTex" OutName="eff_water_ripple" Format="i8" Width="64" Height="64" Offset="0x367B0" />
         <DList Name="gEffWaterRippleDL" Offset="0x377B0" />
-        <DList Name="gameplay_keep_DL_037850" Offset="0x37850" />
+        <DList Name="gEffSparkDL" Offset="0x37850" />
         <Texture Name="gEffWaterSplash1Tex" OutName="eff_water_splash_1" Format="i8" Width="32" Height="40" Offset="0x378F0" />
         <Texture Name="gEffWaterSplash2Tex" OutName="eff_water_splash_2" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
         <Texture Name="gEffWaterSplash3Tex" OutName="eff_water_splash_3" Format="i8" Width="32" Height="40" Offset="0x382F0" />
