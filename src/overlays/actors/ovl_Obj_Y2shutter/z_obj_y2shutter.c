@@ -93,8 +93,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     sShutterInfo[0].unk_1E = DREG(84) + 0xA0;
     sShutterInfo[1].unk_1E = DREG(85) + 0xA0;
 
-    if (((shutterType == 0) && (DREG(86) != 0)) ||
-        ((shutterType != 0) && (DREG(87) != 0))) {
+    if (((shutterType == 0) && (DREG(86) != 0)) || ((shutterType != 0) && (DREG(87) != 0))) {
         if (shutterType == 0) {
             DREG(86) = 0;
         } else {
