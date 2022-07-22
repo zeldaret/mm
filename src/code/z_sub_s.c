@@ -480,13 +480,13 @@ void SubS_TimePathing_ComputeInitialY(PlayState* play, Path* path, s32 waypoint,
     }
 }
 
-Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 max) {
+Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
     Path* path;
     s32 i = 0;
 
     do {
         path = &play->setupPathList[pathIndex];
-        if (i >= max) {
+        if (i >= limit) {
             break;
         }
         pathIndex = path->unk1;
