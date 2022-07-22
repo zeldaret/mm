@@ -143,7 +143,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         EnDemoheishi_SetupIdle(this);
     }
