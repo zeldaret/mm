@@ -8,10 +8,10 @@ struct DmChar03;
 typedef void (*DmChar03ActionFunc)(struct DmChar03*, PlayState*);
 
 typedef struct DmChar03 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ DmChar03ActionFunc actionFunc;
-    /* 0x018C */ s16 animIndex;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ DmChar03ActionFunc actionFunc;
+    /* 0x18C */ s16 animIndex;
     /* 0x18E */ u8 unk_18E;
     /* 0x18F */ u8 objectIndex;
     /* 0x190 */ Vec3f offset;
