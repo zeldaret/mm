@@ -888,6 +888,64 @@ typedef struct {
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
 
+#define TRANS_TRIGGER_OFF 0 // transition is not active
+#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
+#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
+
+typedef enum {
+    /*  0 */ TRANS_MODE_OFF,
+    /*  1 */ TRANS_MODE_01,
+    /*  2 */ TRANS_MODE_02,
+    /*  3 */ TRANS_MODE_03,
+    /*  4 */ TRANS_MODE_04,
+    /*  5 */ TRANS_MODE_05,
+    /*  6 */ TRANS_MODE_06,
+    /*  7 */ TRANS_MODE_07,
+    /*  8 */ TRANS_MODE_08,
+    /*  9 */ TRANS_MODE_09,
+    /* 10 */ TRANS_MODE_10,
+    /* 11 */ TRANS_MODE_11,
+    /* 12 */ TRANS_MODE_12,
+    /* 13 */ TRANS_MODE_13,
+    /* 14 */ TRANS_MODE_14,
+    /* 15 */ TRANS_MODE_15,
+    /* 16 */ TRANS_MODE_16,
+    /* 17 */ TRANS_MODE_17
+} TransitionMode;
+
+typedef enum {
+    /*  0 */ TRANS_TYPE_00,
+    /*  1 */ TRANS_TYPE_01,
+    /*  2 */ TRANS_TYPE_02,
+    /*  3 */ TRANS_TYPE_03,
+    /*  4 */ TRANS_TYPE_04,
+    /*  5 */ TRANS_TYPE_05,
+    /*  6 */ TRANS_TYPE_06,
+    /*  7 */ TRANS_TYPE_07,
+    /*  8 */ TRANS_TYPE_08,
+    /*  9 */ TRANS_TYPE_09, 
+    /* 10 */ TRANS_TYPE_10,
+    /* 11 */ TRANS_TYPE_11,
+    /* 12 */ TRANS_TYPE_12,
+    /* 13 */ TRANS_TYPE_13,
+    /* 14 */ TRANS_TYPE_14,
+    /* 15 */ TRANS_TYPE_15,
+    /* 16 */ TRANS_TYPE_16,
+    /* 17 */ TRANS_TYPE_17,
+    /* 18 */ TRANS_TYPE_18,
+    /* 19 */ TRANS_TYPE_19,
+    /* 20 */ TRANS_TYPE_20,
+    /* 21 */ TRANS_TYPE_21,
+    /* 64 */ TRANS_TYPE_64 = 64,
+    /* 70 */ TRANS_TYPE_70 = 70,
+    /* 72 */ TRANS_TYPE_72 = 72,
+    /* 73 */ TRANS_TYPE_73,
+    /* 80 */ TRANS_TYPE_80 = 80,
+    /* 86 */ TRANS_TYPE_86 = 86
+} TransitionType;
+
+#define TRANS_NEXT_TYPE_DEFAULT 0xFF
+
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
     /* 0x4 */ void* (*callback)(void*, void*);
@@ -1260,20 +1318,20 @@ struct PlayState {
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
-    /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
+    /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F; // fadeTransition
+    /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
-    /* 0x18B4A */ u8 unk_18B4A;
+    /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;

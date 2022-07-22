@@ -681,6 +681,14 @@ wordReplace = {
     "play->msgCtx.unk11F22": "play->msgCtx.msgMode",
     "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
 
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
+    "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
+    "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
+    "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
+    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed"
+
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
     "D_801D1DE0" : "gIdentityMtx",

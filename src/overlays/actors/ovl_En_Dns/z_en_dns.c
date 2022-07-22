@@ -441,9 +441,9 @@ void func_8092D330(EnDns* this, PlayState* play) {
         this->unk_2C6 &= ~0x100;
         play->nextEntranceIndex = 0x5010;
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 3;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     }
 }
 

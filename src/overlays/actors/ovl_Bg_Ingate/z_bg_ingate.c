@@ -251,9 +251,9 @@ void func_809542A0(BgIngate* this, PlayState* play) {
         play->nextEntranceIndex = 0xA810;
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 3;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();

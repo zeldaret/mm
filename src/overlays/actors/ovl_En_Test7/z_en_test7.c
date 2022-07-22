@@ -669,8 +669,8 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         }
     }
 
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 2;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_02;
     gSaveContext.seqIndex = 0xFF;
     gSaveContext.nightSeqIndex = 0xFF;
 }
