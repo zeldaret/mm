@@ -35,7 +35,7 @@ typedef struct EnBigpo {
     /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;
     /* 0x20C */ s16 unk20C; // is this counting the number of frames the player is ztargeting them?
-    /* 0x20E */ s16 cutsceneSubCamId;
+    /* 0x20E */ s16 subCamId;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 hoverHeightCycleTimer; // sin wave up and down bobbing
     /* 0x214 */ f32 fireRadius; // distance from center during conjunction cutscene

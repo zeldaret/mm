@@ -97,13 +97,13 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
 void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             func_80B3C260(this);
         }
-    } else if (talkState == 4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -111,16 +111,19 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
                     this->dyna.actor.textId = 0xCF5;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
+
                 case 1:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF7;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
+
                 case 2:
                     func_8019F230();
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
+                    break;
             }
         }
     }

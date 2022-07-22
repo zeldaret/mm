@@ -240,7 +240,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     if (isItemFound) {
         Inventory_DeleteItem(itemId2, slotId);
         this->unk_3E8 = object_thiefbird_DL_0033B0;
-        if (Message_GetState(&play->msgCtx) == 0) {
+        if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Message_StartTextbox(play, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
@@ -264,7 +264,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 
-        if (Message_GetState(&play->msgCtx) == 0) {
+        if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
             Message_StartTextbox(play, 0xF5, NULL);
         }
     } else {
