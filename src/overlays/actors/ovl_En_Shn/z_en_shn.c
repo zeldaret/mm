@@ -260,9 +260,9 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
             func_800B7298(play, &this->actor, 7);
             play->nextEntranceIndex = 0x8460;
             gSaveContext.nextCutsceneIndex = 0;
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 3;
-            gSaveContext.nextTransition = 7;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_07;
             this->unk_2C6++;
             break;
     }

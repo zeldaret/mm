@@ -39,7 +39,7 @@ typedef struct EnBigokuta {
     /* 0x18C */ EnBigokutaActionFunc actionFunc;
     /* 0x190 */ u8 drawDmgEffType;
     /* 0x192 */ s16 timer;
-    /* 0x194 */ s16 camId;
+    /* 0x194 */ s16 subCamId;
     /* 0x196 */ s16 cutscene;
     /* 0x198 */ Vec3s jointTable[BIGOKUTA_LIMB_MAX];
     /* 0x210 */ Vec3s morphTable[BIGOKUTA_LIMB_MAX];
@@ -48,8 +48,8 @@ typedef struct EnBigokuta {
     /* 0x290 */ f32 drawDmgEffFrozenSteamScale; // only affects DRAWEFFECT_ICE
     /* 0x294 */ Vec3f playerPos;
     /* 0x2A0 */ Vec3f playerHoldPos;
-    /* 0x2AC */ Vec3f camAt;
-    /* 0x2B8 */ Vec3f camEye;
+    /* 0x2AC */ Vec3f subCamAt;
+    /* 0x2B8 */ Vec3f subCamEye;
     /* 0x2C4 */ Vec3f limbPos[13];
     /* 0x360 */ ColliderCylinder shellCollider;
     /* 0x3AC */ ColliderCylinder bodyCollider;

@@ -411,7 +411,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->unk_3CE |= 4;
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         sp78 = this->timePathElapsedTime;
         sp74 = this->timePathWaypoint;
         timePathTargetPos = this->actor.world.pos;
@@ -429,7 +429,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp94, &sp88);
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         this->timePathElapsedTime = sp78;
         this->timePathWaypoint = sp74;
         this->timePathTargetPos = timePathTargetPos;

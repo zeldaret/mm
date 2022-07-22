@@ -374,9 +374,9 @@ void func_80B76BB8(EnTruMt* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == 5) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntranceIndex = 0xA810;
-            play->unk_1887F = 3;
-            gSaveContext.nextTransition = 3;
-            play->sceneLoadFlag = 0x14;
+            play->transitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }
 }
