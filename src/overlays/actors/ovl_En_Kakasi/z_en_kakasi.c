@@ -4,6 +4,7 @@
  * Description: Pierre the Scarecorw
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kakasi.h"
 #include "objects/object_ka/object_ka.h"
 
@@ -78,7 +79,7 @@ const ActorInit En_Kakasi_InitVars = {
     (ActorFunc)EnKakasi_Draw,
 };
 
-static Vec3f D_80971DCC[] = {
+Vec3f D_80971DCC[] = {
     { 0.0f, 60.0f, 60.0f },   { 40.0f, 40.0f, 50.0f },   { -40.0f, 40.0f, 50.0f },
     { 40.0f, 20.0f, 110.0f }, { -40.0f, 20.0f, 110.0f }, { 0.0f, 80.0f, 60.0f },
     { 50.0f, 40.0f, -30.0f }, { -50.0f, 40.0f, -30.0f }, { 0.0f, 50.0f, 60.0f },
@@ -659,8 +660,8 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
-    this->talkState = TEXT_STATE_5;
     this->subCamId = SUB_CAM_ID_DONE;
+    this->talkState = TEXT_STATE_5;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
     this->subCamFov = 0.0f;
