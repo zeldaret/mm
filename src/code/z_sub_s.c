@@ -480,13 +480,13 @@ void SubS_TimePathing_ComputeInitialY(PlayState* play, Path* path, s32 waypoint,
     }
 }
 
-Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 max) {
+Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
     Path* path;
     s32 i = 0;
 
     do {
         path = &play->setupPathList[pathIndex];
-        if (i >= max) {
+        if (i >= limit) {
             break;
         }
         pathIndex = path->unk1;
@@ -830,43 +830,52 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             xzRange = actor->xzDistToPlayer + 1.0f;
             ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
             break;
+
         case 2:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 3:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 4:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= 0x10000;
+            actor->flags |= ACTOR_FLAG_10000;
             ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
+
         case 5:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
-                actor->flags |= 0x10000;
+                actor->flags |= ACTOR_FLAG_10000;
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 6:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= 0x10000;
+                actor->flags |= ACTOR_FLAG_10000;
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
+        default:
+            break;
     }
+
     return ret;
 }
 

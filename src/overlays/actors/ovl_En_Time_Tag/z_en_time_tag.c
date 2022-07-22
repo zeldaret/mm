@@ -264,7 +264,7 @@ void func_80ACA714(EnTimeTag* this, PlayState* play) {
 void func_80ACA724(EnTimeTag* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         play->nextEntranceIndex = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
         }

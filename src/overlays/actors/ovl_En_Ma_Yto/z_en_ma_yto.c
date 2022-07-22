@@ -1088,9 +1088,9 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
         play->nextEntranceIndex = 0x6480;
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {

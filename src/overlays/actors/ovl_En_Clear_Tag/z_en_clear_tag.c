@@ -588,13 +588,13 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 this->cameraState = 0;
-                this->subCamId = CAM_ID_MAIN;
+                this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }

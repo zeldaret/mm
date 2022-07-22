@@ -6,8 +6,8 @@
 struct BgFuMizu;
 
 typedef struct BgFuMizu {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C];
+    /* 0x000 */ DynaPolyActor dyna;   
+    /* 0x15C */ UNK_TYPE1 pad15C[0x4];    
     /* 0x160 */ s16 unk_160;
 } BgFuMizu; // size = 0x164
 

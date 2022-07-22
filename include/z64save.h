@@ -240,16 +240,16 @@ typedef struct SaveContext {
     /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
     /* 0x3F46 */ u16 unk_3F46;                          // "NottoriBgm"
-    /* 0x3F48 */ u8 unk_3F48;                           // "fade_go"
+    /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
     /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
     /* 0x3F4D */ u8 unk_3F4D;                           // "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
-    /* 0x3F50 */ u8 fadeDuration;                       // "fade_speed"
-    /* 0x3F51 */ u8 fadeSpeed;                          // "wipe_speed"           transition related
+    /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
+    /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
     /* 0x3F52 */ u16 environmentTime;                   // "kankyo_time"
     /* 0x3F54 */ u8 dogIsLost;                          // "dog_event_flag"
-    /* 0x3F55 */ u8 nextTransition;                     // "next_wipe"
+    /* 0x3F55 */ u8 nextTransitionType;                 // "next_wipe"
     /* 0x3F56 */ s16 worldMapArea;                      // "area_type"
     /* 0x3F58 */ s16 sunsSongState;                     // "sunmoon_flag"
     /* 0x3F5A */ s16 healthAccumulator;                 // "life_mode"

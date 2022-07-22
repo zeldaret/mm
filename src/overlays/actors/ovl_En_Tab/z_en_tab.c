@@ -366,7 +366,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     EnGm* sp28 = func_80BE04E0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
 
@@ -385,7 +385,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
@@ -399,18 +399,18 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BE1060(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->unk_2FC = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
-            ret = func_80BE0F04(this, play, arg2);
+            ret = func_80BE0F04(this, play, scheduleOutput);
             break;
 
         case 2:
-            ret = func_80BE0FC4(this, play, arg2);
+            ret = func_80BE0FC4(this, play, scheduleOutput);
             break;
 
         default:
@@ -472,7 +472,7 @@ void func_80BE1224(EnTab* this, PlayState* play) {
 }
 
 void func_80BE127C(EnTab* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 

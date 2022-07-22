@@ -590,6 +590,8 @@ wordReplace = {
     "func_8010A54C": "Minimap_Draw",
     "func_8010A580": "Map_Update",
 
+    "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -597,6 +599,7 @@ wordReplace = {
     "GlobalContext": "PlayState",
     "globalCtx": "play",
     "globalCtx2": "play2",
+    "ScheduleResult": "ScheduleOutput",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
@@ -681,6 +684,14 @@ wordReplace = {
     "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
+
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
+    "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
+    "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
+    "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
+    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed"
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",

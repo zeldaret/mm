@@ -118,17 +118,17 @@ void func_809C1158(EnAob01* this, PlayState* play) {
 }
 
 void func_809C11EC(EnAob01* this, PlayState* play) {
-    s32 unk;
+    s32 enDgParams;
     s16 i;
 
     func_809C1158(this, play);
 
     for (i = 0; i < ARRAY_COUNT(D_809C384C); i++) {
-        unk = (this->unk_1D8[D_809C384C[i].unk_06]->unk1 << 0xA) | (i << 5);
+        enDgParams = ENDG_PARAMS(this->unk_1D8[D_809C384C[i].unk_06]->unk1, i);
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * 182.04445f, 0, unk, 0xFFFF, this->actor.unk20, NULL);
+            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.unk20, NULL);
     }
 }
 
@@ -417,11 +417,11 @@ void func_809C1C9C(EnAob01* this, PlayState* play) {
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         play->nextEntranceIndex = 0x7C10;
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 0x40;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_64;
         gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 2;
         gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (this->unk_432 * 8);
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 
@@ -674,9 +674,9 @@ void func_809C2788(EnAob01* this, PlayState* play) {
         if (func_801A8A50(0) != 0x41) {
             play->nextEntranceIndex = 0x7C10;
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
-            play->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 3;
-            play->sceneLoadFlag = 0x14;
+            play->transitionType = TRANS_TYPE_64;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }
 }

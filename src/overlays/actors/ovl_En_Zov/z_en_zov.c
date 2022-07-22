@@ -424,8 +424,8 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
 
             case 0x1039:
                 play->nextEntranceIndex = play->setupExitList[ENZOV_GET_FE00(&this->actor)];
-                play->unk_1887F = 5;
-                play->sceneLoadFlag = 0x14;
+                play->transitionType = TRANS_TYPE_05;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 gSaveContext.save.weekEventReg[78] |= 1;
                 this->actionFunc = func_80BD1D94;
                 play->msgCtx.msgLength = 0;

@@ -666,9 +666,9 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
     play->nextEntranceIndex = 0x6400;
     gSaveContext.nextCutsceneIndex = 0xFFF0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
@@ -758,14 +758,14 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
         play->nextEntranceIndex = 0x6410;
         gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
 
         if (this->poppedBalloonCounter == 10) {
-            play->unk_1887F = 0x50;
-            gSaveContext.nextTransition = 3;
+            play->transitionType = TRANS_TYPE_80;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
         } else {
-            play->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 2;
+            play->transitionType = TRANS_TYPE_64;
+            gSaveContext.nextTransitionType = TRANS_TYPE_02;
         }
 
         this->poppedBalloonCounter = 0;
@@ -863,9 +863,9 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
     play->nextEntranceIndex = 0x6400;
     gSaveContext.nextCutsceneIndex = 0xFFF5;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 2;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_02;
 }
 
 void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
