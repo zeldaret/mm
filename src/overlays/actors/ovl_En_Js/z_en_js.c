@@ -292,13 +292,13 @@ s32 func_80968E38(s32 arg0) {
     s32 count;
     u8 mask;
     u8* maskMaskBit = gSaveContext.maskMaskBit;
-    
+
     if (((arg0 < 0) || (arg0 > 8))) {
         return 0;
     }
 
     count = 0;
-    
+
     arg0 *= 3;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
         if (maskMaskBit[arg0] & mask) {
@@ -319,13 +319,126 @@ s32 func_80968E38(s32 arg0) {
             count++;
         }
     }
-   
+
     return count;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968F48.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_80968F48.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809691B8.s")
+s32 func_80968F48(void) {
+    s32 count = 0;
+
+    if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KAFEIS_MASK) == ITEM_MASK_KAFEIS_MASK) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_ALL_NIGHT) == ITEM_MASK_ALL_NIGHT) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KEATON) == ITEM_MASK_KEATON) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GARO) == ITEM_MASK_GARO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_DON_GERO) == ITEM_MASK_DON_GERO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT) {
+        count++;
+    }
+
+    count -= func_80968E38(0);
+    return count;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809691B8.s")
+
+void func_809691B8(s32 arg0, s32 arg1) {
+    s32 temp_a0;
+    s32 temp_a0_2;
+    s32 temp_a0_3;
+    s32 temp_a1;
+    s32 temp_a1_2;
+    s32 temp_v1;
+    s32 temp_v1_2;
+    s32 temp_v1_3;
+    u8 *temp_a2;
+    u8 *temp_a2_2;
+    u8 *temp_a2_3;
+    u8 *temp_t0;
+    u8 *temp_t0_2;
+
+    if ((arg1 >= 0) && (temp_a0 = arg0 - 0x3A, ((arg1 < 9) != 0))) {
+        temp_a1 = arg1 * 3;
+        if (temp_a0 < 8) {
+            temp_a2 = gSaveContext.maskMaskBit + temp_a1;
+            temp_v1 = 1 << temp_a0;
+            *temp_a2 |= temp_v1;
+            gSaveContext.maskMaskBit[0] = gSaveContext.maskMaskBit[0] | temp_v1;
+            return;
+        }
+        temp_a0_2 = temp_a0 - 8;
+        temp_a1_2 = temp_a1 + 1;
+        if (temp_a0_2 < 8) {
+            temp_t0 = gSaveContext.maskMaskBit;
+            temp_a2_2 = &temp_t0[temp_a1_2];
+            temp_v1_2 = 1 << temp_a0_2;
+            *temp_a2_2 |= temp_v1_2;
+            temp_t0[1] |= temp_v1_2;
+            return;
+        }
+        temp_a0_3 = temp_a0_2 - 8;
+        if (temp_a0_3 < 6) {
+            temp_t0_2 = gSaveContext.maskMaskBit;
+            temp_a2_3 = &temp_t0_2[temp_a1_2 + 1];
+            temp_v1_3 = 1 << temp_a0_3;
+            *temp_a2_3 |= temp_v1_3;
+            temp_t0_2[2] |= temp_v1_3;
+        }
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/func_809692A8.s")
 
