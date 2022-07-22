@@ -26,7 +26,6 @@ void func_8098F66C(ObjMure3* this);
 void func_8098F364(ObjMure3* this, s32 play);
 void func_8098F438(ObjMure3* this, PlayState* play);
 
-#if 0
 const ActorInit Obj_Mure3_InitVars = {
     ACTOR_OBJ_MURE3,
     ACTORCAT_BG,
@@ -38,26 +37,13 @@ const ActorInit Obj_Mure3_InitVars = {
     (ActorFunc)ObjMure3_Update,
     (ActorFunc)NULL,
 };
+static s16 sRupeeCounts[] = { 5, 5, 7, 0 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8098F748[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
-
-static s16 D_8098F740[4] = { 5, 5, 7, 0 };
-
-static ObjMure3SpawnFunc D_8098F754[] = { func_8098F040, func_8098F110, func_8098F220 };
-#endif
-
-extern s16 D_8098F740[];
-extern InitChainEntry D_8098F748[];
-extern f32 D_8098F760;
-extern f32 D_8098F764;
-extern ObjMure3SpawnFunc D_8098F754[];
-// WTF static void (*D_8098F754[3])(ObjMure3 *, PlayState *) = { func_8098F040, func_8098F110, func_8098F220 };
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F040.s")
 
 void func_8098F040(ObjMure3* this, PlayState* play) {
     s32 i;
@@ -73,8 +59,6 @@ void func_8098F040(ObjMure3* this, PlayState* play) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F110.s")
 
 void func_8098F110(ObjMure3* this, PlayState* play) {
     s32 i;
@@ -96,8 +80,6 @@ void func_8098F110(ObjMure3* this, PlayState* play) {
         }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F220.s")
 
 void func_8098F220(ObjMure3* this, PlayState* play) {
     s16 yRot;
@@ -128,10 +110,8 @@ void func_8098F220(ObjMure3* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F364.s")
-
 void func_8098F364(ObjMure3* this, s32 play) {
-    s16 count = D_8098F740[(this->actor.params >> 0xD) & 7];
+    s16 count = sRupeeCounts[(this->actor.params >> 0xD) & 7];
     s32 i;
     EnItem00** collectible;
 
@@ -148,15 +128,12 @@ void func_8098F364(ObjMure3* this, s32 play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F438.s")
-
 void func_8098F438(ObjMure3* this, PlayState* play) {
-    s16 count = D_8098F740[((s16)this->actor.params >> 0xD) & 7];
+    s16 count = sRupeeCounts[((s16)this->actor.params >> 0xD) & 7];
     s32 i;
-    EnItem00** collectible;
 
     for (i = 0; i < count; i++) {
-        collectible = &this->unk148[i];
+        EnItem00** collectible = &this->unk148[i];
         if (((*collectible) != NULL) && (!((this->unk164 >> i) & 1))) {
             if ((*collectible)->unk1A4 != 0) {
                 Flags_SetSwitch(play, this->actor.params & 0x7F);
@@ -166,10 +143,8 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
                 this->unk148[i] = NULL;
             }
         }
-    } //(this->unk148 != 0)
+    }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Init.s")
 
 void ObjMure3_Init(Actor *thisx, PlayState *play) {
     ObjMure3 *this = THIS;
@@ -178,61 +153,47 @@ void ObjMure3_Init(Actor *thisx, PlayState *play) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    Actor_ProcessInitChain(&this->actor, D_8098F748);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     func_8098F598(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Destroy.s")
-
 void ObjMure3_Destroy(Actor *thisx, PlayState *play) {
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F598.s")
 
 void func_8098F598(ObjMure3 *this) {
     this->actionFunc = func_8098F5AC;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5AC.s")
-
 void func_8098F5AC(ObjMure3 *this, PlayState *play) {
     func_8098F5D0(this);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5D0.s")
 
 void func_8098F5D0(ObjMure3 *this) {
     this->actionFunc = func_8098F5E4;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5E4.s")
-
 void func_8098F5E4(ObjMure3 *this, PlayState *play) {
+    static ObjMure3SpawnFunc D_8098F754[] = { func_8098F040, func_8098F110, func_8098F220 };
+    
     if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1150.0f)) {
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         D_8098F754[(this->actor.params >> 0xD) & 7](this, play);
         func_8098F66C(this);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F66C.s")
-
 void func_8098F66C(ObjMure3 *this) {
     this->actionFunc = func_8098F680;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F680.s")
-
 void func_8098F680(ObjMure3 *this, PlayState *play) {
     func_8098F438(this, play);
     if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) >= SQ(1450.0f)) {
-        this->actor.flags &= -0x11;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         func_8098F364(this, play);
         func_8098F5D0(this);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Update.s")
 
 void ObjMure3_Update(Actor *thisx, PlayState *play) {
     ObjMure3 *this = THIS;
