@@ -628,31 +628,29 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 }
 
 void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
-    s32 temp_v0;
-
     switch (Message_GetState(&play->msgCtx)) {
         default:
             break;
 
-        case 4: // Player answered a question
+        case TEXT_STATE_CHOICE: // Player answered a question
             EnMa4_HandlePlayerChoice(this, play);
             break;
 
-        case 5: // End message block
+        case TEXT_STATE_5: // End message block
             EnMa4_ChooseNextDialogue(this, play);
             break;
 
-        case 6: // End conversation
+        case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
                 if ((play->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 

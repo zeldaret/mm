@@ -99,7 +99,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {
         if (this->moonsTear != NULL) {
@@ -198,14 +198,14 @@ void func_809CD028(EnBji01* this, PlayState* play) {
 
 void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
             func_809CCDE0(this, play);
             if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
                 Message_StartTextbox(play, this->textId, &this->actor);
             }
             break;
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
@@ -233,7 +233,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
@@ -282,7 +282,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 }
             }
             break;
-        case 6:
+        case TEXT_STATE_DONE:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, play);

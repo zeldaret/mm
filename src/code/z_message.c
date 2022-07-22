@@ -99,8 +99,8 @@ s32 Message_ShouldAdvanceSilent(PlayState* play) {
 void func_801477B4(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if (play->msgCtx.unk11F10 != 0) {
-        msgCtx->unk12023 = 2;
+    if (play->msgCtx.msgLength != 0) {
+        msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
         play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
@@ -325,7 +325,7 @@ void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
     func_80150D08(play, textId);
     msgCtx->unkActor = Actor;
     msgCtx->msgMode = 1;
-    msgCtx->unk12023 = 0;
+    msgCtx->stateTimer = 0;
     msgCtx->unk12024 = 0;
     play->msgCtx.ocarinaMode = 0;
 }
@@ -334,11 +334,11 @@ void func_80151938(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     msgCtx->msgMode = 5;
-    msgCtx->unk12023 = 8;
+    msgCtx->stateTimer = 8;
     msgCtx->unk12024 = 0;
 
     if (interfaceCtx->unk_222 == 0) {
@@ -354,24 +354,24 @@ void func_80151938(PlayState* play, u16 textId) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
         func_80149C18(play);
-        msgCtx->unk12023 = 1;
+        msgCtx->stateTimer = 1;
     }
 }
 
 void func_80151A68(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->unk11F10 = 0;
+    msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
     func_8015B198(play);
     msgCtx->msgMode = 0x45;
     msgCtx->unk12024 = 0;
     msgCtx->unk1203C = msgCtx->unk1203A = msgCtx->unk1201E = 0;
-    msgCtx->unk12023 = 0x1E;
+    msgCtx->stateTimer = 30;
 
     // Day/Dawn/Night.. Messages
-    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
+    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -439,7 +439,73 @@ void func_80152464(PlayState* play, u16 arg1) {
     func_80151DA4(play, arg1);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_GetState.s")
+/**
+ * @return u8 A value of the TextState enum representing the current state of the on-screen message
+ */
+u8 Message_GetState(MessageContext* msgCtx) {
+    if (msgCtx->msgLength == 0) {
+        return TEXT_STATE_NONE;
+    }
+
+    if (msgCtx->msgMode == 0x42) {
+        if (msgCtx->unk11F14 != 0xFFFF) {
+            return TEXT_STATE_1;
+        }
+
+        if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+            return TEXT_STATE_CHOICE;
+        }
+        if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
+            return TEXT_STATE_5;
+        }
+        if (msgCtx->unk12020 == 0x41) {
+            return TEXT_STATE_16;
+        }
+        if ((msgCtx->unk12020 >= 0x50) && (msgCtx->unk12020 < 0x58)) {
+            return TEXT_STATE_3;
+        }
+        if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
+            return TEXT_STATE_14;
+        }
+        if (msgCtx->unk12020 == 0x62) {
+            return TEXT_STATE_15;
+        }
+        if (msgCtx->unk12020 == 0x63) {
+            return TEXT_STATE_17;
+        }
+        if (msgCtx->unk12020 == 0x12) {
+            return TEXT_STATE_18;
+        }
+        return TEXT_STATE_DONE;
+    }
+
+    if (msgCtx->msgMode == 0x41) {
+        return TEXT_STATE_10;
+    }
+    if (msgCtx->msgMode == 0x1B) {
+        return TEXT_STATE_7;
+    }
+    if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
+        return TEXT_STATE_8;
+    }
+    if (msgCtx->msgMode == 0x20) {
+        return TEXT_STATE_9;
+    }
+    if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
+        return TEXT_STATE_11;
+    }
+    if (msgCtx->msgMode == 0x3D) {
+        return TEXT_STATE_12;
+    }
+    if (msgCtx->msgMode == 0x40) {
+        return TEXT_STATE_13;
+    }
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+        return TEXT_STATE_CLOSING;
+    }
+
+    return TEXT_STATE_3;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 
@@ -523,7 +589,7 @@ void Message_Init(PlayState* play) {
     func_801586A4(play);
     play->msgCtx.ocarinaMode = 0;
     messageCtx->msgMode = 0;
-    messageCtx->unk11F10 = 0;
+    messageCtx->msgLength = 0;
     messageCtx->currentTextId = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;

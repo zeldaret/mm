@@ -628,20 +628,23 @@ void func_80BD9A9C(EnPamera* this) {
 
 void EnPamera_HandleDialogue(EnPamera* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
-        case 5:
+
+        case TEXT_STATE_5:
             func_80BD9B4C(this, play);
             break;
-        case 6:
+
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80BD9938(this);
             }
             break;
+
         default:
             break;
     }

@@ -3402,7 +3402,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 }
 
 void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
             if (gSaveContext.save.weekEventReg[22] & 2) {
                 EnInvadepoh_SetTextID(this, play, 0x3334);
@@ -3468,7 +3468,8 @@ void func_80B4B048(EnInvadepoh* this, PlayState* play) {
     if (play->msgCtx.unk120B1 == 0) {
         if (play->msgCtx.msgMode == 0) {
             D_80B4E998 = 1;
-        } else if ((Message_GetState(&play->msgCtx) == 6) || (Message_GetState(&play->msgCtx) == 5)) {
+        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
+                   (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
             D_80B4E998 = 1;
         }
     }

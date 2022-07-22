@@ -141,10 +141,10 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
     }
 
     talkState = Message_GetState(&play->msgCtx);
-    if (talkState == 2) {
+    if (talkState == TEXT_STATE_CLOSING) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
-    } else if ((talkState == 5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);

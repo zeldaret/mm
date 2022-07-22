@@ -998,7 +998,7 @@ s32 Cutscene_CountNormalMasks(void) {
 // Command 0xA: Textbox
 void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
-    u8 dialogState;
+    u8 talkState;
     s32 pad;
     u16 originalCsFrames;
     s32 pad2;
@@ -1048,10 +1048,11 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
             // a textbox that is expected to be closed by the user is still open.
 
             originalCsFrames = csCtx->frames;
-            dialogState = Message_GetState(&play->msgCtx);
-            if ((dialogState != 2) && (dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
+            talkState = Message_GetState(&play->msgCtx);
+            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+                (talkState != TEXT_STATE_8)) {
                 csCtx->frames--;
-                if ((dialogState == 4) && Message_ShouldAdvance(play)) {
+                if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     if (play->msgCtx.choiceIndex == 0) {
                         if (cmd->base == 0x33BD) {
                             func_8019F230();
@@ -1089,12 +1090,12 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                     }
                 }
 
-                if (dialogState == 5 && Message_ShouldAdvance(play)) {
+                if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                     func_80152434(play, cmd->base);
                 }
             }
 
-            if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
+            if ((talkState == TEXT_STATE_CLOSING) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
                 csCtx->frames--;
                 D_801BB124++;
             }

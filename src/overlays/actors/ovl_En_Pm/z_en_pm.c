@@ -1132,11 +1132,11 @@ void func_80AF8BA8(s32 arg0) {
 
 void func_80AF8C68(EnPm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp28 = Message_GetState(&play->msgCtx);
-    u16 temp_a0 = play->msgCtx.currentTextId;
+    s32 talkState = Message_GetState(&play->msgCtx);
+    u16 textId = play->msgCtx.currentTextId;
 
-    if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&
-        (this->unk_388 == 3)) {
+    if ((player->targetActor == &this->actor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_360 == 120.0f) {
                 this->unk_360 = 0.0f;
@@ -1149,7 +1149,7 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_388 = sp28;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80AF8D84(EnPm* this, PlayState* play) {
@@ -1167,20 +1167,20 @@ s32 func_80AF8D84(EnPm* this, PlayState* play) {
 
 s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u16 temp = play->msgCtx.currentTextId;
+    u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
     if (player->stateFlags1 & (0x400 | 0x40)) {
         this->unk_356 |= 0x400;
-        if (this->unk_358 != temp) {
+        if (this->unk_358 != textId) {
             if ((this->unk_384 == 0) || (this->unk_384 == 1)) {
                 func_80AF7E98(this, 7);
             }
-            if ((temp == 0x277C) || (temp == 0x277D)) {
+            if ((textId == 0x277C) || (textId == 0x277D)) {
                 func_80AF7E98(this, 10);
             }
         }
-        this->unk_358 = temp;
+        this->unk_358 = textId;
     } else {
         if (this->unk_356 & 0x400) {
             this->unk_358 = 0;
@@ -1700,7 +1700,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80AF9D04(EnPm* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80AF7D60(play, this->unk_258);
     Vec3f sp38;
-    Vec3f* sp28;
+    s32 pad;
     f32 temp;
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
