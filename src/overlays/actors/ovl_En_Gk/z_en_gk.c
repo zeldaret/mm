@@ -168,7 +168,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     gSaveContext.save.weekEventReg[41] |= 4;
@@ -179,7 +179,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 gSaveContext.save.weekEventReg[41] |= 4;
@@ -724,9 +724,9 @@ void func_80B51B40(EnGk* this, PlayState* play) {
 
                 if (this->unk_31C == 0xE8F) {
                     play->nextEntranceIndex = 0xD010;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 3;
-                    gSaveContext.nextTransition = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
                                                  (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
                 } else {
@@ -1027,7 +1027,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
-                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 15);
+                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneNum == SCENE_GORONRACE) {
@@ -1159,7 +1159,7 @@ void EnGk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     }
 }
 
-void EnGk_TransformDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+void EnGk_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnGk* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1257,7 +1257,7 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnGk_OverrideLimbDraw, EnGk_PostLimbDraw,
-                                       EnGk_TransformDraw, &this->actor);
+                                       EnGk_TransformLimbDraw, &this->actor);
 
         if (ENGK_GET_F(&this->actor) != ENGK_F_2) {
             func_8012C2DC(play->state.gfxCtx);

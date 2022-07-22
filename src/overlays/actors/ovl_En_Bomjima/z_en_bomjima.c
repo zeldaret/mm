@@ -414,7 +414,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->unk_2F0->actor.world.pos.z;
 
                 SoundSource_PlaySfxAtFixedWorldPos(play, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
-                EffectSsHitMark_SpawnFixedScale(play, 0, &sp40);
+                EffectSsHitmark_SpawnFixedScale(play, 0, &sp40);
                 this->unk_2BC++;
 
                 if (((s16)Rand_ZeroFloat(2.0f) + 3) < this->unk_2BC) {
@@ -759,9 +759,9 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         func_801477B4(play);
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 20;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         ActorCutscene_Stop(this->unk_2D4[1]);
     }
 }

@@ -235,7 +235,7 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
 
     switch (this->unk_2C6) {
         case 0:
-            if (!CHECK_QUEST_ITEM(QUEST_UNK_19)) {
+            if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                 this->unk_2C6 = 6;
                 ret = 1;
             } else {
@@ -250,7 +250,7 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
             if (func_8013A4C4(D_80AE7258[this->unk_2C6])) {
                 this->unk_2C6 = 6;
                 ret = 1;
-                REMOVE_QUEST_ITEM(QUEST_UNK_19);
+                REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
             } else {
                 this->unk_2C6++;
             }
@@ -260,9 +260,9 @@ s32 func_80AE6704(EnShn* thisx, PlayState* play) {
             func_800B7298(play, &this->actor, 7);
             play->nextEntranceIndex = 0x8460;
             gSaveContext.nextCutsceneIndex = 0;
-            play->sceneLoadFlag = 0x14;
-            play->unk_1887F = 3;
-            gSaveContext.nextTransition = 7;
+            play->transitionTrigger = TRANS_TRIGGER_START;
+            play->transitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_07;
             this->unk_2C6++;
             break;
     }

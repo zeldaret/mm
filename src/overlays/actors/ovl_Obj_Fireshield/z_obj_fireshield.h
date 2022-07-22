@@ -15,17 +15,17 @@ typedef void (*ObjFireshieldActionFunc)(struct ObjFireshield*);
 #define OBJFIRESHIELD_GET_ROTX(thisx) ((thisx)->home.rot.x & 1)
 
 typedef struct ObjFireshield {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ ObjFireshieldActionFunc actionFunc;
-    /* 0x0194 */ s32 unk_194;
-    /* 0x0198 */ f32 unk_198;
-    /* 0x019C */ s32 unk_19C;
-    /* 0x01A0 */ s32 unk_1A0;
-    /* 0x01A4 */ s16 unk_1A4;
-    /* 0x01A6 */ u8 unk_1A6;
-    /* 0x01A7 */ s8 unk_1A7;
-    /* 0x01A8 */ s8 unk_1A8;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ ObjFireshieldActionFunc actionFunc;
+    /* 0x194 */ s32 unk_194;
+    /* 0x198 */ f32 unk_198;
+    /* 0x19C */ s32 unk_19C;
+    /* 0x1A0 */ s32 unk_1A0;
+    /* 0x1A4 */ s16 unk_1A4;
+    /* 0x1A6 */ u8 unk_1A6;
+    /* 0x1A7 */ s8 unk_1A7;
+    /* 0x1A8 */ s8 unk_1A8;
 } ObjFireshield; // size = 0x1AC
 
 extern const ActorInit Obj_Fireshield_InitVars;

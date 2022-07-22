@@ -368,8 +368,8 @@ void EnTest4_Destroy(Actor* thisx, PlayState* play) {
 void func_80A42AB8(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->unk_18B4A == 0) && !Play_InCsMode(play) && (play->numSetupActors <= 0) && (play->roomCtx.unk31 == 0) &&
-        (!Play_IsDebugCamEnabled())) {
+    if ((play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
+        (play->roomCtx.unk31 == 0) && !Play_IsDebugCamEnabled()) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->unk_144];
         s16 temp_a3;
@@ -398,7 +398,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     func_80A41FA4(this, play);
                 } else {
                     gSaveContext.screenScale = 0.0f;
-                    Play_SetRespawnData(&play->state, RESTART_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&play->state);
                     if (player->stateFlags1 & 0x800000) {
@@ -447,7 +447,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     } else {
                         playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&play->state, RESTART_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
+                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
@@ -456,8 +456,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                         play->nextEntranceIndex = 0xD800;
                     }
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_02;
                     player->stateFlags1 |= 0x200;
                     Actor_MarkForDeath(&this->actor);
                 }

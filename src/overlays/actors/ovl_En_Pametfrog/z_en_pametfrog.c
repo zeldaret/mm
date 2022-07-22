@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -156,7 +157,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -338,10 +339,10 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, PlayState* play, f32 magShakeXZ,
 void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
     Camera* subCam;
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->subCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         func_800B724C(play, &this->actor, 6);
     }
@@ -533,7 +534,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, PlayState* play) {
 }
 
 void EnPametfrog_SetupJumpToWall(EnPametfrog* this) {
-    Animation_Change(&this->skelAnime, &gGekkoJumpForwardAnim, 2.0f, 0.0f, 0.0f, 0, -2.0f);
+    Animation_Change(&this->skelAnime, &gGekkoJumpForwardAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f);
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.bgCheckFlags &= ~8;
@@ -700,7 +701,7 @@ void EnPametfrog_SetupClimbDownWall(EnPametfrog* this) {
     s16 yaw;
 
     Animation_Change(&this->skelAnime, &gGekkoJumpForwardAnim, 0.0f, 0.0f,
-                     Animation_GetLastFrame(&gGekkoJumpForwardAnim), 2, 0.0f);
+                     Animation_GetLastFrame(&gGekkoJumpForwardAnim), ANIMMODE_ONCE, 0.0f);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.shape.rot.x = 0;
@@ -734,7 +735,7 @@ void EnPametfrog_ClimbDownWall(EnPametfrog* this, PlayState* play) {
 }
 
 void EnPametfrog_SetupRunToSnapper(EnPametfrog* this) {
-    Animation_Change(&this->skelAnime, &gGekkoJumpForwardAnim, 2.0f, 0.0f, 0.0f, 0, -2.0f);
+    Animation_Change(&this->skelAnime, &gGekkoJumpForwardAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f);
     this->actor.params = GEKKO_RETURN_TO_SNAPPER;
     this->actionFunc = EnPametfrog_RunToSnapper;
 }
@@ -826,7 +827,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, PlayState* play) {
     yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         xzDist = sqrtf(SQXZ(this->unk_2DC));
         if (xzDist > 0.001f) {
             xzDist = 200.0f / xzDist;
@@ -856,7 +857,7 @@ void EnPametfrog_FallInAir(EnPametfrog* this, PlayState* play) {
         }
     } else {
         this->spinYaw += 0xF00;
-        if (this->subCamId != CAM_ID_MAIN) {
+        if (this->subCamId != SUB_CAM_ID_DONE) {
             Play_CameraSetAtEye(play, this->subCamId, &this->actor.world.pos,
                                 &Play_GetCamera(play, this->subCamId)->eye);
         }
@@ -1005,7 +1006,7 @@ void EnPametfrog_SetupCutscene(EnPametfrog* this) {
 void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
         func_800B724C(play, &this->actor, 7);
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
@@ -1226,7 +1227,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
     Quake_SetCountdown(this->quake, 15);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     this->timer = 40;
     this->actionFunc = EnPametfrog_SnapperSpawn;
 }
@@ -1236,7 +1237,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
     EnPametfrog_ShakeCamera(this, play, (f32)(this->timer * 7.5f) + 200.0f,
                             ((f32)(this->timer * 2) * (15.0f / 16.0f)) + -20.0f);
     if (this->timer != 0) {
-        func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     } else {
         EnPametfrog_SetupTransitionGekkoSnapper(this, play);
     }
@@ -1249,7 +1250,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play)
     Quake_SetSpeed(this->quake, 20000);
     Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
 }
 

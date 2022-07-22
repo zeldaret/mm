@@ -49,7 +49,7 @@ const ActorInit En_Tag_Obj_InitVars = {
 void EnTagObj_Init(Actor* thisx, PlayState* play) {
     EnTagObj* this = THIS;
 
-    this->hasSpawnedSeahorse = 0;
+    this->hasSpawnedSeahorse = false;
 }
 
 void EnTagObj_Destroy(Actor* thisx, PlayState* play) {
@@ -61,6 +61,6 @@ void EnTagObj_Update(Actor* thisx, PlayState* play) {
     if (!this->hasSpawnedSeahorse) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, 0, 0, 0);
-        this->hasSpawnedSeahorse = 1;
+        this->hasSpawnedSeahorse = true;
     }
 }

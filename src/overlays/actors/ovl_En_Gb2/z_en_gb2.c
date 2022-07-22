@@ -357,16 +357,16 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 void func_80B0FE18(PlayState* play) {
     func_800FD750(0x38);
     play->nextEntranceIndex = 0x9C10;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FE7C(PlayState* play) {
     play->nextEntranceIndex = 0x9C20;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
@@ -430,7 +430,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.unk12023 = 4;
                     func_800B7298(play, NULL, 7);
@@ -582,7 +582,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                 } else {
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.unk12023 = 4;
                     func_800B7298(play, NULL, 7);
@@ -628,7 +628,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
         if (sp24 == 12) {
             gSaveContext.save.weekEventReg[54] |= 0x40;
         } else {
-            func_801159EC(50);
+            Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {

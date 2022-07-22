@@ -4,6 +4,7 @@
  * Description: Breakable Pot With Grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_flowerpot.h"
 #include "objects/object_flowerpot/object_flowerpot.h"
 
@@ -23,13 +24,13 @@ void func_80A1CC0C(ObjFlowerpot* this, PlayState* play);
 void func_80A1CD10(ObjFlowerpot* this);
 void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play);
 
-static u32 D_80A1D830;
-static MtxF D_80A1D838[8];
-static s16 D_80A1DA38;
-static s16 D_80A1DA3A;
-static s16 D_80A1DA3C;
-static s16 D_80A1DA3E;
-static s16 D_80A1DA40;
+u32 D_80A1D830;
+MtxF D_80A1D838[8];
+s16 D_80A1DA38;
+s16 D_80A1DA3A;
+s16 D_80A1DA3C;
+s16 D_80A1DA3E;
+s16 D_80A1DA40;
 
 const ActorInit Obj_Flowerpot_InitVars = {
     ACTOR_OBJ_FLOWERPOT,
@@ -77,19 +78,19 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
-static s16 D_80A1D3F8 = 0;
+s16 D_80A1D3F8 = 0;
 
-static s16 D_80A1D3FC = 0;
+s16 D_80A1D3FC = 0;
 
-static s16 D_80A1D400 = 0;
+s16 D_80A1D400 = 0;
 
-static u8 D_80A1D404 = true;
+u8 D_80A1D404 = true;
 
-static Vec3f D_80A1D408 = { 0.0f, 20.0f, 0.0f };
+Vec3f D_80A1D408 = { 0.0f, 20.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
@@ -177,8 +178,8 @@ void func_80A1B3D0(void) {
 
 void func_80A1B840(MtxF* matrix) {
     MtxF* temp = Matrix_GetCurrent();
-    f32* tmp = (f32*)&temp->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &temp->xx;
+    f32* tmp2 = &matrix->xx;
     s32 i;
 
     for (i = 0; i < 16; i++) {

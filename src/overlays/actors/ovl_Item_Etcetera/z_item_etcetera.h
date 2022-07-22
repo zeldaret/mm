@@ -11,20 +11,20 @@ struct ItemEtcetera;
 typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, PlayState*);
 
 typedef enum {
-    /* 0x00 */ ITEM_ETC_BOTTLE_1,
-    /* 0x01 */ ITEM_ETC_BOTTLE_2,
-    /* 0x02 */ ITEM_ETC_BOTTLE_3,
-    /* 0x03 */ ITEM_ETC_BOTTLE_4,
-    /* 0x04 */ ITEM_ETC_BOTTLE_5,
-    /* 0x05 */ ITEM_ETC_BOTTLE_6,
-    /* 0x06 */ ITEM_ETC_KEY_SMALL,
-    /* 0x07 */ ITEM_ETC_ARROW_FIRE,
-    /* 0x08 */ ITEM_ETC_RUPEE_GREEN_CHEST_GAME,
-    /* 0x09 */ ITEM_ETC_RUPEE_BLUE_CHEST_GAME,
-    /* 0x0A */ ITEM_ETC_RUPEE_RED_CHEST_GAME,
-    /* 0x0B */ ITEM_ETC_RUPEE_PURPLE_CHEST_GAME,
-    /* 0x0C */ ITEM_ETC_HEART_PIECE_CHEST_GAME,
-    /* 0x0D */ ITEM_ETC_KEY_SMALL_CHEST_GAME
+    /* 0x0 */ ITEM_ETC_BOTTLE_1,
+    /* 0x1 */ ITEM_ETC_BOTTLE_2,
+    /* 0x2 */ ITEM_ETC_BOTTLE_3,
+    /* 0x3 */ ITEM_ETC_BOTTLE_4,
+    /* 0x4 */ ITEM_ETC_BOTTLE_5,
+    /* 0x5 */ ITEM_ETC_BOTTLE_6,
+    /* 0x6 */ ITEM_ETC_KEY_SMALL,
+    /* 0x7 */ ITEM_ETC_ARROW_FIRE,
+    /* 0x8 */ ITEM_ETC_RUPEE_GREEN_CHEST_GAME,
+    /* 0x9 */ ITEM_ETC_RUPEE_BLUE_CHEST_GAME,
+    /* 0xA */ ITEM_ETC_RUPEE_RED_CHEST_GAME,
+    /* 0xB */ ITEM_ETC_RUPEE_PURPLE_CHEST_GAME,
+    /* 0xC */ ITEM_ETC_HEART_PIECE_CHEST_GAME,
+    /* 0xD */ ITEM_ETC_KEY_SMALL_CHEST_GAME
 } ItemEtceteraType;
 
 typedef struct ItemEtcetera {

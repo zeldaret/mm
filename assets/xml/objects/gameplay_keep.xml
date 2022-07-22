@@ -786,17 +786,17 @@
         <Texture Name="gPinkDekuFlowerBaseLeafTex" OutName="pink_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10078" />
         <Texture Name="gGoldDekuFlowerPetalAndCenterTex" OutName="gold_deku_flower_petal_and_center" Format="rgba16" Width="16" Height="32" Offset="0x10878" />
         <Texture Name="gGoldDekuFlowerBaseLeafTex" OutName="gold_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10C78" />
-        <Limb Name="gPinkDekuFlowerBaseLimb" Type="Standard" Offset="0x11478" />
-        <Limb Name="gPinkDekuFlowerCenterLimb" Type="Standard" Offset="0x11484" />
-        <Limb Name="gPinkDekuFlowerBackLeafLimb" Type="Standard" Offset="0x11490" />
-        <Limb Name="gPinkDekuFlowerFrontLeafLimb" Type="Standard" Offset="0x1149C" />
-        <Limb Name="gPinkDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x114A8" />
-        <Limb Name="gPinkDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x114B4" />
-        <Limb Name="gPinkDekuFlowerRightLeafLimb" Type="Standard" Offset="0x114C0" />
-        <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x114CC" />
-        <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" Offset="0x114D8" />
-        <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x114E4" />
-        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" Offset="0x11518" />
+        <Limb Name="gPinkDekuFlowerBaseLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BASE" Offset="0x11478" />
+        <Limb Name="gPinkDekuFlowerCenterLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_CENTER" Offset="0x11484" />
+        <Limb Name="gPinkDekuFlowerBackLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_LEAF" Offset="0x11490" />
+        <Limb Name="gPinkDekuFlowerFrontLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_LEAF" Offset="0x1149C" />
+        <Limb Name="gPinkDekuFlowerFrontRightPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_RIGHT_PETAL" Offset="0x114A8" />
+        <Limb Name="gPinkDekuFlowerBackRightPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_RIGHT_PETAL" Offset="0x114B4" />
+        <Limb Name="gPinkDekuFlowerRightLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_RIGHT_LEAF" Offset="0x114C0" />
+        <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x114CC" />
+        <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_LEFT_LEAF" Offset="0x114D8" />
+        <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="PINK_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x114E4" />
+        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" LimbNone="PINK_DEKU_FLOWER_LIMB_NONE" LimbMax="PINK_DEKU_FLOWER_LIMB_MAX" EnumName="PinkDekuFlowerLimbs" Offset="0x11518" />
         <Animation Name="gDekuFlowerRustleAnim" Offset="0x117A8" /> <!-- Original name is "dnp_zawa" ("rustling") -->
         <Collision Name="gGoldDekuFlowerCol" Offset="0x118D8" />
         <DList Name="gGoldDekuFlowerIdleDL" Offset="0x11BD0" />
@@ -810,17 +810,17 @@
         <DList Name="gGoldDekuFlowerFrontRightPetalDL" Offset="0x125B0" />
         <DList Name="gGoldDekuFlowerFrontPetalDL" Offset="0x12638" />
         <DList Name="gGoldDekuFlowerBackPetalDL" Offset="0x126C0" />
-        <Limb Name="gGoldDekuFlowerBaseLimb" Type="Standard" Offset="0x12748" />
-        <Limb Name="gGoldDekuFlowerCenterLimb" Type="Standard" Offset="0x12754" />
-        <Limb Name="gGoldDekuFlowerBackPetalLimb" Type="Standard" Offset="0x12760" />
-        <Limb Name="gGoldDekuFlowerFrontPetalLimb" Type="Standard" Offset="0x1276C" />
-        <Limb Name="gGoldDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x12778" />
-        <Limb Name="gGoldDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x12784" />
-        <Limb Name="gGoldDekuFlowerRightPetalLimb" Type="Standard" Offset="0x12790" />
-        <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x1279C" />
-        <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" Offset="0x127A8" />
-        <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x127B4" />
-        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+        <Limb Name="gGoldDekuFlowerBaseLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BASE" Offset="0x12748" />
+        <Limb Name="gGoldDekuFlowerCenterLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_CENTER" Offset="0x12754" />
+        <Limb Name="gGoldDekuFlowerBackPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_PETAL" Offset="0x12760" />
+        <Limb Name="gGoldDekuFlowerFrontPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_PETAL" Offset="0x1276C" />
+        <Limb Name="gGoldDekuFlowerFrontRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_RIGHT_PETAL" Offset="0x12778" />
+        <Limb Name="gGoldDekuFlowerBackRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_RIGHT_PETAL" Offset="0x12784" />
+        <Limb Name="gGoldDekuFlowerRightPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_RIGHT_PETAL" Offset="0x12790" />
+        <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_FRONT_LEFT_PETAL" Offset="0x1279C" />
+        <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_LEFT_PETAL" Offset="0x127A8" />
+        <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" EnumName="GOLD_DEKU_FLOWER_LIMB_BACK_LEFT_PETAL" Offset="0x127B4" />
+        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" LimbNone="GOLD_DEKU_FLOWER_LIMB_NONE" LimbMax="GOLD_DEKU_FLOWER_LIMB_MAX" EnumName="GoldDekuFlowerLimbs" Offset="0x127E8" />
 
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
@@ -854,8 +854,8 @@
         <DList Name="gameplay_keep_DL_01A4D0" Offset="0x1A4D0" />
         <DList Name="gameplay_keep_DL_01A538" Offset="0x1A538" />
         <DList Name="gameplay_keep_DL_01A590" Offset="0x1A590" />
-        <DList Name="gameplay_keep_DL_01A620" Offset="0x1A620" />
-        <Texture Name="gameplay_keep_Tex_01A6B0" OutName="tex_01A6B0" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
+        <DList Name="gEffFragments1DL" Offset="0x1A620" />
+        <Texture Name="gWitheredLeafTex" OutName="withered_leaf" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
         <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
         <Texture Name="gameplay_keep_Tex_01AAB0" OutName="tex_01AAB0" Format="i8" Width="16" Height="32" Offset="0x1AAB0" />
         <DList Name="gameplay_keep_DL_01ACF0" Offset="0x1ACF0" />
@@ -871,7 +871,7 @@
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
         <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
-        <DList Name="gameplay_keep_DL_01F300" Offset="0x1F300" />
+        <DList Name="gEffFragments2DL" Offset="0x1F300" />
         <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
         <Texture Name="gSelectionCursorTex" OutName="selection_cursor" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
         <Texture Name="gControlStickTex" OutName="control_stick" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
@@ -924,12 +924,14 @@
         <Texture Name="gameplay_keep_Tex_0269E0" OutName="tex_0269E0" Format="i8" Width="32" Height="64" Offset="0x269E0" />
         <Texture Name="gameplay_keep_Tex_0271E0" OutName="tex_0271E0" Format="i8" Width="32" Height="64" Offset="0x271E0" />
         <DList Name="gameplay_keep_DL_027CA0" Offset="0x27CA0" />
-        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x420" Offset="0x27DD0" />
+        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x32C" Offset="0x27DD0" />
+        <Blob Name="gameplay_keep_Blob_0281DC" Size="0xF4" Offset="0x281DC" />
         <DList Name="gameplay_keep_DL_0282D0" Offset="0x282D0" />
         <Texture Name="gameplay_keep_Tex_0283B8" OutName="tex_0283B8" Format="i4" Width="64" Height="64" Offset="0x283B8" />
         <Texture Name="gameplay_keep_Tex_028BB8" OutName="tex_028BB8" Format="i8" Width="32" Height="32" Offset="0x28BB8" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_028FEC" Offset="0x28FEC" />
-        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x24" Offset="0x28FFC" />
+        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x10" Offset="0x28FFC" />
+        <Blob Name="gameplay_keep_Blob_02900C" Size="0x14" Offset="0x2900C" />
         <Animation Name="gameplay_keep_Anim_029140" Offset="0x29140" />
         <Texture Name="gameplay_keep_Tex_029150" OutName="tex_029150" Format="i8" Width="32" Height="64" Offset="0x29150" />
         <DList Name="gameplay_keep_DL_029990" Offset="0x29990" />
@@ -1004,46 +1006,46 @@
         <Texture Name="gEffShockwaveTex" OutName="eff_shockwave" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gEffShockwaveDL" Offset="0x30100" />
         <DList Name="gEffBubbleDL" Offset="0x301B0" />
-        <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
-        <Texture Name="gameplay_keep_Tex_030670" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
-        <Texture Name="gameplay_keep_Tex_030A70" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
-        <Texture Name="gameplay_keep_Tex_030E70" OutName="tex_030E70" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
-        <Texture Name="gameplay_keep_Tex_031270" OutName="tex_031270" Format="ia8" Width="32" Height="32" Offset="0x31270" />
-        <Texture Name="gameplay_keep_Tex_031670" OutName="tex_031670" Format="ia8" Width="32" Height="32" Offset="0x31670" />
-        <Texture Name="gameplay_keep_Tex_031A70" OutName="tex_031A70" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
-        <Texture Name="gameplay_keep_Tex_031E70" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
-        <DList Name="gameplay_keep_DL_032270" Offset="0x32270" />
+        <Texture Name="gEffFireFootprint1Tex" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
+        <Texture Name="gEffFireFootprint2Tex" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
+        <Texture Name="gEffFireFootprint3Tex" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
+        <Texture Name="gEffFireFootprint4Tex" OutName="tex_030E70" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
+        <Texture Name="gEffFireFootprint5Tex" OutName="tex_031270" Format="ia8" Width="32" Height="32" Offset="0x31270" />
+        <Texture Name="gEffFireFootprint6Tex" OutName="tex_031670" Format="ia8" Width="32" Height="32" Offset="0x31670" />
+        <Texture Name="gEffFireFootprint7Tex" OutName="tex_031A70" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
+        <Texture Name="gEffFireFootprint8Tex" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
+        <DList Name="gEffFireFootprintDL" Offset="0x32270" />
         <Texture Name="gameplay_keep_Tex_032310" OutName="tex_032310" Format="rgba32" Width="16" Height="64" Offset="0x32310" />
-        <Texture Name="gameplay_keep_Tex_033310" OutName="tex_033310" Format="i4" Width="32" Height="24" Offset="0x33310" />
-        <Texture Name="gameplay_keep_Tex_033490" OutName="tex_033490" Format="i4" Width="32" Height="24" Offset="0x33490" />
-        <Texture Name="gameplay_keep_Tex_033610" OutName="tex_033610" Format="i4" Width="32" Height="24" Offset="0x33610" />
-        <Texture Name="gameplay_keep_Tex_033790" OutName="tex_033790" Format="i4" Width="32" Height="24" Offset="0x33790" />
-        <Texture Name="gameplay_keep_Tex_033910" OutName="tex_033910" Format="i4" Width="32" Height="24" Offset="0x33910" />
-        <Texture Name="gameplay_keep_Tex_033A90" OutName="tex_033A90" Format="i4" Width="32" Height="24" Offset="0x33A90" />
-        <Texture Name="gameplay_keep_Tex_033C10" OutName="tex_033C10" Format="i4" Width="32" Height="24" Offset="0x33C10" />
-        <Texture Name="gameplay_keep_Tex_033D90" OutName="tex_033D90" Format="i4" Width="32" Height="24" Offset="0x33D90" />
-        <Texture Name="gameplay_keep_Tex_033F10" OutName="tex_033F10" Format="i4" Width="32" Height="24" Offset="0x33F10" />
-        <Texture Name="gameplay_keep_Tex_034090" OutName="tex_034090" Format="i4" Width="32" Height="24" Offset="0x34090" />
-        <Texture Name="gameplay_keep_Tex_034210" OutName="tex_034210" Format="i4" Width="32" Height="24" Offset="0x34210" />
-        <Texture Name="gameplay_keep_Tex_034390" OutName="tex_034390" Format="i4" Width="32" Height="24" Offset="0x34390" />
-        <Texture Name="gameplay_keep_Tex_034510" OutName="tex_034510" Format="i4" Width="32" Height="24" Offset="0x34510" />
-        <Texture Name="gameplay_keep_Tex_034690" OutName="tex_034690" Format="i4" Width="32" Height="24" Offset="0x34690" />
-        <Texture Name="gameplay_keep_Tex_034810" OutName="tex_034810" Format="i4" Width="32" Height="24" Offset="0x34810" />
-        <Texture Name="gameplay_keep_Tex_034990" OutName="tex_034990" Format="i4" Width="32" Height="24" Offset="0x34990" />
-        <Texture Name="gameplay_keep_Tex_034B10" OutName="tex_034B10" Format="i4" Width="32" Height="24" Offset="0x34B10" />
-        <Texture Name="gameplay_keep_Tex_034C90" OutName="tex_034C90" Format="i4" Width="32" Height="24" Offset="0x34C90" />
-        <Texture Name="gameplay_keep_Tex_034E10" OutName="tex_034E10" Format="i4" Width="32" Height="24" Offset="0x34E10" />
-        <Texture Name="gameplay_keep_Tex_034F90" OutName="tex_034F90" Format="i4" Width="32" Height="24" Offset="0x34F90" />
-        <Texture Name="gameplay_keep_Tex_035110" OutName="tex_035110" Format="i4" Width="32" Height="24" Offset="0x35110" />
-        <Texture Name="gameplay_keep_Tex_035290" OutName="tex_035290" Format="i4" Width="32" Height="24" Offset="0x35290" />
-        <Texture Name="gameplay_keep_Tex_035410" OutName="tex_035410" Format="i4" Width="32" Height="24" Offset="0x35410" />
-        <Texture Name="gameplay_keep_Tex_035590" OutName="tex_035590" Format="i4" Width="32" Height="24" Offset="0x35590" />
-        <DList Name="gameplay_keep_DL_035710" Offset="0x35710" />
+        <Texture Name="gEffHitmarkWhiteMetal1Tex" OutName="eff_hitmark_white_metal_1" Format="i4" Width="32" Height="24" Offset="0x33310" />
+        <Texture Name="gEffHitmarkWhiteMetal2Tex" OutName="eff_hitmark_white_metal_2" Format="i4" Width="32" Height="24" Offset="0x33490" />
+        <Texture Name="gEffHitmarkWhiteMetal3Tex" OutName="eff_hitmark_white_metal_3" Format="i4" Width="32" Height="24" Offset="0x33610" />
+        <Texture Name="gEffHitmarkWhiteMetal4Tex" OutName="eff_hitmark_white_metal_4" Format="i4" Width="32" Height="24" Offset="0x33790" />
+        <Texture Name="gEffHitmarkWhiteMetal5Tex" OutName="eff_hitmark_white_metal_5" Format="i4" Width="32" Height="24" Offset="0x33910" />
+        <Texture Name="gEffHitmarkWhiteMetal6Tex" OutName="eff_hitmark_white_metal_6" Format="i4" Width="32" Height="24" Offset="0x33A90" />
+        <Texture Name="gEffHitmarkWhiteMetal7Tex" OutName="eff_hitmark_white_metal_7" Format="i4" Width="32" Height="24" Offset="0x33C10" />
+        <Texture Name="gEffHitmarkWhiteMetal8Tex" OutName="eff_hitmark_white_metal_8" Format="i4" Width="32" Height="24" Offset="0x33D90" />
+        <Texture Name="gEffHitmarkDust1Tex" OutName="eff_hitmark_dust_1" Format="i4" Width="32" Height="24" Offset="0x33F10" />
+        <Texture Name="gEffHitmarkDust2Tex" OutName="eff_hitmark_dust_2" Format="i4" Width="32" Height="24" Offset="0x34090" />
+        <Texture Name="gEffHitmarkDust3Tex" OutName="eff_hitmark_dust_3" Format="i4" Width="32" Height="24" Offset="0x34210" />
+        <Texture Name="gEffHitmarkDust4Tex" OutName="eff_hitmark_dust_4" Format="i4" Width="32" Height="24" Offset="0x34390" />
+        <Texture Name="gEffHitmarkDust5Tex" OutName="eff_hitmark_dust_5" Format="i4" Width="32" Height="24" Offset="0x34510" />
+        <Texture Name="gEffHitmarkDust6Tex" OutName="eff_hitmark_dust_6" Format="i4" Width="32" Height="24" Offset="0x34690" />
+        <Texture Name="gEffHitmarkDust7Tex" OutName="eff_hitmark_dust_7" Format="i4" Width="32" Height="24" Offset="0x34810" />
+        <Texture Name="gEffHitmarkDust8Tex" OutName="eff_hitmark_dust_8" Format="i4" Width="32" Height="24" Offset="0x34990" />
+        <Texture Name="gEffHitmarkRed1Tex" OutName="eff_hitmark_red_1" Format="i4" Width="32" Height="24" Offset="0x34B10" />
+        <Texture Name="gEffHitmarkRed2Tex" OutName="eff_hitmark_red_2" Format="i4" Width="32" Height="24" Offset="0x34C90" />
+        <Texture Name="gEffHitmarkRed3Tex" OutName="eff_hitmark_red_3" Format="i4" Width="32" Height="24" Offset="0x34E10" />
+        <Texture Name="gEffHitmarkRed4Tex" OutName="eff_hitmark_red_4" Format="i4" Width="32" Height="24" Offset="0x34F90" />
+        <Texture Name="gEffHitmarkRed5Tex" OutName="eff_hitmark_red_5" Format="i4" Width="32" Height="24" Offset="0x35110" />
+        <Texture Name="gEffHitmarkRed6Tex" OutName="eff_hitmark_red_6" Format="i4" Width="32" Height="24" Offset="0x35290" />
+        <Texture Name="gEffHitmarkRed7Tex" OutName="eff_hitmark_red_7" Format="i4" Width="32" Height="24" Offset="0x35410" />
+        <Texture Name="gEffHitmarkRed8Tex" OutName="eff_hitmark_red_8" Format="i4" Width="32" Height="24" Offset="0x35590" />
+        <DList Name="gEffHitmarkDL" Offset="0x35710" />
         <Texture Name="gameplay_keep_Tex_0357B0" OutName="tex_0357B0" Format="ia8" Width="32" Height="64" Offset="0x357B0" />
         <Texture Name="gameplay_keep_Tex_035FB0" OutName="tex_035FB0" Format="ia8" Width="32" Height="64" Offset="0x35FB0" />
-        <Texture Name="gameplay_keep_Tex_0367B0" OutName="tex_0367B0" Format="i8" Width="64" Height="64" Offset="0x367B0" />
-        <DList Name="gameplay_keep_DL_0377B0" Offset="0x377B0" />
-        <DList Name="gameplay_keep_DL_037850" Offset="0x37850" />
+        <Texture Name="gEffWaterRippleTex" OutName="eff_water_ripple" Format="i8" Width="64" Height="64" Offset="0x367B0" />
+        <DList Name="gEffWaterRippleDL" Offset="0x377B0" />
+        <DList Name="gEffSparkDL" Offset="0x37850" />
         <Texture Name="gEffWaterSplash1Tex" OutName="eff_water_splash_1" Format="i8" Width="32" Height="40" Offset="0x378F0" />
         <Texture Name="gEffWaterSplash2Tex" OutName="eff_water_splash_2" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
         <Texture Name="gEffWaterSplash3Tex" OutName="eff_water_splash_3" Format="i8" Width="32" Height="40" Offset="0x382F0" />
