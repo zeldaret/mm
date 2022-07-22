@@ -376,7 +376,7 @@ void EnBjt_Talk(EnBjt* this, PlayState* play) {
 
 // Change state based on schedule and stateFlags
 void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
-    ScheduleResult scheduleOutput;
+    ScheduleOutput scheduleOutput;
 
     if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
         scheduleOutput.result = TOILET_HAND_SCH_NONE;
