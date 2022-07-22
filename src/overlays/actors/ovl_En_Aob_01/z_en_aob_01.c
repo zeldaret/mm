@@ -118,17 +118,17 @@ void func_809C1158(EnAob01* this, PlayState* play) {
 }
 
 void func_809C11EC(EnAob01* this, PlayState* play) {
-    s32 unk;
+    s32 enDgParams;
     s16 i;
 
     func_809C1158(this, play);
 
     for (i = 0; i < ARRAY_COUNT(D_809C384C); i++) {
-        unk = (this->unk_1D8[D_809C384C[i].unk_06]->unk1 << 0xA) | (i << 5);
+        enDgParams = ENDG_PARAMS(this->unk_1D8[D_809C384C[i].unk_06]->unk1, i);
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * 182.04445f, 0, unk, 0xFFFF, this->actor.unk20, NULL);
+            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.unk20, NULL);
     }
 }
 
@@ -391,7 +391,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
         case 0x3529:
             if (this->unk_2D2 & 2) {
                 this->unk_2D2 &= ~2;
-                func_801159EC(-this->unk_434);
+                Rupees_ChangeBy(-this->unk_434);
                 func_800B7298(play, NULL, 7);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.unk12023 = 4;
@@ -711,7 +711,7 @@ void func_809C28B8(EnAob01* this, PlayState* play) {
                 this->unk_210 = 0x352A;
                 this->unk_2D2 |= 0x80;
                 this->unk_434 *= 3;
-                func_801159EC(this->unk_434);
+                Rupees_ChangeBy(this->unk_434);
                 play->msgCtx.bankRupees = this->unk_434;
                 break;
 
@@ -719,7 +719,7 @@ void func_809C28B8(EnAob01* this, PlayState* play) {
                 this->unk_210 = 0x352B;
                 this->unk_2D2 |= 0x80;
                 this->unk_434 *= 2;
-                func_801159EC(this->unk_434);
+                Rupees_ChangeBy(this->unk_434);
                 play->msgCtx.bankRupees = this->unk_434;
                 break;
 
@@ -727,7 +727,7 @@ void func_809C28B8(EnAob01* this, PlayState* play) {
             case 4:
             case 5:
                 this->unk_210 = 0x352C;
-                func_801159EC(this->unk_434);
+                Rupees_ChangeBy(this->unk_434);
                 break;
 
             default:

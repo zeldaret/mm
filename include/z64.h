@@ -68,10 +68,13 @@
 #define Z_PRIORITY_DMAMGR   17
 #define Z_PRIORITY_IRQMGR   18
 
-#define EQUIP_SLOT_B 0
-#define EQUIP_SLOT_C_LEFT 1
-#define EQUIP_SLOT_C_DOWN 2
-#define EQUIP_SLOT_C_RIGHT 3
+typedef enum {
+    /* 0 */ EQUIP_SLOT_B,
+    /* 1 */ EQUIP_SLOT_C_LEFT,
+    /* 2 */ EQUIP_SLOT_C_DOWN,
+    /* 3 */ EQUIP_SLOT_C_RIGHT,
+    /* 4 */ EQUIP_SLOT_A
+} EquipSlot;
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -500,7 +503,7 @@ typedef struct {
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ s16 unk_25A;
     /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5]; // ItemId
+    /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 unk_268[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;

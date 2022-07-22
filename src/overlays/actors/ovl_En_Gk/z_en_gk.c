@@ -168,7 +168,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     gSaveContext.save.weekEventReg[41] |= 4;
@@ -179,7 +179,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 gSaveContext.save.weekEventReg[41] |= 4;
@@ -1027,7 +1027,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
-                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 15);
+                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneNum == SCENE_GORONRACE) {

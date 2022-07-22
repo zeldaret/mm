@@ -7,9 +7,26 @@
 // TODO fill out these enums
 
 typedef enum {
-    /* 0x0 */ EQUIP_SWORD,
-    /* 0x1 */ EQUIP_SHIELD
+    /* 0x0 */ EQUIP_TYPE_SWORD,
+    /* 0x1 */ EQUIP_TYPE_SHIELD,
+    /* 0x2 */ EQUIP_TYPE_MAX
 } EquipmentType;
+
+typedef enum {
+    /* 0 */ EQUIP_VALUE_SWORD_NONE,
+    /* 1 */ EQUIP_VALUE_SWORD_KOKIRI,
+    /* 2 */ EQUIP_VALUE_SWORD_RAZOR,
+    /* 3 */ EQUIP_VALUE_SWORD_GILDED,
+    /* 4 */ EQUIP_VALUE_SWORD_DIETY,
+    /* 5 */ EQUIP_VALUE_SWORD_MAX,
+} EquipValueSword;
+
+typedef enum {
+    /* 0 */ EQUIP_VALUE_SHIELD_NONE,
+    /* 1 */ EQUIP_VALUE_SHIELD_HERO,
+    /* 2 */ EQUIP_VALUE_SHIELD_MIRROR,
+    /* 3 */ EQUIP_VALUE_SHIELD_MAX
+} EquipValueShield;
 
 typedef enum {
     /* 0x00 */ UPG_QUIVER,
@@ -41,9 +58,11 @@ typedef enum {
     /* 0x0F */ QUEST_SONG_SOARING,
     /* 0x10 */ QUEST_SONG_STORMS,
     /* 0x11 */ QUEST_SONG_SUN,
-    /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
+    /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
+    /* 0x13 */ QUEST_SKULL_TOKEN,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_UNK_19 // Related to PictoBox
+    /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
+    /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;
 
 typedef enum {
@@ -268,6 +287,9 @@ typedef enum {
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 
+#define BOTTLE_FIRST 0
+#define BOTTLE_MAX 6
+
 typedef enum {
     /* 0x00 */ GI_NONE,
     /* 0x01 */ GI_RUPEE_GREEN,
@@ -414,14 +436,24 @@ typedef enum {
     /* 0x71 */ GID_71
 } GetItemDrawID;
 
+// This enum may not be real, and actionparam is just used directly.
+// Keep using it for now.
 // TODO: fill
 typedef enum {
     /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
     /* 0x00 */ EXCH_ITEM_NONE,
     /* 0x13 */ EXCH_ITEM_13 = 0x13,
     /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
-    /* 0x2E */ EXCH_ITEM_2E = 0x2E
+    /* 0x2A */ EXCH_ITEM_MOON_TEAR = 0x2A,
+    /* 0x2B */ EXCH_ITEM_DEED_LAND,
+    /* 0x2C */ EXCH_ITEM_ROOM_KEY,
+    /* 0x2D */ EXCH_ITEM_LETTER_TO_KAFEI,
+    /* 0x2E */ EXCH_ITEM_2E,
+    /* 0x2F */ EXCH_ITEM_DEED_SWAMP,
+    /* 0x30 */ EXCH_ITEM_DEED_MOUNTAIN,
+    /* 0x31 */ EXCH_ITEM_DEED_OCEAN,
+    /* 0x32 */ EXCH_ITEM_32,
+    /* 0x33 */ EXCH_ITEM_LETTER_MAMA
 } ExchangeItemID;
 
 #endif
