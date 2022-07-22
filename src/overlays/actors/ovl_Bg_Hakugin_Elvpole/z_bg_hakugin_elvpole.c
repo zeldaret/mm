@@ -105,7 +105,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15C++;
         this->dyna.actor.world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.z;
-        func_800B9010(&this->dyna.actor, 0x2103U); 
+        func_800B9010(&this->dyna.actor, 0x2103U);
     } else {
         this->unk_15C = 0;
     }
