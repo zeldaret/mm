@@ -376,7 +376,7 @@ s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     return ret;
 }
 
-s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
@@ -388,7 +388,7 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
@@ -400,7 +400,7 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BD3320(this, play, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -419,26 +419,26 @@ s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->unk_2D8 = 0;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         default:
             ret = false;
             break;
 
         case 1:
-            ret = func_80BD3374(this, play, arg2);
+            ret = func_80BD3374(this, play, scheduleOutput);
             break;
 
         case 2:
-            ret = func_80BD33FC(this, play, arg2);
+            ret = func_80BD33FC(this, play, scheduleOutput);
             break;
 
         case 3:
-            ret = func_80BD3484(this, play, arg2);
+            ret = func_80BD3484(this, play, scheduleOutput);
             break;
     }
     return ret;
@@ -472,7 +472,7 @@ void func_80BD3658(EnAh* this, PlayState* play) {
 }
 
 void func_80BD36B8(EnAh* this, PlayState* play) {
-    ScheduleResult sp18;
+    ScheduleOutput sp18;
 
     if (!Schedule_RunScript(play, D_80BD3DB0, &sp18) ||
         ((this->unk_1DC != sp18.result) && !func_80BD3548(this, play, &sp18))) {

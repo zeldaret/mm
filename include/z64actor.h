@@ -1171,7 +1171,7 @@ typedef enum {
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
 #define ACTOR_FLAG_4000          (1 << 14)
-// 
+//! Carried by arrow
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)
