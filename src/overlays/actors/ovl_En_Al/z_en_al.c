@@ -332,7 +332,7 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 6:
         case 8:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_4E6++;
             sp20 = true;
@@ -342,7 +342,7 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 3:
         case 5:
         case 7:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             this->unk_4E6++;
             sp20 = true;
             break;
@@ -635,7 +635,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     Actor* sp20 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
     Actor* temp_v0 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
@@ -650,10 +650,10 @@ s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleResult* arg2) {
     return ret;
 }
 
-s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     SubS_UpdateFlags(&this->unk_4C2, 3, 7);
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 1:
             func_80BDE27C(this, 0);
             break;
@@ -667,7 +667,7 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleResult* arg2) {
     return true;
 }
 
-s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleResult* arg2) {
+s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
@@ -676,14 +676,14 @@ s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleResult* arg2) {
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 
-    switch (arg2->result) {
+    switch (scheduleOutput->result) {
         case 3:
-            ret = func_80BDF244(this, play, arg2);
+            ret = func_80BDF244(this, play, scheduleOutput);
             break;
 
         case 1:
         case 2:
-            ret = func_80BDF308(this, play, arg2);
+            ret = func_80BDF308(this, play, scheduleOutput);
             break;
 
         default:
@@ -746,7 +746,7 @@ void func_80BDF578(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF5E8(EnAl* this, PlayState* play) {
-    ScheduleResult sp20;
+    ScheduleOutput sp20;
 
     this->unk_4E0 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
     if (!Schedule_RunScript(play, D_80BDFC70, &sp20) ||
