@@ -16,17 +16,14 @@
         <Texture Name="object_hakugin_obj_Tex_0017D0" OutName="tex_0017D0" Format="ci4" Width="64" Height="64" Offset="0x17D0" />
         <DList Name="object_hakugin_obj_DL_002010" Offset="0x2010" />
         <DList Name="object_hakugin_obj_DL_002018" Offset="0x2018" />
-        <!-- <Blob Name="object_hakugin_obj_Blob_0020D8" Size="0x8" Offset="0x20D8" /> -->
         <TextureAnimation Name="object_hakugin_obj_Matanimheader_0020E8" Offset="0x20E8" />
         <Texture Name="object_hakugin_obj_TLUT_0020F0" OutName="tlut_0020F0" Format="rgba16" Width="4" Height="4" Offset="0x20F0" />
         <Texture Name="object_hakugin_obj_Tex_002110" OutName="tex_002110" Format="ci4" Width="64" Height="64" Offset="0x2110" />
         <DList Name="object_hakugin_obj_DL_002970" Offset="0x2970" />
         <DList Name="object_hakugin_obj_DL_002978" Offset="0x2978" />
-        <!-- <Blob Name="object_hakugin_obj_Blob_002A48" Size="0x10" Offset="0x2A48" /> -->
         <TextureAnimation Name="object_hakugin_obj_Matanimheader_002A58" Offset="0x2A58" />
         <DList Name="object_hakugin_obj_DL_0035A0" Offset="0x35A0" />
         <DList Name="object_hakugin_obj_DL_0035A8" Offset="0x35A8" />
-        <!-- <Blob Name="object_hakugin_obj_Blob_003878" Size="0x8" Offset="0x3878" /> -->
         <TextureAnimation Name="object_hakugin_obj_Matanimheader_003888" Offset="0x3888" />
         <Texture Name="object_hakugin_obj_TLUT_003890" OutName="tlut_003890" Format="rgba16" Width="4" Height="4" Offset="0x3890" />
         <Texture Name="object_hakugin_obj_TLUT_0038B0" OutName="tlut_0038B0" Format="rgba16" Width="4" Height="4" Offset="0x38B0" />
@@ -39,7 +36,6 @@
         <Texture Name="object_hakugin_obj_Tex_004A20" OutName="tex_004A20" Format="ci4" Width="64" Height="64" Offset="0x4A20" />
         <DList Name="object_hakugin_obj_DL_005260" Offset="0x5260" />
         <DList Name="object_hakugin_obj_DL_005268" Offset="0x5268" />
-        <!-- <Blob Name="object_hakugin_obj_Blob_005328" Size="0x8" Offset="0x5328" /> -->
         <TextureAnimation Name="object_hakugin_obj_Matanimheader_005338" Offset="0x5338" />
         <Texture Name="object_hakugin_obj_TLUT_005340" OutName="tlut_005340" Format="rgba16" Width="4" Height="4" Offset="0x5340" />
         <Texture Name="object_hakugin_obj_Tex_005360" OutName="tex_005360" Format="ci4" Width="64" Height="64" Offset="0x5360" />

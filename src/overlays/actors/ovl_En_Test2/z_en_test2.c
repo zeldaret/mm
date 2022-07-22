@@ -21,9 +21,14 @@ void EnTest2_Update(Actor* thisx, PlayState* play);
 void EnTest2_SetActorFlags(Actor* thisx, PlayState* play);
 void EnTest2_Draw(Actor* thisx, PlayState* play);
 
+typedef enum {
+    /* 0xB */ EN_TEST2_PARAMS_B = 0xB,
+    /* 0xC */ EN_TEST2_PARAMS_C
+} EnTest2_Params;
+
 typedef struct EnTest2DisplayObjs {
-    Gfx* DList1;
-    Gfx* DList2;
+    Gfx* dList1;
+    Gfx* dList2;
     AnimatedMaterial* animMat;
 } EnTest2DisplayObjs;
 
@@ -39,7 +44,7 @@ const ActorInit En_Test2_InitVars = {
     (ActorFunc)NULL,
 };
 
-EnTest2DisplayObjs sDisplayObjects[] = {
+static EnTest2DisplayObjs sModelInfo[] = {
     { object_dekucity_ana_obj_DL_000040, NULL, NULL },
     { object_sichitai_obj_DL_001820, NULL, NULL },
     { object_yukimura_obj_DL_0008C0, NULL, NULL },
@@ -62,7 +67,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
 };
 
-static s16 sTest2Objects[] = {
+static s16 sObjectIds[] = {
     OBJECT_DEKUCITY_ANA_OBJ, OBJECT_SICHITAI_OBJ,  OBJECT_YUKIMURA_OBJ, OBJECT_HAKUGIN_OBJ, OBJECT_HAKUGIN_OBJ,
     OBJECT_HAKUGIN_OBJ,      OBJECT_MEGANEANA_OBJ, OBJECT_HAKA_OBJ,     OBJECT_HAKA_OBJ,    OBJECT_HAKUGIN_OBJ,
     OBJECT_HAKUGIN_OBJ,      OBJECT_HAKUGIN_OBJ,   OBJECT_HAKUGIN_OBJ,
@@ -72,7 +77,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if ((this->actor.params == 0xB) || (this->actor.params == 0xC)) {
+    if ((this->actor.params == EN_TEST2_PARAMS_B) || (this->actor.params == EN_TEST2_PARAMS_C)) {
         this->actor.flags |= ACTOR_FLAG_20;
     }
 }
@@ -82,21 +87,21 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
     s32 objectIndex;
     EnTest2DisplayObjs* dispObjects;
     EnTest2* this = THIS;
-    objectIndex = Object_GetIndex(&play->objectCtx, sTest2Objects[this->actor.params]);
 
+    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[this->actor.params]);
     if (objectIndex < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     if (Object_IsLoaded(&play->objectCtx, objectIndex)) {
-        dispObjects = &sDisplayObjects[this->actor.params];
+        dispObjects = &sModelInfo[this->actor.params];
         this->actor.objBankIndex = objectIndex;
         this->actor.draw = EnTest2_Draw;
-        if ((dispObjects->animMat) != 0) {
+        if ((dispObjects->animMat) != NULL) {
             Actor_SetObjectDependency(play, &this->actor);
             this->animMat = Lib_SegmentedToVirtual(dispObjects->animMat);
         }
-        if (play->roomCtx.currRoom.unk5 != 0) {
+        if (play->roomCtx.currRoom.unk5) {
             this->actor.update = EnTest2_SetActorFlags;
         } else {
             this->actor.update = Actor_Noop;
@@ -107,7 +112,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
 void EnTest2_SetActorFlags(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
-    if (play->actorCtx.unk4 == 0x64) {
+    if (play->actorCtx.unk4 == 100) {
         this->actor.flags |= ACTOR_FLAG_80;
     } else {
         this->actor.flags &= ~ACTOR_FLAG_80;
@@ -117,7 +122,7 @@ void EnTest2_SetActorFlags(Actor* thisx, PlayState* play) {
 void EnTest2_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTest2* this = THIS;
-    Gfx* dispObjects = sDisplayObjects[this->actor.params].DList2;
+    Gfx* dList = sModelInfo[this->actor.params].dList2;
 
     if (this->animMat != NULL) {
         AnimatedMat_Draw(play, this->animMat);
@@ -128,16 +133,16 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
         func_8012C2DC(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        if (dispObjects != 0) {
-            gSPDisplayList(POLY_XLU_DISP++, dispObjects);
+        if (dList != NULL) {
+            gSPDisplayList(POLY_XLU_DISP++, dList);
         }
-        gSPDisplayList(POLY_XLU_DISP++, sDisplayObjects[this->actor.params].DList1);
+        gSPDisplayList(POLY_XLU_DISP++, sModelInfo[this->actor.params].dList1);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        if (dispObjects != 0) {
-            Gfx_DrawDListXlu(play, dispObjects);
+        if (dList != NULL) {
+            Gfx_DrawDListXlu(play, dList);
         }
-        Gfx_DrawDListOpa(play, sDisplayObjects[this->actor.params].DList1);
+        Gfx_DrawDListOpa(play, sModelInfo[this->actor.params].dList1);
     }
 }
