@@ -341,7 +341,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == EXCH_ITEM_2A) {
+        if (Player_GetExchangeItemId(play) == EXCH_ITEM_MOON_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -382,7 +382,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        func_800B85E0(&this->actor, play, 80.0f, EXCH_ITEM_2A);
+        func_800B85E0(&this->actor, play, 80.0f, EXCH_ITEM_MOON_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -422,7 +422,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
     if (msgState == 0x10) {
         item = func_80123810(play);
         if (item > EXCH_ITEM_NONE) {
-            if (item == EXCH_ITEM_2A) {
+            if (item == EXCH_ITEM_MOON_TEAR) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
                 player->exchangeItemId = item;
