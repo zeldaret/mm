@@ -837,9 +837,9 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
                 }
-                play->unk_1887F = 0x40;
-                gSaveContext.nextTransition = 3;
-                play->sceneLoadFlag = 0x14;
+                play->transitionType = TRANS_TYPE_64;
+                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 phi_v1 = true;
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
@@ -888,12 +888,12 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
     s32 ret = false;
 
     switch (Message_GetState(msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_80B79560(play, this, arg2, this->dyna.actor.textId);
             return true;
 
-        case 4:
-        case 5:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_80B795A0(play, this, arg2)) {
                 msgCtx->msgMode = 0x43;
                 ret = true;
@@ -1141,9 +1141,9 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
             if (gSaveContext.save.weekEventReg[31] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 play->nextEntranceIndex = 0x3E50;
-                play->unk_1887F = 0x40;
-                gSaveContext.nextTransition = 3;
-                play->sceneLoadFlag = 0x14;
+                play->transitionType = TRANS_TYPE_64;
+                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                play->transitionTrigger = TRANS_TRIGGER_START;
             } else {
                 func_80B79524(this);
             }
@@ -1244,9 +1244,9 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             play->nextEntranceIndex = 0xCE40;
-            play->unk_1887F = 0x40;
-            gSaveContext.nextTransition = 3;
-            play->sceneLoadFlag = 0x14;
+            play->transitionType = TRANS_TYPE_64;
+            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            play->transitionTrigger = TRANS_TRIGGER_START;
             break;
 
         default:
@@ -1302,16 +1302,16 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntranceIndex = 0x3E60;
-                    play->unk_1887F = 0x40;
-                    gSaveContext.nextTransition = 3;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_64;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[52] |= 1;
                     gSaveContext.save.weekEventReg[52] &= (u8)~2;
                 } else {
                     play->nextEntranceIndex = 0x6480;
-                    play->unk_1887F = 0x40;
-                    gSaveContext.nextTransition = 3;
-                    play->sceneLoadFlag = 0x14;
+                    play->transitionType = TRANS_TYPE_64;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[52] |= 2;
                     gSaveContext.save.weekEventReg[52] &= (u8)~1;
                 }
@@ -1551,9 +1551,9 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntranceIndex = 0x5400;
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 3;
-        play->sceneLoadFlag = 0x14;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.time += CLOCK_TIME(1, 0) + 2;
     }
     Actor_MoveWithGravity(&this->dyna.actor);
