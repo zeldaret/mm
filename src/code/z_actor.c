@@ -3356,7 +3356,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
 
     if ((player != NULL) && (actor == player->unk_730)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), 0);
+        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {

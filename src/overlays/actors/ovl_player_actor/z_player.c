@@ -224,7 +224,7 @@ extern u32 D_80862B40;
 extern Input* D_80862B44;
 extern s32 D_80862B48;
 extern s32 D_80862B4C;
-extern UNK_TYPE D_80862B50;
+extern EnvLightSettings D_80862B50;
 extern s32 D_80862B6C;
 extern f32 D_8085C3E4;
 
@@ -3362,19 +3362,94 @@ s32 func_808381F8(PlayState* play, Player* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083827C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8083868C.s")
+void func_8083868C(PlayState* play, Player* this) {
+    s32 camMode;
+    Camera* camera;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80838760.s")
+    if (this->unk_AA5 == 3) {
+        if (func_800B7118(this)) {
+            if (this->transformation == PLAYER_FORM_HUMAN) {
+                camMode = CAM_MODE_SLINGSHOT;
+            } else if (this->transformation == PLAYER_FORM_DEKU) {
+                camMode = CAM_MODE_DEKUSHOOT;
+            } else {
+                camMode = CAM_MODE_BOWARROW;
+            }
+        } else {
+            camMode = CAM_MODE_ZORAFIN;
+        }
+    } else {
+        camMode = CAM_MODE_FIRSTPERSON;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808387A0.s")
+    camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN) : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80838830.s")
+    Camera_ChangeMode(camera, camMode);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808388B8.s")
+void func_80838760(Player* this) {
+    if (this->unk_A86 >= 0) {
+        ActorCutscene_Stop(this->unk_A86);
+        this->unk_A86 = -1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_808389BC.s")
+s32 func_808387A0(PlayState* play, Player* this) {
+    if (this->unk_AA5 == 4) {
+        func_80838760(this);
+        this->actor.flags &= ~ACTOR_FLAG_100;
+        func_80831494(play, this, func_8085B08C, 0);
+        if (this->unk_3BA != 0) {
+            this->stateFlags1 |= PLAYER_STATE1_20000000;
+        }
+        func_8082DC38(this);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80838A20.s")
+        return true;
+    }
+    return false;
+}
+
+void func_80838830(Player* this, s16 objectId) {
+    s32 pad[2];
+
+    if (objectId != OBJECT_UNSET_0) {
+        this->giObjectLoading = true;
+        osCreateMesgQueue(&this->giObjectLoadQueue, &this->giObjectLoadMsg, 1);
+        DmaMgr_SendRequestImpl(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart, gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0, &this->giObjectLoadQueue, NULL);
+    }
+}
+
+void func_808553F4(Player *this, PlayState *play);
+void func_80855AF4(Player *this, PlayState *play);
+void func_80855B9C(Player *this, PlayState *play);
+
+void func_808388B8(PlayState* play, Player* this, PlayerTransformation playerForm) {
+    func_8082DE50(play, this);
+    func_80831760(play, this, func_808553F4, 0);
+    func_8082E4A4(play, this, D_8085D160[this->transformation]);
+    gSaveContext.save.playerForm = playerForm;
+    this->stateFlags1 |= PLAYER_STATE1_2;
+
+    D_80862B50 = play->envCtx.lightSettings;
+    this->actor.velocity.y = 0.0f;
+    func_800B90F4(play);
+}
+
+void func_808389BC(PlayState* play, Player* this) {
+    func_80831760(play, this, func_80855AF4, 0);
+    func_8082E4A4(play, this, &gameplay_keep_Linkanim_00D0C8);
+    this->stateFlags1 |= (PLAYER_STATE1_100 | PLAYER_STATE1_20000000);
+    func_8082DAD4(this);
+}
+
+void func_80838A20(PlayState* play, Player* this) {
+    func_80831760(play, this, func_80855B9C, 0);
+    func_8082DB90(play, this, &gameplay_keep_Linkanim_00D0A8);
+    this->currentMask = PLAYER_MASK_NONE;
+    this->stateFlags1 |= (PLAYER_STATE1_100 | PLAYER_STATE1_20000000);
+    func_8082DAD4(this);
+    func_80115D5C(&play->state);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_80838A90.s")
 
