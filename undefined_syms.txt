@@ -582,8 +582,6 @@ D_060037F8 = 0x060037F8;
 
 // ovl_Bg_Haka_Bombwall
 
-D_06000040 = 0x06000040;
-D_06000148 = 0x06000148;
 D_06001680 = 0x06001680;
 
 // ovl_Bg_Hakugin_Bombwall
