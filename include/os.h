@@ -149,4 +149,14 @@ typedef struct {
     /* 0xC */ u8 status;
 } OSVoiceHandle; // size = 0x10
 
+typedef struct {
+    /* 0x00 */ u16 warning;       // Warning
+    /* 0x02 */ u16 answerNum;     // Candidate number (0~5)
+    /* 0x04 */ u16 voiceLevel;    // Voice input level
+    /* 0x06 */ u16 voiceRelLevel; // Relative voice level "voice_sn"
+    /* 0x08 */ u16 voiceTime;     // Voice input time
+    /* 0x0A */ u16 answer[5];     // Candidate word number
+    /* 0x14 */ u16 distance[5];   // Distance value
+} OSVoiceData; // size = 0x20
+
 #endif
