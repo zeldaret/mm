@@ -9,17 +9,17 @@
         <Animation Name="object_zog_Anim_0041D0" Offset="0x41D0" />
         <Animation Name="object_zog_Anim_004BDC" Offset="0x4BDC" />
         <Animation Name="object_zog_Anim_0055B4" Offset="0x55B4" />
-        <DList Name="object_zog_DL_0069F0" Offset="0x69F0" />
-        <DList Name="object_zog_DL_006AA0" Offset="0x6AA0" />
-        <Texture Name="object_zog_Tex_006FD0" OutName="tex_006FD0" Format="rgba16" Width="16" Height="32" Offset="0x6FD0" />
-        <Texture Name="object_zog_Tex_0073D0" OutName="tex_0073D0" Format="rgba16" Width="16" Height="16" Offset="0x73D0" />
-        <Texture Name="object_zog_Tex_0075D0" OutName="tex_0075D0" Format="rgba16" Width="16" Height="16" Offset="0x75D0" />
-        <Texture Name="object_zog_Tex_0077D0" OutName="tex_0077D0" Format="rgba16" Width="16" Height="16" Offset="0x77D0" />
-        <Texture Name="object_zog_Tex_0079D0" OutName="tex_0079D0" Format="rgba16" Width="16" Height="32" Offset="0x79D0" />
-        <Texture Name="object_zog_Tex_007DD0" OutName="tex_007DD0" Format="rgba16" Width="16" Height="32" Offset="0x7DD0" />
-        <Texture Name="object_zog_Tex_0081D0" OutName="tex_0081D0" Format="rgba16" Width="32" Height="8" Offset="0x81D0" />
-        <Texture Name="object_zog_Tex_0083D0" OutName="tex_0083D0" Format="rgba16" Width="16" Height="8" Offset="0x83D0" />
-        <Collision Name="object_zog_Colheader_008670" Offset="0x8670" />
+        <DList Name="gMikauGraveDirtDL" Offset="0x69F0" />
+        <DList Name="gMikauGraveDL" Offset="0x6AA0" />
+        <Texture Name="gMikauGraveDirtTex" OutName="mikau_grave_dirt" Format="rgba16" Width="16" Height="32" Offset="0x6FD0" />
+        <Texture Name="gMikauGraveJawTex" OutName="mikau_grave_jaw" Format="rgba16" Width="16" Height="16" Offset="0x73D0" />
+        <Texture Name="gMikauGraveEyeTex" OutName="mikau_grave_eye" Format="rgba16" Width="16" Height="16" Offset="0x75D0" />
+        <Texture Name="gMikauGraveTeethTex" OutName="mikau_grave_teeth" Format="rgba16" Width="16" Height="16" Offset="0x77D0" />
+        <Texture Name="gMikauGraveSpinousTex" OutName="mikau_grave_spinous" Format="rgba16" Width="16" Height="32" Offset="0x79D0" />
+        <Texture Name="gMikauGraveBonesTex" OutName="mikau_grave_bones" Format="rgba16" Width="16" Height="32" Offset="0x7DD0" />
+        <Texture Name="gMikauGraveWoodenStickTex" OutName="mikau_grave_wooden_stick" Format="rgba16" Width="32" Height="8" Offset="0x81D0" />
+        <Texture Name="gMikauGraveCordTex" OutName="mikau_grave_cord" Format="rgba16" Width="16" Height="8" Offset="0x83D0" />
+        <Collision Name="gObjectZogCol" Offset="0x8670" />
         <Animation Name="object_zog_Anim_008EB8" Offset="0x8EB8" />
         <Animation Name="object_zog_Anim_00931C" Offset="0x931C" />
         <Animation Name="object_zog_Anim_0099A4" Offset="0x99A4" />
