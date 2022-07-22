@@ -409,25 +409,25 @@ void EnMaYto_SetupDefaultDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DefaultHandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_DefaultChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk31E = 0;
                 EnMaYto_SetupDefaultWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 
@@ -541,24 +541,24 @@ void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DinnerDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DinnerHandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_DinnerChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 EnMaYto_SetupDinnerWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 }
@@ -731,22 +731,22 @@ void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_BarnDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_BarnChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk31E = 0;
                 EnMaYto_SetupBarnWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
     }
 }
@@ -911,15 +911,15 @@ void EnMaYto_SetupAfterMilkRunDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_AfterMilkRunDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 6:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_DONE:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_AfterMilkRunChooseNextDialogue(this, play);
             break;
     }
@@ -1063,14 +1063,14 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 || Message_GetState(&play->msgCtx) == 5) {
-        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
             func_800B7298(play, &this->actor, 7);
             func_801477B4(play);
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && play->msgCtx.unk120B1 == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.unk120B1 == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }
@@ -1088,9 +1088,9 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
         play->nextEntranceIndex = 0x6480;
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {

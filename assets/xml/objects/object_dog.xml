@@ -17,7 +17,7 @@
         <Animation Name="gDogLyingDownAnim" Offset="0x1048" /> <!-- Original name is "dog_fuse" ("lying on the ground") -->
         <Animation Name="gDogLyingDownLoopAnim" Offset="0x1348" /> <!-- Original name is "dog_fusetamama" ("lying on the ground continues") -->
         <Animation Name="gDogJumpAnim" Offset="0x1560" /> <!-- Original name is "dog_jump" -->
-        <Animation Name="gDogJump2Anim" Offset="0x17C0" /> <!-- Original name is "dog_jump2" -->
+        <Animation Name="gDogJumpAttackAnim" Offset="0x17C0" /> <!-- Original name is "dog_jump2" -->
         <Animation Name="gDogLongJumpAnim" Offset="0x1A84" /> <!-- Original name is "dog_longjump" -->
         <Animation Name="gDogRunAnim" Offset="0x1BD8" /> <!-- Original name is "dog_run" -->
         <Animation Name="gDogSitAnim" Offset="0x1FB0" /> <!-- Original name is "dog_sit" -->
