@@ -118,17 +118,17 @@ void func_809C1158(EnAob01* this, PlayState* play) {
 }
 
 void func_809C11EC(EnAob01* this, PlayState* play) {
-    s32 unk;
+    s32 enDgParams;
     s16 i;
 
     func_809C1158(this, play);
 
     for (i = 0; i < ARRAY_COUNT(D_809C384C); i++) {
-        unk = (this->unk_1D8[D_809C384C[i].unk_06]->unk1 << 0xA) | (i << 5);
+        enDgParams = ENDG_PARAMS(this->unk_1D8[D_809C384C[i].unk_06]->unk1, i);
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * 182.04445f, 0, unk, 0xFFFF, this->actor.unk20, NULL);
+            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.unk20, NULL);
     }
 }
 

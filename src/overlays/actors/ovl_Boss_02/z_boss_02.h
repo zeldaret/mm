@@ -30,6 +30,13 @@ typedef enum {
     /* 4 */ TWINMOLD_EFFECT_FLASH,      // The flashes of light that appear when the parts of Twinmold explode
 } TwinmoldEffectType;
 
+typedef enum {
+    /*   0 */ TWINMOLD_RED,
+    /*  35 */ TWINMOLD_BLUE = 35,
+    /* 100 */ TWINMOLD_TAIL = 100,
+    /* 200 */ TWINMOLD_STATIC = 200,
+} TwinmoldParams;
+
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ u8 unk_0144;
@@ -68,7 +75,7 @@ typedef struct Boss02 {
     /* 0x15D4 */ Vec3s jointTable[TWINMOLD_HEAD_LIMB_MAX];
     /* 0x1622 */ Vec3s morphTable[TWINMOLD_HEAD_LIMB_MAX];
     /* 0x1670 */ Boss02ActionFunc actionFunc;
-    /* 0x1674 */ struct Boss02* unk_1674; // points to the other's instance
+    /* 0x1674 */ struct Boss02* otherTwinmold; // points to the other's instance
     /* 0x1678 */ s32 unk_1678;
     /* 0x167C */ Vec3f unk_167C;
     /* 0x1688 */ ColliderJntSph colliderSphere1;
