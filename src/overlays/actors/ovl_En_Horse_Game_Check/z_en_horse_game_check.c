@@ -109,8 +109,8 @@ s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play) {
 s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     PlayState* play = play2;
     s32 pad;
-    Vec3f sp4C = { -1262.0f, 15.0f, 780.0f };
-    Vec3f sp40 = { -1262.0f, -26.0f, 470.0f };
+    Vec3f mainCamEye = { -1262.0f, 15.0f, 780.0f };
+    Vec3f mainCamAt = { -1262.0f, -26.0f, 470.0f };
 
     this->unk_164 = 0;
     this->unk_168 = 0;
@@ -138,8 +138,8 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
 
     this->unk_17C = -1;
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_FREE0);
-    Play_CameraSetAtEye(play, 0, &sp40, &sp4C);
-    Play_CameraSetFov(play, 0, 45.0f);
+    Play_CameraSetAtEye(play, CAM_ID_MAIN, &mainCamAt, &mainCamEye);
+    Play_CameraSetFov(play, CAM_ID_MAIN, 45.0f);
     func_800FE484();
     return false;
 }

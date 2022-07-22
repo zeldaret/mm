@@ -241,7 +241,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
         if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->cutscenes[0])),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[0])),
                                    &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
@@ -428,7 +428,7 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->cutscenes[1])),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[1])),
                                    &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->cutscenes[1] != -1) {

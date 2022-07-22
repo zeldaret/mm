@@ -248,7 +248,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D0)),
                                       &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
@@ -550,7 +550,7 @@ void func_809C5BA0(EnBomBowlMan* this) {
 
 void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
     f32 sp2C = this->skelAnime.curFrame;
-    s32 sp28;
+    s32 subCam;
 
     if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
         func_809C493C(this, 15, 1.0f);
@@ -571,13 +571,13 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
         }
 
         if (this->unk_2F4 == 0) {
-            sp28 = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->unk_2D2));
+            subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D2));
 
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);
 
                 func_801477B4(play);
-                Camera_SetTargetActor(sp28, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -592,7 +592,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                Camera_SetTargetActor(sp28, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
             }
         }
     }
