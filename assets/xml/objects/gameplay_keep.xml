@@ -924,12 +924,14 @@
         <Texture Name="gameplay_keep_Tex_0269E0" OutName="tex_0269E0" Format="i8" Width="32" Height="64" Offset="0x269E0" />
         <Texture Name="gameplay_keep_Tex_0271E0" OutName="tex_0271E0" Format="i8" Width="32" Height="64" Offset="0x271E0" />
         <DList Name="gameplay_keep_DL_027CA0" Offset="0x27CA0" />
-        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x420" Offset="0x27DD0" />
+        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x32C" Offset="0x27DD0" />
+        <Blob Name="gameplay_keep_Blob_0281DC" Size="0xF4" Offset="0x281DC" />
         <DList Name="gameplay_keep_DL_0282D0" Offset="0x282D0" />
         <Texture Name="gameplay_keep_Tex_0283B8" OutName="tex_0283B8" Format="i4" Width="64" Height="64" Offset="0x283B8" />
         <Texture Name="gameplay_keep_Tex_028BB8" OutName="tex_028BB8" Format="i8" Width="32" Height="32" Offset="0x28BB8" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_028FEC" Offset="0x28FEC" />
-        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x24" Offset="0x28FFC" />
+        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x10" Offset="0x28FFC" />
+        <Blob Name="gameplay_keep_Blob_02900C" Size="0x14" Offset="0x2900C" />
         <Animation Name="gameplay_keep_Anim_029140" Offset="0x29140" />
         <Texture Name="gameplay_keep_Tex_029150" OutName="tex_029150" Format="i8" Width="32" Height="64" Offset="0x29150" />
         <DList Name="gameplay_keep_DL_029990" Offset="0x29990" />
