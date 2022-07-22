@@ -1300,7 +1300,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             gSaveContext.nightSeqIndex = 0xFF;
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
-                if (this->arePotsBroken == false) {
+                if (!this->areAllPotsBroken) {
                     play->nextEntranceIndex = 0x3E60;
                     play->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
@@ -1341,11 +1341,11 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
         if (this->unk_4DC == 1) {
             s32 i;
 
-            this->arePotsBroken = true;
+            this->areAllPotsBroken = true;
 
             for (i = 0; i < ARRAY_COUNT(this->potsLife); i++) {
                 if (this->potsLife[i] != 1) {
-                    this->arePotsBroken = false;
+                    this->areAllPotsBroken = false;
                     break;
                 }
             }
@@ -1359,7 +1359,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     if (this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED) {
         s32 sp20 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
 
-        if (this->arePotsBroken) {
+        if (this->areAllPotsBroken) {
             sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
         }
         if (ActorCutscene_GetCanPlayNext(sp20)) {
@@ -1379,7 +1379,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->unk_4DC = 0;
-    this->arePotsBroken = false;
+    this->areAllPotsBroken = false;
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0x7FFF);
@@ -1954,7 +1954,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     }
                 }
             } else {
-                //! @bug: skips CLOSE_DISPS
+                //! @bug skips CLOSE_DISPS
                 return;
             }
         }
