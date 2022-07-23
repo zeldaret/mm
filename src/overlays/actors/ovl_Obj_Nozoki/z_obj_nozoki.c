@@ -443,7 +443,7 @@ void func_80BA3344(ObjNozoki* this, PlayState* play) {
         }
     } else if ((this->dyna.actor.textId == 0) || Actor_TextboxIsClosing(&this->dyna.actor, play)) {
         play->nextEntranceIndex = 0xE20;
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 

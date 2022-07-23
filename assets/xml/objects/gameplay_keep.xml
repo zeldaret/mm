@@ -972,16 +972,16 @@
         <TextureAnimation Name="gStrayFairyWoodfallTexAnim" Offset="0x2C908" />
         <TextureAnimation Name="gStrayFairyGreatBayTexAnim" Offset="0x2C980" />
         <TextureAnimation Name="gStrayFairyStoneTowerTexAnim" Offset="0x2C9F8" />
-        <Limb Name="gStrayFairyRightFacingHeadLimb" Type="Standard" Offset="0x2CA08" />
-        <Limb Name="gStrayFairyLeftWingLimb" Type="Standard" Offset="0x2CA14" />
-        <Limb Name="gStrayFairyRightWingLimb" Type="Standard" Offset="0x2CA20" />
-        <Limb Name="gStrayFairyGlowLimb" Type="Standard" Offset="0x2CA2C" />
-        <Limb Name="gStrayFairyTorsoLimb" Type="Standard" Offset="0x2CA38" />
-        <Limb Name="gStrayFairyRightArmLimb" Type="Standard" Offset="0x2CA44" />
-        <Limb Name="gStrayFairyPelvisAndLegsLimb" Type="Standard" Offset="0x2CA50" />
-        <Limb Name="gStrayFairyLeftArmLimb" Type="Standard" Offset="0x2CA5C" />
-        <Limb Name="gStrayFairyLeftFacingHeadLimb" Type="Standard" Offset="0x2CA68" />
-        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+        <Limb Name="gStrayFairyRightFacingHeadLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_RIGHT_FACING_HEAD" Offset="0x2CA08" />
+        <Limb Name="gStrayFairyLeftWingLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_LEFT_WING" Offset="0x2CA14" />
+        <Limb Name="gStrayFairyRightWingLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_RIGHT_WING" Offset="0x2CA20" />
+        <Limb Name="gStrayFairyGlowLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_GLOW" Offset="0x2CA2C" />
+        <Limb Name="gStrayFairyTorsoLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_TORSO" Offset="0x2CA38" />
+        <Limb Name="gStrayFairyRightArmLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_RIGHT_ARM" Offset="0x2CA44" />
+        <Limb Name="gStrayFairyPelvisAndLegsLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_PELVIS_AND_LEGS" Offset="0x2CA50" />
+        <Limb Name="gStrayFairyLeftArmLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_LEFT_ARM" Offset="0x2CA5C" />
+        <Limb Name="gStrayFairyLeftFacingHeadLimb" Type="Standard" EnumName="STRAY_FAIRY_LIMB_LEFT_FACING_HEAD" Offset="0x2CA68" />
+        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" LimbNone="STRAY_FAIRY_LIMB_NONE" LimbMax="STRAY_FAIRY_LIMB_MAX" EnumName="StrayFairyLimbs" Offset="0x2CA98" />
 
         <Texture Name="gameplay_keep_Tex_02CAA8" OutName="tex_02CAA8" Format="i4" Width="16" Height="16" Offset="0x2CAA8" />
         <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />

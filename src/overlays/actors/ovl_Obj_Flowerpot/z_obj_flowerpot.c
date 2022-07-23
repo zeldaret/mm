@@ -146,7 +146,7 @@ void func_80A1B3D0(void) {
     sp74[7] = (spAC - temp_f20) * temp_f22 * temp_f24 * temp_f0 * 0.0013f;
 
     for (i = 0; i < ARRAY_COUNT(D_80A1D838); i++) {
-        ptr = (f32*)&D_80A1D838[i].mf[0];
+        ptr = &D_80A1D838[i].xx;
 
         tempf1 = sp74[(i + 0) & 7];
         tempf2 = sp74[(i + 1) & 7];

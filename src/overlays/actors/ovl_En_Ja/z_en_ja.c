@@ -216,11 +216,11 @@ s32 func_80BC1D70(EnJa* this, PlayState* play) {
 
 void func_80BC1E40(EnJa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp20 = Message_GetState(&play->msgCtx);
+    s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0;
 
-    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
-        (this->unk_374 == 3) && (&this->actor == player->targetActor)) {
+    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->targetActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;
@@ -236,7 +236,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     this->unk_34C = CLAMP(this->unk_34C, 0.0f, 120.0f);
 
     Matrix_Translate(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_374 = sp20;
+    this->prevTalkState = talkState;
 }
 
 s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
