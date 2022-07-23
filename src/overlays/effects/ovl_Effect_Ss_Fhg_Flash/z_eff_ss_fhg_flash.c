@@ -105,7 +105,7 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
         } else {
             bodyPartPos = &goht->unk_2F00[this->rParams][index].unk_00;
         }
-        
+
         this->pos.x = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->x;
         this->pos.y = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->y;
         this->pos.z = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->z;
