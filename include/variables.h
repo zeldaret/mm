@@ -1501,7 +1501,7 @@ extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
 extern const TransitionInit TransitionFade_InitVars;
-// extern UNK_TYPE1 D_801D0D00;
+extern Gfx D_801D0D00[];
 extern const TransitionInit TransitionCircle_InitVars;
 extern s32 gDbgCamEnabled;
 // extern UNK_TYPE1 D_801D0D54;
