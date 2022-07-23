@@ -199,8 +199,8 @@ void Sram_ClearHighscores(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
     gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
+    SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
+    SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
     gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
     gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
