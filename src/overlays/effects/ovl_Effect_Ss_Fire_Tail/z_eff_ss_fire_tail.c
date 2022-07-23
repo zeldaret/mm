@@ -70,7 +70,7 @@ u32 EffectSsFireTail_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
-    s16 yaw;
+    s16 yawDiff;
     Vec3f scale;
     f32 temp1;
     f32 temp2;
@@ -102,9 +102,9 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     }
 
-    yaw = Math_Vec3f_Yaw(&scale, &this->vec) - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
-    temp1 = fabsf(Math_CosS(yaw));
-    temp2 = Math_SinS(yaw);
+    yawDiff = Math_Vec3f_Yaw(&scale, &this->vec) - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
+    temp1 = fabsf(Math_CosS(yawDiff));
+    temp2 = Math_SinS(yawDiff);
     dist = Math_Vec3f_DistXZ(&scale, &this->vec) / (this->rReg10 * 0.1f);
     Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000, MTXMODE_APPLY);
     Matrix_RotateZF(DEGF_TO_RADF(temp2 * this->rReg2 * dist), MTXMODE_APPLY);
