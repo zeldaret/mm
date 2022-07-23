@@ -1000,7 +1000,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
+        gSPDisplayList(&gfxXlu[4], gEffFire1DL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 

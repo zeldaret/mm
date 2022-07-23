@@ -80,8 +80,7 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     scale = Math_SinS(this->life * 0x333) * (this->rScale * 0.00005f);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     redGreen = this->life - 5;
 
@@ -92,14 +91,14 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     func_8012C2DC(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, redGreen * 12.7f, 0, 0, 0);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x0, 0x80, redGreen * 12.7f, redGreen * 12.7f, 0, 255);
-    gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->rScroll * -20) & 0x1FF,
-                                0x20, 0x80));
+    gSPSegment(
+        POLY_XLU_DISP++, 0x08,
+        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->rScroll * -20) & 0x1FF, 0x20, 0x80));
 
     if ((this->rFlags & 0x7FFF) || (this->life < 18)) {
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07D650);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire2DL);
     } else {
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     CLOSE_DISPS(gfxCtx);
@@ -108,12 +107,12 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x14C */ Vec3f firePos[10];
-} FireActorF;
+} FireActorF; // size = 0x1BC
 
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x14C */ Vec3s firePos[10];
-} FireActorS;
+} FireActorS; // size = 0x180
 
 void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this) {
     this->rScroll++;
