@@ -424,7 +424,7 @@ typedef struct {
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
-    /* 0x1EE */ u16 debugState;
+    /* 0x1EE */ u16 debugEditor;
     /* 0x1F0 */ u8 unk_1F0;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;
@@ -442,8 +442,8 @@ typedef struct {
     /* 0x226 */ s16 offsetY;
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 unk_230;
-    /* 0x234 */ s32 unk_234;
+    /* 0x230 */ s32 stickRelX;
+    /* 0x234 */ s32 stickRelY;
     /* 0x238 */ s16 unk_238[5];
     /* 0x242 */ s16 unk_242[5];
     /* 0x24C */ s16 unk_24C[5];

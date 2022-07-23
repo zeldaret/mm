@@ -49,7 +49,8 @@ typedef struct Inventory {
     /* 0x48 */ u32 upgrades;                            // "non_equip_register" some bits are wallet upgrades
     /* 0x4C */ u32 questItems;                          // "collect_register"
     /* 0x50 */ u8 dungeonItems[10];                     // "key_compass_map"
-    /* 0x5A */ s8 dungeonKeys[10];                      // "key_register"
+    /* 0x5A */ s8 dungeonKeys[9];                       // "key_register"
+    /* 0x63 */ s8 defenseHearts;
     /* 0x64 */ s8 strayFairies[10];                     // "orange_fairy"
     /* 0x6E */ char dekuPlaygroundPlayerName[3][8];     // "degnuts_memory_name" Stores playerName (8 char) over (3 days) when getting a new high score
 } Inventory; // size = 0x88
@@ -306,6 +307,13 @@ typedef enum SunsSongState {
 #define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
+#define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
+#define EQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT))
+#define LEQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) <= (4 << QUEST_HEART_PIECE_COUNT))
+#define INCREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT))
+#define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
+#define RESET_HEART_PIECE_COUNT (gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
+
 #define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
 #define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
 #define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])
@@ -379,7 +387,7 @@ void func_80147150(SramContext* sramCtx);
 void func_80147198(SramContext* sramCtx);
 
 extern s32 D_801C6798[];
-extern u8 D_801C67B0[24];
+extern u8 gAmmoItems[];
 extern s32 D_801C67C8[];
 extern s32 D_801C67E8[];
 extern s32 D_801C67F0[];
