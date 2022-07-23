@@ -657,7 +657,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 2) {
         this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
-        if ((this->unk_1D4++ <= 40) ^ 1) {
+        if (this->unk_1D4++ > 40) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
             this->unk_1E4 = this->unk_1B0[1].y - 1.0f;
@@ -825,7 +825,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         func_800B9010(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
 
-        if ((this->unk_1D4++ < 40) ^ 1) {
+        if (this->unk_1D4++ >= 40) {
             this->unk_19A |= 0x10;
 
             this->actor.uncullZoneForward = 12000.0f;
