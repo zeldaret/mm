@@ -113,9 +113,9 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
         EnBigokuta_SetupIdle(this);
     }
 
-    this->camAt.x = (Math_SinS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.x;
-    this->camAt.y = (this->actor.home.pos.y - 49.5f) + 42.899998f;
-    this->camAt.z = (Math_CosS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.z;
+    this->subCamAt.x = (Math_SinS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.x;
+    this->subCamAt.y = (this->actor.home.pos.y - 49.5f) + 42.899998f;
+    this->subCamAt.z = (Math_CosS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.z;
 
     this->unkFunc = func_80AC2B4C; // set but never called
 }
@@ -127,40 +127,40 @@ void EnBigokuta_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->bodyCollider);
 }
 
-void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* at, Vec3f* eye) {
+void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* subCamAt, Vec3f* subCamEye) {
     s16 angle;
 
     ActorCutscene_Start(this->actor.cutscene, &this->actor);
-    this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-    Play_CameraSetAtEye(play, this->camId, at, eye);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    Play_CameraSetAtEye(play, this->subCamId, subCamAt, subCamEye);
 
-    angle = BINANG_SUB(Actor_YawToPoint(&this->actor, eye), this->actor.home.rot.y);
+    angle = BINANG_SUB(Actor_YawToPoint(&this->actor, subCamEye), this->actor.home.rot.y);
     if (angle > 0) {
         angle = BINANG_ADD(this->actor.home.rot.y, 0x1800);
     } else {
         angle = BINANG_SUB(this->actor.home.rot.y, 0x1800);
     }
 
-    this->camEye.x = (Math_SinS(angle) * 250.0f) + this->camAt.x;
-    this->camEye.y = this->camAt.y + 100.0f;
-    this->camEye.z = (Math_CosS(angle) * 250.0f) + this->camAt.z;
+    this->subCamEye.x = (Math_SinS(angle) * 250.0f) + this->subCamAt.x;
+    this->subCamEye.y = this->subCamAt.y + 100.0f;
+    this->subCamEye.z = (Math_CosS(angle) * 250.0f) + this->subCamAt.z;
 }
 
 void EnBigokuta_MoveCamera(EnBigokuta* this, PlayState* play) {
-    Camera* camera = Play_GetCamera(play, this->camId);
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
 
-    Math_Vec3f_StepTo(&camera->eye, &this->camEye, 20.0f);
-    Math_Vec3f_StepTo(&camera->at, &this->camAt, 20.0f);
-    Play_CameraSetAtEye(play, this->camId, &camera->at, &camera->eye);
+    Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, 20.0f);
+    Math_Vec3f_StepTo(&subCam->at, &this->subCamAt, 20.0f);
+    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
 }
 
 void EnBigokuta_ResetCamera(EnBigokuta* this, PlayState* play) {
-    Camera* camera;
+    Camera* subCam;
 
-    if (this->camId != 0) {
-        camera = Play_GetCamera(play, this->camId);
-        Play_CameraSetAtEye(play, 0, &camera->at, &camera->eye);
-        this->camId = 0;
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        subCam = Play_GetCamera(play, this->subCamId);
+        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
     }
 }
@@ -208,7 +208,7 @@ void EnBigokuta_SpawnRipple(EnBigokuta* this, PlayState* play) {
 }
 
 void EnBigokuta_SetupIdle(EnBigokuta* this) {
-    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 0.5f, 0.0f, 0.0f, 1, -3.0f);
+    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actionFunc = EnBigokuta_Idle;
 }
 
@@ -267,12 +267,12 @@ void EnBigokuta_IdleAboveWater(EnBigokuta* this, PlayState* play) {
 
 void EnBigokuta_UpdateOrSetupCam(EnBigokuta* this, PlayState* play) {
     if (this->actor.cutscene != -1) {
-        if (this->camId != 0) {
+        if (this->subCamId != SUB_CAM_ID_DONE) {
             EnBigokuta_MoveCamera(this, play);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            Camera* camera = Play_GetCamera(play, 0);
+            Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-            EnBigokuta_SetupCutsceneCamera(this, play, &camera->at, &camera->eye);
+            EnBigokuta_SetupCutsceneCamera(this, play, &mainCam->at, &mainCam->eye);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
@@ -287,7 +287,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, PlayState* play) {
     Math_Vec3f_Copy(&this->playerPos, &player->actor.world.pos);
     this->timer = 0;
 
-    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, ANIMMODE_ONCE, -3.0f);
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 
     this->playerHoldPos.x = (Math_SinS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.x;

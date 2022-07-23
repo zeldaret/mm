@@ -112,7 +112,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
 
     if (1) {}
-    if (!EN_MINIFROG_IS_RETURNED(this)) {
+    if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
@@ -177,7 +177,7 @@ EnMinifrog* EnMinifrog_GetFrog(PlayState* play) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
+        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
     }
 }
 
@@ -258,7 +258,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         EnMinifrog_SetJumpState(this);
 
         switch (play->msgCtx.currentTextId) {
@@ -496,13 +496,13 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // Yes
                         func_8019F208();
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         break;
                     case 1: // No
                         func_8019F230();
@@ -511,7 +511,8 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 EnMinifrog_SetJumpState(this);
                 switch (play->msgCtx.currentTextId) {
@@ -530,7 +531,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
                     case 0xD77: // "Let us begin our chorus"
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
                         if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece
@@ -554,6 +555,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 }
 

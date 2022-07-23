@@ -145,14 +145,14 @@ void EnSb_SpawnBubbles(PlayState* play, EnSb* this) {
 
 void EnSb_SetupWaitClosed(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_00004C),
-                     2, 0.0f);
+                     ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_WAIT_CLOSED;
     this->actionFunc = EnSb_Idle;
 }
 
 void EnSb_SetupOpen(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_000194, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_000194),
-                     2, 0.0f);
+                     ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
@@ -160,7 +160,7 @@ void EnSb_SetupOpen(EnSb* this) {
 
 void EnSb_SetupWaitOpen(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_002C8C, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_002C8C),
-                     0, 0.0f);
+                     ANIMMODE_LOOP, 0.0f);
     this->state = SHELLBLADE_WAIT_OPEN;
     this->actionFunc = EnSb_WaitOpen;
 }
@@ -169,7 +169,7 @@ void EnSb_SetupLunge(EnSb* this) {
     f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_000124);
     f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
-    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, 2, 0);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
@@ -177,7 +177,7 @@ void EnSb_SetupLunge(EnSb* this) {
 
 void EnSb_SetupBounce(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_0000B4, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_0000B4),
-                     2, 0.0f);
+                     ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_BOUNCE;
     this->actionFunc = EnSb_Bounce;
 }
@@ -186,7 +186,7 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
     f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_00004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, ANIMMODE_ONCE, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -390,7 +390,7 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s8 phi_a2;
     EnSb* this = THIS;
 
-    if (this->isDrawn != false) {
+    if (this->isDrawn) {
         if (limbIndex < 7) {
             phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
             Actor_SpawnBodyParts(thisx, play, phi_a2, dList);

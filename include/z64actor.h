@@ -81,6 +81,11 @@ typedef struct {
 } ActorEnTest20C; // size = 0x3C
 
 typedef struct {
+    /* 0x0 */ s16 unk_0; // frame?
+    /* 0x2 */ Vec3s unk_2; // pos?
+} struct_80124618; // size = 0x8
+
+typedef struct {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -1133,7 +1138,7 @@ typedef enum {
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
 #define ACTOR_FLAG_4000          (1 << 14)
-// 
+//! Carried by arrow
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)

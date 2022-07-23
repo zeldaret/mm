@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_fhg_flash.c
  * Overlay: ovl_Effect_Ss_Fhg_Flash
- * Description:
+ * Description: Shock and Light Ball Effect
  */
 
 #include "z_eff_ss_fhg_flash.h"
@@ -49,7 +49,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
     return 1;
 }
 
-Vec3f D_8097CED4 = { 0.0f, 0.0f, 0.0f };
+Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 #include "overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
 
