@@ -4,9 +4,9 @@
 #include "global.h"
 
 #define ENVIEWER_GET_3(thisx) ((thisx)->params & 3)
-#define ENVIEWER_GET_9(thisx) ((thisx)->params >> 9)
-#define ENVIEWER_GET_7F(thisx) (((thisx)->params >> 2) & 0x7F)
-#define ENVIEWER_GET_FFFF(thisx) (((thisx)->params & 0xFFFF) >> 9)
+#define ENVIEWER_GET_FE00(thisx) ((thisx)->params >> 9)
+#define ENVIEWER_GET_1FC(thisx) (((thisx)->params >> 2) & 0x7F)
+#define ENVIEWER_GET_8000(thisx) (((thisx)->params & 0xFFFF) >> 9)
 
 struct EnViewer;
 
