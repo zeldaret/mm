@@ -537,7 +537,9 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->dyna.actor.textId = sp30.result + 0x1800;
 
-                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? PLAYER_DOORTYPE_5 : PLAYER_DOORTYPE_MINUS_1;
+                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0))
+                                               ? PLAYER_DOORTYPE_5
+                                               : PLAYER_DOORTYPE_MINUS_1;
                     }
                 }
                 func_80122F28(player);
