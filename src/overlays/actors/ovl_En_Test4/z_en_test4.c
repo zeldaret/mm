@@ -520,7 +520,7 @@ void func_80A430C8(EnTest4* this, PlayState* play) {
         (gSaveContext.save.time < CLOCK_TIME(17, 30)) && (play->envCtx.unk_F2[2] == 0)) {
         // rain?
 
-        D_801BDBB0 = 1;
+        gWeatherMode = 1;
         func_800FD78C(play);
         play->envCtx.unk_E3 = 1;
         play->envCtx.unk_F2[0] = 0x3C;
@@ -535,7 +535,7 @@ void func_80A430C8(EnTest4* this, PlayState* play) {
         }
     }
 
-    if (D_801BDBB0 == 1) {
+    if (gWeatherMode == 1) {
         this->state = TEST4_STATE_1;
     }
 }
@@ -544,11 +544,11 @@ void func_80A431C8(EnTest4* this, PlayState* play) {
     if (((gSaveContext.save.time >= CLOCK_TIME(17, 30)) && (gSaveContext.save.time < CLOCK_TIME(23, 0)) &&
          (play->envCtx.unk_F2[0] != 0)) ||
         (play->envCtx.unk_F2[2] != 0)) {
-        D_801BDBB0 = 0;
+        gWeatherMode = 0;
         play->envCtx.unk_E3 = 2;
     }
 
-    if (D_801BDBB0 == 0) {
+    if (gWeatherMode == 0) {
         this->state = TEST4_STATE_0;
     }
 }

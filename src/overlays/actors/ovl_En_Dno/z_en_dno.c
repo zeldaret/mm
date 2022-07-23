@@ -610,11 +610,11 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0x802:
                     if (Message_ShouldAdvance(play)) {
                         if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
-                            this->unk_458 = GI_RUPEE_RED;
+                            this->getItemId = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = GI_MASK_SCENTS;
+                            this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         func_801477B4(play);
                         func_80A72B84(this, play);
                     }
@@ -678,7 +678,7 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_458, 60.0f, 60.0f);
+        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 

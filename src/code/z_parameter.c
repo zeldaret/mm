@@ -595,7 +595,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOWLA);
         return ITEM_NONE;
 
-    } else if (item == ITEM_HEART) {
+    } else if (item == ITEM_RECOVERY_HEART) {
         Health_ChangeBy(play, 0x10);
         return item;
 
@@ -655,7 +655,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         slot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -671,8 +671,8 @@ u8 Item_Give(PlayState* play, u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             slot = SLOT(item);
 
@@ -712,7 +712,7 @@ u8 Item_Give(PlayState* play, u8 item) {
     } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
         temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
-        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_MEMORIES) && (temp != ITEM_NONE)) {
+        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
@@ -816,8 +816,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if (item == ITEM_HEART_CONTAINER) {
         return ITEM_NONE;
 
-    } else if (item == ITEM_HEART) {
-        return ITEM_HEART;
+    } else if (item == ITEM_RECOVERY_HEART) {
+        return ITEM_RECOVERY_HEART;
 
     } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
@@ -843,7 +843,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         bottleSlot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -859,8 +859,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             bottleSlot = SLOT(item);
 
