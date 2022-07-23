@@ -844,9 +844,9 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
-                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_MEMORIES;
-                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_MEMORIES) &&
-                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_MEMORIES)) {
+                            gSaveContext.save.inventory.items[slot] = ITEM_PENDANT_OF_MEMORIES;
+                        } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_OF_MEMORIES) &&
+                                   (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_PENDANT_OF_MEMORIES)) {
                             gSaveContext.save.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) - 1;
                         }
                     }
