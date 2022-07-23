@@ -780,8 +780,8 @@ void EffectSsIcePiece_SpawnBurst(PlayState* play, Vec3f* refPos, f32 scale) {
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim,
-                                    Color_RGBA8* env, f32 scale) {
+void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
+                               f32 scale) {
     EffectSsEnIceInitParams initParams;
 
     initParams.actor = actor;
