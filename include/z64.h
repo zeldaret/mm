@@ -29,6 +29,7 @@
 #include "z64animation.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
+#include "z64camera.h"
 #include "z64collision_check.h"
 #include "z64curve.h"
 #include "z64cutscene.h"
@@ -36,7 +37,9 @@
 #include "z64effect.h"
 #include "z64item.h"
 #include "z64light.h"
+#include "z64map.h"
 #include "z64math.h"
+#include "z64message.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
@@ -46,6 +49,7 @@
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
+#include "z64view.h"
 #include "regs.h"
 
 #define Z_THREAD_ID_IDLE     1
@@ -66,10 +70,13 @@
 #define Z_PRIORITY_DMAMGR   17
 #define Z_PRIORITY_IRQMGR   18
 
-#define EQUIP_SLOT_B 0
-#define EQUIP_SLOT_C_LEFT 1
-#define EQUIP_SLOT_C_DOWN 2
-#define EQUIP_SLOT_C_RIGHT 3
+typedef enum {
+    /* 0 */ EQUIP_SLOT_B,
+    /* 1 */ EQUIP_SLOT_C_LEFT,
+    /* 2 */ EQUIP_SLOT_C_DOWN,
+    /* 3 */ EQUIP_SLOT_C_RIGHT,
+    /* 4 */ EQUIP_SLOT_A
+} EquipSlot;
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -162,25 +169,6 @@ typedef struct FireObjLightParams {
     /* 0x2 */ Color_RGB8 color;
     /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
-
-#define FONT_CHAR_TEX_WIDTH  16
-#define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
-
-// Font textures are loaded into here
-typedef struct {
-    /* 0x00000 */ u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
-    /* 0x07800 */ u8 iconBuf[FONT_CHAR_TEX_SIZE];
-    /* 0x07880 */ u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
-    /* 0x11880 */ union {
-        u8 schar[640];
-        u16 wchar[640];
-    } msgBuf;
-    /* 0x11D80 */ u8* messageStart;
-    /* 0x11D84 */ u8* messageEnd;
-    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
-} Font; // size = 0x11D8C
 
 // Game Info aka. Static Context
 // Data normally accessed through REG macros (see regs.h)
@@ -305,13 +293,6 @@ typedef struct {
     /* 0x3 */ s8 pillarboxMagnitude;
 } ShrinkWindowContext; // size = 0x4
 
-typedef struct {
-    /* 0x0 */ s32 topY;
-    /* 0x4 */ s32 bottomY;
-    /* 0x8 */ s32 leftX;
-    /* 0xC */ s32 rightX;
-} Viewport; // size = 0x10
-
 typedef void(*osCreateThread_func)(void*);
 
 typedef enum {
@@ -417,34 +398,6 @@ typedef struct {
     /* 0x10 */ Vec3f projectedPos;
 } SoundSource; // size = 0x1C
 
-typedef struct {
-    /* 0x000 */ u32 magic;
-    /* 0x004 */ GraphicsContext* gfxCtx;
-    /* 0x008 */ Viewport viewport;
-    /* 0x018 */ f32 fovy;
-    /* 0x01C */ f32 zNear;
-    /* 0x020 */ f32 zFar;
-    /* 0x024 */ f32 scale;
-    /* 0x028 */ Vec3f eye;
-    /* 0x034 */ Vec3f at;
-    /* 0x040 */ Vec3f up;
-    /* 0x04C */ UNK_TYPE1 pad4C[0x4];
-    /* 0x050 */ Vp vp;
-    /* 0x060 */ Mtx projection;
-    /* 0x0A0 */ Mtx viewing;
-    /* 0x0E0 */ Mtx unkE0;
-    /* 0x120 */ Mtx* projectionPtr;
-    /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f distortionDirRot;
-    /* 0x134 */ Vec3f distortionScale;
-    /* 0x140 */ f32 distortionSpeed;
-    /* 0x144 */ Vec3f curDistortionDirRot;
-    /* 0x150 */ Vec3f curDistortionScale;
-    /* 0x15C */ u16 normal;
-    /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ UNK_TYPE4 unk164;
-} View; // size = 0x168
-
 typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
@@ -498,7 +451,7 @@ typedef struct {
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ s16 unk_25A;
     /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5]; // ItemId
+    /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 unk_268[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
@@ -551,7 +504,7 @@ typedef struct {
     /* 0x214 */ u16 unk_214;
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 bButtonDoAction;
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
@@ -587,7 +540,7 @@ typedef struct {
     /* 0x274 */ s16 minimapAlpha;
     /* 0x276 */ s16 startAlpha;
     /* 0x278 */ s16 unk_278;
-    /* 0x27A */ s16 unk_27A;
+    /* 0x27A */ s16 dungeonOrBossAreaMapIndex;
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
@@ -786,102 +739,63 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct {
-    /* 0x00 */ u8 unk00;
-    /* 0x01 */ u8 unk01;
-} MsgCtx11F00;
+#define TRANS_TRIGGER_OFF 0 // transition is not active
+#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
+#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x4];
-    /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
-    /* 0x11F00 */ MsgCtx11F00* unk11F00;
-    /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
-    /* 0x11F0A */ u8 unk11F0A;
-    /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
-    /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
-    /* 0x11F1A */ s16 unk11F1A[3];
-    /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
-    /* 0x11F22 */ u8 msgMode;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ union {
-        u8  schar[206];
-        u16 wchar[103];
-    } decodedBuffer;
-    /* 0x11FF2 */ u16 unk11FF2;
-    /* 0x11FF4 */ s16 unk11FF4;
-    /* 0x11FF6 */ s16 unk11FF6;
-    /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
-    /* 0x11FFE */ s16 unk11FFE[0x3];
-    /* 0x12004 */ s16 unk12004;
-    /* 0x12006 */ s16 unk12006;
-    /* 0x12008 */ u8 unk12008[0x16];
-    /* 0x1201E */ s16 unk1201E;
-    /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ u8 unk12022;
-    /* 0x12023 */ u8 unk12023;
-    /* 0x12024 */ s16 unk12024;
-    /* 0x12026 */ u16 unk12026;
-    /* 0x12028 */ u16 songPlayed;
-    /* 0x1202A */ u16 ocarinaMode;
-    /* 0x1202C */ u16 ocarinaAction;
-    /* 0x1202E */ u16 unk1202E;
-    /* 0x12030 */ s16 unk_12030;
-    /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ UNK_TYPE1 pad12034[0x6];
-    /* 0x1203A */ s16 unk1203A;
-    /* 0x1203C */ s16 unk1203C;
-    /* 0x1203E */ s16 pad1203E;
-    /* 0x12040 */ Actor* unkActor;
-    /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ s16 unk12046;
-    /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
-    /* 0x1204A */ s16 unk1204A[0x5];
-    /* 0x12054 */ s16 unk12054[3]; // First, second and third digits in lottery code guess
-    /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
-    /* 0x12068 */ s16 unk12068;
-    /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ s32 unk12070;
-    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
-    /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees;
-    /* 0x12080 */ MessageTableEntry* messageEntryTable;
-    /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
-    /* 0x12088 */ UNK_TYPE4 unk12088;
-    /* 0x1208C */ MessageTableEntry* messageTableStaff;
-    /* 0x12090 */ s16 unk12090;
-    /* 0x12092 */ s16 unk12092;
-    /* 0x12094 */ s8 unk12094;
-    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
-    /* 0x12098 */ f32 unk12098; // Text_Scale?
-    /* 0x1209C */ s16 unk1209C;
-    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
-    /* 0x120A0 */ s32 unk120A0;
-    /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
-    /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xC];
-    /* 0x120BE */ s16 unk120BE;
-    /* 0x120C0 */ s16 unk120C0;
-    /* 0x120C2 */ s16 unk120C2;
-    /* 0x120C4 */ s32 unk120C4;
-    /* 0x120C8 */ s16 unk120C8;
-    /* 0x120CA */ s16 unk120CA;
-    /* 0x120CC */ s16 unk120CC;
-    /* 0x120CE */ s16 unk120CE;
-    /* 0x120D0 */ s16 unk120D0;
-    /* 0x120D2 */ s16 unk120D2;
-    /* 0x120D4 */ s16 unk120D4;
-    /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
-} MessageContext; // size = 0x120E0
+typedef enum {
+    /*  0 */ TRANS_MODE_OFF,
+    /*  1 */ TRANS_MODE_01,
+    /*  2 */ TRANS_MODE_02,
+    /*  3 */ TRANS_MODE_03,
+    /*  4 */ TRANS_MODE_04,
+    /*  5 */ TRANS_MODE_05,
+    /*  6 */ TRANS_MODE_06,
+    /*  7 */ TRANS_MODE_07,
+    /*  8 */ TRANS_MODE_08,
+    /*  9 */ TRANS_MODE_09,
+    /* 10 */ TRANS_MODE_10,
+    /* 11 */ TRANS_MODE_11,
+    /* 12 */ TRANS_MODE_12,
+    /* 13 */ TRANS_MODE_13,
+    /* 14 */ TRANS_MODE_14,
+    /* 15 */ TRANS_MODE_15,
+    /* 16 */ TRANS_MODE_16,
+    /* 17 */ TRANS_MODE_17
+} TransitionMode;
+
+typedef enum {
+    /*  0 */ TRANS_TYPE_00,
+    /*  1 */ TRANS_TYPE_01,
+    /*  2 */ TRANS_TYPE_02,
+    /*  3 */ TRANS_TYPE_03,
+    /*  4 */ TRANS_TYPE_04,
+    /*  5 */ TRANS_TYPE_05,
+    /*  6 */ TRANS_TYPE_06,
+    /*  7 */ TRANS_TYPE_07,
+    /*  8 */ TRANS_TYPE_08,
+    /*  9 */ TRANS_TYPE_09, 
+    /* 10 */ TRANS_TYPE_10,
+    /* 11 */ TRANS_TYPE_11,
+    /* 12 */ TRANS_TYPE_12,
+    /* 13 */ TRANS_TYPE_13,
+    /* 14 */ TRANS_TYPE_14,
+    /* 15 */ TRANS_TYPE_15,
+    /* 16 */ TRANS_TYPE_16,
+    /* 17 */ TRANS_TYPE_17,
+    /* 18 */ TRANS_TYPE_18,
+    /* 19 */ TRANS_TYPE_19,
+    /* 20 */ TRANS_TYPE_20,
+    /* 21 */ TRANS_TYPE_21,
+    /* 64 */ TRANS_TYPE_64 = 64,
+    /* 70 */ TRANS_TYPE_70 = 70,
+    /* 72 */ TRANS_TYPE_72 = 72,
+    /* 73 */ TRANS_TYPE_73,
+    /* 80 */ TRANS_TYPE_80 = 80,
+    /* 86 */ TRANS_TYPE_86 = 86
+} TransitionType;
+
+#define TRANS_NEXT_TYPE_DEFAULT 0xFF
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
@@ -1002,73 +916,6 @@ typedef struct {
     /* 0x1C */ u32 unk1C;
     /* 0x20 */ u32 unk20;
 } s801BB170; // size = 0x24
-
-typedef struct Camera {
-    /* 0x000 */ char paramData[0x50];
-    /* 0x050 */ Vec3f at;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f up;
-    /* 0x074 */ Vec3f eyeNext;
-    /* 0x080 */ Vec3f skyboxOffset;
-    /* 0x08C */ struct PlayState* play;
-    /* 0x090 */ struct Player* player;
-    /* 0x094 */ PosRot playerPosRot;
-    /* 0x0A8 */ struct Actor* target;
-    /* 0x0AC */ PosRot targetPosRot;
-    /* 0x0C0 */ f32 rUpdateRateInv;
-    /* 0x0C4 */ f32 pitchUpdateRateInv;
-    /* 0x0C8 */ f32 yawUpdateRateInv;
-    /* 0x0CC */ f32 yOffsetUpdateRate;
-    /* 0x0D0 */ f32 xzOffsetUpdateRate;
-    /* 0x0D4 */ f32 fovUpdateRate;
-    /* 0x0D8 */ f32 xzSpeed;
-    /* 0x0DC */ f32 dist;
-    /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f posOffset;
-    /* 0x0F0 */ Vec3f playerPosDelta;
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 atLERPStepScale;
-    /* 0x104 */ f32 playerGroundY;
-    /* 0x108 */ Vec3f floorNorm;
-    /* 0x114 */ f32 waterYPos;
-    /* 0x118 */ s32 waterPrevCamIdx;
-    /* 0x11C */ s32 waterPrevCamSetting;
-    /* 0x120 */ s16 waterQuakeId;
-    /* 0x122 */ s16 unk122;
-    /* 0x124 */ void* data0;
-    /* 0x128 */ void* data1;
-    /* 0x12C */ s16 data2;
-    /* 0x12E */ s16 data3;
-    /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132[2];
-    /* 0x134 */ Vec3s inputDir;
-    /* 0x13A */ Vec3s camDir;
-    /* 0x140 */ s16 status;
-    /* 0x142 */ s16 setting;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ s16 bgCheckId;
-    /* 0x148 */ s16 camDataIdx;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
-    /* 0x14E */ s16 childCamIdx;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ s16 prevSetting;
-    /* 0x156 */ s16 nextCamDataIdx;
-    /* 0x158 */ s16 nextBGCheckId;
-    /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 animState;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 camId;
-    /* 0x166 */ s16 prevCamDataIdx;
-    /* 0x168 */ s16 unk168;
-    /* 0x16A */ s16 unk16A;
-    /* 0x16C */ Vec3f meshActorPos;
-} Camera; // size = 0x178
-
-typedef s32(*camera_update_func)(Camera* camera);
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -1265,9 +1112,9 @@ struct PlayState {
     /* 0x000B4 */ char unk_B4[0x4];
     /* 0x000B8 */ View view;
     /* 0x00220 */ Camera mainCamera;
-    /* 0x00398 */ Camera subCameras[3];
-    /* 0x00800 */ Camera* cameraPtrs[4];
-    /* 0x00810 */ s16 activeCamera;
+    /* 0x00398 */ Camera subCameras[NUM_CAMS - CAM_ID_SUB_FIRST];
+    /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
+    /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
     /* 0x00814 */ SoundContext soundCtx;
     /* 0x00818 */ LightContext lightCtx;
@@ -1299,7 +1146,7 @@ struct PlayState {
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 arg2, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1322,20 +1169,20 @@ struct PlayState {
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
-    /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
+    /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F; // fadeTransition
+    /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
-    /* 0x18B4A */ u8 unk_18B4A;
+    /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;

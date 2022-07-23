@@ -267,11 +267,11 @@ void func_809C6A04(EnSyatekiMan* this, PlayState* play) {
                 this->unk_26A = 3;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26A = 7;
                 player->stateFlags1 |= 0x20;
                 this->actionFunc = func_809C7FFC;
@@ -320,7 +320,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
             case 0xA2C:
             case 0xA35:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(play);
                 play->interfaceCtx.hbaAmmo = 80;
@@ -353,7 +353,7 @@ void func_809C6C2C(EnSyatekiMan* this, PlayState* play) {
 
             case 0xA34:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 player->stateFlags1 |= 0x20;
@@ -372,23 +372,23 @@ void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_809C6848;
             this->unk_26A = 0;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_809C6A04(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_809C6C2C(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~0x20;
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -397,13 +397,13 @@ void func_809C6E30(EnSyatekiMan* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 1:
-        case 3:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_3:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
             break;
     }
 
@@ -546,7 +546,7 @@ void func_809C7380(EnSyatekiMan* this, PlayState* play) {
                 this->unk_26A = 3;
             } else {
                 func_8019F208();
-                func_801159EC(-20);
+                Rupees_ChangeBy(-20);
                 this->unk_26A = 2;
                 if (!(this->unk_282 & 0x10)) {
                     this->unk_282 |= 0x10;
@@ -628,7 +628,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
                     }
                 } else {
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     player->actor.freezeTimer = 0;
                     this->unk_26A = 7;
                     player->stateFlags1 |= 0x20;
@@ -641,7 +641,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
             case 0x3FE:
             case 0x400:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 this->unk_27E = 0;
                 func_80112AFC(play);
@@ -688,7 +688,7 @@ void func_809C7620(EnSyatekiMan* this, PlayState* play) {
             case 0x406:
             case 0x407:
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 this->actionFunc = func_809C7D14;
@@ -706,20 +706,20 @@ void func_809C7990(EnSyatekiMan* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_809C72D8;
             this->unk_26A = 0;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_809C7380(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_809C7620(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -729,13 +729,13 @@ void func_809C7990(EnSyatekiMan* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 1:
-        case 3:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_3:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
             break;
     }
 }
@@ -831,7 +831,7 @@ void func_809C7EB4(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (CURRENT_DAY != 3) {
-        if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
             player->stateFlags1 &= ~0x20;
             this->unk_280 = 0;
             this->unk_26A = 0;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hidden_nuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_hintnuts/object_hintnuts.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
@@ -222,7 +223,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
         this->unk_218 = 30;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80BDB268(this);
     }
@@ -257,7 +258,7 @@ void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
     sp3C.y = this->actor.floorHeight + 30.0f;
 
-    EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
     func_80BDB1B4(this, 7);
@@ -304,7 +305,7 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
     Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
     sp44.y = this->actor.floorHeight + 30.0f;
 
-    EffectSsHahen_SpawnBurst(play, &sp44, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &sp44, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
     this->unk_208 = 1;
@@ -398,7 +399,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
         sp38.y = this->actor.floorHeight;
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
-        EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
+        EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         Actor_MarkForDeath(&this->actor);
     }
 }

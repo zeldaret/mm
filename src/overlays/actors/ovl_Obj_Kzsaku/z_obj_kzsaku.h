@@ -10,11 +10,11 @@ struct ObjKzsaku;
 typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku*, PlayState*);
 
 typedef struct ObjKzsaku {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ObjKzsakuActionFunc actionFunc;
-    /* 0x0160 */ f32 raisedAmount;
-    /* 0x0164 */ s32 switchFlag;
-    /* 0x0168 */ s16 timer;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjKzsakuActionFunc actionFunc;
+    /* 0x160 */ f32 raisedAmount;
+    /* 0x164 */ s32 switchFlag;
+    /* 0x168 */ s16 timer;
 } ObjKzsaku; // size = 0x16C
 
 extern const ActorInit Obj_Kzsaku_InitVars;

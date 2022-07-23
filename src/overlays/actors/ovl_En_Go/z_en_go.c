@@ -744,10 +744,10 @@ s32 func_80A12A64(EnGo* this, PlayState* play) {
     }
 
     if (objIdx2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->skelAnime.playSpeed = this->unk_398;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
 
     return ret;
@@ -790,11 +790,11 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     }
 
     if (objIdx2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(play->objectCtx.status[objIdx].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
 
     return ret;
@@ -1195,19 +1195,19 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             this->unk_3C0++;
             if (this->unk_3C0 >= 65) {
                 switch (player->transformation) {
-                    case 4:
+                    case PLAYER_FORM_HUMAN:
                         gSaveContext.save.weekEventReg[88] |= 0x80;
                         break;
 
-                    case 1:
+                    case PLAYER_FORM_GORON:
                         gSaveContext.save.weekEventReg[89] |= 4;
                         break;
 
-                    case 2:
+                    case PLAYER_FORM_ZORA:
                         gSaveContext.save.weekEventReg[89] |= 2;
                         break;
 
-                    case 3:
+                    case PLAYER_FORM_DEKU:
                         gSaveContext.save.weekEventReg[89] |= 1;
                         break;
                 }
