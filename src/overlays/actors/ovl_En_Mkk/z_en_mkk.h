@@ -3,7 +3,9 @@
 
 #include "global.h"
 
+#define ENMKK_GET_2(thisx) ((thisx)->params & 2)
 #define ENMKK_GET_4(thisx) ((thisx)->params & 4)
+#define ENMKK_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct EnMkk;
 

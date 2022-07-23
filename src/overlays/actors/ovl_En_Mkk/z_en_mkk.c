@@ -139,7 +139,7 @@ static Color_RGBA8 D_80A4F7C4[] = {
 
 void EnMkk_Init(Actor* thisx, PlayState* play) {
     EnMkk* this = THIS;
-    s32 params8;
+    s32 paramsFF00;
     s32 params2;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -163,22 +163,24 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&this->unk_160, &this->actor.world.pos);
     this->unk_14B = ENMKK_GET_4(thisx) ? 8 : 0;
 
-    params8 = (this->actor.params >> 8) & 0xFF;
-    params2 = this->actor.params & 2;
+    paramsFF00 = ENMKK_GET_FF00(&this->actor);
+    params2 = ENMKK_GET_2(&this->actor);
     this->actor.params &= 1;
+
     if (this->actor.params == 1) {
         this->actor.hintId = 0x3C;
     } else {
         this->actor.hintId = 0x2C;
     }
-    if ((params8 == 0) || (params8 == 255)) {
+    
+    if ((paramsFF00 == 0) || (paramsFF00 == 255)) {
         func_80A4E0CC(this);
         this->unk_178 = 30000.0f;
         if (params2 > 0) {
             this->unk_14B |= 4;
         }
     } else {
-        this->unk_178 = params8 * 40.0f * 0.1f;
+        this->unk_178 = paramsFF00 * 40.0f * 0.1f;
         func_80A4EDF0(this);
         this->unk_14E = 0;
     }
@@ -260,7 +262,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     }
     if (this->unk_14E > 0) {
         Math_StepToF(&this->actor.speedXZ, 5.0f, 0.7f);
-        sp20 = 0;
+        sp20 = false;
     } else {
         sp20 = Math_StepToF(&this->actor.speedXZ, 0.0f, 0.7f);
     }
@@ -274,7 +276,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     this->actor.shape.rot.y =
         (s32)(sin_rad(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speedXZ)) + this->unk_150;
     func_800B9010(&this->actor, NA_SE_EN_KUROSUKE_MOVE - SFX_FLAG);
-    if (sp20 != 0) {
+    if (sp20) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
     } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & 0x100)) &&
