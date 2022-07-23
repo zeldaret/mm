@@ -342,8 +342,8 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
 
     if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
-            (Message_GetState(&play->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
+        if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
+            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;

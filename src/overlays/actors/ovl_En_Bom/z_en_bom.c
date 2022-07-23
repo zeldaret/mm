@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bom.h"
+#include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -88,7 +89,7 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
@@ -115,7 +116,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -338,7 +339,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     if (this->collider2.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
@@ -501,7 +502,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                                                                (this->collider1.base.oc->category == ACTORCAT_BOSS)))) {
                 this->timer = 0;
                 thisx->shape.rot.z = 0;
-            } else if ((this->timer > 100) && (func_80123F48(play, &thisx->world.pos, 30.0f, 50.0f))) {
+            } else if ((this->timer > 100) && (Player_IsBurningStickInRange(play, &thisx->world.pos, 30.0f, 50.0f))) {
                 this->timer = 100;
             }
 
@@ -537,7 +538,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
                     play->envCtx.lightSettings.ambientColor[2] = 250;
-                func_800DFD04(&play->mainCamera, 2, 11, 8);
+                Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
                 thisx->flags |= (0x100000 | 0x20);

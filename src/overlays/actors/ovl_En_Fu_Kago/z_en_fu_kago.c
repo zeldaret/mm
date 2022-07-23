@@ -7,6 +7,7 @@
 #include "z_en_fu_kago.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Fu/z_en_fu.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_fu_mato/object_fu_mato.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -221,7 +222,7 @@ void func_80ACFA78(EnFuKago* this, PlayState* play) {
     }
 
     this->dyna.actor.freezeTimer = 2;
-    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 17.0f, 0, 15, 13, 20, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 17.0f, 0, 15, 13, 20, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     this->unk_338 = 60;
     this->unk_33A = 1;

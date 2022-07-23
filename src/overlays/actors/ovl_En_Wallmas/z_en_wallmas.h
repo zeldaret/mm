@@ -25,9 +25,9 @@
  * the timer to 130 frames if the player strays too far from the Wallmaster's current position.
  */
 typedef enum {
-    /* 0x00 */ WALLMASTER_TYPE_TIMER_ONLY,
-    /* 0x01 */ WALLMASTER_TYPE_PROXIMITY,
-    /* 0x02 */ WALLMASTER_TYPE_FLAG
+    /* 0x0 */ WALLMASTER_TYPE_TIMER_ONLY,
+    /* 0x1 */ WALLMASTER_TYPE_PROXIMITY,
+    /* 0x2 */ WALLMASTER_TYPE_FLAG
 } WallmasterType;
 
 struct EnWallmas;
