@@ -13882,7 +13882,7 @@
     0x80B1A348:("D_80B1A348","f32","",0x4),
     0x80B1A34C:("D_80B1A34C","f32","",0x4),
     0x80B1DA30:("D_80B1DA30","UNK_TYPE1","",0x1),
-    0x80B1DA40:("D_80B1DA40","UNK_TYPE1","",0x1),
+    0x80B1DA40:("sPoSisterEnvColors","UNK_TYPE1","",0x1),
     0x80B1DA50:("En_Po_Sisters_InitVars","UNK_TYPE1","",0x1),
     0x80B1DA70:("D_80B1DA70","UNK_TYPE1","",0x1),
     0x80B1DA9C:("D_80B1DA9C","UNK_TYPE1","",0x1),
