@@ -915,7 +915,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPSegment(POLY_XLU_DISP++, 0x08, sSparkTextures[(play->gameplayFrames + i) & 3]);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_037850);
+                gSPDisplayList(POLY_XLU_DISP++, gEffSparkDL);
             }
 
             Matrix_Scale(0.022222223f, 0.022222223f, 0.022222223f, MTXMODE_APPLY);
