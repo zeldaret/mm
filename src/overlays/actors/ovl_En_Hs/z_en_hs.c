@@ -174,7 +174,7 @@ void func_80953098(EnHs* this, PlayState* play) {
 }
 
 void func_80953180(EnHs* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x33F4: // text: laughing that they are all roosters (!)
             case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
@@ -196,7 +196,7 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             case 0x33F5: // He heard from his gramps (?) the moon is going to fall
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80952FE0;
                 this->stateTimer = 0;
                 this->headRot.z = 0;
@@ -217,7 +217,7 @@ void EnHs_DoNothing(EnHs* this, PlayState* play) {
 void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
     if (DECR(this->stateTimer) == 0) {
         play->nextEntranceIndex = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
-        play->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.weekEventReg[25] |= 8;
         this->actionFunc = EnHs_DoNothing;
     }

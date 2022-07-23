@@ -116,7 +116,7 @@ typedef struct {
     /* 0x1 */ u8 buttonIndex[8];
 } OcarinaSongButtons; // size = 0x9
 
-typedef struct {
+typedef struct OcarinaStaff {
     /* 0x0 */ u8 buttonIndex;
     /* 0x1 */ u8 state;   // original name: "status"
     /* 0x2 */ u8 pos;     // original name: "locate"
