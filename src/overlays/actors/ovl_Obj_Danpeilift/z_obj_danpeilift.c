@@ -86,19 +86,18 @@ void ObjDanpeilift_DoNothing(ObjDanpeilift* this, PlayState* play) {
 }
 
 void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
-    s32 isTeleporting;
+    Actor* thisx = &this->dyna.actor;
     Vec3f nextPoint;
     f32 speed;
-    u8 pad;
     f32 target;
     f32 step;
+    s32 isTeleporting;
     s32 isPosUpdated;
-    Vec3s* initialPoint;
     Vec3s* endPoint;
 
-    Math_Vec3s_ToVec3f(&nextPoint, &(&this->points[this->curPoint])[this->direction]);
-    Math_Vec3f_Diff(&nextPoint, &this->dyna.actor.world.pos, &this->dyna.actor.velocity);
-    speed = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
+    Math_Vec3s_ToVec3f(&nextPoint, this->points + this->curPoint + this->direction);
+    Math_Vec3f_Diff(&nextPoint, &thisx->world.pos, &thisx->velocity);
+    speed = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
         target = ((this->speed - 2.0f) * 0.1f) + 2.0f;
         step = this->speed * 0.03f;
@@ -106,19 +105,18 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
         target = this->speed;
         step = this->speed * 0.16f;
     }
-    Math_StepToF(&this->dyna.actor.speedXZ, target, step);
-    if ((this->dyna.actor.speedXZ + 0.05f) < speed) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / speed);
-        this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
-        this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
-        this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
+
+    Math_StepToF(&thisx->speedXZ, target, step);
+    if ((thisx->speedXZ + 0.05f) < speed) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / speed);
+        thisx->world.pos.x += thisx->velocity.x;
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->curPoint += this->direction;
-        if (1) {}
-        this->dyna.actor.speedXZ *= 0.4f;
-        isTeleporting = OBJDANPEILIFT_SHOULD_TELEPORT(&this->dyna.actor);
+        thisx->speedXZ *= 0.4f;
+        isTeleporting = OBJDANPEILIFT_SHOULD_TELEPORT(thisx);
         isPosUpdated = true;
-
         if (((this->curPoint >= this->endPoint) && (this->direction > 0)) ||
             ((this->curPoint <= 0) && (this->direction < 0))) {
             if (!isTeleporting) {
@@ -127,20 +125,16 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
                 this->actionFunc = ObjDanpeilift_Wait;
             } else {
                 endPoint = &this->points[this->endPoint];
-                if (this->direction > 0) {
-                    this->curPoint = 0;
-                } else {
-                    this->curPoint = this->endPoint;
-                }
-                initialPoint = this->points;
-                if ((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y) ||
-                    (initialPoint->z != endPoint->z)) {
+                this->curPoint = this->direction > 0 ? 0 : this->endPoint;
+                if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
+                    (this->points[0].z != endPoint->z)) {
                     this->actionFunc = ObjDanpeilift_Teleport;
                     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
                 }
             }
         }
+
         if (isPosUpdated) {
             ObjDanpeilift_UpdatePosition(this, this->curPoint);
         }
