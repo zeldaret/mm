@@ -357,16 +357,16 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 void func_80B0FE18(PlayState* play) {
     func_800FD750(0x38);
     play->nextEntranceIndex = 0x9C10;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FE7C(PlayState* play) {
     play->nextEntranceIndex = 0x9C20;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
@@ -386,13 +386,13 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FFA8(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
                 gSaveContext.eventInf[4] &= (u8)~0x80;
@@ -403,7 +403,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (this->unk_26E == 0x14D5) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -430,9 +430,9 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
                     break;
@@ -548,13 +548,13 @@ void func_80B10584(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10634(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
                     this->unk_26E = 0x14DE;
@@ -572,7 +572,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.playerData.rupees < this->unk_288) {
@@ -582,9 +582,9 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                 } else {
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
                 }
@@ -628,7 +628,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
         if (sp24 == 12) {
             gSaveContext.save.weekEventReg[54] |= 0x40;
         } else {
-            func_801159EC(50);
+            Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
@@ -746,11 +746,11 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10E98(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 this->actionFunc = func_80B10B5C;
@@ -790,10 +790,10 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 }
 
 void func_80B110F8(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;
         } else {

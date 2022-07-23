@@ -125,7 +125,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_TYPE_1,
         COLSHAPE_TRIS,
     },
-    6,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 

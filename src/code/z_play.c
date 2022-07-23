@@ -59,7 +59,7 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
 s32 Play_InCsMode(PlayState* this) {
-    return (this->csCtx.state != 0) || Player_InCsMode(&this->state);
+    return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169100.s")
@@ -209,14 +209,14 @@ void func_80169ECC(PlayState* this) {
 void func_80169EFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    gSaveContext.respawn[RESTART_MODE_DOWN].tempSwitchFlags = this->actorCtx.flags.switches[2];
-    gSaveContext.respawn[RESTART_MODE_DOWN].unk_18 = this->actorCtx.flags.collectible[1];
-    gSaveContext.respawn[RESTART_MODE_DOWN].tempCollectFlags = this->actorCtx.flags.collectible[2];
-    this->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.flags.switches[2];
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.flags.collectible[1];
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.flags.collectible[2];
+    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_LoadToLastEntrance ?
@@ -224,11 +224,11 @@ void func_80169EFC(GameState* thisx) {
 void func_80169F78(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    this->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_TOP].entranceIndex;
+    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_TriggerRespawn ?

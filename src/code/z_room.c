@@ -143,9 +143,9 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     roomCtx->prevRoom.segment = NULL;
     func_800BA798(play, &play->actorCtx);
     Actor_SpawnTransitionActors(play, &play->actorCtx);
-    if (-1 < roomCtx->currRoom.num) {
-        func_8010A33C(play, roomCtx->currRoom.num);
-        func_8010A2DC(play);
+    if (roomCtx->currRoom.num > -1) {
+        Map_InitRoomData(play, roomCtx->currRoom.num);
+        Minimap_SavePlayerRoomInitInfo(play);
     }
     func_801A3CD8(play->roomCtx.currRoom.echo);
 }

@@ -723,9 +723,8 @@ void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
 
     if (this->flameOpacity > 0) {
         func_8012C2DC(play->state.gfxCtx);
-        Matrix_RotateYS(
-            ((Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
-            MTXMODE_APPLY);
+        Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
+                        MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         currentMatrixState = Matrix_GetCurrent();

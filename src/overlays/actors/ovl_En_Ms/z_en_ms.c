@@ -98,13 +98,13 @@ void EnMs_Wait(EnMs* this, PlayState* play) {
 
 void EnMs_Talk(EnMs* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->actionFunc = EnMs_Wait;
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
@@ -113,7 +113,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             }
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // yes
@@ -127,7 +127,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                         } else {
                             func_8019F208();
                             Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
-                            func_801159EC(-10);
+                            Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
                         break;
@@ -140,6 +140,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                 }
             }
             break;
+
         default:
             break;
     }

@@ -724,7 +724,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
             if (sp43 != 0) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
-                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1055,7 +1055,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
-                        ENWATEREFFECT_780);
+                        ENWATEREFFECT_30C);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1150,9 +1150,9 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 7);
-                this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                this->subCamId = Play_CreateSubCamera(play);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
 
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
@@ -1165,34 +1165,34 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 player->actor.world.pos.y = 1850.0f;
                 player->actor.world.rot.y = player->actor.shape.rot.y;
 
-                this->csCamAt.y = player->actor.world.pos.y + 30.0f;
+                this->subCamAt.y = player->actor.world.pos.y + 30.0f;
                 this->csState = 1;
                 this->csTimer = 0;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_2D5 = true;
 
-                this->cameraFov = KREG(14) + 60.0f;
+                this->subCamFov = KREG(14) + 60.0f;
 
                 case 1:
                     player->actor.world.pos.z = 0.0f;
                     player->actor.world.pos.x = 0.0f;
                     player->actor.speedXZ = 0.0f;
 
-                    this->csCamEye.x = 100.0f;
-                    this->csCamEye.y = 540.0f;
+                    this->subCamEye.x = 100.0f;
+                    this->subCamEye.y = 540.0f;
 
-                    this->csCamEye.z = player->actor.world.pos.z + 100.0f;
-                    this->csCamAt.x = player->actor.world.pos.x;
+                    this->subCamEye.z = player->actor.world.pos.z + 100.0f;
+                    this->subCamAt.x = player->actor.world.pos.x;
 
-                    Math_ApproachF(&this->csCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
-                    this->csCamAt.z = player->actor.world.pos.z;
+                    Math_ApproachF(&this->subCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
+                    this->subCamAt.z = player->actor.world.pos.z;
 
                     if (this->csTimer > 105) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
                         func_8016566C(0x96);
-                        this->cameraFov = 80.0f;
+                        this->subCamFov = 80.0f;
 
                         case 2:
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
@@ -1263,20 +1263,20 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 func_800B7298(play, &this->actor, 8);
             }
 
-            this->csCamEye.x = player->actor.world.pos.x + 30.0f;
-            this->csCamEye.y = player->actor.world.pos.y + Player_GetHeight(player) - 4.0f + BREG(17);
-            this->csCamEye.z = player->actor.world.pos.z - 30.0f;
+            this->subCamEye.x = player->actor.world.pos.x + 30.0f;
+            this->subCamEye.y = player->actor.world.pos.y + Player_GetHeight(player) - 4.0f + BREG(17);
+            this->subCamEye.z = player->actor.world.pos.z - 30.0f;
 
-            this->csCamAt.x = player->actor.world.pos.x;
-            this->csCamAt.y = player->actor.world.pos.y + Player_GetHeight(player) - 18.0f + 6.0f + BREG(18);
-            this->csCamAt.z = player->actor.world.pos.z;
+            this->subCamAt.x = player->actor.world.pos.x;
+            this->subCamAt.y = player->actor.world.pos.y + Player_GetHeight(player) - 18.0f + 6.0f + BREG(18);
+            this->subCamAt.z = player->actor.world.pos.z;
 
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-                this->csCamEye.y -= 60.0f;
-                this->csCamAt.y -= 35.0f;
+                this->subCamEye.y -= 60.0f;
+                this->subCamAt.y -= 35.0f;
             }
 
-            this->cameraFov = 60.0f;
+            this->subCamFov = 60.0f;
             if (this->csTimer == 16) {
                 this->csState = 5;
                 this->csTimer = 0;
@@ -1293,13 +1293,13 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     player->actor.shape.rot.y = -0x1470;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
 
-                    this->csCamEye.x = player->actor.world.pos.x + 30.0f - 90.0f + 300.0f;
-                    this->csCamEye.y = player->actor.world.pos.y + 40.0f + 10.0f;
-                    this->csCamEye.z = player->actor.world.pos.z - 30.0f + 160.0f + 300.0f;
+                    this->subCamEye.x = player->actor.world.pos.x + 30.0f - 90.0f + 300.0f;
+                    this->subCamEye.y = player->actor.world.pos.y + 40.0f + 10.0f;
+                    this->subCamEye.z = player->actor.world.pos.z - 30.0f + 160.0f + 300.0f;
 
-                    this->csCamAt.x = this->actor.world.pos.x;
-                    this->csCamAt.y = this->actor.world.pos.y - 100.0f;
-                    this->csCamAt.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y - 100.0f;
+                    this->subCamAt.z = this->actor.world.pos.z;
 
                     if (this->csTimer == 10) {
                         this->actor.velocity.y = 30.0f;
@@ -1345,34 +1345,34 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         Boss03_SpawnEffectDroplet(play, &effectPos);
                     }
 
-                    this->csCamTargetAt.x = this->actor.world.pos.x;
-                    this->csCamTargetAt.y = this->actor.world.pos.y - 100.0f;
-                    this->csCamTargetAt.z = this->actor.world.pos.z;
+                    this->subCamAtNext.x = this->actor.world.pos.x;
+                    this->subCamAtNext.y = this->actor.world.pos.y - 100.0f;
+                    this->subCamAtNext.z = this->actor.world.pos.z;
                 }
             } else {
-                Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 30.0f - 90.0f + 300.0f - 90.0f, 0.05f,
+                Math_ApproachF(&this->subCamEye.x, player->actor.world.pos.x + 30.0f - 90.0f + 300.0f - 90.0f, 0.05f,
                                3.0f);
-                Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
-                Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z - 30.0f + 160.0f + 300.0f - 90.0f, 0.05f,
+                Math_ApproachF(&this->subCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
+                Math_ApproachF(&this->subCamEye.z, player->actor.world.pos.z - 30.0f + 160.0f + 300.0f - 90.0f, 0.05f,
                                3.0f);
                 Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
             }
 
-            Math_ApproachF(&this->csCamAt.x, this->csCamTargetAt.x, 0.5f, 100.0f);
-            Math_ApproachF(&this->csCamAt.y, this->csCamTargetAt.y + this->unk_568, 0.5f, 100.0f);
-            Math_ApproachF(&this->csCamAt.z, this->csCamTargetAt.z, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.x, this->subCamAtNext.x, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.y, this->subCamAtNext.y + this->unk_568, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.z, this->subCamAtNext.z, 0.5f, 100.0f);
 
             if (this->csTimer == 145) {
-                Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+                Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                camera->eye = this->csCamEye;
-                camera->eyeNext = this->csCamEye;
-                camera->at = this->csCamAt;
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
 
-                func_80169AFC(play, this->csCamId, 0);
+                func_80169AFC(play, this->subCamId, 0);
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
-                this->csCamId = 0;
+                this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
@@ -1395,22 +1395,22 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_RotateYF(sp5C, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
-        Matrix_MultVecZ(100.0f, &this->csCamAt);
+        Matrix_MultVecZ(100.0f, &this->subCamAt);
 
-        this->csCamEye = this->actor.world.pos;
+        this->subCamEye = this->actor.world.pos;
 
         for (i = 0; i < bubblesToSpawnNum; i++) {
-            effectPos.x = randPlusMinusPoint5Scaled(100.0f) + this->csCamAt.x;
-            effectPos.y = (randPlusMinusPoint5Scaled(100.0f) + this->csCamAt.y) - 150.0f;
-            effectPos.z = randPlusMinusPoint5Scaled(100.0f) + this->csCamAt.z;
+            effectPos.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
+            effectPos.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
+            effectPos.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
 
             Boss03_SpawnEffectBubble(play, &effectPos);
         }
     }
 
-    if (this->csCamId != 0) {
-        Play_CameraSetAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
-        Play_CameraSetFov(play, this->csCamId, this->cameraFov);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_CameraSetFov(play, this->subCamId, this->subCamFov);
     }
 }
 
@@ -1435,7 +1435,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
     s32 pad;
     f32 pad2;
     f32 sp64;
-    Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
     Player* player;
     f32 sp4C;
 
@@ -1450,9 +1450,9 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
-                this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                this->subCamId = Play_CreateSubCamera(play);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
                 // Player is above water && Player is standing on ground
@@ -1464,15 +1464,15 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 case 1:
                     this->csTimer = 0;
                     this->csState = 2;
-                    this->csCamEye.x = camera->eye.x;
-                    this->csCamEye.y = camera->eye.y;
-                    this->csCamEye.z = camera->eye.z;
-                    this->csCamAt.x = camera->at.x;
-                    this->csCamAt.y = camera->at.y;
-                    this->csCamAt.z = camera->at.z;
+                    this->subCamEye.x = mainCam->eye.x;
+                    this->subCamEye.y = mainCam->eye.y;
+                    this->subCamEye.z = mainCam->eye.z;
+                    this->subCamAt.x = mainCam->at.x;
+                    this->subCamAt.y = mainCam->at.y;
+                    this->subCamAt.z = mainCam->at.z;
 
-                    aux = this->csCamEye.x - this->actor.world.pos.x;
-                    this->unk_568 = Math_Acot2F(this->csCamEye.z - this->actor.world.pos.z, aux);
+                    aux = this->subCamEye.x - this->actor.world.pos.x;
+                    this->unk_568 = Math_Acot2F(this->subCamEye.z - this->actor.world.pos.z, aux);
 
                     this->unk_570 = 0.0f;
                     this->unk_56C = 0.0f;
@@ -1482,26 +1482,26 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     sp90.y = (50.0f * sp64) + 150.0f;
                     sp90.z = (400.0f * sp64) + 300.0f;
 
-                    this->csCamTargetAt.x = this->actor.world.pos.x;
-                    this->csCamTargetAt.y = this->actor.world.pos.y;
-                    this->csCamTargetAt.z = this->actor.world.pos.z;
+                    this->subCamAtNext.x = this->actor.world.pos.x;
+                    this->subCamAtNext.y = this->actor.world.pos.y;
+                    this->subCamAtNext.z = this->actor.world.pos.z;
 
                     this->unk_568 += this->unk_56C;
                     Matrix_RotateYF(this->unk_568, MTXMODE_NEW);
-                    Matrix_MultVec3f(&sp90, &this->csCamTargetEye);
+                    Matrix_MultVec3f(&sp90, &this->subCamEyeNext);
 
-                    this->csCamTargetEye.x += this->actor.world.pos.x;
-                    this->csCamTargetEye.y += this->waterHeight;
-                    this->csCamTargetEye.z += this->actor.world.pos.z;
+                    this->subCamEyeNext.x += this->actor.world.pos.x;
+                    this->subCamEyeNext.y += this->waterHeight;
+                    this->subCamEyeNext.z += this->actor.world.pos.z;
 
                     sp4C = 40.0f + aux2;
-                    Math_ApproachF(&this->csCamEye.x, this->csCamTargetEye.x, 0.1f, sp4C);
-                    Math_ApproachF(&this->csCamEye.y, this->csCamTargetEye.y, 0.1f, sp4C);
-                    Math_ApproachF(&this->csCamEye.z, this->csCamTargetEye.z, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.x, this->subCamEyeNext.x, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.y, this->subCamEyeNext.y, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.z, this->subCamEyeNext.z, 0.1f, sp4C);
                     sp4C = 70.0f + aux2;
-                    Math_ApproachF(&this->csCamAt.x, this->csCamTargetAt.x, 0.1f, sp4C);
-                    Math_ApproachF(&this->csCamAt.y, this->csCamTargetAt.y, 0.1f, sp4C);
-                    Math_ApproachF(&this->csCamAt.z, this->csCamTargetAt.z, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.x, this->subCamAtNext.x, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.y, this->subCamAtNext.y, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.z, this->subCamAtNext.z, 0.1f, sp4C);
             }
             break;
     }
@@ -1528,7 +1528,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -1622,12 +1622,12 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
         case 2:
             Math_ApproachZeroF(&this->unk_56C, 1.0f, 0.0005f);
             if (this->csTimer == 60) {
-                camera = Play_GetCamera(play, CAM_ID_MAIN);
-                camera->eye = this->csCamEye;
-                camera->eyeNext = this->csCamEye;
-                camera->at = this->csCamAt;
-                func_80169AFC(play, this->csCamId, 0);
-                this->csCamId = 0;
+                mainCam = Play_GetCamera(play, CAM_ID_MAIN);
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 this->csState = 3;
@@ -1642,8 +1642,8 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != 0) {
-        Play_CameraSetAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -1664,9 +1664,9 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 1);
-                this->csCamId = Play_CreateSubCamera(play);
-                Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(play, this->csCamId, 7);
+                this->subCamId = Play_CreateSubCamera(play);
+                Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 
@@ -1691,11 +1691,11 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                      MTXMODE_NEW);
                     Matrix_RotateYS(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
-                    Matrix_MultVecZ(340.0f, &this->csCamEye);
+                    Matrix_MultVecZ(340.0f, &this->subCamEye);
 
-                    this->csCamAt.x = this->actor.world.pos.x;
-                    this->csCamAt.y = this->actor.world.pos.y;
-                    this->csCamAt.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y;
+                    this->subCamAt.z = this->actor.world.pos.z;
 
                     Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
@@ -1715,15 +1715,14 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                     }
 
                     if (this->csTimer >= 150) {
-                        Camera* camera;
+                        Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                        camera = Play_GetCamera(play, CAM_ID_MAIN);
-                        camera->eye = this->csCamEye;
-                        camera->eyeNext = this->csCamEye;
-                        camera->at = this->csCamAt;
+                        mainCam->eye = this->subCamEye;
+                        mainCam->eyeNext = this->subCamEye;
+                        mainCam->at = this->subCamAt;
 
-                        func_80169AFC(play, this->csCamId, 0);
-                        this->csCamId = 0;
+                        func_80169AFC(play, this->subCamId, 0);
+                        this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_End(play, &play->csCtx);
                         func_800B7298(play, &this->actor, 6);
 
@@ -1734,8 +1733,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
             break;
     }
 
-    if (this->csCamId != 0) {
-        Play_CameraSetAtEye(play, this->csCamId, &this->csCamAt, &this->csCamEye);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -2013,7 +2012,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2441,8 +2440,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamera]) * (M_PI / 0x8000),
-                                MTXMODE_APPLY);
+                Matrix_RotateYF(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) * (M_PI / 0x8000), MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&play->billboardMtxF);
             }

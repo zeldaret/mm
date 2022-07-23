@@ -200,9 +200,9 @@ void func_809F24C8(Boss06* this, PlayState* play) {
 
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 7);
-            this->unk_A00 = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(play, this->unk_A00, 7);
+            this->subCamId = Play_CreateSubCamera(play);
+            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             D_809F4970->unk_151 = 1;
             this->unk_1C9 = 1;
             this->unk_1C8 = 1;
@@ -244,26 +244,26 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
 
-                this->unk_A04.x = player->actor.world.pos.x + 20.0f;
-                this->unk_A04.y = player->actor.world.pos.y + 20.0f;
-                this->unk_A04.z = player->actor.world.pos.z + 30.0f;
+                this->subCamEye.x = player->actor.world.pos.x + 20.0f;
+                this->subCamEye.y = player->actor.world.pos.y + 20.0f;
+                this->subCamEye.z = player->actor.world.pos.z + 30.0f;
 
-                this->unk_A10.x = player->actor.world.pos.x;
-                this->unk_A10.y = player->actor.world.pos.y + 26.0f;
-                this->unk_A10.z = player->actor.world.pos.z;
+                this->subCamAt.x = player->actor.world.pos.x;
+                this->subCamAt.y = player->actor.world.pos.y + 26.0f;
+                this->subCamAt.z = player->actor.world.pos.z;
 
                 if (this->unk_1CA >= 75) {
                     temp_v0_2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (temp_v0_2 != NULL) {
                         if ((temp_v0_2->id == ACTOR_EN_KNIGHT) && (&D_809F4970->actor == temp_v0_2) &&
                             (D_809F4970->unk_680 != 0)) {
-                            this->unk_A04.x = 1307.0f;
-                            this->unk_A04.y = 142.0f;
-                            this->unk_A04.z = 2897.0f;
+                            this->subCamEye.x = 1307.0f;
+                            this->subCamEye.y = 142.0f;
+                            this->subCamEye.z = 2897.0f;
 
-                            this->unk_A10.x = 1376.0f;
-                            this->unk_A10.y = 132.0f;
-                            this->unk_A10.z = 2860.0f;
+                            this->subCamAt.x = 1376.0f;
+                            this->subCamAt.y = 132.0f;
+                            this->subCamAt.z = 2860.0f;
 
                             if (this->unk_1CA == 75) {
                                 D_809F4970->unk_148 = 1;
@@ -291,25 +291,25 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                                        this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
 
                     if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-                        this->unk_A04.x = this->actor.world.pos.x - 200.0f;
+                        this->subCamEye.x = this->actor.world.pos.x - 200.0f;
                     } else {
-                        this->unk_A04.x = this->actor.world.pos.x + 200.0f;
+                        this->subCamEye.x = this->actor.world.pos.x + 200.0f;
                     }
-                    this->unk_A04.y = (this->actor.world.pos.y - 200.0f) + 100.0f;
-                    this->unk_A04.z = this->actor.world.pos.z - 200.0f;
+                    this->subCamEye.y = (this->actor.world.pos.y - 200.0f) + 100.0f;
+                    this->subCamEye.z = this->actor.world.pos.z - 200.0f;
 
-                    this->unk_A10.x = this->actor.world.pos.x;
-                    this->unk_A10.y = this->actor.world.pos.y + 80.0f;
-                    this->unk_A10.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y + 80.0f;
+                    this->subCamAt.z = this->actor.world.pos.z;
                 }
             } else {
-                this->unk_A10.z = this->actor.world.pos.z;
-                this->unk_A04.y = this->actor.world.pos.y + 60.0f;
-                this->unk_A04.x = this->actor.world.pos.x;
+                this->subCamEye.x = this->actor.world.pos.x;
+                this->subCamEye.y = this->actor.world.pos.y + 60.0f;
+                this->subCamEye.z = this->actor.world.pos.z - 210.0f;
 
-                this->unk_A04.z = this->actor.world.pos.z - 210.0f;
-                this->unk_A10.y = this->actor.world.pos.y + 80.0f;
-                this->unk_A10.x = this->actor.world.pos.x;
+                this->subCamAt.x = this->actor.world.pos.x;
+                this->subCamAt.y = this->actor.world.pos.y + 80.0f;
+                this->subCamAt.z = this->actor.world.pos.z;
             }
             break;
 
@@ -317,20 +317,20 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             child = this->actor.child;
 
             if (this->unk_1CA == 1) {
-                this->unk_A1C.x = fabsf(this->unk_A10.x - child->world.pos.x);
-                this->unk_A1C.y = fabsf(this->unk_A10.y - child->world.pos.y);
-                this->unk_A1C.z = fabsf(this->unk_A10.z - child->world.pos.z);
+                this->unk_A1C.x = fabsf(this->subCamAt.x - child->world.pos.x);
+                this->unk_A1C.y = fabsf(this->subCamAt.y - child->world.pos.y);
+                this->unk_A1C.z = fabsf(this->subCamAt.z - child->world.pos.z);
             }
 
-            Math_ApproachF(&this->unk_A10.x, child->world.pos.x, 0.15f, this->unk_A1C.x * this->unk_A28);
-            Math_ApproachF(&this->unk_A10.y, child->world.pos.y, 0.15f, this->unk_A1C.y * this->unk_A28);
-            Math_ApproachF(&this->unk_A10.z, child->world.pos.z, 0.15f, this->unk_A1C.z * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.x, child->world.pos.x, 0.15f, this->unk_A1C.x * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.y, child->world.pos.y, 0.15f, this->unk_A1C.y * this->unk_A28);
+            Math_ApproachF(&this->subCamAt.z, child->world.pos.z, 0.15f, this->unk_A1C.z * this->unk_A28);
             Math_ApproachF(&this->unk_A28, 1.0f, 1.0f, 0.001f);
 
             if (this->unk_1CA > 80) {
                 func_809F2ED0(this, play);
-                func_80169AFC(play, this->unk_A00, 0);
-                this->unk_A00 = 0;
+                func_80169AFC(play, this->subCamId, 0);
+                this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 D_809F4970->unk_151 = 0;
@@ -338,9 +338,9 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             break;
     }
 
-    if (this->unk_A00 != 0) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(play, this->unk_A00, &this->unk_A10, &this->unk_A04);
+        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 #else

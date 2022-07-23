@@ -49,7 +49,7 @@ static ColliderTrisElementInit D_80B6F990[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_80B6FA08 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    2, D_80B6F990, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80B6F990, // sTrisElementsInit,
 };
 
 // static InitChainEntry sInitChain[] = {

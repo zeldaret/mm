@@ -96,7 +96,7 @@ Color_RGB8 D_80A94050 = { 0, 0, 0 };
 s16 D_80A94054 = 500;
 s16 D_80A94058 = 1500;
 
-Vec3f D_80A9405C = { 0.0f, 1.0f, 0.0f };
+static Vec3f sSubCamUp = { 0.0f, 1.0f, 0.0f };
 
 Color_RGB8 D_80A94068 = { 225, 230, 225 };
 Color_RGB8 D_80A9406C = { 120, 120, 100 };
@@ -359,7 +359,7 @@ void func_80A9156C(EnTest6* this, PlayState* play) {
                 ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
             } else {
                 ActorCutscene_Start(play->playerActorCsIds[8], NULL);
-                this->unk_284 = ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]);
+                this->subCamId = ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]);
                 EnTest6_SetupAction(this, func_80A91760);
             }
             break;
@@ -369,7 +369,7 @@ void func_80A9156C(EnTest6* this, PlayState* play) {
                 ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
             } else {
                 ActorCutscene_Start(play->playerActorCsIds[8], NULL);
-                this->unk_284 = ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]);
+                this->subCamId = ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]);
                 EnTest6_SetupAction(this, func_80A92188);
             }
             break;
@@ -410,15 +410,15 @@ void func_80A91760(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
     s16 temp_s0;
     Player* player = GET_PLAYER(play);
-    Camera* sp78;
-    Vec3f sp6C;
-    Vec3f sp60;
+    Camera* mainCam;
+    Vec3f subCamAt;
+    Vec3f subCamEye;
     Vec3f sp54;
     s32 i;
     f32 sp4C;
-    Camera* temp_s3 = Play_GetCamera(play, this->unk_284);
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
 
-    sp78 = Play_GetCamera(play, CAM_ID_MAIN);
+    mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     switch (this->unk_274) {
         case 90:
@@ -459,12 +459,12 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 this->unk_254 = ZeldaArena_Malloc(sizeof(Vec3f) * 64);
                 if (this->unk_254 != NULL) {
                     for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
-                        (*this->unk_254)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.x +
-                                                ((temp_s3->at.x - temp_s3->eye.x) * 0.2f);
-                        (*this->unk_254)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + temp_s3->eye.y +
-                                                ((temp_s3->at.y - temp_s3->eye.y) * 0.2f) + sp4C;
-                        (*this->unk_254)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.z +
-                                                ((temp_s3->at.z - temp_s3->eye.z) * 0.2f);
+                        (*this->unk_254)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.x +
+                                                ((subCam->at.x - subCam->eye.x) * 0.2f);
+                        (*this->unk_254)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + subCam->eye.y +
+                                                ((subCam->at.y - subCam->eye.y) * 0.2f) + sp4C;
+                        (*this->unk_254)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + subCam->eye.z +
+                                                ((subCam->at.z - subCam->eye.z) * 0.2f);
                     }
                 }
                 func_80A90C08(0x78);
@@ -562,29 +562,29 @@ void func_80A91760(EnTest6* this, PlayState* play) {
     }
 
     if (this->unk_27A > 80) {
-        temp_s3->fov += (90.0f - temp_s3->fov) / (this->unk_27A - 80);
+        subCam->fov += (90.0f - subCam->fov) / (this->unk_27A - 80);
     } else if (this->unk_27A > 60) {
         sp4C = 1.0f / (this->unk_27A - 60);
 
-        sp6C.x = temp_s3->at.x + ((player->actor.world.pos.x - temp_s3->at.x) * sp4C);
-        sp6C.y = temp_s3->at.y + (((player->actor.focus.pos.y - temp_s3->at.y) - 20.0f) * sp4C);
-        sp6C.z = temp_s3->at.z + ((player->actor.world.pos.z - temp_s3->at.z) * sp4C);
+        subCamAt.x = subCam->at.x + ((player->actor.world.pos.x - subCam->at.x) * sp4C);
+        subCamAt.y = subCam->at.y + (((player->actor.focus.pos.y - subCam->at.y) - 20.0f) * sp4C);
+        subCamAt.z = subCam->at.z + ((player->actor.world.pos.z - subCam->at.z) * sp4C);
 
-        sp54.x = (Math_SinS(player->actor.world.rot.y) * 80.0f) + sp6C.x;
-        sp54.y = sp6C.y + 20.0f;
-        sp54.z = (Math_CosS(player->actor.world.rot.y) * 80.0f) + sp6C.z;
+        sp54.x = (Math_SinS(player->actor.world.rot.y) * 80.0f) + subCamAt.x;
+        sp54.y = subCamAt.y + 20.0f;
+        sp54.z = (Math_CosS(player->actor.world.rot.y) * 80.0f) + subCamAt.z;
         sp4C *= 0.75f;
 
-        VEC3F_LERPIMPDST(&sp60, &temp_s3->eye, &sp54, sp4C);
+        VEC3F_LERPIMPDST(&subCamEye, &subCam->eye, &sp54, sp4C);
 
-        Play_CameraSetAtEye(play, this->unk_284, &sp6C, &sp60);
+        Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if ((this->unk_27A < 11) && (this->unk_27A > 0)) {
-        temp_s3->fov += (sp78->fov - temp_s3->fov) / this->unk_27A;
+        subCam->fov += (mainCam->fov - subCam->fov) / this->unk_27A;
     }
 
     if (this->unk_286 != 0) {
         func_80A90C54(play, this->unk_286 * 0.05f);
-        temp_s3->fov += (sp78->fov - temp_s3->fov) * 0.05f;
+        subCam->fov += (mainCam->fov - subCam->fov) * 0.05f;
         this->unk_286++;
         if (this->unk_286 >= 20) {
             this->unk_27A = 1;
@@ -630,10 +630,10 @@ void func_80A92118(EnTest6* this, PlayState* play) {
 void func_80A92188(EnTest6* this, PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
     Player* player = GET_PLAYER(play);
-    Camera* camera;
+    Camera* subCam;
     s32 pad;
-    s16 sp46;
-    s16 sp44;
+    s16 subCamId;
+    s16 pad2;
 
     if (this->unk_27A > 115) {
         this->unk_160 += 0.2f;
@@ -736,23 +736,23 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     func_80A92950(this, play);
 
     if (this->unk_27A == 115) {
-        sp44 = ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]);
-        camera = Play_GetCamera(play, sp44);
+        subCamId = ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]);
+        subCam = Play_GetCamera(play, subCamId);
 
-        this->unk_258 = camera->at;
-        this->unk_264 = camera->eye;
-        this->unk_270 = camera->fov;
-        func_8016119C(camera, &this->unk_18C);
+        this->subCamAt = subCam->at;
+        this->subCamEye = subCam->eye;
+        this->subCamFov = subCam->fov;
+        func_8016119C(subCam, &this->unk_18C);
     }
 
     if ((this->unk_27A <= 115) && (this->unk_27A >= 16)) {
         func_80161998(D_80A93E80, &this->unk_18C);
     } else if (this->unk_27A < 16) {
-        sp46 = ActorCutscene_GetCurrentCamera(play->playerActorCsIds[8]);
+        subCamId = ActorCutscene_GetCurrentSubCamId(play->playerActorCsIds[8]);
 
-        Play_CameraSetAtEyeUp(play, sp46, &this->unk_258, &this->unk_264, &D_80A9405C);
-        Play_CameraSetFov(play, sp46, this->unk_270);
-        Play_CameraSetRoll(play, sp46, 0);
+        Play_CameraSetAtEyeUp(play, subCamId, &this->subCamAt, &this->subCamEye, &sSubCamUp);
+        Play_CameraSetFov(play, subCamId, this->subCamFov);
+        Play_CameraSetRoll(play, subCamId, 0);
     }
 
     switch (this->unk_27A) {
@@ -979,9 +979,9 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
                                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
-                play->sceneLoadFlag = 0x14;
-                play->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
-                play->unk_1887F = 2;
+                play->transitionTrigger = TRANS_TRIGGER_START;
+                play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+                play->transitionType = TRANS_TYPE_02;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     gSaveContext.eventInf[2] |= 0x80;
@@ -1060,9 +1060,9 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                     Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
-                    play->sceneLoadFlag = 0x14;
-                    play->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
-                    play->unk_1887F = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+                    play->transitionType = TRANS_TYPE_02;
                     gSaveContext.respawnFlag = 2;
                     play->msgCtx.ocarinaMode = 4;
                 }

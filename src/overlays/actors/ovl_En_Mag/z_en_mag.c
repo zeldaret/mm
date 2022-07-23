@@ -161,8 +161,8 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
         gSaveContext.unk_3F1E = 0;
         this->state = MAG_STATE_FADE_IN_MASK;
         sInputDelayTimer = 20;
-        gSaveContext.fadeDuration = 1;
-        gSaveContext.fadeSpeed = 255;
+        gSaveContext.transFadeDuration = 1;
+        gSaveContext.transWipeSpeed = 255;
     }
 
     Font_LoadOrderedFont(&this->font);
@@ -245,8 +245,8 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                     this->unk11F00 = 0;
                     this->unk11F02 = 30;
                     sInputDelayTimer = 20;
-                    gSaveContext.fadeDuration = 1;
-                    gSaveContext.fadeSpeed = 255;
+                    gSaveContext.transFadeDuration = 1;
+                    gSaveContext.transWipeSpeed = 255;
                 }
             }
         } else {
@@ -381,7 +381,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
                             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
-                            if (play->sceneLoadFlag != 0x14) {
+                            if (play->transitionTrigger != TRANS_TRIGGER_START) {
                                 Audio_SetCutsceneFlag(false);
                                 D_801BB12C++;
                                 if (D_801BB12C >= 2) {
@@ -389,8 +389,8 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = 2; // Go to FileChoose
-                                play->sceneLoadFlag = 0x14;
-                                play->unk_1887F = 2;
+                                play->transitionTrigger = TRANS_TRIGGER_START;
+                                play->transitionType = TRANS_TYPE_02;
                                 play->nextEntranceIndex = 0x1C00;
                                 gSaveContext.save.cutscene = 0;
                                 gSaveContext.sceneSetupIndex = 0;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bombf.h"
+#include "z64rumble.h"
 #include "objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
@@ -78,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -181,7 +182,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 }
             }
         } else {
-            if (func_80123F48(play, &this->actor.world.pos, 30.0f, 50.0f)) {
+            if (Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
                 bombf = (EnBombf*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOMBF, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
@@ -261,7 +262,7 @@ void func_808AEF68(EnBombf* this, PlayState* play) {
 void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->colliderJntSph.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->colliderJntSph.elements->dim.modelSphere.radius = 100;
@@ -364,7 +365,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) && (this->colliderCylinder.base.oc->category == 5))) {
             this->unk_1F8 = 1;
             this->timer = 0;
-        } else if ((this->timer > 100) && func_80123F48(play, &this->actor.world.pos, 30.0f, 50.0f)) {
+        } else if ((this->timer > 100) && Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
             this->timer = 100;
         }
 
@@ -413,7 +414,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
                     play->envCtx.lightSettings.ambientColor[2] = 250;
 
-                func_800DFD04(&play->mainCamera, 2, 11, 8);
+                Camera_AddQuake(&play->mainCamera, 2, 11, 8);
 
                 this->actor.params = ENBOMBF_1;
                 this->timer = 10;

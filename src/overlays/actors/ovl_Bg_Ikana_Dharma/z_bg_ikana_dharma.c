@@ -75,7 +75,7 @@ void BgIkanaDharma_SpawnEffects(BgIkanaDharma* this, PlayState* play) {
 
     for (i = 0; i < 4; i++) {
         f32 speed = (Rand_ZeroOne() * 5.0f) + 5.0f;
-        s16 angle = ((u32)Rand_Next() >> 0x12) + this->dyna.actor.world.rot.y + 0x6000;
+        s16 angle = (Rand_Next() >> 0x12) + this->dyna.actor.world.rot.y + 0x6000;
         f32 dirX = Math_SinS(angle);
         f32 dirZ = Math_CosS(angle);
 
@@ -226,7 +226,7 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
             if (this->dyna.actor.bgCheckFlags & 2) {
-                s16 quake = Quake_Add(play->cameraPtrs[play->activeCamera], 3);
+                s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
 
                 Quake_SetSpeed(quake, 21536);
                 Quake_SetQuakeValues(quake, 4, 0, 0, 0);

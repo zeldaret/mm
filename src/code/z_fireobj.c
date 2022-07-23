@@ -119,7 +119,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
-        Math_Vec3f_Diff(&player->swordInfo[0].tip, &fire->position, &dist);
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < 400.0f) {
             sp40 = true;
         }

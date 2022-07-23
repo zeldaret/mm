@@ -2,6 +2,8 @@
 #define Z_EN_KGY_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Kbt/z_en_kbt.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 struct EnKgy;
 

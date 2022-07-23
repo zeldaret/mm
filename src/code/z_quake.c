@@ -756,8 +756,8 @@ void Distortion_Update(void) {
             return;
         }
 
-        depthPhase += DEGF_TO_BINANG(depthPhaseStep);
-        screenPlanePhase += DEGF_TO_BINANG(screenPlanePhaseStep);
+        depthPhase += CAM_DEG_TO_BINANG(depthPhaseStep);
+        screenPlanePhase += CAM_DEG_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionDirRot(&sDistortionContext.play->view,
                                  Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
