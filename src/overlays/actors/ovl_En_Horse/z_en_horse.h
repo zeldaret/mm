@@ -3,11 +3,11 @@
 
 #include "global.h"
 #include "z64skin.h"
-#include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ha/object_ha.h"
 
 struct EnHorse;
+struct EnIn;
 
 typedef void (*EnHorseActionFunc)(struct EnHorse*, PlayState*);
 typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, PlayState*);
@@ -97,18 +97,22 @@ typedef enum {
 } EnHorseAnimationIndex;
 
 typedef enum {
-    /* 0 */ HORSE_EPONA,
-    /* 1 */ HORSE_HNI,
-    /* 2 */ HORSE_2,
-    /* 3 */ HORSE_3,
-    /* 4 */ HORSE_4
+    /* 0 */ HORSE_TYPE_EPONA,
+    /* 1 */ HORSE_TYPE_HNI,
+    /* 2 */ HORSE_TYPE_2,
+    /* 3 */ HORSE_TYPE_BANDIT,
+    /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
 } HorseType;
 
-#define ENHORSE_GET_2000(thisx) ((thisx)->params & 0x2000)
-#define ENHORSE_GET_4000(thisx) ((thisx)->params & 0x4000)
-#define ENHORSE_GET_8000(thisx) ((thisx)->params & 0x8000)
+#define ENHORSE_PARAM_BANDIT 0x2000
+#define ENHORSE_PARAM_4000 0x4000
+#define ENHORSE_PARAM_DONKEY 0x8000
 
-enum {
+#define ENHORSE_IS_BANDIT_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_BANDIT)
+#define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
+#define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
+
+typedef enum {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -130,7 +134,13 @@ enum {
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
     /* 20 */ ENHORSE_20,
-};
+} EnHorseParam;
+
+/**
+ * `paramtype` should be `ENHORSE_PARAM_BANDIT`, `ENHORSE_PARAM_4000` or `ENHORSE_PARAM_DONKEY`
+ * `lower` should be a value of the enum `EnHorseParam`
+ */
+#define ENHORSE_PARAMS(type, lower) ((type) | (lower))
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;
@@ -180,7 +190,7 @@ typedef struct EnHorse {
     /* 0x384 */ u16 cutsceneFlags;
     /* 0x388 */ s32 inRace;
     /* 0x38C */ struct EnIn* rider;
-    /* 0x390 */ UNK_TYPE1 unk390[0x4];
+    /* 0x390 */ UNK_TYPE1 unk_390[0x4];
     /* 0x394 */ u16 unk_394;
     /* 0x398 */ f32 unk_398;
     /* 0x39C */ s32 unk_39C;
@@ -193,7 +203,7 @@ typedef struct EnHorse {
     /* 0x3C8 */ Vec3f backRightHoof;
     /* 0x3D4 */ Vec3f backLeftHoof;
     /* 0x3E0 */ s32 unk_3E0;
-    /* 0x3E4 */ UNK_TYPE1 unk3E4[0x4];
+    /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
     /* 0x3EE */ Vec3s jointTable[OBJECT_HA_1_LIMB_MAX];
@@ -205,13 +215,19 @@ typedef struct EnHorse {
     /* 0x538 */ s32 unk_538;
     /* 0x53C */ s32 unk_53C;
     /* 0x540 */ Vec3f unk_540;
-    /* 0x54C */ UNK_TYPE1 unk54C[0x4];
+    /* 0x54C */ UNK_TYPE unk_54C;
     /* 0x550 */ s32 unk_550;
-    /* 0x554 */ UNK_TYPE1 unk554[0x18];
+    /* 0x554 */ UNK_TYPE unk_554;
+    /* 0x558 */ UNK_TYPE unk_558;
+    /* 0x55C */ s32 unk_55C; // maybe currentDistanceToCart... it isn't really a distance tho
+    /* 0x560 */ s32 unk_560; // maybe initialDistanceToCart
+    /* 0x564 */ s32 unk_564; // set but not used
+    /* 0x568 */ f32 unk_568; // set but not used
     /* 0x56C */ f32 unk_56C;
-    /* 0x570 */ Vec3f unk_570;
+    /* 0x570 */ Vec3f banditPosition; // Milk run minigame bandit
     /* 0x57C */ Vec3f unk_57C;
-    /* 0x588 */ UNK_TYPE1 unk588[0x4];
+    /* 0x588 */ s16 unk_588;
+    /* 0x58A */ UNK_TYPE1 unk_58A[0x2]; // struct padding?
     /* 0x58C */ s32 unk_58C;
     /* 0x590 */ s32 unk_590;
 } EnHorse; // size = 0x594

@@ -2,10 +2,12 @@
 #define Z_EN_ELFORG_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define STRAY_FAIRY_TYPE(thisx) ((thisx)->params & 0xF)
 #define STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx) (((thisx)->params & 0x1C0) >> 6)
 #define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define STRAY_FAIRY_PARAMS(flag, nonDungeonArea, type) (((flag & 0x7F) << 9) | ((nonDungeonArea & 7) << 6) | (type & 0xF))
 
 #define STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME (1 << 0)
 #define STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS (1 << 1)
@@ -13,39 +15,25 @@
 #define STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED (1 << 3)
 
 typedef enum {
-    STRAY_FAIRY_TYPE_FREE_FLOATING,            // The ones just floating around
-    STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN,           // The ones already present when you enter a Fairy Fountain
-    STRAY_FAIRY_TYPE_BUBBLE,                   // The ones trapped in bubbles
-    STRAY_FAIRY_TYPE_CLOCK_TOWN,               // The free-floating Stray Fairies in Clock Town
-    STRAY_FAIRY_TYPE_ENEMY,                    // The ones trapped inside enemies
-    STRAY_FAIRY_TYPE_COLLIDER,                 // Unused in retail. The fairy is hidden until the collider is hit
-    STRAY_FAIRY_TYPE_CHEST,                    // The ones in treasure chests
-    STRAY_FAIRY_TYPE_COLLECTIBLE,              // The ones in boxes, pots, beehives, etc.
-    STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
+    /* 0 */ STRAY_FAIRY_TYPE_FREE_FLOATING,            // The ones just floating around
+    /* 1 */ STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN,           // The ones already present when you enter a Fairy Fountain
+    /* 2 */ STRAY_FAIRY_TYPE_BUBBLE,                   // The ones trapped in bubbles
+    /* 3 */ STRAY_FAIRY_TYPE_CLOCK_TOWN,               // The free-floating Stray Fairies in Clock Town
+    /* 4 */ STRAY_FAIRY_TYPE_ENEMY,                    // The ones trapped inside enemies
+    /* 5 */ STRAY_FAIRY_TYPE_COLLIDER,                 // Unused in retail. The fairy is hidden until the collider is hit
+    /* 6 */ STRAY_FAIRY_TYPE_CHEST,                    // The ones in treasure chests
+    /* 7 */ STRAY_FAIRY_TYPE_COLLECTIBLE,              // The ones in boxes, pots, beehives, etc.
+    /* 8 */ STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
 } StrayFairyType;
 
 typedef enum {
-    STRAY_FAIRY_AREA_CLOCK_TOWN,
-    STRAY_FAIRY_AREA_WOODFALL,
-    STRAY_FAIRY_AREA_SNOWHEAD,
-    STRAY_FAIRY_AREA_GREAT_BAY,
-    STRAY_FAIRY_AREA_STONE_TOWER,
-    STRAY_FAIRY_AREA_MAX
+    /* 0 */ STRAY_FAIRY_AREA_CLOCK_TOWN,
+    /* 1 */ STRAY_FAIRY_AREA_WOODFALL,
+    /* 2 */ STRAY_FAIRY_AREA_SNOWHEAD,
+    /* 3 */ STRAY_FAIRY_AREA_GREAT_BAY,
+    /* 4 */ STRAY_FAIRY_AREA_STONE_TOWER,
+    /* 5 */ STRAY_FAIRY_AREA_MAX
 } StrayFairyArea;
-
-typedef enum {
-    /*  0 */ STRAY_FAIRY_LIMB_NONE,
-    /*  1 */ STRAY_FAIRY_LIMB_RIGHT_FACING_HEAD,
-    /*  2 */ STRAY_FAIRY_LIMB_LEFT_WING,
-    /*  3 */ STRAY_FAIRY_LIMB_RIGHT_WING,
-    /*  4 */ STRAY_FAIRY_LIMB_GLOW,
-    /*  5 */ STRAY_FAIRY_LIMB_TORSO,
-    /*  6 */ STRAY_FAIRY_LIMB_RIGHT_ARM,
-    /*  7 */ STRAY_FAIRY_LIMB_PELVIS_AND_LEGS,
-    /*  8 */ STRAY_FAIRY_LIMB_LEFT_ARM,
-    /*  9 */ STRAY_FAIRY_LIMB_LEFT_FACING_HEAD,
-    /* 10 */ STRAY_FAIRY_LIMB_MAX,
-} StrayFairyLimbs;
 
 struct EnElforg;
 
@@ -57,7 +45,7 @@ typedef struct EnElforg {
     /* 0x188 */ Vec3s jointTable[STRAY_FAIRY_LIMB_MAX];
     /* 0x1C4 */ ColliderCylinder collider;
     /* 0x210 */ Actor* enemy;
-    /* 0x214 */ u16 flags;
+    /* 0x214 */ u16 strayFairyFlags;
     /* 0x216 */ s16 direction; // negative when facing right, positive when facing left
     /* 0x218 */ s16 area;
     /* 0x21C */ s32 timer;

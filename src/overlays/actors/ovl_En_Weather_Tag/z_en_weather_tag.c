@@ -481,7 +481,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
-        (!FrameAdvance_IsEnabled(&play->state)) && (play->sceneLoadFlag == 0) &&
+        (!FrameAdvance_IsEnabled(&play->state)) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
