@@ -19,23 +19,23 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
 
         overlayEntry->unk_14 =
             (uintptr_t)((overlayEntry->unk_14 != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->unk_14 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                            ? (void*)((uintptr_t)overlayEntry->unk_14 - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                             : NULL);
         overlayEntry->init =
             (uintptr_t)((overlayEntry->init != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->init - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                            ? (void*)((uintptr_t)overlayEntry->init - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                             : NULL);
         overlayEntry->destroy =
             (uintptr_t)((overlayEntry->destroy != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->destroy - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                            ? (void*)((uintptr_t)overlayEntry->destroy - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                             : NULL);
         overlayEntry->unk_20 =
             (uintptr_t)((overlayEntry->unk_20 != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->unk_20 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                            ? (void*)((uintptr_t)overlayEntry->unk_20 - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                             : NULL);
         overlayEntry->unk_24 =
             (uintptr_t)((overlayEntry->unk_24 != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->unk_24 - (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                            ? (void*)((uintptr_t)overlayEntry->unk_24 - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                             : NULL);
 
         overlayEntry->unk_28 = 0;
@@ -50,23 +50,23 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
         if (var_v0 == 0) {
             overlayEntry->unk_14 = (uintptr_t)(
                 (overlayEntry->unk_14 != NULL)
-                    ? (void*)((uintptr_t)overlayEntry->unk_14 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                    ? (void*)((uintptr_t)overlayEntry->unk_14 + (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                     : NULL);
             overlayEntry->init = (uintptr_t)(
                 (overlayEntry->init != NULL)
-                    ? (void*)((uintptr_t)overlayEntry->init + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                    ? (void*)((uintptr_t)overlayEntry->init + (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                     : NULL);
             overlayEntry->destroy = (uintptr_t)(
                 (overlayEntry->destroy != NULL)
-                    ? (void*)((uintptr_t)overlayEntry->destroy + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                    ? (void*)((uintptr_t)overlayEntry->destroy + (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                     : NULL);
             overlayEntry->unk_20 = (uintptr_t)(
                 (overlayEntry->unk_20 != NULL)
-                    ? (void*)((uintptr_t)overlayEntry->unk_20 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                    ? (void*)((uintptr_t)overlayEntry->unk_20 + (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                     : NULL);
             overlayEntry->unk_24 = (uintptr_t)(
                 (overlayEntry->unk_24 != NULL)
-                    ? (void*)((uintptr_t)overlayEntry->unk_24 + (intptr_t)OVERLAY_RELOCATION_OFFSET(gameState))
+                    ? (void*)((uintptr_t)overlayEntry->unk_24 + (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                     : NULL);
             SystemArena_Free(overlayEntry->loadedRamAddr);
             overlayEntry->loadedRamAddr = NULL;
