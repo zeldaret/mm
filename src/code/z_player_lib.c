@@ -2116,8 +2116,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             }
 
             Matrix_Push();
-            Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, 0);
-            Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
+            Matrix_Translate(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, MTXMODE_NEW);
+            Matrix_Scale(phi_f20, temp_f22, phi_f20, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
