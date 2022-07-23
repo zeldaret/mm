@@ -2152,7 +2152,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
             D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 20, 20, 3, 0);
             D_801F59C8[i] -= 0x190;
         }
     }
