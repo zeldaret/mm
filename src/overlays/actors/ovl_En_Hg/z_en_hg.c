@@ -176,7 +176,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == 0) {
+    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -215,7 +215,7 @@ void func_80BCF6D0(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF710(EnHg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
