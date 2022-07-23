@@ -126,8 +126,8 @@ void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                     this->rPrimColorA);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, (u32)alpha);
-    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
-    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
+    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceModelDL);
 
 
     CLOSE_DISPS(gfxCtx);
