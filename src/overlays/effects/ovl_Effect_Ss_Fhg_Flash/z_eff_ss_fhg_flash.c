@@ -25,6 +25,7 @@ const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
 };
 
 u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
+    static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     EffectSsFhgFlashInitParams* initParams = PARAMS;
     Vec3f noActorPos = { 0.0f, -1000.0f, 0.0f };
 
@@ -48,8 +49,6 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 
     return 1;
 }
-
-Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 #include "overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
 
