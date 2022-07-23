@@ -257,6 +257,9 @@ void BgLastBwall_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-void BgLastBwall_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, D_80C18A48[THIS->unk238].dList);
+void BgLastBwall_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgLastBwall* this = THIS;
+
+    Gfx_DrawDListOpa(play, D_80C18A48[this->unk238].dList);
 }
