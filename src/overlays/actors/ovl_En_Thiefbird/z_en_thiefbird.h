@@ -18,28 +18,28 @@ typedef struct {
 } EnThiefbirdUnkStruct; // size = 0x24
 
 typedef struct EnThiefbird {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ EnThiefbirdActionFunc actionFunc;
-    /* 0x018C */ u8 drawDmgEffType;
-    /* 0x018E */ s16 unk_18E;
-    /* 0x0190 */ s16 unk_190;
-    /* 0x0192 */ s16 unk_192;
-    /* 0x0194 */ s16 unk_194;
-    /* 0x0196 */ s16 unk_196[6];
-    /* 0x01A2 */ Vec3s jointTable[17];
-    /* 0x0208 */ Vec3s morphTable[17];
-    /* 0x0270 */ ColliderJntSph collider;
-    /* 0x0290 */ ColliderJntSphElement colliderElements[3];
-    /* 0x0350 */ Vec3f limbPos[11];
-    /* 0x03D4 */ f32 drawDmgEffAlpha;
-    /* 0x03D8 */ f32 drawDmgEffScale;
-    /* 0x03DC */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x03E0 */ f32 unk_3E0;
-    /* 0x03E4 */ Gfx* unk_3E4;
-    /* 0x03E8 */ Gfx* unk_3E8;
-    /* 0x03EC */ EnItem00* unk_3EC;
-    /* 0x03F0 */ EnThiefbirdUnkStruct unk_3F0[40];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnThiefbirdActionFunc actionFunc;
+    /* 0x18C */ u8 drawDmgEffType;
+    /* 0x18E */ s16 unk_18E;
+    /* 0x190 */ s16 unk_190;
+    /* 0x192 */ s16 unk_192;
+    /* 0x194 */ s16 unk_194;
+    /* 0x196 */ s16 unk_196[6];
+    /* 0x1A2 */ Vec3s jointTable[17];
+    /* 0x208 */ Vec3s morphTable[17];
+    /* 0x270 */ ColliderJntSph collider;
+    /* 0x290 */ ColliderJntSphElement colliderElements[3];
+    /* 0x350 */ Vec3f limbPos[11];
+    /* 0x3D4 */ f32 drawDmgEffAlpha;
+    /* 0x3D8 */ f32 drawDmgEffScale;
+    /* 0x3DC */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x3E0 */ f32 unk_3E0;
+    /* 0x3E4 */ Gfx* unk_3E4;
+    /* 0x3E8 */ Gfx* unk_3E8;
+    /* 0x3EC */ EnItem00* unk_3EC;
+    /* 0x3F0 */ EnThiefbirdUnkStruct unk_3F0[40];
 } EnThiefbird; // size = 0x990
 
 extern const ActorInit En_Thiefbird_InitVars;

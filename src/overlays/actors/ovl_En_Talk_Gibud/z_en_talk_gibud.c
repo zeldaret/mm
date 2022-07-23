@@ -5,6 +5,7 @@
  */
 
 #include "z_en_talk_gibud.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -310,7 +311,7 @@ void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, PlayState* play) {
 
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(play, &this->actor);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnTalkGibud_SetupWalkToPlayer(this);
@@ -355,7 +356,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
             if (this->playerStunWaitTimer == 0) {
                 player->actor.freezeTimer = 40;
                 this->playerStunWaitTimer = 60;
-                func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+                Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(play, &this->actor);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
@@ -409,7 +410,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
                 damageSfxId = player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 func_800B8E58(player, damageSfxId);
-                func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
+                Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 0;
             } else {
                 this->grabDamageTimer++;
@@ -608,7 +609,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
-                     0.0f, 2, -8.0f);
+                     0.0f, ANIMMODE_ONCE, -8.0f);
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->deathTimer = 0;
@@ -713,7 +714,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
                 return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
         }
-        if (Interface_HasItemInBottle(requestedItem->item)) {
+        if (Inventory_HasItemInBottle(requestedItem->item)) {
             return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }
@@ -795,31 +796,31 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
     EnTalkGibudRequestedItem* requestedItem;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
+        case TEXT_STATE_11:
+        case TEXT_STATE_12:
+        case TEXT_STATE_13:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnTalkGibud_GetNextTextBoxId(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->textId == 0x138A) {
                     // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
-                        func_80115A14(requestedItem->item, -requestedItem->amount);
+                        Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
                         func_80123D50(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }
@@ -833,7 +834,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
             }
             break;
 
-        case 16:
+        case TEXT_STATE_16:
             EnTalkGibud_CheckPresentedItem(this, play);
             break;
     }

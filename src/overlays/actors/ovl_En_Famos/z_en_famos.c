@@ -5,6 +5,7 @@
  */
 
 #include "z_en_famos.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -138,7 +139,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -548,8 +549,8 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            func_800DFD04(play->cameraPtrs[play->activeCamera], 2, 15, 10); // camera shake?
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+            Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 15, 10);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
             // spawn crator on floor

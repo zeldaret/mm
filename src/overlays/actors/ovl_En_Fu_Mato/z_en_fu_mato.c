@@ -6,6 +6,7 @@
 
 #include "z_en_fu_mato.h"
 #include "overlays/actors/ovl_En_Fu/z_en_fu.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_fu_mato/object_fu_mato.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -239,7 +240,7 @@ void func_80ACE850(EnFuMato* this, PlayState* play) {
     }
 
     this->dyna.actor.freezeTimer = 2;
-    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 13.0f, 0, 7, 8, 20, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(play, &this->dyna.actor.world.pos, 13.0f, 0, 7, 8, 20, HAHEN_OBJECT_DEFAULT, 10, NULL);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
     this->actionFunc = func_80ACECFC;
 }

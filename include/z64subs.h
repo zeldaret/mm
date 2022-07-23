@@ -122,7 +122,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
 s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
-s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
+s32 SubS_TrackPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot, Vec3s* torsoRot, TrackOptionsSet* options);
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
