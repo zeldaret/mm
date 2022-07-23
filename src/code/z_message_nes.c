@@ -1,5 +1,6 @@
 #include "global.h"
 #include "message_data_static.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
 
@@ -256,7 +257,7 @@ void Message_LoadAreaTextNES(PlayState* play, s32* offset, f32* arg2, s16* decod
     if ((func_8010A0A4(play) != 0) || (play->sceneNum == SCENE_SECOM)) {
         currentArea = 10;
     } else {
-        currentArea = play->pauseCtx.unk_238[4];
+        currentArea = play->pauseCtx.unk_238[PAUSE_WORLD_MAP];
     }
     stringLimit = D_801D07C4[currentArea];
 

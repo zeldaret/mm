@@ -21,7 +21,7 @@ typedef struct EnKakasi {
     /* 0x1A0 */ s32 animIndex;
     /* 0x1A4 */ s32 unkCounter1A4; // counter, counts up to F while he digs away, reused elsewhere
     /* 0x1A8 */ s32 unkState1A8;
-    /* 0x1AC */ s16 unkMsgState1AC; // might be dialog state, compared against func(msgCtx)
+    /* 0x1AC */ s16 talkState;
     /* 0x1AE */ s16 actorCutscenes[3];
     /* 0x1B4 */ f32 animeFrameCount;
     /* 0x1B8 */ f32 unkHeight;
@@ -47,5 +47,6 @@ extern const ActorInit En_Kakasi_InitVars;
 
 #define GET_KAKASI_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 
 #define GET_KAKASI_ABOVE_GROUND(thisx) ((thisx)->params & 0x1) 
+#define GET_KAKASI_TARGETMODE(thisx) ((thisx)->world.rot.x - 1)
 
 #endif // Z_EN_KAKASI_H
