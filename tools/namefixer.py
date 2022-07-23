@@ -691,7 +691,7 @@ wordReplace = {
     "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
     "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
-    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed"
+    "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
