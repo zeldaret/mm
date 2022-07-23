@@ -65,7 +65,7 @@ void ObjChikuwa_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.scale.z = 0.05f;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_d_lift_Colheader_000F00);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
 
     this->dyna.actor.home.rot.y += 0x2000;
     this->dyna.actor.home.rot.y &= 0xC000;
@@ -210,7 +210,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_d_lift_DL_000D10);
+                gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }
     }
@@ -224,7 +224,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_d_lift_DL_000D10);
+                gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }
     }

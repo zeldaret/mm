@@ -335,7 +335,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                 player->stateFlags1 |= 0x20;
                 this->actionFunc = EnSyatekiMan_Swamp_MovePlayerAndExplainRules;
@@ -388,7 +388,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
             case 0xA2C: // I keep saying - you have to aim with [Control Stick]!
             case 0xA35: // You almost had it! Well...just this once...here you go!
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(play);
                 play->interfaceCtx.hbaAmmo = 80;
@@ -423,7 +423,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
 
             case 0xA34: // Perfect! Take this!
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 player->stateFlags1 |= 0x20;
@@ -442,23 +442,23 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = EnSyatekiMan_Swamp_Idle;
             this->shootingGameState = SG_GAME_STATE_NONE;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnSyatekiMan_Swamp_HandleChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnSyatekiMan_Swamp_HandleNormalMessage(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~0x20;
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -467,13 +467,13 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 1:
-        case 3:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_3:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
             break;
     }
 
@@ -734,7 +734,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     }
                 } else {
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     player->actor.freezeTimer = 0;
                     this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                     player->stateFlags1 |= 0x20;
@@ -747,7 +747,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
             case 0x3FE: // Our highest score is [score]. If you break the record, you'll win a prize!
             case 0x400: // Our highest score is [score]. Good luck!
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
                 func_80112AFC(play);
@@ -797,7 +797,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
             case 0x406: // That was perfect!
             case 0x407: // You got a new record!
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
                 this->actionFunc = EnSyatekiMan_Town_SetupGiveReward;
@@ -815,20 +815,20 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = EnSyatekiMan_Town_Idle;
             this->shootingGameState = SG_GAME_STATE_NONE;
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnSyatekiMan_Town_HandleChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnSyatekiMan_Town_HandleNormalMessage(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 gSaveContext.save.weekEventReg[63] &= (u8)~1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -838,13 +838,13 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 1:
-        case 3:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_3:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
             break;
     }
 }
@@ -945,7 +945,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (CURRENT_DAY != 3) {
-        if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
             player->stateFlags1 &= ~0x20;
             this->score = 0;
             this->shootingGameState = SG_GAME_STATE_NONE;
