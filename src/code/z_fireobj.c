@@ -187,7 +187,7 @@ void FireObj_UpdateLight(PlayState* play, FireObjLight* light, FireObj* fire) {
     if (fire->state == FIRE_STATE_3) {
         Lights_PointSetColorAndRadius(&light->lightInfo, 0, 0, 0, -1);
     } else {
-        radius = ((fire->yScale * 140.0f * fire->sizeInv) + 60.0f);
+        radius = (fire->yScale * 140.0f * fire->sizeInv) + 60.0f;
 
         Lights_PointGlowSetInfo(&light->lightInfo, fire->position.x, (fire->position.y + (fire->yScale * 6500.0f)),
                                 fire->position.z,

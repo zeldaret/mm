@@ -513,26 +513,26 @@ void func_80B717E0(EnRailSkb* this, PlayState* play) {
     this->unk_3FA = 0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             if ((play->gameplayFrames % 2) != 0) {
                 this->unk_3FA = 1;
             }
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80B72100(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80B71F3C(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80B71650(this);
             }

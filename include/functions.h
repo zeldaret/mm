@@ -130,6 +130,7 @@ u32 StackCheck_Check(StackEntry* entry);
 
 void MtxConv_F2L(Mtx* m1, MtxF* m2);
 void MtxConv_L2F(MtxF* m1, Mtx* m2);
+
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
@@ -1451,7 +1452,7 @@ s16 ActorCutscene_GetCurrentIndex(void);
 ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
-s32 func_800F2138(s8 arg0);
+s32 func_800F2138(s32 arg0);
 s32 func_800F2178(s16 arg0);
 s16 ActorCutscene_GetCurrentSubCamId(s16 index);
 s16 func_800F21CC(void);
