@@ -15,7 +15,7 @@ void ObjDanpeilift_Destroy(Actor* thisx, PlayState* play);
 void ObjDanpeilift_Update(Actor* thisx, PlayState* play);
 void ObjDanpeilift_Draw(Actor* thisx, PlayState* play);
 
-void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 arg1);
+void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 index);
 void ObjDanpeilift_DoNothing(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play);
@@ -40,8 +40,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[arg1]);
+void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 index) {
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[index]);
 }
 
 void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
