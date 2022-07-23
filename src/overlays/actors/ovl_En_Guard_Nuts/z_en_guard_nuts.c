@@ -223,7 +223,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 0xBB8, 0);
     }
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         this->targetHeadPos.y = 0;
         this->targetHeadPos.x = 0;
         if ((this->guardTextIndex == 3) && (this->animIndex == WAIT_HEAD_TILT_ANIM)) {
@@ -255,7 +255,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                 EnGuardNuts_SetupWait(this);
             }
         }
-    } else if ((Message_GetState(&play->msgCtx) >= 3) && (D_80ABBE20 == 0)) {
+    } else if ((Message_GetState(&play->msgCtx) >= TEXT_STATE_3) && (D_80ABBE20 == 0)) {
         if ((this->guardTextIndex == 0) || (this->guardTextIndex == 3) || (this->guardTextIndex >= 7)) {
             if (this->timer == 0) {
                 this->timer = 2;

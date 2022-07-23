@@ -378,7 +378,7 @@ void func_80B97110(EnZot* this, PlayState* play) {
 }
 
 void func_80B97194(EnZot* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x125C:
             case 0x125F:
@@ -447,7 +447,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     func_80B96D4C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x126E:
             case 0x1270:
@@ -521,7 +521,7 @@ void func_80B975F8(EnZot* this, PlayState* play) {
 
 void func_80B9765C(EnZot* this, PlayState* play) {
     func_80B96D4C(this);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         s32 requiredScopeTemp;
 
         switch (play->msgCtx.currentTextId) {
@@ -658,7 +658,7 @@ void func_80B979DC(EnZot* this, PlayState* play) {
 }
 
 void func_80B97A44(EnZot* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1279:
             case 0x127C:
@@ -718,7 +718,7 @@ void func_80B97BF8(EnZot* this, PlayState* play) {
 void func_80B97C40(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80B97CC8;
     }
@@ -766,7 +766,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x128C:
                 this->unk_2F2 &= ~4;
@@ -951,7 +951,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(play);
@@ -977,7 +977,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
     func_80B98348(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1293)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -993,7 +993,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1291:
@@ -1090,7 +1090,7 @@ void func_80B98A4C(EnZot* this, PlayState* play) {
 }
 
 void func_80B98AD0(EnZot* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x12B1:
             case 0x12B4:
@@ -1212,7 +1212,7 @@ void func_80B98F94(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x12BB:
                 this->unk_2F2 &= ~4;
@@ -1273,7 +1273,7 @@ void func_80B991E4(EnZot* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         u16 temp = play->msgCtx.currentTextId;
         u32 temp2;
 

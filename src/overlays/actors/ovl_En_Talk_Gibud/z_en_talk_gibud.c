@@ -796,25 +796,25 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
     EnTalkGibudRequestedItem* requestedItem;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_7:
+        case TEXT_STATE_8:
+        case TEXT_STATE_9:
+        case TEXT_STATE_10:
+        case TEXT_STATE_11:
+        case TEXT_STATE_12:
+        case TEXT_STATE_13:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnTalkGibud_GetNextTextBoxId(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->textId == 0x138A) {
                     // Remove the requested item/amount from the player's inventory
@@ -834,7 +834,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
             }
             break;
 
-        case 16:
+        case TEXT_STATE_16:
             EnTalkGibud_CheckPresentedItem(this, play);
             break;
     }

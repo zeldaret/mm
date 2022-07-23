@@ -1291,7 +1291,7 @@ void EnDg_SetupTalk(EnDg* this, PlayState* play) {
 }
 
 void EnDg_Talk(EnDg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         EnDg_ChangeAnimation(&this->skelAnime, sAnimations, DOG_ANIMATION_WALK_AFTER_TALKING);
         this->actionFunc = EnDg_Held;
     }
