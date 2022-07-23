@@ -538,7 +538,7 @@ void EnBox_Open(EnBox* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_ELFORG, this->dyna.actor.world.pos.x,
                                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x,
                                this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
-                               ((ENBOX_GET_CHEST_FLAG(&this->dyna.actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_CHEST);
+                               STRAY_FAIRY_PARAMS(ENBOX_GET_CHEST_FLAG(&this->dyna.actor), 0, STRAY_FAIRY_TYPE_CHEST));
         } else if (this->movementFlags & ENBOX_MOVE_0x40) {
             this->movementFlags &= ~ENBOX_MOVE_0x40;
         }

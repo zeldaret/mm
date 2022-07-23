@@ -175,7 +175,7 @@ void EnAni_IdleStanding(EnAni* this, PlayState* play) {
 
 void EnAni_Talk(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == 2 && play->msgCtx.currentTextId == 0x6DE) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && play->msgCtx.currentTextId == 0x6DE) {
         this->actionFunc = EnAni_IdleInPain;
     }
 }
@@ -308,7 +308,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->actor.cutscene)),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
                                    &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);

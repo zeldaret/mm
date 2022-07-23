@@ -17,7 +17,6 @@ typedef struct FileChooseContext {
     /* 0x00248 */ SkyboxContext skyboxCtx;
     /* 0x00470 */ MessageContext msgCtx;
     /* 0x12550 */ Font font;
-    /* 0x242DC */ UNK_TYPE1 unk_242DC[4];
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;

@@ -215,8 +215,8 @@ void func_80169EFC(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_LoadToLastEntrance ?
@@ -227,8 +227,8 @@ void func_80169F78(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_TriggerRespawn ?

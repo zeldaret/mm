@@ -237,9 +237,9 @@ void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
     play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
-    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
-    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
+    play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
+    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
@@ -530,7 +530,7 @@ void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
  * Sets the exit fade from the next entrance index.
  */
 void Scene_SetExitFade(PlayState* play) {
-    play->unk_1887F = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
+    play->transitionType = Entrance_GetTransitionFlags(play->nextEntranceIndex) & 0x7F;
 }
 
 /**

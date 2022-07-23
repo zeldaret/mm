@@ -532,7 +532,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
-                    ScheduleResult sp30;
+                    ScheduleOutput sp30;
 
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->dyna.actor.textId = sp30.result + 0x1800;
