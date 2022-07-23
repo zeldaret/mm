@@ -52,13 +52,13 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 
     this->rScaleMax = initParams->scale;
 
-    if ((initParams->unk_12 & 0x8000) != 0) {
+    if (initParams->params & ENFIRE_PARAMS_USE_SCALE) {
         this->rScale = initParams->scale;
     } else {
         this->rScale = 0;
     }
 
-    this->rReg6 = initParams->unk_12 & 0x7FFF;
+    this->rReg6 = initParams->params & 0x7FFF;
     this->rBodyPart = initParams->bodyPart;
     this->rFlags = initParams->flags;
 
@@ -130,16 +130,14 @@ void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this) {
                 Matrix_RotateYS(this->rYaw + this->actor->shape.rot.y, MTXMODE_APPLY);
                 Matrix_RotateXS(this->rPitch + this->actor->shape.rot.x, MTXMODE_APPLY);
                 Matrix_MultVec3f(&this->vec, &this->pos);
+            } else if (this->rFlags & ENFIRE_FLAGS_BODYPART_POS_VEC3S) {
+                this->pos.x = ((FireActorS*)this->actor)->firePos[this->rBodyPart].x;
+                this->pos.y = ((FireActorS*)this->actor)->firePos[this->rBodyPart].y;
+                this->pos.z = ((FireActorS*)this->actor)->firePos[this->rBodyPart].z;
             } else {
-                if (this->rFlags & ENFIRE_BODYPART_POS_VEC3S) {
-                    this->pos.x = ((FireActorS*)this->actor)->firePos[this->rBodyPart].x;
-                    this->pos.y = ((FireActorS*)this->actor)->firePos[this->rBodyPart].y;
-                    this->pos.z = ((FireActorS*)this->actor)->firePos[this->rBodyPart].z;
-                } else {
-                    this->pos.x = ((FireActorF*)this->actor)->firePos[this->rBodyPart].x;
-                    this->pos.y = ((FireActorF*)this->actor)->firePos[this->rBodyPart].y;
-                    this->pos.z = ((FireActorF*)this->actor)->firePos[this->rBodyPart].z;
-                }
+                this->pos.x = ((FireActorF*)this->actor)->firePos[this->rBodyPart].x;
+                this->pos.y = ((FireActorF*)this->actor)->firePos[this->rBodyPart].y;
+                this->pos.z = ((FireActorF*)this->actor)->firePos[this->rBodyPart].z;
             }
         } else if (this->rReg6 != 0) {
             this->life = 0;
