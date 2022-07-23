@@ -578,6 +578,7 @@ wordReplace = {
     "func_800E8F08": "Actor_TrackNone",
     "func_800E8FA4": "Actor_TrackPoint",
     "func_800E9250": "Actor_TrackPlayer",
+    "func_800E8EA0": "Actor_ContinueText",
 
     "func_8010A000": "Map_GetDungeonOrBossAreaIndex",
     "func_8010A074": "Map_IsInDungeonOrBossArea",
@@ -628,6 +629,7 @@ wordReplace = {
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
+    "gSaveContext.environmentTime": "gSaveContext.skyboxTime",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",
@@ -701,6 +703,8 @@ wordReplace = {
     "D_801D15BC": "gZeroVec3s",
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
+    "D_04022B28": "gDoorSkel",
+    "D_04023100": "gDoorCol",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",

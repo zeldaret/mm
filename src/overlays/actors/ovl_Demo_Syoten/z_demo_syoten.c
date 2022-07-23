@@ -74,7 +74,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
         case DEMOSYOTEN_F_0:
             func_80183430(&this->unk_144, &object_syoten_Blob_001328, &object_syoten_Blob_00023C, this->unk_174,
-                          this->unk_2A6, 0);
+                          this->unk_2A6, NULL);
             func_801835EC(&this->unk_144, &object_syoten_Blob_00023C);
             this->actor.draw = NULL;
             this->actionFunc = func_80C16A74;

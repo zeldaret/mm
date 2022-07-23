@@ -13,13 +13,6 @@ typedef void (*DmChar00ActionFunc)(struct DmChar00*, PlayState*);
 #define DMCHAR00_0 0
 #define DMCHAR00_1 1
 
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-} DmChar00Struct; // size = 0x10
-
 typedef struct DmChar00 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -28,8 +21,8 @@ typedef struct DmChar00 {
     /* 0x1E2 */ Vec3s morphTable[7];
     /* 0x20C */ UNK_TYPE1 unk_20C[0x30];
     /* 0x23C */ DmChar00ActionFunc actionFunc;
-    /* 0x240 */ DmChar00Struct unk_240;
-    /* 0x250 */ DmChar00Struct unk_250;
+    /* 0x240 */ Color_RGBAf unk_240;
+    /* 0x250 */ Color_RGBAf unk_250;
     /* 0x260 */ u8 unk_260;
     /* 0x261 */ u8 unk_261;
     /* 0x262 */ u16 unk_262;

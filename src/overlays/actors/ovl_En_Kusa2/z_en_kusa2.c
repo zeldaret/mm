@@ -209,7 +209,7 @@ void func_80A5B508(void) {
     sp74[7] = (spAC - temp_f20) * temp_f22 * temp_f24 * temp_f2;
 
     for (i = 0; i < ARRAY_COUNT(D_80A60908); i++) {
-        ptr = (f32*)&D_80A60908[i].mf[0];
+        ptr = &D_80A60908[i].xx;
 
         tempf1 = sp74[(i + 0) & 7];
         tempf2 = sp74[(i + 1) & 7];
@@ -242,8 +242,8 @@ void func_80A5B508(void) {
 void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
     MtxF* temp = Matrix_GetCurrent();
-    f32* tmp = (f32*)&temp->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &temp->xx;
+    f32* tmp2 = &matrix->xx;
 
     for (i = 0; i < 16; i++) {
         *tmp++ += *tmp2++ * arg1;

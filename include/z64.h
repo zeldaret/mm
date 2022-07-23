@@ -901,21 +901,7 @@ typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*draw_func)(PlayState* play, s16 index);
-
 typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
-
-typedef struct {
-    /* 0x00 */ draw_func unk0;
-    /* 0x04 */ u32 unk4;
-    /* 0x08 */ u32 unk8;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u32 unk10;
-    /* 0x14 */ u32 unk14;
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-} s801BB170; // size = 0x24
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -1266,21 +1252,21 @@ enum fram_command {
        Writes Contents in FLASHRAM_MODE_WRITE
        After execution, sets FRAM_MODE to FRAM_MODE_NOP */
     FRAM_COMMAND_EXECUTE = 0xD2000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
     /* flashram->mode = FLASHRAM_MODE_ERASE;
-       flashram->status = 0x1111800800c20000LL; */
+       flashram->status = 0x1111800800C20000LL; */
     FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128;
-       flashram->status = 0x1111800400c20000LL; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128;
+       flashram->status = 0x1111800400C20000LL; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
     /* flashram->mode = FLASHRAM_MODE_WRITE; */
     FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
     /* flashram->mode = FLASHRAM_MODE_STATUS;
-       flashram->status = 0x1111800100c20000LL; */
+       flashram->status = 0x1111800100C20000LL; */
     FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
     /* flashram->mode = FLASHRAM_MODE_READ;
-       flashram->status = 0x11118004f0000000LL; */
+       flashram->status = 0x11118004F0000000LL; */
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000

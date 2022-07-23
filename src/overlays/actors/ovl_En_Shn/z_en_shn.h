@@ -7,6 +7,7 @@
 struct EnShn;
 
 typedef void (*EnShnActionFunc)(struct EnShn*, PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 typedef struct EnShn {
     /* 0x000 */ Actor actor;
@@ -34,7 +35,7 @@ typedef struct EnShn {
     /* 0x2CC */ f32 playSpeed;
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
-    /* 0x2D8 */ s32 unk_2D8;
+    /* 0x2D8 */ MsgEventFunc unk_2D8;
     /* 0x2DC */ s32 prevTalkState;
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;

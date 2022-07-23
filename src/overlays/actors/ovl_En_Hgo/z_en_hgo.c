@@ -1,11 +1,10 @@
 /*
  * File: z_en_hgo.c
  * Overlay: ovl_En_Hgo
- * Description: Pamela's Father (Gibdo)
+ * Description: Pamela's Father (Human)
  */
 
 #include "z_en_hgo.h"
-#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -83,8 +82,8 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644,
-                       this->jointTable, this->morphTable, HGO_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudHumanSkel, &object_harfgibud_Anim_00B644, this->jointTable,
+                       this->morphTable, HARFGIBUD_HUMAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
@@ -319,7 +318,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
 }
 
 void func_80BD0B8C(EnHgo* this, PlayState* play) {
-    Actor_TrackPlayer(play, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     if (this->unk_30E > 2) {
         this->unk_30E--;
     } else if (this->unk_30E == 2) {
@@ -341,7 +340,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
     if (func_80BD0898(this, play)) {
-        Actor_TrackNone(&this->unk_300, &this->unk_306);
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
     } else if (this->actionFunc != func_80BD0410) {
         if (this->actionFunc != func_80BD0434) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -354,9 +353,9 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
 s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == HGO_LIMB_PELVIS) {
-        rot->x += this->unk_300.y;
-        rot->z += this->unk_300.x;
+    if (limbIndex == HARFGIBUD_HUMAN_LIMB_HEAD) {
+        rot->x += this->headRot.y;
+        rot->z += this->headRot.x;
     }
     return false;
 }
@@ -364,7 +363,7 @@ s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == HGO_LIMB_PELVIS) {
+    if (limbIndex == HARFGIBUD_HUMAN_LIMB_HEAD) {
         Matrix_Get(&this->unk_1D8);
         Matrix_MultZero(&this->actor.focus.pos);
     }
@@ -380,6 +379,6 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->unk_1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_00F248);
+    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudHumanEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -199,8 +199,8 @@ void Sram_ClearHighscores(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
     gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
-    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
+    SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
+    SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
     gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
     gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
@@ -412,7 +412,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
+        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             Interface_LoadItemIconImpl(play, j);
         }
@@ -808,8 +808,8 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
-        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm)];
+        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm)];
     }
 
     gSaveContext.save.hasTatl = true;
@@ -887,13 +887,11 @@ void func_80144A94(SramContext* sramCtx) {
 
 u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
 
-#ifdef NON_MATCHING
-// Small regalloc between v0/t6/t7
 void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     s32 i;
     s32 pad;
     s32 phi_t1;
-    s32 pad1[2];
+    s32 pad1;
     s32 fileNum;
 
     if (gSaveContext.unk_3F3F) {
@@ -959,12 +957,11 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entranceIndex = D_801C6A58[gSaveContext.save.owlSaveLocation];
-        if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x84A0 && (gSaveContext.save.weekEventReg[20] & 2)) {
+        gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        if ((gSaveContext.save.entranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
-        } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }
@@ -988,9 +985,6 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         func_80147314(sramCtx, fileNum);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s")
-#endif
 
 // Similar to func_80145698, but accounts for owl saves?
 void func_8014546C(SramContext* sramCtx) {

@@ -1,11 +1,10 @@
 /*
  * File: z_en_hg.c
  * Overlay: ovl_En_Hg
- * Description: Pamela's Father (Human)
+ * Description: Pamela's Father (Gibdo)
  */
 
 #include "z_en_hg.h"
-#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -121,8 +120,8 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C,
-                       this->jointTable, this->morphTable, HG_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C, this->jointTable,
+                       this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -401,9 +400,9 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
-    if (limbIndex == HG_LIMB_HEAD) {
+    if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
         Matrix_Get(&this->unk1D8);
-    } else if (limbIndex == HG_LIMB_PELVIS) {
+    } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -417,6 +416,6 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_005E28);
+    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

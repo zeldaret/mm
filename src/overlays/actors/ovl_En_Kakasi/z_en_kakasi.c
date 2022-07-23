@@ -158,7 +158,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     this->actor.targetMode = 0;
     if (this->actor.world.rot.x > 0 && this->actor.world.rot.x < 8) {
-        this->actor.targetMode = this->actor.world.rot.x - 1;
+        this->actor.targetMode = GET_KAKASI_TARGETMODE(thisx);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
