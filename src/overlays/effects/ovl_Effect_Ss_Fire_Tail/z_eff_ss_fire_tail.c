@@ -85,7 +85,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         if (this->rBodyPart < 0) {
             Matrix_Translate(this->pos.x + this->actor->world.pos.x, this->pos.y + this->actor->world.pos.y,
-                                     this->pos.z + this->actor->world.pos.z, MTXMODE_NEW);
+                             this->pos.z + this->actor->world.pos.z, MTXMODE_NEW);
         } else {
             Player* player = GET_PLAYER(play);
             s16 bodyPart = this->rBodyPart;
@@ -124,9 +124,9 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     func_8012C2DC(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
-    gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->state.frames * -20) & 0x1FF,
-                                32, 128));
+    gSPSegment(
+        POLY_XLU_DISP++, 0x08,
+        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->state.frames * -20) & 0x1FF, 32, 128));
 
     if (this->rType != 0) {
         gSPDisplayList(POLY_XLU_DISP++, gEffFire2DL);

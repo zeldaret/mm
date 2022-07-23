@@ -292,6 +292,6 @@ void ObjAqua_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
-    
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
