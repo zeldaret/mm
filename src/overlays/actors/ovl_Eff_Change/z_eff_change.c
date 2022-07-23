@@ -13,8 +13,11 @@
 void EffChange_Init(Actor* thisx, PlayState* play);
 void EffChange_Destroy(Actor* thisx, PlayState* play);
 void EffChange_Update(Actor* thisx, PlayState* play);
+void EffChange_Draw(Actor* thisx, PlayState* play);
 
-#if 0
+void EffChange_SetColors(EffChange* this, s32 arg1);
+void func_80A4C5CC(EffChange* this, PlayState* play);
+
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,
@@ -27,16 +30,118 @@ const ActorInit Eff_Change_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+static u8 D_80A4C920[] = {
+    // prim r g b   env r g b
+    255, 255, 170, 0,   100, 0,   // COLOR_0
+    255, 255, 170, 200, 0,   0,   // COLOR_1
+    170, 255, 255, 0,   100, 255, // COLOR_2
+    255, 255, 170, 200, 150, 0,   // COLOR_3
+    255, 255, 170, 0,   100, 0,   // COLOR_4
+    255, 255, 170, 0,   100, 0,   // COLOR_5
+    255, 255, 170, 0,   100, 0,   // COLOR_6
+    255, 255, 170, 0,   100, 0    // COLOR_7
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Init.s")
+void EffChange_Init(Actor* thisx, PlayState* play) {
+    EffChange* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Destroy.s")
+    this->actionFunc = func_80A4C5CC;
+    this->actor.draw = EffChange_Draw;
+    EffChange_SetColors(this, EFFCHANGE_GET_COLORS(thisx));
+    Actor_SetScale(&this->actor, 0.075f);
+    this->primColors[3] = 0;
+    func_80183430(&this->skeletonInfo, gameplay_keep_Blob_02900C, gameplay_keep_Blob_0281DC, this->jointTable,
+                  this->morphTable, NULL);
+    func_801834A8(&this->skeletonInfo, gameplay_keep_Blob_0281DC);
+    this->step = 0;
+    this->actor.shape.rot.y = 0;
+    this->skeletonInfo.frameCtrl.unk_C = (2.0f / 3.0f);
+    ActorCutscene_SetIntentToPlay(0x7B);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C578.s")
+void EffChange_Destroy(Actor* thisx, PlayState* play) {
+    EffChange* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C5CC.s")
+    func_8018349C(&this->skeletonInfo);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Update.s")
+void EffChange_SetColors(EffChange* this, s32 arg1) {
+    arg1 *= 6;
+    this->primColors[0] = D_80A4C920[arg1];
+    this->primColors[1] = D_80A4C920[arg1 + 1];
+    this->primColors[2] = D_80A4C920[arg1 + 2];
+    this->envColors[0] = D_80A4C920[arg1 + 3];
+    this->envColors[1] = D_80A4C920[arg1 + 4];
+    this->envColors[2] = D_80A4C920[arg1 + 5];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/func_80A4C7B0.s")
+void func_80A4C5CC(EffChange* this, PlayState* play) {
+    f32 phi_fv0;
+
+    if (func_80183DE0(&this->skeletonInfo)) {
+        Actor_MarkForDeath(&this->actor);
+        ActorCutscene_Stop(0x7B);
+        func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
+    } else {
+        this->step++;
+        if (this->skeletonInfo.frameCtrl.unk_10 < 20.0f) {
+            if ((this->primColors[3]) < 242) {
+                this->primColors[3] += 13;
+            } else {
+                this->primColors[3] = 255;
+            }
+        } else if (this->skeletonInfo.frameCtrl.unk_10 > 70.0f) {
+            if ((this->primColors[3]) >= 14) {
+                this->primColors[3] -= 13;
+            } else {
+                this->primColors[3] = 0;
+            }
+        } else {
+            this->primColors[3] = 255;
+        }
+
+        phi_fv0 = this->primColors[3] * (1.0f / 255.0f);
+        if (phi_fv0 > 1.0f) {
+            phi_fv0 = 1.0f;
+        } else if (phi_fv0 < 0.0f) {
+            phi_fv0 = 0.0f;
+        }
+        func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
+        if (ActorCutscene_GetCurrentIndex() != 0x7B) {
+            if (ActorCutscene_GetCanPlayNext(0x7B)) {
+                ActorCutscene_Start(0x7B, &this->actor);
+            } else {
+                ActorCutscene_SetIntentToPlay(0x7B);
+            }
+        }
+    }
+}
+
+void EffChange_Update(Actor* thisx, PlayState* play) {
+    EffChange* this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void EffChange_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    Mtx* mtx;
+    EffChange* this = THIS;
+
+    AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+
+    if (mtx != NULL) {
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_RotateYS((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
+
+        OPEN_DISPS(play->state.gfxCtx);
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->primColors[0], this->primColors[1], this->primColors[2],
+                        this->primColors[3]);
+        gDPSetEnvColor(POLY_XLU_DISP++, this->envColors[0], this->envColors[1], this->envColors[2], 255);
+        func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}

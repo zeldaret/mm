@@ -44,23 +44,23 @@
         <Texture Name="gSoldierArmorCoatOfArmsTex" OutName="soldier_armor_coat_of_arms_tex" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
         <Texture Name="gSoldierArmorPlate2Tex" OutName="soldier_armor_plate2_tex" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
         <Texture Name="gSoldierFingersTex" OutName="soldier_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
-        <Limb Name="gSoldierRootLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_01" Offset="0xD540" />
-        <Limb Name="gSoldierPelvisLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_02" Offset="0xD54C" />
-        <Limb Name="gSoldierLeftThighLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_03" Offset="0xD558" />
-        <Limb Name="gSoldierLeftShinLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_04" Offset="0xD564" />
-        <Limb Name="gSoldierLeftFootLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_05" Offset="0xD570" />
-        <Limb Name="gSoldierRightThighLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_06" Offset="0xD57C" />
-        <Limb Name="gSoldierRightShinLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_07" Offset="0xD588" />
-        <Limb Name="gSoldierRightFootLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_08" Offset="0xD594" />
-        <Limb Name="gSoldierTorsoLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_09" Offset="0xD5A0" />
-        <Limb Name="gSoldierLeftShoulderLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0A" Offset="0xD5AC" />
-        <Limb Name="gSoldierLeftForearmLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0B" Offset="0xD5B8" />
-        <Limb Name="gSoldierLeftHandLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0C" Offset="0xD5C4" />
-        <Limb Name="gSoldierRightShoulderLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0D" Offset="0xD5D0" />
-        <Limb Name="gSoldierRightForearmLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0E" Offset="0xD5DC" />
-        <Limb Name="gSoldierRightHandWithSpearLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_0F" Offset="0xD5E8" />
-        <Limb Name="gSoldierHeadLimb" Type="Standard" EnumName="OBJECT_SDN_LIMB_10" Offset="0xD5F4" />
-        <Skeleton Name="gSoldierSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SDN_LIMB_NONE" LimbMax="OBJECT_SDN_LIMB_MAX" EnumName="object_sdn_Limbs" Offset="0xD640" />
+        <Limb Name="gSoldierRootLimb" Type="Standard" EnumName="SOLDIER_LIMB_ROOT" Offset="0xD540" />
+        <Limb Name="gSoldierPelvisLimb" Type="Standard" EnumName="SOLDIER_LIMB_PELVIS" Offset="0xD54C" />
+        <Limb Name="gSoldierLeftThighLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_THIGH" Offset="0xD558" />
+        <Limb Name="gSoldierLeftShinLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_SHIN" Offset="0xD564" />
+        <Limb Name="gSoldierLeftFootLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_FOOT" Offset="0xD570" />
+        <Limb Name="gSoldierRightThighLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_THIGH" Offset="0xD57C" />
+        <Limb Name="gSoldierRightShinLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_SHIN" Offset="0xD588" />
+        <Limb Name="gSoldierRightFootLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_FOOT" Offset="0xD594" />
+        <Limb Name="gSoldierTorsoLimb" Type="Standard" EnumName="SOLDIER_LIMB_TORSO" Offset="0xD5A0" />
+        <Limb Name="gSoldierLeftShoulderLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_SHOULDER" Offset="0xD5AC" />
+        <Limb Name="gSoldierLeftForearmLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_FOREARM" Offset="0xD5B8" />
+        <Limb Name="gSoldierLeftHandLimb" Type="Standard" EnumName="SOLDIER_LIMB_LEFT_HAND" Offset="0xD5C4" />
+        <Limb Name="gSoldierRightShoulderLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_SHOULDER" Offset="0xD5D0" />
+        <Limb Name="gSoldierRightForearmLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_FOREARM" Offset="0xD5DC" />
+        <Limb Name="gSoldierRightHandWithSpearLimb" Type="Standard" EnumName="SOLDIER_LIMB_RIGHT_HAND_WITH_SPEAR" Offset="0xD5E8" />
+        <Limb Name="gSoldierHeadLimb" Type="Standard" EnumName="SOLDIER_LIMB_HEAD" Offset="0xD5F4" />
+        <Skeleton Name="gSoldierSkel" Type="Flex" LimbType="Standard" LimbNone="SOLDIER_LIMB_NONE" LimbMax="SOLDIER_LIMB_MAX" EnumName="SoldierLimbs" Offset="0xD640" />
         <Animation Name="gSoldierStandAndLookDown" Offset="0xDC7C" />
     </File>
 </Root>

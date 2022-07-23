@@ -2,6 +2,7 @@
 #define Z_EN_PAMETFROG_H
 
 #include "global.h"
+#include "objects/object_bigslime/object_bigslime.h"
 
 struct EnPametfrog;
 
@@ -19,34 +20,6 @@ typedef enum {
     /* 0x8 */ GEKKO_JUMP_ON_SNAPPER,
     /* 0x9 */ GEKKO_DEFEAT,
 } EnPametfrogState;
-
-typedef enum {
-    /* 0x00 */ GEKKO_LIMB_NONE,
-    /* 0x01 */ GEKKO_LIMB_ROOT,
-    /* 0x02 */ GEKKO_LIMB_WAIST,
-    /* 0x03 */ GEKKO_LIMB_L_THIGH,
-    /* 0x04 */ GEKKO_LIMB_L_SHIN,
-    /* 0x05 */ GEKKO_LIMB_L_ANKLE,
-    /* 0x06 */ GEKKO_LIMB_L_FOOT,
-    /* 0x07 */ GEKKO_LIMB_R_THIGH,
-    /* 0x08 */ GEKKO_LIMB_R_SHIN,
-    /* 0x09 */ GEKKO_LIMB_R_ANKLE,
-    /* 0x0A */ GEKKO_LIMB_R_FOOT,
-    /* 0x0B */ GEKKO_LIMB_TORSO,
-    /* 0x0C */ GEKKO_LIMB_L_UPPER_ARM,
-    /* 0x0D */ GEKKO_LIMB_L_FOREARM,
-    /* 0x0E */ GEKKO_LIMB_L_WRIST,
-    /* 0x0F */ GEKKO_LIMB_L_HAND,
-    /* 0x10 */ GEKKO_LIMB_R_UPPER_ARM,
-    /* 0x11 */ GEKKO_LIMB_R_FOREARM,
-    /* 0x12 */ GEKKO_LIMB_R_WRIST,
-    /* 0x13 */ GEKKO_LIMB_R_HAND,
-    /* 0x14 */ GEKKO_LIMB_HEAD,
-    /* 0x15 */ GEKKO_LIMB_JAW,
-    /* 0x16 */ GEKKO_LIMB_L_EYE,
-    /* 0x17 */ GEKKO_LIMB_R_EYE,
-    /* 0x18 */ GEKKO_LIMB_MAX,
-} EnPametfrogLimb;
 
 typedef struct EnPametfrog {
     /* 0x000 */ Actor actor;

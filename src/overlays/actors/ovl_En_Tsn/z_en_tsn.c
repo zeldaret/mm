@@ -193,7 +193,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x107F:
             case 0x1081:
@@ -299,7 +299,7 @@ void func_80AE0460(EnTsn* this, PlayState* play) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, play, GI_SEAHORSE, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
     }
 }
 
@@ -313,7 +313,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
     s32 sp24;
     Player* player = GET_PLAYER(play);
 
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         sp24 = func_80123810(play);
         if (sp24 != 0) {
             gSaveContext.save.weekEventReg[26] |= 2;
@@ -381,10 +381,10 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
@@ -501,6 +501,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 
     if (this->unk_220 & 2) {
@@ -539,7 +540,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0D10(EnTsn* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80AE0D78;
         ActorCutscene_Stop(this->actor.cutscene);
