@@ -46,7 +46,7 @@ void func_8098F040(ObjMure3* this, PlayState* play) {
     Vec3f spawnPos;
 
     Math_Vec3f_Copy(&spawnPos, &this->actor.world.pos);
-    for (i = 0; i < 5; i++, spawnPos.y += 20.0f) {
+    for (i = 0; i < ARRAY_COUNT(this->unk148) - 1; i++, spawnPos.y += 20.0f) {
         if (!((this->unk164 >> i) & 1)) {
             this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x10001);
             if (this->unk148[i] != NULL) {
@@ -65,12 +65,12 @@ void func_8098F110(ObjMure3* this, PlayState* play) {
 
     spawnPos.y = this->actor.world.pos.y;
 
-    for (i = 0, radius = -40.0f; i < 5; i++, radius += 20.0f) {
+    for (i = 0, radius = -40.0f; i < ARRAY_COUNT(this->unk148) - 1; i++, radius += 20.0f) {
         if (!((this->unk164 >> i) & 1)) {
             spawnPos.x = this->actor.world.pos.x + (sin * radius);
             spawnPos.z = this->actor.world.pos.z + (cos * radius);
             this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x4000);
-            if (this->unk148[i] != 0) {
+            if (this->unk148[i] != NULL) {
                 this->unk148[i]->actor.room = this->actor.room;
             }
         }
@@ -85,7 +85,7 @@ void func_8098F220(ObjMure3* this, PlayState* play) {
     spawnPos.y = this->actor.world.pos.y;
     yRot = this->actor.world.rot.y;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk148); i++) {
         if (!((this->unk164 >> i) & 1)) {
             spawnPos.x = (Math_SinS(yRot) * 40.0f) + this->actor.world.pos.x;
             spawnPos.z = (Math_CosS(yRot) * 40.0f) + this->actor.world.pos.z;
@@ -132,7 +132,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
     for (i = 0; i < count; i++) {
         EnItem00** collectible = &this->unk148[i];
 
-        if (((*collectible) != NULL) && (!((this->unk164 >> i) & 1))) {
+        if ((*collectible != NULL) && (!((this->unk164 >> i) & 1))) {
             if ((*collectible)->unk1A4 != 0) {
                 Flags_SetSwitch(play, OBJMURE3_PARAMS_7F(&this->actor));
             }
@@ -171,11 +171,11 @@ void func_8098F5D0(ObjMure3* this) {
 }
 
 void func_8098F5E4(ObjMure3* this, PlayState* play) {
-    static ObjMure3SpawnFunc spawnFuncs[] = { func_8098F040, func_8098F110, func_8098F220 };
+    static ObjMure3SpawnFunc sSpawnFuncs[] = { func_8098F040, func_8098F110, func_8098F220 };
 
     if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1150.0f)) {
         this->actor.flags |= ACTOR_FLAG_10;
-        spawnFuncs[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)](this, play);
+        sSpawnFuncs[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)](this, play);
         func_8098F66C(this);
     }
 }
