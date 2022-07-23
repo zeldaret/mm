@@ -22,7 +22,7 @@ typedef struct DmStk {
     /* 0x20C */ Vec3s morphTable[SKULL_KID_LIMB_MAX]; // Not used, since it's allocated dynamically instead.
     /* 0x290 */ DmStkActionFunc actionFunc;
     /* 0x294 */ ColliderCylinder collider;
-    /* 0x2E0 */ s16 animationId;
+    /* 0x2E0 */ s16 animIndex;
     /* 0x2E4 */ s32 alpha;
     /* 0x2E8 */ u32 fogR;
     /* 0x2EC */ u32 fogG;

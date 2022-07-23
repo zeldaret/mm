@@ -28,7 +28,7 @@ void osContGetReadData(OSContPad* data) {
     ptr = (u8*)__osContPifRam.ramarray;
     for (i = 0; i < __osMaxControllers; i++, ptr += sizeof(__OSContReadFormat), data++) {
         readformat = *(__OSContReadFormat*)ptr;
-        data->errno = (readformat.rxsize & 0xc0) >> 4;
+        data->errno = (readformat.rxsize & 0xC0) >> 4;
         if (data->errno == 0) {
             data->button = readformat.button;
             data->stick_x = readformat.stick_x;

@@ -301,11 +301,11 @@ void func_80BBB574(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
                     func_80151938(play, 0x124C);
@@ -313,7 +313,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
                 break;
 
             case 0x124C:
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80BBB4CC;
                 func_80BBAE84(this, 10, ANIMMODE_LOOP);
                 break;
@@ -339,7 +339,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         sp24 = func_80123810(play);
         if (sp24 > 0) {
             func_801477B4(play);
@@ -386,7 +386,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1237:
                 player->exchangeItemId = 0;
@@ -581,7 +581,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 func_80BBAE84(this, 2, ANIMMODE_LOOP);
                 func_801477B4(play);
@@ -590,7 +590,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_80BBAE84(this, 2, ANIMMODE_LOOP);
             this->actionFunc = func_80BBC14C;
             this->unk_2B6 |= 1;

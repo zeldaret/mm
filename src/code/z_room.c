@@ -58,7 +58,7 @@ void Room_DrawType1Mesh(PlayState* play, Room* room, u32 flags) {
     } else if (mesh->format == 2) {
         func_8012E32C(play, room, flags);
     } else {
-        __assert("../z_room.c", 0x3c5);
+        __assert("../z_room.c", 965);
     }
 }
 
@@ -85,9 +85,8 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
         roomCtx->unk31 = 1;
 
         size = play->roomList[index].vromEnd - play->roomList[index].vromStart;
-        roomCtx->activeRoomVram =
-            (void*)(((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
-                    0xfffffff0);
+        roomCtx->activeRoomVram = (void*)(ALIGN16((u32)roomCtx->roomMemPages[roomCtx->activeMemPage] -
+                                                  (size + 8) * roomCtx->activeMemPage - 7));
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
@@ -114,7 +113,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
 
             if (((play->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
                 (play->sceneNum != SCENE_IKNINSIDE)) {
-                play->envCtx.lightSettingOverride = 0xff;
+                play->envCtx.lightSettingOverride = 0xFF;
                 play->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();

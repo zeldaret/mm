@@ -108,9 +108,17 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
+u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s")
+    return actorCsCamList->setting;
+}
+
+Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
+
+    return Lib_SegmentedToVirtual(actorCsCamList->actorCsCamFuncData);
+}
 
 /**
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first

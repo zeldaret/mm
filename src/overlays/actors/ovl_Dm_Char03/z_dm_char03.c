@@ -5,6 +5,7 @@
  */
 
 #include "z_dm_char03.h"
+#include "objects/object_osn/object_osn.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,11 +16,10 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play);
 void DmChar03_Update(Actor* thisx, PlayState* play);
 void DmChar03_Draw(Actor* thisx, PlayState* play);
 
-void func_80AAB5F8(DmChar03* this, PlayState* play);
 void func_80AAB644(DmChar03* this, PlayState* play);
-void func_80AAB700(DmChar03* this, PlayState* play);
+void DmChar03_DoNothing(DmChar03* this, PlayState* play);
+void func_80AABA84(PlayState* play, DmChar03* this);
 
-#if 0
 const ActorInit Dm_Char03_InitVars = {
     ACTOR_DM_CHAR03,
     ACTORCAT_ITEMACTION,
@@ -32,34 +32,157 @@ const ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-#endif
+AnimationInfo sAnimations[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
 
-extern UNK_TYPE D_06020550;
+void DmChar03_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 index) {
+    f32 frame;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB4A0.s")
+    animInfo += index;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/DmChar03_Init.s")
+    if (animInfo->frameCount < 0.0f) {
+        frame = Animation_GetLastFrame(animInfo->animation);
+    } else {
+        frame = animInfo->frameCount;
+    }
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, frame, animInfo->mode,
+                     animInfo->morphFrames);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/DmChar03_Destroy.s")
+void DmChar03_Init(Actor* thisx, PlayState* play) {
+    DmChar03* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB5F8.s")
+    this->animIndex = 0;
+    this->actor.targetArrowOffset = 3000.0f;
+    this->unk_18E = false;
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);
+    DmChar03_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actionFunc = DmChar03_DoNothing;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB644.s")
+void DmChar03_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB700.s")
+void func_80AAB5F8(DmChar03* this, PlayState* play) {
+    s32 index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB710.s")
+    if (index >= 0) {
+        this->objectIndex = index;
+        this->actionFunc = func_80AAB644;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB838.s")
+void func_80AAB644(DmChar03* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, 0x88)) {
+        s32 index = Cutscene_GetActorActionIndex(play, 0x88);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/DmChar03_Update.s")
+        if (play->csCtx.actorActions[index]->action == 4) {
+            this->unk_18E = true;
+            this->offset.x = play->csCtx.actorActions[index]->startPos.x;
+            this->offset.y = play->csCtx.actorActions[index]->startPos.y;
+            this->offset.z = play->csCtx.actorActions[index]->startPos.z;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB974.s")
+void DmChar03_DoNothing(DmChar03* this, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB990.s")
+void func_80AAB710(DmChar03* this, PlayState* play) {
+    u8 shouldChangeAnim = true;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AAB9A8.s")
+    if (Cutscene_CheckActorAction(play, 0x88)) {
+        s32 index = Cutscene_GetActorActionIndex(play, 0x88);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/DmChar03_Draw.s")
+        if (play->csCtx.frames == play->csCtx.actorActions[index]->startFrame) {
+            switch (play->csCtx.actorActions[index]->action) {
+                case 1:
+                    shouldChangeAnim = false;
+                    break;
+                case 2:
+                    this->animIndex = 0;
+                    break;
+                case 3:
+                    this->unk_18E = false;
+                    shouldChangeAnim = false;
+                    Actor_MarkForDeath(&this->actor);
+                    break;
+                case 4:
+                    Item_Give(play, ITEM_MASK_DEKU);
+                    shouldChangeAnim = false;
+                    this->actionFunc = func_80AAB5F8;
+                    break;
+                default:
+                    shouldChangeAnim = false;
+                    break;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char03/func_80AABA84.s")
+            if (shouldChangeAnim) {
+                DmChar03_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+            }
+        }
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, index);
+    }
+}
+
+void func_80AAB838(DmChar03* this, PlayState* play) {
+    if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
+    } else if ((Animation_OnFrame(&this->skelAnime, 10.0f)) || (Animation_OnFrame(&this->skelAnime, 18.0f)) ||
+               (Animation_OnFrame(&this->skelAnime, 30.0f)) || (Animation_OnFrame(&this->skelAnime, 38.0f))) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_1);
+    }
+}
+
+void DmChar03_Update(Actor* thisx, PlayState* play) {
+    DmChar03* this = THIS;
+
+    if (Cutscene_CheckActorAction(play, 0x88) &&
+        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action == 2)) {
+        SkelAnime_Update(&this->skelAnime);
+    }
+    this->actionFunc(this, play);
+    func_80AAB710(this, play);
+    func_80AAB838(this, play);
+}
+
+s32 DmChar03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
+}
+
+void DmChar03_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+}
+
+void DmChar03_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+}
+
+void DmChar03_Draw(Actor* thisx, PlayState* play) {
+    DmChar03* this = THIS;
+
+    if (!this->unk_18E) {
+        if ((Cutscene_CheckActorAction(play, 0x88)) &&
+            (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action != 1)) {
+            func_8012C28C(play->state.gfxCtx);
+            SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, DmChar03_OverrideLimbDraw, DmChar03_PostLimbDraw,
+                                           DmChar03_TransformLimbDraw, &this->actor);
+        }
+    } else {
+        func_80AABA84(play, this);
+    }
+}
+
+void func_80AABA84(PlayState* play, DmChar03* this) {
+    s32 pad;
+
+    if (this->actor.objBankIndex == this->objectIndex) {
+        Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_NEW);
+        Matrix_RotateZYX(0, (play->gameplayFrames * 0x3E8), 0, MTXMODE_APPLY);
+        Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
+        GetItem_Draw(play, GID_MASK_DEKU);
+    }
+    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+        this->actor.objBankIndex = this->objectIndex;
+    }
+}
