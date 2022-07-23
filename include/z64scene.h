@@ -4,6 +4,7 @@
 #include "ultra64.h"
 #include "z64dma.h"
 #include "z64cutscene.h"
+#include "z64map.h"
 #include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
@@ -260,7 +261,7 @@ typedef union {
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2;
+    /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 unk5;
@@ -377,7 +378,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 keyFrameLength;
-    /* 0x4 */ void* textureList;
+    /* 0x4 */ TexturePtr* textureList;
     /* 0x8 */ u8* textureIndexList;
 } AnimatedMatTexCycleParams; // size = 0xC
 
@@ -467,19 +468,6 @@ typedef struct {
     /* 0x02 */ s16 unk2;
     /* 0x04 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ u16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ u16 unk8;
-} MinimapEntry; // size = 0xA
-
-typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s16 unk4;
-} MinimapList; // size  = 0x8
 
 typedef struct {
     /* 0x00 */ UNK_TYPE2 unk0;

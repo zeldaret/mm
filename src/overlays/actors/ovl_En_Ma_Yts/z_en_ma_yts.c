@@ -354,21 +354,21 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 
 void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5: // End message block
+        case TEXT_STATE_5: // End message block
             EnMaYts_ChooseNextDialogue(this, play);
             break;
 
-        case 6: // End conversation
+        case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
                 EnMaYts_SetupStartDialogue(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
     }
 }

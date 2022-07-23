@@ -463,7 +463,7 @@ void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
     MinimapList* temp_v0;
     s32 i;
 
-    if (func_8010A208(globalCtx) == 0) {
+    if (Map_IsInBossArea(globalCtx) == 0) {
         D_801BEC1C = globalCtx->numRooms;
         temp_v0 = Lib_SegmentedToVirtual(segmentAddress);
         D_801BEC14 = *temp_v0;
@@ -520,7 +520,7 @@ s32 func_80106450(PlayState* play) {
 }
 
 s32 func_801064CC(PlayState* play) {
-    if (((play->csCtx.state != 0) && (func_80106408(play) == 0)) || (D_801BEBB8.unk20 & 2) || (func_8010A208(play) != 0)) {
+    if (((play->csCtx.state != 0) && (func_80106408(play) == 0)) || (D_801BEBB8.unk20 & 2) || (Map_IsInBossArea(play) != 0)) {
         return true;
     }
     return false;

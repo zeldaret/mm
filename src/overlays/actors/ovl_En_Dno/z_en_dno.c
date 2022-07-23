@@ -322,7 +322,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
         func_800B8614(&this->actor, play, 60.0f);
@@ -356,7 +356,7 @@ void func_80A71E54(EnDno* this, PlayState* play) {
 void func_80A71F18(EnDno* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             if (!(this->unk_3B0 & 0x10) ||
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
                 switch (this->textId) {
@@ -380,7 +380,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case TEXT_STATE_3:
             if (play->msgCtx.currentTextId == 0x80B) {
                 switch (this->unk_32C) {
                     case 16:
@@ -402,9 +402,9 @@ void func_80A71F18(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x80B:
                     switch (this->unk_32C) {
@@ -537,7 +537,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
 
     func_80A71424(&this->unk_466, 0, 0, 0, 0x2000, 0x16C);
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             switch (this->unk_328) {
                 case 0:
                     if (this->unk_32C == 14) {
@@ -569,9 +569,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             if (((play->msgCtx.currentTextId == 0x800) || (play->msgCtx.currentTextId == 0x801)) &&
                 (this->unk_32C == 8)) {
                 Math_SmoothStepToF(&this->unk_454, 1.0f, 1.0f, 0.1f, 0.01f);
@@ -593,9 +593,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
             }
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             switch (play->msgCtx.currentTextId) {
                 case 0x800:
                 case 0x801:

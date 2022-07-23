@@ -60,7 +60,7 @@ static ColliderJntSphElementInit D_808CBF50[3] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808CBFBC = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_808CBF50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_808CBF50, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {

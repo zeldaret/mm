@@ -99,7 +99,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {
         if (this->moonsTear != NULL) {
@@ -198,14 +198,14 @@ void func_809CD028(EnBji01* this, PlayState* play) {
 
 void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
             func_809CCDE0(this, play);
             if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
                 Message_StartTextbox(play, this->textId, &this->actor);
             }
             break;
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
@@ -233,7 +233,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 }
             }
             break;
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
@@ -282,7 +282,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 }
             }
             break;
-        case 6:
+        case TEXT_STATE_DONE:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, play);
@@ -297,7 +297,7 @@ void func_809CD634(EnBji01* this, PlayState* play) {
     func_801A5BD0(0x6F);
     Audio_QueueSeqCmd(0xE0000101);
     play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
-    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
     func_80169EFC(&play->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
@@ -374,7 +374,7 @@ void EnBji01_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
+    Actor_UpdateBgCheckInfo(play, (Actor*)this, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {

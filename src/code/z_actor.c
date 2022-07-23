@@ -172,14 +172,14 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         f32 alphaRatio;
 
         if ((actor->id == ACTOR_PLAYER) && (((Player*)actor)->stateFlags3 & 0x8000)) {
-            f32 tmpScaleZ = actor->scale.z;
+            f32 prevScaleZ = actor->scale.z;
 
             actor->scale.z += 0.03f * fabsf(Math_CosS(((Player*)actor)->unk_AAA));
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MAX(alphaRatio, 1.0f);
             ActorShadow_Draw(actor, mapper, play, gCircleShadowDL, NULL);
-            actor->scale.z = tmpScaleZ;
+            actor->scale.z = prevScaleZ;
         } else {
             actor->shape.shadowScale *= 0.3f;
             alphaRatio = (distToFloor - 20.0f) * 0.02f;
@@ -1343,7 +1343,7 @@ void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(play, CAM_ID_MAIN), 4);
+            Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_HORSE);
         }
     }
 }
@@ -1856,8 +1856,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) ||
-        ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(&play->state)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1887,7 +1886,7 @@ s32 func_800B863C(Actor* actor, PlayState* play) {
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
@@ -1933,7 +1932,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(&play->state) ||
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(play) ||
         (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
@@ -2205,8 +2204,8 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
-    if (func_800C99D4(&play->colCtx, polygon, index) == 8) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+    if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
 
@@ -2509,10 +2508,10 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     Lights_Draw(light, play->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
-        Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.skyboxOffset.x,
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.quakeOffset.x,
                                      actor->world.pos.y +
-                                         ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.skyboxOffset.y),
-                                     actor->world.pos.z + play->mainCamera.skyboxOffset.z, &actor->shape.rot);
+                                         ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.quakeOffset.y),
+                                     actor->world.pos.z + play->mainCamera.quakeOffset.z, &actor->shape.rot);
     } else {
         Matrix_SetTranslateRotateYXZ(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
                                      actor->world.pos.z, &actor->shape.rot);
@@ -3545,7 +3544,7 @@ void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 arg2, Gfx** dList) 
             part = (EnPart*)spawnedPart;
 
             Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
-            part->unk_150 = *dList;
+            part->dList = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }
     }
@@ -4352,7 +4351,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != 0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
             return true;
         }

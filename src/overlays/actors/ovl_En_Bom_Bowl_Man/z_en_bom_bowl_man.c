@@ -98,7 +98,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
-        !CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+        !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -237,7 +237,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Player* player = GET_PLAYER(play);
         s32 pad;
         s32 sp28 = false;
@@ -248,7 +248,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D0)),
                                       &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
@@ -260,7 +260,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 func_809C493C(this, 3, 1.0f);
                 this->unk_2D4 = this->actor.yawTowardsPlayer;
                 this->unk_2C0 = 2;
-                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     this->unk_2C0 = 4;
                 }
                 break;
@@ -273,7 +273,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                     sp28 = true;
                 } else {
                     this->unk_2C0 = 3;
-                    play->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     func_809C493C(this, 1, 1.0f);
                     D_809C6100 = 1;
                     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -301,7 +301,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 if (this->unk_2B8 != 2) {
                     ActorCutscene_Stop(this->unk_2D0);
                 }
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 func_809C493C(this, 1, 1.0f);
                 D_809C6100 = 1;
                 this->actionFunc = func_809C5B1C;
@@ -330,12 +330,13 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+    if ((play->msgCtx.unk120B1 == 0) &&
+        ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
         if (player->transformation == PLAYER_FORM_HUMAN) {
             gSaveContext.save.weekEventReg[84] |= 0x80;
@@ -409,7 +410,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
@@ -447,7 +448,8 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.unk120B1 == 0) && ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == 6))) {
+        if ((play->msgCtx.unk120B1 == 0) &&
+            ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -550,7 +552,7 @@ void func_809C5BA0(EnBomBowlMan* this) {
 
 void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
     f32 sp2C = this->skelAnime.curFrame;
-    s32 sp28;
+    s32 subCam;
 
     if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
         func_809C493C(this, 15, 1.0f);
@@ -571,13 +573,13 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
         }
 
         if (this->unk_2F4 == 0) {
-            sp28 = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->unk_2D2));
+            subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D2));
 
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);
 
                 func_801477B4(play);
-                Camera_SetTargetActor(sp28, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -592,7 +594,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                Camera_SetTargetActor(sp28, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
             }
         }
     }

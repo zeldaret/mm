@@ -842,10 +842,10 @@ void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, PlayState* play) {
 void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
     Camera* subCam;
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->subCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         func_800B724C(play, &this->actor, 6);
@@ -1018,7 +1018,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 20.0f;
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         this->actor.speedXZ = 0.0f;
         this->ceilingMoveTimer = 20;
     } else {
@@ -1042,7 +1042,7 @@ void EnBigslime_MoveOnCeiling(EnBigslime* this, PlayState* play) {
     EnBigslime_Scale(this, pitch, 0.04f, 0.04f);
     EnBigslime_UpdateWavySurface(this);
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         if (this->ceilingMoveTimer == 0) {
             EnBigslime_EndCutscene(this, play);
             this->ceilingMoveTimer = 320;
@@ -2320,7 +2320,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
     s16 yawOffset;
 
     Animation_Change(&this->skelAnime, &gGekkoDamagedAnim, 0.5f, 0.0f,
-                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), 3, 0.0f);
+                     Animation_GetLastFrame(&gGekkoDamagedAnim.common), ANIMMODE_ONCE_INTERP, 0.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->defeatTimer = 60;
     this->actor.speedXZ = 10.0f;
@@ -2545,7 +2545,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
             func_800B724C(play, &this->actor, 7);
         }
 
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
         if (this->actor.colChkInfo.health == 0) {
             EnBigslime_SetupCutsceneDefeat(this, play);
         } else if ((this->actionFuncStored == EnBigslime_DamageGekko) ||

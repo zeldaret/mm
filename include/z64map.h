@@ -1,6 +1,27 @@
-#ifndef Z64_MAP_D_H
-#define Z64_MAP_D_H
+#ifndef Z64MAP_H
+#define Z64MAP_H
 #include "ultra64.h"
+
+#define FLOOR_INDEX_MAX 4
+
+/* z_scene */
+typedef struct {
+    /* 0x00 */ u16 unk0;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ s16 unk6;
+    /* 0x08 */ u16 unk8;
+} MinimapEntry; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ s32 unk4;
+} MinimapList; // size  = 0x8
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ s16 unk4;
+} MinimapList2; // size  = 0x8
 
 /* z_map_data */
 
@@ -45,7 +66,7 @@ typedef struct {
 } T_801BEBB8_unk48;
 
 typedef struct {
-    /* 0x00 */ MinimapList* unk0; //unk0 -> sub1 -> s16[5]
+    /* 0x00 */ MinimapList2* unk0; //unk0 -> sub1 -> s16[5]
     /* 0x04 */ s32 unk4;
     /* 0x08 */ s16 unk8;
     /* 0x0A */ s16 unkA;
