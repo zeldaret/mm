@@ -99,16 +99,18 @@ void func_80C06CC4(ObjMuPict* this) {
 
 void func_80C06CD8(ObjMuPict* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
-        case 5:
+
+        case TEXT_STATE_5:
             func_80C06E88(this, play);
             break;
-        case 6:
+
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C06B5C(this);
                 if (this->actor.cutscene >= 0) {

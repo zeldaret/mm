@@ -260,7 +260,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
     func_80BD1764(this);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1022:
@@ -293,7 +293,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             func_801477B4(play);
             this->actionFunc = func_80BD1C84;
             this->unk_320 &= ~1;
@@ -411,7 +411,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1033:
             case 0x1034:
@@ -424,11 +424,11 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
 
             case 0x1039:
                 play->nextEntranceIndex = play->setupExitList[ENZOV_GET_FE00(&this->actor)];
-                play->unk_1887F = 5;
-                play->sceneLoadFlag = 0x14;
+                play->transitionType = TRANS_TYPE_05;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 gSaveContext.save.weekEventReg[78] |= 1;
                 this->actionFunc = func_80BD1D94;
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 Audio_QueueSeqCmd(0x101400FF);
                 break;
 

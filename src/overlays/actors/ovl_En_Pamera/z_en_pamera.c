@@ -5,9 +5,8 @@
  */
 
 #include "z_en_pamera.h"
-#include "../ovl_En_Bom/z_en_bom.h"
-#include "../ovl_En_Door/z_en_door.h"
-#include "objects/object_pamera/object_pamera.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -136,8 +135,8 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC, this->jointTable,
-                       this->morphTable, PAMERA_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPamelaSkel, &object_pamera_Anim_0005BC, this->jointTable,
+                       this->morphTable, PAMELA_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit2);
@@ -241,7 +240,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
         if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->cutscenes[0])),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[0])),
                                    &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
@@ -428,7 +427,7 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->cutscenes[1])),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[1])),
                                    &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->cutscenes[1] != -1) {
@@ -511,9 +510,9 @@ void func_80BD94E0(EnPamera* this, PlayState* play) {
     if ((this->actionFunc != func_80BD8B70) && (this->actionFunc != func_80BD8964) &&
         (this->actionFunc != func_80BD909C) && (this->actionFunc != func_80BD8D1C) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ == 3.0f))) {
-        Actor_TrackPlayer(play, &this->actor, &this->limb9Rot, &this->limb8Rot, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Actor_TrackNone(&this->limb9Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
     }
 }
 
@@ -534,9 +533,9 @@ void EnPamera_Update(Actor* thisx, PlayState* play) {
 s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPamera* this = THIS;
 
-    if (limbIndex == PAMERA_LIMB_HAIR) {
-        rot->x += this->limb9Rot.y;
-        rot->z += this->limb9Rot.x;
+    if (limbIndex == PAMELA_LIMB_HEAD) {
+        rot->x += this->headRot.y;
+        rot->z += this->headRot.x;
     }
     return false;
 }
@@ -544,7 +543,7 @@ s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void EnPamera_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnPamera* this = THIS;
 
-    if (limbIndex == PAMERA_LIMB_HAIR) {
+    if (limbIndex == PAMELA_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BDA5F0, &this->actor.focus.pos);
     }
 }
@@ -628,20 +627,23 @@ void func_80BD9A9C(EnPamera* this) {
 
 void EnPamera_HandleDialogue(EnPamera* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
-        case 5:
+
+        case TEXT_STATE_5:
             func_80BD9B4C(this, play);
             break;
-        case 6:
+
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80BD9938(this);
             }
             break;
+
         default:
             break;
     }
@@ -683,9 +685,9 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
 
 void func_80BD9C70(EnPamera* this, PlayState* play) {
     play->nextEntranceIndex = 0x2020;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x46;
-    gSaveContext.nextTransition = 2;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_70;
+    gSaveContext.nextTransitionType = TRANS_TYPE_02;
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
@@ -855,7 +857,7 @@ void func_80BDA344(Actor* thisx, PlayState* play) {
         if (!(gSaveContext.save.weekEventReg[61] & 4)) {
             gSaveContext.save.weekEventReg[61] |= 4;
         }
-        Actor_TrackNone(&this->limb9Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
     } else {
         func_80BD94E0(this, play);
         if (this->actionFunc == func_80BD994C) {

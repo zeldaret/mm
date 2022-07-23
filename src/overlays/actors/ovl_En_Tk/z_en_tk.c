@@ -291,7 +291,7 @@ void func_80AECA3C(EnTk* this, PlayState* play) {
 void func_80AECA90(EnTk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, play, 100.0f);
@@ -318,7 +318,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AED4F8(this, play);
         return;
     }
@@ -411,7 +411,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->unk_3CE |= 4;
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         sp78 = this->timePathElapsedTime;
         sp74 = this->timePathWaypoint;
         timePathTargetPos = this->actor.world.pos;
@@ -429,7 +429,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp94, &sp88);
     }
 
-    if ((play->unk_18B4A != 0) || (this->timePathTimeSpeed == 0)) {
+    if ((play->transitionMode != TRANS_MODE_OFF) || (this->timePathTimeSpeed == 0)) {
         this->timePathElapsedTime = sp78;
         this->timePathWaypoint = sp74;
         this->timePathTargetPos = timePathTargetPos;
@@ -555,7 +555,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x1555, 0x71C)) {
                 if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 4, &this->unk_2D4);
@@ -572,14 +572,14 @@ void func_80AED610(EnTk* this, PlayState* play) {
                 break;
             }
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x13FD:
@@ -692,7 +692,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         play->msgCtx.msgMode = 0;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
@@ -795,7 +795,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             switch (this->unk_2E6) {
                 case 0x1404:
                 case 0x1405:
@@ -821,14 +821,14 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
             }
             break;
 
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
-        case 5:
-        case 6:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_5:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1404:
@@ -1190,7 +1190,7 @@ void func_80AEED38(EnTk* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && !Play_InCsMode(play) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(play, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;
