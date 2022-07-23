@@ -172,7 +172,7 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     } else {
         this->actor.hintId = 0x2C;
     }
-    
+
     if ((paramsFF00 == 0) || (paramsFF00 == 255)) {
         func_80A4E0CC(this);
         this->unk_178 = 30000.0f;
