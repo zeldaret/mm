@@ -106,7 +106,7 @@ void func_80B9B74C(ObjTaru* this, PlayState* play) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f, 0, 0,
-                             70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, &gLargeCrateFragment1DL);
+                             70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, gLargeCrateFragment1DL);
     }
     func_800BBFB0(play, thisPos, 90.0f, 6, 100, 160, 1);
 }
@@ -150,7 +150,7 @@ void func_80B9B9C8(ObjTaru* this, PlayState* play) {
             spD8.y += thisPos->y;
             spD8.z += thisPos->z;
             EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, -0x64, 0x20, 0x1C, 4, 0, (Rand_ZeroOne() * 30.0f) + 5.0f, 0,
-                                 0, 0x5A, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, &gLargeCrateFragment2DL);
+                                 0, 0x5A, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, gLargeCrateFragment2DL);
         }
     }
 }
@@ -333,9 +333,9 @@ void ObjTaru_Draw(Actor* thisx, PlayState* play) {
     ObjTaru* this = THIS;
 
     if (OBJ_TARU_GET_80(thisx)) {
-        dList = &gObjTaruBreakablePiratePanelDL;
+        dList = gObjTaruBreakablePiratePanelDL;
     } else {
-        dList = &gObjTaruBarrelDL;
+        dList = gObjTaruBarrelDL;
     }
     Gfx_DrawDListOpa(play, dList);
 }
