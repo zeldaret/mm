@@ -21,16 +21,11 @@ void EnTest2_Update(Actor* thisx, PlayState* play);
 void EnTest2_SetActorFlags(Actor* thisx, PlayState* play);
 void EnTest2_Draw(Actor* thisx, PlayState* play);
 
-typedef enum {
-    /* 0xB */ EN_TEST2_PARAMS_B = 0xB,
-    /* 0xC */ EN_TEST2_PARAMS_C
-} EnTest2_Params;
-
-typedef struct EnTest2DisplayObjs {
-    Gfx* dList1;
-    Gfx* dList2;
-    AnimatedMaterial* animMat;
-} EnTest2DisplayObjs;
+typedef struct EnTest2ModelInfo {
+    /* 0x0 */ Gfx* dList1;
+    /* 0x4 */ Gfx* dList2;
+    /* 0x8 */ AnimatedMaterial* animMat;
+} EnTest2ModelInfo;
 
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
@@ -44,7 +39,7 @@ const ActorInit En_Test2_InitVars = {
     (ActorFunc)NULL,
 };
 
-static EnTest2DisplayObjs sModelInfo[] = {
+static EnTest2ModelInfo sModelInfo[] = {
     { object_dekucity_ana_obj_DL_000040, NULL, NULL },
     { object_sichitai_obj_DL_001820, NULL, NULL },
     { object_yukimura_obj_DL_0008C0, NULL, NULL },
@@ -85,7 +80,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
 void EnTest2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 objectIndex;
-    EnTest2DisplayObjs* dispObjects;
+    EnTest2ModelInfo* modelInfo;
     EnTest2* this = THIS;
 
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[this->actor.params]);
@@ -94,12 +89,12 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
         return;
     }
     if (Object_IsLoaded(&play->objectCtx, objectIndex)) {
-        dispObjects = &sModelInfo[this->actor.params];
+        modelInfo = &sModelInfo[this->actor.params];
         this->actor.objBankIndex = objectIndex;
         this->actor.draw = EnTest2_Draw;
-        if ((dispObjects->animMat) != NULL) {
+        if (modelInfo->animMat != NULL) {
             Actor_SetObjectDependency(play, &this->actor);
-            this->animMat = Lib_SegmentedToVirtual(dispObjects->animMat);
+            this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
         if (play->roomCtx.currRoom.unk5) {
             this->actor.update = EnTest2_SetActorFlags;
@@ -127,7 +122,7 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
     if (this->animMat != NULL) {
         AnimatedMat_Draw(play, this->animMat);
     }
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);
