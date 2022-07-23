@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_fire_tail.c
  * Overlay: ovl_Effect_Ss_Fire_Tail
- * Description:
+ * Description: Fire (burned by something)
  */
 
 #include "z_eff_ss_fire_tail.h"
