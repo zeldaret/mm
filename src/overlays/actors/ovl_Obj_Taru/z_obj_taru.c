@@ -7,6 +7,7 @@
 #include "z_obj_taru.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
+#include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 #include "objects/object_taru/object_taru.h"
 #include "objects/object_kibako2/object_kibako2.h"
 
@@ -36,8 +37,22 @@ const ActorInit Obj_Taru_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x80000508, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x80000508, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 30, 50, 0, { 0, 0, 0 } },
 };
 
@@ -50,9 +65,7 @@ static InitChainEntry sInitChain[] = {
 
 s32 func_80B9B6E0(ObjTaru* this, PlayState* play) {
     s32 chestFlag = -1;
-    s32 skulltulaParams = (OBJ_TARU_P001F(&this->dyna.actor) * 4) | 0xFF01;
-    s32 temp_v0_2;
-    s32 phi_v0;
+    s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->dyna.actor) * 4) | 0xFF01;
 
     if (ENSW_GETS_3(skulltulaParams)) {
         chestFlag = ENSW_GETS_3FC(skulltulaParams);
@@ -98,7 +111,7 @@ void func_80B9B74C(ObjTaru* this, PlayState* play) {
     func_800BBFB0(play, thisPos, 90.0f, 6, 100, 160, 1);
 }
 
-void func_80B9B9C8(ObjTaru *this, PlayState *play) {
+void func_80B9B9C8(ObjTaru* this, PlayState* play) {
     s32 phi_s5;
     s32 i;
     s32 j;
@@ -108,60 +121,60 @@ void func_80B9B9C8(ObjTaru *this, PlayState *play) {
     f32 spC0;
     f32 spBC;
     s32 phi_fp;
-    Vec3f *temp_s1;
+    Vec3f* thisPos = &this->dyna.actor.world.pos;
     f32 temp_fs0;
     f32 temp_fs1;
 
-
     spC0 = Math_SinS(this->dyna.actor.shape.rot.y);
     spBC = Math_CosS(this->dyna.actor.shape.rot.y);
-    if ((this->dyna.actor.params & 0x100) != 0) {
+
+    if (OBJ_TARU_GET_100(&this->dyna.actor)) {
         phi_fp = 0;
         phi_s5 = 8;
     } else {
         phi_fp = 2;
         phi_s5 = 6;
     }
-            temp_s1 = &this->dyna.actor.world.pos;
+
     for (i = 0; i < 4; i++) {
-            for (j = phi_fp; j < phi_s5; j++) {
-                temp_fs0 = randPlusMinusPoint5Scaled(10.0f) + -105.0f + (j * 30.0f);
-                temp_fs1 = randPlusMinusPoint5Scaled(4.0f);
-                spD8.x = temp_fs0 * spBC;
-                spD8.y = randPlusMinusPoint5Scaled(10.0f) + 15.0f + (i * 30.0f);
-                spD8.z = temp_fs0 * spC0;
-                spCC.x = (spD8.x * 0.05f) + (temp_fs1 * spC0);
-                spCC.y = Rand_ZeroFloat(5.0f) + 2.0f;
-                spCC.z = (spD8.z * 0.05f) + (temp_fs1 * spBC);
-                spD8.x += temp_s1->x;
-                spD8.y += temp_s1->y;
-                spD8.z += temp_s1->z;
-                EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, -0x64, 0x20, 0x1C, 4, 0, (s32) ((Rand_ZeroOne() * 30.0f) + 5.0f), 0, 0, 0x5A, -1, 0x133, &gLargeCrateFragment2DL);
-            }
+        for (j = phi_fp; j < phi_s5; j++) {
+            temp_fs0 = randPlusMinusPoint5Scaled(10.0f) + -105.0f + (j * 30.0f);
+            temp_fs1 = randPlusMinusPoint5Scaled(4.0f);
+            spD8.x = temp_fs0 * spBC;
+            spD8.y = randPlusMinusPoint5Scaled(10.0f) + 15.0f + (i * 30.0f);
+            spD8.z = temp_fs0 * spC0;
+            spCC.x = (spD8.x * 0.05f) + (temp_fs1 * spC0);
+            spCC.y = Rand_ZeroFloat(5.0f) + 2.0f;
+            spCC.z = (spD8.z * 0.05f) + (temp_fs1 * spBC);
+            spD8.x += thisPos->x;
+            spD8.y += thisPos->y;
+            spD8.z += thisPos->z;
+            EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, -0x64, 0x20, 0x1C, 4, 0, (Rand_ZeroOne() * 30.0f) + 5.0f, 0,
+                                 0, 0x5A, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, &gLargeCrateFragment2DL);
+        }
     }
 }
 
 void func_80B9BC64(ObjTaru* this, PlayState* play) {
-    s32 temp_v0;
+    s32 item;
 
-    temp_v0 = func_800A8150(this->dyna.actor.params & 0x3F);
-    if (temp_v0 >= 0) {
-        Item_DropCollectible(play, &this->dyna.actor.world.pos,
-                             ((((s16)this->dyna.actor.params >> 8) & 0x7F) << 8) | temp_v0);
+    item = func_800A8150(OBJ_TARU_GET_3F(&this->dyna.actor));
+    if (item >= 0) {
+        Item_DropCollectible(play, &this->dyna.actor.world.pos, (OBJ_TARU_GET_7F00(&this->dyna.actor) << 8) | item);
     }
 }
 
 void func_80B9BCBC(ObjTaru* this, PlayState* play) {
     s32 pad;
-    s32 params;
+    s32 params1F;
     Actor* spawnedActor;
     s16 rotY;
 
     if (func_80B9B6E0(this, play) != 0) {
-        params = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF01;
-        rotY = ((Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000);
-        spawnedActor = Actor_Spawn(&play->actorCtx, play, 0x50, this->dyna.actor.world.pos.x,
-                                   this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, rotY, 0, params);
+        params1F = (OBJ_TARU_GET_1F(&this->dyna.actor) * 4) | 0xFF01;
+        rotY = (Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
+        spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
+                                   this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, rotY, 0, params1F);
         if (spawnedActor != NULL) {
             spawnedActor->parent = &this->dyna.actor;
             spawnedActor->velocity.y = 12.0f;
@@ -171,7 +184,7 @@ void func_80B9BCBC(ObjTaru* this, PlayState* play) {
 }
 
 void func_80B9BD84(ObjTaru* this, PlayState* play) {
-    if (!((this->dyna.actor.params >> 0xF) & 1)) {
+    if (!OBJ_TARU_GET_8000(&this->dyna.actor)) {
         func_80B9BC64(this, play);
     } else {
         func_80B9BCBC(this, play);
@@ -181,33 +194,34 @@ void func_80B9BD84(ObjTaru* this, PlayState* play) {
 void ObjTaru_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTaru* this = THIS;
-    s32 paramsF;
+    s32 params8000;
 
     DynaPolyActor_Init(&this->dyna, 0);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    if ((this->dyna.actor.params & 0x80) != 0) {
-        if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F) != 0) {
+
+    if (OBJ_TARU_GET_80(thisx)) {
+        if (Flags_GetSwitch(play, OBJ_TARU_GET_7F(thisx))) {
             Actor_MarkForDeath(&this->dyna.actor);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_001CB0);
         }
-        if ((this->dyna.actor.params & 0x100) != 0) {
+        if (OBJ_TARU_GET_100(&this->dyna.actor)) {
             this->dyna.actor.scale.x = 0.2f;
         }
     } else {
-        paramsF = (this->dyna.actor.params >> 0xF) & 1;
+        params8000 = OBJ_TARU_GET_8000(thisx);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_000FC8);
         Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        if (paramsF == 0) {
-            if (Item_CanDropBigFairy(play, this->dyna.actor.params & 0x3F, (this->dyna.actor.params >> 8) & 0x7F) !=
-                0) {
-                this->unk1AC = 1;
-                this->dyna.actor.flags |= 0x10;
+
+        if (params8000 == 0) {
+            if (Item_CanDropBigFairy(play, OBJ_TARU_GET_3F(&this->dyna.actor), OBJ_TARU_GET_7F00(&this->dyna.actor))) {
+                this->unk_1AC = 1;
+                this->dyna.actor.flags |= ACTOR_FLAG_10;
             }
         }
-        if ((paramsF != 1) || (func_80B9B6E0(this, play) == 0)) {
-            this->unk1AD = -1;
+        if ((params8000 != 1) || (!func_80B9B6E0(this, play))) {
+            this->unk_1AD = -1;
         }
     }
     this->actionFunc = func_80B9C07C;
@@ -216,7 +230,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
 void ObjTaru_Destroy(Actor* thisx, PlayState* play) {
     ObjTaru* this = THIS;
 
-    if (!(this->dyna.actor.params & 0x80)) {
+    if (!OBJ_TARU_GET_80(thisx)) {
         Collider_DestroyCylinder(play, &this->collider);
     }
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -226,18 +240,18 @@ s32 func_80B9BF7C(ObjTaru* this) {
     s32 pad;
     s32 phi_a3 = 0;
 
-    if ((!(this->dyna.actor.params & 0x80)) && (this->collider.base.acFlags & 2)) {
+    if ((!OBJ_TARU_GET_80(&this->dyna.actor)) && (this->collider.base.acFlags & AC_HIT)) {
         Actor* ac = this->collider.base.ac;
 
-        this->collider.base.acFlags &= 0xFFFD;
+        this->collider.base.acFlags &= ~AC_HIT;
         if (ac != NULL) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
                 phi_a3 = 0;
-                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < 25600.0f) {
+                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     phi_a3 = 1;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
-                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < 10000.0f) {
+                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     phi_a3 = 1;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
@@ -251,25 +265,25 @@ s32 func_80B9BF7C(ObjTaru* this) {
 }
 
 void func_80B9C07C(ObjTaru* this, PlayState* play) {
-    if (func_80B9BF7C(this) != 0) {
-        if ((this->dyna.actor.params & 0x80) == 0) {
+    if (func_80B9BF7C(this)) {
+        if (!OBJ_TARU_GET_80(&this->dyna.actor)) {
             func_80B9B74C(this, play);
         } else {
             func_80B9B9C8(this, play);
         }
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x14U, 0x28AAU);
-        if ((this->dyna.actor.params & 0x80) != 0) {
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x14, NA_SE_EV_WOODBOX_BREAK);
+        if (OBJ_TARU_GET_80(&this->dyna.actor)) {
             this->actionFunc = func_80B9C1A0;
-            return;
+        } else {
+            this->dyna.actor.flags |= ACTOR_FLAG_10;
+            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            this->dyna.actor.draw = NULL;
+            this->actionFunc = func_80B9C174;
         }
-        this->dyna.actor.flags |= 0x10;
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
-        this->dyna.actor.draw = NULL;
-        this->actionFunc = func_80B9C174;
-        return;
-    }
-    if (this->dyna.actor.xzDistToPlayer < 600.0f) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    } else {
+        if (this->dyna.actor.xzDistToPlayer < 600.0f) {
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        }
     }
 }
 
@@ -281,7 +295,7 @@ void func_80B9C174(ObjTaru* this, PlayState* play) {
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -291,22 +305,22 @@ void func_80B9C1A0(ObjTaru* this, PlayState* play) {
 void ObjTaru_Update(Actor* thisx, PlayState* play) {
     ObjTaru* this = THIS;
 
-    if (!(this->dyna.actor.params & 0x80)) {
-        if (this->unk1AC != 0) {
+    if (!OBJ_TARU_GET_80(thisx)) {
+        if (this->unk_1AC != 0) {
             play->actorCtx.unk5 |= 8;
         }
-        if (this->unk1AD >= 0) {
-            switch (this->unk1AD) {
+        if (this->unk_1AD >= 0) {
+            switch (this->unk_1AD) {
                 case 0:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, 0x39DA);
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
                     if (Rand_ZeroOne() < 0.1f) {
-                        this->unk1AD = Rand_S16Offset(0x28, 0x50);
+                        this->unk_1AD = Rand_S16Offset(40, 80);
                     } else {
-                        this->unk1AD = 8;
+                        this->unk_1AD = 8;
                     }
                     break;
                 default:
-                    this->unk1AD--;
+                    this->unk_1AD--;
                     break;
             }
         }
@@ -318,7 +332,7 @@ void ObjTaru_Draw(Actor* thisx, PlayState* play) {
     Gfx* dList;
     ObjTaru* this = THIS;
 
-    if (this->dyna.actor.params & 0x80) {
+    if (OBJ_TARU_GET_80(thisx)) {
         dList = &gObjTaruBreakablePiratePanelDL;
     } else {
         dList = &gObjTaruBarrelDL;
