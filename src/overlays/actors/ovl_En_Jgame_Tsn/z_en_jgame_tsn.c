@@ -251,21 +251,21 @@ void func_80C14030(EnJgameTsn* this) {
 
 void func_80C14044(EnJgameTsn* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80C14684(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80C147B4(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
@@ -368,9 +368,9 @@ void func_80C144E4(EnJgameTsn* this) {
 
 void func_80C144F8(EnJgameTsn* this, PlayState* play) {
     play->nextEntranceIndex = 0x68D0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void func_80C14540(EnJgameTsn* this) {

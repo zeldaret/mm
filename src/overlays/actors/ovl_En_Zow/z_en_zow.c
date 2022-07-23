@@ -459,7 +459,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x12E8:
@@ -487,7 +487,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80BDD634;
             break;
     }

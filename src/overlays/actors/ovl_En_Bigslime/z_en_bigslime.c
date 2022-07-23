@@ -153,7 +153,7 @@ static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
  * Purpose: indices to calculate/update normal vector for lighting calculations
  * "EnBigslimeTri" struct based on "Tri" struct from gbi.h, but without the flag
  */
-static EnBigslimeTri sEnbigslimeTri[BIGSLIME_NUM_FACES] = {
+static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 0, 2, 1 },       { 1, 7, 6 },       { 1, 2, 7 },       { 2, 8, 7 },       { 6, 17, 16 },     { 6, 7, 17 },
     { 8, 19, 18 },     { 7, 8, 18 },      { 7, 18, 17 },     { 9, 21, 20 },     { 0, 3, 2 },       { 2, 9, 8 },
     { 2, 3, 9 },       { 3, 10, 9 },      { 8, 20, 19 },     { 8, 9, 20 },      { 10, 22, 21 },    { 9, 10, 21 },
@@ -436,13 +436,13 @@ void EnBigslime_UpdateSurfaceNorm(EnBigslime* this) {
     }
 
     for (i = 0; i < BIGSLIME_NUM_FACES; i++) {
-        dynamicVtx0 = &sBigslimeDynamicVtx[this->dynamicVtxState][sEnbigslimeTri[i].v[0]];
-        dynamicVtx12 = &sBigslimeDynamicVtx[this->dynamicVtxState][sEnbigslimeTri[i].v[1]];
+        dynamicVtx0 = &sBigslimeDynamicVtx[this->dynamicVtxState][sBigslimeTri[i].v[0]];
+        dynamicVtx12 = &sBigslimeDynamicVtx[this->dynamicVtxState][sBigslimeTri[i].v[1]];
         vecTriEdge1.x = dynamicVtx12->n.ob[0] - dynamicVtx0->n.ob[0];
         vecTriEdge1.y = dynamicVtx12->n.ob[1] - dynamicVtx0->n.ob[1];
         vecTriEdge1.z = dynamicVtx12->n.ob[2] - dynamicVtx0->n.ob[2];
 
-        dynamicVtx12 = &sBigslimeDynamicVtx[this->dynamicVtxState][sEnbigslimeTri[i].v[2]];
+        dynamicVtx12 = &sBigslimeDynamicVtx[this->dynamicVtxState][sBigslimeTri[i].v[2]];
         vecTriEdge2.x = dynamicVtx12->n.ob[0] - dynamicVtx0->n.ob[0];
         vecTriEdge2.y = dynamicVtx12->n.ob[1] - dynamicVtx0->n.ob[1];
         vecTriEdge2.z = dynamicVtx12->n.ob[2] - dynamicVtx0->n.ob[2];
@@ -450,9 +450,9 @@ void EnBigslime_UpdateSurfaceNorm(EnBigslime* this) {
         Math3D_CrossProduct(&vecTriEdge1, &vecTriEdge2, &vecTriNorm);
         EnBigslime_Vec3fNormalize(&vecTriNorm);
 
-        Math_Vec3f_Sum(&vtxNorm[sEnbigslimeTri[i].v[0]], &vecTriNorm, &vtxNorm[sEnbigslimeTri[i].v[0]]);
-        Math_Vec3f_Sum(&vtxNorm[sEnbigslimeTri[i].v[1]], &vecTriNorm, &vtxNorm[sEnbigslimeTri[i].v[1]]);
-        Math_Vec3f_Sum(&vtxNorm[sEnbigslimeTri[i].v[2]], &vecTriNorm, &vtxNorm[sEnbigslimeTri[i].v[2]]);
+        Math_Vec3f_Sum(&vtxNorm[sBigslimeTri[i].v[0]], &vecTriNorm, &vtxNorm[sBigslimeTri[i].v[0]]);
+        Math_Vec3f_Sum(&vtxNorm[sBigslimeTri[i].v[1]], &vecTriNorm, &vtxNorm[sBigslimeTri[i].v[1]]);
+        Math_Vec3f_Sum(&vtxNorm[sBigslimeTri[i].v[2]], &vecTriNorm, &vtxNorm[sBigslimeTri[i].v[2]]);
     }
 
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
@@ -842,10 +842,10 @@ void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, PlayState* play) {
 void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
     Camera* subCam;
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
-        this->subCamId = CAM_ID_MAIN;
+        this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         func_800B724C(play, &this->actor, 6);
@@ -1018,7 +1018,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 20.0f;
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         this->actor.speedXZ = 0.0f;
         this->ceilingMoveTimer = 20;
     } else {
@@ -1042,7 +1042,7 @@ void EnBigslime_MoveOnCeiling(EnBigslime* this, PlayState* play) {
     EnBigslime_Scale(this, pitch, 0.04f, 0.04f);
     EnBigslime_UpdateWavySurface(this);
 
-    if (this->subCamId != CAM_ID_MAIN) {
+    if (this->subCamId != SUB_CAM_ID_DONE) {
         if (this->ceilingMoveTimer == 0) {
             EnBigslime_EndCutscene(this, play);
             this->ceilingMoveTimer = 320;
@@ -2545,7 +2545,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
             func_800B724C(play, &this->actor, 7);
         }
 
-        this->subCamId = ActorCutscene_GetCurrentCamera(this->cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
         if (this->actor.colChkInfo.health == 0) {
             EnBigslime_SetupCutsceneDefeat(this, play);
         } else if ((this->actionFuncStored == EnBigslime_DamageGekko) ||
@@ -3053,7 +3053,7 @@ void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_MultZero(&this->limbPos[limbPosIndex[limbIndex]]);
     }
 
-    if (limbIndex == GEKKO_LIMB_R_ANKLE) {
+    if (limbIndex == GEKKO_LIMB_RIGHT_ANKLE) {
         Matrix_MultVec3f(&rightFootOffsetRef, &rightFootOffset);
         this->gekkoCollider.dim.pos.y = rightFootOffset.y;
     }

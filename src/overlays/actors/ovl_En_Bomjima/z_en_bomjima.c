@@ -581,7 +581,7 @@ void func_80BFF4F4(EnBomjima* this) {
 }
 
 void func_80BFF52C(EnBomjima* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         if (play->msgCtx.choiceIndex == 0) {
             Player* player = GET_PLAYER(play);
@@ -624,7 +624,7 @@ void func_80BFF6CC(EnBomjima* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->unk_2CC <= curFrame) {
-        if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             func_80BFE494(this, 1, 1.0f);
             this->actionFunc = func_80BFF754;
@@ -729,7 +729,7 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFFB40(EnBomjima* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80BFE494(this, 15, 1.0f);
         D_80C009F0 = 100;
@@ -759,9 +759,9 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         func_801477B4(play);
         play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 20;
-        play->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
         ActorCutscene_Stop(this->unk_2D4[1]);
     }
 }
@@ -916,7 +916,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
         if ((this->unk_2A0 == 4) || (this->unk_2CA == 1) || ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
