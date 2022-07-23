@@ -1,12 +1,14 @@
 /*
  * File: z_obj_taru.c
  * Overlay: ovl_Obj_Taru
- * Description: Wooden Barrel
+ * Description: Wooden Barrel and Breakable Pirate Panel
  */
 
 #include "z_obj_taru.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
+#include "objects/object_taru/object_taru.h"
+#include "objects/object_kibako2/object_kibako2.h"
 
 #define FLAGS 0x00000000
 
@@ -21,7 +23,6 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-#if 0
 const ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
     ACTORCAT_BG,
@@ -34,32 +35,18 @@ const ActorInit Obj_Taru_InitVars = {
     (ActorFunc)ObjTaru_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B9C340 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x80000508, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 30, 50, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B9C36C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 3300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
-
-#endif
-
-extern ColliderCylinderInit D_80B9C340;
-extern InitChainEntry D_80B9C36C[];
-extern CollisionHeader D_06000FC8;
-extern Gfx* D_06000420;
-extern UNK_TYPE D_06001040;
-extern UNK_TYPE D_06001100;
-extern UNK_TYPE D_06001CB0;
-extern Gfx* D_06001140;
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9B6E0.s")
 
 s32 func_80B9B6E0(ObjTaru* this, PlayState* play) {
     s32 chestFlag = -1;
@@ -73,8 +60,6 @@ s32 func_80B9B6E0(ObjTaru* this, PlayState* play) {
 
     return (chestFlag < 0) == true || !Flags_GetTreasure(play, chestFlag);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9B74C.s")
 
 void func_80B9B74C(ObjTaru* this, PlayState* play) {
     s32 pad[2];
@@ -108,12 +93,10 @@ void func_80B9B74C(ObjTaru* this, PlayState* play) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f, 0, 0,
-                             70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, &D_06001040);
+                             70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, &gLargeCrateFragment1DL);
     }
     func_800BBFB0(play, thisPos, 90.0f, 6, 100, 160, 1);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9B9C8.s")
 
 void func_80B9B9C8(ObjTaru *this, PlayState *play) {
     s32 phi_s5;
@@ -153,12 +136,10 @@ void func_80B9B9C8(ObjTaru *this, PlayState *play) {
                 spD8.x += temp_s1->x;
                 spD8.y += temp_s1->y;
                 spD8.z += temp_s1->z;
-                EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, -0x64, 0x20, 0x1C, 4, 0, (s32) ((Rand_ZeroOne() * 30.0f) + 5.0f), 0, 0, 0x5A, -1, 0x133, (Gfx *) &D_06001100);
+                EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, -0x64, 0x20, 0x1C, 4, 0, (s32) ((Rand_ZeroOne() * 30.0f) + 5.0f), 0, 0, 0x5A, -1, 0x133, &gLargeCrateFragment2DL);
             }
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9BC64.s")
 
 void func_80B9BC64(ObjTaru* this, PlayState* play) {
     s32 temp_v0;
@@ -169,8 +150,6 @@ void func_80B9BC64(ObjTaru* this, PlayState* play) {
                              ((((s16)this->dyna.actor.params >> 8) & 0x7F) << 8) | temp_v0);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9BCBC.s")
 
 void func_80B9BCBC(ObjTaru* this, PlayState* play) {
     s32 pad;
@@ -191,8 +170,6 @@ void func_80B9BCBC(ObjTaru* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9BD84.s")
-
 void func_80B9BD84(ObjTaru* this, PlayState* play) {
     if (!((this->dyna.actor.params >> 0xF) & 1)) {
         func_80B9BC64(this, play);
@@ -201,28 +178,26 @@ void func_80B9BD84(ObjTaru* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/ObjTaru_Init.s")
-
 void ObjTaru_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTaru* this = THIS;
     s32 paramsF;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    Actor_ProcessInitChain(&this->dyna.actor, D_80B9C36C);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     if ((this->dyna.actor.params & 0x80) != 0) {
         if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F) != 0) {
             Actor_MarkForDeath(&this->dyna.actor);
         } else {
-            DynaPolyActor_LoadMesh(play, &this->dyna, (CollisionHeader*)&D_06001CB0);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_001CB0);
         }
         if ((this->dyna.actor.params & 0x100) != 0) {
             this->dyna.actor.scale.x = 0.2f;
         }
     } else {
         paramsF = (this->dyna.actor.params >> 0xF) & 1;
-        DynaPolyActor_LoadMesh(play, &this->dyna, &D_06000FC8);
-        Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &D_80B9C340);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_000FC8);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         if (paramsF == 0) {
             if (Item_CanDropBigFairy(play, this->dyna.actor.params & 0x3F, (this->dyna.actor.params >> 8) & 0x7F) !=
@@ -238,8 +213,6 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80B9C07C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/ObjTaru_Destroy.s")
-
 void ObjTaru_Destroy(Actor* thisx, PlayState* play) {
     ObjTaru* this = THIS;
 
@@ -249,13 +222,11 @@ void ObjTaru_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9BF7C.s")
-
 s32 func_80B9BF7C(ObjTaru* this) {
     s32 pad;
     s32 phi_a3 = 0;
 
-    if ((!(this->dyna.actor.params & 0x80)) && ((this->collider.base.acFlags & 2))) {
+    if ((!(this->dyna.actor.params & 0x80)) && (this->collider.base.acFlags & 2)) {
         Actor* ac = this->collider.base.ac;
 
         this->collider.base.acFlags &= 0xFFFD;
@@ -278,8 +249,6 @@ s32 func_80B9BF7C(ObjTaru* this) {
     }
     return phi_a3;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9C07C.s")
 
 void func_80B9C07C(ObjTaru* this, PlayState* play) {
     if (func_80B9BF7C(this) != 0) {
@@ -304,14 +273,10 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9C174.s")
-
 void func_80B9C174(ObjTaru* this, PlayState* play) {
     func_80B9BD84(this, play);
     Actor_MarkForDeath(&this->dyna.actor);
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/func_80B9C1A0.s")
 
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
@@ -322,8 +287,6 @@ void func_80B9C1A0(ObjTaru* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/ObjTaru_Update.s")
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {
     ObjTaru* this = THIS;
@@ -351,16 +314,14 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Taru/ObjTaru_Draw.s")
-
 void ObjTaru_Draw(Actor* thisx, PlayState* play) {
     Gfx* dList;
     ObjTaru* this = THIS;
 
     if (this->dyna.actor.params & 0x80) {
-        dList = &D_06001140;
+        dList = &gObjTaruBreakablePiratePanelDL;
     } else {
-        dList = &D_06000420;
+        dList = &gObjTaruBarrelDL;
     }
     Gfx_DrawDListOpa(play, dList);
 }

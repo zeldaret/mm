@@ -4237,8 +4237,7 @@ beginseg
     name "ovl_Obj_Taru"
     compress
     include "build/src/overlays/actors/ovl_Obj_Taru/z_obj_taru.o"
-    include "build/data/ovl_Obj_Taru/ovl_Obj_Taru.data.o"
-    include "build/data/ovl_Obj_Taru/ovl_Obj_Taru.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Taru/ovl_Obj_Taru_reloc.o"
 endseg
 
 beginseg

@@ -15,7 +15,6 @@ typedef struct ObjTaru {
     /* 0x1A8 */ ObjTaruActionFunc actionFunc;
     /* 0x1AC */ s8 unk1AC;
     /* 0x1AD */ s8 unk1AD;
-    /* 0x1AE */ char pad1AE[2];
 } ObjTaru; // size = 0x1B0
 
 extern const ActorInit Obj_Taru_InitVars;
