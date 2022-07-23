@@ -10,13 +10,25 @@
 
 #define THIS ((BgLastBwall*)thisx)
 
+typedef struct {
+    /* 0x0 */ Vec3s* unk0;
+    /* 0x6 */ s16* unk4;
+    /* 0x8 */ s32 unk6;
+} BgLastBwallInitColliderStruct; // size = 0xC
+
+typedef struct {
+    /* 0x0 */ Gfx* dList;
+    /* 0x4 */ void* pad4;
+    /* 0x8 */ CollisionHeader* colHeader;
+} BgLastBwallModelInfo; // size = 0xC
+
 void BgLastBwall_Init(Actor* thisx, PlayState* play);
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play);
 void BgLastBwall_Update(Actor* thisx, PlayState* play);
 void BgLastBwall_Draw(Actor* thisx, PlayState* play);
 
 void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, ColliderTris* collider,
-                              InitColliderStruct* arg4);
+                              BgLastBwallInitColliderStruct* arg4);
 void func_80C187E4(BgLastBwall* this);
 void func_80C184EC(BgLastBwall* this, PlayState* play);
 void func_80C187F8(BgLastBwall* this, PlayState* play);
@@ -37,7 +49,7 @@ const ActorInit Bg_Last_Bwall_InitVars = {
     (ActorFunc)BgLastBwall_Draw,
 };
 
-static ColliderTrisElementInit D_80C189C0[] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -62,7 +74,7 @@ static ColliderTrisElementInit D_80C189C0[] = {
     },
 };
 
-static ColliderTrisInit D_80C18A38 = {
+static ColliderTrisInit sTrisInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -71,12 +83,14 @@ static ColliderTrisInit D_80C18A38 = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    ARRAY_COUNT(D_80C189C0),
-    D_80C189C0, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit),
+    sTrisElementsInit, // sTrisElementsInit,
 };
 
-static ModelInfo D_80C18A48[] = { { object_last_obj_DL_0001A8, 0x0, &object_last_obj_Colheader_000288 },
-                                  { object_last_obj_DL_001318, 0x0, &object_last_obj_Colheader_001450 } };
+static BgLastBwallModelInfo D_80C18A48[] = {
+    { object_last_obj_DL_0001A8, NULL, &object_last_obj_Colheader_000288 },
+    { object_last_obj_DL_001318, NULL, &object_last_obj_Colheader_001450 },
+};
 
 static Vec3s D_80C18A60[] = {
     { 0x118, 0x118, -0x28 },
@@ -87,7 +101,7 @@ static Vec3s D_80C18A60[] = {
 
 static s16 D_80C18A78[] = { 0, 1, 2, 0, 2, 3 };
 
-static InitColliderStruct D_80C18A84 = { D_80C18A60, D_80C18A78, 2 };
+static BgLastBwallInitColliderStruct D_80C18A84 = { D_80C18A60, D_80C18A78, 2 };
 
 static Vec3s D_80C18A90[] = {
     { -0x50, 0x190, -0x50 },
@@ -98,16 +112,16 @@ static Vec3s D_80C18A90[] = {
 
 static s16 D_80C18AA8[] = { 0, 3, 2, 0, 2, 1 };
 
-static InitColliderStruct D_80C18AB4 = { D_80C18A90, D_80C18AA8, 2 };
+static BgLastBwallInitColliderStruct D_80C18AB4 = { D_80C18A90, D_80C18AA8, 2 };
 
-static InitColliderStruct* D_80C18AC0[] = { &D_80C18A84, &D_80C18AB4 };
+static BgLastBwallInitColliderStruct* D_80C18AC0[] = { &D_80C18A84, &D_80C18AB4 };
 
 static InitChainEntry D_80C18AC8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, ColliderTris* collider,
-                              InitColliderStruct* arg4) {
+                              BgLastBwallInitColliderStruct* arg4) {
     s32 i;
     s32 j;
     Vec3f sp6C[3];
@@ -130,7 +144,7 @@ void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, Co
 }
 
 void BgLastBwall_Init(Actor* thisx, PlayState* play) {
-    u32 pad;
+    s32 pad;
     BgLastBwall* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80C18AC8);
@@ -140,19 +154,20 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
-    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &D_80C18A38,
+    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit,
                                  &this->colliderTrisElement)) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
-        BgLastBwall_InitCollider(&D_80C18A38, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot,
+        BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot,
                                  &this->colliderTris, D_80C18AC0[this->unk238]);
-        SubS_FillCutscenesList(&this->dyna.actor, &this->nextCutscene, 1);
+        SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
         func_80C187E4(this);
     }
 }
 
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play) {
     BgLastBwall* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -196,8 +211,8 @@ void func_80C184EC(BgLastBwall* this, PlayState* play) {
         } else {
             var_v0 = 0x20;
         }
-        EffectSsKakera_Spawn(play, &position, &spB4, &position, -0x104, var_v0, 0x14, 0, 0, 0xA, 0, 0, 0x32, -1, 0x234,
-                             object_last_obj_DL_000098);
+        EffectSsKakera_Spawn(play, &position, &spB4, &position, -260, var_v0, 20, 0, 0, 10, 0, 0, 50, -1,
+                             OBJECT_LAST_OBJ, object_last_obj_DL_000098);
     }
 }
 
@@ -207,7 +222,7 @@ void func_80C187E4(BgLastBwall* this) {
 
 void func_80C187F8(BgLastBwall* this, PlayState* play) {
     if (this->colliderTris.base.acFlags & 2) {
-        this->colliderTris.base.acFlags &= 0xFFFD;
+        this->colliderTris.base.acFlags &= ~2;
         Flags_SetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor));
         func_80C1886C(this, play);
     } else {
@@ -220,7 +235,7 @@ void func_80C1886C(BgLastBwall* this, PlayState* play) {
 }
 
 void func_80C18884(BgLastBwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->nextCutscene, -1, 0)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         func_80C188C4(this, play);
     }
 }
@@ -238,6 +253,7 @@ void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play) {
 
 void BgLastBwall_Update(Actor* thisx, PlayState* play) {
     BgLastBwall* this = THIS;
+
     this->actionFunc(this, play);
 }
 
