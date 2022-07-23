@@ -91,12 +91,9 @@ u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
-    f32 scale;
-    u32 gameplayFrames;
+    f32 scale = this->rScale * 0.01f;
+    u32 gameplayFrames = play->gameplayFrames;
     f32 alpha;
-
-    scale = this->rScale * 0.01f;
-    gameplayFrames = play->gameplayFrames;
 
     OPEN_DISPS(gfxCtx);
 
@@ -104,7 +101,7 @@ void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
         alpha = this->life * 12.0f;
     } else {
         if ((this->rLifespan > 0) && (this->life < (this->rLifespan >> 1))) {
-            alpha = ((this->life * 2.0f) / this->rLifespan);
+            alpha = (this->life * 2.0f) / this->rLifespan;
             alpha *= 255.0f;
         } else {
             alpha = 255.0f;
