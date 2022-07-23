@@ -130,6 +130,7 @@ u32 StackCheck_Check(StackEntry* entry);
 
 void MtxConv_F2L(Mtx* m1, MtxF* m2);
 void MtxConv_L2F(MtxF* m1, Mtx* m2);
+
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
