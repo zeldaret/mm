@@ -299,7 +299,7 @@ void func_80AE0460(EnTsn* this, PlayState* play) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, play, GI_SEAHORSE, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
     }
 }
 
