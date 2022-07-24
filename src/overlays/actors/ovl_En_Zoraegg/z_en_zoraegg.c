@@ -405,7 +405,7 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
 
         if (temp_v0 != NULL) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, temp_v0);
-            gSaveContext.eventInf[3] |= 8;
+            SET_EVENTINF(EVENTINF_33);
             Actor_MarkForDeath(&this->actor);
         }
     } else if ((func_80B319A8(play) >= 7) &&
@@ -556,13 +556,13 @@ void func_80B32A88(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32B10(EnZoraegg* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_33)) {
         this->actionFunc = func_80B32A88;
     }
 }
 
 void func_80B32B3C(EnZoraegg* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_33)) {
         this->actionFunc = func_80B32A88;
         this->actor.draw = EnZoraegg_Draw;
     }
