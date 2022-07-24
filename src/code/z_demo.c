@@ -291,7 +291,7 @@ void Cutscene_Command_Misc(PlayState* play2, CutsceneContext* csCtx, CsCmdBase* 
             break;
         case 0x1B:
             if (isStartFrame) {
-                play->nextEntranceIndex = 0x1C00;
+                play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_CUTSCENE, 0, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->transitionType = TRANS_TYPE_03;
@@ -604,11 +604,11 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
             switch (D_801F4DE2) {
                 case 0x1F:
                     if (gSaveContext.save.weekEventReg[20] & 2) {
-                        play->nextEntranceIndex = 0x3010;
+                        play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_WOODFALL_TEMPLE, 1, 0);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                     } else {
-                        play->nextEntranceIndex = 0x8600;
+                        play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_WOODFALL, 0, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -617,11 +617,11 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
                 case 0x44:
                     if (gSaveContext.save.weekEventReg[33] & 0x80) {
-                        play->nextEntranceIndex = 0xAE70;
+                        play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_MOUNTAIN_VILLAGE_SPRING, 7, 0);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                     } else {
-                        play->nextEntranceIndex = 0xAE00;
+                        play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_MOUNTAIN_VILLAGE_SPRING, 0, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -630,7 +630,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
                 case 0x5F:
                     gSaveContext.save.weekEventReg[55] |= 0x80;
-                    play->nextEntranceIndex = 0x6A80;
+                    play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_ZORA_CAPE, 8, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
@@ -638,7 +638,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
                 case 0x36:
                     gSaveContext.save.weekEventReg[52] |= 0x20;
-                    play->nextEntranceIndex = 0x2000;
+                    play->nextEntranceIndex = NEXT_ENTRANCE(ENTRANCE_SCENCE_IKANA_CANYON, 0, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
