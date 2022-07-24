@@ -89,10 +89,21 @@ typedef struct CollisionPoly {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ u16 setting;
-    /* 0x2 */ s16 numData;
-    /* 0x4 */ Vec3s* data;
-} CamData; // size = 0x8 (BgCamData)
+    /* 0x0 */ u16 setting; // camera setting described by CameraSettingType enum
+    /* 0x2 */ s16 count; // only used when `bgCamFuncData` is a list of points used for crawlspaces (unused oot legacy)
+    /* 0x4 */ Vec3s* bgCamFuncData; // s16 data grouped in threes (ex. Vec3s), is usually of type `BgCamFuncData`
+} BgCamInfo; // size = 0x8
+
+typedef BgCamInfo CamData; // TODO: ZAPD compatibility
+
+// The structure used for all instances of s16 data from `BgCamInfo`.
+typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ Vec3s rot;
+    /* 0x0C */ s16 fov;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s16 unk_10;
+} BgCamFuncData; // size = 0x12
 
 typedef struct {
     /* 0x0 */ Vec3s minPos;
@@ -137,7 +148,7 @@ typedef struct {
     /* 0x14 */ u16 numPolygons;
     /* 0x18 */ CollisionPoly* polyList;
     /* 0x1C */ SurfaceType* surfaceTypeList;
-    /* 0x20 */ CamData* cameraDataList;
+    /* 0x20 */ CamData* bgCamList;
     /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C

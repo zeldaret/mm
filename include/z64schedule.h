@@ -3,21 +3,29 @@
 
 #include "ultra64.h"
 
-/*
-  Schedule is a subsystem that acts as a way to make decisions based on the
-  time and scene (and a limited selection of items). It is utilized by writing
-  a script that is encoded into bytecode and ran, returning the result in a
-  struct. The returned result can be a value or a encoded time value.
+/**
+ *   Schedule is a subsystem that acts as a way to make decisions based on the
+ * time and scene (and a limited selection of items). It is utilized by writing
+ * a script that is encoded into bytecode and run, returning the result in a
+ * struct. The returned result can be a value or a encoded time value.
+ *
+ * The scripts contain 2 kinds of instructions:
+ * - Checks with branches (relative offsets, either 1-byte offsets (short, *_S),
+ *                         or 2-byte offsets (long, *_L))
+ * - Returns
+ *
+ * Scripts are stored as u8[]. They are built using the macros are the bottom of
+ * this file. The scheduledis.py script can be used to convert any scripts in
+ * actor data into the macros.
+ */
 
-  The scripts contain 2 kinds of instructions:
-  - Checks with branches (relative offsets, either 1-byte offsets (short, *_S),
-                          or 2-byte offsets (long, *_L))
-  - Returns
-
-  Scripts are stored as u8[]. They are built using the macros are the bottom of
-  this file. The scheduledis.py script can be used to convert any scripts in
-  actor data into the macros.
-*/
+/**
+ * Actors that use this system generally create 3 functions to interact with it.
+ *
+ * - FollowSchedule: The action function an actor sets to follow the schedule.
+ * - ProcessScheduleOutput: Holds the logic of processing the output received by running the schedule script, called by FollowSchedule
+ * - HandleSchedule: Holds the actual logic of how to actually follow the schedule based on the processed output, called by FollowSchedule
+ */
 
 // Macro to convert the time format used in the save struct into the format used in Schedule
 #define SCHEDULE_CONVERT_TIME(time) ((time) - 0x10000 / 360 * 90)
@@ -56,7 +64,7 @@ typedef struct {
     /* 0x4 */ s32 time0;
     /* 0x8 */ s32 time1;
     /* 0xC */ s32 hasResult;
-} ScheduleResult; // size = 0x10
+} ScheduleOutput; // size = 0x10
 
 typedef struct {
     /* 0x0 */ u8 cmd;

@@ -2,7 +2,7 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 typedef struct {
     /* 0x00 */ u8 scene;
@@ -330,9 +330,9 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
-        gSaveContext.save.inventory.questItems += (1 << QUEST_HEART_PIECE_COUNT);
-        if ((gSaveContext.save.inventory.questItems & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT)) {
-            gSaveContext.save.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT);
+        INCREMENT_QUEST_HEART_PIECE_COUNT;
+        if (EQ_MAX_QUEST_HEART_PIECE_COUNT) {
+            RESET_HEART_PIECE_COUNT;
             gSaveContext.save.playerData.healthCapacity += 0x10;
             gSaveContext.save.playerData.health += 0x10;
         }
@@ -595,7 +595,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOWLA);
         return ITEM_NONE;
 
-    } else if (item == ITEM_HEART) {
+    } else if (item == ITEM_RECOVERY_HEART) {
         Health_ChangeBy(play, 0x10);
         return item;
 
@@ -655,7 +655,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         slot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -671,8 +671,8 @@ u8 Item_Give(PlayState* play, u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             slot = SLOT(item);
 
@@ -712,7 +712,7 @@ u8 Item_Give(PlayState* play, u8 item) {
     } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
         temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
-        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_MEMORIES) && (temp != ITEM_NONE)) {
+        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
@@ -816,8 +816,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if (item == ITEM_HEART_CONTAINER) {
         return ITEM_NONE;
 
-    } else if (item == ITEM_HEART) {
-        return ITEM_HEART;
+    } else if (item == ITEM_RECOVERY_HEART) {
+        return ITEM_RECOVERY_HEART;
 
     } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
         if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
@@ -843,7 +843,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
 
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
-               (item == ITEM_SEA_HORSE_CAUGHT)) {
+               (item == ITEM_SEAHORSE_CAUGHT)) {
         bottleSlot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
@@ -859,8 +859,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             } else if (item == ITEM_HYLIAN_LOACH_2) {
                 item = ITEM_HYLIAN_LOACH;
 
-            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
-                item = ITEM_SEA_HORSE;
+            } else if (item == ITEM_SEAHORSE_CAUGHT) {
+                item = ITEM_SEAHORSE;
             }
             bottleSlot = SLOT(item);
 
@@ -989,7 +989,7 @@ void Inventory_UpdateBottleItem(PlayState* play, u8 item, u8 btn) {
 
     Interface_LoadItemIconImpl(play, btn);
 
-    play->pauseCtx.cursorItem[PAUSE_0] = item;
+    play->pauseCtx.cursorItem[PAUSE_ITEM] = item;
     gSaveContext.buttonStatus[btn] = BTN_ENABLED;
 
     if (item == ITEM_HOT_SPRING_WATER) {
