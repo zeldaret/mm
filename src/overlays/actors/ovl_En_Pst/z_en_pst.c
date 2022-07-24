@@ -100,9 +100,9 @@ s32 D_80B2C4F0[] = { 0x06000018, 0x3F800000, 0x0000FFFF, 0x02000000 };
 
 static UNK_TYPE D_80B2C500[] = { D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230 };
 
-void func_80B2B830(EnPst* this, GlobalContext* globalCtx) {
+void func_80B2B830(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 func_80B2B874(EnPst* this) {
@@ -139,18 +139,18 @@ s32 func_80B2B8F4(EnPst* this) {
     }
 }
 
-s32 func_80B2B974(EnPst* this, GlobalContext* globalCtx) {
+s32 func_80B2B974(EnPst* this, PlayState* play) {
     s32 sp18 = 0;
     s32 phi_a3 = 0;
 
     switch (this->unk20E) {
         case 0:
-            switch (Message_GetState(&globalCtx->msgCtx)) {
+            switch (Message_GetState(&play->msgCtx)) {
                 case 4:
                 case 5:
-                    if (Message_ShouldAdvance(globalCtx) != 0) {
+                    if (Message_ShouldAdvance(play) != 0) {
                         case 16:
-                            sp18 = func_80123810(globalCtx);
+                            sp18 = func_80123810(play);
                             phi_a3 = 0;
                             if ((sp18 == 0x2D) || (sp18 == 0x33)) {
                                 this->unk218 = sp18;
@@ -176,8 +176,8 @@ s32 func_80B2B974(EnPst* this, GlobalContext* globalCtx) {
     return phi_a3;
 }
 
-s32* func_80B2BAA4(EnPst* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) == 9) {
+s32* func_80B2BAA4(EnPst* this, PlayState* play) {
+    if (Player_GetMask(play) == 9) {
         return D_80B2C3B8;
     }
 
@@ -222,14 +222,14 @@ s32* func_80B2BAA4(EnPst* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B2BBFC(EnPst* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_80B2BBFC(EnPst* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 sp20 = 0;
 
     if (this->unk208 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
             this->unk208 &= ~0x30;
-            if (player->exchangeItemId == EXCH_ITEM_2D) {
+            if (player->exchangeItemId == EXCH_ITEM_LETTER_TO_KAFEI) {
                 this->unk208 |= 0x10;
                 this->unk218 = player->exchangeItemId;
             } else if (player->exchangeItemId != 0) {
@@ -241,7 +241,7 @@ s32 func_80B2BBFC(EnPst* this, GlobalContext* globalCtx) {
             this->unk20E = 0;
             this->unk210 = NULL;
             this->unk208 |= 0x40;
-            this->unk1DC = func_80B2BAA4(this, globalCtx);
+            this->unk1DC = func_80B2BAA4(this, play);
             this->actionFunc = func_80B2BE54;
             sp20 = 1;
         }
@@ -249,19 +249,19 @@ s32 func_80B2BBFC(EnPst* this, GlobalContext* globalCtx) {
     return sp20;
 }
 
-s32 EnPst_UpdateFlagsSubs(EnPst* this, GlobalContext* globalCtx, struct_80133038_arg2* unkArg) {
+s32 EnPst_UpdateFlagsSubs(EnPst* this, PlayState* play, ScheduleOutput* unkArg) {
     SubS_UpdateFlags(&this->unk208, 3, 7);
     return true;
 }
 
-s32 func_80B2BD30(EnPst* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80B2BD30(EnPst* this, PlayState* play, ScheduleOutput* arg2) {
     s32 ret = false;
 
     this->unk208 = 0;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 1:
-            ret = EnPst_UpdateFlagsSubs(this, globalCtx, arg2);
+            ret = EnPst_UpdateFlagsSubs(this, play, arg2);
             break;
         case 2:
             ret = true;
@@ -270,29 +270,28 @@ s32 func_80B2BD30(EnPst* this, GlobalContext* globalCtx, struct_80133038_arg2* a
     return ret;
 }
 
-void func_80B2BD88(EnPst* this, GlobalContext* globalCtx) {
+void func_80B2BD88(EnPst* this, PlayState* play) {
 }
 
-void func_80B2BD98(EnPst* this, GlobalContext* globalCtx) {
-    s32 pad;
+void func_80B2BD98(EnPst* this, PlayState* play) {
     s16 params = this->actor.params;
-    struct_80133038_arg2 sp1C;
+    ScheduleOutput sp1C;
 
-    if (!func_80133038(globalCtx, D_80B2C500[params], &sp1C) ||
-        ((this->unk1D8 != sp1C.unk0) && !func_80B2BD30(this, globalCtx, &sp1C))) {
+    if (!Schedule_RunScript(play, D_80B2C500[params], &sp1C) ||
+        ((this->unk1D8 != sp1C.result) && !func_80B2BD30(this, play, &sp1C))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        sp1C.unk0 = 0;
+        sp1C.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_1;
     }
-    this->unk1D8 = sp1C.unk0;
-    func_80B2BD88(this, globalCtx);
+    this->unk1D8 = sp1C.result;
+    func_80B2BD88(this, play);
 }
 
-void func_80B2BE54(EnPst* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, this->unk1DC, this->unk210, &this->unk1E0)) {
+void func_80B2BE54(EnPst* this, PlayState* play) {
+    if (func_8010BF58(&this->actor, play, this->unk1DC, this->unk210, &this->unk1E0)) {
         if (func_80B2B874(this) != this->unk21C) {
             switch (gSaveContext.save.day) {
                 case 1:
@@ -318,45 +317,45 @@ void func_80B2BE54(EnPst* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnPst_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnPst_Init(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_pst_Skel_001A80, NULL, &this->jointTable, &this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_pst_Skel_001A80, NULL, &this->jointTable, &this->morphTable,
                        3);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_UpdateFlags(&this->unk208, 3, 7);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, &D_80B2C4F0, 0);
     this->actor.targetMode = 0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = func_80B2BD98;
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 }
 
-void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnPst_Destroy(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnPst_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnPst_Update(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
-    func_80B2BBFC(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    func_80B2BBFC(this, play);
+    this->actionFunc(this, play);
     if (this->unk1D8 != 0) {
         if (Actor_IsFacingPlayer(&this->actor, 0x1FFE)) {
             this->unk214 = 0;
-            func_8013C964(&this->actor, globalCtx, 60.0f, 20.0f, 0, this->unk208 & 7);
+            func_8013C964(&this->actor, play, 60.0f, 20.0f, 0, this->unk208 & 7);
         }
         Actor_SetFocus(&this->actor, 20.0f);
-        func_80B2B830(this, globalCtx);
+        func_80B2B830(this, play);
     }
 }
 
-s32 EnPst_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnPst_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPst* this = THIS;
     f32 phi_fa1;
 
@@ -366,17 +365,17 @@ s32 EnPst_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         } else {
             phi_fa1 = 0.0f;
         }
-        Matrix_InsertTranslation(0.0f, phi_fa1, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, phi_fa1, 0.0f, MTXMODE_APPLY);
     }
     return false;
 }
 
-void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnPst_Draw(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
     if (this->unk1D8 != 0) {
-        func_8012C28C(globalCtx->state.gfxCtx);
-        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+        func_8012C28C(play->state.gfxCtx);
+        SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, EnPst_OverrideLimbDraw, NULL, &this->actor);
     }
 }
