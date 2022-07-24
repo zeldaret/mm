@@ -1103,15 +1103,14 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20,
+        WEEKEVENTREG_27_02, WEEKEVENTREG_27_04, WEEKEVENTREG_27_08, WEEKEVENTREG_27_10, WEEKEVENTREG_27_20,
     };
     static u16 D_80AFB8E0[] = {
-        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
+        WEEKEVENTREG_27_40, WEEKEVENTREG_27_80, WEEKEVENTREG_28_01, WEEKEVENTREG_28_02, WEEKEVENTREG_28_04,
     };
 
     if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_02))) {
-        if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
-            (D_80AFB8D4[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80))) {
+        if (CHECK_WEEKEVENTREG(D_80AFB8D4[arg0])) {
             switch (gSaveContext.save.day) {
                 case 2:
                     SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
@@ -1126,8 +1125,7 @@ void func_80AF8BA8(s32 arg0) {
         }
     }
 
-    gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] =
-        ((void)0, gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8]) | (u8)D_80AFB8E0[arg0];
+    SET_WEEKEVENTREG(D_80AFB8E0[arg0]);
 }
 
 void func_80AF8C68(EnPm* this, PlayState* play) {
@@ -1780,10 +1778,8 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
-        u8 val = gSaveContext.save.weekEventReg[89] | 0x40;
-
-        gSaveContext.save.weekEventReg[89] = val;
-        if (val == 0) {
+        //! @bug Uses SET_WEEKEVENTREG instead of CHECK_WEEKEVENTREG
+        if (!SET_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
         }
     }

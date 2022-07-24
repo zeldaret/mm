@@ -32,7 +32,7 @@ void DmRavine_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmRavine* this = THIS;
 
-    if (((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) != 0) {
+    if ((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

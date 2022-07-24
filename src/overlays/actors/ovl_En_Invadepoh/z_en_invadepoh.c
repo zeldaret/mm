@@ -3085,7 +3085,7 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
         func_80B44C24(this, play);
         func_80B43F0C(this);
         func_80B4516C(this);
-        if (0x20 & gSaveContext.save.weekEventReg[21]) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E;
             } else {

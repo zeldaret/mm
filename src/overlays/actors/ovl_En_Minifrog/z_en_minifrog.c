@@ -69,11 +69,11 @@ static TexturePtr D_808A4D74[] = {
 // gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    (0 << 8) | 0x00,  // NULL
-    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-    (33 << 8) | 0x01, // Southern Swamp Frog Returned
-    (33 << 8) | 0x02, // Laundry Pool Frog Returned
+    0,  // NULL
+    WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
+    WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
+    WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
+    WEEKEVENTREG_33_02, // Laundry Pool Frog Returned
 };
 
 static s32 isInitialized = false;
@@ -94,7 +94,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (!isInitialized) {
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(D_808A4D74); i++) {
             D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
         isInitialized = true;
@@ -114,8 +114,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     if (1) {}
     if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
-            ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
-              (u8)isFrogReturnedFlags[this->frogIndex]))) {
+            CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->timer = 30;
@@ -140,8 +139,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Frog has been returned
-            if ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
-                 (u8)isFrogReturnedFlags[this->frogIndex])) {
+            if (CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
                 this->actionFunc = EnMinifrog_SetupNextFrogInit;
             } else {
                 this->actor.draw = NULL;
@@ -277,9 +275,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
                 }
 
-                gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
-                    ((void)0, gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8]) |
-                    (u8)isFrogReturnedFlags[this->frogIndex];
+                SET_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex]);
                 break;
 
             case 0xD85: // "I understand. I shall head for the mountains immediately."
