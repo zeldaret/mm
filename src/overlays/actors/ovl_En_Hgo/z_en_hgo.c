@@ -306,8 +306,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return true;
     }
-    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
-        (this->actionFunc == func_80BD0410)) {
+    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);

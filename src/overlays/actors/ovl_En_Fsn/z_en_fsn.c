@@ -863,8 +863,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                 case 0x29D2:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) &&
-                               !(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
+                    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40))) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;

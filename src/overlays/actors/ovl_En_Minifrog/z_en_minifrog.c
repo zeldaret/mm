@@ -69,7 +69,7 @@ static TexturePtr D_808A4D74[] = {
 // gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    0,  // NULL
+    0,                  // NULL
     WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
     WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
     WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
@@ -113,8 +113,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
 
     if (1) {}
     if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
-        if ((this->frogIndex == MINIFROG_YELLOW) ||
-            CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
+        if ((this->frogIndex == MINIFROG_YELLOW) || CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->timer = 30;
@@ -268,7 +267,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
-            case 0xD82:                                          // "What has brought you all this way?"
+            case 0xD82:                                       // "What has brought you all this way?"
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) { // Mountain village is unfrozen
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {

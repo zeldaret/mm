@@ -441,7 +441,6 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             CLEAR_EVENTINF(EVENTINF_12);
             CLEAR_EVENTINF(EVENTINF_13);
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
-            // gSaveContext.eventInf[2] = ((CHECK_EVENTINF(EVENTINF_23)) + 1) | (CHECK_EVENTINF(EVENTINF_27));
         } else {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }

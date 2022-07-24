@@ -684,8 +684,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) &&
-        (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
