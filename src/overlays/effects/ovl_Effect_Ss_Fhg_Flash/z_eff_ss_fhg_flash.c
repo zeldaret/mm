@@ -41,10 +41,10 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 
     if (initParams->params != FHGFLASH_SHOCK_NO_ACTOR) {
         this->pos = noActorPos;
-        this->gfx = gFhgFlashDL;
+        this->gfx = gEffFhgFlashDL;
     } else {
         this->pos = initParams->pos;
-        this->gfx = gFhgFlashDL;
+        this->gfx = gEffFhgFlashDL;
     }
 
     return 1;
