@@ -3157,7 +3157,7 @@ u32 Audio_NextRandom(void);
 void Audio_InitMesgQueues(void);
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
-// void func_80194790(void);
+// void osAiSetNextBuffer(void);
 // void func_80194840(void);
 // void func_801948B0(void);
 void AudioPlayback_NoteDisable(Note* note);
