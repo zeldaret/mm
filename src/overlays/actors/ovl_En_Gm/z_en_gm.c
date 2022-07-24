@@ -466,7 +466,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             if (!(gSaveContext.save.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
             }
             this->unk_3E0++;
             ret = true;
@@ -474,7 +474,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
 
         case 1:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
             }
             this->unk_3E0++;
             ret = true;
@@ -491,7 +491,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
 }
 
 s32 func_8094E69C(EnGm* this, PlayState* play) {
-    Camera* camera;
+    Camera* subCam;
     s16 sp4A = func_8094E4D0(this, 0);
     s16 sp48;
     Vec3f sp3C;
@@ -533,8 +533,8 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             if (func_8094E454(this, sp4A)) {
                 case 4:
                 case 6:
-                    camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp4A));
-                    Camera_SetTargetActor(camera, &this->actor);
+                    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp4A));
+                    Camera_SetTargetActor(subCam, &this->actor);
                     this->unk_3E0++;
                     ret = true;
             }
@@ -544,8 +544,8 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                camera = Play_GetCamera(play, ActorCutscene_GetCurrentCamera(sp4A));
-                Camera_SetTargetActor(camera, this->actor.child);
+                subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp4A));
+                Camera_SetTargetActor(subCam, this->actor.child);
             }
             this->unk_3E0++;
             ret = true;
@@ -857,11 +857,11 @@ void func_8094F2E8(EnGm* this) {
 
 void func_8094F3D0(EnGm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp28 = Message_GetState(&play->msgCtx);
-    s32 var = play->msgCtx.currentTextId;
+    s32 talkState = Message_GetState(&play->msgCtx);
+    s32 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((var < 0xFF) || (var > 0x200)) && (sp28 == 3) &&
-        (this->unk_3F0 == 3)) {
+    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_3AC == 120.0f) {
                 this->unk_3AC = 0.0f;
@@ -872,9 +872,10 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
     } else {
         this->unk_3AC = 0.0f;
     }
+
     Math_SmoothStepToF(&this->unk_3B0, this->unk_3AC, 0.8f, 40.0f, 10.0f);
     Matrix_Translate(this->unk_3B0, 0.0f, 0.0f, MTXMODE_APPLY);
-    this->unk_3F0 = sp28;
+    this->prevTalkState = talkState;
 }
 
 s32 func_8094F4EC(EnGm* this, PlayState* play) {
