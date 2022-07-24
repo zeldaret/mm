@@ -1886,7 +1886,7 @@ s32 func_800B863C(Actor* actor, PlayState* play) {
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
@@ -4513,7 +4513,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
         currentMatrix = Matrix_GetCurrent();
 
         // Apply sfx along with damage effect
-        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == 0)) {
+        if ((actor != NULL) && (effectAlpha > 0.05f) && (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {

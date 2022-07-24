@@ -172,9 +172,9 @@ void func_80B3B05C(EnGg2* this, PlayState* play) {
 }
 
 void func_80B3B0A0(EnGg2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         this->unk_2F0 = 0;
         this->actionFunc = func_80B3B5D4;
     }
