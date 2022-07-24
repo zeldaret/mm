@@ -441,7 +441,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
@@ -506,7 +506,7 @@ void EnSob1_SetupLookToShopkeeperFromShelf(PlayState* play, EnSob1* this) {
 }
 
 void EnSob1_EndingInteraction(EnSob1* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         EnSob1_EndInteraction(play, this);
     }
 }
@@ -610,7 +610,7 @@ void EnSob1_Hello(EnSob1* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && Message_ShouldAdvance(play) &&
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play) &&
         !EnSob1_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(play, this);
@@ -659,7 +659,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else {
-        if (talkState == 4) {
+        if (talkState == TEXT_STATE_CHOICE) {
             func_8011552C(play, 6);
             if (!EnSob1_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 if (!Message_ShouldAdvance(play) || !EnSob1_FacingShopkeeperDialogResult(this, play)) {
@@ -680,7 +680,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
 }
 
 void EnSob1_TalkingToShopkeeper(EnSob1* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         EnSob1_StartShopping(play, this);
     }
 }
@@ -911,7 +911,7 @@ void EnSob1_BrowseShelf(EnSob1* this, PlayState* play) {
         this->drawCursor = 0xFF;
         this->stickLeftPrompt.isEnabled = true;
         EnSob1_UpdateCursorPos(play, this);
-        if (talkState == 5) {
+        if (talkState == TEXT_STATE_5) {
             func_8011552C(play, 6);
             if (!EnSob1_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 EnSob1_CursorLeftRight(play, this);
@@ -930,7 +930,7 @@ void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
 
     Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
-    play->msgCtx.unk12023 = 4;
+    play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -1019,7 +1019,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
 void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
+    if (EnSob1_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
         func_8011552C(play, 6);
         if (!EnSob1_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
@@ -1037,7 +1037,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
 }
 
 void EnSob1_CannotBuy(EnSob1* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             this->actionFunc = this->prevActionFunc;
             func_80151938(play, this->items[this->cursorIndex]->actor.textId);
@@ -1048,7 +1048,7 @@ void EnSob1_CannotBuy(EnSob1* this, PlayState* play) {
 void EnSob1_CanBuy(EnSob1* this, PlayState* play) {
     EnGirlA* item;
 
-    if (Message_GetState(&play->msgCtx) == 5 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->shopItemSelectedTween = 0.0f;
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIndex];
@@ -1068,9 +1068,9 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, PlayState* play) {
 }
 
 void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
-        play->msgCtx.unk12023 = 4;
+        play->msgCtx.stateTimer = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -1087,7 +1087,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnGirlA* item;
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIndex];
         item->restockFunc(play, item);
