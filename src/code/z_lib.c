@@ -651,15 +651,15 @@ void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId) {
     Audio_PlaySfxAtPos(pos, sfxId);
 }
 
-void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst) {
-    f32 sp1C;
-    f32 f0;
+void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 rotAngle, Vec3f* src, Vec3f* dst) {
+    f32 cos;
+    f32 sin;
 
-    sp1C = Math_CosS(a);
-    f0 = Math_SinS(a);
-    dst->x = translation->x + (src->x * sp1C + src->z * f0);
+    cos = Math_CosS(rotAngle);
+    sin = Math_SinS(rotAngle);
+    dst->x = translation->x + (src->x * cos + src->z * sin);
     dst->y = translation->y + src->y;
-    dst->z = translation->z + (src->z * sp1C - src->x * f0);
+    dst->z = translation->z + (src->z * cos - src->x * sin);
 }
 
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst) {
@@ -688,7 +688,7 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
         start->z = start->z + f2 * diff.z;
     } else {
         Math_Vec3f_Copy(start, target);
-        f0 = 0;
+        f0 = 0.0f;
     }
 
     return f0;

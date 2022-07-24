@@ -285,9 +285,17 @@ s16 func_80169BF8(PlayState* this, s16 camId, s16 uid) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
+u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s")
+    return actorCsCamList->setting;
+}
+
+Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
+    ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
+
+    return Lib_SegmentedToVirtual(actorCsCamList->actorCsCamFuncData);
+}
 
 /**
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first
@@ -392,8 +400,8 @@ void func_80169EFC(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_LoadToLastEntrance ?
@@ -404,8 +412,8 @@ void func_80169F78(GameState* thisx) {
     this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
-    this->sceneLoadFlag = 0x14;
-    this->unk_1887F = 2;
+    this->transitionTrigger = TRANS_TRIGGER_START;
+    this->transitionType = TRANS_TYPE_02;
 }
 
 // Gameplay_TriggerRespawn ?

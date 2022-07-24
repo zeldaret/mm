@@ -178,7 +178,7 @@ typedef struct {
     /* 0x0C */ f32                  unk_0C;
     /* 0x10 */ u16                  frames;
     /* 0x12 */ u16                  currentCsIndex;
-    /* 0x14 */ s32                  csCamId;
+    /* 0x14 */ s32                  subCamId;
     /* 0x18 */ u16                  unk_18;
     /* 0x1A */ u8                   unk_1A;
     /* 0x1B */ u8                   unk_1B;

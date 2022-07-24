@@ -296,7 +296,7 @@ void func_80B3D2D4(EnDnp* this, PlayState* play) {
 void func_80B3D338(EnDnp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == 2)) {
+    if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING)) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->unk_32E == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
