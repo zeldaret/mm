@@ -1157,16 +1157,79 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_99_40 PACK_WEEKEVENTREG_FLAG(99, 0x40)
 #define WEEKEVENTREG_99_80 PACK_WEEKEVENTREG_FLAG(99, 0x80)
 
-// #define CHECK_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] & ((flag) & 0xFF))
 #define CHECK_WEEKEVENTREG(flag) ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8] & ((flag) & 0xFF))
-// #define SET_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] |= ((flag) & 0xFF))
 #define SET_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) | ((flag) & 0xFF))
-// #define CLEAR_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] &= (u8)~((flag) & 0xFF))
 #define CLEAR_WEEKEVENTREG(flag) (gSaveContext.save.weekEventReg[(flag) >> 8] = ((void)0, gSaveContext.save.weekEventReg[(flag) >> 8]) & (u8)~((flag) & 0xFF))
+
+
+#define EVENTINF_00 0x00
+#define EVENTINF_01 0x01
+#define EVENTINF_02 0x02
+#define EVENTINF_03 0x03
+#define EVENTINF_04 0x04
+#define EVENTINF_05 0x05
+#define EVENTINF_06 0x06
+#define EVENTINF_07 0x07
+#define EVENTINF_10 0x10
+#define EVENTINF_11 0x11
+#define EVENTINF_12 0x12
+#define EVENTINF_13 0x13
+#define EVENTINF_14 0x14
+#define EVENTINF_15 0x15
+#define EVENTINF_16 0x16
+#define EVENTINF_17 0x17
+#define EVENTINF_20 0x20
+#define EVENTINF_21 0x21
+#define EVENTINF_22 0x22
+#define EVENTINF_23 0x23
+#define EVENTINF_24 0x24
+#define EVENTINF_25 0x25
+#define EVENTINF_26 0x26
+#define EVENTINF_27 0x27
+#define EVENTINF_30 0x30
+#define EVENTINF_31 0x31
+#define EVENTINF_32 0x32
+#define EVENTINF_33 0x33
+#define EVENTINF_34 0x34
+#define EVENTINF_35 0x35
+#define EVENTINF_36 0x36
+#define EVENTINF_37 0x37
+#define EVENTINF_40 0x40
+#define EVENTINF_41 0x41
+#define EVENTINF_42 0x42
+#define EVENTINF_43 0x43
+#define EVENTINF_44 0x44
+#define EVENTINF_45 0x45
+#define EVENTINF_46 0x46
+#define EVENTINF_47 0x47
+#define EVENTINF_50 0x50
+#define EVENTINF_51 0x51
+#define EVENTINF_52 0x52
+#define EVENTINF_53 0x53
+#define EVENTINF_54 0x54
+#define EVENTINF_55 0x55
+#define EVENTINF_56 0x56
+#define EVENTINF_57 0x57
+#define EVENTINF_60 0x60
+#define EVENTINF_61 0x61
+#define EVENTINF_62 0x62
+#define EVENTINF_63 0x63
+#define EVENTINF_64 0x64
+#define EVENTINF_65 0x65
+#define EVENTINF_66 0x66
+#define EVENTINF_67 0x67
+#define EVENTINF_70 0x70
+#define EVENTINF_71 0x71
+#define EVENTINF_72 0x72
+#define EVENTINF_73 0x73
+#define EVENTINF_74 0x74
+#define EVENTINF_75 0x75
+#define EVENTINF_76 0x76
+#define EVENTINF_77 0x77
 
 #define CHECK_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] & (1 << ((flag) & 0xF)))
 #define SET_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] |= (1 << ((flag) & 0xF)))
-#define CLEAR_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] &= ~(1 << ((flag) & 0xF)))
+#define CLEAR_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] &= (u8)~(1 << ((flag) & 0xF)))
 
 
 typedef enum {
