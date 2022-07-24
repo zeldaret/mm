@@ -93,7 +93,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;
@@ -204,7 +204,7 @@ void func_80BD06FC(EnHgo* this, PlayState* play) {
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
@@ -306,7 +306,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return true;
     }
-    if ((play->csCtx.state == 0) && GET_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
+    if ((play->csCtx.state == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,

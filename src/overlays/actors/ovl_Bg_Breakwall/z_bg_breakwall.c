@@ -146,14 +146,14 @@ s32 func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !(GET_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if ((gSaveContext.save.day >= 2) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
         return false;
     }
     return true;
 }
 
 s32 func_808B73C4(BgBreakwall* this, PlayState* play) {
-    return (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) || (GET_WEEKEVENTREG(WEEKEVENTREG_21_01));
+    return (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01));
 }
 
 s32 func_808B73FC(BgBreakwall* this, PlayState* play) {
@@ -176,14 +176,14 @@ s32 func_808B7460(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B74A8(BgBreakwall* this, PlayState* play) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         return false;
     }
     return true;
 }
 
 s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_09_80)) || (GET_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
         return false;
     }
     return true;
@@ -285,7 +285,7 @@ void func_808B782C(BgBreakwall* this, PlayState* play) {
 }
 
 void func_808B78A4(BgBreakwall* this, PlayState* play) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }

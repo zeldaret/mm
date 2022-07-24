@@ -71,7 +71,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
         this->unk290 = true;
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_80)) &&
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) &&
             ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -79,7 +79,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        if ((GET_WEEKEVENTREG(WEEKEVENTREG_63_80)) ||
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) ||
             ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -155,7 +155,7 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
     } else {
         if (this->paramCopy != 0) {
             this->textIdIndex = 0;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
                 this->textIdIndex = 1;
             }
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {

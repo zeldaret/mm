@@ -125,7 +125,7 @@ s32 func_80BD7CEC(BgIknvObj* this) {
 }
 
 void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
         this->dyna.actor.shape.rot.z -= 0x64;
         func_800B9098(&this->dyna.actor);
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
@@ -165,7 +165,7 @@ void func_80BD7F4C(BgIknvObj* this, PlayState* play) {
     if (gSaveContext.save.time > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
-    if ((this->dyna.actor.home.rot.x == 1) && !(GET_WEEKEVENTREG(WEEKEVENTREG_58_80))) {
+    if ((this->dyna.actor.home.rot.x == 1) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80))) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.home.rot.x = 0;
     }
@@ -188,7 +188,7 @@ void func_80BD8040(BgIknvObj* this, PlayState* play) {
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, PlayState* play) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
         this->actionFunc = func_80BD8040;
         SET_WEEKEVENTREG(WEEKEVENTREG_89_80);
     }

@@ -388,9 +388,9 @@ void func_80962340(EnFu* this, PlayState* play) {
                 if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     Message_StartTextbox(play, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
-                } else if ((CURRENT_DAY == 3) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) &&
-                           (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
-                    if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_40))) {
+                } else if ((CURRENT_DAY == 3) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) &&
+                           (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
+                    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40))) {
                         Message_StartTextbox(play, 0x2883, &this->actor);
                         this->unk_552 = 0x2883;
                     } else {
@@ -878,7 +878,7 @@ void func_80963560(EnFu* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80963610(this);
-    } else if ((this->unk_552 == 0x2880) && !(GET_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
+    } else if ((this->unk_552 == 0x2880) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -895,12 +895,12 @@ void func_80963630(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20)) &&
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20)) &&
             (CURRENT_DAY == 3) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80))) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_22_80);
                 Message_StartTextbox(play, 0x2882, &this->actor);
                 this->unk_552 = 0x2882;
@@ -1019,7 +1019,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                 if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                     Message_StartTextbox(play, 0x2853, &this->actor);
                     this->unk_552 = 0x2853;
-                } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) {
                     Message_StartTextbox(play, 0x284D, &this->actor);
                     this->unk_552 = 0x284D;
                 } else if (this->unk_53E == 1) {
@@ -1043,7 +1043,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
             } else if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                 Message_StartTextbox(play, 0x2853, &this->actor);
                 this->unk_552 = 0x2853;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_10))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x285B, &this->actor);
                     this->unk_552 = 0x285B;
@@ -1052,7 +1052,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                     Message_StartTextbox(play, 0x285D, &this->actor);
                     this->unk_552 = 0x285D;
                 }
-            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_20)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20)) {
                 Message_StartTextbox(play, 0x2855, &this->actor);
                 this->unk_552 = 0x2855;
             } else if (this->unk_53E == 1) {
@@ -1076,15 +1076,15 @@ void func_809639D0(EnFu* this, PlayState* play) {
             } else if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
                 Message_StartTextbox(play, 0x284B, &this->actor);
                 this->unk_552 = 0x284B;
-            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
-                if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
+                if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                     Message_StartTextbox(play, 0x285F, &this->actor);
                     this->unk_552 = 0x285F;
                 } else {
                     Message_StartTextbox(play, 0x2861, &this->actor);
                     this->unk_552 = 0x2861;
                 }
-            } else if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x2863, &this->actor);
                     this->unk_552 = 0x2863;
@@ -1093,7 +1093,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
                     Message_StartTextbox(play, 0x2865, &this->actor);
                     this->unk_552 = 0x2865;
                 }
-            } else if ((GET_WEEKEVENTREG(WEEKEVENTREG_22_10)) || (GET_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20))) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(play, 0x2867, &this->actor);
                     this->unk_552 = 0x2867;

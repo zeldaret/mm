@@ -177,7 +177,7 @@ s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
     if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
-        !(GET_WEEKEVENTREG(WEEKEVENTREG_30_01))) {
+        !(CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01))) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -522,7 +522,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
         SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
@@ -530,7 +530,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

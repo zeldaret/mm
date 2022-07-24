@@ -125,7 +125,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actor.targetMode = 1;
@@ -369,7 +369,7 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
-                    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_61_02))) {
+                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_61_02))) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
                         this->unk218 = 0;
                     } else {

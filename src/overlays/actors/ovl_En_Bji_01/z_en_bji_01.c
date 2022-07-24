@@ -121,8 +121,8 @@ void func_809CD028(EnBji01* this, PlayState* play) {
         case SHIKASHI_TYPE_FINISHED_CONVERSATION:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_17_10)) {
-                        if (GET_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_10)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
                             this->textId = 0x5F4;
                         } else {
                             this->textId = 0x5E2;
@@ -135,7 +135,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                 case PLAYER_FORM_HUMAN:
                     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
-                    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_74_10)) {
+                    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_10)) {
                         this->textId = 0x5F6;
                     } else {
                         this->textId = 0x5F5;
@@ -144,7 +144,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                     break;
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_75_08)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_08)) {
                         this->textId = 0x5E4;
                     } else {
                         this->textId = 0x5DC;
@@ -156,7 +156,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
         case SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
                         this->textId = 0x5F2;
                     } else {
                         this->textId = 0x5F1;

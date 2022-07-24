@@ -331,10 +331,10 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         Actor_SetScale(&this->dyna.actor, 1.0f);
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
         }
-        if (!(gSaveContext.eventInf[3] & 0x20) && (GET_WEEKEVENTREG(WEEKEVENTREG_90_40))) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_40))) {
             phi_a2 = 1;
             this->unk16C = 1;
             this->actionFunc = func_809541B8;

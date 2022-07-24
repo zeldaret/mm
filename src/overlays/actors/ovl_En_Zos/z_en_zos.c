@@ -84,11 +84,11 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
                 Actor_MarkForDeath(&this->actor);
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
                 this->actionFunc = func_80BBC24C;
             } else {
                 this->actionFunc = func_80BBC14C;
@@ -104,7 +104,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -196,7 +196,7 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
             textId = 0x123E;
             func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_40_20)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_20)) {
             textId = 0x1236;
             func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
@@ -207,7 +207,7 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
         }
     } else {
         this->unk_2B6 &= ~2;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_39_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_10)) {
             textId = 0x1243;
             func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
@@ -241,7 +241,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
     } else {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
             getItemId = GI_RUPEE_PURPLE;
         } else {
             getItemId = GI_HEART_PIECE;
@@ -349,7 +349,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
                 func_80BBAE84(this, 5, ANIMMODE_LOOP);
                 this->unk_2B6 |= 8;
                 SET_WEEKEVENTREG(WEEKEVENTREG_40_20);
-            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
                 player->actor.textId = 0x1241;
             } else {
                 player->actor.textId = 0x1237;
@@ -359,7 +359,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
             }
             this->actionFunc = func_80BBB8AC;
         } else if (sp24 < 0) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
                 func_80151938(play, 0x1241);
             } else {
                 func_80151938(play, 0x1237);
@@ -475,7 +475,7 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_41_10)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_10)) {
             Message_StartTextbox(play, 0x124A, &this->actor);
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, ANIMMODE_LOOP);
@@ -559,9 +559,9 @@ void func_80BBBFBC(EnZos* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x125B;
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_78_80)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_80)) {
             textId = 0x125A;
         } else {
             textId = 0x1259;
@@ -626,7 +626,7 @@ void func_80BBC22C(EnZos* this, PlayState* play) {
 
 void func_80BBC24C(EnZos* this, PlayState* play) {
     func_80BBB0D4(this, play);
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
         this->actionFunc = func_80BBC22C;
         func_80BBAE84(this, 7, ANIMMODE_ONCE);
     }

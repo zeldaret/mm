@@ -161,7 +161,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;

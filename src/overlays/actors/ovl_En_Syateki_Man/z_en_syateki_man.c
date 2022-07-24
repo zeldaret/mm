@@ -399,7 +399,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 break;
 
             case 0xA32: // You have to try harder!
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
                     player->stateFlags1 &= ~0x20;
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
@@ -758,7 +758,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x401: // You got [score]? Oh, that's too bad...
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
@@ -772,7 +772,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x403: // You got [score]? Too bad...
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
@@ -853,20 +853,20 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_59_10))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_59_10);
-        } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_32_02)) && (this->score >= 2180)) {
+        } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02)) && (this->score >= 2180)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_32_02);
         }
 
         this->actor.parent = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_GiveReward;
     } else {
-        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(GET_WEEKEVENTREG(WEEKEVENTREG_59_10))) {
+        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10))) {
             Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
         } else if (this->score < 2180) {
             Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
-        } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_32_02))) {
+        } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02))) {
             Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -908,13 +908,13 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         if (this->prevTextId == 0x407) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_20);
             }
         }
 
         if ((this->prevTextId == 0x405) || (this->prevTextId == 0x406)) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_32_04))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04))) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_32_04);
             }
         }
@@ -923,12 +923,12 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         this->actionFunc = EnSyatekiMan_Town_GiveReward;
     } else {
         if (this->prevTextId == 0x407) {
-            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(GET_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
+            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
                 Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
                 Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
-        } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_32_04))) {
+        } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04))) {
             Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
@@ -1109,7 +1109,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 this->prevTextId = 0xA34;
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else if (this->score >= 2000) {
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
@@ -1362,7 +1362,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
             this->talkWaitTimer = 15;
             if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
                 if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
-                    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
+                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20))) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
                         this->prevTextId = 0x407;

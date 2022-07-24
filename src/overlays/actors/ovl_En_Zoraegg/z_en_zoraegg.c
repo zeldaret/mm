@@ -118,7 +118,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_07:
         case ENZORAEGG_1F_08:
         case ENZORAEGG_1F_09:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -131,7 +131,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_0E:
         case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_19_40))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

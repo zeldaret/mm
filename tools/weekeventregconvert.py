@@ -7,7 +7,7 @@ def getFlagMacro(index: int, mask: int) -> str:
     return f"WEEKEVENTREG_{index:02}_{mask:02X}"
 
 def getGetMacro(index: int, mask: int) -> str:
-    return f"GET_WEEKEVENTREG({getFlagMacro(index, mask)})"
+    return f"CHECK_WEEKEVENTREG({getFlagMacro(index, mask)})"
 
 def getSetMacro(index: int, mask: int) -> str:
     return f"SET_WEEKEVENTREG({getFlagMacro(index, mask)})"

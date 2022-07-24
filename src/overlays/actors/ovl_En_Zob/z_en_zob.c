@@ -114,13 +114,13 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOB_GET_F(&this->actor)) {
         case ENZOB_F_1:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
                 this->actionFunc = func_80BA0BB4;
             } else {
                 this->actionFunc = func_80BA0AD8;
             }
 
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -135,7 +135,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -211,7 +211,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
     this->unk_2F4 |= 1;
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
             textId = 0x11F9;
         } else {
             textId = 0x11F8;
@@ -222,7 +222,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
         textId = 0x1210;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, ANIMMODE_ONCE);
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_31_08)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_08)) {
         textId = 0x1205;
         this->unk_304 = 1;
         func_80B9F7E4(this, 3, ANIMMODE_LOOP);
@@ -234,11 +234,11 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
         textId = 0x1203;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_30_08)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_08)) {
         textId = 0x11FA;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-    } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_30_04))) {
+    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_30_04))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_30_04);
         textId = 0x11FB;
         this->unk_304 = 1;
@@ -595,11 +595,11 @@ void func_80BA08E8(EnZob* this, PlayState* play) {
     s32 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1257;
             this->unk_304 = 3;
             func_80B9F7E4(this, 4, ANIMMODE_ONCE);
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_78_40)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_40)) {
             textId = 0x1256;
             this->unk_304 = 1;
             func_80B9F7E4(this, 2, ANIMMODE_ONCE);
@@ -664,7 +664,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
 
 void func_80BA0BB4(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
         this->actionFunc = func_80BA09E0;
         func_80B9F7E4(this, 0, ANIMMODE_ONCE);
         this->unk_304 = 5;

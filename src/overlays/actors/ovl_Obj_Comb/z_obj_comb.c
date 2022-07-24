@@ -334,7 +334,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitJntSph(play, &this->collider);
 
-    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (GET_WEEKEVENTREG(WEEKEVENTREG_83_02))) {
+    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

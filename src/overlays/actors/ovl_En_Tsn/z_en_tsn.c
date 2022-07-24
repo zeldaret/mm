@@ -86,7 +86,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -94,7 +94,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
             break;
 
         case ENTSN_F_1:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_26_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_04)) {
                 this->actor.textId = 0x1091;
             } else {
                 this->actor.textId = 0x108A;
@@ -102,7 +102,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
             this->actionFunc = func_80AE0D78;
         } else {
@@ -143,7 +143,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -157,15 +157,15 @@ void EnTsn_Destroy(Actor* thisx, PlayState* play) {
 void func_80ADFF84(EnTsn* this, PlayState* play) {
     u16 textId;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
         textId = 0x107E;
     } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
             textId = 0x1083;
         } else {
             textId = 0x107F;
         }
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_26_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_01)) {
         textId = 0x1089;
     } else {
         textId = 0x1084;
@@ -388,7 +388,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
-                        if (GET_WEEKEVENTREG(WEEKEVENTREG_25_40)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_40)) {
                             func_80151938(play, 0x1074);
                         } else {
                             func_80151938(play, 0x106F);
@@ -477,7 +477,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x1092:
-                        if (GET_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                             func_80AE0698(this, play);
                         } else {
                             func_80151938(play, 0x10A7);

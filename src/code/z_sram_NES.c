@@ -296,7 +296,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.maskMaskBit[i] = 0;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
         Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
@@ -983,10 +983,10 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         }
     } else {
         gSaveContext.save.entranceIndex = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
-        if ((gSaveContext.save.entranceIndex == 0x84A0) && (GET_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
+        if ((gSaveContext.save.entranceIndex == 0x84A0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
             // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
-        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (GET_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        } else if ((gSaveContext.save.entranceIndex == 0x9A80) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
             // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }

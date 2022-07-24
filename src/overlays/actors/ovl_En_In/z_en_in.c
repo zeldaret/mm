@@ -224,7 +224,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !(GET_WEEKEVENTREG(WEEKEVENTREG_22_01));
+              !(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01));
 
     return ret;
 }
@@ -458,7 +458,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
             textId = 0x34A9;
         } else if (this->unk4AC & 8) {
             textId = 0x34B1;
@@ -475,14 +475,14 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x345C;
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                 textId = 0x3460;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_15_08))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_15_08))) {
                 textId = 0x3458;
             } else {
                 textId = 0x345B;
             }
             break;
         case 1:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_15_10))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_15_10))) {
                 textId = 0x3463;
             } else {
                 textId = 0x346B;
@@ -494,7 +494,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
                        gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
                 textId = 0x3484;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_56_04))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04))) {
                 textId = 0x346D;
             } else {
                 textId = 0x3482;
@@ -505,7 +505,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x348A;
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_16_01))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_01))) {
                 textId = 0x3486;
             } else {
                 textId = 0x3489;
@@ -514,7 +514,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
         case 5:
             if (func_808F33B8()) {
                 textId = 0x34B3;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_16_02))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_02))) {
                 textId = 0x348E;
             } else {
                 textId = 0x3493;
@@ -526,7 +526,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
                        gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
                 textId = 0x34A7;
-            } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_16_04))) {
+            } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04))) {
                 textId = 0x3495;
             } else {
                 textId = 0x34A5;
@@ -578,7 +578,7 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
             Rupees_ChangeBy(-play->msgCtx.unk1206C);
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_57_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01))) {
                 func_808F4108(this, play, 0x3474);
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, play, 0x3475);
@@ -604,7 +604,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
         func_8019F208();
         if (gSaveContext.save.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_57_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01))) {
                 if (arg4 != 0) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
                 } else {
@@ -1303,8 +1303,8 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 
 void func_808F5B58(EnIn* this, PlayState* play) {
     if (func_800F41E4(play, &play->actorCtx)) {
-        if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && GET_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
-            GET_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
+        if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {
                 func_808F5728(play, this, 6, &this->unk48C);
             } else {
@@ -1312,7 +1312,7 @@ void func_808F5B58(EnIn* this, PlayState* play) {
             }
         }
     } else if (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER ||
-               (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && GET_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
+               (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 4, &this->unk48C);
         } else {
@@ -1325,8 +1325,8 @@ void func_808F5C98(EnIn* this, PlayState* play) {
     if (this->unk4B0 == RACE_FLAG_END) {
         this->actionFunc = func_808F5B58;
     }
-    if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && GET_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
-        GET_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
+    if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
         if (gSaveContext.save.day != 3) {
             func_808F5728(play, this, 2, &this->unk48C);
         } else {
@@ -1417,7 +1417,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             func_808F30B0(&this->skelAnime, 0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
@@ -1428,7 +1428,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             }
                         }
                     } else {
-                        if (GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
                             Actor_MarkForDeath(&this->actor);
                         } else {
                             func_808F30B0(&this->skelAnime, 7);

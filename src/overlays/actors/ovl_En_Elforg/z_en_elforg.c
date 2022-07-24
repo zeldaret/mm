@@ -80,7 +80,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
 
     switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
                 Actor_MarkForDeath(thisx);
                 return;
             }

@@ -383,7 +383,7 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 8;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_76_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_20)) {
                 return 0x1FC8;
             }
 
@@ -401,7 +401,7 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 0x10;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
                 return 0x1FC8;
             }
             SET_WEEKEVENTREG(WEEKEVENTREG_76_40);

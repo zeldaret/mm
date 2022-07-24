@@ -131,13 +131,13 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_85_10)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_84_40))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40))) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
         this->unk_3A8 = 0x838;
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -378,8 +378,8 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !(GET_WEEKEVENTREG(WEEKEVENTREG_84_40))) ||
-                !(GET_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
+            if ((Inventory_HasEmptyBottle() && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40))) ||
+                !(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
                 this->unk_3B2 = 12;
             } else {
                 SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
@@ -397,13 +397,13 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
         Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -729,19 +729,19 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_15_80))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80))) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_15_80);
                 this->unk_3B2 = 3;
             } else {
@@ -753,7 +753,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
             return;
         }
     } else if (gSaveContext.save.day == 2) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
             this->unk_3B2 = 4;
         } else {
             Actor_MarkForDeath(&this->actor);

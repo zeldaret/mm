@@ -265,7 +265,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (GET_WEEKEVENTREG(WEEKEVENTREG_88_10))) {
+    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10))) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
         this->actor.flags |= ACTOR_FLAG_2000000;
@@ -275,7 +275,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
 
         Animation_PlayLoop(&this->skelAnime, D_80B958DC[0]);
         this->actor.textId = 0x1009;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_91_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_02)) {
             this->actor.textId = 0x103C;
             this->actionFunc = func_80B9451C;
         } else {
@@ -749,7 +749,7 @@ void func_80B94A00(EnZog* this, PlayState* play) {
     if (func_80B93BE0(this, play)) {
         this->actionFunc = func_80B948A8;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_29_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_20)) {
             this->actor.textId = 0x1009;
         } else {
             this->actor.textId = 0x1008;

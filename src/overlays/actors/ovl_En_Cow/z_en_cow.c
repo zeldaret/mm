@@ -116,7 +116,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnCow_Idle;
 
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_01)) && (CURRENT_DAY != 1) &&
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -289,7 +289,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
         if (func_801A5100() == 4) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_87_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_87_01))) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_87_01);
                 if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.

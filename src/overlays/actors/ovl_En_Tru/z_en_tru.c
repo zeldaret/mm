@@ -651,11 +651,11 @@ UNK_TYPE* func_80A871E0(EnTru* this, PlayState* play) {
         return D_80A88924;
     }
 
-    if (!(this->unk_34E & 0x40) && !(GET_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
+    if (!(this->unk_34E & 0x40) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
         return D_80A88918;
     }
 
-    if ((this->unk_34E & 0x1000) && !(GET_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
+    if ((this->unk_34E & 0x1000) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
         return D_80A88910;
     }
 
@@ -750,7 +750,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            if ((this->unk_34E & 0x40) || (GET_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
+            if ((this->unk_34E & 0x40) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
                 this->unk_374 = this->actor.cutscene;
                 this->unk_364++;
             } else {
@@ -1036,7 +1036,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
 void func_80A87FD0(EnTru* this, PlayState* play) {
     if (this->actor.draw != NULL) {
-        if ((this->unk_34E & 0x80) || (GET_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
+        if ((this->unk_34E & 0x80) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
             if (func_80A873B8(this)) {
                 SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
@@ -1058,7 +1058,7 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
                     func_80A86924(this, 2);
                 }
             }
-        } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_16_10)) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
+        } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
                    (this->actor.xzDistToPlayer < 140.0f)) {
             SubS_UpdateFlags(&this->unk_34E, 4, 7);
             this->unk_34E |= 0x1040;
@@ -1083,12 +1083,12 @@ void func_80A881E0(EnTru* this, PlayState* play) {
             ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
         }
 
-        if (!(this->unk_34E & 0x40) && !(GET_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
+        if (!(this->unk_34E & 0x40) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10))) {
             func_80A86924(this, 0);
         } else if (this->unk_34E & 0x80) {
             func_80A86924(this, 0);
             func_80A86460(this);
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
             func_80A86924(this, 6);
         }
 
@@ -1105,7 +1105,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
 void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
-    if ((gSaveContext.save.entranceIndex != 0xC200) || (GET_WEEKEVENTREG(WEEKEVENTREG_12_08))) {
+    if ((gSaveContext.save.entranceIndex != 0xC200) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -1125,7 +1125,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
         func_80A86924(this, 5);
     } else {
         this->unk_388 = EXCH_ITEM_NONE;

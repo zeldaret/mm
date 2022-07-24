@@ -1151,7 +1151,7 @@ void DmStk_DoNothing(DmStk* this, PlayState* play) {
 void DmStk_WaitForTelescope(DmStk* this, PlayState* play) {
     Vec3f screenPos;
 
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_74_20))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20))) {
         func_80169474(play, &this->actor.world.pos, &screenPos);
         if (play->view.fovy < 25.0f) {
             if ((screenPos.x >= 70.0f) && (screenPos.x < 250.0f) && (screenPos.y >= 30.0f) && (screenPos.y < 210.0f)) {
@@ -1173,7 +1173,7 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
 
     if (gSaveContext.save.day < 3) {
         cutscene = dayOneAndTwoCutscene;
-    } else if ((GET_WEEKEVENTREG(WEEKEVENTREG_08_40)) ||
+    } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
         cutscene = finalHoursCutscene;
     } else {

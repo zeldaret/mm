@@ -453,7 +453,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
         }
     } else {
         this->unk_230 &= ~4;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_35_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_40)) {
             if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
                 Message_StartTextbox(play, this->unk_496, &this->actor);
@@ -861,7 +861,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_61_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_01)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

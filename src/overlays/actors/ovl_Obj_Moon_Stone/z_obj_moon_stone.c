@@ -49,8 +49,8 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 0;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80C0662C(this);
-    } else if (!(GET_WEEKEVENTREG(WEEKEVENTREG_74_40))) {
-        if ((GET_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
+    } else if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40))) {
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
@@ -97,14 +97,14 @@ void func_80C0670C(ObjMoonStone* this, PlayState* play) {
 }
 
 void func_80C0673C(ObjMoonStone* this) {
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
         this->actor.draw = NULL;
     }
     this->actionFunc = func_80C06768;
 }
 
 void func_80C06768(ObjMoonStone* this, PlayState* play) {
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80))) {
         if (this->actor.draw == NULL) {
             this->actor.draw = ObjMoonStone_Draw;
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,

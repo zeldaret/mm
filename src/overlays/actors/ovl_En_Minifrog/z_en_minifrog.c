@@ -129,7 +129,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             // Not spoken to MINIFROG_YELLOW
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01))) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
 
@@ -271,7 +271,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 break;
 
             case 0xD82:                                          // "What has brought you all this way?"
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) { // Mountain village is unfrozen
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) { // Mountain village is unfrozen
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
@@ -534,7 +534,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         play->msgCtx.msgLength = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
-                        if (GET_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
                             func_80151938(play, 0xD7E);
                         } else {
                             func_80151938(play, 0xD7D); // Get Heart Piece
@@ -567,7 +567,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_01))) { // Not spoken with MINIFROG_YELLOW
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01))) { // Not spoken with MINIFROG_YELLOW
             Message_StartTextbox(play, 0xD76,
                                  &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
                                                 // but it looks like you've lost a little weight..."

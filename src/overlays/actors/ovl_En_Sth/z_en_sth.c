@@ -119,7 +119,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.textId = 0;
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_40)) || !(GET_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) || !(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
                 this->unk_29C |= 1;
             }
             break;
@@ -136,19 +136,19 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENSTH_F_4:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_13_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             this->actor.textId = 0;
             this->actionFunc = func_80B677BC;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
                 this->unk_29C |= 2;
             }
             break;
 
         case ENSTH_F_5:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_13_20)) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -258,7 +258,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
                 break;
 
             case 5:
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                     phi_a1 = 0x113D;
                 } else {
                     phi_a1 = 0x113C;
@@ -266,7 +266,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
                 break;
 
             default:
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                     phi_a1 = 0x1142;
                 } else {
                     phi_a1 = 0x1141;
@@ -335,7 +335,7 @@ void func_80B67540(EnSth* this, PlayState* play) {
 
                         switch (sp2C) {
                             case 0:
-                                if (GET_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                                     this->actor.home.rot.z = 6;
                                 } else {
                                     SET_WEEKEVENTREG(WEEKEVENTREG_13_40);
@@ -433,14 +433,14 @@ void func_80B67958(EnSth* this, PlayState* play) {
 void func_80B67984(EnSth* this, PlayState* play) {
     u16 sp1E;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_34_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10)) {
         sp1E = 0x903;
         func_80B670A4(this, 2);
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_34_20)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20)) {
         sp1E = 0x90F;
         func_80B670A4(this, 2);
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_34_40)) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08))) {
             sp1E = 0x91B;
         } else {
             sp1E = 0x918;
@@ -453,7 +453,7 @@ void func_80B67984(EnSth* this, PlayState* play) {
         } else {
             sp1E = 0x916;
         }
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_34_02)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_02)) {
         sp1E = 0x8FF;
     } else {
         sp1E = 0x8FC;
@@ -579,8 +579,8 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 16);
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
-            if ((GET_WEEKEVENTREG(WEEKEVENTREG_34_10)) || (GET_WEEKEVENTREG(WEEKEVENTREG_34_20)) ||
-                (GET_WEEKEVENTREG(WEEKEVENTREG_34_40)) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20)) ||
+                (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {
@@ -598,7 +598,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                 break;
 
             case ENSTH_F_4:
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
                     func_80B670A4(this, 5);
                 } else {
                     func_80B670A4(this, 5);

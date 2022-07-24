@@ -72,7 +72,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
 
     if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_80)) &&
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) &&
             !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -80,7 +80,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if ((GET_WEEKEVENTREG(WEEKEVENTREG_63_80)) ||
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }

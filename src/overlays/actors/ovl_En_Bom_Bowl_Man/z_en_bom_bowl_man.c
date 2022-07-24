@@ -97,7 +97,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.save.entranceIndex == 0xD220) && (GET_WEEKEVENTREG(WEEKEVENTREG_73_80)) &&
+    if ((gSaveContext.save.entranceIndex == 0xD220) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80)) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
@@ -401,7 +401,7 @@ void func_809C5408(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5524(EnBomBowlMan* this, PlayState* play) {
     this->actor.textId = 0x730;
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);

@@ -603,7 +603,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
             switch (D_801F4DE2) {
                 case 0x1F:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                         play->nextEntranceIndex = 0x3010;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -616,7 +616,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x44:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                         play->nextEntranceIndex = 0xAE70;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;

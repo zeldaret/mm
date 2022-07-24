@@ -49,7 +49,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
-            if ((GET_WEEKEVENTREG(WEEKEVENTREG_08_40)) || (CURRENT_DAY != 3)) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) || (CURRENT_DAY != 3)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -273,7 +273,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA7C4(EnTimeTag* this, PlayState* play) {
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_63_01)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_63_02))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02))) {
         func_800B7298(play, &this->actor, 7);
         Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
         this->actionFunc = func_80ACA724;
@@ -287,8 +287,8 @@ void func_80ACA840(EnTimeTag* this, PlayState* play) {
     if ((play->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
         temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
         temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                 this->actionFunc = func_80ACA7C4;
             } else if ((temp_ft4 == this->actor.home.rot.x) && (temp_hi == this->actor.home.rot.y)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_63_02);

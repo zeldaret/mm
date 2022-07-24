@@ -139,8 +139,8 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
         func_80BFFCFC(this);
     }
 
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_75_40)) || (GET_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
-        (GET_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -166,12 +166,12 @@ void func_80BFE32C(EnBomjima* this, PlayState* play, s32 arg2) {
         case 0:
             if (player->transformation == PLAYER_FORM_DEKU) {
                 this->actor.textId = 0x759;
-                if (!(GET_WEEKEVENTREG(WEEKEVENTREG_73_20))) {
+                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20))) {
                     this->actor.textId = 0x708;
                 }
             } else if (player->transformation == PLAYER_FORM_HUMAN) {
                 this->actor.textId = 0x75A;
-                if (!(GET_WEEKEVENTREG(WEEKEVENTREG_84_80))) {
+                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80))) {
                     this->actor.textId = 0x719;
                 }
             } else if ((this->unk_2C8 == 1) || (this->unk_2C8 == 2)) {
@@ -350,18 +350,18 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
 
     func_80BFE32C(this, play, 0);
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, play, 3);
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, play, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, play, 3);
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_85_01)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_01)) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, play, 2);
         }
@@ -506,11 +506,11 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
     }
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, play, 3);
         } else {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_77_02))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_02))) {
                 if (this->unk_2E8 == 0) {
                     this->unk_2C8 = 4;
                 } else {
@@ -522,11 +522,11 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
             func_80BFE32C(this, play, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, play, 3);
         } else {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_85_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_85_01))) {
                 if (this->unk_2EA == 0) {
                     this->unk_2C8 = 4;
                 } else {

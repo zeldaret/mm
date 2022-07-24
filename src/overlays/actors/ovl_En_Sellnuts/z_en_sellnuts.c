@@ -386,20 +386,20 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_77_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_40)) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             } else {
                 this->unk_33A = 1;
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_17_20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_20)) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             }
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_17_40)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_40)) {
             this->unk_340 = D_80ADD918[this->unk_33A];
         } else {
             this->unk_340 = D_80ADD910[this->unk_33A];
@@ -871,7 +871,7 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
 
 void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
@@ -947,7 +947,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad2;
 
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_17_80)) || (GET_WEEKEVENTREG(WEEKEVENTREG_61_10))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10))) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -969,7 +969,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     this->unk_36C = 0.01f;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
         if (ENSELLNUTS_GET_1(&this->actor)) {
             Actor_MarkForDeath(&this->actor);
             return;

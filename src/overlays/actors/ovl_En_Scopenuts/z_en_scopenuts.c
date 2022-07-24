@@ -170,7 +170,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -684,7 +684,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_74_40)) &&
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) &&
         (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -705,7 +705,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     this->actor.speedXZ = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_MarkForDeath(&this->actor);
         } else if (play->actorCtx.unk5 & 2) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
@@ -716,7 +716,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
                 Actor_MarkForDeath(&this->actor);

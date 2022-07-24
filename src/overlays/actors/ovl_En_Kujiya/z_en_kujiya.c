@@ -235,19 +235,19 @@ void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
 s32 EnKujiya_CheckBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_33_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_10)) {
                 return true;
             }
             break;
 
         case 2:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_33_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_20)) {
                 return true;
             }
             break;
 
         case 3:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_33_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_40)) {
                 return true;
             }
             break;

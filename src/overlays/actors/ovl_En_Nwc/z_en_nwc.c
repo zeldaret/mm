@@ -68,7 +68,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         // if breman mask was already used, replace with adult EnNiw
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);

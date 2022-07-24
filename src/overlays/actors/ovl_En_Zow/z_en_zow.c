@@ -357,41 +357,41 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
                     SET_WEEKEVENTREG(WEEKEVENTREG_78_04);
                 }
-            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
                 phi_a1 = 0x1301;
             } else {
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
                 phi_a1 = 0x12FF;
             }
         } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_78_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_08)) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_08);
             }
-        } else if (GET_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
             phi_a1 = 0x1301;
         } else {
             SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
             phi_a1 = 0x12FF;
         }
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
     } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_78_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_02)) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;

@@ -104,7 +104,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02) ||
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) ||
         ((this->actor.params != 0xFF) && Flags_GetSwitch(play, this->actor.params))) {
         Actor_MarkForDeath(&this->actor);
     } else {

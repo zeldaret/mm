@@ -119,10 +119,10 @@ void func_80BC6E10(EnGuruguru* this) {
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_38_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_10)) {
             this->textIdIndex = 1;
         }
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_38_40)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_40)) {
         this->textIdIndex = 2;
     } else {
         this->textIdIndex = 3;
@@ -131,8 +131,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (GET_WEEKEVENTREG(WEEKEVENTREG_77_04))) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_88_04))) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04))) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -153,7 +153,7 @@ void func_80BC6F14(EnGuruguru* this, PlayState* play) {
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
             this->textIdIndex = 13;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_79_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_04)) {
                 this->textIdIndex = 14;
             }
         }

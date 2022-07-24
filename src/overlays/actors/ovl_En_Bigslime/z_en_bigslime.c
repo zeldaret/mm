@@ -313,10 +313,10 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     // gSaveContext.save.weekEventReg[KEY] = VALUE
     // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
-        (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-        (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-        (33 << 8) | 0x01, // Southern Swamp Frog Returned
-        (33 << 8) | 0x02, // Laundry Pool Frog Returned
+        WEEKEVENTREG_32_40, // Woodfall Temple Frog Returned
+        WEEKEVENTREG_32_80, // Great Bay Temple Frog Returned
+        WEEKEVENTREG_33_01, // Southern Swamp Frog Returned
+        WEEKEVENTREG_33_02, // Laundry Pool Frog Returned
     };
     PlayState* play = play2;
     EnBigslime* this = THIS;
@@ -341,8 +341,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->actor.params);
         }

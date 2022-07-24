@@ -662,9 +662,9 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntranceIndex = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntranceIndex == 0x84A0) && (GET_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
+        if ((play->nextEntranceIndex == 0x84A0) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02))) {
             play->nextEntranceIndex = 0xCA0;
-        } else if ((play->nextEntranceIndex == 0x9A80) && (GET_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        } else if ((play->nextEntranceIndex == 0x9A80) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
             play->nextEntranceIndex = 0xAE80;
         }
     }

@@ -707,7 +707,7 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;

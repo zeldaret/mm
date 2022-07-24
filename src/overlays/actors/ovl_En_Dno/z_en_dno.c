@@ -211,7 +211,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             switch (ENDNO_GET_C000(thisx)) {
                 case ENDNO_GET_C000_0:
                     func_80A71788(this, play);
-                    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_23_20)) || (GET_WEEKEVENTREG(WEEKEVENTREG_93_02))) {
+                    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_02))) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);
@@ -225,7 +225,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case ENDNO_GET_C000_1:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 13, &this->unk_32C);
@@ -267,7 +267,7 @@ void func_80A71B68(EnDno* this, PlayState* play) {
     this->unk_452 = 0;
     this->actor.textId = 0;
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
             if (!(this->unk_3B0 & 0x20)) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 6, &this->unk_32C);
                 this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->unk_460);
@@ -331,13 +331,13 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
 
 void func_80A71E54(EnDno* this, PlayState* play) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
             this->textId = 0x811;
         } else {
             this->textId = 0x80F;
             SET_WEEKEVENTREG(WEEKEVENTREG_27_01);
         }
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_26_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_80)) {
         this->textId = 0x80B;
     } else {
         this->textId = 0x80C;

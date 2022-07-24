@@ -11,7 +11,7 @@
 
 #define THIS ((EnToto*)thisx)
 
-#define ENTOTO_WEEK_EVENT_FLAGS (GET_WEEKEVENTREG(WEEKEVENTREG_50_01) || GET_WEEKEVENTREG(WEEKEVENTREG_51_80))
+#define ENTOTO_WEEK_EVENT_FLAGS (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
 void EnToto_Destroy(Actor* thisx, PlayState* play);
@@ -572,16 +572,16 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     s32 i;
 
     this->unk2B3 = 0;
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_56_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_10)) {
         this->unk2B3 += 1;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_56_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_20)) {
         this->unk2B3 += 2;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_56_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_40)) {
         this->unk2B3 += 4;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_56_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_80)) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < 4; i++) {

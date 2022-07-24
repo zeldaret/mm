@@ -14,19 +14,19 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - GET_WEEKEVENTREG(WEEKEVENTREG_22_01): Aliens defeated
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01): Aliens defeated
  *     If false: The actor doesn't spawn
- * - GET_WEEKEVENTREG(WEEKEVENTREG_31_40)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)
  *     If true: Cremia doesn't explain again she'll deliever milk to town
- * - GET_WEEKEVENTREG(WEEKEVENTREG_31_80)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)
  *     If true: Triggers cutscene on Romani's Ranch
- * - GET_WEEKEVENTREG(WEEKEVENTREG_34_80)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80)
  *     If true: Doesn't spawn on Romani's Ranch
- * - GET_WEEKEVENTREG(WEEKEVENTREG_52_01)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - GET_WEEKEVENTREG(WEEKEVENTREG_52_02)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - GET_WEEKEVENTREG(WEEKEVENTREG_59_02)
+ * - CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)
  *     If true: Doesn't spawn again on Milk Road
  *
  * weekEventReg flags set by this actor:
@@ -683,7 +683,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_PARSE_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -692,7 +692,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
         this->pathIndex = this->initialPathIndex;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
             // In cutscene
 
             sp54 = false;
@@ -702,9 +702,9 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if ((GET_WEEKEVENTREG(WEEKEVENTREG_34_80)) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) ||
-                (GET_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80)) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
+                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) ||
+                (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -714,12 +714,12 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_31_80)) || (GET_WEEKEVENTREG(WEEKEVENTREG_52_01))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01))) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
             this->pathIndex = this->initialPathIndex;
             sp54 = false;
             func_800FE484();
@@ -728,7 +728,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_RotatePlayer(this, play, 0);
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_31_80))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80))) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -740,7 +740,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) || (GET_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -907,7 +907,7 @@ u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
         } else {
@@ -1138,7 +1138,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 play->nextEntranceIndex = 0x3E50;
                 play->transitionType = TRANS_TYPE_64;
@@ -1299,7 +1299,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
             gSaveContext.nightSeqIndex = 0xFF;
 
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_52_01)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02))) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntranceIndex = 0x3E60;
                     play->transitionType = TRANS_TYPE_64;
@@ -1545,7 +1545,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
     ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
 
-    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(GET_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02))) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(false);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_02);

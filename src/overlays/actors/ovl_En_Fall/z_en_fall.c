@@ -220,7 +220,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(GET_WEEKEVENTREG(WEEKEVENTREG_25_02))) {
+                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02))) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -229,7 +229,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
-                if (GET_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -326,7 +326,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
             case 2:
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_93_04)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_04)) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
                             sGiantsCutsceneState++;

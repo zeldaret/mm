@@ -360,7 +360,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_91_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -388,8 +388,8 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
         this->actionFunc = func_80B3AFB0;
     } else if (play->sceneNum == SCENE_17SETUGEN) {
-        if ((GET_WEEKEVENTREG(WEEKEVENTREG_20_04)) && !(GET_WEEKEVENTREG(WEEKEVENTREG_20_08)) &&
-            !(GET_WEEKEVENTREG(WEEKEVENTREG_20_10))) {
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04)) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08)) &&
+            !(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10))) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
@@ -398,8 +398,8 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (play->sceneNum == SCENE_10YUKIYAMANOMURA) {
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_20_04)) && (GET_WEEKEVENTREG(WEEKEVENTREG_20_08)) &&
-            !(GET_WEEKEVENTREG(WEEKEVENTREG_20_10))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08)) &&
+            !(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10))) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);

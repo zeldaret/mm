@@ -1284,7 +1284,7 @@ void func_80B451A0(EnInvadepoh* this, PlayState* play) {
         }
 
         if (D_80B4E940 == 0) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 D_80B4E940 = 3;
             } else {
                 D_80B4E940 = 4;
@@ -1747,7 +1747,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
         Actor_MarkForDeath(&this->actor);
     }
     if (temp == 5) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -1763,7 +1763,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
                 return;
             }
         } else if (temp == 0xC) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
                 Actor_MarkForDeath(&this->actor);
             }
             D_80B503F4 = this;
@@ -1818,7 +1818,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01))) {
         Actor_MarkForDeath(&this->actor);
     }
     D_80B503F8 = this;
@@ -3086,7 +3086,7 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
         func_80B43F0C(this);
         func_80B4516C(this);
         if (0x20 & gSaveContext.save.weekEventReg[21]) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3326,8 +3326,8 @@ void func_80B4A9C8(Actor* thisx, PlayState* play) {
         func_80B43F0C(this);
         func_800B4AEC(play, &this->actor, 50.0f);
         func_80B4516C(this);
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3375,7 +3375,7 @@ void func_80B4ACDC(EnInvadepoh* this) {
 }
 
 void func_80B4ACF0(EnInvadepoh* this, PlayState* play) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->actor.draw = func_80B4E324;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B4AD3C(this);
@@ -3403,7 +3403,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
                 EnInvadepoh_SetTextID(this, play, 0x3334);
                 func_80151BB4(play, 0x1D);
                 func_80151BB4(play, 5);

@@ -120,7 +120,7 @@ s32 func_80B0F660(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0F6DC(EnGb2* this) {
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_54_20))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_54_20))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_54_20);
         this->unk_26E = 0x14D0;
     } else {
@@ -259,7 +259,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return false;
 
         case PLAYER_MASK_CAPTAIN:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_80_40))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40))) {
                 this->unk_26E = 0x14EB;
                 return false;
             }
@@ -267,7 +267,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return true;
     }
 
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_80_20))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20))) {
         this->unk_26E = 0x14EF;
         return false;
     } else {
@@ -617,7 +617,7 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 void func_80B10924(EnGb2* this, PlayState* play) {
     s32 sp24;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
         sp24 = 5;
     } else {
         sp24 = 12;
@@ -884,9 +884,9 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
     switch (ENGB2_GET_7(&this->actor)) {
         case ENGB2_7_0:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_54_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_80)) {
                 Actor_MarkForDeath(&this->actor);
-            } else if (GET_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
                 Actor_MarkForDeath(&this->actor);
             }
 
@@ -909,7 +909,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENGB2_7_1:
-            if ((play->curSpawn == 1) || (GET_WEEKEVENTREG(WEEKEVENTREG_80_80))) {
+            if ((play->curSpawn == 1) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_80_80))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -939,7 +939,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_76_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_80)) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
                 this->actor.flags &= ~ACTOR_FLAG_1;

@@ -163,27 +163,27 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
                 this->unk_2C0 = 1;
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_20)) {
                 this->unk_2C0 = 2;
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_40)) {
                 this->unk_2C0 = 3;
             }
         } else {
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_81_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_80)) {
                 this->unk_2C0 = 1;
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_82_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_01)) {
                 this->unk_2C0 = 2;
             }
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_82_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_02)) {
                 this->unk_2C0 = 3;
             }
         }

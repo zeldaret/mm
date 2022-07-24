@@ -7,17 +7,17 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
     if (CURRENT_DAY <= 0) {
         return 0;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
         return 0;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
             return 0;
         }
         return 0x224;
     }
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_08_80))) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_09_01)) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_01)) {
             return 0x21E;
         }
         if (play->sceneNum == SCENE_YOUSEI_IZUMI) {
@@ -35,27 +35,27 @@ u16 ElfMessage_GetFirstCycleHint(PlayState* play) {
         return 0;
     }
     if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_MOON_TEAR) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_86_04)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_04)) {
             return 0x242;
         }
         return 0x243;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
         return 0x223;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80)) {
         return 0x222;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
         return 0x221;
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_73_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) {
             return 0x240;
         }
         return 0x241;
     }
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_86_02)) || (GET_WEEKEVENTREG(WEEKEVENTREG_73_40))) {
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_02)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_40))) {
         return 0x23F;
     }
     return 0x220;

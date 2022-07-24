@@ -70,7 +70,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->shouldSetHeadRotation = true;
         this->textIdIndex = 2;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_60_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_80)) {
             this->textIdIndex = 3;
         }
 
@@ -82,7 +82,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_63_80) || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -136,7 +136,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         player = GET_PLAYER(play);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_88_08))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08))) {
                 this->actor.textId = 0x62C;
             } else {
                 this->actor.textId = 0x62B;
@@ -164,7 +164,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     } else {
         this->textIdIndex = 0;
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {

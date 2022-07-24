@@ -107,7 +107,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
         case ENZOV_F_1:
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, ANIMMODE_LOOP);
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -120,7 +120,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
 
         default:
             this->unk_320 |= 2;
-            if ((GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) || (GET_WEEKEVENTREG(WEEKEVENTREG_53_20))) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20))) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
@@ -185,7 +185,7 @@ s32 func_80BD15A4(EnZov* this, PlayState* play) {
 void func_80BD160C(EnZov* this, PlayState* play) {
     s32 textId = 0;
 
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
         this->unk_320 &= ~2;
         if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
             textId = 0x1024;
@@ -391,7 +391,7 @@ void func_80BD1D30(EnZov* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1032;
         } else {
             textId = 0x1033;

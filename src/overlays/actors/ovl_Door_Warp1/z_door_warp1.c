@@ -270,7 +270,7 @@ void func_808B8E78(DoorWarp1* this, PlayState* play) {
     this->unk_1A4 = 700.0f;
     if (play->sceneNum == SCENE_INISIE_N) {
         DoorWarp1_SetupAction(this, func_808B96A0);
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_86_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80)) {
         this->unk_1D4 = 0;
         DoorWarp1_SetupAction(this, func_808B921C);
     } else {
@@ -709,7 +709,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
         } else {
             switch (phi_v0_2) {
                 case 0:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
                         play->nextEntranceIndex = 0x3010;
                         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -733,7 +733,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 3:
-                    if (GET_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         play->nextEntranceIndex = 0x6A90;
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -885,7 +885,7 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
         phi_f2 = 85.0f;
     }
 
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_86_80)) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80)) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
         cutscene = this->dyna.actor.cutscene;

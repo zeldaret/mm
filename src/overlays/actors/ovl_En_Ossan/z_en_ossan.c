@@ -1386,19 +1386,19 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animationIndex = FSN_ANIMATION_SLAM_COUNTER_START;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_18_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animationIndex = FSN_ANIMATION_LEAN_FORWARD_START;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_18_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animationIndex = FSN_ANIMATION_HAND_ON_FACE_START;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_18_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1417,17 +1417,17 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_55_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_55_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_55_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];

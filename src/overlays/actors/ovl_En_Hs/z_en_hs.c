@@ -239,7 +239,7 @@ void func_809533A0(EnHs* this, PlayState* play) {
     } else if (this->stateFlags & 0x10) {
         sp1E = 0x33F9;
         this->stateFlags &= ~0x10;
-    } else if (GET_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         sp1E = 0x33F4;
     } else {
         sp1E = 0x33F5;

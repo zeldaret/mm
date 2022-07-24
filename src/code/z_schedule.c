@@ -10,7 +10,7 @@ s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
-    if (GET_WEEKEVENTREG(flag)) {
+    if (CHECK_WEEKEVENTREG(flag)) {
         *script += cmd->offset;
     }
 
@@ -21,7 +21,7 @@ s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagL* cmd = (ScheduleCmdCheckFlagL*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
-    if (GET_WEEKEVENTREG(flag)) {
+    if (CHECK_WEEKEVENTREG(flag)) {
         *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 

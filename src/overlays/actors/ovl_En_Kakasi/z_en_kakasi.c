@@ -177,14 +177,14 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->aboveGroundStatus) {
-        if (GET_WEEKEVENTREG(WEEKEVENTREG_79_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08)) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetFocus(&this->actor, 60.0f);
             this->unkFunc = EnKakasi_8096F88C;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_83_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_01)) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -1032,7 +1032,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
-    if ((GET_WEEKEVENTREG(WEEKEVENTREG_79_08)) && this->actor.xzDistToPlayer < this->songSummonDist &&
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08)) && this->actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
         this->actor.flags &= ~ACTOR_FLAG_8000000;
         play->msgCtx.ocarinaMode = 4;

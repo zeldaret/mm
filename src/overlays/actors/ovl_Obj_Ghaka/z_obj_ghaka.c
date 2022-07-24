@@ -44,7 +44,7 @@ static InitChainEntry D_80B3C96C[] = {
 };
 
 void func_80B3C260(ObjGhaka* this) {
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
     }
     this->actionFunc = func_80B3C39C;
@@ -59,7 +59,7 @@ void func_80B3C2B0(ObjGhaka* this) {
 }
 
 void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
-    if (!(GET_WEEKEVENTREG(WEEKEVENTREG_20_20))) {
+    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20))) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
                                       this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
@@ -85,7 +85,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         }
     }
 
-    if (this->dyna.pushForce < 0.0f && !(GET_WEEKEVENTREG(WEEKEVENTREG_20_20)) &&
+    if (this->dyna.pushForce < 0.0f && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) &&
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
@@ -161,7 +161,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         func_80B3C2C4(this, play);
     }
     func_80B3C260(this);

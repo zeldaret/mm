@@ -372,7 +372,7 @@ s32 func_80BF17BC(EnIg* this, PlayState* play) {
 
         case 1:
         case 3:
-            if (!(GET_WEEKEVENTREG(WEEKEVENTREG_75_10)) && (this->unk_3F6 == 3)) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_75_10)) && (this->unk_3F6 == 3)) {
                 ActorCutscene_Stop(sp2A);
                 this->unk_3F6 = 5;
             } else {

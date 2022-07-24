@@ -167,7 +167,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
     switch (gSaveContext.save.day - 1) {
         case 0:
             this->unk_28A = 0;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_64_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_02)) {
                 this->unk_28A = 6;
             }
             func_80BE6408(this, 8);
@@ -175,7 +175,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
 
         case 1:
             this->unk_28A = 2;
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_64_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_04)) {
                 this->unk_28A = 7;
             }
             func_80BE6408(this, 8);

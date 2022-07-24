@@ -234,7 +234,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     play->nextEntranceIndex = 0xD020;
-    if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -420,7 +420,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         if (this->shouldRestartRace) {
             play->nextEntranceIndex = 0xD010;
 
-            if (GET_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                 // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -489,7 +489,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
         gSaveContext.eventInf[1] &= (u8)~4;
         gSaveContext.eventInf[1] &= (u8)~8;
 
-        if (!(GET_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
+        if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02))) {
             this->actionFunc = EnMttag_ShowIntroCutscene;
         } else {
             s32 requiredScopeTemp;
